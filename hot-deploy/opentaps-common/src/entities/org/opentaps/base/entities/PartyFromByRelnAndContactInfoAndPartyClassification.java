@@ -52,13 +52,16 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyFromByRelnAndContactInfoAndPartyClassification.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyFromByRelnAndContactInfoAndPartyClassifications", query="SELECT PR.STATUS_ID AS \"statusId\",PCM.FROM_DATE AS \"fromDate\",PCM.THRU_DATE AS \"thruDate\",PCM.EXTENSION AS \"extension\",CM.CONTACT_MECH_ID AS \"contactMechId\",CM.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CM.INFO_STRING AS \"infoString\",PMPA.TO_NAME AS \"toName\",PMPA.ATTN_NAME AS \"attnName\",PMPA.ADDRESS1 AS \"address1\",PMPA.ADDRESS2 AS \"address2\",PMPA.DIRECTIONS AS \"directions\",PMPA.CITY AS \"city\",PMPA.POSTAL_CODE AS \"postalCode\",PMPA.POSTAL_CODE_EXT AS \"postalCodeExt\",PMPA.COUNTRY_GEO_ID AS \"countryGeoId\",PMPA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PMPA.COUNTY_GEO_ID AS \"countyGeoId\",PMPA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PMTN.COUNTRY_CODE AS \"countryCode\",PMTN.AREA_CODE AS \"areaCode\",PMTN.CONTACT_NUMBER AS \"contactNumber\",PMTN.ASK_FOR_NAME AS \"askForName\",CMEM.INFO_STRING AS \"infoString\",CMEM.CONTACT_MECH_ID AS \"contactMechId\",CTRYG.ABBREVIATION AS \"abbreviation\",STTG.ABBREVIATION AS \"abbreviation\",CTYG.ABBREVIATION AS \"abbreviation\",P.PARTY_ID AS \"partyId\",P.PARTY_TYPE_ID AS \"partyTypeId\",P.EXTERNAL_ID AS \"externalId\",P.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",P.DESCRIPTION AS \"description\",P.STATUS_ID AS \"statusId\",P.CREATED_DATE AS \"createdDate\",P.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",P.LAST_MODIFIED_DATE AS \"lastModifiedDate\",P.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",P.DATA_SOURCE_ID AS \"dataSourceId\",P.IS_UNREAD AS \"isUnread\",PER.SALUTATION AS \"salutation\",PER.FIRST_NAME AS \"firstName\",PER.MIDDLE_NAME AS \"middleName\",PER.LAST_NAME AS \"lastName\",PER.PERSONAL_TITLE AS \"personalTitle\",PER.SUFFIX AS \"suffix\",PER.NICKNAME AS \"nickname\",PER.FIRST_NAME_LOCAL AS \"firstNameLocal\",PER.MIDDLE_NAME_LOCAL AS \"middleNameLocal\",PER.LAST_NAME_LOCAL AS \"lastNameLocal\",PER.OTHER_LOCAL AS \"otherLocal\",PER.MEMBER_ID AS \"memberId\",PER.GENDER AS \"gender\",PER.BIRTH_DATE AS \"birthDate\",PER.HEIGHT AS \"height\",PER.WEIGHT AS \"weight\",PER.MOTHERS_MAIDEN_NAME AS \"mothersMaidenName\",PER.MARITAL_STATUS AS \"maritalStatus\",PER.SOCIAL_SECURITY_NUMBER AS \"socialSecurityNumber\",PER.PASSPORT_NUMBER AS \"passportNumber\",PER.PASSPORT_EXPIRE_DATE AS \"passportExpireDate\",PER.TOTAL_YEARS_WORK_EXPERIENCE AS \"totalYearsWorkExperience\",PER.EMPLOYMENT_STATUS_ENUM_ID AS \"employmentStatusEnumId\",PER.RESIDENCE_STATUS_ENUM_ID AS \"residenceStatusEnumId\",PER.OCCUPATION AS \"occupation\",PER.YEARS_WITH_EMPLOYER AS \"yearsWithEmployer\",PER.MONTHS_WITH_EMPLOYER AS \"monthsWithEmployer\",PER.EXISTING_CUSTOMER AS \"existingCustomer\",PSD.PARENT_PARTY_ID AS \"parentPartyId\",PSD.DEPARTMENT_NAME AS \"departmentName\",PSD.GENERAL_PROF_TITLE AS \"generalProfTitle\",PSD.COMPANY_NAME AS \"companyName\",PSD.COMPANY_NAME_LOCAL AS \"companyNameLocal\",PSD.ANNUAL_REVENUE AS \"annualRevenue\",PSD.CURRENCY_UOM_ID AS \"currencyUomId\",PSD.NUMBER_EMPLOYEES AS \"numberEmployees\",PSD.INDUSTRY_ENUM_ID AS \"industryEnumId\",PSD.OWNERSHIP_ENUM_ID AS \"ownershipEnumId\",PSD.SIC_CODE AS \"sicCode\",PSD.TICKER_SYMBOL AS \"tickerSymbol\",PSD.IMPORTANT_NOTE AS \"importantNote\",PSD.PRIMARY_POSTAL_ADDRESS_ID AS \"primaryPostalAddressId\",PSD.PRIMARY_TELECOM_NUMBER_ID AS \"primaryTelecomNumberId\",PSD.PRIMARY_EMAIL_ID AS \"primaryEmailId\",PG.GROUP_NAME AS \"groupName\",PG.GROUP_NAME_LOCAL AS \"groupNameLocal\",PG.OFFICE_SITE_NAME AS \"officeSiteName\",PG.NUM_EMPLOYEES AS \"numEmployees\",PG.LOGO_IMAGE_URL AS \"logoImageUrl\",PG.IS_INCORPORATED AS \"isIncorporated\",PG.FEDERAL_TAX_ID AS \"federalTaxId\",PG.REQUIRES1099 AS \"requires1099\",PR.PARTY_ID_FROM AS \"partyIdFrom\",PR.PARTY_ID_TO AS \"partyIdTo\",PR.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PR.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PR.FROM_DATE AS \"fromDate\",PR.THRU_DATE AS \"thruDate\",PR.RELATIONSHIP_NAME AS \"relationshipName\",PR.SECURITY_GROUP_ID AS \"securityGroupId\",PR.PRIORITY_TYPE_ID AS \"priorityTypeId\",PR.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PR.PERMISSIONS_ENUM_ID AS \"permissionsEnumId\",PR.POSITION_TITLE AS \"positionTitle\",TN.COUNTRY_CODE AS \"countryCode\",TN.AREA_CODE AS \"areaCode\",TN.CONTACT_NUMBER AS \"contactNumber\",TN.ASK_FOR_NAME AS \"askForName\",PA.TO_NAME AS \"toName\",PA.ATTN_NAME AS \"attnName\",PA.ADDRESS1 AS \"address1\",PA.ADDRESS2 AS \"address2\",PA.DIRECTIONS AS \"directions\",PA.CITY AS \"city\",PA.POSTAL_CODE AS \"postalCode\",PA.POSTAL_CODE_EXT AS \"postalCodeExt\",PA.COUNTRY_GEO_ID AS \"countryGeoId\",PA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PA.COUNTY_GEO_ID AS \"countyGeoId\",PA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PA.GEO_POINT_ID AS \"geoPointId\",PC.PARTY_CLASSIFICATION_GROUP_ID AS \"partyClassificationGroupId\",PCG.PARTY_CLASSIFICATION_TYPE_ID AS \"partyClassificationTypeId\",PCG.PARENT_GROUP_ID AS \"parentGroupId\" FROM PARTY_RELATIONSHIP PR INNER JOIN PARTY P ON PR.PARTY_ID_FROM = P.PARTY_ID LEFT JOIN PARTY_GROUP PG ON P.PARTY_ID = PG.PARTY_ID LEFT JOIN PERSON PER ON P.PARTY_ID = PER.PARTY_ID LEFT JOIN PARTY_SUPPLEMENTAL_DATA PSD ON P.PARTY_ID = PSD.PARTY_ID LEFT JOIN PARTY_CONTACT_MECH PCM ON P.PARTY_ID = PCM.PARTY_ID LEFT JOIN CONTACT_MECH CM ON PCM.CONTACT_MECH_ID = CM.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER TN ON PCM.CONTACT_MECH_ID = TN.CONTACT_MECH_ID LEFT JOIN POSTAL_ADDRESS PA ON PCM.CONTACT_MECH_ID = PA.CONTACT_MECH_ID LEFT JOIN PARTY_CLASSIFICATION PC ON P.PARTY_ID = PC.PARTY_ID LEFT JOIN PARTY_CLASSIFICATION_GROUP PCG ON PC.PARTY_CLASSIFICATION_GROUP_ID = PCG.PARTY_CLASSIFICATION_GROUP_ID LEFT JOIN POSTAL_ADDRESS PMPA ON PSD.PRIMARY_POSTAL_ADDRESS_ID = PMPA.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER PMTN ON PSD.PRIMARY_TELECOM_NUMBER_ID = PMTN.CONTACT_MECH_ID LEFT JOIN CONTACT_MECH CMEM ON PSD.PRIMARY_EMAIL_ID = CMEM.CONTACT_MECH_ID LEFT JOIN GEO STTG ON PMPA.STATE_PROVINCE_GEO_ID = STTG.GEO_ID LEFT JOIN GEO CTYG ON PMPA.COUNTY_GEO_ID = CTYG.GEO_ID LEFT JOIN GEO CTRYG ON PMPA.COUNTRY_GEO_ID = CTRYG.GEO_ID", resultSetMapping="PartyFromByRelnAndContactInfoAndPartyClassificationMapping")
+@NamedNativeQuery(name="selectPartyFromByRelnAndContactInfoAndPartyClassifications", query="SELECT PR.STATUS_ID AS \"statusId\",PC.FROM_DATE AS \"fromDate\",PC.THRU_DATE AS \"thruDate\",PCM.FROM_DATE AS \"fromDate\",PCM.THRU_DATE AS \"thruDate\",PCM.EXTENSION AS \"extension\",PCG.DESCRIPTION AS \"description\",CM.CONTACT_MECH_ID AS \"contactMechId\",CM.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CM.INFO_STRING AS \"infoString\",PMPA.TO_NAME AS \"toName\",PMPA.ATTN_NAME AS \"attnName\",PMPA.ADDRESS1 AS \"address1\",PMPA.ADDRESS2 AS \"address2\",PMPA.DIRECTIONS AS \"directions\",PMPA.CITY AS \"city\",PMPA.POSTAL_CODE AS \"postalCode\",PMPA.POSTAL_CODE_EXT AS \"postalCodeExt\",PMPA.COUNTRY_GEO_ID AS \"countryGeoId\",PMPA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PMPA.COUNTY_GEO_ID AS \"countyGeoId\",PMPA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PMTN.COUNTRY_CODE AS \"countryCode\",PMTN.AREA_CODE AS \"areaCode\",PMTN.CONTACT_NUMBER AS \"contactNumber\",PMTN.ASK_FOR_NAME AS \"askForName\",CMEM.INFO_STRING AS \"infoString\",CMEM.CONTACT_MECH_ID AS \"contactMechId\",CTRYG.ABBREVIATION AS \"abbreviation\",STTG.ABBREVIATION AS \"abbreviation\",CTYG.ABBREVIATION AS \"abbreviation\",P.PARTY_ID AS \"partyId\",P.PARTY_TYPE_ID AS \"partyTypeId\",P.EXTERNAL_ID AS \"externalId\",P.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",P.DESCRIPTION AS \"description\",P.STATUS_ID AS \"statusId\",P.CREATED_DATE AS \"createdDate\",P.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",P.LAST_MODIFIED_DATE AS \"lastModifiedDate\",P.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",P.DATA_SOURCE_ID AS \"dataSourceId\",P.IS_UNREAD AS \"isUnread\",PER.SALUTATION AS \"salutation\",PER.FIRST_NAME AS \"firstName\",PER.MIDDLE_NAME AS \"middleName\",PER.LAST_NAME AS \"lastName\",PER.PERSONAL_TITLE AS \"personalTitle\",PER.SUFFIX AS \"suffix\",PER.NICKNAME AS \"nickname\",PER.FIRST_NAME_LOCAL AS \"firstNameLocal\",PER.MIDDLE_NAME_LOCAL AS \"middleNameLocal\",PER.LAST_NAME_LOCAL AS \"lastNameLocal\",PER.OTHER_LOCAL AS \"otherLocal\",PER.MEMBER_ID AS \"memberId\",PER.GENDER AS \"gender\",PER.BIRTH_DATE AS \"birthDate\",PER.HEIGHT AS \"height\",PER.WEIGHT AS \"weight\",PER.MOTHERS_MAIDEN_NAME AS \"mothersMaidenName\",PER.MARITAL_STATUS AS \"maritalStatus\",PER.SOCIAL_SECURITY_NUMBER AS \"socialSecurityNumber\",PER.PASSPORT_NUMBER AS \"passportNumber\",PER.PASSPORT_EXPIRE_DATE AS \"passportExpireDate\",PER.TOTAL_YEARS_WORK_EXPERIENCE AS \"totalYearsWorkExperience\",PER.EMPLOYMENT_STATUS_ENUM_ID AS \"employmentStatusEnumId\",PER.RESIDENCE_STATUS_ENUM_ID AS \"residenceStatusEnumId\",PER.OCCUPATION AS \"occupation\",PER.YEARS_WITH_EMPLOYER AS \"yearsWithEmployer\",PER.MONTHS_WITH_EMPLOYER AS \"monthsWithEmployer\",PER.EXISTING_CUSTOMER AS \"existingCustomer\",PSD.PARENT_PARTY_ID AS \"parentPartyId\",PSD.DEPARTMENT_NAME AS \"departmentName\",PSD.GENERAL_PROF_TITLE AS \"generalProfTitle\",PSD.COMPANY_NAME AS \"companyName\",PSD.COMPANY_NAME_LOCAL AS \"companyNameLocal\",PSD.ANNUAL_REVENUE AS \"annualRevenue\",PSD.CURRENCY_UOM_ID AS \"currencyUomId\",PSD.NUMBER_EMPLOYEES AS \"numberEmployees\",PSD.INDUSTRY_ENUM_ID AS \"industryEnumId\",PSD.OWNERSHIP_ENUM_ID AS \"ownershipEnumId\",PSD.SIC_CODE AS \"sicCode\",PSD.TICKER_SYMBOL AS \"tickerSymbol\",PSD.IMPORTANT_NOTE AS \"importantNote\",PSD.PRIMARY_POSTAL_ADDRESS_ID AS \"primaryPostalAddressId\",PSD.PRIMARY_TELECOM_NUMBER_ID AS \"primaryTelecomNumberId\",PSD.PRIMARY_EMAIL_ID AS \"primaryEmailId\",PG.GROUP_NAME AS \"groupName\",PG.GROUP_NAME_LOCAL AS \"groupNameLocal\",PG.OFFICE_SITE_NAME AS \"officeSiteName\",PG.NUM_EMPLOYEES AS \"numEmployees\",PG.LOGO_IMAGE_URL AS \"logoImageUrl\",PG.IS_INCORPORATED AS \"isIncorporated\",PG.FEDERAL_TAX_ID AS \"federalTaxId\",PG.REQUIRES1099 AS \"requires1099\",PR.PARTY_ID_FROM AS \"partyIdFrom\",PR.PARTY_ID_TO AS \"partyIdTo\",PR.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PR.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PR.FROM_DATE AS \"fromDate\",PR.THRU_DATE AS \"thruDate\",PR.RELATIONSHIP_NAME AS \"relationshipName\",PR.SECURITY_GROUP_ID AS \"securityGroupId\",PR.PRIORITY_TYPE_ID AS \"priorityTypeId\",PR.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PR.PERMISSIONS_ENUM_ID AS \"permissionsEnumId\",PR.POSITION_TITLE AS \"positionTitle\",TN.COUNTRY_CODE AS \"countryCode\",TN.AREA_CODE AS \"areaCode\",TN.CONTACT_NUMBER AS \"contactNumber\",TN.ASK_FOR_NAME AS \"askForName\",PA.TO_NAME AS \"toName\",PA.ATTN_NAME AS \"attnName\",PA.ADDRESS1 AS \"address1\",PA.ADDRESS2 AS \"address2\",PA.DIRECTIONS AS \"directions\",PA.CITY AS \"city\",PA.POSTAL_CODE AS \"postalCode\",PA.POSTAL_CODE_EXT AS \"postalCodeExt\",PA.COUNTRY_GEO_ID AS \"countryGeoId\",PA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PA.COUNTY_GEO_ID AS \"countyGeoId\",PA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PA.GEO_POINT_ID AS \"geoPointId\",PC.PARTY_CLASSIFICATION_GROUP_ID AS \"partyClassificationGroupId\",PCG.PARTY_CLASSIFICATION_TYPE_ID AS \"partyClassificationTypeId\",PCG.PARENT_GROUP_ID AS \"parentGroupId\" FROM PARTY_RELATIONSHIP PR INNER JOIN PARTY P ON PR.PARTY_ID_FROM = P.PARTY_ID LEFT JOIN PARTY_GROUP PG ON P.PARTY_ID = PG.PARTY_ID LEFT JOIN PERSON PER ON P.PARTY_ID = PER.PARTY_ID LEFT JOIN PARTY_SUPPLEMENTAL_DATA PSD ON P.PARTY_ID = PSD.PARTY_ID LEFT JOIN PARTY_CONTACT_MECH PCM ON P.PARTY_ID = PCM.PARTY_ID LEFT JOIN CONTACT_MECH CM ON PCM.CONTACT_MECH_ID = CM.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER TN ON PCM.CONTACT_MECH_ID = TN.CONTACT_MECH_ID LEFT JOIN POSTAL_ADDRESS PA ON PCM.CONTACT_MECH_ID = PA.CONTACT_MECH_ID LEFT JOIN PARTY_CLASSIFICATION PC ON P.PARTY_ID = PC.PARTY_ID LEFT JOIN PARTY_CLASSIFICATION_GROUP PCG ON PC.PARTY_CLASSIFICATION_GROUP_ID = PCG.PARTY_CLASSIFICATION_GROUP_ID LEFT JOIN POSTAL_ADDRESS PMPA ON PSD.PRIMARY_POSTAL_ADDRESS_ID = PMPA.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER PMTN ON PSD.PRIMARY_TELECOM_NUMBER_ID = PMTN.CONTACT_MECH_ID LEFT JOIN CONTACT_MECH CMEM ON PSD.PRIMARY_EMAIL_ID = CMEM.CONTACT_MECH_ID LEFT JOIN GEO STTG ON PMPA.STATE_PROVINCE_GEO_ID = STTG.GEO_ID LEFT JOIN GEO CTYG ON PMPA.COUNTY_GEO_ID = CTYG.GEO_ID LEFT JOIN GEO CTRYG ON PMPA.COUNTRY_GEO_ID = CTRYG.GEO_ID", resultSetMapping="PartyFromByRelnAndContactInfoAndPartyClassificationMapping")
 @SqlResultSetMapping(name="PartyFromByRelnAndContactInfoAndPartyClassificationMapping", entities={
 @EntityResult(entityClass=PartyFromByRelnAndContactInfoAndPartyClassification.class, fields = {
 @FieldResult(name="relationshipStatusId", column="relationshipStatusId")
+,@FieldResult(name="classificationFromDate", column="classificationFromDate")
+,@FieldResult(name="classificationThruDate", column="classificationThruDate")
 ,@FieldResult(name="partyContactMechFromDate", column="partyContactMechFromDate")
 ,@FieldResult(name="partyContactMechThruDate", column="partyContactMechThruDate")
 ,@FieldResult(name="extension", column="extension")
+,@FieldResult(name="partyClassificationGroupDescription", column="partyClassificationGroupDescription")
 ,@FieldResult(name="contactMechId", column="contactMechId")
 ,@FieldResult(name="contactMechTypeId", column="contactMechTypeId")
 ,@FieldResult(name="infoString", column="infoString")
@@ -186,9 +189,12 @@ public class PartyFromByRelnAndContactInfoAndPartyClassification extends Entity 
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("relationshipStatusId", "PR.STATUS_ID");
+        fields.put("classificationFromDate", "PC.FROM_DATE");
+        fields.put("classificationThruDate", "PC.THRU_DATE");
         fields.put("partyContactMechFromDate", "PCM.FROM_DATE");
         fields.put("partyContactMechThruDate", "PCM.THRU_DATE");
         fields.put("extension", "PCM.EXTENSION");
+        fields.put("partyClassificationGroupDescription", "PCG.DESCRIPTION");
         fields.put("contactMechId", "CM.CONTACT_MECH_ID");
         fields.put("contactMechTypeId", "CM.CONTACT_MECH_TYPE_ID");
         fields.put("infoString", "CM.INFO_STRING");
@@ -313,9 +319,12 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfoAndPartyClassification", field
 }
   public static enum Fields implements EntityFieldInterface<PartyFromByRelnAndContactInfoAndPartyClassification> {
     relationshipStatusId("relationshipStatusId"),
+    classificationFromDate("classificationFromDate"),
+    classificationThruDate("classificationThruDate"),
     partyContactMechFromDate("partyContactMechFromDate"),
     partyContactMechThruDate("partyContactMechThruDate"),
     extension("extension"),
+    partyClassificationGroupDescription("partyClassificationGroupDescription"),
     contactMechId("contactMechId"),
     contactMechTypeId("contactMechTypeId"),
     infoString("infoString"),
@@ -449,11 +458,17 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfoAndPartyClassification", field
     
    private String relationshipStatusId;
     
+   private Timestamp classificationFromDate;
+    
+   private Timestamp classificationThruDate;
+    
    private Timestamp partyContactMechFromDate;
     
    private Timestamp partyContactMechThruDate;
     
    private String extension;
+    
+   private String partyClassificationGroupDescription;
     
    private String contactMechId;
     
@@ -704,9 +719,9 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfoAndPartyClassification", field
       this.isView = true;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("partyContactMechFromDate");this.primaryKeyNames.add("contactMechId");this.primaryKeyNames.add("primaryEmailContactMechId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("partyIdFrom");this.primaryKeyNames.add("partyIdTo");this.primaryKeyNames.add("roleTypeIdFrom");this.primaryKeyNames.add("roleTypeIdTo");this.primaryKeyNames.add("fromDate");this.primaryKeyNames.add("partyClassificationGroupId");
+      this.primaryKeyNames.add("classificationFromDate");this.primaryKeyNames.add("partyContactMechFromDate");this.primaryKeyNames.add("contactMechId");this.primaryKeyNames.add("primaryEmailContactMechId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("partyIdFrom");this.primaryKeyNames.add("partyIdTo");this.primaryKeyNames.add("roleTypeIdFrom");this.primaryKeyNames.add("roleTypeIdTo");this.primaryKeyNames.add("fromDate");this.primaryKeyNames.add("partyClassificationGroupId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("relationshipStatusId");this.allFieldsNames.add("partyContactMechFromDate");this.allFieldsNames.add("partyContactMechThruDate");this.allFieldsNames.add("extension");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("infoString");this.allFieldsNames.add("primaryToName");this.allFieldsNames.add("primaryAttnName");this.allFieldsNames.add("primaryAddress1");this.allFieldsNames.add("primaryAddress2");this.allFieldsNames.add("primaryDirections");this.allFieldsNames.add("primaryCity");this.allFieldsNames.add("primaryPostalCode");this.allFieldsNames.add("primaryPostalCodeExt");this.allFieldsNames.add("primaryCountryGeoId");this.allFieldsNames.add("primaryStateProvinceGeoId");this.allFieldsNames.add("primaryCountyGeoId");this.allFieldsNames.add("primaryPostalCodeGeoId");this.allFieldsNames.add("primaryCountryCode");this.allFieldsNames.add("primaryAreaCode");this.allFieldsNames.add("primaryContactNumber");this.allFieldsNames.add("primaryAskForName");this.allFieldsNames.add("primaryEmail");this.allFieldsNames.add("primaryEmailContactMechId");this.allFieldsNames.add("primaryCountryAbbreviation");this.allFieldsNames.add("primaryStateProvinceAbbreviation");this.allFieldsNames.add("primaryCountyAbbreviation");this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("salutation");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("nickname");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("middleNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("otherLocal");this.allFieldsNames.add("memberId");this.allFieldsNames.add("gender");this.allFieldsNames.add("birthDate");this.allFieldsNames.add("height");this.allFieldsNames.add("weight");this.allFieldsNames.add("mothersMaidenName");this.allFieldsNames.add("maritalStatus");this.allFieldsNames.add("socialSecurityNumber");this.allFieldsNames.add("passportNumber");this.allFieldsNames.add("passportExpireDate");this.allFieldsNames.add("totalYearsWorkExperience");this.allFieldsNames.add("employmentStatusEnumId");this.allFieldsNames.add("residenceStatusEnumId");this.allFieldsNames.add("occupation");this.allFieldsNames.add("yearsWithEmployer");this.allFieldsNames.add("monthsWithEmployer");this.allFieldsNames.add("existingCustomer");this.allFieldsNames.add("parentPartyId");this.allFieldsNames.add("departmentName");this.allFieldsNames.add("generalProfTitle");this.allFieldsNames.add("companyName");this.allFieldsNames.add("companyNameLocal");this.allFieldsNames.add("annualRevenue");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("numberEmployees");this.allFieldsNames.add("industryEnumId");this.allFieldsNames.add("ownershipEnumId");this.allFieldsNames.add("sicCode");this.allFieldsNames.add("tickerSymbol");this.allFieldsNames.add("importantNote");this.allFieldsNames.add("primaryPostalAddressId");this.allFieldsNames.add("primaryTelecomNumberId");this.allFieldsNames.add("primaryEmailId");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("officeSiteName");this.allFieldsNames.add("numEmployees");this.allFieldsNames.add("logoImageUrl");this.allFieldsNames.add("isIncorporated");this.allFieldsNames.add("federalTaxId");this.allFieldsNames.add("requires1099");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("relationshipName");this.allFieldsNames.add("securityGroupId");this.allFieldsNames.add("priorityTypeId");this.allFieldsNames.add("partyRelationshipTypeId");this.allFieldsNames.add("permissionsEnumId");this.allFieldsNames.add("positionTitle");this.allFieldsNames.add("countryCode");this.allFieldsNames.add("areaCode");this.allFieldsNames.add("contactNumber");this.allFieldsNames.add("askForName");this.allFieldsNames.add("toName");this.allFieldsNames.add("attnName");this.allFieldsNames.add("address1");this.allFieldsNames.add("address2");this.allFieldsNames.add("directions");this.allFieldsNames.add("city");this.allFieldsNames.add("postalCode");this.allFieldsNames.add("postalCodeExt");this.allFieldsNames.add("countryGeoId");this.allFieldsNames.add("stateProvinceGeoId");this.allFieldsNames.add("countyGeoId");this.allFieldsNames.add("postalCodeGeoId");this.allFieldsNames.add("geoPointId");this.allFieldsNames.add("partyClassificationGroupId");this.allFieldsNames.add("partyClassificationTypeId");this.allFieldsNames.add("parentGroupId");
+      this.allFieldsNames.add("relationshipStatusId");this.allFieldsNames.add("classificationFromDate");this.allFieldsNames.add("classificationThruDate");this.allFieldsNames.add("partyContactMechFromDate");this.allFieldsNames.add("partyContactMechThruDate");this.allFieldsNames.add("extension");this.allFieldsNames.add("partyClassificationGroupDescription");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("infoString");this.allFieldsNames.add("primaryToName");this.allFieldsNames.add("primaryAttnName");this.allFieldsNames.add("primaryAddress1");this.allFieldsNames.add("primaryAddress2");this.allFieldsNames.add("primaryDirections");this.allFieldsNames.add("primaryCity");this.allFieldsNames.add("primaryPostalCode");this.allFieldsNames.add("primaryPostalCodeExt");this.allFieldsNames.add("primaryCountryGeoId");this.allFieldsNames.add("primaryStateProvinceGeoId");this.allFieldsNames.add("primaryCountyGeoId");this.allFieldsNames.add("primaryPostalCodeGeoId");this.allFieldsNames.add("primaryCountryCode");this.allFieldsNames.add("primaryAreaCode");this.allFieldsNames.add("primaryContactNumber");this.allFieldsNames.add("primaryAskForName");this.allFieldsNames.add("primaryEmail");this.allFieldsNames.add("primaryEmailContactMechId");this.allFieldsNames.add("primaryCountryAbbreviation");this.allFieldsNames.add("primaryStateProvinceAbbreviation");this.allFieldsNames.add("primaryCountyAbbreviation");this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("salutation");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("nickname");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("middleNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("otherLocal");this.allFieldsNames.add("memberId");this.allFieldsNames.add("gender");this.allFieldsNames.add("birthDate");this.allFieldsNames.add("height");this.allFieldsNames.add("weight");this.allFieldsNames.add("mothersMaidenName");this.allFieldsNames.add("maritalStatus");this.allFieldsNames.add("socialSecurityNumber");this.allFieldsNames.add("passportNumber");this.allFieldsNames.add("passportExpireDate");this.allFieldsNames.add("totalYearsWorkExperience");this.allFieldsNames.add("employmentStatusEnumId");this.allFieldsNames.add("residenceStatusEnumId");this.allFieldsNames.add("occupation");this.allFieldsNames.add("yearsWithEmployer");this.allFieldsNames.add("monthsWithEmployer");this.allFieldsNames.add("existingCustomer");this.allFieldsNames.add("parentPartyId");this.allFieldsNames.add("departmentName");this.allFieldsNames.add("generalProfTitle");this.allFieldsNames.add("companyName");this.allFieldsNames.add("companyNameLocal");this.allFieldsNames.add("annualRevenue");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("numberEmployees");this.allFieldsNames.add("industryEnumId");this.allFieldsNames.add("ownershipEnumId");this.allFieldsNames.add("sicCode");this.allFieldsNames.add("tickerSymbol");this.allFieldsNames.add("importantNote");this.allFieldsNames.add("primaryPostalAddressId");this.allFieldsNames.add("primaryTelecomNumberId");this.allFieldsNames.add("primaryEmailId");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("officeSiteName");this.allFieldsNames.add("numEmployees");this.allFieldsNames.add("logoImageUrl");this.allFieldsNames.add("isIncorporated");this.allFieldsNames.add("federalTaxId");this.allFieldsNames.add("requires1099");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("relationshipName");this.allFieldsNames.add("securityGroupId");this.allFieldsNames.add("priorityTypeId");this.allFieldsNames.add("partyRelationshipTypeId");this.allFieldsNames.add("permissionsEnumId");this.allFieldsNames.add("positionTitle");this.allFieldsNames.add("countryCode");this.allFieldsNames.add("areaCode");this.allFieldsNames.add("contactNumber");this.allFieldsNames.add("askForName");this.allFieldsNames.add("toName");this.allFieldsNames.add("attnName");this.allFieldsNames.add("address1");this.allFieldsNames.add("address2");this.allFieldsNames.add("directions");this.allFieldsNames.add("city");this.allFieldsNames.add("postalCode");this.allFieldsNames.add("postalCodeExt");this.allFieldsNames.add("countryGeoId");this.allFieldsNames.add("stateProvinceGeoId");this.allFieldsNames.add("countyGeoId");this.allFieldsNames.add("postalCodeGeoId");this.allFieldsNames.add("geoPointId");this.allFieldsNames.add("partyClassificationGroupId");this.allFieldsNames.add("partyClassificationTypeId");this.allFieldsNames.add("parentGroupId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -733,6 +748,20 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfoAndPartyClassification", field
     }
     /**
      * Auto generated value setter.
+     * @param classificationFromDate the classificationFromDate to set
+     */
+    public void setClassificationFromDate(Timestamp classificationFromDate) {
+        this.classificationFromDate = classificationFromDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param classificationThruDate the classificationThruDate to set
+     */
+    public void setClassificationThruDate(Timestamp classificationThruDate) {
+        this.classificationThruDate = classificationThruDate;
+    }
+    /**
+     * Auto generated value setter.
      * @param partyContactMechFromDate the partyContactMechFromDate to set
      */
     public void setPartyContactMechFromDate(Timestamp partyContactMechFromDate) {
@@ -751,6 +780,13 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfoAndPartyClassification", field
      */
     public void setExtension(String extension) {
         this.extension = extension;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyClassificationGroupDescription the partyClassificationGroupDescription to set
+     */
+    public void setPartyClassificationGroupDescription(String partyClassificationGroupDescription) {
+        this.partyClassificationGroupDescription = partyClassificationGroupDescription;
     }
     /**
      * Auto generated value setter.
@@ -1604,6 +1640,20 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfoAndPartyClassification", field
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
+    public Timestamp getClassificationFromDate() {
+        return this.classificationFromDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getClassificationThruDate() {
+        return this.classificationThruDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
     public Timestamp getPartyContactMechFromDate() {
         return this.partyContactMechFromDate;
     }
@@ -1620,6 +1670,13 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfoAndPartyClassification", field
      */
     public String getExtension() {
         return this.extension;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPartyClassificationGroupDescription() {
+        return this.partyClassificationGroupDescription;
     }
     /**
      * Auto generated value accessor.
@@ -2470,9 +2527,12 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfoAndPartyClassification", field
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setRelationshipStatusId((String) mapValue.get("relationshipStatusId"));
+        setClassificationFromDate((Timestamp) mapValue.get("classificationFromDate"));
+        setClassificationThruDate((Timestamp) mapValue.get("classificationThruDate"));
         setPartyContactMechFromDate((Timestamp) mapValue.get("partyContactMechFromDate"));
         setPartyContactMechThruDate((Timestamp) mapValue.get("partyContactMechThruDate"));
         setExtension((String) mapValue.get("extension"));
+        setPartyClassificationGroupDescription((String) mapValue.get("partyClassificationGroupDescription"));
         setContactMechId((String) mapValue.get("contactMechId"));
         setContactMechTypeId((String) mapValue.get("contactMechTypeId"));
         setInfoString((String) mapValue.get("infoString"));
@@ -2601,9 +2661,12 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfoAndPartyClassification", field
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("relationshipStatusId", getRelationshipStatusId());
+        mapValue.put("classificationFromDate", getClassificationFromDate());
+        mapValue.put("classificationThruDate", getClassificationThruDate());
         mapValue.put("partyContactMechFromDate", getPartyContactMechFromDate());
         mapValue.put("partyContactMechThruDate", getPartyContactMechThruDate());
         mapValue.put("extension", getExtension());
+        mapValue.put("partyClassificationGroupDescription", getPartyClassificationGroupDescription());
         mapValue.put("contactMechId", getContactMechId());
         mapValue.put("contactMechTypeId", getContactMechTypeId());
         mapValue.put("infoString", getInfoString());

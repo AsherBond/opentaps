@@ -49,10 +49,11 @@ import java.lang.String;
  * Auto generated base entity KeyboardShortcutAndHandler.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectKeyboardShortcutAndHandlers", query="SELECT KB.SHORTCUT_ID AS \"shortcutId\",KB.USER_LOGIN_ID AS \"userLoginId\",KB.APPLICATION_NAME AS \"applicationName\",KB.SCREEN_NAME AS \"screenName\",KB.SHORTCUT AS \"shortcut\",KB.ACTION_TYPE_ID AS \"actionTypeId\",KB.ACTION_TARGET AS \"actionTarget\",KB.DESCRIPTION AS \"description\",KB.SEQUENCE_NUM AS \"sequenceNum\",KBH.SHORTCUT_HANDLER AS \"shortcutHandler\" FROM KEYBOARD_SHORTCUT KB INNER JOIN KEYBOARD_SHORTCUT_HANDLER KBH ON KB.ACTION_TYPE_ID = KBH.ACTION_TYPE_ID", resultSetMapping="KeyboardShortcutAndHandlerMapping")
+@NamedNativeQuery(name="selectKeyboardShortcutAndHandlers", query="SELECT KBH.DESCRIPTION AS \"description\",KB.SHORTCUT_ID AS \"shortcutId\",KB.USER_LOGIN_ID AS \"userLoginId\",KB.APPLICATION_NAME AS \"applicationName\",KB.SCREEN_NAME AS \"screenName\",KB.SHORTCUT AS \"shortcut\",KB.ACTION_TYPE_ID AS \"actionTypeId\",KB.ACTION_TARGET AS \"actionTarget\",KB.DESCRIPTION AS \"description\",KB.SEQUENCE_NUM AS \"sequenceNum\",KBH.SHORTCUT_HANDLER AS \"shortcutHandler\" FROM KEYBOARD_SHORTCUT KB INNER JOIN KEYBOARD_SHORTCUT_HANDLER KBH ON KB.ACTION_TYPE_ID = KBH.ACTION_TYPE_ID", resultSetMapping="KeyboardShortcutAndHandlerMapping")
 @SqlResultSetMapping(name="KeyboardShortcutAndHandlerMapping", entities={
 @EntityResult(entityClass=KeyboardShortcutAndHandler.class, fields = {
-@FieldResult(name="shortcutId", column="shortcutId")
+@FieldResult(name="handlerDescription", column="handlerDescription")
+,@FieldResult(name="shortcutId", column="shortcutId")
 ,@FieldResult(name="userLoginId", column="userLoginId")
 ,@FieldResult(name="applicationName", column="applicationName")
 ,@FieldResult(name="screenName", column="screenName")
@@ -68,6 +69,7 @@ import java.lang.String;
 public class KeyboardShortcutAndHandler extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
+        fields.put("handlerDescription", "KBH.DESCRIPTION");
         fields.put("shortcutId", "KB.SHORTCUT_ID");
         fields.put("userLoginId", "KB.USER_LOGIN_ID");
         fields.put("applicationName", "KB.APPLICATION_NAME");
@@ -81,6 +83,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
 }
   public static enum Fields implements EntityFieldInterface<KeyboardShortcutAndHandler> {
+    handlerDescription("handlerDescription"),
     shortcutId("shortcutId"),
     userLoginId("userLoginId"),
     applicationName("applicationName"),
@@ -101,6 +104,8 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
+    
+   private String handlerDescription;
     @Id
    private String shortcutId;
     
@@ -133,7 +138,7 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("shortcutId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("shortcutId");this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("applicationName");this.allFieldsNames.add("screenName");this.allFieldsNames.add("shortcut");this.allFieldsNames.add("actionTypeId");this.allFieldsNames.add("actionTarget");this.allFieldsNames.add("description");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("shortcutHandler");
+      this.allFieldsNames.add("handlerDescription");this.allFieldsNames.add("shortcutId");this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("applicationName");this.allFieldsNames.add("screenName");this.allFieldsNames.add("shortcut");this.allFieldsNames.add("actionTypeId");this.allFieldsNames.add("actionTarget");this.allFieldsNames.add("description");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("shortcutHandler");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -151,6 +156,13 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
     /**
      * This is a view-entity, so the setter methods will be private to this class and for use in its fromMap constructor only
      */
+    /**
+     * Auto generated value setter.
+     * @param handlerDescription the handlerDescription to set
+     */
+    public void setHandlerDescription(String handlerDescription) {
+        this.handlerDescription = handlerDescription;
+    }
     /**
      * Auto generated value setter.
      * @param shortcutId the shortcutId to set
@@ -222,6 +234,13 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
         this.shortcutHandler = shortcutHandler;
     }
 
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getHandlerDescription() {
+        return this.handlerDescription;
+    }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
@@ -300,6 +319,7 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
+        setHandlerDescription((String) mapValue.get("handlerDescription"));
         setShortcutId((String) mapValue.get("shortcutId"));
         setUserLoginId((String) mapValue.get("userLoginId"));
         setApplicationName((String) mapValue.get("applicationName"));
@@ -317,6 +337,7 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        mapValue.put("handlerDescription", getHandlerDescription());
         mapValue.put("shortcutId", getShortcutId());
         mapValue.put("userLoginId", getUserLoginId());
         mapValue.put("applicationName", getApplicationName());

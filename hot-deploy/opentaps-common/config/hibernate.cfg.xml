@@ -701,7 +701,6 @@
   <mapping class="org.opentaps.base.entities.AcctgTrans"/>
   <mapping class="org.opentaps.base.entities.AcctgTransAttribute"/>
   <mapping class="org.opentaps.base.entities.AcctgTransEntry"/>
-  <mapping class="org.opentaps.base.entities.AcctgTransAndEntries"/>
   <mapping class="org.opentaps.base.entities.AcctgTransEntryProdSums"/>
   <mapping class="org.opentaps.base.entities.AcctgTransEntryType"/>
   <mapping class="org.opentaps.base.entities.AcctgTransType"/>
@@ -726,7 +725,6 @@
   <mapping class="org.opentaps.base.entities.GlResourceType"/>
   <mapping class="org.opentaps.base.entities.GlXbrlClass"/>
   <mapping class="org.opentaps.base.entities.PartyAcctgPreference"/>
-  <mapping class="org.opentaps.base.entities.ProductAverageCost"/>
   <mapping class="org.opentaps.base.entities.ProductAverageCostType"/>
   <mapping class="org.opentaps.base.entities.SettlementTerm"/>
   <mapping class="org.opentaps.base.entities.VarianceReasonGlAccount"/>
@@ -745,7 +743,6 @@
   <mapping class="org.opentaps.base.entities.GiftCardFulfillment"/>
   <mapping class="org.opentaps.base.entities.Payment"/>
   <mapping class="org.opentaps.base.entities.PaymentAndType"/>
-  <mapping class="org.opentaps.base.entities.PaymentAndApplication"/>
   <mapping class="org.opentaps.base.entities.PaymentApplication"/>
   <mapping class="org.opentaps.base.entities.PaymentAttribute"/>
   <mapping class="org.opentaps.base.entities.PaymentBudgetAllocation"/>
@@ -950,7 +947,6 @@
   <mapping class="org.opentaps.base.entities.OrderHeaderAndItems"/>
   <mapping class="org.opentaps.base.entities.OrderHeaderAndPaymentPref"/>
   <mapping class="org.opentaps.base.entities.OrderHeaderAndRoleSummary"/>
-  <mapping class="org.opentaps.base.entities.OrderHeaderAndRoles"/>
   <mapping class="org.opentaps.base.entities.OrderHeaderItemAndInv"/>
   <mapping class="org.opentaps.base.entities.OrderHeaderItemAndInvRoles"/>
   <mapping class="org.opentaps.base.entities.OrderHeaderItemAndRoles"/>
@@ -980,7 +976,6 @@
   <mapping class="org.opentaps.base.entities.CustRequestNoteView"/>
   <mapping class="org.opentaps.base.entities.CustRequestItemNoteView"/>
   <mapping class="org.opentaps.base.entities.QuoteWorkEffortView"/>
-  <mapping class="org.opentaps.base.entities.RequirementAndRole"/>
   <mapping class="org.opentaps.base.entities.RequirementCustRequestView"/>
   <mapping class="org.opentaps.base.entities.RequirementByProductFacility"/>
   <mapping class="org.opentaps.base.entities.RequirementPartyProductCount"/>
@@ -1116,6 +1111,7 @@
   <mapping class="org.opentaps.base.entities.CustRequestRole"/>
   <mapping class="org.opentaps.base.entities.FacilityRole"/>
   <mapping class="org.opentaps.base.entities.DataWarehouseTransform"/>
+  <mapping class="org.opentaps.base.entities.OrderHeaderAndRoles"/>
   <mapping class="org.opentaps.base.entities.OpentapsWebApps"/>
   <mapping class="org.opentaps.base.entities.PartyFromByRelnAndContactInfo"/>
   <mapping class="org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification"/>
@@ -1166,6 +1162,7 @@
   <mapping class="org.opentaps.base.entities.EncumbranceDetail"/>
   <mapping class="org.opentaps.base.entities.EncumbranceDetailType"/>
   <mapping class="org.opentaps.base.entities.AcctgTransEntryRole"/>
+  <mapping class="org.opentaps.base.entities.AcctgTransAndEntries"/>
   <mapping class="org.opentaps.base.entities.AcctgTransAndEntriesPostedTransDate"/>
   <mapping class="org.opentaps.base.entities.AcctgTransEntryAccountSum"/>
   <mapping class="org.opentaps.base.entities.AcctgTransEntryPartySum"/>
@@ -1196,7 +1193,9 @@
   <mapping class="org.opentaps.base.entities.AcctgTransAndOrg"/>
   <mapping class="org.opentaps.base.entities.InvoiceItemAssoc"/>
   <mapping class="org.opentaps.base.entities.PaymentApplicationSum"/>
+  <mapping class="org.opentaps.base.entities.PaymentAndApplication"/>
   <mapping class="org.opentaps.base.entities.PaymentAndPaymentApplication"/>
+  <mapping class="org.opentaps.base.entities.ProductAverageCost"/>
   <mapping class="org.opentaps.base.entities.PaycheckItemType"/>
   <mapping class="org.opentaps.base.entities.PaycheckItemClass"/>
   <mapping class="org.opentaps.base.entities.PaycheckItem"/>
@@ -1228,6 +1227,7 @@
   <mapping class="org.opentaps.base.entities.FacilityProductAndMrpEventAndDetailAndOrder"/>
   <mapping class="org.opentaps.base.entities.FacilityProductAndMrpEventAndDetailAndOrderAndProductStoreGroup"/>
   <mapping class="org.opentaps.base.entities.MrpProductStoreGroupAndProductStore"/>
+  <mapping class="org.opentaps.base.entities.RequirementAndRole"/>
   <mapping class="org.opentaps.base.entities.ProductionRunAndGoods"/>
   <mapping class="org.opentaps.base.entities.FacilityPartyPermission"/>
   <mapping class="org.opentaps.base.entities.FacilityPartyPermissionDetail"/>

@@ -49,10 +49,11 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyAndStatus.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyAndStatuss", query="SELECT PT.PARTY_ID AS \"partyId\",PT.PARTY_TYPE_ID AS \"partyTypeId\",PT.EXTERNAL_ID AS \"externalId\",PT.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",PT.DESCRIPTION AS \"description\",PT.STATUS_ID AS \"statusId\",PT.CREATED_DATE AS \"createdDate\",PT.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PT.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PT.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PT.DATA_SOURCE_ID AS \"dataSourceId\",PT.IS_UNREAD AS \"isUnread\",SI.STATUS_TYPE_ID AS \"statusTypeId\",SI.STATUS_CODE AS \"statusCode\",SI.SEQUENCE_ID AS \"sequenceId\" FROM PARTY PT INNER JOIN STATUS_ITEM SI ON PT.STATUS_ID = SI.STATUS_ID", resultSetMapping="PartyAndStatusMapping")
+@NamedNativeQuery(name="selectPartyAndStatuss", query="SELECT SI.DESCRIPTION AS \"description\",PT.PARTY_ID AS \"partyId\",PT.PARTY_TYPE_ID AS \"partyTypeId\",PT.EXTERNAL_ID AS \"externalId\",PT.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",PT.DESCRIPTION AS \"description\",PT.STATUS_ID AS \"statusId\",PT.CREATED_DATE AS \"createdDate\",PT.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PT.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PT.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PT.DATA_SOURCE_ID AS \"dataSourceId\",PT.IS_UNREAD AS \"isUnread\",SI.STATUS_TYPE_ID AS \"statusTypeId\",SI.STATUS_CODE AS \"statusCode\",SI.SEQUENCE_ID AS \"sequenceId\" FROM PARTY PT INNER JOIN STATUS_ITEM SI ON PT.STATUS_ID = SI.STATUS_ID", resultSetMapping="PartyAndStatusMapping")
 @SqlResultSetMapping(name="PartyAndStatusMapping", entities={
 @EntityResult(entityClass=PartyAndStatus.class, fields = {
-@FieldResult(name="partyId", column="partyId")
+@FieldResult(name="statusDescription", column="statusDescription")
+,@FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="partyTypeId", column="partyTypeId")
 ,@FieldResult(name="externalId", column="externalId")
 ,@FieldResult(name="preferredCurrencyUomId", column="preferredCurrencyUomId")
@@ -73,6 +74,7 @@ import java.sql.Timestamp;
 public class PartyAndStatus extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
+        fields.put("statusDescription", "SI.DESCRIPTION");
         fields.put("partyId", "PT.PARTY_ID");
         fields.put("partyTypeId", "PT.PARTY_TYPE_ID");
         fields.put("externalId", "PT.EXTERNAL_ID");
@@ -91,6 +93,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("PartyAndStatus", fields);
 }
   public static enum Fields implements EntityFieldInterface<PartyAndStatus> {
+    statusDescription("statusDescription"),
     partyId("partyId"),
     partyTypeId("partyTypeId"),
     externalId("externalId"),
@@ -116,6 +119,8 @@ fieldMapColumns.put("PartyAndStatus", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
+    
+   private String statusDescription;
     @Id
    private String partyId;
     
@@ -158,7 +163,7 @@ fieldMapColumns.put("PartyAndStatus", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("statusTypeId");this.allFieldsNames.add("statusCode");this.allFieldsNames.add("sequenceId");
+      this.allFieldsNames.add("statusDescription");this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("statusTypeId");this.allFieldsNames.add("statusCode");this.allFieldsNames.add("sequenceId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -176,6 +181,13 @@ fieldMapColumns.put("PartyAndStatus", fields);
     /**
      * This is a view-entity, so the setter methods will be private to this class and for use in its fromMap constructor only
      */
+    /**
+     * Auto generated value setter.
+     * @param statusDescription the statusDescription to set
+     */
+    public void setStatusDescription(String statusDescription) {
+        this.statusDescription = statusDescription;
+    }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
@@ -282,6 +294,13 @@ fieldMapColumns.put("PartyAndStatus", fields);
         this.sequenceId = sequenceId;
     }
 
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getStatusDescription() {
+        return this.statusDescription;
+    }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
@@ -395,6 +414,7 @@ fieldMapColumns.put("PartyAndStatus", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
+        setStatusDescription((String) mapValue.get("statusDescription"));
         setPartyId((String) mapValue.get("partyId"));
         setPartyTypeId((String) mapValue.get("partyTypeId"));
         setExternalId((String) mapValue.get("externalId"));
@@ -417,6 +437,7 @@ fieldMapColumns.put("PartyAndStatus", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        mapValue.put("statusDescription", getStatusDescription());
         mapValue.put("partyId", getPartyId());
         mapValue.put("partyTypeId", getPartyTypeId());
         mapValue.put("externalId", getExternalId());

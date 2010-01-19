@@ -51,10 +51,14 @@ import java.sql.Timestamp;
  * Auto generated base entity GlReconciliationAndAcctgTransEntry.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectGlReconciliationAndAcctgTransEntrys", query="SELECT GRE.GL_RECONCILIATION_ID AS \"glReconciliationId\",GRE.ACCTG_TRANS_ID AS \"acctgTransId\",GRE.ACCTG_TRANS_ENTRY_SEQ_ID AS \"acctgTransEntrySeqId\",GRE.RECONCILED_AMOUNT AS \"reconciledAmount\",A.ACCTG_TRANS_TYPE_ID AS \"acctgTransTypeId\",A.DESCRIPTION AS \"description\",A.TRANSACTION_DATE AS \"transactionDate\",A.IS_POSTED AS \"isPosted\",A.POSTED_DATE AS \"postedDate\",A.SCHEDULED_POSTING_DATE AS \"scheduledPostingDate\",A.GL_JOURNAL_ID AS \"glJournalId\",A.GL_FISCAL_TYPE_ID AS \"glFiscalTypeId\",A.VOUCHER_REF AS \"voucherRef\",A.VOUCHER_DATE AS \"voucherDate\",A.GROUP_STATUS_ID AS \"groupStatusId\",A.FIXED_ASSET_ID AS \"fixedAssetId\",A.INVENTORY_ITEM_ID AS \"inventoryItemId\",A.PHYSICAL_INVENTORY_ID AS \"physicalInventoryId\",A.PARTY_ID AS \"partyId\",A.ROLE_TYPE_ID AS \"roleTypeId\",A.INVOICE_ID AS \"invoiceId\",A.PAYMENT_ID AS \"paymentId\",A.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",A.SHIPMENT_ID AS \"shipmentId\",A.RECEIPT_ID AS \"receiptId\",A.WORK_EFFORT_ID AS \"workEffortId\",A.THEIR_ACCTG_TRANS_ID AS \"theirAcctgTransId\",A.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",A.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",A.INVOICE_ADJUSTMENT_ID AS \"invoiceAdjustmentId\",A.PAYMENT_APPLICATION_ID AS \"paymentApplicationId\",A.POSTED_AMOUNT AS \"postedAmount\",ATE.ACCTG_TRANS_ENTRY_TYPE_ID AS \"acctgTransEntryTypeId\",ATE.THEIR_PARTY_ID AS \"theirPartyId\",ATE.PRODUCT_ID AS \"productId\",ATE.THEIR_PRODUCT_ID AS \"theirProductId\",ATE.GL_ACCOUNT_TYPE_ID AS \"glAccountTypeId\",ATE.GL_ACCOUNT_ID AS \"glAccountId\",ATE.ORGANIZATION_PARTY_ID AS \"organizationPartyId\",ATE.AMOUNT AS \"amount\",ATE.CURRENCY_UOM_ID AS \"currencyUomId\",ATE.ORIG_AMOUNT AS \"origAmount\",ATE.ORIG_CURRENCY_UOM_ID AS \"origCurrencyUomId\",ATE.DEBIT_CREDIT_FLAG AS \"debitCreditFlag\",ATE.DUE_DATE AS \"dueDate\",ATE.GROUP_ID AS \"groupId\",ATE.TAX_ID AS \"taxId\",ATE.RECONCILE_STATUS_ID AS \"reconcileStatusId\",ATE.SETTLEMENT_TERM_ID AS \"settlementTermId\",ATE.IS_SUMMARY AS \"isSummary\",ATE.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",ATE.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",ATE.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",ATE.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",ATE.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",ATE.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",ATE.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",ATE.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",ATE.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",ATE.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM GL_RECONCILIATION_ENTRY GRE INNER JOIN ACCTG_TRANS A ON GRE.ACCTG_TRANS_ID = A.ACCTG_TRANS_ID INNER JOIN ACCTG_TRANS_ENTRY ATE ON GRE.ACCTG_TRANS_ID = ATE.ACCTG_TRANS_ID AND GRE.ACCTG_TRANS_ENTRY_SEQ_ID = ATE.ACCTG_TRANS_ENTRY_SEQ_ID", resultSetMapping="GlReconciliationAndAcctgTransEntryMapping")
+@NamedNativeQuery(name="selectGlReconciliationAndAcctgTransEntrys", query="SELECT ATE.DESCRIPTION AS \"description\",ATE.VOUCHER_REF AS \"voucherRef\",ATE.PARTY_ID AS \"partyId\",ATE.ROLE_TYPE_ID AS \"roleTypeId\",GRE.GL_RECONCILIATION_ID AS \"glReconciliationId\",GRE.ACCTG_TRANS_ID AS \"acctgTransId\",GRE.ACCTG_TRANS_ENTRY_SEQ_ID AS \"acctgTransEntrySeqId\",GRE.RECONCILED_AMOUNT AS \"reconciledAmount\",A.ACCTG_TRANS_TYPE_ID AS \"acctgTransTypeId\",A.DESCRIPTION AS \"description\",A.TRANSACTION_DATE AS \"transactionDate\",A.IS_POSTED AS \"isPosted\",A.POSTED_DATE AS \"postedDate\",A.SCHEDULED_POSTING_DATE AS \"scheduledPostingDate\",A.GL_JOURNAL_ID AS \"glJournalId\",A.GL_FISCAL_TYPE_ID AS \"glFiscalTypeId\",A.VOUCHER_REF AS \"voucherRef\",A.VOUCHER_DATE AS \"voucherDate\",A.GROUP_STATUS_ID AS \"groupStatusId\",A.FIXED_ASSET_ID AS \"fixedAssetId\",A.INVENTORY_ITEM_ID AS \"inventoryItemId\",A.PHYSICAL_INVENTORY_ID AS \"physicalInventoryId\",A.PARTY_ID AS \"partyId\",A.ROLE_TYPE_ID AS \"roleTypeId\",A.INVOICE_ID AS \"invoiceId\",A.PAYMENT_ID AS \"paymentId\",A.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",A.SHIPMENT_ID AS \"shipmentId\",A.RECEIPT_ID AS \"receiptId\",A.WORK_EFFORT_ID AS \"workEffortId\",A.THEIR_ACCTG_TRANS_ID AS \"theirAcctgTransId\",A.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",A.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",A.INVOICE_ADJUSTMENT_ID AS \"invoiceAdjustmentId\",A.PAYMENT_APPLICATION_ID AS \"paymentApplicationId\",A.POSTED_AMOUNT AS \"postedAmount\",ATE.ACCTG_TRANS_ENTRY_TYPE_ID AS \"acctgTransEntryTypeId\",ATE.THEIR_PARTY_ID AS \"theirPartyId\",ATE.PRODUCT_ID AS \"productId\",ATE.THEIR_PRODUCT_ID AS \"theirProductId\",ATE.GL_ACCOUNT_TYPE_ID AS \"glAccountTypeId\",ATE.GL_ACCOUNT_ID AS \"glAccountId\",ATE.ORGANIZATION_PARTY_ID AS \"organizationPartyId\",ATE.AMOUNT AS \"amount\",ATE.CURRENCY_UOM_ID AS \"currencyUomId\",ATE.ORIG_AMOUNT AS \"origAmount\",ATE.ORIG_CURRENCY_UOM_ID AS \"origCurrencyUomId\",ATE.DEBIT_CREDIT_FLAG AS \"debitCreditFlag\",ATE.DUE_DATE AS \"dueDate\",ATE.GROUP_ID AS \"groupId\",ATE.TAX_ID AS \"taxId\",ATE.RECONCILE_STATUS_ID AS \"reconcileStatusId\",ATE.SETTLEMENT_TERM_ID AS \"settlementTermId\",ATE.IS_SUMMARY AS \"isSummary\",ATE.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",ATE.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",ATE.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",ATE.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",ATE.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",ATE.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",ATE.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",ATE.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",ATE.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",ATE.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM GL_RECONCILIATION_ENTRY GRE INNER JOIN ACCTG_TRANS A ON GRE.ACCTG_TRANS_ID = A.ACCTG_TRANS_ID INNER JOIN ACCTG_TRANS_ENTRY ATE ON GRE.ACCTG_TRANS_ID = ATE.ACCTG_TRANS_ID AND GRE.ACCTG_TRANS_ENTRY_SEQ_ID = ATE.ACCTG_TRANS_ENTRY_SEQ_ID", resultSetMapping="GlReconciliationAndAcctgTransEntryMapping")
 @SqlResultSetMapping(name="GlReconciliationAndAcctgTransEntryMapping", entities={
 @EntityResult(entityClass=GlReconciliationAndAcctgTransEntry.class, fields = {
-@FieldResult(name="glReconciliationId", column="glReconciliationId")
+@FieldResult(name="entryDescription", column="entryDescription")
+,@FieldResult(name="entryVoucherRef", column="entryVoucherRef")
+,@FieldResult(name="entryPartyId", column="entryPartyId")
+,@FieldResult(name="entryRoleTypeId", column="entryRoleTypeId")
+,@FieldResult(name="glReconciliationId", column="glReconciliationId")
 ,@FieldResult(name="acctgTransId", column="acctgTransId")
 ,@FieldResult(name="acctgTransEntrySeqId", column="acctgTransEntrySeqId")
 ,@FieldResult(name="reconciledAmount", column="reconciledAmount")
@@ -120,6 +124,10 @@ import java.sql.Timestamp;
 public class GlReconciliationAndAcctgTransEntry extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
+        fields.put("entryDescription", "ATE.DESCRIPTION");
+        fields.put("entryVoucherRef", "ATE.VOUCHER_REF");
+        fields.put("entryPartyId", "ATE.PARTY_ID");
+        fields.put("entryRoleTypeId", "ATE.ROLE_TYPE_ID");
         fields.put("glReconciliationId", "GRE.GL_RECONCILIATION_ID");
         fields.put("acctgTransId", "GRE.ACCTG_TRANS_ID");
         fields.put("acctgTransEntrySeqId", "GRE.ACCTG_TRANS_ENTRY_SEQ_ID");
@@ -183,6 +191,10 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
 }
   public static enum Fields implements EntityFieldInterface<GlReconciliationAndAcctgTransEntry> {
+    entryDescription("entryDescription"),
+    entryVoucherRef("entryVoucherRef"),
+    entryPartyId("entryPartyId"),
+    entryRoleTypeId("entryRoleTypeId"),
     glReconciliationId("glReconciliationId"),
     acctgTransId("acctgTransId"),
     acctgTransEntrySeqId("acctgTransEntrySeqId"),
@@ -253,6 +265,14 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
+    
+   private String entryDescription;
+    
+   private String entryVoucherRef;
+    
+   private String entryPartyId;
+    
+   private String entryRoleTypeId;
     @Id
    private String glReconciliationId;
     
@@ -385,7 +405,7 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("glReconciliationId");this.primaryKeyNames.add("acctgTransId");this.primaryKeyNames.add("acctgTransEntrySeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("glReconciliationId");this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransEntrySeqId");this.allFieldsNames.add("reconciledAmount");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("glJournalId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("voucherRef");this.allFieldsNames.add("voucherDate");this.allFieldsNames.add("groupStatusId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("physicalInventoryId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("theirAcctgTransId");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("invoiceAdjustmentId");this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("postedAmount");this.allFieldsNames.add("acctgTransEntryTypeId");this.allFieldsNames.add("theirPartyId");this.allFieldsNames.add("productId");this.allFieldsNames.add("theirProductId");this.allFieldsNames.add("glAccountTypeId");this.allFieldsNames.add("glAccountId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("origAmount");this.allFieldsNames.add("origCurrencyUomId");this.allFieldsNames.add("debitCreditFlag");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("groupId");this.allFieldsNames.add("taxId");this.allFieldsNames.add("reconcileStatusId");this.allFieldsNames.add("settlementTermId");this.allFieldsNames.add("isSummary");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
+      this.allFieldsNames.add("entryDescription");this.allFieldsNames.add("entryVoucherRef");this.allFieldsNames.add("entryPartyId");this.allFieldsNames.add("entryRoleTypeId");this.allFieldsNames.add("glReconciliationId");this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransEntrySeqId");this.allFieldsNames.add("reconciledAmount");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("glJournalId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("voucherRef");this.allFieldsNames.add("voucherDate");this.allFieldsNames.add("groupStatusId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("physicalInventoryId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("theirAcctgTransId");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("invoiceAdjustmentId");this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("postedAmount");this.allFieldsNames.add("acctgTransEntryTypeId");this.allFieldsNames.add("theirPartyId");this.allFieldsNames.add("productId");this.allFieldsNames.add("theirProductId");this.allFieldsNames.add("glAccountTypeId");this.allFieldsNames.add("glAccountId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("origAmount");this.allFieldsNames.add("origCurrencyUomId");this.allFieldsNames.add("debitCreditFlag");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("groupId");this.allFieldsNames.add("taxId");this.allFieldsNames.add("reconcileStatusId");this.allFieldsNames.add("settlementTermId");this.allFieldsNames.add("isSummary");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -403,6 +423,34 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
     /**
      * This is a view-entity, so the setter methods will be private to this class and for use in its fromMap constructor only
      */
+    /**
+     * Auto generated value setter.
+     * @param entryDescription the entryDescription to set
+     */
+    public void setEntryDescription(String entryDescription) {
+        this.entryDescription = entryDescription;
+    }
+    /**
+     * Auto generated value setter.
+     * @param entryVoucherRef the entryVoucherRef to set
+     */
+    public void setEntryVoucherRef(String entryVoucherRef) {
+        this.entryVoucherRef = entryVoucherRef;
+    }
+    /**
+     * Auto generated value setter.
+     * @param entryPartyId the entryPartyId to set
+     */
+    public void setEntryPartyId(String entryPartyId) {
+        this.entryPartyId = entryPartyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param entryRoleTypeId the entryRoleTypeId to set
+     */
+    public void setEntryRoleTypeId(String entryRoleTypeId) {
+        this.entryRoleTypeId = entryRoleTypeId;
+    }
     /**
      * Auto generated value setter.
      * @param glReconciliationId the glReconciliationId to set
@@ -824,6 +872,34 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
         this.acctgTagEnumId10 = acctgTagEnumId10;
     }
 
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getEntryDescription() {
+        return this.entryDescription;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getEntryVoucherRef() {
+        return this.entryVoucherRef;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getEntryPartyId() {
+        return this.entryPartyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getEntryRoleTypeId() {
+        return this.entryRoleTypeId;
+    }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
@@ -1252,6 +1328,10 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
+        setEntryDescription((String) mapValue.get("entryDescription"));
+        setEntryVoucherRef((String) mapValue.get("entryVoucherRef"));
+        setEntryPartyId((String) mapValue.get("entryPartyId"));
+        setEntryRoleTypeId((String) mapValue.get("entryRoleTypeId"));
         setGlReconciliationId((String) mapValue.get("glReconciliationId"));
         setAcctgTransId((String) mapValue.get("acctgTransId"));
         setAcctgTransEntrySeqId((String) mapValue.get("acctgTransEntrySeqId"));
@@ -1319,6 +1399,10 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        mapValue.put("entryDescription", getEntryDescription());
+        mapValue.put("entryVoucherRef", getEntryVoucherRef());
+        mapValue.put("entryPartyId", getEntryPartyId());
+        mapValue.put("entryRoleTypeId", getEntryRoleTypeId());
         mapValue.put("glReconciliationId", getGlReconciliationId());
         mapValue.put("acctgTransId", getAcctgTransId());
         mapValue.put("acctgTransEntrySeqId", getAcctgTransEntrySeqId());

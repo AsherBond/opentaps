@@ -50,10 +50,12 @@ import java.sql.Timestamp;
  * Auto generated base entity ShipmentAndItemIssuanceAndInventory.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectShipmentAndItemIssuanceAndInventorys", query="SELECT SHP.SHIPMENT_ID AS \"shipmentId\",SHP.SHIPMENT_TYPE_ID AS \"shipmentTypeId\",SHP.STATUS_ID AS \"statusId\",SHP.PRIMARY_ORDER_ID AS \"primaryOrderId\",SHP.PRIMARY_RETURN_ID AS \"primaryReturnId\",SHP.PRIMARY_SHIP_GROUP_SEQ_ID AS \"primaryShipGroupSeqId\",SHP.PICKLIST_BIN_ID AS \"picklistBinId\",SHP.ESTIMATED_READY_DATE AS \"estimatedReadyDate\",SHP.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",SHP.ESTIMATED_SHIP_WORK_EFF_ID AS \"estimatedShipWorkEffId\",SHP.ESTIMATED_ARRIVAL_DATE AS \"estimatedArrivalDate\",SHP.ESTIMATED_ARRIVAL_WORK_EFF_ID AS \"estimatedArrivalWorkEffId\",SHP.LATEST_CANCEL_DATE AS \"latestCancelDate\",SHP.ESTIMATED_SHIP_COST AS \"estimatedShipCost\",SHP.CURRENCY_UOM_ID AS \"currencyUomId\",SHP.HANDLING_INSTRUCTIONS AS \"handlingInstructions\",SHP.ORIGIN_FACILITY_ID AS \"originFacilityId\",SHP.DESTINATION_FACILITY_ID AS \"destinationFacilityId\",SHP.ORIGIN_CONTACT_MECH_ID AS \"originContactMechId\",SHP.ORIGIN_TELECOM_NUMBER_ID AS \"originTelecomNumberId\",SHP.DESTINATION_CONTACT_MECH_ID AS \"destinationContactMechId\",SHP.DESTINATION_TELECOM_NUMBER_ID AS \"destinationTelecomNumberId\",SHP.PARTY_ID_TO AS \"partyIdTo\",SHP.PARTY_ID_FROM AS \"partyIdFrom\",SHP.ADDITIONAL_SHIPPING_CHARGE AS \"additionalShippingCharge\",SHP.ADDTL_SHIPPING_CHARGE_DESC AS \"addtlShippingChargeDesc\",SHP.CREATED_DATE AS \"createdDate\",SHP.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",SHP.LAST_MODIFIED_DATE AS \"lastModifiedDate\",SHP.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",SHP.RETURN_ID AS \"returnId\",II.ITEM_ISSUANCE_ID AS \"itemIssuanceId\",II.ORDER_ID AS \"orderId\",II.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",II.SHIP_GROUP_SEQ_ID AS \"shipGroupSeqId\",II.INVENTORY_ITEM_ID AS \"inventoryItemId\",II.SHIPMENT_ITEM_SEQ_ID AS \"shipmentItemSeqId\",II.FIXED_ASSET_ID AS \"fixedAssetId\",II.MAINT_HIST_SEQ_ID AS \"maintHistSeqId\",II.ISSUED_DATE_TIME AS \"issuedDateTime\",II.ISSUED_BY_USER_LOGIN_ID AS \"issuedByUserLoginId\",II.QUANTITY AS \"quantity\",II.CANCEL_QUANTITY AS \"cancelQuantity\",INV.INVENTORY_ITEM_TYPE_ID AS \"inventoryItemTypeId\",INV.PRODUCT_ID AS \"productId\",INV.PARTY_ID AS \"partyId\",INV.OWNER_PARTY_ID AS \"ownerPartyId\",INV.DATETIME_RECEIVED AS \"datetimeReceived\",INV.DATETIME_MANUFACTURED AS \"datetimeManufactured\",INV.EXPIRE_DATE AS \"expireDate\",INV.FACILITY_ID AS \"facilityId\",INV.CONTAINER_ID AS \"containerId\",INV.LOT_ID AS \"lotId\",INV.UOM_ID AS \"uomId\",INV.BIN_NUMBER AS \"binNumber\",INV.LOCATION_SEQ_ID AS \"locationSeqId\",INV.COMMENTS AS \"comments\",INV.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",INV.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",INV.OLD_QUANTITY_ON_HAND AS \"oldQuantityOnHand\",INV.OLD_AVAILABLE_TO_PROMISE AS \"oldAvailableToPromise\",INV.SERIAL_NUMBER AS \"serialNumber\",INV.SOFT_IDENTIFIER AS \"softIdentifier\",INV.ACTIVATION_NUMBER AS \"activationNumber\",INV.ACTIVATION_VALID_THRU AS \"activationValidThru\",INV.UNIT_COST AS \"unitCost\",INV.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",INV.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",INV.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",INV.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",INV.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",INV.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",INV.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",INV.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",INV.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",INV.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",INV.PARENT_INVENTORY_ITEM_ID AS \"parentInventoryItemId\" FROM SHIPMENT SHP INNER JOIN ITEM_ISSUANCE II ON SHP.SHIPMENT_ID = II.SHIPMENT_ID INNER JOIN INVENTORY_ITEM INV ON II.INVENTORY_ITEM_ID = INV.INVENTORY_ITEM_ID", resultSetMapping="ShipmentAndItemIssuanceAndInventoryMapping")
+@NamedNativeQuery(name="selectShipmentAndItemIssuanceAndInventorys", query="SELECT INV.STATUS_ID AS \"statusId\",INV.CURRENCY_UOM_ID AS \"currencyUomId\",SHP.SHIPMENT_ID AS \"shipmentId\",SHP.SHIPMENT_TYPE_ID AS \"shipmentTypeId\",SHP.STATUS_ID AS \"statusId\",SHP.PRIMARY_ORDER_ID AS \"primaryOrderId\",SHP.PRIMARY_RETURN_ID AS \"primaryReturnId\",SHP.PRIMARY_SHIP_GROUP_SEQ_ID AS \"primaryShipGroupSeqId\",SHP.PICKLIST_BIN_ID AS \"picklistBinId\",SHP.ESTIMATED_READY_DATE AS \"estimatedReadyDate\",SHP.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",SHP.ESTIMATED_SHIP_WORK_EFF_ID AS \"estimatedShipWorkEffId\",SHP.ESTIMATED_ARRIVAL_DATE AS \"estimatedArrivalDate\",SHP.ESTIMATED_ARRIVAL_WORK_EFF_ID AS \"estimatedArrivalWorkEffId\",SHP.LATEST_CANCEL_DATE AS \"latestCancelDate\",SHP.ESTIMATED_SHIP_COST AS \"estimatedShipCost\",SHP.CURRENCY_UOM_ID AS \"currencyUomId\",SHP.HANDLING_INSTRUCTIONS AS \"handlingInstructions\",SHP.ORIGIN_FACILITY_ID AS \"originFacilityId\",SHP.DESTINATION_FACILITY_ID AS \"destinationFacilityId\",SHP.ORIGIN_CONTACT_MECH_ID AS \"originContactMechId\",SHP.ORIGIN_TELECOM_NUMBER_ID AS \"originTelecomNumberId\",SHP.DESTINATION_CONTACT_MECH_ID AS \"destinationContactMechId\",SHP.DESTINATION_TELECOM_NUMBER_ID AS \"destinationTelecomNumberId\",SHP.PARTY_ID_TO AS \"partyIdTo\",SHP.PARTY_ID_FROM AS \"partyIdFrom\",SHP.ADDITIONAL_SHIPPING_CHARGE AS \"additionalShippingCharge\",SHP.ADDTL_SHIPPING_CHARGE_DESC AS \"addtlShippingChargeDesc\",SHP.CREATED_DATE AS \"createdDate\",SHP.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",SHP.LAST_MODIFIED_DATE AS \"lastModifiedDate\",SHP.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",SHP.RETURN_ID AS \"returnId\",II.ITEM_ISSUANCE_ID AS \"itemIssuanceId\",II.ORDER_ID AS \"orderId\",II.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",II.SHIP_GROUP_SEQ_ID AS \"shipGroupSeqId\",II.INVENTORY_ITEM_ID AS \"inventoryItemId\",II.SHIPMENT_ITEM_SEQ_ID AS \"shipmentItemSeqId\",II.FIXED_ASSET_ID AS \"fixedAssetId\",II.MAINT_HIST_SEQ_ID AS \"maintHistSeqId\",II.ISSUED_DATE_TIME AS \"issuedDateTime\",II.ISSUED_BY_USER_LOGIN_ID AS \"issuedByUserLoginId\",II.QUANTITY AS \"quantity\",II.CANCEL_QUANTITY AS \"cancelQuantity\",INV.INVENTORY_ITEM_TYPE_ID AS \"inventoryItemTypeId\",INV.PRODUCT_ID AS \"productId\",INV.PARTY_ID AS \"partyId\",INV.OWNER_PARTY_ID AS \"ownerPartyId\",INV.DATETIME_RECEIVED AS \"datetimeReceived\",INV.DATETIME_MANUFACTURED AS \"datetimeManufactured\",INV.EXPIRE_DATE AS \"expireDate\",INV.FACILITY_ID AS \"facilityId\",INV.CONTAINER_ID AS \"containerId\",INV.LOT_ID AS \"lotId\",INV.UOM_ID AS \"uomId\",INV.BIN_NUMBER AS \"binNumber\",INV.LOCATION_SEQ_ID AS \"locationSeqId\",INV.COMMENTS AS \"comments\",INV.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",INV.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",INV.OLD_QUANTITY_ON_HAND AS \"oldQuantityOnHand\",INV.OLD_AVAILABLE_TO_PROMISE AS \"oldAvailableToPromise\",INV.SERIAL_NUMBER AS \"serialNumber\",INV.SOFT_IDENTIFIER AS \"softIdentifier\",INV.ACTIVATION_NUMBER AS \"activationNumber\",INV.ACTIVATION_VALID_THRU AS \"activationValidThru\",INV.UNIT_COST AS \"unitCost\",INV.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",INV.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",INV.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",INV.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",INV.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",INV.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",INV.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",INV.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",INV.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",INV.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",INV.PARENT_INVENTORY_ITEM_ID AS \"parentInventoryItemId\" FROM SHIPMENT SHP INNER JOIN ITEM_ISSUANCE II ON SHP.SHIPMENT_ID = II.SHIPMENT_ID INNER JOIN INVENTORY_ITEM INV ON II.INVENTORY_ITEM_ID = INV.INVENTORY_ITEM_ID", resultSetMapping="ShipmentAndItemIssuanceAndInventoryMapping")
 @SqlResultSetMapping(name="ShipmentAndItemIssuanceAndInventoryMapping", entities={
 @EntityResult(entityClass=ShipmentAndItemIssuanceAndInventory.class, fields = {
-@FieldResult(name="shipmentId", column="shipmentId")
+@FieldResult(name="inventoryStatusId", column="inventoryStatusId")
+,@FieldResult(name="inventoryCurrencyUomId", column="inventoryCurrencyUomId")
+,@FieldResult(name="shipmentId", column="shipmentId")
 ,@FieldResult(name="shipmentTypeId", column="shipmentTypeId")
 ,@FieldResult(name="statusId", column="statusId")
 ,@FieldResult(name="primaryOrderId", column="primaryOrderId")
@@ -136,6 +138,8 @@ import java.sql.Timestamp;
 public class ShipmentAndItemIssuanceAndInventory extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
+        fields.put("inventoryStatusId", "INV.STATUS_ID");
+        fields.put("inventoryCurrencyUomId", "INV.CURRENCY_UOM_ID");
         fields.put("shipmentId", "SHP.SHIPMENT_ID");
         fields.put("shipmentTypeId", "SHP.SHIPMENT_TYPE_ID");
         fields.put("statusId", "SHP.STATUS_ID");
@@ -216,6 +220,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("ShipmentAndItemIssuanceAndInventory", fields);
 }
   public static enum Fields implements EntityFieldInterface<ShipmentAndItemIssuanceAndInventory> {
+    inventoryStatusId("inventoryStatusId"),
+    inventoryCurrencyUomId("inventoryCurrencyUomId"),
     shipmentId("shipmentId"),
     shipmentTypeId("shipmentTypeId"),
     statusId("statusId"),
@@ -303,6 +309,10 @@ fieldMapColumns.put("ShipmentAndItemIssuanceAndInventory", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
+    
+   private String inventoryStatusId;
+    
+   private String inventoryCurrencyUomId;
     @Id
    private String shipmentId;
     
@@ -497,7 +507,7 @@ fieldMapColumns.put("ShipmentAndItemIssuanceAndInventory", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("shipmentId");this.primaryKeyNames.add("itemIssuanceId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("primaryOrderId");this.allFieldsNames.add("primaryReturnId");this.allFieldsNames.add("primaryShipGroupSeqId");this.allFieldsNames.add("picklistBinId");this.allFieldsNames.add("estimatedReadyDate");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("estimatedShipWorkEffId");this.allFieldsNames.add("estimatedArrivalDate");this.allFieldsNames.add("estimatedArrivalWorkEffId");this.allFieldsNames.add("latestCancelDate");this.allFieldsNames.add("estimatedShipCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("handlingInstructions");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("destinationFacilityId");this.allFieldsNames.add("originContactMechId");this.allFieldsNames.add("originTelecomNumberId");this.allFieldsNames.add("destinationContactMechId");this.allFieldsNames.add("destinationTelecomNumberId");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("additionalShippingCharge");this.allFieldsNames.add("addtlShippingChargeDesc");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("returnId");this.allFieldsNames.add("itemIssuanceId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("shipmentItemSeqId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("maintHistSeqId");this.allFieldsNames.add("issuedDateTime");this.allFieldsNames.add("issuedByUserLoginId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("cancelQuantity");this.allFieldsNames.add("inventoryItemTypeId");this.allFieldsNames.add("productId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("datetimeReceived");this.allFieldsNames.add("datetimeManufactured");this.allFieldsNames.add("expireDate");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("containerId");this.allFieldsNames.add("lotId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("binNumber");this.allFieldsNames.add("locationSeqId");this.allFieldsNames.add("comments");this.allFieldsNames.add("quantityOnHandTotal");this.allFieldsNames.add("availableToPromiseTotal");this.allFieldsNames.add("oldQuantityOnHand");this.allFieldsNames.add("oldAvailableToPromise");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("softIdentifier");this.allFieldsNames.add("activationNumber");this.allFieldsNames.add("activationValidThru");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("parentInventoryItemId");
+      this.allFieldsNames.add("inventoryStatusId");this.allFieldsNames.add("inventoryCurrencyUomId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("primaryOrderId");this.allFieldsNames.add("primaryReturnId");this.allFieldsNames.add("primaryShipGroupSeqId");this.allFieldsNames.add("picklistBinId");this.allFieldsNames.add("estimatedReadyDate");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("estimatedShipWorkEffId");this.allFieldsNames.add("estimatedArrivalDate");this.allFieldsNames.add("estimatedArrivalWorkEffId");this.allFieldsNames.add("latestCancelDate");this.allFieldsNames.add("estimatedShipCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("handlingInstructions");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("destinationFacilityId");this.allFieldsNames.add("originContactMechId");this.allFieldsNames.add("originTelecomNumberId");this.allFieldsNames.add("destinationContactMechId");this.allFieldsNames.add("destinationTelecomNumberId");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("additionalShippingCharge");this.allFieldsNames.add("addtlShippingChargeDesc");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("returnId");this.allFieldsNames.add("itemIssuanceId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("shipmentItemSeqId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("maintHistSeqId");this.allFieldsNames.add("issuedDateTime");this.allFieldsNames.add("issuedByUserLoginId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("cancelQuantity");this.allFieldsNames.add("inventoryItemTypeId");this.allFieldsNames.add("productId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("datetimeReceived");this.allFieldsNames.add("datetimeManufactured");this.allFieldsNames.add("expireDate");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("containerId");this.allFieldsNames.add("lotId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("binNumber");this.allFieldsNames.add("locationSeqId");this.allFieldsNames.add("comments");this.allFieldsNames.add("quantityOnHandTotal");this.allFieldsNames.add("availableToPromiseTotal");this.allFieldsNames.add("oldQuantityOnHand");this.allFieldsNames.add("oldAvailableToPromise");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("softIdentifier");this.allFieldsNames.add("activationNumber");this.allFieldsNames.add("activationValidThru");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("parentInventoryItemId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -515,6 +525,20 @@ fieldMapColumns.put("ShipmentAndItemIssuanceAndInventory", fields);
     /**
      * This is a view-entity, so the setter methods will be private to this class and for use in its fromMap constructor only
      */
+    /**
+     * Auto generated value setter.
+     * @param inventoryStatusId the inventoryStatusId to set
+     */
+    public void setInventoryStatusId(String inventoryStatusId) {
+        this.inventoryStatusId = inventoryStatusId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param inventoryCurrencyUomId the inventoryCurrencyUomId to set
+     */
+    public void setInventoryCurrencyUomId(String inventoryCurrencyUomId) {
+        this.inventoryCurrencyUomId = inventoryCurrencyUomId;
+    }
     /**
      * Auto generated value setter.
      * @param shipmentId the shipmentId to set
@@ -1055,6 +1079,20 @@ fieldMapColumns.put("ShipmentAndItemIssuanceAndInventory", fields);
         this.parentInventoryItemId = parentInventoryItemId;
     }
 
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInventoryStatusId() {
+        return this.inventoryStatusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInventoryCurrencyUomId() {
+        return this.inventoryCurrencyUomId;
+    }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
@@ -1674,6 +1712,8 @@ fieldMapColumns.put("ShipmentAndItemIssuanceAndInventory", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
+        setInventoryStatusId((String) mapValue.get("inventoryStatusId"));
+        setInventoryCurrencyUomId((String) mapValue.get("inventoryCurrencyUomId"));
         setShipmentId((String) mapValue.get("shipmentId"));
         setShipmentTypeId((String) mapValue.get("shipmentTypeId"));
         setStatusId((String) mapValue.get("statusId"));
@@ -1758,6 +1798,8 @@ fieldMapColumns.put("ShipmentAndItemIssuanceAndInventory", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        mapValue.put("inventoryStatusId", getInventoryStatusId());
+        mapValue.put("inventoryCurrencyUomId", getInventoryCurrencyUomId());
         mapValue.put("shipmentId", getShipmentId());
         mapValue.put("shipmentTypeId", getShipmentTypeId());
         mapValue.put("statusId", getStatusId());
