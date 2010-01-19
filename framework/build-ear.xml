@@ -146,10 +146,10 @@
   <target name="pre-package-framework-config">
     <move file="${framework.dir}/entity/config/entityengine.xml" tofile="${framework.dir}/entity/config/_entityengine.xml.bak"/>
 
-    <copy file="${framework.dir}/appserver/templates/jboss422/entityengine-jboss422.xml" tofile="${framework.dir}/entity/config/entityengine.xml"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/entityengine-jboss510.xml" tofile="${framework.dir}/entity/config/entityengine.xml"/>
 
     <!--
-        <patch patchfile="${framework.dir}/appserver/templates/jboss422/patches/jboss-ee-cfg.patch"
+        <patch patchfile="${framework.dir}/appserver/templates/jboss510/patches/jboss-ee-cfg.patch"
         dir="${basedir}"/>
     -->
 
@@ -158,7 +158,7 @@
     <!-- META-INF -->
     <mkdir dir="${ear.dir}/META-INF"/>
 
-    <copy file="${framework.dir}/appserver/templates/jboss422/application.xml" todir="${ear.dir}/META-INF"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/application.xml" todir="${ear.dir}/META-INF"/>
   </target>
 
   <!-- ================================================================== -->
@@ -166,7 +166,7 @@
   <!-- ================================================================== -->
 
   <target name="post-package-framework-config">
-    <move file="${framework.dir}/entity/config/entityengine.xml" tofile="${framework.dir}/entity/config/entityengine-jboss422.xml"/>
+    <move file="${framework.dir}/entity/config/entityengine.xml" tofile="${framework.dir}/entity/config/entityengine-jboss510.xml"/>
     <move file="${framework.dir}/entity/config/_entityengine.xml.bak" tofile="${framework.dir}/entity/config/entityengine.xml"/>
     <move file="${framework.dir}/base/config/_jndi.properties.bak" tofile="${framework.dir}/base/config/jndi.properties"/>
   </target>
@@ -321,22 +321,22 @@
 
     <!-- server.xml -->
     <move file="${jboss.deploy.dir}/jbossweb.sar/server.xml" tofile="${jboss.deploy.dir}/jbossweb.sar/_server.xml.bak"/>
-    <copy file="${framework.dir}/appserver/templates/jboss422/misc/server.xml" todir="${jboss.deploy.dir}/jbossweb.sar/"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/misc/server.xml" todir="${jboss.deploy.dir}/jbossweb.sar/"/>
 
     <!-- keystore -->
-    <copy file="${framework.dir}/appserver/templates/jboss422/misc/keystore" tofile="${JBOSS_HOME}/server/default/conf/.keystore"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/misc/keystore" tofile="${JBOSS_HOME}/server/default/conf/.keystore"/>
 
     <!-- MySQL -->
-    <copy file="${framework.dir}/appserver/templates/jboss422/patches/mysql-ds.xml" todir="${jboss.deploy.dir}"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/datasource/mysql-ds.xml" todir="${jboss.deploy.dir}"/>
 
-    <copy file="${framework.dir}/appserver/templates/jboss422/jdbc/mysql-connector-java-5.0.6-bin.jar" todir="${JBOSS_HOME}/server/default/lib"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/jdbc/mysql-connector-java-5.0.6-bin.jar" todir="${JBOSS_HOME}/server/default/lib"/>
 
     <!-- run.bat / run.sh -->
     <move file="${JBOSS_HOME}/bin/run.bat" tofile="${JBOSS_HOME}/bin/_run.bat.bak"/>
-    <copy file="${framework.dir}/appserver/templates/jboss422/misc/run.bat" todir="${JBOSS_HOME}/bin/"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/misc/run.bat" todir="${JBOSS_HOME}/bin/"/>
 
     <move file="${JBOSS_HOME}/bin/run.sh" tofile="${JBOSS_HOME}/bin/_run.sh.bak"/>
-    <copy file="${framework.dir}/appserver/templates/jboss422/misc/run.sh" todir="${JBOSS_HOME}/bin/"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/misc/run.sh" todir="${JBOSS_HOME}/bin/"/>
 
     <echo message="[setup-framework-jboss] ============ end ============="/>
 
