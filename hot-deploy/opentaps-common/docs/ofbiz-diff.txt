@@ -310,6 +310,7 @@ r13477 change productsSoldThruTimestamp to timestamp when it is a string value
 applications/product/src/org/ofbiz/shipment/thirdparty/ups/UpsServices.java
 r13859 e-mail customers a shipping confirmation that includes tracking numbers for the package when UPS shipping labels are created
 r13928 orderId on UPS label
+r14687 rate estimate from non-US warehouses (OFBIZ-3420)
 
 applications/order/src/org/ofbiz/order/order/OrderServices.java
 r13899 Fix reservation and cancelOrderItem did not account for already issued quantity
