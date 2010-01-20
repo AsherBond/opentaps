@@ -43,7 +43,9 @@
           <@displayCell text=picklistInfo.shipmentMethodTypeDescription/>
           <@displayCell text=picklistInfo.createdByUserLogin/>
           <@displayCell text=picklistInfo.description/>
-          <@submitFormLinkConfirm form="closePicklistsForm" text=uiLabelMap.WarehouseClosePicklists picklistId=picklistInfo.picklistId  class="subMenuButton"/>
+          <td class="alignRight">
+          <@submitFormLinkConfirm form="closePicklistsForm" text=uiLabelMap.WarehouseClosePicklists picklistId=picklistInfo.picklistId  class="buttontext"/>
+          </td>
         </tr>
       </#list>
     </table>
