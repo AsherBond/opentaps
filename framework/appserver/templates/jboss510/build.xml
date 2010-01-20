@@ -138,8 +138,13 @@
         <move file="${r"${ofbizHome}"}/framework/base/config/_log4j.xml.bak" tofile="${r"${ofbizHome}"}/framework/base/config/log4j.xml"/>
         <move file="${r"${ofbizHome}"}/framework/base/config/_jndi.properties.bak" tofile="${r"${ofbizHome}"}/framework/base/config/jndi.properties"/>
 
-        <!-- setup the OFBIZ_HOME by updating run.conf -->
+        <!-- setup the OFBIZ_HOME by updating run.conf on linux/unix/mac -->
         <move file="../../../../bin/run.conf" tofile="../../../../bin/run.conf.obak"/>
         <copy file="${r"${ofbizHome}"}/setup/jboss510/run.conf" tofile="../../../../bin/run.conf"/>
+
+        <!-- setup the OFBIZ_HOME by updating run.conf.bat on windows -->
+        <move file="../../../../bin/run.conf.bat" tofile="../../../../bin/run.conf.bat.obak"/>
+        <copy file="${r"${ofbizHome}"}/setup/jboss510/run.conf.bat" tofile="../../../../bin/run.conf.bat"/>
+
     </target>
 </project>

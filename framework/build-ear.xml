@@ -283,8 +283,9 @@
 
     <!-- MySQL -->
     <copy file="${framework.dir}/appserver/templates/jboss510/datasource/mysql-ds.xml" todir="${jboss.deploy.dir}"/>
-
-    <copy file="${framework.dir}/appserver/templates/jboss510/jdbc/mysql-connector-java-5.0.6-bin.jar" todir="${JBOSS_HOME}/server/default/lib"/>
+    <copy file="${framework.dir}/entity/lib/jdbc/mysql-connector-java-5.1.10-bin.jar" todir="${JBOSS_HOME}/server/default/lib"/>
+    <!-- this jar conflict with %JBOSS_HOME%\common\lib\bsh.jar, so need copy it to default/lib -->
+    <copy file="${framework.dir}/base/lib/scripting/bsh-2.0b4.jar" todir="${JBOSS_HOME}/server/default/lib"/>
 
     <!-- run.bat / run.sh -->
     <move file="${JBOSS_HOME}/bin/run.bat" tofile="${JBOSS_HOME}/bin/_run.bat.bak"/>
@@ -292,7 +293,22 @@
 
     <move file="${JBOSS_HOME}/bin/run.sh" tofile="${JBOSS_HOME}/bin/_run.sh.bak"/>
     <copy file="${framework.dir}/appserver/templates/jboss510/misc/run.sh" todir="${JBOSS_HOME}/bin/"/>
+    
+    <!-- copy run.conf and replace ofbiz home token -->
+    <move file="${JBOSS_HOME}/bin/run.conf" tofile="${JBOSS_HOME}/bin/run.conf.obak"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/run.conf" toFile="${JBOSS_HOME}/bin/run.conf">
+      <filterset>
+        <filter token="ofbizHome" value="${basedir}"/>
+      </filterset> 
+    </copy>
 
+    <!-- copy run.conf.bat and replace ofbiz home token -->
+    <move file="${JBOSS_HOME}/bin/run.conf.bat" tofile="${JBOSS_HOME}/bin/run.conf.bat.obak"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/run.conf.bat" toFile="${JBOSS_HOME}/bin/run.conf.bat">
+      <filterset>
+        <filter token="ofbizHome" value="${basedir}"/>
+      </filterset> 
+    </copy>
     <echo message="[setup-framework-jboss] ============ end ============="/>
 
   </target>
