@@ -1672,6 +1672,22 @@ public class FinancialsTests extends FinancialsTestCase {
     }
 
     /**
+     *This test checks that payment applications to an adjusted invoice is based on the invoice total including the adjusted amount
+     */
+    public void testPaymentApplicationToAdjustedInvoice() {
+        // create a customer party
+        // create sales invoice to the customer for $10
+        //  set the invoice to READY
+        // create an adjustment of CASH_DISCOUNT of -2 for the invoice
+        // verify that the invoice total amount is $8
+        // verify that the invoice outstanding amount is $8
+        // create a payment (P1) of $4 and apply it to the invoice
+        // create a second payment (P2) of $5 and apply $4 to the invoice
+        // verify that the invoice total is still $8 by the outstanding amount is $0
+        // verify the status of the invoice is PAID
+    }
+
+    /**
      * TestAdjustmentToCancelledInvoice: this test should verify that adjustments to cancelled invoices are not posted to the ledger
      * 1.  Create sales invoice for $10 (do not set to ready)
      * 2.  Create adjustment of EARLY_PAY_DISCOUNT for $2 on invoice from (1)
