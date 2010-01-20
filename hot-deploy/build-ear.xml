@@ -129,6 +129,11 @@
   <target name="package-hot-deploy-webapp">
     <!-- opentaps-common -->
 
+    <mkdir dir="${ear.dir}/commongwt.war"/>
+    <copy todir="${ear.dir}/commongwt.war">
+      <fileset dir="${hot-deploy.dir}/opentaps-common/webapp/commongwt"/>
+    </copy>
+
     <mkdir dir="${ear.dir}/opentaps_images.war"/>
 
     <copy todir="${ear.dir}/opentaps_images.war">
@@ -178,10 +183,11 @@
       <fileset dir="${hot-deploy.dir}/crmsfa/webapp/surveys"/>
     </copy>
 
-    <!--<mkdir dir="${ear.dir}/crmsfagwt.war"/>
-        <copy todir="${ear.dir}/crmsfagwt.war">
-        <fileset dir="${hot-deploy.dir}/crmsfa/webapp/crmsfagwt"/>
-        </copy>-->
+    <mkdir dir="${ear.dir}/crmsfagwt.war"/>
+    <copy todir="${ear.dir}/crmsfagwt.war">
+      <fileset dir="${hot-deploy.dir}/crmsfa/webapp/crmsfagwt"/>
+    </copy>
+
 
     <!-- financials -->
 
@@ -191,12 +197,22 @@
       <fileset dir="${hot-deploy.dir}/financials/webapp/financials"/>
     </copy>
 
+    <mkdir dir="${ear.dir}/financialsgwt.war"/>
+    <copy todir="${ear.dir}/financialsgwt.war">
+      <fileset dir="${hot-deploy.dir}/financials/webapp/financialsgwt"/>
+    </copy>
+    
     <!-- purchasing -->
 
     <mkdir dir="${ear.dir}/purchasing.war"/>
 
     <copy todir="${ear.dir}/purchasing.war">
       <fileset dir="${hot-deploy.dir}/purchasing/webapp/purchasing"/>
+    </copy>
+
+    <mkdir dir="${ear.dir}/purchasinggwt.war"/>
+    <copy todir="${ear.dir}/purchasinggwt.war">
+      <fileset dir="${hot-deploy.dir}/purchasing/webapp/purchasinggwt"/>
     </copy>
 
     <!-- warehouse -->
@@ -207,6 +223,10 @@
       <fileset dir="${hot-deploy.dir}/warehouse/webapp/warehouse"/>
     </copy>
 
+    <mkdir dir="${ear.dir}/warehousegwt.war"/>
+    <copy todir="${ear.dir}/warehousegwt.war">
+      <fileset dir="${hot-deploy.dir}/warehouse/webapp/warehousegwt"/>
+    </copy>
     <!-- dataimport -->
 
     <!-- <mkdir dir="${ear.dir}/dataimport.war"/> -->
