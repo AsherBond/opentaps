@@ -18,8 +18,6 @@ package org.opentaps.aspect.secas;
 
 import java.util.Map;
 
-import org.codehaus.aspectwerkz.annotation.Around;
-import org.codehaus.aspectwerkz.annotation.Expression;
 import org.codehaus.aspectwerkz.joinpoint.JoinPoint;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.service.DispatchContext;
@@ -28,10 +26,14 @@ public class CommonServiceAspects  {
 
     public static final String module = CommonServiceAspects.class.getName();
 
-    @Expression("execution(public static java.util.Map org.ofbiz.common.CommonServices.echoService(..)) && args(dctx, context)")
+    /**
+     * @Expression execution(public static Map org.ofbiz.common.CommonServices.echoService(..)) && args(dctx, context)
+     */
     void echoServiceAroundDemo(DispatchContext dctx, Map context){}
 
-    @Around("echoServiceAroundDemo(dctx, context)")
+    /**
+     * @Around echoServiceAroundDemo(dctx, context)
+     */
     public Object firstEchoServiceAroundDemo(JoinPoint jp, DispatchContext dctx, Map context) throws Throwable {
         Debug.logInfo("Around Advise Demo: enter into firstEchoServiceAroundDemo", module);
         // Calls next advice since it exists
@@ -41,7 +43,9 @@ public class CommonServiceAspects  {
         return results;
     }
 
-    @Around("echoServiceAroundDemo(dctx, context)")
+    /**
+     * @Around echoServiceAroundDemo(dctx, context)
+     */
     public Object nextEchoServiceAroundDemo(JoinPoint jp, DispatchContext dctx, Map context) throws Throwable {
         Debug.logInfo("Around Advise Demo: enter into nextEchoServiceAroundDemo", module);
         // call CommonServices.echoService() since no more joined advices
