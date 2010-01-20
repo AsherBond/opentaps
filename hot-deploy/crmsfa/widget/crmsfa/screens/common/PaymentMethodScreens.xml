@@ -59,8 +59,8 @@
     <screen name="accountsEditEftAccount">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="AccountingEftAccount"/>
-                <set field="sectionHeaderUiLabel" value="AccountingEftAccount"/>
+                <set field="pageTitleLabel" value="AccountingEFTAccount"/>
+                <set field="sectionHeaderUiLabel" value="AccountingEFTAccount"/>
                 <set field="parameters.DONE_PAGE" value="viewAccount"/>
                 <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                
             </actions>
@@ -171,8 +171,8 @@
     <screen name="contactsEditEftAccount">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="AccountingEftAccount"/>
-                <set field="sectionHeaderUiLabel" value="AccountingEftAccount"/>
+                <set field="pageTitleLabel" value="AccountingEFTAccount"/>
+                <set field="sectionHeaderUiLabel" value="AccountingEFTAccount"/>
                 <set field="parameters.DONE_PAGE" value="viewContact"/>
                 <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                
             </actions>
