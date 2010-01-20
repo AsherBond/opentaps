@@ -9428,7 +9428,7 @@ public interface CommonMessages extends Messages {
     String opentapsReference();
     @DefaultMessage("Region")
     String opentapsRegion();
-    @DefaultMessage("1.4-RC1")
+    @DefaultMessage("Developer Version")
     String opentapsReleaseVersion();
     @DefaultMessage("Reply")
     String opentapsReply();
@@ -17186,6 +17186,8 @@ public interface CommonMessages extends Messages {
     String warehouseNoPostalAddress();
     @DefaultMessage("No printer configured for printing shipping label.")
     String warehouseNoPrinterForLabel();
+    @DefaultMessage("No shipment receipts found")
+    String warehouseNoShipmentReceiptsFound();
     @DefaultMessage("# Orders")
     String warehouseNumberOfOrder();
     @DefaultMessage("Open Picklists")
