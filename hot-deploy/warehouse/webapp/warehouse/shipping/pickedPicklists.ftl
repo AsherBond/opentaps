@@ -44,7 +44,7 @@
           <@displayCell text=picklistInfo.createdByUserLogin/>
           <@displayCell text=picklistInfo.description/>
           <td class="alignRight">
-          <@submitFormLinkConfirm form="closePicklistsForm" text=uiLabelMap.WarehouseClosePicklists picklistId=picklistInfo.picklistId  class="buttontext"/>
+          <@submitFormLinkConfirm form="closePicklistsForm" text=uiLabelMap.WarehouseClosePicklists picklistId=picklistInfo.picklistId />
           </td>
         </tr>
       </#list>
