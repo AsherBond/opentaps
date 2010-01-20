@@ -191,8 +191,9 @@ under the License.
                   </#if>
                 </td>
                 <td>
+                  <@form name="updatePartyCarrierAccountHiddenForm" url="updatePartyCarrierAccount" partyId="${parameters.partyId}" carrierPartyId="${partyCarrierAccount.carrierPartyId}" fromDate="${partyCarrierAccount.fromDate}" thruDate="${now}" donePage="${parameters.thisRequestUri}" />
                   <a href="<@ofbizUrl>${editShippingAccount}?partyId=${parameters.partyId}&carrierPartyId=${partyCarrierAccount.carrierPartyId}&fromDate=${partyCarrierAccount.fromDate}&donePage=${parameters.thisRequestUri}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
-                  <a href="<@ofbizUrl>updatePartyCarrierAccount?partyId=${parameters.partyId}&carrierPartyId=${partyCarrierAccount.carrierPartyId}&fromDate=${partyCarrierAccount.fromDate}&thruDate=${now}&donePage=${parameters.thisRequestUri}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonExpire}</a>
+                  <@submitFormLink form="updatePartyCarrierAccountHiddenForm" text="${uiLabelMap.CommonExpire}" />
                 </td>
               </tr>
             </#list>
