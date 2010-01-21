@@ -2636,6 +2636,8 @@ public interface CommonMessages extends Messages {
     String country();
     @DefaultMessage("Create Account")
     String createAccount();
+    @DefaultMessage("This acount is duplicating Acct #{0}.")
+    String createAccountDuplicateCheckFail(String partyId);
     @DefaultMessage("Create Contact")
     String createContact();
     @DefaultMessage("Create Lead")
@@ -5872,6 +5874,8 @@ public interface CommonMessages extends Messages {
     String findByName();
     @DefaultMessage("Phone")
     String findByPhone();
+    @DefaultMessage("Shipping Address")
+    String findByShippingAddress();
     @DefaultMessage("Find Contacts")
     String findContacts();
     @DefaultMessage("Find Leads")

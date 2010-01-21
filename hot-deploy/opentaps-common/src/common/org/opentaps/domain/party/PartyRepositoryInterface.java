@@ -212,4 +212,12 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public Set<Party> getPartyByName(String firstName, String lastName) throws RepositoryException;
+    
+    /**
+     * Finds the list of <code>Party</code> matching the given group name.
+     * @return the list of <code>Party</code> matching the name
+     * @param groupName the groupName to find
+     * @throws RepositoryException if an error occurs
+     */
+    public Set<Party> getPartyByGroupName(String groupName) throws RepositoryException;    
 }

@@ -439,4 +439,28 @@ public class PartyRepository extends DomainRepository implements PartyRepository
         }
         return resultSet;
     }
+    
+    /** {@inheritDoc} */
+    public Set<Party> getPartyByGroupName(String groupName) throws RepositoryException {
+        Set<Party> resultSet = new FastSet<Party>();
+        try {
+            Session session = getInfrastructure().getSession();
+            // prepare the HQL to get Party
+            String hql = "select eo.party from PartyGroup eo where lower(trim(eo.groupName)) like :groupName"
+                + " and (eo.party.statusId is null or 'PARTY_DISABLED' <> eo.party.statusId)";
+            org.hibernate.Query query = session.createQuery(hql);
+            query.setString("groupName", groupName.trim().toLowerCase());
+            List<org.opentaps.base.entities.Party> parties = query.list();
+            List<String> partyIds = new ArrayList<String>();
+            for (org.opentaps.base.entities.Party party : parties) {
+                partyIds.add(party.getPartyId());
+            }
+            if (partyIds.size() > 0) {
+                resultSet.addAll(getPartyByIds(partyIds));
+            }
+        } catch (InfrastructureException e) {
+            throw new RepositoryException(e);
+        }
+        return resultSet;
+    }    
 }
