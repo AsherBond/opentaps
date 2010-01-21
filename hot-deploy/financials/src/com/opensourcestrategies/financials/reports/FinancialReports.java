@@ -17,7 +17,6 @@
 package com.opensourcestrategies.financials.reports;
 
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -69,21 +68,22 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.SalesInvoiceItemFact;
+import org.opentaps.base.entities.TaxInvoiceItemFact;
 import org.opentaps.common.jndi.DataSourceImpl;
 import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
-import org.opentaps.base.entities.SalesInvoiceItemFact;
-import org.opentaps.base.entities.TaxInvoiceItemFact;
+import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.pentaho.di.core.exception.KettleException;
 
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
 import com.opensourcestrategies.financials.financials.FinancialServices;
 
 /**
@@ -101,8 +101,7 @@ public final class FinancialReports {
      * @return query parameter map
      * @throws GenericEntityException if error occur
      */
-    @SuppressWarnings("unchecked")
-    public static Map prepareFinancialReportParameters(HttpServletRequest request) throws GenericEntityException {
+    public static Map<String, Object> prepareFinancialReportParameters(HttpServletRequest request) throws GenericEntityException {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilCommon.getTimeZone(request);
@@ -171,8 +170,7 @@ public final class FinancialReports {
      * @return query parameter map
      * @throws GenericEntityException if error occur
      */
-    @SuppressWarnings("unchecked")
-    public static Map prepareComparativeFlowReportParameters(HttpServletRequest request) throws GenericEntityException {
+    public static Map<String, Object> prepareComparativeFlowReportParameters(HttpServletRequest request) throws GenericEntityException {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
@@ -236,8 +234,7 @@ public final class FinancialReports {
      * @return query parameter map
      * @throws GenericEntityException if error occur
      */
-    @SuppressWarnings("unchecked")
-    public static Map prepareComparativeStateReportParameters(HttpServletRequest request) throws GenericEntityException {
+    public static Map<String, Object> prepareComparativeStateReportParameters(HttpServletRequest request) throws GenericEntityException {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
@@ -245,7 +242,7 @@ public final class FinancialReports {
         String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
         String glFiscalTypeId1 = UtilCommon.getParameter(request, "glFiscalTypeId1");
         String glFiscalTypeId2 = UtilCommon.getParameter(request, "glFiscalTypeId2");
-       String fromDateText = null;
+        String fromDateText = null;
         String thruDateText = null;
         Timestamp fromDate = null;
         Timestamp thruDate = null;
@@ -1130,6 +1127,77 @@ public final class FinancialReports {
     }
 
     /**
+     * @param request
+     * @param response
+     * @return
+     */
+    public static String prepareReceivablesAgingReport(HttpServletRequest request, HttpServletResponse response) {
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Locale locale = UtilHttp.getLocale(request);
+        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
+
+        String reportType = UtilCommon.getParameter(request, "type");
+        String partyId = UtilCommon.getParameter(request, "partyId");
+
+        String organizationPartyId = null;
+        Timestamp asOfDate = null;
+
+        try {
+
+            // retrieve financial data
+            Map<String, Object> ctxt = prepareFinancialReportParameters(request);
+            UtilAccountingTags.addTagParameters(request, ctxt);
+            asOfDate = (Timestamp) ctxt.get("asOfDate");
+            organizationPartyId = (String) ctxt.get("organizationPartyId");
+
+            List<Integer> daysOutstandingBreakPoints = UtilMisc.<Integer>toList(30, 60, 90);
+            // this is a hack to get the the invoices over the last break point (ie, 90+ invoices)
+            Integer maximumDSOBreakPoint = 9999;
+            List<Integer> breakPointParams = FastList.<Integer>newInstance();
+            breakPointParams.addAll(daysOutstandingBreakPoints);
+            breakPointParams.add(maximumDSOBreakPoint);
+
+            Map<Integer, List<Invoice>> invoicesByDSO = null;
+            if (UtilValidate.isEmpty(partyId)) {
+                invoicesByDSO = AccountsHelper.getUnpaidInvoicesForCustomers(organizationPartyId, breakPointParams, asOfDate, UtilMisc.toList("INVOICE_READY"), delegator, timeZone, locale);
+            } else {
+                invoicesByDSO = AccountsHelper.getUnpaidInvoicesForCustomer(organizationPartyId, partyId, breakPointParams, asOfDate, UtilMisc.toList("INVOICE_READY"), delegator, timeZone, locale);
+            }
+
+            List<Map<String, Object>> plainList = FastList.<Map<String, Object>>newInstance();
+            for (Integer breakPoint : invoicesByDSO.keySet()) {
+                List<Invoice> invoicesForBreakPoint = invoicesByDSO.get(breakPoint);
+                if (UtilValidate.isEmpty(invoicesForBreakPoint)) {
+                    plainList.add(UtilMisc.<String, Object>toMap("DCOBreakPoint", breakPoint, "isEmpty", Boolean.TRUE));
+                }
+                for (Invoice invoice : invoicesForBreakPoint) {
+                    FastMap<String, Object> reportLine = FastMap.<String, Object>newInstance();
+                    reportLine.put("DCOBreakPoint", breakPoint);
+                    reportLine.put("isEmpty", Boolean.FALSE);
+                    reportLine.putAll(invoice.toMapNoStamps());
+                    plainList.add(reportLine);
+                }
+            }
+
+            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(plainList));
+
+            Map<String, Object> jrParameters = FastMap.newInstance();
+            jrParameters.putAll(ctxt);
+            jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, (String) ctxt.get("organizationPartyId"), false));
+            jrParameters.put("accountingTags", UtilAccountingTags.formatTagsAsString(request, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator));
+            request.setAttribute("jrParameters", jrParameters);
+
+        } catch (GenericEntityException e) {
+            UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        } catch (RepositoryException e) {
+            UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        }
+
+        return reportType;
+    }
+
+    /**
      * Call a service to update GlAccountTransEntryFact entity. This intermediate data are used by budgeting reports.
      *
      * @param request a <code>HttpServletRequest</code> value
@@ -1849,4 +1917,6 @@ public final class FinancialReports {
 
         return results;
     }
+
+    
 }

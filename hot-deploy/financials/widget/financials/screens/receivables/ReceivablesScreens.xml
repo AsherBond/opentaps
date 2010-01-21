@@ -92,6 +92,8 @@
                 <set field="reportType" value="ACCOUNTS_RECEIVABLE"/>  <!-- this configures the bsh report to get the right data -->
                 <set field="returnPage" value="receivables"/>
                 <set field="returnLabel" value="FinancialsReturnToReceivables"/>
+                <set field="screenRequest" value="receivablesAgingReport"/>
+                <set field="reportRequest" value="JReceivablesAgingReport"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/customerVendorAging.bsh"/>
             </actions>

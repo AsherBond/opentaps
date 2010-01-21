@@ -244,7 +244,7 @@ public class AccountsHelper {
         return getUnpaidInvoicesHelper(organizationPartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map getUnpaidInvoicesForCustomers(String organizationPartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomers(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, null, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
@@ -258,7 +258,7 @@ public class AccountsHelper {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
@@ -345,8 +345,8 @@ public class AccountsHelper {
      * @return
      * @throws GenericEntityException
      */
-    public static Map getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List daysOutstandingPoints,
-            Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate) throws GenericEntityException, RepositoryException {
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List<Integer> daysOutstandingPoints,
+            Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate) throws GenericEntityException, RepositoryException {
 
         // make sure the as of date is at the end of the day, this normalization prevents issues such as invoices that were just created missing from a report
         asOfDateTime = UtilDateTime.getDayEnd(asOfDateTime);
@@ -389,14 +389,14 @@ public class AccountsHelper {
         EntityCondition conditions = EntityCondition.makeCondition(conditionList, EntityOperator.AND);
 
         // search and sort results on invoiceDate ascending
-        List invoices = delegator.findByCondition("Invoice", conditions, null, UtilMisc.toList("invoiceDate"));
+        List<GenericValue> invoices = delegator.findByCondition("Invoice", conditions, null, UtilMisc.toList("invoiceDate"));
 
         // group the results into date buckets using the aging date as a basis
         return groupInvoicesByDateBucket(invoices, asOfDateTime, daysOutstandingPoints, delegator, useAgingDate);
     }
 
-    public static Map getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List daysOutstandingPoints,
-        Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List<Integer> daysOutstandingPoints,
+        Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, invoiceTypeId, daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale, false);
     }
 
@@ -426,18 +426,18 @@ public class AccountsHelper {
         return groupInvoicesByDateBucket(invoices, asOfDateTime, daysOutstandingPoints, delegator, useAgingDate);
     }
 
-    private static Map groupInvoicesByDateBucket(List<GenericValue> invoiceList, Timestamp asOfDateTime, List daysOutstandingPoints, GenericDelegator delegator, boolean useAgingDate) throws GenericEntityException, RepositoryException {
+    private static Map<Integer, List<Invoice>> groupInvoicesByDateBucket(List<GenericValue> invoiceList, Timestamp asOfDateTime, List<Integer> daysOutstandingPoints, GenericDelegator delegator, boolean useAgingDate) throws GenericEntityException, RepositoryException {
 
         // create a temporary bridge to our refactoring
         InvoiceRepository repository = new InvoiceRepository(delegator);
         List<Invoice> invoices = (List<Invoice>) Repository.loadFromGeneric(Invoice.class, invoiceList, repository);
 
         // Create outstandingInvoices map, populate with empty buckets, and store the maximum days outstanding of all the break points
-        Map outstandingInvoicesByAge = FastMap.newInstance();
+        Map<Integer, List<Invoice>> outstandingInvoicesByAge = FastMap.newInstance();
         int maxDaysOutstanding = 0;
-        for (Iterator it = daysOutstandingPoints.iterator(); it.hasNext();) {
-            Integer nextDaysOutstanding = (Integer) it.next();
-            outstandingInvoicesByAge.put(nextDaysOutstanding, new LinkedList());
+        for (Iterator<Integer> it = daysOutstandingPoints.iterator(); it.hasNext();) {
+            Integer nextDaysOutstanding = it.next();
+            outstandingInvoicesByAge.put(nextDaysOutstanding, new LinkedList<Invoice>());
             if (nextDaysOutstanding.intValue() > maxDaysOutstanding) {
                 maxDaysOutstanding = nextDaysOutstanding.intValue();
             }
@@ -455,17 +455,17 @@ public class AccountsHelper {
             // Put this invoice into the List at the first days outstanding (DSO) break point which is greater than the current one, or
             // the last DSO break point in the list of DSO break points, whichever one comes first
             boolean foundDaysOutstandingPoint = false;
-            Iterator it = daysOutstandingPoints.iterator();
+            Iterator<Integer> it = daysOutstandingPoints.iterator();
             while ((it.hasNext()) && (!foundDaysOutstandingPoint)) {
                 Integer daysOutstandingPoint = (Integer) it.next();
                 if (numberOfDays.compareTo(daysOutstandingPoint) == -1) { // -1 is less than
-                    List invoicesByDaysOutstanding = (LinkedList) outstandingInvoicesByAge.get(daysOutstandingPoint);
+                    List<Invoice> invoicesByDaysOutstanding = (LinkedList<Invoice>) outstandingInvoicesByAge.get(daysOutstandingPoint);
                     invoicesByDaysOutstanding.add(invoice);
                     foundDaysOutstandingPoint = true;
                 }
             }
             if (!foundDaysOutstandingPoint) {
-                List invoicesByDaysOutstanding = (LinkedList) outstandingInvoicesByAge.get(new Integer(maxDaysOutstanding));
+                List<Invoice> invoicesByDaysOutstanding = (LinkedList<Invoice>) outstandingInvoicesByAge.get(new Integer(maxDaysOutstanding));
                 invoicesByDaysOutstanding.add(invoice);
             }
         }
