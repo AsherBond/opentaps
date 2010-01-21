@@ -102,7 +102,7 @@
                     <@displayCell text=displayItemSeqId />
                     <@displayCell text=item.typeDescription />
                     <@inputLookupCell name="partyId" default=item.partyId lookup="LookupPartyName" form="updatePaycheckWitholding_o_${item_index}" size="10" />
-                    <@inputTextCell name="amount" default=item.amount?default("EMPTY") size="6"/>
+                    <@inputTextCell name="amount" default=item.amount?default("") size="6"/>
                     <@displayLinkCell href="javascript:document.updatePaycheckWitholding_o_${item_index}.submit()" class="buttontext" text="${uiLabelMap.CommonUpdate}"/>
                   </form>
                 <#else>
@@ -159,7 +159,7 @@
                     <@displayCell text=displayItemSeqId />
                     <@displayCell text=item.typeDescription style="white-space: nowrap;" />
                     <@inputLookupCell name="partyId" default=item.partyId lookup="LookupPartyName" form="updatePaycheckExpense_o_${item_index}" size="10" />
-                    <@inputTextCell name="amount" default=item.amount?default("EMPTY") size="6"/>
+                    <@inputTextCell name="amount" default=item.amount?default("") size="6"/>
                     <@displayLinkCell href="javascript:document.updatePaycheckExpense_o_${item_index}.submit()" class="buttontext" text="${uiLabelMap.CommonUpdate}"/>
                   </form>
                 <#else>
