@@ -40,7 +40,6 @@ under the License.
     <load-component component-location="opentaps-osgi"/>
     -->
     <!--
-    <load-component component-location="livecatalog"/>
     <load-component component-location="funambol"/>
     -->
     <!-- Uncomment these to load the Funambol Data Synchronization or Pentaho BI 
