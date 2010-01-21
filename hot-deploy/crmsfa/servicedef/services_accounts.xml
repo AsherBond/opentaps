@@ -71,6 +71,8 @@
         <attribute name="partyId" type="String" mode="OUT" optional="false"/>
         <attribute name="dataSourceId" type="String" mode="IN" optional="true"/> <!-- initial data source -->
         <attribute name="marketingCampaignId" type="String" mode="IN" optional="true"/> <!-- initial marketing campaign -->
+        <attribute name="forceComplete" type="String" mode="IN" optional="true"/>
+        <attribute name="duplicateAccountsWithName" type="Set" mode="OUT" optional="true"/>
     </service>
 
     <service name="crmsfa.updateAccount" engine="java" location="com.opensourcestrategies.crmsfa.accounts.AccountsServices" invoke="updateAccount">

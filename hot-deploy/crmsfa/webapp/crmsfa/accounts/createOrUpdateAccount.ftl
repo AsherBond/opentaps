@@ -147,11 +147,24 @@
   </tr>
   </#if>
 
+  <@inputHidden name="forceComplete" value="N"/>
+  <#if requestAttributes.duplicateAccountsWithName?exists>
+  <tr> 
+  <td >&nbsp;</td>
+  
+  <td>
+    <@submitFormLinkConfirm form="createAccountForm" text=uiLabelMap.OpentapsForceComplete forceComplete="Y"/>
+    </td>
+    </tr>
+  <#else>
   <#if isCreate>
     <@inputSubmitRow title=uiLabelMap.CrmCreateAccount />
   <#else>
     <@inputSubmitRow title=uiLabelMap.CommonSave />
   </#if>
+  </#if>
+  
+  
   
 </table>
 </form>

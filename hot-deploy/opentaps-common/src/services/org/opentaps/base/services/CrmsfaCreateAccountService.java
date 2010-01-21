@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.accounts.AccountsServices
  * Invoke: createAccount
- * Defined in: hot-deploy/crmsfa/servicedef/services_accounts.xml
+ * Defined in: /D:/eclipse/workspace/opentaps-1.4/hot-deploy/crmsfa/servicedef/services_accounts.xml
  */
 public class CrmsfaCreateAccountService extends ServiceWrapper {
 
@@ -60,6 +60,7 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
         currencyUomId("currencyUomId"),
         dataSourceId("dataSourceId"),
         description("description"),
+        forceComplete("forceComplete"),
         generalAddress1("generalAddress1"),
         generalAddress2("generalAddress2"),
         generalAttnName("generalAttnName"),
@@ -97,6 +98,7 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
     }
 
     public static enum Out {
+        duplicateAccountsWithName("duplicateAccountsWithName"),
         errorMessage("errorMessage"),
         errorMessageList("errorMessageList"),
         generalAddressContactMechId("generalAddressContactMechId"),
@@ -128,6 +130,7 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
     private String inCurrencyUomId;
     private String inDataSourceId;
     private String inDescription;
+    private String inForceComplete;
     private String inGeneralAddress1;
     private String inGeneralAddress2;
     private String inGeneralAttnName;
@@ -159,6 +162,7 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
     private String inTickerSymbol;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
+    private Set outDuplicateAccountsWithName;
     private String outErrorMessage;
     private List outErrorMessageList;
     private String outGeneralAddressContactMechId;
@@ -215,6 +219,14 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
      */
     public String getInDescription() {
         return this.inDescription;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInForceComplete() {
+        return this.inForceComplete;
     }
     /**
      * Auto generated value accessor.
@@ -467,6 +479,14 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
+     * @return <code>Set</code>
+     */
+    public Set getOutDuplicateAccountsWithName() {
+        return this.outDuplicateAccountsWithName;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
      * @return <code>String</code>
      */
     public String getOutErrorMessage() {
@@ -613,6 +633,15 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
     public void setInDescription(String inDescription) {
         this.inParameters.add("description");
         this.inDescription = inDescription;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inForceComplete the inForceComplete to set
+    */
+    public void setInForceComplete(String inForceComplete) {
+        this.inParameters.add("forceComplete");
+        this.inForceComplete = inForceComplete;
     }
     /**
      * Auto generated value setter.
@@ -896,6 +925,15 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param outDuplicateAccountsWithName the outDuplicateAccountsWithName to set
+    */
+    public void setOutDuplicateAccountsWithName(Set outDuplicateAccountsWithName) {
+        this.outParameters.add("duplicateAccountsWithName");
+        this.outDuplicateAccountsWithName = outDuplicateAccountsWithName;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param outErrorMessage the outErrorMessage to set
     */
     public void setOutErrorMessage(String outErrorMessage) {
@@ -1039,6 +1077,7 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
         if (inParameters.contains("currencyUomId")) mapValue.put("currencyUomId", getInCurrencyUomId());
         if (inParameters.contains("dataSourceId")) mapValue.put("dataSourceId", getInDataSourceId());
         if (inParameters.contains("description")) mapValue.put("description", getInDescription());
+        if (inParameters.contains("forceComplete")) mapValue.put("forceComplete", getInForceComplete());
         if (inParameters.contains("generalAddress1")) mapValue.put("generalAddress1", getInGeneralAddress1());
         if (inParameters.contains("generalAddress2")) mapValue.put("generalAddress2", getInGeneralAddress2());
         if (inParameters.contains("generalAttnName")) mapValue.put("generalAttnName", getInGeneralAttnName());
@@ -1078,6 +1117,7 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> outputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        if (outParameters.contains("duplicateAccountsWithName")) mapValue.put("duplicateAccountsWithName", getOutDuplicateAccountsWithName());
         if (outParameters.contains("errorMessage")) mapValue.put("errorMessage", getOutErrorMessage());
         if (outParameters.contains("errorMessageList")) mapValue.put("errorMessageList", getOutErrorMessageList());
         if (outParameters.contains("generalAddressContactMechId")) mapValue.put("generalAddressContactMechId", getOutGeneralAddressContactMechId());
@@ -1101,6 +1141,7 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
         if (mapValue.containsKey("currencyUomId")) setInCurrencyUomId((String) mapValue.get("currencyUomId"));
         if (mapValue.containsKey("dataSourceId")) setInDataSourceId((String) mapValue.get("dataSourceId"));
         if (mapValue.containsKey("description")) setInDescription((String) mapValue.get("description"));
+        if (mapValue.containsKey("forceComplete")) setInForceComplete((String) mapValue.get("forceComplete"));
         if (mapValue.containsKey("generalAddress1")) setInGeneralAddress1((String) mapValue.get("generalAddress1"));
         if (mapValue.containsKey("generalAddress2")) setInGeneralAddress2((String) mapValue.get("generalAddress2"));
         if (mapValue.containsKey("generalAttnName")) setInGeneralAttnName((String) mapValue.get("generalAttnName"));
@@ -1136,6 +1177,7 @@ public class CrmsfaCreateAccountService extends ServiceWrapper {
 
     /** {@inheritDoc} */
     public void putAllOutput(Map<String, Object> mapValue) {
+        if (mapValue.containsKey("duplicateAccountsWithName")) setOutDuplicateAccountsWithName((Set) mapValue.get("duplicateAccountsWithName"));
         if (mapValue.containsKey("errorMessage")) setOutErrorMessage((String) mapValue.get("errorMessage"));
         if (mapValue.containsKey("errorMessageList")) setOutErrorMessageList((List) mapValue.get("errorMessageList"));
         if (mapValue.containsKey("generalAddressContactMechId")) setOutGeneralAddressContactMechId((String) mapValue.get("generalAddressContactMechId"));

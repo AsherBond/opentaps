@@ -33,10 +33,12 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.common.domain.party.PartyRepository;
-import org.opentaps.domain.DomainsLoader;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.TelecomNumber;
+import org.opentaps.base.services.CrmsfaCreateAccountService;
+import org.opentaps.base.services.CrmsfaDeactivateAccountService;
+import org.opentaps.common.domain.party.PartyRepository;
+import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Party;
@@ -1108,4 +1110,49 @@ public class PartyTests extends OpentapsTestCase {
         assertGwtLookupSort(lookup, PartyLookupConfiguration.INOUT_GROUP_NAME, expected);
 
     }
+
+    /**
+     * Test create account service with duplicate account name.
+     * @throws Exception if an error occurs
+     */
+    public void testDuplicateAccountsWithName() throws Exception {
+        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));
+        PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
+        PartyRepositoryInterface repo = partyDomain.getPartyRepository();
+        
+        // create a account by service crmsfa.createAccount
+        CrmsfaCreateAccountService createAccount = new CrmsfaCreateAccountService();
+        createAccount.setInUserLogin(admin);
+        createAccount.setInAccountName("Duplicate Account Test");
+        runAndAssertServiceSuccess(createAccount);
+        String accountId = createAccount.getOutPartyId();
+        
+        
+        createAccount = new CrmsfaCreateAccountService();
+        createAccount.setInUserLogin(admin);
+        createAccount.setInAccountName("DUPLICATE ACCOUNT TEST");
+        runAndAssertServiceError(createAccount);
+        
+        Set<Party> parties = createAccount.getOutDuplicateAccountsWithName();
+        Set<String> partyIds = Entity.getDistinctFieldValues(String.class, parties, Party.Fields.partyId);
+        assertTrue("Should have found the party [" + accountId + "] in the duplicate account results", partyIds.contains(accountId));
+
+        
+        createAccount = new CrmsfaCreateAccountService();
+        createAccount.setInUserLogin(admin);
+        createAccount.setInAccountName("duplicate account test");
+        runAndAssertServiceError(createAccount);
+        parties = createAccount.getOutDuplicateAccountsWithName();
+        partyIds = Entity.getDistinctFieldValues(String.class, parties, Party.Fields.partyId);
+        assertTrue("Should have found the party [" + accountId + "] in the duplicate account results", partyIds.contains(accountId));
+        
+        // deactive the account we created
+        CrmsfaDeactivateAccountService deactivateAccount = new CrmsfaDeactivateAccountService();
+        deactivateAccount.setInUserLogin(admin);
+        deactivateAccount.setInPartyId(accountId);
+        runAndAssertServiceSuccess(deactivateAccount);
+        
+    }
+
+
 }
