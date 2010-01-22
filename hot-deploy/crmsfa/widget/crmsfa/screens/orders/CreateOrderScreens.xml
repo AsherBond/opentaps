@@ -111,9 +111,16 @@ under the License.
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/orderHeaderForm.ftl"/></html>
                 </platform-specific>
-                <platform-specific>
-                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/orderSummary.ftl"/></html>
-                </platform-specific>
+                <section>
+                  <condition>
+                    <if-compare field="useGwt" operator="equals" value="false"/>
+                  </condition>
+                  <widgets>
+                    <platform-specific>
+                      <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/orderSummary.ftl"/></html>
+                    </platform-specific>
+                  </widgets>
+                </section>
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/orders/entry/promocodes.ftl"/></html>
                 </platform-specific>
