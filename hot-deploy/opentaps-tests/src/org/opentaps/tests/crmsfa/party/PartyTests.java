@@ -33,6 +33,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.base.services.CrmsfaCreateAccountService;
@@ -1133,8 +1134,8 @@ public class PartyTests extends OpentapsTestCase {
         createAccount.setInAccountName("DUPLICATE ACCOUNT TEST");
         runAndAssertServiceError(createAccount);
         
-        Set<Party> parties = createAccount.getOutDuplicateAccountsWithName();
-        Set<String> partyIds = Entity.getDistinctFieldValues(String.class, parties, Party.Fields.partyId);
+        Set<PartyGroup> parties = createAccount.getOutDuplicateAccountsWithName();
+        Set<String> partyIds = Entity.getDistinctFieldValues(String.class, parties, PartyGroup.Fields.partyId);
         assertTrue("Should have found the party [" + accountId + "] in the duplicate account results", partyIds.contains(accountId));
 
         
@@ -1143,13 +1144,27 @@ public class PartyTests extends OpentapsTestCase {
         createAccount.setInAccountName("duplicate account test");
         runAndAssertServiceError(createAccount);
         parties = createAccount.getOutDuplicateAccountsWithName();
-        partyIds = Entity.getDistinctFieldValues(String.class, parties, Party.Fields.partyId);
+        partyIds = Entity.getDistinctFieldValues(String.class, parties, PartyGroup.Fields.partyId);
         assertTrue("Should have found the party [" + accountId + "] in the duplicate account results", partyIds.contains(accountId));
         
-        // deactive the account we created
+        // after passing forceComplete=Y causes the account to be created successfully
+        createAccount = new CrmsfaCreateAccountService();
+        createAccount.setInUserLogin(admin);
+        createAccount.setInAccountName("duplicate account test");
+        createAccount.setInForceComplete("Y");
+        runAndAssertServiceSuccess(createAccount);
+        String duplicateAccountId = createAccount.getOutPartyId();
+        
+        
+        // deactive the accounts we created
         CrmsfaDeactivateAccountService deactivateAccount = new CrmsfaDeactivateAccountService();
         deactivateAccount.setInUserLogin(admin);
         deactivateAccount.setInPartyId(accountId);
+        runAndAssertServiceSuccess(deactivateAccount);
+        
+        deactivateAccount = new CrmsfaDeactivateAccountService();
+        deactivateAccount.setInUserLogin(admin);
+        deactivateAccount.setInPartyId(duplicateAccountId);
         runAndAssertServiceSuccess(deactivateAccount);
         
     }

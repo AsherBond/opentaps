@@ -61,6 +61,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsLoader;
@@ -123,11 +124,11 @@ public final class AccountsServices {
             	DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
                 PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
                 PartyRepositoryInterface repo = partyDomain.getPartyRepository();
-                Set<Party> duplicateAccountsWithName = repo.getPartyByGroupName(accountName);
+                Set<PartyGroup> duplicateAccountsWithName = repo.getPartyGroupByGroupName(accountName);
                 // if existing the account which have same account name, then return the conflict account and error message
                 if (duplicateAccountsWithName.size() > 0 && !"Y".equals(forceComplete)) {
-                	Party party = duplicateAccountsWithName.iterator().next();
-                    Map results = ServiceUtil.returnError(UtilMessage.expandLabel("CreateAccountDuplicateCheckFail", UtilMisc.toMap("partyId", party.getPartyId()), locale));
+                	PartyGroup partyGroup = duplicateAccountsWithName.iterator().next();
+                    Map results = ServiceUtil.returnError(UtilMessage.expandLabel("CreateAccountDuplicateCheckFail", UtilMisc.toMap("partyId", partyGroup.getPartyId()), locale));
                     results.put("duplicateAccountsWithName", duplicateAccountsWithName);
                     return results;
                 }

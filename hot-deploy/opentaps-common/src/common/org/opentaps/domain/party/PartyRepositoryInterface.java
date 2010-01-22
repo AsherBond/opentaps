@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.opentaps.base.entities.ExternalUser;
+import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyNoteView;
 import org.opentaps.base.entities.PartySummaryCRMView;
 import org.opentaps.base.entities.PostalAddress;
@@ -214,10 +215,10 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
     public Set<Party> getPartyByName(String firstName, String lastName) throws RepositoryException;
     
     /**
-     * Finds the list of <code>Party</code> matching the given group name.
-     * @return the list of <code>Party</code> matching the name
+     * Finds the list of <code>PartyGroup</code> matching the given group name.
+     * @return the list of <code>PartyGroup</code> matching the name
      * @param groupName the groupName to find
      * @throws RepositoryException if an error occurs
      */
-    public Set<Party> getPartyByGroupName(String groupName) throws RepositoryException;    
+    public Set<PartyGroup> getPartyGroupByGroupName(String groupName) throws RepositoryException;    
 }

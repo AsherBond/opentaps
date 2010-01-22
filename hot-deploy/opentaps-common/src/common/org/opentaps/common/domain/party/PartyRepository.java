@@ -42,6 +42,7 @@ import org.opentaps.base.entities.ContactMech;
 import org.opentaps.base.entities.ExternalUser;
 import org.opentaps.base.entities.PartyContactDetailByPurpose;
 import org.opentaps.base.entities.PartyFromSummaryByRelationship;
+import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyNoteView;
 import org.opentaps.base.entities.PartySummaryCRMView;
 import org.opentaps.base.entities.PostalAddress;
@@ -441,23 +442,17 @@ public class PartyRepository extends DomainRepository implements PartyRepository
     }
     
     /** {@inheritDoc} */
-    public Set<Party> getPartyByGroupName(String groupName) throws RepositoryException {
-        Set<Party> resultSet = new FastSet<Party>();
+    public Set<PartyGroup> getPartyGroupByGroupName(String groupName) throws RepositoryException {
+        Set<PartyGroup> resultSet = new FastSet<PartyGroup>();
         try {
             Session session = getInfrastructure().getSession();
             // prepare the HQL to get Party
-            String hql = "select eo.party from PartyGroup eo where lower(trim(eo.groupName)) like :groupName"
+            String hql = "from PartyGroup eo where lower(trim(eo.groupName)) like :groupName"
                 + " and (eo.party.statusId is null or 'PARTY_DISABLED' <> eo.party.statusId)";
             org.hibernate.Query query = session.createQuery(hql);
             query.setString("groupName", groupName.trim().toLowerCase());
-            List<org.opentaps.base.entities.Party> parties = query.list();
-            List<String> partyIds = new ArrayList<String>();
-            for (org.opentaps.base.entities.Party party : parties) {
-                partyIds.add(party.getPartyId());
-            }
-            if (partyIds.size() > 0) {
-                resultSet.addAll(getPartyByIds(partyIds));
-            }
+            List<org.opentaps.base.entities.PartyGroup> partiyGroups = query.list();
+            resultSet.addAll(partiyGroups);
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
         }
