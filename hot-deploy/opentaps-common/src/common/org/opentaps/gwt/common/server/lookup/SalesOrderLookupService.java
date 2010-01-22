@@ -139,6 +139,27 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER))) {
                 salesOrderLookupRepository.setSerialNumber(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER));
             }
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_ADDRESS))) {
+                salesOrderLookupRepository.setShippingAddress(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_ADDRESS));
+            }
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_CITY))) {
+                salesOrderLookupRepository.setShippingCountry(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_CITY));
+            }
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_COUNTRY))) {
+                salesOrderLookupRepository.setShippingStateProvince(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_COUNTRY));
+            }
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE))) {
+                salesOrderLookupRepository.setShippingCity(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE));
+            }
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_POSTAL_CODE))) {
+                salesOrderLookupRepository.setShippingPostalCode(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_POSTAL_CODE));
+            }
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_TO_NAME))) {
+                salesOrderLookupRepository.setShippingToName(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_TO_NAME));
+            }
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_ATTENTION_NAME))) {
+                salesOrderLookupRepository.setShippingAttnName(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_ATTENTION_NAME));
+            }
 
             // takes into account order statuses
             // activeOnly & desired flags aren't mutually exclusive, activeOnly statuses is a superset

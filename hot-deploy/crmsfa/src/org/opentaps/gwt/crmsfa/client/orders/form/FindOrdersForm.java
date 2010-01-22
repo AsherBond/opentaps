@@ -16,22 +16,25 @@
  */
 package org.opentaps.gwt.crmsfa.client.orders.form;
 
-import com.gwtext.client.widgets.Panel;
-import com.gwtext.client.widgets.form.Field;
-import com.gwtext.client.widgets.form.TextField;
-import com.gwtext.client.widgets.form.event.FieldListenerAdapter;
-import com.gwtext.client.widgets.layout.ColumnLayout;
-import com.gwtext.client.widgets.layout.ColumnLayoutData;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindEntityForm;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
 import org.opentaps.gwt.common.client.form.field.CheckboxField;
 import org.opentaps.gwt.common.client.form.field.DateField;
 import org.opentaps.gwt.common.client.listviews.SalesOrderListView;
+import org.opentaps.gwt.common.client.suggest.CountryAutocomplete;
 import org.opentaps.gwt.common.client.suggest.CustomerAutocomplete;
 import org.opentaps.gwt.common.client.suggest.LotAutocomplete;
 import org.opentaps.gwt.common.client.suggest.OrderStatusAutocomplete;
 import org.opentaps.gwt.common.client.suggest.ProductStoreAutocomplete;
+import org.opentaps.gwt.common.client.suggest.StateAutocomplete;
+
+import com.gwtext.client.widgets.Panel;
+import com.gwtext.client.widgets.form.Field;
+import com.gwtext.client.widgets.form.TextField;
+import com.gwtext.client.widgets.form.event.FieldListenerAdapter;
+import com.gwtext.client.widgets.layout.ColumnLayout;
+import com.gwtext.client.widgets.layout.ColumnLayoutData;
 
 /**
  * Form class for find order in crmsfa.
@@ -39,6 +42,7 @@ import org.opentaps.gwt.common.client.suggest.ProductStoreAutocomplete;
 public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
 
     private final SubFormPanel filterPanel;
+    private final SubFormPanel filterByAdvancedTab;
     // Order Id
     private final TextField orderIdInput;
     // External ID
@@ -67,6 +71,13 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
     private final CheckboxField findAllInput;
 
     private final SalesOrderListView orderListView;
+    private final TextField shippingAddressInput;
+    private final TextField shippingCityInput;
+    private final CountryAutocomplete shippingCountryInput;
+    private final StateAutocomplete shippingStateInput;
+    private final TextField shippingPostalCodeInput;
+    private final TextField shippingToNameInput;
+    private final TextField shippingAttnNameInput;
 
     /**
      * Default constructor.
@@ -121,9 +132,6 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
 
         // Build the filter tab
         filterPanel = getMainForm().addTab(UtilUi.MSG.crmFindOrders());
-        // hide the tab bar since we only use one tab
-        getMainForm().hideTabBar();
-
         Panel mainPanel = new Panel();
         mainPanel.setLayout(new ColumnLayout());
 
@@ -159,33 +167,81 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
 
         columnOnePanel.addField(findAllInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
-
         filterPanel.add(mainPanel);
+        
+        shippingToNameInput = new TextField(UtilUi.MSG.partyToName(), "toName", getInputLength());
+        shippingAttnNameInput = new TextField(UtilUi.MSG.partyAttentionName(), "attnName", getInputLength());
+        shippingAddressInput = new TextField(UtilUi.MSG.address(), "address", getInputLength());
+        shippingCityInput = new TextField(UtilUi.MSG.city(), "city", getInputLength());
+        shippingPostalCodeInput = new TextField(UtilUi.MSG.postalCode(), "postalCode", getInputLength());
+        shippingCountryInput = new CountryAutocomplete(UtilUi.MSG.country(), "country", getInputLength());
+        shippingStateInput = new StateAutocomplete(UtilUi.MSG.stateOrProvince(), "state", shippingCountryInput, getInputLength());
+        // Build the filter by advanced tab
+        filterByAdvancedTab = getMainForm().addTab(UtilUi.MSG.findByShippingAddress());
+        Panel advancedPanel = new Panel();
+        advancedPanel.setLayout(new ColumnLayout());
+
+        SubFormPanel columnOneAdvancedPanel = new SubFormPanel(getMainForm());
+        SubFormPanel columnTwoAdvancedPanel = new SubFormPanel(getMainForm());
+
+        advancedPanel.add(columnOneAdvancedPanel, new ColumnLayoutData(.5));
+        advancedPanel.add(columnTwoAdvancedPanel, new ColumnLayoutData(.5));
+        
+        columnOneAdvancedPanel.addField(shippingToNameInput);
+        columnTwoAdvancedPanel.addField(shippingAttnNameInput);
+        
+        columnOneAdvancedPanel.addField(shippingAddressInput);
+        columnTwoAdvancedPanel.add(UtilUi.makeBlankFormCell());
+
+        columnOneAdvancedPanel.addField(shippingCityInput);
+        columnTwoAdvancedPanel.add(UtilUi.makeBlankFormCell());
+
+        columnOneAdvancedPanel.addField(shippingCountryInput);
+        columnTwoAdvancedPanel.addField(shippingStateInput);
+        
+        columnOneAdvancedPanel.addField(shippingPostalCodeInput);
+        columnTwoAdvancedPanel.add(UtilUi.makeBlankFormCell());
+
+        filterByAdvancedTab.add(advancedPanel);
 
         orderListView = new SalesOrderListView();
         orderListView.setAutoLoad(autoLoad);
         orderListView.init();
         addListView(orderListView);
+        
+
     }
 
     @Override protected void filter() {
         getListView().clearFilters();
-        getListView().filterByOrderId(orderIdInput.getText());
-        getListView().filterByExternalId(externalIdInput.getText());
-        getListView().filterByOrderName(orderNameInput.getText());
-        getListView().filterByCustomerId(customerInput.getText());
-        getListView().filterByProductStoreId(productStoreInput.getText());
-        getListView().filterByStatusId(orderStatusInput.getText());
-        getListView().filterByCorrespondingPoId(correspondingPoIdInput.getText());
-        getListView().filterByFromDate(fromDateInput.getText());
-        getListView().filterByThruDate(thruDateInput.getText());
-        getListView().filterByCreatedBy(createdByInput.getText());
-        getListView().filterByLotId(lotInput.getText());
-        getListView().filterBySerialNumber(serialNumberInput.getText());
-        if (orderStatusInput.getText() == null || "".equals(orderStatusInput.getText())) {
-            getListView().filterIncludeInactiveOrders(findAllInput.getValue());
-        } else {
-            getListView().filterIncludeInactiveOrders(true);
+        
+        Panel p = getMainForm().getTabPanel().getActiveTab();
+        if (p == filterPanel) {
+        	getListView().filterByOrderId(orderIdInput.getText());
+            getListView().filterByExternalId(externalIdInput.getText());
+            getListView().filterByOrderName(orderNameInput.getText());
+            getListView().filterByCustomerId(customerInput.getText());
+            getListView().filterByProductStoreId(productStoreInput.getText());
+            getListView().filterByStatusId(orderStatusInput.getText());
+            getListView().filterByCorrespondingPoId(correspondingPoIdInput.getText());
+            getListView().filterByFromDate(fromDateInput.getText());
+            getListView().filterByThruDate(thruDateInput.getText());
+            getListView().filterByCreatedBy(createdByInput.getText());
+            getListView().filterByLotId(lotInput.getText());
+            getListView().filterBySerialNumber(serialNumberInput.getText());
+            if (orderStatusInput.getText() == null || "".equals(orderStatusInput.getText())) {
+                getListView().filterIncludeInactiveOrders(findAllInput.getValue());
+            } else {
+                getListView().filterIncludeInactiveOrders(true);
+            }
+        } else if (p == filterByAdvancedTab) {
+        	getListView().filterByShippingAddress(shippingAddressInput.getText());
+            getListView().filterByShippingCity(shippingCityInput.getText());
+            getListView().filterByShippingCountry(shippingCountryInput.getText());
+            getListView().filterByShippingStateProvince(shippingStateInput.getText());
+            getListView().filterByShippingPostalCode(shippingPostalCodeInput.getText());
+            getListView().filterByShippingToName(shippingToNameInput.getText());
+            getListView().filterByShippingAttnName(shippingAttnNameInput.getText());
         }
         getListView().applyFilters();
     }

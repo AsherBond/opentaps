@@ -1422,6 +1422,8 @@ public interface CommonMessages extends Messages {
     String analyticsLoginGreeting();
     @DefaultMessage("Arabic")
     String ar();
+    @DefaultMessage("As Of")
+    String asOf();
     @DefaultMessage("As of")
     String asOfDate();
     @DefaultMessage("Asset Maint")
@@ -5874,6 +5876,8 @@ public interface CommonMessages extends Messages {
     String findByName();
     @DefaultMessage("Phone")
     String findByPhone();
+    @DefaultMessage("Shipping Address")
+    String findByShippingAddress();
     @DefaultMessage("Find Contacts")
     String findContacts();
     @DefaultMessage("Find Leads")

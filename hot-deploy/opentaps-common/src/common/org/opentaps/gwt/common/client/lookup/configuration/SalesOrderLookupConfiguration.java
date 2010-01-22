@@ -51,6 +51,13 @@ public abstract class SalesOrderLookupConfiguration {
     public static final String IN_CREATED_BY = "createdBy";
     public static final String IN_LOT_ID = "lotId";
     public static final String IN_SERIAL_NUMBER = "serialNumber";
+    public static final String IN_SHIPPING_ADDRESS = "shippingAddress";
+    public static final String IN_SHIPPING_CITY = "shippingCity";
+    public static final String IN_SHIPPING_COUNTRY = "shippingCountry";
+    public static final String IN_SHIPPING_STATE = "shippingState";
+    public static final String IN_SHIPPING_POSTAL_CODE = "shippingPostalCode";
+    public static final String IN_SHIPPING_TO_NAME = "shippingToName";
+    public static final String IN_SHIPPING_ATTENTION_NAME = "shippingAttnName";
     public static final String OUT_GRAND_TOTAL = "grandTotal";
     public static final String OUT_CURRENCY_UOM = "currencyUom";
     public static final String OUT_ORDER_DATE_STRING = "orderDateString";

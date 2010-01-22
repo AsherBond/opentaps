@@ -17,6 +17,7 @@
 package org.opentaps.gwt.common.client.listviews;
 
 import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.common.client.lookup.configuration.SalesOrderLookupConfiguration;
 
 import com.gwtext.client.core.SortDir;
@@ -198,5 +199,61 @@ public class SalesOrderListView extends EntityListView {
      */
     public void filterIncludeInactiveOrders(boolean findAll) {
         setFilter(SalesOrderLookupConfiguration.IN_FIND_ALL, findAll ? "Y" : "N");
+    }
+    
+    /**
+     * Filters the records of the list by address of the party matching the given sub string.
+     * @param address a <code>String</code> value
+     */
+    public void filterByShippingAddress(String address) {
+        setFilter(SalesOrderLookupConfiguration.IN_SHIPPING_ADDRESS, address);
+    }
+
+    /**
+     * Filters the records of the list by country of the party matching the given country id.
+     * @param countryGeoId a <code>String</code> value
+     */
+    public void filterByShippingCountry(String countryGeoId) {
+        setFilter(SalesOrderLookupConfiguration.IN_SHIPPING_COUNTRY, countryGeoId);
+    }
+
+    /**
+     * Filters the records of the list by state / province of the party matching the given state / province id.
+     * @param stateProvinceGeoId a <code>String</code> value
+     */
+    public void filterByShippingStateProvince(String stateProvinceGeoId) {
+        setFilter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE, stateProvinceGeoId);
+    }
+
+    /**
+     * Filters the records of the list by city of the party matching the given sub string.
+     * @param city a <code>String</code> value
+     */
+    public void filterByShippingCity(String city) {
+        setFilter(SalesOrderLookupConfiguration.IN_SHIPPING_CITY, city);
+    }
+
+    /**
+     * Filters the records of the list by postal code of the party matching the given sub string.
+     * @param postalCode a <code>String</code> value
+     */
+    public void filterByShippingPostalCode(String postalCode) {
+        setFilter(SalesOrderLookupConfiguration.IN_SHIPPING_POSTAL_CODE, postalCode);
+    }
+    
+    /**
+     * Filters the records of the list by the to name of the party matching the given sub string.
+     * @param toName a <code>String</code> value
+     */
+    public void filterByShippingToName(String toName) {
+        setFilter(SalesOrderLookupConfiguration.IN_SHIPPING_TO_NAME, toName);
+    }
+
+    /**
+     * Filters the records of the list by the attention name of the party matching the given sub string.
+     * @param attnName a <code>String</code> value
+     */
+    public void filterByShippingAttnName(String attnName) {
+        setFilter(SalesOrderLookupConfiguration.IN_SHIPPING_ATTENTION_NAME, attnName);
     }
 }

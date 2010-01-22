@@ -142,6 +142,48 @@ public interface SalesOrderLookupRepositoryInterface extends LookupRepositoryInt
      * @param userLoginId a <code>String</code> value
      */
     public void setUserLoginId(String userLoginId);
+    
+    /**
+     * Sets the address of shipping to search for.
+     * @param address a <code>String</code> value
+     */
+    public void setShippingAddress(String address);
+
+    /**
+     * Sets the countryGeoId of shipping to search for.
+     * @param countryGeoId a <code>String</code> value
+     */
+    public void setShippingCountry(String countryGeoId);
+
+    /**
+     * Sets the stateProvinceGeoId of shipping to search for.
+     * @param stateProvinceGeoId a <code>String</code> value
+     */
+    public void setShippingStateProvince(String stateProvinceGeoId);
+
+    /**
+     * Sets the city of shipping to search for.
+     * @param city a <code>String</code> value
+     */
+    public void setShippingCity(String city);
+
+    /**
+     * Sets the postalCode of shipping to search for.
+     * @param postalCode a <code>String</code> value
+     */
+    public void setShippingPostalCode(String postalCode);
+    
+    /**
+     * Sets the toName of shipping to search for.
+     * @param toName a <code>String</code> value
+     */
+    public void setShippingToName(String toName);
+
+    /**
+     * Sets the attnName of shipping to search for.
+     * @param attnName a <code>String</code> value
+     */
+    public void setShippingAttnName(String attnName);
 
     /**
      * Sets the locale for format date string.
