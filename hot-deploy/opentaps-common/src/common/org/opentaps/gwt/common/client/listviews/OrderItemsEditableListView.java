@@ -151,13 +151,13 @@ public class OrderItemsEditableListView extends EntityEditableListView {
         makeColumn("", new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_IS_PROMO)).setHidden(true);
         getColumn().setFixed(true);
 
-        // quantity column
-        makeEditableColumn(UtilUi.MSG.commonQuantity(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_QUANTITY), new NumberField(quantityEditor)).setWidth(60);
-        getColumn().setFixed(true);
         // product column
         makeEditableColumn(UtilUi.MSG.productProduct(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_PRODUCT), new ProductAutocomplete(productEditor), "{1}:{0}");
         // description column
         makeEditableColumn(UtilUi.MSG.commonDescription(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION), new TextField(descriptionEditor)).setWidth(200);
+        // quantity column
+        makeEditableColumn(UtilUi.MSG.commonQuantity(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_QUANTITY), new NumberField(quantityEditor)).setWidth(60);
+        getColumn().setFixed(true);
         // unit price
         makeEditableColumn(UtilUi.MSG.commonUnitPrice(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE), new NumberField(priceEditor)).setWidth(60);
         getColumn().setFixed(true);
@@ -307,7 +307,13 @@ public class OrderItemsEditableListView extends EntityEditableListView {
                 unlockCell(rowIndex, getColumnIndex(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE));
                 markGridNotBusy();
                 // select the next cell
-                startEditingNextEditableCell(rowIndex, getColumnIndex(OrderItemsCartLookupConfiguration.INOUT_QUANTITY));
+                // on sales order we load the info after the product id given, check the quantity
+                if (record.isEmpty(OrderItemsCartLookupConfiguration.INOUT_QUANTITY)) {
+                    stopEditing();
+                    startEditing(rowIndex, getColumnIndex(OrderItemsCartLookupConfiguration.INOUT_QUANTITY));
+                } else {
+                    startEditingNextEditableCell(rowIndex, getColumnIndex(OrderItemsCartLookupConfiguration.INOUT_PRODUCT));
+                }
             }
 
             @Override public void onStoreLoadError(Throwable error) {
