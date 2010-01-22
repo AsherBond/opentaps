@@ -42,14 +42,16 @@
           </span>
         </div>
 
-        <div class="orderEntryHeaderFormRow">
-          <span class="tableheadtext orderEntryHeaderFormLabel">
-            ${uiLabelMap.CommonTotal}:
-          </span>
-          <span class="tableheadtext" style="padding-right:24px">
-            <@ofbizCurrency amount=shoppingCart.getGrandTotal() isoCode=shoppingCart.getCurrency()/>
-          </span>
-        </div>
+        <#if ! useGwt!>
+          <div class="orderEntryHeaderFormRow">
+            <span class="tableheadtext orderEntryHeaderFormLabel">
+              ${uiLabelMap.CommonTotal}:
+            </span>
+            <span class="tableheadtext" style="padding-right:24px">
+              <@ofbizCurrency amount=shoppingCart.getGrandTotal() isoCode=shoppingCart.getCurrency()/>
+            </span>
+          </div>
+        </#if>
   
         <div class="orderEntryHeaderSubmitRow">
           <@inputConfirm title=uiLabelMap.OpentapsCancelOrder form="cancelOrderForm"/>
