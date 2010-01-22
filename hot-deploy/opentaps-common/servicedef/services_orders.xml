@@ -59,7 +59,7 @@ under the License.
         location="org.opentaps.common.order.OrderServices" invoke="disburseChangeForOrder">
         <description>Creates a cash customer refund against an order</description>
         <attribute name="orderId" type="String" mode="IN" optional="false"/>
-        <attribute name="disbursementAmount" type="Double" mode="IN" optional="true"/>
+        <attribute name="disbursementAmount" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="disbursementPaymentId" type="String" mode="OUT" optional="true"/>
         <attribute name="disbursementOrderPaymentPreferenceId" type="String" mode="OUT" optional="true"/>
     </service>

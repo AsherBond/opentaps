@@ -234,7 +234,7 @@ public final class OrderServices {
         Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
-        Double disbursementAmount = (Double) context.get("disbursementAmount");
+        BigDecimal disbursementAmount = (BigDecimal) context.get("disbursementAmount");
 
         Map result = ServiceUtil.returnSuccess();
 
@@ -243,7 +243,7 @@ public final class OrderServices {
             if (UtilValidate.isEmpty(disbursementAmount) || disbursementAmount.doubleValue() == 0) {
                 return result;
             }
-            disbursementAmount = new Double(Math.abs(disbursementAmount.doubleValue()));
+            disbursementAmount = disbursementAmount.abs();
 
             GenericValue orderHeader = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
             if (UtilValidate.isEmpty(orderHeader)) {
@@ -271,7 +271,7 @@ public final class OrderServices {
             String orderPaymentPreferenceId = delegator.getNextSeqId("OrderPaymentPreference");
             GenericValue paymentPref = delegator.makeValue("OrderPaymentPreference", UtilMisc.toMap("orderPaymentPreferenceId", orderPaymentPreferenceId));
             paymentPref.set("paymentMethodTypeId", "CASH");
-            paymentPref.set("maxAmount", new Double(0 - disbursementAmount.doubleValue()));
+            paymentPref.set("maxAmount", disbursementAmount.negate());
             paymentPref.set("statusId", "PAYMENT_RECEIVED");
             paymentPref.set("orderId", orderId);
             paymentPref.set("createdDate", UtilDateTime.nowTimestamp());

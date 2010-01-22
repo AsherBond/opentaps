@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.order.OrderServices
  * Invoke: disburseChangeForOrder
- * Defined in: hot-deploy/opentaps-common/servicedef/services_orders.xml
+ * Defined in: /D:/eclipse/workspace/opentaps-1.4/hot-deploy/opentaps-common/servicedef/services_orders.xml
  */
 public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
 

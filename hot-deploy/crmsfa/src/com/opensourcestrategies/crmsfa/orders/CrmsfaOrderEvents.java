@@ -1143,9 +1143,9 @@ public final class CrmsfaOrderEvents {
 
         String orderId = request.getParameter("orderId");
         String disbursementAmountStr = request.getParameter("disbursementAmount");
-        Double disbursementAmount = null;
+        BigDecimal disbursementAmount = null;
         try {
-            disbursementAmount = UtilValidate.isNotEmpty(disbursementAmountStr) ? Double.valueOf(disbursementAmountStr) : new Double(0);
+            disbursementAmount = UtilValidate.isNotEmpty(disbursementAmountStr) ? new BigDecimal(disbursementAmountStr) : new BigDecimal("0");
         } catch (NumberFormatException e) {
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         }
@@ -1163,7 +1163,7 @@ public final class CrmsfaOrderEvents {
                     TransactionUtil.rollback();
                     return UtilMessage.createAndLogEventError(request, "OpentapsError_ReceiveOfflinePayment", locale, MODULE);
                 }
-                if (disbursementAmount.doubleValue() != 0) {
+                if (disbursementAmount.compareTo(BigDecimal.ZERO) != 0) {
                     Map disburseChangeResult = dispatcher.runSync("opentaps.disburseChangeForOrder", UtilMisc.toMap("orderId", orderId, "disbursementAmount", disbursementAmount, "userLogin", userLogin));
                     if (ServiceUtil.isError(disburseChangeResult)) {
                         TransactionUtil.rollback();
