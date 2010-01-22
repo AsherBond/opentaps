@@ -18,6 +18,7 @@
   <target name="build" depends="">
     <echo message="[build] ========== Start Building Opentaps modules =========="/>
     <subant inheritall="false">
+      <filelist dir="." files="opentaps-osgi/build.xml"/>
       <filelist dir="." files="opentaps-common/build.xml"/>
       <filelist dir="." files="crmsfa/build.xml"/>
       <filelist dir="." files="purchasing/build.xml"/>
