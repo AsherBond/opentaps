@@ -163,7 +163,7 @@ public class OrderItemsEditableListView extends EntityEditableListView {
         getColumn().setFixed(true);
         // item adjustments, only for sales order carts
         if (orderType == OrderType.SALES) {
-            makeColumn(UtilUi.MSG.orderAdjustments(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_ADJUSTMENT)).setWidth(70);
+            makeColumn(UtilUi.MSG.orderAdjustments(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_ADJUSTMENT)).setWidth(75);
             getColumn().setFixed(true);
         }
 
