@@ -270,6 +270,10 @@ public class OrderItemsEditableListView extends EntityEditableListView {
             // only react if the product ID and quantity are both provided
             if (!UtilUi.isEmpty(productId) && !UtilUi.isEmpty(quantityStr)) {
                 loadProductInfoForCart(record, rowIndex, productChanged, qtyChanged);
+            } else {
+                // set focus to the quantity field, the description will be set once the quantity is set
+                stopEditing();
+                startEditing(rowIndex, getColumnIndex(OrderItemsCartLookupConfiguration.INOUT_QUANTITY));
             }
         } else {
             // only react if the product ID is provided
@@ -300,7 +304,8 @@ public class OrderItemsEditableListView extends EntityEditableListView {
                 // set the loaded values if needed
                 record.set(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE, this.getUnitPrice().toString());
                 // change the description only if the product Id changed
-                if (productChanged) {
+                // or if it was empty
+                if (productChanged || record.isEmpty(OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION)) {
                     record.set(OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION, this.getDescription());
                 }
                 unlockCell(rowIndex, getColumnIndex(OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION));
