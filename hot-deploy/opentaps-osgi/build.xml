@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<project name="opentaps OSGi component" default="jar" basedir=".">
+
+    <!-- ================================================================== -->
+    <!-- Initialization of all property settings                            -->
+    <!-- ================================================================== -->
+
+    <target name="init">
+        <property environment="env"/>
+        <property name="src.dir" value="src"/>
+        <property name="bundle.src.dir" value="bundle-src"/>
+        <property name="deploy.dir" value="webapp/WEB-INF/bundles"/>
+        <property name="base.lib.dir" value="webapp/WEB-INF/lib"/>
+        <property name="lib.dir" value="lib"/>
+        <property name="classes.dir" value="webapp/WEB-INF/classes"/>
+    </target>
+
+    <target name="classpath" depends="init">
+        <path id="local.class.path">
+            <fileset dir="../../framework/base/lib/j2eespecs" includes="*.jar"/>
+            <fileset dir="${base.lib.dir}" includes="*.jar"/>
+        </path>
+    </target>
+
+    <target name="clean" depends="init">
+        <subant target="clean" inheritall="false">
+            <fileset dir="${bundle.src.dir}" casesensitive="no">
+                <include name="**/build.xml"/>
+            </fileset>
+        </subant>
+        <delete includeemptydirs="true">
+            <fileset dir="${classes.dir}" includes="**/*"/>
+        </delete>
+    </target>
+
+    <target name="classes" depends="classpath">
+    	<javac debug="on" deprecation="on" destdir="./${classes.dir}">
+            <classpath>
+                <path refid="local.class.path"/>
+            </classpath>
+            <src path="${src.dir}"/>
+        </javac>
+    </target>
+
+    <target name="build" depends="classes">
+        <subant inheritall="false">
+            <fileset dir="${bundle.src.dir}" casesensitive="no">
+                <include name="**/build.xml"/>
+            </fileset>
+        </subant>
+    </target>
+    
+    <target name="jar" depends="build"/>
+ 
+</project>
