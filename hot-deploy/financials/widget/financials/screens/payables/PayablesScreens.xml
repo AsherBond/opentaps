@@ -165,6 +165,8 @@
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="returnPage" value="payables"/>
                 <set field="returnLabel" value="FinancialsReturnToPayables"/>
+                <set field="screenRequest" value="payablesAgingReport"/>
+                <set field="reportRequest" value="JRPayablesAgingReport"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/customerVendorAging.bsh"/>
             </actions>

@@ -172,17 +172,17 @@
     <request-map uri="JReceivablesAgingReport">
         <security https="true" auth="true"/>
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareReceivablesAgingReport"/>
-        <response name="pdf" type="view" value="JReceivablesAgingReportPDF"/>
-        <response name="xls" type="view" value="JReceivablesAgingReportXLS"/>
+        <response name="pdf" type="view" value="JRInvoicesAgingReportPDF"/>
+        <response name="xls" type="view" value="JRInvoicesAgingReportXLS"/>
         <response name="error" type="request-redirect-noparam" value="receivablesAgingReport"/>
     </request-map>
-    <request-map uri="JReceivablesAgingReportPDF">
+    <request-map uri="JRInvoicesAgingReportPDF">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="JReceivablesAgingReportPDF"/>
+        <response name="success" type="view" value="JRInvoicesAgingReportPDF"/>
     </request-map>
-    <request-map uri="JReceivablesAgingReportXLS">
+    <request-map uri="JRInvoicesAgingReportXLS">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="JReceivablesAgingReportXLS"/>
+        <response name="success" type="view" value="JRInvoicesAgingReportXLS"/>
     </request-map>
 
     <request-map uri="customerStatement">
@@ -423,10 +423,19 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="commissionBalancesReport"/>
     </request-map>
+
     <request-map uri="payablesAgingReport">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="payablesAgingReport"/>
     </request-map>
+    <request-map uri="JRPayablesAgingReport">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="preparePayablesAgingReport"/>
+        <response name="pdf" type="view" value="JRInvoicesAgingReportPDF"/>
+        <response name="xls" type="view" value="JRInvoicesAgingReportXLS"/>
+        <response name="error" type="request-redirect-noparam" value="payablesAgingReport"/>
+    </request-map>
+
     <request-map uri="vendorStatement">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="vendorStatement"/>
@@ -1977,8 +1986,8 @@
     <view-map name="JRBalanceSheetXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/BalanceSheet.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
     <view-map name="JRComparativeBalancePDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeBalance.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRComparativeBalanceXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeBalance.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>
-    <view-map name="JReceivablesAgingReportPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ReceivablesAging.jrxml" content-type="application/pdf" encoding="none"/>    
-    <view-map name="JReceivablesAgingReportXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ReceivablesAging.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRInvoicesAgingReportPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/invoicesAging.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRInvoicesAgingReportXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/invoicesAging.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
 
     <!-- transactions -->
     <view-map name="viewAcctgTrans" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTrans"/>

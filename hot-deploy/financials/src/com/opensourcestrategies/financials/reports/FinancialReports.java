@@ -1127,9 +1127,10 @@ public final class FinancialReports {
     }
 
     /**
-     * @param request
-     * @param response
-     * @return
+     * Prepare data source and parameters for accounts receivables aging report.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the event response, either "pdf" or "xls" string to select report type, or "error".
      */
     public static String prepareReceivablesAgingReport(HttpServletRequest request, HttpServletResponse response) {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
@@ -1166,18 +1167,103 @@ public final class FinancialReports {
             }
 
             List<Map<String, Object>> plainList = FastList.<Map<String, Object>>newInstance();
+            Integer prevDCOBreakPoint = 0;
             for (Integer breakPoint : invoicesByDSO.keySet()) {
                 List<Invoice> invoicesForBreakPoint = invoicesByDSO.get(breakPoint);
                 if (UtilValidate.isEmpty(invoicesForBreakPoint)) {
-                    plainList.add(UtilMisc.<String, Object>toMap("DCOBreakPoint", breakPoint, "isEmpty", Boolean.TRUE));
+                    plainList.add(UtilMisc.<String, Object>toMap("DCOBreakPoint", breakPoint, "prevDCOBreakPoint", prevDCOBreakPoint, "isEmpty", Boolean.TRUE));
                 }
                 for (Invoice invoice : invoicesForBreakPoint) {
                     FastMap<String, Object> reportLine = FastMap.<String, Object>newInstance();
+                    reportLine.put("prevDCOBreakPoint", prevDCOBreakPoint);
                     reportLine.put("DCOBreakPoint", breakPoint);
                     reportLine.put("isEmpty", Boolean.FALSE);
-                    reportLine.putAll(invoice.toMapNoStamps());
+                    reportLine.put("invoiceDate", invoice.getInvoiceDate());
+                    reportLine.put("invoiceId", invoice.getInvoiceId());
+                    reportLine.put("invoiceTotal", invoice.getInvoiceTotal());
+                    reportLine.put("partyId", invoice.getPartyId());
+                    reportLine.put("partyName", PartyHelper.getPartyName(delegator, invoice.getPartyId(), false));
                     plainList.add(reportLine);
                 }
+                prevDCOBreakPoint = breakPoint;
+            }
+
+            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(plainList));
+
+            Map<String, Object> jrParameters = FastMap.newInstance();
+            jrParameters.putAll(ctxt);
+            jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, (String) ctxt.get("organizationPartyId"), false));
+            jrParameters.put("isReceivables", Boolean.TRUE);
+            request.setAttribute("jrParameters", jrParameters);
+
+        } catch (GenericEntityException e) {
+            UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        } catch (RepositoryException e) {
+            UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        }
+
+        return reportType;
+    }
+
+    /**
+     * Prepare data source and parameters for accounts payables aging report.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the event response, either "pdf" or "xls" string to select report type, or "error".
+     */
+    public static String preparePayablesAgingReport(HttpServletRequest request, HttpServletResponse response) {
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Locale locale = UtilHttp.getLocale(request);
+        TimeZone timeZone = UtilHttp.getTimeZone(request);
+
+        String reportType = UtilCommon.getParameter(request, "type");
+        String partyId = UtilCommon.getParameter(request, "partyId");
+
+        String organizationPartyId = null;
+        Timestamp asOfDate = null;
+
+        try {
+
+            // retrieve financial data
+            Map<String, Object> ctxt = prepareFinancialReportParameters(request);
+            UtilAccountingTags.addTagParameters(request, ctxt);
+            asOfDate = (Timestamp) ctxt.get("asOfDate");
+            organizationPartyId = (String) ctxt.get("organizationPartyId");
+
+            List<Integer> daysOutstandingBreakPoints = UtilMisc.<Integer>toList(30, 60, 90);
+            // this is a hack to get the the invoices over the last break point (ie, 90+ invoices)
+            Integer maximumDSOBreakPoint = 9999;
+            List<Integer> breakPointParams = FastList.<Integer>newInstance();
+            breakPointParams.addAll(daysOutstandingBreakPoints);
+            breakPointParams.add(maximumDSOBreakPoint);
+
+            Map<Integer, List<Invoice>> invoicesByDSO = null;
+            if (UtilValidate.isEmpty(partyId)) {
+                invoicesByDSO = AccountsHelper.getUnpaidInvoicesForVendors(organizationPartyId, breakPointParams, asOfDate, UtilMisc.toList("INVOICE_READY"), delegator, timeZone, locale);
+            } else {
+                invoicesByDSO = AccountsHelper.getUnpaidInvoicesForVendor(organizationPartyId, partyId, breakPointParams, asOfDate, UtilMisc.toList("INVOICE_READY"), delegator, timeZone, locale);
+            }
+
+            List<Map<String, Object>> plainList = FastList.<Map<String, Object>>newInstance();
+            Integer prevDCOBreakPoint = 0;
+            for (Integer breakPoint : invoicesByDSO.keySet()) {
+                List<Invoice> invoicesForBreakPoint = invoicesByDSO.get(breakPoint);
+                if (UtilValidate.isEmpty(invoicesForBreakPoint)) {
+                    plainList.add(UtilMisc.<String, Object>toMap("DCOBreakPoint", breakPoint, "prevDCOBreakPoint", prevDCOBreakPoint, "isEmpty", Boolean.TRUE));
+                }
+                for (Invoice invoice : invoicesForBreakPoint) {
+                    FastMap<String, Object> reportLine = FastMap.<String, Object>newInstance();
+                    reportLine.put("prevDCOBreakPoint", prevDCOBreakPoint);
+                    reportLine.put("DCOBreakPoint", breakPoint);
+                    reportLine.put("isEmpty", Boolean.FALSE);
+                    reportLine.put("invoiceDate", invoice.getInvoiceDate());
+                    reportLine.put("invoiceId", invoice.getInvoiceId());
+                    reportLine.put("invoiceTotal", invoice.getInvoiceTotal());
+                    reportLine.put("partyId", invoice.getPartyIdFrom());
+                    reportLine.put("partyName", PartyHelper.getPartyName(delegator, invoice.getPartyIdFrom(), false));
+                    plainList.add(reportLine);
+                }
+                prevDCOBreakPoint = breakPoint;
             }
 
             request.setAttribute("jrDataSource", new JRMapCollectionDataSource(plainList));
@@ -1186,6 +1272,7 @@ public final class FinancialReports {
             jrParameters.putAll(ctxt);
             jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, (String) ctxt.get("organizationPartyId"), false));
             jrParameters.put("accountingTags", UtilAccountingTags.formatTagsAsString(request, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator));
+            jrParameters.put("isReceivables", Boolean.FALSE);
             request.setAttribute("jrParameters", jrParameters);
 
         } catch (GenericEntityException e) {

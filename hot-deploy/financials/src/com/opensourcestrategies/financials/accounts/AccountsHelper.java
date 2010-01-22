@@ -19,12 +19,28 @@ package com.opensourcestrategies.financials.accounts;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
+import java.util.TreeMap;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
-import org.ofbiz.base.util.*;
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilNumber;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -34,11 +50,11 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.common.agreement.AgreementReader;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.party.Party;
@@ -239,7 +255,7 @@ public class AccountsHelper {
      * Gets unpaid invoice balances for customer (SALES_INVOICE)
      * See getUnpaidInvoicesHelper for parameter information
      */
-    public static Map getUnpaidInvoicesForCustomers(String organizationPartyId, List daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomers(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
@@ -253,17 +269,17 @@ public class AccountsHelper {
      * Gets unpaid invoice balances for single customer (SALES_INVOICE)
      * See getUnpaidInvoicesHelper for parameter information
      */
-    public static Map getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
 
-    public static Map getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale, useAgingDate);
     }
@@ -272,12 +288,12 @@ public class AccountsHelper {
      * Gets unpaid invoice balances for vendor (PURCHASE_INVOICE)
      * See getUnpaidInvoicesHelper for parameter information
      */
-    public static Map getUnpaidInvoicesForVendors(String organizationPartyId, List daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendors(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map getUnpaidInvoicesForVendors(String organizationPartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendors(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, null, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
@@ -286,12 +302,12 @@ public class AccountsHelper {
      * Gets unpaid invoice balances for single vendor (PURCHASE_INVOICE)
      * See getUnpaidInvoicesHelper for parameter information
      */
-    public static Map getUnpaidInvoicesForVendor(String organizationPartyId, String partyId, List daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendor(String organizationPartyId, String partyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, partyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map getUnpaidInvoicesForVendor(String organizationPartyId, String partyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendor(String organizationPartyId, String partyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, partyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
@@ -300,27 +316,27 @@ public class AccountsHelper {
      * Gets unpaid invoice balances for commission (COMMISSION_INVOICE)
      * See getUnpaidInvoicesHelper for parameter information
      */
-    public static Map getUnpaidInvoicesForCommissions(String organizationPartyId, List daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCommissions(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, "COMMISSION_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map getUnpaidInvoicesForCommissions(String organizationPartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCommissions(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, null, "COMMISSION_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
 
-    public static Map getUnpaidInvoicesHelper(String organizationPartyId, String invoiceTypeId, List daysOutstandingPoints,
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesHelper(String organizationPartyId, String invoiceTypeId, List<Integer> daysOutstandingPoints,
             Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, null, invoiceTypeId, daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List daysOutstandingPoints,
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List<Integer> daysOutstandingPoints,
             Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, invoiceTypeId, daysOutstandingPoints, asOfDateTime, null, delegator, timeZone, locale, false);
     }
 
-    public static Map getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List daysOutstandingPoints,
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List<Integer> daysOutstandingPoints,
             Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate) throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, invoiceTypeId, daysOutstandingPoints, asOfDateTime, null, delegator, timeZone, locale, useAgingDate);
     }
@@ -411,7 +427,7 @@ public class AccountsHelper {
      *
      * Right now it's done by looking up only the receipts, as that's what we need.
      */
-    public static Map getUnpaidInvoicesForPartyClassificationGroup(String organizationPartyId, String partyClassificationGroupId, List daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, boolean useAgingDate) throws GenericEntityException, RepositoryException {
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForPartyClassificationGroup(String organizationPartyId, String partyClassificationGroupId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, boolean useAgingDate) throws GenericEntityException, RepositoryException {
         EntityCondition mainConditions = EntityCondition.makeCondition(EntityOperator.AND,
                     EntityCondition.makeCondition("partyClassificationGroupId", EntityOperator.EQUALS, partyClassificationGroupId),
                     EntityUtil.getFilterByDateExpr());
@@ -420,7 +436,7 @@ public class AccountsHelper {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                                         mainConditions,
                                         EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId));
-        List invoices = delegator.findByAnd("InvoiceAndPartyClassificationReceipt", conditions);
+        List<GenericValue> invoices = delegator.findByAnd("InvoiceAndPartyClassificationReceipt", conditions);
 
         // group the results into date buckets
         return groupInvoicesByDateBucket(invoices, asOfDateTime, daysOutstandingPoints, delegator, useAgingDate);
@@ -499,7 +515,7 @@ public class AccountsHelper {
 
         BigDecimal dailyInterestRate = interestRate.movePointLeft(2).setScale(100, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal("365.25"), BigDecimal.ROUND_HALF_UP);
 
-        Map invoicesByAge = null;
+        Map<Integer, List<Invoice>> invoicesByAge = null;
         if (UtilValidate.isNotEmpty(invoiceToPartyId)) {
             invoicesByAge = AccountsHelper.getUnpaidInvoicesForCustomer(organizationPartyId, invoiceToPartyId, UtilMisc.toList(gracePeriod, gracePeriod + 1), asOfDateTime, delegator, timeZone, locale);
         } else if (UtilValidate.isNotEmpty(partyClassificationGroupId)) {
@@ -510,7 +526,7 @@ public class AccountsHelper {
 
         // The AccountsHelper.getUnpaidInvoices* methods return a map of lists of Invoice objects separated into aged tiers. We've instructed
         //  the method to use two tiers, so get the one which holds all invoices older than the grace period:
-        List<Invoice> invoicesWithOutstanding = (List<Invoice>) invoicesByAge.get(gracePeriod + 1);
+        List<Invoice> invoicesWithOutstanding = invoicesByAge.get(gracePeriod + 1);
 
         // Now we have a list of InvoiceWithOutstandingBalance objects, so we need to loop through them and assemble a list of actual invoices, and
         //  a map of supporting data keyed by invoiceId, for the form widget to use
@@ -569,7 +585,7 @@ public class AccountsHelper {
             throw new GenericServiceException("No currency defined for credit limit term");
         }
         if (!agreementCurrencyUomId.equals(currencyUomId)) {
-            Map result = dispatcher.runSync("convertUom", UtilMisc.toMap("originalValue", limit, "uomId", agreementCurrencyUomId, "uomIdTo", currencyUomId, "asOfDate", now));
+            Map<String, Object> result = dispatcher.runSync("convertUom", UtilMisc.toMap("originalValue", limit, "uomId", agreementCurrencyUomId, "uomIdTo", currencyUomId, "asOfDate", now));
             if (ServiceUtil.isError(result)) {
                 throw new GenericServiceException(ServiceUtil.getErrorMessage(result));
             }
@@ -679,7 +695,7 @@ public class AccountsHelper {
 
                 // get all sales invoices in ready or sent state grouped by date bucket from the as of date time
                 List<Integer> periodList = Arrays.asList(statementPeriod, 2 * statementPeriod, 3 * statementPeriod, 4 * statementPeriod, 999);
-                Map<Integer, Invoice> dateBuckets = AccountsHelper.getUnpaidInvoicesForCustomer(organizationPartyId, partyId, periodList, asOfDate, UtilMisc.toList("INVOICE_READY", "INVOICE_SENT"), delegator, timeZone, locale, useAgingDate);
+                Map<Integer, List<Invoice>> dateBuckets = AccountsHelper.getUnpaidInvoicesForCustomer(organizationPartyId, partyId, periodList, asOfDate, UtilMisc.toList("INVOICE_READY", "INVOICE_SENT"), delegator, timeZone, locale, useAgingDate);
 
                 // iterate through the date buckets and add up the total open amount while keeping track of bucket sums
                 for (Integer bucket : dateBuckets.keySet()) {
