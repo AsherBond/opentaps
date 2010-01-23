@@ -2022,7 +2022,7 @@ public class FinancialsTests extends FinancialsTestCase {
         /*
          * 11.  Run AccountsHelper.getUnpaidInvoicesForCustomers and verify:
          */
-        Map<Integer, List> invoices = AccountsHelper.getUnpaidInvoicesForCustomers(organizationPartyId, UtilMisc.toList(new Integer(30), new Integer(60), new Integer(90), new Integer(9999)), UtilDateTime.nowTimestamp(), delegator, timeZone, locale);
+        Map<Integer, List<Invoice>> invoices = AccountsHelper.getUnpaidInvoicesForCustomers(organizationPartyId, UtilMisc.toList(new Integer(30), new Integer(60), new Integer(90), new Integer(9999)), UtilDateTime.nowTimestamp(), delegator, timeZone, locale);
         assertNotNull("Unpaid Invoices For Customers not found.", invoices);
 
         /*
