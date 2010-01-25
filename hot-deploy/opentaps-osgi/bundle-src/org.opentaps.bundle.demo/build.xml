@@ -38,9 +38,7 @@
 
     <target name="clean" depends="init">
         <delete file="${deploy.dir}/${symbolic.name}.jar"/>
-        <delete includeemptydirs="true">
-            <fileset dir="${bin.dir}"/>
-        </delete>
+        <delete dir="${bin.dir}"/>
     </target>
 
     <target name="classes" depends="classpath">

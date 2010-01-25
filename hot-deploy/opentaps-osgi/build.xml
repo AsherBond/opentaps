@@ -45,12 +45,11 @@
                 <include name="**/build.xml"/>
             </fileset>
         </subant>
-        <delete includeemptydirs="true">
-            <fileset dir="${classes.dir}" includes="**/*"/>
-        </delete>
+        <delete dir="${classes.dir}"/>
     </target>
 
     <target name="classes" depends="classpath">
+        <mkdir dir="${classes.dir}"/>
     	<javac debug="on" deprecation="on" destdir="./${classes.dir}">
             <classpath>
                 <path refid="local.class.path"/>
