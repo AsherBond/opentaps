@@ -81,6 +81,7 @@ completely for now.
 framework/entity/src/org/ofbiz/entity/datasource/GenericDAO.java
 framework/entity/src/org/ofbiz/entity/jdbc/SQLProcessor.java
 r14349 abbreviate the SQL exception messages
+r14742  but provide more detailed logging in the log files
 
 framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
 r13040 fix a bug in the validation which did not work if the rhs was an empty collection
