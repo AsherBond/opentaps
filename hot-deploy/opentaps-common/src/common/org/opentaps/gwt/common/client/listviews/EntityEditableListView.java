@@ -73,6 +73,7 @@ import org.opentaps.gwt.common.client.events.LoadableListenerAdapter;
 import org.opentaps.gwt.common.client.form.FormNotificationInterface;
 import org.opentaps.gwt.common.client.form.ServiceErrorReader;
 import org.opentaps.gwt.common.client.form.base.BaseFormPanel;
+import org.opentaps.gwt.common.client.form.field.ValuePostProcessedInterface;
 import org.opentaps.gwt.common.client.lookup.Permissions;
 import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.client.suggest.EntityAutocomplete;
@@ -163,6 +164,9 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
 
     // record autocompleter editors to columns
     private Map<String, EntityAutocomplete> columnToAutocompleter = new HashMap<String, EntityAutocomplete>();
+
+    // record post processed editors to columns
+    private Map<String, ValuePostProcessedInterface> columnToPostProcessed = new HashMap<String, ValuePostProcessedInterface>();
 
     private boolean loaded = false;
     private boolean loadNow = false;
@@ -309,6 +313,17 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
                     }
                 }
 
+                @Override public boolean doValidateEdit(GridPanel grid, Record record, String field, Object value, Object originalValue, int rowIndex, int colIndex) {
+                    if (columnToPostProcessed.containsKey(field)) {
+                        ValuePostProcessedInterface postProcessed = columnToPostProcessed.get(field);
+                        String realNewValue = postProcessed.getPostProcessedValue(originalValue, value);
+                        if (realNewValue == null) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
                 // set cell edit handler, to sync displayed value when changed from a non-static autocompleter
                 @Override public void onAfterEdit(GridPanel grid, Record record, String field, Object newValue, Object oldValue, int rowIndex, int colIndex) {
                     UtilUi.logDebug("Finished editing cell [" + rowIndex + "/" + colIndex + "], field: " + field + ", from " + oldValue + " to " + newValue + ", displayStringChanged = " + displayStringChanged, MODULE, "onAfterEdit");
@@ -316,6 +331,15 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
                         // copy displayString to the description field of the edited record
                         record.set(field + UtilLookup.DESCRIPTION_SUFFIX, displayString);
                         displayStringChanged = false;
+                    }
+                    // check if the value should be post processed
+                    if (columnToPostProcessed.containsKey(field)) {
+                        ValuePostProcessedInterface postProcessed = columnToPostProcessed.get(field);
+                        String realNewValue = postProcessed.getPostProcessedValue(oldValue, newValue);
+                        newValue = realNewValue;
+                        if (realNewValue != null) {
+                            record.set(field, realNewValue);
+                        }
                     }
                     // trigger the event handler method
                     cellValueChanged(record, field, oldValue, rowIndex, colIndex);
@@ -625,6 +649,10 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
      * @see #makeLinkColumn
      */
     protected ColumnConfig makeEditableColumn(String label, FieldDef definition, Field field) {
+        if (field instanceof ValuePostProcessedInterface) {
+            columnToPostProcessed.put(definition.getName(), (ValuePostProcessedInterface) field);
+        }
+
         return makeEditableColumn(label, definition, new GridEditor(field));
     }
 

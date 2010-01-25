@@ -17,6 +17,7 @@
 
 package org.opentaps.gwt.common.client;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -304,6 +305,39 @@ public abstract class UtilUi {
     // a String empty test
     public static boolean isEmpty(String s) {
         return (s == null) || (s.length() == 0);
+    }
+
+    public static native boolean isNumber(String s) /*-{
+        return (s - 0) == s && s.length > 0;
+    }-*/;
+
+    /**
+     * Tries to covnert a <code>String</code> into a <code>BigDecimal</code>, else return <code>defaultValue</code>.
+     * @param s a <code>String</code> value
+     * @param defaultValue a <code>BigDecimal</code> value
+     * @return a <code>BigDecimal</code> value
+     */
+    public static BigDecimal asBigDecimal(String s, BigDecimal defaultValue) {
+        if (UtilUi.isNumber(s)) {
+            try {
+                return new BigDecimal(s);
+            } catch (Exception e) {
+                UtilUi.logDebug("[" + s + "] is NOT a valid number: " + e.getMessage(), MODULE, "asBigDecimal");
+                return null;
+            }
+        } else {
+            UtilUi.logDebug("[" + s + "] is NOT a valid number", MODULE, "asBigDecimal");
+            return null;
+        }
+    }
+
+    /**
+     * Tries to covnert a <code>String</code> into a <code>BigDecimal</code>, else return <code>null</code>.
+     * @param s a <code>String</code> value
+     * @return a <code>BigDecimal</code> value
+     */
+    public static BigDecimal asBigDecimal(String s) {
+        return asBigDecimal(s, null);
     }
 
     // Common toString methods, useful for debugging and logging

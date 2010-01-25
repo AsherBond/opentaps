@@ -31,6 +31,7 @@ import com.gwtext.client.widgets.grid.CellMetadata;
 import com.gwtext.client.widgets.grid.Renderer;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.CreateOrUpdateEntityForm;
+import org.opentaps.gwt.common.client.form.field.ModifierOrNumberField;
 import org.opentaps.gwt.common.client.form.field.NumberField;
 import org.opentaps.gwt.common.client.form.field.TextField;
 import org.opentaps.gwt.common.client.lookup.configuration.AccountingTagLookupConfiguration;
@@ -68,7 +69,7 @@ public class OrderItemsEditableListView extends EntityEditableListView {
     private final ProductAutocomplete productEditor;
     private final TextField descriptionEditor;
     private final NumberField quantityEditor;
-    private final NumberField priceEditor;
+    private final ModifierOrNumberField priceEditor;
 
     private final String organizationPartyId;
     private final OrderType orderType;
@@ -100,7 +101,7 @@ public class OrderItemsEditableListView extends EntityEditableListView {
         descriptionEditor = new TextField(UtilUi.MSG.commonDescription(), OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION, INPUT_LENGTH);
         productEditor = new ProductAutocomplete(UtilUi.MSG.productProduct(), OrderItemsCartLookupConfiguration.INOUT_PRODUCT, INPUT_LENGTH);
         quantityEditor = new NumberField(UtilUi.MSG.commonQuantity(), OrderItemsCartLookupConfiguration.INOUT_QUANTITY, INPUT_LENGTH);
-        priceEditor = new NumberField(UtilUi.MSG.commonUnitPrice(), OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE, INPUT_LENGTH);
+        priceEditor = new ModifierOrNumberField(UtilUi.MSG.commonUnitPrice(), OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE, INPUT_LENGTH);
 
         form = new CreateOrUpdateEntityForm(false) {
                 @Override protected void onSuccess() {
@@ -159,7 +160,7 @@ public class OrderItemsEditableListView extends EntityEditableListView {
         makeEditableColumn(UtilUi.MSG.commonQuantity(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_QUANTITY), new NumberField(quantityEditor)).setWidth(60);
         getColumn().setFixed(true);
         // unit price
-        makeEditableColumn(UtilUi.MSG.commonUnitPrice(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE), new NumberField(priceEditor)).setWidth(60);
+        makeEditableColumn(UtilUi.MSG.commonUnitPrice(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE), new ModifierOrNumberField(priceEditor)).setWidth(60);
         getColumn().setFixed(true);
         // item adjustments, only for sales order carts
         if (orderType == OrderType.SALES) {
@@ -257,7 +258,6 @@ public class OrderItemsEditableListView extends EntityEditableListView {
             } else if (quantity == null && quantityOld == null) {
                 qtyChanged = false;
             }
-
         }
 
         // if no value changed return there
@@ -345,24 +345,31 @@ public class OrderItemsEditableListView extends EntityEditableListView {
     }
 
     private BigDecimal getItemSubtotal(Record record) {
-        BigDecimal qty;
-        if (record.isEmpty(OrderItemsCartLookupConfiguration.INOUT_QUANTITY)) {
+        BigDecimal qty = null;
+        if (!record.isEmpty(OrderItemsCartLookupConfiguration.INOUT_QUANTITY)) {
+            qty = UtilUi.asBigDecimal(record.getAsString(OrderItemsCartLookupConfiguration.INOUT_QUANTITY));
+        }
+        if (qty == null) {
             qty = new BigDecimal("1.0");
-        } else {
-            qty = new BigDecimal(record.getAsString(OrderItemsCartLookupConfiguration.INOUT_QUANTITY));
         }
-        BigDecimal adjustments;
-        if (record.isEmpty(OrderItemsCartLookupConfiguration.INOUT_ADJUSTMENT)) {
-            adjustments = new BigDecimal("0.0");
-        } else {
-            adjustments = new BigDecimal(record.getAsString(OrderItemsCartLookupConfiguration.INOUT_ADJUSTMENT));
+
+        BigDecimal adjustments = null;
+        if (!record.isEmpty(OrderItemsCartLookupConfiguration.INOUT_ADJUSTMENT)) {
+            adjustments = UtilUi.asBigDecimal(record.getAsString(OrderItemsCartLookupConfiguration.INOUT_ADJUSTMENT));
         }
-        BigDecimal amount;
-        if (record.isEmpty(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE)) {
-            amount = new BigDecimal("0.0");
-        } else {
-            amount = new BigDecimal(record.getAsString(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE));
+        if (adjustments == null) {
+            adjustments = BigDecimal.ZERO;
         }
+
+
+        BigDecimal amount = null;
+        if (!record.isEmpty(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE)) {
+            amount = UtilUi.asBigDecimal(record.getAsString(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE));
+        }
+        if (amount == null) {
+            amount = BigDecimal.ZERO;
+        }
+
         return qty.multiply(amount).add(adjustments).setScale(2, BigDecimal.ROUND_HALF_EVEN);
     }
 
