@@ -68,7 +68,7 @@ public final class FrameworkService {
 
     private Map<String, Object> createConfig() throws Exception {
         Properties props = new Properties();
-        props.load(this.context.getResourceAsStream("/WEB-INF/framework.properties"));
+        props.load(this.context.getResourceAsStream("/WEB-INF/osgi-framework.properties"));
 
         HashMap<String, Object> map = new HashMap<String, Object>();
         for (Object key : props.keySet()) {
