@@ -85,7 +85,7 @@ under the License.
                       <#if cartLine.getProductId()?exists>
                         <#-- product item -->
                         <a href="<@ofbizUrl>product?product_id=${cartLine.getProductId()}</@ofbizUrl>" class="linktext">${cartLine.getProductId()}</a>:
-                        <input size="50" class="inputBox" type="text" name="description_${cartLineIndex}" value="${cartLine.getName()?default("")?xml}" <#if cartLine.getIsPromo()>readonly="readonly"</#if>/>
+                        <input size="50" class="inputBox" type="text" name="description_${cartLineIndex}" value="${cartLine.getName()?default("")?string}" <#if cartLine.getIsPromo()>readonly="readonly"</#if>/>
                       <#else>
                         <#-- this is a non-product item -->
                         <b>${cartLine.getItemTypeDescription()?if_exists}</b> : ${cartLine.getName()?if_exists}
