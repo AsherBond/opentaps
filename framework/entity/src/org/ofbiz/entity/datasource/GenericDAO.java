@@ -168,6 +168,7 @@ public class GenericDAO {
             entity.synchronizedWithDatasource();
             return retVal;
         } catch (GenericEntityException e) {
+            Debug.logError("Error while inserting " + entity.toString(), module);
             throw new GenericEntityException("Error while inserting " + entity.getEntityName(), e);
         } finally {
             sqlP.close();
@@ -271,6 +272,7 @@ public class GenericDAO {
             retVal = sqlP.executeUpdate();
             entity.synchronizedWithDatasource();
         } catch (GenericEntityException e) {
+            Debug.logError("Error while updating " + entity.toString(), module);
             throw new GenericEntityException("Error while updating " + entity.getEntityName(), e);
         } finally {
             sqlP.close();
