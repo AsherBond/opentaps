@@ -45,7 +45,7 @@ public abstract class UtilDate {
     private UtilDate() { }
 
     /** Number of milliseconds in a day. */
-    private static final long MS_IN_A_DAY = 24 * 60 * 60 * 1000;
+    public static final long MS_IN_A_DAY = 24 * 60 * 60 * 1000;
 
     /**
      * Parses a timestamp into fields suitable for selection of default values for AM/PM based form widgets.
