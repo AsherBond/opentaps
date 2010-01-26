@@ -624,7 +624,10 @@ public class OpentapsTestCase extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public <T extends ServiceWrapper> void runAndAssertServiceError(T service) {
-        service.putAllOutput(runAndAssertServiceError(service.name(), service.inputMap()));
+        Map results = runAndAssertServiceError(service.name(), service.inputMap());
+        if (results != null) {
+            service.putAllOutput(results);
+        }
     }
 
     /**
