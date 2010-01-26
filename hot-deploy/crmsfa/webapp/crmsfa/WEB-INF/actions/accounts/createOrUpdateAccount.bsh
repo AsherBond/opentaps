@@ -29,3 +29,6 @@ context.put("marketingCampaignsList", marketingCampaigns);
 teams = delegator.findByAnd("PartyRoleAndPartyDetail", UtilMisc.toMap("roleTypeId", "ACCOUNT_TEAM"), UtilMisc.toList("groupName"));
 context.put("teamsList", teams);
 
+// check if the create service returned a duplicate name error
+errDuplicates = request.getAttribute("duplicateAccountsWithName");
+context.put("duplicateAccountsWithName", errDuplicates);

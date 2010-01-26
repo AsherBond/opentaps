@@ -41,6 +41,12 @@
     <@displayTitleCell title=uiLabelMap.CrmParentParty />
     <@inputLookupCell name="parentPartyId" form="createAccountForm" lookup="LookupAccounts" default=partySummary.parentPartyId />
   </tr>
+  <#if duplicateAccountsWithName?has_content>
+    <tr>
+      <td/>
+      <td colspan="3"><span class="errorMessage">${uiLabelMap.CrmAccountsWithDuplicateName}:</span> <#list duplicateAccountsWithName as dup><@displayPartyLink partyId=dup.partyId /><#if dup_has_next>, </#if></#list></td>
+    </tr>
+  </#if>
   <tr>
     <@displayTitleCell title=uiLabelMap.CrmLocalName />
     <@inputTextCell name="groupNameLocal" maxlength=100 default=partySummary.groupNameLocal />
@@ -153,10 +159,11 @@
   <td >&nbsp;</td>
   
   <td>
-    <@submitFormLinkConfirm form="createAccountForm" text=uiLabelMap.OpentapsForceComplete forceComplete="Y"/>
-    <@submitFormLink form="createAccountForm" text=uiLabelMap.OpentapsTrySaveAgain />
-    </td>
-    </tr>
+    <@inputSubmit title=uiLabelMap.CrmCreateAccount />
+    &nbsp;
+    <@submitFormLinkConfirm form="createAccountForm" text=uiLabelMap.CrmCreateAccountIgnoreDuplicate forceComplete="Y"/>
+  </td>
+  </tr>
   <#else>
   <#if isCreate>
     <@inputSubmitRow title=uiLabelMap.CrmCreateAccount />
@@ -164,9 +171,6 @@
     <@inputSubmitRow title=uiLabelMap.CommonSave />
   </#if>
   </#if>
-  
-  
-  
 </table>
 </form>
 </div>
