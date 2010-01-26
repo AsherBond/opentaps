@@ -154,6 +154,7 @@
   
   <td>
     <@submitFormLinkConfirm form="createAccountForm" text=uiLabelMap.OpentapsForceComplete forceComplete="Y"/>
+    <@submitFormLink form="createAccountForm" text=uiLabelMap.OpentapsTrySaveAgain />
     </td>
     </tr>
   <#else>

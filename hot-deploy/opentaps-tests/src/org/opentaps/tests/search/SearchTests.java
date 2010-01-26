@@ -34,6 +34,7 @@ import org.opentaps.base.services.CrmsfaCreateAccountService;
 import org.opentaps.base.services.CrmsfaCreateContactService;
 import org.opentaps.base.services.CrmsfaCreateLeadService;
 import org.opentaps.base.services.CrmsfaCreateOpportunityService;
+import org.opentaps.base.services.CrmsfaDeactivateAccountService;
 import org.opentaps.base.services.CrmsfaUpdateOpportunityService;
 import org.opentaps.base.services.PurchasingCreateSupplierService;
 import org.opentaps.common.order.PurchaseOrderFactory;
@@ -76,6 +77,7 @@ public class SearchTests extends OpentapsTestCase {
         createSupplier.setInGroupName(partyGroupName);
         createSupplier.setInRequires1099("Y");
         runAndAssertServiceSuccess(createSupplier);
+        String supplierPartyId = createSupplier.getOutPartyId();
 
         // create a account by service crmsfa.createAccount
         CrmsfaCreateAccountService createAccount = new CrmsfaCreateAccountService();
@@ -112,6 +114,12 @@ public class SearchTests extends OpentapsTestCase {
             // assert we find the supplier one
             assertIsSupplierNotCustomer(party);
         }
+        
+        // deactive the supplier we created in the test
+        CrmsfaDeactivateAccountService deactivateAccount = new CrmsfaDeactivateAccountService();
+        deactivateAccount.setInUserLogin(admin);
+        deactivateAccount.setInPartyId(supplierPartyId);
+        runAndAssertServiceSuccess(deactivateAccount);
     }
 
     /**

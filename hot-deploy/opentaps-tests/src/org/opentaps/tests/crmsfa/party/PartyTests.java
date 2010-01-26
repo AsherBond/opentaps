@@ -1117,16 +1117,13 @@ public class PartyTests extends OpentapsTestCase {
      * @throws Exception if an error occurs
      */
     public void testDuplicateAccountsWithName() throws Exception {
-        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));
-        PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
-        PartyRepositoryInterface repo = partyDomain.getPartyRepository();
-        
         // create a account by service crmsfa.createAccount
         CrmsfaCreateAccountService createAccount = new CrmsfaCreateAccountService();
         createAccount.setInUserLogin(admin);
         createAccount.setInAccountName("Duplicate Account Test");
         runAndAssertServiceSuccess(createAccount);
         String accountId = createAccount.getOutPartyId();
+        Debug.logInfo("created an account [" + accountId + "] with account name [Duplicate Account Test]", MODULE);
         
         
         createAccount = new CrmsfaCreateAccountService();
