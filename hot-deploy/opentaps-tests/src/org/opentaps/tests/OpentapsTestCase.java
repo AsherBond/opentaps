@@ -588,8 +588,9 @@ public class OpentapsTestCase extends TestCase {
      * @param <T> the class of <code>ServiceWrapper</code>
      * @param service a <code>ServiceWrapper</code> providing the input and that will contain the output
      */
+    @SuppressWarnings("unchecked")
     public <T extends ServiceWrapper> void runAndAssertServiceError(T service) {
-        runAndAssertServiceError(service.name(), service.inputMap());
+        service.putAllOutput(runAndAssertServiceError(service.name(), service.inputMap()));
     }
 
     /**

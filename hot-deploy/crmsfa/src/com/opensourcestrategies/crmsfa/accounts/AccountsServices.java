@@ -94,7 +94,7 @@ public final class AccountsServices {
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-    	String accountName = (String) context.get("accountName");
+        String accountName = (String) context.get("accountName");
         // the field that flag if force complete to create contact even existing same name already
         String forceComplete = context.get("forceComplete") == null ? "N" : (String) context.get("forceComplete");
         if (!security.hasPermission("CRMSFA_ACCOUNT_CREATE", userLogin)) {
@@ -118,16 +118,16 @@ public final class AccountsServices {
                     return UtilMessage.createAndLogServiceError("person.create.person_exists", findMap, locale, MODULE);
                 }
             }
-            
+
             // verify account name is use already
             if (!"Y".equals(forceComplete)) {
-            	DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+                DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
                 PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
                 PartyRepositoryInterface repo = partyDomain.getPartyRepository();
                 Set<PartyGroup> duplicateAccountsWithName = repo.getPartyGroupByGroupName(accountName);
                 // if existing the account which have same account name, then return the conflict account and error message
                 if (duplicateAccountsWithName.size() > 0 && !"Y".equals(forceComplete)) {
-                	PartyGroup partyGroup = duplicateAccountsWithName.iterator().next();
+                    PartyGroup partyGroup = duplicateAccountsWithName.iterator().next();
                     Map results = ServiceUtil.returnError(UtilMessage.expandLabel("CreateAccountDuplicateCheckFail", UtilMisc.toMap("partyId", partyGroup.getPartyId()), locale));
                     results.put("duplicateAccountsWithName", duplicateAccountsWithName);
                     return results;

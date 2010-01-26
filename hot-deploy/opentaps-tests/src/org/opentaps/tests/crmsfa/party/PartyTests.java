@@ -1131,6 +1131,7 @@ public class PartyTests extends OpentapsTestCase {
         runAndAssertServiceError(createAccount);
 
         Set<PartyGroup> parties = createAccount.getOutDuplicateAccountsWithName();
+        assertNotEmpty("Should have found duplicate party [" + accountId + "]", parties);
         Set<String> partyIds = Entity.getDistinctFieldValues(String.class, parties, PartyGroup.Fields.partyId);
         assertTrue("Should have found the party [" + accountId + "] in the duplicate account results", partyIds.contains(accountId));
 
@@ -1139,6 +1140,7 @@ public class PartyTests extends OpentapsTestCase {
         createAccount.setInAccountName("duplicate account test");
         runAndAssertServiceError(createAccount);
         parties = createAccount.getOutDuplicateAccountsWithName();
+        assertNotEmpty("Should have found duplicate party [" + accountId + "]", parties);
         partyIds = Entity.getDistinctFieldValues(String.class, parties, PartyGroup.Fields.partyId);
         assertTrue("Should have found the party [" + accountId + "] in the duplicate account results", partyIds.contains(accountId));
 

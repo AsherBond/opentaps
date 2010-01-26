@@ -83,6 +83,7 @@ public class SearchTests extends OpentapsTestCase {
         CrmsfaCreateAccountService createAccount = new CrmsfaCreateAccountService();
         createAccount.setInUserLogin(admin);
         createAccount.setInAccountName(partyGroupName);
+        createAccount.setInForceComplete("Y");
         runAndAssertServiceSuccess(createAccount);
 
         // note: the indexing is async, so need to wait a little for the index to be in sync
@@ -114,7 +115,7 @@ public class SearchTests extends OpentapsTestCase {
             // assert we find the supplier one
             assertIsSupplierNotCustomer(party);
         }
-        
+
         // deactive the supplier we created in the test
         CrmsfaDeactivateAccountService deactivateAccount = new CrmsfaDeactivateAccountService();
         deactivateAccount.setInUserLogin(admin);
