@@ -3713,8 +3713,8 @@ public class OrderTests extends OrderTestCase {
      * @throws Exception if an error occurs
      */
     public void testGwtSearchOrderByShippingAddress() throws Exception {
-    	InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
-    	// 1. Create a sales order with a billing address in New York and a shipping address in California
+        InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
+        // 1. Create a sales order with a billing address in New York and a shipping address in California
 
         // create a product
         BigDecimal productQty = new BigDecimal("1.0");
@@ -3727,7 +3727,7 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory salesOrder =  testCreatesSalesOrder(orderSpec, DemoAccount1.getString("partyId"), productStoreId, null, "EXT_OFFLINE", null, "DemoAddress1", "DemoAddress2");
 
-    	// 2. try to find the sales order By shipping address with state = NY, in the sales order is not found
+        // 2. try to find the sales order By shipping address with state = NY, in the sales order is not found
         provider = new TestInputProvider(admin, dispatcher);
         provider.setParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID, salesOrder.getOrderId());
         provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE, "NY");
@@ -3735,8 +3735,8 @@ public class OrderTests extends OrderTestCase {
         SalesOrderLookupService lookup = new SalesOrderLookupService(provider);
         lookup.findOrders();
         assertGwtLookupNotFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
-    	
-    	// 3. try to find the sales order by shipping address with state = CA, and the sales order is found 
+
+        // 3. try to find the sales order by shipping address with state = CA, and the sales order is found
         provider = new TestInputProvider(admin, dispatcher);
         provider.setParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID, salesOrder.getOrderId());
         provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE, "CA");
