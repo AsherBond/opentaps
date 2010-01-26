@@ -26,8 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -39,12 +40,14 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.security.SecurityFactory;
+import org.opentaps.base.constants.OrderAdjustmentTypeConstants;
 import org.opentaps.base.entities.InvoiceItem;
 import org.opentaps.base.services.CancelOrderItemInvResQtyService;
 import org.opentaps.base.services.CancelOrderItemService;
 import org.opentaps.base.services.ChangeOrderItemStatusService;
 import org.opentaps.base.services.CompleteInventoryTransferService;
 import org.opentaps.base.services.CreateInventoryTransferService;
+import org.opentaps.base.services.CreateOrderAdjustmentService;
 import org.opentaps.base.services.CreatePartyPostalAddressService;
 import org.opentaps.base.services.CreatePaymentFromPreferenceService;
 import org.opentaps.base.services.CreatePhysicalInventoryAndVarianceService;
@@ -81,9 +84,6 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 import org.opentaps.gwt.common.server.lookup.SalesOrderLookupService;
 import org.opentaps.tests.gwt.TestInputProvider;
 import org.opentaps.tests.warehouse.InventoryAsserts;
-
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * Order related unit tests.
@@ -3105,6 +3105,15 @@ public class OrderTests extends OrderTestCase {
         salesOrder.approveOrder();
         Order order = orderRepository.getOrderById(salesOrder.getOrderId());
 
+        // add a manual adjustment which will be tagged automatically in the invoice
+        CreateOrderAdjustmentService adjService = new CreateOrderAdjustmentService();
+        adjService.setInUserLogin(admin);
+        adjService.setInOrderId(order.getOrderId());
+        adjService.setInAmount(new BigDecimal("35.0"));
+        adjService.setInOrderAdjustmentTypeId(OrderAdjustmentTypeConstants.SHIPPING_CHARGES);
+        adjService.setInDescription("test manual adjustment tagging");
+        runAndAssertServiceSuccess(adjService);
+
         // pack order
         TestShipOrderService testShipOrder = new TestShipOrderService();
         testShipOrder.setInUserLogin(demowarehouse1);
@@ -3139,14 +3148,16 @@ public class OrderTests extends OrderTestCase {
         Invoice invoice = invoices.get(0);
 
         // check the invoice items, those related to order items should be tagged the same, others should not be tagged
+        InvoiceItem invoiceItemFirst = null;
         InvoiceItem invoiceItemA = null;
         InvoiceItem invoiceItemB = null;
         for (InvoiceItem invoiceItem : invoice.getInvoiceItems()) {
-            // only the invoice item for the product, not taxes or other adjustments
-            if (!"INV_FPROD_ITEM".equals(invoiceItem.getInvoiceItemTypeId())) {
-                continue;
+            if (invoiceItemFirst == null) {
+                invoiceItemFirst = invoiceItem;
             }
 
+            // invoice item related to an order item are tagged according
+            // to that order item
             String itemProductId = invoiceItem.getProductId();
             if (productAId.equals(itemProductId)) {
                 invoiceItemA = invoiceItem;
@@ -3155,8 +3166,8 @@ public class OrderTests extends OrderTestCase {
                 invoiceItemB = invoiceItem;
                 assertAccountingTagsEqual(invoiceItemB, orderItemTagsB);
             } else {
-                // all other invoice items are not tagged
-                assertAccountingTagsEqual(invoiceItem, noTags);
+                // all other invoice items are automatically tagged the same as the first invoice item
+                assertAccountingTagsEqual(invoiceItem, invoiceItemFirst);
             }
         }
         assertNotNull("Could not find sales invoice item for productA in invoice [" + invoice.getInvoiceId() + "]", invoiceItemA);
@@ -3167,21 +3178,49 @@ public class OrderTests extends OrderTestCase {
         assertNotNull("Could not find the accounting transaction related to the invoice [" + invoice.getInvoiceId() + "]", invoiceTransaction);
         List<GenericValue> entries = invoiceTransaction.getRelated("AcctgTransEntry");
         List<String> accountedEntryIds = new ArrayList<String>();
-        // find the specific transaction corresponding to the tagged invoice items in the SALES account
+        // find the specific transaction entries corresponding to the tagged invoice items in the SALES account and tax authorities
+        // we have multiple entries per product, one being the order item itself, the others are its adjustments (taxes)
         String salesAccountId = UtilFinancial.replaceGlAccountTypeWithGlAccountForOrg(organizationPartyId, "SALES_ACCOUNT", delegator);
-        GenericValue transInvoiceItemA = EntityUtil.getOnly(delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", invoiceTransaction.get("acctgTransId"), "glAccountId", salesAccountId, "debitCreditFlag", "C", "productId", productAId)));
-        GenericValue transInvoiceItemB = EntityUtil.getOnly(delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", invoiceTransaction.get("acctgTransId"), "glAccountId", salesAccountId, "debitCreditFlag", "C", "productId", productBId)));
-        assertNotNull("Could not find the SALES accounting transaction for the sales invoice item [" + invoiceItemA + "]", transInvoiceItemA);
-        assertNotNull("Could not find the SALES accounting transaction for the sales invoice item [" + invoiceItemB + "]", transInvoiceItemB);
-        assertAccountingTagsEqual(transInvoiceItemA, orderItemTagsA);
-        assertAccountingTagsEqual(transInvoiceItemB, orderItemTagsB);
-        accountedEntryIds.add(transInvoiceItemA.getString("acctgTransEntrySeqId"));
-        accountedEntryIds.add(transInvoiceItemB.getString("acctgTransEntrySeqId"));
+        GenericValue transInvoiceItemAsales = EntityUtil.getOnly(delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", invoiceTransaction.get("acctgTransId"), "glAccountId", salesAccountId, "debitCreditFlag", "C", "productId", productAId)));
+        GenericValue transInvoiceItemBsales = EntityUtil.getOnly(delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", invoiceTransaction.get("acctgTransId"), "glAccountId", salesAccountId, "debitCreditFlag", "C", "productId", productBId)));
+        assertNotNull("Could not find the SALES accounting transaction entries for the sales invoice item [" + invoiceItemA + "]", transInvoiceItemAsales);
+        assertNotNull("Could not find the SALES accounting transaction entries for the sales invoice item [" + invoiceItemB + "]", transInvoiceItemBsales);
+        List<GenericValue> transInvoiceItemAs = delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", invoiceTransaction.get("acctgTransId"), "roleTypeId", "TAX_AUTHORITY", "debitCreditFlag", "C", "productId", productAId));
+        List<GenericValue> transInvoiceItemBs = delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", invoiceTransaction.get("acctgTransId"), "roleTypeId", "TAX_AUTHORITY", "debitCreditFlag", "C", "productId", productBId));
+        assertNotEmpty("Could not find the tax accounting transaction entries for the sales invoice item [" + invoiceItemA + "]", transInvoiceItemAs);
+        assertNotEmpty("Could not find the tax accounting transaction entries for the sales invoice item [" + invoiceItemB + "]", transInvoiceItemBs);
+        transInvoiceItemBs.add(transInvoiceItemBsales);
+        transInvoiceItemAs.add(transInvoiceItemAsales);
+
+        // find the global adjustments transaction entries, they would be tagged the same as the first invoice item
+        List<GenericValue> transInvoiceItemOthers = delegator.findByCondition("AcctgTransEntry", EntityCondition.makeCondition(
+                                                                EntityCondition.makeCondition("acctgTransId", invoiceTransaction.get("acctgTransId")),
+                                                                EntityCondition.makeCondition("productId", null),
+                                                                EntityCondition.makeCondition("debitCreditFlag", "C"))
+                                                                              , null, null);
+        transInvoiceItemAs.addAll(transInvoiceItemOthers);
+
+        BigDecimal totalA = BigDecimal.ZERO;
+        for (GenericValue entry : transInvoiceItemAs) {
+            assertAccountingTagsEqual(entry, orderItemTagsA);
+            totalA = totalA.add(entry.getBigDecimal("amount"));
+            accountedEntryIds.add(entry.getString("acctgTransEntrySeqId"));
+            Debug.logInfo("Added transaction from invoice item A : " + entry, MODULE);
+        }
+        BigDecimal totalB = BigDecimal.ZERO;
+        for (GenericValue entry : transInvoiceItemBs) {
+            assertAccountingTagsEqual(entry, orderItemTagsB);
+            totalB = totalB.add(entry.getBigDecimal("amount"));
+            accountedEntryIds.add(entry.getString("acctgTransEntrySeqId"));
+            Debug.logInfo("Added transaction from invoice item B : " + entry, MODULE);
+        }
+        Debug.logInfo("totalA = " + totalA + ", totalB = " + totalB, MODULE);
+
         // find the specific transaction corresponding to the tagged invoice items in the ACCOUNTS_RECEIVABLE account
-        // note: those do not have a product id set, instead they balance the previous two transaction entries and have the same amounts
+        // note: those do not have a product id set, instead they balance the previous two set of transaction entries and have the same amounts total
         String arAccountId = UtilFinancial.replaceGlAccountTypeWithGlAccountForOrg(organizationPartyId, "ACCOUNTS_RECEIVABLE", delegator);
-        GenericValue transArA = EntityUtil.getOnly(delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", invoiceTransaction.get("acctgTransId"), "glAccountId", arAccountId, "debitCreditFlag", "D", "amount", transInvoiceItemA.get("amount"))));
-        GenericValue transArB = EntityUtil.getOnly(delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", invoiceTransaction.get("acctgTransId"), "glAccountId", arAccountId, "debitCreditFlag", "D", "amount", transInvoiceItemB.get("amount"))));
+        GenericValue transArA = EntityUtil.getOnly(delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", invoiceTransaction.get("acctgTransId"), "glAccountId", arAccountId, "debitCreditFlag", "D", "amount", totalA)));
+        GenericValue transArB = EntityUtil.getOnly(delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", invoiceTransaction.get("acctgTransId"), "glAccountId", arAccountId, "debitCreditFlag", "D", "amount", totalB)));
         assertNotNull("Could not find the ACCOUNTS_RECEIVABLE accounting transaction for the sales invoice item [" + invoiceItemA + "]", transArA);
         assertNotNull("Could not find the ACCOUNTS_RECEIVABLE accounting transaction for the sales invoice item [" + invoiceItemB + "]", transArB);
         // those transactions only have the tags defined in the ACCOUNTS_RECEIVABLE usage type (which is only the first tag)
@@ -3189,14 +3228,10 @@ public class OrderTests extends OrderTestCase {
         assertAccountingTagsEqual(transArB, UtilMisc.toMap("acctgTagEnumId1", orderItemTagsB.get("acctgTagEnumId1")));
         accountedEntryIds.add(transArA.getString("acctgTransEntrySeqId"));
         accountedEntryIds.add(transArB.getString("acctgTransEntrySeqId"));
-        // for all other transactions, they should be un-tagged
+        // we should have accounted for all the transaction entries
         for (GenericValue entry : entries) {
             String id = entry.getString("acctgTransEntrySeqId");
-            if (accountedEntryIds.contains(id)) {
-                continue;
-            } else {
-                assertAccountingTagsEqual(entry, noTags);
-            }
+            assertTrue("Found unexpected transaction entry: " + entry, accountedEntryIds.contains(id));
         }
 
         // now check the accounting tags for the sent shipment, they should have the inventory items tags

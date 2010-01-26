@@ -398,6 +398,7 @@ public class OpentapsTestCase extends TestCase {
      * @param expected the <code>List</code> of expected values
      * @param ignoreExtraActualValues if set to <code>true</code>, does not fail if some values in actual are not in expected
      */
+    @SuppressWarnings("unchecked")
     public void assertEquals(String message, List actual, List expected, boolean ignoreExtraActualValues) {
         Debug.logInfo("Comparing lists :\nactual = " + actual + "\nexpected = " + expected, MODULE);
 
@@ -428,6 +429,7 @@ public class OpentapsTestCase extends TestCase {
      * @param actual a <code>Map</code> of values
      * @param expected the <code>Map</code> of expected values
      */
+    @SuppressWarnings("unchecked")
     public void assertEquals(String message, Map actual, Map expected) {
         assertEquals(message, actual, expected, true);
     }
@@ -437,6 +439,7 @@ public class OpentapsTestCase extends TestCase {
      * @param value the entity to test the tags for value
      * @param expected the expected tags
      */
+    @SuppressWarnings("unchecked")
     public void assertAccountingTagsEqual(GenericValue value, Map expected) {
         Map<String, String> foundTags = new HashMap<String, String>();
         UtilAccountingTags.putAllAccountingTags(value, foundTags);
@@ -464,6 +467,37 @@ public class OpentapsTestCase extends TestCase {
      * @param expected the expected tags
      * @exception Exception if an error occurs
      */
+    public void assertAccountingTagsEqual(EntityInterface value, GenericValue expected) throws Exception {
+        assertAccountingTagsEqual(Repository.genericValueFromEntity(delegator, value), expected);
+    }
+
+    /**
+     * Asserts that an entity has the expected accounting tags.
+     * @param value the entity to test the tags for value
+     * @param expected the expected tags
+     * @exception Exception if an error occurs
+     */
+    public void assertAccountingTagsEqual(GenericValue value, EntityInterface expected) throws Exception {
+        assertAccountingTagsEqual(value, Repository.genericValueFromEntity(expected));
+    }
+
+    /**
+     * Asserts that an entity has the expected accounting tags.
+     * @param value the entity to test the tags for value
+     * @param expected the expected tags
+     * @exception Exception if an error occurs
+     */
+    public void assertAccountingTagsEqual(EntityInterface value, EntityInterface expected) throws Exception {
+        assertAccountingTagsEqual(Repository.genericValueFromEntity(delegator, value), Repository.genericValueFromEntity(expected));
+    }
+
+    /**
+     * Asserts that an entity has the expected accounting tags.
+     * @param value the entity to test the tags for value
+     * @param expected the expected tags
+     * @exception Exception if an error occurs
+     */
+    @SuppressWarnings("unchecked")
     public void assertAccountingTagsEqual(EntityInterface value, Map expected) throws Exception {
         assertAccountingTagsEqual(Repository.genericValueFromEntity(delegator, value), expected);
     }

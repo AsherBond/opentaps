@@ -2627,6 +2627,10 @@ public final class InvoiceServices {
             int invoiceItemSeqNum = 1;
             String invoiceItemSeqId = UtilFormatOut.formatPaddedNumber(invoiceItemSeqNum, INVOICE_ITEM_SEQUENCE_ID_DIGITS);
 
+            // later the other global adjustments will be tagged the same as the first order item
+            GenericValue firstOrderItem = null;
+            Map globalAccountingTags = new HashMap();
+
             // create the item records
             if (billItems != null) {
                 Iterator itemIter = billItems.iterator();
@@ -2653,6 +2657,12 @@ public final class InvoiceServices {
                         Debug.logError("Cannot create invoice when orderItem, itemIssuance, and shipmentReceipt are all null", MODULE);
                         return UtilMessage.createAndLogServiceError("AccountingIllegalValuesPassedToCreateInvoiceService", locale, MODULE);
                     }
+
+                    if (firstOrderItem == null) {
+                        firstOrderItem = orderItem;
+                        UtilAccountingTags.putAllAccountingTags(firstOrderItem, globalAccountingTags);
+                    }
+
                     GenericValue product = null;
                     if (orderItem.get("productId") != null) {
                         product = orderItem.getRelatedOne("Product");
@@ -2694,7 +2704,7 @@ public final class InvoiceServices {
                     createInvoiceItemContext.put("productFeatureId", orderItem.get("productFeatureId"));
                     createInvoiceItemContext.put("overrideGlAccountId", orderItem.get("overrideGlAccountId"));
                     createInvoiceItemContext.put("userLogin", userLogin);
-                    // copy the accounting tags
+                    // copy the accounting tags from the related order item
                     UtilAccountingTags.putAllAccountingTags(orderItem, createInvoiceItemContext);
 
                     String itemIssuanceId = null;
@@ -2825,6 +2835,8 @@ public final class InvoiceServices {
                             createInvoiceItemAdjContext.put("taxAuthPartyId", adj.get("taxAuthPartyId"));
                             createInvoiceItemAdjContext.put("taxAuthGeoId", adj.get("taxAuthGeoId"));
                             createInvoiceItemAdjContext.put("taxAuthorityRateSeqId", adj.get("taxAuthorityRateSeqId"));
+                            // copy the accounting tags from the related order item
+                            UtilAccountingTags.putAllAccountingTags(orderItem, createInvoiceItemAdjContext);
 
                             // some adjustments fill out the comments field instead
                             String description = (UtilValidate.isEmpty(adj.getString("description")) ? adj.getString("comments") : adj.getString("description"));
@@ -2910,7 +2922,7 @@ public final class InvoiceServices {
                 } else {
                     // these will effect the shipping pro-rate (unless commented)
                     // other adjustment type
-                    BigDecimal adjAmount = calcHeaderAdj(delegator, adj, invoiceType, invoiceId, invoiceItemSeqId,
+                    BigDecimal adjAmount = calcHeaderAdj(delegator, adj, globalAccountingTags, invoiceType, invoiceId, invoiceItemSeqId,
                             orderSubTotal, invoiceSubTotal, adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding), invoiceTypeDecimals, rounding, userLogin, dispatcher, locale);
                     // invoiceShipProRateAmount += adjAmount;
                     // do adjustments compound or are they based off subtotal? Here we will (unless commented)
@@ -2938,7 +2950,7 @@ public final class InvoiceServices {
                     // The base amount in this case is the adjustment amount minus the total already invoiced for that adjustment, since
                     //  it won't be prorated
                     BigDecimal baseAmount = adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding).subtract(adjAlreadyInvoicedAmount);
-                    BigDecimal adjAmount = calcHeaderAdj(delegator, adj, invoiceType, invoiceId, invoiceItemSeqId,
+                    BigDecimal adjAmount = calcHeaderAdj(delegator, adj, globalAccountingTags, invoiceType, invoiceId, invoiceItemSeqId,
                             divisor, multiplier, baseAmount, invoiceTypeDecimals, rounding, userLogin, dispatcher, locale);
                 } else {
 
@@ -2948,7 +2960,7 @@ public final class InvoiceServices {
 
                     // The base amount in this case is the adjustment amount, since we want to prorate based on the full amount
                     BigDecimal baseAmount = adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding);
-                    BigDecimal adjAmount = calcHeaderAdj(delegator, adj, invoiceType, invoiceId, invoiceItemSeqId,
+                    BigDecimal adjAmount = calcHeaderAdj(delegator, adj, globalAccountingTags, invoiceType, invoiceId, invoiceItemSeqId,
                             divisor, multiplier, baseAmount, invoiceTypeDecimals, rounding, userLogin, dispatcher, locale);
                 }
 
@@ -2978,7 +2990,7 @@ public final class InvoiceServices {
                     //  it won't be prorated
                     //  Note this should use invoice decimals & rounding instead of taxDecimals and taxRounding for tax adjustments, because it will be added to the invoice
                     BigDecimal baseAmount = adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding).subtract(adjAlreadyInvoicedAmount);
-                    adjAmount = calcHeaderAdj(delegator, adj, invoiceType, invoiceId, invoiceItemSeqId, divisor, multiplier, baseAmount, invoiceTypeDecimals, rounding, userLogin, dispatcher, locale);
+                    adjAmount = calcHeaderAdj(delegator, adj, globalAccountingTags, invoiceType, invoiceId, invoiceItemSeqId, divisor, multiplier, baseAmount, invoiceTypeDecimals, rounding, userLogin, dispatcher, locale);
                 } else {
 
                     // Pro-rate the tax amount based on shippable information
@@ -2988,7 +3000,7 @@ public final class InvoiceServices {
                     // The base amount in this case is the adjustment amount, since we want to prorate based on the full amount
                     //  Note this should use invoice decimals & rounding instead of taxDecimals and taxRounding for tax adjustments, because it will be added to the invoice
                     BigDecimal baseAmount = adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding);
-                    adjAmount = calcHeaderAdj(delegator, adj, invoiceType, invoiceId, invoiceItemSeqId, divisor, multiplier, baseAmount, invoiceTypeDecimals, rounding, userLogin, dispatcher, locale);
+                    adjAmount = calcHeaderAdj(delegator, adj, globalAccountingTags, invoiceType, invoiceId, invoiceItemSeqId, divisor, multiplier, baseAmount, invoiceTypeDecimals, rounding, userLogin, dispatcher, locale);
                 }
                 invoiceSubTotal = invoiceSubTotal.add(adjAmount).setScale(invoiceTypeDecimals, rounding);
 
@@ -3091,7 +3103,7 @@ public final class InvoiceServices {
 
     /* Required by createInvoiceForOrder */
     @SuppressWarnings("unchecked")
-    private static BigDecimal calcHeaderAdj(GenericDelegator delegator, GenericValue adj, String invoiceTypeId, String invoiceId, String invoiceItemSeqId,
+    private static BigDecimal calcHeaderAdj(GenericDelegator delegator, GenericValue adj, Map accountingTags, String invoiceTypeId, String invoiceId, String invoiceItemSeqId,
             BigDecimal divisor, BigDecimal multiplier, BigDecimal baseAmount, int decimals, int rounding, GenericValue userLogin, LocalDispatcher dispatcher, Locale locale) {
         BigDecimal adjAmount = ZERO;
         if (adj.get("amount") != null) {
@@ -3120,6 +3132,8 @@ public final class InvoiceServices {
                 createInvoiceItemContext.put("taxAuthGeoId", adj.get("taxAuthGeoId"));
                 createInvoiceItemContext.put("taxAuthorityRateSeqId", adj.get("taxAuthorityRateSeqId"));
                 createInvoiceItemContext.put("userLogin", userLogin);
+                // use the given tags
+                UtilAccountingTags.putAllAccountingTags(accountingTags, createInvoiceItemContext);
 
                 Map createInvoiceItemResult = null;
                 try {
