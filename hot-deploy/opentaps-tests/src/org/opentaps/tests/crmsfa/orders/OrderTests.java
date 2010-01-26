@@ -23,14 +23,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastMap;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -42,10 +39,9 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.security.SecurityFactory;
-import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.base.entities.InvoiceItem;
-import org.opentaps.base.services.CancelOrderItemService;
 import org.opentaps.base.services.CancelOrderItemInvResQtyService;
+import org.opentaps.base.services.CancelOrderItemService;
 import org.opentaps.base.services.ChangeOrderItemStatusService;
 import org.opentaps.base.services.CompleteInventoryTransferService;
 import org.opentaps.base.services.CreateInventoryTransferService;
@@ -63,11 +59,12 @@ import org.opentaps.base.services.QuickShipOrderByItemService;
 import org.opentaps.base.services.ReserveProductInventoryByFacilityService;
 import org.opentaps.base.services.ReserveStoreInventoryService;
 import org.opentaps.base.services.SetInvoiceReadyAndCheckIfPaidService;
-import org.opentaps.base.services.TestShipOrderService;
 import org.opentaps.base.services.TestShipOrderManualService;
+import org.opentaps.base.services.TestShipOrderService;
 import org.opentaps.base.services.UpdateInventoryItemService;
 import org.opentaps.base.services.UpdatePostalAddressService;
 import org.opentaps.base.services.UpdateProductStoreService;
+import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
@@ -84,6 +81,9 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 import org.opentaps.gwt.common.server.lookup.SalesOrderLookupService;
 import org.opentaps.tests.gwt.TestInputProvider;
 import org.opentaps.tests.warehouse.InventoryAsserts;
+
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * Order related unit tests.
@@ -3670,6 +3670,45 @@ public class OrderTests extends OrderTestCase {
         // test we found the demo data: TEST10000/TEST10002, not found TEST10001
         assertGwtLookupFound(lookup, Arrays.asList("TEST10000", "TEST10002"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
         assertGwtLookupNotFound(lookup, Arrays.asList("TEST10001"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+
+    }
+    
+    /**
+     * Test the GWT search order by shipping address.
+     * @throws Exception if an error occurs
+     */
+    public void testGwtSearchOrderByShippingAddress() throws Exception {
+    	InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
+    	// 1. Create a sales order with a billing address in New York and a shipping address in California
+
+        // create a product
+        BigDecimal productQty = new BigDecimal("1.0");
+        BigDecimal productUnitPrice = new BigDecimal("11.11");
+        final GenericValue testProduct = createTestProduct("testGwtSearchOrderByShippingAddress Test Product", demowarehouse1);
+        assignDefaultPrice(testProduct, productUnitPrice, admin);
+        // create a sales order for the DemoAccount1 and product
+        Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
+        orderSpec.put(testProduct, productQty);
+        User = DemoCSR;
+        SalesOrderFactory salesOrder =  testCreatesSalesOrder(orderSpec, DemoAccount1.getString("partyId"), productStoreId, null, "EXT_OFFLINE", null, "DemoAddress1", "DemoAddress2");
+
+    	// 2. try to find the sales order By shipping address with state = NY, in the sales order is not found
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID, salesOrder.getOrderId());
+        provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE, "NY");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
+        SalesOrderLookupService lookup = new SalesOrderLookupService(provider);
+        lookup.findOrders();
+        assertGwtLookupNotFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+    	
+    	// 3. try to find the sales order by shipping address with state = CA, and the sales order is found 
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID, salesOrder.getOrderId());
+        provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE, "CA");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
+        lookup = new SalesOrderLookupService(provider);
+        lookup.findOrders();
+        assertGwtLookupFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
 
     }
 }

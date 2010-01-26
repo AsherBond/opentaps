@@ -1451,7 +1451,6 @@ public class OpentapsTestCase extends TestCase {
     protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, String customerPartyId, String productStoreId, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
         return testCreatesSalesOrder(order, customerPartyId, productStoreId, null, paymentMethodTypeId, paymentMethodId, shippingAddressId);
     }
-
     /**
      * Creates an order for the given Customer partyId with the given products.
      *  Checks that ATP and QOH have declined as needed.
@@ -1466,6 +1465,23 @@ public class OpentapsTestCase extends TestCase {
      * @return the <code>SalesOrderFactory</code> object
      */
     protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, String customerPartyId, String productStoreId, Timestamp shipByDate, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
+    	return testCreatesSalesOrder(order, customerPartyId, productStoreId, null, paymentMethodTypeId, paymentMethodId, shippingAddressId, null);
+    }
+
+    /**
+     * Creates an order for the given Customer partyId with the given products.
+     *  Checks that ATP and QOH have declined as needed.
+     *  Checks that Requirements have been created as needed.
+     * @param order a <code>Map</code> or product <code>GenericValue</code> to their quantity to order
+     * @param customerPartyId the customer party id
+     * @param productStoreId the product store id
+     * @param shipByDate
+     * @param paymentMethodTypeId optional, defaults to EXT_OFFLINE if null
+     * @param paymentMethodId optional, defaults to null
+     * @param shippingAddressId the Id of the contactMech that should be used as shipping address, optional
+     * @return the <code>SalesOrderFactory</code> object
+     */
+    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, String customerPartyId, String productStoreId, Timestamp shipByDate, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId, String billingAddressId) {
         // to store ATP, QOH and requirements before and after the order
         Map<GenericValue, BigDecimal> productAtpInitial, productQohInitial, productAtpFinal, productQohFinal, productRequirementInitial;
         productAtpInitial = new HashMap<GenericValue, BigDecimal>();
@@ -1508,6 +1524,9 @@ public class OpentapsTestCase extends TestCase {
         } else {
             sof.addShippingGroup("_NA_", "STANDARD", shippingAddressId);
             sof.addOrderContactMech(shippingAddressId, "SHIPPING_LOCATION");
+        }
+        if (billingAddressId != null) {
+            sof.addOrderContactMech(billingAddressId, "BILLING_LOCATION");
         }
         point.collect();
 
