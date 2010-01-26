@@ -1124,18 +1124,16 @@ public class PartyTests extends OpentapsTestCase {
         runAndAssertServiceSuccess(createAccount);
         String accountId = createAccount.getOutPartyId();
         Debug.logInfo("created an account [" + accountId + "] with account name [Duplicate Account Test]", MODULE);
-        
-        
+
         createAccount = new CrmsfaCreateAccountService();
         createAccount.setInUserLogin(admin);
         createAccount.setInAccountName("DUPLICATE ACCOUNT TEST");
         runAndAssertServiceError(createAccount);
-        
+
         Set<PartyGroup> parties = createAccount.getOutDuplicateAccountsWithName();
         Set<String> partyIds = Entity.getDistinctFieldValues(String.class, parties, PartyGroup.Fields.partyId);
         assertTrue("Should have found the party [" + accountId + "] in the duplicate account results", partyIds.contains(accountId));
 
-        
         createAccount = new CrmsfaCreateAccountService();
         createAccount.setInUserLogin(admin);
         createAccount.setInAccountName("duplicate account test");
@@ -1143,7 +1141,7 @@ public class PartyTests extends OpentapsTestCase {
         parties = createAccount.getOutDuplicateAccountsWithName();
         partyIds = Entity.getDistinctFieldValues(String.class, parties, PartyGroup.Fields.partyId);
         assertTrue("Should have found the party [" + accountId + "] in the duplicate account results", partyIds.contains(accountId));
-        
+
         // after passing forceComplete=Y causes the account to be created successfully
         createAccount = new CrmsfaCreateAccountService();
         createAccount.setInUserLogin(admin);
@@ -1151,19 +1149,18 @@ public class PartyTests extends OpentapsTestCase {
         createAccount.setInForceComplete("Y");
         runAndAssertServiceSuccess(createAccount);
         String duplicateAccountId = createAccount.getOutPartyId();
-        
-        
+
         // deactive the accounts we created
         CrmsfaDeactivateAccountService deactivateAccount = new CrmsfaDeactivateAccountService();
         deactivateAccount.setInUserLogin(admin);
         deactivateAccount.setInPartyId(accountId);
         runAndAssertServiceSuccess(deactivateAccount);
-        
+
         deactivateAccount = new CrmsfaDeactivateAccountService();
         deactivateAccount.setInUserLogin(admin);
         deactivateAccount.setInPartyId(duplicateAccountId);
         runAndAssertServiceSuccess(deactivateAccount);
-        
+
     }
 
 
