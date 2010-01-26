@@ -62,6 +62,7 @@ import org.opentaps.base.entities.ProductStoreCatalog;
 import org.opentaps.base.entities.ProductStoreFacilityByAddress;
 import org.opentaps.base.entities.ProductStoreShipmentMeth;
 import org.opentaps.base.entities.ProductStoreShipmentMethView;
+import org.opentaps.base.entities.ReturnItemResponse;
 import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.base.services.ChangeOrderItemStatusService;
 import org.opentaps.base.services.GetReturnableItemsService;
@@ -590,4 +591,8 @@ public class OrderRepository extends DomainRepository implements OrderRepository
         }
     }
 
+    /** {@inheritDoc} */
+    public ReturnItemResponse getReturnItemResponseById(String returnItemResponseId) throws RepositoryException, EntityNotFoundException {
+        return findOneNotNull(ReturnItemResponse.class, map(ReturnItemResponse.Fields.returnItemResponseId, returnItemResponseId), "OpentapsError_ReturnItemResponseNotFound", UtilMisc.toMap("returnItemResponseId", returnItemResponseId));
+    }
 }

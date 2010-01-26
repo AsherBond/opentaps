@@ -445,4 +445,13 @@ public interface OrderRepositoryInterface extends RepositoryInterface {
      */
     public void updateOrderAddress(String orderId, String contactMechId, String purposeTypeId) throws RepositoryException;
 
+
+    /**
+     * Finds an <code>ReturnItemResponse</code> by ID from the database.
+     * @param returnItemResponseId the ReturnItemResponse ID
+     * @return the <code>ReturnItemResponse</code> found
+     * @throws RepositoryException if an error occurs
+     * @throws EntityNotFoundException no <code>ReturnItemResponse</code> is found for the given id
+     */
+    public ReturnItemResponse getReturnItemResponseById(String returnItemResponseId) throws RepositoryException, EntityNotFoundException;
 }

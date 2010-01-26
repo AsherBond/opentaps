@@ -451,8 +451,9 @@ public class PartyRepository extends DomainRepository implements PartyRepository
                 + " and (eo.party.statusId is null or 'PARTY_DISABLED' <> eo.party.statusId)";
             org.hibernate.Query query = session.createQuery(hql);
             query.setString("groupName", groupName.trim().toLowerCase());
-            List<org.opentaps.base.entities.PartyGroup> partiyGroups = query.list();
-            resultSet.addAll(partiyGroups);
+            List<org.opentaps.base.entities.PartyGroup> partyGroups = query.list();
+            Debug.logInfo("partyGroups.size() : " + partyGroups.size(), MODULE);
+            resultSet.addAll(partyGroups);
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
         }

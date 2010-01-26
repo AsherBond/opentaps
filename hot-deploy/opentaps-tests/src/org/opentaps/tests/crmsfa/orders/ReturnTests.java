@@ -18,17 +18,24 @@
 package org.opentaps.tests.crmsfa.orders;
 
 import java.math.BigDecimal;
-
+import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.base.entities.Invoice;
+import org.opentaps.base.entities.Payment;
+import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.common.order.UtilOrder;
+import org.opentaps.foundation.entity.hibernate.Query;
+import org.opentaps.foundation.entity.hibernate.Session;
+import org.opentaps.foundation.infrastructure.Infrastructure;
 
 /**
  * Tests for returns.
@@ -44,6 +51,7 @@ public class ReturnTests extends ReturnTestCase {
     GenericValue admin;
     static final String productStoreId = "9000";
     static final String facilityId = "WebStoreWarehouse";
+    private Infrastructure infrastructure;
 
     @Override
     public void setUp() throws Exception {
@@ -64,6 +72,7 @@ public class ReturnTests extends ReturnTestCase {
 
         // set the value here since some tests are changing it:
         setProductStorePaymentService(productStoreId, "CREDIT_CARD", "PRDS_PAY_REFUND", "testCCRefund");
+        infrastructure = new Infrastructure(dispatcher);
     }
 
     @Override
@@ -388,6 +397,127 @@ public class ReturnTests extends ReturnTestCase {
         // 10. Verify that DemoSalesManager can manually updateReturnHeader status to RETURN_COMPLETED
         results = runAndAssertServiceSuccess("updateReturnHeader", UtilMisc.toMap("userLogin", DemoSalesManager, "returnId", returnId, "statusId", "RETURN_COMPLETED"));
         assertReturnStatusEquals(returnId, "RETURN_COMPLETED");
+    }
+    
+    /**
+     * verifies accounting tags for returns can be automatically set from the original order item,
+     * and then when the returns are processed, set on the corresponding return invoice items, return payments and applications.
+     * 1.  Create a product
+     * 2.  Receive 10 units of it
+     * 3.  Create a sales order for 5 units to DemoCustomer with the credit card payment methodId 9015/ with accounting tags
+     * 4.  Ship entire order (use the testShipOrder service)
+     * 5.  Create a return from the order for 2.0 of the items
+     * 6.  Set the order's Product Store's ProductStorePaymentSetting for paymentMethodType=CREDIT CARD and paymentServiceTypeEnumId=ProductStorePaymentSetting to testCCRefund
+     * 7.  Accept the return
+     * 8.  Verify that:
+     * 8a.   return invoice items have same accounting tags as original order item
+     * 8b.   return payments have same accounting tags as original order item
+     * 8c.   return applications have same accounting tags as original order item
+     * @throws GeneralException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    public void testSetAccountingTagsForReturn() throws GeneralException {
+        // 1. create test product
+        GenericValue testProduct = createTestProduct("Product for testSetAccountingTagsForReturn", demowarehouse1);
+        String productId = testProduct.getString("productId");
+
+        // create default price as this product should be used in order later
+        assignDefaultPrice(testProduct, new BigDecimal("100.0"), admin);
+        String acctgTagEnumId1 = "DIV_GOV";
+        String acctgTagEnumId2 = "DPT_SALES";
+        Timestamp beginTimestamp = UtilDateTime.nowTimestamp();
+        
+        Map<String, String> orderItemTags = new HashMap<String, String>();
+        orderItemTags.put("acctgTagEnumId1", acctgTagEnumId1);
+        orderItemTags.put("acctgTagEnumId2", acctgTagEnumId2);
+
+        // 2. Receive 10 units
+        receiveInventoryProduct(testProduct, new BigDecimal("10.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("99.0"), demowarehouse1);
+        
+        
+
+        // 3. sales order of 5 units to DemoCustomer with payment method 9015
+        SalesOrderFactory salesOrder = new SalesOrderFactory(delegator, dispatcher, DemoCSR, getOrganizationPartyId(), "DemoCustomer", productStoreId);
+        salesOrder.addPaymentMethod("CREDIT_CARD", "9015");
+        salesOrder.addProduct(testProduct, new BigDecimal("5.0"), salesOrder.getFirstShipGroup(), orderItemTags);
+        salesOrder.approveOrder();
+        
+        String orderId = salesOrder.getOrderId();
+        Debug.logInfo("testBasicReturn created order [" + orderId + "]", MODULE);
+
+        // authorize payment for the order
+        Map results = runAndAssertServiceSuccess("authOrderPayments", UtilMisc.toMap("orderId", orderId, "userLogin", admin));
+        String authResult = (String) results.get("processResult");
+        assertEquals("Auth result", "APPROVED", authResult);
+
+        // capture payment for the order
+        BigDecimal orderAmount = UtilOrder.getOrderOpenAmount(delegator, orderId);
+        results = runAndAssertServiceSuccess("captureOrderPayments", UtilMisc.<String, Object>toMap("orderId", orderId, "captureAmount", orderAmount, "userLogin", admin));
+        String captureResult = (String) results.get("processResult");
+        assertEquals("Capture result", "COMPLETE", captureResult);
+
+        // 4. ship the order
+        runAndAssertServiceSuccess("testShipOrder", UtilMisc.toMap("orderId", orderId, "facilityId", facilityId, "userLogin", demowarehouse1));
+
+
+        // 5. create a return for 2.0 items
+        results = runAndAssertServiceSuccess("crmsfa.createReturnFromOrder", UtilMisc.toMap("orderId", orderId, "userLogin", User));
+        String returnId = (String) results.get("returnId");
+        Debug.logInfo("testBasicReturn created return [" + returnId + "]", MODULE);
+
+        Map callCtx = new HashMap();
+        callCtx.put("userLogin", User);
+        callCtx.put("orderId", orderId);
+        callCtx.put("returnReasonId", "RTN_NOT_WANT");
+        callCtx.put("returnTypeId", "RTN_REFUND");
+        callCtx.put("returnItemTypeId", "RET_PROD_ITEM");
+        callCtx.put("returnId", returnId);
+        callCtx.put("orderItemSeqId", "00001");
+        callCtx.put("productId", productId);
+        callCtx.put("returnPrice", new BigDecimal("100.0"));
+        callCtx.put("returnQuantity", new BigDecimal("2.0"));
+        callCtx.put("description", testProduct.get("description"));
+
+        runAndAssertServiceSuccess("createReturnItem", callCtx);
+
+        // 6. Set the order's Product Store's ProductStorePaymentSetting for paymentMethodType=CREDIT CARD and paymentServiceTypeEnumId=PRDS_PAY_REFUND to testCCRefund
+        setProductStorePaymentService(productStoreId, "CREDIT_CARD", "PRDS_PAY_REFUND", "testCCRefund");
+
+        // 7. Accept the return
+        runAndAssertServiceSuccess("crmsfa.acceptReturn", UtilMisc.toMap("userLogin", admin, "returnId", returnId));
+
+        Session session = infrastructure.getSession();
+
+        //8a. assert return invoice items have same accounting tags as original order item
+        String hql = "from InvoiceItem eo where eo.invoice.invoiceTypeId = 'CUST_RTN_INVOICE' and eo.invoice.partyIdFrom = :partyId and eo.invoice.invoiceDate between :beginTimestamp and current_timestamp() and eo.acctgTagEnumId1 = :acctgTagEnumId1 and eo.acctgTagEnumId2 = :acctgTagEnumId2";
+        Query query = session.createQuery(hql);
+        query.setString("partyId", "DemoCustomer");
+        query.setTimestamp("beginTimestamp", beginTimestamp);
+        query.setString("acctgTagEnumId1", acctgTagEnumId1);
+        query.setString("acctgTagEnumId2", acctgTagEnumId2);
+        List<Invoice> invoices = query.list();
+        assertEquals("We should found a Return Invoice Item with partyId [DemoCustomer] and tags [" + acctgTagEnumId1 + "," + acctgTagEnumId2 + "].", 1, invoices.size());
+
+        //8b. assert return payments have same accounting tags as original order item
+        hql = "from Payment eo where eo.paymentTypeId= 'CUSTOMER_REFUND' and eo.orderPaymentPreference.orderId = :orderId and eo.acctgTagEnumId1 = :acctgTagEnumId1 and eo.acctgTagEnumId2 = :acctgTagEnumId2";
+        query = session.createQuery(hql);
+        query.setString("orderId", orderId);
+        query.setString("acctgTagEnumId1", acctgTagEnumId1);
+        query.setString("acctgTagEnumId2", acctgTagEnumId2);
+        List<Payment> payments = query.list();
+        assertEquals("We should found a Return Payment with orderId [" + orderId + "] and tags [" + acctgTagEnumId1 + "," + acctgTagEnumId2 + "].", 1, payments.size());
+
+        //8c. assert return applications have same accounting tags as original order item
+        hql = "from PaymentApplication eo where eo.payment.paymentTypeId= 'CUSTOMER_REFUND' and eo.payment.orderPaymentPreference.orderId = :orderId and eo.acctgTagEnumId1 = :acctgTagEnumId1 and eo.acctgTagEnumId2 = :acctgTagEnumId2";
+        query = session.createQuery(hql);
+        query.setString("orderId", orderId);
+        query.setString("acctgTagEnumId1", acctgTagEnumId1);
+        query.setString("acctgTagEnumId2", acctgTagEnumId2);
+        List<PaymentApplication> paymentApplications = query.list();
+        assertEquals("We should found a Return Payment Application with orderId [" + orderId + "] and tags [" + acctgTagEnumId1 + "," + acctgTagEnumId2 + "].", 1, paymentApplications.size());
+
+
+        session.close();
     }
 
     /**

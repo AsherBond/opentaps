@@ -333,4 +333,16 @@ under the License.
         <attribute name="newOrderContactMechId" mode="IN" type="String" optional="true" />
     </service>
 
+    <service name="updatePaymentApplicationAccountTagsByReturnOrder" engine="pojo" auth="true"
+            location="org.opentaps.domain.crmsfa.returns.ReturnService" invoke="updatePaymentApplicationAccountTagsByReturnOrder" transaction-timeout="600">
+        <description>Copies all the accounting tags from the return order item to the payment application</description>
+        <attribute name="returnItemResponseId" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="updateInvoiceItemAccountTagsByReturnOrder" engine="pojo" auth="true"
+            location="org.opentaps.domain.crmsfa.returns.ReturnService" invoke="updateInvoiceItemAccountTagsByReturnOrder" transaction-timeout="600">
+        <description>Copies all the accounting tags from the return order item to the invoice item</description>
+        <attribute name="invoiceId" type="String" mode="IN"/>
+        <attribute name="invoiceItemSeqId" type="String" mode="IN"/>
+    </service>    
 </services>

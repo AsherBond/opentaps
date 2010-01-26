@@ -66,4 +66,14 @@
         <condition field-name="orderId" operator="is-not-empty"/>
         <action service="updatePoOnReceiveInventory" mode="sync"/>
     </eca-->
+
+    <!-- Copies all the accounting tags from the return order item to the payment application. -->
+    <eca service="createPaymentApplicationsFromReturnItemResponse" event="commit">
+        <action service="updatePaymentApplicationAccountTagsByReturnOrder" mode="sync" run-as-user="system"/>
+    </eca>    
+    
+    <!-- Copies all the accounting tags from the return order item to the invoice item. -->
+    <eca service="createReturnItemBilling" event="commit">
+        <action service="updateInvoiceItemAccountTagsByReturnOrder" mode="sync" run-as-user="system"/>
+    </eca>    
 </service-eca>

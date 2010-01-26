@@ -16,6 +16,7 @@
  */
 package org.opentaps.domain.billing.payment;
 
+import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -30,6 +31,8 @@ public interface PaymentRepositoryInterface extends RepositoryInterface {
     public PaymentSpecificationInterface getPaymentSpecification();
 
     public Payment getPaymentById(String paymentId) throws RepositoryException, EntityNotFoundException;
+    
+    public PaymentApplication getPaymentApplicationById(String paymentApplicationId) throws RepositoryException, EntityNotFoundException;
 
     public Boolean isPaymentType(Payment payment, PaymentTypeInterface paymentType) throws RepositoryException;
 
