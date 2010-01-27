@@ -128,7 +128,7 @@ public final class AccountsServices {
                 // if existing the account which have same account name, then return the conflict account and error message
                 if (duplicateAccountsWithName.size() > 0 && !"Y".equals(forceComplete)) {
                     PartyGroup partyGroup = duplicateAccountsWithName.iterator().next();
-                    Map results = ServiceUtil.returnError(UtilMessage.expandLabel("CreateAccountDuplicateCheckFail", UtilMisc.toMap("partyId", partyGroup.getPartyId()), locale));
+                    Map results = ServiceUtil.returnError(UtilMessage.expandLabel("CrmCreateAccountDuplicateCheckFail", UtilMisc.toMap("partyId", partyGroup.getPartyId()), locale));
                     results.put("duplicateAccountsWithName", duplicateAccountsWithName);
                     return results;
                 }
