@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -1142,7 +1141,6 @@ public final class FinancialReports {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
-        ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
         String reportType = UtilCommon.getParameter(request, "type");
         String partyId = UtilCommon.getParameter(request, "partyId");
@@ -1316,6 +1314,7 @@ public final class FinancialReports {
      * @param request a <code>HttpServletRequest</code> value
      * @return the event response, either "pdf" or "xls" string to select report type, or "error".
      */
+    @SuppressWarnings("unchecked")
     private static String prepareAverageDSOReport(String invoiceTypeId, HttpServletRequest request) {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
@@ -1326,12 +1325,12 @@ public final class FinancialReports {
 
         try {
 
+            // parse user's input
             Map<String, Object> ctxt = prepareFinancialReportParameters(request);
-            UtilAccountingTags.addTagParameters(request, ctxt);
 
             Map<String, Object> jrParameters = FastMap.<String, Object>newInstance();
 
-            // get the from and thru date from parseReportOptions
+            // get the from and thru date
             Timestamp fromDate = (Timestamp) ctxt.get("fromDate");
             Timestamp thruDate = (Timestamp) ctxt.get("thruDate");
 
@@ -1344,12 +1343,19 @@ public final class FinancialReports {
                 return "error";
             }
 
+            jrParameters.put("isReceivables", isReceivables);
+
             // the date of the report is either now or the thruDate of user's input, whichever is earlier
             Timestamp now = UtilDateTime.nowTimestamp();
             Timestamp reportDate = (thruDate != null && thruDate.before(now) ? thruDate : now); 
             jrParameters.put("reportDate", reportDate);
 
-            // the partyId field we want to use for grouping the report fields is partyIdFrom for receivables, partyId for payables
+            // report should display period, pass dates to parameters
+            jrParameters.put("fromDate", fromDate);
+            jrParameters.put("thruDate", reportDate);
+
+            // the partyId field we want to use for grouping the report fields is partyIdFrom for receivables or
+            // partyId for payables
             String partyIdField = (isReceivables ? "partyId" : "partyIdFrom");
 
             // constants
@@ -1358,10 +1364,7 @@ public final class FinancialReports {
             jrParameters.put("organizationPartyId", organizationPartyId);
             jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, (String) ctxt.get("organizationPartyId"), false));
 
-            // Get the base currency for the organization
-            String currencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
-
-            // get the invoices as a list iterator.  Pending and cancelled invoices should not be considered.
+            // get the invoices as a list iterator.  Pending and canceled invoices should not be considered.
             List<EntityCondition> conditionList = FastList.<EntityCondition>newInstance();
             conditionList.add(EntityCondition.makeCondition("invoiceTypeId", invoiceTypeId));
             conditionList.add(EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "INVOICE_IN_PROCESS"));
@@ -1448,7 +1451,7 @@ public final class FinancialReports {
                 reportLine.put("numberOfInvoices", numberOfInvoices);
 
                 // update avg DSO
-                reportLine.put("dsoAvg", dsoSum.divide(BigDecimal.valueOf(numberOfInvoices)));
+                reportLine.put("dsoAvg", dsoSum.divide(BigDecimal.valueOf(numberOfInvoices), 0, BigDecimal.ROUND_HALF_UP));
 
                 // update weighted DSO
                 reportLine.put("dsoWeighted", invoiceSum.signum() != 0 ? dsoValueSum.divide(invoiceSum, 0, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO);
@@ -1479,7 +1482,7 @@ public final class FinancialReports {
             jrParameters.put("dsoValueSum", dsoValueSum);
             jrParameters.put("numberOfInvoices", new Integer(numberOfInvoices));
             if (numberOfInvoices > 0) {
-                jrParameters.put("dsoAvg", dsoSum.divide(BigDecimal.valueOf(numberOfInvoices)));
+                jrParameters.put("dsoAvg", dsoSum.divide(BigDecimal.valueOf(numberOfInvoices), 0, BigDecimal.ROUND_HALF_UP));
             };
             if (invoiceSum.compareTo(BigDecimal.ZERO) > 0) {
                 jrParameters.put("dsoWeighted", dsoValueSum.divide(invoiceSum, 0, BigDecimal.ROUND_HALF_UP));
