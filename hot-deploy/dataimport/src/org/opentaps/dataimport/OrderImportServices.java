@@ -81,6 +81,9 @@ public class OrderImportServices {
         if (reserveInventory == null) {
             reserveInventory = Boolean.FALSE;
         }
+        if (readShippingAddressFromTable == null) {
+            readShippingAddressFromTable = Boolean.FALSE;
+        }
 
         int imported = 0;
 
