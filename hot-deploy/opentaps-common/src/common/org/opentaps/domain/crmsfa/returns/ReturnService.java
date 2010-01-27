@@ -84,26 +84,26 @@ public class ReturnService extends DomainService {
             OrderRepositoryInterface orderRepository = getDomainsDirectory().getOrderDomain().getOrderRepository();
             ReturnItemResponse returnItemResponse = orderRepository.getReturnItemResponseById(returnItemResponseId);
             Payment payment = returnItemResponse.getPayment();
-            Debug.logInfo("getPaymentTypeId : " + payment.getPaymentTypeId()
-                          + ", payment.getOrderPaymentPreference() : " + payment.getOrderPaymentPreference(), MODULE);
+            Debug.logInfo("getPaymentTypeId : " + payment.getPaymentTypeId() + ", payment.getOrderPaymentPreference() : " + payment.getOrderPaymentPreference(), MODULE);
             if ("CUSTOMER_REFUND".equals(payment.getPaymentTypeId())) {
                 for (PaymentApplication paymentApplication : payment.getPaymentApplications()) {
                     OrderItem orderItem = null;
                     if (UtilValidate.isNotEmpty(payment.getOrderPaymentPreference())) {
                         orderItem = payment.getOrderPaymentPreference().getOrderItem();
-                        Debug.logInfo("orderItem : " + orderItem, MODULE);
+                        Debug.logInfo("Found orderItem from OrderPaymentPreference : " + orderItem, MODULE);
                     }
                     // gets order item with relate invoice
                     if (UtilValidate.isEmpty(orderItem) && UtilValidate.isNotEmpty(paymentApplication.getInvoice())) {
                         for (InvoiceItem invoiceItem : paymentApplication.getInvoice().getInvoiceItems()) {
-                            if (UtilValidate.isNotEmpty(invoiceItem.getReturnItemBillings().size())) {
+                            if (UtilValidate.isNotEmpty(invoiceItem.getReturnItemBillings())) {
                                 ReturnItemBilling returnItemBilling = invoiceItem.getReturnItemBillings().get(0);
                                 orderItem = returnItemBilling.getReturnItem().getOrderItem();
+                                Debug.logInfo("Found orderItem from ReturnItemBilling : " + orderItem, MODULE);
                                 break;
                             }
                         }
                     }
-                    Debug.logInfo("orderItem : " + orderItem, MODULE);
+                    Debug.logInfo("Using orderItem : " + orderItem, MODULE);
                     // copies all the accounting tags from the return order item to the payment application.
                     if (UtilValidate.isNotEmpty(orderItem)) {
                         paymentApplication.setAcctgTagEnumId1(orderItem.getAcctgTagEnumId1());
