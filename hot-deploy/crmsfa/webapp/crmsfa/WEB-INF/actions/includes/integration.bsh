@@ -34,3 +34,9 @@ if (context.get("headerItem") != null) {
     context.put("sectionHeaderUiLabel", headerItemSections.get(item + ".sectionHeaderUiLabel"));
     context.put("sectionDecoratorLocation", headerItemSections.get(item + ".sectionDecoratorLocation"));
 }
+
+// provide a default decorator, else some error messages won't be able to render
+if (UtilValidate.isEmpty(context.get("sectionDecoratorLocation"))) {
+    context.put("sectionDecoratorLocation", "component://opentaps-common/widget/screens/common/CommonScreens.xml");
+}
+

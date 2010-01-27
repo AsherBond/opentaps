@@ -343,7 +343,10 @@ under the License.
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-<!--                <platform-specific><xsl-fo><html-template location="component://common/webcommon/error.fo.ftl"/></xsl-fo></platform-specific> -->
+                      <platform-specific>
+                        <html><html-template location="component://common/webcommon/foErrorAsHtml.ftl"/></html>
+                        <!-- <xsl-fo><html-template location="component://common/webcommon/error.fo.ftl"/></xsl-fo> -->
+                      </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

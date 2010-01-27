@@ -83,8 +83,17 @@ public class ScreenFopViewHandler extends AbstractViewHandler {
             return;
         }
 
-        // set the input source (XSL-FO) and generate the output stream of contentType
         String screenOutString = writer.toString();
+
+        // special case if an error occurred during the rendering the framework inserts
+        // an HTML error message in the output, which should not be transformed
+        int errIdx = screenOutString.indexOf("<h4>Screen Render Error</h4><pre>");
+        if (errIdx >= 0) {
+            renderError(screenOutString, null, request, response);
+            return;
+        }
+
+        // set the input source (XSL-FO) and generate the output stream of contentType
         if (!screenOutString.startsWith("<?xml")) {
             screenOutString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + screenOutString;
         }
@@ -122,7 +131,11 @@ public class ScreenFopViewHandler extends AbstractViewHandler {
             Writer writer = new StringWriter();
             ScreenRenderer screens = new ScreenRenderer(writer, null, new HtmlScreenRenderer());
             screens.populateContextForRequest(request, response, servletContext);
-            screens.getContext().put("errorMessage", msg + ": " + e);
+            String errMsg = msg;
+            if (e != null) {
+                errMsg += ": " + e;
+            }
+            screens.getContext().put("errorMessage", errMsg);
             screens.render(DEFAULT_ERROR_TEMPLATE);
             response.setContentType("text/html");
             response.getWriter().write(writer.toString());
