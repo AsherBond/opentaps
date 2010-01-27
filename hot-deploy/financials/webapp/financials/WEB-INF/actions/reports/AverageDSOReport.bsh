@@ -36,6 +36,14 @@ module = "AverageDSOReport";
 // get the from and thru date from parseReportOptions
 fromDate = context.get("fromDate");
 thruDate = context.get("thruDate");
+now = UtilDateTime.nowTimestamp();
+// Assign default dates. This is the case usually when screen is opened from menu first time.  
+if (thruDate == null) {
+    thruDate = UtilDateTime.getDayEnd(now, timeZone, locale);
+    if (fromDate == null) {
+        fromDate = UtilDateTime.getDayStart(now, -30, timeZone, locale);
+    }
+}
 
 // get the invoice type of the report
 invoiceTypeId = context.get("invoiceTypeId");
@@ -48,8 +56,7 @@ context.put("isPayablesReport", isPayablesReport);
 if (!isReceivablesReport && !isPayablesReport) return;
 
 // the date of the report is either now or the thruDate of user's input, whichever is earlier
-now = UtilDateTime.nowTimestamp();
-reportDate = (thruDate != null && thruDate.before(now) ? thruDate : now); 
+reportDate = (thruDate != null && thruDate.before(now) ? thruDate : now);
 context.put("reportDate", reportDate);
 
 // the partyId field we want to use for grouping the report fields is partyIdFrom for receivables, partyId for payables
@@ -81,7 +88,6 @@ if (fromDate != null) {
 }
 conditions = new EntityConditionList( conditionList, EntityOperator.AND );
 iterator = delegator.findListIteratorByCondition("Invoice", conditions, null, null, UtilMisc.toList(partyIdField), options);
-
 // compose the report by keeping each row of data in a report map keyed to partyId
 reportMap = FastMap.newInstance();
 while ((invoice = iterator.next()) != null) {
