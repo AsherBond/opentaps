@@ -1488,6 +1488,7 @@ public class OpentapsTestCase extends TestCase {
     protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, String customerPartyId, String productStoreId, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
         return testCreatesSalesOrder(order, customerPartyId, productStoreId, null, paymentMethodTypeId, paymentMethodId, shippingAddressId);
     }
+
     /**
      * Creates an order for the given Customer partyId with the given products.
      *  Checks that ATP and QOH have declined as needed.
@@ -1502,7 +1503,7 @@ public class OpentapsTestCase extends TestCase {
      * @return the <code>SalesOrderFactory</code> object
      */
     protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, String customerPartyId, String productStoreId, Timestamp shipByDate, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
-    	return testCreatesSalesOrder(order, customerPartyId, productStoreId, null, paymentMethodTypeId, paymentMethodId, shippingAddressId, null);
+    	return testCreatesSalesOrder(order, customerPartyId, productStoreId, shipByDate, paymentMethodTypeId, paymentMethodId, shippingAddressId, null);
     }
 
     /**
