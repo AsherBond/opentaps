@@ -143,13 +143,13 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
                 salesOrderLookupRepository.setShippingAddress(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_ADDRESS));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_CITY))) {
-                salesOrderLookupRepository.setShippingCountry(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_CITY));
+                salesOrderLookupRepository.setShippingCity(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_CITY));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_COUNTRY))) {
-                salesOrderLookupRepository.setShippingStateProvince(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_COUNTRY));
+                salesOrderLookupRepository.setShippingCountry(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_COUNTRY));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE))) {
-                salesOrderLookupRepository.setShippingCity(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE));
+                salesOrderLookupRepository.setShippingStateProvince(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_POSTAL_CODE))) {
                 salesOrderLookupRepository.setShippingPostalCode(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SHIPPING_POSTAL_CODE));
