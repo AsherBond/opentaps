@@ -3713,6 +3713,7 @@ public class OrderTests extends OrderTestCase {
      * @throws Exception if an error occurs
      */
     public void testGwtSearchOrderByShippingAddress() throws Exception {
+        
         InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
         // 1. Create a sales order with a billing address in New York and a shipping address in California
 
@@ -3721,15 +3722,20 @@ public class OrderTests extends OrderTestCase {
         BigDecimal productUnitPrice = new BigDecimal("11.11");
         final GenericValue testProduct = createTestProduct("testGwtSearchOrderByShippingAddress Test Product", demowarehouse1);
         assignDefaultPrice(testProduct, productUnitPrice, admin);
+        Debug.logInfo("create tests product [" + testProduct.getString("productId") + "] for testGwtSearchOrderByShippingAddress", MODULE);
         // create a sales order for the DemoAccount1 and product
         Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
         orderSpec.put(testProduct, productQty);
         User = DemoCSR;
-        SalesOrderFactory salesOrder =  testCreatesSalesOrder(orderSpec, DemoAccount1.getString("partyId"), productStoreId, null, "EXT_OFFLINE", null, "DemoAddress1", "DemoAddress2");
 
+        String customerPartyId = createPartyFromTemplate(DemoCustomer.getString("partyId"), "Customer for testGwtSearchOrderByShippingAddress");
+        Debug.logInfo("create customer [" + customerPartyId + "]", MODULE);
+        GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
+        SalesOrderFactory salesOrder =  testCreatesSalesOrder(orderSpec, customer.getString("partyId"), productStoreId, null, "EXT_OFFLINE", null, "DemoAddress1", "DemoAddress2");
+        Debug.logInfo("create sales order [" + salesOrder.getOrderId() + "]", MODULE);
+        
         // 2. try to find the sales order By shipping address with state = NY, in the sales order is not found
         provider = new TestInputProvider(admin, dispatcher);
-        provider.setParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID, salesOrder.getOrderId());
         provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE, "NY");
         provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
         SalesOrderLookupService lookup = new SalesOrderLookupService(provider);
@@ -3738,12 +3744,62 @@ public class OrderTests extends OrderTestCase {
 
         // 3. try to find the sales order by shipping address with state = CA, and the sales order is found
         provider = new TestInputProvider(admin, dispatcher);
-        provider.setParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID, salesOrder.getOrderId());
         provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_STATE, "CA");
         provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
         lookup = new SalesOrderLookupService(provider);
         lookup.findOrders();
         assertGwtLookupFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+        
+        // 4. try to find the sales order By shipping address with toName = Demo Account No. 1, in the sales order is found
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_TO_NAME, "Demo Account No. 1");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
+        lookup = new SalesOrderLookupService(provider);
+        lookup.findOrders();
+        assertGwtLookupFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+        
+        
+        // 5. try to find the sales order by shipping address with city = Los Angeles, and the sales order is found
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_CITY, "Los Angeles");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
+        lookup = new SalesOrderLookupService(provider);
+        lookup.findOrders();
+        assertGwtLookupFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+        
+        // 6. try to find the sales order By shipping address with address = 251 West 30th Street, in the sales order is not found
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_ADDRESS, "251 West 30th Street");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
+        lookup = new SalesOrderLookupService(provider);
+        lookup.findOrders();
+        assertGwtLookupNotFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+        
+        // 7. try to find the sales order by shipping address with address = 12345 Wilshire Blvd, and the sales order is found
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_ADDRESS, "12345 Wilshire Blvd");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
+        lookup = new SalesOrderLookupService(provider);
+        lookup.findOrders();
+        assertGwtLookupFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+        
+        // 8. try to find the sales order By shipping address with postal code = 10001, in the sales order is not found
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_POSTAL_CODE, "10001");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
+        lookup = new SalesOrderLookupService(provider);
+        lookup.findOrders();
+        assertGwtLookupNotFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+        
+        // 9. try to find the sales order by shipping address with postal code = 90025, and the sales order is found
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(SalesOrderLookupConfiguration.IN_SHIPPING_POSTAL_CODE, "90025");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
+        lookup = new SalesOrderLookupService(provider);
+        lookup.findOrders();
+        assertGwtLookupFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+
+
 
     }
 }
