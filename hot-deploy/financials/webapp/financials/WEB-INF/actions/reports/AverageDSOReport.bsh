@@ -95,7 +95,7 @@ while ((invoice = iterator.next()) != null) {
         row.put("partyName", PartyHelper.getPartyName(delegator, partyId, false));
     }
 
-    // keep runing total of invoice
+    // keep running total of invoice
     invoiceTotal = InvoiceWorker.getInvoiceTotal(invoice);
     // convert to the currency exchange rate at the time of the invoiceDate
     invoiceSum = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, invoice.getString("currencyUomId"), invoice.getTimestamp("invoiceDate")).multiply(invoiceTotal);

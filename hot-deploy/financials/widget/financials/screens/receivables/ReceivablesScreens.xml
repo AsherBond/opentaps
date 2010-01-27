@@ -155,6 +155,8 @@
                 <set field="returnPage" value="receivables"/>
                 <set field="returnLabel" value="FinancialsReturnToReceivables"/>
                 <set field="reportTitle" value="FinancialsAverageDSOReportReceivables"/>
+                <set field="screenRequest" value="AverageDSOReportReceivables"/>
+                <set field="reportRequest" value="JRAverageDSOReportReceivables"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/setAvgDSORepReceivablesToHistory.bsh"/>
             </actions>
             <widgets>

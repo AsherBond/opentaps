@@ -251,6 +251,8 @@
                 <set field="returnPage" value="payables"/>
                 <set field="returnLabel" value="FinancialsReturnToPayables"/>
                 <set field="reportTitle" value="FinancialsAverageDSOReportPayables"/>
+                <set field="screenRequest" value="AverageDSOReportPayables"/>
+                <set field="reportRequest" value="JRAverageDSOReportPayables"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/setAvgDSORepPayablesToHistory.bsh"/>
             </actions>
             <widgets>

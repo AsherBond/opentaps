@@ -22,9 +22,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -44,6 +46,7 @@ import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 
 import org.hibernate.ScrollableResults;
 import org.hibernate.Transaction;
+import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -55,11 +58,13 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.DynamicViewEntity;
 import org.ofbiz.entity.model.ModelKeyMap;
 import org.ofbiz.entity.model.ModelViewEntity.ComplexAlias;
 import org.ofbiz.entity.model.ModelViewEntity.ComplexAliasField;
+import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.party.PartyHelper;
@@ -85,6 +90,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 
 import com.opensourcestrategies.financials.accounts.AccountsHelper;
 import com.opensourcestrategies.financials.financials.FinancialServices;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * Events preparing data passed to Jasper reports.
@@ -1279,6 +1285,212 @@ public final class FinancialReports {
             UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         } catch (RepositoryException e) {
             UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        }
+
+        return reportType;
+    }
+
+    /**
+     * Prepare data source and parameters for average DSO receivables report.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the event response, either "pdf" or "xls" string to select report type, or "error".
+     */
+    public static String prepareAverageDSOReportReceivables(HttpServletRequest request, HttpServletResponse response) {
+        return prepareAverageDSOReport("SALES_INVOICE", request);
+    }
+
+    /**
+     * Prepare data source and parameters for average DSO payables report.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the event response, either "pdf" or "xls" string to select report type, or "error".
+     */
+    public static String prepareAverageDSOReportPayables(HttpServletRequest request, HttpServletResponse response) {
+        return prepareAverageDSOReport("PURCHASE_INVOICE", request);
+    }
+
+    /**
+     * Implements common logic for average DSO reports.
+     * @param invoiceTypeId report analyzes invoices of this type
+     * @param request a <code>HttpServletRequest</code> value
+     * @return the event response, either "pdf" or "xls" string to select report type, or "error".
+     */
+    private static String prepareAverageDSOReport(String invoiceTypeId, HttpServletRequest request) {
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
+        Locale locale = UtilCommon.getLocale(request);
+
+        String reportType = UtilCommon.getParameter(request, "type");
+
+        try {
+
+            Map<String, Object> ctxt = prepareFinancialReportParameters(request);
+            UtilAccountingTags.addTagParameters(request, ctxt);
+
+            Map<String, Object> jrParameters = FastMap.<String, Object>newInstance();
+
+            // get the from and thru date from parseReportOptions
+            Timestamp fromDate = (Timestamp) ctxt.get("fromDate");
+            Timestamp thruDate = (Timestamp) ctxt.get("thruDate");
+
+            // get the invoice type of the report
+            Boolean isReceivables =
+                "SALES_INVOICE".equals(invoiceTypeId) ? Boolean.TRUE : "PURCHASE_INVOICE".equals(invoiceTypeId) ? Boolean.FALSE : null;
+
+            // don't do anything if invoiceTypeId is invalid
+            if (isReceivables == null) {
+                return "error";
+            }
+
+            // the date of the report is either now or the thruDate of user's input, whichever is earlier
+            Timestamp now = UtilDateTime.nowTimestamp();
+            Timestamp reportDate = (thruDate != null && thruDate.before(now) ? thruDate : now); 
+            jrParameters.put("reportDate", reportDate);
+
+            // the partyId field we want to use for grouping the report fields is partyIdFrom for receivables, partyId for payables
+            String partyIdField = (isReceivables ? "partyId" : "partyIdFrom");
+
+            // constants
+            EntityFindOptions options = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+            String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+            jrParameters.put("organizationPartyId", organizationPartyId);
+            jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, (String) ctxt.get("organizationPartyId"), false));
+
+            // Get the base currency for the organization
+            String currencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
+
+            // get the invoices as a list iterator.  Pending and cancelled invoices should not be considered.
+            List<EntityCondition> conditionList = FastList.<EntityCondition>newInstance();
+            conditionList.add(EntityCondition.makeCondition("invoiceTypeId", invoiceTypeId));
+            conditionList.add(EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "INVOICE_IN_PROCESS"));
+            conditionList.add(EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "INVOICE_WRITEOFF"));
+            conditionList.add(EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "INVOICE_CANCELLED"));
+            conditionList.add(EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "INVOICE_VOIDED"));
+            conditionList.add(EntityCondition.makeCondition("invoiceDate", EntityOperator.LESS_THAN_EQUAL_TO, reportDate));
+            // use the other partyId field to restrict invoices to those just for the current organization 
+            if (isReceivables) {
+                conditionList.add(EntityCondition.makeCondition("partyIdFrom", organizationPartyId)); 
+            } else {
+                conditionList.add(EntityCondition.makeCondition("partyId", organizationPartyId));
+            }
+
+            if (fromDate != null) {
+                conditionList.add(EntityCondition.makeCondition("invoiceDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate) );
+            }
+            EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(conditionList);
+            EntityListIterator iterator =
+                delegator.findListIteratorByCondition("Invoice", conditions, null, null, UtilMisc.toList(partyIdField), options);
+
+            // compose the report by keeping each row of data in a report map keyed to partyId
+            Map<String, Object> reportData = FastMap.<String, Object>newInstance();
+
+            GenericValue invoice = null;
+            while ((invoice = iterator.next()) != null) {
+
+                String partyId = invoice.getString(partyIdField);
+
+                Map<String, Object> reportLine = (Map<String, Object>) reportData.get(partyId);
+                // if no row yet, create a new row and add party data for display
+                if (reportLine == null) {
+                    reportLine = FastMap.<String, Object>newInstance();
+                    reportLine.put("partyId", partyId);
+                    reportLine.put("partyName", PartyHelper.getPartyName(delegator, partyId, false));
+                }
+
+                // keep running total of invoice
+                BigDecimal invoiceTotal = InvoiceWorker.getInvoiceTotal(invoice);
+
+                // convert to the currency exchange rate at the time of the invoiceDate
+                BigDecimal invoiceSum = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, invoice.getString("currencyUomId"), invoice.getTimestamp("invoiceDate")).multiply(invoiceTotal);
+                if (reportLine.get("invoiceSum") != null) {
+                    invoiceSum = invoiceSum.add((BigDecimal) reportLine.get("invoiceSum")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
+                reportLine.put("invoiceSum", invoiceSum);
+
+                // compute DSO, number of days outstanding for invoice
+                Timestamp invoiceDate = invoice.getTimestamp("invoiceDate");
+                if (invoiceDate == null) {
+                    Debug.logWarning("No invoice date for invoice [" + invoice.get("invoiceId") + "], skipping it", MODULE);
+                }
+
+                // if the invoice is PAID, then the paid date from the invoice is used as paid date
+                // if there is no paidDate, then it is set to invoiceDate -- ie, DSO of 0, because in older versions of ofbiz
+                // most orders are captured & paid when they are shipped and no paidDate was set
+                Timestamp dsoDate = reportDate; 
+                if ("INVOICE_PAID".equals(invoice.getString("statusId"))) {
+                    dsoDate = (invoice.get("paidDate") != null ? invoice.getTimestamp("paidDate") : invoiceDate);
+                }
+                Calendar fromCal = UtilDate.toCalendar(invoiceDate, timeZone, locale);
+                Calendar thruCal = UtilDate.toCalendar(dsoDate, timeZone, locale);
+                BigDecimal dso = BigDecimal.valueOf((thruCal.getTimeInMillis() - fromCal.getTimeInMillis()) / (UtilDate.MS_IN_A_DAY));
+
+                // keep running sum of DSO
+                BigDecimal dsoSum = dso;
+                if (reportLine.get("dsoSum") != null) {
+                    dsoSum = dsoSum.add((BigDecimal) reportLine.get("dsoSum"));
+                }
+                reportLine.put("dsoSum", dsoSum);
+
+                // keep running DSO*invoiceTotal sum
+                BigDecimal dsoValueSum = dso.multiply(invoiceTotal);
+                if (reportLine.get("dsoValueSum") != null) {
+                    dsoValueSum = dsoValueSum.add((BigDecimal) reportLine.get("dsoValueSum"));
+                }
+                reportLine.put("dsoValueSum", dsoValueSum);
+
+                // update number of invoices
+                int numberOfInvoices = 1;
+                if (reportLine.get("numberOfInvoices") != null) {
+                    numberOfInvoices += ((Integer) reportLine.get("numberOfInvoices")).intValue();
+                }
+                reportLine.put("numberOfInvoices", numberOfInvoices);
+
+                // update avg DSO
+                reportLine.put("dsoAvg", dsoSum.divide(BigDecimal.valueOf(numberOfInvoices)));
+
+                // update weighted DSO
+                reportLine.put("dsoWeighted", invoiceSum.signum() != 0 ? dsoValueSum.divide(invoiceSum, 0, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO);
+
+                reportData.put(partyId, reportLine);
+            }
+            iterator.close();
+
+            Collection<Object> report = reportData.values();
+            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(report));
+
+            // go through report once more and compute totals row
+            BigDecimal invoiceSum = BigDecimal.ZERO;
+            BigDecimal dsoSum = BigDecimal.ZERO;
+            BigDecimal dsoValueSum = BigDecimal.ZERO;
+            int numberOfInvoices = 0;
+
+            for (Object row : reportData.values()) {
+                Map<String, Object> reportLine = (Map<String, Object>) row;
+                invoiceSum = invoiceSum.add((BigDecimal) reportLine.get("invoiceSum"));
+                dsoSum = dsoSum.add((BigDecimal) reportLine.get("dsoSum"));
+                dsoValueSum = dsoValueSum.add((BigDecimal) reportLine.get("dsoValueSum"));
+                numberOfInvoices += ((Integer) reportLine.get("numberOfInvoices")).intValue();
+            }
+
+            jrParameters.put("invoiceSum", invoiceSum);
+            jrParameters.put("dsoSum", dsoSum);
+            jrParameters.put("dsoValueSum", dsoValueSum);
+            jrParameters.put("numberOfInvoices", new Integer(numberOfInvoices));
+            if (numberOfInvoices > 0) {
+                jrParameters.put("dsoAvg", dsoSum.divide(BigDecimal.valueOf(numberOfInvoices)));
+            };
+            if (invoiceSum.compareTo(BigDecimal.ZERO) > 0) {
+                jrParameters.put("dsoWeighted", dsoValueSum.divide(invoiceSum, 0, BigDecimal.ROUND_HALF_UP));
+            }
+
+            request.setAttribute("jrParameters", jrParameters);
+
+        } catch (GenericEntityException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        } catch (GenericServiceException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         }
 
         return reportType;
