@@ -37,8 +37,6 @@ import org.opentaps.foundation.service.ServiceException;
  */
 public class ReturnService extends DomainService {
     private String returnItemResponseId = null;
-    private String invoiceId;
-    private String invoiceItemSeqId;
 
     private static final String MODULE = ReturnService.class.getName();
 
@@ -59,22 +57,6 @@ public class ReturnService extends DomainService {
     }
 
     /**
-     * Sets the invoice ID.
-     * @param invoiceId the invoice ID
-     */
-    public void setInvoiceId(String invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
-    /**
-     * Sets the invoice item seq ID.
-     * @param invoiceItemSeqId the invoice item seq ID
-     */
-    public void setInvoiceItemSeqId(String invoiceItemSeqId) {
-        this.invoiceItemSeqId = invoiceItemSeqId;
-    }
-
-    /**
      * Copies all the accounting tags from the return order item to the payment application.
      * @throws ServiceException if an error occurs
      */
@@ -92,7 +74,7 @@ public class ReturnService extends DomainService {
                         orderItem = payment.getOrderPaymentPreference().getOrderItem();
                         Debug.logInfo("Found orderItem from OrderPaymentPreference : " + orderItem, MODULE);
                     }
-                    // gets order item with relate invoice
+                    // gets order item from a ReturnItemBilling of related invoice
                     if (UtilValidate.isEmpty(orderItem) && UtilValidate.isNotEmpty(paymentApplication.getInvoice())) {
                         for (InvoiceItem invoiceItem : paymentApplication.getInvoice().getInvoiceItems()) {
                             if (UtilValidate.isNotEmpty(invoiceItem.getReturnItemBillings())) {
@@ -140,41 +122,4 @@ public class ReturnService extends DomainService {
             throw new ServiceException(e);
         }
     }
-
-    /**
-     * Copies all the accounting tags from the return order item to the invoice item.
-     * @throws ServiceException if an error occurs
-     */
-    public void updateInvoiceItemAccountTagsByReturnOrder() throws ServiceException {
-        try {
-            InvoiceRepositoryInterface invoiceRepository = getDomainsDirectory().getBillingDomain().getInvoiceRepository();
-            InvoiceItem invoiceItem = invoiceRepository.getInvoiceItemById(invoiceId, invoiceItemSeqId);
-            // if the invoice type equals CUST_RTN_INVOICE and the invoice item have relate return item billing entities
-            // then copies all the accounting tags from the return order item to the invoice item.
-            if ("CUST_RTN_INVOICE".equals(invoiceItem.getInvoice().getInvoiceTypeId()) && invoiceItem.getReturnItemBillings().size() > 0) {
-                ReturnItemBilling returnItemBilling = invoiceItem.getReturnItemBillings().get(0);
-                OrderItem orderItem = returnItemBilling.getReturnItem().getOrderItem();
-                if (UtilValidate.isNotEmpty(orderItem)) {
-                    invoiceItem.setAcctgTagEnumId1(orderItem.getAcctgTagEnumId1());
-                    invoiceItem.setAcctgTagEnumId2(orderItem.getAcctgTagEnumId2());
-                    invoiceItem.setAcctgTagEnumId3(orderItem.getAcctgTagEnumId3());
-                    invoiceItem.setAcctgTagEnumId4(orderItem.getAcctgTagEnumId4());
-                    invoiceItem.setAcctgTagEnumId5(orderItem.getAcctgTagEnumId5());
-                    invoiceItem.setAcctgTagEnumId6(orderItem.getAcctgTagEnumId6());
-                    invoiceItem.setAcctgTagEnumId7(orderItem.getAcctgTagEnumId7());
-                    invoiceItem.setAcctgTagEnumId8(orderItem.getAcctgTagEnumId8());
-                    invoiceItem.setAcctgTagEnumId9(orderItem.getAcctgTagEnumId9());
-                    invoiceItem.setAcctgTagEnumId10(orderItem.getAcctgTagEnumId10());
-                    invoiceRepository.update(invoiceItem);
-                }
-            }
-
-        } catch (RepositoryException e) {
-            throw new ServiceException(e);
-        } catch (EntityNotFoundException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-
 }

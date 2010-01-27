@@ -2391,6 +2391,11 @@ public final class InvoiceServices {
     /**
      * Create an invoice from existing order.
      * TODO: refactor this monster.
+     * This is the service from ofbiz, the only change is to properly set the accounting
+     *  tags on the invoice items:
+     *  - items that are from an order item are tagged the same as the original order item
+     *  - the related adjustments are tagged the same as the related order item as well
+     *  - the global adjustments are tagged the same as the first order item found
      * @param dctx a <code>DispatchContext</code> value
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
@@ -3067,6 +3072,303 @@ public final class InvoiceServices {
             return resp;
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError("AccountingServiceOtherProblemCreatingInvoiceFromOrderItems", UtilMisc.toMap("reason", e.toString()), locale, MODULE);
+        }
+    }
+
+    /**
+     * Create an invoice from an existing return.
+     * This is the service from ofbiz, the only change is to properly set the accounting (same as createInvoiceForOrder)
+     *  tags on the invoice items:
+     *  - items that are returned products from an order item are tagged the same as the original order item
+     *  - the related adjustments are tagged the same as the related order item as well
+     *  - the global adjustments are tagged the same as the first order item found
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
+    @SuppressWarnings("unchecked")
+    public static Map<String, Object> createInvoiceFromReturn(DispatchContext dctx, Map<String, Object> context) {
+        GenericDelegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Locale locale = (Locale) context.get("locale");
+
+        String returnId = (String) context.get("returnId");
+        List billItems = (List) context.get("billItems");
+        String errorMsg = UtilMessage.expandLabel("AccountingErrorCreatingInvoiceForReturn", UtilMisc.toMap("returnId", returnId), locale);
+        // List invoicesCreated = new ArrayList();
+        try {
+            String invoiceTypeId;
+            String description;
+            // get the return header
+            GenericValue returnHeader = delegator.findByPrimaryKey("ReturnHeader", UtilMisc.toMap("returnId", returnId));
+            if ("CUSTOMER_RETURN".equals(returnHeader.getString("returnHeaderTypeId"))) {
+                invoiceTypeId = "CUST_RTN_INVOICE";
+                description = "Return Invoice for Customer Return #" + returnId;
+            } else {
+                invoiceTypeId = "PURC_RTN_INVOICE";
+                description = "Return Invoice for Vendor Return #" + returnId;
+            }
+            // set the invoice data
+            Map input = UtilMisc.toMap("invoiceTypeId", invoiceTypeId, "statusId", "INVOICE_IN_PROCESS");
+            input.put("partyId", returnHeader.get("toPartyId"));
+            input.put("partyIdFrom", returnHeader.get("fromPartyId"));
+            input.put("currencyUomId", returnHeader.get("currencyUomId"));
+            input.put("invoiceDate", UtilDateTime.nowTimestamp());
+            input.put("description", description);
+            input.put("billingAccountId", returnHeader.get("billingAccountId"));
+            input.put("userLogin", userLogin);
+
+            // call the service to create the invoice
+            Map serviceResults = dispatcher.runSync("createInvoice", input);
+            if (ServiceUtil.isError(serviceResults)) {
+                return ServiceUtil.returnError(errorMsg, null, null, serviceResults);
+            }
+            String invoiceId = (String) serviceResults.get("invoiceId");
+
+            // keep track of the invoice total vs the promised return total (how much the customer promised to return)
+            BigDecimal invoiceTotal = ZERO;
+            BigDecimal promisedTotal = ZERO;
+
+            // loop through shipment receipts to create invoice items and return item billings for each item and adjustment
+            int invoiceItemSeqNum = 1;
+            String invoiceItemSeqId = UtilFormatOut.formatPaddedNumber(invoiceItemSeqNum, INVOICE_ITEM_SEQUENCE_ID_DIGITS);
+
+            // later the other global adjustments will be tagged the same as the first order item
+            GenericValue firstOrderItem = null;
+
+            for (Iterator iter = billItems.iterator(); iter.hasNext();) {
+                GenericValue item = (GenericValue) iter.next();
+                boolean shipmentReceiptFound = false;
+                boolean itemIssuanceFound = false;
+                if ("ShipmentReceipt".equals(item.getEntityName())) {
+                    shipmentReceiptFound = true;
+                } else if ("ItemIssuance".equals(item.getEntityName())) {
+                    itemIssuanceFound = true;
+                } else {
+                    Debug.logError("Unexpected entity " + item + " of type " + item.getEntityName(), MODULE);
+                }
+                // we need the related return item and product
+                GenericValue returnItem = null;
+                if (shipmentReceiptFound) {
+                    returnItem = item.getRelatedOneCache("ReturnItem");
+                } else if (itemIssuanceFound) {
+                    GenericValue shipmentItem = item.getRelatedOneCache("ShipmentItem");
+                    GenericValue returnItemShipment = EntityUtil.getFirst(shipmentItem.getRelated("ReturnItemShipment"));
+                    returnItem = returnItemShipment.getRelatedOneCache("ReturnItem");
+                }
+                if (returnItem == null) {
+                    continue; // Just to prevent NPE
+                }
+                GenericValue orderItem = returnItem.getRelatedOneCache("OrderItem");
+                if (orderItem != null && firstOrderItem == null) {
+                    firstOrderItem = orderItem;
+                }
+
+                GenericValue product = returnItem.getRelatedOneCache("Product");
+
+                // extract the return price as a big decimal for convenience
+                BigDecimal returnPrice = returnItem.getBigDecimal("returnPrice");
+
+                // determine invoice item type from the return item type
+                String invoiceItemTypeId = getInvoiceItemType(delegator, returnItem.getString("returnItemTypeId"), null, invoiceTypeId, null);
+                if (invoiceItemTypeId == null) {
+                    return ServiceUtil.returnError(errorMsg + UtilMessage.expandLabel("AccountingNoKnownInvoiceItemTypeReturnItemType", UtilMisc.toMap("returnItemTypeId", returnItem.getString("returnItemTypeId")), locale));
+                }
+                BigDecimal quantity = BigDecimal.ZERO;
+                if (shipmentReceiptFound) {
+                    quantity = item.getBigDecimal("quantityAccepted");
+                } else if (itemIssuanceFound) {
+                    quantity = item.getBigDecimal("quantity");
+                }
+
+                // create the invoice item for this shipment receipt
+                input = UtilMisc.toMap("invoiceId", invoiceId, "invoiceItemTypeId", invoiceItemTypeId, "quantity", quantity);
+                input.put("invoiceItemSeqId", "" + invoiceItemSeqId); // turn the int into a string with ("" + int) hack
+                input.put("amount", returnItem.get("returnPrice"));
+                input.put("productId", returnItem.get("productId"));
+                input.put("taxableFlag", product.get("taxable"));
+                input.put("description", returnItem.get("description"));
+                // TODO: what about the productFeatureId?
+                input.put("userLogin", userLogin);
+                // copy the accounting tags from the related order item
+                if (orderItem != null) {
+                    UtilAccountingTags.putAllAccountingTags(orderItem, input);
+                }
+
+                serviceResults = dispatcher.runSync("createInvoiceItem", input);
+                if (ServiceUtil.isError(serviceResults)) {
+                    return ServiceUtil.returnError(errorMsg, null, null, serviceResults);
+                }
+
+                // copy the return item information into ReturnItemBilling
+                input = UtilMisc.toMap("returnId", returnId, "returnItemSeqId", returnItem.get("returnItemSeqId"), "invoiceId", invoiceId);
+                input.put("invoiceItemSeqId", "" + invoiceItemSeqId); // turn the int into a string with ("" + int) hack
+                input.put("quantity", quantity);
+                input.put("amount", returnItem.get("returnPrice"));
+                input.put("userLogin", userLogin);
+                if (shipmentReceiptFound) {
+                    input.put("shipmentReceiptId", item.get("receiptId"));
+                }
+                serviceResults = dispatcher.runSync("createReturnItemBilling", input);
+                if (ServiceUtil.isError(serviceResults)) {
+                    return ServiceUtil.returnError(errorMsg, null, null, serviceResults);
+                }
+                if (Debug.verboseOn()) {
+                    Debug.logVerbose("Creating Invoice Item with amount " + returnPrice + " and quantity " + quantity + " for shipment [" + item.getString("shipmentId") + ":" + item.getString("shipmentItemSeqId") + "]", MODULE);
+                }
+
+                String parentInvoiceItemSeqId = invoiceItemSeqId;
+                // increment the seqId counter after creating the invoice item and return item billing
+                invoiceItemSeqNum += 1;
+                invoiceItemSeqId = UtilFormatOut.formatPaddedNumber(invoiceItemSeqNum, INVOICE_ITEM_SEQUENCE_ID_DIGITS);
+
+                // keep a running total (note: a returnItem may have many receipts. hence, the promised total quantity is the receipt quantityAccepted + quantityRejected)
+                BigDecimal cancelQuantity = ZERO;
+                if (shipmentReceiptFound) {
+                    cancelQuantity = item.getBigDecimal("quantityRejected");
+                } else if (itemIssuanceFound) {
+                    cancelQuantity = item.getBigDecimal("cancelQuantity");
+                }
+                if (cancelQuantity == null) {
+                    cancelQuantity = ZERO;
+                }
+                BigDecimal actualAmount = returnPrice.multiply(quantity).setScale(decimals, rounding);
+                BigDecimal promisedAmount = returnPrice.multiply(quantity.add(cancelQuantity)).setScale(decimals, rounding);
+                invoiceTotal = invoiceTotal.add(actualAmount).setScale(decimals, rounding);
+                promisedTotal = promisedTotal.add(promisedAmount).setScale(decimals, rounding);
+
+                // for each adjustment related to this ReturnItem, create a separate invoice item
+                List adjustments = returnItem.getRelatedCache("ReturnAdjustment");
+                for (Iterator adjIter = adjustments.iterator(); adjIter.hasNext();) {
+                    GenericValue adjustment = (GenericValue) adjIter.next();
+
+                    if (adjustment.get("amount") == null) {
+                         Debug.logWarning("Return adjustment [" + adjustment.get("returnAdjustmentId") + "] has null amount and will be skipped", MODULE);
+                         continue;
+                    }
+
+                    // determine invoice item type from the return item type
+                    invoiceItemTypeId = getInvoiceItemType(delegator, adjustment.getString("returnAdjustmentTypeId"), null, invoiceTypeId, null);
+                    if (invoiceItemTypeId == null) {
+                        return ServiceUtil.returnError(errorMsg + "No known invoice item type for the return adjustment type ["
+                                +  adjustment.getString("returnAdjustmentTypeId") + "]");
+                    }
+
+                    // prorate the adjustment amount by the returned amount; do not round ratio
+                    BigDecimal ratio = quantity.divide(returnItem.getBigDecimal("returnQuantity"), 100, rounding);
+                    BigDecimal amount = adjustment.getBigDecimal("amount");
+                    amount = amount.multiply(ratio).setScale(decimals, rounding);
+                    if (Debug.verboseOn()) {
+                        Debug.logVerbose("Creating Invoice Item with amount " + adjustment.getBigDecimal("amount") + " prorated to " + amount + " for return adjustment [" + adjustment.getString("returnAdjustmentId") + "]", MODULE);
+                    }
+
+                    // prepare invoice item data for this adjustment
+                    input = UtilMisc.toMap("invoiceId", invoiceId, "invoiceItemTypeId", invoiceItemTypeId, "quantity", BigDecimal.ONE);
+                    input.put("amount", amount);
+                    input.put("invoiceItemSeqId", "" + invoiceItemSeqId); // turn the int into a string with ("" + int) hack
+                    input.put("productId", returnItem.get("productId"));
+                    input.put("description", adjustment.get("description"));
+                    input.put("overrideGlAccountId", adjustment.get("overrideGlAccountId"));
+                    input.put("parentInvoiceId", invoiceId);
+                    input.put("parentInvoiceItemSeqId", parentInvoiceItemSeqId);
+                    input.put("taxAuthPartyId", adjustment.get("taxAuthPartyId"));
+                    input.put("taxAuthGeoId", adjustment.get("taxAuthGeoId"));
+                    input.put("userLogin", userLogin);
+                    // copy the accounting tags from the related order item
+                    if (orderItem != null) {
+                        UtilAccountingTags.putAllAccountingTags(orderItem, input);
+                    }
+
+                    // only set taxable flag when the adjustment is not a tax
+                    // TODO: Note that we use the value of Product.taxable here. This is not an ideal solution. Instead, use returnAdjustment.includeInTax
+                    if (adjustment.get("returnAdjustmentTypeId").equals("RET_SALES_TAX_ADJ")) {
+                        input.put("taxableFlag", "N");
+                    }
+
+                    // create the invoice item
+                    serviceResults = dispatcher.runSync("createInvoiceItem", input);
+                    if (ServiceUtil.isError(serviceResults)) {
+                        return ServiceUtil.returnError(errorMsg, null, null, serviceResults);
+                    }
+
+                    // increment the seqId counter
+                    invoiceItemSeqNum += 1;
+                    invoiceItemSeqId = UtilFormatOut.formatPaddedNumber(invoiceItemSeqNum, INVOICE_ITEM_SEQUENCE_ID_DIGITS);
+
+                    // keep a running total (promised adjustment in this case is the same as the invoice adjustment)
+                    invoiceTotal = invoiceTotal.add(amount).setScale(decimals, rounding);
+                    promisedTotal = promisedTotal.add(amount).setScale(decimals, rounding);
+                }
+            }
+
+            // ratio of the invoice total to the promised total so far or zero if the amounts were zero
+            BigDecimal actualToPromisedRatio = ZERO;
+            if (invoiceTotal.signum() != 0) {
+                actualToPromisedRatio = invoiceTotal.divide(promisedTotal, 100, rounding);  // do not round ratio
+            }
+
+            // loop through return-wide adjustments and create invoice items for each
+            List adjustments = returnHeader.getRelatedByAndCache("ReturnAdjustment", UtilMisc.toMap("returnItemSeqId", "_NA_"));
+            for (Iterator iter = adjustments.iterator(); iter.hasNext();) {
+                GenericValue adjustment = (GenericValue) iter.next();
+
+                // determine invoice item type from the return item type
+                String invoiceItemTypeId = getInvoiceItemType(delegator, adjustment.getString("returnAdjustmentTypeId"), null, invoiceTypeId, null);
+                if (invoiceItemTypeId == null) {
+                    return ServiceUtil.returnError(errorMsg + UtilMessage.expandLabel("AccountingNoKnownInvoiceItemTypeReturnAdjustmentType", UtilMisc.toMap("returnAdjustmentTypeId", adjustment.getString("returnAdjustmentTypeId")), locale));
+                }
+
+                // prorate the adjustment amount by the actual to promised ratio
+                BigDecimal amount = adjustment.getBigDecimal("amount").multiply(actualToPromisedRatio).setScale(decimals, rounding);
+                if (Debug.verboseOn()) {
+                    Debug.logVerbose("Creating Invoice Item with amount " + adjustment.getBigDecimal("amount") + " prorated to " + amount + " for return adjustment [" + adjustment.getString("returnAdjustmentId") + "]", MODULE);
+                }
+
+                // prepare the invoice item for the return-wide adjustment
+                input = UtilMisc.toMap("invoiceId", invoiceId, "invoiceItemTypeId", invoiceItemTypeId, "quantity", BigDecimal.ONE);
+                input.put("amount", amount);
+                input.put("invoiceItemSeqId", "" + invoiceItemSeqId); // turn the int into a string with ("" + int) hack
+                input.put("description", adjustment.get("description"));
+                input.put("overrideGlAccountId", adjustment.get("overrideGlAccountId"));
+                input.put("taxAuthPartyId", adjustment.get("taxAuthPartyId"));
+                input.put("taxAuthGeoId", adjustment.get("taxAuthGeoId"));
+                input.put("userLogin", userLogin);
+                // copy the accounting tags from the first order item
+                if (firstOrderItem != null) {
+                    UtilAccountingTags.putAllAccountingTags(firstOrderItem, input);
+                }
+
+                // XXX TODO Note: we need to implement ReturnAdjustment.includeInTax for this to work properly
+                input.put("taxableFlag", adjustment.get("includeInTax"));
+
+                // create the invoice item
+                serviceResults = dispatcher.runSync("createInvoiceItem", input);
+                if (ServiceUtil.isError(serviceResults)) {
+                    return ServiceUtil.returnError(errorMsg, null, null, serviceResults);
+                }
+
+                // increment the seqId counter
+                invoiceItemSeqNum += 1;
+                invoiceItemSeqId = UtilFormatOut.formatPaddedNumber(invoiceItemSeqNum, INVOICE_ITEM_SEQUENCE_ID_DIGITS);
+            }
+
+            // Set the invoice to READY
+            serviceResults = dispatcher.runSync("setInvoiceStatus", UtilMisc.<String, Object>toMap("invoiceId", invoiceId, "statusId", "INVOICE_READY", "userLogin", userLogin));
+            if (ServiceUtil.isError(serviceResults)) {
+                return ServiceUtil.returnError(errorMsg, null, null, serviceResults);
+            }
+
+            // return the invoiceId
+            Map results = ServiceUtil.returnSuccess();
+            results.put("invoiceId", invoiceId);
+            return results;
+        } catch (GenericServiceException e) {
+            Debug.logError(e, errorMsg + e.getMessage(), MODULE);
+            return ServiceUtil.returnError(errorMsg + e.getMessage());
+        } catch (GenericEntityException e) {
+            Debug.logError(e, errorMsg + e.getMessage(), MODULE);
+            return ServiceUtil.returnError(errorMsg + e.getMessage());
         }
     }
 
