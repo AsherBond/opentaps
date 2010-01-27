@@ -87,19 +87,19 @@
             </description>
         </field>
         <prim-key field="orderId"/>
-        <relation type="one" fk-name="IMPT_ORDERHDR_TYPE" rel-entity-name="OrderType">
+        <relation type="one-nofk" fk-name="IMPT_ORDERHDR_TYPE" rel-entity-name="OrderType">
             <key-map field-name="orderTypeId"/>
         </relation>
-        <relation type="one" fk-name="IMPT_ORDERHDR_PTY" rel-entity-name="Party" title="Customer">
+        <relation type="one-nofk" fk-name="IMPT_ORDERHDR_PTY" rel-entity-name="Party" title="Customer">
             <key-map field-name="customerPartyId" rel-field-name="partyId"/>
         </relation>
-        <relation type="one" fk-name="IMPT_ORDERHDR_SUPL" rel-entity-name="Party" title="Supplier">
+        <relation type="one-nofk" fk-name="IMPT_ORDERHDR_SUPL" rel-entity-name="Party" title="Supplier">
             <key-map field-name="supplierPartyId" rel-field-name="partyId"/>
         </relation>
-        <relation type="one" fk-name="IMPT_ORDERHDR_CUOM" rel-entity-name="Uom">
+        <relation type="one-nofk" fk-name="IMPT_ORDERHDR_CUOM" rel-entity-name="Uom">
             <key-map field-name="currencyUomId" rel-field-name="uomId"/>
         </relation>
-        <relation type="one" fk-name="IMPT_ORDERHDR_PSSM" rel-entity-name="ProductStoreShipmentMeth">
+        <relation type="one-nofk" fk-name="IMPT_ORDERHDR_PSSM" rel-entity-name="ProductStoreShipmentMeth">
             <key-map field-name="productStoreShipMethId"/>
         </relation>
     </entity>
@@ -149,11 +149,11 @@
         <prim-key field="quantity"/>
         <prim-key field="price"/>
         <!--<prim-key field="itemAdjustmentsTotal"/>  This field is not on the service. what does it do ?-->
-        <relation type="one" fk-name="IMPT_ORDERITEM_HDR" rel-entity-name="DataImportOrderHeader">
+        <relation type="one-nofk" fk-name="IMPT_ORDERITEM_HDR" rel-entity-name="DataImportOrderHeader">
             <key-map field-name="orderId"/>
         </relation>
         <!--removing this as we may import a product in the same batch-->
-        <!--<relation type="one" fk-name="IMPT_ORDERITEM_PRD" rel-entity-name="Product">-->
+        <!--<relation type="one-nofk" fk-name="IMPT_ORDERITEM_PRD" rel-entity-name="Product">-->
         <!--<key-map field-name="productId"/>-->
         <!--</relation>-->
     </entity>
@@ -189,7 +189,7 @@
         <prim-key field="orderId"/>
         <prim-key field="orderPaymentPreferenceId"/>
 
-        <relation type="one" fk-name="DIOP_PMETH_TP" rel-entity-name="PaymentMethodType">
+        <relation type="one-nofk" fk-name="DIOP_PMETH_TP" rel-entity-name="PaymentMethodType">
             <key-map field-name="paymentMethodTypeId"/>
         </relation>
 
