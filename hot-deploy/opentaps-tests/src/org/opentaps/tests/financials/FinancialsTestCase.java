@@ -325,13 +325,49 @@ public class FinancialsTestCase extends OpentapsTestCase {
 
     /**
      * A convenience method to return a set of acctgTransIds since the passed in Timestamp, based on the conditions passed in
+     * It actually searches the AcctgTrans entity, so it is more limited than the getAcctgTransSinceDate method (because the created
+     *  stamp dooesn't exist in a view entity).
+     * It's required to have an acctgTransTypeId condition, otherwise other tests that might use this will collide in
+     * another thread.
+     * @param conditions initial <code>List</code> of condition
+     * @param since only get the transaction with the created stamp since this date
+     * @param delegator a <code>GenericDelegator</code> value
+     * @return the <code>Set</code> of AcctgTransIds matching the conditions
+     * @exception GenericEntityException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    public Set<String> getAcctgTransCreatedSinceDate(List conditions, Timestamp since, GenericDelegator delegator) throws GenericEntityException {
+        conditions.add(EntityCondition.makeCondition("createdStamp", EntityOperator.GREATER_THAN_EQUAL_TO, since));
+        conditions.add(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.NOT_EQUAL, TEST_TRANSACTIONS));
+        List<GenericValue> matches = delegator.findByAnd("AcctgTrans", conditions);
+        Set<String> acctgTransIds = FastSet.newInstance();
+        for (GenericValue match : matches) {
+            acctgTransIds.add(match.getString("acctgTransId"));
+        }
+        return acctgTransIds;
+    }
+
+    /**
+     * As above, but accepts EntityCondition instead of a List of EntityConditions.
+     * @param condition initial <code>EntityCondition</code>
+     * @param since only get the transaction with the created stamp since this date
+     * @param delegator a <code>GenericDelegator</code> value
+     * @return the <code>Set</code> of AcctgTransIds matching the conditions
+     * @exception GenericEntityException if an error occurs
+     */
+    public Set<String> getAcctgTransCreatedSinceDate(EntityCondition condition, Timestamp since, GenericDelegator delegator) throws GenericEntityException {
+        return getAcctgTransSinceDate(UtilMisc.toList(condition), since, delegator);
+    }
+
+    /**
+     * A convenience method to return a set of acctgTransIds since the passed in Timestamp, based on the conditions passed in
      * It actually searches the AcctgTransAndEntries view entity, which allows matching entries by productId and so on.
      * It's required to have an acctgTransTypeId condition, otherwise other tests that might use this will collide in
      * another thread.
      * @param conditions initial <code>List</code> of condition
-     * @param since only get AcctgTransAndEntries since this date
+     * @param since only get the transaction with the transaction date since this date
      * @param delegator a <code>GenericDelegator</code> value
-     * @return the <code>List</code> of AcctgTransAndEntries matching the conditions
+     * @return the <code>Set</code> of AcctgTransIds matching the conditions
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
@@ -349,9 +385,9 @@ public class FinancialsTestCase extends OpentapsTestCase {
     /**
      * As above, but accepts EntityCondition instead of a List of EntityConditions.
      * @param condition initial <code>EntityCondition</code>
-     * @param since only get AcctgTransAndEntries since this date
+     * @param since only get the transaction with the transaction date since this date
      * @param delegator a <code>GenericDelegator</code> value
-     * @return the <code>List</code> of AcctgTransAndEntries matching the conditions
+     * @return the <code>Set</code> of AcctgTransIds matching the conditions
      * @exception GenericEntityException if an error occurs
      */
     public Set<String> getAcctgTransSinceDate(EntityCondition condition, Timestamp since, GenericDelegator delegator) throws GenericEntityException {

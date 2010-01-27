@@ -894,8 +894,9 @@ public class FinancialsTests extends FinancialsTestCase {
         BigDecimal balance4 = AccountsHelper.getBalanceForCustomerPartyId(customerPartyId, organizationPartyId, "ACTUAL", now, delegator);
         assertEquals("Balance for " + customerPartyId + " has not increased by 77.95", balance3, balance4.subtract(new BigDecimal("77.95")));
 
-        // get the transactions for payment with the assistance of our start timestamp
-        transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
+        // get the reversed transactions for payment, their date will be the same as the date of the reversed transaction
+        // so checking the created stamp field instead of the transaction date here
+        transactions = getAcctgTransCreatedSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
         assertNotEmpty(paymentId + " payment void transactions not created.", transactions);
 
         // assert transaction equivalence with the reference PMT_CUST_TEST-2R transaction

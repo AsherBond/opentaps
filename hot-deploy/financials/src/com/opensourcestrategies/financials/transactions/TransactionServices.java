@@ -189,7 +189,7 @@ public final class TransactionServices {
             serviceMap.remove("createdTxStamp");
             serviceMap.remove("lastUpdatedStamp");
             serviceMap.remove("lastUpdatedTxStamp");
-            // reverse the transaction at the same date, so it posts to the same time periods as the original transaction 
+            // reverse the transaction at the same date, so it posts to the same time periods as the original transaction
             serviceMap.put("transactionDate", acctgTrans.get("transactionDate"));
             serviceMap.put("description", "Reversal of Acctg Trans ID# " + acctgTransId);
             serviceMap.put("acctgTransTypeId", "REVERSE");
