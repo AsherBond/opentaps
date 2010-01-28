@@ -217,6 +217,15 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
         
         Panel p = getMainForm().getTabPanel().getActiveTab();
         if (p == filterPanel) {
+            if (orderIdInput.getText().equals("") && externalIdInput.getText().equals("")
+                    && orderNameInput.getText().equals("") && customerInput.getText().equals("")
+                    && productStoreInput.getText().equals("") && orderStatusInput.getText().equals("")
+                    && correspondingPoIdInput.getText().equals("") && serialNumberInput.getText().equals("")
+                    && fromDateInput.getText().equals("") && thruDateInput.getText().equals("")
+                    && createdByInput.getText().equals("") && lotInput.getText().equals("")) {
+                UtilUi.errorMessage(UtilUi.MSG.atLeastOnFieldRequiredToSearch());
+                return;
+            } 
         	getListView().filterByOrderId(orderIdInput.getText());
             getListView().filterByExternalId(externalIdInput.getText());
             getListView().filterByOrderName(orderNameInput.getText());
@@ -235,6 +244,13 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
                 getListView().filterIncludeInactiveOrders(true);
             }
         } else if (p == filterByAdvancedTab) {
+            if (shippingAddressInput.getText().equals("") && shippingCityInput.getText().equals("")
+                    && shippingCountryInput.getText().equals("") && shippingStateInput.getText().equals("")
+                    && shippingPostalCodeInput.getText().equals("") && shippingToNameInput.getText().equals("")
+                    && shippingAttnNameInput.getText().equals("")) {
+                UtilUi.errorMessage(UtilUi.MSG.atLeastOnFieldRequiredToSearch());
+                return;
+            }
         	getListView().filterByShippingAddress(shippingAddressInput.getText());
             getListView().filterByShippingCity(shippingCityInput.getText());
             getListView().filterByShippingCountry(shippingCountryInput.getText());
@@ -242,6 +258,7 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
             getListView().filterByShippingPostalCode(shippingPostalCodeInput.getText());
             getListView().filterByShippingToName(shippingToNameInput.getText());
             getListView().filterByShippingAttnName(shippingAttnNameInput.getText());
+            getListView().filterIncludeInactiveOrders(true);
         }
         getListView().applyFilters();
     }

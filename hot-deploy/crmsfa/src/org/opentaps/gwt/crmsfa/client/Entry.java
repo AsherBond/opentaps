@@ -912,7 +912,7 @@ public class Entry extends BaseEntry {
     }
 
     private void loadFindOrders() {
-        findOrdersForm = new FindOrdersForm(true);
+        findOrdersForm = new FindOrdersForm(false);
         RootPanel.get(FIND_ORDERS_ID).add(findOrdersForm.getMainPanel());
     }
 

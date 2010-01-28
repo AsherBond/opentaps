@@ -1428,6 +1428,8 @@ public interface CommonMessages extends Messages {
     String asOfDate();
     @DefaultMessage("Asset Maint")
     String assetMaint();
+    @DefaultMessage("At least one field is required to search")
+    String atLeastOnFieldRequiredToSearch();
     @DefaultMessage("Attention Name")
     String attnName();
     @DefaultMessage("Bulgarian")
@@ -2638,8 +2640,6 @@ public interface CommonMessages extends Messages {
     String country();
     @DefaultMessage("Create Account")
     String createAccount();
-    @DefaultMessage("An account with this name already exists with ID {0}.")
-    String createAccountDuplicateCheckFail(String partyId);
     @DefaultMessage("Create Contact")
     String createContact();
     @DefaultMessage("Create Lead")
@@ -2660,6 +2660,8 @@ public interface CommonMessages extends Messages {
     String crmAccountShortcuts();
     @DefaultMessage("Accounts")
     String crmAccounts();
+    @DefaultMessage("Duplicates found")
+    String crmAccountsWithDuplicateName();
     @DefaultMessage("Activities")
     String crmActivities();
     @DefaultMessage("All Assigned to Me")
@@ -2830,6 +2832,10 @@ public interface CommonMessages extends Messages {
     String crmConvertLead();
     @DefaultMessage("Create Account")
     String crmCreateAccount();
+    @DefaultMessage("An account with this name already exists with ID {0}.  Use [Create Account Ignoring Duplicates] on Create Account Form to create it anyway.")
+    String crmCreateAccountDuplicateCheckFail(String partyId);
+    @DefaultMessage("Create Account Ignoring Duplicates")
+    String crmCreateAccountIgnoreDuplicate();
     @DefaultMessage("Create Case")
     String crmCreateCase();
     @DefaultMessage("Request Catalog")
