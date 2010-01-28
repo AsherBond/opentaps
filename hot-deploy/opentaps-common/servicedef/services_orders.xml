@@ -339,10 +339,9 @@ under the License.
         <attribute name="returnItemResponseId" type="String" mode="IN" optional="false"/>
     </service>
     
-    <service name="updateInvoiceItemAccountTagsByReturnOrder" engine="pojo" auth="true"
-            location="org.opentaps.domain.crmsfa.returns.ReturnService" invoke="updateInvoiceItemAccountTagsByReturnOrder" transaction-timeout="600">
-        <description>Copies all the accounting tags from the return order item to the invoice item</description>
+    <service name="updateInvoiceItemsAccountingTagsForReturn" engine="pojo" auth="true"
+            location="org.opentaps.domain.crmsfa.returns.ReturnService" invoke="updateInvoiceItemsAccountingTagsForReturn" transaction-timeout="600">
+        <description>Copies all the accounting tags from the return order items to the invoice items.</description>
         <attribute name="invoiceId" type="String" mode="IN"/>
-        <attribute name="invoiceItemSeqId" type="String" mode="IN"/>
     </service>    
 </services>

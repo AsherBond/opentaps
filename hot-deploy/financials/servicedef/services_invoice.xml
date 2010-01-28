@@ -64,17 +64,6 @@
         <attribute name="invoiceId" type="String" mode="OUT" optional="true"/>
         <attribute name="invoiceTypeId" type="String" mode="OUT" optional="true"/>
     </service>
-    <service name="createInvoiceFromReturn" engine="java"
-        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="createInvoiceFromReturn">
-        <description>
-            Create an invoice from a return
-            returnId = The returnId to associate the invoice with
-            shipmentReceiptsToBill = List of ShipmentReceipts to use for creating the invoice
-        </description>
-        <attribute name="returnId" type="String" mode="IN" optional="false"/>
-        <attribute name="billItems" type="List" mode="IN" optional="false"/>
-        <attribute name="invoiceId" type="String" mode="OUT" optional="true"/>
-    </service>
 
     <service name="updateInvoiceAndBillingAddress" engine="java" default-entity-name="Invoice"
         location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="updateInvoiceAndBillingAddress" auth="true">

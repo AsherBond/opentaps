@@ -72,4 +72,9 @@
         <action service="updatePaymentApplicationAccountTagsByReturnOrder" mode="sync" run-as-user="system"/>
     </eca>
 
+    <!-- Copies all the accounting tags from the return order items to the invoice items. -->
+    <eca service="createInvoiceFromReturn" event="commit">
+        <action service="updateInvoiceItemsAccountingTagsForReturn" mode="sync" run-as-user="system"/>
+    </eca>
+
 </service-eca>
