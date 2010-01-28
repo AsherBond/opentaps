@@ -146,9 +146,12 @@
         <arg value="${ofbiz.dir}/applications/order/build/lib/ofbiz-order.jar"/>
       </java>
       <jar jarfile="${lib.dir}/${name}.jar" update="true" basedir="${build.dir}/classes/common" includes="org/opentaps/aspect/secas/**" />
-      <!-- put aop.xml into opentaps-common/build/lib/opentaps-aspect.jar -->
-      <jar jarfile="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib/opentaps-aspect.jar" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
-    	
+      <!-- put aop.xml into target jar META-INF dir -->
+      <mkdir dir="${build.dir}/classes/META-INF" />
+      <copy file="${aopConfig}" tofile="${build.dir}/classes/META-INF/aop.xml" overwrite="true"/>
+      <jar jarfile="${ofbiz.dir}/framework/entity/build/lib/ofbiz-entity.jar" update="true" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
+      <jar jarfile="${ofbiz.dir}/framework/common/build/lib/ofbiz-common.jar" update="true" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
+      <jar jarfile="${ofbiz.dir}/applications/order/build/lib/ofbiz-order.jar" update="true" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
       <echo message="[build] =========== Done Building Aspect (Weave) =============="/>
     </target>
 
