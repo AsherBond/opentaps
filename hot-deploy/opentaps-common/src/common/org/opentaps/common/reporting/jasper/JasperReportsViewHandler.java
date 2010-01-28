@@ -209,7 +209,12 @@ public class JasperReportsViewHandler extends AbstractViewHandler {
                 String datasourceName = delegator.getEntityHelperName(info);
                 String jndiDataSourceName = (String) parameters.get("jndiDS");
 
-                if (UtilValidate.isNotEmpty(datasourceName) && UtilValidate.isEmail(jndiDataSourceName)) {
+                // report may use HQL, put hibernate session
+                Infrastructure i = new Infrastructure((LocalDispatcher) request.getAttribute("dispatcher"));
+                session = i.getSession();
+                parameters.put("HIBERNATE_SESSION", session);
+
+                if (UtilValidate.isNotEmpty(datasourceName) && UtilValidate.isEmpty(jndiDataSourceName)) {
                     // given entity
                     conn = ConnectionFactory.getConnection(datasourceName);
                     jp = JasperFillManager.fillReport(report, parameters, conn);
@@ -220,11 +225,6 @@ public class JasperReportsViewHandler extends AbstractViewHandler {
                     } else {
                         conn = ConnectionFactory.getConnection(delegator.getGroupHelperName("org.opentaps." + jndiDataSourceName));
                     }
-
-                    // report may use HQL, put hibernate session
-                    Infrastructure i = new Infrastructure((LocalDispatcher) request.getAttribute("dispatcher"));
-                    session = i.getSession();
-                    parameters.put("HIBERNATE_SESSION", session);
 
                     jp = JasperFillManager.fillReport(report, parameters, conn);
                 }
