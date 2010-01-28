@@ -397,7 +397,9 @@ public class OrderItem extends org.opentaps.base.entities.OrderItem {
 
         BigDecimal result = BigDecimal.ZERO;
         for (ReturnItem returnItem : getReturnItems()) {
-            result = result.add(returnItem.getReturnQuantity());
+            if (!"RETURN_CANCELLED".equals(returnItem.getStatusId())) {
+                result = result.add(returnItem.getReturnQuantity());
+            }
         }
         returnedQuantity = result;
         return result;
