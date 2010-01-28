@@ -83,11 +83,8 @@ under the License.
     </tr>    
 </#macro>
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.OrderItemsReturned}</div>
-</div>
+<@frameSectionHeader title=uiLabelMap.OrderItemsReturned />
 <div class="form">
-
 <table width="100%" border='0' cellpadding='2' cellspacing='0'>
   <#assign readOnly = (returnHeader.statusId != "RETURN_REQUESTED")>
     

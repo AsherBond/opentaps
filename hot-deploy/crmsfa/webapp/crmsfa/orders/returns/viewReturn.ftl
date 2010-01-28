@@ -41,10 +41,7 @@
 </#if>
 <div class="subSectionBlock">
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CommonReturn}</div>
-    <div class="subMenuBar">${pdfLink?if_exists}${confirmLink?if_exists}${acceptLink?if_exists}${forceCompleteLink?if_exists}${cancelLink?if_exists}</div>
-</div>
+<@frameSectionHeader title=uiLabelMap.CommonReturn extra="${pdfLink?if_exists}${confirmLink?if_exists}${acceptLink?if_exists}${forceCompleteLink?if_exists}${cancelLink?if_exists}"/>
 <form action="<@ofbizUrl>updateReturnHeader</@ofbizUrl>" name="updateReturnHeader" method="post">
     <table class="twoColumnForm">
         <@inputHidden name="returnId" value=returnId />

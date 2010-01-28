@@ -39,9 +39,7 @@ under the License.
 
 <#assign selectAllFormName = "returnItems"/>
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmSelectItemsToReturn}</div>
-</div>
+<@frameSectionHeader title=uiLabelMap.CrmSelectItemsToReturn />
 <div class="form">
 <form name="returnItems" method="post" action="<@ofbizUrl>createReturnItems</@ofbizUrl>">
   <input type="hidden" name="returnId" value="${returnId}">
