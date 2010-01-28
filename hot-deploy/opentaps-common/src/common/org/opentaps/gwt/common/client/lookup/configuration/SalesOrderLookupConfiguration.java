@@ -39,6 +39,7 @@ public abstract class SalesOrderLookupConfiguration {
 
     public static final String INOUT_ORDER_ID = "orderId";
     public static final String IN_EXTERNAL_ID = "externalId";
+    public static final String IN_PRODUCT_ID = "productId";
     public static final String INOUT_ORDER_NAME = "orderName";
     public static final String OUT_ORDER_NAME_ID = "orderNameId";
     public static final String INOUT_PARTY_ID = "partyId";

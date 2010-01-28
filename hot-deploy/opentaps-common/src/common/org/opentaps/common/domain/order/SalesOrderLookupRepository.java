@@ -85,6 +85,7 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
     private String shippingAttnName;
     private String userLoginId;
     private String viewPref;
+    private String productId;
     private boolean findActiveOnly = false;
     private boolean findDesiredOnly = false;
     private Locale locale;
@@ -185,6 +186,11 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
             criteria.createAlias("orderItems", "oi");
             if (UtilValidate.isNotEmpty(purchaseOrderId)) {
                 criteria.add(Restrictions.ilike("oi." + OrderItem.Fields.correspondingPoId.name(), purchaseOrderId, MatchMode.START));
+            }
+            
+            // filter by the given productId string, from the OrderItem entity
+            if (UtilValidate.isNotEmpty(productId)) {
+                criteria.add(Restrictions.ilike("oi." + OrderItem.Fields.productId.name(), productId, MatchMode.START));
             }
             
             // filter by the given shippingAddress string, from the OrderItemShipGroup entity
@@ -364,6 +370,11 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
     /** {@inheritDoc} */
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+    
+    /** {@inheritDoc} */
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     /** {@inheritDoc} */

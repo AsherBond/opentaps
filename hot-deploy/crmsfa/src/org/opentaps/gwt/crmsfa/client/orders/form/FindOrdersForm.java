@@ -26,6 +26,7 @@ import org.opentaps.gwt.common.client.suggest.CountryAutocomplete;
 import org.opentaps.gwt.common.client.suggest.CustomerAutocomplete;
 import org.opentaps.gwt.common.client.suggest.LotAutocomplete;
 import org.opentaps.gwt.common.client.suggest.OrderStatusAutocomplete;
+import org.opentaps.gwt.common.client.suggest.ProductAutocomplete;
 import org.opentaps.gwt.common.client.suggest.ProductStoreAutocomplete;
 import org.opentaps.gwt.common.client.suggest.StateAutocomplete;
 
@@ -69,6 +70,8 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
     private final TextField serialNumberInput;
     // find all option
     private final CheckboxField findAllInput;
+    // Lookup  Product
+    private final ProductAutocomplete productInput;
 
     private final SalesOrderListView orderListView;
     private final TextField shippingAddressInput;
@@ -110,6 +113,7 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
         createdByInput = new TextField(UtilUi.MSG.commonCreatedBy(), "createdBy", getInputLength());
         lotInput = new LotAutocomplete(UtilUi.MSG.productLotId(), "lotId", getInputLength());
         serialNumberInput = new TextField(UtilUi.MSG.productSerialNumber(), "serialNumber", getInputLength());
+        productInput = new ProductAutocomplete(UtilUi.MSG.orderProduct(), "productId", getInputLength());
         findAllInput = new CheckboxField(UtilUi.MSG.commonFindAll(), "findAll");
 
         // add a listener to disable the find all option if a status is specified
@@ -164,6 +168,9 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
 
         columnOnePanel.addField(lotInput);
         columnTwoPanel.addField(serialNumberInput);
+        
+        columnOnePanel.addField(productInput);
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
         columnOnePanel.addField(findAllInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
@@ -222,7 +229,8 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
                     && productStoreInput.getText().equals("") && orderStatusInput.getText().equals("")
                     && correspondingPoIdInput.getText().equals("") && serialNumberInput.getText().equals("")
                     && fromDateInput.getText().equals("") && thruDateInput.getText().equals("")
-                    && createdByInput.getText().equals("") && lotInput.getText().equals("")) {
+                    && createdByInput.getText().equals("") && lotInput.getText().equals("")
+                    && productInput.getText().equals("")) {
                 UtilUi.errorMessage(UtilUi.MSG.atLeastOnFieldRequiredToSearch());
                 return;
             } 
@@ -238,6 +246,7 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
             getListView().filterByCreatedBy(createdByInput.getText());
             getListView().filterByLotId(lotInput.getText());
             getListView().filterBySerialNumber(serialNumberInput.getText());
+            getListView().filterByProductId(productInput.getText());
             if (orderStatusInput.getText() == null || "".equals(orderStatusInput.getText())) {
                 getListView().filterIncludeInactiveOrders(findAllInput.getValue());
             } else {

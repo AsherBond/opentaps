@@ -34,6 +34,12 @@ public interface SalesOrderLookupRepositoryInterface extends LookupRepositoryInt
      * @param orderId a <code>String</code> value
      */
     public void setOrderId(String orderId);
+    
+    /**
+     * Sets the product Id to search for.
+     * @param productId a <code>String</code> value
+     */
+    public void setProductId(String productId);    
 
     /**
      * Sets the external order Id to search for.

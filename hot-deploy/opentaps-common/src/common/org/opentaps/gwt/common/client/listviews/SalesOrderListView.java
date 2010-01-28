@@ -17,7 +17,6 @@
 package org.opentaps.gwt.common.client.listviews;
 
 import org.opentaps.gwt.common.client.UtilUi;
-import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.common.client.lookup.configuration.SalesOrderLookupConfiguration;
 
 import com.gwtext.client.core.SortDir;
@@ -255,5 +254,13 @@ public class SalesOrderListView extends EntityListView {
      */
     public void filterByShippingAttnName(String attnName) {
         setFilter(SalesOrderLookupConfiguration.IN_SHIPPING_ATTENTION_NAME, attnName);
+    }
+
+    /**
+     * Filters the records of the list by product Id matching the given productId.
+     * @param productId a <code>String</code> value
+     */
+    public void filterByProductId(String productId) {
+        setFilter(SalesOrderLookupConfiguration.IN_PRODUCT_ID, productId);
     }
 }

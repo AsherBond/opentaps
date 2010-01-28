@@ -115,6 +115,9 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_EXTERNAL_ID))) {
                 salesOrderLookupRepository.setExteralOrderId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_EXTERNAL_ID));
             }
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRODUCT_ID))) {
+                salesOrderLookupRepository.setProductId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRODUCT_ID));
+            }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_NAME))) {
                 salesOrderLookupRepository.setOrderName(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_NAME));
             }

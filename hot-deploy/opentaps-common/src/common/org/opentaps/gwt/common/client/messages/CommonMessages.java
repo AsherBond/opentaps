@@ -9294,7 +9294,7 @@ public interface CommonMessages extends Messages {
     String opentapsNavHistoryAgreement(String agreementTypeName, String agreementId, String partyNameTo);
     @DefaultMessage("Last Viewed")
     String opentapsNavHistoryTitle();
-    @DefaultMessage("…")
+    @DefaultMessage("")
     String opentapsNavHistoryTruncMark();
     @DefaultMessage("Needed")
     String opentapsNeeded();

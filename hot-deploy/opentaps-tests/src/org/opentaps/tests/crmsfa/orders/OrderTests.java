@@ -3798,4 +3798,39 @@ public class OrderTests extends OrderTestCase {
         lookup.findOrders();
         assertGwtLookupFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
     }
+
+    /**
+     * Test the GWT search order by product.
+     * @throws Exception if an error occurs
+     */
+    public void testGwtSearchOrderByProduct() throws Exception {
+        InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
+        // 1. Create a sales order with a billing address in New York and a shipping address in California
+
+        // create a product
+        BigDecimal productQty = new BigDecimal("1.0");
+        BigDecimal productUnitPrice = new BigDecimal("11.11");
+        final GenericValue testProduct = createTestProduct("testGwtSearchOrderByProduct Test Product", demowarehouse1);
+        assignDefaultPrice(testProduct, productUnitPrice, admin);
+        Debug.logInfo("create tests product [" + testProduct.getString("productId") + "] for testGwtSearchOrderByProduct", MODULE);
+        // create a sales order for the DemoAccount1 and product
+        Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
+        orderSpec.put(testProduct, productQty);
+        User = DemoCSR;
+
+        String customerPartyId = createPartyFromTemplate(DemoCustomer.getString("partyId"), "Customer for testGwtSearchOrderByShippingAddress");
+        Debug.logInfo("create customer [" + customerPartyId + "]", MODULE);
+        GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
+        SalesOrderFactory salesOrder =  testCreatesSalesOrder(orderSpec, customer.getString("partyId"), productStoreId, null, "EXT_OFFLINE", null, "DemoAddress1", "DemoAddress2");
+        Debug.logInfo("create sales order [" + salesOrder.getOrderId() + "]", MODULE);
+        
+        // 2. try to find the sales order By the productId, in the sales order is found
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(SalesOrderLookupConfiguration.IN_PRODUCT_ID, testProduct.getString("productId"));
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
+        SalesOrderLookupService lookup = new SalesOrderLookupService(provider);
+        lookup.findOrders();
+        assertGwtLookupNotFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+
+    }
 }

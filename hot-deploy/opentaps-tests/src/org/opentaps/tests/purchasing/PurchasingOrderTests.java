@@ -41,6 +41,7 @@ import org.ofbiz.order.order.OrderReadHelper;
 import org.opentaps.base.entities.OrderItemShipGroupAssoc;
 import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.common.order.PurchaseOrderFactory;
+import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.order.Order;
@@ -49,8 +50,10 @@ import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
 import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.client.lookup.configuration.PurchaseOrderLookupConfiguration;
+import org.opentaps.gwt.common.client.lookup.configuration.SalesOrderLookupConfiguration;
 import org.opentaps.gwt.common.server.InputProviderInterface;
 import org.opentaps.gwt.common.server.lookup.PurchaseOrderLookupService;
+import org.opentaps.gwt.common.server.lookup.SalesOrderLookupService;
 import org.opentaps.tests.OpentapsTestCase;
 import org.opentaps.tests.financials.FinancialAsserts;
 import org.opentaps.tests.gwt.TestInputProvider;
@@ -1497,6 +1500,37 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         // test we found the demo data: TEST9000/TEST9002, not found TEST9001
         assertGwtLookupFound(lookup, Arrays.asList("TEST9000", "TEST9002"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
         assertGwtLookupNotFound(lookup, Arrays.asList("TEST9001"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+
+    }
+
+    /**
+     * Test the GWT search order by product.
+     * @throws Exception if an error occurs
+     */
+    public void testGwtSearchOrderByProduct() throws Exception {
+        InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
+        
+        // create a supplier from template of DemoSupplier
+        String supplierPartyId = createPartyFromTemplate("DemoSupplier", "Supplier for testGwtSearchOrderByProduct");
+        GenericValue supplier = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", supplierPartyId));
+        Debug.logInfo("create customer [" + supplier.getString("partyId") + "]", MODULE);
+        // create a product
+        GenericValue testProduct = createTestProduct("testGwtSearchOrderByProduct Test Product", demopurch1);
+
+        // 1.create a purchase order for the supplier and product
+        Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
+        orderSpec.put(testProduct, new BigDecimal("1.0"));
+        PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderSpec, supplier, facilityContactMechId);
+        Debug.logInfo("create purchasing order [" + pof.getOrderId() + "]", MODULE);
+
+        
+        // 2. try to find the sales order By the productId, in the sales order is found
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(PurchaseOrderLookupConfiguration.IN_PRODUCT_PARTTERN, testProduct.getString("productId"));
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
+        SalesOrderLookupService lookup = new SalesOrderLookupService(provider);
+        lookup.findOrders();
+        assertGwtLookupNotFound(lookup, Arrays.asList(pof.getOrderId()), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
 
     }
 }
