@@ -18,6 +18,7 @@ package org.opentaps.financials.domain.billing.payment;
 
 import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.entity.GenericEntityException;
+import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
@@ -91,6 +92,11 @@ public class PaymentRepository extends Repository implements PaymentRepositoryIn
     /** {@inheritDoc} */
     public Party getPartyById(String partyId) throws RepositoryException, EntityNotFoundException {
         return getPartyRepository().getPartyById(partyId);
+    }
+    
+    /** {@inheritDoc} */
+    public PaymentApplication getPaymentApplicationById(String paymentApplicationId) throws RepositoryException, EntityNotFoundException {
+        return findOneNotNull(PaymentApplication.class, map(PaymentApplication.Fields.paymentApplicationId, paymentApplicationId), "PaymentApplication [" + paymentApplicationId + "] not found");
     }
 
     protected PartyRepositoryInterface getPartyRepository() throws RepositoryException {
