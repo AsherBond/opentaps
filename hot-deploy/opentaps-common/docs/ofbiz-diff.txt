@@ -190,7 +190,12 @@ framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
 r14376 fix the add redirect parameter of request-redirect which after multipart/form-data form submit
 
 framework/entity/config/entityengine.xml
-r14503 add useOldAliasMetadataBehavior parameter in mysql jdbc url for avoid hibernate got not found column on search view entity 
+r14503 add useOldAliasMetadataBehavior parameter in mysql jdbc url for avoid hibernate got not found column on search view entity
+
+framework/common/webcommon/foErrorAsHtml.ftl
+framework/common/widget/CommonScreens.xml
+framework/widget/src/org/ofbiz/widget/screen/ScreenFopViewHandler.java
+r14773 Fix FO error message screen
 
 Applications changes
 --------------------
