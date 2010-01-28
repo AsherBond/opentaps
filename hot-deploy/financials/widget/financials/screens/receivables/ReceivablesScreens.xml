@@ -176,6 +176,8 @@
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="returnPage" value="receivables"/>
                 <set field="returnLabel" value="FinancialsReturnToReceivables"/>
+                <set field="screenRequest" value="CreditCardReport"/>
+                <set field="reportRequest" value="JRCreditCardReport"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/receivables/CreditCardReport.bsh"/>
             </actions>
             <widgets>

@@ -17,10 +17,13 @@
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <#assign now = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>
 <#assign defaultFromDate = Static["org.ofbiz.base.util.UtilDateTime"].getDayStart(now, timeZone, locale)>
 <#assign defaultThruDate = Static["org.ofbiz.base.util.UtilDateTime"].getDayEnd(now, timeZone, locale)>
+
+<@commonReportJs formName="creditCardReportForm" />
 
 <form method="POST" name="creditCardReportForm" action="">
   <div style="margin-left: 30px; margin-top: 5px;">
@@ -32,8 +35,8 @@
     <@inputDateTime name="thruDate" default=requestParameters.thruDate?default(defaultThruDate)/>
   </div>
   <div style="margin-left: 30px; margin-top: 10px;">
-    <input type="Submit" class="smallSubmit" name="submitButton" value="${uiLabelMap.CommonRun}"></input>
-  </div>  
+    <@submitReportOptions reportRequest=reportRequest! screenRequest=screenRequest! returnPage=returnPage! returnLabel=returnLabel!/>
+  </div>
 </form>
 
 <br/>
@@ -99,15 +102,15 @@ table.salesAndInventoryReport td {
 <table class="salesAndInventoryReport">
   <tr>
     <td class="tableheadtext">${uiLabelMap.FinancialsTransactionDate}</td>
-    <td class="tableheadtext">Payment Id</td>
+    <td class="tableheadtext">${uiLabelMap.FinancialsPaymentId}</td>
     <td class="tableheadtext">${uiLabelMap.AccountingCardNumber}</td>
     <td class="tableheadtext">${uiLabelMap.AccountingCardType}</td>
     <td class="tableheadtext">${uiLabelMap.AccountingExpirationDate}</td>
     <td class="tableheadtext">${uiLabelMap.AccountingAmount}</td>
-    <td class="tableheadtext">Order Id</td>
-    <td class="tableheadtext">Invoice Id</td>
+    <td class="tableheadtext">${uiLabelMap.OrderOrderId}</td>
+    <td class="tableheadtext">${uiLabelMap.FinancialsInvoiceId}</td>
     <td class="tableheadtext">${uiLabelMap.AccountingReferenceNumber}</td>
-    <td class="tableheadtext">Gateway Code</td>
+    <td class="tableheadtext">${uiLabelMap.FinancialsGatewayCode}</td>
   </tr>
 
 <#assign counter = 0>

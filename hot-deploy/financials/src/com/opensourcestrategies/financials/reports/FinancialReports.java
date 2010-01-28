@@ -19,6 +19,7 @@ package com.opensourcestrategies.financials.reports;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -32,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeMap;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -72,6 +74,9 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.constants.EnumerationConstants;
+import org.opentaps.base.constants.PaymentMethodTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.SalesInvoiceItemFact;
 import org.opentaps.base.entities.TaxInvoiceItemFact;
 import org.opentaps.common.jndi.DataSourceImpl;
@@ -1488,6 +1493,126 @@ public final class FinancialReports {
                 jrParameters.put("dsoWeighted", dsoValueSum.divide(invoiceSum, 0, BigDecimal.ROUND_HALF_UP));
             }
 
+            request.setAttribute("jrParameters", jrParameters);
+
+        } catch (GenericEntityException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        } catch (GenericServiceException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        }
+
+        return reportType;
+    }
+
+    /**
+     * Prepare data source and parameters for credit card settlements report.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the event response, either "pdf" or "xls" string to select report type, or "error".
+     */
+    public static String prepareCreditCardReport(HttpServletRequest request, HttpServletResponse response) {
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
+        Locale locale = UtilCommon.getLocale(request);
+        Map<String, Object> jrParameters = FastMap.<String, Object>newInstance();
+
+        String reportType = UtilCommon.getParameter(request, "type");
+
+        try {
+
+            String dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+
+            // get the from and thru date timestamps
+            String fromDateString = UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
+            String thruDateString = UtilHttp.makeParamValueFromComposite(request, "thruDate", locale);
+
+            // don't do anything if dates invalid
+            if (fromDateString == null || thruDateString == null) {
+                return "error";
+            }
+
+            Timestamp fromDate = null;
+            Timestamp thruDate = null;
+            try {
+                fromDate = UtilDateTime.stringToTimeStamp(fromDateString.trim(), dateTimeFormat, timeZone, locale);
+                thruDate = UtilDateTime.stringToTimeStamp(thruDateString.trim(), dateTimeFormat, timeZone, locale);
+            } catch (ParseException e) {
+                return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+            }
+
+            if (thruDate.before(fromDate)) {
+                return UtilMessage.createAndLogEventError(request, "Start date of period is greater than the closing date.", MODULE);
+            }
+
+            // fields to select and order by
+            List<String> orderByForSum = UtilMisc.toList("currencyUomId"); // this is not really important, but helps speed up conversion
+            List<String> orderByForDetail = UtilMisc.toList("transactionDate DESC");
+            List<String> fieldsToSelectForSum = UtilMisc.toList("paymentMethodId", "currencyUomId", "amount", "effectiveDate");
+            List<String> fieldsToSelectForDetail = null; // all fields
+
+            // since these are all receipts, we need to constrain to Payment.partyIdTo = organizationPartyId
+            String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
+
+            // conditions for detail report
+            EntityConditionList<EntityCondition> commonConditions =
+                EntityCondition.makeCondition(UtilMisc.<EntityCondition>toList(
+                        EntityCondition.makeCondition("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+                        EntityCondition.makeCondition("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate),
+                        EntityCondition.makeCondition("transCodeEnumId", EnumerationConstants.PgtCode.PGT_CAPTURE),
+                        EntityCondition.makeCondition("partyIdTo", organizationPartyId)
+                ));
+
+            // conditions for sum report
+            EntityConditionList<EntityCondition> sumConditions =
+                EntityCondition.makeCondition(UtilMisc.<EntityCondition>toList(
+                        EntityCondition.makeCondition("statusId", StatusItemConstants.PmntStatus.PMNT_RECEIVED),
+                        EntityCondition.makeCondition("partyIdTo", organizationPartyId),
+                        EntityCondition.makeCondition("paymentMethodTypeId", PaymentMethodTypeConstants.CREDIT_CARD),
+                        EntityCondition.makeCondition("effectiveDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+                        EntityCondition.makeCondition("effectiveDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate)
+                ));
+
+            List<GenericValue> sumResults =
+                delegator.findByCondition("Payment", sumConditions, fieldsToSelectForSum, orderByForSum);
+            List<GenericValue> detailResults =
+                delegator.findByCondition("CreditCardTrans", commonConditions, fieldsToSelectForDetail, orderByForDetail);
+
+            // sum report keyed to credit card type
+            Map<String, Map<String, Object>> sumReport = new TreeMap<String, Map<String, Object>>();
+            String unknownType = UtilMessage.expandLabel("OpentapsUnknown", locale);
+            for (GenericValue sum : sumResults) {
+                GenericValue creditCard = sum.getRelatedOneCache("CreditCard");
+                String creditCardType = (creditCard == null ? unknownType : creditCard.getString("cardType"));
+                BigDecimal previousAmount = BigDecimal.ZERO;
+
+                // get the last row keyed to the cardType, and its amount (which we will merge)
+                Map<String, Object> reportLine = sumReport.get(creditCardType);
+                if (reportLine == null) {
+                    reportLine = FastMap.<String, Object>newInstance();
+                    reportLine.putAll(sum.getAllFields());
+                    reportLine.put("cardType", creditCardType);
+                } else {
+                    previousAmount = (BigDecimal) reportLine.get("amount");
+                }
+
+                // convert current results
+                BigDecimal amount = sum.getBigDecimal("amount");
+                String currencyUomId = sum.getString("currencyUomId");
+                Timestamp asOf = sum.getTimestamp("effectiveDate");
+                BigDecimal amountConverted;
+                amountConverted = amount.multiply(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, currencyUomId, asOf));
+
+                // store the merged results
+                reportLine.put("amount", amountConverted.add(previousAmount));
+                sumReport.put(creditCardType, reportLine);
+            }
+
+            // store the cardType-sorted sum report results 
+            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(sumReport.values()));
+
+            // the detail report needs to use getRelatedOne in the ftl to get the CreditCard details, especially cardNumber since it cannot be unencrypted in a view entity
+            jrParameters.put("detailReport", new JRMapCollectionDataSource(detailResults));
             request.setAttribute("jrParameters", jrParameters);
 
         } catch (GenericEntityException e) {
