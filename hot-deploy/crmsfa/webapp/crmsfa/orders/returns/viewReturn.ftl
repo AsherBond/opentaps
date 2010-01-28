@@ -50,7 +50,7 @@
         <#if returnHeader.primaryOrderId?has_content>
         <@displayLinkRow title=uiLabelMap.CommonOrder href="orderview?orderId=${returnHeader.primaryOrderId}" text=returnHeader.primaryOrderId />
         </#if>
-        <@displayRow title=uiLabelMap.CommonCustomer text=(customerName + " (${returnHeader.fromPartyId})") />
+        <@displayRow title=uiLabelMap.CrmCustomer text=(customerName + " (${returnHeader.fromPartyId})") />
         <#assign defaultWeightStr = ("uiLabelMap.ProductShipmentUomAbbreviation_" + defaultWeightUomId)?eval/>
         <#if returnHeader.statusId == "RETURN_REQUESTED">
           <@inputSelectRow name="originContactMechId" title=uiLabelMap.CrmReturnedFrom list=addresses key="contactMechId" default=returnHeader.originContactMechId required=false ; address>
@@ -140,10 +140,12 @@
 </div>
 
 <#if returnHeader.statusId != "RETURN_CANCELLED">
-<#if returnItemsCreated>
-<#include "editReturnItemsForm.ftl"/>
-<#else>
-<#include "createReturnItemsForm.ftl"/>
-</#if>
+  <#if returnItemsCreated>
+    <#include "editReturnItemsForm.ftl"/>
+    <br/>
+  </#if>
+  <#if returnHeader.statusId == "RETURN_REQUESTED">
+    <#include "createReturnItemsForm.ftl"/>
+  </#if>
 </#if>
 </#if>

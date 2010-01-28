@@ -38,8 +38,8 @@ under the License.
 -->
 
 <#macro displayReturnAdjustment returnAdjustment adjEditable>
-    <#assign returnHeader = returnAdjustment.getRelatedOne("ReturnHeader")>
-    <#assign adjReturnType = returnAdjustment.getRelatedOne("ReturnType")?if_exists>
+    <#assign returnHeader = returnAdjustment.getRelatedOne("ReturnHeader")/>
+    <#assign adjReturnType = returnAdjustment.getRelatedOne("ReturnType")?if_exists/>
     <input type="hidden" name="_rowSubmit_o_${rowCount}" value="Y" />
     <input type="hidden" name="returnAdjustmentId_o_${rowCount}" value="${returnAdjustment.returnAdjustmentId}" />
     <tr class="tabletext">
@@ -48,7 +48,7 @@ under the License.
             <#if returnAdjustment.comments?has_content>: ${returnAdjustment.comments}</#if>
         </div></td>
         <#if (adjEditable)>
-           <td>
+           <td align="right">
               <input type="text" class="inputBox" size="8" name="amount_o_${rowCount}" value="${returnAdjustment.amount?default(0)?string("##0.00")}"/>
            </td>
         <#else>
@@ -72,7 +72,7 @@ under the License.
           </div>
        </td>
        <#if (adjEditable)>
-         <td align='right'>
+         <td align="right">
            <@submitFormLinkConfirm form="removeReturnAdjustmentAction" text=uiLabelMap.CommonRemove returnAdjustmentId=returnAdjustment.returnAdjustmentId />
          </td>
        <#else>
@@ -85,7 +85,7 @@ under the License.
 
 <@frameSectionHeader title=uiLabelMap.OrderItemsReturned />
 <div class="form">
-<table width="100%" border='0' cellpadding='2' cellspacing='0'>
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
   <#assign readOnly = (returnHeader.statusId != "RETURN_REQUESTED")>
     
   <tr><td colspan="8"><hr class="sepbar"></td></tr>
@@ -230,10 +230,10 @@ under the License.
   </#if>
    <tr><td colspan="8"><hr class="sepbar"></td></tr>
 
-<#-- these are general return adjustments not associated with a particular item (itemSeqId = "_NA_" -->
+<#-- these are general return adjustments not associated with a particular item (itemSeqId = "_NA_") -->
 <#if (returnAdjustments?has_content)>                  
     <#list returnAdjustments as returnAdjustment>
-        <#assign adjEditable = !readOnly> <#-- they are editable if the rest of the return items are -->
+        <#assign adjEditable = !readOnly/> <#-- they are editable if the rest of the return items are -->
         <@displayReturnAdjustment returnAdjustment=returnAdjustment adjEditable=adjEditable/>
     </#list>
     </#if>
