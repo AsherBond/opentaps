@@ -3830,7 +3830,7 @@ public class OrderTests extends OrderTestCase {
         provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999");
         SalesOrderLookupService lookup = new SalesOrderLookupService(provider);
         lookup.findOrders();
-        assertGwtLookupNotFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupFound(lookup, Arrays.asList(salesOrder.getOrderId()), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
 
     }
 }
