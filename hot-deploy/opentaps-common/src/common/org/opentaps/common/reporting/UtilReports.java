@@ -436,11 +436,11 @@ public final class UtilReports {
      */
     public static List<Map<String, Object>> getManagedReports(String componentName, String reportGroupId, GenericDelegator delegator, Locale locale) {
         try {
-            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
-                    EntityCondition.makeCondition("application", componentName),
-                    EntityCondition.makeCondition("showInSelect", "Y"));
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("application", componentName));
             if (UtilValidate.isNotEmpty(reportGroupId)) {
-                conditions.add(EntityCondition.makeCondition("reportGroupId", EntityOperator.EQUALS, reportGroupId));
+                conditions.add(EntityCondition.makeCondition("reportGroupId", reportGroupId));
+            } else {
+                conditions.add(EntityCondition.makeCondition("showInSelect", "Y"));
             }
             List<GenericValue> applicationGroups = delegator.findByCondition("ReportGroup", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, null , UtilMisc.toList("sequenceNum", "description"), null);
             if (UtilValidate.isEmpty(applicationGroups)) {
