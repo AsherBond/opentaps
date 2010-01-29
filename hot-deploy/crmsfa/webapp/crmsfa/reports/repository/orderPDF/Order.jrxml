@@ -333,7 +333,7 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="242" splitType="Stretch">
+		<band height="207" splitType="Stretch">
 			<subreport isUsingCache="true">
 				<reportElement key="subreport-6" x="0" y="31" width="541" height="13" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
 					<printWhenExpression><![CDATA[Boolean.valueOf($P{shipAdjustmentList} != null)]]></printWhenExpression>
@@ -350,7 +350,7 @@
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://crmsfa/webapp/crmsfa/reports/repository/orderPDF/Adjustments.jrxml")]]></subreportExpression>
 			</subreport>
 			<subreport isUsingCache="true">
-				<reportElement key="subreport-7" x="0" y="57" width="541" height="13" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+				<reportElement key="subreport-7" positionType="Float" x="0" y="57" width="541" height="13" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
 					<printWhenExpression><![CDATA[Boolean.valueOf($P{otherAdjustmentList} != null)]]></printWhenExpression>
 				</reportElement>
 				<subreportParameter name="REPORT_LOCALE">
@@ -364,8 +364,8 @@
 				</subreportParameter>
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://crmsfa/webapp/crmsfa/reports/repository/orderPDF/OtherAdjustments.jrxml")]]></subreportExpression>
 			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-8" x="0" y="105" width="541" height="42" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+			<subreport isUsingCache="true" runToBottom="false">
+				<reportElement key="subreport-8" positionType="Float" x="0" y="105" width="541" height="13" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
 					<printWhenExpression><![CDATA[Boolean.valueOf($P{notesList} != null)]]></printWhenExpression>
 				</reportElement>
 				<subreportParameter name="REPORT_LOCALE">
@@ -380,7 +380,7 @@
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://crmsfa/webapp/crmsfa/reports/repository/orderPDF/OrderNotes.jrxml")]]></subreportExpression>
 			</subreport>
 			<subreport isUsingCache="true">
-				<reportElement key="subreport-9" x="0" y="169" width="541" height="42" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+				<reportElement key="subreport-9" positionType="Float" x="0" y="156" width="541" height="22" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
 					<printWhenExpression><![CDATA[Boolean.valueOf($P{paymentsList} != null)]]></printWhenExpression>
 				</reportElement>
 				<subreportParameter name="REPORT_LOCALE">
@@ -410,7 +410,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getItemsSubTotal()]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-37" x="468" y="44" width="70" height="13" isRemoveLineWhenBlank="true">
+				<reportElement key="textField-37" positionType="Float" x="468" y="44" width="70" height="13" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[new Boolean($P{shipAdjustmentList} == null && ((Order) $P{order}).getShippingAmount().doubleValue() != 0.0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -425,7 +425,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getShippingAmount()]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-38" x="468" y="70" width="70" height="13" isRemoveLineWhenBlank="true">
+				<reportElement key="textField-38" positionType="Float" x="468" y="70" width="70" height="13" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[new Boolean($P{otherAdjustmentList} == null && ((Order) $P{order}).getOtherAdjustmentsAmount().doubleValue() != 0.0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -440,7 +440,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getOtherAdjustmentsAmount()]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-39" x="328" y="44" width="140" height="13" isRemoveLineWhenBlank="true">
+				<reportElement key="textField-39" positionType="Float" x="328" y="44" width="140" height="13" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[new Boolean($P{shipAdjustmentList} == null && ((Order) $P{order}).getShippingAmount().doubleValue() != 0.0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -455,7 +455,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderTotalShippingAndHandling}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-40" x="328" y="70" width="140" height="13" isRemoveLineWhenBlank="true">
+				<reportElement key="textField-40" positionType="Float" x="328" y="70" width="140" height="13" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[new Boolean($P{otherAdjustmentList} == null && ((Order) $P{order}).getOtherAdjustmentsAmount().doubleValue() != 0.0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -515,7 +515,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getTaxAmount()]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-44" x="468" y="83" width="70" height="13" isRemoveLineWhenBlank="true">
+				<reportElement key="textField-44" positionType="Float" x="468" y="83" width="70" height="22" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getTotal().doubleValue() != 0.0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -530,7 +530,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getTotal()]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-45" x="328" y="83" width="140" height="13" isRemoveLineWhenBlank="true">
+				<reportElement key="textField-45" positionType="Float" x="328" y="83" width="140" height="22" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getTotal().doubleValue() != 0.0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -545,7 +545,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderTotalDue}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="staticText-1" x="128" y="225" width="278" height="13">
+				<reportElement key="staticText-1" positionType="Float" x="0" y="178" width="541" height="29">
 					<printWhenExpression><![CDATA[((Order)$P{order}).isSalesOrder()]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -554,13 +554,13 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="10" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[THANK YOU FOR YOUR PATRONAGE!]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement key="textField-46" x="0" y="152" width="288" height="13" isRemoveLineWhenBlank="true">
+				<reportElement key="textField-46" positionType="Float" x="0" y="118" width="328" height="22" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[Boolean.valueOf($P{paymentsList} == null)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -569,13 +569,13 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement verticalAlignment="Bottom">
 					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsPaymentsReceived} + ":"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement key="textField-47" x="468" y="152" width="70" height="13" isRemoveLineWhenBlank="true">
+				<reportElement key="textField-47" positionType="Float" x="328" y="118" width="210" height="22" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[Boolean.valueOf($P{paymentsList} == null)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -584,10 +584,25 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonNone}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField-46" positionType="Float" x="0" y="140" width="537" height="16" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[Boolean.valueOf($P{paymentsList} != null)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[ ]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
