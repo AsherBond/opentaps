@@ -33,7 +33,11 @@ import org.opentaps.gwt.common.client.UtilUi;
 public class ModifierOrNumberField extends TextField implements ValuePostProcessedInterface {
 
     private static final String MODULE = ModifierOrNumberField.class.getName();
-    private static final String VAL_REGEX = "^(\\+\\+|--|-|\\+)?[0-9]+(\\.?[0-9]*|%)?$";
+    // this match for example: ++10.5 --10.5 +10% -12%
+    private static final String ALONE_MOD_REGEX = "(\\+\\+|--|-|\\+)?[0-9]+(\\.?[0-9]*|%)?";
+    //  this match for example: -12.5+10.5 7-10.5 130.0+10% 125-12%
+    private static final String NUMBER_AND_MOD_REGEX = "[-+]?[0-9]+(\\.[0-9]+)?([+-][0-9]+(\\.?[0-9]*|%)?)?";
+    private static final String VAL_REGEX = "^(" + ALONE_MOD_REGEX + "|" + NUMBER_AND_MOD_REGEX + ")$";
     private static final String INPUT_REGEX = "[0-9%.+-]+";
 
     /**
@@ -119,12 +123,32 @@ public class ModifierOrNumberField extends TextField implements ValuePostProcess
         }
         UtilUi.logDebug("Parsed old value [" + oldValue  + "] as [" + oldNumber + "]", MODULE, "calculateNewStringValue");
 
+        // check if the price to modify is given too
+        // for this we check the last sign, if it is not the first char of the string then the price was included
+        int signIdx = Math.max(newValue.lastIndexOf("+"), newValue.lastIndexOf("-"));
+        // ignore it if we found the second sign on a ++ / --
+        if (signIdx == 1 && (newValue.startsWith("++") || newValue.startsWith("--"))) {
+            signIdx = -1;
+        }
+        if (signIdx > 0) {
+            // the included price overrides oldNumber
+            oldNumber = UtilUi.asBigDecimal(newValue.substring(0, signIdx));
+            UtilUi.logDebug("Found price to modify included in [" + newValue + "] is [" + oldNumber + "]", MODULE, "calculateNewStringValue");
+            // if we cannot parse it then the string is invalid, return null
+            if (oldNumber == null) {
+                UtilUi.logError("Could not parse the included price in [" + newValue + "]", MODULE, "calculateNewStringValue");
+                return null;
+            }
+
+            newValue = newValue.substring(signIdx);
+        }
+
         // read the new value, which may be a number or a modifier
         BigDecimal newNumber = null;
         if (!UtilUi.isEmpty(newValue)) {
             newValue = newValue.trim();
             UtilUi.logDebug("Parsing new value [" + newValue + "]", MODULE, "calculateNewStringValue");
-            // check if it is an absolute modifier amount: ++444 --444
+            // check if it is an absolute modifier amount: ++444 --444, this syntax only apply as a standalone modifier
             if (newValue.startsWith("++") || newValue.startsWith("--")) {
                 // validate the rest as number
                 newNumber = UtilUi.asBigDecimal(newValue.substring(2));
@@ -138,6 +162,7 @@ public class ModifierOrNumberField extends TextField implements ValuePostProcess
             } else if (newValue.endsWith("%")) {
                 // this is a percent (relative) modifier amount: +12% -12% 12%
                 newValue = newValue.substring(0, newValue.length() - 1);
+
                 // strip the sign if present
                 if (newValue.startsWith("+") || newValue.startsWith("-")) {
                     // to be user friendly also support ++ / -- prefix here
@@ -149,6 +174,7 @@ public class ModifierOrNumberField extends TextField implements ValuePostProcess
                 } else {
                     newNumber = UtilUi.asBigDecimal(newValue);
                 }
+
                 if (newNumber != null) {
                     if (newValue.startsWith("-")) {
                         newNumber = newNumber.negate();
@@ -158,6 +184,17 @@ public class ModifierOrNumberField extends TextField implements ValuePostProcess
                     // round half even, and to 2 decimals (for a valid price)
                     modifier = oldNumber.multiply(modifier).setScale(2, BigDecimal.ROUND_HALF_EVEN);
                     newNumber = oldNumber.add(modifier);
+                    UtilUi.logDebug("Calculated new value [" + newNumber + "]", MODULE, "calculateNewStringValue");
+                }
+            } else if (signIdx > 0 && (newValue.startsWith("+") || newValue.startsWith("-"))) {
+                // check if it is an absolute modifier amount: +444 -444, this syntax only apply with the price included
+                // validate the rest as number
+                newNumber = UtilUi.asBigDecimal(newValue.substring(1));
+                if (newNumber != null) {
+                    if (newValue.startsWith("-")) {
+                        newNumber = newNumber.negate();
+                    }
+                    newNumber = oldNumber.add(newNumber);
                     UtilUi.logDebug("Calculated new value [" + newNumber + "]", MODULE, "calculateNewStringValue");
                 }
             } else {
