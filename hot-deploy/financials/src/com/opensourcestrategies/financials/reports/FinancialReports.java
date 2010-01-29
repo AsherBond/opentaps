@@ -77,6 +77,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.constants.EnumerationConstants;
 import org.opentaps.base.constants.PaymentMethodTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.GlAccount;
 import org.opentaps.base.entities.SalesInvoiceItemFact;
 import org.opentaps.base.entities.TaxInvoiceItemFact;
 import org.opentaps.common.jndi.DataSourceImpl;
@@ -1542,7 +1543,7 @@ public final class FinancialReports {
             }
 
             if (thruDate.before(fromDate)) {
-                return UtilMessage.createAndLogEventError(request, "Start date of period is greater than the closing date.", MODULE);
+                return UtilMessage.createAndLogEventError(request, "FinancialsError_FromDateAfterThruDate", locale, MODULE);
             }
 
             // fields to select and order by
@@ -1640,6 +1641,122 @@ public final class FinancialReports {
         } catch (GenericEntityException e) {
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         } catch (GenericServiceException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        }
+
+        return reportType;
+    }
+
+    /**
+     * Prepare data source and parameters for payment receipts detail report.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the event response, either "pdf" or "xls" string to select report type, or "error".
+     */
+    public static String preparePaymentReceiptsDetailReport(HttpServletRequest request, HttpServletResponse response) {
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
+        Locale locale = UtilCommon.getLocale(request);
+        Map<String, Object> jrParameters = FastMap.<String, Object>newInstance();
+
+        String reportType = UtilCommon.getParameter(request, "type");
+
+        try {
+
+            String dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+
+            // get the from and thru date timestamps
+            String fromDateString = UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
+            String thruDateString = UtilHttp.makeParamValueFromComposite(request, "thruDate", locale);
+
+            // don't do anything if dates invalid
+            if (fromDateString == null || thruDateString == null) {
+                return UtilMessage.createAndLogEventError(request, "Either From Date or Thru Date is empty.", MODULE);
+            }
+            Timestamp fromDate = null;
+            Timestamp thruDate = null;
+            try {
+                fromDate = UtilDateTime.stringToTimeStamp(fromDateString.trim(), dateTimeFormat, timeZone, locale);
+                thruDate = UtilDateTime.stringToTimeStamp(thruDateString.trim(), dateTimeFormat, timeZone, locale);
+            } catch (ParseException e) {
+                return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+            }
+
+            if (thruDate.before(fromDate)) {
+                return UtilMessage.createAndLogEventError(request, "FinancialsError_FromDateAfterThruDate", locale, MODULE);
+            }
+
+            // the glAccountId to select for
+            String glAccountId = UtilCommon.getParameter(request, "glAccountId");
+            if (UtilValidate.isEmpty(glAccountId)) {
+                return UtilMessage.createAndLogEventError(request, "Please specify a GL account.", MODULE);
+            }
+
+            boolean showInvoiceLevelDetail = 
+                "Y".equals(UtilCommon.getParameter(request, "showInvoiceLevelDetail")) ? true : false;
+
+            // Since these are receipts, the partyIdTo of the payment should be the organization
+            String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
+
+            List<EntityCondition> conditionList = UtilMisc.<EntityCondition>toList(
+                    EntityCondition.makeCondition("glAccountId", glAccountId),
+                    EntityCondition.makeCondition("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+                    EntityCondition.makeCondition("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate),
+                    EntityCondition.makeCondition("debitCreditFlag", "D"), // note that only ATE debits must be selected
+                    EntityCondition.makeCondition("partyIdTo", organizationPartyId)
+            );
+
+            GenericValue paymentMethodType = null;
+            String paymentMethodTypeId = UtilCommon.getParameter(request, "paymentMethodTypeId");
+            if( UtilValidate.isNotEmpty(paymentMethodTypeId)) {
+                conditionList.add(EntityCondition.makeCondition("paymentMethodTypeId", paymentMethodTypeId));
+                paymentMethodType = delegator.findByPrimaryKey("PaymentMethodType", UtilMisc.toMap("paymentMethodTypeId", paymentMethodTypeId));
+            }
+
+            // determine whether the invoice level needs to be shown.  A different view entity is used if the invoice level detail is required
+            List<String> fieldsToSelect =
+                UtilMisc.<String>toList("transactionDate", "paymentId", "paymentMethodTypeId", "partyIdFrom", "amount", "currencyUomId");
+            fieldsToSelect.add("paymentRefNum");
+            String entityName = "PaymentReceiptsDetail";
+            if (showInvoiceLevelDetail) {
+                fieldsToSelect.add("invoiceId");
+                fieldsToSelect.add("amountApplied");
+                entityName = "PaymentReceiptsDetailWithApplication";
+            }
+
+            List<GenericValue> PaymentReceiptsDetail = 
+                delegator.findByCondition(entityName, EntityCondition.makeCondition(conditionList), fieldsToSelect, UtilMisc.toList("transactionDate DESC"));
+            // add extra row data
+            List<Map<String, Object>> reportData = FastList.<Map<String, Object>>newInstance();
+            for (GenericValue value : PaymentReceiptsDetail) {
+                Map<String, Object> reportLine = FastMap.<String, Object>newInstance();
+                reportLine.putAll(value.getAllFields());
+                String payerId = value.getString("partyIdFrom");
+                reportLine.put("partyId", payerId);
+                reportLine.put("partyName", PartyHelper.getPartyName(delegator, payerId, false));
+                if (showInvoiceLevelDetail) {
+                    BigDecimal amountApplied = value.getBigDecimal("amountApplied");
+                    if (amountApplied == null) {
+                        amountApplied = value.getBigDecimal("amount");
+                    }
+                    if (amountApplied != null) {
+                        reportLine.put("amount", value.get("amountApplied"));
+                    }
+                }
+                reportData.add(reportLine);
+            }
+
+            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(reportData));
+
+            jrParameters.put("fromDate", fromDate);
+            jrParameters.put("thruDate", thruDate);
+            jrParameters.put("glAccountId", glAccountId);
+            jrParameters.put("organizationPartyId", organizationPartyId);
+            jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, organizationPartyId, false));
+            jrParameters.put("paymentMethod", paymentMethodType.getString("description"));
+            request.setAttribute("jrParameters", jrParameters);
+
+        } catch (GenericEntityException e) {
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         }
 

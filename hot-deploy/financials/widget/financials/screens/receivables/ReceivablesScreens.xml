@@ -201,6 +201,8 @@
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="returnPage" value="receivables"/>
                 <set field="returnLabel" value="FinancialsReturnToReceivables"/>
+                <set field="screenRequest" value="PaymentReceiptsDetail"/>
+                <set field="reportRequest" value="JRPaymentReceiptsDetail"/>
                 <entity-condition entity-name="PaymentMethodType" list="paymentMethodTypes" use-cache="true" >
                     <condition-expr field-name="paymentMethodTypeId" operator="not-equals" value=""/>
                     <order-by field-name="description"/>

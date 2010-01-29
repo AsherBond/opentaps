@@ -238,6 +238,22 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="PaymentReceiptsDetail"/>
     </request-map>
+    <request-map uri="JRPaymentReceiptsDetail">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="preparePaymentReceiptsDetailReport"/>
+        <response name="pdf" type="view" value="JRPaymentReceiptsDetailPDF"/>
+        <response name="xls" type="view" value="JRPaymentReceiptsDetailXLS"/>
+        <response name="error" type="request-redirect-noparam" value="PaymentReceiptsDetail"/>
+    </request-map>
+    <request-map uri="JRPaymentReceiptsDetailPDF">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRPaymentReceiptsDetailPDF"/>
+    </request-map>
+    <request-map uri="JRPaymentReceiptsDetailtXLS">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRPaymentReceiptsDetailXLS"/>
+    </request-map>
+
     <request-map uri="assessFinanceChargesForm">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="assessFinanceChargesForm"/>
@@ -2030,6 +2046,8 @@
     <view-map name="JRAverageDSOReportXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/averageDSO.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
     <view-map name="JRCreditCardReportPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/creditCardSettlements.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRCreditCardReportXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/creditCardSettlements.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRPaymentReceiptsDetailPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/PaymentReceiptsDetail.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRPaymentReceiptsDetailXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/PaymentReceiptsDetail.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
 
     <!-- transactions -->
     <view-map name="viewAcctgTrans" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTrans"/>

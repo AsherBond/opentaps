@@ -1,5 +1,5 @@
 <#--
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -17,10 +17,13 @@
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <#assign now = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>
 <#assign defaultFromDate = Static["org.ofbiz.base.util.UtilDateTime"].getDayStart(now, timeZone, locale)>
 <#assign defaultThruDate = Static["org.ofbiz.base.util.UtilDateTime"].getDayEnd(now, timeZone, locale)>
+
+<@commonReportJs formName="paymentReceiptsDetailForm" />
 
 <form method="POST" name="paymentReceiptsDetailForm" action="">
   <div style="margin-left: 30px; margin-top: 5px;">
@@ -32,7 +35,7 @@
     <@inputDateTime name="thruDate" default=requestParameters.thruDate?default(defaultThruDate)/>
   </div>
   <div style="margin-left: 30px; margin-top: 10px;">
-    <span class="tableheadtext">Gl Account</span> 
+    <span class="tableheadtext">${uiLabelMap.FinancialsGlAccount}</span> 
     <select name="glAccountId" class="inputBox" size="1">
       <#list glAccounts as glAccount>
       <#if glAccount.glAccountId == requestParameters.glAccountId?default(defaultGlAccountId)><#assign selected = "selected"><#else><#assign selected = ""></#if>
@@ -56,8 +59,8 @@
       <option value="Y" ${("Y" == requestParameters.showInvoiceLevelDetail?default("N"))?string("selected=\"selected\"","")}>${uiLabelMap.CommonY}</option>
     </select>
   </div>
-  <div style="margin-left: 30px; margin-top: 10px;">
-    <input type="Submit" class="smallSubmit" name="submitButton" value="${uiLabelMap.CommonRun}"></input>
+  <div style="margin-top: 10px;">
+    <@submitReportOptions reportRequest=reportRequest! screenRequest=screenRequest! returnPage=returnPage! returnLabel=returnLabel!/>
   </div>  
 </form>
 
@@ -90,14 +93,14 @@ table.salesAndInventoryReport td {
 <table class="salesAndInventoryReport">
   <tr>
     <td class="tableheadtext">${uiLabelMap.FinancialsTransactionDate}</td>
-    <td class="tableheadtext">Payment Id</td>
+    <td class="tableheadtext">${uiLabelMap.FinancialsPaymentId}</td>
     <td class="tableheadtext">${uiLabelMap.FinancialsCustomer}</td>
     <#if showInvoiceLevelDetail>
-        <td class="tableheadtext">Invoice Id</td>
+        <td class="tableheadtext">${uiLabelMap.FinancialsInvoiceId}</td>
     </#if>
     <td class="tableheadtext">${uiLabelMap.AccountingReferenceNumber}</td>
     <td class="tableheadtext">${uiLabelMap.AccountingAmount}</td>
-    <td class="tableheadtext" width="1%">Cash</td>
+    <td class="tableheadtext" width="1%">${uiLabelMap.FinancialsCash}</td>
   </tr>
 
 <#assign counter = 0>
@@ -150,17 +153,17 @@ table.salesAndInventoryReport td {
 
 <#-- Totals -->
   <tr>
-    <td class="tableheadtext" colspan="${showInvoiceLevelDetail?string("5","4")}" align="right">Total Cash</td>
+    <td class="tableheadtext" colspan="${showInvoiceLevelDetail?string("5","4")}" align="right">${uiLabelMap.FinancialsTotalCash}</td>
     <td class="tableheadtext" align="right"><@ofbizCurrency amount=totalCash isoCode=parameters.orgCurrencyUomId/></td>
     <td></td>
   </tr>
   <tr>
-    <td class="tableheadtext" colspan="${showInvoiceLevelDetail?string("5","4")}" align="right">Total Non Cash</td>
+    <td class="tableheadtext" colspan="${showInvoiceLevelDetail?string("5","4")}" align="right">${uiLabelMap.FinancialsTotalNonCash}</td>
     <td class="tableheadtext" align="right"><@ofbizCurrency amount=total isoCode=parameters.orgCurrencyUomId/></td>
     <td></td>
   </tr>
   <tr>
-    <td class="tableheadtext" colspan="${showInvoiceLevelDetail?string("5","4")}" align="right">Total All Receipts</td>
+    <td class="tableheadtext" colspan="${showInvoiceLevelDetail?string("5","4")}" align="right">${uiLabelMap.FinancialsTotalAllReceipts}</td>
     <td class="tableheadtext" align="right"><@ofbizCurrency amount=(total+totalCash) isoCode=parameters.orgCurrencyUomId/></td>
     <td></td>
   </tr>
