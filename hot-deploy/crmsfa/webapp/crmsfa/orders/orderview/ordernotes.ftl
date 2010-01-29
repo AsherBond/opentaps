@@ -45,6 +45,7 @@ under the License.
   </#if>
 </#assign>
 
+<@form name="changeInternalNoteAction" url="updateOrderNote" orderId=order.orderId internalNote="" noteId=""/>
 <@frameSection title=uiLabelMap.OrderNotes extra=extraOptions>
   <#if order.notes?has_content>
     <table width="100%" border="0" cellpadding="1">
@@ -64,11 +65,11 @@ under the License.
           <td align="right" valign="top" width="15%">
             <#if note.internalNote?if_exists == "N">
 	      <div class="tabletext">${uiLabelMap.OrderPrintableNote}</div>
-              <a href="<@ofbizUrl>updateOrderNote?orderId=${orderId}&noteId=${note.noteId}&internalNote=Y</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderNotesPrivate}</a>
+              <@submitFormLink form="changeInternalNoteAction" text=uiLabelMap.OrderNotesPrivate noteId=note.noteId internalNote="Y" />
             </#if>    
             <#if note.internalNote?if_exists == "Y">
 	      <div class="tabletext">${uiLabelMap.OrderNotPrintableNote}</div>
-              <a href="<@ofbizUrl>updateOrderNote?orderId=${orderId}&noteId=${note.noteId}&internalNote=N</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderNotesPublic}</a>
+              <@submitFormLink form="changeInternalNoteAction" text=uiLabelMap.OrderNotesPublic noteId=note.noteId internalNote="N" />
             </#if>    
           </td>
         </tr>
