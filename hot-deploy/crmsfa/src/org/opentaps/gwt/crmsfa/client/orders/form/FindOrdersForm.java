@@ -148,8 +148,8 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
         columnOnePanel.addField(orderIdInput);
         columnTwoPanel.addField(externalIdInput);
 
-        columnOnePanel.addField(orderNameInput);
-        columnTwoPanel.add(UtilUi.makeBlankFormCell());
+        columnOnePanel.addField(correspondingPoIdInput);
+        columnTwoPanel.addField(orderNameInput);
 
         columnOnePanel.addField(customerInput);
         columnTwoPanel.addField(productStoreInput);
@@ -157,19 +157,16 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
         columnOnePanel.addField(orderStatusInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
-        columnOnePanel.addField(correspondingPoIdInput);
+        columnOnePanel.addField(productInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
+
+        columnOnePanel.addField(lotInput);
+        columnTwoPanel.addField(serialNumberInput);
 
         columnOnePanel.addField(fromDateInput);
         columnTwoPanel.addField(thruDateInput);
 
         columnOnePanel.addField(createdByInput);
-        columnTwoPanel.add(UtilUi.makeBlankFormCell());
-
-        columnOnePanel.addField(lotInput);
-        columnTwoPanel.addField(serialNumberInput);
-        
-        columnOnePanel.addField(productInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
         columnOnePanel.addField(findAllInput);
