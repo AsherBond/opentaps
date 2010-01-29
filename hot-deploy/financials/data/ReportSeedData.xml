@@ -32,4 +32,7 @@
     <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="BDGT_ACTLEXP_GLACCT" sequenceNum="10"/>
     <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="BDGT_ACTLEXP_ACCTP" sequenceNum="15"/>
 
+    <ReportGroup reportGroupId="FIN_RECEIVABLES" showInSelect="N" description="Financials Receivables Reports" application="financials" sequenceNum="2"/>
+    <ReportGroup reportGroupId="FIN_PAYABLES" showInSelect="N" description="Financials Payables Reports" application="financials" sequenceNum="3"/>
+
 </entity-engine-xml>

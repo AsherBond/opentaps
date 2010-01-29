@@ -68,12 +68,18 @@
 </ul>
 </p>
 <p class="tableheadtext">${uiLabelMap.AccountingReports}
-<ul class="bulletList">
-<li class="tabletext"><a href="<@ofbizUrl>payablesBalancesReport</@ofbizUrl>">${uiLabelMap.FinancialsPayablesBalancesReport}</a>
-<li class="tabletext"><a href="<@ofbizUrl>vendorStatement</@ofbizUrl>">${uiLabelMap.FinancialsVendorStatement}</a>
-<li class="tabletext"><a href="<@ofbizUrl>payablesAgingReport</@ofbizUrl>">${uiLabelMap.FinancialsPayablesAgingReport}</a>
-<li class="tabletext"><a href="<@ofbizUrl>AverageDSOReportPayables</@ofbizUrl>">${uiLabelMap.FinancialsAverageDSOReportPayables}</a>
-<li class="tabletext"><a href="<@ofbizUrl>CommissionReport</@ofbizUrl>">${uiLabelMap.FinancialsCommissionReport}</a>
-</ul>
+  <ul class="bulletList">
+    <li class="tabletext"><a href="<@ofbizUrl>payablesBalancesReport</@ofbizUrl>">${uiLabelMap.FinancialsPayablesBalancesReport}</a></li>
+    <li class="tabletext"><a href="<@ofbizUrl>vendorStatement</@ofbizUrl>">${uiLabelMap.FinancialsVendorStatement}</a></li>
+    <li class="tabletext"><a href="<@ofbizUrl>payablesAgingReport</@ofbizUrl>">${uiLabelMap.FinancialsPayablesAgingReport}</a></li>
+    <li class="tabletext"><a href="<@ofbizUrl>AverageDSOReportPayables</@ofbizUrl>">${uiLabelMap.FinancialsAverageDSOReportPayables}</a></li>
+    <li class="tabletext"><a href="<@ofbizUrl>CommissionReport</@ofbizUrl>">${uiLabelMap.FinancialsCommissionReport}</a></li>
+    <#assign reportGroupedList = Static["org.opentaps.common.reporting.UtilReports"].getManagedReports(parameters.componentName, "FIN_PAYABLES", delegator, Static["org.ofbiz.base.util.UtilHttp"].getLocale(request))?default([])/>
+    <#list reportGroupedList as reportGroup>
+      <#list reportGroup.reports as report>
+        <li class="tabletext"><a href="<@ofbizUrl>setupReport?reportId=${report.reportId}</@ofbizUrl>">${report.shortName}</a></li>
+      </#list>
+    </#list>
+  </ul>
 </p>
 </div>

@@ -83,12 +83,18 @@
 
   <p class="tableheadtext">${uiLabelMap.AccountingReports}
     <ul class="bulletList">
-      <li class="tabletext"><a href="<@ofbizUrl>receivablesBalancesReport</@ofbizUrl>">${uiLabelMap.FinancialsReceivablesBalancesReport}</a>
-      <li class="tabletext"><a href="<@ofbizUrl>customerStatement</@ofbizUrl>">${uiLabelMap.FinancialsCustomerStatement}</a>
-      <li class="tabletext"><a href="<@ofbizUrl>receivablesAgingReport</@ofbizUrl>">${uiLabelMap.FinancialsReceivablesAgingReport}</a>
-      <li class="tabletext"><a href="<@ofbizUrl>AverageDSOReportReceivables</@ofbizUrl>">${uiLabelMap.FinancialsAverageDSOReportReceivables}</a>
+      <li class="tabletext"><a href="<@ofbizUrl>receivablesBalancesReport</@ofbizUrl>">${uiLabelMap.FinancialsReceivablesBalancesReport}</a></li>
+      <li class="tabletext"><a href="<@ofbizUrl>customerStatement</@ofbizUrl>">${uiLabelMap.FinancialsCustomerStatement}</a></li>
+      <li class="tabletext"><a href="<@ofbizUrl>receivablesAgingReport</@ofbizUrl>">${uiLabelMap.FinancialsReceivablesAgingReport}</a></li>
+      <li class="tabletext"><a href="<@ofbizUrl>AverageDSOReportReceivables</@ofbizUrl>">${uiLabelMap.FinancialsAverageDSOReportReceivables}</a></li>
       <li class="tabletext"><a href="<@ofbizUrl>CreditCardReport</@ofbizUrl>">${uiLabelMap.FinancialsCreditCardReport}</a></li>  
-      <li class="tabletext"><a href="<@ofbizUrl>PaymentReceiptsDetail</@ofbizUrl>">${uiLabelMap.FinancialsPaymentReceiptsDetail}</a>
+      <li class="tabletext"><a href="<@ofbizUrl>PaymentReceiptsDetail</@ofbizUrl>">${uiLabelMap.FinancialsPaymentReceiptsDetail}</a></li>
+      <#assign reportGroupedList = Static["org.opentaps.common.reporting.UtilReports"].getManagedReports(parameters.componentName, "FIN_RECEIVABLES", delegator, Static["org.ofbiz.base.util.UtilHttp"].getLocale(request))?default([])/>
+      <#list reportGroupedList as reportGroup>
+        <#list reportGroup.reports as report>
+          <li class="tabletext"><a href="<@ofbizUrl>setupReport?reportId=${report.reportId}</@ofbizUrl>">${report.shortName}</a></li>
+        </#list>
+      </#list>
     </ul>
   </p>
 
