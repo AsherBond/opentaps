@@ -1598,6 +1598,9 @@ public final class FinancialReports {
 
                 // convert current results
                 BigDecimal amount = sum.getBigDecimal("amount");
+                if (amount == null) {
+                    amount = BigDecimal.ZERO;
+                }
                 String currencyUomId = sum.getString("currencyUomId");
                 Timestamp asOf = sum.getTimestamp("effectiveDate");
                 BigDecimal amountConverted;
@@ -1608,11 +1611,30 @@ public final class FinancialReports {
                 sumReport.put(creditCardType, reportLine);
             }
 
-            // store the cardType-sorted sum report results 
-            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(sumReport.values()));
+            // the detail report needs to use getRelatedOne in the ftl to get the CreditCard details, especially cardNumber since it cannot be decrypted in a view entity
+            List<Map<String, Object>> details = FastList.<Map<String, Object>>newInstance();
+            for (GenericValue detailValue : detailResults) {
+                Map<String, Object> detailsLine = FastMap.<String, Object>newInstance();
+                detailsLine.putAll(detailValue.getAllFields());
+                if (UtilValidate.isNotEmpty(detailValue.get("paymentMethodId"))) {
+                    GenericValue cc = detailValue.getRelatedOne("CreditCard");
+                    if (cc != null) {
+                        detailsLine.put("cardNumber", cc.get("cardNumber"));
+                        detailsLine.put("cardType", cc.get("cardType"));
+                        detailsLine.put("expireDate", cc.get("expireDate"));
+                    }
+                }
 
-            // the detail report needs to use getRelatedOne in the ftl to get the CreditCard details, especially cardNumber since it cannot be unencrypted in a view entity
-            jrParameters.put("detailReport", new JRMapCollectionDataSource(detailResults));
+                details.add(detailsLine);
+            }
+            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(details));
+
+            // store the cardType-sorted sum report results 
+            jrParameters.put("summaryReport", new JRMapCollectionDataSource(sumReport.values()));
+            jrParameters.put("fromDate", fromDate);
+            jrParameters.put("thruDate", thruDate);
+            jrParameters.put("organizationPartyId", organizationPartyId);
+            jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, organizationPartyId, false));
             request.setAttribute("jrParameters", jrParameters);
 
         } catch (GenericEntityException e) {
