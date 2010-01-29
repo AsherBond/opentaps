@@ -220,5 +220,14 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @param groupName the groupName to find
      * @throws RepositoryException if an error occurs
      */
-    public Set<PartyGroup> getPartyGroupByGroupName(String groupName) throws RepositoryException;    
+    public Set<PartyGroup> getPartyGroupByGroupName(String groupName) throws RepositoryException;
+    
+    /**
+     * Finds the list of <code>PartyGroup</code> matching the given group name and roleTypeId.
+     * @return the list of <code>PartyGroup</code> matching the name
+     * @param groupName the groupName to find
+     * @param roleTypeId the roleType Id to find
+     * @throws RepositoryException if an error occurs
+     */
+    public Set<PartyGroup> getPartyGroupByGroupNameAndRoleType(String groupName, String roleTypeId) throws RepositoryException; 
 }

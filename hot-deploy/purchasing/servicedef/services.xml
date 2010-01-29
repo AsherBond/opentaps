@@ -47,6 +47,8 @@
         <attribute name="generalPostalCode" type="String" mode="IN" optional="true"/>
         <attribute name="generalCountryGeoId" type="String" mode="IN" optional="true"/>
         <attribute name="partyId" type="String" mode="OUT" optional="true"/>
+        <attribute name="forceComplete" type="String" mode="IN" optional="true"/>
+        <attribute name="duplicateSuppliersWithName" type="Set" mode="OUT" optional="true"/>
     </service>
 
     <service name="purchasing.createSupplierNote" engine="java" location="org.opentaps.purchasing.common.NoteServices" invoke="createSupplierNote">

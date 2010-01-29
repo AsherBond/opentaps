@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.purchasing.supplier.SupplierServices
  * Invoke: createSupplier
- * Defined in: hot-deploy/purchasing/servicedef/services.xml
+ * Defined in: /D:/eclipse/workspace/opentaps-1.4/hot-deploy/purchasing/servicedef/services.xml
  */
 public class PurchasingCreateSupplierService extends ServiceWrapper {
 
@@ -56,6 +56,7 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
     /** The enumeration of input parameters. */
     public static enum In {
         federalTaxId("federalTaxId"),
+        forceComplete("forceComplete"),
         generalAddress1("generalAddress1"),
         generalAddress2("generalAddress2"),
         generalAttnName("generalAttnName"),
@@ -87,6 +88,7 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
     }
 
     public static enum Out {
+        duplicateSuppliersWithName("duplicateSuppliersWithName"),
         errorMessage("errorMessage"),
         errorMessageList("errorMessageList"),
         locale("locale"),
@@ -110,6 +112,7 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
 
 
     private String inFederalTaxId;
+    private String inForceComplete;
     private String inGeneralAddress1;
     private String inGeneralAddress2;
     private String inGeneralAttnName;
@@ -135,6 +138,7 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
     private String inRequires1099;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
+    private Set outDuplicateSuppliersWithName;
     private String outErrorMessage;
     private List outErrorMessageList;
     private Locale outLocale;
@@ -155,6 +159,14 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
      */
     public String getInFederalTaxId() {
         return this.inFederalTaxId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInForceComplete() {
+        return this.inForceComplete;
     }
     /**
      * Auto generated value accessor.
@@ -359,6 +371,14 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
+     * @return <code>Set</code>
+     */
+    public Set getOutDuplicateSuppliersWithName() {
+        return this.outDuplicateSuppliersWithName;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
      * @return <code>String</code>
      */
     public String getOutErrorMessage() {
@@ -437,6 +457,15 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
     public void setInFederalTaxId(String inFederalTaxId) {
         this.inParameters.add("federalTaxId");
         this.inFederalTaxId = inFederalTaxId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inForceComplete the inForceComplete to set
+    */
+    public void setInForceComplete(String inForceComplete) {
+        this.inParameters.add("forceComplete");
+        this.inForceComplete = inForceComplete;
     }
     /**
      * Auto generated value setter.
@@ -666,6 +695,15 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param outDuplicateSuppliersWithName the outDuplicateSuppliersWithName to set
+    */
+    public void setOutDuplicateSuppliersWithName(Set outDuplicateSuppliersWithName) {
+        this.outParameters.add("duplicateSuppliersWithName");
+        this.outDuplicateSuppliersWithName = outDuplicateSuppliersWithName;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param outErrorMessage the outErrorMessage to set
     */
     public void setOutErrorMessage(String outErrorMessage) {
@@ -769,6 +807,7 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         if (inParameters.contains("federalTaxId")) mapValue.put("federalTaxId", getInFederalTaxId());
+        if (inParameters.contains("forceComplete")) mapValue.put("forceComplete", getInForceComplete());
         if (inParameters.contains("generalAddress1")) mapValue.put("generalAddress1", getInGeneralAddress1());
         if (inParameters.contains("generalAddress2")) mapValue.put("generalAddress2", getInGeneralAddress2());
         if (inParameters.contains("generalAttnName")) mapValue.put("generalAttnName", getInGeneralAttnName());
@@ -802,6 +841,7 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> outputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        if (outParameters.contains("duplicateSuppliersWithName")) mapValue.put("duplicateSuppliersWithName", getOutDuplicateSuppliersWithName());
         if (outParameters.contains("errorMessage")) mapValue.put("errorMessage", getOutErrorMessage());
         if (outParameters.contains("errorMessageList")) mapValue.put("errorMessageList", getOutErrorMessageList());
         if (outParameters.contains("locale")) mapValue.put("locale", getOutLocale());
@@ -817,6 +857,7 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
         if (mapValue.containsKey("federalTaxId")) setInFederalTaxId((String) mapValue.get("federalTaxId"));
+        if (mapValue.containsKey("forceComplete")) setInForceComplete((String) mapValue.get("forceComplete"));
         if (mapValue.containsKey("generalAddress1")) setInGeneralAddress1((String) mapValue.get("generalAddress1"));
         if (mapValue.containsKey("generalAddress2")) setInGeneralAddress2((String) mapValue.get("generalAddress2"));
         if (mapValue.containsKey("generalAttnName")) setInGeneralAttnName((String) mapValue.get("generalAttnName"));
@@ -846,6 +887,7 @@ public class PurchasingCreateSupplierService extends ServiceWrapper {
 
     /** {@inheritDoc} */
     public void putAllOutput(Map<String, Object> mapValue) {
+        if (mapValue.containsKey("duplicateSuppliersWithName")) setOutDuplicateSuppliersWithName((Set) mapValue.get("duplicateSuppliersWithName"));
         if (mapValue.containsKey("errorMessage")) setOutErrorMessage((String) mapValue.get("errorMessage"));
         if (mapValue.containsKey("errorMessageList")) setOutErrorMessageList((List) mapValue.get("errorMessageList"));
         if (mapValue.containsKey("locale")) setOutLocale((Locale) mapValue.get("locale"));

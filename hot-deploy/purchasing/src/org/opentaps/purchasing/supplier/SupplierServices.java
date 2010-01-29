@@ -16,7 +16,12 @@
  */
 package org.opentaps.purchasing.supplier;
 
-import org.ofbiz.base.util.Debug;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -24,15 +29,21 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
-import org.ofbiz.service.*;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ModelService;
+import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.party.PartyDomainInterface;
+import org.opentaps.domain.party.PartyRepositoryInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.purchasing.security.PurchasingSecurity;
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Locale;
-import java.util.Map;
 
 public class SupplierServices {
 
@@ -88,9 +99,25 @@ public class SupplierServices {
         String supplierPartyId = (String) context.get("partyId");
 
         Locale locale = UtilCommon.getLocale(context);
-
+        String groupName = (String) context.get("groupName");
+        // the field that flag if force complete to create contact even existing same name already
+        String forceComplete = context.get("forceComplete") == null ? "N" : (String) context.get("forceComplete");
         Map result = ServiceUtil.returnSuccess();
         try {
+         // verify account name is use already
+            if (!"Y".equals(forceComplete)) {
+                DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+                PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
+                PartyRepositoryInterface repo = partyDomain.getPartyRepository();
+                Set<PartyGroup> duplicateSuppliersWithName = repo.getPartyGroupByGroupNameAndRoleType(groupName, "SUPPLIER");
+                // if existing the account which have same account name, then return the conflict account and error message
+                if (duplicateSuppliersWithName.size() > 0 && !"Y".equals(forceComplete)) {
+                    PartyGroup partyGroup = duplicateSuppliersWithName.iterator().next();
+                    Map results = ServiceUtil.returnError(UtilMessage.expandLabel("PurchCreateSupplierDuplicateCheckFail", UtilMisc.toMap("partyId", partyGroup.getPartyId()), locale));
+                    results.put("duplicateSuppliersWithName", duplicateSuppliersWithName);
+                    return results;
+                }
+            }
             ModelService createPartyGroup = dctx.getModelService("createPartyGroup");
             Map input = createPartyGroup.makeValid(context, "IN");
             Map serviceResults = dispatcher.runSync("createPartyGroup", input);
@@ -190,6 +217,8 @@ public class SupplierServices {
 
 
         } catch (GenericServiceException e) {
+            return UtilMessage.createAndLogServiceError(e, "PurchError_CreateSupplierFail", locale, module);
+        } catch (RepositoryException e) {
             return UtilMessage.createAndLogServiceError(e, "PurchError_CreateSupplierFail", locale, module);
         }
 

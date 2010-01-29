@@ -25,6 +25,12 @@
   <tr><td colspan="4" class="formSectionHeaderTitle">${uiLabelMap.PurchSupplierDetails}</td></tr>
   <@inputTextRow name="partyId" title=uiLabelMap.PartyPartyId size=20 maxlength=20 />
   <@inputTextRow name="groupName" title=uiLabelMap.PurchSupplierName titleClass="requiredField" />
+  <#if requestAttributes.duplicateSuppliersWithName?has_content>
+    <tr>
+      <td/>
+      <td colspan="3"><span class="errorMessage">${uiLabelMap.PurchSuppliersWithDuplicateName}:</span> <#list requestAttributes.duplicateSuppliersWithName as dup><@displayPartyLink partyId=dup.partyId /><#if dup_has_next>, </#if></#list></td>
+    </tr>
+  </#if>  
   <@inputTextRow name="federalTaxId" title=uiLabelMap.OpentapsTaxAuthPartyId />
   <@inputIndicatorRow name="requires1099" title=uiLabelMap.OpentapsRequires1099 />
   <@inputIndicatorRow name="isIncorporated" title=uiLabelMap.OpentapsIsIncorporated />
@@ -83,7 +89,22 @@
     <td><@inputCountry stateInputName="generalStateProvinceGeoId" name="generalCountryGeoId" /></td>
   </tr>
 
+  <@inputHidden name="forceComplete" value="N"/>
+  <#if requestAttributes.duplicateSuppliersWithName?exists>
+  <tr> 
+  <td >&nbsp;</td>
+  
+  <td colspan=2>
+    <@inputSubmit title=uiLabelMap.PurchCreateSupplier />
+    &nbsp;
+    <@submitFormLinkConfirm form="createSupplierParty" text=uiLabelMap.PurchCreateSupplierIgnoreDuplicate forceComplete="Y"/>
+  </td>
+  </tr>
+  <#else>
   <@inputSubmitRow title=uiLabelMap.PurchCreateSupplier />
+  </#if>
+
+
 </table>
 
 </form>
