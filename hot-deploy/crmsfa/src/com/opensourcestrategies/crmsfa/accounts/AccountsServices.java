@@ -124,7 +124,7 @@ public final class AccountsServices {
                 DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
                 PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
                 PartyRepositoryInterface repo = partyDomain.getPartyRepository();
-                Set<PartyGroup> duplicateAccountsWithName = repo.getPartyGroupByGroupName(accountName);
+                Set<PartyGroup> duplicateAccountsWithName = repo.getPartyGroupByGroupNameAndRoleType(accountName, "ACCOUNT");
                 // if existing the account which have same account name, then return the conflict account and error message
                 if (duplicateAccountsWithName.size() > 0 && !"Y".equals(forceComplete)) {
                     PartyGroup partyGroup = duplicateAccountsWithName.iterator().next();
