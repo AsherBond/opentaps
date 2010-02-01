@@ -22,6 +22,7 @@
   <!-- ================================================================== -->
 
   <property name="hot-deploy.dir" value="${basedir}/hot-deploy"/>
+  <property name="framework.dir" value="${basedir}/framework"/>
 
   <!-- ================================================================== -->
   <!-- copy the hot-deploy libs into the ear directory                    -->
@@ -70,7 +71,34 @@
   <!-- package the hot-deploy config jars in the ear directory            -->
   <!-- ================================================================== -->
 
+  <!-- for the hibernate configuration, we need to manually regenerate the cfg.xml -->
+  <target name="prepare-hibernate-config">
+    <move file="${framework.dir}/entity/config/entityengine.xml" tofile="${framework.dir}/entity/config/_entityengine.xml.bak"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/entityengine-jboss510.xml" tofile="${framework.dir}/entity/config/entityengine.xml"/>
+    <!-- generated config -->
+    <subant inheritall="true" target="refresh-hibernatecfg">
+      <filelist dir="${basedir}" files="build.xml"/>
+    </subant>
+    <!-- the location of the lucene index is hard coded in the config so it needs to point to JBOSS -->
+    <replaceregexp file="${hot-deploy.dir}/opentaps-common/config/mysql.cfg.xml"
+                   match="hibernate.search.default.indexBase&quot;&gt;.*/runtime/lucene/indexes&lt;/property&gt;"
+                   replace="hibernate.search.default.indexBase&quot;&gt;${jboss.deploy.dir}/${app.name}/runtime/lucene/indexes&lt;/property&gt;"/>
+    <!-- restore the entityengine configuration -->
+    <move file="${framework.dir}/entity/config/entityengine.xml" tofile="${framework.dir}/entity/config/entityengine-jboss510.xml"/>
+    <move file="${framework.dir}/entity/config/_entityengine.xml.bak" tofile="${framework.dir}/entity/config/entityengine.xml"/>
+    <!-- copy the existing indexes in the directory to deploy -->
+    <mkdir dir="${ear.dir}/runtime/lucene/indexes"/>
+    <copy todir="${ear.dir}/runtime/lucene/indexes">
+      <fileset dir="${basedir}/runtime/lucene/indexes"/>
+    </copy>
+    <!-- now we need to rebuild .. refresh-hibernatecfg may have cleaned the opentaps build -->
+    <subant inheritall="true" target="build">
+      <filelist dir="${basedir}" files="build.xml"/>
+    </subant>
+  </target>
+
   <target name="package-hot-deploy-config">
+    
     <jar destfile="${ear.lib.dir}/hot-deploy.opentaps-common.scripts.jar">
       <fileset dir="${hot-deploy.dir}/opentaps-common/scripts"/>
     </jar>
@@ -270,6 +298,7 @@
 
     <echo message="[package-hot-deploy-jboss] =========== start =========="/>
 
+    <antcall target="prepare-hibernate-config"/>
     <antcall target="copy-hot-deploy-libs"/>
     <antcall target="package-hot-deploy-config"/>
     <antcall target="package-hot-deploy-webapp"/>
