@@ -71,7 +71,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($P{organizationName} + " (" + $P{organizationPartyId} +")")]]></textFieldExpression>
 			</textField>
-			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+			<textField pattern="MM/dd/yy" isBlankWhenNull="true">
 				<reportElement key="textField-4" x="127" y="48" width="131" height="16"/>
 				<box leftPadding="2">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -84,7 +84,7 @@
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+			<textField pattern="MM/dd/yy" isBlankWhenNull="true">
 				<reportElement key="textField-3" isPrintRepeatedValues="false" x="313" y="48" width="141" height="16"/>
 				<box leftPadding="2">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
