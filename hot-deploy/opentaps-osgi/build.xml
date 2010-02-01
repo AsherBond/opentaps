@@ -65,7 +65,15 @@
             </fileset>
         </subant>
     </target>
-    
+
     <target name="jar" depends="build"/>
+ 
+    <target name="deploy-all" depends="build">
+        <subant target="deploy" inheritall="false">
+            <fileset dir="${bundle.src.dir}" casesensitive="no">
+                <include name="**/build.xml"/>
+            </fileset>
+        </subant>
+    </target>
  
 </project>
