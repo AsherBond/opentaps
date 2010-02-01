@@ -60,10 +60,8 @@
       <fileset dir="${hot-deploy.dir}/search/build/lib/" includes="*.jar"/>
 
       <!-- dataimport -->
-      <!-- <fileset dir="${hot-deploy.dir}/dataimport/build/lib/" includes="*.jar"/> -->
+      <fileset dir="${hot-deploy.dir}/dataimport/build/lib/" includes="*.jar"/>
 
-      <!-- livecatalog -->
-      <!--<fileset dir="${hot-deploy.dir}/livecatalog/build/lib/" includes="*.jar"/>-->
     </copy>
   </target>
 
@@ -147,17 +145,10 @@
       <fileset dir="${hot-deploy.dir}/search/config"/>
     </jar>
 
-    <!-- <jar destfile="${ear.lib.dir}/hot-deploy.dataimport.script.jar"> -->
-    <!--   <fileset dir="${hot-deploy.dir}/dataimport/script"/> -->
-    <!-- </jar> -->
+    <jar destfile="${ear.lib.dir}/hot-deploy.dataimport.config.jar">
+      <fileset dir="${hot-deploy.dir}/dataimport/config"/>
+    </jar>
 
-    <!-- <jar destfile="${ear.lib.dir}/hot-deploy.dataimport.config.jar"> -->
-    <!--   <fileset dir="${hot-deploy.dir}/dataimport/config"/> -->
-    <!-- </jar> -->
-
-    <!--<jar destfile="${ear.lib.dir}/hot-deploy.livecatalog.config.jar">
-        <fileset dir="${hot-deploy.dir}/livecatalog/config"/>
-        </jar>-->
   </target>
 
   <!-- ================================================================== -->
@@ -195,11 +186,6 @@
     <copy todir="${ear.dir}/opentaps_files.war">
       <fileset dir="${hot-deploy.dir}/opentaps-common/webapp/files"/>
     </copy>
-
-    <!--<mkdir dir="${ear.dir}/resources.war"/>
-        <copy todir="${ear.dir}/resources.war">
-        <fileset dir="${hot-deploy.dir}/opentaps-common/webapp/resources"/>
-        </copy>-->
 
     <!-- crmsfa -->
 
@@ -265,20 +251,14 @@
     <copy todir="${ear.dir}/warehousegwt.war">
       <fileset dir="${hot-deploy.dir}/warehouse/webapp/warehousegwt"/>
     </copy>
+
     <!-- dataimport -->
 
-    <!-- <mkdir dir="${ear.dir}/dataimport.war"/> -->
+    <mkdir dir="${ear.dir}/dataimport.war"/>
+    <copy todir="${ear.dir}/dataimport.war">
+      <fileset dir="${hot-deploy.dir}/dataimport/webapp/dataimport"/>
+    </copy>
 
-    <!-- <copy todir="${ear.dir}/dataimport.war"> -->
-    <!--   <fileset dir="${hot-deploy.dir}/dataimport/webapp/dataimport"/> -->
-    <!-- </copy> -->
-
-    <!-- livecatalog -->
-
-    <!--<mkdir dir="${ear.dir}/livecatalog.war"/>
-        <copy todir="${ear.dir}/livecatalog.war">
-        <fileset dir="${hot-deploy.dir}/livecatalog/webapp/livecatalog"/>
-        </copy>-->
   </target>
 
   <!-- ================================================================== -->
