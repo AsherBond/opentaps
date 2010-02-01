@@ -132,6 +132,43 @@
       </web>
     </module>
 
+    <!-- themes web apps -->
+
+    <module>
+      <web>
+        <web-uri>/bizznesstime.war</web-uri>
+        <context-root>/bizznesstime</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/bluelight.war</web-uri>
+        <context-root>/bluelight</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/flatgrey.war</web-uri>
+        <context-root>/flatgrey</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/multiflex.war</web-uri>
+        <context-root>/multiflex</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/smoothfeather.war</web-uri>
+        <context-root>/smoothfeather</context-root>
+      </web>
+    </module>
+
     <!-- opentaps web apps -->
 
     <module>
@@ -164,6 +201,13 @@
 
     <module>
       <web>
+        <web-uri>/commongwt.war</web-uri>
+        <context-root>/commongwt</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
         <web-uri>/resources.war</web-uri>
         <context-root>/resources</context-root>
       </web>
@@ -173,6 +217,13 @@
       <web>
         <web-uri>/crmsfa.war</web-uri>
         <context-root>/crmsfa</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/crmsfagwt.war</web-uri>
+        <context-root>/crmsfagwt</context-root>
       </web>
     </module>
 
@@ -199,6 +250,13 @@
 
     <module>
       <web>
+        <web-uri>/financialsgwt.war</web-uri>
+        <context-root>/financialsgwt</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
         <web-uri>/purchasing.war</web-uri>
         <context-root>/purchasing</context-root>
       </web>
@@ -206,8 +264,22 @@
 
     <module>
       <web>
+        <web-uri>/purchasinggwt.war</web-uri>
+        <context-root>/purchasinggwt</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
         <web-uri>/warehouse.war</web-uri>
         <context-root>/warehouse</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/warehousegwt.war</web-uri>
+        <context-root>/warehousegwt</context-root>
       </web>
     </module>
 

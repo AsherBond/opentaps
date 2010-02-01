@@ -85,6 +85,10 @@
     </subant>
 
     <subant inheritall="true">
+      <filelist dir="." files="themes/build-ear.xml"/>
+    </subant>
+
+    <subant inheritall="true">
       <filelist dir="." files="specialpurpose/build-ear.xml"/>
     </subant>
 

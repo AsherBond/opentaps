@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<project name="ofbiz themes deploymemt" default="package-themes-jboss" basedir=".">
+
+    <!-- ================================================================== -->
+    <!-- set the themes properties                                       -->
+    <!-- ================================================================== -->
+
+    <property name="themes.dir" value="${basedir}/themes"/>
+
+    <!-- ================================================================== -->
+    <!-- package the themes webapps into the ear directory            -->
+    <!-- ================================================================== -->
+	
+    <target name="package-themes-webapp">    	
+
+    	<mkdir dir="${ear.dir}/bluelight.war"/>
+        <copy todir="${ear.dir}/bluelight.war">
+          <fileset dir="${themes.dir}/bluelight/includes"/>
+          <fileset dir="${themes.dir}/bluelight/webapp/bluelight"/>
+        </copy>
+  	
+    	<mkdir dir="${ear.dir}/bizznesstime.war"/>
+        <copy todir="${ear.dir}/bizznesstime.war">
+          <fileset dir="${themes.dir}/bizznesstime/includes"/>
+          <fileset dir="${themes.dir}/bizznesstime/webapp/bizznesstime"/>
+        </copy>
+  	
+    	<mkdir dir="${ear.dir}/flatgrey.war"/>
+        <copy todir="${ear.dir}/flatgrey.war">
+          <fileset dir="${themes.dir}/flatgrey/includes"/>
+          <fileset dir="${themes.dir}/flatgrey/webapp/flatgrey"/>
+        </copy>
+  	
+    	<mkdir dir="${ear.dir}/multiflex.war"/>
+        <copy todir="${ear.dir}/multiflex.war">
+          <fileset dir="${themes.dir}/multiflex/includes"/>
+          <fileset dir="${themes.dir}/multiflex/webapp/multiflex"/>
+        </copy>
+  	
+    	<mkdir dir="${ear.dir}/smoothfeather.war"/>
+        <copy todir="${ear.dir}/smoothfeather.war">
+          <fileset dir="${themes.dir}/smoothfeather/includes"/>
+          <fileset dir="${themes.dir}/smoothfeather/webapp/smoothfeather"/>
+        </copy>
+
+    </target>
+        	
+    <!-- ================================================================== -->
+    <!-- package ofbiz themes                                         -->
+    <!-- ================================================================== -->
+
+    <target name="package-themes-jboss" depends="">
+        <echo message="[package-themes-jboss] =========== start =========="/>
+        <antcall target="package-themes-webapp"/>
+        <echo message="[package-themes-jboss] ============ end ==========="/>
+    </target>
+
+</project>
