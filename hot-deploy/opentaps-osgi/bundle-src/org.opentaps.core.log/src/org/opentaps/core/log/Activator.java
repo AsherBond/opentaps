@@ -14,16 +14,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.osgi.log;
+package org.opentaps.core.log;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogReaderService;
 
 public class Activator implements BundleActivator {
 
+    /** {@inheritDoc} */
     public void start(BundleContext context) throws Exception {
+        ServiceReference ref = context.getServiceReference(LogReaderService.class.getName());
+        if (ref != null)
+        {
+            LogReaderService reader = (LogReaderService) context.getService(ref);
+            reader.addLogListener(new OSGiLogger());
+        }
     }
 
+    /** {@inheritDoc} */
     public void stop(BundleContext context) throws Exception {
     }
 

@@ -58,8 +58,12 @@
             eclipse="false" 
             failok="false" 
             exceptions="true"
-            output="${deploy.dir}"
+            output="./"
             files="${symbolic.name}.bnd"/>
     </target>
-    
+
+    <target name="deploy" depends="build">
+        <copy file="./${symbolic.name}.jar" tofile="${deploy.dir}/${symbolic.name}.jar" overwrite="true" />
+    </target>
+
 </project>

@@ -16,11 +16,11 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<project name="org.opentaps.bundle.demo" default="build" basedir=".">
+<project name="org.opentaps.core.log" default="build" basedir=".">
 
     <target name="init">
         <property environment="env"/>
-        <property name="symbolic.name" value="org.opentaps.osgi.log"/>
+        <property name="symbolic.name" value="org.opentaps.core.log"/>
         <property name="base.dir" value="../../../.."/>
         <property name="src.dir" value="src"/>
         <property name="bin.dir" value="bin"/>
@@ -30,6 +30,7 @@
 
     <target name="classpath" depends="init">
         <path id="local.class.path">
+            <fileset dir="${base.dir}/framework/base/build/lib" includes="*.jar"/>
             <fileset dir="${base.lib.dir}" includes="*.jar"/>
         </path>
     </target>
@@ -52,12 +53,16 @@
     <target name="build" depends="classes">
         <taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="../../lib/bnd.jar"/>
         <bnd 
-            classpath="bin" 
-            eclipse="false" 
-            failok="false" 
+            classpath="bin"
+            eclipse="false"
+            failok="false"
             exceptions="true"
-            output="${deploy.dir}"
+            output="./"
             files="${symbolic.name}.bnd"/>
     </target>
-    
+
+    <target name="deploy" depends="build">
+        <copy file="./${symbolic.name}.jar" tofile="${deploy.dir}/${symbolic.name}.jar" overwrite="true" />
+    </target>
+
 </project>
