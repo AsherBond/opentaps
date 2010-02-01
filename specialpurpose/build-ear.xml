@@ -37,6 +37,8 @@
             <fileset dir="${specialpurpose.dir}/assetmaint/build/lib/" includes="ofbiz-assetmaint.jar"/>           
             <fileset dir="${specialpurpose.dir}/googlebase/build/lib/" includes="ofbiz-googlebase.jar"/>
             <fileset dir="${specialpurpose.dir}/ebay/build/lib/" includes="ofbiz-ebay.jar"/>
+            <fileset dir="${specialpurpose.dir}/ecommerce/build/lib/" includes="ofbiz-ecommerce.jar"/>
+            <fileset dir="${specialpurpose.dir}/webpos/build/lib/" includes="ofbiz-webpos.jar"/>
         </copy>
     </target>
 
@@ -76,6 +78,22 @@
         <jar destfile="${ear.lib.dir}/specialpurpose.ebay.config.jar">
             <fileset dir="${specialpurpose.dir}/ebay/config"/>
         </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.ecommerce.config.jar">
+            <fileset dir="${specialpurpose.dir}/ecommerce/config"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.ecommerce.script.jar">
+            <fileset dir="${specialpurpose.dir}/ecommerce/script"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.webpos.config.jar">
+            <fileset dir="${specialpurpose.dir}/webpos/config"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.webpos.script.jar">
+            <fileset dir="${specialpurpose.dir}/webpos/script"/>
+        </jar>
     </target>
 
     <!-- ================================================================== -->
@@ -83,39 +101,51 @@
     <!-- ================================================================== -->
 
     <target name="package-specialpurpose-webapp">    	
-    	  <!-- hhfacility -->
-    	  <mkdir dir="${ear.dir}/hhfacility.war"/>
-
+    	<!-- hhfacility -->
+        <mkdir dir="${ear.dir}/hhfacility.war"/>
         <copy todir="${ear.dir}/hhfacility.war">
             <fileset dir="${specialpurpose.dir}/hhfacility/webapp/hhfacility"/>
         </copy>
 
         <!-- assetmaint -->
         <mkdir dir="${ear.dir}/assetmaint.war"/>
-
         <copy todir="${ear.dir}/assetmaint.war">
             <fileset dir="${specialpurpose.dir}/assetmaint/webapp/assetmaint"/>
         </copy>
 
         <!-- cmssite -->
         <mkdir dir="${ear.dir}/cmssite.war"/>
-
         <copy todir="${ear.dir}/cmssite.war">
             <fileset dir="${specialpurpose.dir}/cmssite/webapp/cmssite"/>
         </copy>
 
         <!-- googlebase -->
         <mkdir dir="${ear.dir}/googlebase.war"/>
-
         <copy todir="${ear.dir}/googlebase.war">
             <fileset dir="${specialpurpose.dir}/googlebase/webapp/googlebase"/>
         </copy>
 
         <!-- ebay -->
         <mkdir dir="${ear.dir}/ebay.war"/>
-
         <copy todir="${ear.dir}/ebay.war">
             <fileset dir="${specialpurpose.dir}/ebay/webapp/ebay"/>
+        </copy>
+
+        <!-- ecommerce -->
+        <mkdir dir="${ear.dir}/ecommerce.war"/>
+        <copy todir="${ear.dir}/ecommerce.war">
+            <fileset dir="${specialpurpose.dir}/ecommerce/webapp/ecommerce"/>
+        </copy>
+
+        <mkdir dir="${ear.dir}/ecomclone.war"/>
+        <copy todir="${ear.dir}/ecomclone.war">
+            <fileset dir="${specialpurpose.dir}/ecommerce/webapp/ecomclone"/>
+        </copy>
+
+        <!-- webpos -->
+        <mkdir dir="${ear.dir}/webpos.war"/>
+        <copy todir="${ear.dir}/webpos.war">
+            <fileset dir="${specialpurpose.dir}/webpos/webapp/webpos"/>
         </copy>
     </target>
 

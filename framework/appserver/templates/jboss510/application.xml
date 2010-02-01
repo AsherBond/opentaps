@@ -92,6 +92,13 @@
 
     <module>
       <web>
+        <web-uri>/webpos.war</web-uri>
+        <context-root>/webpos</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
         <web-uri>/ecomclone.war</web-uri>
         <context-root>/ecomclone</context-root>
       </web>
@@ -287,13 +294,6 @@
       <web>
         <web-uri>/dataimport.war</web-uri>
         <context-root>/dataimport</context-root>
-      </web>
-    </module>
-
-    <module>
-      <web>
-        <web-uri>/livecatalog.war</web-uri>
-        <context-root>/livecatalog</context-root>
       </web>
     </module>
 
