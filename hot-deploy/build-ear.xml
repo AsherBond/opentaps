@@ -51,6 +51,13 @@
       <!-- warehouse -->
       <fileset dir="${hot-deploy.dir}/warehouse/build/lib/" includes="*.jar"/>
 
+      <!-- VOIP -->
+      <fileset dir="${hot-deploy.dir}/asterisk/lib/" includes="*.jar"/>
+      <fileset dir="${hot-deploy.dir}/asterisk/build/lib/" includes="*.jar"/>
+
+      <!-- search -->
+      <fileset dir="${hot-deploy.dir}/search/build/lib/" includes="*.jar"/>
+
       <!-- dataimport -->
       <!-- <fileset dir="${hot-deploy.dir}/dataimport/build/lib/" includes="*.jar"/> -->
 
@@ -102,6 +109,14 @@
 
     <jar destfile="${ear.lib.dir}/hot-deploy.warehouse.config.jar">
       <fileset dir="${hot-deploy.dir}/warehouse/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/hot-deploy.asterisk.config.jar">
+      <fileset dir="${hot-deploy.dir}/asterisk/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/hot-deploy.search.config.jar">
+      <fileset dir="${hot-deploy.dir}/search/config"/>
     </jar>
 
     <!-- <jar destfile="${ear.lib.dir}/hot-deploy.dataimport.script.jar"> -->
