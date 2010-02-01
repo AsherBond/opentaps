@@ -41,7 +41,7 @@ public class WebAppsMenu extends BaseEntry {
     private static final String WEBAPPS_MENU_ID = "webAppsMenu";
     private static final String MODULE = WebAppsMenu.class.getName();
     private static int DISPLAY_MENU_ITEMS = 5;
-    public static final RecordDef WEB_APPS_RECORD_DEF = new RecordDef(
+    private static final RecordDef WEB_APPS_RECORD_DEF = new RecordDef(
             new FieldDef[]{
                 new StringFieldDef(WebAppLookupConfiguration.OUT_APPLICATION_ID),
                 new StringFieldDef(WebAppLookupConfiguration.OUT_LINK_URL),
@@ -77,17 +77,17 @@ public class WebAppsMenu extends BaseEntry {
             });
         store.load();
     }
-    
+
     protected void onStoreLoad(Store store, Record[] records) {
 
         // Top level menu
         MenuBar menuTop = new MenuBar();
         menuTop.addStyleName("topMenu");
 
-       // More menu - vertical=true
+        // More menu - vertical=true
         MenuBar menuMore = new MenuBar(true);
-        
-        for (int i=0; i < records.length; i++) {
+
+        for (int i = 0; i < records.length; i++) {
             Record record = records[i];
             String applicationId = record.getAsString(WebAppLookupConfiguration.OUT_APPLICATION_ID);
             String shortName = record.getAsString(WebAppLookupConfiguration.OUT_SHORT_NAME);
@@ -97,7 +97,7 @@ public class WebAppsMenu extends BaseEntry {
             }
             final String linkUrl = record.getAsString(WebAppLookupConfiguration.OUT_LINK_URL);
             if (applicationId != null) {
-                Command command = new Command() {public void execute(){}};
+                Command command = new Command() { public void execute() { } };
                 String menuStyle = "";
                 String menuText = "";
                 if (linkUrl != null && !"".equals(linkUrl)) {
@@ -107,7 +107,7 @@ public class WebAppsMenu extends BaseEntry {
                     menuStyle = "textMenu";
                     menuText = shortName;
                 }
-                
+
                 MenuItem menuItem = new MenuItem(menuText, true, command);
                 menuItem.addStyleName(menuStyle);
                 if (i <= DISPLAY_MENU_ITEMS) {
@@ -119,7 +119,7 @@ public class WebAppsMenu extends BaseEntry {
                 }
             }
         }
-        // add "more" second level menu for contain more link 
+        // add "more" second level menu for contain more link
         if (records.length > DISPLAY_MENU_ITEMS + 1) {
             menuTop.addItem("<span class=\"moreMenu\">more</span>", true, menuMore);
         }
@@ -128,11 +128,6 @@ public class WebAppsMenu extends BaseEntry {
     }
 
     protected void onStoreLoadError(Throwable error) {
-        UtilUi.logError("Store load error [" + error + "] for: " + UtilUi.toString(this), MODULE, "onStoreLoad");
+        UtilUi.logError("Store load error [" + error + "] for: " + UtilUi.toString(this), MODULE, "onStoreLoadError");
     }
-    
-    //redirect the browser to the given url
-    public static native void redirect(String url)/*-{
-          $wnd.location = url;
-    }-*/;
 }
