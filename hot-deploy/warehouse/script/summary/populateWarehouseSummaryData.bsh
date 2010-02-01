@@ -99,15 +99,16 @@ if (UtilValidate.isNotEmpty(facilities)) {
             while (ordersI.hasNext()) {
                 order = ordersI.next();
                 shipmentMethodTypeId = order.get("shipmentMethodTypeId");
-
-                if (orderShipment == null) {
+				if (shipmentMethodTypeId != null) {
+				  if (orderShipment == null) {
                     orderShipment = UtilMisc.toMap(shipmentMethodTypeId, 1);
-                } else if (orderShipment.containsKey(shipmentMethodTypeId)) {
+                  } else if (shipmentMethodTypeId != null && orderShipment.containsKey(shipmentMethodTypeId)) {
                     int total = orderShipment.get(shipmentMethodTypeId) + 1;
                     orderShipment.put(shipmentMethodTypeId, total);
-                } else {
+                  } else {
                     orderShipment.put(shipmentMethodTypeId, 1);
-                }
+                  }
+				}
             }
 
             for (shipmentMethodTypeId : orderShipment.keySet()) {
