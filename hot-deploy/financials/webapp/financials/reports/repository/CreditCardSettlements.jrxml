@@ -106,7 +106,7 @@
 					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[$P{summaryReport}]]></dataSourceExpression>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/creditCardSettlementsSummary.jrxml")]]></subreportExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/CreditCardSettlementsSummary.jrxml")]]></subreportExpression>
 			</subreport>
 		</band>
 	</title>
