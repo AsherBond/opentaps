@@ -1,39 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- $Id: mysql-ds.xml 63175 2007-05-21 16:26:06Z rrajesh $ -->
-<!--  Datasource config for MySQL using 3.0.9 available from:
-http://www.mysql.com/downloads/api-jdbc-stable.html
--->
-
 <datasources>
-  <local-tx-datasource>
+  <xa-datasource>
   
     <jndi-name>OFBizDS</jndi-name>
-    
-    <connection-url>jdbc:mysql://127.0.0.1:3306/opentaps?autoReconnect=true&amp;useOldAliasMetadataBehavior=true</connection-url>
-    <driver-class>com.mysql.jdbc.Driver</driver-class>
-    <user-name>ofbiz</user-name>
-    <password>ofbiz</password>
+
+    <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
+    <xa-datasource-property name="URL">jdbc:mysql://127.0.0.1:3306/opentaps?autoReconnect=true&amp;useOldAliasMetadataBehavior=true</xa-datasource-property>
+    <xa-datasource-property name="User">opentaps</xa-datasource-property>
+    <xa-datasource-property name="Password">opentaps</xa-datasource-property>
     
     <exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter</exception-sorter-class-name>
     
-    <!-- should only be used on drivers after 3.22.1 with "ping" support
+    <!-- should only be used on drivers after 3.22.1 with "ping" support -->
     <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLValidConnectionChecker</valid-connection-checker-class-name>
-    -->
-    
-    <!-- sql to call when connection is created
-    <new-connection-sql>some arbitrary sql</new-connection-sql>
-    -->
-    
-    <!-- sql to call on an existing pooled connection when it is obtained from pool - MySQLValidConnectionChecker is preferred for newer drivers
-    <check-valid-connection-sql>some arbitrary sql</check-valid-connection-sql>
-    -->
 
-    <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml -->
-    <metadata>
-       <type-mapping>mySQL</type-mapping>
-    </metadata>
-    
-  </local-tx-datasource>
+  </xa-datasource>
 </datasources>
 
