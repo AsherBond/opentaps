@@ -40,7 +40,6 @@
             <fileset dir="${applications.dir}/accounting/build/lib/" includes="ofbiz-accounting.jar"/>             
             <fileset dir="${applications.dir}/order/build/lib/" includes="ofbiz-order.jar"/>
             <fileset dir="${applications.dir}/marketing/build/lib/" includes="ofbiz-marketing.jar"/>             
-            <!--<fileset dir="${applications.dir}/ecommerce/build/lib/" includes="ofbiz-ecommerce.jar"/>-->
         </copy>
     </target>
 	
@@ -72,10 +71,6 @@
         <jar destfile="${ear.lib.dir}/applications.content.script.jar">
             <fileset dir="${applications.dir}/content/script"/>
         </jar>
-    	
-        <!--<jar destfile="${ear.lib.dir}/applications.content.dtd.jar">
-            <fileset dir="${applications.dir}/content/dtd"/>
-        </jar>-->
     	
         <jar destfile="${ear.lib.dir}/applications.workeffort.config.jar">
             <fileset dir="${applications.dir}/workeffort/config"/>
@@ -132,14 +127,6 @@
         <jar destfile="${ear.lib.dir}/applications.marketing.config.jar">
             <fileset dir="${applications.dir}/marketing/config"/>
         </jar>
-    	
-        <!--<jar destfile="${ear.lib.dir}/applications.ecommerce.config.jar">
-            <fileset dir="${applications.dir}/ecommerce/config"/>
-        </jar>
-        
-        <jar destfile="${ear.lib.dir}/applications.ecommerce.script.jar">
-            <fileset dir="${applications.dir}/ecommerce/script"/>
-        </jar>-->
 	</target>
 
     <!-- ================================================================== -->
@@ -208,19 +195,6 @@
         <copy todir="${ear.dir}/marketing.war">
             <fileset dir="${applications.dir}/marketing/webapp/marketing"/>
         </copy>
-
-        <!-- ecommerce -->
-        <!--<mkdir dir="${ear.dir}/ecommerce.war"/>
-        
-        <copy todir="${ear.dir}/ecommerce.war">
-            <fileset dir="${applications.dir}/ecommerce/webapp/ecommerce"/>
-        </copy>
-
-        <mkdir dir="${ear.dir}/ecomclone.war"/>
-         
-        <copy todir="${ear.dir}/ecomclone.war">
-            <fileset dir="${applications.dir}/ecommerce/webapp/ecomclone"/>
-        </copy>-->    	
     </target>
         	
     <!-- ================================================================== -->
