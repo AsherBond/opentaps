@@ -22,9 +22,17 @@ import org.osgi.framework.Bundle;
 import javax.servlet.ServletContext;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public final class ProvisionActivator implements BundleActivator {
+
+    List<String> BASIC_BUNDLES = Arrays.asList(
+            "org.apache.felix.log",
+            "org.apache.felix.http"
+    );
 
     private final ServletContext servletContext;
 
@@ -49,10 +57,29 @@ public final class ProvisionActivator implements BundleActivator {
 
     public void stop(BundleContext context) throws Exception {}
 
+    @SuppressWarnings("unchecked")
     private List<URL> findBundles() throws Exception {
         ArrayList<URL> list = new ArrayList<URL>();
-        for (Object o : this.servletContext.getResourcePaths("/WEB-INF/bundles/")) {
-            String name = (String)o;
+        Set<Object> resourcePaths = this.servletContext.getResourcePaths("/WEB-INF/bundles/");
+
+        // find very basic bundles that must be loaded first
+        for (String basicBundle : BASIC_BUNDLES) {
+            Iterator<Object> iter = resourcePaths.iterator();
+            while (iter.hasNext()) {
+                String name = (String) iter.next();
+                if (name.endsWith(".jar") && name.indexOf(basicBundle) != -1) {
+                    URL url = this.servletContext.getResource(name);
+                    if (url != null) {
+                        list.add(url);
+                        iter.remove();
+                    }
+                }
+            }
+        }
+
+        // add all other bundles
+        for (Object path : resourcePaths) {
+            String name = (String) path;
             if (name.endsWith(".jar")) {
                 URL url = this.servletContext.getResource(name);
                 if (url != null) {

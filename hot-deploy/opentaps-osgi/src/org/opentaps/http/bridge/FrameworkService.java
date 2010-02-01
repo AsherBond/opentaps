@@ -74,7 +74,7 @@ public final class FrameworkService {
         for (Object key : props.keySet()) {
             map.put(key.toString(), props.get(key));
         }
-        
+
         map.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, Arrays.asList(new ProvisionActivator(this.context)));
         return map;
     }
