@@ -195,6 +195,13 @@
         <copy todir="${ear.dir}/marketing.war">
             <fileset dir="${applications.dir}/marketing/webapp/marketing"/>
         </copy>
+        
+        <!-- humanres -->
+        <mkdir dir="${ear.dir}/humanres.war"/>
+        
+        <copy todir="${ear.dir}/humanres.war">
+            <fileset dir="${applications.dir}/humanres/webapp/humanres"/>
+        </copy>
     </target>
         	
     <!-- ================================================================== -->

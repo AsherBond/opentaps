@@ -85,6 +85,13 @@
 
     <module>
       <web>
+        <web-uri>/humanres.war</web-uri>
+        <context-root>/humanres</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
         <web-uri>/ecommerce.war</web-uri>
         <context-root>/ecommerce</context-root>
       </web>
@@ -294,6 +301,13 @@
       <web>
         <web-uri>/dataimport.war</web-uri>
         <context-root>/dataimport</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/opentaps.war</web-uri>
+        <context-root>/opentaps</context-root>
       </web>
     </module>
 

@@ -259,6 +259,13 @@
       <fileset dir="${hot-deploy.dir}/dataimport/webapp/dataimport"/>
     </copy>
 
+    <!-- homeapps -->
+
+    <mkdir dir="${ear.dir}/opentaps.war"/>
+    <copy todir="${ear.dir}/opentaps.war">
+      <fileset dir="${hot-deploy.dir}/homeapps/webapp/homeapps"/>
+    </copy>
+
   </target>
 
   <!-- ================================================================== -->
