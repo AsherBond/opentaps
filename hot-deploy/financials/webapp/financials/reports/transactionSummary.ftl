@@ -16,10 +16,13 @@
 -->
 
 <@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
+<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <#assign now = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>
 <#assign defaultFromDate = Static["org.ofbiz.base.util.UtilDateTime"].getDayStart(now, timeZone, locale)>
 <#assign defaultThruDate = Static["org.ofbiz.base.util.UtilDateTime"].getDayEnd(now, timeZone, locale)>
+
+<@commonReportJs formName="transactionSummaryForm" />
 
 <form method="POST" name="transactionSummaryForm" action="">
   <@inputHidden name="glFiscalTypeId" value="ACTUAL"/>
@@ -32,7 +35,7 @@
 
   <@isPostedInputRow default=isPosted! />
 
-  <@submitReportOptions returnPage=returnPage! returnLabel=returnLabel!/>
+  <@submitReportOptions reportRequest="JRTransactionSummary" screenRequest="TransactionSummary" returnPage="reportsMain" returnLabel="${uiLabelMap.FinancialsReturnToReports}"/>
  
 </form>
 

@@ -857,6 +857,21 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="TransactionSummary"/>
     </request-map>
+    <request-map uri="JRTransactionSummary">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareTransactionSummaryReport"/>
+        <response name="pdf" type="view" value="JRTransactionSummaryPDF"/>
+        <response name="xls" type="view" value="JRTransactionSummaryXLS"/>
+        <response name="error" type="request-redirect-noparam" value="TransactionSummary"/>
+    </request-map>
+    <request-map uri="JRTransactionSummaryPDF">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRTransactionSummaryPDF"/>
+    </request-map>
+    <request-map uri="JRTransactionSummaryXLS">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRTransactionSummaryXLS"/>
+    </request-map>
     <request-map uri="ComparativeBalance">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="ComparativeBalance"/>
@@ -2048,6 +2063,8 @@
     <view-map name="JRCreditCardReportXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/creditCardSettlements.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
     <view-map name="JRPaymentReceiptsDetailPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/PaymentReceiptsDetail.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRPaymentReceiptsDetailXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/PaymentReceiptsDetail.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRTransactionSummaryPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/TransactionSummary.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRTransactionSummaryXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/TransactionSummary.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
 
     <!-- transactions -->
     <view-map name="viewAcctgTrans" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTrans"/>

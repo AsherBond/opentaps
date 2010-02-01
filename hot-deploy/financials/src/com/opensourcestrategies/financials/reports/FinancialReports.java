@@ -77,7 +77,6 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.constants.EnumerationConstants;
 import org.opentaps.base.constants.PaymentMethodTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
-import org.opentaps.base.entities.GlAccount;
 import org.opentaps.base.entities.SalesInvoiceItemFact;
 import org.opentaps.base.entities.TaxInvoiceItemFact;
 import org.opentaps.common.jndi.DataSourceImpl;
@@ -1757,6 +1756,206 @@ public final class FinancialReports {
             request.setAttribute("jrParameters", jrParameters);
 
         } catch (GenericEntityException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        }
+
+        return reportType;
+    }
+
+    /**
+     * Prepare data source and parameters for transaction summary report.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the event response, either "pdf" or "xls" string to select report type, or "error".
+     */
+    public static String prepareTransactionSummaryReport(HttpServletRequest request, HttpServletResponse response) {
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
+        Locale locale = UtilCommon.getLocale(request);
+        Map<String, Object> jrParameters = FastMap.<String, Object>newInstance();
+
+        String reportType = UtilCommon.getParameter(request, "type");
+
+        String dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+        String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
+
+        try {
+
+            // get the from and thru date timestamps
+            String fromDateString = UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
+            String thruDateString = UtilHttp.makeParamValueFromComposite(request, "thruDate", locale);
+
+            // don't do anything if dates invalid
+            if (fromDateString == null || thruDateString == null) {
+                return UtilMessage.createAndLogEventError(request, "Both From Date and Thru Date are required", MODULE);
+            }
+
+            Timestamp fromDate = null;
+            Timestamp thruDate = null;
+            try {
+                fromDate = UtilDateTime.stringToTimeStamp(fromDateString.trim(), dateTimeFormat, timeZone, locale);
+            } catch (ParseException e) {
+                UtilMessage.addFieldError(request, "fromDate", "FinancialsError_IllegalDateFieldFormat", UtilMisc.toMap("date", fromDateString) );
+            }
+            try {
+                thruDate = UtilDateTime.stringToTimeStamp(thruDateString.trim(), dateTimeFormat, timeZone, locale);
+            } catch (ParseException e) {
+                UtilMessage.addFieldError(request, "thruDate", "FinancialsError_IllegalDateFieldFormat", UtilMisc.toMap("date", thruDateString) );
+            }
+            if (fromDate != null) {
+                jrParameters.put("fromDate", fromDate);
+            }
+            if (thruDate != null) {
+                jrParameters.put("thruDate", thruDate);
+            }
+            if (fromDate == null || thruDate == null) {
+                return UtilMessage.createAndLogEventError(request, "Both From Date and Thru Date are required", MODULE);
+            }
+            if (thruDate.before(fromDate)) {
+                return UtilMessage.createAndLogEventError(request, "FinancialsError_FromDateAfterThruDate", locale, MODULE);
+            }
+
+            String glFiscalTypeId = UtilCommon.getParameter(request, "glFiscalTypeId");
+            if (glFiscalTypeId == null) {
+                glFiscalTypeId = "ACTUAL";
+            }
+            jrParameters.put("glFiscalTypeId", glFiscalTypeId);
+
+            String isPosted = UtilCommon.getParameter(request, "isPosted");
+            if (isPosted == null) {
+                isPosted = "Y";
+            }
+    
+            List<EntityCondition> commonConditionLists = UtilMisc.<EntityCondition>toList(
+                    EntityCondition.makeCondition("organizationPartyId", organizationPartyId),
+                    EntityCondition.makeCondition("glFiscalTypeId", glFiscalTypeId),
+                    EntityCondition.makeCondition("isPosted", isPosted),
+                    EntityCondition.makeCondition("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+                    EntityCondition.makeCondition("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate)
+            );
+            commonConditionLists.addAll(UtilAccountingTags.buildTagConditions(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, request));
+
+            EntityConditionList<EntityCondition> commonConditions = EntityCondition.makeCondition(commonConditionLists);
+
+            EntityConditionList<EntityCondition> creditConditions =
+                EntityCondition.makeCondition(UtilMisc.toList(commonConditions, EntityCondition.makeCondition("debitCreditFlag", "C")), EntityOperator.AND);
+            EntityConditionList<EntityCondition> debitConditions =
+                EntityCondition.makeCondition(UtilMisc.toList(commonConditions, EntityCondition.makeCondition("debitCreditFlag", "D")), EntityOperator.AND);
+
+            List<String> fieldsToSelect =
+                UtilMisc.<String>toList("glAccountId", "accountCode", "accountName", "glAccountClassId", "amount");
+            List<String> orderBy = UtilMisc.<String>toList("glAccountId");
+
+            // find the debits and credits, summed up.  Note that with the introduction of accounting tags, there may still be multiple rows for each gl Account now.  
+            List<GenericValue> credits =
+                delegator.findByCondition("AcctgTransEntryAccountSum", creditConditions, fieldsToSelect, orderBy);
+            List<GenericValue> debits =
+                delegator.findByCondition("AcctgTransEntryAccountSum", debitConditions, fieldsToSelect, orderBy);
+
+            // go through credits and build a report row keyed to glAccountId with the total credit amounts 
+            Map<String, Map<String, Object>> reportMap = new TreeMap<String, Map<String, Object>>();
+            for (GenericValue credit : credits) {
+                // get the row for the GL account already in this Map, or create it if it's not there
+                Map<String, Object> row = (Map<String, Object>) reportMap.remove(credit.get("glAccountId")); 
+                if (row == null) {
+                    row = UtilMisc.<String, Object>toMap(
+                            "glAccountId", credit.get("glAccountId"),
+                            "accountCode", credit.get("accountCode"),
+                            "accountName", credit.get("accountName")
+                    );
+                }
+
+                // calculate the creditSum for this row, adding it to the existing creditSum for the GL account if it's there 
+                BigDecimal creditSum = null;
+                if (row.get("creditSum") == null) {
+                    creditSum = credit.getBigDecimal("amount");
+                } else {
+                    // credit.amount should never be null, but let's be careful
+                    creditSum = ((BigDecimal) row.get("creditSum"));
+                    if (credit.get("amount") != null) {
+                        creditSum = creditSum.add(credit.getBigDecimal("amount"));
+                    }
+                }
+
+                // skip this row if credit sum is null or zero  
+                if (creditSum == null) {
+                    continue;
+                }
+                creditSum = creditSum.setScale(UtilFinancial.decimals, UtilFinancial.rounding);
+                if (creditSum.signum() == 0) {
+                    continue;
+                }
+                row.put("creditSum", creditSum);
+
+                reportMap.put(credit.getString("glAccountId"), row);
+            }
+
+            // go through debits and add the debit data to each row, or build new rows if no credits were reported for an account
+            for (GenericValue debit : debits) {
+                // it's possible that there were no credits, so a row for the GL account does not exist from above.  If so, add it.
+                Map<String, Object> row = (Map<String, Object>) reportMap.remove(debit.get("glAccountId")); // note that row is removed and must be put back
+                if (row == null) {
+                    row = UtilMisc.toMap("glAccountId", debit.get("glAccountId"), "accountCode", debit.get("accountCode"), "accountName", debit.get("accountName"));
+                }
+
+                // similar strategy to creditSum from above
+                BigDecimal debitSum = null;
+                if (row.get("debitSum") == null) {
+                    debitSum = debit.getBigDecimal("amount");
+                } else {
+                    debitSum = ((BigDecimal) row.get("debitSum"));
+                    if (debit.get("amount") != null) {
+                        debitSum = debitSum.add(debit.getBigDecimal("amount"));
+                    }
+                }
+
+                if (debitSum == null) {
+                    debitSum = BigDecimal.ZERO;
+                }
+                debitSum = debitSum.setScale(UtilFinancial.decimals, UtilFinancial.rounding);
+                row.put("debitSum", debitSum);
+
+                BigDecimal creditSum = (BigDecimal) row.get("creditSum");
+                if (creditSum == null) {
+                    creditSum = BigDecimal.ZERO;
+                }
+
+                // if both credit and debit sums are ZERO, then continue to next row (this row is removed)
+                if (debitSum.signum() == 0 && creditSum.signum() == 0) {
+                    continue;
+                }
+
+                reportMap.put(debit.getString("glAccountId"), row);
+            }
+
+            // calculate net debit and credit
+            for (Map<String, Object> reportLine : reportMap.values()) {
+                BigDecimal creditSum = (BigDecimal) reportLine.get("creditSum");
+                if (creditSum == null) {
+                    creditSum = BigDecimal.ZERO;
+                }
+                BigDecimal debitSum = (BigDecimal) reportLine.get("debitSum");
+                if (debitSum == null) {
+                    debitSum = BigDecimal.ZERO;
+                }
+                if (debitSum.compareTo(creditSum) > 0) {
+                    reportLine.put("netDebit", debitSum.subtract(creditSum));
+                } else {
+                    reportLine.put("netCredit", creditSum.subtract(debitSum));
+                }
+            }
+
+            // put the key-sorted values into the context as our report data
+            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(reportMap.values()));
+
+            jrParameters.put("organizationPartyId", organizationPartyId);
+            jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, organizationPartyId, false));
+            jrParameters.put("accountingTags", UtilAccountingTags.formatTagsAsString(request, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator));
+            request.setAttribute("jrParameters", jrParameters);
+
+        } catch (GenericEntityException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        } catch (RepositoryException e) {
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         }
 
