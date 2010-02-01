@@ -286,13 +286,6 @@
     <copy file="${framework.dir}/entity/lib/jdbc/mysql-connector-java-5.1.10-bin.jar" todir="${JBOSS_HOME}/server/default/lib"/>
     <!-- this jar conflict with %JBOSS_HOME%\common\lib\bsh.jar, so need copy it to default/lib -->
     <copy file="${framework.dir}/base/lib/scripting/bsh-2.0b4.jar" todir="${JBOSS_HOME}/server/default/lib"/>
-
-    <!-- run.bat / run.sh -->
-    <move file="${JBOSS_HOME}/bin/run.bat" tofile="${JBOSS_HOME}/bin/_run.bat.bak"/>
-    <copy file="${framework.dir}/appserver/templates/jboss510/misc/run.bat" todir="${JBOSS_HOME}/bin/"/>
-
-    <move file="${JBOSS_HOME}/bin/run.sh" tofile="${JBOSS_HOME}/bin/_run.sh.bak"/>
-    <copy file="${framework.dir}/appserver/templates/jboss510/misc/run.sh" todir="${JBOSS_HOME}/bin/"/>
     
     <!-- copy run.conf and replace ofbiz home token -->
     <move file="${JBOSS_HOME}/bin/run.conf" tofile="${JBOSS_HOME}/bin/run.conf.obak"/>
