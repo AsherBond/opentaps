@@ -141,12 +141,18 @@ public class Infrastructure {
             DatasourceInfo datasourceInfo = EntityConfigUtil.getDatasourceInfo(groupHelperName);
             Debug.logVerbose("datasourceInfo.fieldTypeName : " + datasourceInfo.fieldTypeName, MODULE);
             //get hibernate dialect by database type
-            annotationConfiguration.setProperty("hibernate.dialect", DIALECTS.get(datasourceInfo.fieldTypeName));
+            String dialect = DIALECTS.get(datasourceInfo.fieldTypeName);
+            if (dialect.length() == 0) {
+                // some rarely used types are not supported
+                Debug.logError("No hibernate dialect defined for the type [" + datasourceInfo.fieldTypeName + "]", MODULE);
+                return null;
+            }
+            annotationConfiguration.setProperty("hibernate.dialect", dialect);
             Debug.logVerbose("configuring SessionFactory ...", MODULE);
             //build a sessionFactory
             String datasourceName = EntityConfigUtil.getDelegatorInfo(delegatorName).groupMap.get(getHelperName());
             Debug.logVerbose("init sessionFactory by datasoure " + datasourceName, MODULE);
-            sessionFactory = annotationConfiguration.configure(HIBERNATE_CFG_PATH + datasourceName + HIBERNATE_CFG_EXT).buildSessionFactory();
+            sessionFactory = annotationConfiguration.configure(datasourceName + HIBERNATE_CFG_EXT).buildSessionFactory();
             Debug.logVerbose("listing loaded entities ...", MODULE);
             Map metadata = sessionFactory.getAllClassMetadata();
             //iterator all classes which are success load of hibernate, it just only for debug use.
