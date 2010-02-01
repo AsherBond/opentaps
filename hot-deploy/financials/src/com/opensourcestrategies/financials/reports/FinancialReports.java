@@ -1654,6 +1654,7 @@ public final class FinancialReports {
      */
     public static String preparePaymentReceiptsDetailReport(HttpServletRequest request, HttpServletResponse response) {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         Locale locale = UtilCommon.getLocale(request);
         Map<String, Object> jrParameters = FastMap.<String, Object>newInstance();
@@ -1691,12 +1692,18 @@ public final class FinancialReports {
                 return UtilMessage.createAndLogEventError(request, "Please specify a GL account.", MODULE);
             }
 
+            GenericValue glAccount = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", glAccountId));
+            String glAccountName = String.format("%1$s: %2$s", glAccountId, glAccount.getString("accountName"));
+            
             boolean showInvoiceLevelDetail = 
                 "Y".equals(UtilCommon.getParameter(request, "showInvoiceLevelDetail")) ? true : false;
 
             // Since these are receipts, the partyIdTo of the payment should be the organization
             String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
 
+            BigDecimal totalCash = BigDecimal.ZERO;
+            BigDecimal total = BigDecimal.ZERO;
+            
             List<EntityCondition> conditionList = UtilMisc.<EntityCondition>toList(
                     EntityCondition.makeCondition("glAccountId", glAccountId),
                     EntityCondition.makeCondition("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
@@ -1728,20 +1735,41 @@ public final class FinancialReports {
             // add extra row data
             List<Map<String, Object>> reportData = FastList.<Map<String, Object>>newInstance();
             for (GenericValue value : PaymentReceiptsDetail) {
+
+                BigDecimal conversion = BigDecimal.ONE;
+                String currencyUomId = value.getString("currencyUomId");
+                if (UtilValidate.isNotEmpty(currencyUomId)) {
+                    conversion = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, currencyUomId);
+                }
+
                 Map<String, Object> reportLine = FastMap.<String, Object>newInstance();
                 reportLine.putAll(value.getAllFields());
+
                 String payerId = value.getString("partyIdFrom");
                 reportLine.put("partyId", payerId);
                 reportLine.put("partyName", PartyHelper.getPartyName(delegator, payerId, false));
+
+                reportLine.put("isCash", PaymentMethodTypeConstants.CASH.equals(value.getString("paymentMethodTypeId")) ? Boolean.TRUE : Boolean.FALSE);
+
+                BigDecimal amount = null;
                 if (showInvoiceLevelDetail) {
-                    BigDecimal amountApplied = value.getBigDecimal("amountApplied");
-                    if (amountApplied == null) {
-                        amountApplied = value.getBigDecimal("amount");
+                    amount = value.getBigDecimal("amountApplied");
+                    if (amount == null) {
+                        amount = value.getBigDecimal("amount");
                     }
-                    if (amountApplied != null) {
-                        reportLine.put("amount", value.get("amountApplied"));
-                    }
+                } else {
+                    amount = value.getBigDecimal("amount");
                 }
+                BigDecimal amountConverted = amount.multiply(conversion);
+                reportLine.put("amount", amount);
+
+                // adjust totals
+                if (PaymentMethodTypeConstants.CASH.equals(paymentMethodTypeId)) {
+                    totalCash = totalCash.add(amountConverted);
+                } else {
+                    total = total.add(amountConverted);
+                }
+
                 reportData.add(reportLine);
             }
 
@@ -1750,12 +1778,19 @@ public final class FinancialReports {
             jrParameters.put("fromDate", fromDate);
             jrParameters.put("thruDate", thruDate);
             jrParameters.put("glAccountId", glAccountId);
+            jrParameters.put("glAccount", glAccountName);
             jrParameters.put("organizationPartyId", organizationPartyId);
             jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, organizationPartyId, false));
-            jrParameters.put("paymentMethod", paymentMethodType.getString("description"));
+            if (paymentMethodType != null) {
+                jrParameters.put("paymentMethod", paymentMethodType.getString("description"));
+            }
+            jrParameters.put("totalCashAmount", totalCash);
+            jrParameters.put("totalNonCashAmount", total);
             request.setAttribute("jrParameters", jrParameters);
 
         } catch (GenericEntityException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        } catch (GenericServiceException e) {
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         }
 
