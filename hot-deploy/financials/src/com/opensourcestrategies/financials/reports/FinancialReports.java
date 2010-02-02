@@ -65,6 +65,8 @@ import org.ofbiz.entity.model.DynamicViewEntity;
 import org.ofbiz.entity.model.ModelKeyMap;
 import org.ofbiz.entity.model.ModelViewEntity.ComplexAlias;
 import org.ofbiz.entity.model.ModelViewEntity.ComplexAliasField;
+import org.ofbiz.entity.transaction.GenericTransactionException;
+import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
@@ -1388,6 +1390,8 @@ public final class FinancialReports {
                 conditionList.add(EntityCondition.makeCondition("invoiceDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate) );
             }
             EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(conditionList);
+
+            TransactionUtil.begin();
             EntityListIterator iterator =
                 delegator.findListIteratorByCondition("Invoice", conditions, null, null, UtilMisc.toList(partyIdField), options);
 
@@ -1464,6 +1468,7 @@ public final class FinancialReports {
                 reportData.put(partyId, reportLine);
             }
             iterator.close();
+            TransactionUtil.commit();
 
             Collection<Object> report = reportData.values();
             request.setAttribute("jrDataSource", new JRMapCollectionDataSource(report));
@@ -1496,6 +1501,13 @@ public final class FinancialReports {
             request.setAttribute("jrParameters", jrParameters);
 
         } catch (GenericEntityException e) {
+            try {
+                if (TransactionUtil.isTransactionInPlace()) {
+                    TransactionUtil.rollback();
+                }
+            } catch (GenericTransactionException e1) {
+                return UtilMessage.createAndLogEventError(request, e1, locale, MODULE);
+            }
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         } catch (GenericServiceException e) {
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
