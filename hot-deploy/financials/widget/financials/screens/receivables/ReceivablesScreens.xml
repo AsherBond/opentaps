@@ -57,6 +57,7 @@
     <screen name="receivablesBalancesReport">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsReceivablesBalancesReport"/>
                 <set field="reportType" value="CUSTOMER"/>  <!-- this configures the bsh report to get the right data -->
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="returnPage" value="receivables"/>
@@ -67,19 +68,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsReceivablesBalancesReport}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/customerVendorBalances.ftl"/></html>
-                                </platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsReceivablesBalancesReport}">
+                            <platform-specific><html>
+                                <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
+                            </html></platform-specific>
+                            <platform-specific><html>
+                                <html-template location="component://financials/webapp/financials/includes/customerVendorBalances.ftl"/></html>
+                            </platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -89,6 +85,7 @@
     <screen name="receivablesAgingReport">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsReceivablesAgingReport"/>
                 <set field="reportType" value="ACCOUNTS_RECEIVABLE"/>  <!-- this configures the bsh report to get the right data -->
                 <set field="returnPage" value="receivables"/>
                 <set field="returnLabel" value="FinancialsReturnToReceivables"/>
@@ -100,19 +97,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsReceivablesAgingReport}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/customerVendorAging.ftl"/></html>
-                                </platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsReceivablesAgingReport}">
+                            <platform-specific><html>
+                                <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific><html>
+                                <html-template location="component://financials/webapp/financials/includes/customerVendorAging.ftl"/></html>
+                            </platform-specific>
+                            </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -151,6 +143,7 @@
     <screen name="AverageDSOReportReceivables">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsAverageDSOReportReceivables"/>
                 <set field="invoiceTypeId" value="SALES_INVOICE"/>
                 <set field="returnPage" value="receivables"/>
                 <set field="returnLabel" value="FinancialsReturnToReceivables"/>
