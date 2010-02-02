@@ -431,27 +431,6 @@ public final class ProductImportServices {
         listPrice.put("productPriceTypeId", "LIST_PRICE");
         toStore.add(listPrice);
 
-          //product store
-        //todo this logic shoudl be moved into magento-opentaps integration module
-        //we are mapping magento storeid to opentaps's category id associated with a opentaps catalog associated to the product store
-
-        /*
-        if(UtilValidate.isNotEmpty(data.get("storeId"))){
-            Object storeId = data.get("storeId");
-            //we verify that the catalog id exist; if it doesn't the product will not be associated to any catalog or store
-            //GenericValue prodCatalog = delegator.findByPrimaryKeyCache("ProductCategoryMember", UtilMisc.toMap("productCategoryId", storeId));
-            //if(!UtilValidate.isEmpty(prodCatalog)){
-                input = FastMap.newInstance();
-                 input.put("productCategoryId", storeId);
-                 input.put("productId", data.get("productId"));
-                 input.put("fromDate",now);
-                GenericValue productCategory = delegator.makeValue("ProductCategoryMember", input);
-                toStore.add(productCategory);
-            //}else{
-               // Debug.logWarning("Product [" + data.get("productId") + "] cannot be associated to any store id [" + storeId + "]", MODULE);
-
-            //}
-        } */
 
         // good identification (this is per customIdN)
         if (!UtilValidate.isEmpty(data.getString("customId1")) && !UtilValidate.isEmpty(goodIdentificationTypeId1)) {
