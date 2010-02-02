@@ -55,12 +55,20 @@ if (UtilConfig.getPropertyBoolean(application, "opentaps.history.show", true)) {
             if (request.QueryString != null) {
                 uri = uri.substring(0, uri.lastIndexOf("?"));
             }
-            String queryString = UtilCommon.makeHistoryQueryString(parameters, historyEntry.get("override"));
-            uri += ("?" + queryString);
+            override = historyEntry.get("override");
+            if (!(override != null && override.size() == 0)) {
+            	String queryString = UtilCommon.makeHistoryQueryString(parameters, historyEntry.get("override"));
+            	uri += ("?" + queryString);
+            }
             uri = uri.substring((uri.indexOf(controlPath) + controlPath.length()) + 1);
 
             // Quick fix: skips uri if its format differs from appname/conrol/currentView
-            if (!currentView.equalsIgnoreCase(uri.substring(0, uri.lastIndexOf("?")))) return;
+            int questionMarkIndex = uri.lastIndexOf("?");
+            if (questionMarkIndex == -1) {
+            	if (!currentView.equalsIgnoreCase(uri.substring(0))) return;
+            } else {
+            	if (!currentView.equalsIgnoreCase(uri.substring(0, uri.lastIndexOf("?")))) return;
+            }
 
             entry = delegator.makeValue("ViewHistory", null);
             controlPath = parameters.get("_CONTROL_PATH_");
