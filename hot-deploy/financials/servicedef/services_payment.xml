@@ -124,7 +124,7 @@ under the License.
       <auto-attributes include="pk" mode="IN" optional="false"/>
     </service>
     
-    <service name="recalcAllEmptyAmountsPayments" engine="pojo" default-entity-name="Invoice"
+    <service name="recalcAllEmptyAmountsPayments" engine="pojo" default-entity-name="Invoice" transaction-timeout="7200"
         location="org.opentaps.financials.domain.billing.payment.PaymentService" invoke="recalcAllEmptyAmountsPayments" auth="true">
         <description>Recalculate all payments calculated fields if the fields is null</description>
     </service>     

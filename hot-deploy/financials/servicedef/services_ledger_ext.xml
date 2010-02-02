@@ -336,7 +336,7 @@ under the License.
         <auto-attributes include="nonpk" mode="IN" optional="false"/>
     </service>
     
-    <service name="updatePostedAmountAcctgTrans" engine="pojo" default-entity-name="AcctgTrans" 
+    <service name="updatePostedAmountAcctgTrans" engine="pojo" default-entity-name="AcctgTrans" transaction-timeout="7200"
         location="org.opentaps.financials.domain.ledger.LedgerService" invoke="updatePostedAmountAcctgTrans" auth="true">
         <description>finds all AcctgTrans where isPosted=Y and sets the postedAmount to the sum of all the debit amounts for the accounting transaction </description>
     </service>    

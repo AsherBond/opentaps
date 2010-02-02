@@ -361,7 +361,7 @@
         <auto-attributes mode="IN" include="pk" optional="false"/>
     </service>
     
-    <service name="recalcAllEmptyAmountsInvoices" engine="pojo" default-entity-name="Invoice"
+    <service name="recalcAllEmptyAmountsInvoices" engine="pojo" default-entity-name="Invoice" transaction-timeout="7200"
         location="org.opentaps.financials.domain.billing.invoice.InvoiceService" invoke="recalcAllEmptyAmountsInvoices" auth="true">
         <description>Recalculate all invoices calculated fields if the fields is null</description>
     </service>    
