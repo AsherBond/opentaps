@@ -31,6 +31,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import com.gwtext.client.data.Converter;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.MessageBoxConfig;
@@ -493,7 +494,18 @@ public abstract class UtilUi {
     }
 
     public static Widget makeBlankFormCell() {
-    	return new HTML("<span class='gwt-blank-field'>&nbsp;</span>");
+        return new HTML("<span class='gwt-blank-field'>&nbsp;</span>");
     }
+
+    public static String removeTrailingZeros(String number) {
+        return number.replaceAll("\\.?0*\\s*$", "");
+    }
+
+    public static final Converter CLEAN_TRAILING_ZERO_CONVERTER = new Converter() {
+                // trim trailing zeros
+                @Override public String format(String input) {
+                    return removeTrailingZeros(input);
+                }
+            };
 
 }

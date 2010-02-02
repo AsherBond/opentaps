@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.gwtext.client.core.SortDir;
+import com.gwtext.client.data.Converter;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.data.Store;
 import com.gwtext.client.data.StringFieldDef;
@@ -157,14 +158,14 @@ public class OrderItemsEditableListView extends EntityEditableListView {
         // description column
         makeEditableColumn(UtilUi.MSG.commonDescription(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION), new TextField(descriptionEditor)).setWidth(200);
         // quantity column
-        makeEditableColumn(UtilUi.MSG.commonQuantity(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_QUANTITY), new NumberField(quantityEditor)).setWidth(60);
+        makeEditableColumn(UtilUi.MSG.commonQuantity(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_QUANTITY, null, UtilUi.CLEAN_TRAILING_ZERO_CONVERTER), new NumberField(quantityEditor)).setWidth(60);
         getColumn().setFixed(true);
         // unit price
-        makeEditableColumn(UtilUi.MSG.commonUnitPrice(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE), new ModifierOrNumberField(priceEditor)).setWidth(60);
+        makeEditableColumn(UtilUi.MSG.commonUnitPrice(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE, null, UtilUi.CLEAN_TRAILING_ZERO_CONVERTER), new ModifierOrNumberField(priceEditor)).setWidth(60);
         getColumn().setFixed(true);
         // item adjustments, only for sales order carts
         if (orderType == OrderType.SALES) {
-            makeColumn(UtilUi.MSG.orderAdjustments(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_ADJUSTMENT)).setWidth(75);
+            makeColumn(UtilUi.MSG.orderAdjustments(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_ADJUSTMENT, null, UtilUi.CLEAN_TRAILING_ZERO_CONVERTER)).setWidth(75);
             getColumn().setFixed(true);
         }
 
@@ -302,7 +303,7 @@ public class OrderItemsEditableListView extends EntityEditableListView {
             @Override protected void onStoreLoad(Store store, Record[] records) {
                 super.onStoreLoad(store, records);
                 // set the loaded values if needed
-                record.set(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE, this.getUnitPrice().toString());
+                record.set(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE, UtilUi.removeTrailingZeros(this.getUnitPrice().toString()));
                 // change the description only if the product Id changed
                 // or if it was empty
                 if (productChanged || record.isEmpty(OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION)) {
