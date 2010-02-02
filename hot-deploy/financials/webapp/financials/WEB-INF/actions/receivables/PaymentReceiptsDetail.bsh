@@ -64,6 +64,9 @@ if (thruDate.before(fromDate)) {
 	return;
 };
 
+context.put("fromDate", fromDate);
+context.put("thruDate", thruDate);
+
 // the glAccountId to select for
 glAccountId = parameters.get("glAccountId");
 if (glAccountId == null || glAccountId.trim().length() == 0) return;

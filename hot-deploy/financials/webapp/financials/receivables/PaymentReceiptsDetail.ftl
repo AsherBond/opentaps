@@ -28,11 +28,11 @@
 <form method="POST" name="paymentReceiptsDetailForm" action="">
   <div style="margin-left: 30px; margin-top: 5px;">
     <span class="tableheadtext">${uiLabelMap.CommonFromDate}</span>
-    <@inputDateTime name="fromDate" default=requestParameters.fromDate?default(defaultFromDate)/>
+    <@inputDateTime name="fromDate" default=fromDate?default(defaultFromDate)/>
   </div>
   <div style="margin-left: 30px; margin-top: 5px;">
     <span class="tableheadtext">${uiLabelMap.CommonThruDate}</span>
-    <@inputDateTime name="thruDate" default=requestParameters.thruDate?default(defaultThruDate)/>
+    <@inputDateTime name="thruDate" default=thruDate?default(defaultThruDate)/>
   </div>
   <div style="margin-left: 30px; margin-top: 10px;">
     <span class="tableheadtext">${uiLabelMap.FinancialsGlAccount}</span> 
