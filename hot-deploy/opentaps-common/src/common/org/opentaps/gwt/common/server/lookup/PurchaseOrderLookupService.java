@@ -129,8 +129,16 @@ public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
 
             // set sort conditions
             purchaseOrderLookupRepository.setOrderBy(getOrderBy());
+
+            // set the pagination
+            purchaseOrderLookupRepository.setPageStart(getPager().getPageStart());
+            purchaseOrderLookupRepository.setPageSize(getPager().getPageSize());
+
             // return the matching result
-            return paginateResults(purchaseOrderLookupRepository.findOrders());
+            List<OrderViewForListing> results = purchaseOrderLookupRepository.findOrders();
+            setResults(results);
+            setResultTotalCount(purchaseOrderLookupRepository.getResultSize());
+            return results;
         } catch (RepositoryException e) {
             storeException(e);
             return null;
