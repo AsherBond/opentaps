@@ -66,7 +66,10 @@ try {
 if (fromDate != null) context.put("fromDate", fromDate);
 if (thruDate != null) context.put("thruDate", thruDate);
 if (fromDate == null || thruDate == null) return;
-if (thruDate.before(fromDate)) return;
+if (thruDate.before(fromDate)) {
+    UtilMessage.addError(request, "FinancialsError_FromDateAfterThruDate");
+	return;
+};
 
 glFiscalTypeId = parameters.get("glFiscalTypeId");
 if (glFiscalTypeId == null) glFiscalTypeId = "ACTUAL";

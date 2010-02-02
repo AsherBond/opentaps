@@ -53,12 +53,16 @@ if (fromDateString == null || thruDateString == null) return;
 fromDate = null;
 thruDate = null;
 try {
-  fromDate = UtilDateTime.stringToTimeStamp(fromDateString.trim(), dateTimeFormat, timeZone, locale);
-  thruDate = UtilDateTime.stringToTimeStamp(thruDateString.trim(), dateTimeFormat, timeZone, locale);
-} catch (ParseException) {
-  return; // TODO: inform user of error
+    fromDate = UtilDateTime.stringToTimeStamp(fromDateString.trim(), dateTimeFormat, timeZone, locale);
+    thruDate = UtilDateTime.stringToTimeStamp(thruDateString.trim(), dateTimeFormat, timeZone, locale);
+} catch (ParseException e) {
+    UtilMessage.addError(request, e.getMessage());
+    return;
 }
-if (thruDate.before(fromDate)) return;
+if (thruDate.before(fromDate)) {
+    UtilMessage.addError(request, "FinancialsError_FromDateAfterThruDate");
+	return;
+};
 
 // the glAccountId to select for
 glAccountId = parameters.get("glAccountId");
