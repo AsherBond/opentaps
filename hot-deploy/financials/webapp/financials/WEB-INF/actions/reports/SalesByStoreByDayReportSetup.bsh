@@ -36,7 +36,7 @@
  }
  
  //put to history
- context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsSalesByStoreByDayReport"));
+ context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsSalesByStoreByDayReport"), null, FastList.newInstance());
  
  printers = UtilReports.enumeratePrinters();
  if (printers != null && printers.size() > 0) {

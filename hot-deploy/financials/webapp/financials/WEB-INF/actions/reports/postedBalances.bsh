@@ -45,7 +45,7 @@ trialBalances = EntityUtil.filterByDate(trialBalances);
 context.put("trialBalances", trialBalances);
 
 //put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsPostedBalancesByGlAccount"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsPostedBalancesByGlAccount"), null, FastList.newInstance());
 
 context.put("organizationPartyId", organizationPartyId);
 context.put("organizationName", PartyHelper.getPartyName(delegator, organizationPartyId, false));

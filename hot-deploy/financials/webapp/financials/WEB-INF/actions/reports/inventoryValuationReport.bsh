@@ -31,9 +31,10 @@ import org.ofbiz.accounting.util.UtilAccounting;
 import com.opensourcestrategies.financials.util.UtilCOGS;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
+import javolution.util.FastList;
 
 //put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsInventoryValuationReport"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsInventoryValuationReport"), null, FastList.newInstance());
 
 // disable the glFiscalTypes, not used by this report
 context.remove("glFiscalTypes");

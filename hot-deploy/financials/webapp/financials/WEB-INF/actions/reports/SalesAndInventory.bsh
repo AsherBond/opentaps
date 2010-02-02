@@ -29,11 +29,12 @@ import com.opensourcestrategies.financials.util.UtilFinancial;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
+import javolution.util.FastList;
 
 timeZone = UtilCommon.getTimeZone(request);
 
 //put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsSalesAndInventory"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsSalesAndInventory"), null, FastList.newInstance());
 
 // get the from and thru date from parseReportOptions
 fromDate = context.get("fromDate");

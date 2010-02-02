@@ -30,7 +30,7 @@ import org.opentaps.common.util.UtilAccountingTags;
 import com.opensourcestrategies.financials.accounts.GLAccountTree;
 
 //put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsCashFlowStatement"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsCashFlowStatement"), null, FastList.newInstance());
 
 organizationPartyId = context.get("organizationPartyId");
 glFiscalTypeId = context.get("glFiscalTypeId");

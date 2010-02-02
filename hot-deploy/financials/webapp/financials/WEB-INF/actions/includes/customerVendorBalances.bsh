@@ -68,14 +68,14 @@ reportType = context.get("reportType");
 if ("VENDOR".equals(reportType)) {
     balances = AccountsHelper.getBalancesForAllVendors(organizationPartyId, glFiscalTypeId, asOfDateTime, delegator);
     title = uiLabelMap.get("FinancialsVendors");
-    context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("FinancialsPayablesBalancesReport"));
+    context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("FinancialsPayablesBalancesReport"), "payablesBalancesReport", FastList.newInstance());
 } else if ("CUSTOMER".equals(reportType)) {
     balances = AccountsHelper.getBalancesForAllCustomers(organizationPartyId, glFiscalTypeId, asOfDateTime, delegator);
     title = uiLabelMap.get("FinancialsCustomers");
-    context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("FinancialsReceivablesBalancesReport"));
+    context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("FinancialsReceivablesBalancesReport"), "receivablesBalancesReport", FastList.newInstance());
 } else if ("COMMISSION".equals(reportType)) {
     balances = AccountsHelper.getBalancesForAllCommissions(organizationPartyId, glFiscalTypeId, asOfDateTime, delegator);
-    context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("FinancialsCommissionBalancesReport"));
+    context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("FinancialsCommissionBalancesReport"), "commissionBalancesReport", FastList.newInstance());
 }
 
 keySet = (Set)balances.keySet();

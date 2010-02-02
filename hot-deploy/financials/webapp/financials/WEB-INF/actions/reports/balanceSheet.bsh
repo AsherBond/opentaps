@@ -22,9 +22,10 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilAccountingTags;
+import javolution.util.FastList;
 
 //put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("AccountingBalanceSheet"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("AccountingBalanceSheet"), null, FastList.newInstance());
     
 // get the asOfDate from parseReportOptions
 asOfDate = context.get("asOfDate");

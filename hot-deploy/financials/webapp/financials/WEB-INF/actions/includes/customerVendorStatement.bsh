@@ -53,6 +53,7 @@ import org.ofbiz.service.*;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.infrastructure.Infrastructure;
+import javolution.util.FastTable;
 
 // the screen should tell us the report type (VENDOR, CUSTOMER, COMMISSION)
 reportType = context.get("reportType");
@@ -76,17 +77,17 @@ balanceTypeEnumId = "";
 
 if ("VENDOR".equals(reportType)) {
     isVendor = true;
-    context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsVendorStatement"));
+    context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsVendorStatement"), "vendorStatement", FastTable.newInstance());
     chartTitle = "Vendor Balances";
     balanceTypeEnumId = "SUPPLIERS";
 } else if ("CUSTOMER".equals(reportType)) {
     isCustomer = true;
-    context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsCustomerStatement"));
+    context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsCustomerStatement"), "customerStatement", FastTable.newInstance());
     chartTitle = "Customer Balances";
     balanceTypeEnumId = "CUSTOMERS";
 } else if ("COMMISSIONS".equals(reportType)) {
     isCommission = true;
-    context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsCommissionsStatement"));
+    context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsCommissionsStatement"), "commissionsStatement", FastTable.newInstance());
     chartTitle = "Commission Balances";
     balanceTypeEnumId = "COMMISSIONS";
 } else return;

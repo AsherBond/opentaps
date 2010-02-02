@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import org.ofbiz.base.util.*;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
+import javolution.util.FastList;
 
 timeZone = UtilCommon.getTimeZone(request);
 
@@ -29,7 +30,7 @@ String partyClassificationGroupId = parameters.get( "partyClassificationGroupId"
 String interestRateString = parameters.get( "interestRate" ) ;
 String gracePeriodString = parameters.get( "gracePeriod" ) ;
 
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("FinancialsNavHistoryAssessFinanceCharge", locale));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("FinancialsNavHistoryAssessFinanceCharge", locale), null, FastList.newInstance());
 
 try {
     interestRate = new BigDecimal(interestRateString);

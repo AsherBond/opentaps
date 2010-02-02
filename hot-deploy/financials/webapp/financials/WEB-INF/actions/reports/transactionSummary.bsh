@@ -37,7 +37,7 @@ dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
 organizationPartyId = session.getAttribute("organizationPartyId");
 
 //put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsTransactionSummary"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsTransactionSummary"), null, FastList.newInstance());
 
 context{"tagTypes"} = UtilAccountingTags.getAccountingTagFiltersForOrganization(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, locale);
 

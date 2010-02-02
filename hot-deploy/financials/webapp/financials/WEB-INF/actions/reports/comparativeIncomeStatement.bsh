@@ -23,9 +23,10 @@ import org.ofbiz.service.*;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilAccountingTags;
+import javolution.util.FastList;
 
 //put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsComparativeIncomeStatement"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsComparativeIncomeStatement"), null, FastList.newInstance());
 
 organizationPartyId = context.get("organizationPartyId");
 glFiscalTypeId1 = context.get("glFiscalTypeId1");

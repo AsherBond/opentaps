@@ -27,6 +27,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
+import javolution.util.FastTable;
 
 timeZone = UtilCommon.getTimeZone(request);
 
@@ -62,7 +63,7 @@ if (reportType.equals("ACCOUNTS_PAYABLE")) {
        	invoicesByDSO = AccountsHelper.getUnpaidInvoicesForVendor(organizationPartyId, partyId, breakPointParams, asOfDate, UtilMisc.toList("INVOICE_READY"), delegator, timeZone, locale);
     }
     if (context{"history"} == null) {
-        context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsPayablesAgingReport"));
+        context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsPayablesAgingReport"), "payablesAgingReport", FastTable.newInstance());
     }
 } else if (reportType.equals("ACCOUNTS_RECEIVABLE")) {
     isCustomer = true;
@@ -72,7 +73,7 @@ if (reportType.equals("ACCOUNTS_PAYABLE")) {
        	invoicesByDSO = AccountsHelper.getUnpaidInvoicesForCustomer(organizationPartyId, partyId, breakPointParams, asOfDate, UtilMisc.toList("INVOICE_READY"), delegator, timeZone, locale);
     }
     if (context{"history"} == null) {
-        context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsReceivablesAgingReport"));
+        context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsReceivablesAgingReport"), "receivablesAgingReport", FastTable.newInstance());
     }
 }
 context.put("invoicesByDSO", invoicesByDSO);

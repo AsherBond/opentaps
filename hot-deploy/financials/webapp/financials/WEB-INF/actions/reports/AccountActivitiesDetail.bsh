@@ -22,6 +22,7 @@ import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
+import javolution.util.FastList;
 
 timeZone = UtilCommon.getTimeZone(request);
 locale = UtilHttp.getLocale(request);
@@ -102,4 +103,4 @@ context.put("transactionFromDate", transactionFromDate);
 context.put("transactionThruDate", transactionThruDate);
 
 /* make an history entry */
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsAccountActivitiesDetail"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsAccountActivitiesDetail"), null, FastList.newInstance());

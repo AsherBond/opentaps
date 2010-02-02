@@ -28,13 +28,14 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilAccountingTags;
+import javolution.util.FastList;
 
 // check that a report was asked first
 reportFormType = context.get("reportFormType");
 if (UtilValidate.isEmpty(reportFormType)) return;
 
 // put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("AccountingIncomeStatement"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("AccountingIncomeStatement"), null, FastList.newInstance());
 
 // get the from and thru date from parseReportOptions
 fromDate = context.get("fromDate");

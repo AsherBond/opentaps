@@ -36,7 +36,7 @@ timeZone = UtilCommon.getTimeZone(request);
 dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
 
 //put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsCreditCardReport"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsCreditCardReport"), null, FastList.newInstance());
 
 // get the from and thru date timestamps
 fromDateString = UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);

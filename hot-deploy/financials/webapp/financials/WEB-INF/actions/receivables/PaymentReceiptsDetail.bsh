@@ -35,7 +35,7 @@ timeZone = UtilCommon.getTimeZone(request);
 dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
 
 //put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsPaymentReceiptsDetail"));
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsPaymentReceiptsDetail"), null, FastList.newInstance());
 
 // default glAccountId: undeposited receipts account 
 context.put("defaultGlAccountId", UtilAccounting.getProductOrgGlAccountId(null, "UNDEPOSITED_RECEIPTS", organizationPartyId, delegator)); 

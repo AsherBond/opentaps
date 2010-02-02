@@ -17,6 +17,7 @@
  */
  import org.opentaps.common.util.UtilMessage;
  import org.opentaps.common.util.UtilCommon;
+ import javolution.util.FastList;
  
  //put to history
- context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsAverageDSOReportReceivables"));
+ context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsAverageDSOReportReceivables"), null, FastList.newInstance());
