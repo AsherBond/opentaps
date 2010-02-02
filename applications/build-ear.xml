@@ -39,7 +39,8 @@
             <fileset dir="${applications.dir}/manufacturing/build/lib/" includes="ofbiz-manufacturing.jar"/>
             <fileset dir="${applications.dir}/accounting/build/lib/" includes="ofbiz-accounting.jar"/>             
             <fileset dir="${applications.dir}/order/build/lib/" includes="ofbiz-order.jar"/>
-            <fileset dir="${applications.dir}/marketing/build/lib/" includes="ofbiz-marketing.jar"/>             
+            <fileset dir="${applications.dir}/marketing/build/lib/" includes="ofbiz-marketing.jar"/>
+            <fileset dir="${applications.dir}/humanres/build/lib/" includes="ofbiz-humanres.jar"/>
         </copy>
     </target>
 	
@@ -82,6 +83,10 @@
 
         <jar destfile="${ear.lib.dir}/applications.humanres.config.jar">
             <fileset dir="${applications.dir}/humanres/config"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/applications.humanres.script.jar">
+            <fileset dir="${applications.dir}/humanres/script"/>
         </jar>
     	
         <jar destfile="${ear.lib.dir}/applications.product.config.jar">
