@@ -503,7 +503,7 @@ public abstract class UtilUi {
 
     public static final Converter CLEAN_TRAILING_ZERO_CONVERTER = new Converter() {
                 // trim trailing zeros
-                @Override public String format(String input) {
+                public String format(String input) {
                     return removeTrailingZeros(input);
                 }
             };
