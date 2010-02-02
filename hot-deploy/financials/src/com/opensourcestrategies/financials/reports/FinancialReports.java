@@ -1401,6 +1401,12 @@ public final class FinancialReports {
             GenericValue invoice = null;
             while ((invoice = iterator.next()) != null) {
 
+                Timestamp invoiceDate = invoice.getTimestamp("invoiceDate");
+                if (invoiceDate == null) {
+                    Debug.logWarning("No invoice date for invoice [" + invoice.get("invoiceId") + "], skipping it", MODULE);
+                    continue;
+                }
+
                 String partyId = invoice.getString(partyIdField);
 
                 Map<String, Object> reportLine = (Map<String, Object>) reportData.get(partyId);
@@ -1422,10 +1428,6 @@ public final class FinancialReports {
                 reportLine.put("invoiceSum", invoiceSum);
 
                 // compute DSO, number of days outstanding for invoice
-                Timestamp invoiceDate = invoice.getTimestamp("invoiceDate");
-                if (invoiceDate == null) {
-                    Debug.logWarning("No invoice date for invoice [" + invoice.get("invoiceId") + "], skipping it", MODULE);
-                }
 
                 // if the invoice is PAID, then the paid date from the invoice is used as paid date
                 // if there is no paidDate, then it is set to invoiceDate -- ie, DSO of 0, because in older versions of ofbiz

@@ -91,6 +91,12 @@ iterator = delegator.findListIteratorByCondition("Invoice", conditions, null, nu
 // compose the report by keeping each row of data in a report map keyed to partyId
 reportMap = FastMap.newInstance();
 while ((invoice = iterator.next()) != null) {
+    invoiceDate = invoice.get("invoiceDate");
+    if (invoiceDate == null) {
+        Debug.logWarning("No invoice date for invoice [" + invoice.get("invoiceId") + "], skipping it", module);
+        continue;
+    }
+
     partyId = invoice.get(partyIdField);
     row = reportMap.get(partyId);
 
@@ -111,10 +117,6 @@ while ((invoice = iterator.next()) != null) {
     row.put("invoiceSum", invoiceSum);
 
     // compute DSO, number of days outstanding for invoice
-    invoiceDate = invoice.get("invoiceDate");
-    if (invoiceDate == null) {
-        Debug.logWarning("No invoice date for invoice [" + invoice.get("invoiceId") + "], skipping it", module);
-    }
 
     // if the invoice is PAID, then the paid date from the invoice is used as paid date
     // if there is no paidDate, then it is set to invoiceDate -- ie, DSO of 0, because in older versions of ofbiz
