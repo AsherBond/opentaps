@@ -218,19 +218,19 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
 
     @Override protected void filter() {
         getListView().clearFilters();
-        
         Panel p = getMainForm().getTabPanel().getActiveTab();
+        getListView().filterIncludeInactiveOrders(true);
         if (p == filterPanel) {
-            if (orderIdInput.getText().equals("") && externalIdInput.getText().equals("")
-                    && orderNameInput.getText().equals("") && customerInput.getText().equals("")
-                    && productStoreInput.getText().equals("") && orderStatusInput.getText().equals("")
-                    && correspondingPoIdInput.getText().equals("") && serialNumberInput.getText().equals("")
-                    && fromDateInput.getText().equals("") && thruDateInput.getText().equals("")
-                    && createdByInput.getText().equals("") && lotInput.getText().equals("")
-                    && productInput.getText().equals("")) {
+            if (!findAllInput.getValue() && isEmpty(orderIdInput.getText()) && isEmpty(externalIdInput.getText())
+                    && isEmpty(orderNameInput.getText()) && isEmpty(customerInput.getText())
+                    && isEmpty(productStoreInput.getText()) && isEmpty(orderStatusInput.getText())
+                    && isEmpty(correspondingPoIdInput.getText()) && isEmpty(serialNumberInput.getText())
+                    && isEmpty(fromDateInput.getText()) && isEmpty(thruDateInput.getText())
+                    && isEmpty(createdByInput.getText()) && isEmpty(lotInput.getText())
+                    && isEmpty(productInput.getText())) {
                 UtilUi.errorMessage(UtilUi.MSG.atLeastOnFieldRequiredToSearch());
                 return;
-            } 
+            }
         	getListView().filterByOrderId(orderIdInput.getText());
             getListView().filterByExternalId(externalIdInput.getText());
             getListView().filterByOrderName(orderNameInput.getText());
@@ -243,17 +243,11 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
             getListView().filterByCreatedBy(createdByInput.getText());
             getListView().filterByLotId(lotInput.getText());
             getListView().filterBySerialNumber(serialNumberInput.getText());
-            getListView().filterByProductId(productInput.getText());
-            if (orderStatusInput.getText() == null || "".equals(orderStatusInput.getText())) {
-                getListView().filterIncludeInactiveOrders(findAllInput.getValue());
-            } else {
-                getListView().filterIncludeInactiveOrders(true);
-            }
         } else if (p == filterByAdvancedTab) {
-            if (shippingAddressInput.getText().equals("") && shippingCityInput.getText().equals("")
-                    && shippingCountryInput.getText().equals("") && shippingStateInput.getText().equals("")
-                    && shippingPostalCodeInput.getText().equals("") && shippingToNameInput.getText().equals("")
-                    && shippingAttnNameInput.getText().equals("")) {
+            if (isEmpty(shippingAddressInput.getText()) && isEmpty(shippingCityInput.getText())
+                    && isEmpty(shippingCountryInput.getText()) && isEmpty(shippingStateInput.getText())
+                    && isEmpty(shippingPostalCodeInput.getText()) && isEmpty(shippingToNameInput.getText())
+                    && isEmpty(shippingAttnNameInput.getText())) {
                 UtilUi.errorMessage(UtilUi.MSG.atLeastOnFieldRequiredToSearch());
                 return;
             }
@@ -264,9 +258,15 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
             getListView().filterByShippingPostalCode(shippingPostalCodeInput.getText());
             getListView().filterByShippingToName(shippingToNameInput.getText());
             getListView().filterByShippingAttnName(shippingAttnNameInput.getText());
-            getListView().filterIncludeInactiveOrders(true);
         }
         getListView().applyFilters();
+    }
+    
+    private static boolean isEmpty(String text) {
+        if (text == null || "".equals(text)) {
+            return true;
+        }
+        return false;
     }
 
 }

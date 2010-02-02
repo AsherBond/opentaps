@@ -152,6 +152,14 @@ public class FindOrdersForm extends FindEntityForm<PurchaseOrderListView> {
 
     @Override protected void filter() {
         getListView().clearFilters();
+        if (!findAllInput.getValue() && isEmpty(orderIdInput.getText()) && isEmpty(productPatternInput.getText())
+                && isEmpty(orderNameInput.getText()) && isEmpty(supplierInput.getText())
+                && isEmpty(orderStatusInput.getText())
+                && isEmpty(fromDateInput.getText()) && isEmpty(thruDateInput.getText())
+                && isEmpty(createdByInput.getText())) {
+            UtilUi.errorMessage(UtilUi.MSG.atLeastOnFieldRequiredToSearch());
+            return;
+        }
         getListView().filterByOrderId(orderIdInput.getText());
         getListView().filterByProductPattern(productPatternInput.getText());
         getListView().filterByOrderName(orderNameInput.getText());
@@ -160,12 +168,15 @@ public class FindOrdersForm extends FindEntityForm<PurchaseOrderListView> {
         getListView().filterByFromDate(fromDateInput.getText());
         getListView().filterByThruDate(thruDateInput.getText());
         getListView().filterByCreatedBy(createdByInput.getText());
-        if (orderStatusInput.getText() == null || "".equals(orderStatusInput.getText())) {
-            getListView().filterHasIncludeInactiveOrders(findAllInput.getValue());
-        } else {
-            getListView().filterHasIncludeInactiveOrders(true);
-        }
+        getListView().filterHasIncludeInactiveOrders(true);
         getListView().applyFilters();
+    }
+    
+    private static boolean isEmpty(String text) {
+        if (text == null || "".equals(text)) {
+            return true;
+        }
+        return false;
     }
 
 }

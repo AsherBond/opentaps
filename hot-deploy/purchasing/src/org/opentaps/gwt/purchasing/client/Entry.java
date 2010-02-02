@@ -84,13 +84,14 @@ public class Entry extends BaseEntry {
     }
 
     private void loadFindOrders() {
-        findOrdersForm = new FindOrdersForm(true);
+        findOrdersForm = new FindOrdersForm(false);
         RootPanel.get(FIND_ORDERS_ID).add(findOrdersForm.getMainPanel());
     }
 
     private void loadOpenOrders() {
         openOrdersForm = new FindOrdersForm(false);
         openOrdersForm.hideFilters();
+        openOrdersForm.getListView().filterHasIncludeInactiveOrders(false);
         openOrdersForm.getListView().applyFilters();
         RootPanel.get(OPEN_ORDERS_ID).add(openOrdersForm.getMainPanel());
     }
