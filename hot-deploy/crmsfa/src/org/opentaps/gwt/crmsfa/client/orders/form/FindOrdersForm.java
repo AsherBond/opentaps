@@ -243,6 +243,7 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
             getListView().filterByCreatedBy(createdByInput.getText());
             getListView().filterByLotId(lotInput.getText());
             getListView().filterBySerialNumber(serialNumberInput.getText());
+            getListView().filterByProductId(productInput.getText());
         } else if (p == filterByAdvancedTab) {
             if (isEmpty(shippingAddressInput.getText()) && isEmpty(shippingCityInput.getText())
                     && isEmpty(shippingCountryInput.getText()) && isEmpty(shippingStateInput.getText())
