@@ -1798,6 +1798,7 @@ public final class FinancialReports {
             }
             jrParameters.put("totalCashAmount", totalCash);
             jrParameters.put("totalNonCashAmount", total);
+            jrParameters.put("showInvoiceLevelDetail", showInvoiceLevelDetail);
             request.setAttribute("jrParameters", jrParameters);
 
         } catch (GenericEntityException e) {

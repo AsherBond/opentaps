@@ -155,7 +155,9 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsPaymentId}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="154" y="0" width="208" height="16"/>
+				<reportElement x="154" y="0" width="208" height="16">
+					<printWhenExpression><![CDATA[$P{showInvoiceLevelDetail}]]></printWhenExpression>
+				</reportElement>
 				<box leftPadding="2" rightPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -169,7 +171,9 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsCustomer}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="362" y="0" width="89" height="16"/>
+				<reportElement x="362" y="0" width="89" height="16">
+					<printWhenExpression><![CDATA[$P{showInvoiceLevelDetail}]]></printWhenExpression>
+				</reportElement>
 				<box leftPadding="2" rightPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -224,10 +228,27 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsCash}]]></textFieldExpression>
 			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="154" y="0" width="297" height="16">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!$P{showInvoiceLevelDetail}.booleanValue())]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="2" rightPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsCustomer}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="16" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{showInvoiceLevelDetail}]]></printWhenExpression>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement x="680" y="0" width="42" height="16"/>
 				<box leftPadding="2" rightPadding="2"/>
@@ -275,6 +296,57 @@
 					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{paymentId}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yy HH:mm:ss" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="89" height="16"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{transactionDate}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="16">
+			<printWhenExpression><![CDATA[Boolean.valueOf(!$P{showInvoiceLevelDetail}.booleanValue())]]></printWhenExpression>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="154" y="0" width="297" height="16"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{partyName} + " (" + $F{partyId} + ")"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true">
+				<reportElement x="603" y="0" width="77" height="16"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{amount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="451" y="0" width="152" height="16"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{paymentRefNum}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="89" y="0" width="65" height="16"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{paymentId}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="680" y="0" width="42" height="16"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{isCash}.booleanValue() ? "Y" : ""]]></textFieldExpression>
 			</textField>
 			<textField pattern="MM/dd/yy HH:mm:ss" isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="89" height="16"/>
