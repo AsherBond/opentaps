@@ -1712,13 +1712,13 @@ public class FinancialsTests extends FinancialsTestCase {
         InvoiceRepositoryInterface repository = getInvoiceRepository(demofinadmin);
         Invoice invoice = repository.getInvoiceById(invoiceId);
 
-        // verify that the invoice total amount is $8
+        // verify that the invoice adjusted total amount is $8
         assertEquals(String.format("Invoice total amount for [%1$s] is incorrect.", invoiceId), BigDecimal.valueOf(8.0), invoice.getInvoiceAdjustedTotal());
 
         // verify that the invoice outstanding amount is $8
         assertEquals(String.format("Invoice outstanding(open) amount for [%1$s] is incorrect.", invoiceId), BigDecimal.valueOf(8.0), invoice.getOpenAmount());
 
-        // create a payment (P1) of $4 and apply it to the invoice
+        // create a payment (paymentId1) of $4 and apply it to the invoice
         String paymentId1 = 
             fa.createPayment(BigDecimal.valueOf(4.0), customerPartyId, PaymentTypeConstants.Receipt.CUSTOMER_PAYMENT, PaymentMethodTypeConstants.CASH);
         runAndAssertServiceSuccess("createPaymentApplication",
@@ -1731,7 +1731,7 @@ public class FinancialsTests extends FinancialsTestCase {
         );
         fa.updatePaymentStatus(paymentId1, StatusItemConstants.PmntStatus.PMNT_RECEIVED);
 
-        // create a second payment (P2) of $5 and apply $4 to the invoice
+        // create a second payment (paymentId2) of $5 and apply $4 to the invoice
         String paymentId2 = 
             fa.createPayment(BigDecimal.valueOf(5.0), customerPartyId, PaymentTypeConstants.Receipt.CUSTOMER_PAYMENT, PaymentMethodTypeConstants.CASH);
         runAndAssertServiceSuccess("createPaymentApplication",
@@ -1746,7 +1746,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
         invoice = repository.getInvoiceById(invoiceId);
 
-        // verify that the invoice total is still $8 by the outstanding amount is $0
+        // verify that the invoice adjusted total is still $8 by the outstanding amount is $0
         assertEquals(String.format("Invoice total amount for [%1$s] is incorrect.", invoiceId), BigDecimal.valueOf(8.0), invoice.getInvoiceAdjustedTotal());
         assertEquals(String.format("Invoice outstanding(open) amount for [%1$s] is incorrect.", invoiceId), BigDecimal.ZERO, invoice.getOpenAmount());
 
