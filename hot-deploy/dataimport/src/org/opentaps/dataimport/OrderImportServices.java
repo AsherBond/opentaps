@@ -208,7 +208,7 @@ public class OrderImportServices {
                         Debug.logInfo("Changing payment status for [" + paymentId + "]", MODULE);
                         Map results = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
                         if (ServiceUtil.isError(results)) {
-                            Debug.logWarning("cahngePaymentStatus returned error " + ServiceUtil.getErrorMessage(results), MODULE);
+                            Debug.logWarning("changePaymentStatus returned error " + ServiceUtil.getErrorMessage(results), MODULE);
                             TransactionUtil.rollback();
                         }
                     }
@@ -559,7 +559,12 @@ public class OrderImportServices {
                 payment.setStatusId(dataImportOrderPayment.getStatusId());
                 payment.setEffectiveDate(dataImportOrderPayment.getEffectiveDate());
                 payment.setPaymentRefNum(dataImportOrderPayment.getPaymentRefNum());
-                payment.setAmount(dataImportOrderPayment.getAmount());
+                // set zero as payment amount default value
+                if (UtilValidate.isEmpty(dataImportOrderPayment.getAmount())) {
+                    payment.setAmount(BigDecimal.ZERO);
+                } else { 
+                    payment.setAmount(dataImportOrderPayment.getAmount());
+                }
                 payment.setCurrencyUomId(dataImportOrderPayment.getCurrencyUomId());
                 payment.setComments(dataImportOrderPayment.getComments());
                 payment.setStatusId("PMNT_NOT_PAID");
