@@ -27,10 +27,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.util.UtilCOGS;
-import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastMap;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -39,9 +37,12 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.opentaps.common.order.PurchaseOrderFactory;
-import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.DomainsLoader;
+import org.opentaps.base.constants.InvoiceAdjustmentTypeConstants;
+import org.opentaps.base.constants.InvoiceItemTypeConstants;
+import org.opentaps.base.constants.InvoiceTypeConstants;
+import org.opentaps.base.constants.PaymentMethodTypeConstants;
+import org.opentaps.base.constants.PaymentTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.AccountBalanceHistory;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.CustomTimePeriod;
@@ -50,6 +51,9 @@ import org.opentaps.base.entities.InventoryItemValueHistory;
 import org.opentaps.base.entities.InvoiceAdjustmentGlAccount;
 import org.opentaps.base.entities.InvoiceAdjustmentType;
 import org.opentaps.base.entities.SupplierProduct;
+import org.opentaps.common.order.PurchaseOrderFactory;
+import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.payment.Payment;
@@ -58,9 +62,9 @@ import org.opentaps.domain.inventory.InventoryDomainInterface;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
 import org.opentaps.domain.ledger.AccountingTransaction;
-import org.opentaps.domain.ledger.AccountingTransaction.TagBalance;
 import org.opentaps.domain.ledger.GeneralLedgerAccount;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
+import org.opentaps.domain.ledger.AccountingTransaction.TagBalance;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.organization.Organization;
@@ -73,6 +77,10 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.tests.analytics.tests.TestObjectGenerator;
 import org.opentaps.tests.warehouse.InventoryAsserts;
+
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.util.UtilCOGS;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * General financial tests.  If there is a large chunk of test cases that are related, please
@@ -519,7 +527,6 @@ public class FinancialsTests extends FinancialsTestCase {
      * a large number of transactions in rapid succession of each other.
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testProductAverageCostLongRunning() throws GeneralException {
         // Create a new product
         Map<String, Object> callContext = new HashMap<String, Object>();
@@ -1674,18 +1681,77 @@ public class FinancialsTests extends FinancialsTestCase {
 
     /**
      *This test checks that payment applications to an adjusted invoice is based on the invoice total including the adjusted amount
+     * @throws Exception 
      */
-    public void testPaymentApplicationToAdjustedInvoice() {
+    public void testPaymentApplicationToAdjustedInvoice() throws Exception {
         // create a customer party
+        String customerPartyId =
+            createPartyFromTemplate("DemoCustomer", "Customer for testPaymentApplicationToAdjustedInvoice");
+
         // create sales invoice to the customer for $10
+        FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
+        String invoiceId = fa.createInvoice(customerPartyId, InvoiceTypeConstants.SALES_INVOICE);
+        fa.createInvoiceItem(invoiceId, InvoiceItemTypeConstants.INV_FPROD_ITEM, "WG-1111", BigDecimal.valueOf(1.0), BigDecimal.valueOf(10.0));
+
         //  set the invoice to READY
+        fa.updateInvoiceStatus(invoiceId, StatusItemConstants.InvoiceStatus.INVOICE_READY);
+
         // create an adjustment of CASH_DISCOUNT of -2 for the invoice
+        Map<String, Object> results =
+            runAndAssertServiceSuccess("createInvoiceAdjustment",
+                    UtilMisc.toMap(
+                            "userLogin", demofinadmin,
+                            "invoiceId", invoiceId,
+                            "invoiceAdjustmentTypeId", InvoiceAdjustmentTypeConstants.CASH_DISCOUNT,
+                            "adjustmentAmount", BigDecimal.valueOf(-2.0)
+                    )
+            );
+        String invoiceAdjustmentId = (String) results.get("invoiceAdjustmentId");
+        assertNotNull(invoiceAdjustmentId);
+
+        InvoiceRepositoryInterface repository = getInvoiceRepository(demofinadmin);
+        Invoice invoice = repository.getInvoiceById(invoiceId);
+
         // verify that the invoice total amount is $8
+        assertEquals(String.format("Invoice total amount for [%1$s] is incorrect.", invoiceId), BigDecimal.valueOf(8.0), invoice.getInvoiceAdjustedTotal());
+
         // verify that the invoice outstanding amount is $8
+        assertEquals(String.format("Invoice outstanding(open) amount for [%1$s] is incorrect.", invoiceId), BigDecimal.valueOf(8.0), invoice.getOpenAmount());
+
         // create a payment (P1) of $4 and apply it to the invoice
+        String paymentId1 = 
+            fa.createPayment(BigDecimal.valueOf(4.0), customerPartyId, PaymentTypeConstants.Receipt.CUSTOMER_PAYMENT, PaymentMethodTypeConstants.CASH);
+        runAndAssertServiceSuccess("createPaymentApplication",
+                UtilMisc.<String, Object>toMap(
+                        "paymentId", paymentId1,
+                        "invoiceId", invoiceId,
+                        "amountApplied", BigDecimal.valueOf(4.0),
+                        "userLogin", demofinadmin
+                )
+        );
+        fa.updatePaymentStatus(paymentId1, StatusItemConstants.PmntStatus.PMNT_RECEIVED);
+
         // create a second payment (P2) of $5 and apply $4 to the invoice
+        String paymentId2 = 
+            fa.createPayment(BigDecimal.valueOf(5.0), customerPartyId, PaymentTypeConstants.Receipt.CUSTOMER_PAYMENT, PaymentMethodTypeConstants.CASH);
+        runAndAssertServiceSuccess("createPaymentApplication",
+                UtilMisc.<String, Object>toMap(
+                        "paymentId", paymentId2,
+                        "invoiceId", invoiceId,
+                        "amountApplied", BigDecimal.valueOf(4.0),
+                        "userLogin", demofinadmin
+                )
+        );
+        fa.updatePaymentStatus(paymentId2, StatusItemConstants.PmntStatus.PMNT_RECEIVED);
+
+        invoice = repository.getInvoiceById(invoiceId);
+
         // verify that the invoice total is still $8 by the outstanding amount is $0
+        assertEquals(String.format("Invoice total amount for [%1$s] is incorrect.", invoiceId), BigDecimal.valueOf(8.0), invoice.getInvoiceAdjustedTotal());
+        assertEquals(String.format("Invoice outstanding(open) amount for [%1$s] is incorrect.", invoiceId), BigDecimal.ZERO, invoice.getOpenAmount());
+
         // verify the status of the invoice is PAID
+        assertEquals("Invoice status should be PAID in this point.", StatusItemConstants.InvoiceStatus.INVOICE_PAID, invoice.getStatusId());
     }
 
     /**
@@ -1871,7 +1937,6 @@ public class FinancialsTests extends FinancialsTestCase {
      *      (e) Customer E: isPastDue = true, current = $44, 30 - 60 days = 155, 60 - 90 days = 266, 90 - 120 days = 377, over 120 days = 1087, total open amount = $1929
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testAccountsReceivableInvoiceAgingAndCustomerBalances() throws GeneralException {
 
         /*
