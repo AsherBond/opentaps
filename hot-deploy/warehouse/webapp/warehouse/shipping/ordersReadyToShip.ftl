@@ -44,12 +44,12 @@
                 ${Static["org.opentaps.common.order.UtilOrder"].getBillToCustomerPartyName(delegator, order.orderId, false)?if_exists}
             </td>
             <td>
-                <#assign carrier = order.getRelatedOne("Party")/>
-                <#if carrier?has_content>
+                <#if order.carrierPartyId?has_content>
+                    <#assign carrier = order.getRelatedOne("Party")/>
                     ${Static["org.ofbiz.party.party.PartyHelper"].getPartyName(carrier)}
                 </#if>
-                <#assign shipmentMethodType = order.getRelatedOne("ShipmentMethodType")/>
-                <#if shipmentMethodType?has_content>
+                <#if order.shipmentMethodTypeId?has_content>
+                    <#assign shipmentMethodType = order.getRelatedOne("ShipmentMethodType")/>
                     &nbsp;${shipmentMethodType.description}
                 </#if>
             </td>
