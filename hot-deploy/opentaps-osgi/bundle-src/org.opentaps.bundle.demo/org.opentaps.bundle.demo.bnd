@@ -1,4 +1,5 @@
-#-output = ../webapp/WEB-INF/bundles
+Bundle-Vendor: Open Source Strategies, Inc.
+Bundle-Copyright: Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
 Bundle-SymbolicName = org.opentaps.bundle.demo
 Bundle-Name = OfBiz Intergation Demo
 Bundle-ManifestVersion = 2

@@ -1,3 +1,5 @@
+Bundle-Vendor: Open Source Strategies, Inc.
+Bundle-Copyright: Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
 Bundle-SymbolicName: org.opentaps.core.log
 Bundle-Name: opentaps Log Adapter
 Bundle-ManifestVersion: 2
