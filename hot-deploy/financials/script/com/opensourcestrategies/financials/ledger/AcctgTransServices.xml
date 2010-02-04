@@ -45,9 +45,9 @@ under the License.
     <simple-method method-name="updateAcctgTransEntry" short-description="Update Entry To AcctgTrans">
         <!-- this method is necessary because ofbiz 09.04's updateAcctgTransEntry will no longer let you set the reconcileStatusId flag to AES_RECONCILED after a transaction has been posted,
         which is in fact when an accounting transaction entry should be reconciled. -->
-        <entity-one entity-name="AcctgTransEntry" value-name="lookedUpValue"/>
-        <set-nonpk-fields map-name="parameters" value-name="lookedUpValue"/>
-        <store-value value-name="lookedUpValue"/>
+        <entity-one entity-name="AcctgTransEntry" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/>
 
         <!-- when changing entries, also update the last modified info for the AcctgTrans -->
         <call-simple-method method-name="updateAcctgTransLastModified"/>
@@ -55,9 +55,9 @@ under the License.
     
     <simple-method method-name="updateAcctgTransLastModified" short-description="Update AcctgTrans LastModified Info">
         <!-- this is just a little method that is meant to be called as an inline call-simple-method target with the context already setup -->
-        <entity-one entity-name="AcctgTrans" value-name="lookedUpACTX"/>
+        <entity-one entity-name="AcctgTrans" value-field="lookedUpACTX"/>
         <set from-field="userLogin.userLoginId" field="lookedUpACTX.lastModifiedByUserLogin"/>
-        <store-value value-name="lookedUpACTX"/>
+        <store-value value-field="lookedUpACTX"/>
     </simple-method>    
 
     <!-- ========= GlReconciliationEntry methods ========= -->
@@ -67,10 +67,10 @@ under the License.
         <check-permission permission="ACCOUNTING" action="_CREATE"><fail-message message="Security Error: to run createGlReconciliationEntry you must have the ACCOUNTING_CREATE or ACCOUNTING_ADMIN permission"/></check-permission>
         <check-errors/>
 
-        <make-value entity-name="GlReconciliationEntry" value-name="newEntity"/>
-        <set-nonpk-fields map-name="parameters" value-name="newEntity"/>
-        <set-pk-fields map-name="parameters" value-name="newEntity"/>
-        <create-value value-name="newEntity"/>
+        <make-value entity-name="GlReconciliationEntry" value-field="newEntity"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <set-pk-fields map="parameters" value-field="newEntity"/>
+        <create-value value-field="newEntity"/>
 
         <!-- when changing entries, also update the last modified info for the GlReconciliation -->
         <call-simple-method method-name="updateGlReconciliationLastModified"/>
@@ -78,9 +78,9 @@ under the License.
 
     <simple-method method-name="updateGlReconciliationLastModified" short-description="Update GlReconciliation LastModified Info">        
         <!-- this is just a little method that is meant to be called as an inline call-simple-method target with the context already setup -->        
-        <entity-one entity-name="GlReconciliation" value-name="lookedUpGLR"/>        
+        <entity-one entity-name="GlReconciliation" value-field="lookedUpGLR"/>        
         <set from-field="userLogin.userLoginId" field="lookedUpGLR.lastModifiedByUserLogin"/>
-        <store-value value-name="lookedUpGLR"/>
+        <store-value value-field="lookedUpGLR"/>
     </simple-method>
 
 
