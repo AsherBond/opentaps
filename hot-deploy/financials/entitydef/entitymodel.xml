@@ -1276,6 +1276,7 @@ under the License.
        <alias name="transactionDate" entity-alias="ATR"/>
        <alias name="acctgTransId" entity-alias="ATR"/>
        <alias name="acctgTransTypeId" entity-alias="ATR"/>
+       <alias name="description" entity-alias="ATR"/>
        <alias name="isPosted" entity-alias="ATR"/>
        <alias name="partyId" entity-alias="ATR"/>
        <alias name="glFiscalTypeId" entity-alias="ATR"/>

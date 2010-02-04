@@ -130,6 +130,7 @@ public class TransactionActions {
             List<String> fieldsToSelect = UtilMisc.toList("acctgTransId", "acctgTransTypeId", "isPosted", "partyId", "transactionDate", "scheduledPostingDate");
             fieldsToSelect.add("postedDate");
             fieldsToSelect.add("postedAmount");
+            fieldsToSelect.add("description");
             Debug.logInfo("search conditions : " + EntityCondition.makeCondition(searchConditions, EntityOperator.AND).toString(), MODULE);
             EntityListBuilder acctgTransListBuilder = new EntityListBuilder(ledgerRepository, AcctgTransAndOrg.class, EntityCondition.makeCondition(searchConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList(AcctgTransAndOrg.Fields.transactionDate.desc()));
             PageBuilder<AcctgTransAndOrg> pageBuilder = new PageBuilder<AcctgTransAndOrg>() {

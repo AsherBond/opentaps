@@ -27,6 +27,7 @@
             <tr class="listTableHeader">
                 <@headerCell title=uiLabelMap.FinancialsTransactionId orderBy="acctgTransId"/>
                 <@headerCell title=uiLabelMap.FinancialsTransactionType orderBy="acctgTransTypeId"/>
+                <@headerCell title=uiLabelMap.CommonDescription orderBy="description"/>
                 <@headerCell title=uiLabelMap.FinancialsIsPosted orderBy="isPosted"/>
                 <@headerCell title=uiLabelMap.PartyParty orderBy="partyId"/>
                 <@headerCell title=uiLabelMap.FinancialsTransactionDate orderBy="transactionDate DESC"/>
@@ -38,6 +39,7 @@
             <tr class="${tableRowClass(row_index)}">
                 <@displayLinkCell text=row.acctgTransId href="viewAcctgTrans?acctgTransId=${row.acctgTransId}"/>
                 <@displayCell text=row.acctgTransTypeDescription/>
+                <@displayCell text=row.description/>
                 <@displayCell text=row.isPosted/>
                 <@displayCell text=row.partyNameAndId/>
                 <@displayDateCell date=row.transactionDate/>

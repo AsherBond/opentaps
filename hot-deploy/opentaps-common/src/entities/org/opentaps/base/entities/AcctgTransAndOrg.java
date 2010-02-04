@@ -50,12 +50,13 @@ import java.sql.Timestamp;
  * Auto generated base entity AcctgTransAndOrg.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectAcctgTransAndOrgs", query="SELECT ATR.TRANSACTION_DATE AS \"transactionDate\",ATR.ACCTG_TRANS_ID AS \"acctgTransId\",ATR.ACCTG_TRANS_TYPE_ID AS \"acctgTransTypeId\",ATR.IS_POSTED AS \"isPosted\",ATR.PARTY_ID AS \"partyId\",ATR.GL_FISCAL_TYPE_ID AS \"glFiscalTypeId\",ATR.SCHEDULED_POSTING_DATE AS \"scheduledPostingDate\",ATR.POSTED_DATE AS \"postedDate\",ATR.POSTED_AMOUNT AS \"postedAmount\",ATE.ORGANIZATION_PARTY_ID AS \"organizationPartyId\" FROM ACCTG_TRANS ATR LEFT JOIN ACCTG_TRANS_ENTRY ATE ON ATR.ACCTG_TRANS_ID = ATE.ACCTG_TRANS_ID", resultSetMapping="AcctgTransAndOrgMapping")
+@NamedNativeQuery(name="selectAcctgTransAndOrgs", query="SELECT ATR.TRANSACTION_DATE AS \"transactionDate\",ATR.ACCTG_TRANS_ID AS \"acctgTransId\",ATR.ACCTG_TRANS_TYPE_ID AS \"acctgTransTypeId\",ATR.DESCRIPTION AS \"description\",ATR.IS_POSTED AS \"isPosted\",ATR.PARTY_ID AS \"partyId\",ATR.GL_FISCAL_TYPE_ID AS \"glFiscalTypeId\",ATR.SCHEDULED_POSTING_DATE AS \"scheduledPostingDate\",ATR.POSTED_DATE AS \"postedDate\",ATR.POSTED_AMOUNT AS \"postedAmount\",ATE.ORGANIZATION_PARTY_ID AS \"organizationPartyId\" FROM ACCTG_TRANS ATR LEFT JOIN ACCTG_TRANS_ENTRY ATE ON ATR.ACCTG_TRANS_ID = ATE.ACCTG_TRANS_ID", resultSetMapping="AcctgTransAndOrgMapping")
 @SqlResultSetMapping(name="AcctgTransAndOrgMapping", entities={
 @EntityResult(entityClass=AcctgTransAndOrg.class, fields = {
 @FieldResult(name="transactionDate", column="transactionDate")
 ,@FieldResult(name="acctgTransId", column="acctgTransId")
 ,@FieldResult(name="acctgTransTypeId", column="acctgTransTypeId")
+,@FieldResult(name="description", column="description")
 ,@FieldResult(name="isPosted", column="isPosted")
 ,@FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="glFiscalTypeId", column="glFiscalTypeId")
@@ -72,6 +73,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("transactionDate", "ATR.TRANSACTION_DATE");
         fields.put("acctgTransId", "ATR.ACCTG_TRANS_ID");
         fields.put("acctgTransTypeId", "ATR.ACCTG_TRANS_TYPE_ID");
+        fields.put("description", "ATR.DESCRIPTION");
         fields.put("isPosted", "ATR.IS_POSTED");
         fields.put("partyId", "ATR.PARTY_ID");
         fields.put("glFiscalTypeId", "ATR.GL_FISCAL_TYPE_ID");
@@ -85,6 +87,7 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
     transactionDate("transactionDate"),
     acctgTransId("acctgTransId"),
     acctgTransTypeId("acctgTransTypeId"),
+    description("description"),
     isPosted("isPosted"),
     partyId("partyId"),
     glFiscalTypeId("glFiscalTypeId"),
@@ -108,6 +111,8 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
    private String acctgTransId;
     
    private String acctgTransTypeId;
+    
+   private String description;
     
    private String isPosted;
     
@@ -134,7 +139,7 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("acctgTransId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("partyId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("postedAmount");this.allFieldsNames.add("organizationPartyId");
+      this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("partyId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("postedAmount");this.allFieldsNames.add("organizationPartyId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -172,6 +177,13 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
      */
     public void setAcctgTransTypeId(String acctgTransTypeId) {
         this.acctgTransTypeId = acctgTransTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
     /**
      * Auto generated value setter.
@@ -248,6 +260,13 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getDescription() {
+        return this.description;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getIsPosted() {
         return this.isPosted;
     }
@@ -304,6 +323,7 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
         setTransactionDate((Timestamp) mapValue.get("transactionDate"));
         setAcctgTransId((String) mapValue.get("acctgTransId"));
         setAcctgTransTypeId((String) mapValue.get("acctgTransTypeId"));
+        setDescription((String) mapValue.get("description"));
         setIsPosted((String) mapValue.get("isPosted"));
         setPartyId((String) mapValue.get("partyId"));
         setGlFiscalTypeId((String) mapValue.get("glFiscalTypeId"));
@@ -321,6 +341,7 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
         mapValue.put("transactionDate", getTransactionDate());
         mapValue.put("acctgTransId", getAcctgTransId());
         mapValue.put("acctgTransTypeId", getAcctgTransTypeId());
+        mapValue.put("description", getDescription());
         mapValue.put("isPosted", getIsPosted());
         mapValue.put("partyId", getPartyId());
         mapValue.put("glFiscalTypeId", getGlFiscalTypeId());
