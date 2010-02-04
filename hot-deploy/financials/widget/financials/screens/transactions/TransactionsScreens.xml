@@ -343,7 +343,6 @@
             <actions>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
                 <set field="glAccountId" from-field="parameters.glAccountId"/>
-                <set field="reconciledDate" from-field="parameters.reconciledDate_c_date"/>
                 <set field="reconciledBalance" from-field="parameters.reconciledBalance"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/ReconcileGlAccount.bsh"/>
             </actions>

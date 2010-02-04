@@ -56,15 +56,26 @@ if (glReconciliations != null && glReconciliations.size() > 0) {
     context.put("lastReconciledBalance", new Double(0.0));
 }
 
-// if there is no reconciledDate from the parameters (ie if we got here from settle payments screen),
-// then get it from the transactionDate.  If there is no transaction date, then use now
-if (parameters.get("reconciledDate") == null) {
-    transactionDate = UtilHttp.makeParamValueFromComposite(request, "transactionDate", locale);
-    if (transactionDate == null) {
-        context.put("reconciledDate" , UtilDateTime.nowTimestamp());
+// In that order, try:
+// * composite (from the Reconcile form)
+// * single string (from reconcileAccountsForm)
+// * transactionDate (from settle payments screen)
+// * now
+reconciledDate = UtilHttp.makeParamValueFromComposite(request, "reconciledDate", locale);
+if (reconciledDate == null) {
+    reconciledDate = parameters.get("reconciledDate");
+    if (UtilValidate.isEmpty(reconciledDate)) {
+        transactionDate = UtilHttp.makeParamValueFromComposite(request, "transactionDate", locale);
+        if (transactionDate == null) {
+            context.put("reconciledDate" , UtilDateTime.nowTimestamp());
+        } else {
+            context.put("reconciledDate", transactionDate);
+        }
     } else {
-        context.put("reconciledDate", transactionDate);
+        context.put("reconciledDate", reconciledDate);
     }
+} else {
+    context.put("reconciledDate", reconciledDate);
 }
 
 // get all related, posted, and not AES_RECONCILED AcctgTransAndEntries
@@ -111,6 +122,8 @@ if ("transactionDate".equals(orderByStr)) {
     orderBy = UtilMisc.toList("debitCreditFlag ASC", "amount DESC", "transactionDate");
 } else if ("reconcileStatusId".equals(orderByStr)) {
     orderBy = UtilMisc.toList("reconcileStatusId", "transactionDate", "acctgTransId", "acctgTransEntrySeqId");
+} else if ("partyId".equals(orderByStr)) {
+    orderBy = UtilMisc.toList("partyId", "transactionDate", "acctgTransId", "acctgTransEntrySeqId");
 }
 
 entries = delegator.findListIteratorByCondition("AcctgTransAndEntriesForReconciliation", condition, null, orderBy);

@@ -19,7 +19,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#-- TODO: security validation, uiLabelMap -->
+<#-- TODO: security validation -->
 
 <#-- custom CSS formatting -->
 <style type="text/css">
@@ -33,31 +33,6 @@ div.scroll {
   padding: 0px;
 }
 
-.currencyinput {
-  font-size: 10px;
-  background-color: #FFFFFF;
-  border: 1px solid #000000;
-  padding: 2px;
-  text-align: right;
-}
-
-.textinput {
-  font-size: 10px;
-  color: #000000;
-  background-color: #FFFFFF;
-  border: 1px solid #000000;
-  padding: 2px;
-}
-
-.textlabel {
-  font-size: 10px;
-  color: #000000;
-  background-color: #FFFFFF;
-  border: 0px;
-  padding: 2px;
-
-}
-
 .textlabelright {
   font-size: 10px;
   color: #000000;
@@ -65,21 +40,6 @@ div.scroll {
   border: 0px;
   padding: 2px;
   text-align: right;
-}
-
-.smallSubmitDisabled {
-  color: #666666;
-  border: #666666 solid 1px;
-}
-
-.smallSubmitDisabled:hover {
-  color: #666666;
-  border: #666666 solid 1px;
-}
-
-.firstnotice {
-  font-size: 10px;
-  color: #333333;
 }
 
 td.gray1 { background:  #EEEEEE; }
@@ -94,10 +54,6 @@ td.blue2 { background:  #EEEEFF; }
 
 <#-- handy little macro to display the various order by links -->
 <#macro displayReorderLink orderByStr titleDescription>
-<#--
-Turning this off for now: we need to find a way to do this in the browser
-<span class="tableheadtext">${titleDescription}</span>
--->
 <a href="javascript:submitSaveAndReturn(document.reconcileForm, 'orderBy=${orderByStr}')" class="buttontext">${titleDescription}</a>
 </#macro>
 
@@ -109,57 +65,38 @@ Turning this off for now: we need to find a way to do this in the browser
 
       <#-- Description and balance table -->
 
-      <table border="0" cellpadding="2" cellspacing="0" class="calendarTable">
+      <table class="fourColumnForm" style="border:inherit; margin-bottom:5px">
 
         <#-- Balance subtable -->
 
         <#-- store our last reconciled balance for form script use -->
         <@inputHidden name="lastReconciledBalance" value=lastReconciledBalance?string("0.00") />
         <@inputHidden name="organizationPartyId" value=organizationPartyId />
+        <#-- need to re post those so that submitSaveAndReturn can work -->
+        <@inputHidden name="reconciledBalance" value=reconciledBalance />
+        <@inputHidden name="reconciledDate" value=reconciledDate />
 
         <#-- Beginning Balance -->
         <tr>
-          <td align="right" width="200px"><span class="tableheadtext">Beginning Balance</span></td>
-          <td>&nbsp;</td>
-          <td><input class="textlabelright" type="textbox" disabled="true" size="12" name="beginningBalance" value="${lastReconciledBalance}" onChange="javascript:recalculateBalance(this.form)"/></td>
-          <td>&nbsp;</td>
+          <@displayTitleCell title=uiLabelMap.FinancialsStatementsBeginningBalance />
+          <td><input class="textlabelright" type="textbox" disabled="true" size="12" name="beginningBalance" value="${lastReconciledBalance?string("0.00")}" onChange="javascript:recalculateBalance(this.form)"/></td>
 
           <#-- display reconcile date if exists -->
           <#if lastReconciledDate?exists>
-            <td><span class="tableheadtext">as of</span></td>
-            <td>&nbsp;</td>
-            <td>
-              <table border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td nowrap="nowrap">
-                    <input type="text" size="30" class="textlabel" disabled="true" name="lastReconciledDate" value="${getLocalizedDate(lastReconciledDate)}"/>
-                  </td>
-                </tr>
-              </table>
-            </td>
+            <@displayTitleCell title=uiLabelMap.asOfDate />
+            <@displayDateCell date=lastReconciledDate />
           <#else>
-            <td colspan="3"><span class="firstnotice">(First Reconciliation for this GL Account)</span></td>
+            <td/>
+            <@displayCell text="(${uiLabelMap.FinancialsFirstReconciliationForThisAccount})" />
           </#if>
         </tr>
 
         <#-- Ending Balance -->
         <tr>
-          <td align="right" width="200px"><span class="tableheadtext">Ending Balance</span></td>
-          <td>&nbsp;</td>
+          <@displayTitleCell title=uiLabelMap.FinancialsStatementsEndingBalance />
           <td><input class="textlabelright" type="textbox" disabled="true" size="12" name="endingBalance" value="${reconciledBalance}" onChange="javascript:recalculateBalance(this.form)"/></td>
-          <td>&nbsp;</td>
-          <td><span class="tableheadtext">as of</span></td>
-          <td>&nbsp;</td>
-          <td>
-            <table border="0" cellspacing="0" cellpadding="0">
-              <tr>
-                <td nowrap="nowrap">
-                  <input type="hidden" name="reconciledDate" value="${getLocalizedDate(reconciledDate)}"/>
-                  <input type="textbox" size="30" class="textlabel" disabled="true" value="${getLocalizedDate(reconciledDate)}"/>
-                </td>
-              </tr>
-            </table>
-          </td>
+          <@displayTitleCell title=uiLabelMap.asOfDate />
+          <@displayDateCell date=reconciledDate />
         </tr>
 
         <#-- Calculated Balance -->
@@ -179,20 +116,16 @@ Turning this off for now: we need to find a way to do this in the browser
           </#if>
         </#list>
         <tr>
-          <td align="right" width="200px"><span class="tableheadtext">Calculated Balance</span></td>
-          <td>&nbsp;</td>
-          <td><input class="textlabelright" type="textbox" disabled="true" size="12" name="reconciledBalance" value="${calcBalance?string("0.00")}"/></td>
-          <td>&nbsp;</td>
+          <@displayTitleCell title=uiLabelMap.FinancialsStatementsCalculatedBalance />
+          <td><input class="textlabelright" type="textbox" disabled="true" size="12" name="calculatedBalance" value="${calcBalance?string("0.00")}"/></td>
 
           <#-- Refresh and Save -->
-          <td colspan="3" rowspan="2" valign="center" align="center">
-            <table border="0" cellpadding="0" cellspacing="0" class="calendarTable">
-              <input type="button" class="smallSubmit" name="recalculate" value="Refresh" onClick="javascript:recalculateBalance(this.form)"/>
-              &nbsp;
-              <input type="button" class="smallSubmit" name="save" value="Check All" onClick="javascript:checkAll(this.form)"/>
-              &nbsp;
-              <input type="button" class="smallSubmit" name="save" value="Uncheck All" onClick="javascript:uncheckAll(this.form)"/>
-            </table>
+          <td colspan="2" rowspan="2" valign="center">
+            <input type="button" class="smallSubmit" name="recalculate" value="${uiLabelMap.CommonRefresh}" onClick="javascript:recalculateBalance(this.form)"/>
+            &nbsp;
+            <input type="button" class="smallSubmit" name="save" value="${uiLabelMap.OpentapsCheckAll}" onClick="javascript:checkAll(this.form)"/>
+            &nbsp;
+            <input type="button" class="smallSubmit" name="save" value="${uiLabelMap.OpentapsUncheckAll}" onClick="javascript:uncheckAll(this.form)"/>
           </td>
         </tr>
 
@@ -200,56 +133,51 @@ Turning this off for now: we need to find a way to do this in the browser
         <#-- TODO: reconciledBalance is passed in as a what? it complains about this not being numeric -->
         <#assign difference = reconciledBalance?number - calcBalance/>
         <tr>
-          <td align="right" width="200px"><span class="tableheadtext">${uiLabelMap.OpentapsDifference}</span></td>
-          <td>&nbsp;</td>
+          <@displayTitleCell title=uiLabelMap.OpentapsDifference />
           <td><input class="textlabelright" type="textbox" disabled="true" size="12" name="difference" value="${difference?string("0.00")}"/></td>
         </tr>
       </table>
 
-      <table border="0" cellpadding="2" cellspacing="0" class="calendarTable">
+      <table class="twoColumnForm" style="border:inherit; margin-bottom:5px">
 
         <#-- Save button -->
         <tr>
-          <td colspan="2">&nbsp;</td>
-          <td><input type="button" class="smallSubmit" name="save" value="Save For Later" onClick="javascript:submitSave(this.form)"/></td>
+          <td/>
+          <td><input type="button" class="smallSubmit" name="save" value="${uiLabelMap.CrmSaveForLater}" onClick="javascript:submitSave(this.form)"/></td>
         </tr>
 
         <#-- Name and description -->
         <tr>
-          <td align="right" width="200px"><span class="tableheadtext">Name</span></td>
-          <td>&nbsp;</td>
-          <td><input class="textinput" type="textbox" size="30" maxlength="100" name="glReconciliationName" value="${uiLabelMap.FinancialsReconciledAsOf} ${getLocalizedDate(reconciledDate)}"/></td>
+          <@displayTitleCell title=uiLabelMap.OpentapsName />
+          <@inputTextCell size="30" maxlength="100" name="glReconciliationName" default="${uiLabelMap.FinancialsReconciledAsOf} ${getLocalizedDate(reconciledDate)}"/>
         </tr>
         <tr>
-          <td align="right" width="200px"><span class="tableheadtext">Description</span></td>
-          <td>&nbsp;</td>
-          <td><input class="textinput" type="textbox" size="30" maxlength="255" name="description" value=""/></td>
+          <@displayTitleCell title=uiLabelMap.CommonDescription />
+          <@inputTextCell size="30" maxlength="255" name="description"/>
         </tr>
 
         <#-- reconcile button -->
         <tr>
-          <td colspan="2">&nbsp;</td>
+          <td/>
           <td>
             <input type="button" class="smallSubmit smallSubmitDisabled" name="reconcile" value="Reconcile" disabled="true" onClick="javascript:submitReconcile(this.form)"/>
           </td>
         </tr>
       </table>
 
-      <p/>
-
       <#-- Entry Header Table -->
       <div class="scroll">
         <table border="1" cellpadding="2" cellspacing="0" class="calendarTable" width="98%">
           <tr align="center">
-            <td><@displayReorderLink orderByStr="acctgTransId" titleDescription="Transaction"/></td>
-            <td><span class="tableheadtext">Party</span></td>
-            <td><@displayReorderLink orderByStr="acctgTransTypeId" titleDescription="Transaction Type"/></td>
-            <td><@displayReorderLink orderByStr="refNum" titleDescription="Reference Num"/></td>
-            <td><@displayReorderLink orderByStr="transactionDate" titleDescription="Transaction Date"/></td>
+            <td><@displayReorderLink orderByStr="acctgTransId" titleDescription=uiLabelMap.FinancialsTransaction /></td>
+            <td><@displayReorderLink orderByStr="partyId" titleDescription=uiLabelMap.PartyParty /></td>
+            <td><@displayReorderLink orderByStr="acctgTransTypeId" titleDescription=uiLabelMap.FinancialsTransactionType /></td>
+            <td><@displayReorderLink orderByStr="refNum" titleDescription=uiLabelMap.AccountingReferenceNumber /></td>
+            <td><@displayReorderLink orderByStr="transactionDate" titleDescription=uiLabelMap.FinancialsTransactionDate /></td>
             <#-- little trick: if you click once, it sorts by descending amount, if you click again, it sorts by ascending amount -->
-            <td><#if (parameters.orderBy?has_content) && (parameters.orderBy == "debitDESC")><@displayReorderLink orderByStr="debitASC" titleDescription="Debit"/><#else><@displayReorderLink orderByStr="debitDESC" titleDescription="Debit"/></#if></td>
-            <td><#if (parameters.orderBy?has_content) && (parameters.orderBy == "creditDESC")><@displayReorderLink orderByStr="creditASC" titleDescription="Credit"/><#else><@displayReorderLink orderByStr="creditDESC" titleDescription="Credit"/></#if></td>
-            <td><@displayReorderLink orderByStr="reconcileStatusId" titleDescription="Reconcile"/></td>
+            <td><#if (parameters.orderBy?has_content) && (parameters.orderBy == "debitDESC")><@displayReorderLink orderByStr="debitASC" titleDescription=uiLabelMap.CommonDebit/><#else><@displayReorderLink orderByStr="debitDESC" titleDescription=uiLabelMap.CommonDebit/></#if></td>
+            <td><#if (parameters.orderBy?has_content) && (parameters.orderBy == "creditDESC")><@displayReorderLink orderByStr="creditASC" titleDescription=uiLabelMap.CommonCredit/><#else><@displayReorderLink orderByStr="creditDESC" titleDescription=uiLabelMap.CommonCredit/></#if></td>
+            <td><@displayReorderLink orderByStr="reconcileStatusId" titleDescription=uiLabelMap.FinancialsReconcile /></td>
           </tr>
 
           <#-- Entries -->
@@ -269,21 +197,21 @@ Turning this off for now: we need to find a way to do this in the browser
             </#if>
 
             <#-- special form data for service-multi updateAcctTransEntries -->
-            <input type="hidden" name="acctgTransId_o_${rowCount}" value="${entry.acctgTransId}"/>
-            <input type="hidden" name="acctgTransEntrySeqId_o_${rowCount}" value="${entry.acctgTransEntrySeqId}"/>
-            <input type="hidden" name="amount_o_${rowCount}" value="${entry.amount?string("0.00")}"/>
-            <input type="hidden" name="reconcileStatusId_o_${rowCount}" value="${entry.reconcileStatusId?if_exists}"/>
+            <@inputHidden name="acctgTransId" index=rowCount value=entry.acctgTransId />
+            <@inputHidden name="acctgTransEntrySeqId" index=rowCount value=entry.acctgTransEntrySeqId />
+            <@inputHidden name="amount" index=rowCount value=entry.amount?string("0.00") />
+            <@inputHidden name="reconcileStatusId" index=rowCount value=entry.reconcileStatusId! />
 
             <#-- special form data for reconcileGlAccount: entry_id_(index) stores the transaction ID pair -->
-            <input type="hidden" name="entry_id_${rowCount}" value="${entry.acctgTransId}|${entry.acctgTransEntrySeqId}"/>
+            <@inputHidden name="entry_id_${rowCount}" value="${entry.acctgTransId}|${entry.acctgTransEntrySeqId}"/>
 
             <#-- check entry by default if partly reconciled and set special input fields _atei to transaction IDs if checked -->
             <#if entry.reconcileStatusId?exists && (entry.reconcileStatusId == "AES_PARTLY_RECON")>
               <#assign checked="checked"/>
-              <input type="hidden" name="${rowCount}_atei" value="${entry.acctgTransId}|${entry.acctgTransEntrySeqId}"/>
+              <@inputHidden name="${rowCount}_atei" value="${entry.acctgTransId}|${entry.acctgTransEntrySeqId}"/>
             <#else>
               <#assign checked=""/>
-              <input type="hidden" name="${rowCount}_atei" value=""/>
+              <@inputHidden name="${rowCount}_atei" value=""/>
             </#if>
 
             <#-- entry display (note: checkbox value is the row/entry index) -->
@@ -327,9 +255,9 @@ Turning this off for now: we need to find a way to do this in the browser
           </#list>
 
           <#-- some final form data -->
-          <input type="hidden" name="_rowCount" value="${rowCount}"/>
-          <input type="hidden" name="_useRowSubmit" value="N"/>
-          <input type="hidden" name="glAccountId" value="${glAccount.glAccountId}"/>
+          <@inputHidden name="_rowCount" value="${rowCount}"/>
+          <@inputHidden name="_useRowSubmit" value="N"/>
+          <@inputHidden name="glAccountId" value="${glAccount.glAccountId}"/>
         </table>
       </div>
 
@@ -411,8 +339,8 @@ function recalculateEntries(form) {
       </#if>
     }
   }
-  form.reconciledBalance.value = reconciledBalance.toFixed(2);
-  difference = form.endingBalance.value - form.reconciledBalance.value;
+  form.calculatedBalance.value = reconciledBalance.toFixed(2);
+  difference = form.endingBalance.value - form.calculatedBalance.value;
   form.difference.value = difference.toFixed(2);
 
   // finally, we check if we should let user Reconcile
@@ -462,18 +390,21 @@ function submitSave(form) {
 
 <#-- on reconcile, call reconcileGlAccount, which takes care of everything from here -->
 function submitReconcile(form) {
-  // tricky problem: must enable reconciledBalance or it won't get submitted!
-  form.reconciledBalance.disabled = false;
+  // copy the new balance in the hidden field
+  form.reconciledBalance.value = form.calculatedBalance.value;
   form.action = "<@ofbizUrl>reconcileGlAccount</@ofbizUrl>";
   form.submit();
 }
 
 <#-- on an action that requires returning to this page, use this function to save the state -->
 function submitSaveAndReturn(form, params) {
-  form.reconciledBalance.disabled = false;
   form.action = "updateAndRefreshReconciliation?"+params;
   form.submit();
 }
+
+// force a refresh here
+recalculateBalance(document.reconcileForm);
+
 /*]]>*/
 </script>
 
