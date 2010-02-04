@@ -1289,6 +1289,10 @@
         <event type="service" invoke="postAcctgTrans"/>
         <response name="success" type="request-redirect" value="reconcileAfterSettlement">
           <redirect-parameter name="transactionDate_c_date"/>
+          <redirect-parameter name="transactionDate_c_ampm"/>
+          <redirect-parameter name="transactionDate_c_hour"/>
+          <redirect-parameter name="transactionDate_c_minutes"/>
+          <redirect-parameter name="transactionDate_c_compositeType"/>
           <redirect-parameter name="creditGlAccountId"/>
           <redirect-parameter name="debitGlAccountId"/>
         </response>
