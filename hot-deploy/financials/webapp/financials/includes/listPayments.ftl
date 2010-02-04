@@ -26,6 +26,7 @@
         <@headerCell title=uiLabelMap.FinancialsPaymentMethod orderBy="paymentMethodTypeId"/>
         <@headerCell title=uiLabelMap.AccountingEffectiveDate orderBy="effectiveDate"/>
         <@headerCell title=uiLabelMap.FinancialsPaymentRef orderBy="paymentRefNum"/>
+        <@headerCell title=uiLabelMap.CommonComments orderBy="comments"/>
         <@headerCell title=uiLabelMap.CommonStatus orderBy="statusId"/>
         <@headerCell title=uiLabelMap.FinancialsReceiveFromParty orderBy="partyIdFrom, effectiveDate DESC"/>
         <@headerCell title=uiLabelMap.FinancialsPayToParty orderBy="partyIdTo, effectiveDate DESC"/>
@@ -38,6 +39,7 @@
           <@displayCell text=row.paymentMethodDescription/>
           <@displayDateCell date=row.effectiveDate/>
           <@displayCell text=row.paymentRefNum/>
+          <@displayCell text=row.comments/>
           <@displayCell text=row.statusDescription/>
           <@displayCell text=row.partyNameFrom/>
           <@displayCell text=row.partyNameTo/>
