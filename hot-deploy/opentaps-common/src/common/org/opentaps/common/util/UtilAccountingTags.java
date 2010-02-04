@@ -67,6 +67,8 @@ public final class UtilAccountingTags {
     public static final String PURCHASE_INVOICES_TAG = "PRCH_INV_ITEMS";
     /** Tags for sales invoices. */
     public static final String SALES_INVOICES_TAG = "SALES_INV_ITEMS";
+    /** Tags for return invoices. */
+    public static final String RETURN_INVOICES_TAG = "RETN_INV_ITEMS";
     /** Tags for commission invoices. */
     public static final String COMMISSION_INVOICES_TAG = "COMM_INV_ITEMS";
     /** Tags for lookup purchase invoices. */
