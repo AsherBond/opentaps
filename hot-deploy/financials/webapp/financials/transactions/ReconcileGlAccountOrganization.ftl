@@ -105,18 +105,18 @@ Turning this off for now: we need to find a way to do this in the browser
 <form name="reconcileForm" method="POST" action="<@ofbizUrl>reconcileGlAccount</@ofbizUrl>">
 
 <#-- outline box -->
-<table border="0" width='100%' cellspacing='0' cellpadding='0' class='boxoutside'>
-<tr><td width='100%'>
+<table border="0" width="100%" cellspacing="0" cellpadding="0" class="boxoutside">
+<tr><td width="100%">
 
 <#-- Main Header with Title -->
-<table width='100%' border='0' cellspacing='0' cellpadding='0' class='boxtop'>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="boxtop">
 <tr>
-<td><div class='boxhead'>Reconciliation for ${glAccount.accountCode} - ${glAccount.accountName}</div></td>
+<td><div class="boxhead">Reconciliation for ${glAccount.accountCode} - ${glAccount.accountName}</div></td>
 </tr>
 </table>
 
 <#-- Rest of stuff Box-->
-<table width='100%' border='0' cellspacing='0' cellpadding='2' class='boxbottom'>
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="boxbottom">
 <tr><td>
 
 
@@ -144,10 +144,10 @@ Turning this off for now: we need to find a way to do this in the browser
       <td><span class="tableheadtext">as of</span></td>
       <td>&nbsp;</td>
       <td>
-        <table border='0' cellspacing='0' cellpadding='0'>
+        <table border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td nowrap>
-              <input type='text' size='30' class='textlabel' disabled="true" name='lastReconciledDate' value='${getLocalizedDate(lastReconciledDate)}'/>
+            <td nowrap="nowrap">
+              <input type="text" size="30" class="textlabel" disabled="true" name="lastReconciledDate" value="${getLocalizedDate(lastReconciledDate)}"/>
             </td>
           </tr>
         </table>
@@ -166,11 +166,11 @@ Turning this off for now: we need to find a way to do this in the browser
     <td><span class="tableheadtext">as of</span></td>
     <td>&nbsp;</td>
     <td>
-      <table border='0' cellspacing='0' cellpadding='0'>
+      <table border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td nowrap>
-            <input type='hidden' name='reconciledDate' value='${getLocalizedDate(reconciledDate)}'/>
-            <input type='textbox' size='30' class='textlabel' disabled="true" value='${getLocalizedDate(reconciledDate)}'/>
+          <td nowrap="nowrap">
+            <input type="hidden" name="reconciledDate" value="${getLocalizedDate(reconciledDate)}"/>
+            <input type="textbox" size="30" class="textlabel" disabled="true" value="${getLocalizedDate(reconciledDate)}"/>
           </td>
         </tr>
       </table>
