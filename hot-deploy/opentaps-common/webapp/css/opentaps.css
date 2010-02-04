@@ -2434,6 +2434,26 @@ color:#000000 !important;
 text-decoration:none !important;
 }
 
+a.buttontextdisabled,
+.smallSubmitDisabled
+{ 
+color:#666 !important;
+border-left:1px solid #AAAAAA !important;
+border-right:1px solid #AAAAAA !important;
+}
+
+a.buttontextdisabled:active,
+a.buttontextdisabled:hover,
+.smallSubmitDisabled:active,
+.smallSubmitDisabled:hover
+{ 
+background:transparent url(/opentaps_images/buttons/btn-sprite.gif) repeat-x scroll 0 -42px !important;
+color:#666 !important;
+border-left:1px solid #AAAAAA !important;
+border-right:1px solid #AAAAAA !important;
+text-decoration:none !important;
+}
+
 .subMenuButtonDangerous:active,
 .subMenuButtonDangerous:hover,
 .buttonDangerous:active,
