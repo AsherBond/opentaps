@@ -17,7 +17,10 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<@paginate name="listPayments" list=paymentListBuilder rememberPage=false>
+<#assign showFromParty = !findDisbursement/>
+<#assign showToParty = findDisbursement/>
+
+<@paginate name="listPayments" list=paymentListBuilder rememberPage=false showFromParty=showFromParty showToParty=showToParty>
   <#noparse>
     <@navigationHeader/>
     <table class="listTable">
@@ -28,8 +31,8 @@
         <@headerCell title=uiLabelMap.FinancialsPaymentRef orderBy="paymentRefNum"/>
         <@headerCell title=uiLabelMap.CommonComments orderBy="comments"/>
         <@headerCell title=uiLabelMap.CommonStatus orderBy="statusId"/>
-        <@headerCell title=uiLabelMap.FinancialsReceiveFromParty orderBy="partyIdFrom, effectiveDate DESC"/>
-        <@headerCell title=uiLabelMap.FinancialsPayToParty orderBy="partyIdTo, effectiveDate DESC"/>
+        <#if parameters.showFromParty><@headerCell title=uiLabelMap.FinancialsReceiveFromParty orderBy="partyIdFrom, effectiveDate DESC"/></#if>
+        <#if parameters.showToParty><@headerCell title=uiLabelMap.FinancialsPayToParty orderBy="partyIdTo, effectiveDate DESC"/></#if>
         <@headerCell title=uiLabelMap.AccountingAmount orderBy="amount, effectiveDate DESC" blockClass="textright"/>
         <@headerCell title=uiLabelMap.FinancialsAmountOutstanding orderBy="openAmount, effectiveDate DESC" blockClass="textright"/>
       </tr>
@@ -41,8 +44,8 @@
           <@displayCell text=row.paymentRefNum/>
           <@displayCell text=row.comments/>
           <@displayCell text=row.statusDescription/>
-          <@displayCell text=row.partyNameFrom/>
-          <@displayCell text=row.partyNameTo/>
+          <#if parameters.showFromParty><@displayCell text=row.partyNameFrom/></#if>
+          <#if parameters.showToParty><@displayCell text=row.partyNameTo/></#if>
           <@displayCurrencyCell amount=row.amount currencyUomId=row.currencyUomId/>
           <@displayCurrencyCell amount=row.openAmount currencyUomId=row.currencyUomId/>
         </tr>
