@@ -126,7 +126,7 @@ public class Paginator implements HttpSessionBindingListener {
     public void setRememberOrderBy(boolean rememberOrderBy) {
         state.setRememberOrderBy(rememberOrderBy);
     }
-    
+
     public void setRenderExcelButton(boolean renderExcelButton) {
         this.renderExcelButton = renderExcelButton;
     }
@@ -134,7 +134,7 @@ public class Paginator implements HttpSessionBindingListener {
     public boolean getRenderExcelButton() {
         return renderExcelButton;
     }
- 
+
     /** Outside consumers should use this function to get the size. */
     public long getListSize() {
         if (cachedSize == -1) {
@@ -156,6 +156,18 @@ public class Paginator implements HttpSessionBindingListener {
         state.setViewSize(viewSize);
     }
 
+    public boolean getViewAll() {
+        return state.getViewAll();
+    }
+
+    public void setViewAll(boolean viewAll) {
+        state.setViewAll(viewAll);
+    }
+
+    public void toggleViewAll() {
+        state.toggleViewAll();
+    }
+
     public long getCursorIndex() {
         return state.getCursorIndex();
     }
@@ -174,12 +186,13 @@ public class Paginator implements HttpSessionBindingListener {
 
     // this should work as long as the cursor never reaches the last element
     public long getPageNumber() {
+        if (state.getViewAll()) return 1;
         return 1 + state.getCursorIndex() / state.getViewSize();
     }
 
     public long getTotalPages() {
         long size = getListSize();
-        if (size == 0) return 1;
+        if (size == 0 || state.getViewAll()) return 1;
         return (long) Math.ceil((double) size / (double) state.getViewSize());
     }
 
@@ -204,7 +217,7 @@ public class Paginator implements HttpSessionBindingListener {
 
     private long getLastPageCursorIndex() {
         try {
-            if (listBuilder.getListSize() == 0) return 0;
+            if (listBuilder.getListSize() == 0 || state.getViewAll()) return 0;
 
             // handle case where list would fit exactly in the viewport
             if ((listBuilder.getListSize() % state.getViewSize()) == 0) {
@@ -220,9 +233,17 @@ public class Paginator implements HttpSessionBindingListener {
 
     // pattern is to set and save state first, which is enforced by this function
     private List getPage(long cursorIndex) throws ListBuilderException {
+        if (state.getViewAll()) {
+            return listBuilder.getCompleteList();
+        }
+
         cachedSize = listBuilder.getListSize();
-        if (cursorIndex < 0) cursorIndex = 0;
-        if (cursorIndex >= cachedSize) cursorIndex = getLastPageCursorIndex();
+        if (cursorIndex < 0) {
+            cursorIndex = 0;
+        }
+        if (cursorIndex >= cachedSize) {
+            cursorIndex = getLastPageCursorIndex();
+        }
         if (cursorIndex != state.getCursorIndex()) {
             state.setCursorIndex(cursorIndex);
             state.save();

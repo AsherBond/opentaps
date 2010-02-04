@@ -469,6 +469,7 @@ public class FormletFactory {
         // add information from the paginator
         context.put("paginatorName", paginator.getPaginatorName());
         context.put("viewSize", paginator.getViewSize());
+        context.put("viewAll", paginator.getViewAll());
         context.put("pageNumber", paginator.getPageNumber());
         context.put("totalPages", paginator.getTotalPages());
         context.put("orderBy", paginator.getOrderByString());

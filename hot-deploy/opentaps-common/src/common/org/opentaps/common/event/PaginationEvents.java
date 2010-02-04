@@ -139,17 +139,32 @@ public final class PaginationEvents {
         Paginator paginator = PaginatorFactory.getPaginator(request);
         if (paginator != null) {
             long delta = 0;
+            long size = 0;
             String deltaValue = UtilCommon.getParameter(request, "delta");
+            String newSize = UtilCommon.getParameter(request, "newSize");
+            String toggleViewAll = UtilCommon.getParameter(request, "toggleViewAll");
             if (deltaValue != null) {
                 try {
                     delta = Long.parseLong(deltaValue);
                 } catch (NumberFormatException e) {
                     Debug.logError(e, e.getMessage(), MODULE);
                 }
+                if (delta != 0) {
+                    paginator.changeViewSize(delta);
+                }
+            } else if (newSize != null) {
+                try {
+                    size = Long.parseLong(newSize);
+                } catch (NumberFormatException e) {
+                    Debug.logError(e, e.getMessage(), MODULE);
+                }
+                if (size != 0) {
+                    paginator.setViewSize(size);
+                }
+            } else if (toggleViewAll != null) {
+                paginator.toggleViewAll();
             }
-            if (delta != 0) {
-                paginator.changeViewSize(delta);
-            }
+
             try {
                 page = paginator.getCurrentPage();
             } catch (ListBuilderException e) {

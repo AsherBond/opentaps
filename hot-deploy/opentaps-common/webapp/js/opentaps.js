@@ -891,6 +891,15 @@ opentaps.changePaginationViewSize = function(paginatorName, appName, delta, resp
     if (! responseFunction) responseFunction = opentaps.processPaginationResponse;
     opentaps.sendRequest('changePaginationViewSize', {'paginatorName' : paginatorName, 'delta' : delta, 'applicationName' : appName}, function(data) {responseFunction(paginatorName, data)}, {target: 'paginate_' + paginatorName, containerClass: 'paginate_' + paginatorName, size: 28});
 }
+opentaps.setPaginationViewSize = function(paginatorName, appName, newSize, responseFunction) {
+    if (! responseFunction) responseFunction = opentaps.processPaginationResponse;
+    opentaps.sendRequest('changePaginationViewSize', {'paginatorName' : paginatorName, 'newSize' : newSize, 'applicationName' : appName}, function(data) {responseFunction(paginatorName, data)}, {target: 'paginate_' + paginatorName, containerClass: 'paginate_' + paginatorName, size: 28});
+}
+opentaps.togglePaginationViewAll = function(paginatorName, appName, responseFunction) {
+    if (! responseFunction) responseFunction = opentaps.processPaginationResponse;
+    opentaps.sendRequest('changePaginationViewSize', {'paginatorName' : paginatorName, 'toggleViewAll' : 'y', 'applicationName' : appName}, function(data) {responseFunction(paginatorName, data)}, {target: 'paginate_' + paginatorName, containerClass: 'paginate_' + paginatorName, size: 28});
+}
+
 
 /* auto complete functions */
 

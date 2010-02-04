@@ -66,6 +66,7 @@ public class PaginationState {
     private List<String> orderBy = null;
     private boolean rememberPage;
     private boolean rememberOrderBy;
+    private boolean viewAll = false; // used to bypass pagination
 
     /**
      * Creates a new <code>PaginationState</code> instance.
@@ -149,6 +150,29 @@ public class PaginationState {
             viewSize = DEFAULT_VIEW_SIZE;
         }
         this.viewSize = viewSize;
+    }
+
+    /**
+     * Gets the page view all flag.
+     * @return a <code>boolean</code> value
+     */
+    public boolean getViewAll() {
+        return viewAll;
+    }
+
+    /**
+     * Sets the page view all flag.
+     * @param viewAll a <code>boolean</code> value
+     */
+    public void setViewAll(boolean viewAll) {
+        this.viewAll = viewAll;
+    }
+
+    /**
+     * Switch the page view all flag.
+     */
+    public void toggleViewAll() {
+        this.viewAll = !this.viewAll;
     }
 
     /**

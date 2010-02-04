@@ -1705,6 +1705,22 @@ input.paginationShrinkPage {
 background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -255px;
 }
 
+
+input.paginationToggleViewAll:hover {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll -15px -195px;
+}
+input.paginationToggleViewAll {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -195px;
+}
+
+
+input.paginationUntoggleViewAll:hover {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll -15px -210px;
+}
+input.paginationUntoggleViewAll {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -210px;
+}
+
 .pageNumber {
     font: normal 0.8em Verdana, Arial, Helvetica, sans-serif;
     padding-right: 10px;

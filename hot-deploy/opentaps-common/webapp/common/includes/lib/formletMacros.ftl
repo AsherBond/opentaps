@@ -29,12 +29,15 @@ requests, and similar things.
   </#if>
   <span class="pageNumber">Page ${pageNumber}/${totalPages}</span>
   <#assign args = "'${paginatorName}','${opentapsApplicationName}'" />
-  <input type="button" class="paginationButton paginationFirstPage" value="" title="${uiLabelMap.pagerFirstPage}" onClick="opentaps.getFirstPage(${args})"/>
-  <input type="button" class="paginationButton paginationPreviousPage" value="" title="${uiLabelMap.pagerPreviousPage}" onClick="opentaps.getPreviousPage(${args})"/>
-  <input type="button" class="paginationButton paginationShrinkPage" value="" title="${uiLabelMap.pagerShrinkPage}" onClick="opentaps.changePaginationViewSize(${args},-5)"/>
-  <input type="button" class="paginationButton paginationGrowPage" value="" title="${uiLabelMap.pagerGrowPage}" onClick="opentaps.changePaginationViewSize(${args},5)"/>
-  <input type="button" class="paginationButton paginationNextPage" value="" title="${uiLabelMap.pagerNextPage}" onClick="opentaps.getNextPage(${args})"/>
-  <input type="button" class="paginationButton paginationLastPage" value="" title="${uiLabelMap.pagerLastPage}" onClick="opentaps.getLastPage(${args})"/>
+  <#if !viewAll>
+    <input type="button" class="paginationButton paginationFirstPage" value="" title="${uiLabelMap.pagerFirstPage}" onClick="opentaps.getFirstPage(${args})"/>
+    <input type="button" class="paginationButton paginationPreviousPage" value="" title="${uiLabelMap.pagerPreviousPage}" onClick="opentaps.getPreviousPage(${args})"/>
+    <input type="button" class="paginationButton paginationShrinkPage" value="" title="${uiLabelMap.pagerShrinkPage}" onClick="opentaps.changePaginationViewSize(${args},-5)"/>
+    <input type="button" class="paginationButton paginationGrowPage" value="" title="${uiLabelMap.pagerGrowPage}" onClick="opentaps.changePaginationViewSize(${args},5)"/>
+    <input type="button" class="paginationButton paginationNextPage" value="" title="${uiLabelMap.pagerNextPage}" onClick="opentaps.getNextPage(${args})"/>
+    <input type="button" class="paginationButton paginationLastPage" value="" title="${uiLabelMap.pagerLastPage}" onClick="opentaps.getLastPage(${args})"/>
+  </#if>
+  <input type="button" class="paginationButton <#if viewAll>paginationUntoggleViewAll<#else>paginationToggleViewAll</#if>" value="" title="${uiLabelMap.pagerToggleViewAll}" onClick="opentaps.togglePaginationViewAll(${args})"/>
 </#macro>
 
 <#macro headerLink title orderBy orderByReverse="" blockClass="" linkClass="orderByHeaderLink">
