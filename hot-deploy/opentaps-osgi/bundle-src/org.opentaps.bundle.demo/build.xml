@@ -23,12 +23,14 @@
         <property name="symbolic.name" value="org.opentaps.bundle.demo"/>
         <property name="base.dir" value="../../../.."/>
         <property name="src.dir" value="src"/>
-        <property name="bin.dir" value="bin"/>
+        <property name="bin.dir" value="build"/>
         <property name="deploy.dir" value="../../webapp/WEB-INF/bundles"/>
         <property name="base.lib.dir" value="../../webapp/WEB-INF/lib"/>
     </target>
 
     <target name="classpath" depends="init">
+        <mkdir dir="${bin.dir}/classes"/>
+        <mkdir dir="${bin.dir}/jar"/>
         <path id="local.class.path">
             <fileset dir="${base.dir}/framework/base/lib/j2eespecs" includes="*.jar"/>
             <fileset dir="${base.dir}/framework/base/build/lib" includes="*.jar"/>
@@ -37,13 +39,12 @@
     </target>
 
     <target name="clean" depends="init">
-        <delete file="${deploy.dir}/${symbolic.name}.jar"/>
         <delete dir="${bin.dir}"/>
     </target>
 
     <target name="classes" depends="classpath">
         <mkdir dir="${bin.dir}"/>
-    	<javac debug="on" deprecation="on" destdir="./${bin.dir}">
+    	<javac debug="on" deprecation="on" destdir="${bin.dir}/classes">
             <classpath>
                 <path refid="local.class.path"/>
             </classpath>
@@ -54,16 +55,16 @@
     <target name="build" depends="classes">
         <taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="../../lib/bnd.jar"/>
         <bnd 
-            classpath="bin" 
+            classpath="${bin.dir}/classes" 
             eclipse="false" 
             failok="false" 
             exceptions="true"
-            output="./"
+            output="${bin.dir}/jar"
             files="${symbolic.name}.bnd"/>
     </target>
 
     <target name="deploy" depends="build">
-        <copy file="./${symbolic.name}.jar" tofile="${deploy.dir}/${symbolic.name}.jar" overwrite="true" />
+        <copy file="${bin.dir}/jar/${symbolic.name}.jar" tofile="${deploy.dir}/${symbolic.name}.jar" overwrite="true" />
     </target>
 
 </project>
