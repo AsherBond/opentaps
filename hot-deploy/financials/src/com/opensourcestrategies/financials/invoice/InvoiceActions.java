@@ -204,8 +204,7 @@ public final class InvoiceActions {
         } else if (invoice.isPurchaseInvoice()) {
             ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, delegator));
         } else if (invoice.isReturnInvoice()) {
-            // use sales invoice tags configuration for return invoice
-            ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.SALES_INVOICES_TAG, delegator));
+            ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.RETURN_INVOICES_TAG, delegator));
         }
 
         ac.put("billingPartyId", invoice.getTransactionPartyId());
