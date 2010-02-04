@@ -361,6 +361,8 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
    )
    
    private StatusItem processingStatusItem = null;
+   private transient List<OrderItemBilling> orderItemBillings = null;
+   private transient OrderItemBilling orderItemBilling = null;
 
   /**
    * Default constructor.
@@ -1185,6 +1187,28 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
         }
         return this.processingStatusItem;
     }
+    /**
+     * Auto generated method that gets the related <code>OrderItemBilling</code> by the relation named <code>OrderItemBilling</code>.
+     * @return the list of <code>OrderItemBilling</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderItemBilling> getOrderItemBillings() throws RepositoryException {
+        if (this.orderItemBillings == null) {
+            this.orderItemBillings = getRelated(OrderItemBilling.class, "OrderItemBilling");
+        }
+        return this.orderItemBillings;
+    }
+    /**
+     * Auto generated method that gets the related <code>OrderItemBilling</code> by the relation named <code>OrderItemBilling</code>.
+     * @return the <code>OrderItemBilling</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public OrderItemBilling getOrderItemBilling() throws RepositoryException {
+        if (this.orderItemBilling == null) {
+            this.orderItemBilling = getRelatedOne(OrderItemBilling.class, "OrderItemBilling");
+        }
+        return this.orderItemBilling;
+    }
 
     /**
      * Auto generated value setter.
@@ -1199,6 +1223,20 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
     */
     public void setProcessingStatusItem(StatusItem processingStatusItem) {
         this.processingStatusItem = processingStatusItem;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderItemBillings the orderItemBillings to set
+    */
+    public void setOrderItemBillings(List<OrderItemBilling> orderItemBillings) {
+        this.orderItemBillings = orderItemBillings;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderItemBilling the orderItemBilling to set
+    */
+    public void setOrderItemBilling(OrderItemBilling orderItemBilling) {
+        this.orderItemBilling = orderItemBilling;
     }
 
 

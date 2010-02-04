@@ -574,6 +574,14 @@ public final class InvoiceActions {
                         newRow.put("processingStatusDescription", processingStatus.get(StatusItem.Fields.description.name(), locale));
                     }
 
+                    // Prepare string that contains list of related order ids
+                    List<? extends OrderItemBilling> orderItemBillings = invoice.getOrderItemBillings();
+                    Set<String> orderIds = new FastSet<String>();
+                    for (OrderItemBilling billing : orderItemBillings) {
+                        orderIds.add(billing.getOrderId());
+                    }
+                    newRow.put("orderIds", orderIds);
+
                     newRow.put("partyNameFrom", PartyHelper.getPartyName(delegator, invoice.getPartyIdFrom(), false));
                     newRow.put("partyName", PartyHelper.getPartyName(delegator, invoice.getPartyId(), false));
 
@@ -589,5 +597,4 @@ public final class InvoiceActions {
 
         ac.put("invoiceListBuilder", invoiceListBuilder);
     }
-
 }

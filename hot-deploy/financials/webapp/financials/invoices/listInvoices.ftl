@@ -52,8 +52,9 @@ function showButtons() {
 
 <#assign showFromParty = !isReceivable/>
 <#assign showToParty = !isPayable/>
+<#assign showOrderIds = isReceivable/>
 
-<@paginate name="listInvoices" list=invoiceListBuilder rememberPage=false showFromParty=showFromParty showToParty=showToParty>
+<@paginate name="listInvoices" list=invoiceListBuilder rememberPage=false showFromParty=showFromParty showToParty=showToParty showOrderIds=showOrderIds>
     <#noparse>
     <form name="listInvoices" action="invoice.pdf" method="POST" target="_blank" class="basic-form">
         <@inputHidden name="reportId" value="FININVOICE" />
@@ -64,6 +65,7 @@ function showButtons() {
                 <@headerCell title=uiLabelMap.FinancialsInvoiceId orderBy="invoiceId"/>
                 <@headerCell title=uiLabelMap.CommonDescription orderBy="description"/>
                 <@headerCell title=uiLabelMap.FinancialsReferenceNumber orderBy="referenceNumber"/>
+                <#if parameters.showOrderIds><th>${uiLabelMap.CommonOrders}</th></#if>
                 <@headerCell title=uiLabelMap.AccountingInvoiceDate orderBy="invoiceDate"/>
                 <@headerCell title=uiLabelMap.AccountingDueDate orderBy="dueDate"/>
                 <@headerCell title=uiLabelMap.CommonStatus orderBy="statusId"/>
@@ -80,6 +82,13 @@ function showButtons() {
                 <@displayLinkCell text=row.invoiceId href="viewInvoice?invoiceId=${row.invoiceId}"/>
                 <@displayCell text=row.description/>
                 <@displayCell text=row.referenceNumber/>
+                <#if parameters.showOrderIds>
+                  <td>
+                    <#if row.orderIds?has_content>
+                      <#list row.orderIds as orderId>${orderId}<#if orderId_has_next>, </#if></#list>
+                    </#if>
+                  </td>
+                </#if>
                 <@displayDateCell date=row.invoiceDate/>
                 <@displayDateCell date=row.dueDate/>
                 <@displayCell text=row.statusDescription/>

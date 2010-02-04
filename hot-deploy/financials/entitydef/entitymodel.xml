@@ -1106,6 +1106,13 @@ under the License.
         <relation type="one" title="Processing" rel-entity-name="StatusItem">
             <key-map field-name="processingStatusId" rel-field-name="statusId"/>
         </relation>
+        <relation type="many" rel-entity-name="OrderItemBilling">
+            <key-map field-name="invoiceId"/>
+        </relation>
+        <relation type="one" rel-entity-name="OrderItemBilling">
+            <key-map field-name="invoiceId"/>
+            <key-map field-name="invoiceItemSeqId"/>
+        </relation>
     </view-entity>
 
     <view-entity entity-name="InvoiceAndPartyClassificationDisbursement"
