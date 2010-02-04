@@ -1344,7 +1344,9 @@
         <description>Update several acctg trans entries at once. Used by reconcile form.</description>
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="updateAcctgTransEntry"/>
-        <response name="success" type="view" value="ViewGlAccountBalance"/>
+        <response name="success" type="request-redirect" value="viewGlAccountBalance">
+          <redirect-parameter name="glAccountId"/>
+        </response>
         <response name="error" type="view" value="reconcileAccounts"/>
     </request-map>
     <request-map uri="updateAndRefreshReconciliation">
