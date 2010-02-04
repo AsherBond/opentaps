@@ -217,7 +217,7 @@ td.blue2 { background:  #EEEEFF; }
             <#-- entry display (note: checkbox value is the row/entry index) -->
             <tr>
               <td class="${graycycle}"><span class="tabletext">
-                  <a target="_blank" href="<@ofbizUrl>viewAcctgTrans?acctgTransId=${entry.acctgTransId}</@ofbizUrl>">${entry.acctgTransId}</a>
+                  <a class="linktext" target="_blank" href="<@ofbizUrl>viewAcctgTrans?acctgTransId=${entry.acctgTransId}</@ofbizUrl>">${entry.acctgTransId}</a>
               </span></td>
               <td class="${graycycle}"><span class="tabletext"><#if entry.partyId?exists>${Static['org.ofbiz.party.party.PartyHelper'].getPartyName(delegator, entry.get("partyId"), false)} (${entry.partyId})<#else>&nbsp;</#if></span></td>
               <td class="${graycycle}"><span class="tabletext">
@@ -228,7 +228,7 @@ td.blue2 { background:  #EEEEFF; }
                   </#if>
                   <#if entry.paymentId?has_content>
                     <#if entry.paymentTypeId?has_content>(${entry.getRelatedOneCache("PaymentType").description})</#if>
-                    <a href="<@ofbizUrl>viewPayment?paymentId=${entry.paymentId}</@ofbizUrl>">${entry.paymentId}</a>
+                    <a class="linktext" href="<@ofbizUrl>viewPayment?paymentId=${entry.paymentId}</@ofbizUrl>">${entry.paymentId}</a>
                   </#if>
               </span></td>
               <td class="${graycycle}">
