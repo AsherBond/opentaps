@@ -22,7 +22,6 @@ package org.opentaps.base.services;
 
 import org.opentaps.foundation.service.ServiceWrapper;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,20 +33,20 @@ import org.ofbiz.entity.GenericValue;
 import org.opentaps.foundation.infrastructure.User;
 
 /**
- * Creates a cash customer refund against an order.
- * Auto generated base service entity opentaps.disburseChangeForOrder.
+ * Copies all the accounting tags from the return order items to the invoice items..
+ * Auto generated base service entity updateInvoiceItemsAccountingTagsForReturn.
  *
- * Engine: java
- * Location: org.opentaps.common.order.OrderServices
- * Invoke: disburseChangeForOrder
+ * Engine: pojo
+ * Location: org.opentaps.domain.crmsfa.returns.ReturnService
+ * Invoke: updateInvoiceItemsAccountingTagsForReturn
  * Defined in: hot-deploy/opentaps-common/servicedef/services_orders.xml
  */
-public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
+public class UpdateInvoiceItemsAccountingTagsForReturnService extends ServiceWrapper {
 
     /** The service name as used by the service engine. */
-    public static final String NAME = "opentaps.disburseChangeForOrder";
+    public static final String NAME = "updateInvoiceItemsAccountingTagsForReturn";
     /** If the service requires authentication. */
-    public static final Boolean REQUIRES_AUTHENTICATION = Boolean.FALSE;
+    public static final Boolean REQUIRES_AUTHENTICATION = Boolean.TRUE;
     /** If the service requires a new transaction. */
     public static final Boolean REQUIRES_NEW_TRANSACTION = Boolean.FALSE;
     /** If the service uses a transaction. */
@@ -55,9 +54,8 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
 
     /** The enumeration of input parameters. */
     public static enum In {
-        disbursementAmount("disbursementAmount"),
+        invoiceId("invoiceId"),
         locale("locale"),
-        orderId("orderId"),
         timeZone("timeZone"),
         userLogin("userLogin");
         private final String _fieldName;
@@ -66,8 +64,6 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
     }
 
     public static enum Out {
-        disbursementOrderPaymentPreferenceId("disbursementOrderPaymentPreferenceId"),
-        disbursementPaymentId("disbursementPaymentId"),
         errorMessage("errorMessage"),
         errorMessageList("errorMessageList"),
         locale("locale"),
@@ -82,20 +78,24 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
     }
 
     /**
-     * Creates a new <code>OpentapsDisburseChangeForOrderService</code> instance.
+     * Creates a new <code>UpdateInvoiceItemsAccountingTagsForReturnService</code> instance.
      */
-    public OpentapsDisburseChangeForOrderService() {
+    public UpdateInvoiceItemsAccountingTagsForReturnService() {
         super();
     }
 
+    /**
+     * Creates a new <code>UpdateInvoiceItemsAccountingTagsForReturnService</code> instance.
+     * @param user an <code>User</code> value
+     */
+    public UpdateInvoiceItemsAccountingTagsForReturnService(User user) {
+        super(user);
+    }
 
-    private BigDecimal inDisbursementAmount;
+    private String inInvoiceId;
     private Locale inLocale;
-    private String inOrderId;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
-    private String outDisbursementOrderPaymentPreferenceId;
-    private String outDisbursementPaymentId;
     private String outErrorMessage;
     private List outErrorMessageList;
     private Locale outLocale;
@@ -110,11 +110,11 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
 
     /**
      * Auto generated value accessor.
-     * This parameter is optional.
-     * @return <code>BigDecimal</code>
+     * This parameter is required.
+     * @return <code>String</code>
      */
-    public BigDecimal getInDisbursementAmount() {
-        return this.inDisbursementAmount;
+    public String getInInvoiceId() {
+        return this.inInvoiceId;
     }
     /**
      * Auto generated value accessor.
@@ -123,14 +123,6 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
      */
     public Locale getInLocale() {
         return this.inLocale;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is required.
-     * @return <code>String</code>
-     */
-    public String getInOrderId() {
-        return this.inOrderId;
     }
     /**
      * Auto generated value accessor.
@@ -147,22 +139,6 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
      */
     public GenericValue getInUserLogin() {
         return this.inUserLogin;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is optional.
-     * @return <code>String</code>
-     */
-    public String getOutDisbursementOrderPaymentPreferenceId() {
-        return this.outDisbursementOrderPaymentPreferenceId;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is optional.
-     * @return <code>String</code>
-     */
-    public String getOutDisbursementPaymentId() {
-        return this.outDisbursementPaymentId;
     }
     /**
      * Auto generated value accessor.
@@ -231,12 +207,12 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
 
     /**
      * Auto generated value setter.
-     * This parameter is optional.
-     * @param inDisbursementAmount the inDisbursementAmount to set
+     * This parameter is required.
+     * @param inInvoiceId the inInvoiceId to set
     */
-    public void setInDisbursementAmount(BigDecimal inDisbursementAmount) {
-        this.inParameters.add("disbursementAmount");
-        this.inDisbursementAmount = inDisbursementAmount;
+    public void setInInvoiceId(String inInvoiceId) {
+        this.inParameters.add("invoiceId");
+        this.inInvoiceId = inInvoiceId;
     }
     /**
      * Auto generated value setter.
@@ -246,15 +222,6 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
     public void setInLocale(Locale inLocale) {
         this.inParameters.add("locale");
         this.inLocale = inLocale;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is required.
-     * @param inOrderId the inOrderId to set
-    */
-    public void setInOrderId(String inOrderId) {
-        this.inParameters.add("orderId");
-        this.inOrderId = inOrderId;
     }
     /**
      * Auto generated value setter.
@@ -273,24 +240,6 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
     public void setInUserLogin(GenericValue inUserLogin) {
         this.inParameters.add("userLogin");
         this.inUserLogin = inUserLogin;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is optional.
-     * @param outDisbursementOrderPaymentPreferenceId the outDisbursementOrderPaymentPreferenceId to set
-    */
-    public void setOutDisbursementOrderPaymentPreferenceId(String outDisbursementOrderPaymentPreferenceId) {
-        this.outParameters.add("disbursementOrderPaymentPreferenceId");
-        this.outDisbursementOrderPaymentPreferenceId = outDisbursementOrderPaymentPreferenceId;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is optional.
-     * @param outDisbursementPaymentId the outDisbursementPaymentId to set
-    */
-    public void setOutDisbursementPaymentId(String outDisbursementPaymentId) {
-        this.outParameters.add("disbursementPaymentId");
-        this.outDisbursementPaymentId = outDisbursementPaymentId;
     }
     /**
      * Auto generated value setter.
@@ -388,9 +337,8 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        if (inParameters.contains("disbursementAmount")) mapValue.put("disbursementAmount", getInDisbursementAmount());
+        if (inParameters.contains("invoiceId")) mapValue.put("invoiceId", getInInvoiceId());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
-        if (inParameters.contains("orderId")) mapValue.put("orderId", getInOrderId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         // allow the User set to override the userLogin
@@ -401,8 +349,6 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> outputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        if (outParameters.contains("disbursementOrderPaymentPreferenceId")) mapValue.put("disbursementOrderPaymentPreferenceId", getOutDisbursementOrderPaymentPreferenceId());
-        if (outParameters.contains("disbursementPaymentId")) mapValue.put("disbursementPaymentId", getOutDisbursementPaymentId());
         if (outParameters.contains("errorMessage")) mapValue.put("errorMessage", getOutErrorMessage());
         if (outParameters.contains("errorMessageList")) mapValue.put("errorMessageList", getOutErrorMessageList());
         if (outParameters.contains("locale")) mapValue.put("locale", getOutLocale());
@@ -416,17 +362,14 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
 
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
-        if (mapValue.containsKey("disbursementAmount")) setInDisbursementAmount((BigDecimal) mapValue.get("disbursementAmount"));
+        if (mapValue.containsKey("invoiceId")) setInInvoiceId((String) mapValue.get("invoiceId"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
-        if (mapValue.containsKey("orderId")) setInOrderId((String) mapValue.get("orderId"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));
     }
 
     /** {@inheritDoc} */
     public void putAllOutput(Map<String, Object> mapValue) {
-        if (mapValue.containsKey("disbursementOrderPaymentPreferenceId")) setOutDisbursementOrderPaymentPreferenceId((String) mapValue.get("disbursementOrderPaymentPreferenceId"));
-        if (mapValue.containsKey("disbursementPaymentId")) setOutDisbursementPaymentId((String) mapValue.get("disbursementPaymentId"));
         if (mapValue.containsKey("errorMessage")) setOutErrorMessage((String) mapValue.get("errorMessage"));
         if (mapValue.containsKey("errorMessageList")) setOutErrorMessageList((List) mapValue.get("errorMessageList"));
         if (mapValue.containsKey("locale")) setOutLocale((Locale) mapValue.get("locale"));
@@ -438,30 +381,30 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
     }
 
     /**
-     * Construct a <code>OpentapsDisburseChangeForOrderService</code> from the input values of the given <code>OpentapsDisburseChangeForOrderService</code>.
-     * @param input a <code>OpentapsDisburseChangeForOrderService</code>
+     * Construct a <code>UpdateInvoiceItemsAccountingTagsForReturnService</code> from the input values of the given <code>UpdateInvoiceItemsAccountingTagsForReturnService</code>.
+     * @param input a <code>UpdateInvoiceItemsAccountingTagsForReturnService</code>
      */
-    public static OpentapsDisburseChangeForOrderService fromInput(OpentapsDisburseChangeForOrderService input) {
-        OpentapsDisburseChangeForOrderService service = new OpentapsDisburseChangeForOrderService();
+    public static UpdateInvoiceItemsAccountingTagsForReturnService fromInput(UpdateInvoiceItemsAccountingTagsForReturnService input) {
+        UpdateInvoiceItemsAccountingTagsForReturnService service = new UpdateInvoiceItemsAccountingTagsForReturnService();
         return fromInput(input.inputMap());
     }
 
     /**
-     * Construct a <code>OpentapsDisburseChangeForOrderService</code> from the output values of the given <code>OpentapsDisburseChangeForOrderService</code>.
-     * @param output a <code>OpentapsDisburseChangeForOrderService</code>
+     * Construct a <code>UpdateInvoiceItemsAccountingTagsForReturnService</code> from the output values of the given <code>UpdateInvoiceItemsAccountingTagsForReturnService</code>.
+     * @param output a <code>UpdateInvoiceItemsAccountingTagsForReturnService</code>
      */
-    public static OpentapsDisburseChangeForOrderService fromOutput(OpentapsDisburseChangeForOrderService output) {
-        OpentapsDisburseChangeForOrderService service = new OpentapsDisburseChangeForOrderService();
+    public static UpdateInvoiceItemsAccountingTagsForReturnService fromOutput(UpdateInvoiceItemsAccountingTagsForReturnService output) {
+        UpdateInvoiceItemsAccountingTagsForReturnService service = new UpdateInvoiceItemsAccountingTagsForReturnService();
         service.putAllOutput(output.outputMap());
         return service;
     }
 
     /**
-     * Construct a <code>OpentapsDisburseChangeForOrderService</code> from the given input <code>Map</code>.
+     * Construct a <code>UpdateInvoiceItemsAccountingTagsForReturnService</code> from the given input <code>Map</code>.
      * @param mapValue the service input <code>Map</code>
      */
-    public static OpentapsDisburseChangeForOrderService fromInput(Map<String, Object> mapValue) {
-        OpentapsDisburseChangeForOrderService service = new OpentapsDisburseChangeForOrderService();
+    public static UpdateInvoiceItemsAccountingTagsForReturnService fromInput(Map<String, Object> mapValue) {
+        UpdateInvoiceItemsAccountingTagsForReturnService service = new UpdateInvoiceItemsAccountingTagsForReturnService();
         service.putAllInput(mapValue);
         if (mapValue.containsKey("userLogin")) {
             GenericValue userGv = (GenericValue) mapValue.get("userLogin");
@@ -473,11 +416,11 @@ public class OpentapsDisburseChangeForOrderService extends ServiceWrapper {
     }
 
     /**
-     * Construct a <code>OpentapsDisburseChangeForOrderService</code> from the given output <code>Map</code>.
+     * Construct a <code>UpdateInvoiceItemsAccountingTagsForReturnService</code> from the given output <code>Map</code>.
      * @param mapValue the service output <code>Map</code>
      */
-    public static OpentapsDisburseChangeForOrderService fromOutput(Map<String, Object> mapValue) {
-        OpentapsDisburseChangeForOrderService service = new OpentapsDisburseChangeForOrderService();
+    public static UpdateInvoiceItemsAccountingTagsForReturnService fromOutput(Map<String, Object> mapValue) {
+        UpdateInvoiceItemsAccountingTagsForReturnService service = new UpdateInvoiceItemsAccountingTagsForReturnService();
         service.putAllOutput(mapValue);
         return service;
     }
