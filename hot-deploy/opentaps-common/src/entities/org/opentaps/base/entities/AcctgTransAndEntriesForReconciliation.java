@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity AcctgTransAndEntriesForReconciliation.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectAcctgTransAndEntriesForReconciliations", query="SELECT ATR.ACCTG_TRANS_ID AS \"acctgTransId\",ATR.ACCTG_TRANS_TYPE_ID AS \"acctgTransTypeId\",ATR.PARTY_ID AS \"partyId\",ATR.PAYMENT_ID AS \"paymentId\",ATR.TRANSACTION_DATE AS \"transactionDate\",ATR.IS_POSTED AS \"isPosted\",ATE.ACCTG_TRANS_ENTRY_SEQ_ID AS \"acctgTransEntrySeqId\",ATE.GL_ACCOUNT_ID AS \"glAccountId\",ATE.DEBIT_CREDIT_FLAG AS \"debitCreditFlag\",ATE.AMOUNT AS \"amount\",ATE.RECONCILE_STATUS_ID AS \"reconcileStatusId\",PMT.PAYMENT_REF_NUM AS \"paymentRefNum\",PMT.PAYMENT_TYPE_ID AS \"paymentTypeId\" FROM ACCTG_TRANS ATR INNER JOIN ACCTG_TRANS_ENTRY ATE ON ATR.ACCTG_TRANS_ID = ATE.ACCTG_TRANS_ID LEFT JOIN PAYMENT PMT ON ATR.PAYMENT_ID = PMT.PAYMENT_ID", resultSetMapping="AcctgTransAndEntriesForReconciliationMapping")
+@NamedNativeQuery(name="selectAcctgTransAndEntriesForReconciliations", query="SELECT ATR.ACCTG_TRANS_ID AS \"acctgTransId\",ATR.ACCTG_TRANS_TYPE_ID AS \"acctgTransTypeId\",ATR.PARTY_ID AS \"partyId\",ATR.PAYMENT_ID AS \"paymentId\",ATR.TRANSACTION_DATE AS \"transactionDate\",ATR.IS_POSTED AS \"isPosted\",ATR.DESCRIPTION AS \"description\",ATE.ACCTG_TRANS_ENTRY_SEQ_ID AS \"acctgTransEntrySeqId\",ATE.GL_ACCOUNT_ID AS \"glAccountId\",ATE.DEBIT_CREDIT_FLAG AS \"debitCreditFlag\",ATE.AMOUNT AS \"amount\",ATE.RECONCILE_STATUS_ID AS \"reconcileStatusId\",PMT.PAYMENT_REF_NUM AS \"paymentRefNum\",PMT.PAYMENT_TYPE_ID AS \"paymentTypeId\" FROM ACCTG_TRANS ATR INNER JOIN ACCTG_TRANS_ENTRY ATE ON ATR.ACCTG_TRANS_ID = ATE.ACCTG_TRANS_ID LEFT JOIN PAYMENT PMT ON ATR.PAYMENT_ID = PMT.PAYMENT_ID", resultSetMapping="AcctgTransAndEntriesForReconciliationMapping")
 @SqlResultSetMapping(name="AcctgTransAndEntriesForReconciliationMapping", entities={
 @EntityResult(entityClass=AcctgTransAndEntriesForReconciliation.class, fields = {
 @FieldResult(name="acctgTransId", column="acctgTransId")
@@ -59,6 +59,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="paymentId", column="paymentId")
 ,@FieldResult(name="transactionDate", column="transactionDate")
 ,@FieldResult(name="isPosted", column="isPosted")
+,@FieldResult(name="description", column="description")
 ,@FieldResult(name="acctgTransEntrySeqId", column="acctgTransEntrySeqId")
 ,@FieldResult(name="glAccountId", column="glAccountId")
 ,@FieldResult(name="debitCreditFlag", column="debitCreditFlag")
@@ -78,6 +79,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("paymentId", "ATR.PAYMENT_ID");
         fields.put("transactionDate", "ATR.TRANSACTION_DATE");
         fields.put("isPosted", "ATR.IS_POSTED");
+        fields.put("description", "ATR.DESCRIPTION");
         fields.put("acctgTransEntrySeqId", "ATE.ACCTG_TRANS_ENTRY_SEQ_ID");
         fields.put("glAccountId", "ATE.GL_ACCOUNT_ID");
         fields.put("debitCreditFlag", "ATE.DEBIT_CREDIT_FLAG");
@@ -94,6 +96,7 @@ fieldMapColumns.put("AcctgTransAndEntriesForReconciliation", fields);
     paymentId("paymentId"),
     transactionDate("transactionDate"),
     isPosted("isPosted"),
+    description("description"),
     acctgTransEntrySeqId("acctgTransEntrySeqId"),
     glAccountId("glAccountId"),
     debitCreditFlag("debitCreditFlag"),
@@ -123,6 +126,8 @@ fieldMapColumns.put("AcctgTransAndEntriesForReconciliation", fields);
    private Timestamp transactionDate;
     
    private String isPosted;
+    
+   private String description;
     
    private String acctgTransEntrySeqId;
     
@@ -170,7 +175,7 @@ fieldMapColumns.put("AcctgTransAndEntriesForReconciliation", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("acctgTransId");this.primaryKeyNames.add("acctgTransEntrySeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("acctgTransEntrySeqId");this.allFieldsNames.add("glAccountId");this.allFieldsNames.add("debitCreditFlag");this.allFieldsNames.add("amount");this.allFieldsNames.add("reconcileStatusId");this.allFieldsNames.add("refNum");this.allFieldsNames.add("paymentTypeId");
+      this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("description");this.allFieldsNames.add("acctgTransEntrySeqId");this.allFieldsNames.add("glAccountId");this.allFieldsNames.add("debitCreditFlag");this.allFieldsNames.add("amount");this.allFieldsNames.add("reconcileStatusId");this.allFieldsNames.add("refNum");this.allFieldsNames.add("paymentTypeId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -229,6 +234,13 @@ fieldMapColumns.put("AcctgTransAndEntriesForReconciliation", fields);
      */
     public void setIsPosted(String isPosted) {
         this.isPosted = isPosted;
+    }
+    /**
+     * Auto generated value setter.
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
     /**
      * Auto generated value setter.
@@ -321,6 +333,13 @@ fieldMapColumns.put("AcctgTransAndEntriesForReconciliation", fields);
      */
     public String getIsPosted() {
         return this.isPosted;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDescription() {
+        return this.description;
     }
     /**
      * Auto generated value accessor.
@@ -439,6 +458,7 @@ fieldMapColumns.put("AcctgTransAndEntriesForReconciliation", fields);
         setPaymentId((String) mapValue.get("paymentId"));
         setTransactionDate((Timestamp) mapValue.get("transactionDate"));
         setIsPosted((String) mapValue.get("isPosted"));
+        setDescription((String) mapValue.get("description"));
         setAcctgTransEntrySeqId((String) mapValue.get("acctgTransEntrySeqId"));
         setGlAccountId((String) mapValue.get("glAccountId"));
         setDebitCreditFlag((String) mapValue.get("debitCreditFlag"));
@@ -459,6 +479,7 @@ fieldMapColumns.put("AcctgTransAndEntriesForReconciliation", fields);
         mapValue.put("paymentId", getPaymentId());
         mapValue.put("transactionDate", getTransactionDate());
         mapValue.put("isPosted", getIsPosted());
+        mapValue.put("description", getDescription());
         mapValue.put("acctgTransEntrySeqId", getAcctgTransEntrySeqId());
         mapValue.put("glAccountId", getGlAccountId());
         mapValue.put("debitCreditFlag", getDebitCreditFlag());

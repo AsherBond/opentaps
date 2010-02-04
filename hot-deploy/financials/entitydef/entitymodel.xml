@@ -1212,6 +1212,7 @@ under the License.
         <alias entity-alias="ATR" name="paymentId"/>
         <alias entity-alias="ATR" name="transactionDate"/>
         <alias entity-alias="ATR" name="isPosted"/>
+        <alias entity-alias="ATR" name="description"/>
         <alias entity-alias="ATE" name="acctgTransEntrySeqId"/>
         <alias entity-alias="ATE" name="glAccountId"/>
         <alias entity-alias="ATE" name="debitCreditFlag"/>

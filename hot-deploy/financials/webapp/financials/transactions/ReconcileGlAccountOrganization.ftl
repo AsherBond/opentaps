@@ -230,6 +230,9 @@ td.blue2 { background:  #EEEEFF; }
                     <#if entry.paymentTypeId?has_content>(${entry.getRelatedOneCache("PaymentType").description})</#if>
                     <a class="linktext" href="<@ofbizUrl>viewPayment?paymentId=${entry.paymentId}</@ofbizUrl>">${entry.paymentId}</a>
                   </#if>
+                  <#if entry.description?has_content>
+                    <br/>${entry.description}
+                  </#if>
               </span></td>
               <td class="${graycycle}">
                 <span class="tabletext">${entry.refNum?if_exists}</span>
