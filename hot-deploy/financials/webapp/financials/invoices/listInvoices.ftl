@@ -50,7 +50,10 @@ function showButtons() {
 /*]]>*/
 </script>
 
-<@paginate name="listInvoices" list=invoiceListBuilder rememberPage=false>
+<#assign showFromParty = !isReceivable/>
+<#assign showToParty = !isPayable/>
+
+<@paginate name="listInvoices" list=invoiceListBuilder rememberPage=false showFromParty=showFromParty showToParty=showToParty>
     <#noparse>
     <form name="listInvoices" action="invoice.pdf" method="POST" target="_blank" class="basic-form">
         <@inputHidden name="reportId" value="FININVOICE" />
@@ -65,8 +68,8 @@ function showButtons() {
                 <@headerCell title=uiLabelMap.AccountingDueDate orderBy="dueDate"/>
                 <@headerCell title=uiLabelMap.CommonStatus orderBy="statusId"/>
                 <@headerCell title=uiLabelMap.FinancialsProcessingStatus orderBy="processingStatusId"/>
-                <@headerCell title=uiLabelMap.AccountingFromParty orderBy="partyIdFrom, invoiceDate DESC"/>
-                <@headerCell title=uiLabelMap.AccountingToParty orderBy="partyId, invoiceDate DESC"/>
+                <#if parameters.showFromParty><@headerCell title=uiLabelMap.AccountingFromParty orderBy="partyIdFrom, invoiceDate DESC"/></#if>
+                <#if parameters.showToParty><@headerCell title=uiLabelMap.AccountingToParty orderBy="partyId, invoiceDate DESC"/></#if>
                 <@headerCell title=uiLabelMap.AccountingAmount orderBy="invoiceTotal, invoiceDate DESC" blockClass="textright"/>
                 <@headerCell title=uiLabelMap.OrderOutstanding orderBy="openAmount, invoiceDate DESC" blockClass="textright"/>
                 <td><input type="checkbox" name="selectAll" value="N" onclick="javascript:toggleAll(this, 'listInvoices'); showButtons();"></td>
@@ -81,8 +84,8 @@ function showButtons() {
                 <@displayDateCell date=row.dueDate/>
                 <@displayCell text=row.statusDescription/>
                 <@displayCell text=row.processingStatusDescription/>
-                <@displayCell text=row.partyNameFrom/>
-                <@displayCell text=row.partyName/>
+                <#if parameters.showFromParty><@displayCell text=row.partyNameFrom/></#if>
+                <#if parameters.showToParty><@displayCell text=row.partyName/></#if>
                 <@displayCurrencyCell amount=row.amount currencyUomId=row.currencyUomId/>
                 <@displayCurrencyCell amount=row.outstanding currencyUomId=row.currencyUomId/>
                 <#if row.statusId != "INVOICE_CANCELLED" && row.statusId != "INVOICE_WRITEOFF" && row.statusId != "INVOICE_VOIDED">
