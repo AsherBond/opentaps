@@ -59,6 +59,7 @@ function showButtons() {
         <table class="listTable">
             <tr class="listTableHeader">
                 <@headerCell title=uiLabelMap.FinancialsInvoiceId orderBy="invoiceId"/>
+                <@headerCell title=uiLabelMap.CommonDescription orderBy="description"/>
                 <@headerCell title=uiLabelMap.FinancialsReferenceNumber orderBy="referenceNumber"/>
                 <@headerCell title=uiLabelMap.AccountingInvoiceDate orderBy="invoiceDate"/>
                 <@headerCell title=uiLabelMap.AccountingDueDate orderBy="dueDate"/>
@@ -74,6 +75,7 @@ function showButtons() {
             <tr class="${tableRowClass(row_index)}">
                 <@inputHidden name="invoiceId" value=row.invoiceId index=row_index/>
                 <@displayLinkCell text=row.invoiceId href="viewInvoice?invoiceId=${row.invoiceId}"/>
+                <@displayCell text=row.description/>
                 <@displayCell text=row.referenceNumber/>
                 <@displayDateCell date=row.invoiceDate/>
                 <@displayDateCell date=row.dueDate/>
