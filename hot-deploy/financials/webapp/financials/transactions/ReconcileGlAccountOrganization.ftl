@@ -59,7 +59,7 @@ td.blue2 { background:  #EEEEFF; }
 
 
 <form name="reconcileForm" method="POST" action="<@ofbizUrl>reconcileGlAccount</@ofbizUrl>">
-  <@frameSection title="Reconciliation for ${glAccount.accountCode} - ${glAccount.accountName}">
+  <@frameSection title="${uiLabelMap.FinancialsReconciliationFor} ${glAccount.accountCode} - ${glAccount.accountName}">
 
     <#if (entries?exists) && (entries.size() gt 0)> <#-- BEGIN ENTRIES EXIST -->
 

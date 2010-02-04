@@ -341,6 +341,7 @@
     <screen name="reconcileAccountForm">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="AccountingAcctRecon"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
                 <set field="glAccountId" from-field="parameters.glAccountId"/>
                 <set field="reconciledBalance" from-field="parameters.reconciledBalance"/>
@@ -360,6 +361,7 @@
     <screen name="reconcileAfterSettlement">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="AccountingAcctRecon"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/SetReconcileFromSettlement.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/ReconcileGlAccount.bsh"/>
