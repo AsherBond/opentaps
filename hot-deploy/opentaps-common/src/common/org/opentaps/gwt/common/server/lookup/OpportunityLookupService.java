@@ -205,6 +205,8 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
                 // Otherwise this isn't make sense because we are on view account page.
                 if (getProvider().parameterIsPresent(OpportunityLookupConfiguration.INOUT_PARTY_ID_FROM_ID)) {
                     opportunity.setPartyFromLink(PartyHelper.createViewPageLink(opportunity.getPartyIdFrom(), getProvider().getInfrastructure().getDelegator(), externalLoginKey));
+                }  else {
+                    opportunity.setPartyFromLink(org.ofbiz.party.party.PartyHelper.getPartyName(getProvider().getInfrastructure().getDelegator(), opportunity.getPartyIdFrom(), false));
                 }
                 // prepare date in localized format
                 String estimatedCloseDateString = opportunity.getEstimatedCloseDate() == null ? "" : UtilDateTime.toDateString(opportunity.getEstimatedCloseDate());
