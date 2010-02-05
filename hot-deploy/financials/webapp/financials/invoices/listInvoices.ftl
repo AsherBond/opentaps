@@ -52,7 +52,7 @@ function showButtons() {
 
 <#assign showFromParty = !isReceivable/>
 <#assign showToParty = !isPayable/>
-<#assign showOrderIds = isReceivable/>
+<#assign showOrderIds = isReceivable || isPayable/>
 
 <@paginate name="listInvoices" list=invoiceListBuilder rememberPage=false showFromParty=showFromParty showToParty=showToParty showOrderIds=showOrderIds>
     <#noparse>
