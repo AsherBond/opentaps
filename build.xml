@@ -681,7 +681,115 @@ under the License.
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${permmemory.max.param}"/>
             <arg value="hibernatecfg"/>
-        </java>     
+        </java>
     </target>
+
+    <!-- ================================================================== -->
+    <!-- Configuration deployment                                           -->
+    <!-- ================================================================== -->
+
+    <!--
+        The name of the properties file used for token substitutions during the copy.
+    -->
+    <target name="prepare-deployconf-from">
+
+      <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+          <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/lib/ant-contrib.jar"/>
+        </classpath>
+      </taskdef>
+
+      <!-- remove a trailing slash -->
+      <propertyregex property="deployconf.from"
+                     input="${from}"
+                     regexp="^(.*?)[/\\]?$"
+                     select="\1"/>
+
+    </target>
+
+    <target name="test-deployconf-from-notempty">
+      <condition property="deployconf-from-notempty">
+        <and>
+          <isset property="from"/>
+          <not>
+            <equals arg1="${deployconf.from}" arg2="" trim="true"/>
+          </not>
+        </and>
+      </condition>
+    </target>
+
+    <target name="test-deployconf-from-exists">
+      <available property="deployconf-base-ok" file="${deployconf.from}" />
+      <condition property="deployconf-from-exists">
+        <istrue value="${deployconf-base-ok}"/>
+      </condition>
+    </target>
+
+    <!--
+        A basic validity test to avoid copying the wrong directory, or
+        copying the opentaps directory into itself.
+    -->
+    <target name="test-deployconf-from-valid">
+      <dirname property="deployconf-fromdir" file="${deployconf.from}"/>
+      <dirname property="deployconf-todir" file="${basedir}"/>
+      <available property="deployconf-has-framework" file="${from}/framework" />
+      <available property="deployconf-has-hotdeploy" file="${from}/hot-deploy" />
+      <condition property="deployconf-from-valid">
+        <and>
+          <or>
+            <istrue value="${deployconf-has-framework}"/>
+            <istrue value="${deployconf-has-hotdeploy}"/>
+          </or>
+          <not>
+            <equals arg1="${deployconf-fromdir}" arg2="${deployconf-todir}" trim="true"/>
+          </not>
+        </and>
+      </condition>
+    </target>
+
+    <target name="deployconf-exists" depends="test-deployconf-from-exists" unless="deployconf-from-exists">
+      <fail message="Directory ${basedir}/${deployconf.from} does not exist."/>
+    </target>
+
+    <target name="deployconf-valid" depends="test-deployconf-from-valid" unless="deployconf-from-valid">
+      <fail message="Directory ${basedir}/${deployconf.from} is not a valid source. It must contain a `framework` and/or `hot-deploy` subdirectories."/>
+    </target>
+
+    <target name="deployconf-empty" depends="test-deployconf-from-notempty" unless="deployconf-from-notempty">
+      <fail message="No from parameter found: for example -Dfrom=&lt;mycomponent&gt;/base-configs/&lt;default&gt; and make sure it points to the directory containing the configuration files in a tree similar to the base direcotry (should have for example subdirectories framework/entity/config or hot-deploy/)."/>
+    </target>
+
+    <target name="check-deployconf-substitution">
+      <available property="deployconf-has-substitutions" file="${deployconf.from}.properties" />
+
+      <condition property="deployconf.substitution.file" value="${deployconf.from}.properties">
+        <istrue value="${deployconf-has-substitutions}"/>
+      </condition>
+
+    </target>
+
+    <!-- in order, check if the from parameter was given, if it points to a valid directory, and if there is substitution properties file to be used -->
+    <target name="deployconf-validation" depends="prepare-deployconf-from,deployconf-empty,deployconf-exists,deployconf-valid,check-deployconf-substitution"/>
+
+    <target name="deploy-config-nosub" depends="deployconf-validation" unless="deployconf-has-substitutions">
+      <echo message="Deploy files from ${basedir}/${deployconf.from} without substitutions" />
+      <copy todir="${basedir}" overwrite="true" verbose="true">
+        <fileset dir="${deployconf.from}"/>
+      </copy>
+    </target>
+
+    <target name="deploy-config-sub" depends="deployconf-validation" if="deployconf-has-substitutions">
+      <echo message="Deploy files from ${basedir}/${deployconf.from} with substitutions" />
+      <copy todir="${basedir}" overwrite="true" verbose="true">
+        <fileset dir="${deployconf.from}"/>
+        <filterset>
+          <filtersfile file="${deployconf.substitution.file}"/>
+        </filterset>
+      </copy>
+    </target>
+
+    <target name="deploy-config" depends="deploy-config-sub,deploy-config-nosub"
+            description="Deploys a set of file from a directory into the instance. Mainly used to manage multiple sets of configuration files.
+eg: ant deploy-config -Dfrom=&lt;directory&gt; [-Ddeployconf.substitution.file=path/to/something.properties]"/>
 
 </project>
