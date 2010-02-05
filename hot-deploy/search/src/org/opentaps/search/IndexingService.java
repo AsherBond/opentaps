@@ -35,6 +35,9 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.model.ModelEntity;
+import org.opentaps.base.entities.Party;
+import org.opentaps.base.entities.PartyGroup;
+import org.opentaps.base.entities.PartyRole;
 import org.opentaps.domain.search.IndexingServiceInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.hibernate.HibernateUtil;
@@ -168,6 +171,8 @@ public class IndexingService extends Service implements IndexingServiceInterface
         .setFetchMode("distributor", FetchMode.JOIN)
         //distinct them (due to collection load)
         .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
+        //set flush mode
+        .setFlushMode(FlushMode.COMMIT)
         //minimize cache interaction
         .setCacheMode(CacheMode.IGNORE)
         .setFetchSize(Session.FETCH_SIZE);
@@ -185,8 +190,6 @@ public class IndexingService extends Service implements IndexingServiceInterface
         }
         // flush last changes
         fullTextSession.flushToIndexes();
-        // optimize indexs after flush
-        fullTextSession.getSearchFactory().optimize(entityClass);
     }
 
     /** {@inheritDoc} */
