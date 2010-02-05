@@ -34,7 +34,7 @@
     <tr>
       <@displayTitleCell title=uiLabelMap.CrmAccount />
       <#if quote.partyId?has_content>
-        <@displayLinkCell text=partyName?if_exists href="${partyUrl}" />
+        <@displayPartyLinkCell partyId=quote.partyId />
       <#else>
         <@displayCell text="" />
       </#if>
@@ -44,7 +44,7 @@
     <tr>
       <@displayTitleCell title=uiLabelMap.CrmContact />
       <#if quote.contactPartyId?has_content>
-        <@displayLinkCell text=contactPartyName?if_exists href="${contactPartyUrl}" />
+        <@displayPartyLinkCell partyId=quote.contactPartyId />
       <#else>
         <@displayCell text="" />
       </#if>
