@@ -201,13 +201,7 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
         try {
             String externalLoginKey = getProvider().getParameter("externalLoginKey");
             for (SalesOpportunityAndPartyRelationshipAndStage opportunity : opportunities) {
-                // make "Opportunity For" column a link if there is no partyIdFrom in input.
-                // Otherwise this isn't make sense because we are on view account page.
-                if (getProvider().parameterIsPresent(OpportunityLookupConfiguration.INOUT_PARTY_ID_FROM_ID)) {
-                    opportunity.setPartyFromLink(PartyHelper.createViewPageLink(opportunity.getPartyIdFrom(), getProvider().getInfrastructure().getDelegator(), externalLoginKey));
-                }  else {
-                    opportunity.setPartyFromLink(org.ofbiz.party.party.PartyHelper.getPartyName(getProvider().getInfrastructure().getDelegator(), opportunity.getPartyIdFrom(), false));
-                }
+                opportunity.setPartyFromLink(PartyHelper.createViewPageLink(opportunity.getPartyIdFrom(), getProvider().getInfrastructure().getDelegator(), externalLoginKey));
                 // prepare date in localized format
                 String estimatedCloseDateString = opportunity.getEstimatedCloseDate() == null ? "" : UtilDateTime.toDateString(opportunity.getEstimatedCloseDate());
                 opportunity.setEstimatedCloseDateString(estimatedCloseDateString);
