@@ -30,6 +30,7 @@ activeAccountsAndLeads = PartyHelper.findActiveClientParties(delegator, dispatch
 partyIds = new ArrayList();
 if (activeAccountsAndLeads != null) {
     activeAccountsAndLeadsList = activeAccountsAndLeads.getCompleteList();
+    activeAccountsAndLeads.close();
     if (UtilValidate.isEmpty(activeAccountsAndLeadsList)) {
         Debug.logWarning("No active clients found.", "");
     } else {
