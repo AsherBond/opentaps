@@ -190,6 +190,7 @@ public class IndexingService extends Service implements IndexingServiceInterface
         }
         // flush last changes
         fullTextSession.flushToIndexes();
+        fullTextSession.getSearchFactory().optimize(entityClass); 
     }
 
     /** {@inheritDoc} */
