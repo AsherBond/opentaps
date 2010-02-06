@@ -115,7 +115,7 @@ function onRunSyncChange() {
                 <@inputDateTimeCell name="SERVICE_TIME" form="${serviceName}Form"/>
             </tr>
             
-            <@inputSubmitRow title="${uiLabelMap.DataimportRunImport}" onClick="makeTimestamp(document.${serviceName}Form.SERVICE_TIME, document.${serviceName}Form.SERVICE_TIME_c_date, document.${serviceName}Form.SERVICE_TIME_c_hour, document.${serviceName}Form.SERVICE_TIME_c_minutes, document.${serviceName}Form.SERVICE_TIME_c_ampm); document.${serviceName}Form.submit();"/>
+            <@inputSubmitRow title="${uiLabelMap.CommonRun}" onClick="makeTimestamp(document.${serviceName}Form.SERVICE_TIME, document.${serviceName}Form.SERVICE_TIME_c_date, document.${serviceName}Form.SERVICE_TIME_c_hour, document.${serviceName}Form.SERVICE_TIME_c_minutes, document.${serviceName}Form.SERVICE_TIME_c_ampm); document.${serviceName}Form.submit();"/>
 
         </table>
 
