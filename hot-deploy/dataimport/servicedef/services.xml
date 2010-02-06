@@ -114,6 +114,7 @@
         <attribute type="String" mode="IN" name="companyPartyId" optional="false"/>
         <!--todo make the below optional-->        
         <attribute type="Boolean" mode="IN" name="readShippingAddressFromTable" optional="true"/>
+        <attribute type="Boolean" mode="IN" name="readBillingAddressFromTable" optional="true"/>
         <attribute type="String" mode="IN" name="productStoreId" optional="true"/>
         <attribute type="String" mode="IN" name="prodCatalogId" optional="true"/>
         <attribute type="String" mode="IN" name="purchaseOrderShipToContactMechId" optional="true"/>

@@ -80,6 +80,16 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("shippingCountry", "SHIPPING_COUNTRY");
         fields.put("shippingPhone", "SHIPPING_PHONE");
         fields.put("shippingFax", "SHIPPING_FAX");
+        fields.put("billingFirstName", "BILLING_FIRST_NAME");
+        fields.put("billingLastName", "BILLING_LAST_NAME");
+        fields.put("billingCompanyName", "BILLING_COMPANY_NAME");
+        fields.put("billingStreet", "BILLING_STREET");
+        fields.put("billingCity", "BILLING_CITY");
+        fields.put("billingRegion", "BILLING_REGION");
+        fields.put("billingPostcode", "BILLING_POSTCODE");
+        fields.put("billingCountry", "BILLING_COUNTRY");
+        fields.put("billingPhone", "BILLING_PHONE");
+        fields.put("billingFax", "BILLING_FAX");
         fields.put("importStatusId", "IMPORT_STATUS_ID");
         fields.put("importError", "IMPORT_ERROR");
         fields.put("processedTimestamp", "PROCESSED_TIMESTAMP");
@@ -116,6 +126,16 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
     shippingCountry("shippingCountry"),
     shippingPhone("shippingPhone"),
     shippingFax("shippingFax"),
+    billingFirstName("billingFirstName"),
+    billingLastName("billingLastName"),
+    billingCompanyName("billingCompanyName"),
+    billingStreet("billingStreet"),
+    billingCity("billingCity"),
+    billingRegion("billingRegion"),
+    billingPostcode("billingPostcode"),
+    billingCountry("billingCountry"),
+    billingPhone("billingPhone"),
+    billingFax("billingFax"),
     importStatusId("importStatusId"),
     importError("importError"),
     processedTimestamp("processedTimestamp"),
@@ -188,6 +208,26 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
    private String shippingPhone;
    @Column(name="SHIPPING_FAX")
    private String shippingFax;
+   @Column(name="BILLING_FIRST_NAME")
+   private String billingFirstName;
+   @Column(name="BILLING_LAST_NAME")
+   private String billingLastName;
+   @Column(name="BILLING_COMPANY_NAME")
+   private String billingCompanyName;
+   @Column(name="BILLING_STREET")
+   private String billingStreet;
+   @Column(name="BILLING_CITY")
+   private String billingCity;
+   @Column(name="BILLING_REGION")
+   private String billingRegion;
+   @Column(name="BILLING_POSTCODE")
+   private String billingPostcode;
+   @Column(name="BILLING_COUNTRY")
+   private String billingCountry;
+   @Column(name="BILLING_PHONE")
+   private String billingPhone;
+   @Column(name="BILLING_FAX")
+   private String billingFax;
    @Column(name="IMPORT_STATUS_ID")
    private String importStatusId;
    @Column(name="IMPORT_ERROR")
@@ -253,7 +293,7 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("customerPartyId");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("shippingTotal");this.allFieldsNames.add("orderTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("adjustmentsTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("comments");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("productStoreShipMethId");this.allFieldsNames.add("orderClosed");this.allFieldsNames.add("shippingFirstName");this.allFieldsNames.add("shippingLastName");this.allFieldsNames.add("shippingCompanyName");this.allFieldsNames.add("shippingStreet");this.allFieldsNames.add("shippingCity");this.allFieldsNames.add("shippingRegion");this.allFieldsNames.add("shippingPostcode");this.allFieldsNames.add("shippingCountry");this.allFieldsNames.add("shippingPhone");this.allFieldsNames.add("shippingFax");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("customerPartyId");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("shippingTotal");this.allFieldsNames.add("orderTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("adjustmentsTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("comments");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("productStoreShipMethId");this.allFieldsNames.add("orderClosed");this.allFieldsNames.add("shippingFirstName");this.allFieldsNames.add("shippingLastName");this.allFieldsNames.add("shippingCompanyName");this.allFieldsNames.add("shippingStreet");this.allFieldsNames.add("shippingCity");this.allFieldsNames.add("shippingRegion");this.allFieldsNames.add("shippingPostcode");this.allFieldsNames.add("shippingCountry");this.allFieldsNames.add("shippingPhone");this.allFieldsNames.add("shippingFax");this.allFieldsNames.add("billingFirstName");this.allFieldsNames.add("billingLastName");this.allFieldsNames.add("billingCompanyName");this.allFieldsNames.add("billingStreet");this.allFieldsNames.add("billingCity");this.allFieldsNames.add("billingRegion");this.allFieldsNames.add("billingPostcode");this.allFieldsNames.add("billingCountry");this.allFieldsNames.add("billingPhone");this.allFieldsNames.add("billingFax");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -449,6 +489,76 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
      */
     public void setShippingFax(String shippingFax) {
         this.shippingFax = shippingFax;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billingFirstName the billingFirstName to set
+     */
+    public void setBillingFirstName(String billingFirstName) {
+        this.billingFirstName = billingFirstName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billingLastName the billingLastName to set
+     */
+    public void setBillingLastName(String billingLastName) {
+        this.billingLastName = billingLastName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billingCompanyName the billingCompanyName to set
+     */
+    public void setBillingCompanyName(String billingCompanyName) {
+        this.billingCompanyName = billingCompanyName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billingStreet the billingStreet to set
+     */
+    public void setBillingStreet(String billingStreet) {
+        this.billingStreet = billingStreet;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billingCity the billingCity to set
+     */
+    public void setBillingCity(String billingCity) {
+        this.billingCity = billingCity;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billingRegion the billingRegion to set
+     */
+    public void setBillingRegion(String billingRegion) {
+        this.billingRegion = billingRegion;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billingPostcode the billingPostcode to set
+     */
+    public void setBillingPostcode(String billingPostcode) {
+        this.billingPostcode = billingPostcode;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billingCountry the billingCountry to set
+     */
+    public void setBillingCountry(String billingCountry) {
+        this.billingCountry = billingCountry;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billingPhone the billingPhone to set
+     */
+    public void setBillingPhone(String billingPhone) {
+        this.billingPhone = billingPhone;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billingFax the billingFax to set
+     */
+    public void setBillingFax(String billingFax) {
+        this.billingFax = billingFax;
     }
     /**
      * Auto generated value setter.
@@ -686,6 +796,76 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getBillingFirstName() {
+        return this.billingFirstName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBillingLastName() {
+        return this.billingLastName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBillingCompanyName() {
+        return this.billingCompanyName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBillingStreet() {
+        return this.billingStreet;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBillingCity() {
+        return this.billingCity;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBillingRegion() {
+        return this.billingRegion;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBillingPostcode() {
+        return this.billingPostcode;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBillingCountry() {
+        return this.billingCountry;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBillingPhone() {
+        return this.billingPhone;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBillingFax() {
+        return this.billingFax;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getImportStatusId() {
         return this.importStatusId;
     }
@@ -900,6 +1080,16 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
         setShippingCountry((String) mapValue.get("shippingCountry"));
         setShippingPhone((String) mapValue.get("shippingPhone"));
         setShippingFax((String) mapValue.get("shippingFax"));
+        setBillingFirstName((String) mapValue.get("billingFirstName"));
+        setBillingLastName((String) mapValue.get("billingLastName"));
+        setBillingCompanyName((String) mapValue.get("billingCompanyName"));
+        setBillingStreet((String) mapValue.get("billingStreet"));
+        setBillingCity((String) mapValue.get("billingCity"));
+        setBillingRegion((String) mapValue.get("billingRegion"));
+        setBillingPostcode((String) mapValue.get("billingPostcode"));
+        setBillingCountry((String) mapValue.get("billingCountry"));
+        setBillingPhone((String) mapValue.get("billingPhone"));
+        setBillingFax((String) mapValue.get("billingFax"));
         setImportStatusId((String) mapValue.get("importStatusId"));
         setImportError((String) mapValue.get("importError"));
         setProcessedTimestamp((Timestamp) mapValue.get("processedTimestamp"));
@@ -940,6 +1130,16 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
         mapValue.put("shippingCountry", getShippingCountry());
         mapValue.put("shippingPhone", getShippingPhone());
         mapValue.put("shippingFax", getShippingFax());
+        mapValue.put("billingFirstName", getBillingFirstName());
+        mapValue.put("billingLastName", getBillingLastName());
+        mapValue.put("billingCompanyName", getBillingCompanyName());
+        mapValue.put("billingStreet", getBillingStreet());
+        mapValue.put("billingCity", getBillingCity());
+        mapValue.put("billingRegion", getBillingRegion());
+        mapValue.put("billingPostcode", getBillingPostcode());
+        mapValue.put("billingCountry", getBillingCountry());
+        mapValue.put("billingPhone", getBillingPhone());
+        mapValue.put("billingFax", getBillingFax());
         mapValue.put("importStatusId", getImportStatusId());
         mapValue.put("importError", getImportError());
         mapValue.put("processedTimestamp", getProcessedTimestamp());

@@ -78,11 +78,15 @@ public class OrderImportServices {
         Boolean calculateGrandTotal = (Boolean) context.get("calculateGrandTotal");
         Boolean reserveInventory = (Boolean) context.get("reserveInventory");
         Boolean readShippingAddressFromTable = (Boolean) context.get("readShippingAddressFromTable");
+        Boolean readBillingAddressFromTable = (Boolean) context.get("readBillingAddressFromTable");
         if (reserveInventory == null) {
             reserveInventory = Boolean.FALSE;
         }
         if (readShippingAddressFromTable == null) {
             readShippingAddressFromTable = Boolean.FALSE;
+        }
+        if (readBillingAddressFromTable == null) {
+            readBillingAddressFromTable = Boolean.FALSE;
         }
 
         int imported = 0;
@@ -148,7 +152,7 @@ public class OrderImportServices {
                         return ServiceUtil.returnError(errMsg);
                     }
 
-                    List<GenericValue> toStore = OrderImportServices.decodeOrder(orderHeader, companyPartyId, productStore, prodCatalogId, purchaseOrderShipToContactMechId, importEmptyOrders.booleanValue(), calculateGrandTotal.booleanValue(), reserveInventory, readShippingAddressFromTable.booleanValue(), delegator, dispatcher, userLogin);
+                    List<GenericValue> toStore = OrderImportServices.decodeOrder(orderHeader, companyPartyId, productStore, prodCatalogId, purchaseOrderShipToContactMechId, importEmptyOrders.booleanValue(), calculateGrandTotal.booleanValue(), reserveInventory, readShippingAddressFromTable.booleanValue(), readBillingAddressFromTable.booleanValue(), delegator, dispatcher, userLogin);
                     if (toStore == null || toStore.size()==0) {
                         Debug.logWarning("Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful.", MODULE);
                         continue;
@@ -298,7 +302,7 @@ public class OrderImportServices {
      * @throws Exception              if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static List decodeOrder(GenericValue externalOrderHeader, String companyPartyId, GenericValue productStore, String prodCatalogId, String purchaseOrderShipToContactMechId, boolean importEmptyOrders, boolean calculateGrandTotal, boolean reserveInventory, boolean readShippingAddressFromTable, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException, Exception {
+    private static List decodeOrder(GenericValue externalOrderHeader, String companyPartyId, GenericValue productStore, String prodCatalogId, String purchaseOrderShipToContactMechId, boolean importEmptyOrders, boolean calculateGrandTotal, boolean reserveInventory, boolean readShippingAddressFromTable, boolean readBillingAddressFromTable,GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException, Exception {
         List toStore = FastList.newInstance();
         //todo move this at the beginning of the class
         DataImportOrderHeader dataImportOrderHeader = new DataImportOrderHeader();
@@ -378,6 +382,7 @@ public class OrderImportServices {
 
         // create a ship group for the sales order
         List postalAddressEntities = FastList.newInstance();
+        List orderContactMechs = FastList.newInstance();
         if (isSalesOrder) {
             // get requested shipping method
             String productStoreShipMethId = externalOrderHeader.getString("productStoreShipMethId");
@@ -392,7 +397,7 @@ public class OrderImportServices {
             String carrierPartyId = shipMeth.getString("partyId");
             String carrierRoleTypeId = shipMeth.getString("roleTypeId");
 
-            //
+
             String contactMechId = null;
 
             if (readShippingAddressFromTable) {
@@ -448,6 +453,15 @@ public class OrderImportServices {
                 postalAddressEntities.add(postalAddressEntity);
                 contactMechId = contactMech.getContactMechId();
 
+
+                // link the ContactMech with the Order
+                OrderContactMech orderContactMech = new OrderContactMech();
+                orderContactMech.setOrderId(orderId);
+                orderContactMech.setContactMechPurposeTypeId("SHIPPING_LOCATION");
+                orderContactMech.setContactMechId(contactMechId);
+                GenericValue orderContactMechEntity = delegator.makeValue(orderContactMech.getBaseEntityName(), orderContactMech.toMap());
+                orderContactMechs.add(orderContactMechEntity);
+
             } else {
                 List<GenericValue> shippingAddresses = PartyContactHelper.getContactMechsByPurpose(customerPartyId, "POSTAL_ADDRESS", "SHIPPING_LOCATION", true, delegator);
                 if (shippingAddresses.size() > 1) {
@@ -473,6 +487,81 @@ public class OrderImportServices {
                 oisg.put("contactMechId", contactMechId);
                 Debug.logInfo("Created ship group for order at PostalAddress [" + contactMechId + "]", MODULE);
             }
+
+            if(readBillingAddressFromTable){
+                //get info from the table
+                ContactMech contactMech = new ContactMech();
+                String contactMechNextId = delegator.getNextSeqId(contactMech.getBaseEntityName());
+                contactMech.setContactMechId(contactMechNextId);
+                contactMech.setContactMechTypeId(ContactMechTypeConstants.POSTAL_ADDRESS);
+                GenericValue contactMechEntity = delegator.makeValue(contactMech.getBaseEntityName(), contactMech.toMap());
+                //todo should we check if the contactMech is empty?
+
+                //GEO look ups
+
+                EntityCondition geoCond = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("geoCode", EntityOperator.EQUALS, dataImportOrderHeader.getBillingCountry()),
+                        EntityCondition.makeCondition("geoTypeId", EntityOperator.EQUALS, "COUNTRY"));
+
+                //Country codes
+                List<GenericValue> geoCountries = delegator.findByCondition("Geo", geoCond, null, null);
+                if (UtilValidate.isEmpty(geoCountries)) {
+                    //todo log error
+                    Debug.logError("Couldn't find geoId for " + dataImportOrderHeader.getBillingCountry(), MODULE);
+                    return FastList.newInstance();
+                }
+                GenericValue geoCountry = EntityUtil.getFirst(geoCountries);
+                String countryGeoId = geoCountry.getString("geoId");
+
+                PostalAddress postalAddress = new PostalAddress();
+                postalAddress.setContactMechId(contactMech.getContactMechId());
+                String toName = dataImportOrderHeader.getBillingFirstName() + " " + dataImportOrderHeader.getBillingLastName();
+                postalAddress.setToName(toName);
+                postalAddress.setAttnName(dataImportOrderHeader.getBillingCompanyName());
+                postalAddress.setAddress1(dataImportOrderHeader.getBillingStreet());
+                postalAddress.setCity(dataImportOrderHeader.getBillingCity());
+                postalAddress.setCountryGeoId(countryGeoId);
+                postalAddress.setPostalCode(dataImportOrderHeader.getBillingPostcode());
+
+                List<GenericValue> provinceIds = delegator.findByCondition("Geo", EntityCondition.makeCondition("geoName", dataImportOrderHeader.getBillingRegion()), null, null);
+                String provinceId = null;
+                if (UtilValidate.isNotEmpty(provinceIds)) {
+                    GenericValue value = EntityUtil.getFirst(provinceIds);
+                    postalAddress.setStateProvinceGeoId(value.getString("geoId"));
+                }
+
+
+                GenericValue postalAddressEntity = delegator.makeValue(postalAddress.getBaseEntityName(), postalAddress.toMap());
+                if (UtilValidate.isEmpty(postalAddressEntity)) {
+                    Debug.logError("Error creating PostalAddress Entity", MODULE);
+                    return FastList.newInstance();
+                }
+                postalAddressEntities.add(contactMechEntity);
+                postalAddressEntities.add(postalAddressEntity);
+                contactMechId = contactMech.getContactMechId();
+
+
+                // link the ContactMech with the Order
+                OrderContactMech orderContactMech = new OrderContactMech();
+                orderContactMech.setOrderId(orderId);
+                orderContactMech.setContactMechPurposeTypeId("BILLING_LOCATION");
+                orderContactMech.setContactMechId(contactMechId);
+                GenericValue orderContactMechEntity = delegator.makeValue(orderContactMech.getBaseEntityName(), orderContactMech.toMap());
+                orderContactMechs.add(orderContactMechEntity);
+
+            }else{
+                List<GenericValue> billingAddresses = PartyContactHelper.getContactMechsByPurpose(customerPartyId, "POSTAL_ADDRESS", "BILLING_LOCATION", true, delegator);
+                if (billingAddresses.size() > 1) {
+                    Debug.logWarning("Customer [" + customerPartyId + "] has more than one billing address.  Using first one.", MODULE);
+                }
+                if (billingAddresses.size() == 0) {
+                    Debug.logInfo("No billing address found for customer [" + customerPartyId + "]", MODULE);
+                } else {
+                    contactMechId = EntityUtil.getFirst(billingAddresses).getString("contactMechId");
+                }
+            }
+
+
 
         }
 
@@ -770,6 +859,7 @@ public class OrderImportServices {
         toStore.add(delegator.makeValue("OrderHeader", orderHeaderInput));
         toStore.add(delegator.makeValue("OrderStatus", orderStatusInput));
         toStore.addAll(postalAddressEntities);
+        toStore.addAll(orderContactMechs);
         if (oisg != null) {
             toStore.add(oisg);
         }

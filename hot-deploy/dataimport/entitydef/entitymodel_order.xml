@@ -74,6 +74,17 @@
         <field name="shippingCountry" type="id"/>
         <field name="shippingPhone" type="short-varchar"/>
         <field name="shippingFax" type="short-varchar"/>
+        
+        <field name="billingFirstName" type="name"/>
+        <field name="billingLastName" type="name"/>
+        <field name="billingCompanyName" type="name"/>
+        <field name="billingStreet" type="long-varchar"/>
+        <field name="billingCity" type="name"/>
+        <field name="billingRegion" type="id"/>
+        <field name="billingPostcode" type="short-varchar"/>
+        <field name="billingCountry" type="id"/>
+        <field name="billingPhone" type="short-varchar"/>
+        <field name="billingFax" type="short-varchar"/>
                                        
         <field name="importStatusId" type="id-ne">
             <description>Status of record import. Null is the same as DATAIMP_NOT_PROC.</description>
