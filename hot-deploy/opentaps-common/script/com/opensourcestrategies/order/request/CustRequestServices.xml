@@ -27,33 +27,33 @@ under the License.
     <simple-method method-name="createCustRequestRole" short-description="Create Customer RequestRole">
         <set from-field="parameters.partyId" field="lookupPKMap.partyId"/>
         <set from-field="parameters.roleTypeId" field="lookupPKMap.roleTypeId"/>
-        <find-by-primary-key entity-name="PartyRole" map-name="lookupPKMap" value-name="partyRole"/>
-        <if-empty map-name="partyRole" field-name="partyId">
-            <make-value value-name="partyRole" entity-name="PartyRole"/>
-            <set-pk-fields map-name="lookupPKMap" value-name="partyRole"/>
-            <create-value value-name="partyRole"/>
+        <find-by-primary-key entity-name="PartyRole" map="lookupPKMap" value-field="partyRole"/>
+        <if-empty field="partyRole.partyId">
+            <make-value value-field="partyRole" entity-name="PartyRole"/>
+            <set-pk-fields map="lookupPKMap" value-field="partyRole"/>
+            <create-value value-field="partyRole"/>
         </if-empty>
-        <make-value value-name="newEntity" entity-name="CustRequestRole"/>
-        <set-pk-fields map-name="parameters" value-name="newEntity"/>
-        <create-value value-name="newEntity"/>
+        <make-value value-field="newEntity" entity-name="CustRequestRole"/>
+        <set-pk-fields map="parameters" value-field="newEntity"/>
+        <create-value value-field="newEntity"/>
     </simple-method>
 
     <simple-method method-name="removeCustRequestRole" short-description="Remove Customer RequestRole">
         <set from-field="parameters.custRequestId" field="lookupPKMap.custRequestId"/>
         <set from-field="parameters.partyId" field="lookupPKMap.partyId"/>
         <set from-field="parameters.roleTypeId" field="lookupPKMap.roleTypeId"/>
-        <find-by-primary-key entity-name="CustRequestRole" map-name="lookupPKMap" value-name="custRequestRole"/>
-        <remove-value value-name="custRequestRole"/>
+        <find-by-primary-key entity-name="CustRequestRole" map="lookupPKMap" value-field="custRequestRole"/>
+        <remove-value value-field="custRequestRole"/>
     </simple-method>
     
     <simple-method method-name="createCustRequestNote" short-description="Create Customer Request Note">
-        <make-value value-name="newEntity" entity-name="CustRequestNote"/>
+        <make-value value-field="newEntity" entity-name="CustRequestNote"/>
         <set from-field="parameters.custRequestId" field="newEntity.custRequestId"/>
         <set from-field="parameters.note" field="newNoteMap.note"/>
         <call-service service-name="createNote" in-map-name="newNoteMap">
-            <result-to-field result-name="noteId" map-name="newEntity"/>
+            <result-to-field result-name="noteId" field="newEntity.noteId"/>
         </call-service>
-        <create-value value-name="newEntity"/>
-        <field-to-result field-name="newEntity.noteId" result-name="noteId"/>
+        <create-value value-field="newEntity"/>
+        <field-to-result field="newEntity.noteId" result-name="noteId"/>
     </simple-method>
 </simple-methods>
