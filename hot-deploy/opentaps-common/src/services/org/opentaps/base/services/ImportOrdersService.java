@@ -72,6 +72,7 @@ public class ImportOrdersService extends ServiceWrapper {
         prodCatalogId("prodCatalogId"),
         productStoreId("productStoreId"),
         purchaseOrderShipToContactMechId("purchaseOrderShipToContactMechId"),
+        readBillingAddressFromTable("readBillingAddressFromTable"),
         readShippingAddressFromTable("readShippingAddressFromTable"),
         reserveInventory("reserveInventory"),
         timeZone("timeZone"),
@@ -111,6 +112,7 @@ public class ImportOrdersService extends ServiceWrapper {
     private String inProdCatalogId;
     private String inProductStoreId;
     private String inPurchaseOrderShipToContactMechId;
+    private Boolean inReadBillingAddressFromTable;
     private Boolean inReadShippingAddressFromTable;
     private Boolean inReserveInventory;
     private TimeZone inTimeZone;
@@ -183,6 +185,14 @@ public class ImportOrdersService extends ServiceWrapper {
      */
     public String getInPurchaseOrderShipToContactMechId() {
         return this.inPurchaseOrderShipToContactMechId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>Boolean</code>
+     */
+    public Boolean getInReadBillingAddressFromTable() {
+        return this.inReadBillingAddressFromTable;
     }
     /**
      * Auto generated value accessor.
@@ -355,6 +365,15 @@ public class ImportOrdersService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inReadBillingAddressFromTable the inReadBillingAddressFromTable to set
+    */
+    public void setInReadBillingAddressFromTable(Boolean inReadBillingAddressFromTable) {
+        this.inParameters.add("readBillingAddressFromTable");
+        this.inReadBillingAddressFromTable = inReadBillingAddressFromTable;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inReadShippingAddressFromTable the inReadShippingAddressFromTable to set
     */
     public void setInReadShippingAddressFromTable(Boolean inReadShippingAddressFromTable) {
@@ -500,6 +519,7 @@ public class ImportOrdersService extends ServiceWrapper {
         if (inParameters.contains("prodCatalogId")) mapValue.put("prodCatalogId", getInProdCatalogId());
         if (inParameters.contains("productStoreId")) mapValue.put("productStoreId", getInProductStoreId());
         if (inParameters.contains("purchaseOrderShipToContactMechId")) mapValue.put("purchaseOrderShipToContactMechId", getInPurchaseOrderShipToContactMechId());
+        if (inParameters.contains("readBillingAddressFromTable")) mapValue.put("readBillingAddressFromTable", getInReadBillingAddressFromTable());
         if (inParameters.contains("readShippingAddressFromTable")) mapValue.put("readShippingAddressFromTable", getInReadShippingAddressFromTable());
         if (inParameters.contains("reserveInventory")) mapValue.put("reserveInventory", getInReserveInventory());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
@@ -533,6 +553,7 @@ public class ImportOrdersService extends ServiceWrapper {
         if (mapValue.containsKey("prodCatalogId")) setInProdCatalogId((String) mapValue.get("prodCatalogId"));
         if (mapValue.containsKey("productStoreId")) setInProductStoreId((String) mapValue.get("productStoreId"));
         if (mapValue.containsKey("purchaseOrderShipToContactMechId")) setInPurchaseOrderShipToContactMechId((String) mapValue.get("purchaseOrderShipToContactMechId"));
+        if (mapValue.containsKey("readBillingAddressFromTable")) setInReadBillingAddressFromTable((Boolean) mapValue.get("readBillingAddressFromTable"));
         if (mapValue.containsKey("readShippingAddressFromTable")) setInReadShippingAddressFromTable((Boolean) mapValue.get("readShippingAddressFromTable"));
         if (mapValue.containsKey("reserveInventory")) setInReserveInventory((Boolean) mapValue.get("reserveInventory"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
