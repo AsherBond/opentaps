@@ -231,7 +231,7 @@ td.blue2 { background:  #EEEEFF; }
                     <a class="linktext" href="<@ofbizUrl>viewPayment?paymentId=${entry.paymentId}</@ofbizUrl>">${entry.paymentId}</a>
                   </#if>
                   <#if entry.description?has_content>
-                    <br/>${entry.description}
+                    <br/><i>${entry.description}</i>
                   </#if>
               </span></td>
               <td class="${graycycle}">
