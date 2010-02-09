@@ -126,7 +126,7 @@ public class HttpInputProvider implements InputProviderInterface {
         if (parameters.containsKey(name)) {
             return parameters.get(name);
         } else {
-            String p = UtilCommon.getUTF8Parameter(request, name);
+            String p = UtilCommon.getParameter(request, name);
             parameters.put(name, p);
             return p;
         }
