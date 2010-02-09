@@ -77,16 +77,9 @@ public class OrderImportServices {
         Boolean importEmptyOrders = (Boolean) context.get("importEmptyOrders");
         Boolean calculateGrandTotal = (Boolean) context.get("calculateGrandTotal");
         Boolean reserveInventory = (Boolean) context.get("reserveInventory");
-        Boolean readShippingAddressFromTable = (Boolean) context.get("readShippingAddressFromTable");
-        Boolean readBillingAddressFromTable = (Boolean) context.get("readBillingAddressFromTable");
+
         if (reserveInventory == null) {
             reserveInventory = Boolean.FALSE;
-        }
-        if (readShippingAddressFromTable == null) {
-            readShippingAddressFromTable = Boolean.FALSE;
-        }
-        if (readBillingAddressFromTable == null) {
-            readBillingAddressFromTable = Boolean.FALSE;
         }
 
         int imported = 0;
@@ -152,7 +145,7 @@ public class OrderImportServices {
                         return ServiceUtil.returnError(errMsg);
                     }
 
-                    List<GenericValue> toStore = OrderImportServices.decodeOrder(orderHeader, companyPartyId, productStore, prodCatalogId, purchaseOrderShipToContactMechId, importEmptyOrders.booleanValue(), calculateGrandTotal.booleanValue(), reserveInventory, readShippingAddressFromTable.booleanValue(), readBillingAddressFromTable.booleanValue(), delegator, dispatcher, userLogin);
+                    List<GenericValue> toStore = OrderImportServices.decodeOrder(orderHeader, companyPartyId, productStore, prodCatalogId, purchaseOrderShipToContactMechId, importEmptyOrders.booleanValue(), calculateGrandTotal.booleanValue(), reserveInventory, delegator, dispatcher, userLogin);
                     if (toStore == null || toStore.size()==0) {
                         Debug.logWarning("Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful.", MODULE);
                         continue;
@@ -302,7 +295,7 @@ public class OrderImportServices {
      * @throws Exception              if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static List decodeOrder(GenericValue externalOrderHeader, String companyPartyId, GenericValue productStore, String prodCatalogId, String purchaseOrderShipToContactMechId, boolean importEmptyOrders, boolean calculateGrandTotal, boolean reserveInventory, boolean readShippingAddressFromTable, boolean readBillingAddressFromTable,GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException, Exception {
+    private static List decodeOrder(GenericValue externalOrderHeader, String companyPartyId, GenericValue productStore, String prodCatalogId, String purchaseOrderShipToContactMechId, boolean importEmptyOrders, boolean calculateGrandTotal, boolean reserveInventory,GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException, Exception {
         List toStore = FastList.newInstance();
         //todo move this at the beginning of the class
         DataImportOrderHeader dataImportOrderHeader = new DataImportOrderHeader();
@@ -383,7 +376,7 @@ public class OrderImportServices {
         // create a ship group for the sales order
         List postalAddressEntities = FastList.newInstance();
         List orderContactMechs = FastList.newInstance();
-        if (isSalesOrder) {
+        if (UtilValidate.isNotEmpty(dataImportOrderHeader.getShippingFirstName()) && UtilValidate.isNotEmpty(dataImportOrderHeader.getShippingLastName())) {
             // get requested shipping method
             String productStoreShipMethId = externalOrderHeader.getString("productStoreShipMethId");
 
@@ -400,7 +393,7 @@ public class OrderImportServices {
 
             String contactMechId = null;
 
-            if (readShippingAddressFromTable) {
+            if (UtilValidate.isNotEmpty(dataImportOrderHeader.getShippingFirstName()) && UtilValidate.isNotEmpty(dataImportOrderHeader.getShippingLastName())) {
                 //get info from the table
                 ContactMech contactMech = new ContactMech();
                 String contactMechNextId = delegator.getNextSeqId(contactMech.getBaseEntityName());
@@ -488,7 +481,7 @@ public class OrderImportServices {
                 Debug.logInfo("Created ship group for order at PostalAddress [" + contactMechId + "]", MODULE);
             }
 
-            if(readBillingAddressFromTable){
+            if(UtilValidate.isNotEmpty(dataImportOrderHeader.getBillingFirstName()) && UtilValidate.isNotEmpty(dataImportOrderHeader.getBillingLastName())){
                 //get info from the table
                 ContactMech contactMech = new ContactMech();
                 String contactMechNextId = delegator.getNextSeqId(contactMech.getBaseEntityName());
