@@ -100,7 +100,6 @@ public class HttpInputProvider implements InputProviderInterface {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public Map<String, Object> getParameterMap() {
         Map<String, Object> parameterMap = UtilHttp.getParameterMap(request);
         parameterMap.putAll(parameters);
