@@ -27,9 +27,10 @@
     <ContextHelpResource contextHelpResourceId="1005" screenName="mergeLeadsForm" applicationName="crmsfa" remotePageName="Merge_Leads_Screen" remotePageVersion="0" />
 
     <ContextHelpResource contextHelpResourceId="1006" screenName="contactsMain" applicationName="crmsfa" remotePageName="My_Contacts_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1006B" screenName="myContacts" applicationName="crmsfa" remotePageName="My_Contacts_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="1007" screenName="createContactForm" applicationName="crmsfa" remotePageName="Create_Contact_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="1008" screenName="findContacts" applicationName="crmsfa" remotePageName="Find_Contact_Screen" remotePageVersion="0" />
-    <ContextHelpResource contextHelpResourceId="1009" screenName="myContacts" applicationName="crmsfa" remotePageName="View_Contact_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1009" screenName="viewContact" applicationName="crmsfa" remotePageName="View_Contact_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="1010" screenName="mergeContactsForm" applicationName="crmsfa" remotePageName="Merge_Contacts_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="1011" screenName="PartyMergeForms" applicationName="crmsfa" remotePageName="Contact_Forms_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="1012" screenName="EditPartyMergeForm" applicationName="crmsfa" remotePageName="Edit_Contact_Screen" remotePageVersion="0" />
