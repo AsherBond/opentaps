@@ -312,7 +312,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             // counts the number of records found matching the query
             int matchCount = 0;
 
-            String fullName, firstName, lastName, groupName, compositeName;
+            String fullName, firstName, lastName, groupName, compositeName, companyName;
 
             for (PartyFromByRelnAndContactInfoAndPartyClassification party : r) {
                 if (matchCount > UtilLookup.SUGGEST_MAX_RESULTS) {
@@ -345,6 +345,18 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                 }
                 groupName = groupName.toUpperCase();
                 if (groupName.indexOf(searchString) > -1) {
+                    parties.add(party);
+                    matchCount++;
+                    continue;
+                }
+                
+                // search the company name
+                companyName = party.getCompanyName();
+                if (companyName == null) {
+                    companyName = "";
+                }
+                companyName = companyName.toUpperCase();
+                if (companyName.indexOf(searchString) > -1) {
                     parties.add(party);
                     matchCount++;
                     continue;
