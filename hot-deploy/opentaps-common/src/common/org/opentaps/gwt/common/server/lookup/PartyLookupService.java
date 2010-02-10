@@ -134,6 +134,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
+        service.setActiveOnly(true);
         service.suggestContacts();
         return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
     }
@@ -164,6 +165,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
+        service.setActiveOnly(true);
         service.suggestAccounts();
         return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
     }
@@ -707,6 +709,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
+        service.setActiveOnly(true);
         service.suggestLeads();
         return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
     }
@@ -730,6 +733,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
+        service.setActiveOnly(true);
         service.suggestAccountsOrLeads();
         return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
     }
@@ -753,6 +757,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
+        service.setActiveOnly(true);
         service.suggestAccountsOrQualifiedLeads();
         return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
     }
@@ -776,6 +781,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
+        service.setActiveOnly(true);
         service.suggestCustomers();
         return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
     }
@@ -800,6 +806,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
+        service.setActiveOnly(true);
         service.suggestSuppliers();
         return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
     }
