@@ -442,17 +442,12 @@
     <GlAccountTypeDefault glAccountTypeId="UNDEPOSITED_RECEIPTS" organizationPartyId="Company" glAccountId="112000" />
     <GlAccountTypeDefault glAccountTypeId="CURRENT_ASSET" organizationPartyId="Company" glAccountId="150000" />
     <GlAccountTypeDefault glAccountTypeId="PARENT_SUB_BAL_ACCT" organizationPartyId="Company" glAccountId="153001" />
-    <GlAccountTypeDefault glAccountTypeId="OTHER_ASSET" organizationPartyId="Company" glAccountId="190000" />
     <GlAccountTypeDefault glAccountTypeId="SALES_ACCOUNT" organizationPartyId="Company" glAccountId="400000" />
-    <GlAccountTypeDefault glAccountTypeId="SALES_RETURNS" organizationPartyId="Company" glAccountId="420000" />
-    <GlAccountTypeDefault glAccountTypeId="DISCOUNTS_ACCOUNT" organizationPartyId="Company" glAccountId="410000" />
     <GlAccountTypeDefault glAccountTypeId="COGS_ACCOUNT" organizationPartyId="Company" glAccountId="500000" />
-    <GlAccountTypeDefault glAccountTypeId="INV_CHANGE_ACCOUNT" organizationPartyId="Company" glAccountId="519000" />
     <GlAccountTypeDefault glAccountTypeId="OPERATING_EXPENSE" organizationPartyId="Company" glAccountId="600000" />
     <GlAccountTypeDefault glAccountTypeId="COMMISSION_EXPENSE" organizationPartyId="Company" glAccountId="601300" />
     <GlAccountTypeDefault glAccountTypeId="OTHER_EXPENSE" organizationPartyId="Company" glAccountId="820000" />
     <GlAccountTypeDefault glAccountTypeId="OWNERS_EQUITY" organizationPartyId="Company" glAccountId="300000" />
-    <GlAccountTypeDefault glAccountTypeId="TAX_ACCOUNT" organizationPartyId="Company" glAccountId="900000" />
     <GlAccountTypeDefault glAccountTypeId="CUSTOMER_DEPOSIT" organizationPartyId="Company" glAccountId="213300" />  <!-- Special Order Deposits -->
     <GlAccountTypeDefault glAccountTypeId="CUSTOMER_CREDIT" organizationPartyId="Company" glAccountId="213000" />  <!-- Customer Credits -->
     <GlAccountTypeDefault glAccountTypeId="PREPAID_EXPENSES" organizationPartyId="Company" glAccountId="150000" />  
@@ -483,9 +478,6 @@
 
     <!-- accounts for manufacturing related expenses -->
     <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE" organizationPartyId="Company" glAccountId="600100"/>
-    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_INTERNAL" organizationPartyId="Company" glAccountId="600110"/>
-    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_CONTRACT" organizationPartyId="Company" glAccountId="600120"/>
-    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_SCRAP" organizationPartyId="Company" glAccountId="600130"/>
     <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_VARIANCE" organizationPartyId="Company" glAccountId="600190"/>
 
     <!-- inventory write down -->
