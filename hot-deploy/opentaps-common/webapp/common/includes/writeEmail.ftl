@@ -60,8 +60,8 @@
     if (data.mergeFormText) opentaps.replaceHtmlEditorValue('htmlArea', data.mergeFormText);
     if (! data.subject) return;
     var subjInput = document.getElementById('subject');
-    if (! subject) return;
-    subject.value = data.subject;
+    if (! subjInput) return;
+    subjInput.value = data.subject ;
   }
 
 /*]]>*/
