@@ -11,7 +11,7 @@ import org.ofbiz.entity.util.*;
 delegator = GenericDelegator.getGenericDelegator("default");
 
 // if the bill from party is not found for an order, use this party
-defaultBillFromPartyId = "GraciousStyle";
+defaultBillFromPartyId = "Company";
 
 orders = delegator.findAll("OrderHeader");
 for (oi = orders.iterator(); oi.hasNext(); ) {
