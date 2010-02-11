@@ -11,7 +11,7 @@ import org.ofbiz.entity.util.*;
 delegator = GenericDelegator.getGenericDelegator("default");
 
 // if the bill from party is not found for an order, use this party
-defaultBillFromPartyId = "Company";
+defaultBillFromPartyId = "GraciousStyle";
 
 orders = delegator.findAll("OrderHeader");
 for (oi = orders.iterator(); oi.hasNext(); ) {
@@ -23,9 +23,11 @@ for (oi = orders.iterator(); oi.hasNext(); ) {
         print("Warning:  Order ["+o.get("orderId")+"] has no bill to party in OrderRole. Skipping this order.");
         continue;
     }
-    if (billFromPartyId == null) {
+    if (billFromParty == null) {
         print("Warning:  Order ["+o.get("orderId")+"] has no bill from  party in OrderRole. Assuming "+defaultBillFromPartyId+".");
         billFromPartyId = defaultBillFromPartyId; 
+    } else {
+        billFromPartyId = billFromParty.get("partyId");
     }
 
     o.set("billFromPartyId", billFromPartyId);
