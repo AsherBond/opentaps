@@ -479,7 +479,8 @@
     <!-- accounts for manufacturing related expenses -->
     <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE" organizationPartyId="Company" glAccountId="600100"/>
     <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_VARIANCE" organizationPartyId="Company" glAccountId="600190"/>
-
+    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_INTERNAL" organizationPartyId="Company" glAccountId="600110"/>
+    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_CONTRACT" organizationPartyId="Company" glAccountId="600120"/>  
     <!-- inventory write down -->
     <GlAccountTypeDefault glAccountTypeId="INVENTORY_VAL_ADJ" organizationPartyId="Company" glAccountId="515000"/>
 
