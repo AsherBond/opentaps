@@ -20,7 +20,6 @@ These scripts are for making table changes from opentaps 1.0 to opentaps 1.4
 */
 
 
--- those tables are not used in the production DB so the update is safe as well
 ALTER TABLE EMPL_POSITION_TYPE
   DROP FOREIGN KEY EMPL_PSTP_PRTY,
   DROP FOREIGN KEY EMPL_PSTP_PRLE;
