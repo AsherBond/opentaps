@@ -564,9 +564,9 @@ public class BomNode implements BomNodeInterface {
             Map inputContext = UtilMisc.toMap("arguments", arguments, "userLogin", userLogin);
             try {
                 Map result = dispatcher.runSync(serviceName, inputContext);
-                Double calcQuantity = (Double) result.get("quantity");
+                BigDecimal calcQuantity = (BigDecimal) result.get("quantity");
                 if (calcQuantity != null) {
-                    this.quantity = BigDecimal.valueOf(calcQuantity);
+                    this.quantity = calcQuantity;
                 }
             } catch (GenericServiceException e) {
                 Debug.logError(e, "Problem calling the getManufacturingComponents service", MODULE);
