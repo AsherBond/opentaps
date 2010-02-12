@@ -25,8 +25,6 @@ import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.service.GenericDispatcher;
-import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.foundation.entity.hibernate.HibernateUtil;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 
@@ -144,11 +142,11 @@ public class EvictHibernateCacheAspects {
     private void evictHibernateCache(String entityName, GenericEntity pk, EntityCondition condition) {
         try {
             // perform the cache clearing
-            Infrastructure infrastructure = new Infrastructure(getDispatcher());
+            Infrastructure infrastructure = new Infrastructure(getDefaultDelegator());
             if (entityName == null) {
                 infrastructure.evictHibernateCache();
             } else if (condition != null) {
-                List<GenericValue> removedEntities = getDelegator().findList(entityName, condition, null, null, null, false);
+                List<GenericValue> removedEntities = infrastructure.getDelegator().findList(entityName, condition, null, null, null, false);
                 for (GenericValue entity : removedEntities) {
                     infrastructure.evictHibernateCache(entityName, HibernateUtil.genericPkToEntityPk(entity.getPrimaryKey()));
                 }
@@ -166,17 +164,8 @@ public class EvictHibernateCacheAspects {
      * The method get GenericDelegator instance.
      * @return a <code>GenericDelegator</code> value
      */
-    public GenericDelegator getDelegator() {
+    public GenericDelegator getDefaultDelegator() {
         GenericDelegator delegator = GenericDelegator.getGenericDelegator(DELEGATOR_NAME);
         return delegator;
-    }
-
-    /**
-     * The method get LocalDispatcher instance.
-     * @return a <code>LocalDispatcher</code> value
-     */
-    public LocalDispatcher getDispatcher() {
-        LocalDispatcher dispatcher = GenericDispatcher.getLocalDispatcher(DELEGATOR_NAME, getDelegator());
-        return dispatcher;
     }
 }

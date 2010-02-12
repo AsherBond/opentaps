@@ -202,6 +202,18 @@ public class Infrastructure {
     }
 
     /**
+     * Constructor.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @exception IllegalArgumentException if the given dispatcher is <code>null</code>
+     */
+    public Infrastructure(GenericDelegator delegator) throws IllegalArgumentException {
+        if (delegator == null) {
+            throw new IllegalArgumentException("Cannot instantiate Infrastructure from null delegator");
+        }
+        this.delegator = delegator;
+    }
+
+    /**
      * Gets the <code>Security</code> object.
      * @return a <code>Security</code> value
      */
