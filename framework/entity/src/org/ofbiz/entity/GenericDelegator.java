@@ -3425,7 +3425,9 @@ public class GenericDelegator implements DelegatorInterface {
         if (!this.testMode || this.testRollbackInProgress) {
             throw new IllegalStateException("An attempt was made to store a TestOperation during rollback or outside of test mode");
         }
-        this.testOperations.add(testOperation);
+        synchronized (testOperations) {
+            this.testOperations.add(testOperation);
+        }
     }
 
     public void rollback() {
