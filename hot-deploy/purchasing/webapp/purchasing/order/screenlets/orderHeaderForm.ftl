@@ -42,7 +42,7 @@
           </span>
         </div>
 
-        <#if ! useGwt!>
+        <#if ! useGwt!false>
           <div class="orderEntryHeaderFormRow">
             <span class="tableheadtext orderEntryHeaderFormLabel">
               ${uiLabelMap.CommonTotal}:
