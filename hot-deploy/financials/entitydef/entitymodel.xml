@@ -1505,7 +1505,7 @@ under the License.
       <field name="systemUse" type="indicator"><description>if set to Y, then this payment type would not be shown to the user when creating or editing payments</description></field>
     </extend-entity>
 
-    <!-- extend GlAccountType add systemUse field -->
+    <!-- extend GlAccountType add needsConfiguration field -->
     <extend-entity entity-name="GlAccountType">
       <field name="needsConfiguration" type="indicator"><description>only GlAccountType? where needsConfiguration="Y" are shown on Configure Ledger page</description></field>
     </extend-entity>
