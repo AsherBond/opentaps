@@ -20,10 +20,15 @@
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilCommon;
 import com.opensourcestrategies.financials.accounts.GLAccountTree;
 
 organizationPartyId = session.getAttribute("organizationPartyId");
+
+if (UtilValidate.isEmpty(organizationPartyId)) {
+    return;
+}
 
 // make the tree
 chartOfAccountsTree = GLAccountTree.getOrganizationTree(delegator, organizationPartyId, UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));
