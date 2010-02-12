@@ -55,40 +55,40 @@
     <!-- GL Account Type hierarchy for income statement -->
     <GlAccountType glAccountTypeId="REVENUE" parentTypeId="INCOME" hasTable="N" description="Revenue"/>
     <GlAccountType glAccountTypeId="COGS" parentTypeId="EXPENSE" hasTable="N" description="Cost of Goods Sold"/>
-    <GlAccountType glAccountTypeId="OPERATING_EXPENSE" parentTypeId="EXPENSE" hasTable="N" description="Operating Expense"/>
-    <GlAccountType glAccountTypeId="OTHER_EXPENSE" parentTypeId="EXPENSE" hasTable="N" description="Other Expense"/>
+    <GlAccountType glAccountTypeId="OPERATING_EXPENSE" parentTypeId="EXPENSE" hasTable="N" description="Operating Expense" needsConfiguration="Y"/>
+    <GlAccountType glAccountTypeId="OTHER_EXPENSE" parentTypeId="EXPENSE" hasTable="N" description="Other Expense" needsConfiguration="Y"/>
     <GlAccountType glAccountTypeId="OTHER_INCOME" parentTypeId="INCOME" hasTable="N" description="Other Income"/>
     <GlAccountType glAccountTypeId="TAX_EXPENSE" parentTypeId="EXPENSE" hasTable="N" description="Tax Expense"/>
 
     <!-- Reclassify these accounts -->
-    <GlAccountType glAccountTypeId="PURCHASE_PRICE_VAR" parentTypeId="OPERATING_EXPENSE" hasTable="N" description="Tax Expense"/>
-    <GlAccountType glAccountTypeId="COGS_ADJ_AVG_COST" parentTypeId="COGS" hasTable="N" description="COGS Average Cost Adjustment"/>
+    <GlAccountType glAccountTypeId="PURCHASE_PRICE_VAR" parentTypeId="OPERATING_EXPENSE" hasTable="N" description="Tax Expense" needsConfiguration="Y"/>
+    <GlAccountType glAccountTypeId="COGS_ADJ_AVG_COST" parentTypeId="COGS" hasTable="N" description="COGS Average Cost Adjustment" needsConfiguration="Y"/>
 
     <!-- special types for manufacturing expenses -->
-    <GlAccountType glAccountTypeId="MFG_EXPENSE" parentTypeId="OPERATING_EXPENSE" hasTable="N" description="Manufacturing Expense"/>
-    <GlAccountType glAccountTypeId="MFG_EXPENSE_CONTRACT" parentTypeId="MFG_EXPENSE" hasTable="N" description="Contract Manufacturing Expense"/>
-    <GlAccountType glAccountTypeId="MFG_EXPENSE_INTERNAL" parentTypeId="MFG_EXPENSE" hasTable="N" description="Internal Manufacturing Expense"/>
+    <GlAccountType glAccountTypeId="MFG_EXPENSE" parentTypeId="OPERATING_EXPENSE" hasTable="N" description="Manufacturing Expense" needsConfiguration="Y"/>
+    <GlAccountType glAccountTypeId="MFG_EXPENSE_CONTRACT" parentTypeId="MFG_EXPENSE" hasTable="N" description="Contract Manufacturing Expense" needsConfiguration="Y"/>
+    <GlAccountType glAccountTypeId="MFG_EXPENSE_INTERNAL" parentTypeId="MFG_EXPENSE" hasTable="N" description="Internal Manufacturing Expense" needsConfiguration="Y"/>
     <!-- This is used for writing off
     (a) difference between standard costs and actual costs when standard costing is used 
     (b) excess of cost of products being disassembled: ie the value of a car - value of its parts -->
-    <GlAccountType glAccountTypeId="MFG_EXPENSE_VARIANCE" parentTypeId="MFG_EXPENSE" hasTable="N" description="Manufacturing Expense Variance"/>
+    <GlAccountType glAccountTypeId="MFG_EXPENSE_VARIANCE" parentTypeId="MFG_EXPENSE" hasTable="N" description="Manufacturing Expense Variance" needsConfiguration="Y"/>
     <!-- Scrap account for additional parts issued to replace defective ones -->
     <GlAccountType glAccountTypeId="MFG_EXPENSE_SCRAP" parentTypeId="MFG_EXPENSE" hasTable="N" description="Scrapped Raw Materials Expense"/>
     <!-- Expense account for a production run which was reverted, but some of whose cost could not be returned to Raw Materials Inventory:
     ie, asset time and labor already used or some raw materials, like glue, that cannot be used for anything else -->
-    <GlAccountType glAccountTypeId="MFG_EXPENSE_REVPRUN" parentTypeId="MFG_EXPENSE" hasTable="N" description="Expense for Reverted Production Runs"/>
+    <GlAccountType glAccountTypeId="MFG_EXPENSE_REVPRUN" parentTypeId="MFG_EXPENSE" hasTable="N" description="Expense for Reverted Production Runs" needsConfiguration="Y"/>
 
     <!-- track due from vendor, in case we want to use a different GL account than regular accounts receivable -->
     <GlAccountType glAccountTypeId="DUE_FROM_VENDOR" parentTypeId="" hasTable="N" description="Due From Vendor"/>
 
     <!-- Inventory value adjustment (usually write downs) -->
-    <GlAccountType glAccountTypeId="INVENTORY_VAL_ADJ" parentTypeId="" hasTable="N" description="Inventory Valuation Adjustment"/>
+    <GlAccountType glAccountTypeId="INVENTORY_VAL_ADJ" parentTypeId="" hasTable="N" description="Inventory Valuation Adjustment" needsConfiguration="Y"/>
 
     <!-- Lockbox cash discount goes directly to this account -->
-    <GlAccountType glAccountTypeId="LOCKBOX_CASH_DISC" parentTypeId="" hasTable="N" description="Lockbox Cash Discount"/>
+    <GlAccountType glAccountTypeId="LOCKBOX_CASH_DISC" parentTypeId="" hasTable="N" description="Lockbox Cash Discount" needsConfiguration="Y"/>
 
     <!-- Special account for reconciling parent payments for child invoices.  This is used to offset accounts receiables, etc. -->
-    <GlAccountType glAccountTypeId="PARENT_SUB_BAL_ACCT" parentTypeId="" hasTable="N" description="Parent Sub Account Reconciliation"/>
+    <GlAccountType glAccountTypeId="PARENT_SUB_BAL_ACCT" parentTypeId="" hasTable="N" description="Parent Sub Account Reconciliation" needsConfiguration="Y"/>
 
     <!-- Payment status VOID and legal status changes -->
     <StatusItem description="Voided" sequenceId="11" statusCode="VOID" statusId="PMNT_VOID" statusTypeId="PMNT_STATUS"/>

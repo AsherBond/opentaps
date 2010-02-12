@@ -19,6 +19,21 @@
 
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilMisc;
+import javolution.util.FastList;
+import org.ofbiz.base.util.*;
 
-accountTypes = delegator.findByAndCache("GlAccountTypeDefault", UtilMisc.toMap("organizationPartyId", session.getAttribute("organizationPartyId")), UtilMisc.toList("glAccountTypeId"));
+defaultAccountTypes = delegator.findByAndCache("GlAccountTypeDefault", UtilMisc.toMap("organizationPartyId", session.getAttribute("organizationPartyId")), UtilMisc.toList("glAccountTypeId"));
+accountTypes = FastList.newInstance();
+needsConfiguration = context.get("needsConfiguration");
+if (UtilValidate.isNotEmpty(needsConfiguration) && "Y".equals(needsConfiguration)) {
+  for (i=0; i < defaultAccountTypes.size(); i++) {
+    defaultAccountType = defaultAccountTypes.get(i);
+    accountType = defaultAccountType.getRelatedOne("GlAccountType");
+    if ("Y".equals(accountType.get("needsConfiguration"))) {
+      accountTypes.add(defaultAccountType);
+    }
+  }
+} else {
+  accountTypes.addAll(defaultAccountTypes);
+}
 context.put("accountTypes", accountTypes);
