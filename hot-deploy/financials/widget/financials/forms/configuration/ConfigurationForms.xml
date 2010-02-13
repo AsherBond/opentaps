@@ -48,12 +48,18 @@
         <field use-when="glAccountTypeId==void || glAccountTypeId==null" name="glAccountTypeId" title="Gl Account Type">
             <drop-down>
                 <entity-options entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId">
+                    <entity-constraint name="needsConfiguration" operator="equals" value="Y"  />
                     <entity-order-by field-name="description"/>
                 </entity-options>
             </drop-down>
         </field>
         <field use-when="glAccountTypeId!=void &amp;&amp; glAccountTypeId!=null" name="glAccountTypeId" title="Gl Account Type">
-            <display-entity entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId"/>
+            <drop-down>
+                <entity-options entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId">
+                    <entity-constraint name="needsConfiguration" operator="equals" value="Y"  />
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>        
         </field>
         <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}">            
             <drop-down>

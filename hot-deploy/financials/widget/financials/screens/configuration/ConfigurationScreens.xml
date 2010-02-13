@@ -85,7 +85,6 @@
         <section>
             <actions>
                 <set field="targetNameToUse" value="createGlAccountTypeDefault"/>
-                <set field="needsConfiguration" value="Y"/>  
                 <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/listGlAccountTypes.bsh"/>
             </actions>
             <widgets>
