@@ -18,7 +18,7 @@ package org.opentaps.bundle.demo;
 
 import javax.servlet.ServletException;
 
-import org.osgi.framework.BundleActivator;
+import org.opentaps.core.bundle.AbstractBundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
@@ -27,7 +27,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 
-public class Activator implements BundleActivator, ServiceListener {
+
+public class Activator extends AbstractBundle implements ServiceListener {
 
     private static final String HTTP_SERVICE_CLASSNAME = "org.osgi.service.http.HttpService";
     private static final String DEMO_SRVLT_ALIAS = "/demo";
@@ -36,6 +37,8 @@ public class Activator implements BundleActivator, ServiceListener {
 
     /** {@inheritDoc} */
     public void start(BundleContext context) throws Exception {
+
+        super.start(context);
 
         // keep context for further operations
         this.context = context;
@@ -54,7 +57,7 @@ public class Activator implements BundleActivator, ServiceListener {
 
     /** {@inheritDoc} */
     public void stop(BundleContext context) throws Exception {
-        // do nothing
+        super.stop(context);
     }
 
     /**
@@ -77,11 +80,9 @@ public class Activator implements BundleActivator, ServiceListener {
             try {
                 registerServlet(event.getServiceReference());
             } catch (ServletException e) {
-                //TODO: log error
-                e.printStackTrace();
+                logError(e.getMessage(), e, null);
             } catch (NamespaceException e) {
-                //TODO: log error
-                e.printStackTrace();
+                logError(e.getMessage(), e, null);
             }
         }
     }
