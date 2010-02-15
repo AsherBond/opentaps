@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<project name="org.opentaps.installer.db" default="build" basedir=".">
+
+    <target name="init">
+        <property environment="env"/>
+        <property name="symbolic.name" value="org.opentaps.installer.db"/>
+        <property name="base.dir" value="../../../.."/>
+        <property name="src.dir" value="src"/>
+        <property name="bin.dir" value="build"/>
+        <property name="deploy.dir" value="../../webapp/WEB-INF/bundles"/>
+        <property name="base.lib.dir" value="../../webapp/WEB-INF/lib"/>
+    </target>
+
+    <target name="classpath" depends="init">
+        <path id="local.class.path">
+            <fileset dir="${base.lib.dir}" includes="*.jar"/>
+            <fileset dir="${deploy.dir}" includes="*.jar"/>
+        </path>
+    </target>
+
+    <target name="clean" depends="init">
+        <delete dir="${bin.dir}"/>
+    </target>
+
+    <target name="classes" depends="classpath">
+        <mkdir dir="${bin.dir}/classes"/>
+        <mkdir dir="${bin.dir}/jar"/>
+    	<javac debug="on" deprecation="on" destdir="./${bin.dir}/classes">
+            <classpath>
+                <path refid="local.class.path"/>
+            </classpath>
+            <src path="${src.dir}"/>
+            <exclude name="org/opentaps/gwt/**"/>
+        </javac>
+    </target>
+
+    <target name="gwt">
+        <property name="gwtmodule" value="org.opentaps.gwt.wiz.db.db"/>
+        <property name="gwt.src.common" value="${base.dir}/hot-deploy/opentaps-common/src/common/org/opentaps/gwt"/>
+        <property name="gwt.src.constants" value="${base.dir}/hot-deploy/opentaps-common/src/constants/org/opentaps/base"/>
+
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+          <classpath>
+            <pathelement location="${base.dir}/hot-deploy/opentaps-common/lib/ant-contrib.jar"/>
+          </classpath>
+        </taskdef>
+
+        <path id="gwt.class.path">
+            <fileset dir="${base.dir}/hot-deploy/opentaps-common/lib" includes="gwt*.jar"/>
+            <fileset dir="${base.dir}/hot-deploy/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
+            <pathelement location="${base.dir}/hot-deploy/opentaps-common/src/constants"/>
+            <pathelement location="${base.dir}/hot-deploy/opentaps-common/src/common"/>
+            <pathelement location="src"/>
+        </path>
+        <uptodate property="gwtuptodate" targetfile="./resources/${gwtmodule}/${gwtmodule}.nocache.js">
+            <srcfiles dir="${gwt.src.common}" includes="**/public/**/*.*"/>
+            <srcfiles dir="${gwt.src.common}" includes="**/client/**/*.*"/>
+            <srcfiles dir="${gwt.src.common}" includes="**/*.gwt.xml"/>
+            <srcfiles dir="${gwt.src.constants}" includes="**/*.*"/>
+            <srcfiles dir="${src.dir}/org/opentaps/gwt" includes="**/public/**/*.*"/>
+            <srcfiles dir="${src.dir}/org/opentaps/gwt" includes="**/client/**/*.*"/>
+            <srcfiles dir="${src.dir}/org/opentaps/gwt" includes="**/*.gwt.xml"/>
+        </uptodate>
+        <if>
+            <isfalse value="${gwtuptodate}"/>
+            <then>
+                <java classpathref="gwt.class.path" classname="com.google.gwt.dev.Compiler" fork="true" failonerror="true">
+                    <jvmarg line="-Xmx1024M"/>  
+                    <arg line="-style OBF"/>
+                    <arg line="-draftCompile"/>
+                    <arg line="-war ./resources"/>
+                    <arg line="${gwtmodule}"/>
+                </java>
+            </then>
+            <else>
+                <echo message="Module ${gwtmodule} is up to date"/>
+            </else>
+        </if>
+    </target>
+
+    <target name="build" depends="classes, gwt">
+        <taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="../../lib/bnd.jar"/>
+        <bnd 
+            classpath="${bin.dir}/classes"
+            eclipse="false"
+            failok="false"
+            exceptions="true"
+            output="${bin.dir}/jar/"
+            files="${symbolic.name}.bnd"/>
+    </target>
+
+    <target name="deploy" depends="build">
+        <copy file="${bin.dir}/jar/${symbolic.name}.jar" tofile="${deploy.dir}/${symbolic.name}.jar" overwrite="true" />
+    </target>
+
+</project>

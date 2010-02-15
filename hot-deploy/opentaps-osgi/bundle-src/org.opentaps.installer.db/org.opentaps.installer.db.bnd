@@ -1,0 +1,11 @@
+Bundle-Vendor: Open Source Strategies, Inc.
+Bundle-Copyright: Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
+Bundle-SymbolicName: org.opentaps.installer.db
+Bundle-Name: Installer Database Wizard
+Bundle-ManifestVersion: 2
+Bundle-Version: 1.0.0.0
+Bundle-Activator: org.opentaps.installer.db.Activator
+Private-Package: org.opentaps.installer.db,\
+    org.opentaps.installer.db.model,\
+    org.opentaps.installer.db.model.impl
+Include-Resource: resources

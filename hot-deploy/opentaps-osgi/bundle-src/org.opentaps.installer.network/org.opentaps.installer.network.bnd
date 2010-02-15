@@ -1,0 +1,11 @@
+Bundle-Vendor: Open Source Strategies, Inc.
+Bundle-Copyright: Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
+Bundle-SymbolicName: org.opentaps.installer.network
+Bundle-Name: Installer Network Wizard
+Bundle-ManifestVersion: 2
+Bundle-Version: 1.0.0.0
+Bundle-Activator: org.opentaps.installer.network.Activator
+Private-Package: org.opentaps.installer.network,\
+    org.opentaps.installer.network.model,\
+    org.opentaps.installer.network.model.impl
+Include-Resource: resources
