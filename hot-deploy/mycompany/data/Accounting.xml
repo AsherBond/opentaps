@@ -444,6 +444,7 @@
     <GlAccountTypeDefault glAccountTypeId="PARENT_SUB_BAL_ACCT" organizationPartyId="Company" glAccountId="153001" />
     <GlAccountTypeDefault glAccountTypeId="SALES_ACCOUNT" organizationPartyId="Company" glAccountId="400000" />
     <GlAccountTypeDefault glAccountTypeId="COGS_ACCOUNT" organizationPartyId="Company" glAccountId="500000" />
+    <GlAccountTypeDefault glAccountTypeId="INV_CHANGE_ACCOUNT" organizationPartyId="Company" glAccountId="519000" />
     <GlAccountTypeDefault glAccountTypeId="OPERATING_EXPENSE" organizationPartyId="Company" glAccountId="600000" />
     <GlAccountTypeDefault glAccountTypeId="COMMISSION_EXPENSE" organizationPartyId="Company" glAccountId="601300" />
     <GlAccountTypeDefault glAccountTypeId="OTHER_EXPENSE" organizationPartyId="Company" glAccountId="820000" />
