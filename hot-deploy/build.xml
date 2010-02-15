@@ -42,6 +42,7 @@
         <exclude name="dataimport/build.xml"/>
         <exclude name="funambol/build.xml"/>
         <exclude name="opentaps-tests/build.xml"/>
+        <exclude name="opentaps-osgi/**/build.xml"/>
         <include name="**/build.xml"/>
       </fileset>
     </subant>
