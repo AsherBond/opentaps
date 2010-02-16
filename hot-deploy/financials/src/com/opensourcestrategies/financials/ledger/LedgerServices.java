@@ -3055,7 +3055,7 @@ public final class LedgerServices {
             for (Iterator gAHi = glAccountHistories.iterator(); gAHi.hasNext();) {
                 GenericValue glAccountHistory = (GenericValue) gAHi.next();
                 double netBalance = UtilAccounting.getNetBalance(glAccountHistory, MODULE).doubleValue();
-                glAccountHistory.set("endingBalance", new Double(netBalance));
+                glAccountHistory.set("endingBalance", new BigDecimal(netBalance));
                 updatedGlAccountHistories.put(glAccountHistory.getString("glAccountId"), glAccountHistory);
             }
 
@@ -3083,12 +3083,12 @@ public final class LedgerServices {
                         // yes: carry forward the balance
                         GenericValue updatedGlAccountHistory = (GenericValue) updatedGlAccountHistories.get(previousGlAccountAndHistory.getString("glAccountId"));
                         double newEndingBalance = updatedGlAccountHistory.getDouble("endingBalance").doubleValue() + previousGlAccountHistory.getDouble("endingBalance").doubleValue();
-                        updatedGlAccountHistory.set("endingBalance", new Double(newEndingBalance));
+                        updatedGlAccountHistory.set("endingBalance", new BigDecimal(newEndingBalance));
                     } else {
                         // no: put it in with the previous period's balance but the current period's time period id
                         GenericValue carriedForwardGlAccountHistory = delegator.makeValue("GlAccountHistory", UtilMisc.toMap("glAccountId", previousGlAccountHistory.getString("glAccountId"),
                                "organizationPartyId", organizationPartyId, "customTimePeriodId", timePeriod.getString("customTimePeriodId"),
-                               "postedDebits", new Double(0.0), "postedCredits", new Double(0.0), "endingBalance", previousGlAccountHistory.getDouble("endingBalance")));
+                               "postedDebits", BigDecimal.ZERO, "postedCredits", BigDecimal.ZERO, "endingBalance", previousGlAccountHistory.getDouble("endingBalance")));
                         updatedGlAccountHistories.put(previousGlAccountHistory.getString("glAccountId"), carriedForwardGlAccountHistory);
                     }
                 }
