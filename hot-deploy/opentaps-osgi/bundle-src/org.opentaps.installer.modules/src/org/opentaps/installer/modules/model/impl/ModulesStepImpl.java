@@ -34,4 +34,9 @@ public class ModulesStepImpl implements InstallerStep, ModulesStepModel {
     public void rollback() {
     }
 
+    /** {@inheritDoc} */
+    public String actionUrl() {
+        return "/osgi/modules/pages/ComponentWizard.html";
+    }
+
 }

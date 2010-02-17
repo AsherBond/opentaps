@@ -23,15 +23,16 @@ import org.opentaps.installer.db.model.impl.DatabaseStepImpl;
 import org.opentaps.installer.service.InstallerStep;
 import org.opentaps.installer.service.OSSInstaller;
 import org.opentaps.installer.util.ResourceCustomizer;
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
-import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 
 public class Activator extends AbstractBundle {
+
+    // the shared instance
+    private static BundleActivator bundle;
 
     private ServiceTracker wizardHttpSrvcTracker;
     private ServiceTracker staticHttpSrvcTracker;
@@ -39,6 +40,7 @@ public class Activator extends AbstractBundle {
     /** {@inheritDoc} */
     public void start(final BundleContext context) throws Exception {
 
+        bundle = this;
         super.start(context);
 
         // register GWT applications under alias /dbWiz as soon as
@@ -67,6 +69,11 @@ public class Activator extends AbstractBundle {
         staticHttpSrvcTracker.close();
 
         super.stop(context);
+        bundle = null;
     }
+
+    public static Activator getInstance() {
+        return (Activator) bundle;
+    };
 
 }

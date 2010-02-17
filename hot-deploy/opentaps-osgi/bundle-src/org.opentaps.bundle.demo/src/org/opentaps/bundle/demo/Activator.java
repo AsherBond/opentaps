@@ -19,6 +19,7 @@ package org.opentaps.bundle.demo;
 import javax.servlet.ServletException;
 
 import org.opentaps.core.bundle.AbstractBundle;
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
@@ -30,6 +31,9 @@ import org.osgi.service.http.NamespaceException;
 
 public class Activator extends AbstractBundle implements ServiceListener {
 
+    // the shared instance
+    private static BundleActivator bundle;
+
     private static final String HTTP_SERVICE_CLASSNAME = "org.osgi.service.http.HttpService";
     private static final String DEMO_SRVLT_ALIAS = "/demo";
 
@@ -38,6 +42,7 @@ public class Activator extends AbstractBundle implements ServiceListener {
     /** {@inheritDoc} */
     public void start(BundleContext context) throws Exception {
 
+        bundle = this;
         super.start(context);
 
         // keep context for further operations
@@ -58,6 +63,7 @@ public class Activator extends AbstractBundle implements ServiceListener {
     /** {@inheritDoc} */
     public void stop(BundleContext context) throws Exception {
         super.stop(context);
+        bundle = null;
     }
 
     /**
@@ -86,5 +92,9 @@ public class Activator extends AbstractBundle implements ServiceListener {
             }
         }
     }
+
+    public static Activator getInstance() {
+        return (Activator) bundle;
+    };
 
 }

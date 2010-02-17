@@ -34,4 +34,8 @@ public class NetworkStepImpl implements InstallerStep, NetworkStepModel {
     public void rollback() {
     }
 
+    public String actionUrl() {
+        return "/osgi/network/pages/NetworkWizard.html";
+    }
+
 }

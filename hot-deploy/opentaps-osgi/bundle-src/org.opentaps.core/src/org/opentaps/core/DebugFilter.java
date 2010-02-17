@@ -14,29 +14,38 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.installer.db.model.impl;
+package org.opentaps.core;
 
-import org.opentaps.installer.db.model.DatabaseStepModel;
-import org.opentaps.installer.service.InstallerStep;
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 
 /**
  *
  *
  */
-public class DatabaseStepImpl implements InstallerStep, DatabaseStepModel {
+public class DebugFilter implements Filter {
 
     /** {@inheritDoc} */
-    public void perform() {
+    public void destroy() {
+        Activator.getInstance().logInfo("Destroyed filter", null, null);
     }
 
     /** {@inheritDoc} */
-    public void rollback() {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        Activator.getInstance().logInfo("Filter request [" + request + "]", null, null);
+        chain.doFilter(request, response);
     }
 
     /** {@inheritDoc} */
-    public String actionUrl() {
-        return "/osgi/dbWiz/pages/DatabaseWizard.html";
+    public void init(FilterConfig config) throws ServletException {
+        Activator.getInstance().logInfo("Init with config [" + config + "]", null, null);
     }
 
 }

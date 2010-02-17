@@ -25,4 +25,6 @@ public interface InstallerStep {
     public void perform();
 
     public void rollback();
+
+    public String actionUrl();
 }

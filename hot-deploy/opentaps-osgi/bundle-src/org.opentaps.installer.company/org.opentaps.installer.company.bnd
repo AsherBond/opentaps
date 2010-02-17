@@ -7,5 +7,7 @@ Bundle-Version: 1.0.0.0
 Bundle-Activator: org.opentaps.installer.company.Activator
 Private-Package: org.opentaps.installer.company,\
     org.opentaps.installer.company.model,\
-    org.opentaps.installer.company.model.impl
+    org.opentaps.installer.company.model.impl,\
+    org.opentaps.gwt.wiz.company.server,\
+    org.opentaps.gwt.wiz.company.client
 Include-Resource: resources

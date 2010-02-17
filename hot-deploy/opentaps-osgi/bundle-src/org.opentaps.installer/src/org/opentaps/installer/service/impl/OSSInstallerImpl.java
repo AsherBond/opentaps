@@ -16,7 +16,11 @@
  */
 package org.opentaps.installer.service.impl;
 
+import org.opentaps.installer.Activator;
+import org.opentaps.installer.service.InstallerStep;
 import org.opentaps.installer.service.OSSInstaller;
+import org.osgi.framework.ServiceReference;
+
 
 /**
  *
@@ -25,25 +29,93 @@ import org.opentaps.installer.service.OSSInstaller;
 public class OSSInstallerImpl implements OSSInstaller {
 
     /** {@inheritDoc} */
-    public String nextUri(String clazz) {
+    public String nextUri(String stepId) {
+        ServiceReference[] steps = Activator.findInstSteps();
+
+        Integer currentSeqNum = null;
+        for (ServiceReference step : steps) {
+            String id = (String) step.getProperty(STEP_ID_PROP);
+            if (stepId.equals(id)) {
+                currentSeqNum = (Integer) step.getProperty(SEQUENCE_PROP);
+                break;
+            }
+        }
+
+        if (currentSeqNum == null) {
+            //TODO add error handling
+        }
+
+        ServiceReference nextStep =  null;
+        Integer temp = Integer.valueOf(9999);
+        for (ServiceReference step : steps) {
+            Integer sequence = (Integer) step.getProperty(SEQUENCE_PROP);
+            if (sequence == null) {
+                //TODO: log message
+                continue;
+            }
+            if (sequence.compareTo(currentSeqNum) > 0) {
+                if (sequence.compareTo(temp) < 0) {
+                    temp = sequence;
+                    nextStep = step;
+                }
+            }
+        }
+
+        if (nextStep != null) {
+            InstallerStep service = Activator.getInstance().findStep(nextStep);
+            if (service != null) {
+                return service.actionUrl();
+            }
+        };
+
         return null;
     }
 
     /** {@inheritDoc} */
-    public String prevUri(String clazz) {
-        return null;
-    }
+    public String prevUri(String stepId) {
+        ServiceReference[] steps = Activator.findInstSteps();
 
-    /** {@inheritDoc} */
-    public void registerStepHandler(String clazz) {
+        Integer currentSeqNum = null;
+        for (ServiceReference step : steps) {
+            String id = (String) step.getProperty(STEP_ID_PROP);
+            if (stepId.equals(id)) {
+                currentSeqNum = (Integer) step.getProperty(SEQUENCE_PROP);
+                break;
+            }
+        }
+
+        if (currentSeqNum == null) {
+            //TODO add error handling
+        }
+
+        ServiceReference nextStep =  null;
+        Integer temp = Integer.valueOf(0);
+        for (ServiceReference step : steps) {
+            Integer sequence = (Integer) step.getProperty(SEQUENCE_PROP);
+            if (sequence == null) {
+                //TODO: log message
+                continue;
+            }
+            if (sequence.compareTo(currentSeqNum) < 0) {
+                if (sequence.compareTo(temp) > 0) {
+                    temp = sequence;
+                    nextStep = step;
+                }
+            }
+        }
+
+        if (nextStep != null) {
+            InstallerStep service = Activator.getInstance().findStep(nextStep);
+            if (service != null) {
+                return service.actionUrl();
+            }
+        };
+
+        return null;
     }
 
     /** {@inheritDoc} */
     public void run() {
-    }
-
-    /** {@inheritDoc} */
-    public void unregisterStepHandler(String clazz) {
     }
 
 }

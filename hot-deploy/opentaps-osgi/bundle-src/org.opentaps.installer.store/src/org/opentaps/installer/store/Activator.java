@@ -17,19 +17,28 @@
 package org.opentaps.installer.store;
 
 import org.opentaps.core.bundle.AbstractBundle;
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 
 public class Activator extends AbstractBundle {
 
+    // the shared instance
+    private static BundleActivator bundle;
+
     /** {@inheritDoc} */
     public void start(BundleContext context) throws Exception {
+        bundle = this;
         super.start(context);
     }
 
     /** {@inheritDoc} */
     public void stop(BundleContext context) throws Exception {
         super.stop(context);
+        bundle = null;
     }
 
+    public static Activator getInstance() {
+        return (Activator) bundle;
+    };
 }

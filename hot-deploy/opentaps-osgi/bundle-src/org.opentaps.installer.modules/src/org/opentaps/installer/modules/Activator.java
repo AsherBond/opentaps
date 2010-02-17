@@ -23,11 +23,15 @@ import org.opentaps.installer.modules.model.impl.ModulesStepImpl;
 import org.opentaps.installer.service.InstallerStep;
 import org.opentaps.installer.service.OSSInstaller;
 import org.opentaps.installer.util.ResourceCustomizer;
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class Activator extends AbstractBundle {
+
+    // the shared instance
+    private static BundleActivator bundle;
 
     private ServiceTracker wizardHttpSrvcTracker;
     private ServiceTracker staticHttpSrvcTracker;
@@ -35,6 +39,7 @@ public class Activator extends AbstractBundle {
     /** {@inheritDoc} */
     public void start(BundleContext context) throws Exception {
 
+        bundle = this;
         super.start(context);
 
         // register GWT applications under alias /modulesWiz as soon as
@@ -63,6 +68,11 @@ public class Activator extends AbstractBundle {
         staticHttpSrvcTracker.close();
 
         super.stop(context);
+        bundle = null;
     }
+
+    public static Activator getInstance() {
+        return (Activator) bundle;
+    };
 
 }

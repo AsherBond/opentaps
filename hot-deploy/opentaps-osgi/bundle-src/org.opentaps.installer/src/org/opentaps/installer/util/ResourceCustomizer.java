@@ -49,9 +49,9 @@ public class ResourceCustomizer implements ServiceTrackerCustomizer {
         HttpService service = (HttpService) context.getService(ref);
         try {
             service.registerResources(alias, resources, null);
-            Activator.logInfo(String.format("Resource directory %1$s is registered as alias %2$s.", resources, alias), null, null);
+            Activator.getInstance().logInfo(String.format("Resource directory %1$s is registered as alias %2$s.", resources, alias), null, null);
         } catch (NamespaceException e) {
-            Activator.logError(e.getMessage(), e, null);
+            Activator.getInstance().logError(e.getMessage(), e, null);
         }
         return alias;
     }
@@ -65,7 +65,7 @@ public class ResourceCustomizer implements ServiceTrackerCustomizer {
     public void removedService(ServiceReference ref, Object alias) {
         HttpService service = (HttpService) context.getService(ref);
         service.unregister((String) alias);
-        Activator.logInfo(String.format("Resources under %1$s are unregistered and no longer available.", alias), null, null);
+        Activator.getInstance().logInfo(String.format("Resources under %1$s are unregistered and no longer available.", alias), null, null);
     }
 
 }

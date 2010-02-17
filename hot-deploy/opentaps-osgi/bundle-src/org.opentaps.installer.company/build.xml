@@ -30,6 +30,9 @@
 
     <target name="classpath" depends="init">
         <path id="local.class.path">
+            <fileset dir="${base.dir}/hot-deploy/opentaps-common/lib" includes="gwt*.jar"/>
+            <pathelement location="${base.dir}/hot-deploy/opentaps-common/src/constants"/>
+            <pathelement location="${base.dir}/hot-deploy/opentaps-common/src/common"/>
             <fileset dir="${base.lib.dir}" includes="*.jar"/>
             <fileset dir="${deploy.dir}" includes="*.jar"/>
         </path>
@@ -47,7 +50,7 @@
                 <path refid="local.class.path"/>
             </classpath>
             <src path="${src.dir}"/>
-    	    <exclude name="org/opentaps/gwt/**"/>
+    	    <!--exclude name="org/opentaps/gwt/**"/-->
         </javac>
     </target>
 

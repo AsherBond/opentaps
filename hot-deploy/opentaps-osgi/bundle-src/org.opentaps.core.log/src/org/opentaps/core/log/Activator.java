@@ -17,6 +17,7 @@
 package org.opentaps.core.log;
 
 import org.opentaps.core.bundle.AbstractBundle;
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogReaderService;
@@ -24,9 +25,13 @@ import org.osgi.service.log.LogReaderService;
 
 public class Activator extends AbstractBundle {
 
+    // the shared instance
+    private static BundleActivator bundle;
+
     /** {@inheritDoc} */
     public void start(BundleContext context) throws Exception {
 
+        bundle = this;
         super.start(context);
 
         ServiceReference ref = context.getServiceReference(LogReaderService.class.getName());
@@ -40,6 +45,10 @@ public class Activator extends AbstractBundle {
     /** {@inheritDoc} */
     public void stop(BundleContext context) throws Exception {
         super.stop(context);
+        bundle = null;
     }
 
+    public static Activator getInstance() {
+        return (Activator) bundle;
+    }
 }

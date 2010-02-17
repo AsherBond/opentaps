@@ -95,7 +95,7 @@
         </if>
     </target>
 
-    <target name="build" depends="classes">
+    <target name="build" depends="classes, gwt">
         <taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="../../lib/bnd.jar"/>
         <bnd 
             classpath="${bin.dir}/classes"

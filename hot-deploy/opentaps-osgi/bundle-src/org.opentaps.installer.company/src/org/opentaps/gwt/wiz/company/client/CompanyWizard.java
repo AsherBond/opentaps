@@ -16,13 +16,27 @@
  */
 package org.opentaps.gwt.wiz.company.client;
 
-import org.opentaps.gwt.common.client.BaseEntry;
-
+import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.URL;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.gwtext.client.core.EventObject;
 import com.gwtext.client.core.Margins;
 import com.gwtext.client.core.RegionPosition;
+import com.gwtext.client.util.Format;
+import com.gwtext.client.util.JSON;
 import com.gwtext.client.widgets.Button;
 import com.gwtext.client.widgets.Panel;
+import com.gwtext.client.widgets.event.ButtonListenerAdapter;
 import com.gwtext.client.widgets.layout.BorderLayout;
 import com.gwtext.client.widgets.layout.BorderLayoutData;
 import com.gwtext.client.widgets.layout.FitLayout;
@@ -33,7 +47,9 @@ import com.gwtext.client.widgets.layout.HorizontalLayout;
  *
  *
  */
-public class CompanyWizard extends BaseEntry {
+public class CompanyWizard implements EntryPoint {
+
+    String NAV = "/osgi/InstNav";
 
     /** {@inheritDoc} */
     public void onModuleLoad() {
@@ -56,8 +72,24 @@ public class CompanyWizard extends BaseEntry {
         buttons.setCollapsible(false);
         buttons.setLayout(new HorizontalLayout(5));
 
-        buttons.add(new Button("Prev"));
-        buttons.add(new Button("Next"));
+        Button prev = new Button("Prev");
+        prev.addListener(new ButtonListenerAdapter() {
+
+            public void onClick(Button button, EventObject e) {
+                CompanyWizard.this.requestUri("prev");
+            }
+
+        });
+        buttons.add(prev);
+        Button next = new Button("Next");
+        next.addListener(new ButtonListenerAdapter() {
+
+            public void onClick(Button button, EventObject e) {
+                CompanyWizard.this.requestUri("next");
+            }
+
+        });
+        buttons.add(next);
         buttons.add(new Button("Finish"));
 
         BorderLayoutData buttonsData = new BorderLayoutData(RegionPosition.SOUTH);
@@ -67,6 +99,40 @@ public class CompanyWizard extends BaseEntry {
         form.add(buttons, buttonsData);
 
         RootPanel.get().add(form);
+    }
+
+    public void requestUri(String direction) {
+        RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(NAV));
+        builder.setHeader("Content-type",  "application/x-www-form-urlencoded");
+        builder.setRequestData(Format.format("stepId={0}&direction={1}", "company", direction));
+        builder.setCallback(new RequestCallback() {
+
+            public void onError(Request request, Throwable exception) {
+                Window.alert(exception.getMessage());
+            }
+
+            public void onResponseReceived(Request request, Response response) {
+                if (200 == response.getStatusCode()) {
+                    JavaScriptObject jsObj = JSON.decode(response.getText());
+                    JSONObject jsonObj = new JSONObject(jsObj);
+                    JSONValue nextAction = jsonObj.get("nextAction");
+                    if (nextAction != null && !"null".equals(nextAction.toString())) {
+                        Window.Location.replace(nextAction.toString());
+                    } else {
+                        Window.alert("No way!");
+                    }
+                } else {
+                    // Handle the error.  Can get the status text from response.getStatusText()
+                    Window.alert("Error: " + response.getStatusText());
+                }
+            }
+        });
+
+        try {
+            builder.send();
+        } catch (RequestException e) {
+            Window.alert(e.getMessage());
+        }
     }
 
 }

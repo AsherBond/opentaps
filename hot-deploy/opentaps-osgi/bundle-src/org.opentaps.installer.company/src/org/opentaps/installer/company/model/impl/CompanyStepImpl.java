@@ -34,4 +34,9 @@ public class CompanyStepImpl implements InstallerStep, CompanyStepModel {
     public void rollback() {
     }
 
+    /** {@inheritDoc} */
+    public String actionUrl() {
+        return "/osgi/companyWiz/pages/CompanyWizard.html";
+    }
+
 }

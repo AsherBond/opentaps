@@ -25,13 +25,9 @@ public interface OSSInstaller {
     public static final String STEP_ID_PROP = "step.id";
     public static final String SEQUENCE_PROP = "sequence";
 
-    public String nextUri(String clazz);
+    public String nextUri(String stepId);
 
-    public String prevUri(String clazz);
-
-    public void registerStepHandler(String clazz);
-
-    public void unregisterStepHandler(String clazz);
+    public String prevUri(String stepId);
 
     public void run();
 }
