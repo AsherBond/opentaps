@@ -103,7 +103,6 @@ public class ComponentWizard extends BaseEntry {
     }
 
     public void requestUri(String direction) {
-        Window.alert(GWT.getModuleBaseURL());
         RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(NAV));
         builder.setHeader("Content-type", "application/x-www-form-urlencoded");
         builder.setRequestData(Format.format("stepId={0}&direction={1}", "modules", direction));
@@ -119,7 +118,7 @@ public class ComponentWizard extends BaseEntry {
                     JSONObject jsonObj = new JSONObject(jsObj);
                     JSONValue nextAction = jsonObj.get("nextAction");
                     if (nextAction != null && !"null".equals(nextAction.toString())) {
-                        Window.Location.replace(nextAction.toString());
+                        Window.Location.replace(nextAction.isString().stringValue());
                     } else {
                         Window.alert("No way!");
                     }

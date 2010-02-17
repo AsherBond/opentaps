@@ -36,7 +36,7 @@ public class ModulesStepImpl implements InstallerStep, ModulesStepModel {
 
     /** {@inheritDoc} */
     public String actionUrl() {
-        return "/osgi/modules/pages/ComponentWizard.html";
+        return "/osgi/modulesWiz/pages/ComponentWizard.html";
     }
 
 }

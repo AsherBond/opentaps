@@ -118,7 +118,7 @@ public class NetworkWizard extends BaseEntry {
                     JSONObject jsonObj = new JSONObject(jsObj);
                     JSONValue nextAction = jsonObj.get("nextAction");
                     if (nextAction != null && !"null".equals(nextAction.toString())) {
-                        Window.Location.replace(nextAction.toString());
+                        Window.Location.replace(nextAction.isString().stringValue());
                     } else {
                         Window.alert("No way!");
                     }
