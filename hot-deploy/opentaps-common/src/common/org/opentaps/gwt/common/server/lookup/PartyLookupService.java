@@ -678,7 +678,10 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     private <T extends EntityInterface> List<T> findAllParties(Class<T> entity, EntityCondition roleCondition) {
         List<EntityCondition> conditions = UtilMisc.toList(roleCondition);
         if (activeOnly) {
-            conditions.add(EntityUtil.getFilterByDateExpr());
+            // simple lookups (without relationships) do not support date filtering
+            if (entity != PartyRoleNameDetailSupplementalData.class) {
+                conditions.add(EntityUtil.getFilterByDateExpr());
+            }
             conditions.add(EntityCondition.makeCondition(EntityOperator.OR,
                                                          EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
                                                          EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null)));
@@ -689,7 +692,10 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     private <T extends EntityInterface> List<T> findPartiesBy(Class<T> entity, EntityCondition roleCondition, List<String> filters) {
         List<EntityCondition> conditions = new ArrayList<EntityCondition>();
         if (activeOnly) {
-            conditions.add(EntityUtil.getFilterByDateExpr());
+            // simple lookups (without relationships) do not support date filtering
+            if (entity != PartyRoleNameDetailSupplementalData.class) {
+                conditions.add(EntityUtil.getFilterByDateExpr());
+            }
             conditions.add(EntityCondition.makeCondition(EntityOperator.OR,
                                                          EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
                                                          EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null)));
