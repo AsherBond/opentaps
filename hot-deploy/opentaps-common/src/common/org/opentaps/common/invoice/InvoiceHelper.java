@@ -275,7 +275,7 @@ public final class InvoiceHelper {
                     invoiceLine.put("shipmentId", issuance.get("shipmentId"));
                     GenericValue shipment = issuance.getRelatedOne("Shipment");
                     invoiceLine.put("createdDate", shipment.get("createdDate"));
-                    GenericValue shipmentRouteSegment = delegator.findByPrimaryKey("ShipmentRouteSegment", UtilMisc.toMap("shipmentId", issuance.get("shipmentId"), "shipmentRouteSegmentId", "00001"));
+                    GenericValue shipmentRouteSegment = EntityUtil.getFirst(delegator.findByAnd("ShipmentRouteSegment", UtilMisc.toMap("shipmentId", issuance.get("shipmentId")), UtilMisc.toList("shipmentRouteSegmentId")));
                     invoiceLine.put("carrierPartyId", shipmentRouteSegment.get("carrierPartyId"));
                     invoiceLine.put("shipmentMethodTypeId", shipmentRouteSegment.get("shipmentMethodTypeId"));
                     List<EntityExpr> conditions = Arrays.asList(
