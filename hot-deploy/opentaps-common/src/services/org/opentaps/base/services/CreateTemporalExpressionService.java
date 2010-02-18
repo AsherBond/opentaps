@@ -62,6 +62,7 @@ public class CreateTemporalExpressionService extends ServiceWrapper {
         locale("locale"),
         string1("string1"),
         string2("string2"),
+        tempExprId("tempExprId"),
         tempExprTypeId("tempExprTypeId"),
         timeZone("timeZone"),
         userLogin("userLogin");
@@ -107,6 +108,7 @@ public class CreateTemporalExpressionService extends ServiceWrapper {
     private Locale inLocale;
     private String inString1;
     private String inString2;
+    private String inTempExprId;
     private String inTempExprTypeId;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
@@ -184,6 +186,14 @@ public class CreateTemporalExpressionService extends ServiceWrapper {
      * This parameter is optional.
      * @return <code>String</code>
      */
+    public String getInTempExprId() {
+        return this.inTempExprId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
     public String getInTempExprTypeId() {
         return this.inTempExprTypeId;
     }
@@ -253,7 +263,7 @@ public class CreateTemporalExpressionService extends ServiceWrapper {
     }
     /**
      * Auto generated value accessor.
-     * This parameter is required.
+     * This parameter is optional.
      * @return <code>String</code>
      */
     public String getOutTempExprId() {
@@ -342,6 +352,15 @@ public class CreateTemporalExpressionService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inTempExprId the inTempExprId to set
+    */
+    public void setInTempExprId(String inTempExprId) {
+        this.inParameters.add("tempExprId");
+        this.inTempExprId = inTempExprId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inTempExprTypeId the inTempExprTypeId to set
     */
     public void setInTempExprTypeId(String inTempExprTypeId) {
@@ -422,7 +441,7 @@ public class CreateTemporalExpressionService extends ServiceWrapper {
     }
     /**
      * Auto generated value setter.
-     * This parameter is required.
+     * This parameter is optional.
      * @param outTempExprId the outTempExprId to set
     */
     public void setOutTempExprId(String outTempExprId) {
@@ -478,6 +497,7 @@ public class CreateTemporalExpressionService extends ServiceWrapper {
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("string1")) mapValue.put("string1", getInString1());
         if (inParameters.contains("string2")) mapValue.put("string2", getInString2());
+        if (inParameters.contains("tempExprId")) mapValue.put("tempExprId", getInTempExprId());
         if (inParameters.contains("tempExprTypeId")) mapValue.put("tempExprTypeId", getInTempExprTypeId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
@@ -510,6 +530,7 @@ public class CreateTemporalExpressionService extends ServiceWrapper {
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("string1")) setInString1((String) mapValue.get("string1"));
         if (mapValue.containsKey("string2")) setInString2((String) mapValue.get("string2"));
+        if (mapValue.containsKey("tempExprId")) setInTempExprId((String) mapValue.get("tempExprId"));
         if (mapValue.containsKey("tempExprTypeId")) setInTempExprTypeId((String) mapValue.get("tempExprTypeId"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));

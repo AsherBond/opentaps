@@ -59,10 +59,18 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
         uploadedFileContentType("_uploadedFile_contentType"),
         uploadedFileFileName("_uploadedFile_fileName"),
         characterSetId("characterSetId"),
+        childBranchCount("childBranchCount"),
+        childLeafCount("childLeafCount"),
         classificationEnumId("classificationEnumId"),
+        contentAssocPredicateId("contentAssocPredicateId"),
+        contentAssocTypeId("contentAssocTypeId"),
         contentId("contentId"),
+        contentIdFrom("contentIdFrom"),
+        contentIdTo("contentIdTo"),
         contentName("contentName"),
         contentPurposeList("contentPurposeList"),
+        contentPurposeTypeId("contentPurposeTypeId"),
+        contentTypeId("contentTypeId"),
         createdByUserLogin("createdByUserLogin"),
         createdDate("createdDate"),
         dataCategoryId("dataCategoryId"),
@@ -71,22 +79,37 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
         dataResourceTypeId("dataResourceTypeId"),
         dataSourceId("dataSourceId"),
         dataTemplateTypeId("dataTemplateTypeId"),
+        deactivateExisting("deactivateExisting"),
+        decoratorContentId("decoratorContentId"),
         description("description"),
+        displayFailCond("displayFailCond"),
+        fromDate("fromDate"),
+        instanceOfContentId("instanceOfContentId"),
         isPublic("isPublic"),
         lastModifiedByUserLogin("lastModifiedByUserLogin"),
         lastModifiedDate("lastModifiedDate"),
+        leftCoordinate("leftCoordinate"),
         locale("locale"),
         localeString("localeString"),
+        mapKey("mapKey"),
         mimeTypeId("mimeTypeId"),
         objectInfo("objectInfo"),
+        ownerContentId("ownerContentId"),
+        privilegeEnumId("privilegeEnumId"),
         relatedDetailId("relatedDetailId"),
+        roleTypeList("roleTypeList"),
+        sequenceNum("sequenceNum"),
+        serviceName("serviceName"),
         skipPermissionCheck("skipPermissionCheck"),
         statusId("statusId"),
         surveyId("surveyId"),
         surveyResponseId("surveyResponseId"),
         targetOperationList("targetOperationList"),
+        templateDataResourceId("templateDataResourceId"),
+        thruDate("thruDate"),
         timeZone("timeZone"),
         uploadedFile("uploadedFile"),
+        upperCoordinate("upperCoordinate"),
         userLogin("userLogin");
         private final String _fieldName;
         private In(String name) { this._fieldName = name; }
@@ -95,6 +118,7 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
 
     public static enum Out {
         contentId("contentId"),
+        contentIdFrom("contentIdFrom"),
         dataResource("dataResource"),
         dataResourceId("dataResourceId"),
         errorMessage("errorMessage"),
@@ -102,6 +126,7 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
         locale("locale"),
         mimeTypeId("mimeTypeId"),
         responseMessage("responseMessage"),
+        roleTypeList("roleTypeList"),
         successMessage("successMessage"),
         successMessageList("successMessageList"),
         timeZone("timeZone"),
@@ -122,10 +147,18 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     private String inUploadedFileContentType;
     private String inUploadedFileFileName;
     private String inCharacterSetId;
+    private Long inChildBranchCount;
+    private Long inChildLeafCount;
     private String inClassificationEnumId;
+    private String inContentAssocPredicateId;
+    private String inContentAssocTypeId;
     private String inContentId;
+    private String inContentIdFrom;
+    private String inContentIdTo;
     private String inContentName;
     private List inContentPurposeList;
+    private String inContentPurposeTypeId;
+    private String inContentTypeId;
     private String inCreatedByUserLogin;
     private Timestamp inCreatedDate;
     private String inDataCategoryId;
@@ -134,24 +167,40 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     private String inDataResourceTypeId;
     private String inDataSourceId;
     private String inDataTemplateTypeId;
+    private String inDeactivateExisting;
+    private String inDecoratorContentId;
     private String inDescription;
+    private Boolean inDisplayFailCond;
+    private Timestamp inFromDate;
+    private String inInstanceOfContentId;
     private String inIsPublic;
     private String inLastModifiedByUserLogin;
     private Timestamp inLastModifiedDate;
+    private Long inLeftCoordinate;
     private Locale inLocale;
     private String inLocaleString;
+    private String inMapKey;
     private String inMimeTypeId;
     private String inObjectInfo;
+    private String inOwnerContentId;
+    private String inPrivilegeEnumId;
     private String inRelatedDetailId;
+    private List inRoleTypeList;
+    private Long inSequenceNum;
+    private String inServiceName;
     private String inSkipPermissionCheck;
     private String inStatusId;
     private String inSurveyId;
     private String inSurveyResponseId;
     private List inTargetOperationList;
+    private String inTemplateDataResourceId;
+    private Timestamp inThruDate;
     private TimeZone inTimeZone;
     private ByteBuffer inUploadedFile;
+    private Long inUpperCoordinate;
     private GenericValue inUserLogin;
     private String outContentId;
+    private String outContentIdFrom;
     private GenericValue outDataResource;
     private String outDataResourceId;
     private String outErrorMessage;
@@ -159,6 +208,7 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     private Locale outLocale;
     private String outMimeTypeId;
     private String outResponseMessage;
+    private List outRoleTypeList;
     private String outSuccessMessage;
     private List outSuccessMessageList;
     private TimeZone outTimeZone;
@@ -194,10 +244,42 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
+     * @return <code>Long</code>
+     */
+    public Long getInChildBranchCount() {
+        return this.inChildBranchCount;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>Long</code>
+     */
+    public Long getInChildLeafCount() {
+        return this.inChildLeafCount;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
      * @return <code>String</code>
      */
     public String getInClassificationEnumId() {
         return this.inClassificationEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInContentAssocPredicateId() {
+        return this.inContentAssocPredicateId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInContentAssocTypeId() {
+        return this.inContentAssocTypeId;
     }
     /**
      * Auto generated value accessor.
@@ -209,7 +291,23 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     }
     /**
      * Auto generated value accessor.
-     * This parameter is required.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInContentIdFrom() {
+        return this.inContentIdFrom;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInContentIdTo() {
+        return this.inContentIdTo;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
      * @return <code>String</code>
      */
     public String getInContentName() {
@@ -222,6 +320,22 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
      */
     public List getInContentPurposeList() {
         return this.inContentPurposeList;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInContentPurposeTypeId() {
+        return this.inContentPurposeTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInContentTypeId() {
+        return this.inContentTypeId;
     }
     /**
      * Auto generated value accessor.
@@ -292,8 +406,48 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
      * This parameter is optional.
      * @return <code>String</code>
      */
+    public String getInDeactivateExisting() {
+        return this.inDeactivateExisting;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInDecoratorContentId() {
+        return this.inDecoratorContentId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
     public String getInDescription() {
         return this.inDescription;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>Boolean</code>
+     */
+    public Boolean getInDisplayFailCond() {
+        return this.inDisplayFailCond;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getInFromDate() {
+        return this.inFromDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInInstanceOfContentId() {
+        return this.inInstanceOfContentId;
     }
     /**
      * Auto generated value accessor.
@@ -322,6 +476,14 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
+     * @return <code>Long</code>
+     */
+    public Long getInLeftCoordinate() {
+        return this.inLeftCoordinate;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
      * @return <code>Locale</code>
      */
     public Locale getInLocale() {
@@ -334,6 +496,14 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
      */
     public String getInLocaleString() {
         return this.inLocaleString;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInMapKey() {
+        return this.inMapKey;
     }
     /**
      * Auto generated value accessor.
@@ -356,8 +526,48 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
      * This parameter is optional.
      * @return <code>String</code>
      */
+    public String getInOwnerContentId() {
+        return this.inOwnerContentId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInPrivilegeEnumId() {
+        return this.inPrivilegeEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
     public String getInRelatedDetailId() {
         return this.inRelatedDetailId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>List</code>
+     */
+    public List getInRoleTypeList() {
+        return this.inRoleTypeList;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>Long</code>
+     */
+    public Long getInSequenceNum() {
+        return this.inSequenceNum;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInServiceName() {
+        return this.inServiceName;
     }
     /**
      * Auto generated value accessor.
@@ -402,6 +612,22 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInTemplateDataResourceId() {
+        return this.inTemplateDataResourceId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getInThruDate() {
+        return this.inThruDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
      * @return <code>TimeZone</code>
      */
     public TimeZone getInTimeZone() {
@@ -418,6 +644,14 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
+     * @return <code>Long</code>
+     */
+    public Long getInUpperCoordinate() {
+        return this.inUpperCoordinate;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
      * @return <code>GenericValue</code>
      */
     public GenericValue getInUserLogin() {
@@ -430,6 +664,14 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
      */
     public String getOutContentId() {
         return this.outContentId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getOutContentIdFrom() {
+        return this.outContentIdFrom;
     }
     /**
      * Auto generated value accessor.
@@ -486,6 +728,14 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
      */
     public String getOutResponseMessage() {
         return this.outResponseMessage;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>List</code>
+     */
+    public List getOutRoleTypeList() {
+        return this.outRoleTypeList;
     }
     /**
      * Auto generated value accessor.
@@ -550,11 +800,47 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inChildBranchCount the inChildBranchCount to set
+    */
+    public void setInChildBranchCount(Long inChildBranchCount) {
+        this.inParameters.add("childBranchCount");
+        this.inChildBranchCount = inChildBranchCount;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inChildLeafCount the inChildLeafCount to set
+    */
+    public void setInChildLeafCount(Long inChildLeafCount) {
+        this.inParameters.add("childLeafCount");
+        this.inChildLeafCount = inChildLeafCount;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inClassificationEnumId the inClassificationEnumId to set
     */
     public void setInClassificationEnumId(String inClassificationEnumId) {
         this.inParameters.add("classificationEnumId");
         this.inClassificationEnumId = inClassificationEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inContentAssocPredicateId the inContentAssocPredicateId to set
+    */
+    public void setInContentAssocPredicateId(String inContentAssocPredicateId) {
+        this.inParameters.add("contentAssocPredicateId");
+        this.inContentAssocPredicateId = inContentAssocPredicateId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inContentAssocTypeId the inContentAssocTypeId to set
+    */
+    public void setInContentAssocTypeId(String inContentAssocTypeId) {
+        this.inParameters.add("contentAssocTypeId");
+        this.inContentAssocTypeId = inContentAssocTypeId;
     }
     /**
      * Auto generated value setter.
@@ -567,7 +853,25 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     }
     /**
      * Auto generated value setter.
-     * This parameter is required.
+     * This parameter is optional.
+     * @param inContentIdFrom the inContentIdFrom to set
+    */
+    public void setInContentIdFrom(String inContentIdFrom) {
+        this.inParameters.add("contentIdFrom");
+        this.inContentIdFrom = inContentIdFrom;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inContentIdTo the inContentIdTo to set
+    */
+    public void setInContentIdTo(String inContentIdTo) {
+        this.inParameters.add("contentIdTo");
+        this.inContentIdTo = inContentIdTo;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inContentName the inContentName to set
     */
     public void setInContentName(String inContentName) {
@@ -582,6 +886,24 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     public void setInContentPurposeList(List inContentPurposeList) {
         this.inParameters.add("contentPurposeList");
         this.inContentPurposeList = inContentPurposeList;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inContentPurposeTypeId the inContentPurposeTypeId to set
+    */
+    public void setInContentPurposeTypeId(String inContentPurposeTypeId) {
+        this.inParameters.add("contentPurposeTypeId");
+        this.inContentPurposeTypeId = inContentPurposeTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inContentTypeId the inContentTypeId to set
+    */
+    public void setInContentTypeId(String inContentTypeId) {
+        this.inParameters.add("contentTypeId");
+        this.inContentTypeId = inContentTypeId;
     }
     /**
      * Auto generated value setter.
@@ -658,11 +980,56 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inDeactivateExisting the inDeactivateExisting to set
+    */
+    public void setInDeactivateExisting(String inDeactivateExisting) {
+        this.inParameters.add("deactivateExisting");
+        this.inDeactivateExisting = inDeactivateExisting;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inDecoratorContentId the inDecoratorContentId to set
+    */
+    public void setInDecoratorContentId(String inDecoratorContentId) {
+        this.inParameters.add("decoratorContentId");
+        this.inDecoratorContentId = inDecoratorContentId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inDescription the inDescription to set
     */
     public void setInDescription(String inDescription) {
         this.inParameters.add("description");
         this.inDescription = inDescription;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inDisplayFailCond the inDisplayFailCond to set
+    */
+    public void setInDisplayFailCond(Boolean inDisplayFailCond) {
+        this.inParameters.add("displayFailCond");
+        this.inDisplayFailCond = inDisplayFailCond;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inFromDate the inFromDate to set
+    */
+    public void setInFromDate(Timestamp inFromDate) {
+        this.inParameters.add("fromDate");
+        this.inFromDate = inFromDate;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inInstanceOfContentId the inInstanceOfContentId to set
+    */
+    public void setInInstanceOfContentId(String inInstanceOfContentId) {
+        this.inParameters.add("instanceOfContentId");
+        this.inInstanceOfContentId = inInstanceOfContentId;
     }
     /**
      * Auto generated value setter.
@@ -694,6 +1061,15 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inLeftCoordinate the inLeftCoordinate to set
+    */
+    public void setInLeftCoordinate(Long inLeftCoordinate) {
+        this.inParameters.add("leftCoordinate");
+        this.inLeftCoordinate = inLeftCoordinate;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inLocale the inLocale to set
     */
     public void setInLocale(Locale inLocale) {
@@ -708,6 +1084,15 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     public void setInLocaleString(String inLocaleString) {
         this.inParameters.add("localeString");
         this.inLocaleString = inLocaleString;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inMapKey the inMapKey to set
+    */
+    public void setInMapKey(String inMapKey) {
+        this.inParameters.add("mapKey");
+        this.inMapKey = inMapKey;
     }
     /**
      * Auto generated value setter.
@@ -730,11 +1115,56 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inOwnerContentId the inOwnerContentId to set
+    */
+    public void setInOwnerContentId(String inOwnerContentId) {
+        this.inParameters.add("ownerContentId");
+        this.inOwnerContentId = inOwnerContentId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inPrivilegeEnumId the inPrivilegeEnumId to set
+    */
+    public void setInPrivilegeEnumId(String inPrivilegeEnumId) {
+        this.inParameters.add("privilegeEnumId");
+        this.inPrivilegeEnumId = inPrivilegeEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inRelatedDetailId the inRelatedDetailId to set
     */
     public void setInRelatedDetailId(String inRelatedDetailId) {
         this.inParameters.add("relatedDetailId");
         this.inRelatedDetailId = inRelatedDetailId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inRoleTypeList the inRoleTypeList to set
+    */
+    public void setInRoleTypeList(List inRoleTypeList) {
+        this.inParameters.add("roleTypeList");
+        this.inRoleTypeList = inRoleTypeList;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inSequenceNum the inSequenceNum to set
+    */
+    public void setInSequenceNum(Long inSequenceNum) {
+        this.inParameters.add("sequenceNum");
+        this.inSequenceNum = inSequenceNum;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inServiceName the inServiceName to set
+    */
+    public void setInServiceName(String inServiceName) {
+        this.inParameters.add("serviceName");
+        this.inServiceName = inServiceName;
     }
     /**
      * Auto generated value setter.
@@ -784,6 +1214,24 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inTemplateDataResourceId the inTemplateDataResourceId to set
+    */
+    public void setInTemplateDataResourceId(String inTemplateDataResourceId) {
+        this.inParameters.add("templateDataResourceId");
+        this.inTemplateDataResourceId = inTemplateDataResourceId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inThruDate the inThruDate to set
+    */
+    public void setInThruDate(Timestamp inThruDate) {
+        this.inParameters.add("thruDate");
+        this.inThruDate = inThruDate;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inTimeZone the inTimeZone to set
     */
     public void setInTimeZone(TimeZone inTimeZone) {
@@ -802,6 +1250,15 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inUpperCoordinate the inUpperCoordinate to set
+    */
+    public void setInUpperCoordinate(Long inUpperCoordinate) {
+        this.inParameters.add("upperCoordinate");
+        this.inUpperCoordinate = inUpperCoordinate;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inUserLogin the inUserLogin to set
     */
     public void setInUserLogin(GenericValue inUserLogin) {
@@ -816,6 +1273,15 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     public void setOutContentId(String outContentId) {
         this.outParameters.add("contentId");
         this.outContentId = outContentId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param outContentIdFrom the outContentIdFrom to set
+    */
+    public void setOutContentIdFrom(String outContentIdFrom) {
+        this.outParameters.add("contentIdFrom");
+        this.outContentIdFrom = outContentIdFrom;
     }
     /**
      * Auto generated value setter.
@@ -883,6 +1349,15 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param outRoleTypeList the outRoleTypeList to set
+    */
+    public void setOutRoleTypeList(List outRoleTypeList) {
+        this.outParameters.add("roleTypeList");
+        this.outRoleTypeList = outRoleTypeList;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param outSuccessMessage the outSuccessMessage to set
     */
     public void setOutSuccessMessage(String outSuccessMessage) {
@@ -943,10 +1418,18 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
         if (inParameters.contains("_uploadedFile_contentType")) mapValue.put("_uploadedFile_contentType", getInUploadedFileContentType());
         if (inParameters.contains("_uploadedFile_fileName")) mapValue.put("_uploadedFile_fileName", getInUploadedFileFileName());
         if (inParameters.contains("characterSetId")) mapValue.put("characterSetId", getInCharacterSetId());
+        if (inParameters.contains("childBranchCount")) mapValue.put("childBranchCount", getInChildBranchCount());
+        if (inParameters.contains("childLeafCount")) mapValue.put("childLeafCount", getInChildLeafCount());
         if (inParameters.contains("classificationEnumId")) mapValue.put("classificationEnumId", getInClassificationEnumId());
+        if (inParameters.contains("contentAssocPredicateId")) mapValue.put("contentAssocPredicateId", getInContentAssocPredicateId());
+        if (inParameters.contains("contentAssocTypeId")) mapValue.put("contentAssocTypeId", getInContentAssocTypeId());
         if (inParameters.contains("contentId")) mapValue.put("contentId", getInContentId());
+        if (inParameters.contains("contentIdFrom")) mapValue.put("contentIdFrom", getInContentIdFrom());
+        if (inParameters.contains("contentIdTo")) mapValue.put("contentIdTo", getInContentIdTo());
         if (inParameters.contains("contentName")) mapValue.put("contentName", getInContentName());
         if (inParameters.contains("contentPurposeList")) mapValue.put("contentPurposeList", getInContentPurposeList());
+        if (inParameters.contains("contentPurposeTypeId")) mapValue.put("contentPurposeTypeId", getInContentPurposeTypeId());
+        if (inParameters.contains("contentTypeId")) mapValue.put("contentTypeId", getInContentTypeId());
         if (inParameters.contains("createdByUserLogin")) mapValue.put("createdByUserLogin", getInCreatedByUserLogin());
         if (inParameters.contains("createdDate")) mapValue.put("createdDate", getInCreatedDate());
         if (inParameters.contains("dataCategoryId")) mapValue.put("dataCategoryId", getInDataCategoryId());
@@ -955,22 +1438,37 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
         if (inParameters.contains("dataResourceTypeId")) mapValue.put("dataResourceTypeId", getInDataResourceTypeId());
         if (inParameters.contains("dataSourceId")) mapValue.put("dataSourceId", getInDataSourceId());
         if (inParameters.contains("dataTemplateTypeId")) mapValue.put("dataTemplateTypeId", getInDataTemplateTypeId());
+        if (inParameters.contains("deactivateExisting")) mapValue.put("deactivateExisting", getInDeactivateExisting());
+        if (inParameters.contains("decoratorContentId")) mapValue.put("decoratorContentId", getInDecoratorContentId());
         if (inParameters.contains("description")) mapValue.put("description", getInDescription());
+        if (inParameters.contains("displayFailCond")) mapValue.put("displayFailCond", getInDisplayFailCond());
+        if (inParameters.contains("fromDate")) mapValue.put("fromDate", getInFromDate());
+        if (inParameters.contains("instanceOfContentId")) mapValue.put("instanceOfContentId", getInInstanceOfContentId());
         if (inParameters.contains("isPublic")) mapValue.put("isPublic", getInIsPublic());
         if (inParameters.contains("lastModifiedByUserLogin")) mapValue.put("lastModifiedByUserLogin", getInLastModifiedByUserLogin());
         if (inParameters.contains("lastModifiedDate")) mapValue.put("lastModifiedDate", getInLastModifiedDate());
+        if (inParameters.contains("leftCoordinate")) mapValue.put("leftCoordinate", getInLeftCoordinate());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("localeString")) mapValue.put("localeString", getInLocaleString());
+        if (inParameters.contains("mapKey")) mapValue.put("mapKey", getInMapKey());
         if (inParameters.contains("mimeTypeId")) mapValue.put("mimeTypeId", getInMimeTypeId());
         if (inParameters.contains("objectInfo")) mapValue.put("objectInfo", getInObjectInfo());
+        if (inParameters.contains("ownerContentId")) mapValue.put("ownerContentId", getInOwnerContentId());
+        if (inParameters.contains("privilegeEnumId")) mapValue.put("privilegeEnumId", getInPrivilegeEnumId());
         if (inParameters.contains("relatedDetailId")) mapValue.put("relatedDetailId", getInRelatedDetailId());
+        if (inParameters.contains("roleTypeList")) mapValue.put("roleTypeList", getInRoleTypeList());
+        if (inParameters.contains("sequenceNum")) mapValue.put("sequenceNum", getInSequenceNum());
+        if (inParameters.contains("serviceName")) mapValue.put("serviceName", getInServiceName());
         if (inParameters.contains("skipPermissionCheck")) mapValue.put("skipPermissionCheck", getInSkipPermissionCheck());
         if (inParameters.contains("statusId")) mapValue.put("statusId", getInStatusId());
         if (inParameters.contains("surveyId")) mapValue.put("surveyId", getInSurveyId());
         if (inParameters.contains("surveyResponseId")) mapValue.put("surveyResponseId", getInSurveyResponseId());
         if (inParameters.contains("targetOperationList")) mapValue.put("targetOperationList", getInTargetOperationList());
+        if (inParameters.contains("templateDataResourceId")) mapValue.put("templateDataResourceId", getInTemplateDataResourceId());
+        if (inParameters.contains("thruDate")) mapValue.put("thruDate", getInThruDate());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("uploadedFile")) mapValue.put("uploadedFile", getInUploadedFile());
+        if (inParameters.contains("upperCoordinate")) mapValue.put("upperCoordinate", getInUpperCoordinate());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         // allow the User set to override the userLogin
         if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
@@ -981,6 +1479,7 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
     public Map<String, Object> outputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         if (outParameters.contains("contentId")) mapValue.put("contentId", getOutContentId());
+        if (outParameters.contains("contentIdFrom")) mapValue.put("contentIdFrom", getOutContentIdFrom());
         if (outParameters.contains("dataResource")) mapValue.put("dataResource", getOutDataResource());
         if (outParameters.contains("dataResourceId")) mapValue.put("dataResourceId", getOutDataResourceId());
         if (outParameters.contains("errorMessage")) mapValue.put("errorMessage", getOutErrorMessage());
@@ -988,6 +1487,7 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
         if (outParameters.contains("locale")) mapValue.put("locale", getOutLocale());
         if (outParameters.contains("mimeTypeId")) mapValue.put("mimeTypeId", getOutMimeTypeId());
         if (outParameters.contains("responseMessage")) mapValue.put("responseMessage", getOutResponseMessage());
+        if (outParameters.contains("roleTypeList")) mapValue.put("roleTypeList", getOutRoleTypeList());
         if (outParameters.contains("successMessage")) mapValue.put("successMessage", getOutSuccessMessage());
         if (outParameters.contains("successMessageList")) mapValue.put("successMessageList", getOutSuccessMessageList());
         if (outParameters.contains("timeZone")) mapValue.put("timeZone", getOutTimeZone());
@@ -1000,10 +1500,18 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
         if (mapValue.containsKey("_uploadedFile_contentType")) setInUploadedFileContentType((String) mapValue.get("_uploadedFile_contentType"));
         if (mapValue.containsKey("_uploadedFile_fileName")) setInUploadedFileFileName((String) mapValue.get("_uploadedFile_fileName"));
         if (mapValue.containsKey("characterSetId")) setInCharacterSetId((String) mapValue.get("characterSetId"));
+        if (mapValue.containsKey("childBranchCount")) setInChildBranchCount((Long) mapValue.get("childBranchCount"));
+        if (mapValue.containsKey("childLeafCount")) setInChildLeafCount((Long) mapValue.get("childLeafCount"));
         if (mapValue.containsKey("classificationEnumId")) setInClassificationEnumId((String) mapValue.get("classificationEnumId"));
+        if (mapValue.containsKey("contentAssocPredicateId")) setInContentAssocPredicateId((String) mapValue.get("contentAssocPredicateId"));
+        if (mapValue.containsKey("contentAssocTypeId")) setInContentAssocTypeId((String) mapValue.get("contentAssocTypeId"));
         if (mapValue.containsKey("contentId")) setInContentId((String) mapValue.get("contentId"));
+        if (mapValue.containsKey("contentIdFrom")) setInContentIdFrom((String) mapValue.get("contentIdFrom"));
+        if (mapValue.containsKey("contentIdTo")) setInContentIdTo((String) mapValue.get("contentIdTo"));
         if (mapValue.containsKey("contentName")) setInContentName((String) mapValue.get("contentName"));
         if (mapValue.containsKey("contentPurposeList")) setInContentPurposeList((List) mapValue.get("contentPurposeList"));
+        if (mapValue.containsKey("contentPurposeTypeId")) setInContentPurposeTypeId((String) mapValue.get("contentPurposeTypeId"));
+        if (mapValue.containsKey("contentTypeId")) setInContentTypeId((String) mapValue.get("contentTypeId"));
         if (mapValue.containsKey("createdByUserLogin")) setInCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         if (mapValue.containsKey("createdDate")) setInCreatedDate((Timestamp) mapValue.get("createdDate"));
         if (mapValue.containsKey("dataCategoryId")) setInDataCategoryId((String) mapValue.get("dataCategoryId"));
@@ -1012,28 +1520,44 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
         if (mapValue.containsKey("dataResourceTypeId")) setInDataResourceTypeId((String) mapValue.get("dataResourceTypeId"));
         if (mapValue.containsKey("dataSourceId")) setInDataSourceId((String) mapValue.get("dataSourceId"));
         if (mapValue.containsKey("dataTemplateTypeId")) setInDataTemplateTypeId((String) mapValue.get("dataTemplateTypeId"));
+        if (mapValue.containsKey("deactivateExisting")) setInDeactivateExisting((String) mapValue.get("deactivateExisting"));
+        if (mapValue.containsKey("decoratorContentId")) setInDecoratorContentId((String) mapValue.get("decoratorContentId"));
         if (mapValue.containsKey("description")) setInDescription((String) mapValue.get("description"));
+        if (mapValue.containsKey("displayFailCond")) setInDisplayFailCond((Boolean) mapValue.get("displayFailCond"));
+        if (mapValue.containsKey("fromDate")) setInFromDate((Timestamp) mapValue.get("fromDate"));
+        if (mapValue.containsKey("instanceOfContentId")) setInInstanceOfContentId((String) mapValue.get("instanceOfContentId"));
         if (mapValue.containsKey("isPublic")) setInIsPublic((String) mapValue.get("isPublic"));
         if (mapValue.containsKey("lastModifiedByUserLogin")) setInLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
         if (mapValue.containsKey("lastModifiedDate")) setInLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
+        if (mapValue.containsKey("leftCoordinate")) setInLeftCoordinate((Long) mapValue.get("leftCoordinate"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("localeString")) setInLocaleString((String) mapValue.get("localeString"));
+        if (mapValue.containsKey("mapKey")) setInMapKey((String) mapValue.get("mapKey"));
         if (mapValue.containsKey("mimeTypeId")) setInMimeTypeId((String) mapValue.get("mimeTypeId"));
         if (mapValue.containsKey("objectInfo")) setInObjectInfo((String) mapValue.get("objectInfo"));
+        if (mapValue.containsKey("ownerContentId")) setInOwnerContentId((String) mapValue.get("ownerContentId"));
+        if (mapValue.containsKey("privilegeEnumId")) setInPrivilegeEnumId((String) mapValue.get("privilegeEnumId"));
         if (mapValue.containsKey("relatedDetailId")) setInRelatedDetailId((String) mapValue.get("relatedDetailId"));
+        if (mapValue.containsKey("roleTypeList")) setInRoleTypeList((List) mapValue.get("roleTypeList"));
+        if (mapValue.containsKey("sequenceNum")) setInSequenceNum((Long) mapValue.get("sequenceNum"));
+        if (mapValue.containsKey("serviceName")) setInServiceName((String) mapValue.get("serviceName"));
         if (mapValue.containsKey("skipPermissionCheck")) setInSkipPermissionCheck((String) mapValue.get("skipPermissionCheck"));
         if (mapValue.containsKey("statusId")) setInStatusId((String) mapValue.get("statusId"));
         if (mapValue.containsKey("surveyId")) setInSurveyId((String) mapValue.get("surveyId"));
         if (mapValue.containsKey("surveyResponseId")) setInSurveyResponseId((String) mapValue.get("surveyResponseId"));
         if (mapValue.containsKey("targetOperationList")) setInTargetOperationList((List) mapValue.get("targetOperationList"));
+        if (mapValue.containsKey("templateDataResourceId")) setInTemplateDataResourceId((String) mapValue.get("templateDataResourceId"));
+        if (mapValue.containsKey("thruDate")) setInThruDate((Timestamp) mapValue.get("thruDate"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("uploadedFile")) setInUploadedFile((ByteBuffer) mapValue.get("uploadedFile"));
+        if (mapValue.containsKey("upperCoordinate")) setInUpperCoordinate((Long) mapValue.get("upperCoordinate"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));
     }
 
     /** {@inheritDoc} */
     public void putAllOutput(Map<String, Object> mapValue) {
         if (mapValue.containsKey("contentId")) setOutContentId((String) mapValue.get("contentId"));
+        if (mapValue.containsKey("contentIdFrom")) setOutContentIdFrom((String) mapValue.get("contentIdFrom"));
         if (mapValue.containsKey("dataResource")) setOutDataResource((GenericValue) mapValue.get("dataResource"));
         if (mapValue.containsKey("dataResourceId")) setOutDataResourceId((String) mapValue.get("dataResourceId"));
         if (mapValue.containsKey("errorMessage")) setOutErrorMessage((String) mapValue.get("errorMessage"));
@@ -1041,6 +1565,7 @@ public class UpdateContentAndUploadedFileService extends ServiceWrapper {
         if (mapValue.containsKey("locale")) setOutLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("mimeTypeId")) setOutMimeTypeId((String) mapValue.get("mimeTypeId"));
         if (mapValue.containsKey("responseMessage")) setOutResponseMessage((String) mapValue.get("responseMessage"));
+        if (mapValue.containsKey("roleTypeList")) setOutRoleTypeList((List) mapValue.get("roleTypeList"));
         if (mapValue.containsKey("successMessage")) setOutSuccessMessage((String) mapValue.get("successMessage"));
         if (mapValue.containsKey("successMessageList")) setOutSuccessMessageList((List) mapValue.get("successMessageList"));
         if (mapValue.containsKey("timeZone")) setOutTimeZone((TimeZone) mapValue.get("timeZone"));

@@ -61,6 +61,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
+        fields.put("needsConfiguration", "NEEDS_CONFIGURATION");
 fieldMapColumns.put("GlAccountType", fields);
 }
   public static enum Fields implements EntityFieldInterface<GlAccountType> {
@@ -71,7 +72,8 @@ fieldMapColumns.put("GlAccountType", fields);
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
-    createdTxStamp("createdTxStamp");
+    createdTxStamp("createdTxStamp"),
+    needsConfiguration("needsConfiguration");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -101,6 +103,8 @@ fieldMapColumns.put("GlAccountType", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @Column(name="NEEDS_CONFIGURATION")
+   private String needsConfiguration;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -176,7 +180,7 @@ fieldMapColumns.put("GlAccountType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("glAccountTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("glAccountTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("glAccountTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("needsConfiguration");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -247,6 +251,13 @@ fieldMapColumns.put("GlAccountType", fields);
     public void setCreatedTxStamp(Timestamp createdTxStamp) {
         this.createdTxStamp = createdTxStamp;
     }
+    /**
+     * Auto generated value setter.
+     * @param needsConfiguration the needsConfiguration to set
+     */
+    public void setNeedsConfiguration(String needsConfiguration) {
+        this.needsConfiguration = needsConfiguration;
+    }
 
     /**
      * Auto generated value accessor.
@@ -303,6 +314,13 @@ fieldMapColumns.put("GlAccountType", fields);
      */
     public Timestamp getCreatedTxStamp() {
         return this.createdTxStamp;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getNeedsConfiguration() {
+        return this.needsConfiguration;
     }
 
     /**
@@ -698,6 +716,7 @@ fieldMapColumns.put("GlAccountType", fields);
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
+        setNeedsConfiguration((String) mapValue.get("needsConfiguration"));
         postInit();
     }
 
@@ -713,6 +732,7 @@ fieldMapColumns.put("GlAccountType", fields);
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
+        mapValue.put("needsConfiguration", getNeedsConfiguration());
         return mapValue;
     }
 
