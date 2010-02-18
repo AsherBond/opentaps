@@ -293,13 +293,17 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     private List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestParties(EntityCondition roleCondition) {
 
         List<EntityCondition> conditions = Arrays.asList(roleCondition);
-        // add filter by date is active only is set
-        if (activeOnly) {
-            conditions.add(EntityUtil.getFilterByDateExpr());
-        }
 
         if (getSuggestQuery() == null) {
             return findAllParties(PartyFromByRelnAndContactInfoAndPartyClassification.class, EntityCondition.makeCondition(conditions, EntityOperator.AND));
+        }
+
+        // add filter by date and status if active only is set
+        if (activeOnly) {
+            conditions.add(EntityUtil.getFilterByDateExpr());
+            conditions.add(EntityCondition.makeCondition(EntityOperator.OR,
+                                                         EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
+                                                         EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null)));
         }
 
         try {
@@ -351,7 +355,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                     matchCount++;
                     continue;
                 }
-                
+
                 // search the company name
                 companyName = party.getCompanyName();
                 if (companyName == null) {
@@ -818,11 +822,108 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     }
 
     /**
-     * Suggests a list of customers.
+     * Suggests a list of suppliers.
+     * Note: this is mostly the same as <code>suggestParties</code> but queries the <code>PartyRoleNameDetailSupplementalData</code> entity instead.
      * @return the list of <code>PartyRoleNameDetailSupplementalData</code>, or <code>null</code> if an error occurred
      */
     public List<PartyRoleNameDetailSupplementalData> suggestSuppliers() {
-        return findAllParties(PartyRoleNameDetailSupplementalData.class, SUPPLIER_CONDITIONS);
+        if (getSuggestQuery() == null) {
+            return findAllParties(PartyRoleNameDetailSupplementalData.class, SUPPLIER_CONDITIONS);
+        }
+
+        List<EntityCondition> conditions = UtilMisc.toList(SUPPLIER_CONDITIONS);
+
+        // add filter by date and status if active only is set
+        if (activeOnly) {
+            conditions.add(EntityCondition.makeCondition(EntityOperator.OR,
+                                                         EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
+                                                         EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null)));
+        }
+
+        try {
+
+            // format the search string for matching
+            String searchString = getSuggestQuery().toUpperCase();
+
+            List<PartyRoleNameDetailSupplementalData> r = getRepository().findList(PartyRoleNameDetailSupplementalData.class, EntityCondition.makeCondition(conditions, EntityOperator.AND), getFields(), getPager().getSortList());
+
+            List<PartyRoleNameDetailSupplementalData> parties = new ArrayList<PartyRoleNameDetailSupplementalData>();
+
+            // counts the number of records found matching the query
+            int matchCount = 0;
+
+            String fullName, firstName, lastName, groupName, compositeName, companyName;
+
+            for (PartyRoleNameDetailSupplementalData party : r) {
+                if (matchCount > UtilLookup.SUGGEST_MAX_RESULTS) {
+                    break;
+                }
+
+                // search the full name
+                fullName = "";
+                firstName = party.getFirstName();
+                if (firstName != null) {
+                    fullName = firstName;
+                }
+
+                lastName = party.getLastName();
+                if (lastName != null) {
+                    fullName = fullName + " " + lastName;
+                }
+
+                fullName = fullName.toUpperCase();
+                if (fullName.indexOf(searchString) > -1) {
+                    parties.add(party);
+                    matchCount++;
+                    continue;
+                }
+
+                // search the group name
+                groupName = party.getGroupName();
+                if (groupName == null) {
+                    groupName = "";
+                }
+                groupName = groupName.toUpperCase();
+                if (groupName.indexOf(searchString) > -1) {
+                    parties.add(party);
+                    matchCount++;
+                    continue;
+                }
+
+                // search the company name
+                companyName = party.getCompanyName();
+                if (companyName == null) {
+                    companyName = "";
+                }
+                companyName = companyName.toUpperCase();
+                if (companyName.indexOf(searchString) > -1) {
+                    parties.add(party);
+                    matchCount++;
+                    continue;
+                }
+
+                // search the composite name (incidentally, this also matches partyId)
+                compositeName = groupName;
+                if (fullName.trim().length() > 0) {
+                    compositeName = compositeName + " " + fullName;
+                }
+                compositeName = compositeName + " (" + party.getPartyId().toUpperCase() + ")";
+                if (compositeName.indexOf(searchString) > -1) {
+                    parties.add(party);
+                    matchCount++;
+                    continue;
+                }
+            }
+
+            // get paginated results
+            paginateResults(parties);
+
+        } catch (RepositoryException e) {
+            Debug.logError(e, MODULE);
+            return null;
+        }
+
+        return getResults();
     }
 
 }
