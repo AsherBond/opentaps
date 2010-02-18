@@ -25,7 +25,6 @@ import org.opentaps.installer.company.model.CompanyStepModel;
 import org.opentaps.installer.company.model.impl.CompanyStepImpl;
 import org.opentaps.installer.service.InstallerNavigation;
 import org.opentaps.installer.service.InstallerStep;
-import org.opentaps.installer.service.OSSInstaller;
 import org.opentaps.installer.util.ResourceCustomizer;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -98,8 +97,8 @@ public class Activator extends AbstractBundle {
         // register services
         CompanyStepModel stepImpl = new CompanyStepImpl();
         Properties props = new Properties();
-        props.put(OSSInstaller.STEP_ID_PROP, "company");
-        props.put(OSSInstaller.SEQUENCE_PROP, Integer.valueOf(10));
+        props.put(InstallerStep.STEP_ID_PROP, "company");
+        props.put(InstallerStep.SEQUENCE_PROP, Integer.valueOf(10));
         context.registerService(InstallerStep.class.getName(), stepImpl, props);
     }
 

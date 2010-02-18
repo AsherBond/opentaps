@@ -53,7 +53,7 @@ public class InstallerNavigation extends HttpServlet {
             throw new ServletException(msg);
         }
 
-        OSSInstaller installer = Activator.getInstaller();
+        OSSInstaller installer = Activator.getInstance().getInstaller();
         if (installer != null) {
 
             String url = null;

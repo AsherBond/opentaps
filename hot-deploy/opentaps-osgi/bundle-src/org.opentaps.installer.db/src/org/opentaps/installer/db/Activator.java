@@ -21,7 +21,6 @@ import java.util.Properties;
 import org.opentaps.core.bundle.AbstractBundle;
 import org.opentaps.installer.db.model.impl.DatabaseStepImpl;
 import org.opentaps.installer.service.InstallerStep;
-import org.opentaps.installer.service.OSSInstaller;
 import org.opentaps.installer.util.ResourceCustomizer;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -58,8 +57,8 @@ public class Activator extends AbstractBundle {
         // register services
         InstallerStep stepImpl = new DatabaseStepImpl();
         Properties props = new Properties();
-        props.put(OSSInstaller.STEP_ID_PROP, "database");
-        props.put(OSSInstaller.SEQUENCE_PROP, Integer.valueOf(20));
+        props.put(InstallerStep.STEP_ID_PROP, "database");
+        props.put(InstallerStep.SEQUENCE_PROP, Integer.valueOf(20));
         context.registerService(InstallerStep.class.getName(), stepImpl, props);
     }
 

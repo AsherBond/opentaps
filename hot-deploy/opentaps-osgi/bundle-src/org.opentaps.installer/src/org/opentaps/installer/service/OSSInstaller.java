@@ -17,17 +17,28 @@
 package org.opentaps.installer.service;
 
 /**
- *
- *
+ * Installer service interface. <br>
+ * Manages installation steps and user navigation.
  */
 public interface OSSInstaller {
 
-    public static final String STEP_ID_PROP = "step.id";
-    public static final String SEQUENCE_PROP = "sequence";
-
+    /**
+     * Next step URL in installer flow.
+     * @param stepId Current step identifier.
+     * @return URL
+     */
     public String nextUri(String stepId);
 
+    /**
+     * Previous step URL in installer flow.
+     * @param stepId Current step identifier.
+     * @return URL
+     */
     public String prevUri(String stepId);
 
+    /**
+     * Perform installation calling every step perform() method in
+     * the order defined by its sequence property.
+     */
     public void run();
 }

@@ -18,7 +18,6 @@ package org.opentaps.gwt.wiz.db.client;
 
 import org.opentaps.gwt.common.client.BaseEntry;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;

@@ -23,20 +23,19 @@ import org.osgi.framework.ServiceReference;
 
 
 /**
- *
- *
+ * Installer service implementation. 
  */
 public class OSSInstallerImpl implements OSSInstaller {
 
     /** {@inheritDoc} */
     public String nextUri(String stepId) {
-        ServiceReference[] steps = Activator.findInstSteps();
+        ServiceReference[] steps = Activator.getInstance().findInstSteps();
 
         Integer currentSeqNum = null;
         for (ServiceReference step : steps) {
-            String id = (String) step.getProperty(STEP_ID_PROP);
+            String id = (String) step.getProperty(InstallerStep.STEP_ID_PROP);
             if (stepId.equals(id)) {
-                currentSeqNum = (Integer) step.getProperty(SEQUENCE_PROP);
+                currentSeqNum = (Integer) step.getProperty(InstallerStep.SEQUENCE_PROP);
                 break;
             }
         }
@@ -48,7 +47,7 @@ public class OSSInstallerImpl implements OSSInstaller {
         ServiceReference nextStep =  null;
         Integer temp = Integer.valueOf(9999);
         for (ServiceReference step : steps) {
-            Integer sequence = (Integer) step.getProperty(SEQUENCE_PROP);
+            Integer sequence = (Integer) step.getProperty(InstallerStep.SEQUENCE_PROP);
             if (sequence == null) {
                 //TODO: log message
                 continue;
@@ -73,13 +72,13 @@ public class OSSInstallerImpl implements OSSInstaller {
 
     /** {@inheritDoc} */
     public String prevUri(String stepId) {
-        ServiceReference[] steps = Activator.findInstSteps();
+        ServiceReference[] steps = Activator.getInstance().findInstSteps();
 
         Integer currentSeqNum = null;
         for (ServiceReference step : steps) {
-            String id = (String) step.getProperty(STEP_ID_PROP);
+            String id = (String) step.getProperty(InstallerStep.STEP_ID_PROP);
             if (stepId.equals(id)) {
-                currentSeqNum = (Integer) step.getProperty(SEQUENCE_PROP);
+                currentSeqNum = (Integer) step.getProperty(InstallerStep.SEQUENCE_PROP);
                 break;
             }
         }
@@ -91,7 +90,7 @@ public class OSSInstallerImpl implements OSSInstaller {
         ServiceReference nextStep =  null;
         Integer temp = Integer.valueOf(0);
         for (ServiceReference step : steps) {
-            Integer sequence = (Integer) step.getProperty(SEQUENCE_PROP);
+            Integer sequence = (Integer) step.getProperty(InstallerStep.SEQUENCE_PROP);
             if (sequence == null) {
                 //TODO: log message
                 continue;

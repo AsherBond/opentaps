@@ -17,14 +17,38 @@
 package org.opentaps.installer.service;
 
 /**
- *
- *
+ * Installation step service interface.<br>
+ * The service collects model data, able to perform or rollback all actions
+ * required at this stage.
  */
 public interface InstallerStep {
 
+    /**
+     * Service property.<br>
+     * Installation step identifier that may be an arbitrary string.
+     */
+    public static final String STEP_ID_PROP = "step.id";
+
+    /**
+     * Service property.<br>
+     * The sequence number that defines the place of the step in the overall sequence.<br>
+     * 0 > Integer < 9999.
+     */
+    public static final String SEQUENCE_PROP = "sequence";
+
+    /**
+     * Perform installation in the step after all required data are collected.
+     */
     public void perform();
 
+    /**
+     * Rollback installation in the step if user has canceled process. 
+     */
     public void rollback();
 
+    /**
+     * Return to caller step URL.
+     * @return URL as string that can be assigned to Window.location (JavaScript) property,
+     */
     public String actionUrl();
 }

@@ -33,6 +33,10 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 
+/**
+ * Customizer object that registers/unregisters <code>InstallerNavigation</code> servlet
+ * with <code>HttpService</code>.
+ */
 class NavigationServletCustomizer implements ServiceTrackerCustomizer {
 
     private static final String INSTALLER_NAVIGATION_ALIAS = "/InstNav";
@@ -69,13 +73,14 @@ class NavigationServletCustomizer implements ServiceTrackerCustomizer {
     }
 }
 
+/**
+ * Core Installer bundle activator.
+ */
 public class Activator extends AbstractBundle {
 
     // the shared instance
     private static BundleActivator bundle;
 
-    private BundleContext context;
- 
     private ServiceTracker navHttpSrvcTracker;
     private ServiceTracker installerTracker;
     private ServiceTracker stepsTracker;
@@ -84,19 +89,19 @@ public class Activator extends AbstractBundle {
     public void start(BundleContext context) throws Exception {
 
         bundle = this;
-        this.context = context;
         super.start(context);
 
         navHttpSrvcTracker = new ServiceTracker(context, HttpService.class.getName(), new NavigationServletCustomizer(context));
         navHttpSrvcTracker.open();
 
-        // register bundle services
+        // register main service that manages installation flow and start tracking it.
         OSSInstaller installer = new OSSInstallerImpl();
         context.registerService(OSSInstaller.class.getName(), installer, null);
 
         installerTracker = new ServiceTracker(context, OSSInstaller.class.getName(), null);
         installerTracker.open();
 
+        // start tracking installation step services 
         Filter stepsFlt = context.createFilter("(objectClass=" + InstallerStep.class.getName() + ")");
         stepsTracker = new ServiceTracker(context, stepsFlt, null);
         stepsTracker.open();
@@ -105,12 +110,12 @@ public class Activator extends AbstractBundle {
     /** {@inheritDoc} */
     public void stop(BundleContext context) throws Exception {
 
+        // stop tracking services
         stepsTracker.close();
         navHttpSrvcTracker.close();
         installerTracker.close();
 
         super.stop(context);
-        context = null;
         bundle = null;
     }
 
@@ -118,16 +123,27 @@ public class Activator extends AbstractBundle {
         return (Activator) bundle;
     }
 
-    public static OSSInstaller getInstaller() {
-        Activator bundle = (org.opentaps.installer.Activator) getInstance();
-        return (OSSInstaller) bundle.installerTracker.getService();
+    /**
+     * Returns <code>OSSInstaller</code> service.
+     * @return An <code>OSSInstaller</code> implementation.
+     */
+    public OSSInstaller getInstaller() {
+        return (OSSInstaller) installerTracker.getService();
     }
 
-    public static ServiceReference[] findInstSteps() {
-        Activator bundle = (org.opentaps.installer.Activator) getInstance();
-        return bundle.stepsTracker.getServiceReferences();
+    /**
+     * Returns installation step service references.
+     * @return Array of the service references.
+     */
+    public ServiceReference[] findInstSteps() {
+        return stepsTracker.getServiceReferences();
     }
 
+    /**
+     * Retrieve step service object.
+     * @param reference A service reference.
+     * @return An implementation of the <code>InstallerStep</code> interface.
+     */
     public InstallerStep findStep(ServiceReference reference) {
         return (InstallerStep) stepsTracker.getService(reference);
     }

@@ -36,11 +36,36 @@ public class Activator extends AbstractBundle {
     private ServiceTracker debugFilterTracker = null;
 
     /** {@inheritDoc} */
-    public void start(final BundleContext context) throws Exception {
+    public void start(BundleContext context) throws Exception {
 
         bundle = this;
         super.start(context);
 
+        // comment in if you need it
+        //installDebugFilter(context);
+    }
+
+    /** {@inheritDoc} */
+    public void stop(BundleContext context) throws Exception {
+
+        if (debugFilterTracker != null && debugFilterTracker.getTrackingCount() != -1) {
+            debugFilterTracker.close();
+        }
+
+        super.stop(context);
+        bundle = null;
+    }
+
+    public static Activator getInstance() {
+        return (Activator) bundle;
+    };
+
+    /**
+     * Install filter for debug purpose.
+     * @param context Bundle context instance.
+     */
+    @SuppressWarnings("unused")
+    private void installDebugFilter(final BundleContext context) {
         debugFilterTracker = new ServiceTracker(context, ExtHttpService.class.getName(), new ServiceTrackerCustomizer() {
 
             public Object addingService(ServiceReference reference) {
@@ -71,17 +96,4 @@ public class Activator extends AbstractBundle {
         });
         debugFilterTracker.open();
     }
-
-    /** {@inheritDoc} */
-    public void stop(BundleContext context) throws Exception {
-        debugFilterTracker.close();
-
-        super.stop(context);
-        bundle = null;
-    }
-
-    public static Activator getInstance() {
-        return (Activator) bundle;
-    };
-
 }

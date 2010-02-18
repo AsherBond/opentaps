@@ -24,8 +24,8 @@ import org.osgi.util.tracker.ServiceTracker;
 
 
 /**
- * 
- *
+ * Common superclass for any bundle activator that implements common
+ * functionality, e. g. offers methods for logging.
  */
 public abstract class AbstractBundle implements BundleActivator {
 
@@ -46,6 +46,15 @@ public abstract class AbstractBundle implements BundleActivator {
         logTracker.close();
     }
 
+    /**
+     * Main logging method that uses OSGi <code>LogService</code> to log a message
+     * using underlying framework capabilities.
+     *
+     * @param severity The severity of the message, one of the <code>LogService.LOG_*</code> constants.
+     * @param message An arbitrary text message or <code>null</code>.
+     * @param e The exception that reflects the condition or <code>null</code>.
+     * @param sref The <code>ServiceReference</code> of the service that this message is associated with or <code>null</code>. 
+     */
     public void log(int severity, String message, Throwable e, ServiceReference sref) {
         LogService service = (LogService) logTracker.getService();
         if (service != null) {
@@ -53,18 +62,50 @@ public abstract class AbstractBundle implements BundleActivator {
         }
     }
 
+    /**
+     * Logs an error message.
+     *
+     * @see org.opentaps.core.bundle.AbstractBundle#log(int, String, Throwable, ServiceReference)
+     * @param message An arbitrary text message or <code>null</code>.
+     * @param e The exception that reflects the condition or <code>null</code>.
+     * @param sref The <code>ServiceReference</code> of the service that this message is associated with or <code>null</code>.
+     */
     public void logError(String message, Throwable e, ServiceReference sref) {
         log(LogService.LOG_ERROR, message, e, sref);
     }
 
+    /**
+     * Logs a debug message.
+     *
+     * @see org.opentaps.core.bundle.AbstractBundle#log(int, String, Throwable, ServiceReference)
+     * @param message An arbitrary text message or <code>null</code>.
+     * @param e The exception that reflects the condition or <code>null</code>.
+     * @param sref The <code>ServiceReference</code> of the service that this message is associated with or <code>null</code>.
+     */
     public void logDebug(String message, Throwable e, ServiceReference sref) {
         log(LogService.LOG_DEBUG, message, e, sref);
     }
- 
+
+    /**
+     * Logs a warning message.
+     *
+     * @see org.opentaps.core.bundle.AbstractBundle#log(int, String, Throwable, ServiceReference)
+     * @param message An arbitrary text message or <code>null</code>.
+     * @param e The exception that reflects the condition or <code>null</code>.
+     * @param sref The <code>ServiceReference</code> of the service that this message is associated with or <code>null</code>.
+     */
     public void logWarning(String message, Throwable e, ServiceReference sref) {
         log(LogService.LOG_WARNING, message, e, sref);
     }
- 
+
+    /**
+     * Logs an information message.
+     *
+     * @see org.opentaps.core.bundle.AbstractBundle#log(int, String, Throwable, ServiceReference)
+     * @param message An arbitrary text message or <code>null</code>.
+     * @param e The exception that reflects the condition or <code>null</code>.
+     * @param sref The <code>ServiceReference</code> of the service that this message is associated with or <code>null</code>.
+     */
     public void logInfo(String message, Throwable e, ServiceReference sref) {
         log(LogService.LOG_WARNING, message, e, sref);
     }

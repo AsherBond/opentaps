@@ -27,8 +27,9 @@ import javax.servlet.ServletResponse;
 
 
 /**
- *
- *
+ * <p>A filter sample class.<br>
+ * Do nothing special but may be useful for debugging.</p>
+ * TODO: log more detailed information about request.
  */
 public class DebugFilter implements Filter {
 
