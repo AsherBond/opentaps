@@ -53,15 +53,4 @@
         <attribute name="classificationEnumId" type="String" mode="IN" optional="true"/>
         <attribute name="contentId" type="String" mode="OUT" optional="false"/>
     </service>
-    
-    <service name="updateContent" engine="java" 
-            location="org.opentaps.common.content.ContentServices" invoke="updateContent">
-        <description>Update fileds of Content.</description>
-        <attribute name="contentId" type="String" mode="IN"/>
-        <attribute name="classificationEnumId" type="String" mode="IN" optional="true"/>
-        <attribute name="contentName" type="String" mode="IN"/>
-        <attribute name="description" type="String" mode="IN" optional="true"/>
-        <attribute name="contentId" type="String" mode="OUT"/>
-    </service>    
-
 </services>

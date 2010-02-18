@@ -294,40 +294,4 @@ public final class ContentServices {
             return createContentFromDataResource(delegator, dataResource, context);
         }
     }
-
-
-    /**
-     * update content method.
-     * @param delegator a <code>GenericDelegator</code> value
-     * @param dataResource a <code>GenericValue</code> value
-     * @param context a <code>Map</code> value
-     * @return the <code>Map</code> value.
-     */
-    public static Map updateContent(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
-        String contentId = (String) context.get("contentId");
-        String classificationEnumId = (String) context.get("classificationEnumId");
-        String contentName = (String) context.get("contentName");
-        String description = (String) context.get("description");
-
-        try {
-            List<GenericValue> contents = delegator.findByAnd("Content", EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId));
-            if (contents.size() > 0) {
-                // exit same file already.
-                GenericValue content = contents.get(0);
-                content.set("description", description);
-                content.set("contentName", contentName);
-                content.set("classificationEnumId", classificationEnumId);
-                content.store();
-                Map<String, Object> results = ServiceUtil.returnSuccess();
-                results.put("contentId", content.getString("contentId"));
-                return results;
-            } else {
-                return ServiceUtil.returnError("Cannot find any Content with given contentId [" + contentId + "]");
-            }
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-            return ServiceUtil.returnError(e.getMessage());
-        }
-    }
 }
