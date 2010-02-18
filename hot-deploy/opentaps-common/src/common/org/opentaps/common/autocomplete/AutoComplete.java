@@ -313,8 +313,8 @@ public final class AutoComplete {
 
             // make the condition
             EntityCondition keywordCondition = EntityCondition.makeCondition(EntityOperator.OR,
-                    EntityCondition.makeCondition("productId", EntityOperator.LIKE, keyword + "%"),
-                    EntityCondition.makeCondition("idValue", EntityOperator.LIKE, keyword + "%"),
+                    EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("productId"), EntityOperator.LIKE, keyword + "%"),
+                    EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("idValue"), EntityOperator.LIKE, keyword + "%"),
                     EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("internalName"), EntityOperator.LIKE, "%" + keyword + "%")
                 );
 
