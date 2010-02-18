@@ -139,7 +139,9 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
     <#assign ofbizAppUrl=response.encodeURL(ofbizTabTarget)/>
   </#if>
   <div style="float: left; vertical-align:top; margin-top: 0px;">
-    <@gwtWidget id="webAppsMenu"/>
+    <div style="height:20px">
+      <@gwtWidget id="webAppsMenu"/>
+    </div>
     <div style="margin-left: 10px; margin-top: 5px; margin-bottom: 10px;">
     <#if ofbizAppUrl?exists><a href="${ofbizAppUrl}"></#if><img alt="${configProperties.get(opentapsApplicationName+".title")}" src="<@ofbizContentUrl>${configProperties.get("opentaps.logo")}</@ofbizContentUrl>" border="0"/><#if ofbizAppUrl?exists></a></#if>
     </div>
