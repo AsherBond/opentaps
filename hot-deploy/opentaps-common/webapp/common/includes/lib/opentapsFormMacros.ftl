@@ -1231,8 +1231,8 @@ For more information, please see documentation/opentapsFormMacros.html
   </select>
 </#macro>
 
-<#macro form name url id="" method="post" formParams...>
-  <form method="${method}" action="${url}" name="${name}">
+<#macro form name url id="" method="post" target="" formParams...>
+  <form method="${method}" action="${url}" name="${name}" <#if target?has_content>target="${target}"</#if>>
     <#if formParams?has_content>
       <#list formParams?keys as param>
         <@inputHidden name="${param}" value="${formParams[param]}" />

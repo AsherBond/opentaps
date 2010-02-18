@@ -66,11 +66,11 @@ under the License.
 <#else>
   <#assign orderReportId = "PRUCHORDER" />
 </#if>
-<@form name="orderPdfAction" method="get" url="order.pdf" orderId=order.orderId reportType="application/pdf" reportId="${orderReportId}"/>
+<@form name="orderPdfAction" target="_blank" method="get" url="order.pdf" orderId=order.orderId reportType="application/pdf" reportId="${orderReportId}"/>
 <#-- Order Picklist PDF action -->
 <#if order.isPickable()>
   <#assign picklistAction><@actionForm form="orderPicklistPdfAction" text="${uiLabelMap.ProductPickList}"/></#assign>
-  <@form name="orderPicklistPdfAction" method="get" url="shipGroups.pdf" orderId=order.orderId />
+  <@form name="orderPicklistPdfAction" target="_blank" method="get" url="shipGroups.pdf" orderId=order.orderId />
 </#if>
 <#-- Order Email action -->
 <#assign emailOrderAction><@actionForm form="orderEmailAction" text="${uiLabelMap.CommonEmail}"/></#assign>
