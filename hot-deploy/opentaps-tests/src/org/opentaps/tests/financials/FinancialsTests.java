@@ -27,8 +27,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.util.UtilCOGS;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -37,6 +39,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.base.constants.GlFiscalTypeConstants;
 import org.opentaps.base.constants.InvoiceAdjustmentTypeConstants;
 import org.opentaps.base.constants.InvoiceItemTypeConstants;
 import org.opentaps.base.constants.InvoiceTypeConstants;
@@ -51,6 +54,7 @@ import org.opentaps.base.entities.InventoryItemValueHistory;
 import org.opentaps.base.entities.InvoiceAdjustmentGlAccount;
 import org.opentaps.base.entities.InvoiceAdjustmentType;
 import org.opentaps.base.entities.SupplierProduct;
+import org.opentaps.base.services.CreateQuickAcctgTransService;
 import org.opentaps.common.order.PurchaseOrderFactory;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
@@ -62,9 +66,9 @@ import org.opentaps.domain.inventory.InventoryDomainInterface;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
 import org.opentaps.domain.ledger.AccountingTransaction;
+import org.opentaps.domain.ledger.AccountingTransaction.TagBalance;
 import org.opentaps.domain.ledger.GeneralLedgerAccount;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
-import org.opentaps.domain.ledger.AccountingTransaction.TagBalance;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.organization.Organization;
@@ -77,10 +81,8 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.tests.analytics.tests.TestObjectGenerator;
 import org.opentaps.tests.warehouse.InventoryAsserts;
-
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.util.UtilCOGS;
-import com.opensourcestrategies.financials.util.UtilFinancial;
+import org.opentaps.base.constants.AcctgTransTypeConstants;
+import org.opentaps.base.services.PostAcctgTransService;
 
 /**
  * General financial tests.  If there is a large chunk of test cases that are related, please
@@ -2623,6 +2625,62 @@ public class FinancialsTests extends FinancialsTestCase {
 
     }
 
+    /**
+     * This test verifies that transaction posted with a glFiscalTypeId not ACTUAL are not changing the GlAccountHistory
+     * @exception Exception if an error occurs
+     */
+    public void testAccountHistoryUpdates() throws Exception {
+        // 1. create AcctgTrans of glFiscalTypeId = BUDGET
+        //      with debitCreditFlag = D, amount = 100, glAccountId = 110000
+        //      with debitCreditFlag = C, amount = 100, glAccountId = 300000
+        String debitAccount  = "110000";
+        String creditAccount = "300000";
+        CreateQuickAcctgTransService service = new CreateQuickAcctgTransService();
+        service.setInUserLogin(admin);
+        service.setInAcctgTransTypeId(AcctgTransTypeConstants.BUDGET);
+        service.setInGlFiscalTypeId(GlFiscalTypeConstants.BUDGET);
+        service.setInAmount(100.0);
+        service.setInDebitGlAccountId(debitAccount);
+        service.setInCreditGlAccountId(creditAccount);
+        service.setInDescription("testAccountHistoryUpdates");
+        service.setInTransactionDate(UtilDateTime.nowTimestamp());
+        service.setInOrganizationPartyId("LEDGER-TEST");
+        runAndAssertServiceSuccess(service);
+        String transId = service.getOutAcctgTransId();
+
+        // 2. get all GlAccountHistory records
+        LedgerRepositoryInterface ledgerRepository = ledgerDomain.getLedgerRepository();
+        List<String> orderBy = UtilMisc.toList(GlAccountHistory.Fields.glAccountId.name(),
+                                               GlAccountHistory.Fields.customTimePeriodId.name());
+        List<GlAccountHistory> creditHists = ledgerRepository.findList(GlAccountHistory.class,
+                                                                       ledgerRepository.map(GlAccountHistory.Fields.glAccountId, creditAccount,
+                                                                                            GlAccountHistory.Fields.organizationPartyId, "TEST-LEDGER"),
+                                                                       orderBy);
+        List<GlAccountHistory> debitHists = ledgerRepository.findList(GlAccountHistory.class,
+                                                                      ledgerRepository.map(GlAccountHistory.Fields.glAccountId, debitAccount,
+                                                                                           GlAccountHistory.Fields.organizationPartyId, "TEST-LEDGER"),
+                                                                      orderBy);
+
+        // 5. postAcctgTrans
+        PostAcctgTransService postService = new PostAcctgTransService();
+        postService.setInUserLogin(admin);
+        postService.setInAcctgTransId(transId);
+        runAndAssertServiceSuccess(postService);
+
+        // 6. verify GlAccountHistory for 100000 and 300000 have not changed.
+        List<GlAccountHistory> creditHists2 = ledgerRepository.findList(GlAccountHistory.class,
+                                                                        ledgerRepository.map(GlAccountHistory.Fields.glAccountId, creditAccount,
+                                                                                             GlAccountHistory.Fields.organizationPartyId, "TEST-LEDGER"),
+                                                                        orderBy);
+        List<GlAccountHistory> debitHists2 = ledgerRepository.findList(GlAccountHistory.class,
+                                                                       ledgerRepository.map(GlAccountHistory.Fields.glAccountId, debitAccount,
+                                                                                            GlAccountHistory.Fields.organizationPartyId, "TEST-LEDGER"),
+                                                                       orderBy);
+
+        assertEquals("The GlAccountHistory for the debit account [" + debitAccount + "] should not have changed.", debitHists, debitHists2);
+        assertEquals("The GlAccountHistory for the credit account [" + creditAccount + "] should not have changed.", creditHists, creditHists2);
+
+    }
 
     /**
      * This test verifies captureAccountBalancesSnapshot service can take snapshot for account balance.
