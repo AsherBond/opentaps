@@ -185,22 +185,21 @@ public class LedgerService extends DomainService implements LedgerServiceInterfa
             }
         }
     }
-    
+
     /** {@inheritDoc} */
-	public void updatePostedAmountAcctgTrans() throws ServiceException {
-		try {
-			LedgerRepositoryInterface ledgerRepository = getRepository();
+    public void updatePostedAmountAcctgTrans() throws ServiceException {
+        try {
+            LedgerRepositoryInterface ledgerRepository = getRepository();
             EntityCondition condition = EntityCondition.makeCondition(AccountingTransaction.Fields.isPosted.name(), EntityOperator.EQUALS, "Y");
             List<AccountingTransaction> acctgTrans = ledgerRepository.findList(AccountingTransaction.class, condition);
             for (AccountingTransaction acctgTran : acctgTrans) {
-            	acctgTran.setPostedAmount(acctgTran.getDebitTotal());
-            	getRepository().update(acctgTran);
+                acctgTran.setPostedAmount(acctgTran.getDebitTotal());
+                getRepository().update(acctgTran);
             }
         } catch (Exception e) {
             throw new ServiceException(e);
         }
-		
-	}
+    }
 
     // verify the open time periods and if something's wrong, throw a ledger exception
     private void validateOpenTimePeriods(List<CustomTimePeriod> periods, AccountingTransaction transaction, AcctgTransEntry entry) throws RepositoryException, LedgerException {
