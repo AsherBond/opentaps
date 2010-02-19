@@ -99,7 +99,7 @@ function notifyInvoiceItemsCount(n) {
 
 <#assign partyName = Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, whichPartyId, false) />
 <#if partyLink?exists>
-  <#assign partyField><a href='${partyLink}' class='linktext'>${partyName}</a></#assign>
+  <#assign partyField><a href="${partyLink}" class="linktext">${partyName} (${whichPartyId})</a></#assign>
 <#else>
   <#assign partyField = partyName>
 </#if>
