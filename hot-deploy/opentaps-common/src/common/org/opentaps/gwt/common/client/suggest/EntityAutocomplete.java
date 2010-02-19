@@ -37,7 +37,6 @@ import com.gwtext.client.widgets.form.ComboBox;
 import com.gwtext.client.widgets.form.Field;
 import com.gwtext.client.widgets.form.event.ComboBoxCallback;
 import com.gwtext.client.widgets.form.event.ComboBoxListenerAdapter;
-import com.gwtext.client.widgets.form.event.FieldListenerAdapter;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.events.LoadableListener;
 import org.opentaps.gwt.common.client.listviews.EntityEditableListView;
@@ -218,11 +217,13 @@ public abstract class EntityAutocomplete extends ComboBox {
         loaded = true;
         // assume the event respond to last queried
         lastLoaded = lastQueried;
+        insertLastQueried();
         UtilUi.logDebug("Store loaded for: " + UtilUi.toString(this) + ", lastQueried = " + lastQueried, MODULE, "onStoreLoad");
         // check if the current value is found in the store, but only if the field is not being edited
         if (!focused) {
             checkValueFound("onStoreLoad");
         }
+        UtilUi.logDebug("Got raw value for: " + UtilUi.toString(this) + " : " + getRawValue() + ", current value : " + getValue(), MODULE, "onStoreLoad");
         // send notification to listeners
         for (LoadableListener l : listeners) {
             l.onLoad();
@@ -447,7 +448,7 @@ public abstract class EntityAutocomplete extends ComboBox {
 
         // there seems to be a bug: when editing the text to "" it will not trigger the
         // selection of the empty value, this is a workaround
-        addListener(new FieldListenerAdapter() {
+        addListener(new ComboBoxListenerAdapter() {
                 @Override public void onFocus(Field field) {
                     setFocused(true);
                 }
@@ -458,6 +459,10 @@ public abstract class EntityAutocomplete extends ComboBox {
 
                 @Override public void onChange(Field field, Object newVal, Object oldVal) {
                     UtilUi.logDebug("Changed " + UtilUi.toString(this) + " from [" + oldVal + "] to [" + newVal + "]", MODULE, "onChange");
+                }
+
+                @Override public void onExpand(ComboBox cb) {
+                    insertLastQueried();
                 }
             });
     }
@@ -476,6 +481,47 @@ public abstract class EntityAutocomplete extends ComboBox {
         boundToRecordGrid = grid;
         boundToRecordRow = row;
         boundToRecordColumn = col;
+    }
+
+    // consider if the input ends with % and could be a valid ID string
+    private boolean isLikeQuery(String input) {
+        return input != null && input.endsWith("%") && isValidId(input);
+    }
+
+    // an input with a space is not a valid ID, this is to determine if we should force it as not a like query
+    private boolean isValidId(String input) {
+        return input != null && input.trim().indexOf(" ") < 0 && input.trim().length() > 0;
+    }
+
+    /**
+     * Insert the lastQueried string in the Store records.
+     */
+    private void insertLastQueried() {
+        boolean isLikeMatch = isLikeQuery(lastQueried);
+
+        if (!isLikeMatch) {
+            return;
+        }
+
+        if ("".equals(lastQueried)) {
+            return;
+        }
+
+        Record firstRec = getStore().getAt(0);
+        if (firstRec != null) {
+            String rid = firstRec.getAsString(UtilLookup.SUGGEST_ID);
+            if (rid != null && rid.equals(lastQueried)) {
+                return;
+            }
+        }
+
+        // when the store is loaded the list of matches expand and the first match will be selected
+        // thus if the user tabs out at this point, the autocompleter will set that selected value
+        // as the current value.
+        // so when doing a fuzzy match, add a default value in the store which is the current value
+        // as typed by the user.
+        Record rec = DEFAULT_RECORD_DEF.createRecord(new Object[] {lastQueried, lastQueried});
+        getStore().insert(0, rec);
     }
 
     /**
@@ -514,7 +560,11 @@ public abstract class EntityAutocomplete extends ComboBox {
 
         String rawValue = getRawValue();
         String value = getValue();
+
+        UtilUi.logDebug("Got raw value for: " + UtilUi.toString(this) + " : " + rawValue + ", current value : " + value + ", lastQueried = " + lastQueried, MODULE, "checkValueFound > " + originMethod);
+
         boolean found = false;
+        boolean isLikeMatch = isLikeQuery(rawValue);
 
         // store need to be obtained with getStore() to work with derived classes
         Store s = getStore();
@@ -543,6 +593,11 @@ public abstract class EntityAutocomplete extends ComboBox {
 
         // then check if the raw value matches any ID in the store now, this happens when the user types an ID
         if (!found && !UtilUi.isEmpty(rawValue)) {
+            if (isLikeMatch) {
+                setValues(rawValue, rawValue);
+                return;
+            }
+
             int idx = s.find(UtilLookup.SUGGEST_ID, rawValue, 0, /* anymatch */ false, /* case sensitive */ false);
             if (idx > -1) {
                 UtilUi.logDebug(" Found match for the ID with : " + rawValue, MODULE, originMethod);

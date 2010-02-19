@@ -114,6 +114,7 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
         lotInput = new LotAutocomplete(UtilUi.MSG.productLotId(), "lotId", getInputLength());
         serialNumberInput = new TextField(UtilUi.MSG.productSerialNumber(), "serialNumber", getInputLength());
         productInput = new ProductAutocomplete(UtilUi.MSG.orderProduct(), "productId", getInputLength());
+
         findAllInput = new CheckboxField(UtilUi.MSG.commonFindAll(), "findAll");
 
         // add a listener to disable the find all option if a status is specified
