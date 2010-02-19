@@ -29,7 +29,7 @@
   ${account.accountName}
   <#if parameters.hasFinancialsTransactionPermission></a></#if>
 </td>
-  <td align="right" class="tabletext"><@ofbizCurrency amount=account.postedBalance?default(0.0) currency=orgCurrencyUomId /></td>
+  <td align="right" class="tabletext"><@ofbizCurrency amount=account.postedBalance?default(0.0) isoCode=orgCurrencyUomId /></td>
   <td width="30">
    <#if account.glAccountTypeId="UNDEPOSITED_RECEIPTS">
           <#if parameters.hasFinancialsTransactionPermission>
