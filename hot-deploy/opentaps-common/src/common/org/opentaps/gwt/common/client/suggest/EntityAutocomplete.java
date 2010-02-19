@@ -610,12 +610,30 @@ public abstract class EntityAutocomplete extends ComboBox {
             } else {
                 // if the store already loaded the result for this value
                 if (rawValue.equals(lastQueried) && rawValue.equals(lastLoaded)) {
-                    UtilUi.logDebug(UtilUi.toString(this) + " " + rawValue + " is not matching any record ID in the store and the query was made, assuming this is a bad value and resetting.", MODULE, originMethod);
-                    setValues("", "");
+                    UtilUi.logDebug(UtilUi.toString(this) + " " + rawValue + " is not matching any record ID in the store and the query was made.", MODULE, originMethod);
                 } else {
                     UtilUi.logDebug(UtilUi.toString(this) + " " + rawValue + " is not matching any record ID in the store, but the query was not made yet.", MODULE, originMethod);
+                    return;
                 }
             }
+
+            // finally try a fuzzy match in the description
+            if (!found) {
+                idx = s.find(UtilLookup.SUGGEST_TEXT, rawValue, 0, /* anymatch */ true, /* case sensitive */ false);
+                if (idx > -1) {
+                    UtilUi.logDebug(" Found match for the Description with : " + rawValue, MODULE, originMethod);
+                    Record rec = s.getRecordAt(idx);
+                    String recId = rec.getAsString(UtilLookup.SUGGEST_ID);
+                    String recDescription = rec.getAsString(UtilLookup.SUGGEST_TEXT);
+                    UtilUi.logDebug(UtilUi.toString(this) + " [" + rawValue + "] is matching record ID [" + recId + "] in the store, setting the corresponding description [" + recDescription + "] and value.", MODULE, originMethod);
+                    setValues(recId, recDescription);
+                    found = true;
+                } else {
+                    UtilUi.logDebug(UtilUi.toString(this) + " " + rawValue + " is not matching any record in the store, resetting the values.", MODULE, originMethod);
+                    setValues("", "");
+                }
+            }
+
         }
     }
 
