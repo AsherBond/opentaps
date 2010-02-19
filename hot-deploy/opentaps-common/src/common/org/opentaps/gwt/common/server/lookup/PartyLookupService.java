@@ -26,6 +26,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
@@ -292,8 +293,8 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
 
     private List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestParties(EntityCondition roleCondition) {
 
-        List<EntityCondition> conditions = Arrays.asList(roleCondition);
-
+        List<EntityCondition> conditions = FastList.newInstance();
+        conditions.add(roleCondition);
         if (getSuggestQuery() == null) {
             return findAllParties(PartyFromByRelnAndContactInfoAndPartyClassification.class, EntityCondition.makeCondition(conditions, EntityOperator.AND));
         }
