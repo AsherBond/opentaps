@@ -456,7 +456,7 @@ public final class EmailServices {
             PartyReader partyReader = new PartyReader(party);
             toEmail = partyReader.getEmail();
             if (UtilValidate.isEmpty(toEmail)) {
-                throw new GenericServiceException("Cannot find any email contech for [" + party.getString("partyId") + "], please create it firstly.");
+                throw new GenericServiceException("Cannot find any email address for [" + party.getString("partyId") + "], please create it first.");
             }
         }
         //create a CommunicationEvent by service
