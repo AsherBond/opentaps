@@ -619,14 +619,35 @@ public abstract class EntityAutocomplete extends ComboBox {
 
             // finally try a fuzzy match in the description
             if (!found) {
+                // the store is ordered by ID, but we want the closest description match
+                // so loop the matches and compare the description strings
                 idx = s.find(UtilLookup.SUGGEST_TEXT, rawValue, 0, /* anymatch */ true, /* case sensitive */ false);
-                if (idx > -1) {
-                    UtilUi.logDebug(" Found match for the Description with : " + rawValue, MODULE, originMethod);
+                String currMatch = null;
+                String currMatchId = null;
+                int prevIdx = -1;
+                while (idx > prevIdx && idx <= s.getCount()) {
                     Record rec = s.getRecordAt(idx);
                     String recId = rec.getAsString(UtilLookup.SUGGEST_ID);
                     String recDescription = rec.getAsString(UtilLookup.SUGGEST_TEXT);
-                    UtilUi.logDebug(UtilUi.toString(this) + " [" + rawValue + "] is matching record ID [" + recId + "] in the store, setting the corresponding description [" + recDescription + "] and value.", MODULE, originMethod);
-                    setValues(recId, recDescription);
+                    UtilUi.logDebug(" Found possible match at [" + idx + "] for the Description : " + rawValue + " with ID [" + recId + "]", MODULE, originMethod);
+
+                    // compare the description
+                    if (currMatch == null) {
+                        currMatch = recDescription;
+                        currMatchId = recId;
+                    } else if (currMatch.compareToIgnoreCase(recDescription) > 0) {
+                        currMatch = recDescription;
+                        currMatchId = recId;
+                    }
+
+                    prevIdx = idx;
+                    idx = s.find(UtilLookup.SUGGEST_TEXT, rawValue, idx + 1, /* anymatch */ true, /* case sensitive */ false);
+                }
+
+                if (currMatchId != null) {
+                    UtilUi.logDebug(" Found match for the Description with : " + rawValue, MODULE, originMethod);
+                    UtilUi.logDebug(UtilUi.toString(this) + " [" + rawValue + "] is matching record ID [" + currMatchId + "] in the store, setting the corresponding description [" + currMatch + "] and value.", MODULE, originMethod);
+                    setValues(currMatchId, currMatch);
                     found = true;
                 } else {
                     UtilUi.logDebug(UtilUi.toString(this) + " " + rawValue + " is not matching any record in the store, resetting the values.", MODULE, originMethod);
