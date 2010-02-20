@@ -93,6 +93,10 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
         </#if>
       </#list>
 
+    <script type="text/javascript">
+        // This code set the timeout default value for opentaps.sendRequest
+        var sendRequestDefaultTimeout = 20000;
+    </script>        
     <#if gwtScripts?exists>
       <meta name="gwt:property" content="locale=${locale}"/>
     </#if>

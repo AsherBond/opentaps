@@ -52,7 +52,7 @@ opentaps.getBoundsByMargin = function(/* Node */ node) {
 
 opentaps.getRequest = function(/* String */ requestName, /* Object */ context, /* Function */ handler, /* Boolean */ asJson, /* Number */ timeout) {
     asJson = asJson ? asJson : true;
-    timeout = timeout ? timeout : 10000;
+    timeout = timeout ? timeout : (sendRequestDefaultTimeout ? sendRequestDefaultTimeout : 10000);
     var request = dojo.xhrGet({
       url: requestName,
       content: context,
