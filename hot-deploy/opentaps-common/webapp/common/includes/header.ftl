@@ -95,7 +95,7 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
 
     <script type="text/javascript">
         // This code set the timeout default value for opentaps.sendRequest
-        var sendRequestDefaultTimeout = 10000;
+        var ajaxDefaultTimeOut = ${configProperties.get("opentaps.ajax.defaultTimeout")};
     </script>        
     <#if gwtScripts?exists>
       <meta name="gwt:property" content="locale=${locale}"/>
