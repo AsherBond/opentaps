@@ -287,7 +287,12 @@ public class GLAccountTree {
      */
     @SuppressWarnings("unchecked")
     public static void populateChildren(GenericDelegator delegator, GLAccountInTree node, String organizationPartyId) throws GenericEntityException, AccountingException {
-        List<GenericValue> children = delegator.findByAnd("GlAccountOrganizationAndClass", UtilMisc.toMap("parentGlAccountId", node.glAccountId, "organizationPartyId", organizationPartyId));
+        List conditions = UtilMisc.toList(
+                EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("parentGlAccountId", EntityOperator.EQUALS, node.glAccountId),
+                EntityUtil.getFilterByDateExpr()
+            );
+        List<GenericValue> children = delegator.findByAnd("GlAccountOrganizationAndClass", conditions);
         for (GenericValue child : children) {
             GLAccountInTree childNode = new GLAccountInTree(delegator, child.getString("glAccountId"), child.getBigDecimal("postedBalance"));
             node.addChild(childNode);
