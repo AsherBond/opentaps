@@ -292,7 +292,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     }
 
     private List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestParties(EntityCondition roleCondition) {
-
+        // use fast list to replace Arrays.asList because it is read only.
         List<EntityCondition> conditions = FastList.newInstance();
         conditions.add(roleCondition);
         if (getSuggestQuery() == null) {
