@@ -19,6 +19,7 @@ package org.opentaps.installer;
 import javax.servlet.ServletException;
 
 import org.opentaps.core.bundle.AbstractBundle;
+import org.opentaps.installer.service.Constants;
 import org.opentaps.installer.service.InstallerNavigation;
 import org.opentaps.installer.service.InstallerStep;
 import org.opentaps.installer.service.OSSInstaller;
@@ -51,7 +52,10 @@ class NavigationServletCustomizer implements ServiceTrackerCustomizer {
         try {
             HttpService service = (HttpService) context.getService(reference);
             if (service != null) {
-                service.registerServlet(INSTALLER_NAVIGATION_ALIAS, new InstallerNavigation(), null, null);
+                String parentWebApp = context.getProperty(Constants.URL_PREFIX);
+                service.registerServlet(
+                        String.format("%1$s%2$s", (parentWebApp == null || parentWebApp.length() == 0) ? "" : parentWebApp, INSTALLER_NAVIGATION_ALIAS),
+                        new InstallerNavigation(), null, null);
             }
         } catch (ServletException e) {
             Activator.getInstance().logError(e.getMessage(), e, null);

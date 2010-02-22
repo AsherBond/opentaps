@@ -20,6 +20,7 @@ import java.util.Properties;
 
 import org.opentaps.core.bundle.AbstractBundle;
 import org.opentaps.installer.network.model.impl.NetworkStepImpl;
+import org.opentaps.installer.service.Constants;
 import org.opentaps.installer.service.InstallerStep;
 import org.opentaps.installer.util.ResourceCustomizer;
 import org.osgi.framework.BundleActivator;
@@ -32,6 +33,8 @@ public class Activator extends AbstractBundle {
     // the shared instance
     private static BundleActivator bundle;
 
+    private String prefix;
+
     private ServiceTracker wizardHttpSrvcTracker;
     private ServiceTracker staticHttpSrvcTracker;
 
@@ -41,16 +44,21 @@ public class Activator extends AbstractBundle {
         bundle = this;
         super.start(context);
 
+        prefix = context.getProperty(Constants.URL_PREFIX);
+        if (prefix == null || prefix.length() == 0) {
+            prefix = "";
+        }
+
         // register GWT applications under alias /networkWiz as soon as
         // HttpService is available.
         wizardHttpSrvcTracker = new ServiceTracker(context, HttpService.class.getName(), new ResourceCustomizer(
-                "/org.opentaps.gwt.wiz.network.network", "/networkWiz", context));
+                "/org.opentaps.gwt.wiz.network.network", prefix + "/networkWiz", context));
         wizardHttpSrvcTracker.open();
 
         // register static pages under alias /networkWiz/pages as soon as
         // HttpService is available.
         staticHttpSrvcTracker = new ServiceTracker(context, HttpService.class.getName(), new ResourceCustomizer(
-                "/static", "/networkWiz/pages", context));
+                "/static", prefix + "/networkWiz/pages", context));
         staticHttpSrvcTracker.open();
 
         // register services
@@ -69,6 +77,7 @@ public class Activator extends AbstractBundle {
 
         super.stop(context);
         bundle = null;
+        prefix = null;
     }
 
     public static Activator getInstance() {

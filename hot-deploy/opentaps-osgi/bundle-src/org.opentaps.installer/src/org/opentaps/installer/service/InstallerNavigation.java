@@ -18,15 +18,11 @@ package org.opentaps.installer.service;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONObject;
 
 import org.opentaps.installer.Activator;
 
@@ -63,9 +59,7 @@ public class InstallerNavigation extends HttpServlet {
                 url = installer.nextUri(currentStepId);
             }
 
-            Map<String, String> result = new HashMap<String, String>();
-            result.put("nextAction", url);
-            String j = JSONObject.fromObject(result).toString();
+            String j = (url != null ? String.format("{\"nextAction\":\"%1$s\"}", url) : "{\"nextAction\":null}");
 
             response.setContentType("application/x-json");
             response.setContentLength(j.getBytes("UTF-8").length);

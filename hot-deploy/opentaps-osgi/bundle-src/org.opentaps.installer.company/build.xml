@@ -50,7 +50,7 @@
                 <path refid="local.class.path"/>
             </classpath>
             <src path="${src.dir}"/>
-    	    <!--exclude name="org/opentaps/gwt/**"/-->
+    	    <exclude name="org/opentaps/gwt/**"/>
         </javac>
     </target>
 

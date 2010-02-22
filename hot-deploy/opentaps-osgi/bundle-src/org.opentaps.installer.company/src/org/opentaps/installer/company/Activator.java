@@ -23,6 +23,7 @@ import javax.servlet.ServletException;
 import org.opentaps.core.bundle.AbstractBundle;
 import org.opentaps.installer.company.model.CompanyStepModel;
 import org.opentaps.installer.company.model.impl.CompanyStepImpl;
+import org.opentaps.installer.service.Constants;
 import org.opentaps.installer.service.InstallerNavigation;
 import org.opentaps.installer.service.InstallerStep;
 import org.opentaps.installer.util.ResourceCustomizer;
@@ -40,9 +41,10 @@ public class Activator extends AbstractBundle {
     // the shared instance
     private static BundleActivator bundle;
 
+    private String prefix;
+
     private ServiceTracker wizardHttpSrvcTracker;
     private ServiceTracker staticHttpSrvcTracker;
-    private ServiceTracker navHttpSrvcTracker;
 
     /** {@inheritDoc} */
     public void start(final BundleContext context) throws Exception {
@@ -50,49 +52,22 @@ public class Activator extends AbstractBundle {
         bundle = this;
         super.start(context);
 
+        prefix = context.getProperty(Constants.URL_PREFIX);
+        if (prefix == null || prefix.length() == 0) {
+            prefix = "";
+        }
+
         // register GWT applications under alias /companyWiz as soon as
         // HttpService is available.
         wizardHttpSrvcTracker = new ServiceTracker(context, HttpService.class.getName(), new ResourceCustomizer(
-                "/org.opentaps.gwt.wiz.company.company", "/companyWiz", context));
+                "/org.opentaps.gwt.wiz.company.company", prefix + "/companyWiz", context));
         wizardHttpSrvcTracker.open();
 
         // register static pages under alias /companyWiz/pages as soon as
         // HttpService is available.
         staticHttpSrvcTracker = new ServiceTracker(context, HttpService.class.getName(), new ResourceCustomizer(
-                "/static", "/companyWiz/pages", context));
+                "/static", prefix + "/companyWiz/pages", context));
         staticHttpSrvcTracker.open();
-
-        navHttpSrvcTracker = new ServiceTracker(context, HttpService.class.getName(), new ServiceTrackerCustomizer() {
-
-            public Object addingService(ServiceReference ref) {
-                HttpService service = (HttpService) context.getService(ref);
-                if (service != null) {
-                    try {
-                        service.registerServlet("/companyWiz/InstNav", new InstallerNavigation(), null, null);
-                    } catch (ServletException e) {
-                        logError(e.getMessage(), e, null);
-                        return null;
-                    } catch (NamespaceException e) {
-                        logError(e.getMessage(), e, null);
-                        return null;
-                    }
-                }
-                return null;
-            }
-
-            public void modifiedService(ServiceReference ref, Object alias) {
-                // do nothing
-            }
-
-            public void removedService(ServiceReference ref, Object alias) {
-                HttpService service = (HttpService) context.getService(ref);
-                if (service != null) {
-                    service.unregister("//companyWiz/InstNav");
-                }
-            }
-            
-        });
-        navHttpSrvcTracker.open();
 
         // register services
         CompanyStepModel stepImpl = new CompanyStepImpl();
@@ -106,10 +81,10 @@ public class Activator extends AbstractBundle {
     public void stop(BundleContext context) throws Exception {
         wizardHttpSrvcTracker.close();
         staticHttpSrvcTracker.close();
-        navHttpSrvcTracker.close();
 
         super.stop(context);
         bundle = null;
+        prefix = null;
     }
 
     public static Activator getInstance() {
