@@ -343,7 +343,41 @@
         <view-link entity-alias="P" rel-entity-alias="PSD" rel-optional="true">
             <key-map field-name="partyId"/>
         </view-link>
-    </view-entity>      
+    </view-entity>
+    
+    <view-entity entity-name="PartyToSummaryByRole"
+                 package-name="com.opensourcestrategies.crmsfa.party"
+                 title="Full PartySummary view related from the partyId of a PartyRole, designed to give
+                 us full party information of accounts, contacts, leads related to a party">
+        <member-entity entity-alias="PR" entity-name="PartyRole"/>
+        <member-entity entity-alias="P" entity-name="Party"/>
+        <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+        <member-entity entity-alias="PER" entity-name="Person"/>
+        <member-entity entity-alias="PSD" entity-name="PartySupplementalData"/>
+        <alias-all entity-alias="P"/>
+        <alias-all entity-alias="PER">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PSD"/>
+        <alias-all entity-alias="PG">
+            <exclude field="comments"/>
+            <exclude field="annualRevenue"/>
+            <exclude field="tickerSymbol"/>
+        </alias-all>
+        <alias entity-alias="PR" name="roleTypeId" field="roleTypeId"/>        
+        <view-link entity-alias="PR" rel-entity-alias="P">
+            <key-map field-name="partyId" rel-field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PG" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PER" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PSD" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+    </view-entity>         
 
     <!-- TODO: join in Geo description for postal code and maybe for country -->
 

@@ -46,11 +46,11 @@ roleTypeIdTo = parameters.get("roleTypeIdTo");
 // construct role conditions
 roleConditions = new ArrayList();
 if (roleTypeIdTo != null) {
-    roleConditions.add(new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, roleTypeIdTo));
+    roleConditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, roleTypeIdTo));
 } else {
     // construct from the default party role to list
     for (iter = PartyHelper.TEAM_MEMBER_ROLES.iterator(); iter.hasNext(); ) {
-        roleConditions.add(new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, iter.next()));
+        roleConditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, iter.next()));
     }
 }
 roleConditionList = new EntityConditionList(roleConditions, EntityOperator.OR);
@@ -82,9 +82,8 @@ if (negateConditions.size() > 0) {
     combinedConditions.add(negateConditionsList);
 }
 conditionList = new EntityConditionList(combinedConditions, EntityOperator.AND);
-
 // We need to get a list iterator because 1) the forms are all set to use list iterators and 2) that seems to be the only way to find distinct records
-listIt = delegator.findListIteratorByCondition("PartyToSummaryByRelationship", conditionList, null, 
+listIt = delegator.findListIteratorByCondition("PartyToSummaryByRole", conditionList, null, 
         UtilMisc.toList("firstName", "lastName", "partyId"), // fields to select 
         UtilMisc.toList("lastName", "firstName"), // fields to order by
         // the first true here is for "specifyTypeAndConcur"

@@ -49,7 +49,7 @@
     <entity-group group="org.ofbiz" entity="PartyFromByRelnAndContactInfoAndPartyClassification" />    
     <entity-group group="org.ofbiz" entity="PartyFromSummaryByRelationship" />
     <entity-group group="org.ofbiz" entity="PartyToSummaryByRelationship" />
-    <entity-group group="org.ofbiz" entity="PartyToSummaryByRelationship" />
+    <entity-group group="org.ofbiz" entity="PartyToSummaryByRole" />
     <entity-group group="org.ofbiz" entity="PartyContactInfo" />
     <entity-group group="org.ofbiz" entity="PartyContactInfoAndContactList" />
     <entity-group group="org.ofbiz" entity="PartyMergeCandidates" />
