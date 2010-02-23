@@ -33,6 +33,7 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.gwtext.client.core.EventObject;
+import com.gwtext.client.core.Function;
 import com.gwtext.client.core.SortDir;
 import com.gwtext.client.core.UrlParam;
 import com.gwtext.client.data.BooleanFieldDef;
@@ -1069,16 +1070,20 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
         pageSizeField.addListener(new FieldListenerAdapter() {
                 @Override public void onSpecialKey(Field field, EventObject e) {
                     if (e.getKey() == EventObject.ENTER) {
-                        int pageSize = pageSizeField.getValue().intValue();
-                        // do not allow 0 as a page size
-                        if (pageSize > 0) {
-                            pagingToolbar.setPageSize(pageSize);
-                        } else {
-                            pageSizeField.setValue(Integer.valueOf(pagingToolbar.getPageSize()));
-                        }
+                        changePageSize(pageSizeField);
                     }
                 }
             });
+        
+        pagingToolbar.doOnRender(new Function() {
+            public void execute() { 
+                pagingToolbar.getRefreshButton().addListener(new ButtonListenerAdapter() {
+                    public void onClick(Button button, EventObject e) {
+                        changePageSize(pageSizeField);
+                    }
+                });
+            }
+        });
 
         final ToolTip toolTip = new ToolTip(UtilUi.MSG.pagerEnterPageSize());
         toolTip.applyTo(pageSizeField);
@@ -1109,6 +1114,20 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
             pagingToolbar.addButton(exportToExcelButton);
         }
         setBottomToolbar(pagingToolbar);
+    }
+
+    /**
+     * Change page size value to pageSizeField.getValue().
+     * @param pageSizeField a <code>NumberField</code> value
+     */
+    private void changePageSize(NumberField pageSizeField) {
+        int pageSize = pageSizeField.getValue().intValue();
+        // do not allow 0 as a page size
+        if (pageSize > 0) {
+            pagingToolbar.setPageSize(pageSize);
+        } else {
+            pageSizeField.setValue(Integer.valueOf(pagingToolbar.getPageSize()));
+        }
     }
 
     /**
