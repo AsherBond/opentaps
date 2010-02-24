@@ -34,20 +34,6 @@
         <condition-field field-name="statusId" operator="not-equals" to-field-name="oldStatusId"/>
         <action service="crmsfa.createCommissionInvoices" mode="sync"/>
     </eca>
-    
-    <eca service="setInvoiceStatus" event="commit">
-        <condition field-name="invoiceId" operator="is-not-empty"/>
-        <condition field-name="statusId" operator="equals" value="INVOICE_READY"/>
-        <condition field-name="invoiceTypeId" operator="equals" value="SALES_INVOICE"/>
-        <action service="recalcInvoiceAmounts" mode="sync"/>
-    </eca>
-
-    <eca service="setInvoiceStatus" event="commit">
-        <condition field-name="invoiceId" operator="is-not-empty"/>
-        <condition field-name="statusId" operator="equals" value="INVOICE_READY"/>
-        <condition field-name="invoiceTypeId" operator="equals" value="SALES_INVOICE"/>
-        <action service="checkInvoicePaymentApplications" mode="sync"/>
-    </eca>
 
     <!-- Create invoice terms when an invoice is created -->
     <eca service="createInvoice" event="commit">
