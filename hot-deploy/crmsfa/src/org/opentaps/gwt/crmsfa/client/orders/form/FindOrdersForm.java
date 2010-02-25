@@ -213,15 +213,15 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
         orderListView.setAutoLoad(autoLoad);
         orderListView.init();
         addListView(orderListView);
-        
-
     }
 
     @Override protected void filter() {
         getListView().clearFilters();
         Panel p = getMainForm().getTabPanel().getActiveTab();
         getListView().filterIncludeInactiveOrders(true);
-        if (p == filterPanel) {
+        // null check to define the default panel, as it happens on page load
+        // with the auto submit set by URL parameter
+        if (p == null || p == filterPanel) {
             if (!findAllInput.getValue() && isEmpty(orderIdInput.getText()) && isEmpty(externalIdInput.getText())
                     && isEmpty(orderNameInput.getText()) && isEmpty(customerInput.getText())
                     && isEmpty(productStoreInput.getText()) && isEmpty(orderStatusInput.getText())
@@ -232,7 +232,7 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
                 UtilUi.errorMessage(UtilUi.MSG.atLeastOnFieldRequiredToSearch());
                 return;
             }
-        	getListView().filterByOrderId(orderIdInput.getText());
+            getListView().filterByOrderId(orderIdInput.getText());
             getListView().filterByExternalId(externalIdInput.getText());
             getListView().filterByOrderName(orderNameInput.getText());
             getListView().filterByCustomerId(customerInput.getText());
@@ -253,7 +253,7 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
                 UtilUi.errorMessage(UtilUi.MSG.atLeastOnFieldRequiredToSearch());
                 return;
             }
-        	getListView().filterByShippingAddress(shippingAddressInput.getText());
+            getListView().filterByShippingAddress(shippingAddressInput.getText());
             getListView().filterByShippingCity(shippingCityInput.getText());
             getListView().filterByShippingCountry(shippingCountryInput.getText());
             getListView().filterByShippingStateProvince(shippingStateInput.getText());
