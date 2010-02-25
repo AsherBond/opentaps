@@ -260,7 +260,7 @@ public class Entry extends BaseEntry {
         }
 
         if (RootPanel.get(CONTACT_OPPORTUNITIES) != null) {
-            loadContactOppotunities();
+            loadContactOpportunities();
         }
 
         if (RootPanel.get(CONTACT_ACCOUNTS) != null) {
@@ -491,7 +491,7 @@ public class Entry extends BaseEntry {
      * Load list of contact opportunities.<br>
      * Designed to use on view contact page.
      */
-    private void loadContactOppotunities() {
+    private void loadContactOpportunities() {
         // setup opportunity list view as subsection
         OpportunitiesSublistView opportunities = new OpportunitiesSublistView();
         // limit displayed contacts to the account
