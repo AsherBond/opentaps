@@ -20,11 +20,11 @@
 <#if validView?default(false) && !accountDeactivated?exists>
 
 <#if hasViewOrderPermission?exists>
-    <#if continueOrder>
-	  <#assign orderLink = "<a href='resumeOrder?partyId="+parameters.partyId+"'>"+uiLabelMap.OpentapsResumeOrder+"</a>" />
-	<#else>
-	  <#assign orderLink = "<a href='newOrder?partyId="+parameters.partyId+"'>"+uiLabelMap.OpentapsCreateOrder+"</a>" />
-	</#if>
+  <#if continueOrder>
+    <#assign orderLink = "<a href='resumeOrder?partyId="+parameters.partyId+"'>"+uiLabelMap.OpentapsResumeOrder+"</a>" />
+  <#else>
+    <#assign orderLink = "<a href='newOrder?partyId="+parameters.partyId+"'>"+uiLabelMap.OpentapsCreateOrder+"</a>" />
+  </#if>
 </#if>
 
 <@frameSection title=uiLabelMap.CrmAccountShortcuts>
@@ -33,10 +33,10 @@
       <li>${orderLink}</li>
     </#if>
     <li>
-      <a href='findQuotes?partyId=${parameters.partyId}'>${uiLabelMap.OrderOrderQuotes}</a>
+      <a href="findQuotes?partyId=${parameters.partyId}&amp;performFind=Y">${uiLabelMap.OrderOrderQuotes}</a>
     </li>
     <li>
-      <a href='EditQuote?partyId=${parameters.partyId}'>${uiLabelMap.CrmCreateQuote}</a>
+      <a href="EditQuote?partyId=${parameters.partyId}">${uiLabelMap.CrmCreateQuote}</a>
     </li>
   </ul>
 </@frameSection>
