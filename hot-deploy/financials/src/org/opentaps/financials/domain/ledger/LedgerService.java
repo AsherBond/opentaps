@@ -129,6 +129,11 @@ public class LedgerService extends DomainService implements LedgerServiceInterfa
     /** {@inheritDoc} */
     public void updateBalanceForTransaction(GeneralLedgerAccount account, AccountingTransaction transaction, OrganizationRepositoryInterface orgRepository) throws RepositoryException, LedgerException {
 
+        // only do that for glFiscalTypeId == ACTUAL
+        if (!GlFiscalTypeConstants.ACTUAL.equals(transaction.getGlFiscalTypeId())) {
+            return;
+        }
+
         // for lazy loading the time periods by organization and the organization accounts
         Map<String, List<CustomTimePeriod>> timePeriodMap = FastMap.newInstance();
         Map<String, GlAccountOrganization> orgAccountMap = FastMap.newInstance();
@@ -161,27 +166,24 @@ public class LedgerService extends DomainService implements LedgerServiceInterfa
             account.getRepository().update(orgAccount);
 
             // keep track of how much we posted in each time period history record
-            // only do that for glFiscalTypeId == ACTUAL
-            if (GlFiscalTypeConstants.ACTUAL.equals(transaction.getGlFiscalTypeId())) {
-                for (CustomTimePeriod period : openTimePeriods) {
-                    GlAccountHistory history = account.getRepository().getAccountHistory(account.getGlAccountId(), entry.getOrganizationPartyId(), period.getCustomTimePeriodId());
-                    if (history == null) {
-                        history = new GlAccountHistory();
-                        history.setGlAccountId(account.getGlAccountId());
-                        history.setOrganizationPartyId(entry.getOrganizationPartyId());
-                        history.setCustomTimePeriodId(period.getCustomTimePeriodId());
-                        history.setPostedDebits(BigDecimal.ZERO);
-                        history.setPostedCredits(BigDecimal.ZERO);
-                    }
-
-                    // add to posted debits or credits column
-                    if (getSpecification().isDebit(entry)) {
-                        history.setPostedDebits(history.getPostedDebits().add(entry.getAmount()));
-                    } else if (getSpecification().isCredit(entry)) {
-                        history.setPostedCredits(history.getPostedCredits().add(entry.getAmount()));
-                    }
-                    account.getRepository().createOrUpdate(history);
+            for (CustomTimePeriod period : openTimePeriods) {
+                GlAccountHistory history = account.getRepository().getAccountHistory(account.getGlAccountId(), entry.getOrganizationPartyId(), period.getCustomTimePeriodId());
+                if (history == null) {
+                    history = new GlAccountHistory();
+                    history.setGlAccountId(account.getGlAccountId());
+                    history.setOrganizationPartyId(entry.getOrganizationPartyId());
+                    history.setCustomTimePeriodId(period.getCustomTimePeriodId());
+                    history.setPostedDebits(BigDecimal.ZERO);
+                    history.setPostedCredits(BigDecimal.ZERO);
                 }
+
+                // add to posted debits or credits column
+                if (getSpecification().isDebit(entry)) {
+                    history.setPostedDebits(history.getPostedDebits().add(entry.getAmount()));
+                } else if (getSpecification().isCredit(entry)) {
+                    history.setPostedCredits(history.getPostedCredits().add(entry.getAmount()));
+                }
+                account.getRepository().createOrUpdate(history);
             }
         }
     }

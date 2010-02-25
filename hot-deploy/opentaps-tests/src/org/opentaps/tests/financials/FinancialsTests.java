@@ -39,6 +39,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.base.constants.AcctgTransTypeConstants;
 import org.opentaps.base.constants.GlFiscalTypeConstants;
 import org.opentaps.base.constants.InvoiceAdjustmentTypeConstants;
 import org.opentaps.base.constants.InvoiceItemTypeConstants;
@@ -50,11 +51,13 @@ import org.opentaps.base.entities.AccountBalanceHistory;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.GlAccountHistory;
+import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.InventoryItemValueHistory;
 import org.opentaps.base.entities.InvoiceAdjustmentGlAccount;
 import org.opentaps.base.entities.InvoiceAdjustmentType;
 import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.base.services.CreateQuickAcctgTransService;
+import org.opentaps.base.services.PostAcctgTransService;
 import org.opentaps.common.order.PurchaseOrderFactory;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
@@ -81,8 +84,6 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.tests.analytics.tests.TestObjectGenerator;
 import org.opentaps.tests.warehouse.InventoryAsserts;
-import org.opentaps.base.constants.AcctgTransTypeConstants;
-import org.opentaps.base.services.PostAcctgTransService;
 
 /**
  * General financial tests.  If there is a large chunk of test cases that are related, please
@@ -2627,6 +2628,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
     /**
      * This test verifies that transaction posted with a glFiscalTypeId not ACTUAL are not changing the GlAccountHistory
+     * or the GlAccountOrganization posted amount.
      * @exception Exception if an error occurs
      */
     public void testAccountHistoryUpdates() throws Exception {
@@ -2660,14 +2662,21 @@ public class FinancialsTests extends FinancialsTestCase {
                                                                       ledgerRepository.map(GlAccountHistory.Fields.glAccountId, debitAccount,
                                                                                            GlAccountHistory.Fields.organizationPartyId, "TEST-LEDGER"),
                                                                       orderBy);
+        // 3. get the GlAccountOrganization record
+        GlAccountOrganization creditAcctOrg = ledgerRepository.findOneNotNull(GlAccountOrganization.class,
+                                                                       ledgerRepository.map(GlAccountOrganization.Fields.glAccountId, creditAccount,
+                                                                                            GlAccountOrganization.Fields.organizationPartyId, "TEST-LEDGER"));
+        GlAccountOrganization debitAcctOrg = ledgerRepository.findOneNotNull(GlAccountOrganization.class,
+                                                                       ledgerRepository.map(GlAccountOrganization.Fields.glAccountId, debitAccount,
+                                                                                            GlAccountOrganization.Fields.organizationPartyId, "TEST-LEDGER"));
 
-        // 5. postAcctgTrans
+        // 4. postAcctgTrans
         PostAcctgTransService postService = new PostAcctgTransService();
         postService.setInUserLogin(admin);
         postService.setInAcctgTransId(transId);
         runAndAssertServiceSuccess(postService);
 
-        // 6. verify GlAccountHistory for 100000 and 300000 have not changed.
+        // 5. verify GlAccountHistory for 100000 and 300000 have not changed.
         List<GlAccountHistory> creditHists2 = ledgerRepository.findList(GlAccountHistory.class,
                                                                         ledgerRepository.map(GlAccountHistory.Fields.glAccountId, creditAccount,
                                                                                              GlAccountHistory.Fields.organizationPartyId, "TEST-LEDGER"),
@@ -2679,6 +2688,17 @@ public class FinancialsTests extends FinancialsTestCase {
 
         assertEquals("The GlAccountHistory for the debit account [" + debitAccount + "] should not have changed.", debitHists, debitHists2);
         assertEquals("The GlAccountHistory for the credit account [" + creditAccount + "] should not have changed.", creditHists, creditHists2);
+
+        // 6. verify GlAccountOrganization for both accounts have not changed
+        GlAccountOrganization creditAcctOrg2 = ledgerRepository.findOneNotNull(GlAccountOrganization.class,
+                                                                       ledgerRepository.map(GlAccountOrganization.Fields.glAccountId, creditAccount,
+                                                                                            GlAccountOrganization.Fields.organizationPartyId, "TEST-LEDGER"));
+        GlAccountOrganization debitAcctOrg2 = ledgerRepository.findOneNotNull(GlAccountOrganization.class,
+                                                                       ledgerRepository.map(GlAccountOrganization.Fields.glAccountId, debitAccount,
+                                                                                            GlAccountOrganization.Fields.organizationPartyId, "TEST-LEDGER"));
+
+        assertEquals("The GlAccountOrganization for the debit account [" + debitAccount + "] should not have changed.", debitAcctOrg, debitAcctOrg2);
+        assertEquals("The GlAccountOrganization for the credit account [" + creditAccount + "] should not have changed.", creditAcctOrg, creditAcctOrg2);
 
     }
 
