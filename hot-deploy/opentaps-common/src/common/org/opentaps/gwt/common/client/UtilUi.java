@@ -35,6 +35,7 @@ import com.gwtext.client.data.Converter;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.MessageBoxConfig;
+import com.gwtext.client.widgets.form.Field;
 import com.gwtext.client.widgets.layout.FormLayoutData;
 import org.opentaps.gwt.common.client.messages.CommonMessages;
 import org.opentaps.gwt.common.client.suggest.EntityAutocomplete;
@@ -99,6 +100,35 @@ public abstract class UtilUi {
     public static native void redirect(String url)/*-{
         $wnd.location = url;
     }-*/;
+
+    /**
+     * Gets a parameter from the current URL.
+     * @param parameter a <code>String</code> value
+     * @return the parameter value
+     */
+    public static String getUrlParameter(String parameter) {
+        return com.google.gwt.user.client.Window.Location.getParameter(parameter);
+    }
+
+    /**
+     * Gets a parameter from the current URL for the given Field.
+     * @param field the field to get the value from the HTTP parameter
+     * @return the parameter value
+     */
+    public static String getUrlParameter(Field field) {
+        return getUrlParameter(field.getName());
+    }
+
+    /**
+     * Gets a parameter from the current URL and set it in the given Field.
+     * @param field the field to set the value from the HTTP parameter
+     * @return the parameter value set
+     */
+    public static String getAndSetUrlParameter(Field field) {
+        String p = getUrlParameter(field.getName());
+        field.setValue(p);
+        return p;
+    }
 
     /**
      * Popups a debug dialog with the given message.

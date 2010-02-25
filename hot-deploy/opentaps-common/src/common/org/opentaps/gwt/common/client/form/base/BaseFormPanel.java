@@ -33,6 +33,7 @@ import com.gwtext.client.widgets.form.FormPanel;
 import com.gwtext.client.widgets.form.TextField;
 import com.gwtext.client.widgets.form.event.FieldListenerAdapter;
 import com.gwtext.client.widgets.form.event.FormListener;
+import com.gwtext.client.widgets.form.event.FormPanelListenerAdapter;
 import com.gwtext.client.widgets.layout.LayoutData;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FormNotificationInterface;
@@ -90,6 +91,15 @@ public class BaseFormPanel extends FormPanel implements FormListener {
         addFormListener(this);
         effectTarget = this;
         setMethod(Connection.POST);
+
+        // copy parameters value from the HTTP request in the corresponding fields
+        addListener(new FormPanelListenerAdapter() {
+                @Override public void onRender(Component c) {
+                    for (Field f : getFields()) {
+                        UtilUi.getAndSetUrlParameter(f);
+                    }
+                }
+            });
     }
 
     /**
