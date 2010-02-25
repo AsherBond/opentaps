@@ -17,6 +17,8 @@
 
 package org.opentaps.gwt.common.client.lookup;
 
+import org.opentaps.gwt.common.client.UtilUi;
+
 /**
  * Defines the common elements used for client / server communications.
  */
@@ -95,5 +97,13 @@ public abstract class UtilLookup {
 
     /** The field name suffix for descriptions, a field name 'foo' can have its value to display in 'fooDescription'. */
     public static final String DESCRIPTION_SUFFIX = "Description";
+
+    /**
+     * Checks if the auto submit URL parameter was provided.
+     * @return a <code>boolean</code> value
+     */
+    public static boolean hasAutoSubmitParameter() {
+        return "Y".equalsIgnoreCase(UtilUi.getUrlParameter("performFind"));
+    }
 
 }

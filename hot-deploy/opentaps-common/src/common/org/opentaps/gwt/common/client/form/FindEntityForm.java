@@ -17,10 +17,13 @@
 
 package org.opentaps.gwt.common.client.form;
 
+import com.gwtext.client.widgets.Component;
+import com.gwtext.client.widgets.form.event.FormPanelListenerAdapter;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.base.ListAndFormPanel;
 import org.opentaps.gwt.common.client.form.base.TabbedFormPanel;
 import org.opentaps.gwt.common.client.listviews.EntityEditableListView;
+import org.opentaps.gwt.common.client.lookup.UtilLookup;
 
 /**
  * Base class for the common Find form + list view pattern.
@@ -47,6 +50,16 @@ public abstract class FindEntityForm<TLIST extends EntityEditableListView> exten
         addMainForm(mainForm);
 
         mainForm.addStandardSubmitButton(findButtonLabel);
+
+        // a special URL parameter to auto submit the form
+        // used for in combination with passing the fields as URL parameter
+        mainForm.addListener(new FormPanelListenerAdapter() {
+                @Override public void onRender(Component c) {
+                    if (UtilLookup.hasAutoSubmitParameter()) {
+                        filter();
+                    }
+                }
+            });
 
     }
 
