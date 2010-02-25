@@ -452,8 +452,7 @@ public class Entry extends BaseEntry {
     private void loadLeadOpportunities() {
         // setup opportunity list view as subsection
         OpportunitiesSublistView opportunities = new OpportunitiesSublistView();
-        // limit displayed contacts to the account
-        opportunities.filterHasIncludeInactiveOpportunities(true);
+        // limit displayed opportunities for this lead
         opportunities.filterByLead(getPartyId());
         opportunities.applyFilters();
 
@@ -494,8 +493,7 @@ public class Entry extends BaseEntry {
     private void loadContactOpportunities() {
         // setup opportunity list view as subsection
         OpportunitiesSublistView opportunities = new OpportunitiesSublistView();
-        // limit displayed contacts to the account
-        opportunities.filterHasIncludeInactiveOpportunities(true);
+        // limit displayed opportunities for this contact
         opportunities.filterByContact(getPartyId());
         opportunities.applyFilters();
 
@@ -840,8 +838,7 @@ public class Entry extends BaseEntry {
     private void loadAccountOpportunities() {
         // setup opportunity list view as subsection
         OpportunitiesSublistView accountOpportunities = new OpportunitiesSublistView();
-        // limit displayed contacts to the account
-        accountOpportunities.filterHasIncludeInactiveOpportunities(true);
+        // limit displayed opportunities for this account
         accountOpportunities.filterByAccount(getPartyId());
         accountOpportunities.applyFilters();
 
