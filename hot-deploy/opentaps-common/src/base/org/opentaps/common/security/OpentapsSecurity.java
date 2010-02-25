@@ -148,7 +148,7 @@ public class OpentapsSecurity {
                                EntityCondition.makeCondition("partyIdTo", userLogin.getString("partyId")),
                                operationConditon,
                                filterByDateCondition);
-            List<GenericValue> permittedRelationships = delegator.findByCondition("PartyRelationshipAndPermission", searchConditions, null, null);
+            List<GenericValue> permittedRelationships = delegator.findByConditionCache("PartyRelationshipAndPermission", searchConditions, null, null);
 
             // do any of these explicitly state a permission for partyIdFor?  If so, then we're done
             List<GenericValue> directPermittedRelationships = EntityUtil.filterByAnd(permittedRelationships, UtilMisc.toMap("partyIdFrom", partyIdFor));
@@ -168,7 +168,7 @@ public class OpentapsSecurity {
                         EntityCondition.makeCondition("partyIdFrom", partyIdFor),
                         EntityCondition.makeCondition("partyIdTo", permittedRelationship.getString("partyIdFrom")),
                         filterByDateCondition);
-                List<GenericValue> indirectPermittedRelationships = delegator.findByCondition("PartyRelationship", indirectConditions, null, null);
+                List<GenericValue> indirectPermittedRelationships = delegator.findByConditionCache("PartyRelationship", indirectConditions, null, null);
                 if ((indirectPermittedRelationships != null) && (indirectPermittedRelationships.size() > 0)) {
                     if (Debug.verboseOn()) {
                         Debug.logVerbose(userLogin + " has indirect permitted relationship for " + partyIdFor, MODULE);
