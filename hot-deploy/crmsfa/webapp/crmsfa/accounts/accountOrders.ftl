@@ -22,8 +22,8 @@
 
 <@sectionHeader title=uiLabelMap.CrmOpenOrders>
     <div class="subMenuBar">
-        <@displayLink href="findOrders?partyIdSearch=${parameters.partyId?if_exists}" text="${uiLabelMap.OrderOrders}" class="subMenuButton"/>
-        <@displayLink href="findQuotes?customerPartyId=${parameters.partyId?if_exists}" text="${uiLabelMap.OrderOrderQuotes}" class="subMenuButton"/>
+        <@displayLink href="findOrders?partyIdSearch=${parameters.partyId?if_exists}&performFind=Y" text="${uiLabelMap.OrderOrders}" class="subMenuButton"/>
+        <@displayLink href="findQuotes?partyId=${parameters.partyId?if_exists}&performFind=Y" text="${uiLabelMap.OrderOrderQuotes}" class="subMenuButton"/>
     </div>
 </@sectionHeader>
 
