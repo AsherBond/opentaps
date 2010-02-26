@@ -106,4 +106,13 @@ public abstract class UtilLookup {
         return "Y".equalsIgnoreCase(UtilUi.getUrlParameter("performFind"));
     }
 
+    /**
+     * Gets the configured default timeout (in ms) for ajax requests.
+     * This is configured in <code>opentaps.properties</code>, or defaults to 10000.
+     * @return the timeout value in ms
+     */
+    public static native int getAjaxDefaultTimeout() /*-{
+        return $wnd.ajaxDefaultTimeOut ? $wnd.ajaxDefaultTimeOut : 10000;
+    }-*/;
+
 }

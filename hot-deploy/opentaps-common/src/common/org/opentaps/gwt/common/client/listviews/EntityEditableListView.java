@@ -1381,6 +1381,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
         RequestBuilder request = new RequestBuilder(RequestBuilder.POST, GWT.getHostPageBaseURL() + saveAllUrl);
         request.setHeader("Content-type", "application/x-www-form-urlencoded");
         request.setRequestData(data);
+        request.setTimeoutMillis(UtilLookup.getAjaxDefaultTimeout());
         request.setCallback(new RequestCallback() {
                 public void onError(Request request, Throwable exception) {
                     // display error message

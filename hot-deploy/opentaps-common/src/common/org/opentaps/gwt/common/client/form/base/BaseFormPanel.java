@@ -40,6 +40,7 @@ import org.opentaps.gwt.common.client.form.FormNotificationInterface;
 import org.opentaps.gwt.common.client.form.ServiceErrorReader;
 import org.opentaps.gwt.common.client.form.field.FieldInterface;
 import org.opentaps.gwt.common.client.listviews.EntityEditableListView;
+import org.opentaps.gwt.common.client.lookup.UtilLookup;
 
 /**
  * Provides utility methods to build a <code>FormPanel</code>.
@@ -72,6 +73,9 @@ public class BaseFormPanel extends FormPanel implements FormListener {
         super(formPosition);
 
         registeredWidgets = new ArrayList<FormNotificationInterface<?>>();
+
+        // set the default timeout from the configuration
+        setTimeout(UtilLookup.getAjaxDefaultTimeout());
 
         // this is used to submit when the user press the enter key
         // instead of having to manually click the button

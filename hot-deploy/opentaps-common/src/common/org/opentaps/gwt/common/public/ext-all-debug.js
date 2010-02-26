@@ -5037,7 +5037,7 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
     
     
     
-    timeout : 30000,
+    timeout : window.ajaxDefaultTimeOut ? window.ajaxDefaultTimeOut : 30000,
     
     autoAbort:false,
 
@@ -5520,7 +5520,7 @@ Ext.extend(Ext.Updater, Ext.util.Observable, {
 
    Ext.Updater.defaults = {
        
-         timeout : 30,
+         timeout : window.ajaxDefaultTimeOut ? (window.ajaxDefaultTimeOut / 1000) : 30,
 
          
         loadScripts : false,
@@ -11180,7 +11180,7 @@ Ext.data.ScriptTagProxy.TRANS_ID = 1000;
 Ext.extend(Ext.data.ScriptTagProxy, Ext.data.DataProxy, {
     
     
-    timeout : 30000,
+    timeout : window.ajaxDefaultTimeOut ? window.ajaxDefaultTimeOut : 30000,
     
     callbackParam : "callback",
     
