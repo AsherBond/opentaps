@@ -3,7 +3,7 @@
  * General Tree view CSS
  */
 
-.TreeExpando  {
+.dijitTreeExpando {
     clear:both;
     display:inline;
     float:left;
@@ -13,45 +13,47 @@
     background-repeat:no-repeat;
 }
 
-.TreeExpandoOpened {
+.dijitTreeExpandoOpened {
     background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_minus.gif');
 }
-.TreeExpandoClosed {
+.dijitTreeExpandoClosed {
     background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_plus.gif');
 }
-.TreeExpandoLeaf {
+.dijitTreeExpandoLeaf {
     background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_leaf.gif');
 }
-.TreeExpandoLoading {
+.dijitTreeExpandoLoading {
     background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_loading.gif');
 }
 
-.TreeContent {
+.dijitTreeContent {
     cursor:default;
     margin-left:18px;
     min-height:26px;
     min-width:18px;
     padding-left:1px;
     padding-top:3px;
+    padding-right:5px;
     height:26px;
     line-height:22px;
 }
 
-.TreeNode {
+.dijitTreeNode {
     background-image:url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/i.gif');
     background-position:left top;
     background-repeat:repeat-y;
     margin-left:19px;
+    border-top:1px solid #DDDDDD;
 }
 
-.TreeIsLast {
+.dijitTreeIsLast {
     background:transparent url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/i_half.gif') no-repeat scroll 0% 0%;
 }
-.TreeIsRoot {
+.dijitTreeIsRoot {
     margin-left:0pt;
 }
 
-.TreeLabelFocused {
+.dijitTreeLabelFocused {
     outline-color:invert;
     outline-style:dotted;
     outline-width:1px;
@@ -61,12 +63,7 @@
     display:none;
 }
 
-div.TreeIcon {
-    border-bottom:1px solid #ddd;
-    padding-right:5px;
-}
-
-div.TreeIcon:hover {
+div.dijitTreeIcon:hover {
     background-color:#EEDDFF;
 }
 

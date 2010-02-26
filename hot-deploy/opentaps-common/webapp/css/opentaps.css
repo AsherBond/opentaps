@@ -2205,7 +2205,12 @@ table.shortcutHelp td.shortcutKey {
    padding-right:2em;
 }
 
-.tundra .dijitDialogTitleBar {
+.dijitDialog { 
+   background:#fff;
+   border:1px solid #ccc;
+   padding:0;
+}
+.dijitDialogTitleBar {
    background:#CCC;
    outline:none;
 }

@@ -31,7 +31,6 @@ dojo.require("dojo.data.JsonItemStoreAutoComplete");
 dojo.require("dijit.Tree");
 dojo.require("dojo.parser");
 dojo.require("dijit.form.ComboBox");
-dojo.require("dijit.util.manager");
 
 opentaps.escapeHTML = function(text) {
     return text.split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;").split("\"").join("&quot;");
@@ -112,10 +111,10 @@ opentaps.shrinkAndFade = function(/* Node */ node) {
     var open = 'true' == node.getAttribute('open');
     if (open) {
         opentaps.hide(node, 200);
-        dojo.fx.slideOut({ node: node, duration:300 }).play();
+        dojo.fx.wipeOut({ node: node, duration:300 }).play();
     } else {
         opentaps.show(node, 300);
-        dojo.fx.slideIn({ node: node, duration:300 }).play();
+        dojo.fx.wipeIn({ node: node, duration:300 }).play();
     }
 }
 
@@ -316,7 +315,7 @@ dojo.declare("opentaps.GLAccountJsonStore", dojo.data.JsonItemStore, {});
 
 opentaps.uniqueIdSequence = 0;
 opentaps.getUniqueId = function() {
-    return "opentaps_unique_id_" + ++opentaps.uniqueIdSequence;
+  return "opentaps_unique_id_" + (++opentaps.uniqueIdSequence);
 }
 
 opentaps.createElement = function(/* String */ id, /* String */ nodeName, /* String */ innerHtml, /* String */ className, /* Array */ eventFunctions, /* String */ src, /* String */ altText) {
