@@ -18,6 +18,8 @@ package org.opentaps.bundle.demo;
 
 import javax.servlet.ServletException;
 
+import org.opentaps.bundle.demo.service.EchoImpl;
+import org.opentaps.common.osgi.demo.Echo;
 import org.opentaps.core.bundle.AbstractBundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -58,6 +60,8 @@ public class Activator extends AbstractBundle implements ServiceListener {
         } else {
             context.addServiceListener(this, String.format("(%1$s=%2$s)", Constants.OBJECTCLASS, HTTP_SERVICE_CLASSNAME));
         }
+
+        context.registerService(Echo.class.getName(), new EchoImpl(), null);
     }
 
     /** {@inheritDoc} */
