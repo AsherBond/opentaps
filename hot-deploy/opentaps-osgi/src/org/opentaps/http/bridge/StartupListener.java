@@ -32,8 +32,9 @@
  */
 package org.opentaps.http.bridge;
 
-import javax.servlet.ServletContextListener;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 
 public final class StartupListener implements ServletContextListener {
@@ -41,11 +42,12 @@ public final class StartupListener implements ServletContextListener {
     private FrameworkService service;
 
     public void contextInitialized(ServletContextEvent event) {
-        this.service = new FrameworkService(event.getServletContext());
-        this.service.start();
+        ServletContext ctxt = event.getServletContext();
+        service = new FrameworkService(ctxt);
+        service.start();
     }
 
     public void contextDestroyed(ServletContextEvent event) {
-        this.service.stop();
+        service.stop();
     }
 }

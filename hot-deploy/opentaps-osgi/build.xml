@@ -35,6 +35,7 @@
     <target name="classpath" depends="init">
         <path id="local.class.path">
             <fileset dir="../../framework/base/lib/j2eespecs" includes="*.jar"/>
+            <fileset dir="../../framework/base/build/lib" includes="*.jar"/>
             <fileset dir="${base.lib.dir}" includes="*.jar"/>
         </path>
     </target>

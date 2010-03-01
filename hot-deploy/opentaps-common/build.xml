@@ -71,6 +71,7 @@
             <fileset dir="${lib.dir}" includes="*.jar" excludes="${lib.dir}/${aspectname}.jar"/>
             <fileset dir="${lib.dir}/hibernate" includes="*.jar"/>
             <fileset dir="${lib.dir}/aspectwerkz" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-osgi/webapp/WEB-INF/lib" includes="org.osgi.*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib/commons" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib/scripting" includes="*.jar"/>

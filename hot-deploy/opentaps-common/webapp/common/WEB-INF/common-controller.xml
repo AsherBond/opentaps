@@ -223,7 +223,14 @@
         <event type="service" invoke="crmsfa.deleteActivityEmail"/>
         <response name="success" type="request" value="donePageRequestHelper"/>
         <response name="error" type="view" value="viewActivity"/>
-    </request-map>           
+    </request-map>
+    <request-map uri="testOSGi">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.osgi.demo.OSGiDemoEvents" invoke="callOSGi"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
     <view-map name="javascriptUiLabels.js" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#javascriptUiLabels.js" content-type="text/javascript"/>
     <view-map name="showChart" type="chart"/>
     <view-map name="setupReport" type="screen" page="component://opentaps-common/widget/screens/reports/ReportScreens.xml#setupReport"/>

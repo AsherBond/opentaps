@@ -32,16 +32,18 @@
  */
 package org.opentaps.http.bridge;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Bundle;
-import javax.servlet.ServletContext;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.ServletContext;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 public final class ProvisionActivator implements BundleActivator {
 
@@ -52,6 +54,8 @@ public final class ProvisionActivator implements BundleActivator {
 
     private final ServletContext servletContext;
 
+    private static BundleContext bundleContext;
+
     public ProvisionActivator(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
@@ -61,7 +65,7 @@ public final class ProvisionActivator implements BundleActivator {
 
         ArrayList<Bundle> installed = new ArrayList<Bundle>();
         for (URL url : findBundles()) {
-            this.servletContext.log("Installing bundle [" + url + "]");
+            servletContext.log("Installing bundle [" + url + "]");
             Bundle bundle = context.installBundle(url.toExternalForm());
             installed.add(bundle);
         }
@@ -76,7 +80,7 @@ public final class ProvisionActivator implements BundleActivator {
     @SuppressWarnings("unchecked")
     private List<URL> findBundles() throws Exception {
         ArrayList<URL> list = new ArrayList<URL>();
-        Set<Object> resourcePaths = this.servletContext.getResourcePaths("/WEB-INF/bundles/");
+        Set<Object> resourcePaths = servletContext.getResourcePaths("/WEB-INF/bundles/");
 
         // find very basic bundles that must be loaded first
         for (String basicBundle : BASIC_BUNDLES) {
@@ -106,4 +110,5 @@ public final class ProvisionActivator implements BundleActivator {
 
         return list;
     }
+
 }

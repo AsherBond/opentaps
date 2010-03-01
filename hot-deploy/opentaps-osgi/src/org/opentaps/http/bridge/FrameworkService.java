@@ -70,32 +70,32 @@ public final class FrameworkService {
     {
         Felix tmp = new Felix(createConfig());
         tmp.start();
-        this.felix = tmp;
+        felix = tmp;
         log("OSGi framework started", null);
     }
 
     private void doStop() throws Exception
     {
-        if (this.felix != null) {
-            this.felix.stop();
+        if (felix != null) {
+            felix.stop();
         }
         log("OSGi framework stopped", null);
     }
 
     private Map<String, Object> createConfig() throws Exception {
         Properties props = new Properties();
-        props.load(this.context.getResourceAsStream("/WEB-INF/osgi-framework.properties"));
+        props.load(context.getResourceAsStream("/WEB-INF/osgi-framework.properties"));
 
         HashMap<String, Object> map = new HashMap<String, Object>();
         for (Object key : props.keySet()) {
             map.put(key.toString(), props.get(key));
         }
 
-        map.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, Arrays.asList(new ProvisionActivator(this.context)));
+        map.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, Arrays.asList(new ProvisionActivator(context)));
         return map;
     }
 
     private void log(String message, Throwable cause) {
-        this.context.log(message, cause);
+        context.log(message, cause);
     }
 }
