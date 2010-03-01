@@ -92,7 +92,7 @@
         </init-param>
         <init-param>
             <param-name>allowedPaths</param-name>
-            <param-value>/control:/select:/index.html:/index.jsp:/default.html:/default.jsp:/images:/includes/maincss.css:/gwt-services</param-value>
+            <param-value>/control:/select:/index.html:/index.jsp:/default.html:/default.jsp:/images:/gwt-services</param-value>
         </init-param>
         <init-param>
             <param-name>errorCode</param-name>

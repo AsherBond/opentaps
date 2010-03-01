@@ -45,7 +45,7 @@ under the License.
         <meta http-equiv="Content-Script-Type" content="text/javascript"/>
         <meta http-equiv="Content-Style-Type" content="text/css"/>
         <title>${uiLabelMap.Example}</title>
-        <link rel="stylesheet" href="https://localhost:8443/opentaps_css/maincss.css" type="text/css"/>
+        <link rel="stylesheet" href="https://localhost:8443/opentaps_css/opentaps.css" type="text/css"/>
     </head>
 <body>
 
