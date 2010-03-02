@@ -608,7 +608,7 @@ public class ObjectType {
                 DateFormat df = null;
 
                 /* check if str in timestamp format */
-                if (str.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$") || str.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d+$")) {
+                if (str.matches("^\\d{4}-\\d{2}-\\d{2} \\d{1,2}:\\d{2}:\\d{2}$") || str.matches("^\\d{4}-\\d{2}-\\d{2} \\d{1,2}:\\d{2}:\\d{2}.\\d+$")) {
                     format = "yyyy-MM-dd HH:mm:ss.S";
                     // hack to mimic Timestamp.valueOf() method
                     if (str.length() > 0 && !str.contains(".")) {
