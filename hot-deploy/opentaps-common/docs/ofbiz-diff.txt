@@ -197,6 +197,9 @@ framework/common/widget/CommonScreens.xml
 framework/widget/src/org/ofbiz/widget/screen/ScreenFopViewHandler.java
 r14773 Fix FO error message screen
 
+framework/base/src/org/ofbiz/base/util/ObjectType.java
+r15076 Fix timestamp parsing for single digit hour
+
 Applications changes
 --------------------
 
