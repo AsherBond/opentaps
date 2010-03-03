@@ -54,10 +54,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.security.FinancialsSecurity;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
-
 import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.accounting.payment.PaymentWorker;
 import org.ofbiz.base.util.Debug;
@@ -88,28 +90,27 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.service.calendar.RecurrenceInfo;
 import org.ofbiz.service.calendar.RecurrenceInfoException;
+import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
+import org.opentaps.base.entities.InvoiceRole;
+import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.common.agreement.AgreementInvoiceFactory;
 import org.opentaps.common.agreement.UtilAgreement;
 import org.opentaps.common.invoice.InvoiceHelper;
+import org.opentaps.common.order.UtilOrder;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
-import org.opentaps.base.entities.InvoiceRole;
 import org.opentaps.domain.billing.invoice.Invoice;
+import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.security.FinancialsSecurity;
-import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * InvoiceServices - Services for creating invoices.
@@ -329,6 +330,43 @@ public final class InvoiceServices {
     }
 
     /**
+     * Sets the default billing address on the given invoice, from the invoice party billing address.
+     *
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context the service parameters <code>Map</code>
+     * @return the service response <code>Map</code>
+     */
+    public static Map<String, Object> setInvoiceDefaultBillingAddress(DispatchContext dctx, Map<String, ?> context) {
+
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Locale locale = UtilCommon.getLocale(context);
+        Security security = dctx.getSecurity();
+
+        if (!(security.hasEntityPermission("FINANCIALS", "_AP_INUPDT", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_INUPDT", userLogin))) {
+            return UtilMessage.createAndLogServiceError("OpentapsError_PermissionDenied", locale, MODULE);
+        }
+
+        String invoiceId = (String) context.get("invoiceId");
+
+        try {
+            DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+            DomainsDirectory domains = dl.loadDomainsDirectory();
+            Invoice invoice = domains.getBillingDomain().getInvoiceRepository().getInvoiceById(invoiceId);
+
+            // get the current invoice billing address and set it to ensure the InvoiceContactMech is in sync
+            invoice.setBillingAddress(invoice.getBillingAddress());
+
+        } catch (GeneralException e) {
+            return UtilMessage.createAndLogServiceError(e, MODULE);
+        }
+
+        Map<String, Object> results = ServiceUtil.returnSuccess();
+        results.put("invoiceId", invoiceId);
+        return results;
+    }
+
+    /**
      * Updates an invoice and its related billing address.
      *
      * @param dctx a <code>DispatchContext</code> value
@@ -336,7 +374,6 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> updateInvoiceAndBillingAddress(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -356,34 +393,28 @@ public final class InvoiceServices {
                 return results;
             }
 
-            // remove existing billing address exist
-            delegator.removeByCondition("InvoiceContactMech",
-                      EntityCondition.makeCondition(EntityOperator.AND,
-                            EntityCondition.makeCondition("invoiceId", invoiceId),
-                            EntityCondition.makeCondition("contactMechPurposeTypeId", ContactMechPurposeTypeConstants.BILLING_LOCATION)));
+            DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+            DomainsDirectory domains = dl.loadDomainsDirectory();
+            InvoiceRepositoryInterface repository = domains.getBillingDomain().getInvoiceRepository();
+            Invoice invoice = repository.getInvoiceById(invoiceId);
+            PostalAddress billingAddress = repository.findOne(PostalAddress.class, repository.map(PostalAddress.Fields.contactMechId, contactMechId));
 
-            // set the new billing address
-            if (UtilValidate.isNotEmpty(contactMechId)) {
-
-                input = UtilMisc.<String, Object>toMap(
-                        "invoiceId", invoiceId,
-                        "contactMechId", contactMechId,
-                        "userLogin", userLogin,
-                        "contactMechPurposeTypeId", ContactMechPurposeTypeConstants.BILLING_LOCATION
-                );
-                results = dispatcher.runSync("createInvoiceContactMech", input);
-                if (ServiceUtil.isError(results)) {
-                    return results;
+            if (billingAddress != null) {
+                // remove existing billing addresses, and set the new one
+                invoice.setBillingAddress(billingAddress);
+            } else {
+                // remove existing billing addresses, and set the default billing address
+                invoice.setBillingAddress(null);
+                billingAddress = invoice.getBillingAddress();
+                if (billingAddress != null) {
+                    invoice.setBillingAddress(billingAddress);
                 }
             }
 
             results = ServiceUtil.returnSuccess();
             results.put("invoiceId", invoiceId);
             return results;
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-            return ServiceUtil.returnError(e.getMessage());
-        } catch (GenericServiceException e) {
+        } catch (GeneralException e) {
             Debug.logError(e, MODULE);
             return ServiceUtil.returnError(e.getMessage());
         }

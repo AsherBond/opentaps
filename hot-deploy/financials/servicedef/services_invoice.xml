@@ -73,6 +73,13 @@
         <attribute name="contactMechId" type="String" mode="IN" optional="true"/>
     </service>
 
+    <service name="setInvoiceDefaultBillingAddressIfNeeded" engine="java" default-entity-name="Invoice"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="setInvoiceDefaultBillingAddress" auth="true">
+        <description>Sets the default billing address on the given invoice, from the invoice party billing address.</description>
+        <auto-attributes mode="INOUT" include="pk" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+    </service>
+
     <service name="sendInvoiceEmail" engine="java"
         location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="sendInvoiceEmail" auth="true">
         <description>Send an email with invoice attached.</description>

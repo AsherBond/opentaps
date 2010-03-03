@@ -45,6 +45,11 @@
         <action service="setInvoiceDueDate" mode="sync"/>
     </eca>
 
+    <!-- Set the billing contact mech -->
+    <eca service="createInvoice" event="commit">
+        <action service="setInvoiceDefaultBillingAddressIfNeeded" mode="sync"/>
+    </eca>
+
     <!-- Bill third parties when a sales invoice is set to ready -->
     <eca service="setInvoiceStatus" event="commit">
         <condition field-name="statusId" operator="equals" value="INVOICE_READY"/>
