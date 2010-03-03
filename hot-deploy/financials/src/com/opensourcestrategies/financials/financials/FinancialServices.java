@@ -476,7 +476,7 @@ public final class FinancialServices {
             boolean accountingTagsUsed = false;
 
             // check if accounting tags are being used
-            accountingTagsUsed = !UtilAccountingTags.getTagParameters(context).isEmpty();
+            accountingTagsUsed = UtilAccountingTags.areTagsSet(context);
             if (accountingTagsUsed) {
                 Debug.logWarning("getBalanceSheetForDate is using accounting tags, not looking for closed time periods", MODULE);
                 lastClosedTimePeriod = null;

@@ -664,7 +664,33 @@ public final class UtilAccountingTags {
         List<Enumeration> enumerations = repository.findList(Enumeration.class, EntityCondition.makeCondition(Enumeration.Fields.enumTypeId.name(), EntityOperator.IN, typeIds), Arrays.asList(Enumeration.Fields.sequenceId.asc()));
         return Entity.groupByFieldValues(EnumerationType.class, enumerations, Enumeration.Fields.enumTypeId, enumerationTypes, EnumerationType.Fields.enumTypeId);
     }
-    
+
+    /**
+     * Checks if there is at least one tag set in the given Map, excluding the <code>ANY</code> special value.
+     * @param input a <code>Map</code> value
+     * @return a <code>boolean</code> value
+     */
+    public static boolean areTagsSet(Map<String, Object> input) {
+        return areTagsSet(input, TAG_PARAM_PREFIX);
+    }
+
+    /**
+     * Checks if there is at least one tag set in the given Map, excluding the <code>ANY</code> special value.
+     * @param input a <code>Map</code> value
+     * @param prefix the part of parameters before the index which holds the values for the accounting tags in the request
+     * @return a <code>boolean</code> value
+     */
+    public static boolean areTagsSet(Map<String, Object> input, String prefix) {
+        if (input == null || input.isEmpty()) {
+            return false;
+        }
+        for (Object v : getTagParameters(input, prefix).values()) {
+            if (v != null && !"".equals(v) && !"ANY".equals(v)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Return if set any accounting tag on the entity
