@@ -473,8 +473,11 @@ public final class FinancialServices {
             Timestamp lastClosedDate = null;
             GenericValue lastClosedTimePeriod = null;
             Map tmpResult;
+            boolean accountingTagsUsed = false;
 
-            if (!UtilAccountingTags.getTagParameters(context).isEmpty()) {
+            // check if accounting tags are being used
+            accountingTagsUsed = !UtilAccountingTags.getTagParameters(context).isEmpty();
+            if (accountingTagsUsed) {
                 Debug.logWarning("getBalanceSheetForDate is using accounting tags, not looking for closed time periods", MODULE);
                 lastClosedTimePeriod = null;
                 List<GenericValue> timePeriods = delegator.findByAnd("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId), UtilMisc.toList("fromDate ASC"));
@@ -526,7 +529,15 @@ public final class FinancialServices {
             tmpResult = dispatcher.runSync("getIncomeStatementByDates", input);
             GenericValue retainedEarningsGlAccount = (GenericValue) tmpResult.get("retainedEarningsGlAccount");
             BigDecimal interimNetIncome = (BigDecimal) tmpResult.get("netIncome");
-            UtilCommon.addInMapOfBigDecimal(equityAccountBalances, retainedEarningsGlAccount, interimNetIncome);
+
+            // if any time periods had been closed, the retained earnings account may have a posted balance but for all accounting tags, which is
+            // not appropriate from the accounting tags, so if accountings tags are used, then ignore any existing posted retained earnings balance
+            // and just put the interim net income as reatained earnings
+            if (accountingTagsUsed) {
+                equityAccountBalances.put(retainedEarningsGlAccount, interimNetIncome);
+            } else {
+                UtilCommon.addInMapOfBigDecimal(equityAccountBalances, retainedEarningsGlAccount, interimNetIncome);
+            }
 
             // TODO: This is just copied over from getIncomeStatementByDates for now.  We should implement a good version at some point.
             boolean isClosed = true;
@@ -534,8 +545,8 @@ public final class FinancialServices {
                     EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
                     EntityCondition.makeCondition("isClosed", EntityOperator.NOT_EQUAL, "Y"),
                     EntityCondition.makeCondition(EntityOperator.OR,
-                            EntityCondition.makeCondition("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, UtilDate.timestampToSqlDate(lastClosedDate)),
-                            EntityCondition.makeCondition("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, UtilDate.timestampToSqlDate(asOfDate))));
+                            EntityCondition.makeCondition("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, lastClosedDate),
+                            EntityCondition.makeCondition("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate)));
             List timePeriods = delegator.findByCondition("CustomTimePeriod", conditions, UtilMisc.toList("customTimePeriodId"), UtilMisc.toList("customTimePeriodId"));
             if (timePeriods.size() > 0) {
                 isClosed = false;
