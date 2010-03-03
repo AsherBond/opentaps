@@ -260,6 +260,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     public void setBillingAddress(Invoice invoice, PostalAddress billingAddress) throws RepositoryException {
         try {
             // TODO: this needs a solution to the Party.ContactPurpose issue
+            // remove all associated InvoiceContactMech that are BILLING_LOCATION
             List<InvoiceContactMech> addresses = invoice.getRelated(InvoiceContactMech.class);
             for (InvoiceContactMech address : addresses) {
                 if (ContactMechPurposeTypeConstants.BILLING_LOCATION.equals(address.getContactMechPurposeTypeId())) {
@@ -267,12 +268,14 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
                 }
             }
 
-            // create the billing address
-            InvoiceContactMech contactMech = new InvoiceContactMech();
-            contactMech.setInvoiceId(invoice.getInvoiceId());
-            contactMech.setContactMechPurposeTypeId(ContactMechPurposeTypeConstants.BILLING_LOCATION);
-            contactMech.setContactMechId(billingAddress.getContactMechId());
-            createOrUpdate(contactMech);
+            if (billingAddress != null) {
+                // create the new billing address
+                InvoiceContactMech contactMech = new InvoiceContactMech();
+                contactMech.setInvoiceId(invoice.getInvoiceId());
+                contactMech.setContactMechPurposeTypeId(ContactMechPurposeTypeConstants.BILLING_LOCATION);
+                contactMech.setContactMechId(billingAddress.getContactMechId());
+                createOrUpdate(contactMech);
+            }
 
         } catch (GeneralException e) {
             throw new RepositoryException(e);
