@@ -329,7 +329,7 @@ public final class InvoiceServices {
     }
 
     /**
-     * Updates an invoice and its related billing/payment addresses.
+     * Updates an invoice and its related billing address.
      *
      * @param dctx a <code>DispatchContext</code> value
      * @param context the service parameters <code>Map</code>
@@ -356,15 +356,14 @@ public final class InvoiceServices {
                 return results;
             }
 
+            // remove existing billing address exist
+            delegator.removeByCondition("InvoiceContactMech",
+                      EntityCondition.makeCondition(EntityOperator.AND,
+                            EntityCondition.makeCondition("invoiceId", invoiceId),
+                            EntityCondition.makeCondition("contactMechPurposeTypeId", ContactMechPurposeTypeConstants.BILLING_LOCATION)));
+
+            // set the new billing address
             if (UtilValidate.isNotEmpty(contactMechId)) {
-                // ensure only billing and payment address exist
-                delegator.removeByCondition("InvoiceContactMech",
-                        EntityCondition.makeCondition(Arrays.asList(
-                                EntityCondition.makeCondition("invoiceId", invoiceId), 
-                                EntityCondition.makeCondition(Arrays.asList(
-                                        EntityCondition.makeCondition("contactMechPurposeTypeId", ContactMechPurposeTypeConstants.BILLING_LOCATION), 
-                                        EntityCondition.makeCondition("contactMechPurposeTypeId", ContactMechPurposeTypeConstants.PAYMENT_LOCATION)), 
-                                        EntityOperator.OR)), EntityOperator.AND));
 
                 input = UtilMisc.<String, Object>toMap(
                         "invoiceId", invoiceId,
@@ -376,15 +375,6 @@ public final class InvoiceServices {
                 if (ServiceUtil.isError(results)) {
                     return results;
                 }
-
-                input.put("contactMechPurposeTypeId", ContactMechPurposeTypeConstants.PAYMENT_LOCATION);
-                results = dispatcher.runSync("createInvoiceContactMech", input);
-                if (ServiceUtil.isError(results)) {
-                    return results;
-                }
-            } else {
-                input = UtilMisc.<String, Object>toMap("invoiceId", invoiceId);
-                delegator.removeByAnd("InvoiceContactMech", input);
             }
 
             results = ServiceUtil.returnSuccess();
