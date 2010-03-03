@@ -305,11 +305,17 @@ public final class InvoiceHelper {
         // add the remaining invoice items to the lines
         for (GenericValue invoiceItem  : invoiceItems) {
             Map<String, Object> invoiceLine = joinInvoiceItemForPresentation(invoiceItem);
+            // quantity default to 1, amount default to 0 
             BigDecimal quantity = invoiceItem.getBigDecimal("quantity");
             if (quantity == null) {
                 quantity = BigDecimal.ONE;
             }
-            BigDecimal amountTotal = quantity.multiply(invoiceItem.getBigDecimal("amount")).setScale(decimals + 1, rounding);
+            BigDecimal amount = invoiceItem.getBigDecimal("amount");
+            if (amount == null) {
+                amount = BigDecimal.ZERO;
+            }
+ 
+            BigDecimal amountTotal = quantity.multiply(amount).setScale(decimals + 1, rounding);
             invoiceLine.put("amountTotal", amountTotal);
             invoiceLines.add(invoiceLine);
         }
