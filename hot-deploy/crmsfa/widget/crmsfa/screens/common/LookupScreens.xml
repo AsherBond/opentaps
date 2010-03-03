@@ -57,6 +57,7 @@
                 <property-map resource="ProductUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OpentapsUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="opentaps" map-name="configProperties" global="true"/>
                 <property-map resource="crmsfa" map-name="configProperties" global="true"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/main-decorator.bsh"/>
                 <!-- this tells the various list forms that they are part of a lookup, so they will use the right target -->

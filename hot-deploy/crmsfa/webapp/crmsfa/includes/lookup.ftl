@@ -104,6 +104,12 @@
     		window.close();
          }
     </script>
+
+    <script type="text/javascript">
+        // This code set the timeout default value for opentaps.sendRequest
+        var ajaxDefaultTimeOut = ${configProperties.get("opentaps.ajax.defaultTimeout")};
+    </script>
+
     <#if gwtScripts?exists>
       <meta name="gwt:property" content="locale=${locale}"/>
     </#if>
