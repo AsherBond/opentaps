@@ -51,9 +51,16 @@ if (UtilConfig.getPropertyBoolean(application, "opentaps.history.show", true)) {
             currentView = UtilCommon.getParameter(context, "_CURRENT_VIEW_");            
         };
         String uri = UtilHttp.getFullRequestUrl(request).toString();
+        uri = "https://localhost:8484/crmsfa/control/orderview;jsessionid=93B5E7B9DABED7A45A18BFF10CBC47D9.jvm1?orderId=WS10010";
         if (uri.indexOf(currentView) != -1) {
+            print("====== " + uri);
             if (request.QueryString != null) {
                 uri = uri.substring(0, uri.lastIndexOf("?"));
+                // check for cookie token that may be at the end of URL like view;jsessionid=XXXX
+                int jsessionidIndex = uri.indexOf(";");
+                if (jsessionidIndex != -1) {
+                    uri = uri.substring(0, jsessionidIndex);
+                }
             }
             override = historyEntry.get("override");
             if (!(override != null && override.size() == 0)) {
