@@ -275,6 +275,10 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
                 contactMech.setContactMechPurposeTypeId(ContactMechPurposeTypeConstants.BILLING_LOCATION);
                 contactMech.setContactMechId(billingAddress.getContactMechId());
                 createOrUpdate(contactMech);
+
+                // set the invoice contactMechId
+                invoice.setContactMechId(billingAddress.getContactMechId());
+                update(invoice);
             }
 
         } catch (GeneralException e) {
