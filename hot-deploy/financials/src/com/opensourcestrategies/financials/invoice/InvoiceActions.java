@@ -37,7 +37,6 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -48,7 +47,6 @@ import org.opentaps.base.entities.BillingAccountAndRole;
 import org.opentaps.base.entities.GlAccountOrganizationAndClass;
 import org.opentaps.base.entities.InvoiceAdjustmentType;
 import org.opentaps.base.entities.InvoiceAndInvoiceItem;
-import org.opentaps.base.entities.InvoiceContactMech;
 import org.opentaps.base.entities.InvoiceType;
 import org.opentaps.base.entities.OrderItem;
 import org.opentaps.base.entities.OrderItemBilling;
@@ -73,7 +71,6 @@ import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.exception.FoundationException;
-import org.opentaps.foundation.repository.ofbiz.Repository;
 
 /**
  * InvoiceActions - Java Actions for invoices.
@@ -210,24 +207,12 @@ public final class InvoiceActions {
         ac.put("billingPartyId", invoice.getTransactionPartyId());
 
         // the billing address, which can be either the payment or billing location
-        // TODO: this should be moved into invoice repository / Invoice
         String invoiceContactMechId = null;
-        PostalAddress invoiceAddress = null;
-        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                          EntityCondition.makeCondition(InvoiceContactMech.Fields.contactMechPurposeTypeId.name(), EntityOperator.EQUALS, "BILLING_LOCATION"),
-                                          EntityCondition.makeCondition(InvoiceContactMech.Fields.invoiceId.name(), EntityOperator.EQUALS, invoice.getInvoiceId()));
-        InvoiceContactMech invoiceContactMech = Entity.getFirst(invoiceRepository.findList(InvoiceContactMech.class, conditions, UtilMisc.toList("lastUpdatedStamp DESC")));
-        if (invoiceContactMech != null) {
-            invoiceContactMechId = invoiceContactMech.getContactMechId();
-            invoiceAddress = invoiceRepository.findOne(PostalAddress.class, invoiceRepository.map(PostalAddress.Fields.contactMechId, invoiceContactMech.getContactMechId()));
-        } else {
-            // if the address is not in InvoiceContactMech, use the billing address of the party
-            GenericValue invoiceAddressGV = UtilFinancial.getBillingAddress(invoice.getTransactionPartyId(), delegator);
-            if (invoiceAddressGV != null) {
-                invoiceAddress = Repository.loadFromGeneric(PostalAddress.class, invoiceAddressGV);
-                invoiceContactMechId = invoiceAddress.getContactMechId();
-            }
+        PostalAddress invoiceAddress = invoice.getBillingAddress();
+        if (invoiceAddress != null) {
+            invoiceContactMechId = invoiceAddress.getContactMechId();
         }
+
         ac.put("invoiceAddress", invoiceAddress);
         ac.put("invoiceContactMechId", invoiceContactMechId);
 
@@ -263,6 +248,7 @@ public final class InvoiceActions {
         ac.put("hasWriteoffPermission", hasWriteoffPermission);
 
         // update permission implies that the header and items are editable, so get some data for the forms
+        EntityCondition conditions;
         if (hasUpdatePermission || limitedEditOnly) {
             List<GlAccountOrganizationAndClass> glAccounts = invoiceRepository.findListCache(GlAccountOrganizationAndClass.class, invoiceRepository.map(GlAccountOrganizationAndClass.Fields.organizationPartyId, organizationPartyId), UtilMisc.toList(GlAccountOrganizationAndClass.Fields.accountCode.name()));
             ac.put("glAccounts", glAccounts);

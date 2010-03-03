@@ -227,8 +227,6 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
 
     /** {@inheritDoc} */
     public PostalAddress getBillingAddress(Invoice invoice) throws RepositoryException {
-        String billingPartyId = invoice.isReceivable() ? invoice.getPartyId() : invoice.getPartyIdFrom();
-
         InvoiceContactMech mech = getFirst(findList(InvoiceContactMech.class, map(InvoiceContactMech.Fields.invoiceId, invoice.getInvoiceId(), InvoiceContactMech.Fields.contactMechPurposeTypeId, ContactMechPurposeTypeConstants.BILLING_LOCATION), UtilMisc.toList("lastUpdatedStamp DESC")));
         if (mech != null) {
             return findOne(PostalAddress.class, map(PostalAddress.Fields.contactMechId, mech.getContactMechId()));
@@ -240,7 +238,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
         PostalAddress billingAddress = null;
 
         try {
-            Party billingParty = partyRepository.getPartyById(billingPartyId);
+            Party billingParty = partyRepository.getPartyById(invoice.getTransactionPartyId());
             billingAddress = billingParty.getBillingAddress();
             if (billingAddress == null) {
                 // no billing address, use general one
