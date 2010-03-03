@@ -343,6 +343,7 @@ public class FinancialStatementTests extends FinancialsTestCase {
         verifyIncomeStatement(messagePrefix, organizationPartyId, YEAR1, new BigDecimal("234374.22"), new BigDecimal("121924.22"), new BigDecimal("113174.22"), new BigDecimal("99174.22"));
 
         // verify income statement results is the same for YEAR1 using accountingTags ANY/ANY/ANY
+        verifyIncomeStatement(messagePrefix, organizationPartyId, YEAR1, new BigDecimal("234374.22"), new BigDecimal("121924.22"), new BigDecimal("113174.22"), new BigDecimal("99174.22"), UtilMisc.toMap("tag1", "ANY", "tag2", "ANY", "tag3", "ANY"));
 
         // verify balance sheet statements
         verifyBalanceSheet(messagePrefix, organizationPartyId, YEAR0, new BigDecimal("610000"), new BigDecimal("300000"), new BigDecimal("310000"));
@@ -351,6 +352,7 @@ public class FinancialStatementTests extends FinancialsTestCase {
         verifyBalanceSheet(messagePrefix, organizationPartyId, YEAR1, new BigDecimal("1025343.22"), new BigDecimal("617169"), new BigDecimal("408174.22"));
 
         // verify balance sheet results is the same for YEAR1 using accountingTags ANY/ANY/ANY
+        verifyBalanceSheet(messagePrefix, organizationPartyId, YEAR1, new BigDecimal("1025343.22"), new BigDecimal("617169"), new BigDecimal("408174.22"), UtilMisc.toMap("tag1", "ANY", "tag2", "ANY", "tag3", "ANY"));
         
         // verify cash flow statements
         verifyCashflowStatement(messagePrefix, organizationPartyId, QUARTER1, new BigDecimal("200000.00"), new BigDecimal("74243.22"), new BigDecimal("-104756.78"), new BigDecimal("-50000.00"), new BigDecimal("29000"), new BigDecimal("-125756.78"));
@@ -358,6 +360,7 @@ public class FinancialStatementTests extends FinancialsTestCase {
         verifyCashflowStatement(messagePrefix, organizationPartyId, YEAR1, new BigDecimal("200000"), new BigDecimal("136743.22"), new BigDecimal("-42256.78"), new BigDecimal("-50000"), new BigDecimal("29000"), new BigDecimal("-63256.78"));
 
         // verify cashflow statement results is the same for YEAR1 using accountingTags ANY/ANY/ANY
+        verifyCashflowStatement(messagePrefix, organizationPartyId, YEAR1, new BigDecimal("200000"), new BigDecimal("136743.22"), new BigDecimal("-42256.78"), new BigDecimal("-50000"), new BigDecimal("29000"), new BigDecimal("-63256.78"), UtilMisc.toMap("tag1", "ANY", "tag2", "ANY", "tag3", "ANY"));
     }
 
     /**
