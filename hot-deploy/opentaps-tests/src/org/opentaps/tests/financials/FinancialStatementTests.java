@@ -342,17 +342,22 @@ public class FinancialStatementTests extends FinancialsTestCase {
         verifyIncomeStatement(messagePrefix, organizationPartyId, QUARTER2, new BigDecimal("92356.00"), new BigDecimal("84356.00"), new BigDecimal("84356.00"), new BigDecimal("84356.00"));
         verifyIncomeStatement(messagePrefix, organizationPartyId, YEAR1, new BigDecimal("234374.22"), new BigDecimal("121924.22"), new BigDecimal("113174.22"), new BigDecimal("99174.22"));
 
+        // verify income statement results is the same for YEAR1 using accountingTags ANY/ANY/ANY
+
         // verify balance sheet statements
         verifyBalanceSheet(messagePrefix, organizationPartyId, YEAR0, new BigDecimal("610000"), new BigDecimal("300000"), new BigDecimal("310000"));
         verifyBalanceSheet(messagePrefix, organizationPartyId, QUARTER1, new BigDecimal("867343.22"), new BigDecimal("543525.00"), new BigDecimal("323818.22"));
         verifyBalanceSheet(messagePrefix, organizationPartyId, QUARTER2, new BigDecimal("1025343.22"), new BigDecimal("617169"), new BigDecimal("408174.22"));
         verifyBalanceSheet(messagePrefix, organizationPartyId, YEAR1, new BigDecimal("1025343.22"), new BigDecimal("617169"), new BigDecimal("408174.22"));
 
+        // verify balance sheet results is the same for YEAR1 using accountingTags ANY/ANY/ANY
+        
         // verify cash flow statements
         verifyCashflowStatement(messagePrefix, organizationPartyId, QUARTER1, new BigDecimal("200000.00"), new BigDecimal("74243.22"), new BigDecimal("-104756.78"), new BigDecimal("-50000.00"), new BigDecimal("29000"), new BigDecimal("-125756.78"));
         verifyCashflowStatement(messagePrefix, organizationPartyId, QUARTER2, new BigDecimal("74243.22"), new BigDecimal("136743.22"), new BigDecimal("62500"), new BigDecimal("0.00"), BigDecimal.ZERO, new BigDecimal("62500"));
         verifyCashflowStatement(messagePrefix, organizationPartyId, YEAR1, new BigDecimal("200000"), new BigDecimal("136743.22"), new BigDecimal("-42256.78"), new BigDecimal("-50000"), new BigDecimal("29000"), new BigDecimal("-63256.78"));
 
+        // verify cashflow statement results is the same for YEAR1 using accountingTags ANY/ANY/ANY
     }
 
     /**
