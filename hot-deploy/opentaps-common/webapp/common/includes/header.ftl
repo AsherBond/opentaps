@@ -189,7 +189,7 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
            <div style="padding:5px;position:absolute;right:60px" class="applicationSearch" id="gwtSearch"></div>
            <a class="liveHelp" href="${helpUrl}" target="_blank" title="${uiLabelMap.OpentapsLiveHelp}"><img src="/opentaps_images/buttons/help_ofbiz_svn.gif" width="20" height="20" alt="${uiLabelMap.OpentapsLiveHelp}"/></a>
          <#else>  
-           <#-- just search button, right aligned -->
+           <#-- just search button, with room to the right for the contact button  -->
            <div style="padding:5px;position:absolute;right:30px" class="applicationSearch" id="gwtSearch"></div>
         </#if>
         <a href="http://www.opentaps.org/contact" target="_blank" title="${uiLabelMap.OpentapsGetHelpFromAnOpentapsPartner}"><img src="<@ofbizContentUrl>/opentaps_images/openclipart.org/dholler_ok_16x16.png</@ofbizContentUrl>" alt="${uiLabelMap.OpentapsGetHelpFromAnOpentapsPartner}" width="16" height="16"/></a>
