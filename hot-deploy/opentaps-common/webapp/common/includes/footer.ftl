@@ -18,8 +18,11 @@
 <#-- This file is the common opentaps footer for every application that appears as a tab in OFBiz -->
 
 <div id="footer">
-  <div class="tabletext"><a href="http://www.opentaps.org" class="tabletext">${uiLabelMap.OpentapsProductName}</a> ${uiLabelMap.OpentapsReleaseVersion}.<br />  
-  Opentaps is a trademark of <a href="http://www.opensourcestrategies.com">Open Source Strategies, Inc.</a></div>
-<div class="tabletext">This application is free software under the terms of the <a href="http://www.opentaps.org/index.php?option=com_content&amp;task=view&amp;id=16&amp;Itemid=36">Affero General Public License v3</a> WITH ABSOLUTELY NO WARRANTY.<br />  It is also available under <a href="http://www.opentaps.org/index.php?option=com_content&amp;task=blogcategory&amp;id=17&amp;Itemid=77">commercial licenses</a> from Open Source Strategies, Inc.</div>
+  <div class="tabletext"><a href="http://www.opentaps.org" class="tabletext">${uiLabelMap.OpentapsProductName}</a> ${uiLabelMap.OpentapsReleaseVersion}.
+  opentaps is a trademark of <a href="http://www.opensourcestrategies.com">Open Source Strategies, Inc.</a></div>
+<div class="tabletext">This application is free software under the terms of the <a href="http://www.opentaps.org/about-opentaps/licensing">Affero General Public License v3</a> WITH ABSOLUTELY NO WARRANTY.<br />  It is also available under <a href="http://www.opentaps.org/services-support/professional-edition">commercial licenses</a> from Open Source Strategies, Inc.</div>
   <div class="tabletext">(c) 2005-2010 <a href="http://www.opensourcestrategies.com" class="tabletext">Open Source Strategies, Inc. </a></div>
+<div class="tabletext">
+  ${uiLabelMap.OpentapsToLearnMoreAboutOpentapsFollowUsOn} <a href="http://www.facebook.com/pages/opentaps/285070770315"/><img width="16" height="16" src="<@ofbizContentUrl>/opentaps_images/facebook_square_16x16.jpg</@ofbizContentUrl>" alt="Facebook"/></a> ${uiLabelMap.CommonAnd} <a href="http://twitter.com/opentaps"><img width="16" height="16" src="<@ofbizContentUrl>/opentaps_images/twitter_square_16x16.jpg</@ofbizContentUrl>" alt="twitter" /></a>
+</div>
 </div>
