@@ -39,6 +39,7 @@ custRequestName = parameters.get("custRequestName");
 custRequestTypeId = parameters.get("custRequestTypeId");
 custRequestCategoryId = parameters.get("custRequestCategoryId");
 statusId = parameters.get("statusId");
+performFind = parameters.get("performFind");
 
 // trim text input
 if (custRequestName != null) custRequestName = custRequestName.trim();
@@ -51,7 +52,7 @@ if ("".equals(custRequestCategoryId)) custRequestCategoryId = null;
 if ("".equals(statusId)) statusId = null;
 
 // don't do anything if no input specified (default find all is harder)
-if (priority == null && custRequestName == null && custRequestTypeId == null && custRequestCategoryId == null && statusId == null) {
+if (!"Y".equals(performFind) && priority == null && custRequestName == null && custRequestTypeId == null && custRequestCategoryId == null && statusId == null) {
     return;
 }
 
@@ -82,7 +83,7 @@ if (statusId != null) {
     searchConditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
     findParams += "&statusId=" + statusId;
 }
-if (searchConditions.size() == 0) return;
+if (!"Y".equals(performFind) && searchConditions.size() == 0) return;
 searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
 
 // prepare conditions to the case page builder in listCases.bsh

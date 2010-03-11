@@ -29,7 +29,9 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilView;
 
 // prevent crash if script invoked without object, such as if viewAccount?partyId=democontact1
-if (context.get("entityName") == null) return;
+if (context.get("entityName") == null) {
+    return;
+}
 
 // use a page builder to fetch the case list, because we need some extra data
 buildCaseList(delegator, conditions) {
