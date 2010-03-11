@@ -64,7 +64,7 @@ findParams = "";
 
 // construct search conditions and find parameters
 if (priority != null) {
-    searchConditions.add(new EntityExpr("priority", EntityOperator.EQUALS, priority));
+    searchConditions.add(new EntityExpr("priority", EntityOperator.EQUALS, Integer.valueOf(priority)));
     findParams += "&priority="+priority;
 }
 if (custRequestName != null) {
