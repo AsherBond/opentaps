@@ -72,6 +72,10 @@
     </#list>
 
     <script type="text/javascript">
+        // This code set the timeout default value for opentaps.sendRequest
+        var ajaxDefaultTimeOut = ${configProperties.get("opentaps.ajax.defaultTimeout")};
+    </script>
+    <script type="text/javascript">
         // This code inserts the value lookedup by a popup window back into the associated form element
         var re_id = new RegExp('id=(\\d+)');
         var num_id = (re_id.exec(String(window.location))
