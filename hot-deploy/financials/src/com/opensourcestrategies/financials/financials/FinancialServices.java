@@ -225,9 +225,10 @@ public final class FinancialServices {
             // get the current time period and first use it to assume whether this period has been closed or not
             GenericValue currentTimePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
             boolean isClosed = false;
+            boolean accountingTagsUsed = UtilAccountingTags.areTagsSet(context);
             if (currentTimePeriod.getString("isClosed").equals("Y")) {
                 isClosed = true;
-                if (!UtilAccountingTags.getTagParameters(context).isEmpty()) {
+                if (accountingTagsUsed) {
                     Debug.logWarning("getBalanceSheetForTimePeriod found a closed time period but we have accounting tag, considering the time period as NOT closed", MODULE);
                     isClosed = false;
                 }
@@ -473,10 +474,7 @@ public final class FinancialServices {
             Timestamp lastClosedDate = null;
             GenericValue lastClosedTimePeriod = null;
             Map tmpResult;
-            boolean accountingTagsUsed = false;
-
-            // check if accounting tags are being used
-            accountingTagsUsed = UtilAccountingTags.areTagsSet(context);
+            boolean accountingTagsUsed = UtilAccountingTags.areTagsSet(context);
             if (accountingTagsUsed) {
                 Debug.logWarning("getBalanceSheetForDate is using accounting tags, not looking for closed time periods", MODULE);
                 lastClosedTimePeriod = null;
