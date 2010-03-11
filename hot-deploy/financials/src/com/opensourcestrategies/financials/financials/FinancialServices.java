@@ -52,7 +52,6 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
-import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
@@ -61,7 +60,6 @@ import org.opentaps.domain.organization.OrganizationDomainInterface;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -515,9 +513,9 @@ public final class FinancialServices {
 
             // now add the new asset, liability, and equity transactions
             Map tags = UtilAccountingTags.getTagParameters(context);
-            assetAccountBalances = getAcctgTransAndEntriesForClass(assetAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "ASSET", tags, userLogin, dispatcher);
-            liabilityAccountBalances = getAcctgTransAndEntriesForClass(liabilityAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "LIABILITY", tags, userLogin, dispatcher);
-            equityAccountBalances = getAcctgTransAndEntriesForClass(equityAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "EQUITY", tags, userLogin, dispatcher);
+            assetAccountBalances = getAcctgTransAndEntriesForClass(assetAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "ASSET", tags, true, userLogin, dispatcher);
+            liabilityAccountBalances = getAcctgTransAndEntriesForClass(liabilityAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "LIABILITY", tags, true, userLogin, dispatcher);
+            equityAccountBalances = getAcctgTransAndEntriesForClass(equityAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "EQUITY", tags, true, userLogin, dispatcher);
 
             // calculate a net income since the last closed date and add it to our equity account balances
             Map input = new HashMap(context);
@@ -530,7 +528,7 @@ public final class FinancialServices {
 
             // if any time periods had been closed, the retained earnings account may have a posted balance but for all accounting tags, which is
             // not appropriate from the accounting tags, so if accountings tags are used, then ignore any existing posted retained earnings balance
-            // and just put the interim net income as reatained earnings
+            // and just put the interim net income as retained earnings
             if (accountingTagsUsed) {
                 equityAccountBalances.put(retainedEarningsGlAccount, interimNetIncome);
             } else {
@@ -587,8 +585,9 @@ public final class FinancialServices {
         String partyId = (String) context.get("partyId");
         // this defaults to FINANCIALS_REPORTS_TAG (see the service definition)
         String accountingTagUsage = (String) context.get("accountingTagUsage");
+        List<String> ignoreAcctgTransTypeIds = (List<String>) context.get("ignoreAcctgTransTypeIds");
 
-        if ((glAccountClasses == null || glAccountClasses.size() == 0) && (glAccountTypes == null || glAccountTypes.size() == 0)) {
+        if (UtilValidate.isEmpty(glAccountClasses) && UtilValidate.isEmpty(glAccountTypes)) {
             return ServiceUtil.returnError("Please supply either a list of glAccountClassId or glAccountTypeId");
         }
 
@@ -609,11 +608,14 @@ public final class FinancialServices {
                     EntityCondition.makeCondition("glFiscalTypeId", EntityOperator.EQUALS, glFiscalTypeId),
                     EntityCondition.makeCondition("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
                     EntityCondition.makeCondition("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate));
-            if (glAccountClassesConsidered.size() > 0) {
+            if (UtilValidate.isNotEmpty(glAccountClassesConsidered)) {
                 searchConditions.add(EntityCondition.makeCondition(glAccountClassesConsidered, EntityOperator.OR));
             }
-            if (glAccountTypes != null && glAccountTypes.size() > 0) {
+            if (UtilValidate.isNotEmpty(glAccountTypes)) {
                 searchConditions.add(EntityCondition.makeCondition("glAccountTypeId", EntityOperator.IN, glAccountTypes));
+            }
+            if (UtilValidate.isNotEmpty(ignoreAcctgTransTypeIds)) {
+                searchConditions.add(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.NOT_IN, ignoreAcctgTransTypeIds));
             }
             if (UtilValidate.isNotEmpty(productId)) {
                 searchConditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
@@ -727,9 +729,34 @@ public final class FinancialServices {
      */
     @SuppressWarnings("unchecked")
     private static Map<GenericValue, BigDecimal> getAcctgTransAndEntriesForClass(Map<GenericValue, BigDecimal> accountBalances, String organizationPartyId, Timestamp fromDate, Timestamp thruDate, String glFiscalTypeId, String glAccountClassId, Map tags, GenericValue userLogin, LocalDispatcher dispatcher) {
+        return getAcctgTransAndEntriesForClass(accountBalances, organizationPartyId, fromDate, thruDate, glFiscalTypeId, glAccountClassId, tags, false, userLogin, dispatcher);
+    }
+
+
+    /**
+     * Little method to help out getBalanceSheetForDate.  Gets all AcctgTransAndEntries of a glAccountClassId and add them to the
+     * original accountBalances Map, which is returned.
+     * @param accountBalances
+     * @param organizationPartyId
+     * @param fromDate
+     * @param thruDate
+     * @param glFiscalTypeId
+     * @param glAccountClassId
+     * @param tags the <code>Map</code> of accounting tags
+     * @param ignoreClosingPeriodTransactions used for getBalanceSheetForDate so as the closing transaction is already accounted for
+     * @param userLogin the user login <code>GenericValue</code>
+     * @param dispatcher a <code>LocalDispatcher</code> value
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    private static Map<GenericValue, BigDecimal> getAcctgTransAndEntriesForClass(Map<GenericValue, BigDecimal> accountBalances, String organizationPartyId, Timestamp fromDate, Timestamp thruDate, String glFiscalTypeId, String glAccountClassId, Map tags, boolean ignoreClosingPeriodTransactions, GenericValue userLogin, LocalDispatcher dispatcher) {
         try {
             // first get all the AcctgTransAndEntries of this glAccountClassId
             Map input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "fromDate", fromDate, "thruDate", thruDate, "glFiscalTypeId", glFiscalTypeId, "glAccountClasses", UtilMisc.toList(glAccountClassId), "userLogin", userLogin);
+            if (ignoreClosingPeriodTransactions) {
+                input.put("ignoreAcctgTransTypeIds", UtilMisc.toList("PERIOD_CLOSING"));
+            }
+
             if (tags != null) {
                 input.putAll(tags);
             }

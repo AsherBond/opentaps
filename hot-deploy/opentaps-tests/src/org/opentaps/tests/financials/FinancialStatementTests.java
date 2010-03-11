@@ -512,6 +512,14 @@ public class FinancialStatementTests extends FinancialsTestCase {
         tmpResult = runAndAssertServiceSuccess("getBalanceSheetForDate", input, -1, false);
         verifyBalanceSheetResults(messagePrefix + " calculated from dates for " , timePeriodId, tmpResult, assetTotal, liabilityTotal, equityTotal);
 
+        // test by date, using the day of closing
+        input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "asOfDate", UtilDateTime.getTimestamp(timePeriod.getDate("thruDate").getTime() - 1000), "glFiscalTypeId", FISCAL_TYPE, "userLogin", demofinadmin);
+        if (tags != null) {
+            input.putAll(tags);
+        }
+        tmpResult = runAndAssertServiceSuccess("getBalanceSheetForDate", input, -1, false);
+        verifyBalanceSheetResults(messagePrefix + " calculated from dates for " , timePeriodId, tmpResult, assetTotal, liabilityTotal, equityTotal);
+
     }
 
     /**

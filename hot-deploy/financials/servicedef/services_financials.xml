@@ -288,6 +288,7 @@
         <attribute name="partyId" mode="IN" type="String" optional="true"/>
         <attribute name="glAccountClasses" mode="IN" type="java.util.List" optional="true"/>
         <attribute name="glAccountTypes" mode="IN" type="java.util.List" optional="true"/>
+        <attribute name="ignoreAcctgTransTypeIds" mode="IN" type="java.util.List" optional="true"/>
         <attribute name="transactionEntries" mode="OUT" type="java.util.List" optional="false"/>
     </service>
     <service name="addToAccountBalances" engine="java"
