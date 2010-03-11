@@ -3047,15 +3047,14 @@ public final class LedgerServices {
 
             // the first step is to find all GlAccountHistory of the current time period
 
-            List glAccountHistories = delegator.findByAnd("GlAccountHistory", UtilMisc.toMap("organizationPartyId", organizationPartyId,
+            List<GenericValue> glAccountHistories = delegator.findByAnd("GlAccountHistory", UtilMisc.toMap("organizationPartyId", organizationPartyId,
                             "customTimePeriodId", timePeriod.getString("customTimePeriodId")));
 
             // now make a map of glAccountId -> GlAccountHistory, with the correct endingBalance in the GlAccountHistory values
-            Map updatedGlAccountHistories = new HashMap();
-            for (Iterator gAHi = glAccountHistories.iterator(); gAHi.hasNext();) {
-                GenericValue glAccountHistory = (GenericValue) gAHi.next();
-                double netBalance = UtilAccounting.getNetBalance(glAccountHistory, MODULE).doubleValue();
-                glAccountHistory.set("endingBalance", new BigDecimal(netBalance));
+            Map<String, GenericValue> updatedGlAccountHistories = new HashMap<String, GenericValue>();
+            for (GenericValue glAccountHistory : glAccountHistories) {
+                BigDecimal netBalance = UtilAccounting.getNetBalance(glAccountHistory, MODULE);
+                glAccountHistory.set("endingBalance", netBalance);
                 updatedGlAccountHistories.put(glAccountHistory.getString("glAccountId"), glAccountHistory);
             }
 
@@ -3070,35 +3069,32 @@ public final class LedgerServices {
                                   UtilFinancial.getEquityExpr(delegator)),
                           EntityCondition.makeCondition("customTimePeriodId", EntityOperator.EQUALS, lastClosedTimePeriodId));
 
-                List previousGlAccountHistories = delegator.findByCondition("GlAccountAndHistory", previousPeriodConditions,
+                List<GenericValue> previousGlAccountHistories = delegator.findByCondition("GlAccountAndHistory", previousPeriodConditions,
                     UtilMisc.toList("organizationPartyId", "customTimePeriodId", "glAccountId", "postedDebits", "postedCredits", "endingBalance"), UtilMisc.toList("glAccountId"));
 
                 // loop and check them against current period
-                for (Iterator pGAHi = previousGlAccountHistories.iterator(); pGAHi.hasNext();) {
-                    GenericValue previousGlAccountAndHistory = (GenericValue) pGAHi.next();
+                for (GenericValue previousGlAccountAndHistory : previousGlAccountHistories) {
                     GenericValue previousGlAccountHistory = previousGlAccountAndHistory.getRelatedOne("GlAccountHistory");
 
                     // is this gl account also in the current period?
                     if (updatedGlAccountHistories.get(previousGlAccountAndHistory.getString("glAccountId")) != null) {
                         // yes: carry forward the balance
-                        GenericValue updatedGlAccountHistory = (GenericValue) updatedGlAccountHistories.get(previousGlAccountAndHistory.getString("glAccountId"));
-                        double newEndingBalance = updatedGlAccountHistory.getDouble("endingBalance").doubleValue() + previousGlAccountHistory.getDouble("endingBalance").doubleValue();
-                        updatedGlAccountHistory.set("endingBalance", new BigDecimal(newEndingBalance));
+                        GenericValue updatedGlAccountHistory = updatedGlAccountHistories.get(previousGlAccountAndHistory.getString("glAccountId"));
+                        BigDecimal newEndingBalance = updatedGlAccountHistory.getBigDecimal("endingBalance").add(previousGlAccountHistory.getBigDecimal("endingBalance"));
+                        updatedGlAccountHistory.set("endingBalance", newEndingBalance);
                     } else {
                         // no: put it in with the previous period's balance but the current period's time period id
                         GenericValue carriedForwardGlAccountHistory = delegator.makeValue("GlAccountHistory", UtilMisc.toMap("glAccountId", previousGlAccountHistory.getString("glAccountId"),
                                "organizationPartyId", organizationPartyId, "customTimePeriodId", timePeriod.getString("customTimePeriodId"),
-                               "postedDebits", BigDecimal.ZERO, "postedCredits", BigDecimal.ZERO, "endingBalance", previousGlAccountHistory.getDouble("endingBalance")));
+                               "postedDebits", BigDecimal.ZERO, "postedCredits", BigDecimal.ZERO, "endingBalance", previousGlAccountHistory.getBigDecimal("endingBalance")));
                         updatedGlAccountHistories.put(previousGlAccountHistory.getString("glAccountId"), carriedForwardGlAccountHistory);
                     }
                 }
             }
 
             // store all of these
-            List toBeStored = new ArrayList();
-            for (Iterator vi = updatedGlAccountHistories.values().iterator(); vi.hasNext();) {
-                toBeStored.add(vi.next());
-            }
+            List<GenericValue> toBeStored = new ArrayList<GenericValue>();
+            toBeStored.addAll(updatedGlAccountHistories.values());
             delegator.storeAll(toBeStored);
 
             // finally, set time period to closed
