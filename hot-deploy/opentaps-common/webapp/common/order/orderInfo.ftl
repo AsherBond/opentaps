@@ -54,6 +54,11 @@ under the License.
   <@form name="holdOrderAction" url="changeOrderStatus" orderId=order.orderId statusId="ORDER_HOLD" />
 </#if>
 
+<#if (order.isOpen() && (order.isSalesOrder() || security.hasEntityPermission("PRCH", "_ORD_APPRV", session))) >
+  <#assign cancelOrderAction><@actionForm form="cancelOrderAction" text="${uiLabelMap.OpentapsCancelOrder}"/></#assign>
+  <@form name="cancelOrderAction" url="cancelOrderItem" orderId="${order.orderId}" />
+</#if>
+
 <#-- Complete Order action; we need check permission when it is a purchase order -->
 <#if order.isApproved() && !order.uncompleteItems?has_content && (order.isSalesOrder() || security.hasEntityPermission("PRCH", "_ORD_APPRV", session))>
   <#assign completeOptionAction><@actionForm form="completeOrderAction" text="${uiLabelMap.OrderCompleteOrder}"/></#assign>
@@ -82,6 +87,7 @@ under the License.
 <#assign extraOptions>
   <@selectActionForm name="orderActions" prompt="${uiLabelMap.CommonSelectOne}">
     ${actionAction?if_exists}
+    ${cancelOrderAction?if_exists}
     ${completeOptionAction?if_exists}
     ${separatorLineAction?if_exists}
     ${picklistAction?if_exists}

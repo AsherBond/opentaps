@@ -203,6 +203,14 @@ public class Order extends org.opentaps.base.entities.OrderHeader {
     }
 
     /**
+     * Order is open if it is created, approved or held.
+     * @return a <code>true</code> if order is open.
+     */
+    public Boolean isOpen() {
+        return (isCreated() || isApproved() || isOnHold());
+    }
+
+    /**
      * Gets this order <code>OrderType</code>.
      * This is an alias for {@link org.opentaps.base.entities.OrderHeader#getOrderType}.
      * @return the <code>OrderType</code>
