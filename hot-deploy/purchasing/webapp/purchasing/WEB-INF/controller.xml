@@ -605,7 +605,9 @@
     <request-map uri="appendItemToOrder">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="opentaps.appendOrderItem"/>
-        <response name="success" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="view" value="editorderitems"/>
     </request-map>
     <request-map uri="editProductDeliveryDate">
