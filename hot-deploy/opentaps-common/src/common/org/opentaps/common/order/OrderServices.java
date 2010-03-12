@@ -1233,7 +1233,9 @@ public final class OrderServices {
                     appendItemParams.put("unitPrice", basePrice);
                     // list price will null -- only basePrice is input
                 } else {
-                    Debug.logWarning("Override price was selected.  Input price of [" + basePrice + "] will be overriden with [" + results.get("price") + "]", MODULE);
+                    if (basePrice != null) {
+                        Debug.logWarning("Override price was NOT selected. Input price of [" + basePrice + "] will be ignored, using the result of calculateProductPrice [" + results.get("price") + "] instead", MODULE);
+                    }
                     appendItemParams.put("unitPrice", results.get("price"));
                     appendItemParams.put("isSalePrice", results.get("isSale"));
                 }
