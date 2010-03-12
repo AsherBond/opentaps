@@ -1082,6 +1082,14 @@ under the License.
       </relation>
     </extend-entity>
 
+    <!--
+         Extend the Product entity to add isActive flag indicating the product should not be returned
+         by any lookup / autocompleter
+    -->
+    <extend-entity entity-name="Product">
+      <field name="isActive" type="indicator" />
+    </extend-entity>
+
     <!-- this is ugly for a reason: in ofbiz, an order is linked to inventory item via OrderItemShipGrpInvRes when it is first
     created, approved, etc., then when the order is completed, the OISGIR is deleted, and it is linked via ItemIssuance.  It is not
      possible to optionally join OrderItem to InventoryItem via either OISGIR or ItemIssuance, hence two entities. -->
