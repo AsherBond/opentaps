@@ -1434,7 +1434,11 @@ public final class PaymentServices {
 
                 // remove applications if payment is being cancelled
                 if ("PMNT_CANCELLED".equals(statusId)) {
-                    delegator.removeByAnd("PaymentApplication", UtilMisc.toMap("paymentId", paymentId));
+                    // removeByXXX does not trigger the remove ECA
+                    List<GenericValue> toRemove = delegator.findByAnd("PaymentApplication", UtilMisc.toMap("paymentId", paymentId));
+                    for (GenericValue r : toRemove) {
+                        delegator.removeValue(r);
+                    }
                 }
 
                 // all set for status change
