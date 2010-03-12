@@ -62,6 +62,7 @@ public class GetAcctgTransAndEntriesByTypeService extends ServiceWrapper {
         glAccountClasses("glAccountClasses"),
         glAccountTypes("glAccountTypes"),
         glFiscalTypeId("glFiscalTypeId"),
+        ignoreAcctgTransTypeIds("ignoreAcctgTransTypeIds"),
         locale("locale"),
         organizationPartyId("organizationPartyId"),
         partyId("partyId"),
@@ -119,6 +120,7 @@ public class GetAcctgTransAndEntriesByTypeService extends ServiceWrapper {
     private List inGlAccountClasses;
     private List inGlAccountTypes;
     private String inGlFiscalTypeId;
+    private List inIgnoreAcctgTransTypeIds;
     private Locale inLocale;
     private String inOrganizationPartyId;
     private String inPartyId;
@@ -188,6 +190,14 @@ public class GetAcctgTransAndEntriesByTypeService extends ServiceWrapper {
      */
     public String getInGlFiscalTypeId() {
         return this.inGlFiscalTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>List</code>
+     */
+    public List getInIgnoreAcctgTransTypeIds() {
+        return this.inIgnoreAcctgTransTypeIds;
     }
     /**
      * Auto generated value accessor.
@@ -442,6 +452,15 @@ public class GetAcctgTransAndEntriesByTypeService extends ServiceWrapper {
     public void setInGlFiscalTypeId(String inGlFiscalTypeId) {
         this.inParameters.add("glFiscalTypeId");
         this.inGlFiscalTypeId = inGlFiscalTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inIgnoreAcctgTransTypeIds the inIgnoreAcctgTransTypeIds to set
+    */
+    public void setInIgnoreAcctgTransTypeIds(List inIgnoreAcctgTransTypeIds) {
+        this.inParameters.add("ignoreAcctgTransTypeIds");
+        this.inIgnoreAcctgTransTypeIds = inIgnoreAcctgTransTypeIds;
     }
     /**
      * Auto generated value setter.
@@ -706,6 +725,7 @@ public class GetAcctgTransAndEntriesByTypeService extends ServiceWrapper {
         if (inParameters.contains("glAccountClasses")) mapValue.put("glAccountClasses", getInGlAccountClasses());
         if (inParameters.contains("glAccountTypes")) mapValue.put("glAccountTypes", getInGlAccountTypes());
         if (inParameters.contains("glFiscalTypeId")) mapValue.put("glFiscalTypeId", getInGlFiscalTypeId());
+        if (inParameters.contains("ignoreAcctgTransTypeIds")) mapValue.put("ignoreAcctgTransTypeIds", getInIgnoreAcctgTransTypeIds());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("organizationPartyId")) mapValue.put("organizationPartyId", getInOrganizationPartyId());
         if (inParameters.contains("partyId")) mapValue.put("partyId", getInPartyId());
@@ -750,6 +770,7 @@ public class GetAcctgTransAndEntriesByTypeService extends ServiceWrapper {
         if (mapValue.containsKey("glAccountClasses")) setInGlAccountClasses((List) mapValue.get("glAccountClasses"));
         if (mapValue.containsKey("glAccountTypes")) setInGlAccountTypes((List) mapValue.get("glAccountTypes"));
         if (mapValue.containsKey("glFiscalTypeId")) setInGlFiscalTypeId((String) mapValue.get("glFiscalTypeId"));
+        if (mapValue.containsKey("ignoreAcctgTransTypeIds")) setInIgnoreAcctgTransTypeIds((List) mapValue.get("ignoreAcctgTransTypeIds"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("organizationPartyId")) setInOrganizationPartyId((String) mapValue.get("organizationPartyId"));
         if (mapValue.containsKey("partyId")) setInPartyId((String) mapValue.get("partyId"));

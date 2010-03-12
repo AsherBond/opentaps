@@ -1117,6 +1117,7 @@
   <mapping class="org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification"/>
   <mapping class="org.opentaps.base.entities.PartyFromSummaryByRelationship"/>
   <mapping class="org.opentaps.base.entities.PartyToSummaryByRelationship"/>
+  <mapping class="org.opentaps.base.entities.PartyToSummaryByRole"/>
   <mapping class="org.opentaps.base.entities.PartyContactInfo"/>
   <mapping class="org.opentaps.base.entities.PartyContactInfoAndContactList"/>
   <mapping class="org.opentaps.base.entities.PartyMergeCandidates"/>

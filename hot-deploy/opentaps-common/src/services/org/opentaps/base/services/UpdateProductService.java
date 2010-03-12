@@ -76,6 +76,7 @@ public class UpdateProductService extends ServiceWrapper {
         internalName("internalName"),
         introductionDate("introductionDate"),
         inventoryMessage("inventoryMessage"),
+        isActive("isActive"),
         isVariant("isVariant"),
         isVirtual("isVirtual"),
         largeImageUrl("largeImageUrl"),
@@ -173,6 +174,7 @@ public class UpdateProductService extends ServiceWrapper {
     private String inInternalName;
     private Timestamp inIntroductionDate;
     private String inInventoryMessage;
+    private String inIsActive;
     private String inIsVariant;
     private String inIsVirtual;
     private String inLargeImageUrl;
@@ -387,6 +389,14 @@ public class UpdateProductService extends ServiceWrapper {
      */
     public String getInInventoryMessage() {
         return this.inInventoryMessage;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInIsActive() {
+        return this.inIsActive;
     }
     /**
      * Auto generated value accessor.
@@ -980,6 +990,15 @@ public class UpdateProductService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inIsActive the inIsActive to set
+    */
+    public void setInIsActive(String inIsActive) {
+        this.inParameters.add("isActive");
+        this.inIsActive = inIsActive;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inIsVariant the inIsVariant to set
     */
     public void setInIsVariant(String inIsVariant) {
@@ -1480,6 +1499,7 @@ public class UpdateProductService extends ServiceWrapper {
         if (inParameters.contains("internalName")) mapValue.put("internalName", getInInternalName());
         if (inParameters.contains("introductionDate")) mapValue.put("introductionDate", getInIntroductionDate());
         if (inParameters.contains("inventoryMessage")) mapValue.put("inventoryMessage", getInInventoryMessage());
+        if (inParameters.contains("isActive")) mapValue.put("isActive", getInIsActive());
         if (inParameters.contains("isVariant")) mapValue.put("isVariant", getInIsVariant());
         if (inParameters.contains("isVirtual")) mapValue.put("isVirtual", getInIsVirtual());
         if (inParameters.contains("largeImageUrl")) mapValue.put("largeImageUrl", getInLargeImageUrl());
@@ -1564,6 +1584,7 @@ public class UpdateProductService extends ServiceWrapper {
         if (mapValue.containsKey("internalName")) setInInternalName((String) mapValue.get("internalName"));
         if (mapValue.containsKey("introductionDate")) setInIntroductionDate((Timestamp) mapValue.get("introductionDate"));
         if (mapValue.containsKey("inventoryMessage")) setInInventoryMessage((String) mapValue.get("inventoryMessage"));
+        if (mapValue.containsKey("isActive")) setInIsActive((String) mapValue.get("isActive"));
         if (mapValue.containsKey("isVariant")) setInIsVariant((String) mapValue.get("isVariant"));
         if (mapValue.containsKey("isVirtual")) setInIsVirtual((String) mapValue.get("isVirtual"));
         if (mapValue.containsKey("largeImageUrl")) setInLargeImageUrl((String) mapValue.get("largeImageUrl"));

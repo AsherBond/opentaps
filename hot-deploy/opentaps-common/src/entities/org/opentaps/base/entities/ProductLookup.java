@@ -51,7 +51,7 @@ import java.sql.Timestamp;
  * Auto generated base entity ProductLookup.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectProductLookups", query="SELECT PSGM.PRODUCT_STORE_ID AS \"productStoreId\",PSGM.PRODUCT_STORE_GROUP_ID AS \"productStoreGroupId\",PP.PRODUCT_PRICE_TYPE_ID AS \"productPriceTypeId\",PP.PRODUCT_PRICE_PURPOSE_ID AS \"productPricePurposeId\",PP.CURRENCY_UOM_ID AS \"currencyUomId\",PP.FROM_DATE AS \"fromDate\",PP.THRU_DATE AS \"thruDate\",PR.PRODUCT_ID AS \"productId\",PR.PRODUCT_TYPE_ID AS \"productTypeId\",PR.PRIMARY_PRODUCT_CATEGORY_ID AS \"primaryProductCategoryId\",PR.MANUFACTURER_PARTY_ID AS \"manufacturerPartyId\",PR.FACILITY_ID AS \"facilityId\",PR.INTRODUCTION_DATE AS \"introductionDate\",PR.SUPPORT_DISCONTINUATION_DATE AS \"supportDiscontinuationDate\",PR.SALES_DISCONTINUATION_DATE AS \"salesDiscontinuationDate\",PR.SALES_DISC_WHEN_NOT_AVAIL AS \"salesDiscWhenNotAvail\",PR.INTERNAL_NAME AS \"internalName\",PR.BRAND_NAME AS \"brandName\",PR.COMMENTS AS \"comments\",PR.PRODUCT_NAME AS \"productName\",PR.DESCRIPTION AS \"description\",PR.LONG_DESCRIPTION AS \"longDescription\",PR.PRICE_DETAIL_TEXT AS \"priceDetailText\",PR.SMALL_IMAGE_URL AS \"smallImageUrl\",PR.MEDIUM_IMAGE_URL AS \"mediumImageUrl\",PR.LARGE_IMAGE_URL AS \"largeImageUrl\",PR.DETAIL_IMAGE_URL AS \"detailImageUrl\",PR.ORIGINAL_IMAGE_URL AS \"originalImageUrl\",PR.DETAIL_SCREEN AS \"detailScreen\",PR.INVENTORY_MESSAGE AS \"inventoryMessage\",PR.REQUIRE_INVENTORY AS \"requireInventory\",PR.QUANTITY_UOM_ID AS \"quantityUomId\",PR.QUANTITY_INCLUDED AS \"quantityIncluded\",PR.PIECES_INCLUDED AS \"piecesIncluded\",PR.REQUIRE_AMOUNT AS \"requireAmount\",PR.FIXED_AMOUNT AS \"fixedAmount\",PR.AMOUNT_UOM_TYPE_ID AS \"amountUomTypeId\",PR.WEIGHT_UOM_ID AS \"weightUomId\",PR.WEIGHT AS \"weight\",PR.HEIGHT_UOM_ID AS \"heightUomId\",PR.PRODUCT_HEIGHT AS \"productHeight\",PR.SHIPPING_HEIGHT AS \"shippingHeight\",PR.WIDTH_UOM_ID AS \"widthUomId\",PR.PRODUCT_WIDTH AS \"productWidth\",PR.SHIPPING_WIDTH AS \"shippingWidth\",PR.DEPTH_UOM_ID AS \"depthUomId\",PR.PRODUCT_DEPTH AS \"productDepth\",PR.SHIPPING_DEPTH AS \"shippingDepth\",PR.PRODUCT_RATING AS \"productRating\",PR.RATING_TYPE_ENUM AS \"ratingTypeEnum\",PR.RETURNABLE AS \"returnable\",PR.TAXABLE AS \"taxable\",PR.CHARGE_SHIPPING AS \"chargeShipping\",PR.AUTO_CREATE_KEYWORDS AS \"autoCreateKeywords\",PR.INCLUDE_IN_PROMOTIONS AS \"includeInPromotions\",PR.IS_VIRTUAL AS \"isVirtual\",PR.IS_VARIANT AS \"isVariant\",PR.VIRTUAL_VARIANT_METHOD_ENUM AS \"virtualVariantMethodEnum\",PR.ORIGIN_GEO_ID AS \"originGeoId\",PR.REQUIREMENT_METHOD_ENUM_ID AS \"requirementMethodEnumId\",PR.BILL_OF_MATERIAL_LEVEL AS \"billOfMaterialLevel\",PR.RESERV_MAX_PERSONS AS \"reservMaxPersons\",PR.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",PR.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",PR.CONFIG_ID AS \"configId\",PR.CREATED_DATE AS \"createdDate\",PR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PR.IN_SHIPPING_BOX AS \"inShippingBox\",PR.DEFAULT_SHIPMENT_BOX_TYPE_ID AS \"defaultShipmentBoxTypeId\",GI.GOOD_IDENTIFICATION_TYPE_ID AS \"goodIdentificationTypeId\",GI.ID_VALUE AS \"idValue\" FROM PRODUCT PR LEFT JOIN GOOD_IDENTIFICATION GI ON PR.PRODUCT_ID = GI.PRODUCT_ID INNER JOIN PRODUCT_PRICE PP ON PR.PRODUCT_ID = PP.PRODUCT_ID INNER JOIN PRODUCT_STORE_GROUP_MEMBER PSGM ON PP.PRODUCT_STORE_GROUP_ID = PSGM.PRODUCT_STORE_GROUP_ID", resultSetMapping="ProductLookupMapping")
+@NamedNativeQuery(name="selectProductLookups", query="SELECT PSGM.PRODUCT_STORE_ID AS \"productStoreId\",PSGM.PRODUCT_STORE_GROUP_ID AS \"productStoreGroupId\",PP.PRODUCT_PRICE_TYPE_ID AS \"productPriceTypeId\",PP.PRODUCT_PRICE_PURPOSE_ID AS \"productPricePurposeId\",PP.CURRENCY_UOM_ID AS \"currencyUomId\",PP.FROM_DATE AS \"fromDate\",PP.THRU_DATE AS \"thruDate\",PR.PRODUCT_ID AS \"productId\",PR.PRODUCT_TYPE_ID AS \"productTypeId\",PR.PRIMARY_PRODUCT_CATEGORY_ID AS \"primaryProductCategoryId\",PR.MANUFACTURER_PARTY_ID AS \"manufacturerPartyId\",PR.FACILITY_ID AS \"facilityId\",PR.INTRODUCTION_DATE AS \"introductionDate\",PR.SUPPORT_DISCONTINUATION_DATE AS \"supportDiscontinuationDate\",PR.SALES_DISCONTINUATION_DATE AS \"salesDiscontinuationDate\",PR.SALES_DISC_WHEN_NOT_AVAIL AS \"salesDiscWhenNotAvail\",PR.INTERNAL_NAME AS \"internalName\",PR.BRAND_NAME AS \"brandName\",PR.COMMENTS AS \"comments\",PR.PRODUCT_NAME AS \"productName\",PR.DESCRIPTION AS \"description\",PR.LONG_DESCRIPTION AS \"longDescription\",PR.PRICE_DETAIL_TEXT AS \"priceDetailText\",PR.SMALL_IMAGE_URL AS \"smallImageUrl\",PR.MEDIUM_IMAGE_URL AS \"mediumImageUrl\",PR.LARGE_IMAGE_URL AS \"largeImageUrl\",PR.DETAIL_IMAGE_URL AS \"detailImageUrl\",PR.ORIGINAL_IMAGE_URL AS \"originalImageUrl\",PR.DETAIL_SCREEN AS \"detailScreen\",PR.INVENTORY_MESSAGE AS \"inventoryMessage\",PR.REQUIRE_INVENTORY AS \"requireInventory\",PR.QUANTITY_UOM_ID AS \"quantityUomId\",PR.QUANTITY_INCLUDED AS \"quantityIncluded\",PR.PIECES_INCLUDED AS \"piecesIncluded\",PR.REQUIRE_AMOUNT AS \"requireAmount\",PR.FIXED_AMOUNT AS \"fixedAmount\",PR.AMOUNT_UOM_TYPE_ID AS \"amountUomTypeId\",PR.WEIGHT_UOM_ID AS \"weightUomId\",PR.WEIGHT AS \"weight\",PR.HEIGHT_UOM_ID AS \"heightUomId\",PR.PRODUCT_HEIGHT AS \"productHeight\",PR.SHIPPING_HEIGHT AS \"shippingHeight\",PR.WIDTH_UOM_ID AS \"widthUomId\",PR.PRODUCT_WIDTH AS \"productWidth\",PR.SHIPPING_WIDTH AS \"shippingWidth\",PR.DEPTH_UOM_ID AS \"depthUomId\",PR.PRODUCT_DEPTH AS \"productDepth\",PR.SHIPPING_DEPTH AS \"shippingDepth\",PR.PRODUCT_RATING AS \"productRating\",PR.RATING_TYPE_ENUM AS \"ratingTypeEnum\",PR.RETURNABLE AS \"returnable\",PR.TAXABLE AS \"taxable\",PR.CHARGE_SHIPPING AS \"chargeShipping\",PR.AUTO_CREATE_KEYWORDS AS \"autoCreateKeywords\",PR.INCLUDE_IN_PROMOTIONS AS \"includeInPromotions\",PR.IS_VIRTUAL AS \"isVirtual\",PR.IS_VARIANT AS \"isVariant\",PR.VIRTUAL_VARIANT_METHOD_ENUM AS \"virtualVariantMethodEnum\",PR.ORIGIN_GEO_ID AS \"originGeoId\",PR.REQUIREMENT_METHOD_ENUM_ID AS \"requirementMethodEnumId\",PR.BILL_OF_MATERIAL_LEVEL AS \"billOfMaterialLevel\",PR.RESERV_MAX_PERSONS AS \"reservMaxPersons\",PR.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",PR.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",PR.CONFIG_ID AS \"configId\",PR.CREATED_DATE AS \"createdDate\",PR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PR.IN_SHIPPING_BOX AS \"inShippingBox\",PR.DEFAULT_SHIPMENT_BOX_TYPE_ID AS \"defaultShipmentBoxTypeId\",PR.IS_ACTIVE AS \"isActive\",GI.GOOD_IDENTIFICATION_TYPE_ID AS \"goodIdentificationTypeId\",GI.ID_VALUE AS \"idValue\" FROM PRODUCT PR LEFT JOIN GOOD_IDENTIFICATION GI ON PR.PRODUCT_ID = GI.PRODUCT_ID INNER JOIN PRODUCT_PRICE PP ON PR.PRODUCT_ID = PP.PRODUCT_ID INNER JOIN PRODUCT_STORE_GROUP_MEMBER PSGM ON PP.PRODUCT_STORE_GROUP_ID = PSGM.PRODUCT_STORE_GROUP_ID", resultSetMapping="ProductLookupMapping")
 @SqlResultSetMapping(name="ProductLookupMapping", entities={
 @EntityResult(entityClass=ProductLookup.class, fields = {
 @FieldResult(name="productStoreId", column="productStoreId")
@@ -125,6 +125,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
 ,@FieldResult(name="inShippingBox", column="inShippingBox")
 ,@FieldResult(name="defaultShipmentBoxTypeId", column="defaultShipmentBoxTypeId")
+,@FieldResult(name="isActive", column="isActive")
 ,@FieldResult(name="goodIdentificationTypeId", column="goodIdentificationTypeId")
 ,@FieldResult(name="idValue", column="idValue")
 })})
@@ -204,6 +205,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastModifiedByUserLogin", "PR.LAST_MODIFIED_BY_USER_LOGIN");
         fields.put("inShippingBox", "PR.IN_SHIPPING_BOX");
         fields.put("defaultShipmentBoxTypeId", "PR.DEFAULT_SHIPMENT_BOX_TYPE_ID");
+        fields.put("isActive", "PR.IS_ACTIVE");
         fields.put("goodIdentificationTypeId", "GI.GOOD_IDENTIFICATION_TYPE_ID");
         fields.put("idValue", "GI.ID_VALUE");
 fieldMapColumns.put("ProductLookup", fields);
@@ -280,6 +282,7 @@ fieldMapColumns.put("ProductLookup", fields);
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
     inShippingBox("inShippingBox"),
     defaultShipmentBoxTypeId("defaultShipmentBoxTypeId"),
+    isActive("isActive"),
     goodIdentificationTypeId("goodIdentificationTypeId"),
     idValue("idValue");
     private final String fieldName;
@@ -435,6 +438,8 @@ fieldMapColumns.put("ProductLookup", fields);
     
    private String defaultShipmentBoxTypeId;
     
+   private String isActive;
+    
    private String goodIdentificationTypeId;
     
    private String idValue;
@@ -450,7 +455,7 @@ fieldMapColumns.put("ProductLookup", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productStoreId");this.primaryKeyNames.add("productStoreGroupId");this.primaryKeyNames.add("productPriceTypeId");this.primaryKeyNames.add("productPricePurposeId");this.primaryKeyNames.add("currencyUomId");this.primaryKeyNames.add("productPriceFromDate");this.primaryKeyNames.add("productId");this.primaryKeyNames.add("goodIdentificationTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("productStoreGroupId");this.allFieldsNames.add("productPriceTypeId");this.allFieldsNames.add("productPricePurposeId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("productPriceFromDate");this.allFieldsNames.add("productPriceThruDate");this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("primaryProductCategoryId");this.allFieldsNames.add("manufacturerPartyId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("introductionDate");this.allFieldsNames.add("supportDiscontinuationDate");this.allFieldsNames.add("salesDiscontinuationDate");this.allFieldsNames.add("salesDiscWhenNotAvail");this.allFieldsNames.add("internalName");this.allFieldsNames.add("brandName");this.allFieldsNames.add("comments");this.allFieldsNames.add("productName");this.allFieldsNames.add("description");this.allFieldsNames.add("longDescription");this.allFieldsNames.add("priceDetailText");this.allFieldsNames.add("smallImageUrl");this.allFieldsNames.add("mediumImageUrl");this.allFieldsNames.add("largeImageUrl");this.allFieldsNames.add("detailImageUrl");this.allFieldsNames.add("originalImageUrl");this.allFieldsNames.add("detailScreen");this.allFieldsNames.add("inventoryMessage");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("quantityIncluded");this.allFieldsNames.add("piecesIncluded");this.allFieldsNames.add("requireAmount");this.allFieldsNames.add("fixedAmount");this.allFieldsNames.add("amountUomTypeId");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("weight");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("productHeight");this.allFieldsNames.add("shippingHeight");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("productWidth");this.allFieldsNames.add("shippingWidth");this.allFieldsNames.add("depthUomId");this.allFieldsNames.add("productDepth");this.allFieldsNames.add("shippingDepth");this.allFieldsNames.add("productRating");this.allFieldsNames.add("ratingTypeEnum");this.allFieldsNames.add("returnable");this.allFieldsNames.add("taxable");this.allFieldsNames.add("chargeShipping");this.allFieldsNames.add("autoCreateKeywords");this.allFieldsNames.add("includeInPromotions");this.allFieldsNames.add("isVirtual");this.allFieldsNames.add("isVariant");this.allFieldsNames.add("virtualVariantMethodEnum");this.allFieldsNames.add("originGeoId");this.allFieldsNames.add("requirementMethodEnumId");this.allFieldsNames.add("billOfMaterialLevel");this.allFieldsNames.add("reservMaxPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("configId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("inShippingBox");this.allFieldsNames.add("defaultShipmentBoxTypeId");this.allFieldsNames.add("goodIdentificationTypeId");this.allFieldsNames.add("idValue");
+      this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("productStoreGroupId");this.allFieldsNames.add("productPriceTypeId");this.allFieldsNames.add("productPricePurposeId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("productPriceFromDate");this.allFieldsNames.add("productPriceThruDate");this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("primaryProductCategoryId");this.allFieldsNames.add("manufacturerPartyId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("introductionDate");this.allFieldsNames.add("supportDiscontinuationDate");this.allFieldsNames.add("salesDiscontinuationDate");this.allFieldsNames.add("salesDiscWhenNotAvail");this.allFieldsNames.add("internalName");this.allFieldsNames.add("brandName");this.allFieldsNames.add("comments");this.allFieldsNames.add("productName");this.allFieldsNames.add("description");this.allFieldsNames.add("longDescription");this.allFieldsNames.add("priceDetailText");this.allFieldsNames.add("smallImageUrl");this.allFieldsNames.add("mediumImageUrl");this.allFieldsNames.add("largeImageUrl");this.allFieldsNames.add("detailImageUrl");this.allFieldsNames.add("originalImageUrl");this.allFieldsNames.add("detailScreen");this.allFieldsNames.add("inventoryMessage");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("quantityIncluded");this.allFieldsNames.add("piecesIncluded");this.allFieldsNames.add("requireAmount");this.allFieldsNames.add("fixedAmount");this.allFieldsNames.add("amountUomTypeId");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("weight");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("productHeight");this.allFieldsNames.add("shippingHeight");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("productWidth");this.allFieldsNames.add("shippingWidth");this.allFieldsNames.add("depthUomId");this.allFieldsNames.add("productDepth");this.allFieldsNames.add("shippingDepth");this.allFieldsNames.add("productRating");this.allFieldsNames.add("ratingTypeEnum");this.allFieldsNames.add("returnable");this.allFieldsNames.add("taxable");this.allFieldsNames.add("chargeShipping");this.allFieldsNames.add("autoCreateKeywords");this.allFieldsNames.add("includeInPromotions");this.allFieldsNames.add("isVirtual");this.allFieldsNames.add("isVariant");this.allFieldsNames.add("virtualVariantMethodEnum");this.allFieldsNames.add("originGeoId");this.allFieldsNames.add("requirementMethodEnumId");this.allFieldsNames.add("billOfMaterialLevel");this.allFieldsNames.add("reservMaxPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("configId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("inShippingBox");this.allFieldsNames.add("defaultShipmentBoxTypeId");this.allFieldsNames.add("isActive");this.allFieldsNames.add("goodIdentificationTypeId");this.allFieldsNames.add("idValue");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -964,6 +969,13 @@ fieldMapColumns.put("ProductLookup", fields);
      */
     public void setDefaultShipmentBoxTypeId(String defaultShipmentBoxTypeId) {
         this.defaultShipmentBoxTypeId = defaultShipmentBoxTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param isActive the isActive to set
+     */
+    public void setIsActive(String isActive) {
+        this.isActive = isActive;
     }
     /**
      * Auto generated value setter.
@@ -1481,6 +1493,13 @@ fieldMapColumns.put("ProductLookup", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getIsActive() {
+        return this.isActive;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getGoodIdentificationTypeId() {
         return this.goodIdentificationTypeId;
     }
@@ -1570,6 +1589,7 @@ fieldMapColumns.put("ProductLookup", fields);
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
         setInShippingBox((String) mapValue.get("inShippingBox"));
         setDefaultShipmentBoxTypeId((String) mapValue.get("defaultShipmentBoxTypeId"));
+        setIsActive((String) mapValue.get("isActive"));
         setGoodIdentificationTypeId((String) mapValue.get("goodIdentificationTypeId"));
         setIdValue((String) mapValue.get("idValue"));
         postInit();
@@ -1650,6 +1670,7 @@ fieldMapColumns.put("ProductLookup", fields);
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
         mapValue.put("inShippingBox", getInShippingBox());
         mapValue.put("defaultShipmentBoxTypeId", getDefaultShipmentBoxTypeId());
+        mapValue.put("isActive", getIsActive());
         mapValue.put("goodIdentificationTypeId", getGoodIdentificationTypeId());
         mapValue.put("idValue", getIdValue());
         return mapValue;

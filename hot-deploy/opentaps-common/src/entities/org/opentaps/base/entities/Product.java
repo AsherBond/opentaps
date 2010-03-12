@@ -123,6 +123,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
+        fields.put("isActive", "IS_ACTIVE");
 fieldMapColumns.put("Product", fields);
 }
   public static enum Fields implements EntityFieldInterface<Product> {
@@ -193,7 +194,8 @@ fieldMapColumns.put("Product", fields);
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
-    createdTxStamp("createdTxStamp");
+    createdTxStamp("createdTxStamp"),
+    isActive("isActive");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -343,6 +345,8 @@ fieldMapColumns.put("Product", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @Column(name="IS_ACTIVE")
+   private String isActive;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -753,7 +757,7 @@ fieldMapColumns.put("Product", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("primaryProductCategoryId");this.allFieldsNames.add("manufacturerPartyId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("introductionDate");this.allFieldsNames.add("supportDiscontinuationDate");this.allFieldsNames.add("salesDiscontinuationDate");this.allFieldsNames.add("salesDiscWhenNotAvail");this.allFieldsNames.add("internalName");this.allFieldsNames.add("brandName");this.allFieldsNames.add("comments");this.allFieldsNames.add("productName");this.allFieldsNames.add("description");this.allFieldsNames.add("longDescription");this.allFieldsNames.add("priceDetailText");this.allFieldsNames.add("smallImageUrl");this.allFieldsNames.add("mediumImageUrl");this.allFieldsNames.add("largeImageUrl");this.allFieldsNames.add("detailImageUrl");this.allFieldsNames.add("originalImageUrl");this.allFieldsNames.add("detailScreen");this.allFieldsNames.add("inventoryMessage");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("quantityIncluded");this.allFieldsNames.add("piecesIncluded");this.allFieldsNames.add("requireAmount");this.allFieldsNames.add("fixedAmount");this.allFieldsNames.add("amountUomTypeId");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("weight");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("productHeight");this.allFieldsNames.add("shippingHeight");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("productWidth");this.allFieldsNames.add("shippingWidth");this.allFieldsNames.add("depthUomId");this.allFieldsNames.add("productDepth");this.allFieldsNames.add("shippingDepth");this.allFieldsNames.add("productRating");this.allFieldsNames.add("ratingTypeEnum");this.allFieldsNames.add("returnable");this.allFieldsNames.add("taxable");this.allFieldsNames.add("chargeShipping");this.allFieldsNames.add("autoCreateKeywords");this.allFieldsNames.add("includeInPromotions");this.allFieldsNames.add("isVirtual");this.allFieldsNames.add("isVariant");this.allFieldsNames.add("virtualVariantMethodEnum");this.allFieldsNames.add("originGeoId");this.allFieldsNames.add("requirementMethodEnumId");this.allFieldsNames.add("billOfMaterialLevel");this.allFieldsNames.add("reservMaxPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("configId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("inShippingBox");this.allFieldsNames.add("defaultShipmentBoxTypeId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("primaryProductCategoryId");this.allFieldsNames.add("manufacturerPartyId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("introductionDate");this.allFieldsNames.add("supportDiscontinuationDate");this.allFieldsNames.add("salesDiscontinuationDate");this.allFieldsNames.add("salesDiscWhenNotAvail");this.allFieldsNames.add("internalName");this.allFieldsNames.add("brandName");this.allFieldsNames.add("comments");this.allFieldsNames.add("productName");this.allFieldsNames.add("description");this.allFieldsNames.add("longDescription");this.allFieldsNames.add("priceDetailText");this.allFieldsNames.add("smallImageUrl");this.allFieldsNames.add("mediumImageUrl");this.allFieldsNames.add("largeImageUrl");this.allFieldsNames.add("detailImageUrl");this.allFieldsNames.add("originalImageUrl");this.allFieldsNames.add("detailScreen");this.allFieldsNames.add("inventoryMessage");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("quantityIncluded");this.allFieldsNames.add("piecesIncluded");this.allFieldsNames.add("requireAmount");this.allFieldsNames.add("fixedAmount");this.allFieldsNames.add("amountUomTypeId");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("weight");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("productHeight");this.allFieldsNames.add("shippingHeight");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("productWidth");this.allFieldsNames.add("shippingWidth");this.allFieldsNames.add("depthUomId");this.allFieldsNames.add("productDepth");this.allFieldsNames.add("shippingDepth");this.allFieldsNames.add("productRating");this.allFieldsNames.add("ratingTypeEnum");this.allFieldsNames.add("returnable");this.allFieldsNames.add("taxable");this.allFieldsNames.add("chargeShipping");this.allFieldsNames.add("autoCreateKeywords");this.allFieldsNames.add("includeInPromotions");this.allFieldsNames.add("isVirtual");this.allFieldsNames.add("isVariant");this.allFieldsNames.add("virtualVariantMethodEnum");this.allFieldsNames.add("originGeoId");this.allFieldsNames.add("requirementMethodEnumId");this.allFieldsNames.add("billOfMaterialLevel");this.allFieldsNames.add("reservMaxPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("configId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("inShippingBox");this.allFieldsNames.add("defaultShipmentBoxTypeId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("isActive");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -1244,6 +1248,13 @@ fieldMapColumns.put("Product", fields);
     public void setCreatedTxStamp(Timestamp createdTxStamp) {
         this.createdTxStamp = createdTxStamp;
     }
+    /**
+     * Auto generated value setter.
+     * @param isActive the isActive to set
+     */
+    public void setIsActive(String isActive) {
+        this.isActive = isActive;
+    }
 
     /**
      * Auto generated value accessor.
@@ -1720,6 +1731,13 @@ fieldMapColumns.put("Product", fields);
      */
     public Timestamp getCreatedTxStamp() {
         return this.createdTxStamp;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getIsActive() {
+        return this.isActive;
     }
 
     /**
@@ -4290,6 +4308,7 @@ fieldMapColumns.put("Product", fields);
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
+        setIsActive((String) mapValue.get("isActive"));
         postInit();
     }
 
@@ -4365,6 +4384,7 @@ fieldMapColumns.put("Product", fields);
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
+        mapValue.put("isActive", getIsActive());
         return mapValue;
     }
 
