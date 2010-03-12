@@ -2897,9 +2897,35 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("Adjusted amount incorrect for invoice [" + invoiceId + "]", invoice.getAdjustedAmount(), new BigDecimal("-2"));
         assertEquals("Adjusted amount incorrect for invoice [" + invoiceId + "]", invoice.getInvoiceAdjustedTotal(), new BigDecimal("37"));
 
+        // create a payment and application of 8
+        String paymentId3 = financialAsserts.createPaymentAndApplication(new BigDecimal("8"), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_NOT_PAID");
+
+        // check the invoice amounts at this point
+        invoice = invoiceRepository.getInvoiceById(invoiceId);
+        assertEquals("Invoice total incorrect for invoice [" + invoiceId + "]", invoice.getInvoiceTotal(), new BigDecimal("39"));
+        assertEquals("Open amount incorrect for invoice [" + invoiceId + "]", invoice.getOpenAmount(), new BigDecimal("25"));
+        assertEquals("Pending Open amount incorrect for invoice [" + invoiceId + "]", invoice.getPendingOpenAmount(), new BigDecimal("17"));
+        assertEquals("Applied amount incorrect for invoice [" + invoiceId + "]", invoice.getAppliedAmount(), new BigDecimal("12"));
+        assertEquals("Pending Applied amount incorrect for invoice [" + invoiceId + "]", invoice.getPendingAppliedAmount(), new BigDecimal("8"));
+        assertEquals("Adjusted amount incorrect for invoice [" + invoiceId + "]", invoice.getAdjustedAmount(), new BigDecimal("-2"));
+        assertEquals("Adjusted amount incorrect for invoice [" + invoiceId + "]", invoice.getInvoiceAdjustedTotal(), new BigDecimal("37"));
+
+        // cancel the payment
+        financialAsserts.updatePaymentStatus(paymentId3, "PMNT_CANCELLED");
+
+        // check the invoice amounts at this point
+        invoice = invoiceRepository.getInvoiceById(invoiceId);
+        assertEquals("Invoice total incorrect for invoice [" + invoiceId + "]", invoice.getInvoiceTotal(), new BigDecimal("39"));
+        assertEquals("Open amount incorrect for invoice [" + invoiceId + "]", invoice.getOpenAmount(), new BigDecimal("25"));
+        assertEquals("Pending Open amount incorrect for invoice [" + invoiceId + "]", invoice.getPendingOpenAmount(), new BigDecimal("25"));
+        assertEquals("Applied amount incorrect for invoice [" + invoiceId + "]", invoice.getAppliedAmount(), new BigDecimal("12"));
+        assertEquals("Pending Applied amount incorrect for invoice [" + invoiceId + "]", invoice.getPendingAppliedAmount(), BigDecimal.ZERO);
+        assertEquals("Adjusted amount incorrect for invoice [" + invoiceId + "]", invoice.getAdjustedAmount(), new BigDecimal("-2"));
+        assertEquals("Adjusted amount incorrect for invoice [" + invoiceId + "]", invoice.getInvoiceAdjustedTotal(), new BigDecimal("37"));
+
         // create a final payment and application of 25, and receive it
-        String paymentId3 = financialAsserts.createPaymentAndApplication(new BigDecimal("25"), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_NOT_PAID");
-        financialAsserts.updatePaymentStatus(paymentId3, "PMNT_RECEIVED");
+        String paymentId4 = financialAsserts.createPaymentAndApplication(new BigDecimal("25"), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_NOT_PAID");
+        financialAsserts.updatePaymentStatus(paymentId4, "PMNT_RECEIVED");
 
         // check the invoice amounts at this point
         invoice = invoiceRepository.getInvoiceById(invoiceId);
