@@ -26,7 +26,6 @@ import javax.servlet.http.HttpSession;
 
 import javolution.util.FastList;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -318,14 +317,14 @@ public final class AutoComplete {
                     EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("internalName"), EntityOperator.LIKE, "%" + keyword + "%")
                 );
 
-            EntityCondition dateCondition = EntityCondition.makeCondition(EntityOperator.OR,
-                    EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, null),
-                    EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.nowTimestamp())
+            EntityCondition activeCondition = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("isActive", EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition("isActive", EntityOperator.EQUALS, "Y")
                 );
 
             EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
-                    keywordCondition,
-                    dateCondition);
+                    activeCondition,
+                    keywordCondition);
 
             // get result as a list iterator (transaction block is to work around a bug in entity engine)
             TransactionUtil.begin();

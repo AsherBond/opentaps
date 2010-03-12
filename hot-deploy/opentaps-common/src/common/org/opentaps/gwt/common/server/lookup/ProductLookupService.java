@@ -21,6 +21,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.entities.ProductAndGoodIdentification;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
@@ -57,7 +59,13 @@ public class ProductLookupService extends EntityLookupAndSuggestService {
      * @return the list of <code>Product</code>, or <code>null</code> if an error occurred
      */
     public List<ProductAndGoodIdentification> suggestProduct() {
-        return findSuggestMatchesAnyOf(ProductAndGoodIdentification.class, ProductLookupConfiguration.LIST_LOOKUP_FIELDS);
+
+        EntityCondition activeCondition = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition(ProductAndGoodIdentification.Fields.isActive.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(ProductAndGoodIdentification.Fields.isActive.name(), EntityOperator.EQUALS, "Y")
+                );
+
+        return findSuggestMatchesAnyOf(ProductAndGoodIdentification.class, ProductLookupConfiguration.LIST_LOOKUP_FIELDS, activeCondition);
     }
 
     @Override

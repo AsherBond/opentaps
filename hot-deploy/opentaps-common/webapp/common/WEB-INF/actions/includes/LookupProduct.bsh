@@ -19,6 +19,8 @@
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 
@@ -64,6 +66,17 @@ if (!ignoreGoodId) {
     if (!ignoreGoodType) fields.add("goodIdentificationTypeId");
     fields.add("idValue");
 }
+
+// add active product only filter
+conditions = EntityCondition.makeCondition(
+              conditions,
+              EntityOperator.AND,
+              EntityCondition.makeCondition(
+                    EntityCondition.makeCondition("isActive", EntityOperator.EQUALS, null),
+                    EntityOperator.OR,
+                    EntityCondition.makeCondition("isActive", EntityOperator.EQUALS, "Y")
+));
+
 iterator = delegator.findListIteratorByCondition("ProductAndGoodIdentification", conditions, null, fields, null, UtilCommon.DISTINCT_READ_OPTIONS);
 
 context.put("products", iterator);

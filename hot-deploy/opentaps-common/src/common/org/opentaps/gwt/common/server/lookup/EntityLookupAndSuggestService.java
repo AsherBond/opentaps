@@ -75,6 +75,26 @@ public abstract class EntityLookupAndSuggestService extends EntityLookupService 
      *
      * For example:
      *  <code>findSuggestMatchesAnyOf(Product.class, UtilMisc.toList("internalName", "productName"))</code>
+     *  finds all <code>Product</code> for which the "internalName" OR the "productName" matches the <code>suggestQuery</code>
+     *  passed as parameter.
+     *  The match is done by looking values containing the <code>suggestQuery</code>, case insensitive.
+     *
+     * @param <T> the entity class to return
+     * @param entity the entity class to return
+     * @param fields the list of fields to lookup
+     * @param additionalFilter a condition to restrict the possible matches
+     * @return the list of entities found, or <code>null</code> if an error occurred
+     * @throws RepositoryException if an error occurs
+     */
+    protected <T extends EntityInterface> List<T> findSuggestMatchesAnyOf(Class<T> entity, List<String> fields, EntityCondition additionalFilter) {
+        return findSuggestMatchesAnyOf(entity, getSuggestQuery(), fields, additionalFilter);
+    }
+
+    /**
+     * Builds the query for suggesters that will lookup the list of given fields for the given query string.
+     *
+     * For example:
+     *  <code>findSuggestMatchesAnyOf(Product.class, UtilMisc.toList("internalName", "productName"))</code>
      *  finds all <code>Product</code> for which the "internalName" OR the "productName" matches the given <code>query</code>
      *  passed as parameter.
      *  The match is done by looking values containing the <code>query</code>, case insensitive.
@@ -86,6 +106,26 @@ public abstract class EntityLookupAndSuggestService extends EntityLookupService 
      * @return the list of entities found, or <code>null</code> if an error occurred
      */
     protected <T extends EntityInterface> List<T> findSuggestMatchesAnyOf(Class<T> entity, String query, List<String> fields) {
+        return findSuggestMatchesAnyOf(entity, query, fields, null);
+    }
+
+    /**
+     * Builds the query for suggesters that will lookup the list of given fields for the given query string.
+     *
+     * For example:
+     *  <code>findSuggestMatchesAnyOf(Product.class, UtilMisc.toList("internalName", "productName"))</code>
+     *  finds all <code>Product</code> for which the "internalName" OR the "productName" matches the given <code>query</code>
+     *  passed as parameter.
+     *  The match is done by looking values containing the <code>query</code>, case insensitive.
+     *
+     * @param <T> the entity class to return
+     * @param entity the entity class to return
+     * @param query the string to lookup
+     * @param fields the list of fields to lookup
+     * @param additionalFilter a condition to restrict the possible matches
+     * @return the list of entities found, or <code>null</code> if an error occurred
+     */
+    protected <T extends EntityInterface> List<T> findSuggestMatchesAnyOf(Class<T> entity, String query, List<String> fields, EntityCondition additionalFilter) {
         Debug.logInfo("findSuggestMatchesAnyOf: entity=" + entity.getName() + ", query=" + query + ", fields=" + fields, "");
         if (query == null || fields.isEmpty()) {
             return findAll(entity);
@@ -95,7 +135,12 @@ public abstract class EntityLookupAndSuggestService extends EntityLookupService 
         for (String field : fields) {
             suggestConds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(field), EntityOperator.LIKE, EntityFunction.UPPER("%" + query + "%")));
         }
-        return findList(entity, EntityCondition.makeCondition(suggestConds, EntityOperator.OR));
+        EntityCondition conditions = EntityCondition.makeCondition(suggestConds, EntityOperator.OR);
+
+        if (additionalFilter != null) {
+            conditions = EntityCondition.makeCondition(EntityOperator.AND, conditions, additionalFilter);
+        }
+        return findList(entity, conditions);
     }
 
     /**
