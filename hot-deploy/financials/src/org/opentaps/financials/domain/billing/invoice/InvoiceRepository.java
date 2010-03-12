@@ -209,16 +209,16 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
         // not using the ofbiz setInvoiceStatus right now because its checkPaymentApplications service would not
         // take InvoiceAdjustment into account, and also because the method is by design not required to check that
         // the invoice is fully paid
-    	// set paid date
-    	if (invoice.getPaymentApplications().size() > 0) {
-    		// set the last payment.effectiveDate as paid date
-        	Timestamp paidDate = null;
-        	for (PaymentApplication paymentApplication: invoice.getPaymentApplications()) {
-        		if (paidDate == null || paidDate.before(paymentApplication.getPayment().getEffectiveDate())) {
-        			paidDate = paymentApplication.getPayment().getEffectiveDate();
-        		}
-        	}
-        	invoice.setPaidDate(paidDate);
+        // set paid date
+        if (invoice.getPaymentApplications().size() > 0) {
+            // set the last payment.effectiveDate as paid date
+            Timestamp paidDate = null;
+            for (PaymentApplication paymentApplication: invoice.getPaymentApplications()) {
+                if (paidDate == null || paidDate.before(paymentApplication.getPayment().getEffectiveDate())) {
+                    paidDate = paymentApplication.getPayment().getEffectiveDate();
+                }
+            }
+            invoice.setPaidDate(paidDate);
             Debug.logInfo("set invoice paid date : [" + paidDate + "]", MODULE);
         }
         invoice.setStatusId(InvoiceSpecification.InvoiceStatusEnum.PAID.getStatusId());
