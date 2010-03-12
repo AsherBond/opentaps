@@ -548,6 +548,7 @@ public final class OrderServices {
         String shipGroupSeqId = (String) context.get("shipGroupSeqId");
         String surveyResponseId = (String) context.get("surveyResponseId");
         String comments = (String) context.get("comments");
+        String description = (String) context.get("description");
         String correspondingPoId = (String) context.get("correspondingPoId");
 
         try {
@@ -601,7 +602,11 @@ public final class OrderServices {
                 orderItem.setUnitListPrice(listPrice);
             }
             orderItem.setIsModifiedPrice("N");   // I think this means the price has not been changed
-            orderItem.setItemDescription(ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher));
+            if (UtilValidate.isEmpty(description)) {
+                orderItem.setItemDescription(ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher));
+            } else {
+                orderItem.setItemDescription(description);
+            }
             orderItem.setStatusId("ITEM_CREATED");
             orderItem.setComments(comments);
             orderItem.setCorrespondingPoId(correspondingPoId);
@@ -1279,6 +1284,8 @@ public final class OrderServices {
         BigDecimal quantity = (BigDecimal) context.get("quantity");
         BigDecimal amount = (BigDecimal) context.get("amount");
         String overridePrice = (String) context.get("overridePrice");
+        String comments = (String) context.get("comments");
+        String description = (String) context.get("description");
 
         if (amount == null) {
             amount = BigDecimal.ZERO;
@@ -1317,6 +1324,12 @@ public final class OrderServices {
                 item.setQuantity(quantity, dispatcher, cart, false);
                 item.setBasePrice(basePrice);
                 item.setIsModifiedPrice(true);
+            }
+            if (UtilValidate.isNotEmpty(comments)) {
+                item.setItemComment(comments);
+            }
+            if (UtilValidate.isNotEmpty(description)) {
+                item.setName(description);
             }
 
             DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));

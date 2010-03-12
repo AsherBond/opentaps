@@ -114,6 +114,7 @@ under the License.
         <attribute name="quantity" type="BigDecimal" mode="IN" optional="false"/>
         <attribute name="surveyResponseId" type="String" mode="IN" optional="true"/>
         <attribute name="comments" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
         <attribute name="correspondingPoId" type="String" mode="IN" optional="true"/>
         <attribute name="amount" type="BigDecimal" mode="IN" optional="true"/>
     </service>
@@ -130,6 +131,8 @@ under the License.
         <attribute name="quantity" type="BigDecimal" mode="IN" optional="false"/>
         <attribute name="amount" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="overridePrice" type="String" mode="IN" optional="true"/>
+        <attribute name="comments" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
         <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
     </service>
 
@@ -184,6 +187,7 @@ under the License.
         <attribute name="recalcOrder" type="String" mode="IN" optional="true"/>
         <attribute name="surveyResponseId" type="String" mode="IN" optional="true"/>
         <attribute name="comments" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
         <attribute name="correspondingPoId" type="String" mode="IN" optional="true"/>
         <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="true"/>
     </service>
