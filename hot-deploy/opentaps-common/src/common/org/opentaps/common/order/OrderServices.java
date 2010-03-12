@@ -1230,7 +1230,7 @@ public final class OrderServices {
                 String overridePrice = (String) context.get("overridePrice");
                 if (overridePrice != null) {
                     // overriding the price
-                    appendItemParams.put("unitPrice", new Double(basePrice.doubleValue()));
+                    appendItemParams.put("unitPrice", basePrice);
                     // list price will null -- only basePrice is input
                 } else {
                     Debug.logWarning("Override price was selected.  Input price of [" + basePrice + "] will be overriden with [" + results.get("price") + "]", MODULE);
