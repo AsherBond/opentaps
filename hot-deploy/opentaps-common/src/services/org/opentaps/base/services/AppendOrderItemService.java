@@ -58,6 +58,8 @@ public class AppendOrderItemService extends ServiceWrapper {
     public static enum In {
         amount("amount"),
         basePrice("basePrice"),
+        comments("comments"),
+        description("description"),
         locale("locale"),
         orderId("orderId"),
         overridePrice("overridePrice"),
@@ -115,6 +117,8 @@ public class AppendOrderItemService extends ServiceWrapper {
 
     private BigDecimal inAmount;
     private BigDecimal inBasePrice;
+    private String inComments;
+    private String inDescription;
     private Locale inLocale;
     private String inOrderId;
     private String inOverridePrice;
@@ -163,6 +167,22 @@ public class AppendOrderItemService extends ServiceWrapper {
      */
     public BigDecimal getInBasePrice() {
         return this.inBasePrice;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInComments() {
+        return this.inComments;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInDescription() {
+        return this.inDescription;
     }
     /**
      * Auto generated value accessor.
@@ -414,6 +434,24 @@ public class AppendOrderItemService extends ServiceWrapper {
     public void setInBasePrice(BigDecimal inBasePrice) {
         this.inParameters.add("basePrice");
         this.inBasePrice = inBasePrice;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inComments the inComments to set
+    */
+    public void setInComments(String inComments) {
+        this.inParameters.add("comments");
+        this.inComments = inComments;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inDescription the inDescription to set
+    */
+    public void setInDescription(String inDescription) {
+        this.inParameters.add("description");
+        this.inDescription = inDescription;
     }
     /**
      * Auto generated value setter.
@@ -702,6 +740,8 @@ public class AppendOrderItemService extends ServiceWrapper {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         if (inParameters.contains("amount")) mapValue.put("amount", getInAmount());
         if (inParameters.contains("basePrice")) mapValue.put("basePrice", getInBasePrice());
+        if (inParameters.contains("comments")) mapValue.put("comments", getInComments());
+        if (inParameters.contains("description")) mapValue.put("description", getInDescription());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("orderId")) mapValue.put("orderId", getInOrderId());
         if (inParameters.contains("overridePrice")) mapValue.put("overridePrice", getInOverridePrice());
@@ -746,6 +786,8 @@ public class AppendOrderItemService extends ServiceWrapper {
     public void putAllInput(Map<String, Object> mapValue) {
         if (mapValue.containsKey("amount")) setInAmount((BigDecimal) mapValue.get("amount"));
         if (mapValue.containsKey("basePrice")) setInBasePrice((BigDecimal) mapValue.get("basePrice"));
+        if (mapValue.containsKey("comments")) setInComments((String) mapValue.get("comments"));
+        if (mapValue.containsKey("description")) setInDescription((String) mapValue.get("description"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("orderId")) setInOrderId((String) mapValue.get("orderId"));
         if (mapValue.containsKey("overridePrice")) setInOverridePrice((String) mapValue.get("overridePrice"));

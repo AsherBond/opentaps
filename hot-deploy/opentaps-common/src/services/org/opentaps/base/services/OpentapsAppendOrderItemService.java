@@ -60,6 +60,7 @@ public class OpentapsAppendOrderItemService extends ServiceWrapper {
         basePrice("basePrice"),
         comments("comments"),
         correspondingPoId("correspondingPoId"),
+        description("description"),
         locale("locale"),
         orderId("orderId"),
         overridePrice("overridePrice"),
@@ -121,6 +122,7 @@ public class OpentapsAppendOrderItemService extends ServiceWrapper {
     private BigDecimal inBasePrice;
     private String inComments;
     private String inCorrespondingPoId;
+    private String inDescription;
     private Locale inLocale;
     private String inOrderId;
     private String inOverridePrice;
@@ -187,6 +189,14 @@ public class OpentapsAppendOrderItemService extends ServiceWrapper {
      */
     public String getInCorrespondingPoId() {
         return this.inCorrespondingPoId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInDescription() {
+        return this.inDescription;
     }
     /**
      * Auto generated value accessor.
@@ -472,6 +482,15 @@ public class OpentapsAppendOrderItemService extends ServiceWrapper {
     public void setInCorrespondingPoId(String inCorrespondingPoId) {
         this.inParameters.add("correspondingPoId");
         this.inCorrespondingPoId = inCorrespondingPoId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inDescription the inDescription to set
+    */
+    public void setInDescription(String inDescription) {
+        this.inParameters.add("description");
+        this.inDescription = inDescription;
     }
     /**
      * Auto generated value setter.
@@ -780,6 +799,7 @@ public class OpentapsAppendOrderItemService extends ServiceWrapper {
         if (inParameters.contains("basePrice")) mapValue.put("basePrice", getInBasePrice());
         if (inParameters.contains("comments")) mapValue.put("comments", getInComments());
         if (inParameters.contains("correspondingPoId")) mapValue.put("correspondingPoId", getInCorrespondingPoId());
+        if (inParameters.contains("description")) mapValue.put("description", getInDescription());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("orderId")) mapValue.put("orderId", getInOrderId());
         if (inParameters.contains("overridePrice")) mapValue.put("overridePrice", getInOverridePrice());
@@ -828,6 +848,7 @@ public class OpentapsAppendOrderItemService extends ServiceWrapper {
         if (mapValue.containsKey("basePrice")) setInBasePrice((BigDecimal) mapValue.get("basePrice"));
         if (mapValue.containsKey("comments")) setInComments((String) mapValue.get("comments"));
         if (mapValue.containsKey("correspondingPoId")) setInCorrespondingPoId((String) mapValue.get("correspondingPoId"));
+        if (mapValue.containsKey("description")) setInDescription((String) mapValue.get("description"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("orderId")) setInOrderId((String) mapValue.get("orderId"));
         if (mapValue.containsKey("overridePrice")) setInOverridePrice((String) mapValue.get("overridePrice"));
