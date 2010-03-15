@@ -45,6 +45,10 @@ under the License.
                 </entity-options>
             </drop-down>
         </field>
+        <field position="1" name="isActive">
+            <drop-down  no-current-selected-key="Y"><option key="Y" description="${uiLabelMap.CommonY}"/><option key="N" description="${uiLabelMap.CommonN}"/></drop-down>
+        </field>
+
         <field position="1" name="isVirtual" title="${uiLabelMap.ProductVirtualProduct}">
             <drop-down><option key="N" description="${uiLabelMap.CommonN}"/><option key="Y" description="${uiLabelMap.CommonY}"/></drop-down>
         </field>
@@ -220,6 +224,7 @@ under the License.
             <field-group>
                 <sort-field name="productId"/>
                 <sort-field name="productTypeId"/>
+                <sort-field name="isActive"/>
             </field-group>
             <field-group title="${uiLabelMap.ProductWordingAndComment}" collapsible="true">
                 <sort-field name="internalName"/>
