@@ -886,19 +886,13 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="mergeSuppliersForm"/>
     </request-map>
-    <request-map uri="confirmMergeSupplierForm">
-        <security https="true" auth="true"/>
-        <event type="service" invoke="opentaps.validateMergeParties"/>
-        <response name="success" type="view" value="confirmMergeSupplierForm"/>
-        <response name="error" type="request-redirect" value="mergeSuppliersForm"/>
-    </request-map>
     <request-map uri="mergeSuppliers">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.mergeParties"/>
         <response name="success" type="request-redirect" value="viewSupplier">
-          <redirect-parameter name="partyId"/>
+          <redirect-parameter name="partyId" from="partyIdTo"/>
         </response>
-        <response name="error" type="request-redirect" value="mergeSuppliersForm"/>
+        <response name="error" type="view" value="mergeSuppliersForm"/>
     </request-map>
 
     <!-- ========================= -->

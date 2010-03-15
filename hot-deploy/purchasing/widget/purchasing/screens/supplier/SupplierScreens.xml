@@ -287,7 +287,7 @@
             <actions>
                 <set field="pageTitleLabel" value="PurchMergeSuppliers"/>
                 <set field="sectionHeaderUiLabel" value="PurchMergeSuppliers"/>
-                <set field="mergeFormTarget" value="confirmMergeSupplierForm"/>
+                <set field="mergeFormTarget" value="mergeSuppliers"/>
                 <property-to-field field="fromPartyTitle" resource="PurchasingUiLabels" property="PurchFromSupplier"/>
                 <property-to-field field="toPartyTitle" resource="PurchasingUiLabels" property="PurchToSupplier"/>
                 <set field="lookupTarget" value="LookupSupplier"/>
@@ -298,29 +298,6 @@
                     <decorator-section name="section-body">
                         <platform-specific>
                             <html><html-template location="component://opentaps-common/webapp/common/party/MergePartyForm.ftl"/></html>
-                        </platform-specific>
-                    </decorator-section>
-                </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="confirmMergeSuppliersForm">
-        <section>
-            <actions>
-                <set field="pageTitleLabel" value="PurchConfirmMergeSuppliers"/>
-                <set field="sectionHeaderUiLabel" value="PurchConfirmMergeSuppliers"/>
-                <set field="mergeFormTarget" value="mergeSuppliers"/>
-                <set field="mergeFormChangeTarget" value="mergeSuppliersForm"/>
-                <property-to-field field="fromPartyTitle" resource="PurchasingUiLabels" property="PurchFromSupplier"/>
-                <property-to-field field="toPartyTitle" resource="PurchasingUiLabels" property="PurchToSupplier"/>
-                <set field="viewTarget" value="viewAccount"/>
-            </actions>
-            <widgets>
-                <decorator-screen name="main-section-decorator">
-                    <decorator-section name="section-body">
-                        <platform-specific>
-                            <html><html-template location="component://opentaps-common/webapp/common/party/ConfirmMergePartyForm.ftl"/></html>
                         </platform-specific>
                     </decorator-section>
                 </decorator-screen>

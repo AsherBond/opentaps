@@ -32,7 +32,13 @@
                 <@inputAutoComplete name="partyIdTo" url="${remoteService}" lookup="${lookupTarget}" styleClass="inputAutoCompleteQuick" size="20" />
             </td>
         </tr>
-        <@inputSubmitRow title="${uiLabelMap.OpentapsMerge}"/>
+        <tr><td colspan="2"></td></tr>
+        <tr>
+        <td></td>
+        <td>
+            <@submitFormLinkConfirm form="MergePartyForm" text="${uiLabelMap.OpentapsMerge}"/>
+        </td>
+        </tr>
     </table>
     </form>
 </div>

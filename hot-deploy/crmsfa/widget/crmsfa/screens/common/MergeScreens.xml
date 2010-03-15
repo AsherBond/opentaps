@@ -26,7 +26,7 @@
             <actions>
                 <set field="pageTitleLabel" value="CrmMergeAccounts"/>
                 <set field="sectionHeaderUiLabel" value="CrmMergeAccounts"/>
-                <set field="mergeFormTarget" value="confirmMergeAccountsForm"/> <!-- URI target of the merge form -->
+                <set field="mergeFormTarget" value="mergeAccounts"/> <!-- URI target of the merge form -->
                 <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromAccount"/>
                 <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToAccount"/>
                 <set field="lookupTarget" value="LookupAccounts"/>
@@ -44,35 +44,12 @@
         </section>
     </screen>
 
-    <screen name="confirmMergeAccountsForm">
-        <section>
-            <actions>
-                <set field="pageTitleLabel" value="CrmConfirmMergeAccounts"/>
-                <set field="sectionHeaderUiLabel" value="CrmConfirmMergeAccounts"/>
-                <set field="mergeFormTarget" value="mergeAccounts"/> <!-- URI target of the confirm merge form -->
-                <set field="mergeFormChangeTarget" value="mergeAccountsForm"/>  <!-- how to get back to the first merge form -->
-                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromAccount"/>
-                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToAccount"/>
-                <set field="viewTarget" value="viewAccount"/>
-            </actions>
-            <widgets>
-                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
-                    <decorator-section name="section-body">
-                        <platform-specific>
-                            <html><html-template location="component://opentaps-common/webapp/common/party/ConfirmMergePartyForm.ftl"/></html>
-                        </platform-specific>
-                    </decorator-section>
-                </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
     <screen name="mergeContactsForm">
         <section>
             <actions>
                 <set field="pageTitleLabel" value="CrmMergeContacts"/>
                 <set field="sectionHeaderUiLabel" value="CrmMergeContacts"/>
-                <set field="mergeFormTarget" value="confirmMergeContactsForm"/> <!-- URI target of the merge form -->
+                <set field="mergeFormTarget" value="mergeContacts"/> <!-- URI target of the merge form -->
                 <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromContact"/>
                 <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToContact"/>
                 <set field="lookupTarget" value="LookupContacts"/>
@@ -90,35 +67,12 @@
         </section>
     </screen>
 
-    <screen name="confirmMergeContactsForm">
-        <section>
-            <actions>
-                <set field="pageTitleLabel" value="CrmConfirmMergeContacts"/>
-                <set field="sectionHeaderUiLabel" value="CrmConfirmMergeContacts"/>
-                <set field="mergeFormTarget" value="mergeContacts"/> <!-- URI target of the confirm merge form -->
-                <set field="mergeFormChangeTarget" value="mergeContactsForm"/>  <!-- how to get back to the first merge form -->
-                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromContact"/>
-                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToContact"/>
-                <set field="viewTarget" value="viewContact"/>
-            </actions>
-            <widgets>
-                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
-                    <decorator-section name="section-body">
-                        <platform-specific>
-                            <html><html-template location="component://opentaps-common/webapp/common/party/ConfirmMergePartyForm.ftl"/></html>
-                        </platform-specific>
-                    </decorator-section>
-                </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
     <screen name="mergeLeadsForm">
         <section>
             <actions>
                 <set field="pageTitleLabel" value="CrmMergeLeads"/>
                 <set field="sectionHeaderUiLabel" value="CrmMergeLeads"/>
-                <set field="mergeFormTarget" value="confirmMergeLeadsForm"/> <!-- URI target of the merge form -->
+                <set field="mergeFormTarget" value="mergeLeads"/> <!-- URI target of the merge form -->
                 <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromLead"/>
                 <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToLead"/>
                 <set field="lookupTarget" value="LookupLeads"/>
@@ -129,29 +83,6 @@
                     <decorator-section name="section-body">
                         <platform-specific>
                             <html><html-template location="component://opentaps-common/webapp/common/party/MergePartyForm.ftl"/></html>
-                        </platform-specific>
-                    </decorator-section>
-                </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="confirmMergeLeadsForm">
-        <section>
-            <actions>
-                <set field="pageTitleLabel" value="CrmConfirmMergeLeads"/>
-                <set field="sectionHeaderUiLabel" value="CrmConfirmMergeLeads"/>
-                <set field="mergeFormTarget" value="mergeLeads"/> <!-- URI target of the confirm merge form -->
-                <set field="mergeFormChangeTarget" value="mergeLeadsForm"/>  <!-- how to get back to the first merge form -->
-                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromLead"/>
-                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToLead"/>
-                <set field="viewTarget" value="viewLead"/>
-            </actions>
-            <widgets>
-                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
-                    <decorator-section name="section-body">
-                        <platform-specific>
-                            <html><html-template location="component://opentaps-common/webapp/common/party/ConfirmMergePartyForm.ftl"/></html>
                         </platform-specific>
                     </decorator-section>
                 </decorator-screen>
