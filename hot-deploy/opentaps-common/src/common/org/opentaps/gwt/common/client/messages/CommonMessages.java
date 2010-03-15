@@ -3030,8 +3030,6 @@ public interface CommonMessages extends Messages {
     String crmErrorMarketingCampaignContactListNotFound(String campaignListId);
     @DefaultMessage("No marketing campaign with ID {0} found")
     String crmErrorMarketingCampaignNotFound(String marketingCampaignId);
-    @DefaultMessage("Failed to merge parties:")
-    String crmErrorMergePartiesFail();
     @DefaultMessage("Failed to add product [{0}] to order: {1}")
     String crmErrorModifyCart(String productId, String message);
     @DefaultMessage("New Password is required")
@@ -3494,16 +3492,12 @@ public interface CommonMessages extends Messages {
     String crmMarketingSurveyResults();
     @DefaultMessage("Surveys")
     String crmMarketingSurveys();
-    @DefaultMessage("Merge")
-    String crmMerge();
     @DefaultMessage("Merge Accounts")
     String crmMergeAccounts();
     @DefaultMessage("Merge Contacts")
     String crmMergeContacts();
     @DefaultMessage("Merge Leads")
     String crmMergeLeads();
-    @DefaultMessage("Warning! You are merging the following two parties. Please confirm that this is correct. After the merge, the From party will be deleted.")
-    String crmMergePartiesConfirmMessage();
     @DefaultMessage("Modified By")
     String crmModifiedBy();
     @DefaultMessage("My Accounts")
@@ -3524,10 +3518,10 @@ public interface CommonMessages extends Messages {
     String crmMyOrders();
     @DefaultMessage("My Quotes")
     String crmMyQuotes();
-    @DefaultMessage("Order {0} {1}")
-    String crmNavHistoryOrder(String orderId, String orderName);
-    @DefaultMessage("Return {0} from \"{1}\"")
-    String crmNavHistoryReturn(String returnId, String customerName);
+    @DefaultMessage("Order {0}")
+    String crmNavHistoryOrder(String orderId);
+    @DefaultMessage("Return {0}")
+    String crmNavHistoryReturn(String returnId);
     @DefaultMessage("New Account")
     String crmNewAccount();
     @DefaultMessage("New Attendee")
@@ -4850,6 +4844,8 @@ public interface CommonMessages extends Messages {
     String financialsCODCommission();
     @DefaultMessage("COGS")
     String financialsCOGS();
+    @DefaultMessage("Cash")
+    String financialsCash();
     @DefaultMessage("Cash Equivalents")
     String financialsCashEquivalents();
     @DefaultMessage("Cash Flow Statement")
@@ -5094,6 +5090,8 @@ public interface CommonMessages extends Messages {
     String financialsError_CreditLimitExceeded();
     @DefaultMessage("No date range or time period was given.")
     String financialsError_DateRangeMissing();
+    @DefaultMessage("Start date of period is greater than the closing date.")
+    String financialsError_FromDateAfterThruDate();
     @DefaultMessage("Both from and thru dates are required.")
     String financialsError_FromOrThruDateMissing();
     @DefaultMessage("The GL Account Class [{0}] is not properly configured.  It is not part of the DEBIT or CREDIT account class trees.")
@@ -5180,12 +5178,18 @@ public interface CommonMessages extends Messages {
     String financialsFindSalesInvoices();
     @DefaultMessage("Find Transactions")
     String financialsFindTransactions();
+    @DefaultMessage("First Reconciliation for this GL Account")
+    String financialsFirstReconciliationForThisAccount();
     @DefaultMessage("Fund Code")
     String financialsFundCode();
     @DefaultMessage("Account Code")
     String financialsGLAccountCode();
     @DefaultMessage("Account Name")
     String financialsGLAccountName();
+    @DefaultMessage("Gateway Code")
+    String financialsGatewayCode();
+    @DefaultMessage("Gl Account")
+    String financialsGlAccount();
     @DefaultMessage("Account Type")
     String financialsGlAccountType();
     @DefaultMessage("GL Account Activity Analysis")
@@ -5560,6 +5564,8 @@ public interface CommonMessages extends Messages {
     String financialsReconciledAsOf();
     @DefaultMessage("Reconciled By")
     String financialsReconciledBy();
+    @DefaultMessage("Reconciliation for")
+    String financialsReconciliationFor();
     @DefaultMessage("Recurrence")
     String financialsRecurrence();
     @DefaultMessage("Recurring Invoices")
@@ -5752,6 +5758,8 @@ public interface CommonMessages extends Messages {
     String financialsStatementsBalance();
     @DefaultMessage("Beginning Balance")
     String financialsStatementsBeginningBalance();
+    @DefaultMessage("Calculated Balance")
+    String financialsStatementsCalculatedBalance();
     @DefaultMessage("Ending Balance")
     String financialsStatementsEndingBalance();
     @DefaultMessage("Status")
@@ -5780,16 +5788,22 @@ public interface CommonMessages extends Messages {
     String financialsTimePeriodsFor();
     @DefaultMessage("To Classification Group")
     String financialsToClsGroup();
+    @DefaultMessage("Total All Receipts")
+    String financialsTotalAllReceipts();
     @DefaultMessage("Total Amount")
     String financialsTotalAmount();
     @DefaultMessage("TOTAL")
     String financialsTotalCapital();
+    @DefaultMessage("Total Cash")
+    String financialsTotalCash();
     @DefaultMessage("Total Financing Cash Flow")
     String financialsTotalFinancingCashFlow();
     @DefaultMessage("Total Investing Cash Flow")
     String financialsTotalInvestingCashFlow();
     @DefaultMessage("Total Net Cash Flow")
     String financialsTotalNetCashFlow();
+    @DefaultMessage("Total Non Cash")
+    String financialsTotalNonCash();
     @DefaultMessage("Total Operating Cash Flow")
     String financialsTotalOperatingCashFlow();
     @DefaultMessage("Total Outstanding")
@@ -8862,6 +8876,8 @@ public interface CommonMessages extends Messages {
     String opentapsCashDrawerVariance();
     @DefaultMessage("Change Password")
     String opentapsChangePassword();
+    @DefaultMessage("Check All")
+    String opentapsCheckAll();
     @DefaultMessage("&#x2713;")
     String opentapsCheckmark();
     @DefaultMessage("Choose")
@@ -8886,6 +8902,8 @@ public interface CommonMessages extends Messages {
     String opentapsComposeNew();
     @DefaultMessage("Configuration")
     String opentapsConfiguration();
+    @DefaultMessage("Confirm Merge")
+    String opentapsConfirmMerge();
     @DefaultMessage("A file with the same name is already associated to this order, do you want to overwrite it?")
     String opentapsConfirmOverwriteContent();
     @DefaultMessage("Confirmed")
@@ -9070,6 +9088,8 @@ public interface CommonMessages extends Messages {
     String opentapsError_InvoiceCurrencyNotSet(String invoiceId);
     @DefaultMessage("Invoice [{0}] not found.")
     String opentapsError_InvoiceNotFound(String invoiceId);
+    @DefaultMessage("Failed to merge parties:")
+    String opentapsError_MergePartiesFail();
     @DefaultMessage("Cannot create order, a payment method must be supplied.")
     String opentapsError_MissingOrderPaymentMethod();
     @DefaultMessage("<div class=\"errortooltip\">Unable to fetch data because session has expired.  Please reload this page.</div>")
@@ -9232,6 +9252,8 @@ public interface CommonMessages extends Messages {
     String opentapsGenerateForm();
     @DefaultMessage("Generate Letter")
     String opentapsGenerateFormLetter();
+    @DefaultMessage("Get help from an opentaps Partner")
+    String opentapsGetHelpFromAnOpentapsPartner();
     @DefaultMessage("Go Back")
     String opentapsGoBack();
     @DefaultMessage("Grid View")
@@ -9272,12 +9294,18 @@ public interface CommonMessages extends Messages {
     String opentapsKeyboardShortcutsSpecificToPage();
     @DefaultMessage("Last updated at {0}")
     String opentapsLastUpdatedAt(String lastUpdatedStamp);
+    @DefaultMessage("Live help for this page on opentaps Wiki")
+    String opentapsLiveHelp();
     @DefaultMessage("opentaps Login")
     String opentapsLoginGreeting();
     @DefaultMessage("Is Default?")
     String opentapsMakeDefault();
     @DefaultMessage("Map It")
     String opentapsMapIt();
+    @DefaultMessage("Merge")
+    String opentapsMerge();
+    @DefaultMessage("Warning! You are merging the following two parties. Please confirm that this is correct. After the merge, the From party will be deleted.")
+    String opentapsMergePartiesConfirmMessage();
     @DefaultMessage("Mini-Catalog")
     String opentapsMiniCatalog();
     @DefaultMessage("Move")
@@ -9290,11 +9318,13 @@ public interface CommonMessages extends Messages {
     String opentapsMyMessages();
     @DefaultMessage("N/A")
     String opentapsNA();
+    @DefaultMessage("Name")
+    String opentapsName();
     @DefaultMessage("{0} agreement {1} to \"{2}\"")
     String opentapsNavHistoryAgreement(String agreementTypeName, String agreementId, String partyNameTo);
     @DefaultMessage("Last Viewed")
     String opentapsNavHistoryTitle();
-    @DefaultMessage("")
+    @DefaultMessage("…")
     String opentapsNavHistoryTruncMark();
     @DefaultMessage("Needed")
     String opentapsNeeded();
@@ -9520,6 +9550,8 @@ public interface CommonMessages extends Messages {
     String opentapsTextData();
     @DefaultMessage("Full Text Not Available")
     String opentapsTextDataNotAvailable();
+    @DefaultMessage("To learn more about opentaps, follow us on")
+    String opentapsToLearnMoreAboutOpentapsFollowUsOn();
     @DefaultMessage("Top Level Only")
     String opentapsTopLevelOnly();
     @DefaultMessage("Tracking Codes")
@@ -9530,6 +9562,8 @@ public interface CommonMessages extends Messages {
     String opentapsUPC();
     @DefaultMessage("Unassign")
     String opentapsUnassign();
+    @DefaultMessage("Uncheck All")
+    String opentapsUncheckAll();
     @DefaultMessage("Unknown")
     String opentapsUnknown();
     @DefaultMessage("Unset")
@@ -12176,6 +12210,8 @@ public interface CommonMessages extends Messages {
     String pagerPreviousPage();
     @DefaultMessage("Less records per page")
     String pagerShrinkPage();
+    @DefaultMessage("Toggle View All")
+    String pagerToggleViewAll();
     @DefaultMessage("Partner Id")
     String partnerId();
     @DefaultMessage("Partner List")
@@ -16542,6 +16578,8 @@ public interface CommonMessages extends Messages {
     String purchBomComponentOnlyForRouting();
     @DefaultMessage("Configure Warehouses")
     String purchConfigureWarehouses();
+    @DefaultMessage("Confirm Merge Suppliers")
+    String purchConfirmMergeSuppliers();
     @DefaultMessage("Consolidate Requirements")
     String purchConsolidateRequirements();
     @DefaultMessage("Create Purchase Agreement")
@@ -16552,6 +16590,10 @@ public interface CommonMessages extends Messages {
     String purchCreateInventoryTransfer();
     @DefaultMessage("Create Supplier")
     String purchCreateSupplier();
+    @DefaultMessage("An supplier with this name already exists with ID {0}.  Use [Create Supplier Ignoring Duplicates] on Create Supplier Form to create it anyway.")
+    String purchCreateSupplierDuplicateCheckFail(String partyId);
+    @DefaultMessage("Create Supplier Ignoring Duplicates")
+    String purchCreateSupplierIgnoreDuplicate();
     @DefaultMessage("Created Orders")
     String purchCreatedOrders();
     @DefaultMessage("Delivery Schedule")
@@ -16598,6 +16640,8 @@ public interface CommonMessages extends Messages {
     String purchFindRequirements();
     @DefaultMessage("Find Suppliers")
     String purchFindSuppliers();
+    @DefaultMessage("From Supplier")
+    String purchFromSupplier();
     @DefaultMessage("Held Orders")
     String purchHeldOrders();
     @DefaultMessage("Requirements")
@@ -16608,6 +16652,8 @@ public interface CommonMessages extends Messages {
     String purchInvoiceSupplies();
     @DefaultMessage("Max Quantity")
     String purchMaxQuantity();
+    @DefaultMessage("Merge Suppliers")
+    String purchMergeSuppliers();
     @DefaultMessage("Min Quantity")
     String purchMinQuantity();
     @DefaultMessage("Create Pending Internal Requirements?")
@@ -16626,8 +16672,8 @@ public interface CommonMessages extends Messages {
     String purchMrpStoreGroup();
     @DefaultMessage("Inventory transfer requirement {0} from {1} to {2} at {3}")
     String purchMrpTransferRequirementFromToAt(String requirementId, String fromFacilityName, String toFacilityName, String transferTime);
-    @DefaultMessage("PO {0} {1}")
-    String purchNavHistoryOrder(String orderId, String orderName);
+    @DefaultMessage("PO {0}")
+    String purchNavHistoryOrder(String orderId);
     @DefaultMessage("Net Quantity")
     String purchNetQuantity();
     @DefaultMessage("There are no agreements for this supplier")
@@ -16730,8 +16776,12 @@ public interface CommonMessages extends Messages {
     String purchSupplierName();
     @DefaultMessage("Suppliers")
     String purchSuppliers();
+    @DefaultMessage("Duplicates found")
+    String purchSuppliersWithDuplicateName();
     @DefaultMessage("Task")
     String purchTask();
+    @DefaultMessage("To Supplier")
+    String purchToSupplier();
     @DefaultMessage("Edit Supplier")
     String purchUpdateSupplier();
     @DefaultMessage("Agreement Details")

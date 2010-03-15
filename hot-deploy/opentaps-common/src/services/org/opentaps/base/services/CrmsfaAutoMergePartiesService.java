@@ -34,7 +34,7 @@ import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Merge all PartyMergeCandidate pairs with a null processedTimestamp and doNotMerge != "Y" and updates the record on success. Each pair is transactional inside the service.
-            If validate is set to "N", then crmsfa.validateMergeCrmParties will not be run..
+            If validate is set to "N", then common.validateMergeParties will not be run..
  * Auto generated base service entity crmsfa.autoMergeParties.
  *
  * Engine: java

@@ -22,7 +22,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -39,10 +38,6 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.model.ModelEntity;
-import org.ofbiz.entity.model.ModelField;
-import org.ofbiz.entity.model.ModelRelation;
-import org.ofbiz.entity.model.ModelViewEntity;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
@@ -67,170 +62,6 @@ public final class PartyServices {
     private PartyServices() { }
 
     private static final String MODULE = PartyServices.class.getName();
-
-    /**
-     * Merging function for two unique GenericValues.
-     * @param entityName the name of the <code>GenericValue</code> entity
-     * @param fromKeys <code>Map</code> representing the primary key of the entity to merge from
-     * @param toKeys <code>Map</code> representing the primary key of the entity to merge to
-     * @param delegator a <code>GenericDelegator</code> value
-     * @exception GenericEntityException if an error occurs
-     */
-    private static void mergeTwoValues(String entityName, Map<String, String> fromKeys, Map<String, String> toKeys, GenericDelegator delegator) throws GenericEntityException {
-        GenericValue from = delegator.findByPrimaryKey(entityName, fromKeys);
-        GenericValue to = delegator.findByPrimaryKey(entityName, toKeys);
-        if (from == null || to == null) {
-            return;
-        }
-        from.setNonPKFields(to.getAllFields());
-        to.setNonPKFields(from.getAllFields());
-        to.store();
-    }
-
-    /**
-     * Ensures two parties can be merged. Returns service error if they cannot. A merge requires CRMSFA_${type}_UPDATE where
-     * type is the roleTypeId of the party, such as ACCOUNT, CONTACT, or LEAD. Also, the input must be two different partyIds
-     * with the same roleTypeId.
-     *
-     * @param dctx a <code>DispatchContext</code> value
-     * @param context a <code>Map</code> value
-     * @return a <code>Map</code> value
-     */
-    @SuppressWarnings("unchecked")
-    public static Map validateMergeCrmParties(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
-        Security security = dctx.getSecurity();
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = UtilCommon.getLocale(context);
-
-        String partyIdFrom = (String) context.get("partyIdFrom");
-        String partyIdTo = (String) context.get("partyIdTo");
-        try {
-            // ensure that merging parties are the same type (ACCOUNT, CONTACT, PROSPECT)
-            String fromPartyType = PartyHelper.getFirstValidInternalPartyRoleTypeId(partyIdFrom, delegator);
-            String toPartyType = PartyHelper.getFirstValidInternalPartyRoleTypeId(partyIdTo, delegator);
-            if ((fromPartyType == null) || !fromPartyType.equals(toPartyType)) {
-                return UtilMessage.createAndLogServiceError("Cannot merge party [" + partyIdFrom + "] of type [" + fromPartyType + "] with party [" + partyIdTo + "] of type [" + toPartyType + "] because they are not the same type.", "CrmErrorMergePartiesFail", locale, MODULE);
-            }
-            if (partyIdFrom.equals(partyIdTo)) {
-                return UtilMessage.createAndLogServiceError("Cannot merge party [" + partyIdFrom + "] to itself!", "CrmErrorMergeParties", locale, MODULE);
-            }
-
-            // convert ACCOUNT/CONTACT/PROSPECT to ACCOUNT/CONTACT/LEAD
-            String partyTypeCrm = (fromPartyType.equals("PROSPECT") ? "LEAD" : fromPartyType);
-
-            // make sure userLogin has CRMSFA_${partyTypeCrm}_UPDATE permission for both parties TODO: and delete, check security config
-            if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_" + partyTypeCrm, "_UPDATE", userLogin, partyIdFrom)
-                    || !CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_" + partyTypeCrm, "_UPDATE", userLogin, partyIdTo)) {
-                return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied" + ": CRMSFA_" + partyTypeCrm + "_UPDATE", locale, MODULE);
-            }
-        } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorMergePartiesFail", locale, MODULE);
-        }
-        return ServiceUtil.returnSuccess();
-    }
-
-    /**
-     * Merge two parties. Checks crmsfa.validateMergeCrmParties as a precaution if the validate parameter is not set to N. The From party will be deleted after the merge.
-     * TODO: avoid merging parties with particular statuses. implement with an array.
-     *
-     * @param dctx a <code>DispatchContext</code> value
-     * @param context a <code>Map</code> value
-     * @return a <code>Map</code> value
-     */
-    public static Map<String, Object> mergeCrmParties(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = UtilCommon.getLocale(context);
-
-        String partyIdFrom = (String) context.get("partyIdFrom");
-        String partyIdTo = (String) context.get("partyIdTo");
-        String validate = (String) context.get("validate");
-
-        try {
-
-            Map<String, Object> serviceResults = null;
-
-            if (!"N".equalsIgnoreCase(validate)) {
-                // validate again
-                serviceResults = dispatcher.runSync("crmsfa.validateMergeCrmParties",
-                        UtilMisc.toMap("userLogin", userLogin, "partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo));
-                if (ServiceUtil.isError(serviceResults)) {
-                    return serviceResults;
-                }
-            }
-
-            // merge the party objects
-            mergeTwoValues("PartySupplementalData", UtilMisc.toMap("partyId", partyIdFrom), UtilMisc.toMap("partyId", partyIdTo), delegator);
-            mergeTwoValues("Person", UtilMisc.toMap("partyId", partyIdFrom), UtilMisc.toMap("partyId", partyIdTo), delegator);
-            mergeTwoValues("PartyGroup", UtilMisc.toMap("partyId", partyIdFrom), UtilMisc.toMap("partyId", partyIdTo), delegator);
-            mergeTwoValues("Party", UtilMisc.toMap("partyId", partyIdFrom), UtilMisc.toMap("partyId", partyIdTo), delegator);
-
-            List<GenericValue> toRemove = new ArrayList<GenericValue>();
-
-            // Get a list of entities related to the Party entity, in descending order by relation
-            List<ModelEntity> relatedEntities = getRelatedEntities("Party", delegator);
-
-            // Go through the related entities in forward order - this makes sure that parent records are created before child records
-            Iterator<ModelEntity> reit = relatedEntities.iterator();
-            while (reit.hasNext()) {
-                ModelEntity modelEntity = reit.next();
-
-                // Examine each field of the entity
-                Iterator<ModelField> mefit = modelEntity.getFieldsIterator();
-                while (mefit.hasNext()) {
-                    ModelField modelField = mefit.next();
-                    if (modelField.getName().matches(".*[pP]artyId.*")) {
-
-                        // If the name of the field has something to do with a partyId, get all the existing records from that entity which have the
-                        //  partyIdFrom in that particular field
-                        List<GenericValue> existingRecords = delegator.findByAnd(modelEntity.getEntityName(), UtilMisc.toMap(modelField.getName(), partyIdFrom));
-                        if (existingRecords.size() > 0) {
-                            Iterator<GenericValue> eit = existingRecords.iterator();
-                            while (eit.hasNext()) {
-                                GenericValue existingRecord = eit.next();
-                                if (modelField.getIsPk()) {
-
-                                    // If the partyId field is part of a primary key, create a new record with the partyIdTo in place of the partyIdFrom
-                                    GenericValue newRecord = delegator.makeValue(modelEntity.getEntityName(), existingRecord.getAllFields());
-                                    newRecord.set(modelField.getName(), partyIdTo);
-
-                                    // Create the new record if a record with the same primary key doesn't already exist
-                                    if (delegator.findByPrimaryKey(newRecord.getPrimaryKey()) == null) {
-                                        newRecord.create();
-                                    }
-
-                                    // Add the old record to the list of records to remove
-                                    toRemove.add(existingRecord);
-                                } else {
-
-                                    // If the partyId field is not party of a primary key, simply update the field with the new value and store it
-                                    existingRecord.set(modelField.getName(), partyIdTo);
-                                    existingRecord.store();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Go through the list of records to remove in REVERSE order! Since they're still in descending order of relation to the Party
-            //  entity, reversing makes sure that child records are removed before parent records, all the way back to the original Party record
-            ListIterator<GenericValue> rit = toRemove.listIterator(toRemove.size());
-            while (rit.hasPrevious()) {
-                GenericValue existingRecord = (GenericValue) rit.previous();
-                Debug.logError(existingRecord.toString(), MODULE);
-                existingRecord.remove();
-            }
-
-        } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorMergePartiesFail", locale, MODULE);
-        } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorMergePartiesFail", locale, MODULE);
-        }
-        return ServiceUtil.returnSuccess();
-    }
 
     /**
      * Identifies parties which should be merged based on identical names and postal addresses (alphanumeric portions of address1, postalCode, countryGeoId)
@@ -485,7 +316,7 @@ public final class PartyServices {
 
     /**
      * Merge all PartyMergeCandidate pairs with a null processedTimestamp and doNotMerge != "Y" and updates the record on success. Each pair is transactional inside the service.
-     * If validate is set to "N", then crmsfa.validateMergeCrmParties will not be run.
+     * If validate is set to "N", then common.validateMergeParties will not be run.
      *
      * @param dctx a <code>DispatchContext</code> value
      * @param context a <code>Map</code> value
@@ -526,7 +357,7 @@ public final class PartyServices {
                         // Call the party merge service inside a transaction
                         TransactionUtil.begin();
 
-                        Map<String, Object> mergeResult = dispatcher.runSync("crmsfa.mergeCrmParties", UtilMisc.toMap("partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo, "validate", validate, "userLogin", userLogin));
+                        Map<String, Object> mergeResult = dispatcher.runSync("common.mergeParties", UtilMisc.toMap("partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo, "validate", validate, "userLogin", userLogin));
                         if (ServiceUtil.isError(mergeResult)) {
                             TransactionUtil.rollback();
                             UtilMessage.logServiceError("crmsfa.autoMergePartiesError", UtilMisc.toMap("partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo), locale, MODULE);
@@ -717,42 +548,6 @@ public final class PartyServices {
         }
 
         return ServiceUtil.returnSuccess();
-    }
-
-    private static List<ModelEntity> getRelatedEntities(String parentEntityName, GenericDelegator delegator) {
-        ModelEntity parentEntity = delegator.getModelEntity(parentEntityName);
-
-        // Start the recursion
-        return getRelatedEntities(new ArrayList<ModelEntity>(), parentEntity, delegator);
-    }
-
-    /**
-     * Recursive method to map relations from a single entity.
-     * @param relatedEntities List of related ModelEntity objects in descending order of relation from the parent entity
-     * @param parentEntity Root ModelEntity for deriving relations
-     * @param delegator GenericDelegator
-     * @return List of ModelEntity objects in descending order of relation from the original parent entity
-     */
-    private static List<ModelEntity> getRelatedEntities(List<ModelEntity> relatedEntities, ModelEntity parentEntity, GenericDelegator delegator) {
-
-        // Do nothing if the parent entity has already been mapped
-        if (relatedEntities.contains(parentEntity)) {
-            return relatedEntities;
-        }
-
-        relatedEntities.add(parentEntity);
-        Iterator<ModelRelation> reit = parentEntity.getRelationsIterator();
-
-        // Recurse for each relation from the parent entity that doesn't refer to a view-entity
-        while (reit.hasNext()) {
-            ModelRelation relation = reit.next();
-            String relatedEntityName = relation.getRelEntityName();
-            ModelEntity relatedEntity = delegator.getModelEntity(relatedEntityName);
-            if (!(relatedEntity instanceof ModelViewEntity)) {
-                relatedEntities = getRelatedEntities(relatedEntities, relatedEntity, delegator);
-            }
-        }
-        return relatedEntities;
     }
 
     /**

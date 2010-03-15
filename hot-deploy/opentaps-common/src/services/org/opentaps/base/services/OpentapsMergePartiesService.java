@@ -34,21 +34,20 @@ import org.opentaps.foundation.infrastructure.User;
 
 /**
  * 
-            Ensures two parties can be merged. Returns service error if they cannot. A merge requires CRMSFA_${type}_UPDATE where
-            type is the roleTypeId of the party, such as ACCOUNT, CONTACT, or LEAD. Also, the input must be two different partyIds
-            with the same roleTypeId.
+            Merge two parties. Checks crmsfa.validateMergeParties as a precaution if the validate 
+            parameter is not set to N. The From party will be deleted after the merge.
         .
- * Auto generated base service entity crmsfa.validateMergeCrmParties.
+ * Auto generated base service entity opentaps.mergeParties.
  *
- * Engine: java
- * Location: com.opensourcestrategies.crmsfa.party.PartyServices
- * Invoke: validateMergeCrmParties
- * Defined in: hot-deploy/crmsfa/servicedef/services_party.xml
+ * Engine: pojo
+ * Location: org.opentaps.common.domain.party.PartyMergeService
+ * Invoke: mergeParties
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_party.xml
  */
-public class CrmsfaValidateMergeCrmPartiesService extends ServiceWrapper {
+public class OpentapsMergePartiesService extends ServiceWrapper {
 
     /** The service name as used by the service engine. */
-    public static final String NAME = "crmsfa.validateMergeCrmParties";
+    public static final String NAME = "opentaps.mergeParties";
     /** If the service requires authentication. */
     public static final Boolean REQUIRES_AUTHENTICATION = Boolean.TRUE;
     /** If the service requires a new transaction. */
@@ -62,7 +61,8 @@ public class CrmsfaValidateMergeCrmPartiesService extends ServiceWrapper {
         partyIdFrom("partyIdFrom"),
         partyIdTo("partyIdTo"),
         timeZone("timeZone"),
-        userLogin("userLogin");
+        userLogin("userLogin"),
+        validate("validate");
         private final String _fieldName;
         private In(String name) { this._fieldName = name; }
         public String getName() { return this._fieldName; }
@@ -83,17 +83,17 @@ public class CrmsfaValidateMergeCrmPartiesService extends ServiceWrapper {
     }
 
     /**
-     * Creates a new <code>CrmsfaValidateMergeCrmPartiesService</code> instance.
+     * Creates a new <code>OpentapsMergePartiesService</code> instance.
      */
-    public CrmsfaValidateMergeCrmPartiesService() {
+    public OpentapsMergePartiesService() {
         super();
     }
 
     /**
-     * Creates a new <code>CrmsfaValidateMergeCrmPartiesService</code> instance.
+     * Creates a new <code>OpentapsMergePartiesService</code> instance.
      * @param user an <code>User</code> value
      */
-    public CrmsfaValidateMergeCrmPartiesService(User user) {
+    public OpentapsMergePartiesService(User user) {
         super(user);
     }
 
@@ -102,6 +102,7 @@ public class CrmsfaValidateMergeCrmPartiesService extends ServiceWrapper {
     private String inPartyIdTo;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
+    private String inValidate;
     private String outErrorMessage;
     private List outErrorMessageList;
     private Locale outLocale;
@@ -153,6 +154,14 @@ public class CrmsfaValidateMergeCrmPartiesService extends ServiceWrapper {
      */
     public GenericValue getInUserLogin() {
         return this.inUserLogin;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInValidate() {
+        return this.inValidate;
     }
     /**
      * Auto generated value accessor.
@@ -267,6 +276,15 @@ public class CrmsfaValidateMergeCrmPartiesService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inValidate the inValidate to set
+    */
+    public void setInValidate(String inValidate) {
+        this.inParameters.add("validate");
+        this.inValidate = inValidate;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param outErrorMessage the outErrorMessage to set
     */
     public void setOutErrorMessage(String outErrorMessage) {
@@ -365,6 +383,7 @@ public class CrmsfaValidateMergeCrmPartiesService extends ServiceWrapper {
         if (inParameters.contains("partyIdTo")) mapValue.put("partyIdTo", getInPartyIdTo());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        if (inParameters.contains("validate")) mapValue.put("validate", getInValidate());
         // allow the User set to override the userLogin
         if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
@@ -391,6 +410,7 @@ public class CrmsfaValidateMergeCrmPartiesService extends ServiceWrapper {
         if (mapValue.containsKey("partyIdTo")) setInPartyIdTo((String) mapValue.get("partyIdTo"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));
+        if (mapValue.containsKey("validate")) setInValidate((String) mapValue.get("validate"));
     }
 
     /** {@inheritDoc} */
@@ -406,30 +426,30 @@ public class CrmsfaValidateMergeCrmPartiesService extends ServiceWrapper {
     }
 
     /**
-     * Construct a <code>CrmsfaValidateMergeCrmPartiesService</code> from the input values of the given <code>CrmsfaValidateMergeCrmPartiesService</code>.
-     * @param input a <code>CrmsfaValidateMergeCrmPartiesService</code>
+     * Construct a <code>OpentapsMergePartiesService</code> from the input values of the given <code>OpentapsMergePartiesService</code>.
+     * @param input a <code>OpentapsMergePartiesService</code>
      */
-    public static CrmsfaValidateMergeCrmPartiesService fromInput(CrmsfaValidateMergeCrmPartiesService input) {
-        CrmsfaValidateMergeCrmPartiesService service = new CrmsfaValidateMergeCrmPartiesService();
+    public static OpentapsMergePartiesService fromInput(OpentapsMergePartiesService input) {
+        OpentapsMergePartiesService service = new OpentapsMergePartiesService();
         return fromInput(input.inputMap());
     }
 
     /**
-     * Construct a <code>CrmsfaValidateMergeCrmPartiesService</code> from the output values of the given <code>CrmsfaValidateMergeCrmPartiesService</code>.
-     * @param output a <code>CrmsfaValidateMergeCrmPartiesService</code>
+     * Construct a <code>OpentapsMergePartiesService</code> from the output values of the given <code>OpentapsMergePartiesService</code>.
+     * @param output a <code>OpentapsMergePartiesService</code>
      */
-    public static CrmsfaValidateMergeCrmPartiesService fromOutput(CrmsfaValidateMergeCrmPartiesService output) {
-        CrmsfaValidateMergeCrmPartiesService service = new CrmsfaValidateMergeCrmPartiesService();
+    public static OpentapsMergePartiesService fromOutput(OpentapsMergePartiesService output) {
+        OpentapsMergePartiesService service = new OpentapsMergePartiesService();
         service.putAllOutput(output.outputMap());
         return service;
     }
 
     /**
-     * Construct a <code>CrmsfaValidateMergeCrmPartiesService</code> from the given input <code>Map</code>.
+     * Construct a <code>OpentapsMergePartiesService</code> from the given input <code>Map</code>.
      * @param mapValue the service input <code>Map</code>
      */
-    public static CrmsfaValidateMergeCrmPartiesService fromInput(Map<String, Object> mapValue) {
-        CrmsfaValidateMergeCrmPartiesService service = new CrmsfaValidateMergeCrmPartiesService();
+    public static OpentapsMergePartiesService fromInput(Map<String, Object> mapValue) {
+        OpentapsMergePartiesService service = new OpentapsMergePartiesService();
         service.putAllInput(mapValue);
         if (mapValue.containsKey("userLogin")) {
             GenericValue userGv = (GenericValue) mapValue.get("userLogin");
@@ -441,11 +461,11 @@ public class CrmsfaValidateMergeCrmPartiesService extends ServiceWrapper {
     }
 
     /**
-     * Construct a <code>CrmsfaValidateMergeCrmPartiesService</code> from the given output <code>Map</code>.
+     * Construct a <code>OpentapsMergePartiesService</code> from the given output <code>Map</code>.
      * @param mapValue the service output <code>Map</code>
      */
-    public static CrmsfaValidateMergeCrmPartiesService fromOutput(Map<String, Object> mapValue) {
-        CrmsfaValidateMergeCrmPartiesService service = new CrmsfaValidateMergeCrmPartiesService();
+    public static OpentapsMergePartiesService fromOutput(Map<String, Object> mapValue) {
+        OpentapsMergePartiesService service = new OpentapsMergePartiesService();
         service.putAllOutput(mapValue);
         return service;
     }

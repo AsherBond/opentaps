@@ -76,36 +76,17 @@
     <service name="crmsfa.findCrmPartiesForMerge" engine="java"
         location="com.opensourcestrategies.crmsfa.party.PartyServices" invoke="findCrmPartiesForMerge" auth="true" use-transaction="false">
         <description>Identifies parties which should be merged based on identical names and postal addresses (alphanumeric portions of address1, postalCode, countryGeoId) or identical email addresses, and creates
-            records in PartyMergeCandidates for later merging using the crmsfa.mergeCrmParties service.</description>
+            records in PartyMergeCandidates for later merging using the common.mergeParties service.</description>
     </service>
 
     <service name="crmsfa.autoMergeParties" engine="java"
         location="com.opensourcestrategies.crmsfa.party.PartyServices" invoke="autoMergeParties" auth="true" use-transaction="false">
         <description>Merge all PartyMergeCandidate pairs with a null processedTimestamp and doNotMerge != "Y" and updates the record on success. Each pair is transactional inside the service.
-            If validate is set to "N", then crmsfa.validateMergeCrmParties will not be run.</description>
+            If validate is set to "N", then common.validateMergeParties will not be run.</description>
         <attribute name="validate" type="String" mode="IN" optional="true"/>
         <attribute name="successfulMerges" type="Integer" mode="OUT"/>
     </service>
 
-    <service name="crmsfa.mergeCrmParties" engine="java"
-        location="com.opensourcestrategies.crmsfa.party.PartyServices" invoke="mergeCrmParties" auth="true">
-        <description>Merge two parties. Checks crmsfa.validateMergeCrmParties as a precaution if the validate parameter is not set to N. The From party will be deleted after the merge.</description>
-        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
-        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
-        <attribute name="validate" type="String" mode="IN" optional="true"/>
-    </service>
-
-    <service name="crmsfa.validateMergeCrmParties" engine="java"
-        location="com.opensourcestrategies.crmsfa.party.PartyServices" invoke="validateMergeCrmParties" auth="true">
-        <description>
-            Ensures two parties can be merged. Returns service error if they cannot. A merge requires CRMSFA_${type}_UPDATE where
-            type is the roleTypeId of the party, such as ACCOUNT, CONTACT, or LEAD. Also, the input must be two different partyIds
-            with the same roleTypeId.
-        </description>
-        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
-        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
-    </service>
- 
     <service name="crmsfa.autoAssignParty" engine="java"
         location="com.opensourcestrategies.crmsfa.party.PartyServices" invoke="autoAssignParty" auth="true">
         <description>

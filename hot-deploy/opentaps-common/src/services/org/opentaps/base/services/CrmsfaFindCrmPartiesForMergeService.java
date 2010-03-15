@@ -34,7 +34,7 @@ import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Identifies parties which should be merged based on identical names and postal addresses (alphanumeric portions of address1, postalCode, countryGeoId) or identical email addresses, and creates
-            records in PartyMergeCandidates for later merging using the crmsfa.mergeCrmParties service..
+            records in PartyMergeCandidates for later merging using the common.mergeParties service..
  * Auto generated base service entity crmsfa.findCrmPartiesForMerge.
  *
  * Engine: java

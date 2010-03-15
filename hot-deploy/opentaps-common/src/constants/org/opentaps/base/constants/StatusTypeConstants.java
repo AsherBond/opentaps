@@ -130,7 +130,7 @@ public final class StatusTypeConstants {
         public static final String LEAD_STATUS = "LEAD_STATUS";
         /** Status codes for parties which are leads (role = PROSPECT). */
         public static final String PARTY_LEAD_STATUS = "PARTY_LEAD_STATUS";
-        /** Party status. */
+        /** Party. */
         public static final String PARTY_STATUS = "PARTY_STATUS";
     }
     /** PartyQual verification status. */

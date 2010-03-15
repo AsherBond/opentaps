@@ -881,6 +881,26 @@
         <event type="service" invoke="opentaps.preparePurchasingOrderEmail"/>
         <response name="success" type="request" value="writeEmail"/>
     </request-map>
+
+    <request-map uri="mergeSuppliersForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="mergeSuppliersForm"/>
+    </request-map>
+    <request-map uri="confirmMergeSupplierForm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.validateMergeParties"/>
+        <response name="success" type="view" value="confirmMergeSupplierForm"/>
+        <response name="error" type="request-redirect" value="mergeSuppliersForm"/>
+    </request-map>
+    <request-map uri="mergeSuppliers">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.mergeParties"/>
+        <response name="success" type="request-redirect" value="viewSupplier">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="request-redirect" value="mergeSuppliersForm"/>
+    </request-map>
+
     <!-- ========================= -->
     <!-- Pentaho Services Mappings -->
     <!-- ========================= -->
@@ -1010,5 +1030,7 @@
     <view-map name="createAgreement" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#createAgreement"/>
     <view-map name="editAgreement" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#editAgreement"/>
     <view-map name="outsourceRoutingTaskForm" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#outsourceRoutingTaskForm"/>
+    <view-map name="mergeSuppliersForm" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#mergeSuppliersForm"/>
+    <view-map name="confirmMergeSupplierForm" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#confirmMergeSuppliersForm"/>
 
 </site-conf>

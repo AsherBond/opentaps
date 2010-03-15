@@ -2342,25 +2342,25 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     </request-map>
     <request-map uri="confirmMergeAccountsForm">
         <security https="true" auth="true"/>
-        <event type="service" invoke="crmsfa.validateMergeCrmParties"/>
+        <event type="service" invoke="opentaps.validateMergeParties"/>
         <response name="success" type="view" value="confirmMergeAccountsForm"/>
         <response name="error" type="request-redirect" value="mergeAccountsForm"/>
     </request-map>
     <request-map uri="confirmMergeContactsForm">
         <security https="true" auth="true"/>
-        <event type="service" invoke="crmsfa.validateMergeCrmParties"/>
+        <event type="service" invoke="opentaps.validateMergeParties"/>
         <response name="success" type="view" value="confirmMergeContactsForm"/>
         <response name="error" type="request-redirect" value="mergeContactsForm"/>
     </request-map>
     <request-map uri="confirmMergeLeadsForm">
         <security https="true" auth="true"/>
-        <event type="service" invoke="crmsfa.validateMergeCrmParties"/>
+        <event type="service" invoke="opentaps.validateMergeParties"/>
         <response name="success" type="view" value="confirmMergeLeadsForm"/>
         <response name="error" type="request-redirect" value="mergeLeadsForm"/>
     </request-map>
     <request-map uri="mergeAccounts">
         <security https="true" auth="true"/>
-        <event type="service" invoke="crmsfa.mergeCrmParties"/>
+        <event type="service" invoke="opentaps.mergeParties"/>
         <response name="success" type="request-redirect" value="viewAccount">
           <redirect-parameter name="partyId"/>
         </response>
@@ -2368,7 +2368,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     </request-map>
     <request-map uri="mergeContacts">
         <security https="true" auth="true"/>
-        <event type="service" invoke="crmsfa.mergeCrmParties"/>
+        <event type="service" invoke="opentaps.mergeParties"/>
         <response name="success" type="request-redirect" value="viewContact">
           <redirect-parameter name="partyId"/>
         </response>
@@ -2376,7 +2376,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     </request-map>
     <request-map uri="mergeLeads">
         <security https="true" auth="true"/>
-        <event type="service" invoke="crmsfa.mergeCrmParties"/>
+        <event type="service" invoke="opentaps.mergeParties"/>
         <response name="success" type="request-redirect" value="viewLead">
           <redirect-parameter name="partyId"/>
         </response>

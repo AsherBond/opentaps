@@ -106,50 +106,6 @@
         <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallsubmit"><submit/></field>
     </form>
 
-    <!-- for merging parties, present two input fields -->
-    <form name="MergePartyForm" type="single" target="${mergeFormTarget}"
-        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
-        <field name="partyIdFrom" title="${fromPartyTitle}" title-style="requiredField" widget-style="inputBox">
-            <lookup target-form-name="${lookupTarget}" size="20" maxlength="20"/>
-        </field>
-        <field name="partyIdTo" title="${toPartyTitle}" title-style="requiredField" widget-style="inputBox">
-            <lookup target-form-name="${lookupTarget}" size="20" maxlength="20"/>
-        </field>
-        <field name="submitButton" title="${uiLabelMap.CrmMerge}" widget-style="smallSubmit">
-        	<submit/>
-        </field>
-    </form>
-
-    <!-- confirm merging two parties -->
-    <form name="ConfirmMergePartyForm" type="single" target="${mergeFormTarget}"
-        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext" title="Timestamp">
-        <!-- this field is for linking back to viewAccount, etc. -->
-        <field name="partyId"><hidden value="${parameters.partyIdTo}"/></field>
-        <field name="partyIdFrom" title="${fromPartyTitle}" title-style="requiredField">
-            <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${groupName} ${firstName} ${lastName} (${partyId})" also-hidden="true">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="${viewTarget}" target-window="top">
-                    <parameter param-name="partyId" value="${parameters.partyIdFrom}"/>
-                </sub-hyperlink>
-            </display-entity>
-        </field>
-        <field name="partyIdTo" title="${toPartyTitle}" title-style="requiredField">
-            <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${groupName} ${firstName} ${lastName} (${partyId})" also-hidden="true">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="${viewTarget}" target-window="top">
-                    <parameter param-name="partyId" value="${parameters.partyIdTo}"/>
-                </sub-hyperlink>
-            </display-entity>
-        </field>
-        <field name="goBack" title="" widget-style="buttontext">
-            <hyperlink target="${mergeFormChangeTarget}" description="${uiLabelMap.CommonChange}" also-hidden="false">
-                <parameter param-name="partyIdFrom" value="${parameters.partyIdFrom}"/>
-                <parameter param-name="partyIdTo" value="${parameters.partyIdTo}"/>
-            </hyperlink>
-        </field>
-        <field name="submitButton" title="${uiLabelMap.CrmConfirmMerge}" widget-style="smallSubmit">
-            <submit/>
-        </field>
-    </form>
-
     <form name="testDateTime" type="single" title="Test form" target="testDateTimeInput" 
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext" >
         <field name="sampleTimestamp" title="Timestamp" encode-output="false"><date-time default-value="${testTimestampValue}" type="date"/></field>

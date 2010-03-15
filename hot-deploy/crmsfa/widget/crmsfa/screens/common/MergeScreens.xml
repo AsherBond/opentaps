@@ -30,13 +30,14 @@
                 <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromAccount"/>
                 <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToAccount"/>
                 <set field="lookupTarget" value="LookupAccounts"/>
+                <set field="remoteService" value="getAutoCompleteAccountPartyIds"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
                     <decorator-section name="section-body">
-                        <container style="form">
-                            <include-form name="MergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/party/MergePartyForm.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -57,12 +58,9 @@
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
                     <decorator-section name="section-body">
-                        <container style="form">
-                            <container style="subSectionBlock">
-                                <label style="requiredField">${crmUiLabelMap.CrmMergePartiesConfirmMessage}</label>
-                            </container>
-                            <include-form name="ConfirmMergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/party/ConfirmMergePartyForm.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -78,13 +76,14 @@
                 <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromContact"/>
                 <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToContact"/>
                 <set field="lookupTarget" value="LookupContacts"/>
+                <set field="remoteService" value="getAutoCompleteClientPartyIds"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
                     <decorator-section name="section-body">
-                        <container style="form">
-                            <include-form name="MergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/party/MergePartyForm.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -105,18 +104,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
                     <decorator-section name="section-body">
-                        <container style="form">
-                            <container style="subSectionBlock">
-                                <label style="requiredField">${crmUiLabelMap.CrmMergePartiesConfirmMessage}</label>
-                            </container>
-                            <include-form name="ConfirmMergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/party/ConfirmMergePartyForm.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
         </section>
     </screen>
-
 
     <screen name="mergeLeadsForm">
         <section>
@@ -127,13 +122,14 @@
                 <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromLead"/>
                 <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToLead"/>
                 <set field="lookupTarget" value="LookupLeads"/>
+                <set field="remoteService" value="getAutoCompleteClientPartyIds"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
                     <decorator-section name="section-body">
-                        <container style="form">
-                            <include-form name="MergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/party/MergePartyForm.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -154,12 +150,9 @@
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
                     <decorator-section name="section-body">
-                        <container style="form">
-                            <container style="subSectionBlock">
-                                <label style="requiredField">${crmUiLabelMap.CrmMergePartiesConfirmMessage}</label>
-                            </container>
-                            <include-form name="ConfirmMergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/party/ConfirmMergePartyForm.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

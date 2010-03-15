@@ -22,4 +22,5 @@ shortcuts = FastList.newInstance();
 shortcuts.add( UtilMisc.toMap("uri", "findSuppliers", "uiLabel", "PurchFindSuppliers") );
 shortcuts.add( UtilMisc.toMap("uri", "createSupplier", "uiLabel", "PurchCreateSupplier") );
 shortcuts.add( UtilMisc.toMap("uri", "outsourceRoutingTaskForm", "uiLabel", "PurchOutsourceRoutingTask") );
+shortcuts.add( UtilMisc.toMap("uri", "mergeSuppliersForm", "uiLabel", "PurchMergeSuppliers") );
 context.put("shortcuts", shortcuts);

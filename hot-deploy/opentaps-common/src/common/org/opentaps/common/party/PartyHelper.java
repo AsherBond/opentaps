@@ -77,6 +77,8 @@ import org.opentaps.foundation.repository.RepositoryException;
  */
 public final class PartyHelper {
 
+    public static List<String> MERGE_PARTY_ROLES = UtilMisc.toList("ACCOUNT", "CONTACT", "PROSPECT", "SUPPLIER");
+
     private PartyHelper() { }
 
     private static final String MODULE = PartyHelper.class.getName();

@@ -53,9 +53,9 @@ public final class PartyRelationshipTypeConstants {
     public static final String OWNER = "OWNER";
     public static final String PARENT = "PARENT";
     public static final String PARENT_ACCOUNT = "PARENT_ACCOUNT";
-    public static final String PARTNERSHIP = "PARTNERSHIP";
     /** Partner Of. */
     public static final String PARTNER_OF = "PARTNER_OF";
+    public static final String PARTNERSHIP = "PARTNERSHIP";
     public static final String REPORTS_TO = "REPORTS_TO";
     /** An account or contact owner is someone who is responsible for that account. */
     public static final String RESPONSIBLE_FOR = "RESPONSIBLE_FOR";

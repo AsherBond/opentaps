@@ -147,4 +147,22 @@
         <auto-attributes mode="IN" include="nonpk" optional="true"/>        
     </service>
 
+    <service name="opentaps.validateMergeParties" engine="pojo"
+        location="org.opentaps.common.domain.party.PartyMergeService" invoke="validateMergeParties" auth="true">
+        <description>Ensures two parties can be merged. Returns service error if they cannot.</description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.mergeParties" engine="pojo"
+        location="org.opentaps.common.domain.party.PartyMergeService" invoke="mergeParties" auth="true">
+        <description>
+            Merge two parties. Checks crmsfa.validateMergeParties as a precaution if the validate 
+            parameter is not set to N. The From party will be deleted after the merge.
+        </description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="validate" type="String" mode="IN" optional="true"/>
+    </service>
+
 </services>

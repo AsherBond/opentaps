@@ -52,13 +52,13 @@ public final class GlAccountTypeConstants {
     public static final String BALANCE_ACCOUNT = "BALANCE_ACCOUNT";
     /** Bank Settlement. */
     public static final String BANK_STLMNT_ACCOUNT = "BANK_STLMNT_ACCOUNT";
-    public static final class Cogs {
-        private Cogs() { }
-        /** COGS Average Cost Adjustment. */
+    public static final class CogsAccount {
+        private CogsAccount() { }
+        /** COGS - Average Cost Adjustment. */
         public static final String COGS_ADJ_AVG_COST = "COGS_ADJ_AVG_COST";
+        /** Cost of Goods Sold. */
+        public static final String COGS_ACCOUNT = "COGS_ACCOUNT";
     }
-    /** Cost of Goods Sold. */
-    public static final String COGS_ACCOUNT = "COGS_ACCOUNT";
     /** Credit Card. */
     public static final String CREDIT_CARD = "CREDIT_CARD";
     public static final class CurrentAsset {
@@ -121,6 +121,8 @@ public final class GlAccountTypeConstants {
     }
     public static final class Income {
         private Income() { }
+        /** Interest Income. */
+        public static final String INTEREST_INCOME = "INTEREST_INCOME";
         /** Other Income. */
         public static final String OTHER_INCOME = "OTHER_INCOME";
         /** Revenue. */
@@ -166,8 +168,6 @@ public final class GlAccountTypeConstants {
         public static final String COMMISSION_EXPENSE = "COMMISSION_EXPENSE";
         /** Manufacturing Expense. */
         public static final String MFG_EXPENSE = "MFG_EXPENSE";
-        /** Tax Expense. */
-        public static final String PURCHASE_PRICE_VAR = "PURCHASE_PRICE_VAR";
         /** Salary Expenses. */
         public static final String SALARY_EXPENSES = "SALARY_EXPENSES";
     }
@@ -177,13 +177,10 @@ public final class GlAccountTypeConstants {
         private OtherExpense() { }
         /** Foreign Exchange Gain/Loss. */
         public static final String FX_GAIN_LOSS_ACCT = "FX_GAIN_LOSS_ACCT";
+        /** Purchase Price Variance. */
+        public static final String PURCHASE_PRICE_VAR = "PURCHASE_PRICE_VAR";
         /** Write Off. */
         public static final String WRITEOFF = "WRITEOFF";
-    }
-    public static final class OtherIncome {
-        private OtherIncome() { }
-        /** Interest Income. */
-        public static final String INTEREST_INCOME = "INTEREST_INCOME";
     }
     /** Owner's Equity. */
     public static final String OWNERS_EQUITY = "OWNERS_EQUITY";
