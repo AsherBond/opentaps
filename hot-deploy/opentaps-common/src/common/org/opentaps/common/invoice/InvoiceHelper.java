@@ -128,6 +128,10 @@ public final class InvoiceHelper {
                 amountTotal = ZERO;
             }
             BigDecimal quantity = invoiceItem.getBigDecimal("quantity");
+            if (quantity == null) {
+                quantity = BigDecimal.ONE;
+            }
+
             BigDecimal amount = invoiceItem.getBigDecimal("amount");
             amountTotal = amountTotal.add(quantity.multiply(amount)).setScale(decimals + 1, rounding);
             invoiceLine.put("amountTotal", amountTotal);
