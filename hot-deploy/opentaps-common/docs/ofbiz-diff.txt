@@ -343,6 +343,9 @@ applications/accounting/entitydef/entitymodel.xml
 applications/order/entitydef/entitymodel_view.xml
 Comment out redefined entities, ofbiz seems to be confused about some of them and their newalias definitions
 
+applications/product/webapp/catalog/product/ProductForms.xml
+r15163 #1455 Add IsActive field in the catalog product view.
+
 Other API Changes
 -----------------
 
