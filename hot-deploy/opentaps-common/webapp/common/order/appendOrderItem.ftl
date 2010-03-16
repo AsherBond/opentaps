@@ -96,9 +96,9 @@ under the License.
                   </tr>
                   <@inputTextRow title=uiLabelMap.OrderQuantity name="quantity" size=6 default="1" />
                   <@inputSelectRow title=uiLabelMap.OrderShipGroup name="shipGroupSeqId" list=order.shipGroups key="shipGroupSeqId" displayField="shipGroupSeqId" default="00001" />
-                  <@inputTextareaRow title=uiLabelMap.CommonComments name="comments" rows="5" cols="40" />
+                  <@inputTextareaRow title=uiLabelMap.CommonComments name="comments" rows="5" cols="60" colspan="3"/>
+                  <@inputTextRow title=uiLabelMap.CommonDescription name="description" size="60" colspan="3"/>
                   <tr>
-                  <@inputTextareaRow title=uiLabelMap.CommonDescription name="description" rows="5" cols="40" />
                     <td>&nbsp;</td>
                     <td>
                       <input type="checkbox" name="recalcOrder" value="Y"/>
