@@ -121,8 +121,8 @@ dijit._place = function(/*HtmlElement*/ node, /* Array */ choices, /* Function *
 			best = {
 				corner: corner,
 				aroundCorner: choices[i].aroundCorner,
-				x: startX,
-				y: startY,
+				x: startX+view.l,
+				y: startY+view.t,
 				w: width,
 				h: height,
 				overflow: overflow

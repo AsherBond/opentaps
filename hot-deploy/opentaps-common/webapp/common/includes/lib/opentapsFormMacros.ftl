@@ -547,6 +547,7 @@ For more information, please see documentation/opentapsFormMacros.html
     autoComplete="false"
     searchAttr="name"
     searchDelay="1000"
+    pageSize="15"
     size="${size}"
     maxlength="${maxlength}"
     value="${defaultValue}"
