@@ -41,7 +41,7 @@
             <td><a class="linktext" href="<@ofbizUrl>viewAcctgTransEntry?acctgTransId=${entry.acctgTransId}&amp;acctgTransEntrySeqId=${entry.acctgTransEntrySeqId}</@ofbizUrl>">${entry.acctgTransEntrySeqId}</a></td>
             <td><#assign glAccount = entry.getRelatedOneCache("GlAccount")/><a class="linktext" href="<@ofbizUrl>AccountActivitiesDetail?glAccountId=${glAccount.glAccountId}&amp;organizationPartyId=${session.getAttribute("organizationPartyId")}</@ofbizUrl>">${glAccount.accountCode?default(glAccount.glAccountId)}</a>: ${glAccount.accountName?default("")}</td>
             <td>${entry.debitCreditFlag}</td>
-            <td>${entry.amount}</td>
+            <@displayCurrencyCell amount=entry.amount currencyUomId=entry.currencyUomId class="tabletext" />
             <td>${entry.getRelatedOneCache("StatusItem").description}</td>
           </tr>
           <#-- List possible tags in separate lines -->

@@ -41,6 +41,8 @@ import org.opentaps.common.builder.PageBuilder;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
+import org.opentaps.domain.organization.Organization;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
 
 /**
@@ -60,6 +62,8 @@ public class TransactionActions {
         final Locale locale = ac.getLocale();
         String organizationPartyId = UtilCommon.getOrganizationPartyId(ac.getRequest());
 
+
+        
         // possible fields we're searching by
         String partyId = ac.getParameter("partyId");
         String acctgTransId = ac.getParameter("findAcctgTransId");
@@ -79,6 +83,12 @@ public class TransactionActions {
 
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
         final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain().getLedgerRepository();
+        
+        OrganizationRepositoryInterface organizationRepository = dd.getOrganizationDomain().getOrganizationRepository();
+        Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
+        if (organization != null) {
+            ac.put("orgCurrencyUomId", organization.getPartyAcctgPreference().getBaseCurrencyUomId());
+        }
 
         // get the list of transactionTypes for the parametrized form ftl
         List<AcctgTransType> transactionTypes = ledgerRepository.findAll(AcctgTransType.class);

@@ -20,7 +20,7 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 
-<@paginate name="listAcctgTrans" list=acctgTransListBuilder rememberPage=false>
+<@paginate name="listAcctgTrans" list=acctgTransListBuilder rememberPage=false orgCurrencyUomId="${orgCurrencyUomId}">
     <#noparse>
         <@navigationHeader/>
         <table class="listTable">
@@ -45,7 +45,7 @@
                 <@displayDateCell date=row.transactionDate/>
                 <@displayDateCell date=row.scheduledPostingDate/>
                 <@displayDateCell date=row.postedDate/>
-                <@displayCurrencyCell amount=row.postedAmount class="textright"/>
+                <@displayCurrencyCell amount=row.postedAmount currencyUomId=parameters.orgCurrencyUomId class="textright"/>
             </tr>
             </#list>
         </table>
