@@ -32,5 +32,10 @@
         <attribute name="description" mode="IN" type="String" optional="false"/>
         <attribute name="numberOfItems" mode="IN" type="Integer" optional="false"/>
         <attribute name="testIds" type="java.util.List" mode="OUT" optional="true"/>
-    </service>    
+    </service>
+    <service name="opentaps.testNextOrderId" engine="pojo" auth="true"
+            location="org.opentaps.tests.service.TestNextOrderId" invoke="getNextOrderId" transaction-timeout="7200">
+        <description>A wrapper to getNextOrderId which sleeps to simulate load in order to test concurrency</description>
+        <implements service="getNextOrderId"/>
+    </service>
 </services>
