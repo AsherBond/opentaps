@@ -16,7 +16,14 @@
 -->
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<@frameSectionHeader title="${uiLabelMap.CrmFormLetterTemplate} ${mergeFormId?has_content?string(\"[${mergeFormId}]\", '')}" />
+<#assign title>
+${uiLabelMap.CrmFormLetterTemplate}
+<#if mergeFormId?has_content>
+  [${mergeFormId}]
+</#if>
+</#assign>
+
+<@frameSectionHeader title=title />
 
 <#if mergeFormId?has_content>
  <#assign formName="updateMergeForm" />
