@@ -200,6 +200,9 @@ r14773 Fix FO error message screen
 framework/base/src/org/ofbiz/base/util/ObjectType.java
 r15076 Fix timestamp parsing for single digit hour
 
+framework/service/src/org/ofbiz/service/ModelService.java
+r15196 Fix service model so that semaphore attributes are used
+
 Applications changes
 --------------------
 
