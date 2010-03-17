@@ -84,3 +84,7 @@ context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(orga
 //put to history
 acctgTransType = acctgTrans.getRelatedOne("AcctgTransType");
 context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("FinancialsNavHistoryAcctgTransaction", locale, UtilMisc.toMap("acctgTransId", acctgTransId)), "viewAcctgTrans", UtilMisc.toList("acctgTransId"));
+
+// Get the base currency for the organization
+baseCurrencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
+context.put("orgCurrencyUomId", baseCurrencyUomId);

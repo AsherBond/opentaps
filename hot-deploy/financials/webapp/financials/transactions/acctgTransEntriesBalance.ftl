@@ -21,20 +21,21 @@
   <div class="screenlet-header">
     <span class="boxhead">${uiLabelMap.FinancialsTransactionBalance}</span>
   </div>
+  <!-- orgCurrencyUomId :  ${orgCurrencyUomId!} -->
   <div class="screenlet-body">
     <#if accountingTransaction?exists>
       <table width="100%" cellpadding="0" cellspacing="2">
         <tr>
           <td><div class="tabletext"><b>${uiLabelMap.FinancialsDebitTotal}</b></div></td>
-          <td align="right"><@displayCurrency amount=accountingTransaction.debitTotal /></td>
+          <td align="right"><@displayCurrency amount=accountingTransaction.debitTotal currencyUomId=orgCurrencyUomId /></td>
         </tr>
         <tr>
           <td><div class="tabletext"><b>${uiLabelMap.FinancialsCreditTotal}</b></div></td>
-          <td align="right"><@displayCurrency amount=accountingTransaction.creditTotal /></td>
+          <td align="right"><@displayCurrency amount=accountingTransaction.creditTotal currencyUomId=orgCurrencyUomId /></td>
         </tr>
         <tr>
           <td><div class="tabletext"><b>${uiLabelMap.FinancialsStatementsBalance}</b></div></td>
-          <td align="right"><@displayCurrency amount=accountingTransaction.trialBalance /></td>
+          <td align="right"><@displayCurrency amount=accountingTransaction.trialBalance currencyUomId=orgCurrencyUomId /></td>
         </tr>
       </table>
     <#else/>

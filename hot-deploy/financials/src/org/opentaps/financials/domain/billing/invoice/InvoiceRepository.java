@@ -169,6 +169,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     /** {@inheritDoc} */
     public List<InvoiceItemType> getApplicableInvoiceItemTypes(String invoiceTypeId, String organizationPartyId) throws RepositoryException {
         Set<String> typeIds;
+        Debug.logInfo("invoiceTypeId : " + invoiceTypeId + ", organizationPartyId : " + organizationPartyId, MODULE);
         // partner invoices are treated in a special way
         if (InvoiceSpecification.InvoiceTypeEnum.PARTNER.equals(invoiceTypeId)) {
             List<AgreementInvoiceItemType> agreements = findListCache(AgreementInvoiceItemType.class, map(AgreementInvoiceItemType.Fields.agreementTypeId, AgreementTypeConstants.PARTNER_AGREEMENT), Arrays.asList(AgreementInvoiceItemType.Fields.sequenceNum.desc()));
@@ -183,6 +184,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
                                 EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId),
                                 EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.orgGlAccountId.name(), EntityOperator.NOT_EQUAL, null)
                                 )));
+            Debug.logInfo("invoiceItemTypeCondition : " + invoiceItemTypeCondition.toString(), MODULE);
             List<InvoiceItemTypeAndOrgGlAccount> itemTypes = findListCache(InvoiceItemTypeAndOrgGlAccount.class, invoiceItemTypeCondition);
             typeIds = Entity.getDistinctFieldValues(String.class, itemTypes, InvoiceItemTypeAndOrgGlAccount.Fields.invoiceItemTypeId);
         }
