@@ -232,7 +232,7 @@
 				<textElement>
 					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[(!$V{INVOICE_STATUS_ID}.equals("INVOICE_CANCELLED") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_WRITEOFF") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_VOIDED")) ? $R{CommonDate} : null]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="M/d/yy" isBlankWhenNull="true">
 				<reportElement key="textField-14" x="408" y="58" width="91" height="16"/>
@@ -245,7 +245,7 @@
 				<textElement>
 					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.sql.Timestamp"><![CDATA[(!$V{INVOICE_STATUS_ID}.equals("INVOICE_CANCELLED") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_WRITEOFF") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_VOIDED")) ? ((Invoice)$P{invoice}).getInvoiceDate() : null]]></textFieldExpression>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[((Invoice)$P{invoice}).getInvoiceDate()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField-15" x="0" y="165" width="241" height="13"/>
