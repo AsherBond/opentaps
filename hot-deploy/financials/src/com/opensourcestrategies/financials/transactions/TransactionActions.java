@@ -83,7 +83,9 @@ public class TransactionActions {
 
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
         final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain().getLedgerRepository();
-        
+       
+        // TODO: Put a currencyUomId on AcctgTrans and modify postAcctgTrans to set that in addition to postedAmount,
+        // instead of using the organization's base currency 
         OrganizationRepositoryInterface organizationRepository = dd.getOrganizationDomain().getOrganizationRepository();
         Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
         if (organization != null) {
