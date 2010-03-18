@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2009 - 2010 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -16,146 +16,134 @@
  */
 
 package org.opentaps.dataimport;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastList;
-import javolution.util.FastMap;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.product.spreadsheetimport.ImportProductHelper;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.DataImportSupplier;
+import org.opentaps.common.util.UtilMessage;
 
-public class SupplierImportFromExcelServices {
-	
-	  public static String module = SupplierImportServices.class.getName();
+/**
+ * Supplier importation from Excel sheets.
+ */
+public final class SupplierImportFromExcelServices {
 
-	    /**
-	     * @param dctx
-	     * @param context
-	     * @return
-	     */
-	    @SuppressWarnings("deprecation")
-		public static Map<String, Object> importSuppliersFromExcel(DispatchContext dctx, Map<String, ? extends Object> context) {
-	        GenericDelegator delegator = dctx.getDelegator();
-	        Map<String, Object> responseMsgs = FastMap.newInstance();
-	        // System.getProperty("user.dir") returns the path upto ofbiz home
-	        // directory
-	        String path = System.getProperty("user.dir") + File.separatorChar + "hot-deploy" + File.separatorChar + "dataimport" + File.separatorChar + "data" + File.separatorChar + "xls" + File.separatorChar;
-	        List<File> fileItems = FastList.newInstance();
+    private SupplierImportFromExcelServices() { }
 
-	        if (path != null && path.length() > 0) {
-	            File importDir = new File(path);
-	            if (importDir.isDirectory() && importDir.canRead()) {
-	                File[] files = importDir.listFiles();
-	                // loop for all the containing xls file in the spreadsheet
-	                // directory
-	                for (int i = 0; i < files.length; i++) {
-	                    if (files[i].getName().toUpperCase().endsWith("XLS")) {
-	                        fileItems.add(files[i]);
-	                    }
-	                }
-	            } else {
-	                Debug.logWarning("Directory not found or can't be read" + path, module);
-	                return responseMsgs;
-	            }
-	        } else {
-	            Debug.logWarning("No path specified, doing nothing", module);
-	            return responseMsgs;
-	        }
+    private static final String MODULE = SupplierImportFromExcelServices.class.getName();
 
-	        if (fileItems.size() < 1) {
-	            Debug.logWarning("No spreadsheet exists in " + path, module);
-	            return responseMsgs;
-	        }
+    /**
+     * Imports products from Excel sheet in DataImportSupplier.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return the service result <code>Map</code>
+     */
+    public static Map<String, Object> importSuppliersFromExcel(DispatchContext dctx, Map<String, ? extends Object> context) {
+        GenericDelegator delegator = dctx.getDelegator();
 
-	        for (File item: fileItems) {
-	            // read all xls file and create workbook one by one.
-	            List<Map<String, Object>> Suppliers = FastList.newInstance();
-	            POIFSFileSystem fs = null;
-	            HSSFWorkbook wb = null;
-	            try {
-	                fs = new POIFSFileSystem(new FileInputStream(item));
-	                wb = new HSSFWorkbook(fs);
-	            } catch (IOException e) {
-	                Debug.logError("Unable to read or create workbook from file", module);
-	                return responseMsgs;
-	            }
+        // optionally the file name can be specified explicitly, usually when linked to the upload service
+        String fileName = (String) context.get("_uploadedFile_fileName");
 
-	            // get first sheet
-	            HSSFSheet sheet = wb.getSheet("Suppliers");
-	            int sheetLastRowNumber = sheet.getLastRowNum();
-	            for (int j = 1; j <= sheetLastRowNumber; j++) {
-	                HSSFRow row = sheet.getRow(j);
-	                if (row != null) {
-	                    // read supplierId from first column "sheet column index
-	                    // starts from 0"
-	                    HSSFCell cell1 = row.getCell((short) 0);
-	                    cell1.setCellType(HSSFCell.CELL_TYPE_STRING);
-	                    String supplierId = cell1.getRichStringCellValue().toString();
-	                    
-	                    boolean supplierExists = SupplierImportHelper.checkSupplierExistsExcel(supplierId, delegator);
+        List<File> files;
+        if (UtilValidate.isNotEmpty(fileName)) {
+            files = FastList.newInstance();
+            files.add(CommonExcelServices.getUploadedExcelFile(fileName));
+        } else {
+            files = CommonExcelServices.getUploadedExcelFiles();
+        }
 
-	                    if (supplierId != null && !supplierId.trim().equalsIgnoreCase("") && !supplierExists) 
-	                        Suppliers.add(SupplierImportHelper.prepareProduct(supplierId,
-	                        													row.getCell((short) 1).toString(),
-	                        													row.getCell((short) 2).toString(),
-	                        													row.getCell((short) 3).toString(),
-	                        													row.getCell((short) 4).toString(),
-	                        													row.getCell((short) 5).toString(),
-	                        													row.getCell((short) 6).toString(),
-	                        													row.getCell((short) 7).toString(),
-	                        													row.getCell((short) 8).toString(),
-	                        													row.getCell((short) 9).toString(),
-	                        													row.getCell((short) 10).toString(),
-	                        													row.getCell((short) 11).toString(),
-	                        													row.getCell((short) 12).toString(),
-	                        													row.getCell((short) 13).toString(),
-	                        													row.getCell((short) 14).toString()));
-	                    
-	                    
-	                   
-	                    int rowNum = row.getRowNum() + 1;
-	                    if (row.toString() != null && !row.toString().trim().equalsIgnoreCase("") && Suppliers.size() > 0
-	                                && !supplierExists) {
-	                            Debug.logWarning("Row number " + rowNum + " not imported from " + item.getName(), module);
-	                     }
+        int totalImportedCount = 0;
 
-	                }
-	            }
-	            // create and store values in "DataImportSupplier"
-	            // in database
-	            for (int j = 0; j < Suppliers.size(); j++) {
-	                GenericValue supplierGV = delegator.makeValue("DataImportSupplier", Suppliers.get(j));
-	                
-	                if (!SupplierImportHelper.checkSupplierExistsExcel(supplierGV.getString("supplierId"), delegator)) {
-	                    try {	    	        
-	                        delegator.create("DataImportSupplier", Suppliers.get(j));
+        for (File item : files) {
+            Debug.logInfo("Reading file " + item.getName(), MODULE);
 
-	                    } catch (GenericEntityException e) {
-	                        Debug.logError("Cannot store supplier", module);
-	                        return ServiceUtil.returnError("Cannot store supplier");
-	                    }
-	                }
-	            }
-	            int uploadedSuppliers = Suppliers.size() + 1;
-	            if (Suppliers.size() > 0)
-	                Debug.logInfo("Imported " + uploadedSuppliers + " suppliers from file " + item.getName(), module);
-	        }
-	        return responseMsgs;
-	    }
-	    
+            // read all xls file and create workbook one by one.
+            List<DataImportSupplier> suppliers = FastList.newInstance();
+            POIFSFileSystem fs = null;
+            HSSFWorkbook wb = null;
+            try {
+                // this will auto close the FileInputStream when the constructor completes
+                fs = new POIFSFileSystem(new FileInputStream(item));
+                wb = new HSSFWorkbook(fs);
+            } catch (IOException e) {
+                return UtilMessage.createAndLogServiceError(e, "Unable to read or create workbook from file", MODULE);
+            }
+
+            // get first sheet
+            int sheetCount = wb.getNumberOfSheets();
+            if (sheetCount > 1) {
+                Debug.logWarning("Found " + sheetCount + " sheets in " + item.getName() + " but will only try to import the first sheet.", MODULE);
+            }
+            HSSFSheet sheet = wb.getSheetAt(0);
+            int sheetLastRowNumber = sheet.getLastRowNum();
+            for (int j = 1; j <= sheetLastRowNumber; j++) {
+                HSSFRow row = sheet.getRow(j);
+                if (CommonExcelServices.isNotEmpty(row)) {
+                    // row index starts at 0 here but is actually 1 in Excel
+                    int rowNum = row.getRowNum() + 1;
+                    // read supplierId from first column "sheet column index
+                    // starts from 0"
+                    String id = CommonExcelServices.readStringCell(row, 0);
+
+                    if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1) {
+                        Debug.logWarning("Row number " + rowNum + " not imported from " + item.getName() + " : invalid ID value [" + id + "].", MODULE);
+                        continue;
+                    }
+
+                    if (SupplierImportHelper.checkSupplierExists(id, delegator)) {
+                        Debug.logWarning("Row number " + rowNum + " not imported from " + item.getName() + " : supplier [" + id + "] already exists in the DataImportProduct table.", MODULE);
+                        continue;
+                    }
+
+                    DataImportSupplier supplier = new DataImportSupplier();
+                    supplier.setSupplierId(id);
+                    supplier.setSupplierName(CommonExcelServices.readStringCell(row, 1));
+                    supplier.setAddress1(CommonExcelServices.readStringCell(row, 2));
+                    supplier.setAddress2(CommonExcelServices.readStringCell(row, 3));
+                    supplier.setCity(CommonExcelServices.readStringCell(row, 4));
+                    supplier.setStateProvinceGeoId(CommonExcelServices.readStringCell(row, 5));
+                    supplier.setPostalCode(CommonExcelServices.readStringCell(row, 6));
+                    supplier.setCountryGeoId(CommonExcelServices.readStringCell(row, 7));
+                    supplier.setPrimaryPhoneCountryCode(CommonExcelServices.readStringCell(row, 8));
+                    supplier.setPrimaryPhoneAreaCode(CommonExcelServices.readStringCell(row, 9));
+                    supplier.setPrimaryPhoneNumber(CommonExcelServices.readStringCell(row, 10));
+                    supplier.setNetPaymentDays(CommonExcelServices.readLongCell(row, 11));
+                    supplier.setIsIncorporated(CommonExcelServices.readStringCell(row, 12));
+                    supplier.setFederalTaxId(CommonExcelServices.readStringCell(row, 13));
+                    supplier.setRequires1099(CommonExcelServices.readStringCell(row, 14));
+                    suppliers.add(supplier);
+                }
+            }
+            // create and store values in "DataImportSupplier" in database
+            try {
+                CommonExcelServices.makeValues(delegator, suppliers);
+            } catch (GenericEntityException e) {
+                return UtilMessage.createAndLogServiceError(e, "Cannot store DataImportSupplier", MODULE);
+            }
+            int uploadedCount = suppliers.size();
+            if (uploadedCount > 0) {
+                Debug.logInfo("Imported " + uploadedCount + " products from file " + item.getName(), MODULE);
+                totalImportedCount += uploadedCount;
+            }
+        }
+
+        Map<String, Object> responseMsgs = ServiceUtil.returnSuccess("Wrote " + totalImportedCount + " DataImportSupplier.");
+        responseMsgs.put("importedRecords", totalImportedCount);
+        return responseMsgs;
+    }
+
 }

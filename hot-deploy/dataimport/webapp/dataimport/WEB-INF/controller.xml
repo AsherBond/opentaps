@@ -39,7 +39,7 @@
     <postprocessor>
         <!-- Events to run on every request after all other processing (chains exempt) -->
     </postprocessor>
-    
+
     <!-- ================= -->
     <!-- Security Mappings -->
     <!-- ================= -->
@@ -63,7 +63,7 @@
         <response name="success" type="request" value="checkLogin"/>
         <response name="error" type="view" value="myHomeMain"/>
     </request-map>
-    
+
     <!-- ====================== -->
     <!-- Basic Request Mappings -->
     <!-- ====================== -->
@@ -93,7 +93,7 @@
         <response name="selectOrganization" type="view" value="selectOrganizationForm"/>
         <response name="success" type="url" value="/dataimport/control/myHomeMain"/>
     </request-map>
-    
+
     <!-- ================== -->
     <!-- Main Request Maps  -->
     <!-- ================== -->
@@ -102,7 +102,14 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="myHomeMain"/>
     </request-map>
-    
+
+    <request-map uri="uploadFileAndSetServiceParameters">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="uploadExcelFileAndRunImportService"/>
+        <response name="error" type="view" value="myHomeMain"/>
+        <response name="success" type="request-redirect-noparam" value="myHomeMain"/>
+    </request-map>
+
     <request-map uri="setServiceParameters">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="setServiceParameters"/>
@@ -114,7 +121,7 @@
         <response name="success" type="request-redirect" value="myHomeMain"/>
         <response name="sync_success" type="request-redirect" value="myHomeMain"/>
         <response name="error" type="view" value="setServiceParameters"/>
-    </request-map>   
+    </request-map>
 
     <!-- ============= -->
     <!-- View Mappings -->
@@ -127,5 +134,5 @@
     <!-- main screens for each section -->
     <view-map name="myHomeMain" type="screen" page="component://dataimport/widget/dataimport/screens/myhome/MyHomeScreens.xml#myHome"/>
     <view-map name="setServiceParameters" type="screen" page="component://dataimport/widget/dataimport/screens/myhome/MyHomeScreens.xml#setServiceParameters"/>
-    
+
 </site-conf>

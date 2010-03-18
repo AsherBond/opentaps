@@ -16,7 +16,7 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Data Import Services</description>
     <vendor>Open Source Strategies, Inc.</vendor>
@@ -38,71 +38,71 @@
         <description>
             Import customers using DataImportCustomer.  Specify the initial party that is responsible
             for these records in CRMSFA.  Also specify the Accounts Receivable General Ledger account
-            with arGlAccountId, the offsetting account with offsettingGlAccountId, and the organization 
+            with arGlAccountId, the offsetting account with offsettingGlAccountId, and the organization
             of these accounts with organizationPartyId.
             Note that this service is not wrapped in a transaction.  Each customer record imported is in its
-            own transaction, so it can store as many good records as possible. 
+            own transaction, so it can store as many good records as possible.
         </description>
         <attribute type="String" mode="IN" name="initialResponsiblePartyId" optional="false"/>
         <attribute type="String" mode="IN" name="arGlAccountId" optional="true"/>
         <attribute type="String" mode="IN" name="offsettingGlAccountId" optional="true"/>
         <attribute type="String" mode="IN" name="organizationPartyId" optional="false"/>
         <attribute type="Integer" mode="OUT" name="customersImported" optional="true"/>
-    </service>   
+    </service>
 
     <service name="importShoppingLists" engine="java" use-transaction="false"
         location="org.opentaps.dataimport.ShoppingListImportServices" invoke="importShoppingLists">
         <description>
             Import shopping lists using DataImportShoppingList and DataImportShoppingListItem.
             Note that this service is not wrapped in a transaction.  Each record imported is in its
-            own transaction, so it can store as many good records as possible. 
+            own transaction, so it can store as many good records as possible.
             The productStoreId parameters specify for which store to create the shopping lists.
         </description>
         <attribute type="String" mode="IN" name="productStoreId" optional="false"/>
         <attribute type="Integer" mode="OUT" name="shoppingListsImported" optional="true"/>
-    </service> 
-   
+    </service>
+
     <service name="importCustomersCommissions" engine="java" use-transaction="false"
         location="org.opentaps.dataimport.CustomerImportServices" invoke="importCustomersCommissions">
         <description>
             Import customersCommissions using DataImportCommissionRates.
             Note that this service is not wrapped in a transaction.  Each customerCommisions record imported is in its
-            own transaction, so it can store as many good records as possible. 
+            own transaction, so it can store as many good records as possible.
         </description>
         <attribute type="String" mode="IN" name="organizationPartyId" optional="false"/>
         <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
-    </service>   
-   
+    </service>
+
     <service name="importSuppliers" engine="java" use-transaction="false"
         location="org.opentaps.dataimport.SupplierImportServices" invoke="importSuppliers">
         <description>
             Import suppliers using DataImportSupplier.
             Note that this service is not wrapped in a transaction.  Each supplier record imported is in its
-            own transaction, so it can store as many good records as possible. 
+            own transaction, so it can store as many good records as possible.
         </description>
         <attribute type="String" mode="IN" name="organizationPartyId" optional="false"/>
         <attribute type="Integer" mode="OUT" name="importedRecords" optional="true"/>
-    </service>   
-   
+    </service>
+
     <service name="importProducts" engine="java" use-transaction="false"
         location="org.opentaps.dataimport.ProductImportServices" invoke="importProducts">
         <description>
             Import products using DataImportProduct.
             Note that this service is not wrapped in a transaction.  Each product record imported is in its
-            own transaction, so it can store as many good records as possible. 
+            own transaction, so it can store as many good records as possible.
             The goodIdentificationTypeIdN parameters correspond to the type of the customIdN fields in DataImportProduct.
         </description>
         <attribute type="String" mode="IN" name="goodIdentificationTypeId1" optional="true"/>
         <attribute type="String" mode="IN" name="goodIdentificationTypeId2" optional="true"/>
         <attribute type="Integer" mode="OUT" name="productsImported" optional="true"/>
-    </service>   
- 
+    </service>
+
     <service name="importOrders" engine="java" use-transaction="false"
         location="org.opentaps.dataimport.OrderImportServices" invoke="importOrders">
         <description>
             Import orders using DataImportOrderHeader and DataImportOrderItems.
             Note that this service is not wrapped in a transaction.  Each orderHeader/orderItems record set imported is in its
-                own transaction, so it can store as many good records as possible. 
+                own transaction, so it can store as many good records as possible.
             companyPartyId is the ID of the billFromVendor for the orders.
             productStoreId is the productStore that the orders should be related to.
             prodCatalogId is the productCatalog that the orders should be related to (optional).
@@ -112,7 +112,7 @@
                 field or calculated from orderItems and orderAdjustments
         </description>
         <attribute type="String" mode="IN" name="companyPartyId" optional="false"/>
-        <!--todo make the below optional-->        
+        <!--todo make the below optional-->
         <attribute type="String" mode="IN" name="productStoreId" optional="true"/>
         <attribute type="String" mode="IN" name="prodCatalogId" optional="true"/>
         <attribute type="String" mode="IN" name="purchaseOrderShipToContactMechId" optional="true"/>
@@ -120,8 +120,8 @@
         <attribute type="Boolean" mode="IN" name="calculateGrandTotal" optional="false"/>
         <attribute type="Boolean" mode="IN" name="reserveInventory" optional="true"/>
         <attribute type="Integer" mode="OUT" name="ordersImported" optional="true"/>
-    </service>   
- 
+    </service>
+
     <service name="importProductInventory" engine="java" use-transaction="false"
         location="org.opentaps.dataimport.ProductImportServices" invoke="importProductInventory">
         <description>
@@ -148,21 +148,38 @@
         <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
         <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
     </service>
-	
-	<service name="importProductFromExcel" engine="java" use-transaction="false"
-        location="org.opentaps.dataimport.ProductImportFromExcelServices" invoke="importProductFromExcel">
+
+    <service name="importProductsFromExcel" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.ProductImportFromExcelServices" invoke="importProductsFromExcel">
         <description>
-            Imports products from Excel sheet in DataImportProduct. 
+            Imports products from Excel sheet in DataImportProduct.
         </description>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="true"/>
         <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
     </service>
-	
-	<service name="importSuppliersFromExcel" engine="java" use-transaction="false"
+
+    <service name="importSuppliersFromExcel" engine="java" use-transaction="false"
         location="org.opentaps.dataimport.SupplierImportFromExcelServices" invoke="importSuppliersFromExcel">
         <description>
-            Imports suppliers from Excel sheet in DataImportSupplier. 
+            Imports suppliers from Excel sheet in DataImportSupplier.
         </description>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="true"/>
         <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
-    </service>  
-	  
+    </service>
+
+    <service name="uploadExcelFile" engine="java" use-transaction="false"
+             location="org.opentaps.dataimport.CommonExcelServices" invoke="uploadExcelFile">
+        <description>Upload an Excel file for Dataimport</description>
+        <attribute name="uploadedFile" type="java.nio.ByteBuffer" mode="IN"/>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN"/>
+        <attribute name="_uploadedFile_contentType" type="String" mode="IN"/>
+    </service>
+
+    <service name="uploadExcelFileAndRunImportService" engine="java" use-transaction="false"
+             location="org.opentaps.dataimport.CommonExcelServices" invoke="uploadExcelFileAndRunImportService">
+        <description>Upload an Excel file for Dataimport and run the given import service</description>
+        <implements service="uploadExcelFile"/>
+        <attribute name="SERVICE_NAME" type="String" mode="IN"/>
+    </service>
+
 </services>

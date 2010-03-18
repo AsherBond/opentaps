@@ -28,32 +28,31 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 
 /**
- * Helper methods for Supplier importation.
+ * Helper methods for Product importation.
  */
-public final class SupplierImportHelper {
+public final class ProductImportHelper {
 
-    private SupplierImportHelper() { }
+    private ProductImportHelper() { }
 
-    private static final String MODULE = SupplierImportHelper.class.getName();
+    private static final String MODULE = ProductImportHelper.class.getName();
 
     /**
-     * Checks if the supplier already exists in the database.
+     * Checks if the product already exists in the database.
      *
-     * @param supplierId a <code>String</code> value
+     * @param productId a <code>String</code> value
      * @param delegator a <code>GenericDelegator</code> value
      * @return a <code>boolean</code> value
      */
-    public static boolean checkSupplierExists(String supplierId, GenericDelegator delegator) {
-        boolean supplierExists = false;
+    public static boolean checkProductExists(String productId, GenericDelegator delegator) {
+        boolean productExists = false;
         try {
-            GenericValue tmpSupplierGV = delegator.findByPrimaryKey("DataImportSupplier", UtilMisc.toMap("supplierId", supplierId));
-            if (tmpSupplierGV != null) {
-                supplierExists = true;
+            GenericValue tmpProductGV = delegator.findByPrimaryKey("DataImportProduct", UtilMisc.toMap("productId", productId));
+            if (tmpProductGV != null) {
+                productExists = true;
             }
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Problem in reading data of supplier", MODULE);
+            Debug.logError(e, "Problem in reading data of product", MODULE);
         }
-        return supplierExists;
+        return productExists;
     }
-
 }

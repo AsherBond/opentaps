@@ -1,6 +1,6 @@
 <#--
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -72,56 +72,48 @@ function onRunSyncChange() {
 /*]]>*/
 </script>
 
-<div class="subSectionBlock">
+<#assign title>
+  <#if parameters.sectionHeaderUiLabel?has_content>${uiLabelMap.get(parameters.sectionHeaderUiLabel)!}</#if>
+</#assign>
 
-    <div class="subSectionHeader">
-        <div class="subSectionTitle">${parameters.sectionHeaderUiLabel?if_exists}</div>
-    </div>
+<@frameSection title=title>
 
-	<#assign serviceName = parameters.SERVICE_NAME/>
+  <#assign serviceName = parameters.SERVICE_NAME/>
 
-    <form action="<@ofbizUrl>scheduleService</@ofbizUrl>" method="post" name="${serviceName}Form">
-    	<@inputHidden name="SERVICE_TIME" value=""/>
+  <form action="<@ofbizUrl>scheduleService</@ofbizUrl>" method="post" name="${serviceName}Form">
+    <@inputHidden name="SERVICE_TIME" value=""/>
 
-        <#list scheduleOptions as scheduleOption>
-	        <input type="hidden" name="${scheduleOption.name}" value="${scheduleOption.value}"/>
+    <#list scheduleOptions as scheduleOption>
+      <@inputHidden name="${scheduleOption.name}" value="${scheduleOption.value}"/>
+    </#list>
+
+    <table class="twoColumnForm">
+      <#list serviceParameters as serviceParameter>
+        <#if serviceParameter.optional == "N">
+          <@inputTextRow title="${serviceParameter.name}(${serviceParameter.type})" name="${serviceParameter.name}" default="${serviceParameter.value!serviceParameter.defaultValue!}" titleClass="requiredField"/>
+          <#else>
+            <@inputTextRow title="${serviceParameter.name}(${serviceParameter.type})" name="${serviceParameter.name}" default="${serviceParameter.value!serviceParameter.defaultValue!}"/>
+          </#if>
         </#list>
 
-        <table class="twoColumnForm">
-            <#list serviceParameters as serviceParameter>
-                <#if serviceParameter.optional == "N">
-                    <@inputTextRow title="${serviceParameter.name}(${serviceParameter.type})" name="${serviceParameter.name}" default="${serviceParameter.value!serviceParameter.defaultValue!}" titleClass="requiredField"/>
-                <#else>
-                    <@inputTextRow title="${serviceParameter.name}(${serviceParameter.type})" name="${serviceParameter.name}" default="${serviceParameter.value!serviceParameter.defaultValue!}"/>
-                </#if>
-            </#list>
+        <@inputIndicatorRow title=uiLabelMap.DataImportSync name="_RUN_SYNC_" onChange="onRunSyncChange()"/>
 
-            <tr>
-                <td class="titleCell"><span class="tableheadtext">${uiLabelMap.DataimportSync}</span></td>
-                <td>
-                    <select id="runSyncCtrl" name="_RUN_SYNC_" class="inputBox" onchange="onRunSyncChange()">
-                        <option selected value="Y">${uiLabelMap.CommonYes}</option>
-                        <option value="N">${uiLabelMap.CommonNo}</option>
-                    </select>
-                <td>
-            </tr>
-            
-            <tr id="jobRow" class="hidden">
-            	<@displayCell text="${uiLabelMap.DataimportJobName}" class="tableheadtext" blockClass="titleCell"/>
-                <@inputTextCell name="JOB_NAME"/>
-            </tr>
-            <tr id="startTimeRow" class="hidden">
-                <@displayCell text="${uiLabelMap.DataimportServiceTime}" class="tableheadtext" blockClass="titleCell"/>
-                <@inputDateTimeCell name="SERVICE_TIME" form="${serviceName}Form"/>
-            </tr>
-            
-            <@inputSubmitRow title="${uiLabelMap.CommonRun}" onClick="makeTimestamp(document.${serviceName}Form.SERVICE_TIME, document.${serviceName}Form.SERVICE_TIME_c_date, document.${serviceName}Form.SERVICE_TIME_c_hour, document.${serviceName}Form.SERVICE_TIME_c_minutes, document.${serviceName}Form.SERVICE_TIME_c_ampm); document.${serviceName}Form.submit();"/>
+        <tr id="jobRow" class="hidden">
+          <@displayCell text="${uiLabelMap.DataImportJobName}" class="tableheadtext" blockClass="titleCell"/>
+          <@inputTextCell name="JOB_NAME"/>
+        </tr>
+        <tr id="startTimeRow" class="hidden">
+          <@displayCell text="${uiLabelMap.DataImportServiceTime}" class="tableheadtext" blockClass="titleCell"/>
+          <@inputDateTimeCell name="SERVICE_TIME" form="${serviceName}Form"/>
+        </tr>
 
-        </table>
+        <@inputSubmitRow title="${uiLabelMap.CommonRun}" onClick="makeTimestamp(document.${serviceName}Form.SERVICE_TIME, document.${serviceName}Form.SERVICE_TIME_c_date, document.${serviceName}Form.SERVICE_TIME_c_hour, document.${serviceName}Form.SERVICE_TIME_c_minutes, document.${serviceName}Form.SERVICE_TIME_c_ampm); document.${serviceName}Form.submit();"/>
 
-    </form>
+    </table>
 
-</div>
+  </form>
+
+</@frameSection>
 
 <script>
 opentaps.addOnLoad(onRunSyncChange);

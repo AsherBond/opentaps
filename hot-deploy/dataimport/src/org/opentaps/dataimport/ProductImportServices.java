@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -16,6 +16,12 @@
  */
 
 package org.opentaps.dataimport;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -34,27 +40,18 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.common.util.UtilCommon;
-import org.opentaps.foundation.infrastructure.Infrastructure;
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Import products via intermediate DataImportProduct entity.
- *
- * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
  */
 public final class ProductImportServices {
 
     private ProductImportServices() { }
 
     private static String MODULE = ProductImportServices.class.getName();
-    private static final int decimals = UtilNumber.getBigDecimalScale("order.decimals");
-    private static final int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
-    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(decimals, rounding);
+    private static final int DECIMALS = UtilNumber.getBigDecimalScale("order.decimals");
+    private static final int ROUNDING = UtilNumber.getBigDecimalRoundingMode("order.rounding");
+    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(DECIMALS, ROUNDING);
     private static int acctgTransSeqNum = 1;
 
     /**
@@ -137,17 +134,17 @@ public final class ProductImportServices {
                     // if there was an error, we'll just skip this product
                     TransactionUtil.rollback();
                     Debug.logError(e, "Failed to import product[" + product.get("productId") + "]. Error stack follows.", MODULE);
-                    
+
                     // store the import error
                     String message = "Failed to import product[" + product.get("productId") + "], Error message : " + e.getMessage();
-                    storeImportProductError(product, message,delegator);
+                    storeImportProductError(product, message, delegator);
                 } catch (Exception e) {
                     TransactionUtil.rollback();
                     Debug.logError(e, "Failed to import product[" + product.get("productId") + "]. Error stack follows.", MODULE);
 
                     // store the import error
                     String message = "Failed to import product[" + product.get("productId") + "], Error message : " + e.getMessage();
-                    storeImportProductError(product, message,delegator);
+                    storeImportProductError(product, message, delegator);
                 }
             }
             importProducts.close();
@@ -181,7 +178,6 @@ public final class ProductImportServices {
     public static Map importProductInventory(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Infrastructure infrastructure = new Infrastructure(dispatcher);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String inventoryGlAccountId = (String) context.get("inventoryGlAccountId");
@@ -395,16 +391,16 @@ public final class ProductImportServices {
         input.put("depthUomId", data.get("productLengthUomId"));
         input.put("productWidth", data.get("width"));
         input.put("widthUomId", data.get("widthUomId"));
-        input.put("taxable", data.get("taxable"));        
+        input.put("taxable", data.get("taxable"));
         input.put("weight", data.get("weight"));
         input.put("weightUomId", data.get("weightUomId"));
         input.put("isVirtual", "N");
         input.put("isVariant", "N");
-        if(data.get("createdDate")!=null || data.get("createdDate")!=""){
-            input.put("createdDate",data.get("createdDate"));
-        }else{
+        if (data.get("createdDate") != null || data.get("createdDate") != "") {
+            input.put("createdDate", data.get("createdDate"));
+        } else {
             input.put("createdDate", now);
-        }        
+        }
         GenericValue product = delegator.makeValue("Product", input);
         toStore.add(product);
 
@@ -554,7 +550,7 @@ public final class ProductImportServices {
 
         BigDecimal averageCost = ZERO;
         if (onHand.doubleValue() > 0.0) {
-            averageCost = new BigDecimal(inventoryValue.doubleValue() / onHand.doubleValue()).setScale(decimals, rounding);
+            averageCost = new BigDecimal(inventoryValue.doubleValue() / onHand.doubleValue()).setScale(DECIMALS, ROUNDING);
         }
 
         // Verify that productId exists
@@ -655,7 +651,6 @@ public final class ProductImportServices {
      * @param delegator a <code>GenericDelegator</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private static void storeImportProductError(GenericValue dataImportProduct, String message, GenericDelegator delegator) throws GenericEntityException {
         // store the exception and mark as failed
         dataImportProduct.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_FAILED);
@@ -663,7 +658,7 @@ public final class ProductImportServices {
         dataImportProduct.set("importError", message);
         dataImportProduct.store();
     }
-    
+
     /**
      * Helper method to store import product error to DataImportInventory entities.
      * @param dataImportInventory a <code>GenericValue</code> value
@@ -671,7 +666,6 @@ public final class ProductImportServices {
      * @param delegator a <code>GenericDelegator</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private static void storeImportInventoryError(GenericValue dataImportInventory, String message, GenericDelegator delegator) throws GenericEntityException {
         // store the exception and mark as failed
         dataImportInventory.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_FAILED);
@@ -679,5 +673,5 @@ public final class ProductImportServices {
         dataImportInventory.set("importError", message);
         dataImportInventory.store();
     }
-    
+
 }

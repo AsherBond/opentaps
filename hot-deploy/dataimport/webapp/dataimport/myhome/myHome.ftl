@@ -1,5 +1,5 @@
 <#--
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -17,97 +17,89 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+<#macro importForm importService label sectionLabel submitLabel processed notProcessed>
+    <form name="${importService}Form" method="post" action="setServiceParameters">
+      <@inputHidden name="SERVICE_NAME" value="${importService}"/>
+      <@inputHidden name="POOL_NAME" value="pool"/>
+      <@inputHidden name="sectionHeaderUiLabel" value="${sectionLabel}"/>
+      <@displayCell text="${label}:"/>
+      <@displayCell text="${processed}"/>
+      <@displayCell text="${notProcessed}"/>
+      <#if hasDIAdminPermissions?default(false)>
+        <@inputSubmitCell title="${submitLabel}"/>
+      </#if>
+    </form>
+</#macro>
+
 <table  class="headedTable">
-	<tr class="header">
-		<@displayCell text="Importing"/>
-		<@displayCell text="${uiLabelMap.DataImportNumberProcessed}"/>
-		<@displayCell text="${uiLabelMap.DataImportNumberNotProcessed}"/>
-		<#if hasFullPermissions?default(false)><td>&nbsp;</td></#if>
-	</tr>
-	<tr>
-	    <form name="RunImportCustomerForm" method="post" action="setServiceParameters">
-	        <@inputHidden name="SERVICE_NAME" value="importCustomers"/>
-	        <@inputHidden name="POOL_NAME" value="pool"/>
-	        <@inputHidden name="_RUN_SYNC_" value="Y"/>
-	        <@inputHidden name="sectionHeaderUiLabel" value="Import Customers"/>
-    	    <@displayCell text="${uiLabelMap.FinancialsCustomers}:"/>
-	        <@displayCell text="${customersProcessed}"/>
-	        <@displayCell text="${customersNotProcessed}"/>
-	        <#if hasDIAdminPermissions?default(false)>
-	            <@inputSubmitCell title="${uiLabelMap.DataImportCustomers}"/>
-	        </#if>
-	    </form>
-	</tr>
-	<tr>
-	    <form name="RunImportProductsForm" method="post" action="setServiceParameters">
-	        <@inputHidden name="SERVICE_NAME" value="importProducts"/>
-	        <@inputHidden name="POOL_NAME" value="pool"/>
-	        <@inputHidden name="sectionHeaderUiLabel" value="Import Products"/>
-	    	<@displayCell text="${uiLabelMap.ProductProducts}:"/>
-		    <@displayCell text="${productsProcessed}"/>
-		    <@displayCell text="${productsNotProcessed}"/>
-		    <#if hasDIAdminPermissions?default(false)>
-		        <@inputSubmitCell title="${uiLabelMap.DataImportProducts}"/>
-		    </#if>
-		</form>
-	</tr>
-	<tr>
-	    <form name="RunImportInventoryForm" method="post" action="setServiceParameters">
-	        <@inputHidden name="SERVICE_NAME" value="importProductInventory"/>
-	        <@inputHidden name="POOL_NAME" value="pool"/>
-	        <@inputHidden name="_RUN_SYNC_" value="Y"/>
-	        <@inputHidden name="sectionHeaderUiLabel" value="Import Inventory"/>
-	    	<@displayCell text="${uiLabelMap.ProductInventoryItems}:"/>
-		    <@displayCell text="${inventoryProcessed}"/>
-		    <@displayCell text="${inventoryNotProcessed}"/>
-		    <#if hasDIAdminPermissions?default(false)>
-		        <@inputSubmitCell title="${uiLabelMap.DataImportInventory}"/>
-		    </#if>
-		</form>
-	</tr>
-	<tr>
-	    <form name="RunImportOrderHeadersForm" method="post" action="setServiceParameters">
-	        <@inputHidden name="sel_service_name" value="importOrders"/>
-	        <@inputHidden name="SERVICE_NAME" value="importOrders"/>
-	        <@inputHidden name="POOL_NAME" value="pool"/>
-	        <@inputHidden name="sectionHeaderUiLabel" value="Import Orders"/>
-	    	<@displayCell text="${uiLabelMap.DataImportOrderLines}:"/>
-		    <@displayCell text="${orderHeadersProcessed}"/>
-		    <@displayCell text="${orderHeadersNotProcessed}"/>
-		    <#if hasDIAdminPermissions?default(false)>
-		        <@inputSubmitCell title="${uiLabelMap.DataImportOrders}"/>
-		    </#if>
-		</form>
-	</tr>
-	<tr>
-  	    <@displayCell text="${uiLabelMap.DataImportOrderItemLines}:"/>
-	    <@displayCell text="${orderItemsProcessed}"/>
-	    <@displayCell text="${orderItemsNotProcessed}"/>
-	</tr>
-	<tr>
-	    <form name="RunImportProductsFormExcel" method="post" action="setServiceParameters">
-	        <@inputHidden name="SERVICE_NAME" value="importProductFromExcel"/>
-	        <@inputHidden name="POOL_NAME" value="pool"/>
-	        <@inputHidden name="sectionHeaderUiLabel" value="Import Products from Excel"/>
-	    	<@displayCell text="${uiLabelMap.ProductProductsExcel}:"/>
-		    <@displayCell text="$"/>
-		    <@displayCell text="$"/>
-		    <#if hasDIAdminPermissions?default(false)>
-		        <@inputSubmitCell title="${uiLabelMap.DataImportProducts}"/>
-		    </#if>
-		</form>
-	</tr>
-	<tr>
-	    <form name="RunImportSuppliersForm" method="post" action="setServiceParameters">
-	        <@inputHidden name="SERVICE_NAME" value="importSuppliersFromExcel"/>
-	        <@inputHidden name="POOL_NAME" value="pool"/>
-	        <@inputHidden name="sectionHeaderUiLabel" value="Import Suppliers from Excel"/>
-	    	<@displayCell text="${uiLabelMap.SuppliersExcel}:"/>
-		    <@displayCell text="$"/>
-		    <@displayCell text="$"/>
-		    <#if hasDIAdminPermissions?default(false)>
-		        <@inputSubmitCell title="${uiLabelMap.DataImportSuppliers}"/>
-		    </#if>
-		</form>
-	</tr>		
+  <tr class="header">
+    <@displayCell text=uiLabelMap.DataImportImporting/>
+    <@displayCell text=uiLabelMap.DataImportNumberProcessed/>
+    <@displayCell text=uiLabelMap.DataImportNumberNotProcessed/>
+    <#if hasFullPermissions?default(false)><td>&nbsp;</td></#if>
+  </tr>
+  <tr>
+    <@importForm importService="importCustomers"
+                 sectionLabel="DataImportImportCustomers"
+                 label=uiLabelMap.FinancialsCustomers
+                 submitLabel=uiLabelMap.DataImportImportCustomers
+                 processed=customersProcessed notProcessed=customersNotProcessed/>
+  </tr>
+  <tr>
+    <@importForm importService="importSuppliers"
+                 sectionLabel="DataImportImportSuppliers"
+                 label=uiLabelMap.PurchSuppliers
+                 submitLabel=uiLabelMap.DataImportImportSuppliers
+                 processed=suppliersProcessed notProcessed=suppliersNotProcessed/>
+  </tr>
+  <tr>
+    <@importForm importService="importProducts"
+                 sectionLabel="DataImportImportProducts"
+                 label=uiLabelMap.ProductProducts
+                 submitLabel=uiLabelMap.DataImportImportProducts
+                 processed=productsProcessed notProcessed=productsNotProcessed/>
+  </tr>
+  <tr>
+    <@importForm importService="importProductInventory"
+                 sectionLabel="DataImportImportInventory"
+                 label=uiLabelMap.ProductInventoryItems
+                 submitLabel=uiLabelMap.DataImportImportInventory
+                 processed=inventoryProcessed notProcessed=inventoryNotProcessed/>
+  </tr>
+  <tr>
+    <@importForm importService="importOrders"
+                 sectionLabel="DataImportImportOrders"
+                 label=uiLabelMap.DataImportOrderLines
+                 submitLabel=uiLabelMap.DataImportImportOrders
+                 processed=orderHeadersProcessed notProcessed=orderHeadersNotProcessed/>
+  </tr>
+  <tr>
+    <@displayCell text="${uiLabelMap.DataImportOrderItemLines}:"/>
+    <@displayCell text="${orderItemsProcessed}"/>
+    <@displayCell text="${orderItemsNotProcessed}"/>
+  </tr>
 </table>
+
+<br/>
+
+<#if hasDIAdminPermissions?default(false)>
+  <@frameSection title=uiLabelMap.DataImportUploadExcelFile>
+    <form name="UploadExcelAndImport" method="post" enctype="multipart/form-data" action="uploadFileAndSetServiceParameters">
+      <@inputHidden name="POOL_NAME" value="pool"/>
+      <@inputHidden name="sectionHeaderUiLabel" value="DataImportImportFromExcel"/>
+      <table class="twoColumnForm">
+        <@inputFileRow title=uiLabelMap.DataImportFileToImport name="uploadedFile" />
+        <tr>
+          <@displayTitleCell title=uiLabelMap.DataImportImport />
+          <td>
+            <select name="SERVICE_NAME" class="inputBox">
+              <option value="importProductsFromExcel">${uiLabelMap.ProductProducts}</option>
+              <option value="importSuppliersFromExcel">${uiLabelMap.PurchSuppliers}</option>
+            </select>
+          </td>
+        </tr>
+        <@inputSubmitRow title="${uiLabelMap.DataImportRunImport}"/>
+      </table>
+    </form>
+  </@frameSection>
+</#if>
