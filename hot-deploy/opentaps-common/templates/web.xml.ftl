@@ -44,24 +44,63 @@
         <filter-name>GzipFilter</filter-name>
         <display-name>GzipFilter</display-name>
         <filter-class>org.opentaps.common.event.GzipFilter</filter-class>
-    </filter>    
+    </filter>
+        
     <filter-mapping>
         <filter-name>GzipFilter</filter-name>
-            <url-pattern>*.js</url-pattern>
+        <url-pattern>*.js</url-pattern>
+        <param-value>private, max-age=15552000</param-value>
     </filter-mapping>
     <filter-mapping>
         <filter-name>GzipFilter</filter-name>
-            <url-pattern>*.css</url-pattern>
+        <url-pattern>*.css</url-pattern>
     </filter-mapping>
-    
-	<filter>
-        <filter-name>CacheEnabler</filter-name>
+
+    <filter>
+        <filter-name>PrivateCacheEnabler</filter-name>
         <display-name>CacheEnabler</display-name>
         <filter-class>org.opentaps.common.event.CacheEnabler</filter-class>
+        <init-param>
+          <param-name>Cache-Control</param-name>
+          <param-value>private, max-age=15552000</param-value>
+        </init-param>            
     </filter>
+    <filter>
+        <filter-name>PublicCacheEnabler</filter-name>
+        <display-name>CacheEnabler</display-name>
+        <filter-class>org.opentaps.common.event.CacheEnabler</filter-class>
+        <init-param>
+          <param-name>Cache-Control</param-name>
+          <param-value>public, max-age=15552000</param-value>
+        </init-param>            
+    </filter>    
     <filter-mapping>
-        <filter-name>CacheEnabler</filter-name>
-            <url-pattern>/*</url-pattern>
+        <filter-name>PrivateCacheEnabler</filter-name>
+        <url-pattern>*.js</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PrivateCacheEnabler</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PublicCacheEnabler</filter-name>
+        <url-pattern>*.gif</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PublicCacheEnabler</filter-name>
+        <url-pattern>*.jpg</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PublicCacheEnabler</filter-name>
+        <url-pattern>*.png</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PublicCacheEnabler</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PublicCacheEnabler</filter-name>
+        <url-pattern>*.htm</url-pattern>
     </filter-mapping>
     
     <session-config>

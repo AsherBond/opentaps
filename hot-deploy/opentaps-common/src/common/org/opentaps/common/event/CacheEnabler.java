@@ -25,35 +25,40 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilValidate;
 
 /**
  *
  */
 public class CacheEnabler implements Filter {
-
+    private final String DEFAULT_CACHE_CONTROL = "public, max-age=15552000";
+    private String MODULE = CacheEnabler.class.getName();
+    private String cacheControl;
+    
     /** {@inheritDoc} */
     public void destroy() {
     }
 
     /** {@inheritDoc} */
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponseWrapper response = new HttpServletResponseWrapper((HttpServletResponse) resp);
-
         response.setDateHeader("Expires", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.MONTH, 6).getTime());
         response.setDateHeader("Last-Modified", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.MONTH, -6).getTime());
-        response.setHeader("Cache-Control", "public, max-age=15552000");
-
+        response.setHeader("Cache-Control", cacheControl);
         chain.doFilter(req, resp);
     }
 
     /** {@inheritDoc} */
     public void init(FilterConfig config) throws ServletException {
+        cacheControl = config.getInitParameter("Cache-Control");
+        if (UtilValidate.isEmpty(cacheControl)) {
+            cacheControl = DEFAULT_CACHE_CONTROL;
+        }
     }
 
 }
