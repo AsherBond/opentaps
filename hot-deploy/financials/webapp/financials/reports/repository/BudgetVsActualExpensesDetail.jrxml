@@ -1,78 +1,64 @@
-<?xml version="1.0" encoding="UTF-8"  ?>
-<!-- Created with iReport - A designer for JasperReports -->
-<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-<jasperReport
-		 name="BudgetVsActualExpensesDetail"
-		 columnCount="1"
-		 printOrder="Vertical"
-		 orientation="Landscape"
-		 pageWidth="792"
-		 pageHeight="612"
-		 columnWidth="752"
-		 columnSpacing="0"
-		 leftMargin="20"
-		 rightMargin="20"
-		 topMargin="20"
-		 bottomMargin="20"
-		 whenNoDataType="AllSectionsNoDetail"
-		 isTitleNewPage="false"
-		 isSummaryNewPage="false">
-	<property name="ireport.scriptlethandling" value="0" />
-	<property name="ireport.encoding" value="UTF-8" />
-	<import value="java.util.*" />
-	<import value="net.sf.jasperreports.engine.*" />
-	<import value="net.sf.jasperreports.engine.data.*" />
-
-	<parameter name="organizationPartyId" isForPrompting="false" class="java.lang.String"/>
-	<parameter name="fromDate" isForPrompting="true" class="java.sql.Timestamp"/>
-	<parameter name="thruDate" isForPrompting="true" class="java.sql.Timestamp"/>
-	<parameter name="tag1" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="tag2" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="tag3" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="tag4" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="tag5" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="tag6" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="tag7" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="tag8" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="tag9" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="tag10" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="accountingTags" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[""]]></defaultValueExpression>
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BudgetVsActualExpensesDetail" pageWidth="792" pageHeight="612" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="organizationPartyId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="fromDate" class="java.sql.Timestamp"/>
+	<parameter name="thruDate" class="java.sql.Timestamp"/>
+	<parameter name="tag1" class="java.lang.String"/>
+	<parameter name="tag2" class="java.lang.String"/>
+	<parameter name="tag3" class="java.lang.String"/>
+	<parameter name="tag4" class="java.lang.String"/>
+	<parameter name="tag5" class="java.lang.String"/>
+	<parameter name="tag6" class="java.lang.String"/>
+	<parameter name="tag7" class="java.lang.String"/>
+	<parameter name="tag8" class="java.lang.String"/>
+	<parameter name="tag9" class="java.lang.String"/>
+	<parameter name="tag10" class="java.lang.String"/>
+	<parameter name="accountingTags" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
-	<parameter name="tag1_SQL" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[$P{tag1} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID1 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID1 IS NULL" : $P{tag1}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID1 LIKE '%'" : $P{tag1}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID1 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID1 = '" + $P{tag1} + "'"]]></defaultValueExpression>
+	<parameter name="tag1_SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{tag1} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID1 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID1 IS NULL" : $P{tag1}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID1 LIKE '%'" : $P{tag1}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID1 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID1 = '" + $P{tag1} + "'"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="tag2_SQL" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[$P{tag2} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID2 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID2 IS NULL" : $P{tag2}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID2 LIKE '%'" : $P{tag2}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID2 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID2 = '" + $P{tag2} + "'"]]></defaultValueExpression>
+	<parameter name="tag2_SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{tag2} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID2 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID2 IS NULL" : $P{tag2}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID2 LIKE '%'" : $P{tag2}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID2 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID2 = '" + $P{tag2} + "'"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="tag3_SQL" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[$P{tag3} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID3 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID3 IS NULL" : $P{tag3}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID3 LIKE '%'" : $P{tag3}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID3 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID3 = '" + $P{tag3} + "'"]]></defaultValueExpression>
+	<parameter name="tag3_SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{tag3} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID3 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID3 IS NULL" : $P{tag3}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID3 LIKE '%'" : $P{tag3}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID3 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID3 = '" + $P{tag3} + "'"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="tag4_SQL" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[$P{tag4} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID4 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID4 IS NULL" : $P{tag4}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID4 LIKE '%'" : $P{tag4}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID4 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID4 = '" + $P{tag4} + "'"]]></defaultValueExpression>
+	<parameter name="tag4_SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{tag4} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID4 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID4 IS NULL" : $P{tag4}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID4 LIKE '%'" : $P{tag4}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID4 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID4 = '" + $P{tag4} + "'"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="tag5_SQL" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[$P{tag5} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID5 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID5 IS NULL" : $P{tag5}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID5 LIKE '%'" : $P{tag5}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID5 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID5 = '" + $P{tag5} + "'"]]></defaultValueExpression>
+	<parameter name="tag5_SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{tag5} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID5 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID5 IS NULL" : $P{tag5}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID5 LIKE '%'" : $P{tag5}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID5 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID5 = '" + $P{tag5} + "'"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="tag6_SQL" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[$P{tag6} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID6 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID6 IS NULL" : $P{tag6}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID6 LIKE '%'" : $P{tag6}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID6 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID6 = '" + $P{tag6} + "'"]]></defaultValueExpression>
+	<parameter name="tag6_SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{tag6} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID6 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID6 IS NULL" : $P{tag6}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID6 LIKE '%'" : $P{tag6}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID6 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID6 = '" + $P{tag6} + "'"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="tag7_SQL" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[$P{tag7} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID7 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID7 IS NULL" : $P{tag7}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID7 LIKE '%'" : $P{tag7}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID7 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID7 = '" + $P{tag7} + "'"]]></defaultValueExpression>
+	<parameter name="tag7_SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{tag7} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID7 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID7 IS NULL" : $P{tag7}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID7 LIKE '%'" : $P{tag7}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID7 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID7 = '" + $P{tag7} + "'"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="tag8_SQL" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[$P{tag8} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID8 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID8 IS NULL" : $P{tag8}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID8 LIKE '%'" : $P{tag8}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID8 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID8 = '" + $P{tag8} + "'"]]></defaultValueExpression>
+	<parameter name="tag8_SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{tag8} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID8 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID8 IS NULL" : $P{tag8}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID8 LIKE '%'" : $P{tag8}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID8 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID8 = '" + $P{tag8} + "'"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="tag9_SQL" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[$P{tag9} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID9 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID9 IS NULL" : $P{tag9}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID9 LIKE '%'" : $P{tag9}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID9 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID9 = '" + $P{tag9} + "'"]]></defaultValueExpression>
+	<parameter name="tag9_SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{tag9} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID9 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID9 IS NULL" : $P{tag9}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID9 LIKE '%'" : $P{tag9}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID9 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID9 = '" + $P{tag9} + "'"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="tag10_SQL" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[$P{tag10} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID10 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID10 IS NULL" : $P{tag10}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID10 LIKE '%'" : $P{tag10}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID10 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID10 = '" + $P{tag10} + "'"]]></defaultValueExpression>
+	<parameter name="tag10_SQL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{tag10} == null ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID10 LIKE '%' OR GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID10 IS NULL" : $P{tag10}.equals("ANY") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID10 LIKE '%'" : $P{tag10}.equals("NONE") ? "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID10 IS NULL" : "GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TAG_ENUM_ID10 = '" + $P{tag10} + "'"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="TimeRange" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA[($P{fromDate} != null ? ("GL_ACCOUNT_TRANS_ENTRY_FACT.TRANSACTION_DATE >= '" + $P{fromDate} + "' AND ") : "1 = 1 AND ") + ($P{thruDate} != null ? ("GL_ACCOUNT_TRANS_ENTRY_FACT.TRANSACTION_DATE <= '" + $P{thruDate}) + "'" : "1 = 1")]]></defaultValueExpression>
+	<parameter name="TimeRange" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[($P{fromDate} != null ? ("GL_ACCOUNT_TRANS_ENTRY_FACT.TRANSACTION_DATE >= '" + $P{fromDate} + "' AND ") : "1 = 1 AND ") + ($P{thruDate} != null ? ("GL_ACCOUNT_TRANS_ENTRY_FACT.TRANSACTION_DATE <= '" + $P{thruDate}) + "'" : "1 = 1")]]></defaultValueExpression>
 	</parameter>
-	<queryString><![CDATA[SELECT
+	<queryString>
+		<![CDATA[SELECT
      GL_ACCOUNT.ACCOUNT_CODE AS AccountCode,
      GL_ACCOUNT.ACCOUNT_NAME AS AccountName,
      GL_ACCOUNT_TYPE.DESCRIPTION AS AccountTypeDescription,
@@ -83,6 +69,7 @@
      GL_ACCOUNT_TRANS_ENTRY_FACT.TRANSACTION_DATE AS TransactionDate,
      ACCTG_TRANS.DESCRIPTION AS AcctgTransDescription,
      ACCTG_TRANS_ENTRY.DEBIT_CREDIT_FLAG AS DebitCreditFlag,
+     ACCTG_TRANS_ENTRY.PARTY_ID AS AcctgTransEntryPartyId,
      GL_ACCOUNT_TRANS_ENTRY_FACT.BUDGET_DEBIT_AMOUNT AS BudgetDebitAmount,
      GL_ACCOUNT_TRANS_ENTRY_FACT.BUDGET_CREDIT_AMOUNT AS BudgetCreditAmount,
      GL_ACCOUNT_TRANS_ENTRY_FACT.ACTUAL_DEBIT_AMOUNT AS ActualDebitAmount,
@@ -93,10 +80,17 @@
      GL_ACCOUNT_TRANS_ENTRY_FACT.ACTUAL_NET_AMOUNT AS ActualNetAmount,
      GL_ACCOUNT_TRANS_ENTRY_FACT.ENCUMBERED_NET_AMOUNT AS EncumberedNetAmount,
      ORDER_HEADER.ORDER_NAME AS OrderName,
+     ACCTG_TRANS.PARTY_ID as AcctgTransPartyId,
      ACCTG_TRANS.INVOICE_ID as InvoiceId,
      INVOICE.DESCRIPTION as InvoiceDescription,
      ACCTG_TRANS.PAYMENT_ID as PaymentId,
-     PAYMENT.COMMENTS as PaymentComments 
+     PAYMENT.COMMENTS as PaymentComments,
+     PERSON_AT.FIRST_NAME as AtFirstName,
+     PERSON_AT.LAST_NAME as AtLastName,
+     PERSON_ATE.FIRST_NAME as AteFirstName,
+     PERSON_ATE.LAST_NAME as AteLastName,
+     PARTY_GROUP_AT.GROUP_NAME as AtGroupName,
+     PARTY_GROUP_ATE.GROUP_NAME as AteGroupName
 FROM
      GL_ACCOUNT GL_ACCOUNT RIGHT OUTER JOIN GL_ACCOUNT_TRANS_ENTRY_FACT GL_ACCOUNT_TRANS_ENTRY_FACT ON GL_ACCOUNT.GL_ACCOUNT_ID = GL_ACCOUNT_TRANS_ENTRY_FACT.GL_ACCOUNT_ID
      LEFT OUTER JOIN GL_ACCOUNT_TYPE GL_ACCOUNT_TYPE ON GL_ACCOUNT.GL_ACCOUNT_TYPE_ID = GL_ACCOUNT_TYPE.GL_ACCOUNT_TYPE_ID
@@ -105,7 +99,11 @@ FROM
      LEFT OUTER JOIN ORDER_HEADER ORDER_HEADER ON GL_ACCOUNT_TRANS_ENTRY_FACT.ORDER_ID = ORDER_HEADER.ORDER_ID
      LEFT OUTER JOIN ACCTG_TRANS ACCTG_TRANS ON ACCTG_TRANS_ENTRY.ACCTG_TRANS_ID = ACCTG_TRANS.ACCTG_TRANS_ID
      LEFT OUTER JOIN INVOICE INVOICE ON INVOICE.INVOICE_ID=ACCTG_TRANS.INVOICE_ID
-     LEFT OUTER JOIN PAYMENT PAYMENT ON PAYMENT.PAYMENT_ID=ACCTG_TRANS.PAYMENT_ID 
+     LEFT OUTER JOIN PAYMENT PAYMENT ON PAYMENT.PAYMENT_ID=ACCTG_TRANS.PAYMENT_ID
+     LEFT OUTER JOIN PERSON PERSON_AT ON PERSON_AT.PARTY_ID=ACCTG_TRANS.PARTY_ID
+     LEFT OUTER JOIN PERSON PERSON_ATE ON PERSON_ATE.PARTY_ID=ACCTG_TRANS_ENTRY.PARTY_ID
+     LEFT OUTER JOIN PARTY_GROUP PARTY_GROUP_AT ON PARTY_GROUP_AT.PARTY_ID=ACCTG_TRANS.PARTY_ID
+     LEFT OUTER JOIN PARTY_GROUP PARTY_GROUP_ATE ON PARTY_GROUP_ATE.PARTY_ID=ACCTG_TRANS_ENTRY.PARTY_ID
 WHERE
     ($P!{TimeRange}) AND
     ($P!{tag1_SQL}) AND
@@ -117,8 +115,8 @@ WHERE
     ($P!{tag7_SQL}) AND
     ($P!{tag8_SQL}) AND
     ($P!{tag9_SQL}) AND
-    ($P!{tag10_SQL})]]></queryString>
-
+    ($P!{tag10_SQL})]]>
+	</queryString>
 	<field name="AccountCode" class="java.lang.String"/>
 	<field name="AccountName" class="java.lang.String"/>
 	<field name="AccountTypeDescription" class="java.lang.String"/>
@@ -128,6 +126,8 @@ WHERE
 	<field name="OrderItemSeqId" class="java.lang.String"/>
 	<field name="TransactionDate" class="java.sql.Timestamp"/>
 	<field name="AcctgTransDescription" class="java.lang.String"/>
+	<field name="AcctgTransPartyId" class="java.lang.String"/>
+	<field name="AcctgTransEntryPartyId" class="java.lang.String"/>
 	<field name="BudgetDebitAmount" class="java.lang.Double"/>
 	<field name="BudgetCreditAmount" class="java.lang.Double"/>
 	<field name="ActualDebitAmount" class="java.lang.Double"/>
@@ -142,24 +142,28 @@ WHERE
 	<field name="InvoiceDescription" class="java.lang.String"/>
 	<field name="PaymentId" class="java.lang.String"/>
 	<field name="PaymentComments" class="java.lang.String"/>
-
-	<sortField name="AccountCode" />
-	<sortField name="AcctgTransId" />
-	<sortField name="AcctgTransEntrySeqId" />
-	<sortField name="OrderId" />
-	<sortField name="OrderItemSeqId" />
-
-	<variable name="BudgetTotal" class="java.lang.Double" resetType="Report" calculation="Sum">
+	<field name="AtFirstName" class="java.lang.String"/>
+	<field name="AtLastName" class="java.lang.String"/>
+	<field name="AtGroupName" class="java.lang.String"/>
+	<field name="AteFirstName" class="java.lang.String"/>
+	<field name="AteLastName" class="java.lang.String"/>
+	<field name="AteGroupName" class="java.lang.String"/>
+	<sortField name="AccountCode"/>
+	<sortField name="AcctgTransId"/>
+	<sortField name="AcctgTransEntrySeqId"/>
+	<sortField name="OrderId"/>
+	<sortField name="OrderItemSeqId"/>
+	<variable name="BudgetTotal" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{BudgetNetAmount}]]></variableExpression>
 		<initialValueExpression><![CDATA[Double.valueOf(0.0)]]></initialValueExpression>
 	</variable>
-	<variable name="ExpensesTotal" class="java.lang.Double" resetType="Report" calculation="Sum">
+	<variable name="ExpensesTotal" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{ActualNetAmount}]]></variableExpression>
 	</variable>
-	<variable name="EncumbrancesTotal" class="java.lang.Double" resetType="Report" calculation="Sum">
+	<variable name="EncumbrancesTotal" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{EncumberedNetAmount}]]></variableExpression>
 	</variable>
-	<variable name="BalanceTotal" class="java.lang.Double" resetType="Report" calculation="Sum">
+	<variable name="BalanceTotal" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[Double.valueOf($F{BudgetNetAmount}.doubleValue() - ($F{ActualNetAmount}.doubleValue() + $F{EncumberedNetAmount}.doubleValue()))]]></variableExpression>
 		<initialValueExpression><![CDATA[Double.valueOf(0.0)]]></initialValueExpression>
 	</variable>
@@ -175,485 +179,478 @@ WHERE
 	<variable name="AccountBalance" class="java.lang.Double" resetType="Group" resetGroup="GlAccountGroup" calculation="Sum">
 		<variableExpression><![CDATA[Double.valueOf($F{BudgetNetAmount}.doubleValue() - $F{ActualNetAmount}.doubleValue() -$F{EncumberedNetAmount}.doubleValue())]]></variableExpression>
 	</variable>
-
-		<group  name="GlAccountGroup" >
-			<groupExpression><![CDATA[$F{AccountCode}]]></groupExpression>
-			<groupHeader>
-			<band height="16"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="75"
-						y="0"
-						width="407"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+	<group name="GlAccountGroup">
+		<groupExpression><![CDATA[$F{AccountCode}]]></groupExpression>
+		<groupHeader>
+			<band height="16" splitType="Stretch">
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="75" y="0" width="407" height="16"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{AccountName}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{AccountName}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="75"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="0" y="0" width="75" height="16"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{AccountCode}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{AccountCode}]]></textFieldExpression>
 				</textField>
 			</band>
-			</groupHeader>
-			<groupFooter>
-			<band height="37"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="482"
-						y="0"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="37" splitType="Stretch">
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement key="textField" x="482" y="0" width="90" height="16"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{AccountBudgetTotal}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{AccountBudgetTotal}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="572"
-						y="0"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement key="textField" x="572" y="0" width="90" height="16"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{AccountExpensesTotal}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{AccountExpensesTotal}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="662"
-						y="0"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement key="textField" x="662" y="0" width="90" height="16"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{AccountEncumbrancesTotal}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{AccountEncumbrancesTotal}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="382"
-						y="0"
-						width="100"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="382" y="0" width="100" height="16"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isBold="false" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+						<font size="9" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsAccountTotal} + ":"]]></textFieldExpression>
+					<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAccountTotal} + ":"]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="662"
-						y="16"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement key="textField" x="662" y="16" width="90" height="16"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{AccountBalance}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{AccountBalance}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="562"
-						y="16"
-						width="100"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="562" y="16" width="100" height="16"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isBold="false" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+						<font size="9" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsAccountBalance} + ":"]]></textFieldExpression>
+					<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAccountBalance} + ":"]]></textFieldExpression>
 				</textField>
 			</band>
-			</groupFooter>
-		</group>
-		<background>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</background>
-		<title>
-			<band height="70"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="752"
-						height="20"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center">
-						<font pdfFontName="DejaVuSans.ttf" isBold="false" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsBudgetVsActualExpensesDetails}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="43"
-						width="752"
-						height="20"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" isBold="false" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{accountingTags}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="MM/dd/yy h.mm a" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="457"
-						y="20"
-						width="100"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="MM/dd/yy h.mm a" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="295"
-						y="20"
-						width="100"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="233"
-						y="20"
-						width="60"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{CommonFromDate} + ":"]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="395"
-						y="20"
-						width="60"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{CommonThruDate} + ":"]]></textFieldExpression>
-				</textField>
-			</band>
-		</title>
-		<pageHeader>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</pageHeader>
-		<columnHeader>
-			<band height="20"  isSplitAllowed="true" >
-				<line direction="TopDown">
-					<reportElement
-						x="0"
-						y="18"
-						width="752"
-						height="1"
-						key="line"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="482"
-						height="18"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font pdfFontName="DejaVuSans.ttf" isBold="false" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsAccountCodeName}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="482"
-						y="2"
-						width="90"
-						height="18"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font pdfFontName="DejaVuSans.ttf" isBold="false" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsBudget}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="572"
-						y="2"
-						width="90"
-						height="18"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font pdfFontName="DejaVuSans.ttf" isBold="false" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsExpenses}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="662"
-						y="2"
-						width="90"
-						height="18"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsEncumbrances}]]></textFieldExpression>
-				</textField>
-			</band>
-		</columnHeader>
-		<detail>
-			<band height="16"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="482"
-						y="0"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{BudgetNetAmount}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="572"
-						y="0"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{ActualNetAmount}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="662"
-						y="0"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{EncumberedNetAmount}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="0"
-						y="0"
-						width="134"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{OrderId} == null ? ("Acctg Trans: " + $F{AcctgTransId} + "/" + $F{AcctgTransEntrySeqId}) : ("PO: " + $F{OrderId} + "/" + $F{OrderItemSeqId})]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="MM/dd/yy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="134"
-						y="0"
-						width="61"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[$F{TransactionDate}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="195"
-						y="0"
-						width="287"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{AcctgTransDescription} != null && !"".equals($F{AcctgTransDescription}) 
-? $F{AcctgTransDescription} : 
-($F{InvoiceId} == null ? "" : $R{AccountingInvoice} + " " + $F{InvoiceId} + ($F{InvoiceDescription} == null ? "" : ": " + $F{InvoiceDescription}) + "\n") 
-+ ($F{PaymentId} == null ? "" : $R{AccountingPayment} + " " +  $F{PaymentId} + ($F{PaymentComments} == null ? "" : ": " + $F{PaymentComments}))]]></textFieldExpression>
-				</textField>
-			</band>
-		</detail>
-		<columnFooter>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</columnFooter>
-		<pageFooter>
-			<band height="16"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="314"
-						y="0"
-						width="80"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{CommonPage}+" "+$V{PAGE_NUMBER}+" "+$R{OpentapsOf}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="394"
-						y="0"
-						width="40"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-				</textField>
-			</band>
-		</pageFooter>
-		<summary>
-			<band height="38"  isSplitAllowed="true" >
-				<line direction="TopDown">
-					<reportElement
-						x="392"
-						y="0"
-						width="360"
-						height="1"
-						key="line"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="482"
-						y="1"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{BudgetTotal}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="572"
-						y="1"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{ExpensesTotal}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="662"
-						y="1"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{EncumbrancesTotal}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="382"
-						y="1"
-						width="100"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isBold="false" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsGrandTotal} + ":"]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="662"
-						y="17"
-						width="90"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Double"><![CDATA[$V{BalanceTotal}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="562"
-						y="16"
-						width="100"
-						height="16"
-						key="textField"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="DejaVuSans.ttf" size="9" isBold="false" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsBalance} + ":"]]></textFieldExpression>
-				</textField>
-			</band>
-		</summary>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="0" width="752" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsBudgetVsActualExpensesDetails}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="43" width="752" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{accountingTags}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yy h.mm a" isBlankWhenNull="true">
+				<reportElement key="textField" x="457" y="20" width="100" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yy h.mm a" isBlankWhenNull="true">
+				<reportElement key="textField" x="295" y="20" width="100" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField" x="233" y="20" width="60" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonFromDate} + ":"]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField" x="395" y="20" width="60" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonThruDate} + ":"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement key="line" x="0" y="18" width="752" height="1"/>
+			</line>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="0" y="0" width="482" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAccountCodeName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="482" y="2" width="90" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsBudget}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="572" y="2" width="90" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsExpenses}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="662" y="2" width="90" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsEncumbrances}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" x="482" y="0" width="90" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{BudgetNetAmount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" x="572" y="0" width="90" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ActualNetAmount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" x="662" y="0" width="90" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{EncumberedNetAmount}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="0" width="134" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{OrderId} == null ? ("Acctg Trans: " + $F{AcctgTransId} + "/" + $F{AcctgTransEntrySeqId}) : ("PO: " + $F{OrderId} + "/" + $F{OrderItemSeqId})]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yy" isBlankWhenNull="true">
+				<reportElement key="textField" x="134" y="0" width="61" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{TransactionDate}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField" x="195" y="0" width="287" height="16" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{AcctgTransDescription} != null && !"".equals($F{AcctgTransDescription})
+? $F{AcctgTransDescription} :
+($F{InvoiceId} == null ? "" : $R{AccountingInvoice} + " " + $F{InvoiceId} + ($F{InvoiceDescription} == null ? "" : ": " + $F{InvoiceDescription}) + "\n")
++ ($F{PaymentId} == null ? "" : $R{AccountingPayment} + " " +  $F{PaymentId} + ($F{PaymentComments} == null ? "" : ": " + $F{PaymentComments})))
++ ($F{AcctgTransEntryPartyId} == null ? ($F{AcctgTransPartyId} == null ? "" :
+ " " + $R{CommonFor} + " " + 
+     ($F{AtFirstName} == null ? 
+      ($F{AtGroupName} == null ? "" : $F{AtGroupName}) :
+       $F{AtFirstName} + " " + $F{AtLastName}) + " (" + $F{AcctgTransPartyId} + ")") :
+ " " + $R{CommonFor} + " " + 
+     ($F{AteFirstName} == null ? 
+      ($F{AteGroupName} == null ? "" : $F{AteGroupName}) :
+       $F{AteFirstName} + " " + $F{AteLastName}) + " (" +  $F{AcctgTransEntryPartyId} + ")")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="16" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="314" y="0" width="80" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage}+" "+$V{PAGE_NUMBER}+" "+$R{OpentapsOf}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="true">
+				<reportElement key="textField" x="394" y="0" width="40" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="38" splitType="Stretch">
+			<line>
+				<reportElement key="line" x="392" y="0" width="360" height="1"/>
+			</line>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" x="482" y="1" width="90" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{BudgetTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" x="572" y="1" width="90" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{ExpensesTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" x="662" y="1" width="90" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{EncumbrancesTotal}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="382" y="1" width="100" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsGrandTotal} + ":"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" x="662" y="17" width="90" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{BalanceTotal}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="562" y="16" width="100" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsBalance} + ":"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>
