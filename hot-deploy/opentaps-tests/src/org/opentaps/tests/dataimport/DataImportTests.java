@@ -193,5 +193,22 @@ public class DataImportTests extends OpentapsTestCase {
         }
 
     }
+    
+    /**
+     * Verify that the importGlAccounts can successfully import GL accounts so that transactions can be posted to them
+     */
+    public void testImportGlAccount() {
+    	// use delegator.getNextSeqId to get 3 glAccountIds, gl1, gl2, gl3
+    	// create DataImportGlAccount values for gl1, gl2, gl3, with gl1 being the parent of gl2, with classifications:
+    	//   gl1 - CURRENT_ASSET
+    	//   gl2 - ACCOUNTS_RECEIVABLE
+    	//   gl3 - ACCOUNTS_PAYABLE
+    	// run the importGlAccounts test with organizationPartyId=Company, verify that it's successful
+    	// create an accounting transaction for Company with
+    	//   gl1 D 100
+    	//   gl2 D 200
+    	//   gl3 C 300
+    	// run postAcctgTrans for the accounting transaction and verify that it's successful
+    }
 
 }
