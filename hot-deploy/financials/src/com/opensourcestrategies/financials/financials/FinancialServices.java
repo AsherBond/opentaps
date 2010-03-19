@@ -522,9 +522,16 @@ public final class FinancialServices {
             input.put("fromDate", lastClosedDate);
             input.put("thruDate", asOfDate);
             input = dctx.getModelService("getIncomeStatementByDates").makeValid(input, ModelService.IN_PARAM);
-            tmpResult = dispatcher.runSync("getIncomeStatementByDates", input);
+            
+Debug.logFatal("****net income parameters = " + input, MODULE);
+tmpResult = dispatcher.runSync("getIncomeStatementByDates", input);
             GenericValue retainedEarningsGlAccount = (GenericValue) tmpResult.get("retainedEarningsGlAccount");
             BigDecimal interimNetIncome = (BigDecimal) tmpResult.get("netIncome");
+
+Debug.logFatal("equityAccountBalances = " + equityAccountBalances, MODULE);
+Debug.logFatal("retainedEarningsGlAccount = " + retainedEarningsGlAccount, MODULE);
+Debug.logFatal("interimNetIncome = " + interimNetIncome, MODULE);
+
 
             // if any time periods had been closed, the retained earnings account may have a posted balance but for all accounting tags, which is
             // not appropriate from the accounting tags, so if accountings tags are used, then ignore any existing posted retained earnings balance

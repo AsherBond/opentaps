@@ -159,7 +159,7 @@ public final class ConfigurationServices {
             }
 
             // extract glAccountClassId and glAccountTypeId from GlAccountClassType
-            GenericValue gv = delegator.findByPrimaryKey("GlAccountClassTypeMap", UtilMisc.toMap("glAccountClassTypeKey", glAccountClassTypeKey));
+            GenericValue gv = delegator.findByPrimaryKeyCache("GlAccountClassTypeMap", UtilMisc.toMap("glAccountClassTypeKey", glAccountClassTypeKey));
 
             String glAccountTypeId = gv.getString("glAccountTypeId");
             String glAccountClassId = gv.getString("glAccountClassId");
@@ -209,7 +209,7 @@ public final class ConfigurationServices {
 
         try {
             // extract glAccountClassId and glAccountTypeId from GlAccountClassType
-            GenericValue gv = delegator.findByPrimaryKey("GlAccountClassTypeMap", UtilMisc.toMap("glAccountClassTypeKey", glAccountClassTypeKey));
+            GenericValue gv = delegator.findByPrimaryKeyCache("GlAccountClassTypeMap", UtilMisc.toMap("glAccountClassTypeKey", glAccountClassTypeKey));
 
             String glAccountTypeId = gv.getString("glAccountTypeId");
             String glAccountClassId = gv.getString("glAccountClassId");
