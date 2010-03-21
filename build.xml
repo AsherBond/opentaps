@@ -695,7 +695,7 @@ under the License.
 
       <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
-          <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/lib/ant-contrib.jar"/>
+          <pathelement location="./hot-deploy/opentaps-common/lib/ant-contrib.jar"/>
         </classpath>
       </taskdef>
 
