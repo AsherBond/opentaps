@@ -44,6 +44,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -319,6 +321,20 @@ public class ConstantsGeneratorContainer implements Container {
         return models;
     }
 
+    private static class ConstantComparator implements Comparator<Map<String, String>> {
+        public int compare(Map<String, String> o1, Map<String, String> o2) {
+            String name1 = o1.get("constantName");
+            String name2 = o2.get("constantName");
+            if (name1 == null && name2 == null) {
+                return 0;
+            } else if (name1 == null && name2 != null) {
+                return 1;
+            } else {
+                return name1.compareTo(name2);
+            }
+        }
+    }
+
     private static class ConstantModel {
         private String key;
         private String entityName;
@@ -454,6 +470,7 @@ public class ConstantsGeneratorContainer implements Container {
                 }
                 values.add(map);
             }
+            Collections.sort(values, new ConstantComparator());
             return values;
         }
 
