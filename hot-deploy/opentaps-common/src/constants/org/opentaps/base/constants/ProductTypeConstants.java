@@ -45,6 +45,8 @@ public final class ProductTypeConstants {
         public static final String FINDIG_GOOD = "FINDIG_GOOD";
         /** Finished Good. */
         public static final String FINISHED_GOOD = "FINISHED_GOOD";
+        /** Good. */
+        public static final String GOOD = "GOOD";
         /** Marketing Package: Auto Manufactured. */
         public static final String MARKETING_PKG_AUTO = "MARKETING_PKG_AUTO";
         /** Marketing Package: Pick Assembly. */
@@ -57,15 +59,13 @@ public final class ProductTypeConstants {
         public static final String SUBASSEMBLY = "SUBASSEMBLY";
         /** Work In Process. */
         public static final String WIP = "WIP";
-        /** Good. */
-        public static final String GOOD = "GOOD";
     }
     public static final class Service {
         private Service() { }
-        /** Contracted Manufacturing Service. */
-        public static final String SERVICE_CONTRACT_MFG = "SERVICE_CONTRACT_MFG";
         /** Service. */
         public static final String SERVICE = "SERVICE";
+        /** Contracted Manufacturing Service. */
+        public static final String SERVICE_CONTRACT_MFG = "SERVICE_CONTRACT_MFG";
     }
     /** Supplies. */
     public static final String SUPPLIES = "SUPPLIES";

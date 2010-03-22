@@ -356,7 +356,7 @@ public final class EnumerationConstants {
         public static final String FAC_MANLIFT = "FAC_MANLIFT";
         /** Mobile. */
         public static final String FAC_MOBILE = "FAC_MOBILE";
-        /** Passenger Vehicle. */
+        /** Passneger Vehicle. */
         public static final String FAC_PASSENGER = "FAC_PASSENGER";
         /** Puller. */
         public static final String FAC_PULLER = "FAC_PULLER";
@@ -769,6 +769,8 @@ public final class EnumerationConstants {
         public static final String PRIP_PARTY_GRP_MEM = "PRIP_PARTY_GRP_MEM";
         /** Party. */
         public static final String PRIP_PARTY_ID = "PRIP_PARTY_ID";
+        /** Product. */
+        public static final String PRIP_PRODUCT_ID = "PRIP_PRODUCT_ID";
         /** Product Category. */
         public static final String PRIP_PROD_CAT_ID = "PRIP_PROD_CAT_ID";
         /** Product Catalog. */
@@ -777,8 +779,6 @@ public final class EnumerationConstants {
         public static final String PRIP_PROD_FEAT_ID = "PRIP_PROD_FEAT_ID";
         /** Product Store Group. */
         public static final String PRIP_PROD_SGRP_ID = "PRIP_PROD_SGRP_ID";
-        /** Product. */
-        public static final String PRIP_PRODUCT_ID = "PRIP_PRODUCT_ID";
         /** Quantity. */
         public static final String PRIP_QUANTITY = "PRIP_QUANTITY";
         /** Role Type. */
@@ -975,7 +975,7 @@ public final class EnumerationConstants {
         public static final String US_IRS_1040 = "US_IRS_1040";
         /** Form 1065 (US IRS). */
         public static final String US_IRS_1065 = "US_IRS_1065";
-        /** Form 1120 (US IRS). */
+        /** Form 1120S (US IRS). */
         public static final String US_IRS_1120 = "US_IRS_1120";
         /** Form 1120S (US IRS). */
         public static final String US_IRS_1120S = "US_IRS_1120S";

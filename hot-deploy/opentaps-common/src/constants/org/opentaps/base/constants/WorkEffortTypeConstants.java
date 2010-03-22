@@ -58,10 +58,10 @@ public final class WorkEffortTypeConstants {
     public static final String PROJECT_TEMPLATE = "PROJECT_TEMPLATE";
     /** Publish Properties. */
     public static final String PUBLISH_PROPS = "PUBLISH_PROPS";
-    /** Routing Task. */
-    public static final String ROU_TASK = "ROU_TASK";
     /** Routing. */
     public static final String ROUTING = "ROUTING";
+    /** Routing Task. */
+    public static final String ROU_TASK = "ROU_TASK";
     /** Task. */
     public static final String TASK = "TASK";
     /** Project Task Template. */

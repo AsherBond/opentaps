@@ -86,12 +86,12 @@ public final class StatusTypeConstants {
     public static final String HR_JOB_STATUS = "HR_JOB_STATUS";
     public static final class InventoryItemStts {
         private InventoryItemStts() { }
+        /** Inventory Item. */
+        public static final String INVENTORY_ITEM_STTS = "INVENTORY_ITEM_STTS";
         /** Non-Serialized Inventory Item. */
         public static final String INV_NON_SER_STTS = "INV_NON_SER_STTS";
         /** Serialized Inventory Item. */
         public static final String INV_SERIALIZED_STTS = "INV_SERIALIZED_STTS";
-        /** Inventory Item. */
-        public static final String INVENTORY_ITEM_STTS = "INVENTORY_ITEM_STTS";
     }
     /** Inventory Transfer. */
     public static final String INVENTORY_XFER_STTS = "INVENTORY_XFER_STTS";
@@ -130,7 +130,7 @@ public final class StatusTypeConstants {
         public static final String LEAD_STATUS = "LEAD_STATUS";
         /** Status codes for parties which are leads (role = PROSPECT). */
         public static final String PARTY_LEAD_STATUS = "PARTY_LEAD_STATUS";
-        /** Party. */
+        /** Party status. */
         public static final String PARTY_STATUS = "PARTY_STATUS";
     }
     /** PartyQual verification status. */
@@ -151,14 +151,14 @@ public final class StatusTypeConstants {
     public static final String PRODUCT_REVIEW_STTS = "PRODUCT_REVIEW_STTS";
     public static final class Project {
         private Project() { }
+        /** Project. */
+        public static final String PROJECT = "PROJECT";
         /** Project Assignment. */
         public static final String PROJECT_ASSGN_STATUS = "PROJECT_ASSGN_STATUS";
         /** Project status. */
         public static final String PROJECT_STATUS = "PROJECT_STATUS";
         /** Project Task. */
         public static final String PROJECT_TASK_STATUS = "PROJECT_TASK_STATUS";
-        /** Project. */
-        public static final String PROJECT = "PROJECT";
     }
     /** Purchase Shipment. */
     public static final String PURCH_SHIP_STATUS = "PURCH_SHIP_STATUS";

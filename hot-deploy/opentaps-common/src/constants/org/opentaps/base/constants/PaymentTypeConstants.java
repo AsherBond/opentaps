@@ -32,12 +32,14 @@ public final class PaymentTypeConstants {
         public static final String COMMISSION_PAYMENT = "COMMISSION_PAYMENT";
         /** Customer Refund. */
         public static final String CUSTOMER_REFUND = "CUSTOMER_REFUND";
+        /** Disbursement. */
+        public static final String DISBURSEMENT = "DISBURSEMENT";
         /** Gift Certificate Withdrawal. */
         public static final String GC_WITHDRAWAL = "GC_WITHDRAWAL";
-        /** Pay Check. */
-        public static final String PAY_CHECK = "PAY_CHECK";
         /** Payrol Payment. */
         public static final String PAYROL_PAYMENT = "PAYROL_PAYMENT";
+        /** Pay Check. */
+        public static final String PAY_CHECK = "PAY_CHECK";
         /** POS Paid Out. */
         public static final String POS_PAID_OUT = "POS_PAID_OUT";
         /** Tax Payment. */
@@ -46,8 +48,6 @@ public final class PaymentTypeConstants {
         public static final String VENDOR_PAYMENT = "VENDOR_PAYMENT";
         /** Vendor Prepayment. */
         public static final String VENDOR_PREPAY = "VENDOR_PREPAY";
-        /** Disbursement. */
-        public static final String DISBURSEMENT = "DISBURSEMENT";
     }
     public static final class PayCheck {
         private PayCheck() { }
@@ -66,16 +66,16 @@ public final class PaymentTypeConstants {
         public static final String CUSTOMER_PAYMENT = "CUSTOMER_PAYMENT";
         /** Gift Certificate Deposit. */
         public static final String GC_DEPOSIT = "GC_DEPOSIT";
-        /** Interest Receipt. */
+        /** Finance Charge Payment. */
         public static final String INTEREST_RECEIPT = "INTEREST_RECEIPT";
         /** Partner Receipt. */
         public static final String PARTNER_RECEIPT = "PARTNER_RECEIPT";
         /** POS Paid In. */
         public static final String POS_PAID_IN = "POS_PAID_IN";
-        /** Vendor Credit. */
-        public static final String VENDOR_CREDIT_RCPT = "VENDOR_CREDIT_RCPT";
         /** Receipt. */
         public static final String RECEIPT = "RECEIPT";
+        /** Vendor Credit. */
+        public static final String VENDOR_CREDIT_RCPT = "VENDOR_CREDIT_RCPT";
     }
     public static final class TaxPayment {
         private TaxPayment() { }

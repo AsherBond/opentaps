@@ -30,13 +30,13 @@ public final class InvoiceTypeConstants {
     public static final String COMMISSION_INVOICE = "COMMISSION_INVOICE";
     /** Customer Return. */
     public static final String CUST_RTN_INVOICE = "CUST_RTN_INVOICE";
-    /** Interest. */
+    /** Finance Charge. */
     public static final String INTEREST_INVOICE = "INTEREST_INVOICE";
     /** Partner Invoice. */
     public static final String PARTNER_INVOICE = "PARTNER_INVOICE";
     /** Payrol. */
     public static final String PAYROL_INVOICE = "PAYROL_INVOICE";
-    /** Purchase Invoice. */
+    /** Vendor Invoice. */
     public static final String PURCHASE_INVOICE = "PURCHASE_INVOICE";
     /** Purchase Return. */
     public static final String PURC_RTN_INVOICE = "PURC_RTN_INVOICE";

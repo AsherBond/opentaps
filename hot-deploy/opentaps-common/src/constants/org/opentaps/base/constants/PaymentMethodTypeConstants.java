@@ -38,17 +38,17 @@ public final class PaymentMethodTypeConstants {
     public static final String CREDIT_CARD = "CREDIT_CARD";
     /** Electronic Funds Transfer. */
     public static final String EFT_ACCOUNT = "EFT_ACCOUNT";
+    /** Billing Account. */
+    public static final String EXT_BILLACT = "EXT_BILLACT";
     /** Bill to Third Party. */
     public static final String EXT_BILL_3RDPTY = "EXT_BILL_3RDPTY";
     /** Paid via COD. */
     public static final String EXT_BILL_3RDPTY_COD = "EXT_BILL_3RDPTY_COD";
-    /** Billing Account. */
-    public static final String EXT_BILLACT = "EXT_BILLACT";
     /** Cash On Delivery. */
     public static final String EXT_COD = "EXT_COD";
     /** eBay. */
     public static final String EXT_EBAY = "EXT_EBAY";
-    /** Check, Money Order, or On Credit. */
+    /** Offline Payment. */
     public static final String EXT_OFFLINE = "EXT_OFFLINE";
     /** PayPal. */
     public static final String EXT_PAYPAL = "EXT_PAYPAL";
