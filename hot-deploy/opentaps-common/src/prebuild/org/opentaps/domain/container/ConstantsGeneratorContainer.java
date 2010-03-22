@@ -54,6 +54,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 
+import freemarker.template.TemplateException;
 import org.apache.commons.io.FileUtils;
 import org.ofbiz.base.container.Container;
 import org.ofbiz.base.container.ContainerConfig;
@@ -69,8 +70,6 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.service.ServiceDispatcher;
-
-import freemarker.template.TemplateException;
 
 /**
  * Some utility routines for loading seed data.
@@ -95,6 +94,9 @@ public class ConstantsGeneratorContainer implements Container {
 
     /** Entries in <code>configProperties</code> with this value indicates the entities to query. */
     private static final String GENERATE_VALUE = "generate";
+
+    /** Prefix constants that starts with a number to make a valid Java constant name. */
+    private static final String NUMERIC_PREFIX = "_";
 
 
     /**
@@ -475,6 +477,9 @@ public class ConstantsGeneratorContainer implements Container {
             fieldName = fieldName.replace(' ', '_');
             fieldName = fieldName.replace('.', '_');
             fieldName = fieldName.replace('-', '_');
+            if (fieldName.substring(0, 1).matches("[0-9]")) {
+                fieldName = NUMERIC_PREFIX + fieldName;
+            }
             return fieldName;
         }
     }
