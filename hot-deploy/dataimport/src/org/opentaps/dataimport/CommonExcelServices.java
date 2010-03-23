@@ -273,9 +273,9 @@ public final class CommonExcelServices {
 
         try {
             // upload first
-            ModelService service = dctx.getModelService("uploadExcelFile");
+            ModelService service = dctx.getModelService("uploadExcelFileForDataImport");
             Map<String, Object> input = service.makeValid(context, "IN");
-            Map<String, Object> servResults = dispatcher.runSync("uploadExcelFile", input);
+            Map<String, Object> servResults = dispatcher.runSync("uploadExcelFileForDataImport", input);
             if (ServiceUtil.isError(servResults)) {
                 return UtilMessage.createAndLogServiceError(servResults, MODULE);
             }

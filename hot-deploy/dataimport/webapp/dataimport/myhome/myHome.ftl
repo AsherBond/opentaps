@@ -89,6 +89,14 @@
       <@inputHidden name="sectionHeaderUiLabel" value="DataImportImportFromFile"/>
       <table class="twoColumnForm">
         <@inputFileRow title=uiLabelMap.DataImportFileToImport name="uploadedFile" />
+        <tr>
+          <@displayTitleCell title=uiLabelMap.DataImportUploadFileFormat />
+          <td>
+            <select name="fileFormat" class="inputBox">
+              <option value="EXCEL">${uiLabelMap.DataImportUploadFileFormatExcel}</option>
+            </select>
+          </td>
+        </tr>
         <@inputSubmitRow title="${uiLabelMap.DataImportRunImport}"/>
       </table>
     </form>
