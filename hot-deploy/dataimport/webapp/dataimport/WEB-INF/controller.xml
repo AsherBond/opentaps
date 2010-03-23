@@ -103,9 +103,9 @@
         <response name="success" type="view" value="myHomeMain"/>
     </request-map>
 
-    <request-map uri="uploadFileAndSetServiceParameters">
+    <request-map uri="uploadFileAndImport">
         <security https="true" auth="true"/>
-        <event type="service" invoke="uploadExcelFileAndRunImportService"/>
+        <event type="service" invoke="uploadFileAndImport"/>
         <response name="error" type="view" value="myHomeMain"/>
         <response name="success" type="request-redirect-noparam" value="myHomeMain"/>
     </request-map>

@@ -19,6 +19,9 @@ package org.opentaps.dataimport;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -266,6 +269,7 @@ public final class CommonExcelServices {
      */
     public static Map<String, Object> uploadExcelFileAndRunImportService(DispatchContext dctx, Map<String, ? extends Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
+        List<String> msg = new ArrayList<String>();
 
         try {
             // upload first
@@ -276,14 +280,21 @@ public final class CommonExcelServices {
                 return UtilMessage.createAndLogServiceError(servResults, MODULE);
             }
 
-            // run the import service
-            String importService = (String) context.get("SERVICE_NAME");
-            Debug.logInfo("Running import service: " + importService, MODULE);
-            service = dctx.getModelService(importService);
-            input = service.makeValid(context, "IN");
-            servResults = dispatcher.runSync(importService, input);
-            if (ServiceUtil.isError(servResults)) {
-                return UtilMessage.createAndLogServiceError(servResults, MODULE);
+            List<String> services = Arrays.asList("importProductsFromExcel", "importSuppliersFromExcel");
+
+            // run the import services
+            for (String importService : services) {
+                Debug.logInfo("Running import service: " + importService, MODULE);
+                service = dctx.getModelService(importService);
+                input = service.makeValid(context, "IN");
+                servResults = dispatcher.runSync(importService, input);
+                if (ServiceUtil.isError(servResults)) {
+                    return UtilMessage.createAndLogServiceError(servResults, MODULE);
+                }
+                Object servMsg = servResults.get(ModelService.SUCCESS_MESSAGE);
+                if (servMsg != null) {
+                    msg.add(servMsg.toString());
+                }
             }
 
             // remove the uploaded file now
@@ -297,7 +308,16 @@ public final class CommonExcelServices {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
 
-        return ServiceUtil.returnSuccess();
+        StringBuilder outMsg = new StringBuilder();
+        for (Iterator<String> iter = msg.iterator(); iter.hasNext();) {
+            String m = iter.next();
+            outMsg.append(m);
+            if (iter.hasNext()) {
+                outMsg.append("\n");
+            }
+        }
+
+        return ServiceUtil.returnSuccess(outMsg.toString());
     }
 
 }

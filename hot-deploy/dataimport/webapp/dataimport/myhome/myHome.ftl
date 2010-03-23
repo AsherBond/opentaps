@@ -83,21 +83,12 @@
 <br/>
 
 <#if hasDIAdminPermissions?default(false)>
-  <@frameSection title=uiLabelMap.DataImportUploadExcelFile>
-    <form name="UploadExcelAndImport" method="post" enctype="multipart/form-data" action="uploadFileAndSetServiceParameters">
+  <@frameSection title=uiLabelMap.DataImportUploadFile>
+    <form name="UploadFileAndImport" method="post" enctype="multipart/form-data" action="uploadFileAndImport">
       <@inputHidden name="POOL_NAME" value="pool"/>
-      <@inputHidden name="sectionHeaderUiLabel" value="DataImportImportFromExcel"/>
+      <@inputHidden name="sectionHeaderUiLabel" value="DataImportImportFromFile"/>
       <table class="twoColumnForm">
         <@inputFileRow title=uiLabelMap.DataImportFileToImport name="uploadedFile" />
-        <tr>
-          <@displayTitleCell title=uiLabelMap.DataImportImport />
-          <td>
-            <select name="SERVICE_NAME" class="inputBox">
-              <option value="importProductsFromExcel">${uiLabelMap.ProductProducts}</option>
-              <option value="importSuppliersFromExcel">${uiLabelMap.PurchSuppliers}</option>
-            </select>
-          </td>
-        </tr>
         <@inputSubmitRow title="${uiLabelMap.DataImportRunImport}"/>
       </table>
     </form>

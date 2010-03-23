@@ -175,11 +175,10 @@
         <attribute name="_uploadedFile_contentType" type="String" mode="IN"/>
     </service>
 
-    <service name="uploadExcelFileAndRunImportService" engine="java" use-transaction="false"
+    <service name="uploadFileAndImport" engine="java" use-transaction="false"
              location="org.opentaps.dataimport.CommonExcelServices" invoke="uploadExcelFileAndRunImportService">
         <description>Upload an Excel file for Dataimport and run the given import service</description>
         <implements service="uploadExcelFile"/>
-        <attribute name="SERVICE_NAME" type="String" mode="IN"/>
     </service>
 
 </services>
