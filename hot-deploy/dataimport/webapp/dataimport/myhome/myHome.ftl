@@ -84,7 +84,7 @@
 
 <#if hasDIAdminPermissions?default(false)>
   <@frameSection title=uiLabelMap.DataImportUploadFile>
-    <form name="UploadFileAndImport" method="post" enctype="multipart/form-data" action="uploadFileAndImport">
+    <form name="uploadFileAndImport" method="post" enctype="multipart/form-data" action="uploadFileAndImport">
       <@inputHidden name="POOL_NAME" value="pool"/>
       <@inputHidden name="sectionHeaderUiLabel" value="DataImportImportFromFile"/>
       <table class="twoColumnForm">
@@ -97,7 +97,7 @@
             </select>
           </td>
         </tr>
-        <@inputSubmitRow title="${uiLabelMap.DataImportRunImport}"/>
+        <@inputSubmitRow title="${uiLabelMap.DataImportUpload}"/>
       </table>
     </form>
   </@frameSection>
