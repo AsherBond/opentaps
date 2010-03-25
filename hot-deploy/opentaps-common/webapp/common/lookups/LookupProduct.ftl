@@ -89,7 +89,7 @@
     <tr>
       <td align="right" class="tableheadtext">${uiLabelMap.ProductProductType}</td>
       <td style="padding-left: 20px;">
-        <@inputSelect name="productTypeId" list=productTypes key="productTypeId" displayField="description" required=false />        
+        <@inputSelect name="productTypeId" list=productTypes key="productTypeId" displayField="description" required=true />        
       </td>
     </tr>
 
