@@ -30,6 +30,8 @@ orderHeadersProcessed = 0;
 orderHeadersNotProcessed = 0;
 orderItemsProcessed = 0;
 orderItemsNotProcessed = 0;
+glAccountsProcessed = 0;
+glAccountsNotProcessed = 0;
 
 /*
   GET PROCESSED
@@ -44,6 +46,7 @@ productsProcessed = delegator.findCountByCondition("DataImportProduct", allCondi
 inventoryProcessed = delegator.findCountByCondition("DataImportInventory", allConditions, null);
 orderHeadersProcessed = delegator.findCountByCondition("DataImportOrderHeader", allConditions, null);
 orderItemsProcessed = delegator.findCountByCondition("DataImportOrderItem", allConditions, null);
+glAccountsProcessed = delegator.findCountByCondition("DataImportGlAccount", allConditions, null);
 
 /*
   GET NOT-PROCESSED
@@ -60,6 +63,7 @@ productsNotProcessed = delegator.findCountByCondition("DataImportProduct", statu
 inventoryNotProcessed = delegator.findCountByCondition("DataImportInventory", statusCond, null);
 orderHeadersNotProcessed = delegator.findCountByCondition("DataImportOrderHeader", statusCond, null);
 orderItemsNotProcessed = delegator.findCountByCondition("DataImportOrderItem", statusCond, null);
+glAccountsNotProcessed = delegator.findCountByCondition("DataImportGlAccount", statusCond, null);
 
 context.put("suppliersProcessed", suppliersProcessed);
 context.put("suppliersNotProcessed", suppliersNotProcessed);
@@ -73,3 +77,5 @@ context.put("orderHeadersProcessed", orderHeadersProcessed);
 context.put("orderHeadersNotProcessed", orderHeadersNotProcessed);
 context.put("orderItemsProcessed", orderItemsProcessed);
 context.put("orderItemsNotProcessed", orderItemsNotProcessed);
+context.put("glAccountsProcessed", glAccountsProcessed);
+context.put("glAccountsNotProcessed", glAccountsNotProcessed);
