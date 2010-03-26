@@ -83,5 +83,10 @@
   <entity-group group="org.ofbiz" entity="NetSuitePaymentTerm"/>
   <entity-group group="org.ofbiz" entity="NetSuitePriceList"/>
   <entity-group group="org.ofbiz" entity="NetSuiteItemPrice"/>
+  
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.accounting.ledger    -->
+  <!-- =================================== -->
+  <entity-group group="org.ofbiz" entity="DataImportGlAccount"/>
 
 </entitygroup>
