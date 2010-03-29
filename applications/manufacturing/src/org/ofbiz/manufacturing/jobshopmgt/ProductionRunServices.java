@@ -2102,7 +2102,8 @@ public class ProductionRunServices {
         serviceContext.put("userLogin", userLogin);
         Map resultService = null;
         try {
-            resultService = dispatcher.runSync("createProductionRunsForProductBom", serviceContext);
+            Debug.logInfo("calling opentaps.createProductionRun to handle outsourcing tasks...", module);
+            resultService = dispatcher.runSync("opentaps.createProductionRun", serviceContext);
         } catch (GenericServiceException e) {
             return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunNotCreated", locale) + ": " + e.getMessage());
         }
