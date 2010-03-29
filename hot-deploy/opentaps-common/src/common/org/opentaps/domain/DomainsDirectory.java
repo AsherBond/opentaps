@@ -17,6 +17,7 @@
 package org.opentaps.domain;
 
 import org.opentaps.domain.billing.BillingDomainInterface;
+import org.opentaps.domain.dataimport.DataImportDomainInterface;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
 import org.opentaps.domain.ledger.LedgerDomainInterface;
 import org.opentaps.domain.manufacturing.ManufacturingDomainInterface;
@@ -48,6 +49,7 @@ public class DomainsDirectory implements DomainContextInterface {
     private VoipDomainInterface voipDomain;
     private SearchDomainInterface searchDomain;
     private WebAppDomainInterface webAppDomain;
+    public DataImportDomainInterface dataImportDomain;
 
     private Infrastructure infrastructure;
     private User user;
@@ -223,6 +225,16 @@ public class DomainsDirectory implements DomainContextInterface {
 
     public void setWebAppDomain(WebAppDomainInterface webAppDomain) {
         this.webAppDomain = webAppDomain;
+    }
+
+    public DataImportDomainInterface getDataImportDomain() {
+        dataImportDomain.setInfrastructure(infrastructure);
+        dataImportDomain.setUser(user);
+        return dataImportDomain;
+    }
+
+    public void setDataImportDomain(DataImportDomainInterface dataImportDomain) {
+        this.dataImportDomain = dataImportDomain;
     }
 
 }
