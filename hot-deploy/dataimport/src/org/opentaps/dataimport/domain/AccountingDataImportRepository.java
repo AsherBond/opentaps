@@ -27,6 +27,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.StatusItemConstants;
 
+/** {@inheritDoc}. */
 public class AccountingDataImportRepository extends DomainRepository implements AccountingDataImportRepositoryInterface{
     
     /**
@@ -46,6 +47,7 @@ public class AccountingDataImportRepository extends DomainRepository implements 
         super(infrastructure, userLogin);
     }
 
+    /** {@inheritDoc}. */
     public List<DataImportGlAccount> findNotProcessesDataImportGlAccountEntries() throws RepositoryException {
         EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
         EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_NOT_PROC),

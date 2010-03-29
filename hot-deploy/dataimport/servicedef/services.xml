@@ -152,7 +152,7 @@
     <service name="importGlAccounts" engine="pojo" use-transaction="false"
              location="org.opentaps.dataimport.domain.GlAccountImportService" invoke="importGlAccounts">
         <description>
-            Import Great Ledger accounts using DataImportGlAccount.
+            Import Great Ledger accounts using DataImportGlAccount bridge entity.
             Note that this service is not wrapped in a transaction.  Each account record imported is in its
             own transaction, so it can store as many good records as possible.
         </description>

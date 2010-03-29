@@ -69,8 +69,7 @@ public class GlAccountImportService extends DomainService implements GlAccountIm
     }
     
     /** {@inheritDoc} */
-    public void importGlAccounts() throws ServiceException{
-        
+    public void importGlAccounts() throws ServiceException{        
         try {
             this.session = this.getInfrastructure().getSession();
             
@@ -79,6 +78,7 @@ public class GlAccountImportService extends DomainService implements GlAccountIm
             
             List<DataImportGlAccount> dataforimp = imp_repo.findNotProcessesDataImportGlAccountEntries();
             
+            int imported = 0;
             Transaction imp_tx1 = null;
             Transaction imp_tx2 = null;
             for(int i = 0; i < dataforimp.size(); i++){
@@ -119,6 +119,8 @@ public class GlAccountImportService extends DomainService implements GlAccountIm
                     String message = "Successfully imported General Ledger account [" + rawdata.getGlAccountId() + "].";                   
                     this.storeImportGlAccountSuccess(rawdata, imp_repo);
                     Debug.logInfo(message, MODULE);
+                    
+                    imported = imported + 1;
                      
                 }catch(Exception ex){
                     String message = "Failed to import General Ledger account [" + rawdata.getGlAccountId() + "], Error message : " + ex.getMessage();
@@ -137,6 +139,8 @@ public class GlAccountImportService extends DomainService implements GlAccountIm
                 }
             }
             
+            this.importedRecords = imported;
+            
         } catch (InfrastructureException ex) {
             Debug.logError(ex, MODULE);
             throw new ServiceException(ex.getMessage());
@@ -146,14 +150,27 @@ public class GlAccountImportService extends DomainService implements GlAccountIm
         }
     }
     
+    /**
+     * Helper method to store GL account import succes into <code>DataImportGlAccount</code> entity row.
+     * @param rawdata item of <code>DataImportGlAccount</code> entity that was successfully imported
+     * @param imp_repo repository of accounting
+     * @throws org.opentaps.foundation.repository.RepositoryException
+     */
     private void storeImportGlAccountSuccess(DataImportGlAccount rawdata, AccountingDataImportRepositoryInterface imp_repo) throws RepositoryException {
-        // store the exception and mark as failed
+        // mark as success
         rawdata.setImportStatusId(StatusItemConstants.Dataimport.DATAIMP_IMPORTED);
         rawdata.setImportError(null);
         rawdata.setProcessedTimestamp(UtilDateTime.nowTimestamp());
         imp_repo.createOrUpdate(rawdata);
     }
 
+    /**
+     * Helper method to store GL account import error into <code>DataImportGlAccount</code> entity row.
+     * @param rawdata item of <code>DataImportGlAccount</code> entity that was unsuccessfully imported
+     * @param message error message
+     * @param imp_repo repository of accounting
+     * @throws org.opentaps.foundation.repository.RepositoryException
+     */
     private void storeImportGlAccountError(DataImportGlAccount rawdata, String message, AccountingDataImportRepositoryInterface imp_repo) throws RepositoryException {
         // store the exception and mark as failed
         rawdata.setImportStatusId(StatusItemConstants.Dataimport.DATAIMP_FAILED);

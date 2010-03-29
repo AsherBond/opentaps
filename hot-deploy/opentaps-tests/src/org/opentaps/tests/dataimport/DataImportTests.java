@@ -23,6 +23,7 @@ import java.util.Map;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -195,20 +196,120 @@ public class DataImportTests extends OpentapsTestCase {
     }
     
     /**
-     * Verify that the importGlAccounts can successfully import GL accounts so that transactions can be posted to them
+     * Verify that the importGlAccounts can successfully import GL accounts so that transactions can be posted to them.
+     * 1. Verify importGlAccounts service success.
+     * 2. Run service postAcctgTrans and verify success.
      */
-    public void testImportGlAccount() {
-    	// use delegator.getNextSeqId to get 3 glAccountIds, gl1, gl2, gl3
-    	// create DataImportGlAccount values for gl1, gl2, gl3, with gl1 being the parent of gl2, with classifications:
+    public void testImportGlAccount() throws Exception {
+        // 1a. use delegator.getNextSeqId to get 3 glAccountIds, gl1, gl2, gl3
+        String gl1 = delegator.getNextSeqId("GlAccount");
+        String gl2 = Integer.valueOf(Integer.valueOf(gl1).intValue()+1).toString();
+        String gl3 = Integer.valueOf(Integer.valueOf(gl2).intValue()+1).toString();
+
+        // 1b. create DataImportGlAccount values for gl1, gl2, gl3, with gl1 being the parent of gl2, with classifications:
     	//   gl1 - CURRENT_ASSET
     	//   gl2 - ACCOUNTS_RECEIVABLE
     	//   gl3 - ACCOUNTS_PAYABLE
-    	// run the importGlAccounts test with organizationPartyId=Company, verify that it's successful
-    	// create an accounting transaction for Company with
+        
+        GenericValue dataImportGlAccount1 = delegator.makeValue("DataImportGlAccount");
+        dataImportGlAccount1.set("glAccountId", gl1);
+        dataImportGlAccount1.set("classification", "CURRENT_ASSET");
+        delegator.create(dataImportGlAccount1);
+        dataImportGlAccount1.store();
+        
+        GenericValue dataImportGlAccount2 = delegator.makeValue("DataImportGlAccount");
+        dataImportGlAccount2.set("glAccountId", gl2);
+        dataImportGlAccount2.set("parentGlAccountId", gl1);
+        dataImportGlAccount2.set("classification", "ACCOUNTS_RECEIVABLE");
+        delegator.create(dataImportGlAccount2); 
+        
+        GenericValue dataImportGlAccount3 = delegator.makeValue("DataImportGlAccount");
+        dataImportGlAccount3.set("glAccountId", gl3);
+        dataImportGlAccount3.set("classification", "ACCOUNTS_PAYABLE");
+        delegator.create(dataImportGlAccount3);
+        
+        // 1c. run the importGlAccounts test with organizationPartyId=Company, verify that it's successful
+        Map<String, Object> results = dispatcher.runSync("importGlAccounts", UtilMisc.toMap("organizationPartyId", "Company"));
+        
+        Integer imported = (Integer)results.get("importedRecords");
+        assertTrue("Imported GL accounts ("+imported+") is less than 2, should be at least 3.", imported.compareTo(Integer.valueOf(2)) > 0);
+        GenericValue glAccount1 = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", gl1));
+        assertNotNull("There is no imported GlAccount["+gl1+"] .", glAccount1);
+        GenericValue glAccount2 = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", gl2));
+        assertNotNull("There is no imported GlAccount["+gl2+"] .", glAccount2);
+        GenericValue glAccount3 = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", gl3));
+        assertNotNull("There is no imported GlAccount["+gl3+"] .", glAccount3);
+        
+        GenericValue glAccountOrganization1 = delegator.findByPrimaryKey("GlAccountOrganization", UtilMisc.toMap("glAccountId", gl1, "organizationPartyId", "Company"));
+        assertNotNull("There is no imported GlAccountOrganization["+gl1+",'Company'] .", glAccountOrganization1);
+        GenericValue glAccountOrganization2 = delegator.findByPrimaryKey("GlAccountOrganization", UtilMisc.toMap("glAccountId", gl2, "organizationPartyId", "Company"));
+        assertNotNull("There is no imported GlAccountOrganization["+gl2+",'Company'] .", glAccountOrganization2);
+        GenericValue glAccountOrganization3 = delegator.findByPrimaryKey("GlAccountOrganization", UtilMisc.toMap("glAccountId", gl3, "organizationPartyId", "Company"));
+        assertNotNull("There is no imported GlAccountOrganization["+gl3+",'Company'] .", glAccountOrganization3);
+        
+        assertEquals("GL Account["+gl1+"] type Id has not correct value","CURRENT_ASSET", glAccount1.getString("glAccountTypeId"));
+        assertEquals("GL Account["+gl1+"] class Id has not correct value","CASH_EQUIVALENT", glAccount1.getString("glAccountClassId"));
+        assertEquals("GL Account["+gl2+"] parent Id has not correct value", gl1, glAccount2.getString("parentGlAccountId") );
+        assertNotNull("GL Account Organization ["+gl1+",'Company'] fromDate is empty", glAccountOrganization1.get("fromDate"));
+        
+        // 2a. create an accounting transaction for Company with
     	//   gl1 D 100
     	//   gl2 D 200
     	//   gl3 C 300
-    	// run postAcctgTrans for the accounting transaction and verify that it's successful
+        
+        GenericValue acctgTrans = delegator.makeValue("AcctgTrans");
+        String acctgTransId = delegator.getNextSeqId("AcctgTrans");
+        acctgTrans.set("acctgTransId", acctgTransId);
+        acctgTrans.set("isPosted", "N");
+        delegator.create(acctgTrans);
+        
+        GenericValue acctgTransEntry1 = delegator.makeValue("AcctgTransEntry");
+        acctgTransEntry1.set("acctgTransId", acctgTransId);
+        acctgTransEntry1.set("acctgTransEntrySeqId", "1");
+        acctgTransEntry1.set("glAccountId", gl1);
+        acctgTransEntry1.set("organizationPartyId", "Company");
+        acctgTransEntry1.set("amount", 100);
+        acctgTransEntry1.set("currencyUomId", "USD");
+        acctgTransEntry1.set("debitCreditFlag", "D");
+        delegator.create(acctgTransEntry1);
+        
+        GenericValue acctgTransEntry2 = delegator.makeValue("AcctgTransEntry");
+        acctgTransEntry2.set("acctgTransId", acctgTransId);
+        acctgTransEntry2.set("acctgTransEntrySeqId", "2");
+        acctgTransEntry2.set("glAccountId", gl2);
+        acctgTransEntry2.set("organizationPartyId", "Company");
+        acctgTransEntry2.set("amount", 200);
+        acctgTransEntry2.set("currencyUomId", "USD");
+        acctgTransEntry2.set("debitCreditFlag", "D");
+        delegator.create(acctgTransEntry2);
+        
+        GenericValue acctgTransEntry3 = delegator.makeValue("AcctgTransEntry");
+        acctgTransEntry3.set("acctgTransId", acctgTransId);
+        acctgTransEntry3.set("acctgTransEntrySeqId", "3");
+        acctgTransEntry3.set("glAccountId", gl3);
+        acctgTransEntry3.set("organizationPartyId", "Company");
+        acctgTransEntry3.set("amount", 300);
+        acctgTransEntry3.set("currencyUomId", "USD");
+        acctgTransEntry3.set("debitCreditFlag", "C");
+        delegator.create(acctgTransEntry3);
+
+    	// 2b. run postAcctgTrans for the accounting transaction and verify that it's successful
+        results = dispatcher.runSync("postAcctgTrans", UtilMisc.toMap("userLogin", admin, "acctgTransId", acctgTransId));
+        
+        acctgTrans = delegator.findByPrimaryKey("AcctgTrans", UtilMisc.toMap("acctgTransId", acctgTransId));
+        assertEquals("AcctgTrans["+acctgTransId+"] posted amount ("+acctgTrans.getBigDecimal("postedAmount")+") is not equal to transaction debit total (300)", BigDecimal.valueOf(300), acctgTrans.getBigDecimal("postedAmount"));
+        assertEquals("Accauting transaction is not posted", "Y", acctgTrans.getString("isPosted"));
+
+        
     }
 
 }
+
+
+
+
+
+
+
+
+
