@@ -151,9 +151,9 @@
       </#if>
       <#if transDescription?has_content>      
       <tr class="${tableRowClass(row_index)}">
-        <td align="center">&nbsp;</td>
-        <td colspan="13">
-        ${transDescription}
+        <td align="center" colspan="4">&nbsp;</td>
+        <td colspan="10">
+        <i>${transDescription}</i>
         </td>
       </tr>
       </#if>  
