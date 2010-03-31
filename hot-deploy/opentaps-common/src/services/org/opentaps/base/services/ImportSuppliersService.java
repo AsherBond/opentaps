@@ -36,7 +36,7 @@ import org.opentaps.foundation.infrastructure.User;
  * 
             Import suppliers using DataImportSupplier.
             Note that this service is not wrapped in a transaction.  Each supplier record imported is in its
-            own transaction, so it can store as many good records as possible. 
+            own transaction, so it can store as many good records as possible.
         .
  * Auto generated base service entity importSuppliers.
  *

@@ -35,6 +35,7 @@
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_product.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_shoppinglist.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_tax.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_accounting.xml"/>
 
     <!-- Import Entities to handle imports from other CRM systems -->
     <!-- <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_mscrm.xml"/>     -->
@@ -46,6 +47,7 @@
     <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoImportSupplier.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoImportOrders.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoImportProducts.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoImportAccounting.xml"/>
 
     <entity-resource type="data" reader-name="demo" loader="main" location="data/DataImportDemoUsers.xml"/>
 

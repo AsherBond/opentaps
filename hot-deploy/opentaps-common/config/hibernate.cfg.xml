@@ -1262,6 +1262,7 @@
   <mapping class="org.opentaps.base.entities.DataImportShoppingListItem"/>
   <mapping class="org.opentaps.base.entities.DataImportUSZipCodes"/>
   <mapping class="org.opentaps.base.entities.DataImportUSCountyTax"/>
+  <mapping class="org.opentaps.base.entities.DataImportGlAccount"/>
   <mapping class="org.opentaps.base.entities.NetSuiteItem"/>
   <mapping class="org.opentaps.base.entities.NetSuiteCustomer"/>
   <mapping class="org.opentaps.base.entities.NetSuiteAddressBook"/>

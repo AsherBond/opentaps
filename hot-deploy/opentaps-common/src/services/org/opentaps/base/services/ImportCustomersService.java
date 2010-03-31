@@ -36,10 +36,10 @@ import org.opentaps.foundation.infrastructure.User;
  * 
             Import customers using DataImportCustomer.  Specify the initial party that is responsible
             for these records in CRMSFA.  Also specify the Accounts Receivable General Ledger account
-            with arGlAccountId, the offsetting account with offsettingGlAccountId, and the organization 
+            with arGlAccountId, the offsetting account with offsettingGlAccountId, and the organization
             of these accounts with organizationPartyId.
             Note that this service is not wrapped in a transaction.  Each customer record imported is in its
-            own transaction, so it can store as many good records as possible. 
+            own transaction, so it can store as many good records as possible.
         .
  * Auto generated base service entity importCustomers.
  *

@@ -78,6 +78,13 @@
     <@displayCell text="${orderItemsProcessed}"/>
     <@displayCell text="${orderItemsNotProcessed}"/>
   </tr>
+  <tr>
+    <@importForm importService="importGlAccounts"
+                 sectionLabel="DataImportImportGlAccounts"
+                 label=uiLabelMap.DataImportGlAccountsLines
+                 submitLabel=uiLabelMap.DataImportImportGlAccounts
+                 processed=glAccountsProcessed notProcessed=glAccountsNotProcessed/>
+  </tr>
 </table>
 
 <br/>
