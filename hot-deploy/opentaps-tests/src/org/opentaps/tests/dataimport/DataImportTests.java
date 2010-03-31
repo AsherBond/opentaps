@@ -23,12 +23,26 @@ import java.util.Map;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.base.entities.AcctgTrans;
+import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.DataImportGlAccount;
+import org.opentaps.base.entities.GlAccount;
+import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.dataimport.AccountingDataImportRepositoryInterface;
+import org.opentaps.domain.dataimport.DataImportDomainInterface;
+import org.opentaps.domain.dataimport.GlAccountImportServiceInterface;
+import org.opentaps.domain.ledger.AccountingTransaction;
+import org.opentaps.domain.ledger.LedgerDomainInterface;
+import org.opentaps.domain.ledger.LedgerRepositoryInterface;
+import org.opentaps.domain.ledger.LedgerServiceInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.tests.OpentapsTestCase;
 import org.opentaps.tests.crmsfa.orders.OrderTests;
 import org.opentaps.tests.financials.AgreementTests;
@@ -201,7 +215,15 @@ public class DataImportTests extends OpentapsTestCase {
      * 2. Run service postAcctgTrans and verify success.
      */
     public void testImportGlAccount() throws Exception {
+        //obtain domains and repositories which is needed in the test
+        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(this.admin));
+        DataImportDomainInterface imp_domain = domainLoader.loadDomainsDirectory().getDataImportDomain();
+        AccountingDataImportRepositoryInterface imp_repos = imp_domain.getAccountingDataImportRepository();                
+        LedgerDomainInterface ledger_domain = domainLoader.loadDomainsDirectory().getLedgerDomain();
+        LedgerRepositoryInterface leger_repos = ledger_domain.getLedgerRepository();
+        
         // 1a. use delegator.getNextSeqId to get 3 glAccountIds, gl1, gl2, gl3
+        
         String gl1 = delegator.getNextSeqId("GlAccount");
         String gl2 = Integer.valueOf(Integer.valueOf(gl1).intValue()+1).toString();
         String gl3 = Integer.valueOf(Integer.valueOf(gl2).intValue()+1).toString();
@@ -211,96 +233,101 @@ public class DataImportTests extends OpentapsTestCase {
     	//   gl2 - ACCOUNTS_RECEIVABLE
     	//   gl3 - ACCOUNTS_PAYABLE
         
-        GenericValue dataImportGlAccount1 = delegator.makeValue("DataImportGlAccount");
-        dataImportGlAccount1.set("glAccountId", gl1);
-        dataImportGlAccount1.set("classification", "CURRENT_ASSET");
-        delegator.create(dataImportGlAccount1);
-        dataImportGlAccount1.store();
+        DataImportGlAccount dataImportGlAccount1 = new DataImportGlAccount();
+        dataImportGlAccount1.setGlAccountId(gl1);
+        dataImportGlAccount1.setClassification("CURRENT_ASSET");
+        imp_repos.createOrUpdate(dataImportGlAccount1);
         
-        GenericValue dataImportGlAccount2 = delegator.makeValue("DataImportGlAccount");
-        dataImportGlAccount2.set("glAccountId", gl2);
-        dataImportGlAccount2.set("parentGlAccountId", gl1);
-        dataImportGlAccount2.set("classification", "ACCOUNTS_RECEIVABLE");
-        delegator.create(dataImportGlAccount2); 
+        DataImportGlAccount dataImportGlAccount2 = new DataImportGlAccount();
+        dataImportGlAccount2.setGlAccountId(gl2);
+        dataImportGlAccount2.setParentGlAccountId(gl1);
+        dataImportGlAccount2.setClassification("ACCOUNTS_RECEIVABLE");
+        imp_repos.createOrUpdate(dataImportGlAccount2);
         
-        GenericValue dataImportGlAccount3 = delegator.makeValue("DataImportGlAccount");
-        dataImportGlAccount3.set("glAccountId", gl3);
-        dataImportGlAccount3.set("classification", "ACCOUNTS_PAYABLE");
-        delegator.create(dataImportGlAccount3);
-        
+        DataImportGlAccount dataImportGlAccount3 = new DataImportGlAccount();
+        dataImportGlAccount3.setGlAccountId(gl3);        
+        dataImportGlAccount3.setClassification("ACCOUNTS_PAYABLE");
+        imp_repos.createOrUpdate(dataImportGlAccount3);
+
         // 1c. run the importGlAccounts test with organizationPartyId=Company, verify that it's successful
-        Map<String, Object> results = dispatcher.runSync("importGlAccounts", UtilMisc.toMap("organizationPartyId", "Company"));
         
-        Integer imported = (Integer)results.get("importedRecords");
+        GlAccountImportServiceInterface glAccountImportService = imp_domain.getGlAccountImportService();
+        glAccountImportService.setOrganizationPartyId("Company");
+        glAccountImportService.importGlAccounts();
+        
+        Integer imported = glAccountImportService.getImportedRecords();
         assertTrue("Imported GL accounts ("+imported+") is less than 2, should be at least 3.", imported.compareTo(Integer.valueOf(2)) > 0);
-        GenericValue glAccount1 = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", gl1));
+        GlAccount glAccount1 = leger_repos.findOne(GlAccount.class, leger_repos.map(GlAccount.Fields.glAccountId, gl1));
         assertNotNull("There is no imported GlAccount["+gl1+"] .", glAccount1);
-        GenericValue glAccount2 = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", gl2));
+        GlAccount glAccount2 = leger_repos.findOne(GlAccount.class, leger_repos.map(GlAccount.Fields.glAccountId, gl2));
         assertNotNull("There is no imported GlAccount["+gl2+"] .", glAccount2);
-        GenericValue glAccount3 = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", gl3));
+        GlAccount glAccount3 = leger_repos.findOne(GlAccount.class, leger_repos.map(GlAccount.Fields.glAccountId, gl3));
         assertNotNull("There is no imported GlAccount["+gl3+"] .", glAccount3);
         
-        GenericValue glAccountOrganization1 = delegator.findByPrimaryKey("GlAccountOrganization", UtilMisc.toMap("glAccountId", gl1, "organizationPartyId", "Company"));
+        GlAccountOrganization glAccountOrganization1 = leger_repos.findOne(GlAccountOrganization.class, 
+                leger_repos.map(GlAccountOrganization.Fields.glAccountId, gl1, GlAccountOrganization.Fields.organizationPartyId, "Company"));
         assertNotNull("There is no imported GlAccountOrganization["+gl1+",'Company'] .", glAccountOrganization1);
-        GenericValue glAccountOrganization2 = delegator.findByPrimaryKey("GlAccountOrganization", UtilMisc.toMap("glAccountId", gl2, "organizationPartyId", "Company"));
+        GlAccountOrganization glAccountOrganization2 = leger_repos.findOne(GlAccountOrganization.class, 
+                leger_repos.map(GlAccountOrganization.Fields.glAccountId, gl2, GlAccountOrganization.Fields.organizationPartyId, "Company"));
         assertNotNull("There is no imported GlAccountOrganization["+gl2+",'Company'] .", glAccountOrganization2);
-        GenericValue glAccountOrganization3 = delegator.findByPrimaryKey("GlAccountOrganization", UtilMisc.toMap("glAccountId", gl3, "organizationPartyId", "Company"));
+        GlAccountOrganization glAccountOrganization3 = leger_repos.findOne(GlAccountOrganization.class, 
+                leger_repos.map(GlAccountOrganization.Fields.glAccountId, gl3, GlAccountOrganization.Fields.organizationPartyId, "Company"));
         assertNotNull("There is no imported GlAccountOrganization["+gl3+",'Company'] .", glAccountOrganization3);
         
-        assertEquals("GL Account["+gl1+"] type Id has not correct value","CURRENT_ASSET", glAccount1.getString("glAccountTypeId"));
-        assertEquals("GL Account["+gl1+"] class Id has not correct value","CASH_EQUIVALENT", glAccount1.getString("glAccountClassId"));
-        assertEquals("GL Account["+gl2+"] parent Id has not correct value", gl1, glAccount2.getString("parentGlAccountId") );
-        assertNotNull("GL Account Organization ["+gl1+",'Company'] fromDate is empty", glAccountOrganization1.get("fromDate"));
+        assertEquals("GL Account["+gl1+"] type Id has not correct value","CURRENT_ASSET", glAccount1.getGlAccountTypeId());
+        assertEquals("GL Account["+gl1+"] class Id has not correct value","CASH_EQUIVALENT", glAccount1.getGlAccountClassId());
+        assertEquals("GL Account["+gl2+"] parent Id has not correct value", gl1, glAccount2.getParentGlAccountId() );
+        assertNotNull("GL Account Organization ["+gl1+",'Company'] fromDate is empty", glAccountOrganization1.getFromDate());
         
         // 2a. create an accounting transaction for Company with
     	//   gl1 D 100
     	//   gl2 D 200
     	//   gl3 C 300
         
-        GenericValue acctgTrans = delegator.makeValue("AcctgTrans");
-        String acctgTransId = delegator.getNextSeqId("AcctgTrans");
-        acctgTrans.set("acctgTransId", acctgTransId);
-        acctgTrans.set("isPosted", "N");
-        delegator.create(acctgTrans);
+        AcctgTrans acctgTrans = new AcctgTrans();
+        acctgTrans.setAcctgTransId(delegator.getNextSeqId("AcctgTrans"));
+        acctgTrans.setIsPosted("N");
+        leger_repos.createOrUpdate(acctgTrans);
         
-        GenericValue acctgTransEntry1 = delegator.makeValue("AcctgTransEntry");
-        acctgTransEntry1.set("acctgTransId", acctgTransId);
-        acctgTransEntry1.set("acctgTransEntrySeqId", "1");
-        acctgTransEntry1.set("glAccountId", gl1);
-        acctgTransEntry1.set("organizationPartyId", "Company");
-        acctgTransEntry1.set("amount", 100);
-        acctgTransEntry1.set("currencyUomId", "USD");
-        acctgTransEntry1.set("debitCreditFlag", "D");
-        delegator.create(acctgTransEntry1);
+        AcctgTransEntry acctgTransEntry1 = new AcctgTransEntry();
+        acctgTransEntry1.setAcctgTransId(acctgTrans.getAcctgTransId());
+        acctgTransEntry1.setAcctgTransEntrySeqId("1");
+        acctgTransEntry1.setGlAccountId(gl1);
+        acctgTransEntry1.setOrganizationPartyId("Company");
+        acctgTransEntry1.setAmount(BigDecimal.valueOf(100));
+        acctgTransEntry1.setCurrencyUomId("USD");
+        acctgTransEntry1.setDebitCreditFlag("D");
+        leger_repos.createOrUpdate(acctgTransEntry1);
         
-        GenericValue acctgTransEntry2 = delegator.makeValue("AcctgTransEntry");
-        acctgTransEntry2.set("acctgTransId", acctgTransId);
-        acctgTransEntry2.set("acctgTransEntrySeqId", "2");
-        acctgTransEntry2.set("glAccountId", gl2);
-        acctgTransEntry2.set("organizationPartyId", "Company");
-        acctgTransEntry2.set("amount", 200);
-        acctgTransEntry2.set("currencyUomId", "USD");
-        acctgTransEntry2.set("debitCreditFlag", "D");
-        delegator.create(acctgTransEntry2);
+        AcctgTransEntry acctgTransEntry2 = new AcctgTransEntry();
+        acctgTransEntry2.setAcctgTransId(acctgTrans.getAcctgTransId());
+        acctgTransEntry2.setAcctgTransEntrySeqId("2");
+        acctgTransEntry2.setGlAccountId(gl2);
+        acctgTransEntry2.setOrganizationPartyId("Company");
+        acctgTransEntry2.setAmount(BigDecimal.valueOf(200));
+        acctgTransEntry2.setCurrencyUomId("USD");
+        acctgTransEntry2.setDebitCreditFlag("D");
+        leger_repos.createOrUpdate(acctgTransEntry2);
         
-        GenericValue acctgTransEntry3 = delegator.makeValue("AcctgTransEntry");
-        acctgTransEntry3.set("acctgTransId", acctgTransId);
-        acctgTransEntry3.set("acctgTransEntrySeqId", "3");
-        acctgTransEntry3.set("glAccountId", gl3);
-        acctgTransEntry3.set("organizationPartyId", "Company");
-        acctgTransEntry3.set("amount", 300);
-        acctgTransEntry3.set("currencyUomId", "USD");
-        acctgTransEntry3.set("debitCreditFlag", "C");
-        delegator.create(acctgTransEntry3);
+        AcctgTransEntry acctgTransEntry3 = new AcctgTransEntry();
+        acctgTransEntry3.setAcctgTransId(acctgTrans.getAcctgTransId());
+        acctgTransEntry3.setAcctgTransEntrySeqId("3");
+        acctgTransEntry3.setGlAccountId(gl3);
+        acctgTransEntry3.setOrganizationPartyId("Company");
+        acctgTransEntry3.setAmount(BigDecimal.valueOf(300));
+        acctgTransEntry3.setCurrencyUomId("USD");
+        acctgTransEntry3.setDebitCreditFlag("C");
+        leger_repos.createOrUpdate(acctgTransEntry3);
 
     	// 2b. run postAcctgTrans for the accounting transaction and verify that it's successful
-        results = dispatcher.runSync("postAcctgTrans", UtilMisc.toMap("userLogin", admin, "acctgTransId", acctgTransId));
         
-        acctgTrans = delegator.findByPrimaryKey("AcctgTrans", UtilMisc.toMap("acctgTransId", acctgTransId));
-        assertEquals("AcctgTrans["+acctgTransId+"] posted amount ("+acctgTrans.getBigDecimal("postedAmount")+") is not equal to transaction debit total (300)", BigDecimal.valueOf(300), acctgTrans.getBigDecimal("postedAmount"));
-        assertEquals("Accauting transaction is not posted", "Y", acctgTrans.getString("isPosted"));
-
+        LedgerServiceInterface ledgerService = ledger_domain.getLedgerService();
+        ledgerService.setAcctgTransId(acctgTrans.getAcctgTransId());
+        ledgerService.postAcctgTrans();
         
+        AccountingTransaction changedAcctgTrans = leger_repos.getAccountingTransaction(acctgTrans.getAcctgTransId());
+        assertEquals("AcctgTrans["+acctgTrans.getAcctgTransId()+"] posted amount ("+acctgTrans.getBigDecimal("postedAmount")+") is not equal to transaction debit total (300)", BigDecimal.valueOf(300), changedAcctgTrans.getPostedAmount());
+        assertEquals("Accauting transaction is not posted", "Y", changedAcctgTrans.getIsPosted());
     }
 
 }

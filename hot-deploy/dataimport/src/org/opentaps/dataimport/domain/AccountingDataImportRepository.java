@@ -22,10 +22,10 @@ import org.opentaps.domain.DomainRepository;
 import org.opentaps.domain.dataimport.AccountingDataImportRepositoryInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.foundation.infrastructure.User;
 
 /** {@inheritDoc}. */
 public class AccountingDataImportRepository extends DomainRepository implements AccountingDataImportRepositoryInterface{
@@ -40,11 +40,11 @@ public class AccountingDataImportRepository extends DomainRepository implements 
      /**
      * If you want the full infrastructure including the dispatcher, then you must have the User.
      * @param infrastructure the domain infrastructure
-     * @param userLogin the Ofbiz <code>UserLogin</code> generic value
+     * @param user the domain user
      * @throws RepositoryException if an error occurs
      */
-    public AccountingDataImportRepository(Infrastructure infrastructure, GenericValue userLogin) throws RepositoryException {
-        super(infrastructure, userLogin);
+    public AccountingDataImportRepository(Infrastructure infrastructure, User user) throws RepositoryException {
+        super(infrastructure, user);
     }
 
     /** {@inheritDoc}. */
