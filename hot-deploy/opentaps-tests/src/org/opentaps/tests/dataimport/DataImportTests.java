@@ -252,7 +252,7 @@ public class DataImportTests extends OpentapsTestCase {
         // 1c. run the importGlAccounts test with organizationPartyId=Company, verify that it's successful
         
         GlAccountImportServiceInterface glAccountImportService = imp_domain.getGlAccountImportService();
-        glAccountImportService.setOrganizationPartyId("Company");
+        glAccountImportService.setOrganizationPartyId(organizationPartyId);
         glAccountImportService.importGlAccounts();
         
         Integer imported = glAccountImportService.getImportedRecords();
@@ -265,13 +265,13 @@ public class DataImportTests extends OpentapsTestCase {
         assertNotNull("There is no imported GlAccount["+gl3+"] .", glAccount3);
         
         GlAccountOrganization glAccountOrganization1 = leger_repos.findOne(GlAccountOrganization.class, 
-                leger_repos.map(GlAccountOrganization.Fields.glAccountId, gl1, GlAccountOrganization.Fields.organizationPartyId, "Company"));
+                leger_repos.map(GlAccountOrganization.Fields.glAccountId, gl1, GlAccountOrganization.Fields.organizationPartyId, organizationPartyId));
         assertNotNull("There is no imported GlAccountOrganization["+gl1+",'Company'] .", glAccountOrganization1);
         GlAccountOrganization glAccountOrganization2 = leger_repos.findOne(GlAccountOrganization.class, 
-                leger_repos.map(GlAccountOrganization.Fields.glAccountId, gl2, GlAccountOrganization.Fields.organizationPartyId, "Company"));
+                leger_repos.map(GlAccountOrganization.Fields.glAccountId, gl2, GlAccountOrganization.Fields.organizationPartyId, organizationPartyId));
         assertNotNull("There is no imported GlAccountOrganization["+gl2+",'Company'] .", glAccountOrganization2);
         GlAccountOrganization glAccountOrganization3 = leger_repos.findOne(GlAccountOrganization.class, 
-                leger_repos.map(GlAccountOrganization.Fields.glAccountId, gl3, GlAccountOrganization.Fields.organizationPartyId, "Company"));
+                leger_repos.map(GlAccountOrganization.Fields.glAccountId, gl3, GlAccountOrganization.Fields.organizationPartyId, organizationPartyId));
         assertNotNull("There is no imported GlAccountOrganization["+gl3+",'Company'] .", glAccountOrganization3);
         
         assertEquals("GL Account["+gl1+"] type Id has not correct value","CURRENT_ASSET", glAccount1.getGlAccountTypeId());
@@ -293,7 +293,7 @@ public class DataImportTests extends OpentapsTestCase {
         acctgTransEntry1.setAcctgTransId(acctgTrans.getAcctgTransId());
         acctgTransEntry1.setAcctgTransEntrySeqId("1");
         acctgTransEntry1.setGlAccountId(gl1);
-        acctgTransEntry1.setOrganizationPartyId("Company");
+        acctgTransEntry1.setOrganizationPartyId(organizationPartyId);
         acctgTransEntry1.setAmount(BigDecimal.valueOf(100));
         acctgTransEntry1.setCurrencyUomId("USD");
         acctgTransEntry1.setDebitCreditFlag("D");
@@ -303,7 +303,7 @@ public class DataImportTests extends OpentapsTestCase {
         acctgTransEntry2.setAcctgTransId(acctgTrans.getAcctgTransId());
         acctgTransEntry2.setAcctgTransEntrySeqId("2");
         acctgTransEntry2.setGlAccountId(gl2);
-        acctgTransEntry2.setOrganizationPartyId("Company");
+        acctgTransEntry2.setOrganizationPartyId(organizationPartyId);
         acctgTransEntry2.setAmount(BigDecimal.valueOf(200));
         acctgTransEntry2.setCurrencyUomId("USD");
         acctgTransEntry2.setDebitCreditFlag("D");
@@ -313,7 +313,7 @@ public class DataImportTests extends OpentapsTestCase {
         acctgTransEntry3.setAcctgTransId(acctgTrans.getAcctgTransId());
         acctgTransEntry3.setAcctgTransEntrySeqId("3");
         acctgTransEntry3.setGlAccountId(gl3);
-        acctgTransEntry3.setOrganizationPartyId("Company");
+        acctgTransEntry3.setOrganizationPartyId(organizationPartyId);
         acctgTransEntry3.setAmount(BigDecimal.valueOf(300));
         acctgTransEntry3.setCurrencyUomId("USD");
         acctgTransEntry3.setDebitCreditFlag("C");
@@ -327,7 +327,7 @@ public class DataImportTests extends OpentapsTestCase {
         
         AccountingTransaction changedAcctgTrans = leger_repos.getAccountingTransaction(acctgTrans.getAcctgTransId());
         assertEquals("AcctgTrans["+acctgTrans.getAcctgTransId()+"] posted amount ("+acctgTrans.getBigDecimal("postedAmount")+") is not equal to transaction debit total (300)", BigDecimal.valueOf(300), changedAcctgTrans.getPostedAmount());
-        assertEquals("Accauting transaction is not posted", "Y", changedAcctgTrans.getIsPosted());
+        assertEquals("Accounting transaction [" + changedAcctgTrans.getAcctgTransId() + "] is not posted", changedAcctgTrans.isPosted());
     }
 
 }
