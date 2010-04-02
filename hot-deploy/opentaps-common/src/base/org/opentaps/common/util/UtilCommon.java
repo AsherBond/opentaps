@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -63,6 +64,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.ofbiz.base.component.ComponentConfig;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
@@ -1629,5 +1631,19 @@ public abstract class UtilCommon {
             return string;
         }
         return string.replaceAll("'", "&apos;");
+    }
+    
+    /**
+     * Split string to Vector.
+     * @param ids a <code>String</code> value
+     * @return a <code>Vector</code> value
+     */
+    public static Vector stringToVector(String ids) {
+        Vector vector = new Vector();
+        List<String> idList = StringUtil.split(ids, ",");
+      for (String id : idList) {
+           vector.add(id);
+      }
+      return vector;
     }
 }
