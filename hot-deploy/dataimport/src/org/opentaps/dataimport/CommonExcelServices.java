@@ -18,6 +18,8 @@
 package org.opentaps.dataimport;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +30,9 @@ import java.util.Map;
 import javolution.util.FastList;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
@@ -41,6 +46,8 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.DataImportProduct;
+import org.opentaps.base.entities.DataImportSupplier;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.entity.EntityInterface;
 
@@ -52,6 +59,10 @@ public final class CommonExcelServices {
     private CommonExcelServices() { }
 
     private static final String MODULE = CommonExcelServices.class.getName();
+    
+    private static final String EXCEL_PRODUCT_TAB = "Products";
+    private static final String EXCEL_SUPPLIERS_TAB = "Suppliers";
+    private static final List<String> EXCEL_TABS = Arrays.asList(EXCEL_PRODUCT_TAB, EXCEL_SUPPLIERS_TAB);
 
     /**
      * Gets the data import directory path for Excel files.
@@ -262,6 +273,92 @@ public final class CommonExcelServices {
     }
 
     /**
+     * Take each row of an Excel sheet and put it into DataImportProduct
+     * @param sheet
+     * @param delegator
+     * @throws GenericEntityException
+     */
+    protected static void createDataImportProducts(HSSFSheet sheet, GenericDelegator delegator) throws GenericEntityException {
+    	 int sheetLastRowNumber = sheet.getLastRowNum();
+    	 List<DataImportProduct> products = FastList.newInstance();
+         
+         for (int j = 1; j <= sheetLastRowNumber; j++) {
+             HSSFRow row = sheet.getRow(j);
+             if (isNotEmpty(row)) {
+                 // row index starts at 0 here but is actually 1 in Excel
+                 int rowNum = row.getRowNum() + 1;
+                 // read productId from first column "sheet column index
+                 // starts from 0"
+                 String id = CommonExcelServices.readStringCell(row, 0);
+
+                 if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("productId")) {
+                     Debug.logWarning("Row number " + rowNum + " not imported from Products tab: invalid ID value [" + id + "].", MODULE);
+                     continue;
+                 }
+
+                 DataImportProduct product = new DataImportProduct();
+                 product.setProductId(id);
+                 product.setProductTypeId(CommonExcelServices.readStringCell(row, 1));
+                 product.setDescription(CommonExcelServices.readStringCell(row, 2));
+                 product.setPrice(CommonExcelServices.readBigDecimalCell(row, 3));
+                 product.setPriceCurrencyUomId(CommonExcelServices.readStringCell(row, 4));
+                 product.setSupplierPartyId(CommonExcelServices.readStringCell(row, 5));
+                 product.setPurchasePrice(CommonExcelServices.readBigDecimalCell(row, 6));
+                 products.add(product);
+             }
+         }
+         // create and store values in "DataImportProduct" in database
+         CommonExcelServices.makeValues(delegator, products);
+    }
+    
+    /**
+     * Take each row of an Excel sheet and put it into DataImportSupplier
+     * @param sheet
+     * @param delegator
+     * @throws GenericEntityException
+     */
+    protected static void createDataImportSuppliers(HSSFSheet sheet, GenericDelegator delegator) throws GenericEntityException {
+    	
+    	List<DataImportSupplier> suppliers = FastList.newInstance();
+    	int sheetLastRowNumber = sheet.getLastRowNum();
+    	for (int j = 1; j <= sheetLastRowNumber; j++) {
+    		HSSFRow row = sheet.getRow(j);
+    		if (isNotEmpty(row)) {
+    			// row index starts at 0 here but is actually 1 in Excel
+    			int rowNum = row.getRowNum() + 1;
+    			// read supplierId from first column "sheet column index
+    			// starts from 0"
+    			String id = CommonExcelServices.readStringCell(row, 0);
+
+    			if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("supplierId")) {
+    				Debug.logWarning("Row number " + rowNum + " not imported from Suppliers tab: invalid ID value [" + id + "].", MODULE);
+    				continue;
+    			}
+
+    			DataImportSupplier supplier = new DataImportSupplier();
+    			supplier.setSupplierId(id);
+    			supplier.setSupplierName(CommonExcelServices.readStringCell(row, 1));
+    			supplier.setAddress1(CommonExcelServices.readStringCell(row, 2));
+    			supplier.setAddress2(CommonExcelServices.readStringCell(row, 3));
+    			supplier.setCity(CommonExcelServices.readStringCell(row, 4));
+    			supplier.setStateProvinceGeoId(CommonExcelServices.readStringCell(row, 5));
+    			supplier.setPostalCode(CommonExcelServices.readStringCell(row, 6));
+    			supplier.setCountryGeoId(CommonExcelServices.readStringCell(row, 7));
+    			supplier.setPrimaryPhoneCountryCode(CommonExcelServices.readStringCell(row, 8));
+    			supplier.setPrimaryPhoneAreaCode(CommonExcelServices.readStringCell(row, 9));
+    			supplier.setPrimaryPhoneNumber(CommonExcelServices.readStringCell(row, 10));
+    			supplier.setNetPaymentDays(CommonExcelServices.readLongCell(row, 11));
+    			supplier.setIsIncorporated(CommonExcelServices.readStringCell(row, 12));
+    			supplier.setFederalTaxId(CommonExcelServices.readStringCell(row, 13));
+    			supplier.setRequires1099(CommonExcelServices.readStringCell(row, 14));
+    			suppliers.add(supplier);
+    		}
+    	}
+    	// create and store values in "DataImportSupplier" in database
+    	CommonExcelServices.makeValues(delegator, suppliers);
+    }
+    
+    /**
      * Uploads an Excel file in the correct directory.
      * @param dctx a <code>DispatchContext</code> value
      * @param context a <code>Map</code> value
@@ -269,8 +366,7 @@ public final class CommonExcelServices {
      */
     public static Map<String, Object> uploadExcelFileAndRunImportService(DispatchContext dctx, Map<String, ? extends Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        List<String> msg = new ArrayList<String>();
-
+        
         try {
             // upload first
             ModelService service = dctx.getModelService("uploadExcelFileForDataImport");
@@ -280,26 +376,41 @@ public final class CommonExcelServices {
                 return UtilMessage.createAndLogServiceError(servResults, MODULE);
             }
 
-            List<String> services = Arrays.asList("importProductsFromExcel", "importSuppliersFromExcel");
-
-            // run the import services
-            for (String importService : services) {
-                Debug.logInfo("Running import service: " + importService, MODULE);
-                service = dctx.getModelService(importService);
-                input = service.makeValid(context, "IN");
-                servResults = dispatcher.runSync(importService, input);
-                if (ServiceUtil.isError(servResults)) {
-                    return UtilMessage.createAndLogServiceError(servResults, MODULE);
-                }
-                Object servMsg = servResults.get(ModelService.SUCCESS_MESSAGE);
-                if (servMsg != null) {
-                    msg.add(servMsg.toString());
-                }
-            }
-
-            // remove the uploaded file now
+            // Get the uploaded file
             String fileName = (String) context.get("_uploadedFile_fileName");
             File file = getUploadedExcelFile(fileName);
+            
+            // set it up as an Excel workbook
+            POIFSFileSystem fs = null;
+            HSSFWorkbook wb = null;
+            try {
+                // this will auto close the FileInputStream when the constructor completes
+                fs = new POIFSFileSystem(new FileInputStream(file));
+                wb = new HSSFWorkbook(fs);
+            } catch (IOException e) {
+                return UtilMessage.createAndLogServiceError(e, "Unable to read or create workbook from file", MODULE);
+            }
+            
+            // loop through the tabs and import them one by one
+            for (String excelTab: EXCEL_TABS) {
+            	 HSSFSheet sheet = wb.getSheet(excelTab);
+                 if (sheet == null) {
+                     Debug.logWarning("Did not find a sheet named " + excelTab + " in " + file.getName() + ".  Will not be importing anything.", MODULE);
+                 } else {
+                	 try {
+                		 if (EXCEL_PRODUCT_TAB.equals(excelTab)) {
+                			 createDataImportProducts(sheet, dctx.getDelegator());
+                		 } else if (EXCEL_SUPPLIERS_TAB.equals(excelTab)) {
+                			 createDataImportSuppliers(sheet, dctx.getDelegator());
+                		 } // etc.
+                	 } catch (GenericEntityException e) {
+                         return UtilMessage.createAndLogServiceError(e, "Cannot store DataImportSupplier", MODULE);
+                     } 
+                 }
+            	
+            }
+          
+            // remove the uploaded file now
             if (!file.delete()) {
                 Debug.logWarning("Could not delete the file : " + file.getName(), MODULE);
             }
@@ -307,17 +418,7 @@ public final class CommonExcelServices {
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
-
-        StringBuilder outMsg = new StringBuilder();
-        for (Iterator<String> iter = msg.iterator(); iter.hasNext();) {
-            String m = iter.next();
-            outMsg.append(m);
-            if (iter.hasNext()) {
-                outMsg.append("\n");
-            }
-        }
-
-        return ServiceUtil.returnSuccess(outMsg.toString());
+        return ServiceUtil.returnSuccess();
     }
 
 }
