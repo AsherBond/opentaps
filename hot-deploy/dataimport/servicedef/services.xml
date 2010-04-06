@@ -164,19 +164,15 @@
         <description>Upload a file for Dataimport</description>
     </service>
 
-    <service name="uploadFileForDataImport" engine="java" use-transaction="false"
+    <service name="uploadFileForDataImport" engine="java" use-transaction="true"
              location="org.opentaps.dataimport.CommonImportServices" invoke="uploadFileForDataImport">
-       <description>Upload a file for Dataimport by running the service corresponding to the file format</description>
+       <description>Upload a file for Dataimport by running the service corresponding to the file format
+	   Currently on EXCEL is supported as a fileFormat
+	   Unlike other data import services, this is all in one transaction, so if part of the file fails, it is rejected</description>
        <attribute name="uploadedFile" type="java.nio.ByteBuffer" mode="IN"/>
        <attribute name="_uploadedFile_fileName" type="String" mode="IN"/>
        <attribute name="_uploadedFile_contentType" type="String" mode="IN"/>
        <attribute name="fileFormat" type="String" mode="IN" optional="true"/>
-    </service>
-
-    <service name="parseExcelFileForDataImport" engine="java" use-transaction="false"
-             location="org.opentaps.dataimport.ExcelImportServices" invoke="parseExcelFileForDataImport">
-       <description>Parse an uploaded file in Excel format into DataImport* entities.  Then deletes the file.</description>
-       <attribute name="_uploadedFile_fileName" type="String" mode="IN"/>		
     </service>
 
 </services>
