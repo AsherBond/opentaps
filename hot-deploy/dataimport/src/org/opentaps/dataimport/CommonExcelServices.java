@@ -69,7 +69,7 @@ public final class CommonExcelServices {
      * @return a <code>String</code> value
      */
     public static String getExcelUploadPath() {
-        return System.getProperty("user.dir") + File.separatorChar + "hot-deploy" + File.separatorChar + "dataimport" + File.separatorChar + "data" + File.separatorChar + "xls" + File.separatorChar;
+        return System.getProperty("user.dir") + File.separatorChar + "runtime" + File.separatorChar + "data" + File.separatorChar;
     }
 
     /**
@@ -107,44 +107,7 @@ public final class CommonExcelServices {
     public static File getUploadedExcelFile(String fileName) {
         return getUploadedExcelFile(getExcelUploadPath(), fileName);
     }
-
-    /**
-     * Gets the List of Excel Files in the default directory.
-     * @param path the path <code>String</code> of the directory to look files into
-     * @return the List of File found
-     */
-    public static List<File> getUploadedExcelFiles(String path) {
-        List<File> fileItems = FastList.newInstance();
-        if (UtilValidate.isNotEmpty(path)) {
-            File importDir = new File(path);
-            if (importDir.isDirectory() && importDir.canRead()) {
-                File[] files = importDir.listFiles();
-                // loop for all the containing xls file in the spreadsheet
-                // directory
-                for (int i = 0; i < files.length; i++) {
-                    if (files[i].getName().toUpperCase().endsWith("XLS")) {
-                        fileItems.add(files[i]);
-                    }
-                }
-            } else {
-                Debug.logWarning("Directory not found or can't be read " + path, MODULE);
-                return fileItems;
-            }
-        } else {
-            Debug.logWarning("No path specified, doing nothing", MODULE);
-            return fileItems;
-        }
-        return fileItems;
-    }
-
-    /**
-     * Gets the List of Excel Files in the standard Excel upload directory.
-     * @return the List of File found
-     */
-    public static List<File> getUploadedExcelFiles() {
-        return getUploadedExcelFiles(getExcelUploadPath());
-    }
-
+    
     /**
      * Helper method to check if an Excel row is empty.
      * @param row a <code>HSSFRow</code> value
