@@ -21,9 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -54,11 +52,9 @@ import org.opentaps.foundation.entity.EntityInterface;
 /**
  * Common services and helper methods related to Excel files uploading and management.
  */
-public final class CommonExcelServices {
+public final class ExcelImportServices {
 
-    private CommonExcelServices() { }
-
-    private static final String MODULE = CommonExcelServices.class.getName();
+    private static final String MODULE = ExcelImportServices.class.getName();
     
     private static final String EXCEL_PRODUCT_TAB = "Products";
     private static final String EXCEL_SUPPLIERS_TAB = "Suppliers";
@@ -252,7 +248,7 @@ public final class CommonExcelServices {
                  int rowNum = row.getRowNum() + 1;
                  // read productId from first column "sheet column index
                  // starts from 0"
-                 String id = CommonExcelServices.readStringCell(row, 0);
+                 String id = readStringCell(row, 0);
 
                  if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("productId")) {
                      Debug.logWarning("Row number " + rowNum + " not imported from Products tab: invalid ID value [" + id + "].", MODULE);
@@ -261,17 +257,17 @@ public final class CommonExcelServices {
 
                  DataImportProduct product = new DataImportProduct();
                  product.setProductId(id);
-                 product.setProductTypeId(CommonExcelServices.readStringCell(row, 1));
-                 product.setDescription(CommonExcelServices.readStringCell(row, 2));
-                 product.setPrice(CommonExcelServices.readBigDecimalCell(row, 3));
-                 product.setPriceCurrencyUomId(CommonExcelServices.readStringCell(row, 4));
-                 product.setSupplierPartyId(CommonExcelServices.readStringCell(row, 5));
-                 product.setPurchasePrice(CommonExcelServices.readBigDecimalCell(row, 6));
+                 product.setProductTypeId(readStringCell(row, 1));
+                 product.setDescription(readStringCell(row, 2));
+                 product.setPrice(readBigDecimalCell(row, 3));
+                 product.setPriceCurrencyUomId(readStringCell(row, 4));
+                 product.setSupplierPartyId(readStringCell(row, 5));
+                 product.setPurchasePrice(readBigDecimalCell(row, 6));
                  products.add(product);
              }
          }
          // create and store values in "DataImportProduct" in database
-         CommonExcelServices.makeValues(delegator, products);
+         makeValues(delegator, products);
     }
     
     /**
@@ -291,7 +287,7 @@ public final class CommonExcelServices {
     			int rowNum = row.getRowNum() + 1;
     			// read supplierId from first column "sheet column index
     			// starts from 0"
-    			String id = CommonExcelServices.readStringCell(row, 0);
+    			String id = readStringCell(row, 0);
 
     			if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("supplierId")) {
     				Debug.logWarning("Row number " + rowNum + " not imported from Suppliers tab: invalid ID value [" + id + "].", MODULE);
@@ -300,25 +296,25 @@ public final class CommonExcelServices {
 
     			DataImportSupplier supplier = new DataImportSupplier();
     			supplier.setSupplierId(id);
-    			supplier.setSupplierName(CommonExcelServices.readStringCell(row, 1));
-    			supplier.setAddress1(CommonExcelServices.readStringCell(row, 2));
-    			supplier.setAddress2(CommonExcelServices.readStringCell(row, 3));
-    			supplier.setCity(CommonExcelServices.readStringCell(row, 4));
-    			supplier.setStateProvinceGeoId(CommonExcelServices.readStringCell(row, 5));
-    			supplier.setPostalCode(CommonExcelServices.readStringCell(row, 6));
-    			supplier.setCountryGeoId(CommonExcelServices.readStringCell(row, 7));
-    			supplier.setPrimaryPhoneCountryCode(CommonExcelServices.readStringCell(row, 8));
-    			supplier.setPrimaryPhoneAreaCode(CommonExcelServices.readStringCell(row, 9));
-    			supplier.setPrimaryPhoneNumber(CommonExcelServices.readStringCell(row, 10));
-    			supplier.setNetPaymentDays(CommonExcelServices.readLongCell(row, 11));
-    			supplier.setIsIncorporated(CommonExcelServices.readStringCell(row, 12));
-    			supplier.setFederalTaxId(CommonExcelServices.readStringCell(row, 13));
-    			supplier.setRequires1099(CommonExcelServices.readStringCell(row, 14));
+    			supplier.setSupplierName(readStringCell(row, 1));
+    			supplier.setAddress1(readStringCell(row, 2));
+    			supplier.setAddress2(readStringCell(row, 3));
+    			supplier.setCity(readStringCell(row, 4));
+    			supplier.setStateProvinceGeoId(readStringCell(row, 5));
+    			supplier.setPostalCode(readStringCell(row, 6));
+    			supplier.setCountryGeoId(readStringCell(row, 7));
+    			supplier.setPrimaryPhoneCountryCode(readStringCell(row, 8));
+    			supplier.setPrimaryPhoneAreaCode(readStringCell(row, 9));
+    			supplier.setPrimaryPhoneNumber(readStringCell(row, 10));
+    			supplier.setNetPaymentDays(readLongCell(row, 11));
+    			supplier.setIsIncorporated(readStringCell(row, 12));
+    			supplier.setFederalTaxId(readStringCell(row, 13));
+    			supplier.setRequires1099(readStringCell(row, 14));
     			suppliers.add(supplier);
     		}
     	}
     	// create and store values in "DataImportSupplier" in database
-    	CommonExcelServices.makeValues(delegator, suppliers);
+    	makeValues(delegator, suppliers);
     }
     
     /**

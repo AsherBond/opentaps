@@ -168,13 +168,13 @@
     </service>
 
     <service name="uploadExcelFileForDataImport" engine="java" use-transaction="false"
-             location="org.opentaps.dataimport.CommonExcelServices" invoke="uploadExcelFile">
+             location="org.opentaps.dataimport.ExcelImportServices" invoke="uploadExcelFile">
         <description>Upload an Excel file for Dataimport</description>
         <implements service="uploadFileForDataImport"/>
     </service>
 
     <service name="uploadExcelFileAndRunImportService" engine="java" use-transaction="false"
-             location="org.opentaps.dataimport.CommonExcelServices" invoke="uploadExcelFileAndRunImportService">
+             location="org.opentaps.dataimport.ExcelImportServices" invoke="uploadExcelFileAndRunImportService">
         <description>Upload an Excel file for Dataimport and run the corresponding import service</description>
         <implements service="uploadFileForDataImport"/>
     </service>
