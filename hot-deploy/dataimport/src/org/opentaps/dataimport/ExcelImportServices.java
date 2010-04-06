@@ -22,7 +22,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javolution.util.FastList;
@@ -37,17 +39,20 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
-import org.ofbiz.service.DispatchContext;
-import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.entities.DataImportProduct;
 import org.opentaps.base.entities.DataImportSupplier;
-import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.DomainService;
+import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.service.ServiceException;
 
 /**
  * Common services and helper methods related to Excel files uploading and management.
  */
-public final class ExcelImportServices {
+public final class ExcelImportServices extends DomainService {
 
     private static final String MODULE = ExcelImportServices.class.getName();
     
@@ -55,14 +60,23 @@ public final class ExcelImportServices {
     private static final String EXCEL_SUPPLIERS_TAB = "Suppliers";
     private static final List<String> EXCEL_TABS = Arrays.asList(EXCEL_PRODUCT_TAB, EXCEL_SUPPLIERS_TAB);
 
+    private String uploadedFileName;
+    
+    public ExcelImportServices() {
+    	super();
+    }
    
+    public ExcelImportServices(Infrastructure infrastructure, User user, Locale locale) throws ServiceException {
+        super(infrastructure, user, locale);
+    } 
+    
     /**
      * Gets the specified Excel File in the given directory.
      * @param path the path <code>String</code> of the directory to look files into
      * @param fileName the name of the file to find in the path
      * @return the File found
      */
-    public static File getUploadedExcelFile(String path, String fileName) {
+    public File getUploadedExcelFile(String path, String fileName) {
         String name = path;
         if (File.separatorChar == name.charAt(name.length() - 1)) {
             name += File.separatorChar;
@@ -88,7 +102,7 @@ public final class ExcelImportServices {
      * @param fileName the name of the file to find in the path
      * @return the File found
      */
-    public static File getUploadedExcelFile(String fileName) {
+    public File getUploadedExcelFile(String fileName) {
         return getUploadedExcelFile(CommonImportServices.getUploadPath(), fileName);
     }
     
@@ -97,7 +111,7 @@ public final class ExcelImportServices {
      * @param row a <code>HSSFRow</code> value
      * @return a <code>boolean</code> value
      */
-    public static boolean isNotEmpty(HSSFRow row) {
+    public boolean isNotEmpty(HSSFRow row) {
         if (row == null) {
             return false;
         }
@@ -115,7 +129,7 @@ public final class ExcelImportServices {
      * @param maps the list of Map containing the values to store
      * @exception GenericEntityException if an error occurs
      */
-    public static void makeValues(GenericDelegator delegator, String entityName, List<Map<String, Object>> maps) throws GenericEntityException {
+    public void makeValues(GenericDelegator delegator, String entityName, List<Map<String, Object>> maps) throws GenericEntityException {
         for (int j = 0; j < maps.size(); j++) {
             GenericValue value = delegator.makeValue(entityName, maps.get(j));
             delegator.create(value);
@@ -128,7 +142,7 @@ public final class ExcelImportServices {
      * @param entities the list of <code>EntityInterface</code> to store
      * @exception GenericEntityException if an error occurs
      */
-    public static void makeValues(GenericDelegator delegator, List<? extends EntityInterface> entities) throws GenericEntityException {
+    public void makeValues(GenericDelegator delegator, List<? extends EntityInterface> entities) throws GenericEntityException {
         for (EntityInterface entity : entities) {
             ModelEntity model = delegator.getModelReader().getModelEntity(entity.getBaseEntityName());
             GenericValue value = GenericValue.create(model, entity.toMap());
@@ -142,7 +156,7 @@ public final class ExcelImportServices {
      * @param index the column index <code>int</code> value which is then casted to a short
      * @return a <code>String</code> value
      */
-    public static String readStringCell(HSSFRow row, int index) {
+    public String readStringCell(HSSFRow row, int index) {
         HSSFCell cell = row.getCell((short) index);
         if (cell == null) {
             return null;
@@ -158,7 +172,7 @@ public final class ExcelImportServices {
      * @param index the column index <code>int</code> value which is then casted to a short
      * @return a <code>Long</code> value
      */
-    public static Long readLongCell(HSSFRow row, int index) {
+    public Long readLongCell(HSSFRow row, int index) {
         HSSFCell cell = row.getCell((short) index);
         if (cell == null) {
             return null;
@@ -177,7 +191,7 @@ public final class ExcelImportServices {
      * @param index the column index <code>int</code> value which is then casted to a short
      * @return a <code>BigDecimal</code> value
      */
-    public static BigDecimal readBigDecimalCell(HSSFRow row, int index) {
+    public BigDecimal readBigDecimalCell(HSSFRow row, int index) {
         HSSFCell cell = row.getCell((short) index);
         if (cell == null) {
             return null;
@@ -192,7 +206,7 @@ public final class ExcelImportServices {
      * @param delegator
      * @throws GenericEntityException
      */
-    protected static void createDataImportProducts(HSSFSheet sheet, GenericDelegator delegator) throws GenericEntityException {
+    protected Collection<? extends EntityInterface> createDataImportProducts(HSSFSheet sheet) throws RepositoryException {
     	 int sheetLastRowNumber = sheet.getLastRowNum();
     	 List<DataImportProduct> products = FastList.newInstance();
          
@@ -221,9 +235,8 @@ public final class ExcelImportServices {
                  products.add(product);
              }
          }
-         // create and store values in "DataImportProduct" in database
-         makeValues(delegator, products);
-    }
+         return products;
+     }
     
     /**
      * Take each row of an Excel sheet and put it into DataImportSupplier
@@ -231,7 +244,7 @@ public final class ExcelImportServices {
      * @param delegator
      * @throws GenericEntityException
      */
-    protected static void createDataImportSuppliers(HSSFSheet sheet, GenericDelegator delegator) throws GenericEntityException {
+    protected Collection<? extends EntityInterface> createDataImportSuppliers(HSSFSheet sheet) throws RepositoryException {
     	
     	List<DataImportSupplier> suppliers = FastList.newInstance();
     	int sheetLastRowNumber = sheet.getLastRowNum();
@@ -268,8 +281,8 @@ public final class ExcelImportServices {
     			suppliers.add(supplier);
     		}
     	}
-    	// create and store values in "DataImportSupplier" in database
-    	makeValues(delegator, suppliers);
+    	
+    	return suppliers;
     }
     
     /**
@@ -278,11 +291,10 @@ public final class ExcelImportServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    public static Map<String, Object> parseExcelFileForDataImport(DispatchContext dctx, Map<String, ? extends Object> context) {
+    public void parseFileForDataImport() throws ServiceException {
 
     	// Get the uploaded file
-    	String fileName = (String) context.get("_uploadedFile_fileName");
-    	File file = getUploadedExcelFile(fileName);
+    	File file = getUploadedExcelFile(getUploadedFileName());
 
     	// set it up as an Excel workbook
     	POIFSFileSystem fs = null;
@@ -292,34 +304,48 @@ public final class ExcelImportServices {
     		fs = new POIFSFileSystem(new FileInputStream(file));
     		wb = new HSSFWorkbook(fs);
     	} catch (IOException e) {
-    		return UtilMessage.createAndLogServiceError(e, "Unable to read or create workbook from file", MODULE);
+    		throw new ServiceException("Unable to read or create workbook from file [" + getUploadedFileName() + "] " + e.getMessage());
     	}
 
     	// loop through the tabs and import them one by one
-    	for (String excelTab: EXCEL_TABS) {
-    		HSSFSheet sheet = wb.getSheet(excelTab);
-    		if (sheet == null) {
-    			Debug.logWarning("Did not find a sheet named " + excelTab + " in " + file.getName() + ".  Will not be importing anything.", MODULE);
-    		} else {
-    			try {
+    	try {
+    		// a collection of all the records from all the excel spreadsheet tabs
+        	FastList entitiesToCreate = FastList.newInstance();
+        	
+    		for (String excelTab: EXCEL_TABS) {
+    			HSSFSheet sheet = wb.getSheet(excelTab);
+    			if (sheet == null) {
+    				Debug.logWarning("Did not find a sheet named " + excelTab + " in " + file.getName() + ".  Will not be importing anything.", MODULE);
+    			} else {
     				if (EXCEL_PRODUCT_TAB.equals(excelTab)) {
-    					createDataImportProducts(sheet, dctx.getDelegator());
+    					entitiesToCreate.addAll(createDataImportProducts(sheet));
     				} else if (EXCEL_SUPPLIERS_TAB.equals(excelTab)) {
-    					createDataImportSuppliers(sheet, dctx.getDelegator());
+    					entitiesToCreate.addAll(createDataImportSuppliers(sheet));
     				} // etc.
-    			} catch (GenericEntityException e) {
-    				return UtilMessage.createAndLogServiceError(e, "Cannot store DataImportSupplier", MODULE);
-    			} 
-    		}
+    			}
+    		} 
+        	// create and store values from all the sheets in the workbook in database using the PartyRepositoryInterface
+        	// note we're just using the most basic repository method, so any repository could do here
+        	PartyRepositoryInterface partyRepo = this.getDomainsDirectory().getPartyDomain().getPartyRepository();
+        	partyRepo.createOrUpdate(entitiesToCreate);
 
+    	} catch (RepositoryException e) {
+    		throw new ServiceException(e);
     	}
+
 
     	// remove the uploaded file now
     	if (!file.delete()) {
     		Debug.logWarning("Could not delete the file : " + file.getName(), MODULE);
     	}
-
-    	return ServiceUtil.returnSuccess();
     }
+
+	public void setUploadedFileName(String uploadedFileName) {
+		this.uploadedFileName = uploadedFileName;
+	}
+
+	public String getUploadedFileName() {
+		return uploadedFileName;
+	}
 
 }

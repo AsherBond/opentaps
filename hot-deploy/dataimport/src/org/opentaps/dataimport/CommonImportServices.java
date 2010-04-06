@@ -18,17 +18,22 @@
 package org.opentaps.dataimport;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.service.ServiceException;
 
 /**
  * Common services and helper methods related to files uploading and management.
@@ -58,6 +63,7 @@ public final class CommonImportServices {
         String fileFormat = (String) context.get("fileFormat");
         String fileName = (String) context.get("_uploadedFile_fileName");
         String mimeTypeId = (String) context.get("_uploadedFile_contentType");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         if (mimeTypeId != null && mimeTypeId.length() > 60) {
             // XXX This is a fix to avoid problems where an OS gives us a mime type that is too long to fit in 60 chars
@@ -79,19 +85,21 @@ public final class CommonImportServices {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
         // for now we only support EXCEL format
-        String serviceName;
         if ("EXCEL".equalsIgnoreCase(fileFormat)) {
-            serviceName = "parseExcelFileForDataImport";
+        	ExcelImportServices excelImportService;
+			try {
+				excelImportService = new ExcelImportServices(new Infrastructure(dispatcher), new User(userLogin), (Locale) context.get("locale"));
+				excelImportService.setUploadedFileName(fileName);
+	        	excelImportService.parseFileForDataImport();
+	        } catch (ServiceException e) {
+				return UtilMessage.createAndLogServiceError(e, MODULE);
+			} catch (IllegalArgumentException e) {
+				return UtilMessage.createAndLogServiceError(e, MODULE);
+			}
         } else {
             return UtilMessage.createAndLogServiceError("[" + fileFormat + "] is not a supported file format.", MODULE);
         }
-
-        try {
-            ModelService service = dctx.getModelService(serviceName);
-            input = service.makeValid(context, "IN");
-            return dispatcher.runSync(serviceName, input);
-        } catch (GeneralException e) {
-            return UtilMessage.createAndLogServiceError(e, MODULE);
-        }
+        
+		return ServiceUtil.returnSuccess();
     }
 }
