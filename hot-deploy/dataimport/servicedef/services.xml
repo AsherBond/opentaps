@@ -162,28 +162,21 @@
 
     <service name="uploadFileForDataImport" engine="interface" location="" invoke="">
         <description>Upload a file for Dataimport</description>
-        <attribute name="uploadedFile" type="java.nio.ByteBuffer" mode="IN"/>
-        <attribute name="_uploadedFile_fileName" type="String" mode="IN"/>
-        <attribute name="_uploadedFile_contentType" type="String" mode="IN"/>
     </service>
 
-    <service name="uploadExcelFileForDataImport" engine="java" use-transaction="false"
-             location="org.opentaps.dataimport.ExcelImportServices" invoke="uploadExcelFile">
-        <description>Upload an Excel file for Dataimport</description>
-        <implements service="uploadFileForDataImport"/>
+    <service name="uploadFileForDataImport" engine="java" use-transaction="false"
+             location="org.opentaps.dataimport.CommonImportServices" invoke="uploadFileForDataImport">
+       <description>Upload a file for Dataimport by running the service corresponding to the file format</description>
+       <attribute name="uploadedFile" type="java.nio.ByteBuffer" mode="IN"/>
+       <attribute name="_uploadedFile_fileName" type="String" mode="IN"/>
+       <attribute name="_uploadedFile_contentType" type="String" mode="IN"/>
+       <attribute name="fileFormat" type="String" mode="IN" optional="true"/>
     </service>
 
-    <service name="uploadExcelFileAndRunImportService" engine="java" use-transaction="false"
-             location="org.opentaps.dataimport.ExcelImportServices" invoke="uploadExcelFileAndRunImportService">
-        <description>Upload an Excel file for Dataimport and run the corresponding import service</description>
-        <implements service="uploadFileForDataImport"/>
-    </service>
-
-    <service name="uploadFileAndImport" engine="java" use-transaction="false"
-             location="org.opentaps.dataimport.CommonImportServices" invoke="uploadFileAndRunImportService">
-        <description>Upload a file for Dataimport by running the service corresponding to the file format</description>
-        <implements service="uploadFileForDataImport"/>
-        <attribute name="fileFormat" type="String" mode="IN" optional="true"/>
+    <service name="parseExcelFileForDataImport" engine="java" use-transaction="false"
+             location="org.opentaps.dataimport.ExcelImportServices" invoke="parseExcelFileForDataImport">
+       <description>Parse an uploaded file in Excel format into DataImport* entities.  Then deletes the file.</description>
+       <attribute name="_uploadedFile_fileName" type="String" mode="IN"/>		
     </service>
 
 </services>

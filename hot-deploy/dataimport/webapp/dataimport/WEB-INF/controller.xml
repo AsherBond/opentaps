@@ -103,9 +103,9 @@
         <response name="success" type="view" value="myHomeMain"/>
     </request-map>
 
-    <request-map uri="uploadFileAndImport">
+    <request-map uri="uploadFileForDataImport">
         <security https="true" auth="true"/>
-        <event type="service" invoke="uploadFileAndImport"/>
+        <event type="service" invoke="uploadFileForDataImport"/>
         <response name="error" type="view" value="myHomeMain"/>
         <response name="success" type="request-redirect-noparam" value="myHomeMain"/>
     </request-map>

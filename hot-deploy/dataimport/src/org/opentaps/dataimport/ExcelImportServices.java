@@ -32,17 +32,12 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.GeneralException;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.service.DispatchContext;
-import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.service.LocalDispatcher;
-import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.entities.DataImportProduct;
 import org.opentaps.base.entities.DataImportSupplier;
@@ -60,14 +55,7 @@ public final class ExcelImportServices {
     private static final String EXCEL_SUPPLIERS_TAB = "Suppliers";
     private static final List<String> EXCEL_TABS = Arrays.asList(EXCEL_PRODUCT_TAB, EXCEL_SUPPLIERS_TAB);
 
-    /**
-     * Gets the data import directory path for Excel files.
-     * @return a <code>String</code> value
-     */
-    public static String getExcelUploadPath() {
-        return System.getProperty("user.dir") + File.separatorChar + "runtime" + File.separatorChar + "data" + File.separatorChar;
-    }
-
+   
     /**
      * Gets the specified Excel File in the given directory.
      * @param path the path <code>String</code> of the directory to look files into
@@ -101,7 +89,7 @@ public final class ExcelImportServices {
      * @return the File found
      */
     public static File getUploadedExcelFile(String fileName) {
-        return getUploadedExcelFile(getExcelUploadPath(), fileName);
+        return getUploadedExcelFile(CommonImportServices.getUploadPath(), fileName);
     }
     
     /**
@@ -199,39 +187,6 @@ public final class ExcelImportServices {
     }
 
     /**
-     * Uploads an Excel file in the correct directory.
-     * @param dctx a <code>DispatchContext</code> value
-     * @param context a <code>Map</code> value
-     * @return the service result <code>Map</code>
-     */
-    public static Map<String, Object> uploadExcelFile(DispatchContext dctx, Map<String, ? extends Object> context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        String mimeTypeId = (String) context.get("_uploadedFile_contentType");
-        if (mimeTypeId != null && mimeTypeId.length() > 60) {
-            // XXX This is a fix to avoid problems where an OS gives us a mime type that is too long to fit in 60 chars
-            // (ex. MS .xlsx as application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)
-            Debug.logWarning("Truncating mime type [" + mimeTypeId + "] to 60 characters.", MODULE);
-            mimeTypeId = mimeTypeId.substring(0, 60);
-        }
-        String fileName = (String) context.get("_uploadedFile_fileName");
-
-        String fileAndPath = getExcelUploadPath() + fileName;
-
-        // save the file to the system using the ofbiz service
-        Map<String, Object> input = UtilMisc.toMap("dataResourceId", null, "binData", context.get("uploadedFile"), "dataResourceTypeId", "LOCAL_FILE", "objectInfo", fileAndPath);
-        try {
-            Map<String, Object> results = dispatcher.runSync("createAnonFile", input);
-            if (ServiceUtil.isError(results)) {
-                return results;
-            }
-        } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, MODULE);
-        }
-
-        return ServiceUtil.returnSuccess();
-    }
-
-    /**
      * Take each row of an Excel sheet and put it into DataImportProduct
      * @param sheet
      * @param delegator
@@ -323,61 +278,48 @@ public final class ExcelImportServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    public static Map<String, Object> uploadExcelFileAndRunImportService(DispatchContext dctx, Map<String, ? extends Object> context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        
-        try {
-            // upload first
-            ModelService service = dctx.getModelService("uploadExcelFileForDataImport");
-            Map<String, Object> input = service.makeValid(context, "IN");
-            Map<String, Object> servResults = dispatcher.runSync("uploadExcelFileForDataImport", input);
-            if (ServiceUtil.isError(servResults)) {
-                return UtilMessage.createAndLogServiceError(servResults, MODULE);
-            }
+    public static Map<String, Object> parseExcelFileForDataImport(DispatchContext dctx, Map<String, ? extends Object> context) {
 
-            // Get the uploaded file
-            String fileName = (String) context.get("_uploadedFile_fileName");
-            File file = getUploadedExcelFile(fileName);
-            
-            // set it up as an Excel workbook
-            POIFSFileSystem fs = null;
-            HSSFWorkbook wb = null;
-            try {
-                // this will auto close the FileInputStream when the constructor completes
-                fs = new POIFSFileSystem(new FileInputStream(file));
-                wb = new HSSFWorkbook(fs);
-            } catch (IOException e) {
-                return UtilMessage.createAndLogServiceError(e, "Unable to read or create workbook from file", MODULE);
-            }
-            
-            // loop through the tabs and import them one by one
-            for (String excelTab: EXCEL_TABS) {
-            	 HSSFSheet sheet = wb.getSheet(excelTab);
-                 if (sheet == null) {
-                     Debug.logWarning("Did not find a sheet named " + excelTab + " in " + file.getName() + ".  Will not be importing anything.", MODULE);
-                 } else {
-                	 try {
-                		 if (EXCEL_PRODUCT_TAB.equals(excelTab)) {
-                			 createDataImportProducts(sheet, dctx.getDelegator());
-                		 } else if (EXCEL_SUPPLIERS_TAB.equals(excelTab)) {
-                			 createDataImportSuppliers(sheet, dctx.getDelegator());
-                		 } // etc.
-                	 } catch (GenericEntityException e) {
-                         return UtilMessage.createAndLogServiceError(e, "Cannot store DataImportSupplier", MODULE);
-                     } 
-                 }
-            	
-            }
-          
-            // remove the uploaded file now
-            if (!file.delete()) {
-                Debug.logWarning("Could not delete the file : " + file.getName(), MODULE);
-            }
+    	// Get the uploaded file
+    	String fileName = (String) context.get("_uploadedFile_fileName");
+    	File file = getUploadedExcelFile(fileName);
 
-        } catch (GeneralException e) {
-            return UtilMessage.createAndLogServiceError(e, MODULE);
-        }
-        return ServiceUtil.returnSuccess();
+    	// set it up as an Excel workbook
+    	POIFSFileSystem fs = null;
+    	HSSFWorkbook wb = null;
+    	try {
+    		// this will auto close the FileInputStream when the constructor completes
+    		fs = new POIFSFileSystem(new FileInputStream(file));
+    		wb = new HSSFWorkbook(fs);
+    	} catch (IOException e) {
+    		return UtilMessage.createAndLogServiceError(e, "Unable to read or create workbook from file", MODULE);
+    	}
+
+    	// loop through the tabs and import them one by one
+    	for (String excelTab: EXCEL_TABS) {
+    		HSSFSheet sheet = wb.getSheet(excelTab);
+    		if (sheet == null) {
+    			Debug.logWarning("Did not find a sheet named " + excelTab + " in " + file.getName() + ".  Will not be importing anything.", MODULE);
+    		} else {
+    			try {
+    				if (EXCEL_PRODUCT_TAB.equals(excelTab)) {
+    					createDataImportProducts(sheet, dctx.getDelegator());
+    				} else if (EXCEL_SUPPLIERS_TAB.equals(excelTab)) {
+    					createDataImportSuppliers(sheet, dctx.getDelegator());
+    				} // etc.
+    			} catch (GenericEntityException e) {
+    				return UtilMessage.createAndLogServiceError(e, "Cannot store DataImportSupplier", MODULE);
+    			} 
+    		}
+
+    	}
+
+    	// remove the uploaded file now
+    	if (!file.delete()) {
+    		Debug.logWarning("Could not delete the file : " + file.getName(), MODULE);
+    	}
+
+    	return ServiceUtil.returnSuccess();
     }
 
 }

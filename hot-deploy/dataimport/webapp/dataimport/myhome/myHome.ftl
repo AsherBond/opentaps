@@ -91,7 +91,7 @@
 
 <#if hasDIAdminPermissions?default(false)>
   <@frameSection title=uiLabelMap.DataImportUploadFile>
-    <form name="uploadFileAndImport" method="post" enctype="multipart/form-data" action="uploadFileAndImport">
+    <form name="uploadFileAndImport" method="post" enctype="multipart/form-data" action="uploadFileForDataImport">
       <@inputHidden name="POOL_NAME" value="pool"/>
       <@inputHidden name="sectionHeaderUiLabel" value="DataImportImportFromFile"/>
       <table class="twoColumnForm">
