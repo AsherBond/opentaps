@@ -70,7 +70,7 @@
     <div class="screenlet-header"><div class="boxhead">${uiLabelMap.FinancialsNewInvoiceItem}</div></div>
     <div class="screenlet-body">
       <table border="0" cellpadding="2" cellspacing="0" width="100%">
-        <@inputSelectRow name="invoiceItemTypeId" title=uiLabelMap.CommonType list=invoiceItemTypes displayField="description" />
+        <@inputSelectRow name="invoiceItemTypeId" title=uiLabelMap.CommonType list=invoiceItemTypes displayField="description" default=(lastItem.invoiceItemTypeId)! />
         <@inputTextRow name="description" title=uiLabelMap.CommonDescription size="60" />
         <tr>
           <@displayTitleCell title=uiLabelMap.FinancialsOverrideGlAccount />
@@ -95,7 +95,7 @@
         </tr>
 
         <#if !disableTags?exists && tagTypes?has_content>
-          <@accountingTagsSelectRows tags=tagTypes prefix="acctgTagEnumId" />
+          <@accountingTagsSelectRows tags=tagTypes prefix="acctgTagEnumId" entity=lastItem! />
         </#if>
         <@inputSubmitRow title=uiLabelMap.CommonAdd/>
       </table>

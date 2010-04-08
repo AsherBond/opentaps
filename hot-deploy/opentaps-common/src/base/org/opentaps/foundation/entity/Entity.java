@@ -378,6 +378,20 @@ public class Entity implements EntityInterface {
     }
 
     /**
+     * Gets the last entity from the given List.
+     * @param <T> the entity class
+     * @param entities a list of entities
+     * @return the last of the given list or <code>null</code> if the list is <code>null</code> or empty
+     */
+    public static <T extends EntityInterface> T getLast(List<T> entities) {
+        if ((entities != null) && (entities.size() > 0)) {
+            return entities.get(entities.size() - 1);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Gets the only entity from the given List, throws an exception if more than one is present in the List.
      * @param <T> the entity class
      * @param entities a list of entities
