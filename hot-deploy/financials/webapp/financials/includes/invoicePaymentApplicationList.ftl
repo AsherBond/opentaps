@@ -56,7 +56,8 @@
           <@inputButtonCell title=uiLabelMap.CommonApply/>
         </tr>
 	<#if tagTypes?has_content && allocatePaymentTagsToApplications>
-	  <@accountingTagsInputCells tags=tagTypes prefix="acctgTagEnumId" tagColSpan="2" />
+          <#-- use the first invoice item tags as default for the application -->
+	  <@accountingTagsInputCells tags=tagTypes prefix="acctgTagEnumId" tagColSpan="2" entity=row.firstItem! />
 	</#if>		    
       </form>
     </#list>

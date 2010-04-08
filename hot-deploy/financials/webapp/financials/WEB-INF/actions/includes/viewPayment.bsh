@@ -275,6 +275,8 @@ if (! payment.isVoided()) {
                         } else {
                             invoiceMap.put("amountToApply", outstandingAmount);
                         }
+                        // used as default accounting tags
+                        invoiceMap.put("firstItem", Entity.getFirst(invoice.getInvoiceItems()));
                         invoicesList.add(invoiceMap);
                     }
                 }
