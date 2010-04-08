@@ -67,6 +67,7 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.CartItemModifyException;
@@ -82,6 +83,9 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.OrderAdjustmentBilling;
+import org.opentaps.base.entities.OrderItemShipGroupAssoc;
+import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
 import org.opentaps.common.product.UtilProduct;
 import org.opentaps.common.util.UtilAccountingTags;
@@ -89,9 +93,6 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.base.entities.OrderAdjustmentBilling;
-import org.opentaps.base.entities.OrderItemShipGroupAssoc;
-import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
@@ -1940,12 +1941,16 @@ public final class OrderServices {
         Map itemDescriptionMap = (Map) context.get("itemDescriptionMap");
         Map itemPriceMap = (Map) context.get("itemPriceMap");
         Map itemQtyMap = (Map) context.get("itemQtyMap");
+        Map customFieldsMap = (Map) context.get("customFieldsMap");
         // for accounting tags
         Map[] tagsMaps = UtilAccountingTags.getTagMapParameters(context);
 
         PurchasingRepositoryInterface purchasingRepository = null;
         OrderRepositoryInterface orderRepository = null;
         Order order = null;
+
+        // to look for custom fields
+        ModelEntity model = delegator.getModelEntity("OrderItem");
 
         try {
             DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
@@ -1967,7 +1972,7 @@ public final class OrderServices {
             return tmp;
         }
 
-        // set the items quantity/price/description
+        // set the items quantity/price/description/custom fields
         try {
             List<OrderItem> updatedOrderItems = new ArrayList<OrderItem>();
             for (OrderItem orderItem : order.getItems()) {
@@ -2008,6 +2013,22 @@ public final class OrderServices {
                     orderItem.setItemDescription(description);
                     Debug.logVerbose("Set item description: [" + orderItem.getOrderItemSeqId() + "] " + description, MODULE);
                     update = true;
+                }
+
+                // Update the custom fields
+                //  the Map contains the custom fields without their cust_ prefix, so for example cust_fooBar_seqid
+                //  becomes fooBar_seqid -> value
+                if (customFieldsMap != null) {
+                    for (String n : model.getAllFieldNames()) {
+                        if (UtilCommon.isCustomEntityField(n)) {
+                            String custKey = (n + "_" + orderItem.getOrderItemSeqId()).substring(5); // 5 is length of "cust_"
+                            if (customFieldsMap.containsKey(custKey)) {
+                                String value = (String) customFieldsMap.get(custKey);
+                                orderItem.set(n, model.convertFieldValue(n, value, delegator));
+                                update = true;
+                            }
+                        }
+                    }
                 }
 
                 // set accounting tags

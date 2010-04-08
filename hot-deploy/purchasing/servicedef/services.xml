@@ -136,6 +136,7 @@
         <attribute name="itemQtyMap" type="Map" mode="IN" string-map-prefix="iqm_" optional="false"/>
         <attribute name="itemPriceMap" type="Map" mode="IN" string-map-prefix="ipm_" optional="false"/>
         <attribute name="overridePriceMap" type="Map" mode="IN" string-map-prefix="opm_" optional="false"/>
+        <attribute name="customFieldsMap" type="Map" mode="IN" string-map-prefix="cust_" optional="true"/>
         <attribute name="tagsMap1" type="Map" mode="IN" string-map-prefix="tag1_" optional="true"/>
         <attribute name="tagsMap2" type="Map" mode="IN" string-map-prefix="tag2_" optional="true"/>
         <attribute name="tagsMap3" type="Map" mode="IN" string-map-prefix="tag3_" optional="true"/>
