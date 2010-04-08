@@ -35,10 +35,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.model.ModelEntity;
 import org.opentaps.base.entities.DataImportProduct;
 import org.opentaps.base.entities.DataImportSupplier;
 import org.opentaps.domain.DomainService;
@@ -120,34 +116,6 @@ public final class ExcelImportServices extends DomainService {
             return false;
         }
         return !"".equals(s.trim());
-    }
-
-    /**
-     * Helper method to store the DataImportXXX values.
-     * @param delegator a <code>GenericDelegator</code> value
-     * @param entityName a <code>String</code> value
-     * @param maps the list of Map containing the values to store
-     * @exception GenericEntityException if an error occurs
-     */
-    public void makeValues(GenericDelegator delegator, String entityName, List<Map<String, Object>> maps) throws GenericEntityException {
-        for (int j = 0; j < maps.size(); j++) {
-            GenericValue value = delegator.makeValue(entityName, maps.get(j));
-            delegator.create(value);
-        }
-    }
-
-    /**
-     * Helper method to store the DataImportXXX values.
-     * @param delegator a <code>GenericDelegator</code> value
-     * @param entities the list of <code>EntityInterface</code> to store
-     * @exception GenericEntityException if an error occurs
-     */
-    public void makeValues(GenericDelegator delegator, List<? extends EntityInterface> entities) throws GenericEntityException {
-        for (EntityInterface entity : entities) {
-            ModelEntity model = delegator.getModelReader().getModelEntity(entity.getBaseEntityName());
-            GenericValue value = GenericValue.create(model, entity.toMap());
-            delegator.create(value);
-        }
     }
 
     /**
