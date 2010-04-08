@@ -66,7 +66,11 @@ under the License.
                     <td rowspan="6" valign="top">
                       <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <#if tagTypes?has_content>
-                          <@accountingTagsSelectRows tags=tagTypes />
+                          <#-- use the first order item as template for the tag to be selected by default -->
+                          <#if order.items?has_content>
+                            <#assign defaultTags = order.items.get(0) />
+                          </#if>
+                          <@accountingTagsSelectRows tags=tagTypes entity=defaultTags! />
                         </#if>
                       </table>
                     </td>
