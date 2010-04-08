@@ -38,16 +38,6 @@ under the License.
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if order?has_content>
-<script type="text/javascript">
-/*<![CDATA[*/
-  function appendItemToOrder_setOverridePrice() {
-    var price = opentaps.trim(document.appendItemForm.basePrice.value);
-    if (price != "") { document.appendItemForm.overridePrice.value = "Y"; }
-    return true;
-  }
-/*]]>*/
-
-</script>
   <table border="0" width="100%" cellspacing="0" cellpadding="0" class="boxoutside">
     <tr>
       <td width="100%">
@@ -65,8 +55,7 @@ under the License.
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="boxbottom">
           <tr>
             <td>
-              <form method="post" action="<@ofbizUrl>appendItemToOrder</@ofbizUrl>" name="appendItemForm" onSubmit="return appendItemToOrder_setOverridePrice()"
- style="margin: 0;">
+              <form method="post" action="<@ofbizUrl>appendItemToOrder</@ofbizUrl>" name="appendItemForm" style="margin: 0;">
                 <@inputHidden name="orderId" value=order.orderId?if_exists />
                 <@inputHidden name="correspondingPoId" value=order.primaryPoNumber?if_exists />
                 <table border="0">
@@ -91,7 +80,8 @@ under the License.
                     <@displayTitleCell title=uiLabelMap.OrderPrice />
                     <td>
                       <@inputText name="basePrice" size=6 />
-                      <@inputHidden name="overridePrice" value="" />
+                      <input type="checkbox" name="overridePrice" value="Y" checked="checked"/>
+                      <@display text=uiLabelMap.OrderOverridePrice />
                     </td>
                   </tr>
                   <@inputTextRow title=uiLabelMap.OrderQuantity name="quantity" size=6 default="1" />
