@@ -320,6 +320,17 @@ public final class OrderEvents {
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         }
 
+        // pass all the customized fields from the request parameters into the item attributes
+        for (Object o : request.getParameterMap().keySet()) {
+            if (!(o instanceof String)) {
+                continue;
+            }
+            String n = (String) o;
+            if (UtilCommon.isCustomEntityField(n)) {
+                attributes.put(n, request.getParameter(n));
+            }
+        }
+
         // add the item to the cart using the simplest method
         try {
             addItemToOrder(cart, productId, null, quantity, null, null, null, shipBeforeDate, null, null, attributes, null, null, itemType, null, null, request);

@@ -1641,9 +1641,20 @@ public abstract class UtilCommon {
     public static Vector stringToVector(String ids) {
         Vector vector = new Vector();
         List<String> idList = StringUtil.split(ids, ",");
-      for (String id : idList) {
-           vector.add(id);
-      }
-      return vector;
+        for (String id : idList) {
+            vector.add(id);
+        }
+        return vector;
+    }
+
+    /**
+     * Checks if the given field name is a custom field.
+     * This is used in some places to identify parameters that should be treated as custom fields, so that the code
+     * can adapt automatically instead of having to change the code when new fields are introduced.
+     * @param fieldName a <code>String</code> value
+     * @return a <code>Boolean</code> value
+     */
+    public static Boolean isCustomEntityField(String fieldName) {
+        return fieldName.startsWith("cust_");
     }
 }
