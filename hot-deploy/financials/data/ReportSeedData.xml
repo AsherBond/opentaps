@@ -26,11 +26,13 @@
     <ReportRegistry reportId="BDGT_ACTLEXP_GLACCT" shortName="Budget versus Actual Expenses by GL Account" description="" reportLocation="component://financials/webapp/financials/reports/repository/BudgetVsActualExpensesByGlAccount.jrxml" setupUri="setupReport?acctgTagUsage=FINANCIALS_REPORTS&amp;"/>
     <ReportRegistry reportId="BDGT_ACTLEXP_DTL" shortName="Budget versus Actual Expenses Details" description="" reportLocation="component://financials/webapp/financials/reports/repository/BudgetVsActualExpensesDetail.jrxml" setupUri="setupReport?acctgTagUsage=FINANCIALS_REPORTS&amp;"/>
     <ReportRegistry reportId="BDGT_ACTLEXP_ACCTP" shortName="Budget Versus Actual Expenses by GL Account Type" description="" reportLocation="component://financials/webapp/financials/reports/repository/BudgetVsActualExpensesByGlAccountType.jrxml" setupUri="setupReport?acctgTagUsage=FINANCIALS_REPORTS&amp;"/>
+    <ReportRegistry reportId="ACCT_TAGS" shortName="Accounting Tags Report" description="" reportLocation="component://financials/webapp/financials/reports/repository/AccountingTagsReport.jrxml"/>
     <ReportGroup reportGroupId="FIN_BUDGETING" showInSelect="Y" description="Budgeting" application="financials" sequenceNum="1"/>
     <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="FIN_BALANCE" sequenceNum="1"/>
     <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="BDGT_ACTLEXP_DTL" sequenceNum="5"/>
     <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="BDGT_ACTLEXP_GLACCT" sequenceNum="10"/>
     <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="BDGT_ACTLEXP_ACCTP" sequenceNum="15"/>
+    <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="ACCT_TAGS" sequenceNum="20"/>
 
     <ReportGroup reportGroupId="FIN_RECEIVABLES" showInSelect="N" description="Financials Receivables Reports" application="financials" sequenceNum="2"/>
     <ReportGroup reportGroupId="FIN_PAYABLES" showInSelect="N" description="Financials Payables Reports" application="financials" sequenceNum="3"/>
