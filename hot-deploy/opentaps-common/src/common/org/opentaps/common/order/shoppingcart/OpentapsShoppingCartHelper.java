@@ -53,11 +53,13 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartHelper;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
@@ -145,6 +147,9 @@ public class OpentapsShoppingCartHelper extends ShoppingCartHelper {
             String parameterValue = (String) context.get(parameterName);
             int underscorePos = parameterName.lastIndexOf('_');
 
+            // for validating custom field
+            ModelEntity model = delegator.getModelEntity("OrderItem");
+
             if (underscorePos >= 0) {
                 try {
                     String indexStr = parameterName.substring(underscorePos + 1);
@@ -178,6 +183,16 @@ public class OpentapsShoppingCartHelper extends ShoppingCartHelper {
                         }
                         // remove the parameter
                         parameterNameIter.remove();
+                    } else if (UtilCommon.isCustomEntityField(parameterName)) {
+                        if (parameterValue.length() > 0) {
+                            // validate
+                            try {
+                                model.convertFieldValue(indexParameterName, parameterValue, delegator);
+                            } catch (IllegalArgumentException e) {
+                                return UtilMessage.createAndLogServiceError(e, locale, MODULE);
+                            }
+                        }
+                        item.setAttribute(indexParameterName, parameterValue);
                     }
                 } catch (NumberFormatException nfe) {
                     Debug.logWarning(nfe, UtilProperties.getMessage(resource_error, "OrderCaughtNumberFormatExceptionOnCartUpdate", locale), MODULE);
