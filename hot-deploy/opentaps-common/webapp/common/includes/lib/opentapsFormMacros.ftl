@@ -815,23 +815,23 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 
-<#macro inputIndicator name required=true default="" index=-1 onChange="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+<#macro inputIndicator name required=true default="" index=-1 onChange="" id="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
-  <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}">
+  <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" id="${id}">
     <#if !required><option value=""></option></#if>
     <option <#if defaultValue == "Y">selected="selected"</#if> value="Y">${yesLabel}</option>
     <option <#if defaultValue == "N">selected="selected"</#if> value="N">${noLabel}</option>
   </select>
 </#macro>
 
-<#macro inputIndicatorCell name required=true default="" index=-1 onChange="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
-  <td><@inputIndicator name=name required=required default=default index=index onChange=onChange ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel /></td>
+<#macro inputIndicatorCell name required=true default="" index=-1 onChange=""  id=""ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+  <td><@inputIndicator name=name required=required default=default index=index onChange=onChange id=id ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel /></td>
 </#macro>
 
-<#macro inputIndicatorRow name title required=true default="" titleClass="tableheadtext" index=-1 onChange="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+<#macro inputIndicatorRow name title required=true default="" titleClass="tableheadtext" index=-1 onChange="" id="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputIndicatorCell name=name required=required default=default index=index onChange=onChange ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel />
+    <@inputIndicatorCell name=name required=required default=default index=index onChange=onChange id=id ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel />
   </tr>
 </#macro>
 
