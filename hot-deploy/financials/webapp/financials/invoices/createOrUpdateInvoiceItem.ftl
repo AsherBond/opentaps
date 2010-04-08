@@ -70,7 +70,16 @@
     <div class="screenlet-header"><div class="boxhead">${uiLabelMap.FinancialsNewInvoiceItem}</div></div>
     <div class="screenlet-body">
       <table border="0" cellpadding="2" cellspacing="0" width="100%">
-        <@inputSelectRow name="invoiceItemTypeId" title=uiLabelMap.CommonType list=invoiceItemTypes displayField="description" default=(lastItem.invoiceItemTypeId)! />
+        <#assign defaultType=(lastItem.invoiceItemTypeId)!/>
+        <#if !defaultType?has_content>
+          <#if invoice.invoiceTypeId == "SALES_INVOICE">
+            <#assign defaultType = "INV_FPROD_ITEM"/>
+          </#if>
+          <#if invoice.invoiceTypeId == "PURCHASE_INVOICE">
+            <#assign defaultType = "PINV_SUPLPRD_ITEM"/>
+          </#if>
+        </#if>
+        <@inputSelectRow name="invoiceItemTypeId" title=uiLabelMap.CommonType list=invoiceItemTypes displayField="description" default=defaultType! />
         <@inputTextRow name="description" title=uiLabelMap.CommonDescription size="60" />
         <tr>
           <@displayTitleCell title=uiLabelMap.FinancialsOverrideGlAccount />
