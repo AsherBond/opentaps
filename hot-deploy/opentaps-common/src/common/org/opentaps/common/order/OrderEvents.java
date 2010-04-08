@@ -49,7 +49,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -57,7 +56,6 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -71,6 +69,7 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.CartItemModifyException;
@@ -88,6 +87,13 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.ContactMech;
+import org.opentaps.base.entities.OrderContactMech;
+import org.opentaps.base.entities.OrderHeaderNoteView;
+import org.opentaps.base.entities.OrderTerm;
+import org.opentaps.base.entities.PostalAddress;
+import org.opentaps.base.entities.SupplierProduct;
+import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.common.order.shoppingcart.OpentapsShippingEstimateWrapper;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCartHelper;
@@ -101,13 +107,6 @@ import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.base.entities.ContactMech;
-import org.opentaps.base.entities.OrderContactMech;
-import org.opentaps.base.entities.OrderHeaderNoteView;
-import org.opentaps.base.entities.OrderTerm;
-import org.opentaps.base.entities.PostalAddress;
-import org.opentaps.base.entities.SupplierProduct;
-import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderAdjustment;
@@ -321,13 +320,23 @@ public final class OrderEvents {
         }
 
         // pass all the customized fields from the request parameters into the item attributes
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        ModelEntity model = delegator.getModelEntity("OrderItem");
         for (Object o : request.getParameterMap().keySet()) {
             if (!(o instanceof String)) {
                 continue;
             }
             String n = (String) o;
             if (UtilCommon.isCustomEntityField(n)) {
-                attributes.put(n, request.getParameter(n));
+                String v = request.getParameter(n);
+                // validate
+                try {
+                    model.convertFieldValue(n, v, delegator);
+                } catch (IllegalArgumentException e) {
+                    UtilMessage.addFieldError(request, n, e.getMessage());
+                    return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+                }
+                attributes.put(n, v);
             }
         }
 
