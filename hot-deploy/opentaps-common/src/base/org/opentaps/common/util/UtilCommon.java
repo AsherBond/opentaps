@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,7 +52,6 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -77,11 +77,13 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.util.ByteWrapper;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ModelService;
+import org.opentaps.foundation.entity.EntityInterface;
 
 /**
  * UtilCommon - A place for common opentaps helper methods.
@@ -1656,5 +1658,57 @@ public abstract class UtilCommon {
      */
     public static Boolean isCustomEntityField(String fieldName) {
         return fieldName.startsWith("cust_");
+    }
+
+    public static Map<String, Object> getCustomFieldsFromServiceMap(ModelEntity model, Map customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
+        Map<String, Object> out = new HashMap<String, Object>();
+        if (customFieldsMap != null) {
+            for (String n : model.getAllFieldNames()) {
+                String custKey = n;
+                if (UtilValidate.isNotEmpty(parameterNameSuffix)) {
+                    custKey = custKey + parameterNameSuffix;
+                }
+                custKey = custKey.substring(5); // 5 is length of "cust_"
+                if (customFieldsMap.containsKey(custKey)) {
+                    Object value = customFieldsMap.get(custKey);
+                    out.put(n, model.convertFieldValue(n, value, delegator));
+                }
+            }
+        }
+        return out;
+    }
+
+    public static void setCustomFieldsFromServiceMap(GenericValue entity, Map customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
+        ModelEntity model = entity.getModelEntity();
+        if (customFieldsMap != null) {
+            for (String n : model.getAllFieldNames()) {
+                String custKey = n;
+                if (UtilValidate.isNotEmpty(parameterNameSuffix)) {
+                    custKey = custKey + parameterNameSuffix;
+                }
+                custKey = custKey.substring(5); // 5 is length of "cust_"
+                if (customFieldsMap.containsKey(custKey)) {
+                    Object value = customFieldsMap.get(custKey);
+                    entity.set(n, model.convertFieldValue(n, value, delegator));
+                }
+            }
+        }
+    }
+
+    public static void setCustomFieldsFromServiceMap(EntityInterface entity, Map customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
+        ModelEntity model = delegator.getModelEntity(entity.getBaseEntityName());
+        if (customFieldsMap != null) {
+            for (String n : model.getAllFieldNames()) {
+                String custKey = n;
+                if (UtilValidate.isNotEmpty(parameterNameSuffix)) {
+                    custKey = custKey + parameterNameSuffix;
+                }
+                custKey = custKey.substring(5); // 5 is length of "cust_"
+                if (customFieldsMap.containsKey(custKey)) {
+                    Object value = customFieldsMap.get(custKey);
+                    entity.set(n, model.convertFieldValue(n, value, delegator));
+                }
+            }
+        }
     }
 }

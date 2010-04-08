@@ -67,7 +67,6 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.CartItemModifyException;
@@ -102,7 +101,6 @@ import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -551,6 +549,7 @@ public final class OrderServices {
         String comments = (String) context.get("comments");
         String description = (String) context.get("description");
         String correspondingPoId = (String) context.get("correspondingPoId");
+        Map customFieldsMap = (Map) context.get("customFieldsMap");
 
         try {
             // verify the order exists and can be added to
@@ -622,6 +621,9 @@ public final class OrderServices {
                     return UtilMessage.createAndLogServiceError("OpentapsError_ServiceErrorRequiredTagNotFound", UtilMisc.toMap("tagName", missingTag.getDescription()), locale, MODULE);
                 }
             }
+
+            // custom fields
+            UtilCommon.setCustomFieldsFromServiceMap(orderItem, customFieldsMap, null, delegator);
 
             // persist the order item
             orderItem.setNextSubSeqId(OrderItem.Fields.orderItemSeqId.name(), ORDER_ITEM_PADDING, 1);
@@ -1287,6 +1289,7 @@ public final class OrderServices {
         String overridePrice = (String) context.get("overridePrice");
         String comments = (String) context.get("comments");
         String description = (String) context.get("description");
+        Map customFieldsMap = (Map) context.get("customFieldsMap");
 
         if (amount == null) {
             amount = BigDecimal.ZERO;
@@ -1349,6 +1352,16 @@ public final class OrderServices {
                 for (AccountingTagConfigurationForOrganizationAndUsage missingTag : missings) {
                     return UtilMessage.createAndLogServiceError("OpentapsError_ServiceErrorRequiredTagNotFound", UtilMisc.toMap("tagName", missingTag.getDescription()), locale, MODULE);
                 }
+            }
+
+            // customized fields
+            try {
+                Map<String, Object> customFields = UtilCommon.getCustomFieldsFromServiceMap(delegator.getModelEntity("OrderItem"), customFieldsMap, null, delegator);
+                for (String k : customFields.keySet()) {
+                    item.setAttribute(k, customFields.get(k));
+                }
+            } catch (IllegalArgumentException e) {
+                return UtilMessage.createAndLogServiceError(e, locale, MODULE);
             }
 
             // set the item in the selected ship group
@@ -1949,9 +1962,6 @@ public final class OrderServices {
         OrderRepositoryInterface orderRepository = null;
         Order order = null;
 
-        // to look for custom fields
-        ModelEntity model = delegator.getModelEntity("OrderItem");
-
         try {
             DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
             DomainsDirectory dd = domainLoader.loadDomainsDirectory();
@@ -2018,18 +2028,7 @@ public final class OrderServices {
                 // Update the custom fields
                 //  the Map contains the custom fields without their cust_ prefix, so for example cust_fooBar_seqid
                 //  becomes fooBar_seqid -> value
-                if (customFieldsMap != null) {
-                    for (String n : model.getAllFieldNames()) {
-                        if (UtilCommon.isCustomEntityField(n)) {
-                            String custKey = (n + "_" + orderItem.getOrderItemSeqId()).substring(5); // 5 is length of "cust_"
-                            if (customFieldsMap.containsKey(custKey)) {
-                                String value = (String) customFieldsMap.get(custKey);
-                                orderItem.set(n, model.convertFieldValue(n, value, delegator));
-                                update = true;
-                            }
-                        }
-                    }
-                }
+                UtilCommon.setCustomFieldsFromServiceMap(orderItem, customFieldsMap, "_" + orderItem.getOrderItemSeqId(), delegator);
 
                 // set accounting tags
                 for (int j = 1; j <= UtilAccountingTags.TAG_COUNT; j++) {
