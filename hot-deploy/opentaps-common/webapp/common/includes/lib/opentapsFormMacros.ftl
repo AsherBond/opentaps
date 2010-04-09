@@ -222,11 +222,10 @@ For more information, please see documentation/opentapsFormMacros.html
       runtimeData - for future extension
       updater - URL that should used to update report summary data
       nameOnly - show only report names if true (default), otherwise attach description on the right of report name.
+      ignoreSetupScreen - ignore setup screen, display pdf directly
 -->
-<#macro displayReportGroup group runtimeData="" updater="" nameOnly=true>
-  <#if !reportGroupedList?has_content>
-     <#assign reportGroupedList = Static["org.opentaps.common.reporting.UtilReports"].getManagedReports(parameters.componentName, group?default(null), delegator, Static["org.ofbiz.base.util.UtilHttp"].getLocale(request))?default([])/> 
-  </#if>
+<#macro displayReportGroup group runtimeData="" updater="" nameOnly=true ignoreSetupScreen=false>
+  <#assign reportGroupedList = Static["org.opentaps.common.reporting.UtilReports"].getManagedReports(parameters.componentName, group?default(null), delegator, Static["org.ofbiz.base.util.UtilHttp"].getLocale(request))?default([])/> 
 
   <#list reportGroupedList as reportGroup>
   <p><b>${reportGroup.description}</b>
@@ -242,12 +241,16 @@ For more information, please see documentation/opentapsFormMacros.html
     <ul class="bulletList">
     <#assign reports = reportGroup.reports/>
     <#list reports as report>
-      <#if report.setupUri?has_content>
-        <#assign setupUri = "${report.setupUri}"/>
+      <#if ignoreSetupScreen>
+        <li><a href="<@ofbizUrl>runReport?</@ofbizUrl>reportId=${report.reportId}&reportType=application/pdf&organizationPartyId=${organizationPartyId}">${report.shortName}</a><#if report.description?has_content && !nameOnly>: ${report.description}</#if></li>
       <#else>
-        <#assign setupUri = "setupReport?"/>
+        <#if report.setupUri?has_content>
+          <#assign setupUri = "${report.setupUri}"/>
+        <#else>
+          <#assign setupUri = "setupReport?"/>
+        </#if>
+        <li><a href="<@ofbizUrl>${setupUri}</@ofbizUrl>reportId=${report.reportId}">${report.shortName}</a><#if report.description?has_content && !nameOnly>: ${report.description}</#if></li>
       </#if>
-      <li><a href="<@ofbizUrl>${setupUri}</@ofbizUrl>reportId=${report.reportId}">${report.shortName}</a><#if report.description?has_content && !nameOnly>: ${report.description}</#if></li>
     </#list>
     <#nested>
     </ul>
