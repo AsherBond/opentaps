@@ -254,6 +254,9 @@ r13032 Upgraded lucene from 2.2 to 2.4 needed for hibernate search.
 applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
 r13173 Fix so that the production run quantityToProduce field is also updated on store
 
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRunServices.java
+r15248 Fix MRP to create production runs with outsourced tasks correctly
+
 applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
 applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ViewProductionRun.groovy
 applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.groovy

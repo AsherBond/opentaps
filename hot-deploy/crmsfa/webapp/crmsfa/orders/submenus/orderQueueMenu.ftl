@@ -16,6 +16,6 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmOrderQueueManageOrders}</div>
-</div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<@frameSectionHeader title=uiLabelMap.CrmOrderQueueManageOrders/>

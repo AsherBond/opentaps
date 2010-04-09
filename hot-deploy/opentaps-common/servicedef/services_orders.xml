@@ -117,6 +117,7 @@ under the License.
         <attribute name="description" type="String" mode="IN" optional="true"/>
         <attribute name="correspondingPoId" type="String" mode="IN" optional="true"/>
         <attribute name="amount" type="BigDecimal" mode="IN" optional="true"/>
+        <attribute name="customFieldsMap" type="Map" mode="IN" string-map-prefix="cust_" optional="true"/>
     </service>
 
     <service name="appendOrderItem" engine="java" auth="true"
@@ -133,6 +134,7 @@ under the License.
         <attribute name="overridePrice" type="String" mode="IN" optional="true"/>
         <attribute name="comments" type="String" mode="IN" optional="true"/>
         <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="customFieldsMap" type="Map" mode="IN" string-map-prefix="cust_" optional="true"/>
         <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
     </service>
 

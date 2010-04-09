@@ -36,7 +36,7 @@ import org.opentaps.foundation.infrastructure.User;
  * 
             Import products using DataImportProduct.
             Note that this service is not wrapped in a transaction.  Each product record imported is in its
-            own transaction, so it can store as many good records as possible. 
+            own transaction, so it can store as many good records as possible.
             The goodIdentificationTypeIdN parameters correspond to the type of the customIdN fields in DataImportProduct.
         .
  * Auto generated base service entity importProducts.

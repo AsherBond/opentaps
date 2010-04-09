@@ -36,7 +36,7 @@ import org.opentaps.foundation.infrastructure.User;
  * 
             Import shopping lists using DataImportShoppingList and DataImportShoppingListItem.
             Note that this service is not wrapped in a transaction.  Each record imported is in its
-            own transaction, so it can store as many good records as possible. 
+            own transaction, so it can store as many good records as possible.
             The productStoreId parameters specify for which store to create the shopping lists.
         .
  * Auto generated base service entity importShoppingLists.

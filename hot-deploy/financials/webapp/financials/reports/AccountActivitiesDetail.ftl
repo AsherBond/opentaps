@@ -129,6 +129,34 @@
           <@displayCurrencyCell amount=row.amount currencyUomId=row.currencyUomId />
         </#if >
       </tr>
+      <#if row.transDescription?has_content>
+        <#assign transDescription = row.transDescription/>
+      <#else>
+        <#assign transDescription = ""/>
+        <#if row.invoiceId?has_content>
+         <#assign invoice = row.getRelatedOne("Invoice")/>
+         <#if invoice.description?has_content>
+           <#assign transDescription = uiLabelMap.AccountingInvoice + " " + row.invoiceId + ": " + invoice.description/>
+         </#if> 
+        </#if> 
+        <#if row.paymentId?has_content>
+         <#assign payment = row.getRelatedOne("Payment")/>
+         <#if payment.comments?has_content>
+          <#if transDescription?has_content>
+           <#assign transDescription = transDescription + "<br/>"/>
+          </#if>
+          <#assign transDescription = transDescription + uiLabelMap.AccountingPayment + " " + row.paymentId + ": " + payment.comments/>
+         </#if> 
+        </#if>
+      </#if>
+      <#if transDescription?has_content>      
+      <tr class="${tableRowClass(row_index)}">
+        <td align="center" colspan="4">&nbsp;</td>
+        <td colspan="10">
+        <i>${transDescription}</i>
+        </td>
+      </tr>
+      </#if>  
     </#list >
     </tbody>
   </table>

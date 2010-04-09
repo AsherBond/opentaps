@@ -36,7 +36,7 @@ import org.opentaps.foundation.infrastructure.User;
  * 
             Import orders using DataImportOrderHeader and DataImportOrderItems.
             Note that this service is not wrapped in a transaction.  Each orderHeader/orderItems record set imported is in its
-                own transaction, so it can store as many good records as possible. 
+                own transaction, so it can store as many good records as possible.
             companyPartyId is the ID of the billFromVendor for the orders.
             productStoreId is the productStore that the orders should be related to.
             prodCatalogId is the productCatalog that the orders should be related to (optional).

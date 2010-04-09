@@ -82,6 +82,9 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.OrderAdjustmentBilling;
+import org.opentaps.base.entities.OrderItemShipGroupAssoc;
+import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
 import org.opentaps.common.product.UtilProduct;
 import org.opentaps.common.util.UtilAccountingTags;
@@ -89,9 +92,6 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.base.entities.OrderAdjustmentBilling;
-import org.opentaps.base.entities.OrderItemShipGroupAssoc;
-import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
@@ -101,7 +101,6 @@ import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -550,6 +549,7 @@ public final class OrderServices {
         String comments = (String) context.get("comments");
         String description = (String) context.get("description");
         String correspondingPoId = (String) context.get("correspondingPoId");
+        Map customFieldsMap = (Map) context.get("customFieldsMap");
 
         try {
             // verify the order exists and can be added to
@@ -621,6 +621,9 @@ public final class OrderServices {
                     return UtilMessage.createAndLogServiceError("OpentapsError_ServiceErrorRequiredTagNotFound", UtilMisc.toMap("tagName", missingTag.getDescription()), locale, MODULE);
                 }
             }
+
+            // custom fields
+            UtilCommon.setCustomFieldsFromServiceMap(orderItem, customFieldsMap, null, delegator);
 
             // persist the order item
             orderItem.setNextSubSeqId(OrderItem.Fields.orderItemSeqId.name(), ORDER_ITEM_PADDING, 1);
@@ -1286,6 +1289,7 @@ public final class OrderServices {
         String overridePrice = (String) context.get("overridePrice");
         String comments = (String) context.get("comments");
         String description = (String) context.get("description");
+        Map customFieldsMap = (Map) context.get("customFieldsMap");
 
         if (amount == null) {
             amount = BigDecimal.ZERO;
@@ -1348,6 +1352,16 @@ public final class OrderServices {
                 for (AccountingTagConfigurationForOrganizationAndUsage missingTag : missings) {
                     return UtilMessage.createAndLogServiceError("OpentapsError_ServiceErrorRequiredTagNotFound", UtilMisc.toMap("tagName", missingTag.getDescription()), locale, MODULE);
                 }
+            }
+
+            // customized fields
+            try {
+                Map<String, Object> customFields = UtilCommon.getCustomFieldsFromServiceMap(delegator.getModelEntity("OrderItem"), customFieldsMap, null, delegator);
+                for (String k : customFields.keySet()) {
+                    item.setAttribute(k, customFields.get(k));
+                }
+            } catch (IllegalArgumentException e) {
+                return UtilMessage.createAndLogServiceError(e, locale, MODULE);
             }
 
             // set the item in the selected ship group
@@ -1940,6 +1954,7 @@ public final class OrderServices {
         Map itemDescriptionMap = (Map) context.get("itemDescriptionMap");
         Map itemPriceMap = (Map) context.get("itemPriceMap");
         Map itemQtyMap = (Map) context.get("itemQtyMap");
+        Map customFieldsMap = (Map) context.get("customFieldsMap");
         // for accounting tags
         Map[] tagsMaps = UtilAccountingTags.getTagMapParameters(context);
 
@@ -1967,7 +1982,7 @@ public final class OrderServices {
             return tmp;
         }
 
-        // set the items quantity/price/description
+        // set the items quantity/price/description/custom fields
         try {
             List<OrderItem> updatedOrderItems = new ArrayList<OrderItem>();
             for (OrderItem orderItem : order.getItems()) {
@@ -2009,6 +2024,11 @@ public final class OrderServices {
                     Debug.logVerbose("Set item description: [" + orderItem.getOrderItemSeqId() + "] " + description, MODULE);
                     update = true;
                 }
+
+                // Update the custom fields
+                //  the Map contains the custom fields without their cust_ prefix, so for example cust_fooBar_seqid
+                //  becomes fooBar_seqid -> value
+                UtilCommon.setCustomFieldsFromServiceMap(orderItem, customFieldsMap, "_" + orderItem.getOrderItemSeqId(), delegator);
 
                 // set accounting tags
                 for (int j = 1; j <= UtilAccountingTags.TAG_COUNT; j++) {

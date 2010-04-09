@@ -34,7 +34,7 @@ import org.opentaps.foundation.infrastructure.User;
 
 /**
  * 
-            Imports suppliers from Excel sheet in DataImportSupplier. 
+            Imports suppliers from Excel sheet in DataImportSupplier.
         .
  * Auto generated base service entity importSuppliersFromExcel.
  *
@@ -56,6 +56,7 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
 
     /** The enumeration of input parameters. */
     public static enum In {
+        uploadedFileFileName("_uploadedFile_fileName"),
         locale("locale"),
         timeZone("timeZone"),
         userLogin("userLogin");
@@ -87,6 +88,7 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     }
 
 
+    private String inUploadedFileFileName;
     private Locale inLocale;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
@@ -103,6 +105,14 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     private Set<String> inParameters = FastSet.newInstance();
     private Set<String> outParameters = FastSet.newInstance();
 
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInUploadedFileFileName() {
+        return this.inUploadedFileFileName;
+    }
     /**
      * Auto generated value accessor.
      * This parameter is optional.
@@ -200,6 +210,15 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
         return this.outUserLogin;
     }
 
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inUploadedFileFileName the inUploadedFileFileName to set
+    */
+    public void setInUploadedFileFileName(String inUploadedFileFileName) {
+        this.inParameters.add("_uploadedFile_fileName");
+        this.inUploadedFileFileName = inUploadedFileFileName;
+    }
     /**
      * Auto generated value setter.
      * This parameter is optional.
@@ -332,6 +351,7 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        if (inParameters.contains("_uploadedFile_fileName")) mapValue.put("_uploadedFile_fileName", getInUploadedFileFileName());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
@@ -357,6 +377,7 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
 
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
+        if (mapValue.containsKey("_uploadedFile_fileName")) setInUploadedFileFileName((String) mapValue.get("_uploadedFile_fileName"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));

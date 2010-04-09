@@ -17,8 +17,6 @@
 package org.opentaps.dataimport.domain;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.ofbiz.base.util.Debug;
 import java.util.Locale;
 import org.ofbiz.base.util.UtilDateTime;

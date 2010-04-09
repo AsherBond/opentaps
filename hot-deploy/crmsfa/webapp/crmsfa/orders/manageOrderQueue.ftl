@@ -326,15 +326,7 @@
 <#-- This form is used to set the filters -->
 <form name="filterForm" method="post" action="<@ofbizUrl>manageOrderQueue</@ofbizUrl>">
   <table class="twoColumnForm">
-    <tr>
-      <td class="titleCell tableheadtext">${uiLabelMap.CommonShow}</td>
-      <td>
-        <select name="onlyApprovedOrders" class="selectBox">
-          <option value="N">${uiLabelMap.OpentapsAllOpenOrders}</option>
-          <option value="Y">${uiLabelMap.OpentapsApprovedOrdersOnly}</option>
-        </select>
-      </td
-    </tr>
+    <@inputIndicatorRow title=uiLabelMap.CommonShow name="onlyApprovedOrders" yesLabel=uiLabelMap.OpentapsApprovedOrdersOnly noLabel=uiLabelMap.OpentapsAllOpenOrders default="N"/>
     <@inputLookupRow title=uiLabelMap.CrmContainsProductId name="containsProductId" lookup="LookupProduct" form="filterForm" />
     <@inputSubmitRow title=uiLabelMap.CommonFind />
   </table>

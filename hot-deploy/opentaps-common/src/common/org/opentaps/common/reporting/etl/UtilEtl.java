@@ -17,16 +17,6 @@
 
 package org.opentaps.common.reporting.etl;
 
-import java.net.MalformedURLException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
-
 import org.ofbiz.base.location.ComponentLocationResolver;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -50,15 +40,17 @@ import org.pentaho.di.core.util.EnvUtil;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobEntryLoader;
 import org.pentaho.di.job.JobMeta;
-import org.pentaho.di.repository.RepositoriesMeta;
-import org.pentaho.di.repository.Repository;
-import org.pentaho.di.repository.RepositoryDirectory;
-import org.pentaho.di.repository.RepositoryMeta;
-import org.pentaho.di.repository.UserInfo;
+import org.pentaho.di.repository.*;
 import org.pentaho.di.trans.StepLoader;
 import org.pentaho.di.trans.Trans;
 import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.version.BuildVersion;
+
+import java.net.MalformedURLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Utility class to deal with ETL jobs.
@@ -71,6 +63,8 @@ public final class UtilEtl {
 
     private static final String STRING_KITCHEN = "Kitchen";
 
+
+
     /**
      * Runs an ETL job.
      * @param jobFilename the name of the job, eg: "sales_tax_statement_etl_job.kjb"
@@ -78,8 +72,20 @@ public final class UtilEtl {
      * @exception KettleException if an error occurs
      */
     public static void runJob(String jobFilename, String reportsPath) throws KettleException {
-        EnvUtil.environmentInit();
+        runJob(jobFilename,reportsPath,null);
+    }
 
+    
+     /**
+     * Runs an ETL job.
+     * @param jobFileName the name of the job, eg: "sales_tax_statement_etl_job.kjb"
+     * @param reportsPath the path to the job, eg: "component://financials/webapp/financials/reports/repository"
+     * @param args job parameters
+     * @exception KettleException if an error occurs
+     */
+    public static void runJob(String jobFileName,String reportsPath,String[]args) throws KettleException {
+
+        EnvUtil.environmentInit();
         RepositoryMeta repinfo  = null;
         UserInfo       userinfo = null;
         Job            job      = null;
@@ -94,7 +100,7 @@ public final class UtilEtl {
         String jobFilenameTemplate = "/${jobFilename}";
         try {
             jobDirPath = ComponentLocationResolver.getBaseLocation(reportsPath).toString();
-            jobFilePath = ComponentLocationResolver.getBaseLocation(FlexibleStringExpander.expandString(reportsPath + jobFilenameTemplate, UtilMisc.toMap("jobFilename", jobFilename))).toString();
+            jobFilePath = ComponentLocationResolver.getBaseLocation(FlexibleStringExpander.expandString(reportsPath + jobFilenameTemplate, UtilMisc.toMap("jobFilename", jobFileName))).toString();
         } catch (MalformedURLException muex) {
             log.logError(STRING_KITCHEN, "Error resolving ETL files path.", muex);
         }
@@ -295,7 +301,7 @@ public final class UtilEtl {
         //int returnCode=0;
 
         try {
-            job.getJobMeta().setArguments(null);
+            job.getJobMeta().setArguments(args);
             job.initializeVariablesFrom(null);
 
             // set the path to where the transformation files are located

@@ -222,11 +222,10 @@ For more information, please see documentation/opentapsFormMacros.html
       runtimeData - for future extension
       updater - URL that should used to update report summary data
       nameOnly - show only report names if true (default), otherwise attach description on the right of report name.
+      ignoreSetupScreen - ignore setup screen, display pdf directly
 -->
-<#macro displayReportGroup group runtimeData="" updater="" nameOnly=true>
-  <#if !reportGroupedList?has_content>
-     <#assign reportGroupedList = Static["org.opentaps.common.reporting.UtilReports"].getManagedReports(parameters.componentName, group?default(null), delegator, Static["org.ofbiz.base.util.UtilHttp"].getLocale(request))?default([])/> 
-  </#if>
+<#macro displayReportGroup group runtimeData="" updater="" nameOnly=true ignoreSetupScreen=false>
+  <#assign reportGroupedList = Static["org.opentaps.common.reporting.UtilReports"].getManagedReports(parameters.componentName, group?default(null), delegator, Static["org.ofbiz.base.util.UtilHttp"].getLocale(request))?default([])/> 
 
   <#list reportGroupedList as reportGroup>
   <p><b>${reportGroup.description}</b>
@@ -242,12 +241,16 @@ For more information, please see documentation/opentapsFormMacros.html
     <ul class="bulletList">
     <#assign reports = reportGroup.reports/>
     <#list reports as report>
-      <#if report.setupUri?has_content>
-        <#assign setupUri = "${report.setupUri}"/>
+      <#if ignoreSetupScreen>
+        <li><a href="<@ofbizUrl>runReport?</@ofbizUrl>reportId=${report.reportId}&reportType=application/pdf&organizationPartyId=${organizationPartyId}">${report.shortName}</a><#if report.description?has_content && !nameOnly>: ${report.description}</#if></li>
       <#else>
-        <#assign setupUri = "setupReport?"/>
+        <#if report.setupUri?has_content>
+          <#assign setupUri = "${report.setupUri}"/>
+        <#else>
+          <#assign setupUri = "setupReport?"/>
+        </#if>
+        <li><a href="<@ofbizUrl>${setupUri}</@ofbizUrl>reportId=${report.reportId}">${report.shortName}</a><#if report.description?has_content && !nameOnly>: ${report.description}</#if></li>
       </#if>
-      <li><a href="<@ofbizUrl>${setupUri}</@ofbizUrl>reportId=${report.reportId}">${report.shortName}</a><#if report.description?has_content && !nameOnly>: ${report.description}</#if></li>
     </#list>
     <#nested>
     </ul>
@@ -400,7 +403,7 @@ For more information, please see documentation/opentapsFormMacros.html
 <#macro inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false class="inputBox">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
-  <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
+  <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)/>
   <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="${class}" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
     <#if !required><option value="">${defaultOptionText}</option></#if>
     <#list list as option>
@@ -815,23 +818,23 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 
-<#macro inputIndicator name required=true default="" index=-1 onChange="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+<#macro inputIndicator name required=true default="" index=-1 onChange="" id="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
-  <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}">
+  <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" id="${id}">
     <#if !required><option value=""></option></#if>
     <option <#if defaultValue == "Y">selected="selected"</#if> value="Y">${yesLabel}</option>
     <option <#if defaultValue == "N">selected="selected"</#if> value="N">${noLabel}</option>
   </select>
 </#macro>
 
-<#macro inputIndicatorCell name required=true default="" index=-1 onChange="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
-  <td><@inputIndicator name=name required=required default=default index=index onChange=onChange ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel /></td>
+<#macro inputIndicatorCell name required=true default="" index=-1 onChange=""  id=""ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+  <td><@inputIndicator name=name required=required default=default index=index onChange=onChange id=id ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel /></td>
 </#macro>
 
-<#macro inputIndicatorRow name title required=true default="" titleClass="tableheadtext" index=-1 onChange="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+<#macro inputIndicatorRow name title required=true default="" titleClass="tableheadtext" index=-1 onChange="" id="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputIndicatorCell name=name required=required default=default index=index onChange=onChange ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel />
+    <@inputIndicatorCell name=name required=required default=default index=index onChange=onChange id=id ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel />
   </tr>
 </#macro>
 
@@ -1563,9 +1566,9 @@ For more information, please see documentation/opentapsFormMacros.html
 <#macro accountingTagsInputCells tags prefix="tag" tagColSpan="1" suffix="" entity="" tabIndex="" readonly="false">
   <#assign ti=tabIndex />
   <#list tags as tag>
-  <#assign tagName="${prefix}${tag.index}" />
-  <!-- only display tags that are set to something -->
-  <#assign fieldName = "acctgTagEnumId${tag.index}"/>
+    <#assign tagName="${prefix}${tag.index}" />
+    <!-- only display tags that are set to something -->
+    <#assign fieldName = "acctgTagEnumId${tag.index}"/>
     <#if entity?has_content>
       <#assign default=entity.get("acctgTagEnumId${tag.index}")! />
     <#elseif tag.hasDefaultValue()>
@@ -1576,31 +1579,31 @@ For more information, please see documentation/opentapsFormMacros.html
     <#else>
       <#assign tagTitleClass="tableheadtext" />
     </#if>
-  <#if readonly == "true">  
-	 <#if entity?has_content && entity.get(fieldName)?has_content>
-	  <tr class="viewManyTR2">  
-	    <td/>
-	    <td><span class="${tagTitleClass}">${tag.description}</span></td>
-	    <td colspan=tagColSpan>
-        <#list tag.tagValues as tagValue>
+    <#if readonly == "true">  
+      <#if entity?has_content && entity.get(fieldName)?has_content>
+        <tr class="viewManyTR2">  
+	  <td/>
+	  <td><span class="${tagTitleClass}">${tag.description}</span></td>
+	  <td colspan="${tagColSpan}">
+            <#list tag.tagValues as tagValue>
 	      <#if tagValue.enumId == entity.get(fieldName)>
 	        ${tagValue.description}
 	      </#if>
 	    </#list>
-	    </td>
-	  </tr> 
-	 </#if>	    
-  <#else>
-	  <tr class="viewManyTR2">  
-	    <td/>
-	    <td colspan=${tagColSpan}><span class="${tagTitleClass}">${tag.description}</span></td>
-	    <td colspan=${tagColSpan}>
-    	<@inputSelect name="${tagName}" list=tag.tagValues key="enumId" displayField="description" required=false default=default ignoreParameters=true/>
-	    </td>
-	  </tr>  
-  </#if>
-   <#if ti?has_content>
-     <#assign ti=ti+1 />
-   </#if>
+	  </td>
+        </tr> 
+      </#if>	    
+    <#else>
+      <tr class="viewManyTR2">  
+	<td/>
+	<td colspan="${tagColSpan}"><span class="${tagTitleClass}">${tag.description}</span></td>
+	<td colspan="${tagColSpan}">
+    	  <@inputSelect name="${tagName}" list=tag.tagValues key="enumId" displayField="description" required=false default=default ignoreParameters=true/>
+	</td>
+      </tr>  
+    </#if>
+    <#if ti?has_content>
+      <#assign ti=ti+1 />
+    </#if>
   </#list>
 </#macro>

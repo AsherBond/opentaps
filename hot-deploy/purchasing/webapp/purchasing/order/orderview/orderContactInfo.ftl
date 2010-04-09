@@ -97,7 +97,12 @@ under the License.
                 <div class="tabletext">
                   <a href="<@ofbizContentUrl>writeEmail?orderId=${order.orderId}&toEmail=${contactMech.infoString}</@ofbizContentUrl>" class="linktext">${contactMech.infoString}</a>
                   <#if security.hasEntityPermission("ORDERMGR", "_SEND_CONFIRMATION", session)>
-                    <br/>(<a href="<@ofbizUrl>writeOrderConfirmationEmail?orderId=${order.orderId}&amp;partyId=${order.mainExternalParty.partyId}&amp;sendTo=${contactMech.infoString}</@ofbizUrl>" class="linktext">${uiLabelMap.OrderSendConfirmationEmail}</a>)
+                     <form name="writeOrderEmailForm" method="post" action="<@ofbizUrl>writeOrderEmail</@ofbizUrl>"/>
+                         <@inputHidden name="orderId" value="${order.orderId}"/>
+                         <@inputHidden name="partyId" value="${order.mainExternalParty.partyId}"/>
+                         <@inputHidden name="sendTo" value="${contactMech.infoString}"/>
+                     </form>
+                     (<@submitFormLink form="writeOrderEmailForm" text=uiLabelMap.OrderSendConfirmationEmail class="linktext"/></a>)
                   </#if>
                 </div>
               <#elseif contactMech.contactMechTypeId == "WEB_ADDRESS">

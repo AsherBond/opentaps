@@ -47,6 +47,7 @@ import org.opentaps.base.entities.BillingAccountAndRole;
 import org.opentaps.base.entities.GlAccountOrganizationAndClass;
 import org.opentaps.base.entities.InvoiceAdjustmentType;
 import org.opentaps.base.entities.InvoiceAndInvoiceItem;
+import org.opentaps.base.entities.InvoiceItem;
 import org.opentaps.base.entities.InvoiceType;
 import org.opentaps.base.entities.OrderItem;
 import org.opentaps.base.entities.OrderItemBilling;
@@ -150,6 +151,10 @@ public final class InvoiceActions {
 
         // get the invoice items
         ac.put("invoiceItems", invoice.getInvoiceItems());
+ 
+        // get the last invoice item, will use it as default tags for the add invoice item form
+        InvoiceItem lastItem = Entity.getLast(invoice.getInvoiceItems());
+        ac.put("lastItem", lastItem);
 
         // get the application payments, we need to fetch the payment entity too
         List<? extends PaymentApplication> paymentApplications = invoice.getPaymentApplications();

@@ -57,6 +57,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.order.shoppingcart.CartItemModifyException;
 import org.ofbiz.order.shoppingcart.ItemNotFoundException;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
@@ -64,6 +65,7 @@ import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.common.product.UtilProduct;
 import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.common.util.UtilCommon;
 
 /**
  * Opentaps implementation of the Shopping Cart.
@@ -425,6 +427,19 @@ public class OpentapsShoppingCart extends ShoppingCart {
                 for (int i = 1; i <= UtilAccountingTags.TAG_COUNT; i++) {
                     orderItem.put(UtilAccountingTags.ENTITY_TAG_PREFIX + i, item.getAttribute(UtilAccountingTags.TAG_PARAM_PREFIX + i));
                 }
+
+                // copy the other custom fields from the attributes in the orderItem
+                ModelEntity model = orderItem.getModelEntity();
+                for (Object o : item.getAttributes().keySet()) {
+                    if (o == null || !(o instanceof String)) {
+                        continue;
+                    }
+                    String n = (String) o;
+                    if (UtilCommon.isCustomEntityField(n) && model.isField(n)) {
+                        orderItem.set(n, model.convertFieldValue(n, item.getAttribute(n), getDelegator()));
+                    }
+                }
+
 
                 result.add(orderItem);
                 // don't do anything with adjustments here, those will be added below in makeAllAdjustments
