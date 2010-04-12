@@ -80,10 +80,10 @@ public final class UtilEtl {
      * Runs an ETL job.
      * @param jobFileName the name of the job, eg: "sales_tax_statement_etl_job.kjb"
      * @param reportsPath the path to the job, eg: "component://financials/webapp/financials/reports/repository"
-     * @param args job parameters
+     * @param jobParameters job parameters
      * @exception KettleException if an error occurs
      */
-    public static void runJob(String jobFileName,String reportsPath,String[]args) throws KettleException {
+    public static void runJob(String jobFileName,String reportsPath,Map<String,String>jobParameters) throws KettleException {
 
         EnvUtil.environmentInit();
         RepositoryMeta repinfo  = null;
@@ -301,8 +301,15 @@ public final class UtilEtl {
         //int returnCode=0;
 
         try {
-            job.getJobMeta().setArguments(args);
             job.initializeVariablesFrom(null);
+            if(jobParameters!=null){
+                job.getJobMeta().setInternalKettleVariables(job);
+                final Set<String> stringSet = jobParameters.keySet();
+                for (String key : stringSet) {
+                    job.setParameterValue(key,jobParameters.get(key));
+                    job.setVariable(key,jobParameters.get(key));
+                }
+            }            
 
             // set the path to where the transformation files are located
             job.setVariable("transformationsPath", jobDirPath);
