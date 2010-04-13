@@ -1097,7 +1097,7 @@ under the License.
         <alias-all entity-alias="I"/>
         <alias-all entity-alias="II" prefix="item"/>
 
-        <view-link entity-alias="I" rel-entity-alias="II">
+        <view-link entity-alias="I" rel-entity-alias="II" rel-optional="true">
             <key-map field-name="invoiceId"/>
         </view-link>
         <relation type="one" rel-entity-name="StatusItem">
