@@ -59,6 +59,7 @@ public class AppendOrderItemService extends ServiceWrapper {
         amount("amount"),
         basePrice("basePrice"),
         comments("comments"),
+        customFieldsMap("customFieldsMap"),
         description("description"),
         locale("locale"),
         orderId("orderId"),
@@ -118,6 +119,7 @@ public class AppendOrderItemService extends ServiceWrapper {
     private BigDecimal inAmount;
     private BigDecimal inBasePrice;
     private String inComments;
+    private Map inCustomFieldsMap;
     private String inDescription;
     private Locale inLocale;
     private String inOrderId;
@@ -175,6 +177,14 @@ public class AppendOrderItemService extends ServiceWrapper {
      */
     public String getInComments() {
         return this.inComments;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>Map</code>
+     */
+    public Map getInCustomFieldsMap() {
+        return this.inCustomFieldsMap;
     }
     /**
      * Auto generated value accessor.
@@ -443,6 +453,15 @@ public class AppendOrderItemService extends ServiceWrapper {
     public void setInComments(String inComments) {
         this.inParameters.add("comments");
         this.inComments = inComments;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inCustomFieldsMap the inCustomFieldsMap to set
+    */
+    public void setInCustomFieldsMap(Map inCustomFieldsMap) {
+        this.inParameters.add("customFieldsMap");
+        this.inCustomFieldsMap = inCustomFieldsMap;
     }
     /**
      * Auto generated value setter.
@@ -741,6 +760,7 @@ public class AppendOrderItemService extends ServiceWrapper {
         if (inParameters.contains("amount")) mapValue.put("amount", getInAmount());
         if (inParameters.contains("basePrice")) mapValue.put("basePrice", getInBasePrice());
         if (inParameters.contains("comments")) mapValue.put("comments", getInComments());
+        if (inParameters.contains("customFieldsMap")) mapValue.put("customFieldsMap", getInCustomFieldsMap());
         if (inParameters.contains("description")) mapValue.put("description", getInDescription());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("orderId")) mapValue.put("orderId", getInOrderId());
@@ -787,6 +807,7 @@ public class AppendOrderItemService extends ServiceWrapper {
         if (mapValue.containsKey("amount")) setInAmount((BigDecimal) mapValue.get("amount"));
         if (mapValue.containsKey("basePrice")) setInBasePrice((BigDecimal) mapValue.get("basePrice"));
         if (mapValue.containsKey("comments")) setInComments((String) mapValue.get("comments"));
+        if (mapValue.containsKey("customFieldsMap")) setInCustomFieldsMap((Map) mapValue.get("customFieldsMap"));
         if (mapValue.containsKey("description")) setInDescription((String) mapValue.get("description"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("orderId")) setInOrderId((String) mapValue.get("orderId"));
