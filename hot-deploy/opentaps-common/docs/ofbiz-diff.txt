@@ -352,6 +352,11 @@ Comment out redefined entities, ofbiz seems to be confused about some of them an
 applications/product/webapp/catalog/product/ProductForms.xml
 r15163 #1455 Add IsActive field in the catalog product view.
 
+applications/party/config/PartyUiLabels.xml
+applications/party/webapp/partymgr/party/editeftaccount.ftl
+applications/party/webapp/partymgr/party/profileblocks/PaymentMethods.ftl
+r15359 Modified a few italian labels with a better translation, added 2 null checks to prevent verbose FTL exceptions.
+
 Other API Changes
 -----------------
 
