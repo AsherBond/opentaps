@@ -2509,7 +2509,7 @@
         <value xml:lang="en">Attention Name</value>
         <value xml:lang="es">A la Atención de</value>
         <value xml:lang="fr">A l'attention de</value>
-        <value xml:lang="it">All'attenzione di</value>
+        <value xml:lang="it">Ragione Sociale</value>
         <value xml:lang="ja">Attention Name</value>
         <value xml:lang="nl">Attentie naam</value>
         <value xml:lang="pt_PT">Nome do Receptor</value>
@@ -2537,6 +2537,7 @@
         <value xml:lang="fr">Attribut(s) de l'acteur</value>
         <value xml:lang="it">Attributo(i) Soggetto</value>
         <value xml:lang="nl">Kenmerken relatie</value>
+
         <value xml:lang="ro">Atribut(e) Subiect</value>
         <value xml:lang="ru">Атрибут(ы) участника</value>
         <value xml:lang="th">ความสนใจของกลุ่มผู้ใช้</value>
@@ -8534,7 +8535,7 @@
         <value xml:lang="es">Nombre</value>
         <value xml:lang="fr">Nom dest.</value>
         <value xml:lang="hi_IN">नाम को</value>
-        <value xml:lang="it">al nome</value>
+        <value xml:lang="it">C.A.</value>
         <value xml:lang="ja">To Name</value>
         <value xml:lang="nl">Aan Naam</value>
         <value xml:lang="pt_PT">Para O Nome De</value>
