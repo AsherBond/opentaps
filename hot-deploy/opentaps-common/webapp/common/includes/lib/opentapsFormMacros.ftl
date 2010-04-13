@@ -1563,11 +1563,11 @@ For more information, please see documentation/opentapsFormMacros.html
   </#list>
 </#macro>
 
-<#macro accountingTagsInputCells tags prefix="tag" tagColSpan="1" suffix="" entity="" tabIndex="" readonly="false">
+<#macro accountingTagsInputCells tags prefix="tag" tagTitleColSpan="1" tagColSpan="1" suffix="" entity="" tabIndex="" readonly="false">
   <#assign ti=tabIndex />
   <#list tags as tag>
     <#assign tagName="${prefix}${tag.index}" />
-    <!-- only display tags that are set to something -->
+    <#-- only display tags that are set to something -->
     <#assign fieldName = "acctgTagEnumId${tag.index}"/>
     <#if entity?has_content>
       <#assign default=entity.get("acctgTagEnumId${tag.index}")! />
@@ -1579,28 +1579,28 @@ For more information, please see documentation/opentapsFormMacros.html
     <#else>
       <#assign tagTitleClass="tableheadtext" />
     </#if>
-    <#if readonly == "true">  
+    <#if readonly == "true">
       <#if entity?has_content && entity.get(fieldName)?has_content>
-        <tr class="viewManyTR2">  
-	  <td/>
-	  <td><span class="${tagTitleClass}">${tag.description}</span></td>
-	  <td colspan="${tagColSpan}">
+        <tr class="viewManyTR2">
+          <td/>
+          <td colspan="${tagTitleColSpan}" align="left"><span class="${tagTitleClass}">${tag.description}</span></td>
+          <td colspan="${tagColSpan}" align="left">
             <#list tag.tagValues as tagValue>
-	      <#if tagValue.enumId == entity.get(fieldName)>
-	        ${tagValue.description}
-	      </#if>
-	    </#list>
-	  </td>
-        </tr> 
-      </#if>	    
+              <#if tagValue.enumId == entity.get(fieldName)>
+                ${tagValue.description}
+              </#if>
+            </#list>
+          </td>
+        </tr>
+      </#if>
     <#else>
-      <tr class="viewManyTR2">  
-	<td/>
-	<td colspan="${tagColSpan}"><span class="${tagTitleClass}">${tag.description}</span></td>
-	<td colspan="${tagColSpan}">
-    	  <@inputSelect name="${tagName}" list=tag.tagValues key="enumId" displayField="description" required=false default=default ignoreParameters=true/>
-	</td>
-      </tr>  
+      <tr class="viewManyTR2">
+        <td/>
+        <td colspan="${tagTitleColSpan}" align="left"><span class="${tagTitleClass}">${tag.description}</span></td>
+        <td colspan="${tagColSpan}" align="left">
+          <@inputSelect name="${tagName}" list=tag.tagValues key="enumId" displayField="description" required=false default=default ignoreParameters=true/>
+        </td>
+      </tr>
     </#if>
     <#if ti?has_content>
       <#assign ti=ti+1 />

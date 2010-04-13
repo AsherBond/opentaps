@@ -47,7 +47,7 @@
         </td>
       </tr>
       <#if tagTypes?has_content && allocatePaymentTagsToApplications>
-        <@accountingTagsInputCells tags=tagTypes prefix="acctgTagEnumId" tagColSpan="1" entity=row!/>
+        <@accountingTagsInputCells tags=tagTypes prefix="acctgTagEnumId" tagColSpan="4" entity=row!/>
       </#if>
     </form>
   </#list>
