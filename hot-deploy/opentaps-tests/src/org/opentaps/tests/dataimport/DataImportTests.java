@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -85,6 +85,8 @@ public class DataImportTests extends OpentapsTestCase {
         demowarehouse1      = null;
         demopurch1          = null;
         product             = null;
+   
+        // remove all DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory entities whose primary keys begin with excel  
     }
 
     /**
@@ -328,6 +330,13 @@ public class DataImportTests extends OpentapsTestCase {
         AccountingTransaction changedAcctgTrans = leger_repos.getAccountingTransaction(acctgTrans.getAcctgTransId());
         assertEquals("AcctgTrans["+acctgTrans.getAcctgTransId()+"] posted amount ("+acctgTrans.getBigDecimal("postedAmount")+") is not equal to transaction debit total (300)", BigDecimal.valueOf(300), changedAcctgTrans.getPostedAmount());
         assertEquals("Accounting transaction [" + changedAcctgTrans.getAcctgTransId() + "] is not posted", changedAcctgTrans.isPosted());
+    }
+
+    public void testImportExcelFile() throws Exception {
+        // get the number of DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory entities  
+        // run the uploadFileForDataImport service with the file from hot-deploy/dataimport/data/xls/OpentapsImport.xls
+        // verify the correct number of DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory have been added
+        // another dataimport branch change
     }
 
 }
