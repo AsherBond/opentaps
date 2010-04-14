@@ -203,9 +203,6 @@ r15076 Fix timestamp parsing for single digit hour
 framework/service/src/org/ofbiz/service/ModelService.java
 r15196 Fix service model so that semaphore attributes are used
 
-framework/base/src/org/ofbiz/base/util/ObjectType.java
-r15386 #1498 fix Date format issue in Chinese locale
-
 Applications changes
 --------------------
 

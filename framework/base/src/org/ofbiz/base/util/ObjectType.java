@@ -608,7 +608,7 @@ public class ObjectType {
                 DateFormat df = null;
 
                 /* check if str in timestamp format */
-                if (str.matches("^\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}$") || str.matches("^\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}.\\d+$")) {
+                if (str.matches("^\\d{4}-\\d{2}-\\d{2} \\d{1,2}:\\d{2}:\\d{2}$") || str.matches("^\\d{4}-\\d{2}-\\d{2} \\d{1,2}:\\d{2}:\\d{2}.\\d+$")) {
                     format = "yyyy-MM-dd HH:mm:ss.S";
                     // hack to mimic Timestamp.valueOf() method
                     if (str.length() > 0 && !str.contains(".")) {
@@ -622,20 +622,11 @@ public class ObjectType {
                             str = str + "000".substring(timeSplit[1].length());
                         }
                     }
-                } else if (str.matches("^\\d{2}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}$") || str.matches("^\\d{2}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}.\\d+$")) {
-                    format = "yy-MM-dd HH:mm:ss.S";
-                    if (str.length() > 0 && !str.contains(".")) {
-                        str += ".0";
-                    } else {
-                        String[] timeSplit = str.split("[.]");
-                        if (timeSplit.length > 1 && timeSplit[1].length() < 3) {
-                            str = str + "000".substring(timeSplit[1].length());
-                        }
-                    }
-                } else if (str.matches("^\\d{4}-\\d{1,2}-\\d{1,2}$")) {
+                } else if (str.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
                     format = "yyyy-MM-dd HH:mm:ss.S";
                     str += " 00:00:00.0";
                 }
+
                 Date fieldDate = null;
 
                 try {
@@ -1282,6 +1273,4 @@ public class ObjectType {
             }
         }
     }
-    
-    
 }
