@@ -45,8 +45,6 @@ public class POIWorkbookServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String rootPath = getServletContext().getRealPath("../../../../");
-        String filePath = "/runtime/output/";
         String filename = null;
         File file = null;
 
@@ -62,7 +60,7 @@ public class POIWorkbookServlet extends HttpServlet {
                     response.setContentType("text/html");
                     out.print("Bad Request!");
                 } else {
-                    file = new File(rootPath + filePath + filename);
+                    file = new File(UtilCommon.getAbsoluteFilePath(request, filename));
                     fileToDownload = new FileInputStream(file);
                     response.setContentLength(fileToDownload.available());
 

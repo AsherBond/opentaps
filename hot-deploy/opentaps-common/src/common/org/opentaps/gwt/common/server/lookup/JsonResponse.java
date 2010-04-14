@@ -221,7 +221,7 @@ public class JsonResponse {
             excelDataList.add(e.toMap(fields));
         }
 
-        String excelFilePath = getAbsoluteFilePath(fileName, servletContext);
+        String excelFilePath = UtilCommon.getAbsoluteFilePath(servletContext, fileName);
         try {
             UtilCommon.saveToExcel(excelFilePath, "data", fields, excelDataList);
         } catch (IOException ioe) {
@@ -262,7 +262,7 @@ public class JsonResponse {
         try {
             out = response.getOutputStream();
 
-            file = new File(getAbsoluteFilePath(filename, servletContext));
+            file = new File(UtilCommon.getAbsoluteFilePath(servletContext, filename));
             fileToDownload = new FileInputStream(file);
 
             response.setContentType("application/vnd.ms-excel");
@@ -296,12 +296,6 @@ public class JsonResponse {
         }
 
         return "success";
-    }
-
-    private String getAbsoluteFilePath(final String filename, ServletContext servletContext) {
-        String rootPath = servletContext.getRealPath("../../../../");
-        String filePath = "/runtime/output/";
-        return rootPath + filePath + filename;
     }
 
     @SuppressWarnings("unchecked")

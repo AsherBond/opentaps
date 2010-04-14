@@ -45,7 +45,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
-
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -1634,7 +1634,32 @@ public abstract class UtilCommon {
         }
         return string.replaceAll("'", "&apos;");
     }
-    
+
+    /**
+     * Gets the absolute path to the given file according to the servlet context.
+     * Files are in /runtime/output/ and we get there from the servlet context path.
+     * @param servletContext a <code>ServletContext</code> value
+     * @param filename a <code>String</code> value
+     * @return the absolute path
+     */
+    public static String getAbsoluteFilePath(ServletContext servletContext, final String filename) {
+        String rootPath = servletContext.getRealPath("../../../../");
+        String filePath = "/runtime/output/";
+        return rootPath + filePath + filename;
+    }
+
+    /**
+     * Gets the absolute path to the given file according to the servlet context.
+     * Files are in /runtime/output/ and we get there from the servlet context path.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param filename a <code>String</code> value
+     * @return the absolute path
+     */
+    public static String getAbsoluteFilePath(HttpServletRequest request, final String filename) {
+        ServletContext servletContext = request.getSession().getServletContext();
+        return getAbsoluteFilePath(servletContext, filename);
+    }
+
     /**
      * Split string to Vector.
      * @param ids a <code>String</code> value
