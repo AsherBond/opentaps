@@ -32,7 +32,6 @@
             <fileset dir="${applications.dir}/party/build/lib/" includes="ofbiz-party.jar"/>
             <fileset dir="${applications.dir}/securityext/build/lib/" includes="ofbiz-securityext.jar"/>
             <fileset dir="${applications.dir}/content/lib/" includes="lucene-2.2.0.jar"/>
-            <fileset dir="${applications.dir}/content/lib/" includes="poi-3.0.1.jar"/>             
             <fileset dir="${applications.dir}/content/build/lib/" includes="ofbiz-content.jar"/>
             <fileset dir="${applications.dir}/workeffort/build/lib/" includes="ofbiz-workeffort.jar"/>
             <fileset dir="${applications.dir}/product/build/lib/" includes="ofbiz-product.jar"/>             

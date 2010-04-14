@@ -34,7 +34,6 @@
       <fileset dir="${hot-deploy.dir}/opentaps-common/build/lib/" includes="*.jar"/>
       <fileset dir="${hot-deploy.dir}/opentaps-common/lib/">
         <include name="**/*.jar"/>
-        <exclude name="**/poi-3.0.1.jar"/>
         <exclude name="**/spring-core*.jar"/>
         <exclude name="**/ant/*.jar"/>
       </fileset>
@@ -89,6 +88,8 @@
     <copy todir="${ear.dir}/runtime/lucene/indexes">
       <fileset dir="${basedir}/runtime/lucene/indexes"/>
     </copy>
+    <!-- make sure the output directory exists -->
+    <mkdir dir="${ear.dir}/runtime/output"/>
     <!-- now we need to rebuild .. refresh-hibernatecfg may have cleaned the opentaps build -->
     <subant inheritall="true" target="build">
       <filelist dir="${basedir}" files="build.xml"/>
