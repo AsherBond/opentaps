@@ -15,7 +15,7 @@
 * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
 
-<project name="ofbiz hot-deploy deploymemt" default="package-hot-deploy-jboss" basedir=".">
+<project name="ofbiz hot-deploy deploymemt" default="package-hot-deploy-jboss" basedir="..">
 
   <!-- ================================================================== -->
   <!-- set the hot-deploy properties                                      -->
