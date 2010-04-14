@@ -1643,7 +1643,15 @@ public abstract class UtilCommon {
      * @return the absolute path
      */
     public static String getAbsoluteFilePath(ServletContext servletContext, final String filename) {
-        String rootPath = servletContext.getRealPath("../../../../");
+        String rootPath;
+
+        // JBoss is a special case as the directory structure is a bit different than with the embedded tomcat server
+        if (servletContext.getServerInfo().toLowerCase().contains("jboss")) {
+            rootPath = servletContext.getRealPath("../");
+        } else {
+            rootPath = servletContext.getRealPath("../../../../");
+        }
+
         String filePath = "/runtime/output/";
         return rootPath + filePath + filename;
     }
