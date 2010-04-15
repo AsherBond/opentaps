@@ -173,6 +173,10 @@ public class RaceConditionTests extends OpentapsTestCase {
         assertNotNull("Failed to get the partyAcctgPreference for " + organizationPartyId, partyAcctgPreference);
         String orderSequenceEnumId = partyAcctgPreference.getString("orderSequenceEnumId");
         Long lastOrderNumber = partyAcctgPreference.getLong("lastOrderNumber");
+        if (lastOrderNumber == null) {
+            lastOrderNumber = new Long(0);
+        }
+
 
         // set ODRSQ_ENF_SEQ
         partyAcctgPreference.set("orderSequenceEnumId", "ODRSQ_ENF_SEQ");
