@@ -42,48 +42,48 @@
     <@importForm importService="importCustomers"
                  sectionLabel="DataImportImportCustomers"
                  label=uiLabelMap.FinancialsCustomers
-                 submitLabel=uiLabelMap.DataImportImportCustomers
+                 submitLabel=uiLabelMap.DataImportImport
                  processed=customersProcessed notProcessed=customersNotProcessed/>
   </tr>
   <tr>
     <@importForm importService="importSuppliers"
                  sectionLabel="DataImportImportSuppliers"
                  label=uiLabelMap.PurchSuppliers
-                 submitLabel=uiLabelMap.DataImportImportSuppliers
+                 submitLabel=uiLabelMap.DataImportImport
                  processed=suppliersProcessed notProcessed=suppliersNotProcessed/>
   </tr>
   <tr>
     <@importForm importService="importProducts"
                  sectionLabel="DataImportImportProducts"
                  label=uiLabelMap.ProductProducts
-                 submitLabel=uiLabelMap.DataImportImportProducts
+                 submitLabel=uiLabelMap.DataImportImport
                  processed=productsProcessed notProcessed=productsNotProcessed/>
   </tr>
   <tr>
     <@importForm importService="importProductInventory"
                  sectionLabel="DataImportImportInventory"
                  label=uiLabelMap.ProductInventoryItems
-                 submitLabel=uiLabelMap.DataImportImportInventory
+                 submitLabel=uiLabelMap.DataImportImport
                  processed=inventoryProcessed notProcessed=inventoryNotProcessed/>
+  </tr>
+  <tr>
+    <@importForm importService="importGlAccounts"
+                 sectionLabel="DataImportImportGlAccounts"
+                 label=uiLabelMap.DataImportGlAccounts
+                 submitLabel=uiLabelMap.DataImportImport
+                 processed=glAccountsProcessed notProcessed=glAccountsNotProcessed/>
   </tr>
   <tr>
     <@importForm importService="importOrders"
                  sectionLabel="DataImportImportOrders"
                  label=uiLabelMap.DataImportOrderLines
-                 submitLabel=uiLabelMap.DataImportImportOrders
+                 submitLabel=uiLabelMap.DataImportImport
                  processed=orderHeadersProcessed notProcessed=orderHeadersNotProcessed/>
   </tr>
   <tr>
     <@displayCell text="${uiLabelMap.DataImportOrderItemLines}:"/>
     <@displayCell text="${orderItemsProcessed}"/>
     <@displayCell text="${orderItemsNotProcessed}"/>
-  </tr>
-  <tr>
-    <@importForm importService="importGlAccounts"
-                 sectionLabel="DataImportImportGlAccounts"
-                 label=uiLabelMap.DataImportGlAccountsLines
-                 submitLabel=uiLabelMap.DataImportImportGlAccounts
-                 processed=glAccountsProcessed notProcessed=glAccountsNotProcessed/>
   </tr>
 </table>
 
