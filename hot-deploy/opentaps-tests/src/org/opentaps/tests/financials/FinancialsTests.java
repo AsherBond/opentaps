@@ -2646,7 +2646,7 @@ public class FinancialsTests extends FinancialsTestCase {
         service.setInCreditGlAccountId(creditAccount);
         service.setInDescription("testAccountHistoryUpdates");
         service.setInTransactionDate(UtilDateTime.nowTimestamp());
-        service.setInOrganizationPartyId("LEDGER-TEST");
+        service.setInOrganizationPartyId(testLedgerOrganizationPartyId);
         runAndAssertServiceSuccess(service);
         String transId = service.getOutAcctgTransId();
 
@@ -2656,19 +2656,19 @@ public class FinancialsTests extends FinancialsTestCase {
                                                GlAccountHistory.Fields.customTimePeriodId.name());
         List<GlAccountHistory> creditHists = ledgerRepository.findList(GlAccountHistory.class,
                                                                        ledgerRepository.map(GlAccountHistory.Fields.glAccountId, creditAccount,
-                                                                                            GlAccountHistory.Fields.organizationPartyId, "LEDGER-TEST"),
+                                                                                            GlAccountHistory.Fields.organizationPartyId, testLedgerOrganizationPartyId),
                                                                        orderBy);
         List<GlAccountHistory> debitHists = ledgerRepository.findList(GlAccountHistory.class,
                                                                       ledgerRepository.map(GlAccountHistory.Fields.glAccountId, debitAccount,
-                                                                                           GlAccountHistory.Fields.organizationPartyId, "LEDGER-TEST"),
+                                                                                           GlAccountHistory.Fields.organizationPartyId, testLedgerOrganizationPartyId),
                                                                       orderBy);
         // 3. get the GlAccountOrganization record
         GlAccountOrganization creditAcctOrg = ledgerRepository.findOneNotNull(GlAccountOrganization.class,
                                                                        ledgerRepository.map(GlAccountOrganization.Fields.glAccountId, creditAccount,
-                                                                                            GlAccountOrganization.Fields.organizationPartyId, "LEDGER-TEST"));
+                                                                                            GlAccountOrganization.Fields.organizationPartyId, testLedgerOrganizationPartyId));
         GlAccountOrganization debitAcctOrg = ledgerRepository.findOneNotNull(GlAccountOrganization.class,
                                                                        ledgerRepository.map(GlAccountOrganization.Fields.glAccountId, debitAccount,
-                                                                                            GlAccountOrganization.Fields.organizationPartyId, "LEDGER-TEST"));
+                                                                                            GlAccountOrganization.Fields.organizationPartyId, testLedgerOrganizationPartyId));
 
         // 4. postAcctgTrans
         PostAcctgTransService postService = new PostAcctgTransService();
@@ -2679,11 +2679,11 @@ public class FinancialsTests extends FinancialsTestCase {
         // 5. verify GlAccountHistory for 100000 and 300000 have not changed.
         List<GlAccountHistory> creditHists2 = ledgerRepository.findList(GlAccountHistory.class,
                                                                         ledgerRepository.map(GlAccountHistory.Fields.glAccountId, creditAccount,
-                                                                                             GlAccountHistory.Fields.organizationPartyId, "LEDGER-TEST"),
+                                                                                             GlAccountHistory.Fields.organizationPartyId, testLedgerOrganizationPartyId),
                                                                         orderBy);
         List<GlAccountHistory> debitHists2 = ledgerRepository.findList(GlAccountHistory.class,
                                                                        ledgerRepository.map(GlAccountHistory.Fields.glAccountId, debitAccount,
-                                                                                            GlAccountHistory.Fields.organizationPartyId, "LEDGER-TEST"),
+                                                                                            GlAccountHistory.Fields.organizationPartyId, testLedgerOrganizationPartyId),
                                                                        orderBy);
 
         assertEquals("The GlAccountHistory for the debit account [" + debitAccount + "] should not have changed.", debitHists, debitHists2);
@@ -2692,10 +2692,10 @@ public class FinancialsTests extends FinancialsTestCase {
         // 6. verify GlAccountOrganization for both accounts have not changed
         GlAccountOrganization creditAcctOrg2 = ledgerRepository.findOneNotNull(GlAccountOrganization.class,
                                                                        ledgerRepository.map(GlAccountOrganization.Fields.glAccountId, creditAccount,
-                                                                                            GlAccountOrganization.Fields.organizationPartyId, "LEDGER-TEST"));
+                                                                                            GlAccountOrganization.Fields.organizationPartyId, testLedgerOrganizationPartyId));
         GlAccountOrganization debitAcctOrg2 = ledgerRepository.findOneNotNull(GlAccountOrganization.class,
                                                                        ledgerRepository.map(GlAccountOrganization.Fields.glAccountId, debitAccount,
-                                                                                            GlAccountOrganization.Fields.organizationPartyId, "LEDGER-TEST"));
+                                                                                            GlAccountOrganization.Fields.organizationPartyId, testLedgerOrganizationPartyId));
 
         assertEquals("The GlAccountOrganization for the debit account [" + debitAccount + "] should not have changed.", debitAcctOrg, debitAcctOrg2);
         assertEquals("The GlAccountOrganization for the credit account [" + creditAccount + "] should not have changed.", creditAcctOrg, creditAcctOrg2);
