@@ -319,7 +319,15 @@ public class JsonResponse {
                 }
             }
             json.put(field, values);
-        } else {
+        } else if (object instanceof Date) {
+            //2987870
+            //if the date does not contain a time json serializer will fail as it is using a deprecated method
+            //wrapping the date into the calendar object solve this issue
+            final Date date = (Date) object;
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);                                                
+            json.put(field,calendar.getTime());
+        }else{
             json.put(field, object);
         }
     }
