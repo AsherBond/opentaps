@@ -1253,14 +1253,14 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
         return this.getEntityName().compareTo(otherModelEntity.getEntityName());
     }
 
-    public void convertFieldMapInPlace(Map<String, Object> inContext, GenericDelegator delegator) {
+    public void convertFieldMapInPlace(Map<String, Object> inContext, GenericDelegator delegator, Locale locale) {
         Iterator<ModelField> modelFields = this.getFieldsIterator();
         while (modelFields.hasNext()) {
             ModelField modelField = modelFields.next();
             String fieldName = modelField.getName();
             Object oldValue = inContext.get(fieldName);
             if (oldValue != null) {
-                inContext.put(fieldName, this.convertFieldValue(modelField, oldValue, delegator, inContext));
+                inContext.put(fieldName, this.convertFieldValue(modelField, oldValue, delegator, inContext, locale));
             }
         }
     }
@@ -1302,9 +1302,10 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
      * @param value
      * @param delegator
      * @param context
+     * @param locale This is required in very specific case when context can't has locale. One known issue - entity fields automapping.
      * @return the converted value
      */
-    public Object convertFieldValue(ModelField modelField, Object value, GenericDelegator delegator, Map<String, ? extends Object> context) {
+    public Object convertFieldValue(ModelField modelField, Object value, GenericDelegator delegator, Map<String, ? extends Object> context, Locale locale) {
         if (value == null || value == GenericEntity.NULL_FIELD) {
             return null;
         }
@@ -1317,7 +1318,7 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
             throw new IllegalArgumentException(errMsg);
         }
         try {
-            return ObjectType.simpleTypeConvert(value, fieldJavaType, null, (TimeZone) context.get("timeZone"), (Locale) context.get("locale"), true);
+            return ObjectType.simpleTypeConvert(value, fieldJavaType, null, (TimeZone) context.get("timeZone"), (locale == null ? (Locale) context.get("locale") : locale), true);
         } catch (GeneralException e) {
             String errMsg = "Could not convert field value for the field: [" + modelField.getName() + "] on the [" + this.getEntityName() + "] entity to the [" + fieldJavaType + "] type for the value [" + value + "]: " + e.toString();
             Debug.logError(e, errMsg, module);

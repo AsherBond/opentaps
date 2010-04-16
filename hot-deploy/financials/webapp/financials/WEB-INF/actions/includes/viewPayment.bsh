@@ -152,6 +152,9 @@ context.put("showChildAccountsInvoices", showChildAccountsInvoices);
 
 // figure out how much has already been applied and how much is still open
 BigDecimal paymentApplied = payment.getAppliedAmount();
+if (paymentApplied == null) {
+    paymentApplied = BigDecimal.ZERO;
+}
 BigDecimal paymentToApply = payment.getAmount().subtract(paymentApplied).setScale(Payment.DECIMALS, Payment.ROUNDING);
 context.put("amountToApply", paymentToApply);
 

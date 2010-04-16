@@ -203,6 +203,13 @@ r15076 Fix timestamp parsing for single digit hour
 framework/service/src/org/ofbiz/service/ModelService.java
 r15196 Fix service model so that semaphore attributes are used
 
+framework/common/src/org/ofbiz/common/FindServices.java
+framework/entity/src/org/ofbiz/entity/finder/ByAndFinder.java
+framework/entity/src/org/ofbiz/entity/finder/EntityFinderUtil.java
+framework/entity/src/org/ofbiz/entity/finder/PrimaryKeyFinder.java
+framework/entity/src/org/ofbiz/entity/model/ModelEntity.java
+r15394 Fix localized date conversion error in entity engine for <entity-one ... auto-field-map="true/>.
+
 Applications changes
 --------------------
 
@@ -351,6 +358,11 @@ Comment out redefined entities, ofbiz seems to be confused about some of them an
 
 applications/product/webapp/catalog/product/ProductForms.xml
 r15163 #1455 Add IsActive field in the catalog product view.
+
+applications/party/config/PartyUiLabels.xml
+applications/party/webapp/partymgr/party/editeftaccount.ftl
+applications/party/webapp/partymgr/party/profileblocks/PaymentMethods.ftl
+r15359 Modified a few italian labels with a better translation, added 2 null checks to prevent verbose FTL exceptions.
 
 Other API Changes
 -----------------

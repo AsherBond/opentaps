@@ -1335,7 +1335,8 @@ public class MrpTests extends MrpTestCase {
         List<GenericValue> requirements = delegator.findByAnd("Requirement", conditions);
         String requirementId = EntityUtil.getFirst(requirements).getString("requirementId");
         runAndAssertServiceSuccess("purchasing.updateRequirementSupplierAndQuantity", UtilMisc.toMap("requirementId", requirementId, "quantity", BigDecimal.valueOf(5.0), "userLogin", demopurch1));
-        runAndAssertServiceSuccess("approveRequirement", UtilMisc.toMap("requirementId", requirementId, "userLogin", demopurch1));
+        // this creates a production run and requires permission on the WebStoreWarehouse
+        runAndAssertServiceSuccess("approveRequirement", UtilMisc.toMap("requirementId", requirementId, "userLogin", demowarehouse1));
 
         // 7. create outgoing transfer requirement
         Map<String, Object> requirement =
@@ -1412,8 +1413,8 @@ public class MrpTests extends MrpTestCase {
         Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new BigDecimal("0.0"), "createPendingManufacturingRequirements", false);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
         String req1Id = assertRequirementExistsWithQuantity(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("10.0"));
-        // create the production run
-        runAndAssertServiceSuccess("approveRequirement", UtilMisc.toMap("userLogin", demopurch1, "requirementId", req1Id));
+        // this creates a production run and requires permission on the WebStoreWarehouse
+        runAndAssertServiceSuccess("approveRequirement", UtilMisc.toMap("userLogin", demowarehouse1, "requirementId", req1Id));
 
         // update the production run to produce 6
         GenericValue prun = EntityUtil.getOnly(delegator.findByAnd("WorkEffortAndGoods", UtilMisc.toMap("productId", productId, "currentStatusId", "PRUN_CREATED")));

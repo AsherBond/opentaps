@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
 
-<!-- 
+<!--
  * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
@@ -19,24 +19,15 @@
 -->
 
 <web-app>
-	
-	<display-name>Opentaps - CRMSFA Images</display-name>
+
+  <display-name>Opentaps - CRMSFA Images</display-name>
     <description>CRMSFA Static Images of the Opentaps Project</description>
 
     <filter>
         <filter-name>GzipFilter</filter-name>
         <display-name>GzipFilter</display-name>
         <filter-class>org.opentaps.common.event.GzipFilter</filter-class>
-    </filter>    
-    <filter-mapping>
-        <filter-name>GzipFilter</filter-name>
-            <url-pattern>*.js</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>GzipFilter</filter-name>
-            <url-pattern>*.css</url-pattern>
-    </filter-mapping>
-    
+    </filter>
     <filter>
         <filter-name>PrivateCacheEnabler</filter-name>
         <display-name>CacheEnabler</display-name>
@@ -44,7 +35,7 @@
         <init-param>
           <param-name>Cache-Control</param-name>
           <param-value>private, max-age=15552000</param-value>
-        </init-param>            
+        </init-param>
     </filter>
     <filter>
         <filter-name>PublicCacheEnabler</filter-name>
@@ -53,8 +44,17 @@
         <init-param>
           <param-name>Cache-Control</param-name>
           <param-value>public, max-age=15552000</param-value>
-        </init-param>            
-    </filter>    
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>GzipFilter</filter-name>
+        <url-pattern>*.js</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>GzipFilter</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>PrivateCacheEnabler</filter-name>
         <url-pattern>*.js</url-pattern>
@@ -83,7 +83,7 @@
         <filter-name>PublicCacheEnabler</filter-name>
         <url-pattern>*.htm</url-pattern>
     </filter-mapping>
-    
+
     <session-config>
         <session-timeout>60</session-timeout> <!-- in minutes -->
     </session-config>

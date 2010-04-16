@@ -55,6 +55,7 @@ public class UpdatePurchaseOrderItemsService extends ServiceWrapper {
 
     /** The enumeration of input parameters. */
     public static enum In {
+        customFieldsMap("customFieldsMap"),
         itemDescriptionMap("itemDescriptionMap"),
         itemPriceMap("itemPriceMap"),
         itemQtyMap("itemQtyMap"),
@@ -109,6 +110,7 @@ public class UpdatePurchaseOrderItemsService extends ServiceWrapper {
         super(user);
     }
 
+    private Map inCustomFieldsMap;
     private Map inItemDescriptionMap;
     private Map inItemPriceMap;
     private Map inItemQtyMap;
@@ -141,6 +143,14 @@ public class UpdatePurchaseOrderItemsService extends ServiceWrapper {
     private Set<String> inParameters = FastSet.newInstance();
     private Set<String> outParameters = FastSet.newInstance();
 
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>Map</code>
+     */
+    public Map getInCustomFieldsMap() {
+        return this.inCustomFieldsMap;
+    }
     /**
      * Auto generated value accessor.
      * This parameter is optional.
@@ -366,6 +376,15 @@ public class UpdatePurchaseOrderItemsService extends ServiceWrapper {
         return this.outUserLogin;
     }
 
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inCustomFieldsMap the inCustomFieldsMap to set
+    */
+    public void setInCustomFieldsMap(Map inCustomFieldsMap) {
+        this.inParameters.add("customFieldsMap");
+        this.inCustomFieldsMap = inCustomFieldsMap;
+    }
     /**
      * Auto generated value setter.
      * This parameter is optional.
@@ -642,6 +661,7 @@ public class UpdatePurchaseOrderItemsService extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        if (inParameters.contains("customFieldsMap")) mapValue.put("customFieldsMap", getInCustomFieldsMap());
         if (inParameters.contains("itemDescriptionMap")) mapValue.put("itemDescriptionMap", getInItemDescriptionMap());
         if (inParameters.contains("itemPriceMap")) mapValue.put("itemPriceMap", getInItemPriceMap());
         if (inParameters.contains("itemQtyMap")) mapValue.put("itemQtyMap", getInItemQtyMap());
@@ -683,6 +703,7 @@ public class UpdatePurchaseOrderItemsService extends ServiceWrapper {
 
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
+        if (mapValue.containsKey("customFieldsMap")) setInCustomFieldsMap((Map) mapValue.get("customFieldsMap"));
         if (mapValue.containsKey("itemDescriptionMap")) setInItemDescriptionMap((Map) mapValue.get("itemDescriptionMap"));
         if (mapValue.containsKey("itemPriceMap")) setInItemPriceMap((Map) mapValue.get("itemPriceMap"));
         if (mapValue.containsKey("itemQtyMap")) setInItemQtyMap((Map) mapValue.get("itemQtyMap"));

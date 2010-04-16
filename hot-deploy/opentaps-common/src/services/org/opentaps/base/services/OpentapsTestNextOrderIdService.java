@@ -33,31 +33,30 @@ import org.ofbiz.entity.GenericValue;
 import org.opentaps.foundation.infrastructure.User;
 
 /**
- * 
-            Imports suppliers from Excel sheet in DataImportSupplier.
-        .
- * Auto generated base service entity importSuppliersFromExcel.
+ * A wrapper to getNextOrderId which sleeps to simulate load in order to test concurrency.
+ * Auto generated base service entity opentaps.testNextOrderId.
  *
- * Engine: java
- * Location: org.opentaps.dataimport.SupplierImportFromExcelServices
- * Invoke: importSuppliersFromExcel
- * Defined in: hot-deploy/dataimport/servicedef/services.xml
+ * Engine: pojo
+ * Location: org.opentaps.tests.service.TestNextOrderId
+ * Invoke: getNextOrderId
+ * Defined in: hot-deploy/opentaps-tests/servicedef/services_tests.xml
  */
-public class ImportSuppliersFromExcelService extends ServiceWrapper {
+public class OpentapsTestNextOrderIdService extends ServiceWrapper {
 
     /** The service name as used by the service engine. */
-    public static final String NAME = "importSuppliersFromExcel";
+    public static final String NAME = "opentaps.testNextOrderId";
     /** If the service requires authentication. */
-    public static final Boolean REQUIRES_AUTHENTICATION = Boolean.FALSE;
+    public static final Boolean REQUIRES_AUTHENTICATION = Boolean.TRUE;
     /** If the service requires a new transaction. */
     public static final Boolean REQUIRES_NEW_TRANSACTION = Boolean.FALSE;
     /** If the service uses a transaction. */
-    public static final Boolean USES_TRANSACTION = Boolean.FALSE;
+    public static final Boolean USES_TRANSACTION = Boolean.TRUE;
 
     /** The enumeration of input parameters. */
     public static enum In {
-        uploadedFileFileName("_uploadedFile_fileName"),
         locale("locale"),
+        partyId("partyId"),
+        productStoreId("productStoreId"),
         timeZone("timeZone"),
         userLogin("userLogin");
         private final String _fieldName;
@@ -68,8 +67,8 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     public static enum Out {
         errorMessage("errorMessage"),
         errorMessageList("errorMessageList"),
-        importedRecords("importedRecords"),
         locale("locale"),
+        orderId("orderId"),
         responseMessage("responseMessage"),
         successMessage("successMessage"),
         successMessageList("successMessageList"),
@@ -81,21 +80,29 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     }
 
     /**
-     * Creates a new <code>ImportSuppliersFromExcelService</code> instance.
+     * Creates a new <code>OpentapsTestNextOrderIdService</code> instance.
      */
-    public ImportSuppliersFromExcelService() {
+    public OpentapsTestNextOrderIdService() {
         super();
     }
 
+    /**
+     * Creates a new <code>OpentapsTestNextOrderIdService</code> instance.
+     * @param user an <code>User</code> value
+     */
+    public OpentapsTestNextOrderIdService(User user) {
+        super(user);
+    }
 
-    private String inUploadedFileFileName;
     private Locale inLocale;
+    private String inPartyId;
+    private String inProductStoreId;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
     private String outErrorMessage;
     private List outErrorMessageList;
-    private Integer outImportedRecords;
     private Locale outLocale;
+    private String outOrderId;
     private String outResponseMessage;
     private String outSuccessMessage;
     private List outSuccessMessageList;
@@ -108,18 +115,26 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
-     * @return <code>String</code>
-     */
-    public String getInUploadedFileFileName() {
-        return this.inUploadedFileFileName;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is optional.
      * @return <code>Locale</code>
      */
     public Locale getInLocale() {
         return this.inLocale;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is required.
+     * @return <code>String</code>
+     */
+    public String getInPartyId() {
+        return this.inPartyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInProductStoreId() {
+        return this.inProductStoreId;
     }
     /**
      * Auto generated value accessor.
@@ -156,18 +171,18 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
-     * @return <code>Integer</code>
-     */
-    public Integer getOutImportedRecords() {
-        return this.outImportedRecords;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is optional.
      * @return <code>Locale</code>
      */
     public Locale getOutLocale() {
         return this.outLocale;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is required.
+     * @return <code>String</code>
+     */
+    public String getOutOrderId() {
+        return this.outOrderId;
     }
     /**
      * Auto generated value accessor.
@@ -213,20 +228,29 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
-     * @param inUploadedFileFileName the inUploadedFileFileName to set
-    */
-    public void setInUploadedFileFileName(String inUploadedFileFileName) {
-        this.inParameters.add("_uploadedFile_fileName");
-        this.inUploadedFileFileName = inUploadedFileFileName;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is optional.
      * @param inLocale the inLocale to set
     */
     public void setInLocale(Locale inLocale) {
         this.inParameters.add("locale");
         this.inLocale = inLocale;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is required.
+     * @param inPartyId the inPartyId to set
+    */
+    public void setInPartyId(String inPartyId) {
+        this.inParameters.add("partyId");
+        this.inPartyId = inPartyId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inProductStoreId the inProductStoreId to set
+    */
+    public void setInProductStoreId(String inProductStoreId) {
+        this.inParameters.add("productStoreId");
+        this.inProductStoreId = inProductStoreId;
     }
     /**
      * Auto generated value setter.
@@ -267,20 +291,20 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
-     * @param outImportedRecords the outImportedRecords to set
-    */
-    public void setOutImportedRecords(Integer outImportedRecords) {
-        this.outParameters.add("importedRecords");
-        this.outImportedRecords = outImportedRecords;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is optional.
      * @param outLocale the outLocale to set
     */
     public void setOutLocale(Locale outLocale) {
         this.outParameters.add("locale");
         this.outLocale = outLocale;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is required.
+     * @param outOrderId the outOrderId to set
+    */
+    public void setOutOrderId(String outOrderId) {
+        this.outParameters.add("orderId");
+        this.outOrderId = outOrderId;
     }
     /**
      * Auto generated value setter.
@@ -351,8 +375,9 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        if (inParameters.contains("_uploadedFile_fileName")) mapValue.put("_uploadedFile_fileName", getInUploadedFileFileName());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
+        if (inParameters.contains("partyId")) mapValue.put("partyId", getInPartyId());
+        if (inParameters.contains("productStoreId")) mapValue.put("productStoreId", getInProductStoreId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         // allow the User set to override the userLogin
@@ -365,8 +390,8 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         if (outParameters.contains("errorMessage")) mapValue.put("errorMessage", getOutErrorMessage());
         if (outParameters.contains("errorMessageList")) mapValue.put("errorMessageList", getOutErrorMessageList());
-        if (outParameters.contains("importedRecords")) mapValue.put("importedRecords", getOutImportedRecords());
         if (outParameters.contains("locale")) mapValue.put("locale", getOutLocale());
+        if (outParameters.contains("orderId")) mapValue.put("orderId", getOutOrderId());
         if (outParameters.contains("responseMessage")) mapValue.put("responseMessage", getOutResponseMessage());
         if (outParameters.contains("successMessage")) mapValue.put("successMessage", getOutSuccessMessage());
         if (outParameters.contains("successMessageList")) mapValue.put("successMessageList", getOutSuccessMessageList());
@@ -377,8 +402,9 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
 
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
-        if (mapValue.containsKey("_uploadedFile_fileName")) setInUploadedFileFileName((String) mapValue.get("_uploadedFile_fileName"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
+        if (mapValue.containsKey("partyId")) setInPartyId((String) mapValue.get("partyId"));
+        if (mapValue.containsKey("productStoreId")) setInProductStoreId((String) mapValue.get("productStoreId"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));
     }
@@ -387,8 +413,8 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     public void putAllOutput(Map<String, Object> mapValue) {
         if (mapValue.containsKey("errorMessage")) setOutErrorMessage((String) mapValue.get("errorMessage"));
         if (mapValue.containsKey("errorMessageList")) setOutErrorMessageList((List) mapValue.get("errorMessageList"));
-        if (mapValue.containsKey("importedRecords")) setOutImportedRecords((Integer) mapValue.get("importedRecords"));
         if (mapValue.containsKey("locale")) setOutLocale((Locale) mapValue.get("locale"));
+        if (mapValue.containsKey("orderId")) setOutOrderId((String) mapValue.get("orderId"));
         if (mapValue.containsKey("responseMessage")) setOutResponseMessage((String) mapValue.get("responseMessage"));
         if (mapValue.containsKey("successMessage")) setOutSuccessMessage((String) mapValue.get("successMessage"));
         if (mapValue.containsKey("successMessageList")) setOutSuccessMessageList((List) mapValue.get("successMessageList"));
@@ -397,30 +423,30 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     }
 
     /**
-     * Construct a <code>ImportSuppliersFromExcelService</code> from the input values of the given <code>ImportSuppliersFromExcelService</code>.
-     * @param input a <code>ImportSuppliersFromExcelService</code>
+     * Construct a <code>OpentapsTestNextOrderIdService</code> from the input values of the given <code>OpentapsTestNextOrderIdService</code>.
+     * @param input a <code>OpentapsTestNextOrderIdService</code>
      */
-    public static ImportSuppliersFromExcelService fromInput(ImportSuppliersFromExcelService input) {
-        ImportSuppliersFromExcelService service = new ImportSuppliersFromExcelService();
+    public static OpentapsTestNextOrderIdService fromInput(OpentapsTestNextOrderIdService input) {
+        OpentapsTestNextOrderIdService service = new OpentapsTestNextOrderIdService();
         return fromInput(input.inputMap());
     }
 
     /**
-     * Construct a <code>ImportSuppliersFromExcelService</code> from the output values of the given <code>ImportSuppliersFromExcelService</code>.
-     * @param output a <code>ImportSuppliersFromExcelService</code>
+     * Construct a <code>OpentapsTestNextOrderIdService</code> from the output values of the given <code>OpentapsTestNextOrderIdService</code>.
+     * @param output a <code>OpentapsTestNextOrderIdService</code>
      */
-    public static ImportSuppliersFromExcelService fromOutput(ImportSuppliersFromExcelService output) {
-        ImportSuppliersFromExcelService service = new ImportSuppliersFromExcelService();
+    public static OpentapsTestNextOrderIdService fromOutput(OpentapsTestNextOrderIdService output) {
+        OpentapsTestNextOrderIdService service = new OpentapsTestNextOrderIdService();
         service.putAllOutput(output.outputMap());
         return service;
     }
 
     /**
-     * Construct a <code>ImportSuppliersFromExcelService</code> from the given input <code>Map</code>.
+     * Construct a <code>OpentapsTestNextOrderIdService</code> from the given input <code>Map</code>.
      * @param mapValue the service input <code>Map</code>
      */
-    public static ImportSuppliersFromExcelService fromInput(Map<String, Object> mapValue) {
-        ImportSuppliersFromExcelService service = new ImportSuppliersFromExcelService();
+    public static OpentapsTestNextOrderIdService fromInput(Map<String, Object> mapValue) {
+        OpentapsTestNextOrderIdService service = new OpentapsTestNextOrderIdService();
         service.putAllInput(mapValue);
         if (mapValue.containsKey("userLogin")) {
             GenericValue userGv = (GenericValue) mapValue.get("userLogin");
@@ -432,11 +458,11 @@ public class ImportSuppliersFromExcelService extends ServiceWrapper {
     }
 
     /**
-     * Construct a <code>ImportSuppliersFromExcelService</code> from the given output <code>Map</code>.
+     * Construct a <code>OpentapsTestNextOrderIdService</code> from the given output <code>Map</code>.
      * @param mapValue the service output <code>Map</code>
      */
-    public static ImportSuppliersFromExcelService fromOutput(Map<String, Object> mapValue) {
-        ImportSuppliersFromExcelService service = new ImportSuppliersFromExcelService();
+    public static OpentapsTestNextOrderIdService fromOutput(Map<String, Object> mapValue) {
+        OpentapsTestNextOrderIdService service = new OpentapsTestNextOrderIdService();
         service.putAllOutput(mapValue);
         return service;
     }

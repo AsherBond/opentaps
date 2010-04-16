@@ -22,6 +22,7 @@ package org.opentaps.base.services;
 
 import org.opentaps.foundation.service.ServiceWrapper;
 
+import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -33,31 +34,35 @@ import org.ofbiz.entity.GenericValue;
 import org.opentaps.foundation.infrastructure.User;
 
 /**
- * 
-            Imports products from Excel sheet in DataImportProduct. 
-        .
- * Auto generated base service entity importProductFromExcel.
+ * Upload a file for Dataimport by running the service corresponding to the file format
+	   Currently on EXCEL is supported as a fileFormat
+	   Unlike other data import services, this is all in one transaction, so if part of the file fails, it is rejected.
+ * Auto generated base service entity uploadFileForDataImport.
  *
  * Engine: java
- * Location: org.opentaps.dataimport.ProductImportFromExcelServices
- * Invoke: importProductFromExcel
+ * Location: org.opentaps.dataimport.CommonImportServices
+ * Invoke: uploadFileForDataImport
  * Defined in: hot-deploy/dataimport/servicedef/services.xml
  */
-public class ImportProductFromExcelService extends ServiceWrapper {
+public class UploadFileForDataImportService extends ServiceWrapper {
 
     /** The service name as used by the service engine. */
-    public static final String NAME = "importProductFromExcel";
+    public static final String NAME = "uploadFileForDataImport";
     /** If the service requires authentication. */
     public static final Boolean REQUIRES_AUTHENTICATION = Boolean.FALSE;
     /** If the service requires a new transaction. */
     public static final Boolean REQUIRES_NEW_TRANSACTION = Boolean.FALSE;
     /** If the service uses a transaction. */
-    public static final Boolean USES_TRANSACTION = Boolean.FALSE;
+    public static final Boolean USES_TRANSACTION = Boolean.TRUE;
 
     /** The enumeration of input parameters. */
     public static enum In {
+        uploadedFileContentType("_uploadedFile_contentType"),
+        uploadedFileFileName("_uploadedFile_fileName"),
+        fileFormat("fileFormat"),
         locale("locale"),
         timeZone("timeZone"),
+        uploadedFile("uploadedFile"),
         userLogin("userLogin");
         private final String _fieldName;
         private In(String name) { this._fieldName = name; }
@@ -67,7 +72,6 @@ public class ImportProductFromExcelService extends ServiceWrapper {
     public static enum Out {
         errorMessage("errorMessage"),
         errorMessageList("errorMessageList"),
-        importedRecords("importedRecords"),
         locale("locale"),
         responseMessage("responseMessage"),
         successMessage("successMessage"),
@@ -80,19 +84,22 @@ public class ImportProductFromExcelService extends ServiceWrapper {
     }
 
     /**
-     * Creates a new <code>ImportProductFromExcelService</code> instance.
+     * Creates a new <code>UploadFileForDataImportService</code> instance.
      */
-    public ImportProductFromExcelService() {
+    public UploadFileForDataImportService() {
         super();
     }
 
 
+    private String inUploadedFileContentType;
+    private String inUploadedFileFileName;
+    private String inFileFormat;
     private Locale inLocale;
     private TimeZone inTimeZone;
+    private ByteBuffer inUploadedFile;
     private GenericValue inUserLogin;
     private String outErrorMessage;
     private List outErrorMessageList;
-    private Integer outImportedRecords;
     private Locale outLocale;
     private String outResponseMessage;
     private String outSuccessMessage;
@@ -103,6 +110,30 @@ public class ImportProductFromExcelService extends ServiceWrapper {
     private Set<String> inParameters = FastSet.newInstance();
     private Set<String> outParameters = FastSet.newInstance();
 
+    /**
+     * Auto generated value accessor.
+     * This parameter is required.
+     * @return <code>String</code>
+     */
+    public String getInUploadedFileContentType() {
+        return this.inUploadedFileContentType;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is required.
+     * @return <code>String</code>
+     */
+    public String getInUploadedFileFileName() {
+        return this.inUploadedFileFileName;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInFileFormat() {
+        return this.inFileFormat;
+    }
     /**
      * Auto generated value accessor.
      * This parameter is optional.
@@ -118,6 +149,14 @@ public class ImportProductFromExcelService extends ServiceWrapper {
      */
     public TimeZone getInTimeZone() {
         return this.inTimeZone;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is required.
+     * @return <code>ByteBuffer</code>
+     */
+    public ByteBuffer getInUploadedFile() {
+        return this.inUploadedFile;
     }
     /**
      * Auto generated value accessor.
@@ -142,14 +181,6 @@ public class ImportProductFromExcelService extends ServiceWrapper {
      */
     public List getOutErrorMessageList() {
         return this.outErrorMessageList;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is optional.
-     * @return <code>Integer</code>
-     */
-    public Integer getOutImportedRecords() {
-        return this.outImportedRecords;
     }
     /**
      * Auto generated value accessor.
@@ -202,6 +233,33 @@ public class ImportProductFromExcelService extends ServiceWrapper {
 
     /**
      * Auto generated value setter.
+     * This parameter is required.
+     * @param inUploadedFileContentType the inUploadedFileContentType to set
+    */
+    public void setInUploadedFileContentType(String inUploadedFileContentType) {
+        this.inParameters.add("_uploadedFile_contentType");
+        this.inUploadedFileContentType = inUploadedFileContentType;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is required.
+     * @param inUploadedFileFileName the inUploadedFileFileName to set
+    */
+    public void setInUploadedFileFileName(String inUploadedFileFileName) {
+        this.inParameters.add("_uploadedFile_fileName");
+        this.inUploadedFileFileName = inUploadedFileFileName;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inFileFormat the inFileFormat to set
+    */
+    public void setInFileFormat(String inFileFormat) {
+        this.inParameters.add("fileFormat");
+        this.inFileFormat = inFileFormat;
+    }
+    /**
+     * Auto generated value setter.
      * This parameter is optional.
      * @param inLocale the inLocale to set
     */
@@ -217,6 +275,15 @@ public class ImportProductFromExcelService extends ServiceWrapper {
     public void setInTimeZone(TimeZone inTimeZone) {
         this.inParameters.add("timeZone");
         this.inTimeZone = inTimeZone;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is required.
+     * @param inUploadedFile the inUploadedFile to set
+    */
+    public void setInUploadedFile(ByteBuffer inUploadedFile) {
+        this.inParameters.add("uploadedFile");
+        this.inUploadedFile = inUploadedFile;
     }
     /**
      * Auto generated value setter.
@@ -244,15 +311,6 @@ public class ImportProductFromExcelService extends ServiceWrapper {
     public void setOutErrorMessageList(List outErrorMessageList) {
         this.outParameters.add("errorMessageList");
         this.outErrorMessageList = outErrorMessageList;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is optional.
-     * @param outImportedRecords the outImportedRecords to set
-    */
-    public void setOutImportedRecords(Integer outImportedRecords) {
-        this.outParameters.add("importedRecords");
-        this.outImportedRecords = outImportedRecords;
     }
     /**
      * Auto generated value setter.
@@ -332,8 +390,12 @@ public class ImportProductFromExcelService extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        if (inParameters.contains("_uploadedFile_contentType")) mapValue.put("_uploadedFile_contentType", getInUploadedFileContentType());
+        if (inParameters.contains("_uploadedFile_fileName")) mapValue.put("_uploadedFile_fileName", getInUploadedFileFileName());
+        if (inParameters.contains("fileFormat")) mapValue.put("fileFormat", getInFileFormat());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
+        if (inParameters.contains("uploadedFile")) mapValue.put("uploadedFile", getInUploadedFile());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         // allow the User set to override the userLogin
         if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
@@ -345,7 +407,6 @@ public class ImportProductFromExcelService extends ServiceWrapper {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         if (outParameters.contains("errorMessage")) mapValue.put("errorMessage", getOutErrorMessage());
         if (outParameters.contains("errorMessageList")) mapValue.put("errorMessageList", getOutErrorMessageList());
-        if (outParameters.contains("importedRecords")) mapValue.put("importedRecords", getOutImportedRecords());
         if (outParameters.contains("locale")) mapValue.put("locale", getOutLocale());
         if (outParameters.contains("responseMessage")) mapValue.put("responseMessage", getOutResponseMessage());
         if (outParameters.contains("successMessage")) mapValue.put("successMessage", getOutSuccessMessage());
@@ -357,8 +418,12 @@ public class ImportProductFromExcelService extends ServiceWrapper {
 
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
+        if (mapValue.containsKey("_uploadedFile_contentType")) setInUploadedFileContentType((String) mapValue.get("_uploadedFile_contentType"));
+        if (mapValue.containsKey("_uploadedFile_fileName")) setInUploadedFileFileName((String) mapValue.get("_uploadedFile_fileName"));
+        if (mapValue.containsKey("fileFormat")) setInFileFormat((String) mapValue.get("fileFormat"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
+        if (mapValue.containsKey("uploadedFile")) setInUploadedFile((ByteBuffer) mapValue.get("uploadedFile"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));
     }
 
@@ -366,7 +431,6 @@ public class ImportProductFromExcelService extends ServiceWrapper {
     public void putAllOutput(Map<String, Object> mapValue) {
         if (mapValue.containsKey("errorMessage")) setOutErrorMessage((String) mapValue.get("errorMessage"));
         if (mapValue.containsKey("errorMessageList")) setOutErrorMessageList((List) mapValue.get("errorMessageList"));
-        if (mapValue.containsKey("importedRecords")) setOutImportedRecords((Integer) mapValue.get("importedRecords"));
         if (mapValue.containsKey("locale")) setOutLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("responseMessage")) setOutResponseMessage((String) mapValue.get("responseMessage"));
         if (mapValue.containsKey("successMessage")) setOutSuccessMessage((String) mapValue.get("successMessage"));
@@ -376,30 +440,30 @@ public class ImportProductFromExcelService extends ServiceWrapper {
     }
 
     /**
-     * Construct a <code>ImportProductFromExcelService</code> from the input values of the given <code>ImportProductFromExcelService</code>.
-     * @param input a <code>ImportProductFromExcelService</code>
+     * Construct a <code>UploadFileForDataImportService</code> from the input values of the given <code>UploadFileForDataImportService</code>.
+     * @param input a <code>UploadFileForDataImportService</code>
      */
-    public static ImportProductFromExcelService fromInput(ImportProductFromExcelService input) {
-        ImportProductFromExcelService service = new ImportProductFromExcelService();
+    public static UploadFileForDataImportService fromInput(UploadFileForDataImportService input) {
+        UploadFileForDataImportService service = new UploadFileForDataImportService();
         return fromInput(input.inputMap());
     }
 
     /**
-     * Construct a <code>ImportProductFromExcelService</code> from the output values of the given <code>ImportProductFromExcelService</code>.
-     * @param output a <code>ImportProductFromExcelService</code>
+     * Construct a <code>UploadFileForDataImportService</code> from the output values of the given <code>UploadFileForDataImportService</code>.
+     * @param output a <code>UploadFileForDataImportService</code>
      */
-    public static ImportProductFromExcelService fromOutput(ImportProductFromExcelService output) {
-        ImportProductFromExcelService service = new ImportProductFromExcelService();
+    public static UploadFileForDataImportService fromOutput(UploadFileForDataImportService output) {
+        UploadFileForDataImportService service = new UploadFileForDataImportService();
         service.putAllOutput(output.outputMap());
         return service;
     }
 
     /**
-     * Construct a <code>ImportProductFromExcelService</code> from the given input <code>Map</code>.
+     * Construct a <code>UploadFileForDataImportService</code> from the given input <code>Map</code>.
      * @param mapValue the service input <code>Map</code>
      */
-    public static ImportProductFromExcelService fromInput(Map<String, Object> mapValue) {
-        ImportProductFromExcelService service = new ImportProductFromExcelService();
+    public static UploadFileForDataImportService fromInput(Map<String, Object> mapValue) {
+        UploadFileForDataImportService service = new UploadFileForDataImportService();
         service.putAllInput(mapValue);
         if (mapValue.containsKey("userLogin")) {
             GenericValue userGv = (GenericValue) mapValue.get("userLogin");
@@ -411,11 +475,11 @@ public class ImportProductFromExcelService extends ServiceWrapper {
     }
 
     /**
-     * Construct a <code>ImportProductFromExcelService</code> from the given output <code>Map</code>.
+     * Construct a <code>UploadFileForDataImportService</code> from the given output <code>Map</code>.
      * @param mapValue the service output <code>Map</code>
      */
-    public static ImportProductFromExcelService fromOutput(Map<String, Object> mapValue) {
-        ImportProductFromExcelService service = new ImportProductFromExcelService();
+    public static UploadFileForDataImportService fromOutput(Map<String, Object> mapValue) {
+        UploadFileForDataImportService service = new UploadFileForDataImportService();
         service.putAllOutput(mapValue);
         return service;
     }
