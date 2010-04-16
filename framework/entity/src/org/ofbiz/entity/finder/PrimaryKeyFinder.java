@@ -20,6 +20,7 @@
 package org.ofbiz.entity.finder;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -113,7 +114,7 @@ public class PrimaryKeyFinder extends Finder {
         EntityFinderUtil.expandFieldMapToContext(fieldMap, context, entityContext);
         //Debug.logInfo("PrimaryKeyFinder: entityContext=" + entityContext, module);
         // then convert the types...
-        modelEntity.convertFieldMapInPlace(entityContext, delegator);
+        modelEntity.convertFieldMapInPlace(entityContext, delegator, (Locale) context.get("locale"));
 
         // get the list of fieldsToSelect from selectFieldExpanderList
         Set<String> fieldsToSelect = EntityFinderUtil.makeFieldsToSelect(selectFieldExpanderList, context);

@@ -323,7 +323,7 @@ public class FindServices {
 
             Object fieldObject = null;
             if (fieldOp != EntityOperator.IN || ! (fieldValue instanceof Collection)) {
-                fieldObject = modelEntity.convertFieldValue(modelField, fieldValue, delegator, context);
+                fieldObject = modelEntity.convertFieldValue(modelField, fieldValue, delegator, context, null);
             } else {
                 fieldObject = fieldValue;
             }
@@ -401,7 +401,7 @@ public class FindServices {
                 fieldOp = EntityOperator.LESS_THAN;
             }
             // String rhs = fieldValue.toString();
-            fieldObject = modelEntity.convertFieldValue(modelField, fieldValue, delegator, context);
+            fieldObject = modelEntity.convertFieldValue(modelField, fieldValue, delegator, context, null);
             cond = EntityCondition.makeCondition(fieldName, (EntityComparisonOperator) fieldOp, fieldObject);
             tmpList.add(cond);
 

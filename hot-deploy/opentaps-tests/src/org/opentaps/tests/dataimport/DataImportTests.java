@@ -328,8 +328,8 @@ public class DataImportTests extends OpentapsTestCase {
         ledgerService.postAcctgTrans();
         
         AccountingTransaction changedAcctgTrans = leger_repos.getAccountingTransaction(acctgTrans.getAcctgTransId());
-        assertEquals("AcctgTrans["+acctgTrans.getAcctgTransId()+"] posted amount ("+acctgTrans.getBigDecimal("postedAmount")+") is not equal to transaction debit total (300)", BigDecimal.valueOf(300), changedAcctgTrans.getPostedAmount());
-        assertEquals("Accounting transaction [" + changedAcctgTrans.getAcctgTransId() + "] is not posted", changedAcctgTrans.isPosted());
+        assertEquals("AcctgTrans[" + acctgTrans.getAcctgTransId() + "] posted amount (" + acctgTrans.getBigDecimal("postedAmount") + ") is not equal to transaction debit total (300)", BigDecimal.valueOf(300), changedAcctgTrans.getPostedAmount());
+        assertTrue("Accounting transaction [" + changedAcctgTrans.getAcctgTransId() + "] is not posted", changedAcctgTrans.isPosted());
     }
 
     public void testImportExcelFile() throws Exception {

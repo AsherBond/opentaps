@@ -225,7 +225,7 @@ public class EntityFinderUtil {
             if (!((operator.equals(EntityOperator.IN) || operator.equals(EntityOperator.BETWEEN))
                     && value instanceof Collection)) {
                 // now to a type conversion for the target fieldName
-                value = modelEntity.convertFieldValue(modelEntity.getField(fieldName), value, delegator, context);
+                value = modelEntity.convertFieldValue(modelEntity.getField(fieldName), value, delegator, context, null);
             }
 
             if (Debug.verboseOn()) Debug.logVerbose("Got value for fieldName [" + fieldName + "]: " + value, module);

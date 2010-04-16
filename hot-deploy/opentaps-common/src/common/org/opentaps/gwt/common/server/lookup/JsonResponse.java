@@ -23,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -221,7 +223,7 @@ public class JsonResponse {
             excelDataList.add(e.toMap(fields));
         }
 
-        String excelFilePath = getAbsoluteFilePath(fileName, servletContext);
+        String excelFilePath = UtilCommon.getAbsoluteFilePath(servletContext, fileName);
         try {
             UtilCommon.saveToExcel(excelFilePath, "data", fields, excelDataList);
         } catch (IOException ioe) {
@@ -262,7 +264,7 @@ public class JsonResponse {
         try {
             out = response.getOutputStream();
 
-            file = new File(getAbsoluteFilePath(filename, servletContext));
+            file = new File(UtilCommon.getAbsoluteFilePath(servletContext, filename));
             fileToDownload = new FileInputStream(file);
 
             response.setContentType("application/vnd.ms-excel");
@@ -298,12 +300,6 @@ public class JsonResponse {
         return "success";
     }
 
-    private String getAbsoluteFilePath(final String filename, ServletContext servletContext) {
-        String rootPath = servletContext.getRealPath("../../../../");
-        String filePath = "/runtime/output/";
-        return rootPath + filePath + filename;
-    }
-
     @SuppressWarnings("unchecked")
     private void jsonSerialize(String field, Object object, JSONObject json) {
         if (object instanceof BigDecimal) {
@@ -325,6 +321,14 @@ public class JsonResponse {
                 }
             }
             json.put(field, values);
+        } else if (object instanceof Date) {
+            //2987870
+            //if the date does not contain a time json serializer will fail as it is using a deprecated method
+            //wrapping the date into the calendar object solve this issue
+            final Date date = (Date) object;
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            json.put(field,calendar.getTime());
         } else {
             json.put(field, object);
         }

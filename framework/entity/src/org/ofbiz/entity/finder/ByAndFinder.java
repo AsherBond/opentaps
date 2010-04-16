@@ -53,7 +53,7 @@ public class ByAndFinder extends ListFinder {
         Map<String, Object> entityContext = FastMap.newInstance();
         EntityFinderUtil.expandFieldMapToContext(this.fieldMap, context, entityContext);
         // then convert the types...
-        modelEntity.convertFieldMapInPlace(entityContext, delegator);
+        modelEntity.convertFieldMapInPlace(entityContext, delegator, null);
         return EntityCondition.makeCondition(entityContext);
     }
 }

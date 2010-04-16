@@ -346,7 +346,7 @@ public final class PaginationEvents {
 
         // using random string as part of file name, avoid multi user operate in same time.
         String fileName = "data_" + String.valueOf((int) (Math.random() * 100000)) + ".xls";
-        String excelFilePath = getAbsoluteFilePath(request, fileName);
+        String excelFilePath = UtilCommon.getAbsoluteFilePath(request, fileName);
         try {
             UtilCommon.saveToExcel(excelFilePath, "data", keys, excelDataList);
         } catch (IOException ioe) {
@@ -374,7 +374,7 @@ public final class PaginationEvents {
         try {
             out = response.getOutputStream();
 
-            file = new File(getAbsoluteFilePath(request, filename));
+            file = new File(UtilCommon.getAbsoluteFilePath(request, filename));
             fileToDownload = new FileInputStream(file);
 
             response.setContentType("application/vnd.ms-excel");
@@ -408,13 +408,6 @@ public final class PaginationEvents {
         }
 
         return "success";
-    }
-
-    private static String getAbsoluteFilePath(HttpServletRequest request, final String filename) {
-        ServletContext servletContext = request.getSession().getServletContext();
-        String rootPath = servletContext.getRealPath("../../../../");
-        String filePath = "/runtime/output/";
-        return rootPath + filePath + filename;
     }
 
 }
