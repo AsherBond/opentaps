@@ -16,7 +16,12 @@
  */
 package org.opentaps.tests.dataimport;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +32,14 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.DataImportCustomer;
 import org.opentaps.base.entities.DataImportGlAccount;
+import org.opentaps.base.entities.DataImportInventory;
+import org.opentaps.base.entities.DataImportProduct;
+import org.opentaps.base.entities.DataImportSupplier;
 import org.opentaps.base.entities.GlAccount;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.common.util.UtilCommon;
@@ -37,6 +47,8 @@ import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.dataimport.AccountingDataImportRepositoryInterface;
 import org.opentaps.domain.dataimport.DataImportDomainInterface;
 import org.opentaps.domain.dataimport.GlAccountImportServiceInterface;
+import org.opentaps.domain.dataimport.PartyDataImportRepositoryInterface;
+import org.opentaps.domain.dataimport.ProductDataImportRepositoryInterface;
 import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.domain.ledger.LedgerDomainInterface;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
@@ -79,6 +91,22 @@ public class DataImportTests extends OpentapsTestCase {
 
     @Override
     public void tearDown() throws Exception {
+        // obtain domains and repositories which is needed to remove records
+        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(this.admin));
+        DataImportDomainInterface imp_domain = domainLoader.loadDomainsDirectory().getDataImportDomain();
+        ProductDataImportRepositoryInterface product_repos = imp_domain.getProductDataImportRepository();
+        PartyDataImportRepositoryInterface party_repos = imp_domain.getPartyDataImportRepository();
+        AccountingDataImportRepositoryInterface acc_repos = imp_domain.getAccountingDataImportRepository();
+        
+        // remove all DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory entities whose primary keys begin with excel  
+        String id_suffix = "excel%";
+        product_repos.remove(product_repos.findList(DataImportProduct.class, EntityCondition.makeCondition(DataImportProduct.Fields.productId.name(), EntityOperator.LIKE, id_suffix)));
+        product_repos.remove(product_repos.findList(DataImportInventory.class, EntityCondition.makeCondition(DataImportInventory.Fields.itemId.name(), EntityOperator.LIKE, id_suffix)));
+        party_repos.remove(party_repos.findList(DataImportSupplier.class, EntityCondition.makeCondition(DataImportSupplier.Fields.supplierId.name(), EntityOperator.LIKE, id_suffix)));
+        party_repos.remove(party_repos.findList(DataImportCustomer.class, EntityCondition.makeCondition(DataImportCustomer.Fields.customerId.name(), EntityOperator.LIKE, id_suffix)));
+        acc_repos.remove(acc_repos.findList(DataImportGlAccount.class, EntityCondition.makeCondition(DataImportGlAccount.Fields.glAccountId.name(), EntityOperator.LIKE, id_suffix)));
+        //end of remove
+        
         super.tearDown();
         demofinadmin        = null;
         DemoSalesManager    = null;
@@ -86,7 +114,7 @@ public class DataImportTests extends OpentapsTestCase {
         demopurch1          = null;
         product             = null;
    
-        // remove all DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory entities whose primary keys begin with excel  
+        
     }
 
     /**
@@ -332,11 +360,83 @@ public class DataImportTests extends OpentapsTestCase {
         assertTrue("Accounting transaction [" + changedAcctgTrans.getAcctgTransId() + "] is not posted", changedAcctgTrans.isPosted());
     }
 
+    /**
+     * Verify that uploadFileForDataImport service can successifully upload records from excel file to DataImport* entities.
+     * 1. Get the number of records of every DataImport* entity. Every DataImport* entity corresponds to excel file tabs i.e. Products tab - DataImportProduct .
+     * 2. Run the uploadFileForDataImport service with the file from hot-deploy/dataimport/data/xls/OpentapsImport.xls .
+     * 3. Verify the correct number of DataImport* records have been added .
+     * @throws java.lang.Exception if an error occurs
+     */
     public void testImportExcelFile() throws Exception {
-        // get the number of DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory entities  
-        // run the uploadFileForDataImport service with the file from hot-deploy/dataimport/data/xls/OpentapsImport.xls
-        // verify the correct number of DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory have been added
-        // another dataimport branch change
+        //obtain domains and repositories which is needed in the test
+        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(this.admin));
+        DataImportDomainInterface imp_domain = domainLoader.loadDomainsDirectory().getDataImportDomain();
+        ProductDataImportRepositoryInterface product_repos = imp_domain.getProductDataImportRepository();
+        PartyDataImportRepositoryInterface party_repos = imp_domain.getPartyDataImportRepository();
+        AccountingDataImportRepositoryInterface acc_repos = imp_domain.getAccountingDataImportRepository();
+        
+        //1. Get the number of records of DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory entities .
+        int bcount1 = product_repos.findAll(DataImportProduct.class).size();
+        int bcount2 = product_repos.findAll(DataImportInventory.class).size();
+        int bcount3 = party_repos.findAll(DataImportSupplier.class).size();
+        int bcount4 = party_repos.findAll(DataImportCustomer.class).size();
+        int bcount5 = acc_repos.findAll(DataImportGlAccount.class).size();
+        
+        //2. Run the uploadFileForDataImport service with the file from hot-deploy/dataimport/data/xls/OpentapsImport.xls .
+        String fileName = "OpentapsImport.xls";
+        String folderPath = "hot-deploy/dataimport/data/xls/";
+        String fileFormat = "EXCEL";
+        String contentType = "application/vnd.ms-excel";
+        File excelFile = new File(folderPath + fileName);
+        ByteBuffer fileBytes = ByteBuffer.wrap(getBytesFromFile(excelFile));
+              
+        Map params = UtilMisc.toMap("userLogin", this.admin, 
+                                                    "uploadedFile", fileBytes, 
+                                                    "_uploadedFile_fileName", fileName , 
+                                                    "_uploadedFile_contentType", contentType,
+                                                    "fileFormat", fileFormat);
+        String uploadFileForDataImportServiceName = "uploadFileForDataImport";
+        Map<String, Object> results = dispatcher.runSync(uploadFileForDataImportServiceName, params);        
+        this.assertEquals("Service "+uploadFileForDataImportServiceName+" failure.", ServiceUtil.returnSuccess(), results);
+        
+        //3. Verify the correct number of DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory have been added .
+        int acount1 = product_repos.findAll(DataImportProduct.class).size();
+        int acount2 = product_repos.findAll(DataImportInventory.class).size();
+        int acount3 = party_repos.findAll(DataImportSupplier.class).size();
+        int acount4 = party_repos.findAll(DataImportCustomer.class).size();
+        int acount5 = acc_repos.findAll(DataImportGlAccount.class).size();
+        
+        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Products' to entity DataImportProduct.", 2, acount1-bcount1);
+        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Suppliers' to entity DataImportSupplier.", 2, acount3-bcount3);
+        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Inventory' to entity DataImportInventory.", 3, acount2-bcount2);        
+        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Customers' to entity DataImportCustomer.", 3, acount4-bcount4);
+        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Gl Accounts' to entity DataImportGlAccount.", 15, acount5-bcount5);
+        
+    }
+    
+    /**
+     * Helper method to get byte[] from a file.
+     *
+     * @param f a <code>File</code> value
+     * @throws Exception if an error occurs
+     * @return a <code>byte[]</code> value
+     * @throws IOException if an error occurs
+     */
+    private static byte[] getBytesFromFile(File f) throws IOException {
+        if (f == null) {
+            return null;
+        }
+
+        FileInputStream stream = new FileInputStream(f);
+        ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+        byte[] b = new byte[1024];
+        int n;
+        while ((n = stream.read(b)) != -1) {
+            out.write(b, 0, n);
+        }
+        stream.close();
+        out.close();
+        return out.toByteArray();
     }
 
 }

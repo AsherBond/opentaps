@@ -19,9 +19,9 @@ package org.opentaps.dataimport.domain;
 import org.opentaps.domain.dataimport.AccountingDataImportRepositoryInterface;
 import org.opentaps.domain.dataimport.DataImportDomainInterface;
 import org.opentaps.domain.dataimport.GlAccountImportServiceInterface;
+import org.opentaps.domain.dataimport.PartyDataImportRepositoryInterface;
+import org.opentaps.domain.dataimport.ProductDataImportRepositoryInterface;
 import org.opentaps.foundation.domain.Domain;
-import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -38,6 +38,16 @@ public class DataImportDomain extends Domain implements DataImportDomainInterfac
     /** {@inheritDoc} */
     public GlAccountImportServiceInterface getGlAccountImportService() throws ServiceException {
         return this.instantiateService(GlAccountImportService.class);
+    }
+
+    /** {@inheritDoc} */
+    public ProductDataImportRepositoryInterface getProductDataImportRepository() throws RepositoryException {
+        return instantiateRepository(ProductDataImportRepository.class);
+    }
+
+    /** {@inheritDoc} */
+    public PartyDataImportRepositoryInterface getPartyDataImportRepository() throws RepositoryException {
+        return instantiateRepository(PartyDataImportRepository.class);
     }
 
 }
