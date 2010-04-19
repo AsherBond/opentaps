@@ -23,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -325,9 +327,9 @@ public class JsonResponse {
             //wrapping the date into the calendar object solve this issue
             final Date date = (Date) object;
             final Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);                                                
+            calendar.setTime(date);
             json.put(field,calendar.getTime());
-        }else{
+        } else {
             json.put(field, object);
         }
     }
