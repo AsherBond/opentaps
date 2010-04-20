@@ -144,6 +144,12 @@ public class OpentapsShoppingCartHelper extends ShoppingCartHelper {
         Set<Integer> cartWithTags = new HashSet<Integer>();
         while (parameterNameIter.hasNext()) {
             String parameterName = parameterNameIter.next();
+
+            // skip the remove selected checkbox param
+            if ("selectedItem".equals(parameterName)) {
+                continue;
+            }
+
             String parameterValue = (String) context.get(parameterName);
             int underscorePos = parameterName.lastIndexOf('_');
 
