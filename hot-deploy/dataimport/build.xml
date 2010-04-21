@@ -118,7 +118,7 @@
     <!-- ================================================================== -->
 
     <target name="docs" depends="prepare-docs,classpath">
-        <javadoc packagenames="com.opensourcestrategies.financials.*" 
+        <javadoc packagenames="org.opentaps.dataimport.*" 
                  classpathref="local.class.path"
                  destdir="${build.dir}/javadocs" 
                  Windowtitle="Open Source Strategies - ${desc}">

@@ -68,5 +68,13 @@
     <target name="deploy" depends="build">
         <copy file="${bin.dir}/jar/${symbolic.name}.jar" tofile="${deploy.dir}/${symbolic.name}.jar" overwrite="true" />
     </target>
+    
+    <!-- ================================================================== -->
+    <!-- Build JavaDoc                                                      -->
+    <!-- ================================================================== -->
+
+    <target name="docs">
+        <!-- do nothing -->
+    </target>
 
 </project>
