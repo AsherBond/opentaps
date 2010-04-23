@@ -29,6 +29,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.base.constants.ProductAssocTypeConstants;
 import org.opentaps.base.entities.GoodIdentification;
 import org.opentaps.base.entities.ProductAssoc;
+import org.opentaps.base.entities.ProductPrice;
 import org.opentaps.base.services.CalculateProductPriceService;
 import org.opentaps.base.services.GetProductByComprehensiveSearchService;
 import org.opentaps.base.services.GetProductCostService;
@@ -147,4 +148,17 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
             throw new RepositoryException(e);
         }
     }
+    
+    /** {@inheritDoc} */
+    public BigDecimal getSalePrice(Product product, String currencyUomId) throws RepositoryException {
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition(ProductPrice.Fields.productId.name(), product.getProductId()),
+                EntityCondition.makeCondition(ProductPrice.Fields.currencyUomId.name(), currencyUomId),
+                EntityCondition.makeCondition(ProductPrice.Fields.productPriceTypeId.name(), "PROMO_PRICE"),
+                EntityUtil.getFilterByDateExpr());
+        List<ProductPrice> productPrices = findList(ProductPrice.class, conditions);
+        return productPrices.size() == 0 ? null : productPrices.get(0).getPrice();
+    }
+
+   
 }
