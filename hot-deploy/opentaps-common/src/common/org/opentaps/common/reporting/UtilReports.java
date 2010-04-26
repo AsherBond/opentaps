@@ -477,6 +477,14 @@ public final class UtilReports {
 
                 Map<String, Object> reportsGroup = FastMap.newInstance();
                 reportsGroup.putAll(group.getAllFields());
+                String groupDesc = group.getString("description");
+                if (UtilValidate.isNotEmpty(groupDesc) && groupDesc.startsWith("%")) {
+                    String label = (String) uiLabelsMap.get(groupDesc.substring(1));
+                    if (UtilValidate.isNotEmpty(label)) {
+                        reportsGroup.put("description", label);
+                    }
+                }
+
                 reportsGroup.put("reports", EntityUtil.orderBy(members, UtilMisc.toList("sequenceNum", "shortName")));
                 reportsGroupedList.add(reportsGroup);
             }
