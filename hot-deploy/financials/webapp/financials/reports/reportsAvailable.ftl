@@ -32,8 +32,7 @@
     </ul>
     </p>
 
-    <p><b>${uiLabelMap.Financials}</b>
-    <ul class="bulletList">
+    <@displayReportGroup group="FIN_FINANCIALS" nameOnly=true >
     <li><a href="<@ofbizUrl>TrialBalance</@ofbizUrl>">${uiLabelMap.AccountingTrialBalance}</a></li>
     <li><a href="<@ofbizUrl>IncomeStatement</@ofbizUrl>">${uiLabelMap.AccountingIncomeStatement}</a></li>
     <li><a href="<@ofbizUrl>ComparativeIncomeStatement</@ofbizUrl>">${uiLabelMap.FinancialsComparativeIncomeStatement}</a></li>
@@ -41,8 +40,7 @@
     <li><a href="<@ofbizUrl>ComparativeBalance</@ofbizUrl>">${uiLabelMap.FinancialsComparativeBalanceSheet}</a></li>
     <li><a href="<@ofbizUrl>CashFlowStatement</@ofbizUrl>">${uiLabelMap.FinancialsCashFlowStatement}</a></li>
     <li><a href="<@ofbizUrl>ComparativeCashFlowStatement</@ofbizUrl>">${uiLabelMap.FinancialsComparativeCashFlowStatement}</a></li>
-    </ul>
-    </p>
+    </@displayReportGroup>
 
   </td>
   <td style="vertical-align: top;">
