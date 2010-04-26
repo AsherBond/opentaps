@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javolution.util.FastList;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -34,10 +36,15 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.service.GenericServiceException;
 import org.opentaps.base.entities.DataImportProduct;
 import org.opentaps.base.entities.DataImportSupplier;
+import org.opentaps.common.jndi.DataSourceImpl;
+import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.domain.DomainService;
+import org.opentaps.domain.dataimport.DataImportDomainInterface;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
@@ -54,7 +61,14 @@ public final class ExcelImportServices extends DomainService {
     
     private static final String EXCEL_PRODUCT_TAB = "Products";
     private static final String EXCEL_SUPPLIERS_TAB = "Suppliers";
-    private static final List<String> EXCEL_TABS = Arrays.asList(EXCEL_PRODUCT_TAB, EXCEL_SUPPLIERS_TAB);
+    private static final String EXCEL_CUSTOMERS_TAB = "Customers";
+    private static final String EXCEL_INVENTORY_TAB = "Inventory";
+    private static final String EXCEL_GL_ACCOUNTS_TAB = "GL Accounts";
+    private static final List<String> EXCEL_TABS = Arrays.asList(EXCEL_PRODUCT_TAB, EXCEL_SUPPLIERS_TAB, 
+                                                                 EXCEL_CUSTOMERS_TAB, EXCEL_INVENTORY_TAB, 
+                                                                 EXCEL_GL_ACCOUNTS_TAB);
+    
+    private static final String USER_ABSOLUTE_FILE_PATH_PARAM = "USER_FILE_PATH";
 
     private String uploadedFileName;
     
@@ -277,27 +291,51 @@ public final class ExcelImportServices extends DomainService {
 
     	// loop through the tabs and import them one by one
     	try {
-    		// a collection of all the records from all the excel spreadsheet tabs
-        	FastList entitiesToCreate = FastList.newInstance();
-        	
-    		for (String excelTab: EXCEL_TABS) {
-    			HSSFSheet sheet = wb.getSheet(excelTab);
-    			if (sheet == null) {
-    				Debug.logWarning("Did not find a sheet named " + excelTab + " in " + file.getName() + ".  Will not be importing anything.", MODULE);
-    			} else {
-    				if (EXCEL_PRODUCT_TAB.equals(excelTab)) {
-    					entitiesToCreate.addAll(createDataImportProducts(sheet));
-    				} else if (EXCEL_SUPPLIERS_TAB.equals(excelTab)) {
-    					entitiesToCreate.addAll(createDataImportSuppliers(sheet));
-    				} // etc.
-    			}
-    		} 
-        	// create and store values from all the sheets in the workbook in database using the PartyRepositoryInterface
-        	// note we're just using the most basic repository method, so any repository could do here
-        	PartyRepositoryInterface partyRepo = this.getDomainsDirectory().getPartyDomain().getPartyRepository();
-        	partyRepo.createOrUpdate(entitiesToCreate);
+            // ETL transformations use JNDI to obtain database connection parameters.
+            // We have to put proper data source into naming context before run transformations.
+            DataImportDomainInterface d_imp_domain = this.getDomainsDirectory().getDataImportDomain();
+            String dataSourceName = d_imp_domain.getInfrastructure().getDelegator().getGroupHelperName("org.ofbiz");
+            DataSourceImpl datasource = new DataSourceImpl(dataSourceName);
+            new InitialContext().rebind("java:comp/env/jdbc/default_delegator", datasource);
+            
+            // a collection of all the records from all the excel spreadsheet tabs
+            FastList entitiesToCreate = FastList.newInstance();
 
-    	} catch (RepositoryException e) {
+            for (String excelTab: EXCEL_TABS) {
+                    HSSFSheet sheet = wb.getSheet(excelTab);
+                    if (sheet == null) {
+                            Debug.logWarning("Did not find a sheet named " + excelTab + " in " + file.getName() + ".  Will not be importing anything.", MODULE);
+                    } else {
+                            if (EXCEL_PRODUCT_TAB.equals(excelTab)) {
+                                entitiesToCreate.addAll(createDataImportProducts(sheet));
+                            } else if (EXCEL_SUPPLIERS_TAB.equals(excelTab)) {
+                                entitiesToCreate.addAll(createDataImportSuppliers(sheet));
+                            } else if (EXCEL_CUSTOMERS_TAB.equals(excelTab)) {
+                                Map<String, String> params = UtilMisc.toMap(USER_ABSOLUTE_FILE_PATH_PARAM, file.getAbsolutePath());
+                                UtilEtl.runTrans("component://dataimport/script/etl/Customers_from_excel_to_bridge_table.ktr", null, params);
+                            } else if (EXCEL_INVENTORY_TAB.equals(excelTab)) {
+                                Map<String, String> params = UtilMisc.toMap(USER_ABSOLUTE_FILE_PATH_PARAM, file.getAbsolutePath());
+                                UtilEtl.runTrans("component://dataimport/script/etl/Inventory_from_excel_to_bridge_table.ktr", null, params);
+                            } else if (EXCEL_GL_ACCOUNTS_TAB.equals(excelTab)) {
+                                Map<String, String> params = UtilMisc.toMap(USER_ABSOLUTE_FILE_PATH_PARAM, file.getAbsolutePath());
+                                UtilEtl.runTrans("component://dataimport/script/etl/GlAccounts_from_excel_to_bridge_table.ktr", null, params);
+                            }// etc.                                
+                    }
+            }
+
+            // unregister data source
+            new InitialContext().unbind("java:comp/env/jdbc/default_delegator");
+
+            // create and store values from all the sheets in the workbook in database using the PartyRepositoryInterface
+            // note we're just using the most basic repository method, so any repository could do here
+            PartyRepositoryInterface partyRepo = this.getDomainsDirectory().getPartyDomain().getPartyRepository();
+            partyRepo.createOrUpdate(entitiesToCreate);
+
+    	} catch (GenericServiceException ex) {
+            throw new ServiceException(ex);
+        } catch (NamingException ex) {
+            throw new ServiceException(ex);
+        } catch (RepositoryException e) {
     		throw new ServiceException(e);
     	}
 
