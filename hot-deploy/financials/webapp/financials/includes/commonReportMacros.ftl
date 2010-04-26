@@ -260,14 +260,26 @@ To use these macros in your page, first put this at the top:
   </#list>
 </#macro>
 
-<#macro submitReportOptions reportRequest="" screenRequest="" returnPage="" returnLabel="">
+<#macro submitReportOptions reportRequest="" screenRequest="" returnPage="" returnLabel="" optionPdf=true optionXls=true optionCsv=false optionHtml=false>
   <div style="margin-left: 30px; margin-top: 10px;">
     <@inputHidden name="type" value="pdf"/>
-    <#if reportRequest?has_content && screenRequest?has_content>
+    <#if reportRequest?has_content>
       <@selectAction name="reportAction" prompt="${uiLabelMap.OpentapsRunReportIn}">
+      <#if screenRequest?has_content>
         <@action url="javascript: doSubmit('${screenRequest}', 'screen')" text="${uiLabelMap.OpentapsReportOptionScreen}"/>
+      </#if>
+      <#if optionPdf == true || (doPdf?has_content && doPdf == "Y") >
         <@action url="javascript: doSubmit('${reportRequest}', 'pdf')" text="${uiLabelMap.OpentapsReportOptionPdf}"/>
+      </#if>
+      <#if optionXls == true || (doXls?has_content && doXls == "Y")>
         <@action url="javascript: doSubmit('${reportRequest}', 'xls')" text="${uiLabelMap.OpentapsReportOptionXls}"/>
+      </#if>
+      <#if optionCsv == true || (doCsv?has_content && doCsv == "Y")>
+        <@action url="javascript: doSubmit('${reportRequest}', 'csv')" text="${uiLabelMap.OpentapsReportOptionCsv}"/>
+      </#if>
+      <#if optionHtml == true || (doHtml?has_content && doHtml == "Y")>
+        <@action url="javascript: doSubmit('${reportRequest}', 'html')" text="${uiLabelMap.OpentapsReportOptionHtml}"/>
+      </#if>
       <#if returnPage?has_content && returnLabel?has_content>
         <@action url="javascript: void()" text="${uiLabelMap.OpentapsDefaultActionSeparator}"/>
         <@action url="javascript: window.location.href='/financials/control/${returnPage}'" text="${uiLabelMap.get(returnLabel)}"/>
