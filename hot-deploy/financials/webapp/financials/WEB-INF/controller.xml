@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -1023,6 +1023,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareTrialBalanceReport"/>
         <response name="pdf" type="view" value="JRTrialBalancePDF"/>
         <response name="xls" type="view" value="JRTrialBalanceXLS"/>
+        <response name="csv" type="view" value="JRTrialBalanceCSV"/>
         <response name="error" type="request-redirect-noparam" value="TrialBalance"/>
     </request-map>
     <request-map uri="JRTrialBalancePDF">
@@ -1033,6 +1034,10 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="JRTrialBalanceXLS"/>
     </request-map>
+    <request-map uri="JRTrialBalanceCSV">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRTrialBalanceCSV"/>
+    </request-map>
 
     <!-- income statement report by JR  -->
     <request-map uri="JRIncomeStatement">
@@ -1040,6 +1045,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareIncomeStatementReport"/>
         <response name="pdf" type="view" value="JRIncomeStatementPDF"/>
         <response name="xls" type="view" value="JRIncomeStatementXLS"/>
+        <response name="csv" type="view" value="JRIncomeStatementCSV"/>
         <response name="error" type="request-redirect-noparam" value="IncomeStatement"/>
     </request-map>
     <request-map uri="JRIncomeStatementPDF">
@@ -1050,6 +1056,10 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="JRIncomeStatementXLS"/>
     </request-map>
+    <request-map uri="JRIncomeStatementCSV">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRIncomeStatementCSV"/>
+    </request-map>
 
     <!-- comarative income statement report by JR  -->
     <request-map uri="JRComparativeIncomeStatement">
@@ -1057,6 +1067,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareComparativeIncomeStatementReport"/>
         <response name="pdf" type="view" value="JRComparativeIncomeStatementPDF"/>
         <response name="xls" type="view" value="JRComparativeIncomeStatementXLS"/>
+        <response name="csv" type="view" value="JRComparativeIncomeStatementCSV"/>
         <response name="error" type="request-redirect-noparam" value="ComparativeIncomeStatement"/>
     </request-map>
     <request-map uri="JRComparativeIncomeStatementPDF">
@@ -1067,6 +1078,10 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="JRIncomeStatementXLS"/>
     </request-map>
+    <request-map uri="JRComparativeIncomeStatementCSV">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRIncomeStatementCSV"/>
+    </request-map>
 
     <!-- balance sheet report by JR  -->
     <request-map uri="JRBalanceSheet">
@@ -1074,6 +1089,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareBalanceSheetReport"/>
         <response name="pdf" type="view" value="JRBalanceSheetPDF"/>
         <response name="xls" type="view" value="JRBalanceSheetXLS"/>
+        <response name="csv" type="view" value="JRBalanceSheetCSV"/>
         <response name="error" type="request-redirect-noparam" value="BalanceSheet"/>
     </request-map>
     <request-map uri="JRBalanceSheetPDF">
@@ -1084,6 +1100,10 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="JRBalanceSheetXLS"/>
     </request-map>
+    <request-map uri="JRBalanceSheetCSV">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRBalanceSheetCSV"/>
+    </request-map>
 
     <!-- comparative balance report by JR -->
     <request-map uri="JRComparativeBalance">
@@ -1091,6 +1111,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareComparativeBalanceReport"/>
         <response name="pdf" type="view" value="JRComparativeBalancePDF"/>
         <response name="xls" type="view" value="JRComparativeBalanceXLS"/>
+        <response name="csv" type="view" value="JRComparativeBalanceCSV"/>
         <response name="error" type="request-redirect-noparam" value="ComparativeBalance"/>
     </request-map>
     <request-map uri="JRComparativeBalancePDF">
@@ -1101,6 +1122,10 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="JRIncomeStatementXLS"/>
     </request-map>
+    <request-map uri="JRComparativeBalanceCSV">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRIncomeStatementCSV"/>
+    </request-map>
 
     <!-- cach flow statement report by JR  -->
     <request-map uri="JRCashFlowStatement">
@@ -1108,6 +1133,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareCashFlowStatementReport"/>
         <response name="pdf" type="view" value="JRCashFlowStatementPDF"/>
         <response name="xls" type="view" value="JRCashFlowStatementXLS"/>
+        <response name="csv" type="view" value="JRCashFlowStatementCSV"/>
         <response name="error" type="request-redirect-noparam" value="CashFlowStatement"/>
     </request-map>
     <request-map uri="JRCashFlowStatementPDF">
@@ -1118,6 +1144,10 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="JRCashFlowStatementXLS"/>
     </request-map>
+    <request-map uri="JRCashFlowStatementCSV">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRCashFlowStatementCSV"/>
+    </request-map>
 
     <!-- comparative cach flow statement report by JR  -->
     <request-map uri="JRComparativeCashFlowStatement">
@@ -1125,6 +1155,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareComparativeCashFlowStatementReport"/>
         <response name="pdf" type="view" value="JRComparativeCashFlowStatementPDF"/>
         <response name="xls" type="view" value="JRComparativeCashFlowStatementXLS"/>
+        <response name="csv" type="view" value="JRComparativeCashFlowStatementCSV"/>
         <response name="error" type="request-redirect-noparam" value="ComparativeCashFlowStatement"/>
     </request-map>
     <request-map uri="JRComparativeCashFlowStatementPDF">
@@ -1134,6 +1165,10 @@
     <request-map uri="JRComparativeCashFlowStatementXLS">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="JRComparativeCashFlowStatementXLS"/>
+    </request-map>
+    <request-map uri="JRComparativeCashFlowStatementCSV">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRComparativeCashFlowStatementCSV"/>
     </request-map>
 
     <!-- Budgeting  -->
@@ -2024,6 +2059,7 @@
     <view-map name="TrialBalance" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#TrialBalance"/>
     <view-map name="JRTrialBalancePDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/TrialBalance.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRTrialBalanceXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/TrialBalance.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRTrialBalanceCSV" type="jasperreports" page="component://financials/webapp/financials/reports/repository/TrialBalance.jrxml" content-type="text/csv" encoding="none"/>    
     <view-map name="TransactionSummary" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#TransactionSummary"/>
     <view-map name="ComparativeBalance" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#ComparativeBalance"/>
     <view-map name="ComparativeIncomeStatement" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#ComparativeIncomeStatement"/>
@@ -2050,17 +2086,23 @@
     <view-map name="BalanceReportSetup" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#BalanceReportSetup"/>    
     <view-map name="JRIncomeStatementPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/IncomeStatement.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRIncomeStatementXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/IncomeStatement.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRIncomeStatementCSV" type="jasperreports" page="component://financials/webapp/financials/reports/repository/IncomeStatement.jrxml" content-type="text/csv" encoding="none"/>
     <view-map name="JRComparativeIncomeStatementPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeIncomeStatement.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRComparativeIncomeStatementXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeIncomeStatement.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRComparativeIncomeStatementCSV" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeIncomeStatement.jrxml" content-type="text/csv" encoding="none"/>    
     <view-map name="jrBalanceReport" type="jasperreports" page="component://financials/webapp/financials/reports/repository/BalanceReport.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRCashFlowStatementPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/CashFlowStatement.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRCashFlowStatementXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/CashFlowStatement.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRCashFlowStatementCSV" type="jasperreports" page="component://financials/webapp/financials/reports/repository/CashFlowStatement.jrxml" content-type="text/csv" encoding="none"/>    
     <view-map name="JRComparativeCashFlowStatementPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeCashFlowStatement.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRComparativeCashFlowStatementXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeCashFlowStatement.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRComparativeCashFlowStatementCSV" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeCashFlowStatement.jrxml" content-type="text/csv" encoding="none"/>    
     <view-map name="JRBalanceSheetPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/BalanceSheet.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRBalanceSheetXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/BalanceSheet.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRBalanceSheetCSV" type="jasperreports" page="component://financials/webapp/financials/reports/repository/BalanceSheet.jrxml" content-type="text/csv" encoding="none"/>    
     <view-map name="JRComparativeBalancePDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeBalance.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRComparativeBalanceXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeBalance.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>
+    <view-map name="JRComparativeBalanceCSV" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeBalance.jrxml" content-type="text/csv" encoding="none"/>
     <view-map name="JRInvoicesAgingReportPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/InvoicesAging.jrxml" content-type="application/pdf" encoding="none"/>    
     <view-map name="JRInvoicesAgingReportXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/InvoicesAging.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>
     <view-map name="JRAverageDSOReportPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/AverageDSO.jrxml" content-type="application/pdf" encoding="none"/>    
