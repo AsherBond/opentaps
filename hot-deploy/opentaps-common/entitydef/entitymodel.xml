@@ -876,6 +876,7 @@ under the License.
         <field name="salesInvoiceFooterText" type="description"/>
         <field name="groupSalesTaxOnInvoicePdf" type="indicator"/>
         <field name="allocPaymentTagsToAppl" type="indicator"/>
+        <field name="autoPostReverseAcctgTrans" type="indicator"/>
         <relation type="one" fk-name="ACTGPREF_COSTMETH" title="CostingMethod" rel-entity-name="Enumeration">
             <key-map field-name="costingMethodId" rel-field-name="enumId"/>
         </relation>
