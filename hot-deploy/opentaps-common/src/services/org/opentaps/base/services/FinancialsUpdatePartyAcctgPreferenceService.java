@@ -56,6 +56,7 @@ public class FinancialsUpdatePartyAcctgPreferenceService extends ServiceWrapper 
     /** The enumeration of input parameters. */
     public static enum In {
         allocPaymentTagsToAppl("allocPaymentTagsToAppl"),
+        autoPostReverseAcctgTrans("autoPostReverseAcctgTrans"),
         baseCurrencyUomId("baseCurrencyUomId"),
         cogsMethodId("cogsMethodId"),
         costingMethodId("costingMethodId"),
@@ -116,6 +117,7 @@ public class FinancialsUpdatePartyAcctgPreferenceService extends ServiceWrapper 
     }
 
     private String inAllocPaymentTagsToAppl;
+    private String inAutoPostReverseAcctgTrans;
     private String inBaseCurrencyUomId;
     private String inCogsMethodId;
     private String inCostingMethodId;
@@ -160,6 +162,14 @@ public class FinancialsUpdatePartyAcctgPreferenceService extends ServiceWrapper 
      */
     public String getInAllocPaymentTagsToAppl() {
         return this.inAllocPaymentTagsToAppl;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInAutoPostReverseAcctgTrans() {
+        return this.inAutoPostReverseAcctgTrans;
     }
     /**
      * Auto generated value accessor.
@@ -434,6 +444,15 @@ public class FinancialsUpdatePartyAcctgPreferenceService extends ServiceWrapper 
     public void setInAllocPaymentTagsToAppl(String inAllocPaymentTagsToAppl) {
         this.inParameters.add("allocPaymentTagsToAppl");
         this.inAllocPaymentTagsToAppl = inAllocPaymentTagsToAppl;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inAutoPostReverseAcctgTrans the inAutoPostReverseAcctgTrans to set
+    */
+    public void setInAutoPostReverseAcctgTrans(String inAutoPostReverseAcctgTrans) {
+        this.inParameters.add("autoPostReverseAcctgTrans");
+        this.inAutoPostReverseAcctgTrans = inAutoPostReverseAcctgTrans;
     }
     /**
      * Auto generated value setter.
@@ -757,6 +776,7 @@ public class FinancialsUpdatePartyAcctgPreferenceService extends ServiceWrapper 
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         if (inParameters.contains("allocPaymentTagsToAppl")) mapValue.put("allocPaymentTagsToAppl", getInAllocPaymentTagsToAppl());
+        if (inParameters.contains("autoPostReverseAcctgTrans")) mapValue.put("autoPostReverseAcctgTrans", getInAutoPostReverseAcctgTrans());
         if (inParameters.contains("baseCurrencyUomId")) mapValue.put("baseCurrencyUomId", getInBaseCurrencyUomId());
         if (inParameters.contains("cogsMethodId")) mapValue.put("cogsMethodId", getInCogsMethodId());
         if (inParameters.contains("costingMethodId")) mapValue.put("costingMethodId", getInCostingMethodId());
@@ -804,6 +824,7 @@ public class FinancialsUpdatePartyAcctgPreferenceService extends ServiceWrapper 
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
         if (mapValue.containsKey("allocPaymentTagsToAppl")) setInAllocPaymentTagsToAppl((String) mapValue.get("allocPaymentTagsToAppl"));
+        if (mapValue.containsKey("autoPostReverseAcctgTrans")) setInAutoPostReverseAcctgTrans((String) mapValue.get("autoPostReverseAcctgTrans"));
         if (mapValue.containsKey("baseCurrencyUomId")) setInBaseCurrencyUomId((String) mapValue.get("baseCurrencyUomId"));
         if (mapValue.containsKey("cogsMethodId")) setInCogsMethodId((String) mapValue.get("cogsMethodId"));
         if (mapValue.containsKey("costingMethodId")) setInCostingMethodId((String) mapValue.get("costingMethodId"));

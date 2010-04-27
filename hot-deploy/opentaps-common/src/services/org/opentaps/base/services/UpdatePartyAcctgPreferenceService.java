@@ -55,6 +55,7 @@ public class UpdatePartyAcctgPreferenceService extends ServiceWrapper {
     /** The enumeration of input parameters. */
     public static enum In {
         allocPaymentTagsToAppl("allocPaymentTagsToAppl"),
+        autoPostReverseAcctgTrans("autoPostReverseAcctgTrans"),
         costingMethodId("costingMethodId"),
         errorGlJournalId("errorGlJournalId"),
         groupSalesTaxOnInvoicePdf("groupSalesTaxOnInvoicePdf"),
@@ -99,6 +100,7 @@ public class UpdatePartyAcctgPreferenceService extends ServiceWrapper {
     }
 
     private String inAllocPaymentTagsToAppl;
+    private String inAutoPostReverseAcctgTrans;
     private String inCostingMethodId;
     private String inErrorGlJournalId;
     private String inGroupSalesTaxOnInvoicePdf;
@@ -127,6 +129,14 @@ public class UpdatePartyAcctgPreferenceService extends ServiceWrapper {
      */
     public String getInAllocPaymentTagsToAppl() {
         return this.inAllocPaymentTagsToAppl;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInAutoPostReverseAcctgTrans() {
+        return this.inAutoPostReverseAcctgTrans;
     }
     /**
      * Auto generated value accessor.
@@ -273,6 +283,15 @@ public class UpdatePartyAcctgPreferenceService extends ServiceWrapper {
     public void setInAllocPaymentTagsToAppl(String inAllocPaymentTagsToAppl) {
         this.inParameters.add("allocPaymentTagsToAppl");
         this.inAllocPaymentTagsToAppl = inAllocPaymentTagsToAppl;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inAutoPostReverseAcctgTrans the inAutoPostReverseAcctgTrans to set
+    */
+    public void setInAutoPostReverseAcctgTrans(String inAutoPostReverseAcctgTrans) {
+        this.inParameters.add("autoPostReverseAcctgTrans");
+        this.inAutoPostReverseAcctgTrans = inAutoPostReverseAcctgTrans;
     }
     /**
      * Auto generated value setter.
@@ -452,6 +471,7 @@ public class UpdatePartyAcctgPreferenceService extends ServiceWrapper {
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         if (inParameters.contains("allocPaymentTagsToAppl")) mapValue.put("allocPaymentTagsToAppl", getInAllocPaymentTagsToAppl());
+        if (inParameters.contains("autoPostReverseAcctgTrans")) mapValue.put("autoPostReverseAcctgTrans", getInAutoPostReverseAcctgTrans());
         if (inParameters.contains("costingMethodId")) mapValue.put("costingMethodId", getInCostingMethodId());
         if (inParameters.contains("errorGlJournalId")) mapValue.put("errorGlJournalId", getInErrorGlJournalId());
         if (inParameters.contains("groupSalesTaxOnInvoicePdf")) mapValue.put("groupSalesTaxOnInvoicePdf", getInGroupSalesTaxOnInvoicePdf());
@@ -483,6 +503,7 @@ public class UpdatePartyAcctgPreferenceService extends ServiceWrapper {
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
         if (mapValue.containsKey("allocPaymentTagsToAppl")) setInAllocPaymentTagsToAppl((String) mapValue.get("allocPaymentTagsToAppl"));
+        if (mapValue.containsKey("autoPostReverseAcctgTrans")) setInAutoPostReverseAcctgTrans((String) mapValue.get("autoPostReverseAcctgTrans"));
         if (mapValue.containsKey("costingMethodId")) setInCostingMethodId((String) mapValue.get("costingMethodId"));
         if (mapValue.containsKey("errorGlJournalId")) setInErrorGlJournalId((String) mapValue.get("errorGlJournalId"));
         if (mapValue.containsKey("groupSalesTaxOnInvoicePdf")) setInGroupSalesTaxOnInvoicePdf((String) mapValue.get("groupSalesTaxOnInvoicePdf"));
