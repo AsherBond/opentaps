@@ -59,6 +59,7 @@ public class PostAcctgTransService extends ServiceWrapper {
     public static enum In {
         acctgTransId("acctgTransId"),
         locale("locale"),
+        skipCheckAcctgTags("skipCheckAcctgTags"),
         timeZone("timeZone"),
         userLogin("userLogin");
         private final String _fieldName;
@@ -97,6 +98,7 @@ public class PostAcctgTransService extends ServiceWrapper {
 
     private String inAcctgTransId;
     private Locale inLocale;
+    private String inSkipCheckAcctgTags;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
     private String outErrorMessage;
@@ -126,6 +128,14 @@ public class PostAcctgTransService extends ServiceWrapper {
      */
     public Locale getInLocale() {
         return this.inLocale;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInSkipCheckAcctgTags() {
+        return this.inSkipCheckAcctgTags;
     }
     /**
      * Auto generated value accessor.
@@ -225,6 +235,15 @@ public class PostAcctgTransService extends ServiceWrapper {
     public void setInLocale(Locale inLocale) {
         this.inParameters.add("locale");
         this.inLocale = inLocale;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inSkipCheckAcctgTags the inSkipCheckAcctgTags to set
+    */
+    public void setInSkipCheckAcctgTags(String inSkipCheckAcctgTags) {
+        this.inParameters.add("skipCheckAcctgTags");
+        this.inSkipCheckAcctgTags = inSkipCheckAcctgTags;
     }
     /**
      * Auto generated value setter.
@@ -342,6 +361,7 @@ public class PostAcctgTransService extends ServiceWrapper {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         if (inParameters.contains("acctgTransId")) mapValue.put("acctgTransId", getInAcctgTransId());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
+        if (inParameters.contains("skipCheckAcctgTags")) mapValue.put("skipCheckAcctgTags", getInSkipCheckAcctgTags());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         // allow the User set to override the userLogin
@@ -367,6 +387,7 @@ public class PostAcctgTransService extends ServiceWrapper {
     public void putAllInput(Map<String, Object> mapValue) {
         if (mapValue.containsKey("acctgTransId")) setInAcctgTransId((String) mapValue.get("acctgTransId"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
+        if (mapValue.containsKey("skipCheckAcctgTags")) setInSkipCheckAcctgTags((String) mapValue.get("skipCheckAcctgTags"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));
     }
