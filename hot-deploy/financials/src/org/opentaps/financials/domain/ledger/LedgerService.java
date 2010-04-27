@@ -56,6 +56,7 @@ public class LedgerService extends DomainService implements LedgerServiceInterfa
     private static final String MODULE = LedgerService.class.getName();
 
     private String acctgTransId = null;
+    private String skipCheckAcctgTags = null;
 
     /**
      * Default constructor.
@@ -67,6 +68,11 @@ public class LedgerService extends DomainService implements LedgerServiceInterfa
     /** {@inheritDoc} */
     public void setAcctgTransId(String acctgTransId) {
         this.acctgTransId = acctgTransId;
+    }
+
+    /** {@inheritDoc} */
+    public void setSkipCheckAcctgTags(String skipCheckAcctgTags) {
+        this.skipCheckAcctgTags = skipCheckAcctgTags;
     }
 
     /** {@inheritDoc} */
@@ -101,7 +107,7 @@ public class LedgerService extends DomainService implements LedgerServiceInterfa
         }
 
         // verify that the transaction can be posted
-        if (!transaction.canPost()) {
+        if (!transaction.canPost("Y".equals(skipCheckAcctgTags))) {
             Debug.logError("Cannot post transaction: " + transaction + " with entries " + transaction.getTransactionEntries(), MODULE);
             TagBalance tagNotBalance = transaction.accountingTagsBalance();
             if (tagNotBalance == null) {

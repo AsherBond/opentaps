@@ -51,6 +51,7 @@ under the License.
             <check-permission permission="ACCOUNTING" action="_ATX_POST"/>
         </required-permissions>
         <auto-attributes include="pk" mode="IN" optional="false"/>
+        <attribute name="skipCheckAcctgTags" type="String" mode="IN" optional="true"/>
     </service>
 
     <service name="reconcileGlAccount" default-entity-name="GlReconciliation" engine="java"

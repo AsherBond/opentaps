@@ -33,6 +33,12 @@ public interface LedgerServiceInterface extends ServiceInterface {
     public void setAcctgTransId(String acctgTransId);
 
     /**
+     * Sets if the service should skip the checks on the accounting tags, optional parameter for {@link #postAcctgTrans}.
+     * @param skipCheckAcctgTags an indicator <code>String</code> value
+     */
+    public void setSkipCheckAcctgTags(String skipCheckAcctgTags);
+
+    /**
      * Service to post a transaction to the ledger.
      * Uses the acctgTransId to find the transaction.
      * @throws ServiceException if an error occurs
