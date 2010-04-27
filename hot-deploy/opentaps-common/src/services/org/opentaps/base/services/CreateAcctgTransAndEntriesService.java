@@ -64,6 +64,7 @@ public class CreateAcctgTransAndEntriesService extends ServiceWrapper {
         acctgTransEntries("acctgTransEntries"),
         acctgTransId("acctgTransId"),
         acctgTransTypeId("acctgTransTypeId"),
+        autoPostReverseAcctgTrans("autoPostReverseAcctgTrans"),
         createdByUserLogin("createdByUserLogin"),
         description("description"),
         finAccountTransId("finAccountTransId"),
@@ -125,6 +126,7 @@ public class CreateAcctgTransAndEntriesService extends ServiceWrapper {
     private List inAcctgTransEntries;
     private String inAcctgTransId;
     private String inAcctgTransTypeId;
+    private String inAutoPostReverseAcctgTrans;
     private String inCreatedByUserLogin;
     private String inDescription;
     private String inFinAccountTransId;
@@ -191,6 +193,14 @@ public class CreateAcctgTransAndEntriesService extends ServiceWrapper {
      */
     public String getInAcctgTransTypeId() {
         return this.inAcctgTransTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInAutoPostReverseAcctgTrans() {
+        return this.inAutoPostReverseAcctgTrans;
     }
     /**
      * Auto generated value accessor.
@@ -531,6 +541,15 @@ public class CreateAcctgTransAndEntriesService extends ServiceWrapper {
     public void setInAcctgTransTypeId(String inAcctgTransTypeId) {
         this.inParameters.add("acctgTransTypeId");
         this.inAcctgTransTypeId = inAcctgTransTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inAutoPostReverseAcctgTrans the inAutoPostReverseAcctgTrans to set
+    */
+    public void setInAutoPostReverseAcctgTrans(String inAutoPostReverseAcctgTrans) {
+        this.inParameters.add("autoPostReverseAcctgTrans");
+        this.inAutoPostReverseAcctgTrans = inAutoPostReverseAcctgTrans;
     }
     /**
      * Auto generated value setter.
@@ -910,6 +929,7 @@ public class CreateAcctgTransAndEntriesService extends ServiceWrapper {
         if (inParameters.contains("acctgTransEntries")) mapValue.put("acctgTransEntries", getInAcctgTransEntries());
         if (inParameters.contains("acctgTransId")) mapValue.put("acctgTransId", getInAcctgTransId());
         if (inParameters.contains("acctgTransTypeId")) mapValue.put("acctgTransTypeId", getInAcctgTransTypeId());
+        if (inParameters.contains("autoPostReverseAcctgTrans")) mapValue.put("autoPostReverseAcctgTrans", getInAutoPostReverseAcctgTrans());
         if (inParameters.contains("createdByUserLogin")) mapValue.put("createdByUserLogin", getInCreatedByUserLogin());
         if (inParameters.contains("description")) mapValue.put("description", getInDescription());
         if (inParameters.contains("finAccountTransId")) mapValue.put("finAccountTransId", getInFinAccountTransId());
@@ -965,6 +985,7 @@ public class CreateAcctgTransAndEntriesService extends ServiceWrapper {
         if (mapValue.containsKey("acctgTransEntries")) setInAcctgTransEntries((List) mapValue.get("acctgTransEntries"));
         if (mapValue.containsKey("acctgTransId")) setInAcctgTransId((String) mapValue.get("acctgTransId"));
         if (mapValue.containsKey("acctgTransTypeId")) setInAcctgTransTypeId((String) mapValue.get("acctgTransTypeId"));
+        if (mapValue.containsKey("autoPostReverseAcctgTrans")) setInAutoPostReverseAcctgTrans((String) mapValue.get("autoPostReverseAcctgTrans"));
         if (mapValue.containsKey("createdByUserLogin")) setInCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         if (mapValue.containsKey("description")) setInDescription((String) mapValue.get("description"));
         if (mapValue.containsKey("finAccountTransId")) setInFinAccountTransId((String) mapValue.get("finAccountTransId"));
