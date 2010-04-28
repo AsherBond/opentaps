@@ -68,6 +68,10 @@
 </script>
 
 <div class="form">
+
+<#-- for the remove attachement button -->
+<@form name="removeEmailAttachmentForm" url="removeEmailAttachment" workEffortId="" communicationEventId="" contentId="" dataResourceId="" fromDate="" />
+
 <form name="writeEmailForm" id="writeEmailForm" method="POST" action="<@ofbizUrl>${sendTarget}</@ofbizUrl>" ${marketingCampaigns?exists?string("","enctype=\"multipart/form-data\"")}>
   <@inputHidden name="contactMechIdTo" value=parameters.contactMechIdTo?if_exists />
   <@inputHidden name="partyId" value=partyId?if_exists /> <#-- for passing to viewAccount/viewContact/viewLead when form finishes -->
@@ -198,9 +202,8 @@
               <a href="/partymgr/control/ViewSimpleContent?contentId=${attachment.contentId}" class="buttontext">${attachment.contentName}</a>
             </td>
             <td>
-              <a href="<@ofbizUrl>removeEmailAttachment?workEffortId=${parameters.workEffortId}&communicationEventId=${attachment.communicationEventId}&contentId=${attachment.contentId}&dataResourceId=${attachment.dataResourceId?if_exists}&fromDate=${attachment.fromDate?datetime}</@ofbizUrl>">
-              <img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/delete.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonRemove}"/>
-              </a>
+              <#assign removeAttText><img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/delete.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonRemove}"/></#assign>
+              <@submitFormLink form="removeEmailAttachmentForm" workEffortId=parameters.workEffortId communicationEventId=attachment.communicationEventId contentId=attachment.contentId dataResourceId=attachment.dataResourceId! fromDate=attachment.fromDate?datetime text=removeAttText class=""/>
             </td>
           </tr>
         </#list>
