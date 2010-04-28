@@ -171,6 +171,7 @@ public final class TransactionServices {
 
             // Toggle the debit/credit flag, set the reconcileStatusId and remove the acctgTransId from each AcctgTransEntry
             Iterator ateit = acctgTransEntries.iterator();
+            String organizationPartyId = null;
             while (ateit.hasNext()) {
                 GenericValue acctgTransEntry = (GenericValue) ateit.next();
                 if (acctgTransEntry.getString("debitCreditFlag").equals("C")) {
@@ -180,6 +181,9 @@ public final class TransactionServices {
                 }
                 acctgTransEntry.set("reconcileStatusId", "AES_NOT_RECONCILED");
                 acctgTransEntry.remove("acctgTransId");
+                if (organizationPartyId == null) {
+                    organizationPartyId = acctgTransEntry.getString("organizationPartyId");
+                }
             }
 
             // Assemble the context for the service that creates and posts AcctgTrans and AcctgTransEntry records
@@ -189,6 +193,19 @@ public final class TransactionServices {
             serviceMap.remove("createdTxStamp");
             serviceMap.remove("lastUpdatedStamp");
             serviceMap.remove("lastUpdatedTxStamp");
+
+            // check the PartyAcctgPreference autoPostReverseAcctgTrans flag: if set to N
+            // set the createAcctgTransAndEntries service not to auto post the transaction and make sure the isPosted flag is set to N
+            if (UtilValidate.isEmpty(organizationPartyId)) {
+                Debug.logWarning("Got empty organizationPartyId for transaction [" + acctgTransId + "], cannot determine autoPostReverseAcctgTrans", MODULE);
+            } else {
+                GenericValue pref = delegator.findByPrimaryKeyCache("PartyAcctgPreference", UtilMisc.toMap("partyId", organizationPartyId));
+                if ("N".equals(pref.get("autoPostReverseAcctgTrans"))) {
+                    serviceMap.put("isPosted", "N");
+                    serviceMap.put("autoPostReverseAcctgTrans", "N");
+                }
+            }
+
             // reverse the transaction at the same date, so it posts to the same time periods as the original transaction
             serviceMap.put("transactionDate", acctgTrans.get("transactionDate"));
             serviceMap.put("description", "Reversal of Acctg Trans ID# " + acctgTransId);

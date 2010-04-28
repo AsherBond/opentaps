@@ -83,6 +83,7 @@
           then manually post them later, it does not work for time period closings, so we have to make it sync for now. -->
     <eca service="createAcctgTransAndEntries" event="commit">
         <condition field-name="acctgTransId" operator="is-not-empty"/>
+        <condition field-name="autoPostReverseAcctgTrans" operator="not-equals" value="N"/>
         <action service="postAcctgTrans" mode="sync" persist="true"/>
     </eca>    
 

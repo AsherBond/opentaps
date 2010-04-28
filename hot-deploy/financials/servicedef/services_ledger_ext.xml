@@ -314,6 +314,7 @@ under the License.
         </required-permissions>
         <auto-attributes include="pk" mode="IN" optional="true"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="autoPostReverseAcctgTrans" type="String" mode="IN" optional="true"/>
         <attribute name="acctgTransEntries" type="java.util.List" mode="IN" optional="false"/>
         <attribute name="acctgTransId" type="String" mode="OUT"/>
         <!-- TODO: make required-permissions tag work here rather than inside the simple XML -->
