@@ -28,7 +28,7 @@
   </tr>
   <#list paymentApplicationsList as row>
     <tr class="viewManyTR2">
-      <@displayLinkCell text=row.invoiceId href="viewInvoice?invoiceId=${row.invoiceId}"/>
+      <@displayLinkCell text=row.invoiceId! href="viewInvoice?invoiceId=${row.invoiceId?default(\"\")}"/>
       <@displayCell text=row.invoiceRefNum/>
       <@displayCell text=row.description/>
       <@displayDateCell date=row.invoiceDate/>
