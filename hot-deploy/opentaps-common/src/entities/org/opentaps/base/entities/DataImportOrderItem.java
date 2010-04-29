@@ -56,6 +56,7 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("orderId", "ORDER_ID");
         fields.put("productId", "PRODUCT_ID");
+        fields.put("goodIdentificationTypeId", "GOOD_IDENTIFICATION_TYPE_ID");
         fields.put("productName", "PRODUCT_NAME");
         fields.put("productSku", "PRODUCT_SKU");
         fields.put("quantity", "QUANTITY");
@@ -79,6 +80,7 @@ fieldMapColumns.put("DataImportOrderItem", fields);
   public static enum Fields implements EntityFieldInterface<DataImportOrderItem> {
     orderId("orderId"),
     productId("productId"),
+    goodIdentificationTypeId("goodIdentificationTypeId"),
     productName("productName"),
     productSku("productSku"),
     quantity("quantity"),
@@ -126,6 +128,8 @@ fieldMapColumns.put("DataImportOrderItem", fields);
       public void setId(DataImportOrderItemPk id) {
          this.id = id;
       }
+   @Column(name="GOOD_IDENTIFICATION_TYPE_ID")
+   private String goodIdentificationTypeId;
    @Column(name="PRODUCT_NAME")
    private String productName;
    @Column(name="PRODUCT_SKU")
@@ -177,7 +181,7 @@ fieldMapColumns.put("DataImportOrderItem", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("productId");this.primaryKeyNames.add("quantity");this.primaryKeyNames.add("price");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productName");this.allFieldsNames.add("productSku");this.allFieldsNames.add("quantity");this.allFieldsNames.add("quantityShipped");this.allFieldsNames.add("price");this.allFieldsNames.add("itemTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("itemAdjustmentsTotal");this.allFieldsNames.add("customerPo");this.allFieldsNames.add("comments");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("productId");this.allFieldsNames.add("goodIdentificationTypeId");this.allFieldsNames.add("productName");this.allFieldsNames.add("productSku");this.allFieldsNames.add("quantity");this.allFieldsNames.add("quantityShipped");this.allFieldsNames.add("price");this.allFieldsNames.add("itemTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("itemAdjustmentsTotal");this.allFieldsNames.add("customerPo");this.allFieldsNames.add("comments");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -205,6 +209,13 @@ fieldMapColumns.put("DataImportOrderItem", fields);
      */
     public void setProductId(String productId) {
         id.setProductId(productId);
+    }
+    /**
+     * Auto generated value setter.
+     * @param goodIdentificationTypeId the goodIdentificationTypeId to set
+     */
+    public void setGoodIdentificationTypeId(String goodIdentificationTypeId) {
+        this.goodIdentificationTypeId = goodIdentificationTypeId;
     }
     /**
      * Auto generated value setter.
@@ -346,6 +357,13 @@ fieldMapColumns.put("DataImportOrderItem", fields);
      */
     public String getProductId() {
         return this.id.getProductId();
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getGoodIdentificationTypeId() {
+        return this.goodIdentificationTypeId;
     }
     /**
      * Auto generated value accessor.
@@ -501,6 +519,7 @@ fieldMapColumns.put("DataImportOrderItem", fields);
         preInit();
         setOrderId((String) mapValue.get("orderId"));
         setProductId((String) mapValue.get("productId"));
+        setGoodIdentificationTypeId((String) mapValue.get("goodIdentificationTypeId"));
         setProductName((String) mapValue.get("productName"));
         setProductSku((String) mapValue.get("productSku"));
         setQuantity(convertToBigDecimal(mapValue.get("quantity")));
@@ -528,6 +547,7 @@ fieldMapColumns.put("DataImportOrderItem", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("orderId", getOrderId());
         mapValue.put("productId", getProductId());
+        mapValue.put("goodIdentificationTypeId", getGoodIdentificationTypeId());
         mapValue.put("productName", getProductName());
         mapValue.put("productSku", getProductSku());
         mapValue.put("quantity", getQuantity());
