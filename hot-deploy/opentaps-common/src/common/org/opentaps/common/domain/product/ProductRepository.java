@@ -81,8 +81,7 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
             if (service.isError()) {
                 throw new RepositoryException(service.getErrorMessage());
             }
-            BigDecimal unitPrice = UtilValidate.isNotEmpty(getSalePrice(product, currencyUomId)) ? service.getOutListPrice() : service.getOutDefaultPrice();
-            return unitPrice;
+            return service.getOutPrice();
         } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
