@@ -65,6 +65,7 @@ public class CreateProductStoreEmailSettingService extends ServiceWrapper {
         subject("subject"),
         timeZone("timeZone"),
         userLogin("userLogin"),
+        withAttachment("withAttachment"),
         xslfoAttachScreenLocation("xslfoAttachScreenLocation");
         private final String _fieldName;
         private In(String name) { this._fieldName = name; }
@@ -111,6 +112,7 @@ public class CreateProductStoreEmailSettingService extends ServiceWrapper {
     private String inSubject;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
+    private String inWithAttachment;
     private String inXslfoAttachScreenLocation;
     private String outErrorMessage;
     private List outErrorMessageList;
@@ -211,6 +213,14 @@ public class CreateProductStoreEmailSettingService extends ServiceWrapper {
      */
     public GenericValue getInUserLogin() {
         return this.inUserLogin;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is required.
+     * @return <code>String</code>
+     */
+    public String getInWithAttachment() {
+        return this.inWithAttachment;
     }
     /**
      * Auto generated value accessor.
@@ -386,6 +396,15 @@ public class CreateProductStoreEmailSettingService extends ServiceWrapper {
     }
     /**
      * Auto generated value setter.
+     * This parameter is required.
+     * @param inWithAttachment the inWithAttachment to set
+    */
+    public void setInWithAttachment(String inWithAttachment) {
+        this.inParameters.add("withAttachment");
+        this.inWithAttachment = inWithAttachment;
+    }
+    /**
+     * Auto generated value setter.
      * This parameter is optional.
      * @param inXslfoAttachScreenLocation the inXslfoAttachScreenLocation to set
     */
@@ -500,6 +519,7 @@ public class CreateProductStoreEmailSettingService extends ServiceWrapper {
         if (inParameters.contains("subject")) mapValue.put("subject", getInSubject());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        if (inParameters.contains("withAttachment")) mapValue.put("withAttachment", getInWithAttachment());
         if (inParameters.contains("xslfoAttachScreenLocation")) mapValue.put("xslfoAttachScreenLocation", getInXslfoAttachScreenLocation());
         // allow the User set to override the userLogin
         if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
@@ -533,6 +553,7 @@ public class CreateProductStoreEmailSettingService extends ServiceWrapper {
         if (mapValue.containsKey("subject")) setInSubject((String) mapValue.get("subject"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));
+        if (mapValue.containsKey("withAttachment")) setInWithAttachment((String) mapValue.get("withAttachment"));
         if (mapValue.containsKey("xslfoAttachScreenLocation")) setInXslfoAttachScreenLocation((String) mapValue.get("xslfoAttachScreenLocation"));
     }
 

@@ -60,6 +60,7 @@ public class OpentapsPrepareSalesOrderEmailService extends ServiceWrapper {
         locale("locale"),
         orderId("orderId"),
         sendTo("sendTo"),
+        skipAttachment("skipAttachment"),
         subject("subject"),
         timeZone("timeZone"),
         userLogin("userLogin");
@@ -96,6 +97,7 @@ public class OpentapsPrepareSalesOrderEmailService extends ServiceWrapper {
     private Locale inLocale;
     private String inOrderId;
     private String inSendTo;
+    private String inSkipAttachment;
     private String inSubject;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
@@ -144,6 +146,14 @@ public class OpentapsPrepareSalesOrderEmailService extends ServiceWrapper {
      */
     public String getInSendTo() {
         return this.inSendTo;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInSkipAttachment() {
+        return this.inSkipAttachment;
     }
     /**
      * Auto generated value accessor.
@@ -285,6 +295,15 @@ public class OpentapsPrepareSalesOrderEmailService extends ServiceWrapper {
     public void setInSendTo(String inSendTo) {
         this.inParameters.add("sendTo");
         this.inSendTo = inSendTo;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inSkipAttachment the inSkipAttachment to set
+    */
+    public void setInSkipAttachment(String inSkipAttachment) {
+        this.inParameters.add("skipAttachment");
+        this.inSkipAttachment = inSkipAttachment;
     }
     /**
      * Auto generated value setter.
@@ -431,6 +450,7 @@ public class OpentapsPrepareSalesOrderEmailService extends ServiceWrapper {
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("orderId")) mapValue.put("orderId", getInOrderId());
         if (inParameters.contains("sendTo")) mapValue.put("sendTo", getInSendTo());
+        if (inParameters.contains("skipAttachment")) mapValue.put("skipAttachment", getInSkipAttachment());
         if (inParameters.contains("subject")) mapValue.put("subject", getInSubject());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
@@ -461,6 +481,7 @@ public class OpentapsPrepareSalesOrderEmailService extends ServiceWrapper {
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("orderId")) setInOrderId((String) mapValue.get("orderId"));
         if (mapValue.containsKey("sendTo")) setInSendTo((String) mapValue.get("sendTo"));
+        if (mapValue.containsKey("skipAttachment")) setInSkipAttachment((String) mapValue.get("skipAttachment"));
         if (mapValue.containsKey("subject")) setInSubject((String) mapValue.get("subject"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));

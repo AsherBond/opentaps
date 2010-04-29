@@ -282,20 +282,25 @@ public final class EmailServices {
         String sendTo = (String) context.get("sendTo");
         String subject = (String) context.get("subject");
         String content = (String) context.get("content");
+        boolean withAttachment = !"Y".equals(context.get("skipAttachment"));
+
         // the file name of output pdf
         String reportName = "order_" + orderId + ".pdf";
         // get jrxml report location
         String jrxml = null;
-        try {
-            jrxml = getJrxmlLocation(dispatcher, SALES_ORDER_JRXML_REPORT_ID);
-        } catch (InfrastructureException e) {
-            Debug.logError(e, "Problem getting jrxml location", MODULE);
-        } catch (SQLException e) {
-            Debug.logError(e, "Problem getting jrxml location", MODULE);
+        if (withAttachment) {
+            try {
+                jrxml = getJrxmlLocation(dispatcher, SALES_ORDER_JRXML_REPORT_ID);
+            } catch (InfrastructureException e) {
+                Debug.logError(e, "Problem getting jrxml location", MODULE);
+            } catch (SQLException e) {
+                Debug.logError(e, "Problem getting jrxml location", MODULE);
+            }
+            if (jrxml == null) {
+                return ServiceUtil.returnFailure(UtilMessage.expandLabel("OpentapsError_ReportNotFound", locale, UtilMisc.toMap("location", SALES_ORDER_JRXML_REPORT_ID)));
+            }
         }
-        if (jrxml == null) {
-            return ServiceUtil.returnFailure(UtilMessage.expandLabel("OpentapsError_ReportNotFound", locale, UtilMisc.toMap("location", SALES_ORDER_JRXML_REPORT_ID)));
-        }
+
         // get the quote and store
         try {
             DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
@@ -314,7 +319,7 @@ public final class EmailServices {
             Map jasperParameters = OrderEvents.prepareOrderReportParameters(dl, delegator, dispatcher, userLogin, locale, orderId, organizationPartyId);
             Map<String, Object> jrParameters = (Map<String, Object>) jasperParameters.get("jrParameters");
             JRMapCollectionDataSource jrDataSource = (JRMapCollectionDataSource) jasperParameters.get("jrDataSource");
-            Map parameters = createPendEmail(dctx, context, jrxml, reportName, jrParameters, jrDataSource, partyId, sendTo, subject, content);
+            Map parameters = createPendEmail(dctx, context, jrxml, reportName, jrParameters, jrDataSource, partyId, sendTo, subject, content, withAttachment);
             // associate work effort with order.
             String workEffortId = (String) parameters.get("workEffortId");
             associateWorkEffortAndOrder(dispatcher, delegator, userLogin, orderId, workEffortId);
@@ -442,23 +447,52 @@ public final class EmailServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createPendEmail(DispatchContext dctx, Map context, String jrxml, String reportName, Map<String, Object> jrParameters, JRMapCollectionDataSource jrDataSource, String toPartyId, String sendTo, String subject, String content) throws GenericEntityException, GenericServiceException, JRException, IOException, PartyNotFoundException {
+        return createPendEmail(dctx, context, jrxml, reportName, jrParameters, jrDataSource, toPartyId, sendTo, subject, content, true);
+    }
+
+    /**
+     * create pend email for send jasper pdf.
+     * @param dctx a <code>DispatchContext</code> instance
+     * @param context a <code>Map</code> instance
+     * @param jrxml japser source file
+     * @param reportName japser report name
+     * @param jrParameters a <code>Map<String, Object></code> instance
+     * @param jrDataSource a <code>JRMapCollectionDataSource</code> instance
+     * @param toPartyId partyId of receiver
+     * @param sendTo target email, optional
+     * @param subject subject of email
+     * @param content content of email
+     * @param withAttachment flag to indicate the attachment should be set
+     * @return workEffort Id
+     * @throws GenericServiceException if an error occurs
+     * @throws GenericEntityException if an error occurs
+     * @throws JRException if an error occurs
+     * @throws IOException if an error occurs
+     * @throws PartyNotFoundException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    public static Map createPendEmail(DispatchContext dctx, Map context, String jrxml, String reportName, Map<String, Object> jrParameters, JRMapCollectionDataSource jrDataSource, String toPartyId, String sendTo, String subject, String content, boolean withAttachment) throws GenericEntityException, GenericServiceException, JRException, IOException, PartyNotFoundException {
         Map<String, Object> parameters = FastMap.newInstance();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         String toEmail = (sendTo == null || sendTo.equals("")) ? "" : sendTo;
+
         // generate pdf report
-        String author = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, userLogin.getString("partyId"), false);
-        UtilReports.generatePdf(jrParameters, jrDataSource, locale, jrxml, UtilReports.ContentType.PDF, reportName, author);
-        GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", toPartyId));
-        if (UtilValidate.isEmpty(toEmail)) {
-            PartyReader partyReader = new PartyReader(party);
-            toEmail = partyReader.getEmail();
+        if (withAttachment) {
+            String author = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, userLogin.getString("partyId"), false);
+            UtilReports.generatePdf(jrParameters, jrDataSource, locale, jrxml, UtilReports.ContentType.PDF, reportName, author);
+            GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", toPartyId));
             if (UtilValidate.isEmpty(toEmail)) {
-                throw new GenericServiceException("Cannot find any email address for [" + party.getString("partyId") + "], please create it first.");
+                PartyReader partyReader = new PartyReader(party);
+                toEmail = partyReader.getEmail();
+                if (UtilValidate.isEmpty(toEmail)) {
+                    throw new GenericServiceException("Cannot find any email address for [" + party.getString("partyId") + "], please create it first.");
+                }
             }
         }
+
         //create a CommunicationEvent by service
         String serviceName = "createCommunicationEvent";
         ModelService service = dctx.getModelService(serviceName);
@@ -504,33 +538,36 @@ public final class EmailServices {
         // get the communication event id if the common event was created
         String communicationEventId = (String) serviceResults.get("communicationEventId");
         parameters.put("communicationEventId", communicationEventId);
-        File pdfFile = new File(UtilReports.OUT_PATH + reportName);
-        ByteBuffer uploadedFile = ByteBuffer.wrap(getBytesFromFile(pdfFile));
-        // Populate the context for the DataResource/Content/CommEventContentAssoc creation service
-        input = new HashMap();
-        input.put("userLogin", userLogin);
-        input.put("contentName", reportName);
-        input.put("uploadedFile", uploadedFile);
-        input.put("_uploadedFile_fileName", reportName);
-        input.put("_uploadedFile_contentType", "application/pdf");
 
-        serviceResults = dispatcher.runSync("uploadFile", input);
-        // delete the generate pdf after upload
-        Debug.logInfo("delete pdf [" + UtilReports.OUT_PATH + reportName + "] after upload.", MODULE);
-        pdfFile.delete();
+        if (withAttachment) {
+            File pdfFile = new File(UtilReports.OUT_PATH + reportName);
+            ByteBuffer uploadedFile = ByteBuffer.wrap(getBytesFromFile(pdfFile));
+            // Populate the context for the DataResource/Content/CommEventContentAssoc creation service
+            input = new HashMap();
+            input.put("userLogin", userLogin);
+            input.put("contentName", reportName);
+            input.put("uploadedFile", uploadedFile);
+            input.put("_uploadedFile_fileName", reportName);
+            input.put("_uploadedFile_contentType", "application/pdf");
 
-        if (ServiceUtil.isError(serviceResults)) {
-            throw new GenericServiceException(ServiceUtil.getErrorMessage(serviceResults));
-        }
-        String contentId = (String) serviceResults.get("contentId");
-        if (UtilValidate.isNotEmpty(contentId)) {
-            serviceResults = dispatcher.runSync("createCommEventContentAssoc", UtilMisc.toMap("contentId", contentId, "communicationEventId", communicationEventId,
-                    "sequenceNum", new Long(1), "userLogin", userLogin));
+            serviceResults = dispatcher.runSync("uploadFile", input);
+            // delete the generate pdf after upload
+            Debug.logInfo("delete pdf [" + UtilReports.OUT_PATH + reportName + "] after upload.", MODULE);
+            pdfFile.delete();
+
             if (ServiceUtil.isError(serviceResults)) {
                 throw new GenericServiceException(ServiceUtil.getErrorMessage(serviceResults));
             }
-        } else {
-            throw new GenericServiceException("Upload file ran successfully for [" + reportName + "] but no contentId was returned");
+            String contentId = (String) serviceResults.get("contentId");
+            if (UtilValidate.isNotEmpty(contentId)) {
+                serviceResults = dispatcher.runSync("createCommEventContentAssoc", UtilMisc.toMap("contentId", contentId, "communicationEventId", communicationEventId,
+                                                                                                  "sequenceNum", new Long(1), "userLogin", userLogin));
+                if (ServiceUtil.isError(serviceResults)) {
+                    throw new GenericServiceException(ServiceUtil.getErrorMessage(serviceResults));
+                }
+            } else {
+                throw new GenericServiceException("Upload file ran successfully for [" + reportName + "] but no contentId was returned");
+            }
         }
 
         // Create or update a scheduled (TASK_STARTED) TASK WorkEffort to save this email

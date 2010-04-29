@@ -824,13 +824,11 @@ public final class CrmsfaOrderServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        Map<String, Object> result = ServiceUtil.returnSuccess();
 
         String orderId = (String) context.get("orderId");
-        result.put("orderId", orderId);
-
         String sendTo = (String) context.get("sendTo");
-        result.put("toEmail", sendTo);
+
+        Map<String, Object> mailServiceInput = UtilMisc.<String, Object>toMap("orderId", orderId, "sendTo", sendTo);
 
         // Provide the correct order confirmation ProductStoreEmailSetting, if one exists
         GenericValue orderHeader = null;
@@ -878,7 +876,7 @@ public final class CrmsfaOrderServices {
             if (UtilValidate.isNotEmpty(subjectPattern)) {
                 subject = FlexibleStringExpander.expandString(subjectPattern, args);
             }
-            result.put("subject", subject);
+            mailServiceInput.put("subject", subject);
 
             String bodyScreen = productStoreEmailSetting.getString("bodyScreenLocation");
             String content = null;
@@ -892,14 +890,18 @@ public final class CrmsfaOrderServices {
                 }
             }
 
-            result.put("content", content);
+            mailServiceInput.put("content", content);
+
+            if ("N".equals(productStoreEmailSetting.getString("withAttachment"))) {
+                mailServiceInput.put("skipAttachment", "Y");
+            }
         }
 
         //create a pend sales order email by opentaps.prepareSalesOrderEmail service
         String serviceName = "opentaps.prepareSalesOrderEmail";
         try {
             ModelService service = dctx.getModelService(serviceName);
-            Map<String, Object> input = service.makeValid(result, "IN");
+            Map<String, Object> input = service.makeValid(mailServiceInput, "IN");
             input.put("userLogin", userLogin);
             Map<String, Object> serviceResults = dispatcher.runSync(serviceName, input);
             return serviceResults;

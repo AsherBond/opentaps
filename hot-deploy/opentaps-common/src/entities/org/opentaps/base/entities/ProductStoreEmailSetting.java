@@ -66,6 +66,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
+        fields.put("withAttachment", "WITH_ATTACHMENT");
 fieldMapColumns.put("ProductStoreEmailSetting", fields);
 }
   public static enum Fields implements EntityFieldInterface<ProductStoreEmailSetting> {
@@ -81,7 +82,8 @@ fieldMapColumns.put("ProductStoreEmailSetting", fields);
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
-    createdTxStamp("createdTxStamp");
+    createdTxStamp("createdTxStamp"),
+    withAttachment("withAttachment");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -133,6 +135,8 @@ fieldMapColumns.put("ProductStoreEmailSetting", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @Column(name="WITH_ATTACHMENT")
+   private String withAttachment;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -159,7 +163,7 @@ fieldMapColumns.put("ProductStoreEmailSetting", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productStoreId");this.primaryKeyNames.add("emailType");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("emailType");this.allFieldsNames.add("bodyScreenLocation");this.allFieldsNames.add("xslfoAttachScreenLocation");this.allFieldsNames.add("fromAddress");this.allFieldsNames.add("ccAddress");this.allFieldsNames.add("bccAddress");this.allFieldsNames.add("subject");this.allFieldsNames.add("contentType");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("emailType");this.allFieldsNames.add("bodyScreenLocation");this.allFieldsNames.add("xslfoAttachScreenLocation");this.allFieldsNames.add("fromAddress");this.allFieldsNames.add("ccAddress");this.allFieldsNames.add("bccAddress");this.allFieldsNames.add("subject");this.allFieldsNames.add("contentType");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("withAttachment");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -265,6 +269,13 @@ fieldMapColumns.put("ProductStoreEmailSetting", fields);
     public void setCreatedTxStamp(Timestamp createdTxStamp) {
         this.createdTxStamp = createdTxStamp;
     }
+    /**
+     * Auto generated value setter.
+     * @param withAttachment the withAttachment to set
+     */
+    public void setWithAttachment(String withAttachment) {
+        this.withAttachment = withAttachment;
+    }
 
     /**
      * Auto generated value accessor.
@@ -357,6 +368,13 @@ fieldMapColumns.put("ProductStoreEmailSetting", fields);
     public Timestamp getCreatedTxStamp() {
         return this.createdTxStamp;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWithAttachment() {
+        return this.withAttachment;
+    }
 
     /**
      * Auto generated method that gets the related <code>ProductStore</code> by the relation named <code>ProductStore</code>.
@@ -414,6 +432,7 @@ fieldMapColumns.put("ProductStoreEmailSetting", fields);
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
+        setWithAttachment((String) mapValue.get("withAttachment"));
         postInit();
     }
 
@@ -434,6 +453,7 @@ fieldMapColumns.put("ProductStoreEmailSetting", fields);
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
+        mapValue.put("withAttachment", getWithAttachment());
         return mapValue;
     }
 

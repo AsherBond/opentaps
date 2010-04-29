@@ -43,6 +43,7 @@
             No security at the moment.</description>
         <implements service="opentaps.prepareEmailInterface"/>
         <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="skipAttachment" type="String" mode="IN" optional="true"/>
     </service>
     <service name="opentaps.preparePurchasingOrderEmail" engine="java" use-transaction="false"
              location="org.opentaps.common.content.EmailServices" invoke="preparePurchasingOrderEmail">

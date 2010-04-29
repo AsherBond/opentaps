@@ -46,6 +46,10 @@ under the License.
         <field name="disabled" type="indicator"/>
     </extend-entity>
 
+    <extend-entity entity-name="ProductStoreEmailSetting">
+        <field name="withAttachment" type="indicator"/>
+    </extend-entity>
+
     <!-- =================================== -->
     <!-- org.opentaps.common.accounting      -->
     <!-- =================================== -->
