@@ -45,6 +45,8 @@ import org.hibernate.search.Search;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.base.entities.DataResource;
+import org.opentaps.base.entities.ElectronicText;
 import org.opentaps.base.entities.PartyContactInfo;
 import org.opentaps.base.entities.SalesOpportunity;
 import org.opentaps.base.entities.SalesOpportunityRole;
@@ -1446,6 +1448,33 @@ public class HibernateTests extends OpentapsTestCase {
        TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, testId);
        assertNull(reloadedTestEntity);
    }
+   
+   /**
+    * Tests hibernate can save the object with given primary key.
+    * @throws Exception if an error occurs
+    */
+   public void testSaveTheObjectWithGivenId() throws Exception {
+    // open a new session, if session has opened, then close it first
+       reOpenSession();
+       Transaction tx = session.beginTransaction();
+       DataResource dataResource = new DataResource();
+       dataResource.setDataResourceTypeId("ELECTRONIC_TEXT");
+       dataResource.setDataTemplateTypeId("FTL");
+       dataResource.setMimeTypeId("text/html");
+       String dataResourceId = (String) session.save(dataResource);
+       dataResource.setDataResourceId(dataResourceId);
+       Debug.logInfo("create DataResource with dataResourceId [" + dataResourceId + "]", MODULE);
+       
+       ElectronicText electronicText = new ElectronicText();
+       electronicText.setDataResourceId(dataResourceId);
+       electronicText.setTextData("empty ftl");
+
+       session.save(electronicText);
+       session.flush();
+       tx.commit();
+       assertEquals("ElectronicText primary key dataResourceId not equals initial value after save.", electronicText.getDataResourceId(), dataResourceId);
+
+   }   
 
     /**
      * Remove all test data from TestEntityItem and TestEntity.

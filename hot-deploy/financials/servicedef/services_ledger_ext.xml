@@ -51,6 +51,7 @@ under the License.
             <check-permission permission="ACCOUNTING" action="_ATX_POST"/>
         </required-permissions>
         <auto-attributes include="pk" mode="IN" optional="false"/>
+        <attribute name="skipCheckAcctgTags" type="String" mode="IN" optional="true"/>
     </service>
 
     <service name="reconcileGlAccount" default-entity-name="GlReconciliation" engine="java"
@@ -314,6 +315,7 @@ under the License.
         </required-permissions>
         <auto-attributes include="pk" mode="IN" optional="true"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="autoPostReverseAcctgTrans" type="String" mode="IN" optional="true"/>
         <attribute name="acctgTransEntries" type="java.util.List" mode="IN" optional="false"/>
         <attribute name="acctgTransId" type="String" mode="OUT"/>
         <!-- TODO: make required-permissions tag work here rather than inside the simple XML -->

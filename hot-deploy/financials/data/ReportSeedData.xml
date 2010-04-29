@@ -41,4 +41,6 @@
     <ReportGroup reportGroupId="FIN_RECEIVABLES" showInSelect="N" description="Financials Receivables Reports" application="financials" sequenceNum="2"/>
     <ReportGroup reportGroupId="FIN_PAYABLES" showInSelect="N" description="Financials Payables Reports" application="financials" sequenceNum="3"/>
 
+    <ReportGroup reportGroupId="FIN_FINANCIALS" showInSelect="N" description="%Financials" application="financials" sequenceNum="2"/>
+
 </entity-engine-xml>

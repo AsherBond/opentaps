@@ -17,7 +17,7 @@
 -->
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <#if acctgTrans?exists>
-    <@form name="postAcctgTransForm" url="postAcctgTrans" acctgTransId=acctgTrans.acctgTransId />
+    <@form name="postAcctgTransForm" url="postAcctgTrans" acctgTransId=acctgTrans.acctgTransId skipCheckAcctgTags=""/>
     <@form name="reverseAcctgTransForm" url="reverseAcctgTrans" acctgTransId=acctgTrans.acctgTransId />
     <@form name="deleteAcctgTransForm" url="deleteAcctgTrans" acctgTransId=acctgTrans.acctgTransId />
     <div class="screenlet-header">
@@ -31,7 +31,9 @@
                 </#if><#t/>          
                 <#if accountingTransaction.canPost()>
                   <@submitFormLink form="postAcctgTransForm" text=uiLabelMap.AccountingPostTransaction class="buttontext" />
-                </#if><#t>
+                <#elseif accountingTransaction.canPost(true)>
+                  <@submitFormLinkConfirm form="postAcctgTransForm" text=uiLabelMap.AccountingPostTransaction confirmText=uiLabelMap.FinancialsPostTransactionConfirmSkipCheckTags skipCheckAcctgTags="Y" />
+                </#if><#t/>
             </#if><#t/>
         </div><#t/>
         <div class="boxhead">

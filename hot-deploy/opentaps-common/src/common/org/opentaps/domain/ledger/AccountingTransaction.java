@@ -113,7 +113,18 @@ public class AccountingTransaction extends org.opentaps.base.entities.AcctgTrans
      * @throws RepositoryException if an error occurs
      */
     public boolean canPost() throws LedgerException, RepositoryException {
-        return (getDebitTotal().compareTo(getCreditTotal()) == 0) && (accountingTagsBalance() == null);
+        return canPost(false);
+    }
+
+    /**
+     * Checks if this transaction can be posted.
+     * @param skipCheckAcctgTags flag to ignore the tags check
+     * @return a <code>boolean</code> value
+     * @throws LedgerException if an error occurs
+     * @throws RepositoryException if an error occurs
+     */
+    public boolean canPost(Boolean skipCheckAcctgTags) throws LedgerException, RepositoryException {
+        return (getDebitTotal().compareTo(getCreditTotal()) == 0) && (skipCheckAcctgTags || (accountingTagsBalance() == null));
     }
 
     private void updateCreditDebitTotals() throws LedgerException, RepositoryException {

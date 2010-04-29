@@ -90,4 +90,14 @@ public interface ProductRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException
      */
     public List<GoodIdentification> getAlternateProductIds(String productId) throws RepositoryException;
+
+    /**
+     * Finds the <code>Product</code> sale price.
+     * @param product the <code>Product</code> for which the price is calculated
+     * @param currencyUomId the currency for which the price is calculated
+     * @return the sale price for the given currency
+     * @throws RepositoryException if an error occurs
+     */
+    public BigDecimal getSalePrice(Product product, String currencyUomId) throws RepositoryException;
+
 }

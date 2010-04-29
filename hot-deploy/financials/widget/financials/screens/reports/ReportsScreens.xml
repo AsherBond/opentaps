@@ -63,6 +63,7 @@
                 <set field="returnLabel" value="FinancialsReturnToReports"/>
                 <set field="screenRequest" value="BalanceSheet"/>
                 <set field="reportRequest" value="JRBalanceSheet"/>
+                <set field="doCsv" value="Y"/> <!-- PDF and XLS by default -->
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/balanceSheet.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/constructGlAccountBalanceTrees.bsh"/>
@@ -113,7 +114,7 @@
                 <set field="returnLabel" value="FinancialsReturnToReports"/>
                 <set field="screenRequest" value="TrialBalance"/>
                 <set field="reportRequest" value="JRTrialBalance"/>
-                
+                <set field="doCsv" value="Y"/> <!-- PDF and XLS by default -->
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/trialBalance.bsh"/> 
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/constructGlAccountBalanceTrees.bsh"/> 
@@ -164,6 +165,7 @@
                 <set field="returnLabel" value="FinancialsReturnToReports"/>
                 <set field="screenRequest" value="ComparativeBalance"/>
                 <set field="reportRequest" value="JRComparativeBalance"/>
+                <set field="doCsv" value="Y"/> <!-- PDF and XLS by default -->
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseComparativeStateOptions.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/comparativeBalance.bsh"/>
             </actions>
@@ -193,6 +195,7 @@
                 <set field="returnLabel" value="FinancialsReturnToReports"/>
                 <set field="screenRequest" value="ComparativeIncomeStatement"/>
                 <set field="reportRequest" value="JRComparativeIncomeStatement"/>
+                <set field="doCsv" value="Y"/> <!-- PDF and XLS by default -->
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseComparativeFlowOptions.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/comparativeIncomeStatement.bsh"/>
             </actions>
@@ -222,6 +225,7 @@
                 <set field="returnLabel" value="FinancialsReturnToReports"/>
                 <set field="screenRequest" value="IncomeStatement"/>
                 <set field="reportRequest" value="JRIncomeStatement"/>
+                <set field="doCsv" value="Y"/> <!-- PDF and XLS by default -->
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/incomeStatement.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/constructGlAccountTrees.bsh"/>
@@ -252,6 +256,7 @@
                 <set field="returnLabel" value="FinancialsReturnToReports"/>
                 <set field="screenRequest" value="CashFlowStatement"/>
                 <set field="reportRequest" value="JRCashFlowStatement"/>
+                <set field="doCsv" value="Y"/> <!-- PDF and XLS by default -->
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/cashFlowStatement.bsh"/>
             </actions>
@@ -281,6 +286,7 @@
                 <set field="returnLabel" value="FinancialsReturnToReports"/>
                 <set field="screenRequest" value="ComparativeCashFlowStatement"/>
                 <set field="reportRequest" value="JRComparativeCashFlowStatement"/>
+                <set field="doCsv" value="Y"/> <!-- PDF and XLS by default -->
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseComparativeFlowOptions.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/comparativeCashFlowStatement.bsh"/>
             </actions>

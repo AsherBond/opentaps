@@ -2754,6 +2754,8 @@ public interface CommonMessages extends Messages {
     String crmBillableLifetimeTip();
     @DefaultMessage("Calculate 3605-R Postage")
     String crmCalculate3605Postage();
+    @DefaultMessage("Cancel Order")
+    String crmCancelOrder();
     @DefaultMessage("Case")
     String crmCase();
     @DefaultMessage("Case Closed")
@@ -2778,6 +2780,8 @@ public interface CommonMessages extends Messages {
     String crmChangePassword();
     @DefaultMessage("Choose a Variant")
     String crmChooseVariantProduct();
+    @DefaultMessage("Clear Items")
+    String crmClearItems();
     @DefaultMessage("Clients")
     String crmClients();
     @DefaultMessage("Close Case")
@@ -2836,6 +2840,8 @@ public interface CommonMessages extends Messages {
     String crmCreateAccountDuplicateCheckFail(String partyId);
     @DefaultMessage("Create Account Ignoring Duplicates")
     String crmCreateAccountIgnoreDuplicate();
+    @DefaultMessage("Create Address")
+    String crmCreateAddress();
     @DefaultMessage("Create Case")
     String crmCreateCase();
     @DefaultMessage("Request Catalog")
@@ -2846,6 +2852,8 @@ public interface CommonMessages extends Messages {
     String crmCreateContactList();
     @DefaultMessage("Create Customer for Order")
     String crmCreateCustomerForOrder();
+    @DefaultMessage("Create Email")
+    String crmCreateEmail();
     @DefaultMessage("Create Event")
     String crmCreateEvent();
     @DefaultMessage("Create Forecast")
@@ -2870,6 +2878,14 @@ public interface CommonMessages extends Messages {
     String crmCreateNote();
     @DefaultMessage("Create Opportunity")
     String crmCreateOpportunity();
+    @DefaultMessage("Create Order")
+    String crmCreateOrder();
+    @DefaultMessage("Create Order for New Customer")
+    String crmCreateOrderForNewCustomer();
+    @DefaultMessage("Resume Order")
+    String crmCreateOrderResume();
+    @DefaultMessage("Create Phone Number")
+    String crmCreatePhoneNumber();
     @DefaultMessage("Create Quote")
     String crmCreateQuote();
     @DefaultMessage("Create Return")
@@ -2880,6 +2896,8 @@ public interface CommonMessages extends Messages {
     String crmCreateTeam();
     @DefaultMessage("Create Tracking Code")
     String crmCreateTrackingCode();
+    @DefaultMessage("Create Web URL")
+    String crmCreateWebUrl();
     @DefaultMessage("Customer")
     String crmCustomer();
     @DefaultMessage("Customer Details")
@@ -3206,6 +3224,8 @@ public interface CommonMessages extends Messages {
     String crmExempt();
     @DefaultMessage("External Party")
     String crmExternalParty();
+    @DefaultMessage("Finalize Order")
+    String crmFinalizeOrder();
     @DefaultMessage("Find Accounts")
     String crmFindAccounts();
     @DefaultMessage("Find Activities")
@@ -3486,10 +3506,14 @@ public interface CommonMessages extends Messages {
     String crmMarketingCampaigns();
     @DefaultMessage("Estimated Cost")
     String crmMarketingEstimatedCost();
+    @DefaultMessage("New Survey")
+    String crmMarketingNewSurvey();
     @DefaultMessage("Marketing Reports")
     String crmMarketingReports();
     @DefaultMessage("Survey Results")
     String crmMarketingSurveyResults();
+    @DefaultMessage("View Responses")
+    String crmMarketingSurveyViewResponses();
     @DefaultMessage("Surveys")
     String crmMarketingSurveys();
     @DefaultMessage("Merge Accounts")
@@ -3688,6 +3712,8 @@ public interface CommonMessages extends Messages {
     String crmOrderSendNewEmail();
     @DefaultMessage("Set Shipping")
     String crmOrderSetShipping();
+    @DefaultMessage("Order Settings")
+    String crmOrderSettings();
     @DefaultMessage("Ship Before Date")
     String crmOrderShipBeforeDate();
     @DefaultMessage("Ship By Date")
@@ -3700,6 +3726,8 @@ public interface CommonMessages extends Messages {
     String crmOrderShipGroupTo(String shipGroupSeqId);
     @DefaultMessage("Select Shipping Addresses and Methods")
     String crmOrderShipToSettings();
+    @DefaultMessage("Order Shipping Address")
+    String crmOrderShippingAddress();
     @DefaultMessage("Shipping Address and Method")
     String crmOrderShippingAddressAndMethod();
     @DefaultMessage("Shipping Instructions")
@@ -3730,6 +3758,8 @@ public interface CommonMessages extends Messages {
     String crmOwnership();
     @DefaultMessage("Parent Account")
     String crmParentParty();
+    @DefaultMessage("Partners")
+    String crmPartners();
     @DefaultMessage("Classification")
     String crmPartyClassification();
     @DefaultMessage("ID")
@@ -3782,6 +3812,10 @@ public interface CommonMessages extends Messages {
     String crmQualifyLead();
     @DefaultMessage("Quota")
     String crmQuota();
+    @DefaultMessage("Amount")
+    String crmQuoteAmount();
+    @DefaultMessage("Description")
+    String crmQuoteDescription();
     @DefaultMessage("Finalize Quote")
     String crmQuoteFinalize();
     @DefaultMessage("Quote Option")
@@ -3790,6 +3824,12 @@ public interface CommonMessages extends Messages {
     String crmQuoteItemOptions();
     @DefaultMessage("Quote Name and ID")
     String crmQuoteNameAndID();
+    @DefaultMessage("Product")
+    String crmQuoteProduct();
+    @DefaultMessage("Qty")
+    String crmQuoteQty();
+    @DefaultMessage("Unit")
+    String crmQuoteUnit();
     @DefaultMessage("Quotes")
     String crmQuotes();
     @DefaultMessage("Reason")
@@ -4058,10 +4098,32 @@ public interface CommonMessages extends Messages {
     String crmsfa_sendCrmNotificationEmailsErrorNoAddress(String partyId);
     @DefaultMessage("Czeck")
     String cz();
+    @DefaultMessage("File to Import")
+    String dataImportFileToImport();
+    @DefaultMessage("General Ledger Accounts Lines")
+    String dataImportGlAccountsLines();
+    @DefaultMessage("Data Import")
+    String dataImportHome();
+    @DefaultMessage("Import")
+    String dataImportImport();
     @DefaultMessage("Import Customers")
-    String dataImportCustomers();
+    String dataImportImportCustomers();
+    @DefaultMessage("Import From File")
+    String dataImportImportFromFile();
+    @DefaultMessage("Import General Ledger Accounts")
+    String dataImportImportGlAccounts();
     @DefaultMessage("Import Inventory")
-    String dataImportInventory();
+    String dataImportImportInventory();
+    @DefaultMessage("Import Orders")
+    String dataImportImportOrders();
+    @DefaultMessage("Import Products")
+    String dataImportImportProducts();
+    @DefaultMessage("Import Suppliers")
+    String dataImportImportSuppliers();
+    @DefaultMessage("Importing")
+    String dataImportImporting();
+    @DefaultMessage("Job Name")
+    String dataImportJobName();
     @DefaultMessage("# Not Processed")
     String dataImportNumberNotProcessed();
     @DefaultMessage("# Processed")
@@ -4070,12 +4132,24 @@ public interface CommonMessages extends Messages {
     String dataImportOrderItemLines();
     @DefaultMessage("Order Header Lines")
     String dataImportOrderLines();
-    @DefaultMessage("Import Orders")
-    String dataImportOrders();
-    @DefaultMessage("Import Products")
-    String dataImportProducts();
-    @DefaultMessage("Import Suppliers")
-    String dataImportSuppliers();
+    @DefaultMessage("Run Import")
+    String dataImportRunImport();
+    @DefaultMessage("Start Date/Time")
+    String dataImportServiceTime();
+    @DefaultMessage("Synchronously")
+    String dataImportSync();
+    @DefaultMessage("Upload")
+    String dataImportUpload();
+    @DefaultMessage("Upload a File")
+    String dataImportUploadFile();
+    @DefaultMessage("File Format")
+    String dataImportUploadFileFormat();
+    @DefaultMessage("Excel")
+    String dataImportUploadFileFormatExcel();
+    @DefaultMessage("Added {0} new Products from the uploaded file.")
+    String dataImportUploadServiceProcessedProducts(String processed);
+    @DefaultMessage("Added {0} new Suppliers from the uploaded file.")
+    String dataImportUploadServiceProcessedSuppliers(String processed);
     @DefaultMessage("Data Source")
     String dataSource();
     @DefaultMessage("Create Data Source")
@@ -4090,18 +4164,8 @@ public interface CommonMessages extends Messages {
     String dataSourceType();
     @DefaultMessage("Create Data Source Type")
     String dataSourceTypeCreate();
-    @DefaultMessage("Data Import")
-    String dataimportHome();
-    @DefaultMessage("Job Name")
-    String dataimportJobName();
     @DefaultMessage("Opentaps DataImport Login")
     String dataimportLoginGreeting();
-    @DefaultMessage("Run Import")
-    String dataimportRunImport();
-    @DefaultMessage("Start Date/Time")
-    String dataimportServiceTime();
-    @DefaultMessage("Synchronously")
-    String dataimportSync();
     @DefaultMessage("German")
     String de();
     @DefaultMessage("eBay")
@@ -4734,6 +4798,8 @@ public interface CommonMessages extends Messages {
     String financialsAccountingTagsMustBalance();
     @DefaultMessage("Accounting Tags Posting Checks")
     String financialsAccountingTagsPostingChecks();
+    @DefaultMessage("Accounting Tags Report")
+    String financialsAccountingTagsReport();
     @DefaultMessage("Acctg Trans Id")
     String financialsAcctgTransactionId();
     @DefaultMessage("Activities")
@@ -5192,6 +5258,8 @@ public interface CommonMessages extends Messages {
     String financialsGlAccount();
     @DefaultMessage("Account Type")
     String financialsGlAccountType();
+    @DefaultMessage("Gl Accounts Report")
+    String financialsGlAccountsReport();
     @DefaultMessage("GL Account Activity Analysis")
     String financialsGlActivityReport();
     @DefaultMessage("GL Account Activity Analysis Report Parameters")
@@ -5646,6 +5714,8 @@ public interface CommonMessages extends Messages {
     String financialsSelectOrganization();
     @DefaultMessage("Select Default Refund Payment Method for")
     String financialsSelectRefundPaymentMethod();
+    @DefaultMessage("Seq #")
+    String financialsSequenceNumber();
     @DefaultMessage("Missing invoiceId or partyIdFrom for invoiceId {0}")
     String financialsServiceErrorCheckRunMissingInvoiceData(String invoiceId);
     @DefaultMessage("Cannot process invoices with different currencies")
@@ -5764,6 +5834,8 @@ public interface CommonMessages extends Messages {
     String financialsStatementsEndingBalance();
     @DefaultMessage("Status")
     String financialsStatusId();
+    @DefaultMessage("ID")
+    String financialsTagId();
     @DefaultMessage("Tax")
     String financialsTax();
     @DefaultMessage("Tax Due")
@@ -9482,6 +9554,10 @@ public interface CommonMessages extends Messages {
     String opentapsReportFormat();
     @DefaultMessage("Available reports")
     String opentapsReportList();
+    @DefaultMessage("Comma-separated values (*.csv)")
+    String opentapsReportOptionCsv();
+    @DefaultMessage("HTML (*.html)")
+    String opentapsReportOptionHtml();
     @DefaultMessage("Portable Document (*.pdf)")
     String opentapsReportOptionPdf();
     @DefaultMessage("On Screen")
@@ -15604,8 +15680,6 @@ public interface CommonMessages extends Messages {
     String productProductWidth();
     @DefaultMessage("Products")
     String productProducts();
-    @DefaultMessage("Products from Excel")
-    String productProductsExcel();
     @DefaultMessage("Products Last Viewed")
     String productProductsLastViewed();
     @DefaultMessage("Leave blank to auto-generate a unique promo code")
@@ -16904,8 +16978,6 @@ public interface CommonMessages extends Messages {
     String supplierList();
     @DefaultMessage("Supplier Name")
     String supplierName();
-    @DefaultMessage("Suppliers from Excel")
-    String suppliersExcel();
     @DefaultMessage("Agreement Termination")
     String termType_AGREEMENT_TERMINATIO();
     @DefaultMessage("Incoterm Cost and Freight")
@@ -17036,6 +17108,8 @@ public interface CommonMessages extends Messages {
     String warehouseClosePicklists();
     @DefaultMessage("Close")
     String warehouseCloseProductionRun();
+    @DefaultMessage("Configuration")
+    String warehouseConfiguration();
     @DefaultMessage("Confirm Shipment and Print Labels")
     String warehouseConfirmShipmentAndPrintLabels();
     @DefaultMessage("Crating")

@@ -84,7 +84,16 @@ function onRunSyncChange() {
     <@inputHidden name="SERVICE_TIME" value=""/>
 
     <#list scheduleOptions as scheduleOption>
-      <@inputHidden name="${scheduleOption.name}" value="${scheduleOption.value}"/>
+      <#assign alsoParam = false/>
+      <#list serviceParameters as serviceParameter>
+        <#if scheduleOption.name == serviceParameter.name>
+          <#assign alsoParam = true/>
+          <#break/>
+        </#if>
+      </#list>
+      <#if !alsoParam>
+	<input type="hidden" name="${scheduleOption.name}" value="${scheduleOption.value}"/>
+      </#if>
     </#list>
 
     <table class="twoColumnForm">

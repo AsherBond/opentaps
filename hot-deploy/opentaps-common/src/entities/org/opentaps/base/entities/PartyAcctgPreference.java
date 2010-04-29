@@ -81,6 +81,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("salesInvoiceFooterText", "SALES_INVOICE_FOOTER_TEXT");
         fields.put("groupSalesTaxOnInvoicePdf", "GROUP_SALES_TAX_ON_INVOICE_PDF");
         fields.put("allocPaymentTagsToAppl", "ALLOC_PAYMENT_TAGS_TO_APPL");
+        fields.put("autoPostReverseAcctgTrans", "AUTO_POST_REVERSE_ACCTG_TRANS");
 fieldMapColumns.put("PartyAcctgPreference", fields);
 }
   public static enum Fields implements EntityFieldInterface<PartyAcctgPreference> {
@@ -110,7 +111,8 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
     costingMethodId("costingMethodId"),
     salesInvoiceFooterText("salesInvoiceFooterText"),
     groupSalesTaxOnInvoicePdf("groupSalesTaxOnInvoicePdf"),
-    allocPaymentTagsToAppl("allocPaymentTagsToAppl");
+    allocPaymentTagsToAppl("allocPaymentTagsToAppl"),
+    autoPostReverseAcctgTrans("autoPostReverseAcctgTrans");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -178,6 +180,8 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
    private String groupSalesTaxOnInvoicePdf;
    @Column(name="ALLOC_PAYMENT_TAGS_TO_APPL")
    private String allocPaymentTagsToAppl;
+   @Column(name="AUTO_POST_REVERSE_ACCTG_TRANS")
+   private String autoPostReverseAcctgTrans;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -260,7 +264,7 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("fiscalYearStartMonth");this.allFieldsNames.add("fiscalYearStartDay");this.allFieldsNames.add("taxFormId");this.allFieldsNames.add("cogsMethodId");this.allFieldsNames.add("baseCurrencyUomId");this.allFieldsNames.add("invoiceSequenceEnumId");this.allFieldsNames.add("invoiceIdPrefix");this.allFieldsNames.add("lastInvoiceNumber");this.allFieldsNames.add("lastInvoiceRestartDate");this.allFieldsNames.add("useInvoiceIdForReturns");this.allFieldsNames.add("quoteSequenceEnumId");this.allFieldsNames.add("quoteIdPrefix");this.allFieldsNames.add("lastQuoteNumber");this.allFieldsNames.add("orderSequenceEnumId");this.allFieldsNames.add("orderIdPrefix");this.allFieldsNames.add("lastOrderNumber");this.allFieldsNames.add("refundPaymentMethodId");this.allFieldsNames.add("errorGlJournalId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("costingMethodId");this.allFieldsNames.add("salesInvoiceFooterText");this.allFieldsNames.add("groupSalesTaxOnInvoicePdf");this.allFieldsNames.add("allocPaymentTagsToAppl");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("fiscalYearStartMonth");this.allFieldsNames.add("fiscalYearStartDay");this.allFieldsNames.add("taxFormId");this.allFieldsNames.add("cogsMethodId");this.allFieldsNames.add("baseCurrencyUomId");this.allFieldsNames.add("invoiceSequenceEnumId");this.allFieldsNames.add("invoiceIdPrefix");this.allFieldsNames.add("lastInvoiceNumber");this.allFieldsNames.add("lastInvoiceRestartDate");this.allFieldsNames.add("useInvoiceIdForReturns");this.allFieldsNames.add("quoteSequenceEnumId");this.allFieldsNames.add("quoteIdPrefix");this.allFieldsNames.add("lastQuoteNumber");this.allFieldsNames.add("orderSequenceEnumId");this.allFieldsNames.add("orderIdPrefix");this.allFieldsNames.add("lastOrderNumber");this.allFieldsNames.add("refundPaymentMethodId");this.allFieldsNames.add("errorGlJournalId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("costingMethodId");this.allFieldsNames.add("salesInvoiceFooterText");this.allFieldsNames.add("groupSalesTaxOnInvoicePdf");this.allFieldsNames.add("allocPaymentTagsToAppl");this.allFieldsNames.add("autoPostReverseAcctgTrans");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -464,6 +468,13 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
     public void setAllocPaymentTagsToAppl(String allocPaymentTagsToAppl) {
         this.allocPaymentTagsToAppl = allocPaymentTagsToAppl;
     }
+    /**
+     * Auto generated value setter.
+     * @param autoPostReverseAcctgTrans the autoPostReverseAcctgTrans to set
+     */
+    public void setAutoPostReverseAcctgTrans(String autoPostReverseAcctgTrans) {
+        this.autoPostReverseAcctgTrans = autoPostReverseAcctgTrans;
+    }
 
     /**
      * Auto generated value accessor.
@@ -653,6 +664,13 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
      */
     public String getAllocPaymentTagsToAppl() {
         return this.allocPaymentTagsToAppl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAutoPostReverseAcctgTrans() {
+        return this.autoPostReverseAcctgTrans;
     }
 
     /**
@@ -869,6 +887,7 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
         setSalesInvoiceFooterText((String) mapValue.get("salesInvoiceFooterText"));
         setGroupSalesTaxOnInvoicePdf((String) mapValue.get("groupSalesTaxOnInvoicePdf"));
         setAllocPaymentTagsToAppl((String) mapValue.get("allocPaymentTagsToAppl"));
+        setAutoPostReverseAcctgTrans((String) mapValue.get("autoPostReverseAcctgTrans"));
         postInit();
     }
 
@@ -903,6 +922,7 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
         mapValue.put("salesInvoiceFooterText", getSalesInvoiceFooterText());
         mapValue.put("groupSalesTaxOnInvoicePdf", getGroupSalesTaxOnInvoicePdf());
         mapValue.put("allocPaymentTagsToAppl", getAllocPaymentTagsToAppl());
+        mapValue.put("autoPostReverseAcctgTrans", getAutoPostReverseAcctgTrans());
         return mapValue;
     }
 
