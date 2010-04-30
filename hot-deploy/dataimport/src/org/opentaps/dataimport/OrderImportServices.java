@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  *
@@ -688,9 +689,20 @@ public class OrderImportServices {
             orderItemInput.put("orderId", orderId);
             orderItemInput.put("orderItemSeqId", orderItemSeqId);
             orderItemInput.put("orderItemTypeId", "PRODUCT_ORDER_ITEM");
-            if (UtilValidate.isNotEmpty(externalOrderItem.get("productId"))) {
-                orderItemInput.put("productId", externalOrderItem.getString("productId"));
-                GenericValue product = delegator.findByPrimaryKeyCache("Product", UtilMisc.toMap("productId", externalOrderItem.getString("productId")));
+            String productId = externalOrderItem.getString("productId");
+            if (UtilValidate.isNotEmpty(productId)) {
+                // check if the DataImportOrderItem has a goodIdentificationTypeId, if so use it to lookup the real productId
+                String goodIdentificationTypeId = externalOrderItem.getString("goodIdentificationTypeId");
+                if (UtilValidate.isNotEmpty(goodIdentificationTypeId)) {
+                    GenericValue gi = EntityUtil.getFirst(delegator.findByAndCache("GoodIdentification", UtilMisc.toMap("goodIdentificationTypeId", goodIdentificationTypeId, "idValue", productId)));
+                    if (gi != null) {
+                        productId = gi.getString("productId");
+                    }
+
+                }
+                orderItemInput.put("productId", productId);
+                GenericValue product = delegator.findByPrimaryKeyCache("Product", UtilMisc.toMap("productId", productId));
+
                 if (UtilValidate.isNotEmpty(product)) {
                     orderItemInput.put("itemDescription", product.getString("productName"));
                 } else {
