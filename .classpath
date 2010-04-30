@@ -193,7 +193,6 @@
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwtext.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwtextux.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/jfreechart-1.0.6.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/poi-3.0.1.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/jcommon-1.0.10.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/inflector-0.7.0.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/aspectwerkz/aspectwerkz-2.0.jar"/>
