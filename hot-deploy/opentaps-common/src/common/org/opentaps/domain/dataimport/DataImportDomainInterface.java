@@ -26,7 +26,7 @@ import org.opentaps.foundation.service.ServiceException;
 public interface DataImportDomainInterface extends DomainInterface {
     
     /**
-     * Returns the repository od accountin data import instance.
+     * Returns the accounting data import repository instance.
      * @return a <code>AccountingDataImportRepositoryInterface</code> value
      * @throws RepositoryException if an error occurs
      */
@@ -38,5 +38,19 @@ public interface DataImportDomainInterface extends DomainInterface {
      * @throws ServiceException if an error occurs
      */
     public GlAccountImportServiceInterface getGlAccountImportService() throws ServiceException;
+    
+    /**
+     * Returns the product data import repository instance.
+     * @return a <code>ProductDataImportRepositoryInterface</code> value
+     * @throws RepositoryException if an error occurs
+     */
+    public ProductDataImportRepositoryInterface getProductDataImportRepository() throws RepositoryException;
+    
+    /**
+     * Returns the party data import repository instance.
+     * @return a <code>PartyDataImportRepositoryInterface</code> value
+     * @throws RepositoryException if an error occurs
+     */
+    public PartyDataImportRepositoryInterface getPartyDataImportRepository() throws RepositoryException;
 
 }

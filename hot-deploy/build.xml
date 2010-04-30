@@ -75,5 +75,13 @@
       <filelist dir="." files="analytics/build.xml"/>
     </subant>
   </target>
+  
+  <!-- ================================================================== -->
+    <!-- Build JavaDoc                                                      -->
+    <!-- ================================================================== -->
+
+    <target name="docs">
+        <!-- do nothing -->
+    </target>
 
 </project>

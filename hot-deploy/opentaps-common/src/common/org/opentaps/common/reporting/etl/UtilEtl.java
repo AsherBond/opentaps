@@ -316,7 +316,6 @@ public final class UtilEtl {
 
             // set all parameters as internal variables
             job.getJobMeta().setInternalKettleVariables(job);
-
             result = job.execute(); // Execute the selected job.
             job.endProcessing("end", result);  // The bookkeeping...
         } catch (KettleJobException je) {
@@ -373,7 +372,7 @@ public final class UtilEtl {
             transMeta.setArguments(arguments);
 
             Trans trans = new Trans(transMeta);
-
+            
             trans.prepareExecution(transMeta.getArguments());
             trans.startThreads();
             trans.waitUntilFinished();
@@ -391,6 +390,57 @@ public final class UtilEtl {
             throw new GenericServiceException(e);
         }
     }
+    
+    /**
+     * Runs an ETL transformation.
+     *
+     * @param location transformation file, should be in component url format.
+     * @param arguments a <code>String</code> value
+     * @param parameters ETL transaction parameters
+     * @exception GenericServiceException if an error occurs
+     */
+    public static void runTrans(String location, String[] arguments, Map<String, String> parameters) throws GenericServiceException {
+
+        try {
+            String path = ComponentLocationResolver.getBaseLocation(location).toString();
+            Debug.logInfo("Starting transformation at location" + path, MODULE);
+
+            EnvUtil.environmentInit();
+            StepLoader.init();
+
+            TransMeta transMeta = new TransMeta(path);
+            transMeta.setArguments(arguments);
+
+            Trans trans = new Trans(transMeta);
+            
+            trans.initializeVariablesFrom(null);
+            if(parameters!=null){
+                trans.getTransMeta().setInternalKettleVariables(trans);
+                final Set<String> stringSet = parameters.keySet();
+                for (String key : stringSet) {
+                    trans.setParameterValue(key,parameters.get(key));
+                    trans.setVariable(key,parameters.get(key));
+                }
+            }
+            
+            trans.prepareExecution(transMeta.getArguments());
+            trans.startThreads();
+            trans.waitUntilFinished();
+            trans.endProcessing("end");
+
+            int errs = trans.getErrors();
+            if (errs > 0) {
+                String msg = "There were " + errs + " errors during transformation execution [" + location + "].";
+                Debug.logError(msg, MODULE);
+                throw new GenericServiceException(msg);
+            }
+        } catch (KettleException e) {
+            throw new GenericServiceException(e);
+        } catch (MalformedURLException e) {
+            throw new GenericServiceException(e);
+        }
+    }
+    
 
     /**
      * This method allow look up surrogate key in dimension entity under certain conditions.

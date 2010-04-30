@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2010 - 2011 Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<entity-engine-xml>
+    
+    <ReportGroup reportGroupId="DATAIMP_FORM" showInSelect="N" description="Data Import Reports" application="dataimport" sequenceNum="1"/>    
+    
+    <ReportRegistry reportId="CUST_IMP" shortName="Customers Import Report" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/CustomersImportReport.jrxml"/>
+    <ReportRegistry reportId="SUPPL_IMP" shortName="Suppliers Import Report" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/SuppliersImportReport.jrxml"/>
+    <ReportRegistry reportId="PROD_IMP" shortName="Products Import Report" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/ProductsImportReport.jrxml"/>
+    <ReportRegistry reportId="INVENT_IMP" shortName="Inventory Import Report" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/InventorysImportReport.jrxml"/>
+    <ReportRegistry reportId="GL_ACCTS_IMP" shortName="GL Accounts Import Report" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/GlAccountsImportReport.jrxml"/>
+    <ReportRegistry reportId="ORDER_H_IMP" shortName="Order Header Lines Import Report" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/OrderHeaderLinesImportReport.jrxml"/>
+    <ReportRegistry reportId="ORDER_I_IMP" shortName="Order Item Lines Import Report" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/OrderItemLinesImportReport.jrxml"/>    
+    
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="CUST_IMP" sequenceNum="1"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="SUPPL_IMP" sequenceNum="2"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="PROD_IMP" sequenceNum="3"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="INVENT_IMP" sequenceNum="4"/>    
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="GL_ACCTS_IMP" sequenceNum="5"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="ORDER_H_IMP" sequenceNum="6"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="ORDER_I_IMP" sequenceNum="7"/>
+    
+</entity-engine-xml>

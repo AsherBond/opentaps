@@ -17,7 +17,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#macro importForm importService label sectionLabel submitLabel processed notProcessed>
+<#macro importForm importService label sectionLabel submitLabel processed notProcessed reportHref reportLabel>
     <form name="${importService}Form" method="post" action="setServiceParameters">
       <@inputHidden name="SERVICE_NAME" value="${importService}"/>
       <@inputHidden name="POOL_NAME" value="pool"/>
@@ -28,7 +28,9 @@
       <#if hasDIAdminPermissions?default(false)>
         <@inputSubmitCell title="${submitLabel}"/>
       </#if>
+      <@displayLinkCell href="${reportHref}" text="${reportLabel}" />
     </form>
+    
 </#macro>
 
 <table  class="headedTable">
@@ -43,47 +45,61 @@
                  sectionLabel="DataImportImportCustomers"
                  label=uiLabelMap.FinancialsCustomers
                  submitLabel=uiLabelMap.DataImportImport
-                 processed=customersProcessed notProcessed=customersNotProcessed/>
+                 processed=customersProcessed notProcessed=customersNotProcessed
+                 reportHref="setupReport?reportId=CUST_IMP"
+                 reportLabel=uiLabelMap.DataImportCustomersImportReport/>
   </tr>
   <tr>
     <@importForm importService="importSuppliers"
                  sectionLabel="DataImportImportSuppliers"
                  label=uiLabelMap.PurchSuppliers
                  submitLabel=uiLabelMap.DataImportImport
-                 processed=suppliersProcessed notProcessed=suppliersNotProcessed/>
+                 processed=suppliersProcessed notProcessed=suppliersNotProcessed
+                 reportHref="setupReport?reportId=SUPPL_IMP"
+                 reportLabel=uiLabelMap.DataImportSuppliersImportReport/>
   </tr>
   <tr>
     <@importForm importService="importProducts"
                  sectionLabel="DataImportImportProducts"
                  label=uiLabelMap.ProductProducts
                  submitLabel=uiLabelMap.DataImportImport
-                 processed=productsProcessed notProcessed=productsNotProcessed/>
+                 processed=productsProcessed notProcessed=productsNotProcessed
+                 reportHref="setupReport?reportId=PROD_IMP"
+                 reportLabel=uiLabelMap.DataImportProductsImportReport/>
   </tr>
   <tr>
     <@importForm importService="importProductInventory"
                  sectionLabel="DataImportImportInventory"
                  label=uiLabelMap.ProductInventoryItems
                  submitLabel=uiLabelMap.DataImportImport
-                 processed=inventoryProcessed notProcessed=inventoryNotProcessed/>
+                 processed=inventoryProcessed notProcessed=inventoryNotProcessed
+                 reportHref="setupReport?reportId=INVENT_IMP"
+                 reportLabel=uiLabelMap.DataImportInventoryImportReport/>
   </tr>
   <tr>
     <@importForm importService="importGlAccounts"
                  sectionLabel="DataImportImportGlAccounts"
                  label=uiLabelMap.DataImportGlAccounts
                  submitLabel=uiLabelMap.DataImportImport
-                 processed=glAccountsProcessed notProcessed=glAccountsNotProcessed/>
+                 processed=glAccountsProcessed notProcessed=glAccountsNotProcessed
+                 reportHref="setupReport?reportId=GL_ACCTS_IMP"
+                 reportLabel=uiLabelMap.DataImportGlAccountsImportReport/>
   </tr>
   <tr>
     <@importForm importService="importOrders"
                  sectionLabel="DataImportImportOrders"
                  label=uiLabelMap.DataImportOrderLines
                  submitLabel=uiLabelMap.DataImportImport
-                 processed=orderHeadersProcessed notProcessed=orderHeadersNotProcessed/>
+                 processed=orderHeadersProcessed notProcessed=orderHeadersNotProcessed
+                 reportHref="setupReport?reportId=ORDER_H_IMP"
+                 reportLabel=uiLabelMap.DataImportOrderHeaderLinesImportReport/>
   </tr>
   <tr>
     <@displayCell text="${uiLabelMap.DataImportOrderItemLines}:"/>
     <@displayCell text="${orderItemsProcessed}"/>
     <@displayCell text="${orderItemsNotProcessed}"/>
+    <td>&nbsp;</td>
+    <@displayLinkCell href="setupReport?reportId=ORDER_I_IMP" text=uiLabelMap.DataImportOrderItemLinesImportReport />
   </tr>
 </table>
 

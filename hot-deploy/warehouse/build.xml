@@ -174,7 +174,7 @@
     <!-- ================================================================== -->
 
     <target name="docs" depends="prepare-docs,classpath">
-        <javadoc packagenames="org.opentaps.common.*"
+        <javadoc packagenames="org.opentaps.warehouse.*"
             classpathref="local.class.path"
             destdir="${build.dir}/javadocs"
             Windowtitle="Open Source Strategies - ${desc}">
