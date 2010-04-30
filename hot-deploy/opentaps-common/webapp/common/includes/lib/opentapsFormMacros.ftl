@@ -1487,7 +1487,7 @@ For more information, please see documentation/opentapsFormMacros.html
       <#assign default=tag.defaultValue />
     </#if>
   </#if>
-  <@inputSelect name="${prefix}${tag.index}${suffix}" errorField="${prefix}${tag.index}${suffix}" list=tag.tagValues key="enumId" required=false default=default tabIndex=ti index=index ; tagValue>
+  <@inputSelect name="${prefix}${tag.index}${suffix}" errorField="${prefix}${tag.index}${suffix}" list=tag.activeTagValues key="enumId" required=false default=default tabIndex=ti index=index ; tagValue>
     ${tagValue.description}
   </@inputSelect>
 </#macro>
@@ -1506,7 +1506,7 @@ For more information, please see documentation/opentapsFormMacros.html
     <#else>
       <#assign titleClass="tableheadtext" />
     </#if>
-    <@inputSelectRow titleClass=titleClass title=tag.description name="${prefix}${tag.index}${suffix}" errorField="${prefix}${tag.index}${suffix}" list=tag.tagValues key="enumId" required=false default=default tabIndex=ti ; tagValue>
+    <@inputSelectRow titleClass=titleClass title=tag.description name="${prefix}${tag.index}${suffix}" errorField="${prefix}${tag.index}${suffix}" list=tag.activeTagValues key="enumId" required=false default=default tabIndex=ti ; tagValue>
       ${tagValue.description}
     </@inputSelectRow>
     <#if ti?has_content>
@@ -1527,7 +1527,7 @@ For more information, please see documentation/opentapsFormMacros.html
     <#if !default?has_content && tag.hasDefaultValue()>
       <#assign default=tag.defaultValue />
     </#if>  
-    <@inputSelectRow titleClass=titleClass title=tag.description name="${tagName}_${index}" list=tag.tagValues key="enumId" required=false default=default ; tagValue>
+    <@inputSelectRow titleClass=titleClass title=tag.description name="${tagName}_${index}" list=tag.activeTagValues key="enumId" required=false default=default ; tagValue>
       ${tagValue.description}
     </@inputSelectRow>
   </#list>
@@ -1598,7 +1598,7 @@ For more information, please see documentation/opentapsFormMacros.html
         <td/>
         <td colspan="${tagTitleColSpan}" align="left"><span class="${tagTitleClass}">${tag.description}</span></td>
         <td colspan="${tagColSpan}" align="left">
-          <@inputSelect name="${tagName}" list=tag.tagValues key="enumId" displayField="description" required=false default=default ignoreParameters=true/>
+          <@inputSelect name="${tagName}" list=tag.activeTagValues key="enumId" displayField="description" required=false default=default ignoreParameters=true/>
         </td>
       </tr>
     </#if>

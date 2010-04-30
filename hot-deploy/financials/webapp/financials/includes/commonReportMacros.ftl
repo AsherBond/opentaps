@@ -253,7 +253,7 @@ To use these macros in your page, first put this at the top:
   <#list tagTypes as tag>
     <div style="margin-left: 30px; margin-top: 5px;">
       <span class="tableheadtext">${tag.description}</span>
-      <@inputSelect name="tag${tag.index}" list=tag.tagValues key="enumId" required=true ; tagValue>
+      <@inputSelect name="tag${tag.index}" list=tag.activeTagValues key="enumId" required=true ; tagValue>
         ${tagValue.description}
       </@inputSelect>
     </div>

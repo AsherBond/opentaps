@@ -37,6 +37,7 @@ public class AccountingTagConfigurationForOrganizationAndUsage extends Entity {
         type("type"),
         description("description"),
         tagValues("tagValues"),
+        activeTagValues("activeTagValues"),
         isRequired("isRequired");
         private final String fieldName;
         private Fields(String name) { fieldName = name; }
@@ -55,6 +56,7 @@ public class AccountingTagConfigurationForOrganizationAndUsage extends Entity {
     private String defaultValue;
     private Enumeration defaultValueTag;
     private List<Enumeration> tagValues;
+    private List<Enumeration> activeTagValues;
 
     /**
      * Default constructor.
@@ -91,6 +93,10 @@ public class AccountingTagConfigurationForOrganizationAndUsage extends Entity {
         this.tagValues = tagValues;
     }
 
+    public void setActiveTagValues(List<Enumeration> activeTagValues) {
+        this.activeTagValues = activeTagValues;
+    }
+
     public void setIsRequired(String isRequired) {
         this.isRequired = isRequired;
     }
@@ -109,6 +115,10 @@ public class AccountingTagConfigurationForOrganizationAndUsage extends Entity {
 
     public List<Enumeration> getTagValues() {
         return tagValues;
+    }
+
+    public List<Enumeration> getActiveTagValues() {
+        return activeTagValues;
     }
 
     public String getIsRequired() {
@@ -155,6 +165,7 @@ public class AccountingTagConfigurationForOrganizationAndUsage extends Entity {
         setType((String) mapValue.get("type"));
         setDescription((String) mapValue.get("description"));
         setTagValues((List<Enumeration>) mapValue.get("tagValues"));
+        setActiveTagValues((List<Enumeration>) mapValue.get("activeTagValues"));
         setIsRequired((String) mapValue.get("isRequired"));
         postInit();
     }
@@ -167,6 +178,7 @@ public class AccountingTagConfigurationForOrganizationAndUsage extends Entity {
         mapValue.put("type", getType());
         mapValue.put("description", getDescription());
         mapValue.put("tagValues", getTagValues());
+        mapValue.put("activeTagValues", getActiveTagValues());
         mapValue.put("isRequired", getIsRequired());
         return mapValue;
     }

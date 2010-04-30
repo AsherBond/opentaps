@@ -56,12 +56,12 @@
         
         <tr>
           <@displayTitleCell title=tag.description titleClass=titleClass />
-          <@inputSelectCell name="debitTagEnumId${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.tagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
+          <@inputSelectCell name="debitTagEnumId${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
             ${tagValue.description}
           </@inputSelectCell>
 
           <@displayTitleCell title=tag.description titleClass=titleClass />
-          <@inputSelectCell name="creditTagEnumId${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.tagValues key="enumId" required=false default=tag.defaultValue!  ; tagValue>
+          <@inputSelectCell name="creditTagEnumId${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue!  ; tagValue>
             ${tagValue.description}
           </@inputSelectCell>
         </tr>

@@ -85,7 +85,7 @@
 
       <#if tagFilters?has_content>
         <#list tagFilters as tag>
-          <@inputSelectRow title=tag.description name="tag${tag.index}" list=tag.tagValues key="enumId" required=true ; tagValue>
+          <@inputSelectRow title=tag.description name="tag${tag.index}" list=tag.activeTagValues key="enumId" required=true ; tagValue>
             ${tagValue.description}
           </@inputSelectRow>
         </#list>

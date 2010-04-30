@@ -30,7 +30,7 @@
 
             <#-- List possible tags -->
             <#list tagTypes as tag>
-              <@inputSelectRow name="tag${tag.index}" title="${tag.description}" list=tag.tagValues key="enumId" required=true default="" ; tagValue>
+              <@inputSelectRow name="tag${tag.index}" title="${tag.description}" list=tag.activeTagValues key="enumId" required=true default="" ; tagValue>
                 ${tagValue.description}
               </@inputSelectRow>
             </#list>

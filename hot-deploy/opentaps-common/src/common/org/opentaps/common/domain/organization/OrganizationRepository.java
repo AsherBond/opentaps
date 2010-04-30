@@ -222,8 +222,12 @@ public class OrganizationRepository extends PartyRepository implements Organizat
             tag.setIndex(index);
             tag.setType(type);
             tag.setDescription(findOneCache(EnumerationType.class, map(EnumerationType.Fields.enumTypeId, type)).getDescription());
-            // filter out disabled tags
             tag.setTagValues(findListCache(Enumeration.class,
+                                           Arrays.asList(
+                                               EntityCondition.makeCondition(Enumeration.Fields.enumTypeId.name(), type)),
+                                           Arrays.asList(Enumeration.Fields.sequenceId.asc())));
+            // filter out disabled tags
+            tag.setActiveTagValues(findList(Enumeration.class,
                                            Arrays.asList(
                                                EntityCondition.makeCondition(Enumeration.Fields.enumTypeId.name(), type),
                                                EntityCondition.makeCondition(EntityOperator.OR,

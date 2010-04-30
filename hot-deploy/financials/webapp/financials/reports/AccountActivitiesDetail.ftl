@@ -65,7 +65,7 @@
         <#list tagTypes as tag>
           <tr>
             <@displayTitleCell title=tag.description />
-            <@inputSelectCell name="tag${tag.index}" list=tag.tagValues key="enumId" required=true default="" ; tagValue>
+            <@inputSelectCell name="tag${tag.index}" list=tag.activeTagValues key="enumId" required=true default="" ; tagValue>
               ${tagValue.description}
             </@inputSelectCell>
           </tr>
