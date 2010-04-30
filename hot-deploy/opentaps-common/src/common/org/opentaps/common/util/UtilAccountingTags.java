@@ -140,16 +140,19 @@ public final class UtilAccountingTags {
         // insert the common filters at the beginning of the value list for each tag configuration
         for (AccountingTagConfigurationForOrganizationAndUsage tag : tagTypesAndValues) {
             List<Enumeration> values = tag.getTagValues();
+            List<Enumeration> activeValues = tag.getActiveTagValues();
             Enumeration any = new Enumeration();
             any.setEnumTypeId(tag.getType());
             any.setEnumId("ANY");
             any.setDescription(UtilMessage.expandLabel("CommonAny", locale));
             values.add(0, any);
+            activeValues.add(0, any);
             Enumeration none = new Enumeration();
             none.setEnumTypeId(tag.getType());
             none.setEnumId("NONE");
             none.setDescription(UtilMessage.expandLabel("CommonNone", locale));
             values.add(1, none);
+            activeValues.add(1, none);
         }
         return tagTypesAndValues;
     }
