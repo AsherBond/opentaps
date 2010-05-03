@@ -5,17 +5,21 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     `ORDER_ID`,
-     `IMPORT_STATUS_ID`,
-     `IMPORT_ERROR`,
-     `ORDER_TYPE_ID`,
-     `CUSTOMER_PARTY_ID`,
-     `SUPPLIER_PARTY_ID`
+     DI.`ORDER_ID`,
+     STATUS_ITEM.`DESCRIPTION` AS 'STATUS_DESCRIPTION',
+     DI.`IMPORT_ERROR`,
+     DI.`ORDER_TYPE_ID`,
+     DI.`CUSTOMER_PARTY_ID`,
+     DI.`SUPPLIER_PARTY_ID`
 FROM
-     `DATA_IMPORT_ORDER_HEADER`]]>
+     `DATA_IMPORT_ORDER_HEADER` DI
+     LEFT JOIN
+     `STATUS_ITEM` STATUS_ITEM
+ON
+     DI.`IMPORT_STATUS_ID` = STATUS_ITEM.`STATUS_ID`]]>
 	</queryString>
 	<field name="ORDER_ID" class="java.lang.String"/>
-	<field name="IMPORT_STATUS_ID" class="java.lang.String"/>
+	<field name="STATUS_DESCRIPTION" class="java.lang.String"/>
 	<field name="IMPORT_ERROR" class="java.lang.String"/>
 	<field name="ORDER_TYPE_ID" class="java.lang.String"/>
 	<field name="CUSTOMER_PARTY_ID" class="java.lang.String"/>
@@ -65,7 +69,7 @@ FROM
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{DataImportImportStatusId}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonStatus}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Opaque" x="89" y="30" width="131" height="20" backcolor="#EFEBE7"/>
@@ -181,7 +185,7 @@ FROM
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{IMPORT_STATUS_ID}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{STATUS_DESCRIPTION}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="580" y="0" width="222" height="22"/>

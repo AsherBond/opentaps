@@ -46,8 +46,8 @@
                  label=uiLabelMap.FinancialsCustomers
                  submitLabel=uiLabelMap.DataImportImport
                  processed=customersProcessed notProcessed=customersNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP"
-                 reportLabel=uiLabelMap.DataImportCustomersImportReport/>
+                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@importForm importService="importSuppliers"
@@ -55,8 +55,8 @@
                  label=uiLabelMap.PurchSuppliers
                  submitLabel=uiLabelMap.DataImportImport
                  processed=suppliersProcessed notProcessed=suppliersNotProcessed
-                 reportHref="setupReport?reportId=SUPPL_IMP"
-                 reportLabel=uiLabelMap.DataImportSuppliersImportReport/>
+                 reportHref="setupReport?reportId=SUPPL_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@importForm importService="importProducts"
@@ -64,8 +64,8 @@
                  label=uiLabelMap.ProductProducts
                  submitLabel=uiLabelMap.DataImportImport
                  processed=productsProcessed notProcessed=productsNotProcessed
-                 reportHref="setupReport?reportId=PROD_IMP"
-                 reportLabel=uiLabelMap.DataImportProductsImportReport/>
+                 reportHref="setupReport?reportId=PROD_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@importForm importService="importProductInventory"
@@ -73,8 +73,8 @@
                  label=uiLabelMap.ProductInventoryItems
                  submitLabel=uiLabelMap.DataImportImport
                  processed=inventoryProcessed notProcessed=inventoryNotProcessed
-                 reportHref="setupReport?reportId=INVENT_IMP"
-                 reportLabel=uiLabelMap.DataImportInventoryImportReport/>
+                 reportHref="setupReport?reportId=INVENT_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@importForm importService="importGlAccounts"
@@ -82,8 +82,8 @@
                  label=uiLabelMap.DataImportGlAccounts
                  submitLabel=uiLabelMap.DataImportImport
                  processed=glAccountsProcessed notProcessed=glAccountsNotProcessed
-                 reportHref="setupReport?reportId=GL_ACCTS_IMP"
-                 reportLabel=uiLabelMap.DataImportGlAccountsImportReport/>
+                 reportHref="setupReport?reportId=GL_ACCTS_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@importForm importService="importOrders"
@@ -91,15 +91,15 @@
                  label=uiLabelMap.DataImportOrderLines
                  submitLabel=uiLabelMap.DataImportImport
                  processed=orderHeadersProcessed notProcessed=orderHeadersNotProcessed
-                 reportHref="setupReport?reportId=ORDER_H_IMP"
-                 reportLabel=uiLabelMap.DataImportOrderHeaderLinesImportReport/>
+                 reportHref="setupReport?reportId=ORDER_H_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@displayCell text="${uiLabelMap.DataImportOrderItemLines}:"/>
     <@displayCell text="${orderItemsProcessed}"/>
     <@displayCell text="${orderItemsNotProcessed}"/>
     <td>&nbsp;</td>
-    <@displayLinkCell href="setupReport?reportId=ORDER_I_IMP" text=uiLabelMap.DataImportOrderItemLinesImportReport />
+    <@displayLinkCell href="setupReport?reportId=ORDER_I_IMP&amp;sectionName=myHome" text=uiLabelMap.OpentapsReport />
   </tr>
 </table>
 
