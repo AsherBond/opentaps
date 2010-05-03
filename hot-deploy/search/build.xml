@@ -117,7 +117,7 @@
     <!-- ================================================================== -->
 
     <target name="docs" depends="prepare-docs,classpath">
-      <javadoc packagenames="org.opentaps.asterisk.*"
+      <javadoc packagenames="org.opentaps.search.*"
                classpathref="local.class.path"
                destdir="${build.dir}/javadocs"
                windowtitle="Open Source Strategies - ${desc}">

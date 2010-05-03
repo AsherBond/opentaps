@@ -22,7 +22,8 @@
         <section>
             <actions>
                 <set field="gwtScripts[]" value="analyticsgwt/org.opentaps.analytics.gwt.query.query" global="true"/>
-                <set field="sectionName" value="reports" global="true"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/report/setupSectionName.bsh"/>
+                <set field="sectionName" value="${parameters.sectionName}" global="true"/>
             </actions>
             <widgets>
                 <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>

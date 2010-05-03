@@ -160,10 +160,6 @@
         <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
     </service>
 
-    <service name="uploadFileForDataImport" engine="interface" location="" invoke="">
-        <description>Upload a file for Dataimport</description>
-    </service>
-
     <service name="uploadFileForDataImport" engine="java" use-transaction="true"
              location="org.opentaps.dataimport.CommonImportServices" invoke="uploadFileForDataImport">
        <description>Upload a file for Dataimport by running the service corresponding to the file format

@@ -17,7 +17,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#macro importForm importService label sectionLabel submitLabel processed notProcessed>
+<#macro importForm importService label sectionLabel submitLabel processed notProcessed reportHref reportLabel>
     <form name="${importService}Form" method="post" action="setServiceParameters">
       <@inputHidden name="SERVICE_NAME" value="${importService}"/>
       <@inputHidden name="POOL_NAME" value="pool"/>
@@ -28,7 +28,9 @@
       <#if hasDIAdminPermissions?default(false)>
         <@inputSubmitCell title="${submitLabel}"/>
       </#if>
+      <@displayLinkCell href="${reportHref}" text="${reportLabel}" />
     </form>
+    
 </#macro>
 
 <table  class="headedTable">
@@ -42,48 +44,62 @@
     <@importForm importService="importCustomers"
                  sectionLabel="DataImportImportCustomers"
                  label=uiLabelMap.FinancialsCustomers
-                 submitLabel=uiLabelMap.DataImportImportCustomers
-                 processed=customersProcessed notProcessed=customersNotProcessed/>
+                 submitLabel=uiLabelMap.DataImportImport
+                 processed=customersProcessed notProcessed=customersNotProcessed
+                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@importForm importService="importSuppliers"
                  sectionLabel="DataImportImportSuppliers"
                  label=uiLabelMap.PurchSuppliers
-                 submitLabel=uiLabelMap.DataImportImportSuppliers
-                 processed=suppliersProcessed notProcessed=suppliersNotProcessed/>
+                 submitLabel=uiLabelMap.DataImportImport
+                 processed=suppliersProcessed notProcessed=suppliersNotProcessed
+                 reportHref="setupReport?reportId=SUPPL_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@importForm importService="importProducts"
                  sectionLabel="DataImportImportProducts"
                  label=uiLabelMap.ProductProducts
-                 submitLabel=uiLabelMap.DataImportImportProducts
-                 processed=productsProcessed notProcessed=productsNotProcessed/>
+                 submitLabel=uiLabelMap.DataImportImport
+                 processed=productsProcessed notProcessed=productsNotProcessed
+                 reportHref="setupReport?reportId=PROD_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@importForm importService="importProductInventory"
                  sectionLabel="DataImportImportInventory"
                  label=uiLabelMap.ProductInventoryItems
-                 submitLabel=uiLabelMap.DataImportImportInventory
-                 processed=inventoryProcessed notProcessed=inventoryNotProcessed/>
+                 submitLabel=uiLabelMap.DataImportImport
+                 processed=inventoryProcessed notProcessed=inventoryNotProcessed
+                 reportHref="setupReport?reportId=INVENT_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
+  </tr>
+  <tr>
+    <@importForm importService="importGlAccounts"
+                 sectionLabel="DataImportImportGlAccounts"
+                 label=uiLabelMap.DataImportGlAccounts
+                 submitLabel=uiLabelMap.DataImportImport
+                 processed=glAccountsProcessed notProcessed=glAccountsNotProcessed
+                 reportHref="setupReport?reportId=GL_ACCTS_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@importForm importService="importOrders"
                  sectionLabel="DataImportImportOrders"
                  label=uiLabelMap.DataImportOrderLines
-                 submitLabel=uiLabelMap.DataImportImportOrders
-                 processed=orderHeadersProcessed notProcessed=orderHeadersNotProcessed/>
+                 submitLabel=uiLabelMap.DataImportImport
+                 processed=orderHeadersProcessed notProcessed=orderHeadersNotProcessed
+                 reportHref="setupReport?reportId=ORDER_H_IMP&amp;sectionName=myHome"
+                 reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
     <@displayCell text="${uiLabelMap.DataImportOrderItemLines}:"/>
     <@displayCell text="${orderItemsProcessed}"/>
     <@displayCell text="${orderItemsNotProcessed}"/>
-  </tr>
-  <tr>
-    <@importForm importService="importGlAccounts"
-                 sectionLabel="DataImportImportGlAccounts"
-                 label=uiLabelMap.DataImportGlAccountsLines
-                 submitLabel=uiLabelMap.DataImportImportGlAccounts
-                 processed=glAccountsProcessed notProcessed=glAccountsNotProcessed/>
+    <td>&nbsp;</td>
+    <@displayLinkCell href="setupReport?reportId=ORDER_I_IMP&amp;sectionName=myHome" text=uiLabelMap.OpentapsReport />
   </tr>
 </table>
 

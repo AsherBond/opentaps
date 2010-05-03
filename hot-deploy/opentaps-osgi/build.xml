@@ -24,12 +24,14 @@
 
     <target name="init">
         <property environment="env"/>
+        <property name="desc" value="opentaps OSGi component"/>
         <property name="src.dir" value="src"/>
         <property name="bundle.src.dir" value="bundle-src"/>
         <property name="deploy.dir" value="webapp/WEB-INF/bundles"/>
         <property name="base.lib.dir" value="webapp/WEB-INF/lib"/>
         <property name="lib.dir" value="lib"/>
         <property name="classes.dir" value="webapp/WEB-INF/classes"/>
+        <property name="build.dir" value="build"/>      
     </target>
 
     <target name="classpath" depends="init">
@@ -76,5 +78,28 @@
             </fileset>
         </subant>
     </target>
+    
+    <!-- ================================================================== -->
+    <!-- Makes sure the needed directory structure is in place              -->
+    <!-- ================================================================== -->
+    
+    <target name="prepare-docs" depends="init">
+        <mkdir dir="${build.dir}/javadocs"/>
+    </target>
+    
+    <!-- ================================================================== -->
+    <!-- Build JavaDoc                                                      -->
+    <!-- ================================================================== -->
+
+    <target name="docs" depends="prepare-docs,classpath">
+        <javadoc packagenames="org.opentaps.*"
+            classpathref="local.class.path"
+            destdir="${build.dir}/javadocs"
+            Windowtitle="Open Source Strategies - ${desc}">
+            <sourcepath path="${src.dir}"/>
+        </javadoc>
+    </target>
+
+    <target name="all" depends="jar,docs"/>
  
 </project>
