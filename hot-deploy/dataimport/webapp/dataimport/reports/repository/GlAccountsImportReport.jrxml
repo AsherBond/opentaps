@@ -5,16 +5,20 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     `GL_ACCOUNT_ID` ,
-     `ACCOUNT_NAME` ,
-     `IMPORT_STATUS_ID` ,
-     `IMPORT_ERROR`
+     DI.`GL_ACCOUNT_ID` ,
+     DI.`ACCOUNT_NAME` ,
+     STATUS_ITEM.`DESCRIPTION` AS 'STATUS_DESCRIPTION',
+     DI.`IMPORT_ERROR`
 FROM
-     `DATA_IMPORT_GL_ACCOUNT`]]>
+     `DATA_IMPORT_GL_ACCOUNT` DI
+     LEFT JOIN
+     `STATUS_ITEM` STATUS_ITEM
+ON
+     DI.`IMPORT_STATUS_ID` = STATUS_ITEM.`STATUS_ID`]]>
 	</queryString>
 	<field name="GL_ACCOUNT_ID" class="java.lang.String"/>
 	<field name="ACCOUNT_NAME" class="java.lang.String"/>
-	<field name="IMPORT_STATUS_ID" class="java.lang.String"/>
+        <field name="STATUS_DESCRIPTION" class="java.lang.String"/>
 	<field name="IMPORT_ERROR" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -61,7 +65,7 @@ FROM
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{DataImportImportStatusId}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonStatus}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Opaque" x="89" y="30" width="131" height="20" backcolor="#EFEBE7"/>
@@ -149,7 +153,7 @@ FROM
 					<rightPen lineWidth="0.25"/>
 				</box>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{IMPORT_STATUS_ID}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{STATUS_DESCRIPTION}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="333" y="0" width="222" height="22"/>
