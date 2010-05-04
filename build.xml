@@ -23,7 +23,7 @@ under the License.
     <property name="memory.initial.param" value="-Xms512M"/>
     <property name="memory.max.param" value="-Xmx1024M"/>
     <property name="permmemory.max.param" value="-XX:MaxPermSize=1024m"/>
-
+    <property name="javadoc.maxmemory" value="1024M"/>
 
     <available file="applications/build.xml" property="applications.present"/>
     <available file="specialpurpose/build.xml" property="specialpurpose.present"/>
@@ -261,6 +261,104 @@ under the License.
         <echo message="[docs] ========== Done Building (JavaDocs) =========="/>
     </target>
 
+  <target name="docs-split" depends="build,docs-framework,docs-applications,docs-hotdeploy"
+          description="Build ofbiz base and opentaps javadoc into two trees for easier viewing by the community">
+    
+  </target>
+
+  <target name="docs-framework" depends="build"
+          description="Build ofbiz framework javadoc into two trees for easier viewing by the community">
+
+      <echo message="[docs-split] ========== Start Building Framework JavaDoc =========="/>
+
+      <mkdir dir="${site.dir}/javadocs/framework"/>
+      <javadoc packagenames="org.ofbiz.*"
+               destdir="${site.dir}/javadocs/framework"
+               maxmemory="${javadoc.maxmemory}"
+               windowtitle="Opentaps - Ofbiz Framework - API"
+               useexternalfile="yes">
+        <fileset dir="${basedir}/framework" defaultexcludes="yes">
+          <include name="**/*.java"/>
+          <exclude name="**/ControlApplet.java"/>
+          <exclude name="**/ShipmentScaleApplet.java"/>
+          <exclude name="**/test/"/>
+        </fileset>
+      </javadoc>
+  </target>
+
+  <target name="docs-applications" depends="build"
+          description="Build ofbiz applications javadoc into two trees for easier viewing by the community">
+
+      <echo message="[docs-split] ========== Start Building Applications JavaDoc =========="/>
+
+      <mkdir dir="${site.dir}/javadocs/applications"/>
+      <javadoc packagenames="org.ofbiz.*"
+               destdir="${site.dir}/javadocs/applications"
+               maxmemory="${javadoc.maxmemory}"
+               windowtitle="Opentaps - Ofbiz Applications - API"
+               useexternalfile="yes">
+        <fileset dir="${basedir}" defaultexcludes="yes">
+          <include name="applications/**/*.java"/>
+          <include name="specialpurpose/**/*.java"/>
+          <exclude name="**/ControlApplet.java"/>
+          <exclude name="**/ShipmentScaleApplet.java"/>
+          <exclude name="**/test/"/>
+        </fileset>
+      </javadoc>
+  </target>
+
+  <target name="docs-hotdeploy" depends="build"
+          description="Build opentaps javadoc into two trees for easier viewing by the community">
+
+      <echo message="[docs-split] ========== Start Building Hot-Deploy JavaDoc =========="/>
+
+      <mkdir dir="${site.dir}/javadocs/opentaps"/>
+
+      <path id="hotdeploy.class.path">
+        <fileset dir="hot-deploy/opentaps-common/lib/" includes="*.jar"/>
+        <fileset dir="hot-deploy/opentaps-common/lib/hibernate" includes="*.jar"/>
+        <fileset dir="hot-deploy/opentaps-common/lib/aspectwerkz" includes="*.jar"/>
+        <fileset dir="hot-deploy/opentaps-osgi/webapp/WEB-INF/lib" includes="org.osgi.*.jar"/>
+        <fileset dir="framework/base/lib" includes="*.jar"/>
+        <fileset dir="framework/base/lib/commons" includes="*.jar"/>
+        <fileset dir="framework/base/lib/scripting" includes="*.jar"/>
+        <fileset dir="framework/base/lib/j2eespecs" includes="*.jar"/>
+        <fileset dir="framework/base/lib/etl" includes="*.jar"/>
+        <fileset dir="framework/base/build/lib" includes="*.jar"/>
+        <fileset dir="framework/entity/lib" includes="*.jar"/>
+        <fileset dir="framework/entity/build/lib" includes="*.jar"/>
+        <fileset dir="framework/datafile/build/lib" includes="*.jar"/>
+        <fileset dir="framework/security/build/lib" includes="*.jar"/>
+        <fileset dir="framework/service/lib" includes="*.jar"/>
+        <fileset dir="framework/service/build/lib" includes="*.jar"/>
+        <fileset dir="framework/minilang/build/lib" includes="*.jar"/>
+        <fileset dir="framework/webapp/lib" includes="*.jar"/>
+        <fileset dir="framework/webapp/build/lib" includes="*.jar"/>
+        <fileset dir="framework/common/build/lib" includes="*.jar"/>
+        <fileset dir="framework/widget/build/lib" includes="*.jar"/>
+        <fileset dir="applications/accounting/build/lib" includes="*.jar"/>
+        <fileset dir="applications/order/build/lib" includes="*.jar"/>
+        <fileset dir="applications/content/build/lib" includes="*.jar"/>
+        <fileset dir="applications/party/build/lib" includes="*.jar"/>
+        <fileset dir="applications/product/build/lib" includes="*.jar"/>
+        <fileset dir="applications/manufacturing/build/lib" includes="*.jar"/>
+      </path>
+
+      <javadoc packagenames="*"
+               destdir="${site.dir}/javadocs/opentaps"
+               maxmemory="${javadoc.maxmemory}"
+               windowtitle="Opentaps - API"
+               useexternalfile="yes"
+               classpathref="hotdeploy.class.path">
+        <fileset dir="${basedir}/hot-deploy" defaultexcludes="yes">
+          <include name="**/*.java"/>
+          <exclude name="**/test/"/>
+          <exclude name="**/org/opentaps/base/entities/"/>
+          <exclude name="**/org/opentaps/base/services/"/>
+        </fileset>
+      </javadoc>
+  </target>
+
   <target name="docs-all" depends="build"
         description="Build all javadoc into one tree for easier viewing by the community">
 
@@ -269,7 +367,7 @@ under the License.
         <mkdir dir="${site.dir}/javadocs"/>
         <javadoc packagenames="org.ofbiz.*"
           destdir="${site.dir}/javadocs"
-          maxmemory="256M"
+          maxmemory="4096M"
           windowtitle="Open for Business - API"
             useexternalfile="yes">
       <fileset dir="${basedir}" defaultexcludes="yes">
