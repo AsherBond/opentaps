@@ -28,7 +28,7 @@
       <#if hasDIAdminPermissions?default(false)>
         <@inputSubmitCell title="${submitLabel}"/>
       </#if>
-      <@displayLinkCell href="${reportHref}" text="${reportLabel}" />
+      <@displayLinkCell href="${reportHref}" text="${reportLabel}" class="buttontext"/>
     </form>
     
 </#macro>
@@ -99,7 +99,7 @@
     <@displayCell text="${orderItemsProcessed}"/>
     <@displayCell text="${orderItemsNotProcessed}"/>
     <td>&nbsp;</td>
-    <@displayLinkCell href="setupReport?reportId=ORDER_I_IMP&amp;sectionName=myHome" text=uiLabelMap.OpentapsReport />
+    <@displayLinkCell href="setupReport?reportId=ORDER_I_IMP&amp;sectionName=myHome" text=uiLabelMap.OpentapsReport class="buttontext" />
   </tr>
 </table>
 
