@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.invoice.InvoiceServices
  * Invoke: createInterestInvoice
- * Defined in: hot-deploy/financials/servicedef/services_invoice.xml
+ * Defined in: opentaps/financials/servicedef/services_invoice.xml
  */
 public class FinancialsCreateInterestInvoiceService extends ServiceWrapper {
 

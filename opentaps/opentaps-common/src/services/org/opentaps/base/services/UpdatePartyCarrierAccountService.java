@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.party.PartyServices
  * Invoke: updatePartyCarrierAccount
- * Defined in: hot-deploy/opentaps-common/servicedef/services_party.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_party.xml
  */
 public class UpdatePartyCarrierAccountService extends ServiceWrapper {
 

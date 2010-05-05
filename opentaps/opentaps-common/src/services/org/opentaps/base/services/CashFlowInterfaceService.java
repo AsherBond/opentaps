@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: hot-deploy/financials/servicedef/services_financials.xml
+ * Defined in: opentaps/financials/servicedef/services_financials.xml
  */
 public class CashFlowInterfaceService extends ServiceWrapper {
 

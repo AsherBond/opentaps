@@ -44,7 +44,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.party.PartyServices
  * Invoke: updatePartyPassword
- * Defined in: hot-deploy/crmsfa/servicedef/services_party.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_party.xml
  */
 public class CrmsfaUpdatePartyPasswordService extends ServiceWrapper {
 

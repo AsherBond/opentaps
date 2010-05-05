@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.common.domain.inventory.OrderInventoryService
  * Invoke: balanceInventoryItems
- * Defined in: hot-deploy/opentaps-common/servicedef/services_inventory.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_inventory.xml
  */
 public class BalanceInventoryItemsService extends ServiceWrapper {
 

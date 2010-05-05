@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.warehouse.configuration.ConfigurationServices
  * Invoke: removeFacilityTeamMember
- * Defined in: hot-deploy/warehouse/servicedef/services_configuration.xml
+ * Defined in: opentaps/warehouse/servicedef/services_configuration.xml
  */
 public class RemoveFacilityTeamMemberService extends ServiceWrapper {
 

@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices
  * Invoke: reReserveInventoryOnSalesOrderStatusChange
- * Defined in: hot-deploy/crmsfa/servicedef/services_orders.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_orders.xml
  */
 public class CrmsfaReReserveInventoryOnSalesOrderStatusChangeService extends ServiceWrapper {
 

@@ -17,7 +17,7 @@
 <#if surveyWrapper?has_content>
 <form method="POST" action="<@ofbizUrl>${surveyAction?default('/createResponse')}</@ofbizUrl>">
 <#-- note this must point to the exact file system location not just the component name in ofbiz-component.xml -->
-  ${surveyWrapper.render("/hot-deploy/crmsfa/templates/survey/genericsurvey.ftl").toString()}
+  ${surveyWrapper.render("/opentaps/crmsfa/templates/survey/genericsurvey.ftl").toString()}
 </form>
 <#else>
 <h2>${uiLabelMap.CrmSurveyDoesNotExist}</h2>

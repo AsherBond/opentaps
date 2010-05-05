@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="hot-deploy components Build" default="build" basedir=".">
+<project name="opentaps components Build" default="build" basedir=".">
 
   <!-- ================================================================== -->
   <!-- Compile all components, ordered to satisfy dependencies            -->
@@ -29,7 +29,7 @@
       <filelist dir="." files="opentaps-osgi/build.xml"/>
     </subant>
     <echo message="[build] ========== Done Building Opentaps modules =========="/>
-    <echo message="[build] ========== Start Building other hot-deploy modules =========="/>
+    <echo message="[build] ========== Start Building other opentaps modules =========="/>
     <subant inheritall="false">
       <!-- now build any other component -->
       <fileset dir="." casesensitive="no">
@@ -46,7 +46,7 @@
         <include name="**/build.xml"/>
       </fileset>
     </subant>
-    <echo message="[build] ========== Done Building other hot-deploy modules =========="/>
+    <echo message="[build] ========== Done Building other opentaps modules =========="/>
   </target>
   
 

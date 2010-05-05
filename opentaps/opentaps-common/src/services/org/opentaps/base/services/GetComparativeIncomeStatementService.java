@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.financials.FinancialServices
  * Invoke: getComparativeIncomeStatement
- * Defined in: hot-deploy/financials/servicedef/services_financials.xml
+ * Defined in: opentaps/financials/servicedef/services_financials.xml
  */
 public class GetComparativeIncomeStatementService extends ServiceWrapper {
 

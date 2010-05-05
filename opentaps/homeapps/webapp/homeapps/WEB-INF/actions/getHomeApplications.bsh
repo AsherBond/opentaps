@@ -21,7 +21,7 @@
 
    An example.
    
-   We define the following in hot-deploy/homeapps/HomeAppsSeedData.xml:
+   We define the following in opentaps/homeapps/HomeAppsSeedData.xml:
    <HomeWebApps applicationId="party" name="Parties and Users" description="Party Description."
      imageUrl="/opentaps_images/integratingweb/party.png" imageHoverUrl="/opentaps_images/integratingweb/partyHover.png" linkUrl="/partymgr/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
      lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>

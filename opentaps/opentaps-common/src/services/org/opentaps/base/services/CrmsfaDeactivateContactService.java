@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.contacts.ContactsServices
  * Invoke: deactivateContact
- * Defined in: hot-deploy/crmsfa/servicedef/services_contacts.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_contacts.xml
  */
 public class CrmsfaDeactivateContactService extends ServiceWrapper {
 

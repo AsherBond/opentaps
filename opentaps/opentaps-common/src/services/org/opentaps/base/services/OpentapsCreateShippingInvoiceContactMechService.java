@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.invoice.InvoiceServices
  * Invoke: createShippingInvoiceContactMech
- * Defined in: hot-deploy/financials/servicedef/services_invoice.xml
+ * Defined in: opentaps/financials/servicedef/services_invoice.xml
  */
 public class OpentapsCreateShippingInvoiceContactMechService extends ServiceWrapper {
 

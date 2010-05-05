@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.product.ProductServices
  * Invoke: getProductByComprehensiveSearch
- * Defined in: hot-deploy/opentaps-common/servicedef/services_product.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_product.xml
  */
 public class GetProductByComprehensiveSearchService extends ServiceWrapper {
 

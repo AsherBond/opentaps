@@ -58,8 +58,8 @@
      <property name="lib.dir" value="lib"/>
 	 <property name="output.dir" value="build/classes"/>	
      <!-- This parameter must point to your ofbiz/ directory or the libraries for the financials app would not be found.
-         The default setting would work if you have checked out the financials module into your ofbiz/hot-deploy/ directory.
-         It would NOT work if you checked it out somewhere else and symlinked to it in your hot-deploy/ directory.
+         The default setting would work if you have checked out the financials module into your ofbiz/opentaps/ directory.
+         It would NOT work if you checked it out somewhere else and symlinked to it in your opentaps/ directory.
          If you experience build problems, put the full path here -->
      <property name="ofbiz.dir" value="../../"/> 
     </target>
@@ -76,10 +76,10 @@
         <fileset dir="${ofbiz.dir}/framework/entity/build/lib" includes="*.jar"/>
         <fileset dir="${ofbiz.dir}/framework/service/build/lib" includes="*.jar"/>
 	
-        <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/" includes="*.jar"/>
-        <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/hibernate" includes="*.jar"/>
+        <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/" includes="*.jar"/>
+        <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/hibernate" includes="*.jar"/>
         <!-- OpenTAPs modules on which we depend -->	      
-        <path location="${ofbiz.dir}/hot-deploy/crmsfa/build/classes"/>
+        <path location="${ofbiz.dir}/opentaps/crmsfa/build/classes"/>
  	  
         <!-- external jars specific to OTFM -->	 
         <fileset dir="lib/core" includes="*.jar"/>
@@ -88,7 +88,7 @@
           <include name="funambol-pim-framework-8.0.0.jar"/>
           <include name="funambol-pim-parsers-8.0.0.jar"/>
         </fileset>
-        <fileset dir="${ofbiz.dir}/hot-deploy/crmsfa/build/lib" includes="*.jar"/>
+        <fileset dir="${ofbiz.dir}/opentaps/crmsfa/build/lib" includes="*.jar"/>
       </path>
     </target>
 

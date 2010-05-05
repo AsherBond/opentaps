@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices
  * Invoke: addContactToOpportunity
- * Defined in: hot-deploy/crmsfa/servicedef/services_opportunities.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_opportunities.xml
  */
 public class CrmsfaAddContactToOpportunityService extends ServiceWrapper {
 

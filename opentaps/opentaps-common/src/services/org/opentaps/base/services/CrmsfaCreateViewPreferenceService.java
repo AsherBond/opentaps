@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: com/opensourcestrategies/crmsfa/party/ViewPrefServices.xml
  * Invoke: createViewPreference
- * Defined in: hot-deploy/crmsfa/servicedef/services_party.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_party.xml
  */
 public class CrmsfaCreateViewPreferenceService extends ServiceWrapper {
 

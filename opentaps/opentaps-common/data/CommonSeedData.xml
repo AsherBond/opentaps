@@ -161,7 +161,7 @@ under the License.
     <RecurrenceInfo recurrenceInfoId="CLEANNAVHSTR" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="CLEANNAVHSTR" recurrenceCount="0"/>
     <JobSandbox jobId="CLEANNAVHSTR" jobName="Garbage collection on navigation history" runTime="2007-01-01 15:45:00.000" serviceName="opentaps.purgeNavHistory" poolId="pool" runAsUser="system" recurrenceInfoId="CLEANNAVHSTR"/>
     
-     <!-- OFTM (hot-deploy/funambol): The following types are necessary to permit full mapping with Outlook contact subrecord types -->
+     <!-- OFTM (opentaps/funambol): The following types are necessary to permit full mapping with Outlook contact subrecord types -->
     <ContactMechPurposeType contactMechPurposeTypeId="HOME_LOCATION" description="Home Address"/>
     <ContactMechPurposeType contactMechPurposeTypeId="OTHER_LOCATION" description="Other Address"/>
     <ContactMechPurposeType contactMechPurposeTypeId="PHONE_HOME_SEC" description="Alternative Home Phone Number"/>

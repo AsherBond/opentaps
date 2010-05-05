@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.manufacturing.bom.BomServices
  * Invoke: getManufacturingComponents
- * Defined in: hot-deploy/opentaps-common/servicedef/services_bom.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_bom.xml
  */
 public class GetManufacturingComponentsService extends ServiceWrapper {
 

@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.content.EmailServices
  * Invoke: prepareQuoteEmail
- * Defined in: hot-deploy/opentaps-common/servicedef/services_email.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_email.xml
  */
 public class OpentapsPrepareQuoteEmailService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: org/ofbiz/marketing/contact/ContactListServices.xml
  * Invoke: updateContactList
- * Defined in: hot-deploy/crmsfa/servicedef/services_marketing.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_marketing.xml
  */
 public class UpdateContactListService extends ServiceWrapper {
 

@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.content.ContentServices
  * Invoke: uploadUrl
- * Defined in: hot-deploy/opentaps-common/servicedef/services_content.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_content.xml
  */
 public class UploadUrlService extends ServiceWrapper {
 

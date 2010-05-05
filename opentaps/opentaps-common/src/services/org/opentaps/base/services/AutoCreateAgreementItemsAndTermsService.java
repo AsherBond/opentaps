@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.agreement.AgreementServices
  * Invoke: autoCreateAgreementItemsAndTerms
- * Defined in: hot-deploy/opentaps-common/servicedef/services_agreement.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_agreement.xml
  */
 public class AutoCreateAgreementItemsAndTermsService extends ServiceWrapper {
 

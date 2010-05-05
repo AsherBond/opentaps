@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.leads.LeadsServices
  * Invoke: convertLead
- * Defined in: hot-deploy/crmsfa/servicedef/services_leads.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_leads.xml
  */
 public class CrmsfaConvertLeadService extends ServiceWrapper {
 

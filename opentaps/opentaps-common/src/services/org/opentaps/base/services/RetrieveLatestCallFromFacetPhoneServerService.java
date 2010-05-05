@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.voip.VoIPServices
  * Invoke: retrieveLatestCallFromFacetPhoneServer
- * Defined in: hot-deploy/crmsfa/servicedef/services_voip.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_voip.xml
  */
 public class RetrieveLatestCallFromFacetPhoneServerService extends ServiceWrapper {
 

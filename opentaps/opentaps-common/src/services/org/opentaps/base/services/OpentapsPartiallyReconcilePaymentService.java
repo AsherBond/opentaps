@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.payment.PaymentServices
  * Invoke: partiallyReconcilePayment
- * Defined in: hot-deploy/financials/servicedef/services_payment.xml
+ * Defined in: opentaps/financials/servicedef/services_payment.xml
  */
 public class OpentapsPartiallyReconcilePaymentService extends ServiceWrapper {
 

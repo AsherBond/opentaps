@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.domain.crmsfa.returns.ReturnService
  * Invoke: updateInvoiceItemsAccountingTagsForReturn
- * Defined in: hot-deploy/opentaps-common/servicedef/services_orders.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_orders.xml
  */
 public class UpdateInvoiceItemsAccountingTagsForReturnService extends ServiceWrapper {
 

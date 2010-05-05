@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.forms.MergeFormServices
  * Invoke: deleteMergeForm
- * Defined in: hot-deploy/opentaps-common/servicedef/services_forms.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_forms.xml
  */
 public class DeleteMergeFormService extends ServiceWrapper {
 

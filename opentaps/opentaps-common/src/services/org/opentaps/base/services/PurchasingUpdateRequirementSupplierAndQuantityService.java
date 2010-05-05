@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.purchasing.domain.planning.requirement.RequirementService
  * Invoke: updateRequirementSupplierAndQuantity
- * Defined in: hot-deploy/purchasing/servicedef/services.xml
+ * Defined in: opentaps/purchasing/servicedef/services.xml
  */
 public class PurchasingUpdateRequirementSupplierAndQuantityService extends ServiceWrapper {
 

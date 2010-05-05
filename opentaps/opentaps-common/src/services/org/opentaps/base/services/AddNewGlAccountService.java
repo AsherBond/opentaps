@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.configuration.ConfigurationServices
  * Invoke: addNewGlAccount
- * Defined in: hot-deploy/financials/servicedef/services_configuration.xml
+ * Defined in: opentaps/financials/servicedef/services_configuration.xml
  */
 public class AddNewGlAccountService extends ServiceWrapper {
 

@@ -65,20 +65,20 @@
             <fileset dir="${ofbiz.dir}/applications/party/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/product/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/order/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/hibernate" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/hibernate" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/build/lib" includes="*.jar"/>
         </path>
     </target>
 
     <target name="gwtclasspath" depends="init">
         <path id="gwt.class.path">
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
-            <pathelement location="${ofbiz.dir}/hot-deploy/analytics/src"/>
-            <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/common"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="gwt*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
+            <pathelement location="${ofbiz.dir}/opentaps/analytics/src"/>
+            <pathelement location="${ofbiz.dir}/opentaps/opentaps-common/src/common"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib" includes="gwt*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
         </path>
     </target>
 

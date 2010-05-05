@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.reports.BalanceReports
  * Invoke: balanceStatementReport
- * Defined in: hot-deploy/financials/servicedef/services_financials.xml
+ * Defined in: opentaps/financials/servicedef/services_financials.xml
  */
 public class BalanceStatementReportService extends ServiceWrapper {
 

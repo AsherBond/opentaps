@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.payment.PaymentServices
  * Invoke: updateSentOrReceivedPayment
- * Defined in: hot-deploy/financials/servicedef/services_other.xml
+ * Defined in: opentaps/financials/servicedef/services_other.xml
  */
 public class FinancialsUpdateSentOrReceivedPaymentService extends ServiceWrapper {
 

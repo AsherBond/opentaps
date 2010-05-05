@@ -259,7 +259,7 @@ public class FinancialsTests extends FinancialsTestCase {
     public void testGlAccountTypeSetting() throws GeneralException {
         LedgerRepositoryInterface ledgerRepository = ledgerDomain.getLedgerRepository();
         GeneralLedgerAccount glAccount = ledgerRepository.getDefaultLedgerAccount("ACCOUNTS_RECEIVABLE", testLedgerOrganizationPartyId);
-        // this hardcoded gl account ID Needs to be the same as that defined in hot-deploy/opentaps-tests/data/financials/LedgerPostingTestData.xml
+        // this hardcoded gl account ID Needs to be the same as that defined in opentaps/opentaps-tests/data/financials/LedgerPostingTestData.xml
         assertEquals("Incorrect Accounts Receivables account for [" + testLedgerOrganizationPartyId + "]", "120000", glAccount.getGlAccountId());
     }
 

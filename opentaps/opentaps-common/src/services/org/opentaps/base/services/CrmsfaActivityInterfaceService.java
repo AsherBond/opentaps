@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: hot-deploy/crmsfa/servicedef/services_activities.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_activities.xml
  */
 public class CrmsfaActivityInterfaceService extends ServiceWrapper {
 

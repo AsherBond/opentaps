@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.party.PartyServices
  * Invoke: assignParty
- * Defined in: hot-deploy/crmsfa/servicedef/services_party.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_party.xml
  */
 public class CrmsfaAssignPartyService extends ServiceWrapper {
 

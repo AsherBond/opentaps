@@ -80,11 +80,11 @@ public class AmazonTests extends OpentapsTestCase {
         // TODO: Use new SalesOrderLookupRepository
         // TODO: also test inventory reservation (ATP decreases for these products
 
-        // based on hot-deploy/amazon/data/AmazonDemoSetup.xml
+        // based on opentaps/amazon/data/AmazonDemoSetup.xml
         List<GenericValue> orders = delegator.findByAnd("OrderHeader", UtilMisc.toMap("productStoreId", "AMAZON"));
         for (GenericValue orderGV : orders) {
             Order order = orderRepository.getOrderById(orderGV.getString("orderId"));
-            // these are from hot-deploy/amazon/data/AmazonDemoData.xml
+            // these are from opentaps/amazon/data/AmazonDemoData.xml
             if ("TEST-AMNZ-9876543210".equals(order.getOrderId())) {
                 assertEquals("Total for TEST-AMNZ-9876543210 is not correct", order.getTotal(), "43.98");
             } else if ("TEST-AMNZ-9876543211".equals(order.getOrderId())) {

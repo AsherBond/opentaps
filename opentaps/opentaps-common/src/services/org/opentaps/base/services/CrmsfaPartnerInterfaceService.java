@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: hot-deploy/crmsfa/servicedef/services_partners.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_partners.xml
  */
 public class CrmsfaPartnerInterfaceService extends ServiceWrapper {
 

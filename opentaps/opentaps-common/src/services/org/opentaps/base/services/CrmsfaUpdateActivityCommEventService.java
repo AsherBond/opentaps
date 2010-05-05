@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.activities.ActivitiesServices
  * Invoke: updateActivityCommEvent
- * Defined in: hot-deploy/crmsfa/servicedef/services_activities.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_activities.xml
  */
 public class CrmsfaUpdateActivityCommEventService extends ServiceWrapper {
 

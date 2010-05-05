@@ -72,9 +72,9 @@ public class HibernateCfgGeneratorContainer implements Container {
 
     private static final String MODULE = HibernateCfgGeneratorContainer.class.getName();
     // hibernate configuration file store path, It also define in Infrastructure, but we cannot access it in this class.
-    private final static String HIBERNATE_CFG_PATH = "hot-deploy/opentaps-common/config/";
+    private final static String HIBERNATE_CFG_PATH = "opentaps/opentaps-common/config/";
     // hibernate configuration template path
-    private final static String HIBERNATE_COMMON_PATH = "hot-deploy/opentaps-common/config/hibernate.cfg.xml";
+    private final static String HIBERNATE_COMMON_PATH = "opentaps/opentaps-common/config/hibernate.cfg.xml";
     // hibernate configuration template path
     private final static String HIBERNATE_SEARCH_INDEX_PATH = "runtime/lucene/indexes";
     // hibernate configuration file ext

@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.content.EmailServices
  * Invoke: prepareSalesOrderEmail
- * Defined in: hot-deploy/opentaps-common/servicedef/services_email.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_email.xml
  */
 public class OpentapsPrepareSalesOrderEmailService extends ServiceWrapper {
 

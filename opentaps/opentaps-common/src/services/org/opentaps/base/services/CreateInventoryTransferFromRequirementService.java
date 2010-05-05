@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.purchasing.mrp.OpentapsMrpServices
  * Invoke: createInventoryTransferFromRequirement
- * Defined in: hot-deploy/purchasing/servicedef/services_mrp.xml
+ * Defined in: opentaps/purchasing/servicedef/services_mrp.xml
  */
 public class CreateInventoryTransferFromRequirementService extends ServiceWrapper {
 

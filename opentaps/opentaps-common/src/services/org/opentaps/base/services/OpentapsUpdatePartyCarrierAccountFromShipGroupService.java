@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.shipment.ShippingServices
  * Invoke: updatePartyCarrierAccountFromShipGroup
- * Defined in: hot-deploy/opentaps-common/servicedef/services_shipping.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_shipping.xml
  */
 public class OpentapsUpdatePartyCarrierAccountFromShipGroupService extends ServiceWrapper {
 

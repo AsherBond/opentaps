@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.CommonServices
  * Invoke: testIterateTestEntityCache
- * Defined in: hot-deploy/opentaps-common/servicedef/services_common.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_common.xml
  */
 public class OpentapsTestIterateTestEntityCacheService extends ServiceWrapper {
 

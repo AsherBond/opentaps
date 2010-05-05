@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.amazon.order.AmazonOrderServices
  * Invoke: acknowledgeImportedOrders
- * Defined in: hot-deploy/amazon/servicedef/services_amazon.xml
+ * Defined in: opentaps/amazon/servicedef/services_amazon.xml
  */
 public class OpentapsAmazonAcknowledgeImportedOrdersService extends ServiceWrapper {
 

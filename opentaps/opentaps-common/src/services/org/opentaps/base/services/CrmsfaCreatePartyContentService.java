@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.content.ContentServices
  * Invoke: createPartyContent
- * Defined in: hot-deploy/crmsfa/servicedef/services_content.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_content.xml
  */
 public class CrmsfaCreatePartyContentService extends ServiceWrapper {
 

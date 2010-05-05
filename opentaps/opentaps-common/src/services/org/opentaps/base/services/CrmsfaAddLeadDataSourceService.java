@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.common.DataSourceServices
  * Invoke: addLeadDataSource
- * Defined in: hot-deploy/crmsfa/servicedef/services_datasources.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_datasources.xml
  */
 public class CrmsfaAddLeadDataSourceService extends ServiceWrapper {
 

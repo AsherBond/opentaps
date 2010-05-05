@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.order.OrderServices
  * Invoke: updatePostalAddressForProductStoreFacilityByAddress
- * Defined in: hot-deploy/opentaps-common/servicedef/services_orders.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_orders.xml
  */
 public class OpentapsUpdatePostalAddressForProductStoreFacilityByAddressService extends ServiceWrapper {
 

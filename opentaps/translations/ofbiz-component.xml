@@ -17,7 +17,7 @@
 -->
 
 <!-- This is a special component just to hold various translation files.  You can create one yourself
-for your language as well and plug it into hot-deploy -->
+for your language as well and plug it into opentaps -->
 
 <ofbiz-component name="translations"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 

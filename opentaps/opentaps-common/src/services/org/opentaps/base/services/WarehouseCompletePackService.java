@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.warehouse.shipment.packing.PackingServices
  * Invoke: warehouseCompletePack
- * Defined in: hot-deploy/warehouse/servicedef/services_shipping.xml
+ * Defined in: opentaps/warehouse/servicedef/services_shipping.xml
  */
 public class WarehouseCompletePackService extends ServiceWrapper {
 

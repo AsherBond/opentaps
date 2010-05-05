@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.dataimport.domain.GlAccountImportService
  * Invoke: importGlAccounts
- * Defined in: hot-deploy/dataimport/servicedef/services.xml
+ * Defined in: opentaps/dataimport/servicedef/services.xml
  */
 public class ImportGlAccountsService extends ServiceWrapper {
 

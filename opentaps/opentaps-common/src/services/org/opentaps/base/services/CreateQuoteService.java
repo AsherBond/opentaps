@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: org/ofbiz/order/quote/QuoteServices.xml
  * Invoke: createQuote
- * Defined in: hot-deploy/crmsfa/servicedef/services_quotes.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_quotes.xml
  */
 public class CreateQuoteService extends ServiceWrapper {
 

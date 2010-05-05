@@ -46,7 +46,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.payment.PaymentServices
  * Invoke: createPaymentApplication
- * Defined in: hot-deploy/financials/servicedef/services_payment.xml
+ * Defined in: opentaps/financials/servicedef/services_payment.xml
  */
 public class CreatePaymentApplicationService extends ServiceWrapper {
 

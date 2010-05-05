@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.custrequest.CustRequestServices
  * Invoke: markCustRequestAsUpdated
- * Defined in: hot-deploy/opentaps-common/servicedef/services_custrequest.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_custrequest.xml
  */
 public class MarkCustRequestAsUpdatedService extends ServiceWrapper {
 

@@ -20,7 +20,7 @@ This is seed data for the Opentaps Home Page.
 Here we suppose that the applicationId defined for an application in the entity HomeWebApps
 is equal to the webapp name of the same application, defined in his own ofbiz-component.xml.
 
-More infos in hot-deploy/homeapps/webapp/WEB-INF/actions/getHomeApplications.bsh
+More infos in opentaps/homeapps/webapp/WEB-INF/actions/getHomeApplications.bsh
 
 Logging in, applications will be displayed if-and-only-if the authenticated user has VIEW permissions to view them.
 

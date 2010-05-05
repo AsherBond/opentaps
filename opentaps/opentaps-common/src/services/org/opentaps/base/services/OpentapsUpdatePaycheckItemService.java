@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.payroll.PayrollServices
  * Invoke: updatePaycheckItem
- * Defined in: hot-deploy/financials/servicedef/services_payroll.xml
+ * Defined in: opentaps/financials/servicedef/services_payroll.xml
  */
 public class OpentapsUpdatePaycheckItemService extends ServiceWrapper {
 

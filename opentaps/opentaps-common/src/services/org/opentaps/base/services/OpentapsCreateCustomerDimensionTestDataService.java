@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.tests.analytics.AnalyticsServices
  * Invoke: createCustomerDimensionTestData
- * Defined in: hot-deploy/opentaps-tests/servicedef/services_analytics.xml
+ * Defined in: opentaps/opentaps-tests/servicedef/services_analytics.xml
  */
 public class OpentapsCreateCustomerDimensionTestDataService extends ServiceWrapper {
 

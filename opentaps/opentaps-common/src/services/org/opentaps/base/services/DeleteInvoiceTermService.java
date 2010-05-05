@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: com/opensourcestrategies/financials/invoices/InvoiceServices.xml
  * Invoke: deleteInvoiceTerm
- * Defined in: hot-deploy/financials/servicedef/services_invoice.xml
+ * Defined in: opentaps/financials/servicedef/services_invoice.xml
  */
 public class DeleteInvoiceTermService extends ServiceWrapper {
 

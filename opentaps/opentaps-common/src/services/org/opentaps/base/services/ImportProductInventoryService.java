@@ -48,7 +48,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.dataimport.ProductImportServices
  * Invoke: importProductInventory
- * Defined in: hot-deploy/dataimport/servicedef/services.xml
+ * Defined in: opentaps/dataimport/servicedef/services.xml
  */
 public class ImportProductInventoryService extends ServiceWrapper {
 

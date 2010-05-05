@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.warehouse.domain.inventory.InventoryService
  * Invoke: getProductInventoryAvailable
- * Defined in: hot-deploy/warehouse/servicedef/services_inventory.xml
+ * Defined in: opentaps/warehouse/servicedef/services_inventory.xml
  */
 public class GetProductInventoryAvailableService extends ServiceWrapper {
 

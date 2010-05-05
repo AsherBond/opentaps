@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.common.domain.party.PartyMergeService
  * Invoke: validateMergeParties
- * Defined in: hot-deploy/opentaps-common/servicedef/services_party.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_party.xml
  */
 public class OpentapsValidateMergePartiesService extends ServiceWrapper {
 

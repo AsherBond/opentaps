@@ -567,7 +567,7 @@
     <VarianceReasonGlAccount varianceReasonId="VAR_FOUND" organizationPartyId="Company" glAccountId="514000"/>
     <VarianceReasonGlAccount varianceReasonId="VAR_DAMAGED" organizationPartyId="Company" glAccountId="514000"/>
     <VarianceReasonGlAccount varianceReasonId="VAR_SAMPLE" organizationPartyId="Company" glAccountId="625000"/> <!-- other advertising & promotion -->
-  <!-- This is commented out for now because the loading sequence puts hot-deploy/mycompany before hot-deploy/warehouse/, causing an
+  <!-- This is commented out for now because the loading sequence puts opentaps/mycompany before opentaps/warehouse/, causing an
   exception.  We're going to have to think about how to solve this -->
    <VarianceReasonGlAccount varianceReasonId="VAR_TRANSIT" organizationPartyId="Company" glAccountId="514100"/> --> <!-- other advertising & promotion -->
    

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.cases.CasesServices
  * Invoke: closeCase
- * Defined in: hot-deploy/crmsfa/servicedef/services_cases.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_cases.xml
  */
 public class CrmsfaCloseCaseService extends ServiceWrapper {
 

@@ -35,8 +35,8 @@ import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 
 /**
- * Verify financial statements are correct based on the data in hot-deploy/opentaps-tests/data/financials/StatementsTestData.xml
- * and according to the spreadsheet hot-deploy/opentaps-tests/scripts/spreadsheets/financial statements tests.xls.
+ * Verify financial statements are correct based on the data in opentaps/opentaps-tests/data/financials/StatementsTestData.xml
+ * and according to the spreadsheet opentaps/opentaps-tests/scripts/spreadsheets/financial statements tests.xls.
  */
 public class FinancialStatementTests extends FinancialsTestCase {
 

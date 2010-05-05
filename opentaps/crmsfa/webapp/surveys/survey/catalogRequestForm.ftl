@@ -106,7 +106,7 @@ use "N/A" for the state code.</p>
     <td><input class="inputBox" name="primaryEmail" value="${parameters.primaryEmail?if_exists}" size="35"/></td>
   </tr>
 
-  ${surveyWrapper.render("/hot-deploy/crmsfa/templates/survey/simpleFormlessSurvey.ftl")}
+  ${surveyWrapper.render("/opentaps/crmsfa/templates/survey/simpleFormlessSurvey.ftl")}
 
   <tr>
     <td>How did you hear abut us?</td>

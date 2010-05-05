@@ -87,9 +87,9 @@ public class Infrastructure {
         DIALECTS.put("advantage", "");  //not exist mapping Dialect
     }
     /** Hibernate configuration file store path. */
-    public static final String HIBERNATE_CFG_PATH = "hot-deploy/opentaps-common/config/";
+    public static final String HIBERNATE_CFG_PATH = "opentaps/opentaps-common/config/";
     /** Hibernate configuration template path. */
-    public static final String HIBERNATE_COMMON_PATH = "hot-deploy/opentaps-common/config/hibernate.cfg.xml";
+    public static final String HIBERNATE_COMMON_PATH = "opentaps/opentaps-common/config/hibernate.cfg.xml";
     /** Hibernate configuration template path. */
     public static final String HIBERNATE_SEARCH_INDEX_PATH = "runtime/lucene/indexes";
     /** Hibernate configuration file ext. */

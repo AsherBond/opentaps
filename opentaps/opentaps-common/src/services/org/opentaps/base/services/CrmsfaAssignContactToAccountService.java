@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.contacts.ContactsServices
  * Invoke: assignContactToAccount
- * Defined in: hot-deploy/crmsfa/servicedef/services_contacts.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_contacts.xml
  */
 public class CrmsfaAssignContactToAccountService extends ServiceWrapper {
 

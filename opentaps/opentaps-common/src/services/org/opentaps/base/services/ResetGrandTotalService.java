@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.common.domain.order.OrderService
  * Invoke: resetGrandTotal
- * Defined in: hot-deploy/opentaps-common/servicedef/services_orders.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_orders.xml
  */
 public class ResetGrandTotalService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.returns.ReturnServices
  * Invoke: acceptReturn
- * Defined in: hot-deploy/crmsfa/servicedef/services_returns.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_returns.xml
  */
 public class CrmsfaAcceptReturnService extends ServiceWrapper {
 

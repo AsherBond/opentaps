@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices
  * Invoke: getOrderPriorityList
- * Defined in: hot-deploy/crmsfa/servicedef/services_orders.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_orders.xml
  */
 public class CrmsfaGetOrderPriorityListService extends ServiceWrapper {
 

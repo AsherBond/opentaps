@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: org/ofbiz/shipment/receipt/ShipmentReceiptServices.xml
  * Invoke: receiveInventoryProduct
- * Defined in: hot-deploy/opentaps-common/servicedef/services_inventory.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_inventory.xml
  */
 public class ReceiveInventoryProductService extends ServiceWrapper {
 

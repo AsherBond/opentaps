@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.accounts.BillingAccountServices
  * Invoke: captureBillingAccountPayment
- * Defined in: hot-deploy/financials/servicedef/services_billingaccount.xml
+ * Defined in: opentaps/financials/servicedef/services_billingaccount.xml
  */
 public class CaptureBillingAccountPaymentsService extends ServiceWrapper {
 

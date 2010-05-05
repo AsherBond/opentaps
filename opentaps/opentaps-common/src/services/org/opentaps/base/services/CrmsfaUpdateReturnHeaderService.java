@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.returns.ReturnServices
  * Invoke: updateReturnHeader
- * Defined in: hot-deploy/crmsfa/servicedef/services_returns.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_returns.xml
  */
 public class CrmsfaUpdateReturnHeaderService extends ServiceWrapper {
 

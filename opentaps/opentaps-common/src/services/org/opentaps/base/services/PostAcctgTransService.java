@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.financials.domain.ledger.LedgerService
  * Invoke: postAcctgTrans
- * Defined in: hot-deploy/financials/servicedef/services_ledger_ext.xml
+ * Defined in: opentaps/financials/servicedef/services_ledger_ext.xml
  */
 public class PostAcctgTransService extends ServiceWrapper {
 

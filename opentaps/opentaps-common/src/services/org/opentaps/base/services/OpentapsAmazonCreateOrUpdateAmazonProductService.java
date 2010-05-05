@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.amazon.product.AmazonProductServices
  * Invoke: createOrUpdateAmazonProduct
- * Defined in: hot-deploy/amazon/servicedef/services_amazon.xml
+ * Defined in: opentaps/amazon/servicedef/services_amazon.xml
  */
 public class OpentapsAmazonCreateOrUpdateAmazonProductService extends ServiceWrapper {
 

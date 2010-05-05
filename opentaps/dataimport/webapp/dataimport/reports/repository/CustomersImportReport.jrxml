@@ -101,7 +101,7 @@ ON
 			</textField>
 			<image evaluationTime="Report">
 				<reportElement x="0" y="11" width="104" height="18"/>
-				<imageExpression class="java.lang.String"><![CDATA["hot-deploy/opentaps-common/webapp/images/opentaps_logo.png"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA["opentaps/opentaps-common/webapp/images/opentaps_logo.png"]]></imageExpression>
 			</image>
 			<textField pattern="dd/MM/yyyy HH.mm.ss">
 				<reportElement x="712" y="11" width="90" height="18"/>

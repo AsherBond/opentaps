@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.financials.FinancialServices
  * Invoke: getIncomeStatementByTimePeriods
- * Defined in: hot-deploy/financials/servicedef/services_financials.xml
+ * Defined in: opentaps/financials/servicedef/services_financials.xml
  */
 public class GetIncomeStatementByTimePeriodsService extends ServiceWrapper {
 

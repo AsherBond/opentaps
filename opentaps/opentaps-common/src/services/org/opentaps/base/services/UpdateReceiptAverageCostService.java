@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.cogs.COGSServices
  * Invoke: updateReceiptAverageCost
- * Defined in: hot-deploy/financials/servicedef/services_cogs.xml
+ * Defined in: opentaps/financials/servicedef/services_cogs.xml
  */
 public class UpdateReceiptAverageCostService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.quotes.QuoteServices
  * Invoke: finalizeQuote
- * Defined in: hot-deploy/crmsfa/servicedef/services_quotes.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_quotes.xml
  */
 public class FinalizeQuoteService extends ServiceWrapper {
 

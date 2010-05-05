@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: hot-deploy/financials/servicedef/services_gateway.xml
+ * Defined in: opentaps/financials/servicedef/services_gateway.xml
  */
 public class EftRefundInterfaceService extends ServiceWrapper {
 

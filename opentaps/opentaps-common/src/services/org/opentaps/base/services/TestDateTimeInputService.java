@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.CommonServices
  * Invoke: testDateTimeInput
- * Defined in: hot-deploy/crmsfa/servicedef/services_common.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_common.xml
  */
 public class TestDateTimeInputService extends ServiceWrapper {
 

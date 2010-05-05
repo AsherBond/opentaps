@@ -27,7 +27,7 @@
  <bean class="mz.co.dbl.siga.framework.util.SystemPropertiesSetter">	 
   <property name="mappings">
    <map>
-    <entry key="funambol.ds.home" value="hot-deploy/funambol"/>  <!-- path to funambol DS server component, relative to opentaps or absolute path -->
+    <entry key="funambol.ds.home" value="opentaps/funambol"/>  <!-- path to funambol DS server component, relative to opentaps or absolute path -->
    </map>	  
   </property>	 		 
  </bean>

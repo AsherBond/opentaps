@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.content.ContentServices
  * Invoke: createQuoteContent
- * Defined in: hot-deploy/crmsfa/servicedef/services_content.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_content.xml
  */
 public class CrmsfaCreateQuoteContentService extends ServiceWrapper {
 

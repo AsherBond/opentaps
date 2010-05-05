@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.quotes.QuoteServices
  * Invoke: copyQuoteItem
- * Defined in: hot-deploy/crmsfa/servicedef/services_quotes.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_quotes.xml
  */
 public class CopyQuoteItemService extends ServiceWrapper {
 

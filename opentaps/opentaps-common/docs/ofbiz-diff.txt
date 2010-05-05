@@ -311,7 +311,7 @@ applications/party/src/org/ofbiz/party/communication/CommunicationEventServices.
 r13836 NPE fixes for storeIncomingEmail
 
 applications/order/servicedef/secas.xml
-r13211 Comment out SECAs on cancelOrderItem since those are redefined in hot-deploy/opentaps-common/servicedef/secas_orders.xml
+r13211 Comment out SECAs on cancelOrderItem since those are redefined in opentaps/opentaps-common/servicedef/secas_orders.xml
 
 applications/order/src/org/ofbiz/order/order/OrderServices.java
 r13222 Small fix for reserveInventory not to try to reserve cancelled quantity
@@ -383,7 +383,7 @@ Note: this only affects two services in WorkEffortServices.java : processWorkEff
 Possible buisness logic changes
 -------------------------------
 
-hot-deploy/opentaps-common/src/common/org/opentaps/domain/order/OrderItemShipGroup.java
+opentaps/opentaps-common/src/common/org/opentaps/domain/order/OrderItemShipGroup.java
 r13023 getEstimatedShipDate is now also a field of the OISG entity, the method now takes this value into account.
 If the ship group may split, the calculated date is the earliest of the estimatedShipDate set on the OISG and the promisedDatetime of the related OrderItemShipGrpInvRes.
 Else it is the latest of those values.

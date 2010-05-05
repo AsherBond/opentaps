@@ -1425,7 +1425,7 @@ public abstract class UtilCommon {
     /**
      * put a GWT Script into context.  scriptLocation here is the location of a GWT script, such as
      * "commongwt/org.opentaps.gwt.common.asterisk.asterisk" for the asterisk script in the commongwt webapp/ in
-     * hot-deploy/opentaps-common.  This is used in lieu of
+     * opentaps/opentaps-common.  This is used in lieu of
      * <set field="gwtScripts[]" value="commongwt/org.opentaps.gwt.common.asterisk.asterisk" global="true"/> in
      * a screen XML definition.
      * @param context a <code>Map</code> value

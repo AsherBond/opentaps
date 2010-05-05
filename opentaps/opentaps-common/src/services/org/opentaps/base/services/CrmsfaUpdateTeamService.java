@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.teams.TeamServices
  * Invoke: updateTeam
- * Defined in: hot-deploy/crmsfa/servicedef/services_teams.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_teams.xml
  */
 public class CrmsfaUpdateTeamService extends ServiceWrapper {
 

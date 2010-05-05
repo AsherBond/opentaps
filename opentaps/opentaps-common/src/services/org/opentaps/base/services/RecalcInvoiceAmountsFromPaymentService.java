@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.financials.domain.billing.invoice.InvoiceService
  * Invoke: recalcInvoiceAmountsFromPayment
- * Defined in: hot-deploy/financials/servicedef/services_invoice.xml
+ * Defined in: opentaps/financials/servicedef/services_invoice.xml
  */
 public class RecalcInvoiceAmountsFromPaymentService extends ServiceWrapper {
 

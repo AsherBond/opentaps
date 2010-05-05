@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.shipment.ShippingServices
  * Invoke: scheduleReturnShipmentUPS
- * Defined in: hot-deploy/opentaps-common/servicedef/services_shipping.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_shipping.xml
  */
 public class OpentapsScheduleReturnShipmentUPSService extends ServiceWrapper {
 

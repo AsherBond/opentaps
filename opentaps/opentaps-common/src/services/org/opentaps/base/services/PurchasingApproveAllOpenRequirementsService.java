@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.purchasing.planning.PlanningServices
  * Invoke: approveAllOpenRequirements
- * Defined in: hot-deploy/purchasing/servicedef/services.xml
+ * Defined in: opentaps/purchasing/servicedef/services.xml
  */
 public class PurchasingApproveAllOpenRequirementsService extends ServiceWrapper {
 

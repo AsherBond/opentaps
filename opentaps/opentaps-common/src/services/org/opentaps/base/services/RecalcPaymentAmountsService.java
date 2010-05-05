@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.financials.domain.billing.payment.PaymentService
  * Invoke: recalcPaymentAmounts
- * Defined in: hot-deploy/financials/servicedef/services_payment.xml
+ * Defined in: opentaps/financials/servicedef/services_payment.xml
  */
 public class RecalcPaymentAmountsService extends ServiceWrapper {
 

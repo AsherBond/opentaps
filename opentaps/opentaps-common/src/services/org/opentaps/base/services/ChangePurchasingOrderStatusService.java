@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.order.order.OrderServices
  * Invoke: setOrderStatus
- * Defined in: hot-deploy/purchasing/servicedef/services.xml
+ * Defined in: opentaps/purchasing/servicedef/services.xml
  */
 public class ChangePurchasingOrderStatusService extends ServiceWrapper {
 

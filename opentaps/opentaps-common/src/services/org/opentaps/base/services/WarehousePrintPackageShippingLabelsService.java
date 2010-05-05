@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.warehouse.shipment.ShippingServices
  * Invoke: printPackageShippingLabels
- * Defined in: hot-deploy/warehouse/servicedef/services_shipping.xml
+ * Defined in: opentaps/warehouse/servicedef/services_shipping.xml
  */
 public class WarehousePrintPackageShippingLabelsService extends ServiceWrapper {
 

@@ -50,7 +50,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.dataimport.OrderImportServices
  * Invoke: importOrders
- * Defined in: hot-deploy/dataimport/servicedef/services.xml
+ * Defined in: opentaps/dataimport/servicedef/services.xml
  */
 public class ImportOrdersService extends ServiceWrapper {
 

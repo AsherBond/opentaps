@@ -122,7 +122,7 @@ public class UtilConfig {
                 if (js.indexOf("-" + language) != -1) {
 
                     // check lang/calendar-??-utf8.js
-                    String fileUtf8 = js.replace("/opentaps_js", "hot-deploy/opentaps-common/webapp/js");
+                    String fileUtf8 = js.replace("/opentaps_js", "opentaps/opentaps-common/webapp/js");
                     File ch = new File(fileUtf8);
                     if (ch.exists()) {
                         javascriptFiles.add(js);

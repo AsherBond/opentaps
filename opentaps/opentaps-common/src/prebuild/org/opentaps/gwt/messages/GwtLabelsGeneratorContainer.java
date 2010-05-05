@@ -76,7 +76,7 @@ import freemarker.template.Template;
 /**
  * Converts Opentaps labels into GWT compatible labels.
  *
- * Import the labels from the properties files specified in "hot-deploy/opentaps-common/config/LabelConfiguration.properties" (see <code>sources</code>).
+ * Import the labels from the properties files specified in "opentaps/opentaps-common/config/LabelConfiguration.properties" (see <code>sources</code>).
  *
  * For each label we try to extract its placeholders in order to generate an equivalent method.
  * eg: <code>cart.quantity_not_positive_number=Quantity requested: ${quantityReq} Quantity available: ${quantityAvail}</code>
@@ -147,15 +147,15 @@ public final class GwtLabelsGeneratorContainer implements Container {
         // *** Configuration
 
         // directory containing the template
-        String templatePath = "hot-deploy/opentaps-common/templates/";
+        String templatePath = "opentaps/opentaps-common/templates/";
         // template to use
         String templateFile = "BaseGWTUILabel.ftl";
 
         // the path to the GWT module configuration that defines the target locale, should be common.gwt.xml
-        String gwtModuleConfigurationFile = "hot-deploy/opentaps-common/src/common/org/opentaps/gwt/common/common.gwt.xml";
+        String gwtModuleConfigurationFile = "opentaps/opentaps-common/src/common/org/opentaps/gwt/common/common.gwt.xml";
 
         // directory where the labels are generated (must end with '/')
-        String gwtPropertiesDir = "hot-deploy/opentaps-common/src/common/org/opentaps/gwt/common/client/messages/";
+        String gwtPropertiesDir = "opentaps/opentaps-common/src/common/org/opentaps/gwt/common/client/messages/";
         // the class name of the GWT message interface to generate in the gwtPropertiesDir
         //  this will generate <gwtPropertiesDir>/<gwtLabelFileName>.java as the interface
         //  <gwtPropertiesDir>/<gwtLabelFileName>.properties as the properties files containing the default label definitions (corresponding to DEFAULT_LOCALE)
@@ -168,7 +168,7 @@ public final class GwtLabelsGeneratorContainer implements Container {
         boolean dumpBadLocalizedLabels = true;
 
         // load the list of UI labels to use as a source
-        Properties sources = loadPropertiesFile("hot-deploy/opentaps-common/config/LabelConfiguration.properties");
+        Properties sources = loadPropertiesFile("opentaps/opentaps-common/config/LabelConfiguration.properties");
         // this Map stores the {locale => Map{label key => GwtLabelDefinition}}
         Map<String, TreeMap<String, GwtLabelDefinition>> allGwtLabelDefinitionsMaps = new HashMap<String, TreeMap<String, GwtLabelDefinition>>();
 

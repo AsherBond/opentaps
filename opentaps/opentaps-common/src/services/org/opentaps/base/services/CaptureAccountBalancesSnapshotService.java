@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.financials.domain.billing.financials.AccountBalanceHistoryService
  * Invoke: captureAccountBalancesSnapshot
- * Defined in: hot-deploy/financials/servicedef/services_financials.xml
+ * Defined in: opentaps/financials/servicedef/services_financials.xml
  */
 public class CaptureAccountBalancesSnapshotService extends ServiceWrapper {
 

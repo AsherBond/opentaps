@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.search.IndexingService
  * Invoke: createHibernateSearchIndex
- * Defined in: hot-deploy/search/servicedef/services_search.xml
+ * Defined in: opentaps/search/servicedef/services_search.xml
  */
 public class OpentapsCreateHibernateSearchIndexService extends ServiceWrapper {
 

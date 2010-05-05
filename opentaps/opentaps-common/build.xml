@@ -59,8 +59,8 @@
         <property name="gwt.src.base" value="./src/common/org/opentaps/gwt/common"/>
         <property name="gwt.module.list" value="voip,webapp"/>
         <!-- This parameter must point to your ofbiz/ directory or the libraries for the financials app would not be found.
-         The default setting would work if you have checked out the financials module into your ofbiz/hot-deploy/ directory.
-         It would NOT work if you checked it out somewhere else and symlinked to it in your hot-deploy/ directory.
+         The default setting would work if you have checked out the financials module into your ofbiz/opentaps/ directory.
+         It would NOT work if you checked it out somewhere else and symlinked to it in your opentaps/ directory.
          If you experience build problems, put the full path here -->
         <property name="ofbiz.dir" value="../../"/> 
         <property name="aopConfig" value="config/aop-profiling.xml"/>
@@ -71,7 +71,7 @@
             <fileset dir="${lib.dir}" includes="*.jar" excludes="${lib.dir}/${aspectname}.jar"/>
             <fileset dir="${lib.dir}/hibernate" includes="*.jar"/>
             <fileset dir="${lib.dir}/aspectwerkz" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-osgi/webapp/WEB-INF/lib" includes="org.osgi.*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-osgi/webapp/WEB-INF/lib" includes="org.osgi.*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib/commons" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib/scripting" includes="*.jar"/>
@@ -101,10 +101,10 @@
     <target name="gwtclasspath" depends="init">
         <path id="gwt.class.path">
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="gwt*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
-            <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/constants"/>
-            <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/common"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib" includes="gwt*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
+            <pathelement location="${ofbiz.dir}/opentaps/opentaps-common/src/constants"/>
+            <pathelement location="${ofbiz.dir}/opentaps/opentaps-common/src/common"/>
         </path>
     </target>
 
@@ -261,7 +261,7 @@
     <target name="gwt-compile-modules">
       <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
-          <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/lib/ant-contrib.jar"/>
+          <pathelement location="${ofbiz.dir}/opentaps/opentaps-common/lib/ant-contrib.jar"/>
         </classpath>
       </taskdef>
       <foreach list="${gwt.module.list}" target="gwt-compile" param="module" inheritall="true" inheritrefs="true" parallel="${gwt.compiler.parallel}" maxThreads="${gwt.compiler.threads}"/>

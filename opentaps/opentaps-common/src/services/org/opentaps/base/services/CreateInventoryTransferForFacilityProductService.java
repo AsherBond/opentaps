@@ -47,7 +47,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.warehouse.manufacturing.ProductionRunServices
  * Invoke: createInventoryTransferForFacilityProduct
- * Defined in: hot-deploy/warehouse/servicedef/services_manufacturing.xml
+ * Defined in: opentaps/warehouse/servicedef/services_manufacturing.xml
  */
 public class CreateInventoryTransferForFacilityProductService extends ServiceWrapper {
 

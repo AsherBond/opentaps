@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.financials.domain.billing.lockbox.LockboxService
  * Invoke: uploadLockboxFile
- * Defined in: hot-deploy/financials/servicedef/services_other.xml
+ * Defined in: opentaps/financials/servicedef/services_other.xml
  */
 public class FinancialsUploadLockboxFileService extends ServiceWrapper {
 

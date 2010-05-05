@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.party.PartyServices
  * Invoke: sendInternalMessage
- * Defined in: hot-deploy/opentaps-common/servicedef/services_party.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_party.xml
  */
 public class OpentapsSendInternalMessageService extends ServiceWrapper {
 

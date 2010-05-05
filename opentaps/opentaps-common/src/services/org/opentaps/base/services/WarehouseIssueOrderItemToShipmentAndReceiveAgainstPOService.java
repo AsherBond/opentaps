@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.warehouse.inventory.InventoryServices
  * Invoke: issueOrderItemToShipmentAndReceiveAgainstPO
- * Defined in: hot-deploy/warehouse/servicedef/services_inventory.xml
+ * Defined in: opentaps/warehouse/servicedef/services_inventory.xml
  */
 public class WarehouseIssueOrderItemToShipmentAndReceiveAgainstPOService extends ServiceWrapper {
 

@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.purchasing.supplier.SupplierServices
  * Invoke: outsourceRoutingTask
- * Defined in: hot-deploy/purchasing/servicedef/services.xml
+ * Defined in: opentaps/purchasing/servicedef/services.xml
  */
 public class OpentapsOutsourceRoutingTaskService extends ServiceWrapper {
 

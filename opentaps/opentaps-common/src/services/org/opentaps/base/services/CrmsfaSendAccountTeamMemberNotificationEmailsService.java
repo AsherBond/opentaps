@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.accounts.AccountsServices
  * Invoke: sendAccountTeamMemberNotificationEmails
- * Defined in: hot-deploy/crmsfa/servicedef/services_accounts.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_accounts.xml
  */
 public class CrmsfaSendAccountTeamMemberNotificationEmailsService extends ServiceWrapper {
 

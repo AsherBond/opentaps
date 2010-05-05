@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.product.ProductServices
  * Invoke: calculateProductPrice
- * Defined in: hot-deploy/opentaps-common/servicedef/services_product.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_product.xml
  */
 public class OpentapsCalculateProductPriceService extends ServiceWrapper {
 

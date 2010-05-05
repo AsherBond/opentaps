@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.invoice.InvoiceServices
  * Invoke: createThirdPartySalesInvoice
- * Defined in: hot-deploy/financials/servicedef/services_invoice.xml
+ * Defined in: opentaps/financials/servicedef/services_invoice.xml
  */
 public class CreateThirdPartySalesInvoiceService extends ServiceWrapper {
 

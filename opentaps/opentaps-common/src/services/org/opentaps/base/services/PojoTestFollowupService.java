@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.tests.service.POJOTestServices
  * Invoke: pojoTestFollowup
- * Defined in: hot-deploy/opentaps-tests/servicedef/services_pojo_tests.xml
+ * Defined in: opentaps/opentaps-tests/servicedef/services_pojo_tests.xml
  */
 public class PojoTestFollowupService extends ServiceWrapper {
 

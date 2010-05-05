@@ -44,7 +44,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.communication.CommunicationEventServices
  * Invoke: sendEmailToContactList
- * Defined in: hot-deploy/crmsfa/servicedef/services_marketing.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_marketing.xml
  */
 public class SendEmailToContactListService extends ServiceWrapper {
 

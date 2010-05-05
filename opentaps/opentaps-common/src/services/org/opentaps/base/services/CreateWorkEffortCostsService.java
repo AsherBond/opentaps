@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.manufacturing.ManufacturingServices
  * Invoke: createWorkEffortCosts
- * Defined in: hot-deploy/financials/servicedef/services_manufacturing.xml
+ * Defined in: opentaps/financials/servicedef/services_manufacturing.xml
  */
 public class CreateWorkEffortCostsService extends ServiceWrapper {
 

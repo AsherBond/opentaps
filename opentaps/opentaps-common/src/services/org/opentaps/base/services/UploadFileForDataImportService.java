@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.dataimport.CommonImportServices
  * Invoke: uploadFileForDataImport
- * Defined in: hot-deploy/dataimport/servicedef/services.xml
+ * Defined in: opentaps/dataimport/servicedef/services.xml
  */
 public class UploadFileForDataImportService extends ServiceWrapper {
 

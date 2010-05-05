@@ -53,20 +53,20 @@
 
     <target name="gwt">
         <property name="gwtmodule" value="org.opentaps.gwt.wiz.modules.modules"/>
-        <property name="gwt.src.common" value="${base.dir}/hot-deploy/opentaps-common/src/common/org/opentaps/gwt"/>
-        <property name="gwt.src.constants" value="${base.dir}/hot-deploy/opentaps-common/src/constants/org/opentaps/base"/>
+        <property name="gwt.src.common" value="${base.dir}/opentaps/opentaps-common/src/common/org/opentaps/gwt"/>
+        <property name="gwt.src.constants" value="${base.dir}/opentaps/opentaps-common/src/constants/org/opentaps/base"/>
 
         <taskdef resource="net/sf/antcontrib/antcontrib.properties">
           <classpath>
-            <pathelement location="${base.dir}/hot-deploy/opentaps-common/lib/ant-contrib.jar"/>
+            <pathelement location="${base.dir}/opentaps/opentaps-common/lib/ant-contrib.jar"/>
           </classpath>
         </taskdef>
 
         <path id="gwt.class.path">
-            <fileset dir="${base.dir}/hot-deploy/opentaps-common/lib" includes="gwt*.jar"/>
-            <fileset dir="${base.dir}/hot-deploy/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
-            <pathelement location="${base.dir}/hot-deploy/opentaps-common/src/constants"/>
-            <pathelement location="${base.dir}/hot-deploy/opentaps-common/src/common"/>
+            <fileset dir="${base.dir}/opentaps/opentaps-common/lib" includes="gwt*.jar"/>
+            <fileset dir="${base.dir}/opentaps/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
+            <pathelement location="${base.dir}/opentaps/opentaps-common/src/constants"/>
+            <pathelement location="${base.dir}/opentaps/opentaps-common/src/common"/>
             <pathelement location="src"/>
         </path>
         <uptodate property="gwtuptodate" targetfile="./resources/${gwtmodule}/${gwtmodule}.nocache.js">

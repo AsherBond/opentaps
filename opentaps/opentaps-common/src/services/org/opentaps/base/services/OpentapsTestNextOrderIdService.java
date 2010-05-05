@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.tests.service.TestNextOrderId
  * Invoke: getNextOrderId
- * Defined in: hot-deploy/opentaps-tests/servicedef/services_tests.xml
+ * Defined in: opentaps/opentaps-tests/servicedef/services_tests.xml
  */
 public class OpentapsTestNextOrderIdService extends ServiceWrapper {
 

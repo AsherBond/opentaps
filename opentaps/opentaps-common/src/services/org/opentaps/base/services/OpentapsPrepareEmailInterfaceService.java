@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: hot-deploy/opentaps-common/servicedef/services_email.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_email.xml
  */
 public class OpentapsPrepareEmailInterfaceService extends ServiceWrapper {
 

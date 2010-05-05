@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.shipment.DemoCarrierServices
  * Invoke: demoCarrierShipmentEstimate
- * Defined in: hot-deploy/opentaps-common/servicedef/services_shipping.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_shipping.xml
  */
 public class OpentapsDemoCarrierShipmentEstimateService extends ServiceWrapper {
 

@@ -37,8 +37,8 @@
         <property name="gwt.src.base" value="./src/org/opentaps/gwt/financials"/>   
         <property name="gwt.module.list" value="invoices"/>
         <!-- This parameter must point to your ofbiz/ directory or the libraries for the financials app would not be found.
-         The default setting would work if you have checked out the financials module into your ofbiz/hot-deploy/ directory.
-         It would NOT work if you checked it out somewhere else and symlinked to it in your hot-deploy/ directory.
+         The default setting would work if you have checked out the financials module into your ofbiz/opentaps/ directory.
+         It would NOT work if you checked it out somewhere else and symlinked to it in your opentaps/ directory.
          If you experience build problems, put the full path here -->
          <property name="ofbiz.dir" value="../../"/> 
     </target>
@@ -67,20 +67,20 @@
             <fileset dir="${ofbiz.dir}/applications/content/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/accounting/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/workeffort/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/hibernate" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/hibernate" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/build/lib" includes="*.jar"/>
         </path>
     </target>
 
     <target name="gwtclasspath" depends="init">
         <path id="gwt.class.path">
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
-            <pathelement location="${ofbiz.dir}/hot-deploy/financials/src"/>
-            <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/constants"/>
-            <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/common"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="gwt*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
+            <pathelement location="${ofbiz.dir}/opentaps/financials/src"/>
+            <pathelement location="${ofbiz.dir}/opentaps/opentaps-common/src/constants"/>
+            <pathelement location="${ofbiz.dir}/opentaps/opentaps-common/src/common"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib" includes="gwt*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
         </path>
     </target>
 

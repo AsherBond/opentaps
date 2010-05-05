@@ -47,7 +47,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.leads.LeadsServices
  * Invoke: createCatalogRequestWithSurvey
- * Defined in: hot-deploy/crmsfa/servicedef/services_leads.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_leads.xml
  */
 public class CreateCatalogRequestWithSurveyService extends ServiceWrapper {
 

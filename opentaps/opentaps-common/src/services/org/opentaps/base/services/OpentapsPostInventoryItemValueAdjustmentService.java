@@ -46,7 +46,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.ledger.LedgerServices
  * Invoke: postInventoryItemValueAdjustment
- * Defined in: hot-deploy/financials/servicedef/services_ledger_ext.xml
+ * Defined in: opentaps/financials/servicedef/services_ledger_ext.xml
  */
 public class OpentapsPostInventoryItemValueAdjustmentService extends ServiceWrapper {
 

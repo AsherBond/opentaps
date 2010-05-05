@@ -363,7 +363,7 @@ public class DataImportTests extends OpentapsTestCase {
     /**
      * Verify that uploadFileForDataImport service can successifully upload records from excel file to DataImport* entities.
      * 1. Get the number of records of every DataImport* entity. Every DataImport* entity corresponds to excel file tabs i.e. Products tab - DataImportProduct .
-     * 2. Run the uploadFileForDataImport service with the file from hot-deploy/dataimport/data/xls/OpentapsImport.xls .
+     * 2. Run the uploadFileForDataImport service with the file from opentaps/dataimport/data/xls/OpentapsImport.xls .
      * 3. Verify the correct number of DataImport* records have been added .
      * @throws java.lang.Exception if an error occurs
      */
@@ -382,9 +382,9 @@ public class DataImportTests extends OpentapsTestCase {
         int bcount4 = party_repos.findAll(DataImportCustomer.class).size();
         int bcount5 = acc_repos.findAll(DataImportGlAccount.class).size();
         
-        //2. Run the uploadFileForDataImport service with the file from hot-deploy/dataimport/data/xls/OpentapsImport.xls .
+        //2. Run the uploadFileForDataImport service with the file from opentaps/dataimport/data/xls/OpentapsImport.xls .
         String fileName = "OpentapsImport.xls";
-        String folderPath = "hot-deploy/dataimport/data/xls/";
+        String folderPath = "opentaps/dataimport/data/xls/";
         String fileFormat = "EXCEL";
         String contentType = "application/vnd.ms-excel";
         File excelFile = new File(folderPath + fileName);

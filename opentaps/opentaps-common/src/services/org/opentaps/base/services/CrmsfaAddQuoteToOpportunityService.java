@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices
  * Invoke: addQuoteToOpportunity
- * Defined in: hot-deploy/crmsfa/servicedef/services_opportunities.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_opportunities.xml
  */
 public class CrmsfaAddQuoteToOpportunityService extends ServiceWrapper {
 

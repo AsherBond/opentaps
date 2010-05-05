@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.payment.gateway.AimEcheckServices
  * Invoke: refundEft
- * Defined in: hot-deploy/financials/servicedef/services_gateway.xml
+ * Defined in: opentaps/financials/servicedef/services_gateway.xml
  */
 public class ECheckNetRefundService extends ServiceWrapper {
 

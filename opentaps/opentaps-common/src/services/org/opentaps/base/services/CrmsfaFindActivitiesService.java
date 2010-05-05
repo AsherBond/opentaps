@@ -44,7 +44,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.activities.ActivitiesServices
  * Invoke: findActivities
- * Defined in: hot-deploy/crmsfa/servicedef/services_activities.xml
+ * Defined in: opentaps/crmsfa/servicedef/services_activities.xml
  */
 public class CrmsfaFindActivitiesService extends ServiceWrapper {
 

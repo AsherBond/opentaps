@@ -59,12 +59,12 @@
             <fileset dir="${ofbiz.dir}/applications/party/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/product/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/manufacturing/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/crmsfa/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/dataimport/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/financials/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/purchasing/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/warehouse/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/crmsfa/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/dataimport/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/financials/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/purchasing/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/warehouse/build/lib" includes="*.jar"/>
             <fileset dir="${lib.dir}/aspectwerkz" includes="*.jar"/>
         </path>
     </target>

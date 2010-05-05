@@ -53,9 +53,9 @@
             <fileset dir="${ofbiz.dir}/applications/order/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/party/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/product/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/hibernate" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-tests/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/hibernate" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/opentaps/opentaps-tests/build/lib" includes="*.jar"/>
             <fileset dir="${lib.dir}" includes="*.jar"/>
         </path>
     </target>

@@ -996,8 +996,8 @@ public class HibernateTests extends OpentapsTestCase {
     public void testBlobFields() throws Exception {
         reOpenSession();
         UserTransaction tx = session.beginUserTransaction();
-        File file1 = new File("hot-deploy/opentaps-common/webapp/images/opentaps_logo.png");
-        File file2  = new File("hot-deploy/opentaps-common/webapp/images/osslogo_small.jpg");
+        File file1 = new File("opentaps/opentaps-common/webapp/images/opentaps_logo.png");
+        File file2  = new File("opentaps/opentaps-common/webapp/images/osslogo_small.jpg");
         byte[] data1 = getBytesFromFile(file1);
         byte[] data2 = getBytesFromFile(file2);
         String fileCRCCode1 = getCRCCode(data1);
@@ -1071,7 +1071,7 @@ public class HibernateTests extends OpentapsTestCase {
         Long testNumericField = new Long(123456789);
         BigDecimal testFloatingPointField = new BigDecimal("98765432.12").setScale(DECIMALS, ROUNDING);
         // store a file into the blob
-        File file = new File("hot-deploy/opentaps-common/webapp/images/opentaps_logo.png");
+        File file = new File("opentaps/opentaps-common/webapp/images/opentaps_logo.png");
         byte[] data = getBytesFromFile(file);
         String oldCRCCode = getCRCCode(data);
 

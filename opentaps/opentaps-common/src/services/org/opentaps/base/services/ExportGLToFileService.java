@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.integration.GLExportServices
  * Invoke: exportGLToFile
- * Defined in: hot-deploy/financials/servicedef/services_other.xml
+ * Defined in: opentaps/financials/servicedef/services_other.xml
  */
 public class ExportGLToFileService extends ServiceWrapper {
 

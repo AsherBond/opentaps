@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.dataimport.CustomerImportServices
  * Invoke: importCustomersCommissions
- * Defined in: hot-deploy/dataimport/servicedef/services.xml
+ * Defined in: opentaps/dataimport/servicedef/services.xml
  */
 public class ImportCustomersCommissionsService extends ServiceWrapper {
 

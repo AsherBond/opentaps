@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: com/opensourcestrategies/order/request/CustRequestServices.xml
  * Invoke: createCustRequestNote
- * Defined in: hot-deploy/opentaps-common/servicedef/services_custrequest.xml
+ * Defined in: opentaps/opentaps-common/servicedef/services_custrequest.xml
  */
 public class CreateCustRequestNoteService extends ServiceWrapper {
 
