@@ -1,0 +1,394 @@
+Based on revisions:
+https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@934744
+svn://svn.opentaps.org/opentaps_all/versions/1.0/tags/tests-passed-20091026
+
+Note: Opentaps is now using GIT, you can clone and/or contribute at http://gitorious.org/opentaps
+
+Overall changes
+---------------
+Commented out various webapps and components which duplicate or are superseded by opentaps.
+r13679, 13743, 13753
+
+applications/*/webapp/*/WEB-INF/web.xml
+r13646 Added ofbizServerName context-param for JBOSS integration
+
+framework/common/widget/CommonScreens.xml
+specialpurpose/ecommerce/widget/CommonScreens.xml
+specialpurpose/webpos/widget/CommonScreens.xml
+r13762 Changed favicon to the opentaps icon
+
+framework/common/config/CommonUiLabels.xml
+specialpurpose/cmssite/template/ofbiz/ofbizFooter.ftl
+specialpurpose/ecommerce/webapp/ecommerce/includes/footer.ftl
+specialpurpose/webpos/webapp/webpos/includes/Footer.ftl
+themes/bizznesstime/includes/footer.ftl
+themes/flatgrey/includes/footer.ftl
+themes/multiflex/includes/footer.ftl
+r13761, r13800 Fix ofbiz footers to include Opentaps
+
+Localized date/time input and output feature
+Affected files:
+framework/base/src/org/ofbiz/base/util/UtilDateTime.java
+framework/base/src/org/ofbiz/base/util/ObjectType.java
+framework/base/src/org/ofbiz/base/util/UtilHttp.java
+framework/base/src/org/ofbiz/base/util/UtilValidate.java
+framework/base/src/org/ofbiz/base/util/string/UelFunctions.java
+framework/minilang/src/org/ofbiz/minilang/method/envops/SetCalendar.java
+framework/widget/src/org/ofbiz/widget/form/ModelFormField.java
+framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
+framework/common/config/CommonUiLabels.xml
+framework/common/src/org/ofbiz/common/FindServices.java
+applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
+applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCartEvents.java
+In revisions:
+r13768, r13769, r13784, r13786, r13798, r13812-r13818, r13822, r13824, r13833, r13834
+
+Framework changes
+-----------------
+
+This list the changes made in the framework directory, from the 09.04 ofbiz release.
+
+framework/base/src/org/ofbiz/base/util/UtilFormatOut.java
+r12890 Added a formatCurrency method which does not require the maximumFractionDigits argument. It uses the default value for the locale. Added for backward compatibility.
+
+framework/base/config/pojoentities-containers.xml
+framework/start/src/org/ofbiz/base/start/pojoentities.properties
+r13007 Added the POJO generator configuration
+
+framework/base/config/hibernatecfg-containers.xml
+framework/base/config/ofbiz-containers.xml
+framework/base/config/test-containers.xml
+framework/start/src/org/ofbiz/base/start/hibernatecfg.properties
+r13030 Added hibernate configuration generator container
+
+framework/base/lib/etl/
+framework/base/lib/etl/js.jar
+framework/base/lib/etl/kettle-core.jar
+framework/base/lib/etl/kettle-db.jar
+framework/base/lib/etl/kettle-engine.jar
+framework/base/lib/etl/ognl-2.6.9.jar
+r13618 Move kettle libraries to framework in order to resolve classpath problems
+r13623 Removed log4j.xml from the kettle-engine.jar root because it affects common logging format. 
+
+framework/base/config/debug.properties
+r13645 Filter Spring logging to WARN
+
+framework/base/src/org/ofbiz/base/util/UtilHttp.java
+r13392 Port back change in makeParamValueFromComposite to return the String representing the parsed Timestamp instead of directly the Timestamp
+
+framework/entity/src/org/ofbiz/entity/GenericDelegator.java
+r12909 Removed depracation tags for the findXXX methods. Ofbiz deprecated them to be replaced with findOne, findList but the old methods are used in too many places to be refactored
+completely for now.
+
+framework/entity/src/org/ofbiz/entity/datasource/GenericDAO.java
+framework/entity/src/org/ofbiz/entity/jdbc/SQLProcessor.java
+r14349 abbreviate the SQL exception messages
+r14742  but provide more detailed logging in the log files
+
+framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
+r13040 fix a bug in the validation which did not work if the rhs was an empty collection
+
+framework/entity/fieldtype/fieldtypederby.xml
+framework/entity/fieldtype/fieldtypemysql.xml
+framework/entity/fieldtype/fieldtypeoracle.xml
+framework/entity/fieldtype/fieldtypepostgres.xml
+framework/entity/fieldtype/fieldtypepostnew.xml
+r13031 add field types for pentaho integration
+
+framework/entity/src/org/ofbiz/entity/GenericEntity.java
+framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
+r13261 Remove backtrace from database type warnings
+
+framework/entity/config/entityengine.xml
+r13534 Add analytics & testing(analytics test database) to entity engine config
+
+framework/entity/src/org/ofbiz/entity/GenericEntity.java
+r13280 Return field value if entity label for a primary key equals to this key. This fix broken labels in many screens
+The reason: some common entity labels (example CommonEntityLabels.xml DataSource.description.*> are ID, not description.
+
+framework/service/config/serviceengine.xml
+r12978 Added the POJOJavaEngine as a service engine. This is a needed part of opentaps.
+
+framework/service/src/org/ofbiz/service/ModelService.java
+r14149 Fix invalid WSDL (OFBIZ-3300)
+
+framework/webapp/dtd/site-conf.xsd
+framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
+framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
+r13252, r13253 Port back request-redirect-filterparam
+framework/webapp/src/org/ofbiz/webapp/stats/ServerHitBin.java
+r13794 Avoid PK exceptions when multiple server hits at the same timestamp are stored
+
+framework/webapp/lib
+r13338 Updated itext-2.0.1.jar to iText-2.1.7.jar, necessary to work with our version of jasper report
+r13342 Added jasperreports-3.5.2.jar library, needed for compilation of content/report for example
+
+framework/webapp/src/org/ofbiz/webapp/event/ServiceEventHandler.java 
+r13357 Changed error message for secured URL parameters
+
+framework/widget/templates/foScreenMacroLibrary.ftl
+r13376 Fix for missing macros and new parameters
+
+framework/widget/src/org/ofbiz/widget/html/HtmlScreenRenderer.java
+framework/widget/src/org/ofbiz/widget/screen/ScreenWidgetViewHandler.java
+r13276 Save the current content type in the context, and skip inserting an HTML DocType if the content type is not html. This is used for example for javascript files.
+r13298 Fixed, reverted previous change in RequestHandler.java
+
+framework/widget/src/org/ofbiz/widget/screen/ScreenXmlViewHandler.java
+r14305 Adding content type to the view handler
+
+framework/widget/src/org/ofbiz/widget/form/ModelFormField.java
+framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
+r13551,r13554 add re-display search value for date/time calendar on submit support.
+
+framework/widget/dtd/widget-form.xsd
+framework/widget/src/org/ofbiz/widget/form/ModelForm.java
+r13488 Default form pagination back to false, and fix the ModelForm to actually the paginate = false
+
+framework/widget/src/org/ofbiz/widget/screen/ModelScreen.java
+r13693 Instead of throwing a complicated error, just render it to the writer when caught. This is much clearer.
+
+framework/widget/dtd/widget-screen.xsd
+framework/widget/src/org/ofbiz/widget/screen/ModelScreenAction.java
+r13738 Applied patch from JIRA 44, allow to use java action in addition to bsh action in screens
+
+framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
+r13747 Remove non-serializable entries from each attribute that is an instance of Map
+
+framework/webapp/config/url.properties
+r13789 disable https by default for demo purposes
+
+framework/service/servicedef/services_test_se.xml
+framework/service/src/org/ofbiz/service/test/ServiceEngineTestServices.java
+framework/service/testdef/servicetests.xml
+r13842 Fix concurrency issue for service-eca-global-event-exec test, see JIRA 3124 as this should be a temporary hack
+
+framework/common/servicedef/services_email.xml
+r13869 Be more permissive for the HTML in the email bodies.
+
+framework/base/src/org/ofbiz/base/util/template/FreeMarkerWorker.java
+r13870 Fix issues in the freemarker template caching causing different template string but same template locations to be cached under the same key.
+
+framework/webapp/config/fop.xconf
+framework/webapp/src/org/ofbiz/webapp/view/ApacheFopWorker.java
+r14022 Disable cache (that used for keep font triplet info) because it doesn't work and throw classloader exception.
+       Also add references to fonts that are in opentaps-common/lib/DejaVu by default
+r13024 Set up font base URL
+
+framework/testtools/src/org/ofbiz/testtools/TestRunContainer.java
+r13832 r14077 Fix test html report, and add extra logging of Test progress.
+
+framework/widget/dtd/widget-screen.xsd
+framework/widget/src/org/ofbiz/widget/fo/FoScreenRenderer.java
+framework/widget/src/org/ofbiz/widget/html/HtmlScreenRenderer.java
+framework/widget/src/org/ofbiz/widget/screen/MacroScreenRenderer.java
+framework/widget/src/org/ofbiz/widget/screen/ModelScreenWidget.java
+framework/widget/src/org/ofbiz/widget/screen/ScreenStringRenderer.java
+framework/widget/src/org/ofbiz/widget/text/TextScreenRenderer.java
+framework/widget/templates/htmlScreenMacroLibrary.ftl
+r14407 r14434 Add screen XML node to render a simple frame section with styled header.
+
+framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
+r14376 fix the add redirect parameter of request-redirect which after multipart/form-data form submit
+
+framework/entity/config/entityengine.xml
+r14503 add useOldAliasMetadataBehavior parameter in mysql jdbc url for avoid hibernate got not found column on search view entity
+
+framework/common/webcommon/foErrorAsHtml.ftl
+framework/common/widget/CommonScreens.xml
+framework/widget/src/org/ofbiz/widget/screen/ScreenFopViewHandler.java
+r14773 Fix FO error message screen
+
+framework/base/src/org/ofbiz/base/util/ObjectType.java
+r15076 Fix timestamp parsing for single digit hour
+
+framework/service/src/org/ofbiz/service/ModelService.java
+r15196 Fix service model so that semaphore attributes are used
+
+framework/common/src/org/ofbiz/common/FindServices.java
+framework/entity/src/org/ofbiz/entity/finder/ByAndFinder.java
+framework/entity/src/org/ofbiz/entity/finder/EntityFinderUtil.java
+framework/entity/src/org/ofbiz/entity/finder/PrimaryKeyFinder.java
+framework/entity/src/org/ofbiz/entity/model/ModelEntity.java
+r15394 Fix localized date conversion error in entity engine for <entity-one ... auto-field-map="true/>.
+
+Applications changes
+--------------------
+
+This list the changes made in the applications directory, from the 09.04 ofbiz release.
+
+applications/accounting/config/AccountingUiLabels.xml
+r13681 fix a couple of English UI labels
+
+applications/accounting/ofbiz-component.xml
+r13042 commented out secas_ledger.xml
+r13085 commented out the services, secas and entities related to ofbiz BI (SalesInvoiceItemFact)
+
+applications/accounting/data/AccountingTypeData.xml
+r13145 The following AcctgTransType were removed from Ofbiz as they already exist in opentaps with slightly different acctgTransTypeId:
+ * (exists)             -> (removed)
+ * DISBURSEMENT_ACCTG_T -> DISBURSEMENT
+ * RECEIPT_ACCTG_TRANS  -> RECEIPT
+ * ITEM_VARIANCE_ACCTG_ -> ITEM_VARIANCE
+ * MANUFACTURING_ATX    -> MANUFACTURING
+ * OTHER_INTERNAL_ACCTG -> OTHER_INTERNAL
+ * SALES_ACCTG_TRANS    -> SALES
+
+applications/accounting/widget/GlSetupForms.xml
+r13565, hide PartyAcctgPreference.errorGlJournalId field
+
+applications/accounting/servicedef/services_paymentmethod.xml
+r13303 Fix gift card number should be required, service has NPE if not given, see JIRA 2926
+
+applications/accounting/servicedef/secas.xml
+r13147 Removed the seca on createPaymentApplication that called createAcctgTransAndEntriesForPaymentApplication (new ofbiz service)
+
+applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceServices.java
+r13651 Fix to calculate adjustment with source percentage and no amount set.
+
+applications/accounting/src/org/ofbiz/accounting/payment/PaymentGatewayServices.java
+r13205 Fix potential NPE if the OPP maxAmount is null
+
+applicatioins/content/entitydef/entitymodel.xml
+ofbiz remove contentPurposeEnumId from entity PartyContent, also add partyContentTypeId as part of primary key.
+I re-add contentPurposeEnumId in r12982, and going to refactor relate codes. 
+
+applications/content/build.xml
+applications/content/lib/uno/*.jar
+r13341 Adding jars for jasper reports and openoffice (uno)
+
+applications/content/lib/lucene-core-2.4.0.jar
+r13032 Upgraded lucene from 2.2 to 2.4 needed for hibernate search.
+
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
+r13173 Fix so that the production run quantityToProduce field is also updated on store
+
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRunServices.java
+r15248 Fix MRP to create production runs with outsourced tasks correctly
+
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
+applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ViewProductionRun.groovy
+applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.groovy
+r13650 Patch to ofbiz files to fix NPE occurring if the WEGS is missing.
+
+applications/manufacturing/src/org/ofbiz/manufacturing/routing/RoutingServices.java
+r13123 change return parameters estimatedSetupMillis/estimatedMilliSeconds to fix service define (Double -> BigDecimal)
+TODO: it should patch back to ofbiz
+
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRunServices.java
+r13138 change return parameters estimatedSetupMillis/estimatedMilliSeconds to fix service define (Double -> BigDecimal)
+TODO: it should patch back to ofbiz
+
+applications/order/entitydef/entitymodel_old.xml
+r12972 removed OldCustRequestRole from ofbiz order entitydef
+related to this change:
+r12972 re-added CustRequestRole/InventoryEventPlanned/InventoryEventPlannedType/MrpInventoryEventPlanned in opentaps common.
+
+applications/order/servicedef/secas.xml
+r12967 removed receiveInventoryProduct service eca
+
+applications/order/data/OrderTypeData.xml
+r13468 comment the quote status item and status valid change for the it conflict with our code
+
+applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCart.java
+r12896 made some methods / attributes protected instead of private, so we can access them in OpentapsShoppingCart
+
+applications/order/src/org/ofbiz/order/shoppingcart/CheckOutHelper.java
+applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCart.java
+specialpurpose/pos/src/org/ofbiz/pos/PosTransaction.java
+r13991 Fix problem of POS trying to create negative payments instead of refunds (same as r12431 from opentaps 1.0.x) -- euronymous666 
+
+applications/order/servicedef/secas.xml
+r13192 Removed ofbiz new seca that auto invoice services when approved, this conflicts with the perform service -> invoice performed services workflow in opentaps.
+
+applications/order/src/org/ofbiz/order/order/OrderServices.java
+r13199 Small fix for cancelOrderItem, so that it sets an item as completed if part of it is billed and the remaining quantity is cancelled.
+
+applications/party/script/org/ofbiz/party/contact/PartyContactMechServices.xml
+r13048 fix the createPartyContactMech service to return the contact mech id if it reuses an existing contact mech
+
+applications/party/src/org/ofbiz/party/communication/CommunicationEventServices.java
+r13836 NPE fixes for storeIncomingEmail
+
+applications/order/servicedef/secas.xml
+r13211 Comment out SECAs on cancelOrderItem since those are redefined in opentaps/opentaps-common/servicedef/secas_orders.xml
+
+applications/order/src/org/ofbiz/order/order/OrderServices.java
+r13222 Small fix for reserveInventory not to try to reserve cancelled quantity
+
+applications/order/src/org/ofbiz/order/order/OrderReturnServices.java
+r13243 Re added the code block that creates filler payments from the remaining amount
+
+applications/order/src/org/ofbiz/order/shoppingcart/CheckOutEvents.java
+r13310 Revert Ofbiz change, only Purchase Order should require Terms. Avoid the terms screen to appear in the sales order checkout process.
+
+applications/order/webapp/ordermgr/WEB-INF/actions/order/OrderView.groovy
+r13479 fix view purchasing order NPE if facility is null
+
+applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
+r13649 Changed Warehouse Dashboard to exclude any completed pick lists.
+
+applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
+r13477 change productsSoldThruTimestamp to timestamp when it is a string value
+
+applications/product/src/org/ofbiz/shipment/thirdparty/ups/UpsServices.java
+r13859 e-mail customers a shipping confirmation that includes tracking numbers for the package when UPS shipping labels are created
+r13928 orderId on UPS label
+r14687 rate estimate from non-US warehouses (OFBIZ-3420)
+
+applications/order/src/org/ofbiz/order/order/OrderServices.java
+r13899 Fix reservation and cancelOrderItem did not account for already issued quantity
+
+applications/workeffort/src/org/ofbiz/workeffort/workeffort/WorkEffortServices.java
+r14110 exclude cancelled task on filter out cancel event is true
+
+applications/product/webapp/facility/inventory/InventoryForms.xml
+r14521 fix styles on the edit inventory item screen (inventory item reservations and Physical Inventory Variances list headers)
+
+applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceWorker.java
+r14557 Fix InvoiceWorker and payment application services to account for invoice adjustments.
+
+applications/manufacturing/webapp/manufacturing/jobshopmgt/ProductionRun.fo.ftl
+r14616 fix the ui label for production run report
+
+applications/manufacturing/widget/manufacturing/JobshopScreens.xml
+r14618 fix the ui label for production run report
+
+applications/accounting/entitydef/entitymodel.xml
+applications/order/entitydef/entitymodel_view.xml
+Comment out redefined entities, ofbiz seems to be confused about some of them and their newalias definitions
+
+applications/product/webapp/catalog/product/ProductForms.xml
+r15163 #1455 Add IsActive field in the catalog product view.
+
+applications/party/config/PartyUiLabels.xml
+applications/party/webapp/partymgr/party/editeftaccount.ftl
+applications/party/webapp/partymgr/party/profileblocks/PaymentMethods.ftl
+r15359 Modified a few italian labels with a better translation, added 2 null checks to prevent verbose FTL exceptions.
+
+Other API Changes
+-----------------
+
+- UtilDateTime.toCalendar must have a TimeZone set or will throw a NPE. This can be indirect if for example the method s called from a service getting those from the context without checking
+if the timezone / locale are actually set. UtilDate.toCalendar handles this case more gracefully by defaulting to the system timezone / locale.
+Note: this only affects two services in WorkEffortServices.java : processWorkEffortEventReminders and getWorkEffortEventsByPeriod
+
+- Since the move to generics, UtilMisc.addToBigDecimalInMap is not working for a Map<?, BigDecimal>, instead use UtilCommon.addInMapOfBigDecimal
+
+- ServiceUtil.isSucess was moved to UtilCommon
+
+- The base users (admin, system, ...) and UserLogin seed data is no longer loaded by ofbiz, instead it is loaded as demo data. The needed data was added into CommonSecurityData.xml
+
+
+Possible buisness logic changes
+-------------------------------
+
+opentaps/opentaps-common/src/common/org/opentaps/domain/order/OrderItemShipGroup.java
+r13023 getEstimatedShipDate is now also a field of the OISG entity, the method now takes this value into account.
+If the ship group may split, the calculated date is the earliest of the estimatedShipDate set on the OISG and the promisedDatetime of the related OrderItemShipGrpInvRes.
+Else it is the latest of those values.
+TODO: see when this value get set and with which value, else we can use it to cache the result of this method or just ignore it and leave it to null.
+
+
+
+

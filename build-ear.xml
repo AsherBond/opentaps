@@ -77,12 +77,12 @@
     <antcall target="copy-jdk-libs"/>
 
     <!--
-        Note: hot-deploy comes first, it will rebuild the hibernate conf and then make a normal build to make sure all jars are built/weaved
+        Note: opentaps comes first, it will rebuild the hibernate conf and then make a normal build to make sure all jars are built/weaved
          (and because of that we do not need to call a build before this)
     -->
 
     <subant inheritall="true">
-      <filelist dir="." files="hot-deploy/build-ear.xml"/>
+      <filelist dir="." files="opentaps/build-ear.xml"/>
     </subant>
 
     <subant inheritall="true">

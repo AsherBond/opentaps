@@ -25,6 +25,6 @@ else
   JAVA=java
 fi
 
-"$JAVA" -jar hot-deploy/opentaps-common/lib/ant/ant-launcher.jar "$@"
+"$JAVA" -jar opentaps/opentaps-common/lib/ant/ant-launcher.jar "$@"
 exit 0
 
