@@ -528,7 +528,11 @@ public abstract class UtilUi {
     }
 
     public static String removeTrailingZeros(String number) {
-        return number.replaceAll("\\.?0*\\s*$", "");
+        // convert XX.XX000 into XX.XX
+        String rep = number.replaceFirst("^(\\d+\\.0*[^0]+)0*\\s*$", "$1");
+        // convert XX.000 into XX
+        rep = rep.replaceFirst("^(\\d+)\\.0*$", "$1");
+        return rep;
     }
 
     public static final Converter CLEAN_TRAILING_ZERO_CONVERTER = new Converter() {
