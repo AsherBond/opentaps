@@ -40,18 +40,21 @@
         <#assign location = location.substring(location.lastIndexOf("framework"))/>
       </#if>
     <#if location.contains("/applications/")>
-        <#assign location = location.substring(location.lastIndexOf("applications"))/>
+        <#assign location = location.substring(location.lastIndexOf("/applications/"))/>
       </#if>
     <#if location.contains("/specialpurpose/")>
-        <#assign location = location.substring(location.lastIndexOf("specialpurpose"))/>
+        <#assign location = location.substring(location.lastIndexOf("/specialpurpose/"))/>
+      </#if>
+      <#if location.contains("/opentaps/")>
+        <#assign location = location.substring(location.lastIndexOf("/opentaps/"))/>
       </#if>
       <#if location.contains("/hot-deploy/")>
-        <#assign location = location.substring(location.lastIndexOf("hot-deploy"))/>
+        <#assign location = location.substring(location.lastIndexOf("/hot-deploy/"))/>
       </#if>
     <#if location != origin>
   <module id="${webapp.getName()}${instanceNumber}">
     <web>
-      <web-uri>${location}/</web-uri>
+      <web-uri>/${location}/</web-uri>
       <context-root>${webapp.getContextRoot()}${instanceNumber}</context-root>
     </web>
   </module>

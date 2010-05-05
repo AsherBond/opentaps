@@ -48,8 +48,8 @@ under the License.
     <!-- the constants generator container, auto generate Java constants from some existing values in the DB (eg: some Enumeration, StatusItem ...) as configured in the configProperties file. -->
     <container name="constants-generation-container" class="org.opentaps.domain.container.ConstantsGeneratorContainer">
         <property name="delegator-name" value="default"/>
-        <property name="template" value="hot-deploy/opentaps-common/templates/Constants.ftl"/>
-        <property name="outputPath" value="hot-deploy/opentaps-common/src/constants/org/opentaps/base/constants/"/>
+        <property name="template" value="opentaps/opentaps-common/templates/Constants.ftl"/>
+        <property name="outputPath" value="opentaps/opentaps-common/src/constants/org/opentaps/base/constants/"/>
         <!-- no extension needed here, .properties is assumed by the loader -->
         <property name="configProperties" value="constantsGenerationConfig" />
     </container>
