@@ -42,24 +42,24 @@
 	<classpathentry kind="src" path="specialpurpose/projectmgr/src"/>
 	<classpathentry excluding="org/enhydra/|org/ofbiz/" kind="src" path="specialpurpose/shark/src"/>
 	<classpathentry kind="src" path="specialpurpose/workflow/src"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/base"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/constants"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/common"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/entities"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/prebuild"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/services"/>
-	<classpathentry kind="src" path="hot-deploy/amazon/src"/>
-	<classpathentry kind="src" path="hot-deploy/analytics/src"/>
-	<classpathentry kind="src" path="hot-deploy/asterisk/src"/>
-	<classpathentry kind="src" path="hot-deploy/crmsfa/src"/>
-	<classpathentry kind="src" path="hot-deploy/dataimport/src"/>
-	<classpathentry kind="src" path="hot-deploy/financials/src"/>
-	<classpathentry kind="src" path="hot-deploy/funambol/src"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-tests/src"/>
-	<classpathentry kind="src" path="hot-deploy/purchasing/src"/>
-	<classpathentry kind="src" path="hot-deploy/search/src"/>
-	<classpathentry kind="src" path="hot-deploy/warehouse/src"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-osgi/src"/>
+	<classpathentry kind="src" path="opentaps/opentaps-common/src/base"/>
+	<classpathentry kind="src" path="opentaps/opentaps-common/src/constants"/>
+	<classpathentry kind="src" path="opentaps/opentaps-common/src/common"/>
+	<classpathentry kind="src" path="opentaps/opentaps-common/src/entities"/>
+	<classpathentry kind="src" path="opentaps/opentaps-common/src/prebuild"/>
+	<classpathentry kind="src" path="opentaps/opentaps-common/src/services"/>
+	<classpathentry kind="src" path="opentaps/amazon/src"/>
+	<classpathentry kind="src" path="opentaps/analytics/src"/>
+	<classpathentry kind="src" path="opentaps/asterisk/src"/>
+	<classpathentry kind="src" path="opentaps/crmsfa/src"/>
+	<classpathentry kind="src" path="opentaps/dataimport/src"/>
+	<classpathentry kind="src" path="opentaps/financials/src"/>
+	<classpathentry kind="src" path="opentaps/funambol/src"/>
+	<classpathentry kind="src" path="opentaps/opentaps-tests/src"/>
+	<classpathentry kind="src" path="opentaps/purchasing/src"/>
+	<classpathentry kind="src" path="opentaps/search/src"/>
+	<classpathentry kind="src" path="opentaps/warehouse/src"/>
+	<classpathentry kind="src" path="opentaps/opentaps-osgi/src"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/velocity-1.6.1.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/DataVision-1.0.0.jar"/>
 	<classpathentry kind="lib" path="framework/service/lib/wsdl4j.jar"/>
@@ -182,48 +182,48 @@
 	<classpathentry kind="lib" path="framework/webslinger/lib/webslinger-extension-velocity-20090320-c73d2e782311.jar"/>
 	<classpathentry kind="lib" path="framework/webslinger/lib/webslinger-extension-wiki-20090320-c73d2e782311.jar"/>
 	<classpathentry kind="lib" path="framework/webslinger/lib/webslinger-launcher-20090320-c73d2e782311.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/ejb3-persistence.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/hibernate-3.3.2.GA.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/hibernate-annotations-3.4.0.GA.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/hibernate-commons-annotations-3.4.0.GA.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/hibernate-search-3.1.1.GA.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwt-log-3.0.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwt-math-2.1.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwt-user-2.0.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwtext.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwtextux.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/jfreechart-1.0.6.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/jcommon-1.0.10.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/inflector-0.7.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/aspectwerkz/aspectwerkz-2.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/aspectwerkz/aspectwerkz-core-2.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/jetm.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/opentapsFedEx_RateService_Axis-1.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/spring-beans-2.0.8.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/spring-context-2.0.8.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/spring-core-2.0.8.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/lucene-core-2.4.1.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/hibernate/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/hibernate/hibernate-3.3.2.GA.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/hibernate/hibernate-annotations-3.4.0.GA.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/hibernate/hibernate-commons-annotations-3.4.0.GA.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/hibernate/hibernate-search-3.1.1.GA.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwt-log-3.0.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwt-math-2.1.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwt-user-2.0.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwtext.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwtextux.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/jfreechart-1.0.6.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/jcommon-1.0.10.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/inflector-0.7.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/aspectwerkz/aspectwerkz-2.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/aspectwerkz/aspectwerkz-core-2.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/jetm.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/opentapsFedEx_RateService_Axis-1.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/spring-beans-2.0.8.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/spring-context-2.0.8.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/spring-core-2.0.8.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/hibernate/lucene-core-2.4.1.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/iText-2.1.7.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/jasperreports-3.5.2.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/asterisk/lib/asterisk-java-0.3.1.jar"/>
+	<classpathentry kind="lib" path="opentaps/asterisk/lib/asterisk-java-0.3.1.jar"/>
 	<classpathentry kind="lib" path="framework/base/lib/etl/kettle-core-3.2.0.jar"/>
 	<classpathentry kind="lib" path="framework/base/lib/etl/kettle-db-3.2.0.jar"/>
 	<classpathentry kind="lib" path="framework/base/lib/etl/kettle-engine-3.2.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-foundation-core-8.0.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-framework-8.0.1.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-server-8.0.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-server-framework-8.0.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/funambol/lib/ext/siga-fwk-bsd.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/funambol/lib/ext/xpp3-1.1.2a-fun.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-admin-libs.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-admin.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/funambol/lib/modules/funambol-pim-framework-8.0.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/funambol/lib/modules/funambol-pim-parsers-8.0.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/amazon/lib/opentapsAmazon_Axis-1.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.compendium-1.2.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.compendium-4.0.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.core-1.2.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.foundation-1.2.0.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-osgi/webapp/WEB-INF/lib/org.apache.felix.framework-1.8.1.jar"/>
+	<classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-foundation-core-8.0.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-framework-8.0.1.jar"/>
+	<classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-server-8.0.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-server-framework-8.0.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/funambol/lib/ext/siga-fwk-bsd.jar"/>
+	<classpathentry kind="lib" path="opentaps/funambol/lib/ext/xpp3-1.1.2a-fun.jar"/>
+	<classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-admin-libs.jar"/>
+	<classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-admin.jar"/>
+	<classpathentry kind="lib" path="opentaps/funambol/lib/modules/funambol-pim-framework-8.0.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/funambol/lib/modules/funambol-pim-parsers-8.0.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/amazon/lib/opentapsAmazon_Axis-1.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.compendium-1.2.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.compendium-4.0.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.core-1.2.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.foundation-1.2.0.jar"/>
+	<classpathentry kind="lib" path="opentaps/opentaps-osgi/webapp/WEB-INF/lib/org.apache.felix.framework-1.8.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
