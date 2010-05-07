@@ -160,5 +160,20 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
         return productPrices.size() == 0 ? null : productPrices.get(0).getPrice();
     }
 
-   
+    /** {@inheritDoc} */
+    public BigDecimal getBasePrice(Product product, String currencyUomId) throws RepositoryException {
+        try {
+            CalculateProductPriceService service = new CalculateProductPriceService();
+            service.setInProduct(Repository.genericValueFromEntity(product));
+            service.setInCurrencyUomId(currencyUomId);
+            service.runSyncNoNewTransaction(getInfrastructure());
+            if (service.isError()) {
+                throw new RepositoryException(service.getErrorMessage());
+            }
+            BigDecimal basePrice = UtilValidate.isNotEmpty(service.getOutListPrice()) ? service.getOutListPrice() : service.getOutDefaultPrice();
+            return basePrice;
+        } catch (ServiceException e) {
+            throw new RepositoryException(e);
+        }
+    }   
 }

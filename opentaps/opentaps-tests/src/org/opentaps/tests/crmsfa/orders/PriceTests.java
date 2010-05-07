@@ -28,7 +28,8 @@ import org.ofbiz.entity.GenericValue;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.tests.OpentapsTestCase;
-
+import org.opentaps.base.services.CalculateProductPriceService;
+import org.opentaps.foundation.repository.ofbiz.Repository;
 
 public class PriceTests extends OpentapsTestCase {
 
@@ -94,4 +95,37 @@ public class PriceTests extends OpentapsTestCase {
 
         assertEquals("Domain method to get unit price for party returned unexpected price.", expectedPrice, price);
     }
+
+    /**
+     * Calculates base price GZ-1000 and compare it with expected price.
+     * @throws GeneralException if an error occurs
+     */
+    public void testBasePricingDomain() throws GeneralException {
+        String product1Id = "GZ-1000";
+        ProductRepositoryInterface repository = domainsDirectory.getProductDomain().getProductRepository();
+        Product product1 = repository.getProductById(product1Id);
+        CalculateProductPriceService service = new CalculateProductPriceService();
+        service.setInProduct(Repository.genericValueFromEntity(product1));
+        service.setInCurrencyUomId("USD");
+        service.runSyncNoNewTransaction(domainsDirectory.getInfrastructure());
+
+        // getBasePrice method should return list price
+        BigDecimal basePrice = product1.getBasePrice("USD");
+        BigDecimal expectedPrice = service.getOutListPrice();
+
+        assertEquals("Domain method to get base price not equal the price from calculateProductPrice service.", basePrice, expectedPrice);
+        
+        // getBasePrice method should return default price because not existing list price
+        String product2Id = "GZ-1004";
+        Product product2 = repository.getProductById(product2Id);
+        service = new CalculateProductPriceService();
+        service.setInProduct(Repository.genericValueFromEntity(product2));
+        service.setInCurrencyUomId("USD");
+        service.runSyncNoNewTransaction(domainsDirectory.getInfrastructure());
+
+        basePrice = product2.getBasePrice("USD");
+        expectedPrice = service.getOutDefaultPrice();
+
+        assertEquals("Domain method to get base price not equal the price from calculateProductPrice service.", basePrice, expectedPrice);
+       }  
 }

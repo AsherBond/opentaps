@@ -104,5 +104,15 @@ public class Product extends org.opentaps.base.entities.Product {
     public BigDecimal getSalePrice(String currencyUomId) throws RepositoryException {
         return getRepository().getSalePrice(this, currencyUomId);
     }
+
+    /**
+     * Gets the base price for this product.
+     * @param currencyUomId the currency for which the cost is calculated
+     * @return the unit price for the given currency
+     * @exception RepositoryException if an error occurs
+     */
+    public BigDecimal getBasePrice(String currencyUomId) throws RepositoryException {
+        return getRepository().getBasePrice(this, currencyUomId);
+    }
 }
 

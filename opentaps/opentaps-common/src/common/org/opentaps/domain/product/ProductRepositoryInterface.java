@@ -100,4 +100,12 @@ public interface ProductRepositoryInterface extends RepositoryInterface {
      */
     public BigDecimal getSalePrice(Product product, String currencyUomId) throws RepositoryException;
 
+    /**
+     * Finds the <code>Product</code> base price.
+     * @param product the <code>Product</code>
+     * @param currencyUomId the currency for which the cost is calculated
+     * @return the base price for the given currency
+     * @throws RepositoryException if an error occurs
+     */
+    public BigDecimal getBasePrice(Product product, String currencyUomId) throws RepositoryException; 
 }
