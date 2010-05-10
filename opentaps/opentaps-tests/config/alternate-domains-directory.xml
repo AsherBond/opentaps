@@ -22,7 +22,9 @@
 
 <beans>
 
-    <!-- The ids are used below to configure which domain class to use, so you can change the classes to reference -->
+    <!-- The ids are used below to configure which domain class to use, so you can change the classes to reference
+		You should usually change the bean id's to be your own, such as myBillingDomain, but here let's keep them
+		the same as the default ones to show that the test still works -->
 	<bean id="opentapsBillingDomain" class="org.opentaps.tests.domains.TestBillingDomain"/>  <!-- this one is changed to a test billing domain -->
     <bean id="opentapsOrderDomain" class="org.opentaps.common.domain.order.OrderDomain"/>
     <bean id="opentapsPartyDomain" class="org.opentaps.common.domain.party.PartyDomain"/>

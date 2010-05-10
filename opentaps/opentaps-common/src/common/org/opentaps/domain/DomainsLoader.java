@@ -165,7 +165,8 @@ public class DomainsLoader implements DomainContextInterface {
     /**
      * Initialize the DomainsDirectory for domainsDirectoryFile.  This is internally
      * synchronized to ensure two threads do not attempt to initialize two
-     * copies of the domainsDirectory from the same domainsDirectoryFile.  
+     * copies of the domainsDirectory from the same domainsDirectoryFile.  The domains
+     * directory is saved in a Map with the domains directory file as a key.
      *
      * @param infrastructure
      * @param user
@@ -220,7 +221,7 @@ public class DomainsLoader implements DomainContextInterface {
         	Debug.logWarning("Domain loader [" + domainLoaderName + "] has already been registered.  Will not be registering again.", MODULE);
         	return;
         } else {
-        	Debug.logFatal("Now registering domain loader [" + domainLoaderName + "]", MODULE);
+        	Debug.logInfo("Now registering domain loader [" + domainLoaderName + "]", MODULE);
         }
         
         Resource resource = new ClassPathResource(domainsDirectoryFile);
@@ -237,9 +238,7 @@ public class DomainsLoader implements DomainContextInterface {
     }
 
     /**
-     * the domains directory by using the Spring framework to load the
-     * domains directory file (by default called) "domains-directory.xml") and return its DomainsDirectory bean (by default called
-     * "domainsDirectory")
+     * same as getDomainsDirectory()
      * @return
      * 
      * @deprecated {@link #getDomainsDirectory()}

@@ -18,9 +18,11 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<!-- this file demonstrates how you can add additional domains to a DomainsDirectory -->
+
 <beans>
 
-	<!-- specify a test domain to be loaded -->
+	<!-- specify an additional domain to be loaded -->
     <bean id="testDomain" class="org.opentaps.tests.domains.TestDomain"/>
     
 </beans>
