@@ -145,10 +145,12 @@ public class DomainsDirectory implements DomainContextInterface {
      */
     public DomainInterface getDomain(String name) {    	
     	DomainInterface domain = domainDirectories.get(name); 
-	    // for some reason these need to be set here again, or they will come up as null
-    	domain.setInfrastructure(infrastructure);
-	    domain.setUser(user);
-	    return domain;
+    	if (domain != null) {
+    		// for some reason these need to be set here again, or they will come up as null
+    		domain.setInfrastructure(infrastructure);
+    		domain.setUser(user);
+    	}
+    	return domain;
     }
 
 
