@@ -17,6 +17,7 @@
 
 package org.opentaps.tests.domains;
 
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.tests.OpentapsTestCase;
@@ -30,10 +31,13 @@ public class DomainsTests extends OpentapsTestCase {
 	private TestDomainsLoader testDomainsLoader;
 	private Object testDomain;
 	private Class testDomainClass = org.opentaps.tests.domains.TestDomain.class;
+	private Class testBillingDomainClass = org.opentaps.tests.domains.TestBillingDomain.class;
+	private AlternateDomainsLoader alternateDomainsLoader;
 	
 	public void setUp() throws Exception {
 		super.setUp();
 		testDomainsLoader = new TestDomainsLoader(new Infrastructure(dispatcher), new User(admin));
+		alternateDomainsLoader = new AlternateDomainsLoader(new Infrastructure(dispatcher), new User(admin));
 		testDomain = null;
 	}
 	
@@ -57,6 +61,12 @@ public class DomainsTests extends OpentapsTestCase {
 		testDomain = domainsLoader.getDomainsDirectory().getDomain(TestDomainsLoader.TEST_DOMAIN);
 		assertNotNull("Test domain could not be retrieved from main DomainsLoader", testDomain);
 		assertTrue("Test domain was not an instance of [" + testDomainClass.getName() + "]", testDomainClass.isInstance(testDomain));
+	}
+	
+	public void testAlternateDomainLoader() {
+		testDomain = alternateDomainsLoader.getDomainsDirectory().getDomain(DomainsDirectory.BILLING_DOMAIN);
+		assertNotNull("Test domain could not be retrieved from alternate DomainsLoader", testDomain);
+		assertTrue("Test domain from alternate DomainsLoader was not an instance of [" + testBillingDomainClass.getName() + "] but is actually [" + testDomain.getClass().getName() + "]", testBillingDomainClass.isInstance(testDomain));
 	}
 	
 }
