@@ -22,6 +22,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.foundation.domain.DomainInterface;
@@ -42,6 +43,7 @@ public class DomainsLoader implements DomainContextInterface {
 
     private static String DOMAINS_DIRECTORY_FILE = "domains-directory.xml";
     private static String DOMAINS_DIRECTORY_BEAN_ID = "domainsDirectory";
+    private static String MODULE = DomainsLoader.class.getName();
    
     /* The domainsDirectory is static because the XML definitions should not
      * change until the system restarts. Also, the directory will accept 
@@ -151,6 +153,7 @@ public class DomainsLoader implements DomainContextInterface {
     	 * the registrations within that instance would be lost.
     	 */
 		if (domainsDirectory != null) {
+			Debug.logWarning("Domains directory is not null, will not be reinitializing", MODULE);
 			return;
 		}
 		
@@ -180,6 +183,7 @@ public class DomainsLoader implements DomainContextInterface {
         final String domainLoaderName = methodCaller.getClassName();
         if (registeredLoaders.contains(domainLoaderName)) {
         	// TODO: should throw an exception here
+        	Debug.logWarning("Domain loader [" + domainLoaderName + "] has already been registered.  Will not be registering again.", MODULE);
         	return;
         }
         
