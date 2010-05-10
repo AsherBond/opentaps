@@ -143,8 +143,12 @@ public class DomainsDirectory implements DomainContextInterface {
      * @return the DomainInterface registered for the specified name, or
      *	       <tt>null</tt> if no such domain is registered.
      */
-    public DomainInterface getDomain(String name) {
-    	return domainDirectories.get(name);
+    public DomainInterface getDomain(String name) {    	
+    	DomainInterface domain = domainDirectories.get(name); 
+	    // for some reason these need to be set here again, or they will come up as null
+    	domain.setInfrastructure(infrastructure);
+	    domain.setUser(user);
+	    return domain;
     }
 
 
