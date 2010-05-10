@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2007 - 2010 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -16,11 +16,15 @@
  */
 package org.opentaps.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.LocalDispatcher;
+import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.infrastructure.DomainContextInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
@@ -38,7 +42,14 @@ public class DomainsLoader implements DomainContextInterface {
 
     private static String DOMAINS_DIRECTORY_FILE = "domains-directory.xml";
     private static String DOMAINS_DIRECTORY_BEAN_ID = "domainsDirectory";
-    private static ListableBeanFactory listableBeanFactory = null;
+   
+    /* The domainsDirectory is static because the XML definitions should not
+     * change until the system restarts. Also, the directory will accept 
+     * registrations from various modules.  By having a single, centralized
+     * directory all domains can access all other domains.
+     */
+    private static DomainsDirectory domainsDirectory = null;
+    private static Set<String> registeredLoaders = new HashSet<String>();
 
     private Infrastructure infrastructure = null;
     private User user = null;
@@ -112,26 +123,88 @@ public class DomainsLoader implements DomainContextInterface {
         this.setInfrastructure(infrastructure);
         this.setUser(user);
     }
-
-    private static synchronized ListableBeanFactory getListableBeanFactory() {
-        if (listableBeanFactory == null) {
-            Resource resource = new ClassPathResource(DOMAINS_DIRECTORY_FILE);
-            listableBeanFactory = new XmlBeanFactory(resource);
+    
+    /**
+     * Returns the domains directory. 
+     * 
+     * @return
+     */
+    public DomainsDirectory getDomainsDirectory() {
+    	if (domainsDirectory == null) {
+    		initializeDomainsDirectory(infrastructure, user);
+    	}
+    	
+		return domainsDirectory;
+    }
+    /**
+     * Initialize the centralized DomainsDirectory.  This is internally
+     * synchronized to ensure two threads do not attempt to initialize two
+     * copies of the domainsDirectory.
+     *
+     * @param infrastructure
+     * @param user
+     */
+    private static synchronized void initializeDomainsDirectory(Infrastructure infrastructure, User user) {
+    	/* If this method was not synchronized it could lead to a temporary
+    	 * state of multiple domainsDirectories.  Registrations could randomly 
+    	 * occur against either.  When the earlier of two was garbage collected 
+    	 * the registrations within that instance would be lost.
+    	 */
+		if (domainsDirectory != null) {
+			return;
+		}
+		
+        Resource resource = new ClassPathResource(DOMAINS_DIRECTORY_FILE);
+    	ListableBeanFactory bf = new XmlBeanFactory(resource);
+    	DomainsDirectory myDomainsDirectory = (DomainsDirectory) bf.getBean(DOMAINS_DIRECTORY_BEAN_ID);
+    	myDomainsDirectory.setInfrastructure(infrastructure);
+    	myDomainsDirectory.setUser(user);
+    	domainsDirectory = myDomainsDirectory;
+    }
+    
+    
+    /**
+     * Registers the domains configured in the specified domainsDirectoryFile.
+     * Extending DomainsLoaders should invoke this method on instantiation. This
+     * method will ignore attempts to re-register domains that have already
+     * registered.
+     *
+     * @param domainsDirectoryFile
+     */
+    protected void registerDomains(String domainsDirectoryFile) {
+    	/* Figure out the name of the DomainLoader attempting to register. If it
+    	 * has already registered, do not re-register
+    	 */
+    	final Throwable t = new Throwable();
+        final StackTraceElement methodCaller = t.getStackTrace()[1];
+        final String domainLoaderName = methodCaller.getClassName();
+        if (registeredLoaders.contains(domainLoaderName)) {
+        	// TODO: should throw an exception here
+        	return;
         }
-        return listableBeanFactory;
+        
+        Resource resource = new ClassPathResource(domainsDirectoryFile);
+        XmlBeanFactory bean = new XmlBeanFactory(resource);
+    	String[] domainsToRegister = bean.getBeanNamesForType(DomainInterface.class);
+    	DomainsDirectory domainsDirectory = getDomainsDirectory();
+    	for (String domainToRegister : domainsToRegister) {
+    		domainsDirectory.addDomain(domainToRegister, 
+    				(DomainInterface) bean.getBean(domainToRegister));
+    	}
+    	
+    	// Register the calling class so that it may not re-register
+    	registeredLoaders.add(domainLoaderName);
     }
 
     /**
-     * Loads the domains directory by using the Spring framework to load the
+     * the domains directory by using the Spring framework to load the
      * domains directory file (by default called) "domains-directory.xml") and return its DomainsDirectory bean (by default called
-     * "domainsDirectory").
-     * @return a <code>DomainsDirectory</code> instance of the configured bean
+     * "domainsDirectory")
+     * @return
+     * 
+     * @deprecated {@link #getDomainsDirectory()}
      */
     public DomainsDirectory loadDomainsDirectory() {
-        ListableBeanFactory bf = getListableBeanFactory();
-        DomainsDirectory domains = (DomainsDirectory) bf.getBean(DOMAINS_DIRECTORY_BEAN_ID);
-        domains.setInfrastructure(infrastructure);
-        domains.setUser(user);
-        return domains;
+    	return getDomainsDirectory();
     }
 }

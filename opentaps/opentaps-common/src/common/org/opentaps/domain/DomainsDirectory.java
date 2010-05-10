@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2007 - 2010 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -16,6 +16,11 @@
  */
 package org.opentaps.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.dataimport.DataImportDomainInterface;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
@@ -30,27 +35,34 @@ import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.shipping.ShippingDomainInterface;
 import org.opentaps.domain.voip.VoipDomainInterface;
 import org.opentaps.domain.webapp.WebAppDomainInterface;
+import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.infrastructure.DomainContextInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 
 public class DomainsDirectory implements DomainContextInterface {
 
-    private BillingDomainInterface billingDomain;
-    private OrderDomainInterface orderDomain;
-    private PartyDomainInterface partyDomain;
-    private InventoryDomainInterface inventoryDomain;
-    private ProductDomainInterface productDomain;
-    private LedgerDomainInterface ledgerDomain;
-    private OrganizationDomainInterface organizationDomain;
-    private ShippingDomainInterface shippingDomain;
-    private ManufacturingDomainInterface manufacturingDomain;
-    private PurchasingDomainInterface purchasingDomain;
-    private VoipDomainInterface voipDomain;
-    private SearchDomainInterface searchDomain;
-    private WebAppDomainInterface webAppDomain;
-    public DataImportDomainInterface dataImportDomain;
+	// these are public so you can refer to domains as literals outside this class well
+	// note that these string values aren't important -- it's the names of the set methods that need to match the domains-directory.xml's
+	// Spring bean definitions
+	public static final String BILLING_DOMAIN = "BillingDomain";
+	public static final String CRMSFA_DOMAIN = "CrmsfaDomain";
+	public static final String PURCHASING_DOMAIN = "PurchasingDomain";
+	public static final String MANUFACTURING_DOMAIN = "ManufacturingDomain";
+	public static final String SHIPPING_DOMAIN = "ShippingDomain";
+	public static final String ORGANIZATION_DOMAIN = "OrganizationDomain";
+	public static final String LEDGER_DOMAIN = "LedgerDomain";
+	public static final String PRODUCT_DOMAIN = "ProductDomain";
+	public static final String INVENTORY_DOMAIN = "InventoryDomain";
+	public static final String PARTY_DOMAIN = "PartyDomain";
+	public static final String ORDER_DOMAIN = "OrderDomain";
+	public static final String SEARCH_DOMAIN = "SearchDomain";
+	public static final String VOIP_DOMAIN = "VoipDomain";
+	public static final String WEBAPP_DOMAIN = "WebappDomain";
+	public static final String DATA_IMPORT_DOMAIN = "DataImportDomain";
 
+	// Holds a map of Domain Key (the name of the domain) to DomainInterfaces.
+	private Map<String, DomainInterface> domainDirectories = new HashMap<String, DomainInterface>();
     private Infrastructure infrastructure;
     private User user;
 
@@ -94,147 +106,159 @@ public class DomainsDirectory implements DomainContextInterface {
     public static DomainsDirectory getDomainsDirectory(DomainContextInterface object) {
         return new DomainsLoader(object.getInfrastructure(), object.getUser()).loadDomainsDirectory();
     }
+    /**
+     * Adds the specified domain to the directory.  May be retrieved by using
+     * the specified name.  If a domain is already registered for the specified
+     * name, the previous domain will be unregistered and returned.
+     *
+     * @param name The name of the domain.
+     * @param newDomain The DomainInterface for the domain.
+     * @return previous DomainInterface associated with specified key, or 
+     * 			<tt>null</tt> if there was no previous.
+     */
+    public DomainInterface addDomain(String name, DomainInterface newDomain) {
+    	if (StringUtils.isEmpty(name)) {
+    		throw new IllegalArgumentException("null is not a valid domain name key");
+    	}
+    	if (newDomain == null) {
+    		throw new IllegalArgumentException("Cannot add a null domain");
+    	}
+    	newDomain.setInfrastructure(this.infrastructure);
+    	newDomain.setUser(this.user);
+    	return domainDirectories.put(name, newDomain);
+    }
+    /**
+     * Return a Set of the names of registered domains.
+     *
+     * @return Set of the names of registered domains.
+     */
+    public Set<String> listDomains() {
+    	return domainDirectories.keySet();
+    }
+    
+    /**
+     * Returns the DomainInterface registered to the specified name.
+     *
+     * @param name The name of the domain.
+     * @return the DomainInterface registered for the specified name, or
+     *	       <tt>null</tt> if no such domain is registered.
+     */
+    public DomainInterface getDomain(String name) {
+    	return domainDirectories.get(name);
+    }
+
 
     public void setBillingDomain(BillingDomainInterface domain) {
-        billingDomain = domain;
+        addDomain(BILLING_DOMAIN, domain);
     }
 
     public BillingDomainInterface getBillingDomain() {
-        // for some unknown reason, these don't get set when the domain is loaded, so they need to be set here, or they'll be null
-        billingDomain.setInfrastructure(this.infrastructure);
-        billingDomain.setUser(this.user);
-        return billingDomain;
+    	return (BillingDomainInterface) getDomain(BILLING_DOMAIN);
     }
 
     public void setOrderDomain(OrderDomainInterface domain) {
-        orderDomain = domain;
+    	addDomain(ORDER_DOMAIN, domain);
     }
 
     public OrderDomainInterface getOrderDomain() {
-        // for some unknown reason, these don't get set when the domain is loaded, so they need to be set here, or they'll be null
-        orderDomain.setInfrastructure(this.infrastructure);
-        orderDomain.setUser(this.user);
-        return orderDomain;
+    	return (OrderDomainInterface) getDomain(ORDER_DOMAIN);
     }
 
     public PartyDomainInterface getPartyDomain() {
-        partyDomain.setInfrastructure(infrastructure);
-        partyDomain.setUser(user);
-        return partyDomain;
+    	return (PartyDomainInterface) getDomain(PARTY_DOMAIN);
     }
 
     public void setPartyDomain(PartyDomainInterface partyDomain) {
-        this.partyDomain = partyDomain;
+    	addDomain(PARTY_DOMAIN, partyDomain);
     }
 
     public InventoryDomainInterface getInventoryDomain() {
-        inventoryDomain.setInfrastructure(infrastructure);
-        inventoryDomain.setUser(user);
-        return inventoryDomain;
+    	return (InventoryDomainInterface) getDomain(INVENTORY_DOMAIN);
     }
 
     public void setInventoryDomain(InventoryDomainInterface inventoryDomain) {
-        this.inventoryDomain = inventoryDomain;
+    	addDomain(INVENTORY_DOMAIN, inventoryDomain);
     }
 
     public ProductDomainInterface getProductDomain() {
-        productDomain.setInfrastructure(infrastructure);
-        productDomain.setUser(user);
-        return productDomain;
+    	return (ProductDomainInterface) getDomain(PRODUCT_DOMAIN);
     }
 
     public void setProductDomain(ProductDomainInterface productDomain) {
-        this.productDomain = productDomain;
+    	addDomain(PRODUCT_DOMAIN, productDomain);
     }
 
     public LedgerDomainInterface getLedgerDomain() {
-        ledgerDomain.setInfrastructure(infrastructure);
-        ledgerDomain.setUser(user);
-        return ledgerDomain;
+    	return (LedgerDomainInterface) getDomain(LEDGER_DOMAIN);
     }
 
     public void setLedgerDomain(LedgerDomainInterface ledgerDomain) {
-        this.ledgerDomain = ledgerDomain;
+    	addDomain(LEDGER_DOMAIN, ledgerDomain);
     }
 
     public OrganizationDomainInterface getOrganizationDomain() {
-        organizationDomain.setInfrastructure(infrastructure);
-        organizationDomain.setUser(user);
-        return organizationDomain;
+    	return (OrganizationDomainInterface) getDomain(ORGANIZATION_DOMAIN);
     }
 
     public void setOrganizationDomain(OrganizationDomainInterface organizationDomain) {
-        this.organizationDomain = organizationDomain;
+    	addDomain(ORGANIZATION_DOMAIN, organizationDomain);
     }
 
     public ShippingDomainInterface getShippingDomain() {
-        shippingDomain.setInfrastructure(infrastructure);
-        shippingDomain.setUser(user);
-        return shippingDomain;
-    }
+    	return (ShippingDomainInterface) getDomain(SHIPPING_DOMAIN);
+   }
 
     public void setShippingDomain(ShippingDomainInterface shippingDomain) {
-        this.shippingDomain = shippingDomain;
+    	addDomain(SHIPPING_DOMAIN, shippingDomain);
     }
 
     public ManufacturingDomainInterface getManufacturingDomain() {
-        manufacturingDomain.setInfrastructure(infrastructure);
-        manufacturingDomain.setUser(user);
-        return manufacturingDomain;
+    	return (ManufacturingDomainInterface) getDomain(MANUFACTURING_DOMAIN);
     }
 
     public void setManufacturingDomain(ManufacturingDomainInterface manufacturingDomain) {
-        this.manufacturingDomain = manufacturingDomain;
+    	addDomain(MANUFACTURING_DOMAIN, manufacturingDomain);
     }
 
     public PurchasingDomainInterface getPurchasingDomain() {
-        purchasingDomain.setInfrastructure(infrastructure);
-        purchasingDomain.setUser(user);
-        return purchasingDomain;
+    	return (PurchasingDomainInterface) getDomain(PURCHASING_DOMAIN);
     }
 
     public void setPurchasingDomain(PurchasingDomainInterface purchasingDomain) {
-        this.purchasingDomain = purchasingDomain;
+    	addDomain(PURCHASING_DOMAIN, purchasingDomain);
     }
 
     public VoipDomainInterface getVoipDomain() {
-        voipDomain.setInfrastructure(infrastructure);
-        voipDomain.setUser(user);
-        return voipDomain;
+    	return (VoipDomainInterface) getDomain(VOIP_DOMAIN);
     }
 
     public void setVoipDomain(VoipDomainInterface voipDomain) {
-        this.voipDomain = voipDomain;
+    	addDomain(VOIP_DOMAIN, voipDomain);
     }
 
     public SearchDomainInterface getSearchDomain() {
-        searchDomain.setInfrastructure(infrastructure);
-        searchDomain.setUser(user);
-        return searchDomain;
+    	return (SearchDomainInterface) getDomain(SEARCH_DOMAIN);
+
     }
 
     public void setSearchDomain(SearchDomainInterface searchDomain) {
-        this.searchDomain = searchDomain;
+    	addDomain(SEARCH_DOMAIN, searchDomain);
     }
     
     public WebAppDomainInterface getWebAppDomain() {
-        webAppDomain.setInfrastructure(infrastructure);
-        webAppDomain.setUser(user);
-        return webAppDomain;
+    	return (WebAppDomainInterface) getDomain(WEBAPP_DOMAIN);
     }
 
     public void setWebAppDomain(WebAppDomainInterface webAppDomain) {
-        this.webAppDomain = webAppDomain;
+    	addDomain(WEBAPP_DOMAIN, webAppDomain);
     }
 
     public DataImportDomainInterface getDataImportDomain() {
-        dataImportDomain.setInfrastructure(infrastructure);
-        dataImportDomain.setUser(user);
-        return dataImportDomain;
+    	return (DataImportDomainInterface) getDomain(DATA_IMPORT_DOMAIN);
     }
 
     public void setDataImportDomain(DataImportDomainInterface dataImportDomain) {
-        this.dataImportDomain = dataImportDomain;
+    	addDomain(DATA_IMPORT_DOMAIN, dataImportDomain);
     }
 
 }
