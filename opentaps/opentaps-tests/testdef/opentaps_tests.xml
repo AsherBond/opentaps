@@ -19,6 +19,7 @@
 
     <!-- testing general util methods and such -->
     <test-case case-name="common-tests"><junit-test-suite class-name="org.opentaps.tests.common.CommonTests"/></test-case>
+    <test-case case-name="domain-tests"><junit-test-suite class-name="org.opentaps.tests.domains.DomainsTests"/></test-case>
     <test-case case-name="query-tests"><junit-test-suite class-name="org.opentaps.tests.common.QueryTests"/></test-case>
     <test-case case-name="entity-tests"><junit-test-suite class-name="org.opentaps.tests.entity.EntityTests"/></test-case>
     <test-case case-name="pojo-service-tests"><junit-test-suite class-name="org.opentaps.tests.service.POJOServiceTests"/></test-case>
