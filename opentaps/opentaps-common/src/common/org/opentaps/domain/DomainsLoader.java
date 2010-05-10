@@ -17,10 +17,13 @@
 package org.opentaps.domain;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericValue;
@@ -49,11 +52,14 @@ public class DomainsLoader implements DomainContextInterface {
      * change until the system restarts. Also, the directory will accept 
      * registrations from various modules.  By having a single, centralized
      * directory all domains can access all other domains.
+     * 
+     * To support separate domains directories for each component, we maintain
+     * a Map of source file -> DomainsDirectory
      */
-    private static DomainsDirectory domainsDirectory = null;
+    private static Map<String,DomainsDirectory> domainsDirectories = FastMap.newInstance();
     private static Set<String> registeredLoaders = new HashSet<String>();
-
-    private Infrastructure infrastructure = null;
+    
+	private Infrastructure infrastructure = null;
     private User user = null;
 
     public DomainsLoader() {
@@ -67,6 +73,12 @@ public class DomainsLoader implements DomainContextInterface {
      * @param user an <code>User</code> value
      */
     public DomainsLoader(Infrastructure infrastructure, User user) {
+        this();
+        setInfrastructure(infrastructure);
+        setUser(user);
+    }
+    
+    public DomainsLoader(Infrastructure infrastructure, User user, String domainsDirectoryFile) {
         this();
         setInfrastructure(infrastructure);
         setUser(user);
@@ -127,42 +139,64 @@ public class DomainsLoader implements DomainContextInterface {
     }
     
     /**
-     * Returns the domains directory. 
+     * Returns the domains directory from the default DOMAINS_DIRECTORY_FILE. 
+     * Overload in your extended class to return the custom domains for your class
      * 
      * @return
      */
     public DomainsDirectory getDomainsDirectory() {
-    	if (domainsDirectory == null) {
-    		initializeDomainsDirectory(infrastructure, user);
+    	return getDomainsDirectory(DOMAINS_DIRECTORY_FILE);
+    }
+    
+    /**
+     * Returns DomainsDirectory from your domainsDirectoryFile
+     * Use this method to create overloaded versions in custom domains loaders
+     * @param domainsDirectoryFile
+     * @return
+     */
+    public DomainsDirectory getDomainsDirectory(String domainsDirectoryFile) {
+    	if (domainsDirectories.get(domainsDirectoryFile) == null) {
+    		initializeDomainsDirectory(infrastructure, user, domainsDirectoryFile);
     	}
     	
-		return domainsDirectory;
+		return domainsDirectories.get(domainsDirectoryFile);
     }
+    
     /**
-     * Initialize the centralized DomainsDirectory.  This is internally
+     * Initialize the DomainsDirectory for domainsDirectoryFile.  This is internally
      * synchronized to ensure two threads do not attempt to initialize two
-     * copies of the domainsDirectory.
+     * copies of the domainsDirectory from the same domainsDirectoryFile.  
      *
      * @param infrastructure
      * @param user
+     * @param domainsDirectoryFile
      */
-    private static synchronized void initializeDomainsDirectory(Infrastructure infrastructure, User user) {
+    private static synchronized void initializeDomainsDirectory(Infrastructure infrastructure, User user, String domainsDirectoryFile) {
     	/* If this method was not synchronized it could lead to a temporary
     	 * state of multiple domainsDirectories.  Registrations could randomly 
     	 * occur against either.  When the earlier of two was garbage collected 
     	 * the registrations within that instance would be lost.
     	 */
-		if (domainsDirectory != null) {
-			Debug.logWarning("Domains directory is not null, will not be reinitializing", MODULE);
+		if (domainsDirectories.get(domainsDirectoryFile) != null) {
+			Debug.logWarning("Domains directory for [" + domainsDirectoryFile + "] is not null, will not be reinitializing", MODULE);
 			return;
 		}
 		
-        Resource resource = new ClassPathResource(DOMAINS_DIRECTORY_FILE);
+		// use default domains directory file unless another one has been set
+		if (domainsDirectoryFile == null) {
+		    Debug.logFatal("No domains directory file found, using default value [" + DOMAINS_DIRECTORY_FILE + "]", MODULE);
+			domainsDirectoryFile = DOMAINS_DIRECTORY_FILE;
+		}
+		
+		Debug.logFatal("Using domains directory file [" + domainsDirectoryFile + "]", MODULE);
+        Resource resource = new ClassPathResource(domainsDirectoryFile);
     	ListableBeanFactory bf = new XmlBeanFactory(resource);
     	DomainsDirectory myDomainsDirectory = (DomainsDirectory) bf.getBean(DOMAINS_DIRECTORY_BEAN_ID);
     	myDomainsDirectory.setInfrastructure(infrastructure);
     	myDomainsDirectory.setUser(user);
-    	domainsDirectory = myDomainsDirectory;
+    	
+    	// save using the domains directory file as key
+    	domainsDirectories.put(domainsDirectoryFile, myDomainsDirectory);
     }
     
     
@@ -185,6 +219,8 @@ public class DomainsLoader implements DomainContextInterface {
         	// TODO: should throw an exception here
         	Debug.logWarning("Domain loader [" + domainLoaderName + "] has already been registered.  Will not be registering again.", MODULE);
         	return;
+        } else {
+        	Debug.logFatal("Now registering domain loader [" + domainLoaderName + "]", MODULE);
         }
         
         Resource resource = new ClassPathResource(domainsDirectoryFile);

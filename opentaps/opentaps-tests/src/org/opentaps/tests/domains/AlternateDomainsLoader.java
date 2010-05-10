@@ -16,7 +16,7 @@
  */
 package org.opentaps.tests.domains;
 
-import org.ofbiz.base.util.Debug;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
@@ -24,17 +24,17 @@ import org.opentaps.foundation.infrastructure.User;
 public class AlternateDomainsLoader extends DomainsLoader {
 	
 	public static String ALT_DOMAINS_DIRECTORY = "alternate-domains-directory.xml";
-	private static String MODULE = "AlternateDomainsLoader.java";
 	
 	public AlternateDomainsLoader() {
 		super();
-		Debug.logFatal(" now I will set the alternate domains directory", MODULE);
-		super.resetDomainsDirectory(ALT_DOMAINS_DIRECTORY);
 	}
 	
 	public AlternateDomainsLoader(Infrastructure infrastructure, User user) {
 		super(infrastructure, user);
-		super.resetDomainsDirectory(ALT_DOMAINS_DIRECTORY);
     }
+	
+	public DomainsDirectory getDomainsDirectory() {
+		return super.getDomainsDirectory(ALT_DOMAINS_DIRECTORY);
+	}
 
 }
