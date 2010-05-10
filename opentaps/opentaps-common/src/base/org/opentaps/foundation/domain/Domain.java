@@ -72,6 +72,9 @@ public abstract class Domain implements DomainInterface {
     public <T extends RepositoryInterface> T instantiateRepository(Class<T> repositoryClass) throws RepositoryException {
         try {
             T repository = repositoryClass.newInstance();
+            if (repository == null) {
+            	throw new RepositoryException("Repository class [" + repositoryClass.getName() + "] cannot be instantiated.");
+            }
             repository.setInfrastructure(getInfrastructure());
             repository.setUser(getUser());
             return repository;
@@ -93,6 +96,9 @@ public abstract class Domain implements DomainInterface {
     public <T extends ServiceInterface> T instantiateService(Class<T> serviceClass) throws ServiceException {
         try {
             T service = serviceClass.newInstance();
+            if (service == null) {
+            	throw new RepositoryException("Repository class [" + serviceClass.getName() + "] cannot be instantiated.");
+            }
             service.setInfrastructure(getInfrastructure());
             service.setUser(getUser());
             return service;
