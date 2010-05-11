@@ -206,6 +206,9 @@ public class DomainsLoader implements DomainContextInterface {
      * Extending DomainsLoaders should invoke this method on instantiation. This
      * method will ignore attempts to re-register domains that have already
      * registered.
+     * 
+     * Note since this method is protected, only classes which extend DomainsLoaders,
+     * i.e. custom DomainsLoaders, can register additional domains.  
      *
      * @param domainsDirectoryFile
      */
