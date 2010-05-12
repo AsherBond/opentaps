@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class ReportConditions {
 
     // this is only possible escape sequences for percent & ampersand signs for 1.7.0
-    private static final String PERCENT = "%25";
+    private static final String PERCENT =  "%"; //TODO changed to un-escaped value. Should be tested in pentaho environment.
     private static final String AMPERSAND = "%26";
 
     private ArrayList<String> conditions = new ArrayList<String>();
