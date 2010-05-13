@@ -387,6 +387,10 @@ public class Repository implements RepositoryInterface  {
     /** {@inheritDoc} */
     public void remove(EntityInterface entity) throws RepositoryException {
         try {
+            if (entity == null) {
+                // don't remove if there is no entity
+                return;
+            }
             GenericValue value = Repository.genericValueFromEntity(delegator, entity);
             delegator.removeValue(value);
         } catch (GenericEntityException e) {

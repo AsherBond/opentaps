@@ -76,6 +76,7 @@ public class DataImportTests extends OpentapsTestCase {
     private String organizationPartyId          = "Company";
     private static final String productStoreId  = "9000";
     private static final String productId       = "GZ-1005";
+    private static final String decimalDigitsId = "1234567890";
 
 
     @Override
@@ -105,6 +106,12 @@ public class DataImportTests extends OpentapsTestCase {
         party_repos.remove(party_repos.findList(DataImportSupplier.class, EntityCondition.makeCondition(DataImportSupplier.Fields.supplierId.name(), EntityOperator.LIKE, id_suffix)));
         party_repos.remove(party_repos.findList(DataImportCustomer.class, EntityCondition.makeCondition(DataImportCustomer.Fields.customerId.name(), EntityOperator.LIKE, id_suffix)));
         acc_repos.remove(acc_repos.findList(DataImportGlAccount.class, EntityCondition.makeCondition(DataImportGlAccount.Fields.glAccountId.name(), EntityOperator.LIKE, id_suffix)));
+        // remove all DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory entities whose primary keys equals to decimalDigitsId
+        product_repos.remove(product_repos.findOne(DataImportProduct.class, product_repos.map(DataImportProduct.Fields.productId, decimalDigitsId)));
+        product_repos.remove(product_repos.findOne(DataImportInventory.class, product_repos.map(DataImportInventory.Fields.itemId, decimalDigitsId)));
+        party_repos.remove(party_repos.findOne(DataImportSupplier.class, party_repos.map(DataImportSupplier.Fields.supplierId, decimalDigitsId)));
+        party_repos.remove(party_repos.findOne(DataImportCustomer.class, party_repos.map(DataImportCustomer.Fields.customerId, decimalDigitsId)));
+        acc_repos.remove(acc_repos.findOne(DataImportGlAccount.class, acc_repos.map(DataImportGlAccount.Fields.glAccountId, decimalDigitsId)));
         //end of remove
         
         super.tearDown();
@@ -399,18 +406,46 @@ public class DataImportTests extends OpentapsTestCase {
         Map<String, Object> results = dispatcher.runSync(uploadFileForDataImportServiceName, params);        
         this.assertEquals("Service "+uploadFileForDataImportServiceName+" failure.", ServiceUtil.returnSuccess(), results);
         
-        //3. Verify the correct number of DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory have been added .
+        
+        //3. Verify that recods with id that contains only decimal digits have been added.
+        
+        DataImportProduct testproduct = product_repos.findOne(DataImportProduct.class, product_repos.map(DataImportProduct.Fields.productId, decimalDigitsId));
+        DataImportInventory testinventory = product_repos.findOne(DataImportInventory.class, product_repos.map(DataImportInventory.Fields.itemId, decimalDigitsId));
+        DataImportSupplier testsupplier = party_repos.findOne(DataImportSupplier.class, party_repos.map(DataImportSupplier.Fields.supplierId, decimalDigitsId));
+        DataImportCustomer testcustomer = party_repos.findOne(DataImportCustomer.class, party_repos.map(DataImportCustomer.Fields.customerId, decimalDigitsId));
+        DataImportGlAccount testglAccount = acc_repos.findOne(DataImportGlAccount.class, acc_repos.map(DataImportGlAccount.Fields.glAccountId, decimalDigitsId));
+        
+        assertNotNull("Can't find DataImportProduct["+decimalDigitsId+"].", testproduct);
+        assertNotNull("Can't find DataImportInventory["+decimalDigitsId+"].", testinventory);
+        assertNotNull("Can't find DataImportSupplier["+decimalDigitsId+"].", testsupplier);
+        assertNotNull("Can't find DataImportCustomer["+decimalDigitsId+"].", testcustomer);
+        assertNotNull("Can't find DataImportGlAccount["+decimalDigitsId+"].", testglAccount);
+        
+        //4. Verify the correct number of DataImportProduct, _Supplier, _Customer, _GlAccount, _Inventory have been added .
         int acount1 = product_repos.findAll(DataImportProduct.class).size();        
         int acount2 = product_repos.findAll(DataImportInventory.class).size();
         int acount3 = party_repos.findAll(DataImportSupplier.class).size();        
         int acount4 = party_repos.findAll(DataImportCustomer.class).size();
         int acount5 = acc_repos.findAll(DataImportGlAccount.class).size();
         
-        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Products' to entity DataImportProduct.", 2, acount1-bcount1);
-        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Inventory' to entity DataImportInventory.", 3, acount2-bcount2);
-        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Suppliers' to entity DataImportSupplier.", 2, acount3-bcount3);                
-        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Customers' to entity DataImportCustomer.", 3, acount4-bcount4);
-        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Gl Accounts' to entity DataImportGlAccount.", 15, acount5-bcount5);
+        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Products' to entity DataImportProduct.", 3, acount1-bcount1);
+        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Inventory' to entity DataImportInventory.", 4, acount2-bcount2);
+        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Suppliers' to entity DataImportSupplier.", 3, acount3-bcount3);                
+        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Customers' to entity DataImportCustomer.", 4, acount4-bcount4);
+        assertEquals("Wrong count of records imported from excel file ["+folderPath+fileName+"] tab 'Gl Accounts' to entity DataImportGlAccount.", 16, acount5-bcount5);
+        
+        //5. Verify fields ProductName and InternalName of entity DataImportProduct filled properly.
+        
+        DataImportProduct product1 = product_repos.findOne(DataImportProduct.class, product_repos.map(DataImportProduct.Fields.productId, "excelImport1"));
+        DataImportProduct product2 = product_repos.findOne(DataImportProduct.class, product_repos.map(DataImportProduct.Fields.productId, "excelImport2"));
+        DataImportProduct product3 = product_repos.findOne(DataImportProduct.class, product_repos.map(DataImportProduct.Fields.productId, decimalDigitsId));
+        
+        assertEquals("Field productName of entity DataImportProduct["+product1.getProductId()+"] not filled properly.", "Product name 1", product1.getProductName());
+        assertEquals("Field internalName of entity DataImportProduct["+product1.getProductId()+"] not filled properly.", "Product name 1", product1.getInternalName());
+        assertEquals("Field productName of entity DataImportProduct["+product2.getProductId()+"] not filled properly.", "Product name 2", product2.getProductName());
+        assertEquals("Field internalName of entity DataImportProduct["+product2.getProductId()+"] not filled properly.", "Product name 2", product2.getInternalName());
+        assertEquals("Field productName of entity DataImportProduct["+product3.getProductId()+"] not filled properly.", "Product name 3", product3.getProductName());
+        assertEquals("Field internalName of entity DataImportProduct["+product3.getProductId()+"] not filled properly.", "Product name 3", product3.getInternalName());
         
     }
     
