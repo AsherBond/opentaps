@@ -67,7 +67,7 @@ public class GLAccountTree {
      * @exception AccountingException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public GLAccountTree(GenericDelegator delegator, String organizationPartyId, String currencyUomId, List<Map> accounts) throws GenericEntityException, AccountingException {
+    public GLAccountTree(GenericDelegator delegator, String organizationPartyId, String currencyUomId, List<Map<String, Object>> accounts) throws GenericEntityException, AccountingException {
         this(organizationPartyId, currencyUomId);
 
         // Make an expanded map of accounts which contains all parents, grandparents, etc. so that we can create
@@ -141,7 +141,7 @@ public class GLAccountTree {
      */
     @SuppressWarnings("unchecked")
     public static GLAccountTree getGLAccountTree(GenericDelegator delegator, String organizationPartyId, String currencyUomId, Map<GenericValue, ?> accountBalances) throws GenericEntityException, AccountingException {
-        List<Map> accountBalancesList = new ArrayList<Map>();
+        List<Map<String, Object>> accountBalancesList = new ArrayList<Map<String, Object>>();
         if (accountBalances != null) {
             for (GenericValue a : accountBalances.keySet()) {
                 Object balObj = accountBalances.get(a);
