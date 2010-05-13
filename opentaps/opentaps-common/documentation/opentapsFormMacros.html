@@ -1,0 +1,360 @@
+<html>
+  <head>
+    <title>opentaps Form Macros Documentation</title>
+    <style type="text/css">
+    </style>
+  </head>
+<body>
+
+<h2>opentaps Form Macros Documentation</h2>
+
+<p><b>Important Note to all Developers: Please keep this document up to date!  If you make changes to the form macros,
+please also change this document.</b></p>
+
+<h3>Why It Exists</h3>
+
+<p>Many of us are constantly creating forms for our users to enter and display data.  Most of those
+forms share common elements: text input fields, date input fields, drop downs, etc. etc.  Wouldn't it be nice to have a
+tool which helps you make and manage?  At the same time, the tool should still give you control over the design of your
+form, so you don't end up with an ugly cookie-cutter look for all your forms.  You should be able to add form elements in
+HTML when they are appropriate, or completely change the layout and design of your forms by just changing the HTML.</p>
+
+<p>The opentaps Form Macros were created for this reason: to make writing forms easier, while still giving you control
+over the final layout.  The macros help you design form elements such as input rows, select
+boxes, and date fields more efficiently but do not force you to use them--you can write some form elements with them, write
+others in HTML or anything else.  It is completely written in Freemarker and can be accessed from any Freemarker
+page, so you can combine opentaps Form Macros, HTML, Freemarker in the same form.  It is also easily extend or re-skin:
+you edit the form macros file and make your changes there, without updating XSD definitions or Java code.</p>
+
+<h3>How It Works</h3>
+
+<p>First, you must make sure that the opentaps form macro importing tool is loaded.  This can be done by including the
+    following code in your beanshell (.bsh) script for your page.  They can be put in main-decorator.bsh so that the
+    form macros would work for your entire webapp:
+<pre>
+    loader = Thread.currentThread().getContextClassLoader();
+    globalContext.put("import", loader.loadClass("org.opentaps.common.template.freemarker.transform.ImportTransform").newInstance());
+    globalContext.put("include", loader.loadClass("org.opentaps.common.template.freemarker.transform.IncludeTransform").newInstance());
+</pre>
+</p>
+
+<p>The form macros are located in an FTL file in your opentaps-common directory:
+<pre>
+opentaps/opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl
+</pre>
+
+To use it, simply include the form macros in your Freemarker (FTL) page, like this:
+<pre>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+</pre>
+
+&lt;@import /&gt; is an opentaps Freemarker extension which allows macros to be imported into the current context from
+any file in your opentaps applications.</p>
+
+<p><b><i>IMPORTANT: There must be no spaces in your file path!</i></b></p>
+
+<p>
+Now you are ready to use the form macros, like this:
+<pre>
+    <#list inventoryProduced as inventoryItemProduced>
+        <#assign inventoryItem = inventoryItemProduced.getRelatedOne("InventoryItem")/>
+        <#if inventoryItem.inventoryItemTypeId == "SERIALIZED_INV_ITEM">
+        &lt;tr class="${tableRowClass(rowIndex)}"&gt;
+            <@displayLink href="EditInventoryItem?inventoryItemId=${inventoryItem.inventoryItemId}" text="${inventoryItem.inventoryItemId}"/>
+            <@display text="${inventoryItem.productId}"/>
+            <@inputText name="serialNumber_o_${rowIndex}" default="${inventoryItem.serialNumber?if_exists}"/>
+            <@inputHidden name="_rowSubmit_o_${rowIndex}" value="Y"/>
+            <@inputHidden name="inventoryItemId_o_${rowIndex}" value="${inventoryItem.inventoryItemId}"/>
+
+</pre>
+In this example, we've mixed Freemarker directives (if, list, assign), HTML and CSS tags (tr, class), and opentaps forms
+macros (displayLink, display, inputText, inputHidden.)  The form macros are just macros for generating the appropriate
+HTML around the parametrized fields nad values.  The list of form macros and how to use them are given in the
+<a href="#API">API</a> below.</p>
+
+<p>That's all there is to it.
+</p>
+
+<a name="API"><h3>The opentaps Form Macros API</h3></a>
+
+<p>Notation:
+<pre>@inputHidden name value=""</pre>
+    means that the macro can be used as:
+<pre>&lt;@inputHidden name="facilityId"&gt;</pre>
+    which creates a hidden input with default value of "".  Or, it can be used as:
+<pre>&lt;@inputHidden name="facilityId" value="${facilityId}"&gt;</pre>
+    which creates a hidden input with default value of whatever ${facilityId} is in the context.  Each attribute (ie,
+    name or value in this case) after the name of the macro (inputHidden in this case)  is a parameter.
+    If there is an <b>=""</b> after the attribute, it defines a default value.
+</p>
+
+<p>By convention, these are standard fields for all macros which may use them:
+    <ul>
+        <li>name: name of the field.</li>
+        <li>title: descriptive title of this field, used for rows (ie, "Charge Tax?")</li>
+        <li>form: name of the current form, for javascript such as lookup widgets</li>
+        <li>list: used for dropdowns.  The list of maps or GenericValue entities where the information for the select
+            option elements will be retrieved
+        </li>
+        <li>key: used for dropdowns.  For each map in "list", a select "option" element is generated, and its value (the "value" attribute)
+            comes from map or GenericValue's entry under the key in "key"; if the value of "key" is empty, then the value of "name" is
+            used as the lookup key instead.
+        </li>
+        <li>displayField: used for dropdowns.  The value of lookup key used to retrieve (from each map in "list") the display text of the
+            generated option. Note that if "displayField" is empty, then the macro expects a nested string that contains
+            the FTL string that will be used as the option display text.
+        </li>
+        <li>default: the default value for the field.  For dropdowns, which is the option that will be initially
+            selected by the browser (optional).</li>
+        <li>index: used for multi-row submit forms.  By default, index is set to -1, which means nothing happens.  If set
+            to a different value, then"_o_${index}" is appended to the field name.  For example, if you call a macro with
+            name="productId" and index="5", you will get "product_o_5" for the name of the field.
+        </li>
+        <li>required: for dropdowns, whether the user is required to select an option from the select box or not (if not, then a
+            "default" option element with an empty value is generated, in addition to the other ones).
+        </li>
+    </ul>
+
+<p>The form macros can be divided into two sub-groups: element and row macros.  Element macros are for creating a single cell
+    or form element.  Row macros use the element macros for creating an entire input row.  For example, an element macro might
+    be used to create a date entry field, which can be used in a multi-row or single submit form.  A date entry row macro
+    might then use the date entry field element macro to create a row with a title ("Start Date") and the elemnt macro,
+    all wrapped in TR and TD tags.</p>
+
+<p><b><i>NOTE: There are many more form macros available.  Please look in your
+    opentaps/opentaps-commons/webapp/common/includes/lib/opentapsFormMacros.ftl file for details.</i></b></p>
+
+<h4>Row Macros</h4>
+
+<table border="1" cellpadding="3" cellspacing="0">
+    <thead>
+        <th width="25%" bgcolor="#ccccff">Macro</th>
+        <th width="75%" bgcolor="#ccccff">Usage</th>
+    </thead>
+    <tr>
+        <td>@inputTextRow name title size=30 maxlength="" default="" titleClass="tableheadtext" index=-1 rowId="" hidden=false</td>
+        <td>Creates a text entry row for field with name and displays the title.  Optionally specify size, maxlength, and default 
+        values.</td>
+    </tr>
+
+    <tr>
+        <td>@inputLookupRow name title lookup form size=20 maxlength=20 default="" titleClass="tableheadtext"</td>
+        <td>Creates a text entry row with a lookup.  The lookup URL is specified in the "lookup" parameter.</td>
+    </tr>
+    <tr>
+        <td>@inputHidden name value=""</td>
+        <td>Creates a hidden input for name with default value of ""</td>
+    </tr>
+    <tr>
+        <td>@inputDateTimeRow name title default="" titleClass="tableheadtext" popup=true weekNumbers=false onUpdate="" onDateStatusFunc="" linkedName="" delta=0</td>
+        <td>Creates a date and time input row.</td>
+    </tr>
+    <tr>
+        <td>@inputDateRow name title default="" titleClass="tableheadtext" popup=true weekNumbers=false onUpdate="" onDateStatusFunc="" linkedName="" delta=0</td>
+        <td>Creates a date input row.</td>
+    </tr>
+
+    <tr>
+        <td>@inputIndicatorRow name title required=true default="" titleClass="tableheadtext" index=-1</td>
+        <td>Creates an input row with a Y/N dropdown (select) box.
+        This uses inputIndicator (see above.)</td>
+    </tr>
+     <tr>
+        <td>@inputSubmitRow title colspan="1"</td>
+        <td>Creates a submit button.  Specify the word in the button with title and how many columns it spans.</td>
+    </tr>
+
+</table>
+
+<h4>Element Tags</h4>
+<table border="1" cellpadding="3" cellspacing="0">
+
+    <thead>
+        <th width="25%" bgcolor="#ccccff">Macro</th>
+        <th width="75%" bgcolor="#ccccff">Usage</th>
+    </thead>
+
+    <tr>
+        <td>@displayTitle text class="tableheadtext" width=200</td>
+        <td>Display a title tag.  Used by inputRowText.</td>
+    </tr>
+    <tr>
+        <td>@inputLookup name lookup form default="" size=20 maxlength=20 index=-1</td>
+        <td>An input element with a lookup button next to it.  lookup is the controller request for the lookup (ie, LookupProduct)
+        </td>
+    </tr>
+    <tr>
+        <td>@inputIndicator name required=true default=""</td>
+        <td>Creates dropdown (select) box of Y/N for the name.  If required=true, user must select one.</td>
+    </tr>
+    <tr>
+        <td>@inputSelect name list title="" key="" displayField="" default="" index=-1 required=true defaultOptionText="" display="row|cell|block|inline"</td>
+        <td>Creates a select box.  defaultOptionText is the value of "required" is false, and an empty default option element is generated,
+            then "defaultOptionText" will contain the display text for that option.
+            <p>For a row:<br/>
+            @inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText=""<br/>
+            or:
+            @inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" display="row"<br/></p>
+            <p>For a cell:<br/>
+            @inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" display="cell"<br/></p>
+            <p>For a block:<br/>
+            @inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" display="block"<br/></p>
+            <p>Inline:<br/>
+            @inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" display="inline"<br/></p>
+        </td>
+    </tr>
+    <tr>
+        <td>@inputText name size=30 maxlength="" default="" index=-1</td>
+        <td>Create an input text box.  index not implemented yet.</td>
+    </tr>
+    <tr>
+        <td>@inputConfirm title href="" form="" confirmText=uiLabelMap.OpentapsAreYouSure class="buttonDangerous"</td>
+        <td>Creates a confirmation button.  When the button is pressed, it will produce a popup confirmation dialogue.
+            If the user cancels, then nothing happens.  If the user confirms, then either the given form name is submitted
+            or the user is sent to the given href link.  The text in the popup window can be set with confirmText, but the
+            buttons are browser specific.  (See the javascript function confirm() for reference.)
+        </td>
+    </tr>
+    <tr>
+        <td>@inputStateCountry address=null stateInputName="stateProvinceGeoId" countryInputName="countryGeoId"</td>
+        <td>Creates two dropdowns for the user to select state and country.  If the country is changed, the state dropdown 
+          will be updated to show the states in that country.  The default country is defined in opentaps.properties
+          as defaultCountryGeoId.
+          <p>You may either pass in a PostalAddress with the address= argument, or you can specify the parameter field names with stateInputName and countryInputName.
+          <p>In order for this macro to work properly, the following script should be called in the implementing screen,</p>
+          <tt>components://opentaps-common/webapp/common/WEB-INF/actions/includes/stateDropdownData.bsh</tt>
+          <p>For a row:<br/>
+          @inputRowSelect title stateInputName="stateProvinceGeoId" countryInputName="countryGeoId"
+          <p>For a cell:<br/>
+          @inputCellSelect stateInputName="stateProvinceGeoId" countryInputName="countryGeoId"
+        </td>
+    </tr>
+</table>
+
+<h4>Header and Menu Tags</h4>
+<table border="1" cellpadding="3" cellspacing="0">
+
+    <thead>
+        <th width="25%" bgcolor="#ccccff">Macro</th>
+        <th width="75%" bgcolor="#ccccff">Usage</th>
+    </thead>
+
+    <tr>
+        <td>@sectionHeader title headerClass="subSectionHeader" titleClass="subSectionTitle"</td>
+        <td>Creates a header for a subsection within an OpenTaps screen.  Parameter "title" is the title that will be shown in header, "headerClass" is the class of the section header DIV element, and "titleClass" is the class of the actual title (technically, the DIV element that contains the title, which in turn is contained within the section header DIV element).  Note that additional contents, such as FTL code for menu buttons, can be "nested" within this macro.</td>
+    </tr>
+</table>
+
+<h4>Other Macros</h4>
+<table border="1" cellpadding="3" cellspacing="0">
+
+    <thead>
+        <th width="25%" bgcolor="#ccccff">Macro</th>
+        <th width="75%" bgcolor="#ccccff">Usage</th>
+    </thead>
+
+    <tr>
+        <td>@pagination viewIndex viewSize currentResultSize requestName totalResultSize=-1 extraParameters=""</td>
+        <td>
+            Generates a pagination block for a list, eg: <code>Previous 21-35 of 35 Next</code><br/>
+            <br/>
+            viewIndex: Current starting record number, eg: 21<br/>
+            viewSize: Number of records to show, eg: 20<br/>
+            currentResultSize: Number of records currently showing, eg: 15<br/>
+            totalResultSize: Total records in result set, eg: 35. If not supplied, total results will not appear (eg: <code>Previous 21-35 Next</code>)<br/>
+            requestName: request to pass back and forth in the Previous and Next links<br/>
+            extraParameters: Any extra request parameters to pass in the Previous/Next links. This will be HTML-encoded by the macro.<br/>
+            <br/>
+            Usage example:<br/>
+            <br/>
+            In screen definition:<br/>
+            <br/>
+            <code>&lt;set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/></code><br/>
+            <code>&lt;set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/></code><br/>
+            <br/>
+            In bsh:<br/>
+            <code>lotListIt = delegator.findListIteratorByCondition("Lot", ...);</code><br/>
+            <code>lotList = lotListIt.getPartialList(viewIndex.intValue(), viewSize.intValue());</code><br/>
+            <code>lotListIt.last();</code><br/>
+            <code>lotsTotalSize = lotListIt.currentIndex();</code><br/>
+            <code>context.put("lotList", lots);</code><br/>
+            <code>context.put("lotsTotalSize", lotsTotalSize);</code><br/>
+            <br/>
+            In FTL:<br/>
+            <code><#assign exParams = "&amp;doLookup=Y&amp;supplierPartyId=" + parameters.supplierPartyId?if_exists/></code>
+            <code><@pagination viewIndex=viewIndex viewSize=viewSize currentResultSize=lotList?size requestName="manageLots" totalResultSize=lotsTotalSize extraParameters=exParams/></code><br/>
+            <br/>
+            Will generate the following code:<br/>
+            <code>
+                &lt;div class="pagination"><br/>
+                &nbsp;&nbsp;&lt;span class="paginationPrevious">&lt;a href="/warehouse/control/manageLots?VIEW_INDEX=1&amp;doLookup=Y&amp;supplierPartyId=">Previous&lt;/a>&lt;/span><br/>
+                &nbsp;&nbsp;&lt;span class="paginationText">3 - 4 of 7&lt;/span><br/>
+                &nbsp;&nbsp;&lt;span class="paginationNext">&lt;a href="/warehouse/control/manageLots?VIEW_INDEX=5&amp;doLookup=Y&amp;supplierPartyId=">Next&lt;/a>&lt;/span><br/>
+                &lt;/div>
+            </code>
+            <div style="color:red; background-color: #FFCCCC; border: 1px solid red; padding: 10px; margin-top: 15px">
+              Important!  <p>The pagination macro only works with GET forms. If you have a form which feeds a page with parameter values (example: warehouse/control/backOrderedItems), the form 
+              must use the GET method, not POST. Otherwise there can be two values for the same parameter name (one passed via POST and one passed by the pagination macro in the querystring)
+              and an ArrayList results from parameters.get(), not a String, which makes things explode.</p>
+            </div>
+        </td>
+    </tr>
+  
+    <tr>
+        <td>@flexArea targetId title="" class="" style="" controlClassOpen="" controlClassClosed="" controlStyle="" state="" save=false enabled=true</td>
+        <td>
+            <p>Generates a clickable control block with headline, which triggers the expansion/contraction of an inner block.</p>
+            targetId: DOM ID for the flexArea. Must be unique to the screen. Used to trigger the collapse/expand and to persist the state of the flexArea.<br/>
+            title: Headline for the control block.<br/>
+            class: CSS class for the opened/expanded state of the inner block. Defaults to flexAreaContainer_open.<br/>
+            style: CSS styles to override the expanded class of the inner block.<br/>
+            controlClassOpen: CSS class for the expanded state of the control block. Defaults to flexAreaControl_open.<br/>
+            controlClassClosed: CSS class for the collapsed state of the control block. Defaults to flexAreaControl_closed.<br/>
+            controlStyle: CSS styles to override both the expanded and collapsed states of the control block.<br/>
+            state: Controls the initial state of the flexArea on page load. If not specified and no saved state exists in the database, defaults to closed.<br/>
+            save: If true, the state of the flexArea will be saved to the database each time it it expanded or contracted.<br/>
+            enabled: If false, clicking on the control block will not expand or contract the flexArea. Specify false when another DOM element should control the expansion.<br/>
+            <br/>
+            Usage example:<br/>
+            <br/>
+            In bsh (include in a global bsh such as main-decorator.bsh so that every screen has access to the saved states of its flexAreas):<br/>
+            <code>    screenName = parameters.get("thisRequestUri");</code><br/>
+            <code>    prefMap = UtilMisc.toMap("application", opentapsApplicationName, "screenName", screenName, "userLoginId", userLogin.getString("userLoginId"));</code><br/>
+            <code>    viewPrefs = delegator.findByAnd("ViewPrefAndLocation", prefMap);</code><br/>
+            <code>    vpit = viewPrefs.iterator();</code><br/>
+            <code>    while (vpit.hasNext()) {</code><br/>
+            <code>        viewPref = vpit.next();</code><br/>
+            <code>        foldedStates.put(viewPref.get("domId"), viewPref.getString("viewPrefString"));</code><br/>
+            <code>    }</code><br/>
+            <code>globalContext.put("foldedStates", foldedStates);</code><br/>
+            <br/>
+            In FTL:<br/>
+            <br/>
+            For a simple flexArea:<br/>
+            <code><@flexArea targetId="..." title="Click me to expand/contract">&lt;div>Elements to hide and show&lt;/div>&lt;/@flexArea></code><br/>
+            <br/>
+            For a flexArea which is always open on page load:<br/>
+            <code><@flexArea targetId="..." title="..." state="open" save=false>...&lt;/@flexArea></code><br/>
+            <br/>
+            For a flexArea which is hidden and closed on page load and has its expansion triggered by an external event:<br/>
+            <code><@flexArea targetId="..." title="..." controlClassClosed="hidden" state="closed" save=false enabled=false>...&lt;/@flexArea></code><br/>
+            <br/>
+            To override the default classes:<br/>
+            <code><@flexArea targetId="..." title="..." class="customClassForOpenInnerBlock" controlClassClosed="customClassForClosedControlBlock" controlClassOpen="customClassForOpenControlBlock">...&lt;/@flexArea></code><br/>
+            <br/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            isOpen(domId, default="")
+            <br/>
+            <br/>
+            openOrClosedClass(domId, openClassName, closedClassName, default="")
+        </td>
+        <td>Supporting functions for the flexArea macro. Not useful separately.
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

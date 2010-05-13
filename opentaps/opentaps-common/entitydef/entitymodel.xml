@@ -1,0 +1,2533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->        
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <title>Opentaps Commons Entity Definitions</title>
+    <copyright>Copyright (c) 2006 - 2009 Open Source Strategies Inc.</copyright>
+    <author>Leon Torres</author>
+
+    <extend-entity entity-name="Enumeration">
+        <field name="disabled" type="indicator"/>
+    </extend-entity>
+
+    <extend-entity entity-name="ProductStoreEmailSetting">
+        <field name="withAttachment" type="indicator"/>
+    </extend-entity>
+
+    <!-- =================================== -->
+    <!-- org.opentaps.common.accounting      -->
+    <!-- =================================== -->
+
+    <entity entity-name="AcctgTagEnumType" package-name="org.opentaps.common.accounting"
+            title="Entity to setup the accounting tags used by organization">
+        <field name="organizationPartyId" type="id"/>
+        <field name="acctgTagUsageTypeId" type="id"/>
+        <field name="enumTypeId1" type="id-ne"/>
+        <field name="enumTypeId2" type="id-ne"/>
+        <field name="enumTypeId3" type="id-ne"/>
+        <field name="enumTypeId4" type="id-ne"/>
+        <field name="enumTypeId5" type="id-ne"/>
+        <field name="enumTypeId6" type="id-ne"/>
+        <field name="enumTypeId7" type="id-ne"/>
+        <field name="enumTypeId8" type="id-ne"/>
+        <field name="enumTypeId9" type="id-ne"/>
+        <field name="enumTypeId10" type="id-ne"/>
+        <field name="isTagEnum1Required" type="indicator"/>
+        <field name="isTagEnum2Required" type="indicator"/>
+        <field name="isTagEnum3Required" type="indicator"/>
+        <field name="isTagEnum4Required" type="indicator"/>
+        <field name="isTagEnum5Required" type="indicator"/>
+        <field name="isTagEnum6Required" type="indicator"/>
+        <field name="isTagEnum7Required" type="indicator"/>
+        <field name="isTagEnum8Required" type="indicator"/>
+        <field name="isTagEnum9Required" type="indicator"/>
+        <field name="isTagEnum10Required" type="indicator"/>
+        <field name="defaultTagEnumId1" type="id-ne"/>
+        <field name="defaultTagEnumId2" type="id-ne"/>
+        <field name="defaultTagEnumId3" type="id-ne"/>
+        <field name="defaultTagEnumId4" type="id-ne"/>
+        <field name="defaultTagEnumId5" type="id-ne"/>
+        <field name="defaultTagEnumId6" type="id-ne"/>
+        <field name="defaultTagEnumId7" type="id-ne"/>
+        <field name="defaultTagEnumId8" type="id-ne"/>
+        <field name="defaultTagEnumId9" type="id-ne"/>
+        <field name="defaultTagEnumId10" type="id-ne"/>
+        
+        <prim-key field="organizationPartyId"/>
+        <prim-key field="acctgTagUsageTypeId"/>
+        <relation type="one" rel-entity-name="Party" fk-name="ATET_PTY">
+            <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="AcctgTagUsageType" fk-name="ATET_USAGE">
+            <key-map field-name="acctgTagUsageTypeId" />
+        </relation>
+
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="ATET_TAG1" title="tag1">
+            <key-map field-name="enumTypeId1" rel-field-name="enumTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="ATET_TAG2" title="tag2">
+            <key-map field-name="enumTypeId2" rel-field-name="enumTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="ATET_TAG3" title="tag3">
+            <key-map field-name="enumTypeId3" rel-field-name="enumTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="ATET_TAG4" title="tag4">
+            <key-map field-name="enumTypeId4" rel-field-name="enumTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="ATET_TAG5" title="tag5">
+            <key-map field-name="enumTypeId5" rel-field-name="enumTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="ATET_TAG6" title="tag6">
+            <key-map field-name="enumTypeId6" rel-field-name="enumTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="ATET_TAG7" title="tag7">
+            <key-map field-name="enumTypeId7" rel-field-name="enumTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="ATET_TAG8" title="tag8">
+            <key-map field-name="enumTypeId8" rel-field-name="enumTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="ATET_TAG9" title="tag9">
+            <key-map field-name="enumTypeId9" rel-field-name="enumTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="ATET_TAG10" title="tag10">
+            <key-map field-name="enumTypeId10" rel-field-name="enumTypeId"/>
+        </relation>
+
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATET_DEFAULT_1" title="tag1">
+            <key-map field-name="defaultTagEnumId1" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATET_DEFAULT_2" title="tag2">
+            <key-map field-name="defaultTagEnumId2" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATET_DEFAULT_3" title="tag3">
+            <key-map field-name="defaultTagEnumId3" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATET_DEFAULT_4" title="tag4">
+            <key-map field-name="defaultTagEnumId4" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATET_DEFAULT_5" title="tag5">
+            <key-map field-name="defaultTagEnumId5" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATET_DEFAULT_6" title="tag6">
+            <key-map field-name="defaultTagEnumId6" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATET_DEFAULT_7" title="tag7">
+            <key-map field-name="defaultTagEnumId7" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATET_DEFAULT_8" title="tag8">
+            <key-map field-name="defaultTagEnumId8" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATET_DEFAULT_9" title="tag9">
+            <key-map field-name="defaultTagEnumId9" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATET_DEFAULT_10" title="tag10">
+            <key-map field-name="defaultTagEnumId10" rel-field-name="enumId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AcctgTagUsageType" package-name="org.opentaps.common.accounting"
+            title="Used to configure where accounting tags may be used">
+        <field name="acctgTagUsageTypeId" type="id"/>
+        <field name="description" type="description"/>
+        <prim-key field="acctgTagUsageTypeId"/>
+    </entity>
+
+    <entity entity-name="AcctgTagPostingCheck" package-name="org.opentaps.common.accounting"
+            title="Used to configure the tags that should balance when posting transactions">
+        <field name="organizationPartyId" type="id"/>
+        <field name="tagEnum1MustBalance" type="indicator"/>
+        <field name="tagEnum2MustBalance" type="indicator"/>
+        <field name="tagEnum3MustBalance" type="indicator"/>
+        <field name="tagEnum4MustBalance" type="indicator"/>
+        <field name="tagEnum5MustBalance" type="indicator"/>
+        <field name="tagEnum6MustBalance" type="indicator"/>
+        <field name="tagEnum7MustBalance" type="indicator"/>
+        <field name="tagEnum8MustBalance" type="indicator"/>
+        <field name="tagEnum9MustBalance" type="indicator"/>
+        <field name="tagEnum10MustBalance" type="indicator"/>
+
+        <prim-key field="organizationPartyId"/>
+        <relation type="one" rel-entity-name="Party" fk-name="ATPC_PTY">
+            <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+        </relation>
+    </entity>
+
+    <!-- ============================== -->
+    <!-- org.opentaps.common.agreement  -->
+    <!-- ============================== -->
+
+    <!-- These extensions are designed to create a structure for the Agreement-related entities, so that they should always follow this pattern:
+    Agreement defines the master agreement or contract: from A to B, starting on XXX date, etc.
+    AgreementItem are the sub-points of the agreement: 1.  Purpose 2.  Payment Terms  3.  Service Terms  4.  Pricing  5.  Parties Involved
+    AgreementTerm are the terms of the agreement items: 2(a) Net 30, 3(a) Valid for 1 year, 4(a) 50% discount on Product 1 4(b) 25% on Product 2 5(a) Customer 1 5(b) Customer 2 
+    -->
+
+    <extend-entity entity-name="Agreement">
+        <field name="statusId" type="id"/>
+        <field name="defaultCurrencyUomId" type="id" >
+            <description>Default currency for all terms and items in the agreement.</description>
+        </field>
+        <field name="fromPartyClassGroupId" type="id">
+            <description>Used to support party classifications on agreements</description>
+        </field>                                                            
+        <field name="toPartyClassGroupId" type="id">
+            <description>Used to support party classifications on agreements</description>
+        </field>
+        <relation type="one" rel-entity-name="StatusItem" fk-name="AGR_STATUS">
+            <key-map field-name="statusId"/>
+        </relation>
+        <relation type="one" title="From" rel-entity-name="PartyClassificationGroup" fk-name="AGR_FROM_PTYCLASS">
+            <key-map field-name="fromPartyClassGroupId" rel-field-name="partyClassificationGroupId"/>
+        </relation>
+        <relation type="one" title="To" rel-entity-name="PartyClassificationGroup" fk-name="AGR_TO_PTYCLASS">
+            <key-map field-name="toPartyClassGroupId" rel-field-name="partyClassificationGroupId"/>
+        </relation>
+    </extend-entity>
+
+    <extend-entity entity-name="AgreementTerm">
+        <field name="productId" type="id"/>
+        <field name="productCategoryId" type="id"/>
+        <field name="partyId" type="id">
+            <description>This is more flexible than using AgreementRole because you can define include/exclude on a party</description>
+        </field>
+        <field name="roleTypeId" type="id"/>
+        <field name="partyClassificationGroupId" type="id"/>
+        <field name="valueEnumId" type="id">
+            <description>For enumerated values on agreement terms</description>
+        </field>
+        <field name="currencyUomId" type="id">
+            <description>Currency on this AgreementTerm</description>
+        </field>
+        <field name="uomId" type="id">
+            <description>A unit of measure for this term, such monthly or weekly</description>
+        </field>
+        <relation type="one" rel-entity-name="Product" fk-name="AGRTERM_PRODUCT">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation type="one" rel-entity-name="ProductCategory" fk-name="AGRTERM_PRODCAT">
+            <key-map field-name="productCategoryId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Party" fk-name="AGRTERM_PARTY">
+            <key-map field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="RoleType" fk-name="AGRTERM_ROLE">
+            <key-map field-name="roleTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="PartyClassificationGroup" fk-name="AGRTERM_PTYCLASS">
+            <key-map field-name="partyClassificationGroupId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="AGRTERM_VALENUM">
+            <key-map field-name="valueEnumId" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" title="Currency" rel-entity-name="Uom" fk-name="AGRTERM_CURUOM">
+            <key-map field-name="currencyUomId" rel-field-name="uomId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Uom" fk-name="AGRTERM_UOM">
+            <key-map field-name="uomId"/>
+        </relation>
+    </extend-entity>
+
+    <entity entity-name="AgreementTermBilling"
+            package-name="org.opentaps.common.agreement"
+            title="Tracks the billing of an agreement at the item (term) level or for the whole invoice">
+        <field name="agreementTermBillingId" type="id"/>
+        <field name="agreementId" type="id"/>
+        <field name="agreementTermId" type="id"/>
+        <field name="invoiceId" type="id"><description>Invoice generated by agreement</description></field>
+        <field name="invoiceItemSeqId" type="id"/>
+        <field name="amount" type="currency-precise"><description>Amount earned by agent for this item or for the whole invoice</description></field>
+        <field name="origInvoiceId" type="id"><description>Original invoice that is subject of agreement</description></field>
+        <field name="origInvoiceItemSeqId" type="id"/>
+        <field name="origPaymentApplicationId" type="id"><description>Payment application which paid the original invoice (if we're generating invoices on payment receipt)</description></field>
+        <field name="origPaymentAmount" type="currency-amount"><description>Payment application amount</description></field>
+        <field name="origAmount" type="currency-amount"><description>Original invoice item amount applicable to term or the original invoice total</description></field>
+        <field name="origCommissionRate" type="floating-point"><description>Commission rate if we're doing item (term) level data (agreementTermId not null)</description></field>
+        <field name="agentPartyId" type="id"><description>Who the generated agreement is from</description></field>
+        <field name="billingDatetime" type="date-time"/>
+        <prim-key field="agreementTermBillingId"/>
+        <relation type="one" rel-entity-name="Agreement" fk-name="AGRITBILL_AGR">
+            <key-map field-name="agreementId"/>
+        </relation>
+        <relation type="one" rel-entity-name="AgreementTerm" fk-name="AGRITBILL_AGRTERM">
+            <key-map field-name="agreementTermId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Invoice" fk-name="AGRITBILL_INVOICE">
+            <key-map field-name="invoiceId"/>
+        </relation>
+        <relation type="one" rel-entity-name="InvoiceItem" fk-name="AGRITBILL_INVITEM">
+            <key-map field-name="invoiceId"/>
+            <key-map field-name="invoiceItemSeqId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Invoice" title="Original" fk-name="AGRITBL_ORINV">
+            <key-map field-name="origInvoiceId" rel-field-name="invoiceId"/>
+        </relation>
+        <relation type="one" rel-entity-name="InvoiceItem" title="Original" fk-name="AGRITBL_ORINVITM">
+            <key-map field-name="origInvoiceId" rel-field-name="invoiceId"/>
+            <key-map field-name="origInvoiceItemSeqId" rel-field-name="invoiceItemSeqId"/>
+        </relation>
+        <relation type="one" rel-entity-name="PaymentApplication" fk-name="AGRITBL_ORPMTAPP">
+            <key-map field-name="origPaymentApplicationId" rel-field-name="paymentApplicationId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Party" fk-name="AGRITBL_ORAGENT">
+            <key-map field-name="agentPartyId" rel-field-name="partyId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="AgreementBillingAndInvoiceSum"
+            package-name="org.opentaps.common.agreement"
+            title="Sum of the amount billed to an agreement with constraints based on Invoice fields.  This version is at the whole invoice level.">
+
+        <member-entity entity-alias="ATB" entity-name="AgreementTermBilling"/>
+        <member-entity entity-alias="I" entity-name="Invoice"/>
+
+        <alias entity-alias="ATB" name="agreementId" group-by="true"/>
+        <alias entity-alias="ATB" name="origInvoiceId" group-by="true"/>
+        <alias entity-alias="ATB" name="agentPartyId" group-by="true"/>
+        <alias entity-alias="ATB" name="amount" function="sum"/>
+        <alias entity-alias="ATB" name="origAmount" function="sum"/>
+        <alias entity-alias="ATB" name="origPaymentAmount" function="sum"/>
+        <alias entity-alias="ATB" name="origPaymentApplicationId" function="sum"/>
+        <alias entity-alias="ATB" name="billingDatetime" group-by="true"/>
+        <alias entity-alias="I" name="invoiceTypeId" group-by="true"/>
+        <alias entity-alias="I" name="statusId" group-by="false"/>
+        <alias entity-alias="I" name="partyId" group-by="true"/>
+        <alias entity-alias="I" name="partyIdFrom" group-by="true"/>
+        <alias entity-alias="I" name="invoiceDate" group-by="true"/>
+
+        <!-- note we're joining the original invoice that is subject to the agreement -->
+        <view-link entity-alias="ATB" rel-entity-alias="I">
+            <key-map field-name="origInvoiceId" rel-field-name="invoiceId"/>
+        </view-link>
+    </view-entity>
+
+    <!-- These entities are to help creating user interfaces. Once the user selects an agreement, pre-defined agreement items
+     will be populated, and only certain term types will be shown for each agreement item type, etc.
+    -->
+
+    <entity entity-name="AgreementToItemMap"
+            package-name="org.opentaps.common.agreement"
+            title="Associates a set of valid AgreementItemTypes to an AgreementType, for creating user interfaces">
+
+        <field name="agreementTypeId" type="id"/>
+        <field name="agreementItemTypeId" type="id"/>
+        <field name="autoCreate" type="indicator">
+            <description>Set to Y to denote which items should be automatically </description>
+        </field>
+        <field name="sequenceNum" type="numeric"/>
+        <field name="maxAllowed" type="numeric">
+            <description>Maximum number of this item type allowed per agreement</description>
+        </field>
+
+        <prim-key field="agreementTypeId"/>
+        <prim-key field="agreementItemTypeId"/>
+
+        <relation type="one" fk-name="AGR_TO_ITEMTY" rel-entity-name="AgreementItemType">
+            <key-map field-name="agreementItemTypeId"/>
+        </relation>
+        <relation type="one" fk-name="AGR_TO_AGRTY" rel-entity-name="AgreementType">
+            <key-map field-name="agreementTypeId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AgreementItemToTermMap"
+            package-name="org.opentaps.common.agreement"
+            title="Associates a set of valid TermTypes to an AgreementItemTypes, for creating user interfaces">
+
+        <field name="agreementItemTypeId" type="id"/>
+        <field name="termTypeId" type="id"/>
+        <field name="autoCreate" type="indicator">
+            <description>Set to Y to denote which terms should be automatically </description>
+        </field>
+        <field name="sequenceNum" type="numeric"/>
+        <field name="defaultDescription" type="description"/>
+        <field name="maxAllowed" type="numeric">
+            <description>Maximum number of this term type allowed per agreement item</description>
+        </field>
+
+        <prim-key field="agreementItemTypeId"/>
+        <prim-key field="termTypeId"/>
+
+        <relation type="one" fk-name="AGRIT_TO_ITEMTY" rel-entity-name="AgreementItemType">
+            <key-map field-name="agreementItemTypeId"/>
+        </relation>
+        <relation type="one" fk-name="AGRIT_TO_TERMTY" rel-entity-name="TermType">
+            <key-map field-name="termTypeId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AgreementInvoiceItemType"
+            package-name="org.opentaps.common.agreement"
+            title="Maps InvoiceItemType to InvoiceItemType based on AgreementType.  Used in generating invoices from agreements.">
+        <description>
+            When we generate an invoice from an agreement and a set of subject invoices, we need to specify what the
+            output invoiceItemTypeIds are based on the input invoiceItemTypeIds.  For instane, commission invoices will
+            map most sales invoice item types to COMM_INV_ITEM and sales invoice item adjustment types to COMM_INV_ADJ. 
+        </description>
+
+        <field name="agreementTypeId" type="id"/>
+        <field name="invoiceItemTypeIdFrom" type="id"/>
+        <field name="invoiceItemTypeIdTo" type="id"/>
+        <field name="descriptionLabel" type="description"><description>uiLabel used for the resulting invoice item description</description></field>
+        <field name="sequenceNum" type="numeric"><description>Preferred order sequence for the resulting invoice item</description></field>
+
+        <prim-key field="agreementTypeId"/>
+        <prim-key field="invoiceItemTypeIdFrom"/>
+        <prim-key field="invoiceItemTypeIdTo"/>
+
+        <relation type="one" fk-name="AIIT_IITFR" title="From" rel-entity-name="InvoiceItemType">
+            <key-map field-name="invoiceItemTypeIdFrom" rel-field-name="invoiceItemTypeId"/>
+        </relation>
+        <relation type="one" fk-name="AIIT_IITTO" title="To" rel-entity-name="InvoiceItemType">
+            <key-map field-name="invoiceItemTypeIdTo" rel-field-name="invoiceItemTypeId"/>
+        </relation>
+        <relation type="one" fk-name="AIIT_AGTY" rel-entity-name="AgreementType">
+            <key-map field-name="agreementTypeId"/>
+        </relation>
+    </entity>
+
+	<entity entity-name="AgreementDocumentTypeMap"
+			package-name="org.opentaps.common.agreement"
+			title="Associate different types of documents (sales, purchase orders and invoices) to agreement terms via an agreement type">
+		<field name="documentTypeId" type="id-ne"></field>
+		<field name="agreementTypeId" type="id"></field>
+        <prim-key field="documentTypeId"/>
+        <relation type="one" fk-name="ATDT_AGTY" rel-entity-name="AgreementType">
+            <key-map field-name="agreementTypeId"/>
+        </relation>
+	</entity>
+	
+	<view-entity entity-name="AgreementTermTypesByDocumentType" 
+			package-name="org.opentaps.common.agreement"
+			title="View entity which shows the term types for different types of documents.  The linkage is
+			documentTypeId to agreementTypeId to agreementItemTypeId to termTypeId">
+		<member-entity entity-alias="ADTM" entity-name="AgreementDocumentTypeMap"></member-entity>
+		<member-entity entity-alias="ATIM" entity-name="AgreementToItemMap"></member-entity>
+ 		<member-entity entity-alias="AITM" entity-name="AgreementItemToTermMap"></member-entity>
+ 		<alias name="documentTypeId" entity-alias="ADTM"></alias>
+		<alias name="termTypeId" entity-alias="AITM"></alias>
+		<view-link rel-entity-alias="ATIM" entity-alias="ADTM" ><key-map field-name="agreementTypeId"/></view-link>
+		<view-link rel-entity-alias="AITM" entity-alias="ATIM" ><key-map field-name="agreementItemTypeId"/></view-link>
+	</view-entity>
+
+    <entity entity-name="TermTypeToEnumTypeMap"
+            package-name="org.opentaps.common.agreement"
+            title="Associate valid enumerations based on an enumeration type for a term type, for creating user interfaces">
+        <field name="termTypeId" type="id"/>
+        <field name="enumTypeId" type="id"/>
+        <prim-key field="termTypeId"/>
+        <prim-key field="enumTypeId"/>
+        <relation type="one" rel-entity-name="TermType" fk-name="TETYPE_TERMTYPE">
+            <key-map field-name="termTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="EnumerationType" fk-name="TETYPE_ENUMTYPE">
+            <key-map field-name="enumTypeId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="TermTypeToUomTypeMap"
+            package-name="org.opentaps.common.agreement"
+            title="Associate valid enumerations based on an uom type for a term type, for creating user interfaces">
+        <field name="termTypeId" type="id"/>
+        <field name="uomTypeId" type="id"/>
+        <prim-key field="termTypeId"/>
+        <prim-key field="uomTypeId"/>
+        <relation type="one" rel-entity-name="TermType" fk-name="TUTYPE_TERMTYPE">
+            <key-map field-name="termTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="UomType" fk-name="TUTYPE_UOMTYPE">
+            <key-map field-name="uomTypeId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="AgreementAndItemAndTerm"
+            package-name="org.opentaps.common.agreement"
+            title="Combines Agreement, AgreementItem and AgreementTerm with emphasis on listing terms.">
+
+        <member-entity entity-alias="A" entity-name="Agreement"/>
+        <member-entity entity-alias="AI" entity-name="AgreementItem"/>
+        <member-entity entity-alias="TERM" entity-name="AgreementTerm"/>
+
+        <alias-all entity-alias="A">
+            <exclude field="productId"/>
+        </alias-all>
+        <alias-all entity-alias="AI">
+            <exclude field="currencyUomId"/>    <!-- use the AgreementTerm.currencyUomId -->
+        </alias-all>
+        <alias-all entity-alias="TERM">
+            <exclude field="agreementItemSeqId"/>
+            <exclude field="fromDate"/>
+            <exclude field="thruDate"/>
+            <exclude field="description"/>
+        </alias-all>
+        <alias entity-alias="AI" name="agreementItemCurrencyUomId" field="currencyUomId"/>
+        <alias entity-alias="TERM" name="termFromDate" field="fromDate"/>
+        <alias entity-alias="TERM" name="termThruDate" field="thruDate"/>
+        <alias entity-alias="TERM" name="termDescription" field="description"/>
+
+        <view-link entity-alias="A" rel-entity-alias="TERM">
+            <key-map field-name="agreementId"/>
+        </view-link>
+        <view-link entity-alias="TERM" rel-entity-alias="AI" rel-optional="true">
+            <key-map field-name="agreementId"/>
+            <key-map field-name="agreementItemSeqId"/>
+        </view-link>
+        <relation type="one" fk-name="AGITTER_PROD_CAT" rel-entity-name="ProductCategory">
+            <key-map field-name="productCategoryId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="TermType">
+            <key-map field-name="termTypeId"/>
+        </relation>
+    </view-entity>
+
+    <entity entity-name="AgreementTypeForRoleType" package-name="org.opentaps.common.agreement"
+        title="Define the agreement types which are available for a role type, meant to be a configuration table rather than user one">
+        <field name="organizationPartyId" type="id-ne"/>
+        <field name="roleTypeId" type="id-ne"/>
+        <field name="agreementTypeId" type="id-ne"/>
+        <prim-key field="organizationPartyId"/>
+        <prim-key field="roleTypeId"/>
+        <prim-key field="agreementTypeId"/>
+        <relation type="one" fk-name="ATFRT_TO_PARTY" rel-entity-name="Party">
+            <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="RoleType" fk-name="ATFRT_RT">
+            <key-map field-name="roleTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="AgreementType" fk-name="ATFRT_AT">
+            <key-map field-name="agreementTypeId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="TermTypeFields" package-name="org.opentaps.common.agreement"
+        title="Defines the available fields for an (Agreement) Term, based on field names from AgreementTerm.  Meant for making
+        user-configurable agreements easier to work with">
+        <field name="termTypeId" type="id-ne"/>
+        <field name="field1" type="name"/>
+        <field name="field2" type="name"/>
+        <field name="field3" type="name"/>
+        <field name="field4" type="name"/>
+        <field name="field5" type="name"/>
+        <field name="field6" type="name"/>
+        <field name="field7" type="name"/>
+        <field name="field8" type="name"/>
+        <field name="field9" type="name"/>
+        <!-- Feel free to add more here or extend this although think about it first: too many fields is confusing to the user -->
+        <prim-key field="termTypeId"/>
+        <relation type="one" rel-entity-name="TermType">
+            <key-map field-name="termTypeId"/>
+        </relation>
+    </entity>
+
+
+    <entity entity-name="FacilityAssoc" package-name="org.opentaps.common.facility"
+        title="Define associations between facilities">
+        <field name="facilityId" type="id-ne"/>
+        <field name="facilityIdTo" type="id-ne"/>
+        <field name="facilityAssocTypeId" type="id-ne"/>
+        <field name="fromDate" type="date-time"/>
+        <field name="thruDate" type="date-time"/>
+        <field name="sequenceNum" type="numeric"/> 
+        <prim-key field="facilityId"/>
+        <prim-key field="facilityIdTo"/>
+        <prim-key field="facilityAssocTypeId"/>
+        <prim-key field="fromDate"/>
+        <relation type="one" fk-name="FACASSOC_FAC" title="From" rel-entity-name="Facility">
+            <key-map field-name="facilityId"/>
+        </relation>
+        <relation type="one" fk-name="FACASSOC_FACTO" title="To" rel-entity-name="Facility">
+            <key-map field-name="facilityIdTo" rel-field-name="facilityId"/>
+        </relation>
+        <relation type="one" fk-name="FACASSOC_TYPE" rel-entity-name="FacilityAssocType">
+            <key-map field-name="facilityAssocTypeId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="FacilityAssocType" package-name="org.opentaps.common.facility"
+            title="Define associations between facilities">
+        <field name="facilityAssocTypeId" type="id-ne"/>
+        <field name="description" type="description"/>
+        <prim-key field="facilityAssocTypeId"/>        
+    </entity>
+
+    <view-entity entity-name="InventoryTransferAndItem"
+            package-name="org.opentaps.common.facility"
+            title="Inventory Transfer and Inventory Item View Entity">
+      <member-entity entity-alias="IT" entity-name="InventoryTransfer"/>
+      <member-entity entity-alias="II" entity-name="InventoryItem"/>
+      <alias-all entity-alias="II"/>
+      <alias entity-alias="IT" name="inventoryTransferId"/>
+      <alias entity-alias="IT" name="transferStatusId" field="statusId"/>
+      <alias entity-alias="IT" name="facilityIdTo"/>
+      <alias entity-alias="IT" name="locationSeqIdTo"/>
+      <alias entity-alias="IT" name="containerIdTo"/>
+      <alias entity-alias="IT" name="sendDate"/>
+      <alias entity-alias="IT" name="receiveDate"/>
+      <alias entity-alias="IT" name="transferComments" field="comments"/>
+      <view-link entity-alias="IT" rel-entity-alias="II">
+        <key-map field-name="inventoryItemId"/>
+      </view-link>
+    </view-entity>
+
+    <!-- ============================= -->
+    <!-- org.opentaps.common.marketing -->
+    <!-- ============================= -->
+
+
+    <!-- Because of database compatibility reasons, it is better practice NOT to use timestamps as a primary key field but rather
+    use a simple auto-sequence ID like this -->
+    <entity entity-name="MarketingCampaignContactList" package-name="org.opentaps.common.marketing"
+        table-name="MMARKETING_CAMPAIGN_CONTACLIST" title="Associate contact lists to marketing campaigns">
+        <field name="campaignListId" type="id-ne"/>
+        <field name="marketingCampaignId" type="id-ne"/>
+        <field name="contactListId" type="id-ne"/>
+        <field name="fromDate" type="date-time"/>
+        <field name="thruDate" type="date-time"/>
+        <prim-key field="campaignListId"/>
+        <relation type="one" rel-entity-name="MarketingCampaign">
+            <key-map field-name="marketingCampaignId"/>
+        </relation>
+        <relation type="one" rel-entity-name="ContactList">
+            <key-map field-name="contactListId"/>
+        </relation>
+    </entity>
+
+    <extend-entity entity-name="ContactList">
+        <field name="parentContactListId" type="id-ne"/>
+        <relation type="one" title="Parent" rel-entity-name="ContactList">
+            <key-map field-name="parentContactListId" rel-field-name="contactListId"/>
+        </relation>
+    </extend-entity>
+
+    <!-- Having campaignListId as well as marketingCampaignId and contactListId will cause TrackingCode
+    to be associated with each use of a contact list with a marketing campaign.
+    If instead TrackingCode only had marketingCampaignId and contactListId, and you used the same contact list but at different times,
+    let's say from 2008-01-01 to 2008-03-31 then from 2008-09-01 to 2008-12-31, you will not be able to have two distinguishable tracking codes
+    for each time period that the list was used for the campaign.  You CAN have two tracking codes which associate with both campaign/list
+    combinations, but they will not tell you which one is for the first time period, which one is for the second time period. -->
+    <extend-entity entity-name="TrackingCode">
+
+        <field name="contactListId" type="id-ne"/>
+        <field name="campaignListId" type="id-ne"/>
+        <relation type="one" rel-entity-name="MarketingCampaignContactList" fk-name="TRCK_CD_MTGCNTLST">
+            <key-map field-name="campaignListId"/>
+        </relation>
+        <relation type="one" rel-entity-name="ContactList" fk-name="TRCK_CD_CNTCT_LST">
+            <key-map field-name="contactListId"/>
+        </relation>
+    </extend-entity>
+
+
+
+    <!-- ========================= -->
+    <!-- org.opentaps.common.party -->
+    <!-- ========================= -->
+
+    <!-- this represents a departure from the orthodox OFBIZ pattern, which is to create such data as PartyClassificationType
+        and then group then as PartyClassificationGroup and associate them with Party.  This would involve several additional
+        entities and a lot more code.  At this stage, it does not seem that we need all that complexity just to track ancillary data,
+        hence this simple entity -->
+    <entity entity-name="PartySupplementalData"
+            package-name="org.opentaps.common.party"
+            title="Supplemental detail about a party, either a person or party group">
+        <field name="partyId" type="id-ne"></field>
+        <field name="parentPartyId" type="id">
+            <description>This is for arranging the parties in a heiarchial structure.</description>
+        </field>
+        <!-- this is meant to primarily apply to a person -->
+        <field name="departmentName" type="name"></field>
+        <field name="generalProfTitle" type="name">
+            <description>This is a general professional title (CEO, VP) which mirrors PartyRelationship.relationshipName.
+                Again, created for use in cases where specific relationships aren't needed</description>
+        </field>
+        <!-- these fields were added to make leads much simpler by eliminating the need to create a separate PartyGroup,
+            PartyRole, PartySupplementalData, PartyRelationship for every lead. -->
+        <field name="companyName" type="name">
+            <description>This field is a temporary holding field for company name of a Person who is a lead (PROSPECT).
+                Later it will be used to create a PartyGroup of role ACCOUNT if/when the lead is converted.  Do not use
+                this for any other purpose.</description>
+        </field>
+        <field name="companyNameLocal" type="name">
+            <description>This field is a temporary holding field for company name of a Person who is a lead (PROSPECT).
+                Later it will be used to create a PartyGroup of role ACCOUNT if/when the lead is converted.  Do not use
+                this for any other purpose.</description>
+        </field>
+        <!-- these mostly apply to party groups (ie, companies) -->
+        <field name="annualRevenue" type="currency-amount"></field>
+        <field name="currencyUomId" type="id"></field>
+        <field name="numberEmployees" type="numeric"></field>
+        <field name="industryEnumId" type="id-ne"></field>
+        <field name="ownershipEnumId" type="id-ne"></field>
+        <field name="sicCode" type="id"></field>   <!-- sicCode and ticker symbol could be shorter -->
+        <field name="tickerSymbol" type="id"></field>
+        <field name="importantNote" type="very-long"><description>Important note which will be shown on quotes, orders, etc. for this party</description></field>
+        <field name="primaryPostalAddressId" type="id"></field>
+        <field name="primaryTelecomNumberId" type="id"></field>
+        <field name="primaryEmailId" type="id"></field>
+        <prim-key field="partyId"/>
+        <relation title="Industry" fk-name="PSD_GRP_IND_ENUM" rel-entity-name="Enumeration" type="one">
+            <key-map field-name="industryEnumId" rel-field-name="enumId"/>
+         </relation>
+         <relation title="Ownership" fk-name="PSD_GRP_OWNR_ENUM" rel-entity-name="Enumeration" type="one">
+            <key-map field-name="ownershipEnumId" rel-field-name="enumId"/>
+         </relation>
+         <relation fk-name="PSD_PARTY" rel-entity-name="Party" type="one">
+             <key-map field-name="partyId"/>
+         </relation>
+         <relation title="Parent" fk-name="PSD_PARENT_PARTY" rel-entity-name="Party" type="one">
+             <key-map field-name="parentPartyId" rel-field-name="partyId"/>
+         </relation>
+         <relation fk-name="PSD_CURRENCY_UOM" rel-entity-name="Uom" type="one">
+             <key-map field-name="currencyUomId" rel-field-name="uomId"/>
+         </relation>
+         <relation title="ContactMechPostalAddress" type="one" fk-name="PSD_P_PADDR_MECH" rel-entity-name="ContactMech">
+           <key-map field-name="primaryPostalAddressId" rel-field-name="contactMechId"/>
+         </relation>
+         <relation title="ContactMechTelecomNumber" type="one" fk-name="PSD_P_TEL_MECH" rel-entity-name="ContactMech">
+           <key-map field-name="primaryTelecomNumberId" rel-field-name="contactMechId"/>
+         </relation>
+         <relation title="ContactMechEmail" type="one" fk-name="PSD_P_EMAIL_MECH" rel-entity-name="ContactMech">
+           <key-map field-name="primaryEmailId" rel-field-name="contactMechId"/>
+         </relation>
+    </entity>
+
+    <view-entity entity-name="PartySummaryCRMView"
+                 package-name="org.opentaps.common.party"
+                 title="View for Party details of CRM SFA Account">
+        <member-entity entity-alias="P" entity-name="Party"/>
+        <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+        <member-entity entity-alias="PER" entity-name="Person"/>
+        <member-entity entity-alias="PSD" entity-name="PartySupplementalData"/>
+        <member-entity entity-alias="PMPA" entity-name="PostalAddress"/>
+        <member-entity entity-alias="PMTN" entity-name="TelecomNumber"/>
+        <member-entity entity-alias="CMEM" entity-name="ContactMech"/>
+        <alias-all entity-alias="P"/>
+        <alias-all entity-alias="PG">
+            <exclude field="partyId"/>
+            <exclude field="annualRevenue"/>
+            <exclude field="tickerSymbol"/>
+            <exclude field="numEmployees"/>
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PER">
+            <exclude field="partyId"/>
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PSD">
+            <exclude field="partyId"/>
+        </alias-all>
+        <alias entity-alias="PMPA" name="primaryToName" field="toName"/>
+        <alias entity-alias="PMPA" name="primaryAttnName" field="attnName"/>
+        <alias entity-alias="PMPA" name="primaryAddress1" field="address1"/>
+        <alias entity-alias="PMPA" name="primaryAddress2" field="address2"/>
+        <alias entity-alias="PMPA" name="primaryDirections" field="directions"/>
+        <alias entity-alias="PMPA" name="primaryCity" field="city"/>
+        <alias entity-alias="PMPA" name="primaryPostalCode" field="postalCode"/>
+        <alias entity-alias="PMPA" name="primaryPostalCodeExt" field="postalCodeExt"/>
+        <alias entity-alias="PMPA" name="primaryCountryGeoId" field="countryGeoId"/>
+        <alias entity-alias="PMPA" name="primaryStateProvinceGeoId" field="stateProvinceGeoId"/>
+        <alias entity-alias="PMPA" name="primaryCountyGeoId" field="countyGeoId"/>
+        <alias entity-alias="PMPA" name="primaryPostalCodeGeoId" field="postalCodeGeoId"/>
+        <alias entity-alias="PMTN" name="primaryCountryCode" field="countryCode"/>
+        <alias entity-alias="PMTN" name="primaryAreaCode" field="areaCode"/>
+        <alias entity-alias="PMTN" name="primaryContactNumber" field="contactNumber"/>
+        <alias entity-alias="PMTN" name="primaryAskForName" field="askForName"/>
+        <alias entity-alias="CMEM" name="primaryEmail" field="infoString"/>
+        <view-link entity-alias="P" rel-entity-alias="PG" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PER" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PSD" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="PMPA" rel-optional="true">
+            <key-map field-name="primaryPostalAddressId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="PMTN" rel-optional="true">
+            <key-map field-name="primaryTelecomNumberId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="CMEM" rel-optional="true">
+            <key-map field-name="primaryEmailId" rel-field-name="contactMechId"/>
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="PartyRoleNameDetailSupplementalData"
+        package-name="org.opentaps.common.party"
+        title="Party Role, Party Detail and supplemental data View Entity">
+        <member-entity entity-alias="PTY" entity-name="Party"/>
+        <member-entity entity-alias="PR" entity-name="PartyRole"/>
+        <member-entity entity-alias="PERSON" entity-name="Person"/>
+        <member-entity entity-alias="PTYGRP" entity-name="PartyGroup"/>
+        <member-entity entity-alias="PSD" entity-name="PartySupplementalData"/>
+        <member-entity entity-alias="PMPA" entity-name="PostalAddress"/>
+        <member-entity entity-alias="PMTN" entity-name="TelecomNumber"/>
+        <member-entity entity-alias="CMEM" entity-name="ContactMech"/>
+        <member-entity entity-alias="STTG" entity-name="Geo"/>
+        <member-entity entity-alias="CTYG" entity-name="Geo"/>
+        <member-entity entity-alias="CTRYG" entity-name="Geo"/>        
+        <alias-all entity-alias="PTY"/>
+        <alias-all entity-alias="PR"/>
+        <alias-all entity-alias="PERSON">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PTYGRP">
+            <exclude field="comments"/>
+            <exclude field="annualRevenue"/>
+            <exclude field="tickerSymbol"/>
+        </alias-all>
+        <alias-all entity-alias="PSD"/>
+        <alias entity-alias="PMPA" name="primaryToName" field="toName"/>
+        <alias entity-alias="PMPA" name="primaryAttnName" field="attnName"/>
+        <alias entity-alias="PMPA" name="primaryAddress1" field="address1"/>
+        <alias entity-alias="PMPA" name="primaryAddress2" field="address2"/>
+        <alias entity-alias="PMPA" name="primaryDirections" field="directions"/>
+        <alias entity-alias="PMPA" name="primaryCity" field="city"/>
+        <alias entity-alias="PMPA" name="primaryPostalCode" field="postalCode"/>
+        <alias entity-alias="PMPA" name="primaryPostalCodeExt" field="postalCodeExt"/>
+        <alias entity-alias="PMPA" name="primaryCountryGeoId" field="countryGeoId"/>
+        <alias entity-alias="PMPA" name="primaryStateProvinceGeoId" field="stateProvinceGeoId"/>
+        <alias entity-alias="PMPA" name="primaryCountyGeoId" field="countyGeoId"/>
+        <alias entity-alias="PMPA" name="primaryPostalCodeGeoId" field="postalCodeGeoId"/>
+        <alias entity-alias="PMTN" name="primaryCountryCode" field="countryCode"/>
+        <alias entity-alias="PMTN" name="primaryAreaCode" field="areaCode"/>
+        <alias entity-alias="PMTN" name="primaryContactNumber" field="contactNumber"/>
+        <alias entity-alias="PMTN" name="primaryAskForName" field="askForName"/>
+        <alias entity-alias="CMEM" name="primaryEmail" field="infoString"/>
+        <alias entity-alias="CMEM" name="primaryEmailContactMechId" field="contactMechId"/>
+        <alias entity-alias="CTRYG" name="primaryCountryAbbreviation" field="abbreviation"/>
+        <alias entity-alias="STTG" name="primaryStateProvinceAbbreviation" field="abbreviation"/>
+        <alias entity-alias="CTYG" name="primaryCountyAbbreviation" field="abbreviation"/>        
+        <view-link entity-alias="PTY" rel-entity-alias="PR">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PTY" rel-entity-alias="PERSON" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PTY" rel-entity-alias="PTYGRP" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PTY" rel-entity-alias="PSD" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="PMPA" rel-optional="true">
+            <key-map field-name="primaryPostalAddressId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="PMTN" rel-optional="true">
+            <key-map field-name="primaryTelecomNumberId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="CMEM" rel-optional="true">
+            <key-map field-name="primaryEmailId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PMPA" rel-entity-alias="STTG" rel-optional="true">
+            <key-map field-name="stateProvinceGeoId" rel-field-name="geoId"/>
+        </view-link>
+        <view-link entity-alias="PMPA" rel-entity-alias="CTYG" rel-optional="true">
+            <key-map field-name="countyGeoId" rel-field-name="geoId"/>
+        </view-link>
+        <view-link entity-alias="PMPA" rel-entity-alias="CTRYG" rel-optional="true">
+            <key-map field-name="countryGeoId" rel-field-name="geoId"/>
+        </view-link>           
+    </view-entity>
+
+    <entity entity-name="PartyDeactivation"
+            package-name="org.opentaps.comon.party"
+            title="Party deactivations are soft or hard and not by status, this entity records when they were deactivated.  No foreign keys because partyId might be deleted.">
+      <field name="partyId" type="id-ne"></field>
+      <field name="deactivationTimestamp" type="date-time"></field>
+      <prim-key field="partyId"/>
+      <prim-key field="deactivationTimestamp"/>
+    </entity>
+
+    <extend-entity entity-name="PartyAcctgPreference">
+        <field name="costingMethodId" type="id"/>
+        <field name="salesInvoiceFooterText" type="description"/>
+        <field name="groupSalesTaxOnInvoicePdf" type="indicator"/>
+        <field name="allocPaymentTagsToAppl" type="indicator"/>
+        <field name="autoPostReverseAcctgTrans" type="indicator"/>
+        <relation type="one" fk-name="ACTGPREF_COSTMETH" title="CostingMethod" rel-entity-name="Enumeration">
+            <key-map field-name="costingMethodId" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>
+
+    <!-- ================================== -->
+    <!-- org.opentaps.common.party.viewpref -->
+    <!-- ================================== -->
+
+    <!-- A note on how view preference works: each ViewPreference is defined by a viewPrefTypeId which tells you what kind of view preference it is and an enumeration and a value
+    field which tells you what the users's preference is.  The enumerated view preference takes precedence over the string value.  Many ViewPreferences can be associated with a UserLogin.
+    There are two ways to use ViewPreferences:
+    1.  Define a viewPrefTypeId associated with a particular kind of view you want to give user control: MY_OR_TEAM_ACCOUNTS for example for whether the user should see his teams' accounts or
+    his own accounts.  You can then do a lookup against this viewPrefTypeId.
+    2.  ViewPrefType can be associated with screen and form locations, so you can do a findByAnd against a screen and form location on the ViewPrefAndLocation view-entity and see all the 
+    view preferences related to this screen or form. -->
+
+    <entity entity-name="ViewPreference"
+            package-name="org.opentaps.comon.party.viewpref"
+            title="An application preference for a given userLogin.">
+      <field name="viewPrefTypeId" type="id-ne"></field>
+      <field name="userLoginId" type="id-vlong-ne"></field>
+      <field name="viewPrefValueTypeId" type="id"><description>Whether the value is an Enumeration (viewPrefEnumId) or String (viewPrefString)</description></field>
+      <field name="viewPrefEnumId" type="id"></field>
+      <field name="viewPrefString" type="value"></field>
+      <prim-key field="viewPrefTypeId"/>
+      <prim-key field="userLoginId"/>
+      <relation type="one" fk-name="VPREF_TYPE" rel-entity-name="ViewPrefType">
+        <key-map field-name="viewPrefTypeId"/>
+      </relation>
+      <relation type="one" fk-name="VPREF_VALUE_TYPE" rel-entity-name="ViewPrefValueType">
+        <key-map field-name="viewPrefValueTypeId"/>
+      </relation>
+      <relation type="one" fk-name="VPREF_USR_LOGIN" rel-entity-name="UserLogin">
+        <key-map field-name="userLoginId"/>
+      </relation>
+      <relation type="one" fk-name="VPREF_ENUM" rel-entity-name="Enumeration">
+        <key-map field-name="viewPrefEnumId" rel-field-name="enumId"/>
+      </relation>
+    </entity>
+    <entity entity-name="ViewPrefType"
+            package-name="org.opentaps.comon.party.viewpref"
+            title="Defines a particular View Preference and where it can be applied. For example, MAIN_CSS_STYLE could be free form and used everywhere whereas ORDER_LIST_PREF might be found only in ordermgr orderList screen">
+      <field name="viewPrefTypeId" type="id-ne"></field>
+      <field name="description" type="description"></field>
+      <field name="application" type="value"></field>
+      <field name="applicationSection" type="value"></field>
+      <field name="screenName" type="value"></field>
+      <field name="formName" type="value"></field>
+      <field name="domId" type="id-vlong-ne"/>
+      <prim-key field="viewPrefTypeId"/>
+    </entity>
+    <entity entity-name="ViewPrefValueType"
+            package-name="org.opentaps.comon.party.viewpref"
+            title="Type of value stored in view preference. E.g., Enumeration or String.">
+      <field name="viewPrefValueTypeId" type="id-ne"></field>
+      <field name="description" type="description"></field>
+      <prim-key field="viewPrefValueTypeId"/>
+    </entity>
+    <view-entity entity-name="ViewPrefAndLocation"
+            package-name="org.opentaps.comon.party.viewpref"
+            title="Joins the ViewPreference and ViewPrefType tables so view preferences can be searched by its location in the application.">
+      <member-entity entity-alias="VP" entity-name="ViewPreference"/>
+      <member-entity entity-alias="VPT" entity-name="ViewPrefType"/>
+      <alias-all entity-alias="VP"/>
+      <alias-all entity-alias="VPT"/>
+      <view-link entity-alias="VP" rel-entity-alias="VPT">
+        <key-map field-name="viewPrefTypeId"/>
+      </view-link>
+      <relation type="one" fk-name="VPAL_VIEW_PREF" rel-entity-name="ViewPreference">
+        <key-map field-name="userLoginId"/>
+        <key-map field-name="viewPrefTypeId"/>
+      </relation>
+      <relation type="one" fk-name="VPAL_VIEW_PREF_TY" rel-entity-name="ViewPrefType">
+        <key-map field-name="viewPrefTypeId"/>
+      </relation>
+      <relation type="one" fk-name="VPAL_USER_LOGIN" rel-entity-name="UserLogin">
+        <key-map field-name="userLoginId"/>
+      </relation>
+    </view-entity>
+
+    <entity entity-name="PaginationPreference"
+        package-name="org.opentaps.common.party.viewpref"
+        title="Stores information about what page the user is looking at in a list and what the sort order is.">
+        <field name="userLoginId" type="id-vlong-ne"></field>
+        <field name="paginatorName" type="value"></field>
+        <field name="viewSize" type="numeric"></field>
+        <field name="cursorIndex" type="numeric"></field>
+        <field name="orderBy" type="value"></field>
+        <prim-key field="userLoginId"/>
+        <prim-key field="paginatorName"/>
+    </entity>
+
+    <entity entity-name="WorkEffortViewHistory"
+        package-name="org.opentaps.common.party.viewpref"
+        title="Stores when the work effort was last viewed.">
+        <field name="workEffortId" type="id-ne"></field>
+        <field name="userLoginId" type="id-vlong-ne"></field>
+        <field name="viewedTimestamp" type="date-time"></field>
+        <prim-key field="workEffortId"/>
+        <prim-key field="userLoginId"/>
+    </entity>
+
+    <entity entity-name="EntityViewHistory"
+        package-name="org.opentaps.common.party.viewpref"
+        title="Stores when the entity was last viewed.">
+        <field name="entityName" type="name"></field>
+        <field name="userLoginId" type="id-vlong-ne"></field>
+        <field name="primaryKeyId" type="id-ne"></field>        
+        <field name="viewedTimestamp" type="date-time"></field>
+        <prim-key field="entityName"/>
+        <prim-key field="userLoginId"/>
+        <prim-key field="primaryKeyId"/>
+        <relation type="one" fk-name="EVHIST_USR_LOGIN" rel-entity-name="UserLogin">
+            <key-map field-name="userLoginId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="ProductOrderItemType"
+        package-name="org.opentaps.common.order"
+        title="Relates the default orderItemTypeId for each type of orderTypeId and productTypeId">
+        <field name="productTypeId" type="id-ne"/>
+        <field name="orderTypeId" type="id-ne"/>
+        <field name="orderItemTypeId" type="id-ne"/>
+        <prim-key field="productTypeId"/>
+        <prim-key field="orderTypeId"/>
+    </entity>
+
+    <entity entity-name="ProductInvoiceItemType"
+        package-name="com.opensourcestrategies.financials.invoice"
+        title="Relates the default invoiceItemTypeId for each type of invoiceTypeId and productTypeId">
+        <field name="productTypeId" type="id-ne"/>
+        <field name="invoiceTypeId" type="id-ne"/>
+        <field name="invoiceItemTypeId" type="id-ne"/>
+        <prim-key field="productTypeId"/>
+        <prim-key field="invoiceTypeId"/>
+    </entity>
+    
+    <!-- Extend return header to track the primary order for it -->
+    <extend-entity entity-name="ReturnHeader">
+        <field name="primaryOrderId" type="id"/>
+        <field name="comments" type="very-long"/>
+    </extend-entity>
+
+
+    <!-- This denormalizes the standard ofbiz OrderHeader entity and makes searching easier: ie, all the orders from an organization to a customer, etc. -->
+    <extend-entity entity-name="OrderHeader">
+        <field name="billFromPartyId" type="id-ne"/>
+        <field name="billToPartyId" type="id-ne"/>
+        <relation fk-name="OH_FROM_PTY" title="BillFromVendor" rel-entity-name="Party" type="one">
+            <key-map field-name="billFromPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation fk-name="OH_TO_PTY" title="BillToCustomer" rel-entity-name="Party" type="one">
+            <key-map field-name="billToPartyId" rel-field-name="partyId"/>
+        </relation>
+    </extend-entity>
+
+    <!-- Extend the OrderItemShipGroup entity to provide fields to store third-party account number, postal code and country code,
+         for later propagation to the shipmentRouteSegment records -->
+    <!-- Also extend with status -->
+    <extend-entity entity-name="OrderItemShipGroup">
+        <field name="thirdPartyAccountNumber" type="id"></field>
+        <field name="thirdPartyPostalCode" type="id"></field>
+        <field name="thirdPartyCountryGeoCode" type="id"></field>
+        <field name="statusId" type="id"></field>
+        <relation type="one" fk-name="ORDER_ITSG_STS" rel-entity-name="StatusItem">
+            <key-map field-name="statusId"/>
+        </relation>
+    </extend-entity>
+
+    <!-- Extend the InvoiceTerm entity with some of AgreementTerm's fields -->
+    <extend-entity entity-name="InvoiceTerm">
+      <field name="minQuantity" type="floating-point"></field>
+      <field name="maxQuantity" type="floating-point"></field>
+    </extend-entity>
+
+    <!--
+        Extend the ProductStoreShipmentMeth entity to support COD surcharges in the order entry process.
+        Support userDescription for each shipment method, since these represent choices the user can make.
+        Support minimumRate for lower bounds on estimates (currency is in context of shipping estimates).
+     -->
+    <extend-entity entity-name="ProductStoreShipmentMeth">
+      <field name="codSurcharge" type="floating-point"></field>
+      <field name="userDescription" type="description"/>
+      <field name="minimumRate" type="currency-amount"/>
+    </extend-entity>
+
+    <!-- 
+         Extend the ProductStore entity to support 
+         a switch to control auto-setting of NO_SHIPPING on drop-ship groups 
+         and extend the do not ship feature to block order entry for a product store
+         Also provide a way to specify the default shipment method.
+    -->
+    <extend-entity entity-name="ProductStore">
+      <field name="noShipOnDropShipGroups" type="indicator" />
+      <field name="allowDoNotShipOrders" type="indicator" />
+      <field name="defaultShipmentMethodTypeId" type="id" col-name="DEFAULT_SHIP_METHOD_ID"/>
+      <field name="defaultShippingCarrierPartyId" type="id" col-name="DEFAULT_SHIP_CARRIER_PARTY_ID"/>
+      <relation type="one" rel-entity-name="ShipmentMethodType">
+          <key-map field-name="defaultShipmentMethodTypeId" rel-field-name="shipmentMethodTypeId"/>
+      </relation>
+      <relation type="one" rel-entity-name="Party" fk-name="PRDSTR_DEFCARRIER" title="DefaultCarrier">
+          <key-map field-name="defaultShippingCarrierPartyId" rel-field-name="partyId"/>
+      </relation>
+    </extend-entity>
+
+    <!--
+         Extend the Product entity to add isActive flag indicating the product should not be returned
+         by any lookup / autocompleter
+    -->
+    <extend-entity entity-name="Product">
+      <field name="isActive" type="indicator" />
+    </extend-entity>
+
+    <!-- this is ugly for a reason: in ofbiz, an order is linked to inventory item via OrderItemShipGrpInvRes when it is first
+    created, approved, etc., then when the order is completed, the OISGIR is deleted, and it is linked via ItemIssuance.  It is not
+     possible to optionally join OrderItem to InventoryItem via either OISGIR or ItemIssuance, hence two entities. -->
+    <view-entity entity-name="OrderHeaderItemAndRolesAndInvPending"
+            package-name="org.opentaps.common.order"
+            never-cache="true"
+            title="Links orderheader/role/item to inventory item either via OISGIR for searching pending orders">
+      <member-entity entity-alias="OT" entity-name="OrderRole"/>
+      <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+      <member-entity entity-alias="OI" entity-name="OrderItem"/>
+      <member-entity entity-alias="OISGIR" entity-name="OrderItemShipGrpInvRes"/>
+      <member-entity entity-alias="II" entity-name="InventoryItem"/>
+      <alias entity-alias="OH" name="orderName"/>
+      <alias entity-alias="OH" name="orderId"/>
+      <alias entity-alias="OT" name="partyId"/>
+      <alias entity-alias="OT" name="roleTypeId"/>
+      <alias entity-alias="OH" name="orderTypeId"/>
+      <alias entity-alias="OH" name="orderDate"/>
+      <alias entity-alias="OH" name="entryDate"/>
+      <alias entity-alias="OH" name="visitId"/>
+      <alias entity-alias="OH" name="statusId"/>
+      <alias entity-alias="OH" name="billFromPartyId"/>
+      <alias entity-alias="OH" name="billToPartyId"/>
+      <alias entity-alias="OH" name="createdBy"/>
+      <alias entity-alias="OH" name="firstAttemptOrderId"/>
+      <alias entity-alias="OH" name="currencyUom"/>
+      <alias entity-alias="OH" name="syncStatusId"/>
+      <alias entity-alias="OH" name="billingAccountId"/>
+      <alias entity-alias="OH" name="originFacilityId"/>
+      <alias entity-alias="OH" name="productStoreId"/>
+      <alias entity-alias="OH" name="webSiteId"/>
+      <alias entity-alias="OH" name="grandTotal"/>
+      <alias entity-alias="OH" name="remainingSubTotal"/>
+      <alias entity-alias="OH" name="externalId"/>
+      <alias entity-alias="OI" name="productId"/>
+      <alias entity-alias="OI" name="quantity"/>
+      <alias entity-alias="OI" name="unitPrice"/>
+      <alias entity-alias="OI" name="unitListPrice"/>
+      <alias entity-alias="OI" name="estimatedShipDate"/>
+      <alias entity-alias="OI" name="autoCancelDate"/>
+      <alias entity-alias="OI" name="correspondingPoId"/>
+      <alias entity-alias="II" name="serialNumber"/>
+      <alias entity-alias="II" name="lotId"/>
+
+      <view-link entity-alias="OT" rel-entity-alias="OH">
+        <key-map field-name="orderId"/>
+      </view-link>
+      <view-link entity-alias="OH" rel-entity-alias="OI" rel-optional="true">
+        <key-map field-name="orderId"/>
+      </view-link>
+        <!-- OrderItem links to InventoryItem via OISGIR for pending orders -->
+      <view-link entity-alias="OI" rel-entity-alias="OISGIR" rel-optional="true">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>
+      </view-link>
+      <view-link entity-alias="OISGIR" rel-entity-alias="II" rel-optional="true">
+        <key-map field-name="inventoryItemId"/>
+      </view-link>
+      <relation type="one-nofk" rel-entity-name="OrderType">
+        <key-map field-name="orderTypeId"/>
+      </relation>
+      <relation type="one-nofk" title="Origin" rel-entity-name="Facility">
+        <key-map field-name="originFacilityId" rel-field-name="facilityId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderTypeAttr">
+        <key-map field-name="orderTypeId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderAttribute">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderAdjustment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItem">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderContactMech">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItemBilling">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItemContactMech">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItemRole">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderRole">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderShipment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderStatus">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderTerm">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="WorkOrderItemFulfillment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="ProductOrderItem">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="BillingAccount">
+        <key-map field-name="billingAccountId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderPaymentPreference">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderHeaderNoteView">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="UserLogin">
+        <key-map field-name="createdBy" rel-field-name="userLoginId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
+      </relation>
+      <relation type="one-nofk" title="Sync" rel-entity-name="StatusItem">
+        <key-map field-name="syncStatusId" rel-field-name="statusId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderRequirementCommitment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="ShipmentReceipt">
+        <key-map field-name="orderId"/>
+      </relation>
+    </view-entity>
+
+    <view-entity entity-name="OrderHeaderItemAndRolesAndInvCompleted"
+                package-name="org.opentaps.common.order"
+                never-cache="true"
+                title="Links orderheader/role/item to inventory item either via OISGIR for searching pending orders">
+          <member-entity entity-alias="OT" entity-name="OrderRole"/>
+          <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+          <member-entity entity-alias="OI" entity-name="OrderItem"/>
+          <member-entity entity-alias="ISS" entity-name="ItemIssuance"/>
+          <member-entity entity-alias="II" entity-name="InventoryItem"/>
+          <alias entity-alias="OH" name="orderName"/>
+          <alias entity-alias="OH" name="orderId"/>
+          <alias entity-alias="OT" name="partyId"/>
+          <alias entity-alias="OT" name="roleTypeId"/>
+          <alias entity-alias="OH" name="orderTypeId"/>
+          <alias entity-alias="OH" name="orderDate"/>
+          <alias entity-alias="OH" name="entryDate"/>
+          <alias entity-alias="OH" name="visitId"/>
+          <alias entity-alias="OH" name="statusId"/>
+          <alias entity-alias="OH" name="billFromPartyId"/>
+          <alias entity-alias="OH" name="billToPartyId"/>
+          <alias entity-alias="OH" name="createdBy"/>
+          <alias entity-alias="OH" name="firstAttemptOrderId"/>
+          <alias entity-alias="OH" name="currencyUom"/>
+          <alias entity-alias="OH" name="syncStatusId"/>
+          <alias entity-alias="OH" name="billingAccountId"/>
+          <alias entity-alias="OH" name="originFacilityId"/>
+          <alias entity-alias="OH" name="productStoreId"/>
+          <alias entity-alias="OH" name="webSiteId"/>
+          <alias entity-alias="OH" name="grandTotal"/>
+          <alias entity-alias="OH" name="remainingSubTotal"/>
+          <alias entity-alias="OH" name="externalId"/>
+          <alias entity-alias="OI" name="productId"/>
+          <alias entity-alias="OI" name="quantity"/>
+          <alias entity-alias="OI" name="unitPrice"/>
+          <alias entity-alias="OI" name="unitListPrice"/>
+          <alias entity-alias="OI" name="estimatedShipDate"/>
+          <alias entity-alias="OI" name="autoCancelDate"/>
+          <alias entity-alias="OI" name="correspondingPoId"/>
+          <alias entity-alias="II" name="serialNumber"/>
+          <alias entity-alias="II" name="lotId"/>
+          <view-link entity-alias="OT" rel-entity-alias="OH">
+            <key-map field-name="orderId"/>
+          </view-link>
+          <view-link entity-alias="OH" rel-entity-alias="OI" rel-optional="true">
+            <key-map field-name="orderId"/>
+          </view-link>
+          <!-- OrderItem links to InventoryItem via ItemIssuance for completed orders -->
+          <view-link entity-alias="OI" rel-entity-alias="ISS" rel-optional="true">
+            <key-map field-name="orderId"/>
+            <key-map field-name="orderItemSeqId"/>
+          </view-link>
+          <view-link entity-alias="ISS" rel-entity-alias="II" rel-optional="true">
+            <key-map field-name="inventoryItemId"/>
+          </view-link>
+          <relation type="one-nofk" rel-entity-name="OrderType">
+            <key-map field-name="orderTypeId"/>
+          </relation>
+          <relation type="one-nofk" title="Origin" rel-entity-name="Facility">
+            <key-map field-name="originFacilityId" rel-field-name="facilityId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderTypeAttr">
+            <key-map field-name="orderTypeId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderAttribute">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderAdjustment">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderItem">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderContactMech">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderItemBilling">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderItemContactMech">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderItemRole">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderRole">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderShipment">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderStatus">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderTerm">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="WorkOrderItemFulfillment">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="ProductOrderItem">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="one-nofk" rel-entity-name="BillingAccount">
+            <key-map field-name="billingAccountId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderPaymentPreference">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderHeaderNoteView">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="one-nofk" rel-entity-name="UserLogin">
+            <key-map field-name="createdBy" rel-field-name="userLoginId"/>
+          </relation>
+          <relation type="one-nofk" rel-entity-name="StatusItem">
+            <key-map field-name="statusId"/>
+          </relation>
+          <relation type="one-nofk" title="Sync" rel-entity-name="StatusItem">
+            <key-map field-name="syncStatusId" rel-field-name="statusId"/>
+          </relation>
+          <relation type="many" rel-entity-name="OrderRequirementCommitment">
+            <key-map field-name="orderId"/>
+          </relation>
+          <relation type="many" rel-entity-name="ShipmentReceipt">
+            <key-map field-name="orderId"/>
+          </relation>
+    </view-entity>
+
+
+    <entity entity-name="SalesForecastItem"
+            package-name="org.opentaps.common.order"
+            title="Sales forecast item level detail">
+        <field name="salesForecastItemId" type="id-ne"/>
+        <field name="salesForecastId" type="id-ne"/>
+        <field name="forecastDatetime" type="date-time"/>
+        <field name="productStoreId" type="id-ne"/>
+        <field name="facilityId" type="id-ne"/>
+        <field name="partyId" type="id-ne"/>
+        <field name="productId" type="id-ne"/>
+        <field name="forecastQuantity" type="floating-point"/>
+        <field name="forecastUnitPrice" type="currency-precise"/>
+        <field name="forecastTotalAmount" type="currency-precise"/>
+        <prim-key field="salesForecastItemId"/>
+        <relation type="one" rel-entity-name="SalesForecast" fk-name="SFCITM_SFC">
+            <key-map field-name="salesForecastId"/>
+        </relation>
+        <relation type="one" rel-entity-name="ProductStore" fk-name="SFCITM_STORE">
+            <key-map field-name="productStoreId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Facility" fk-name="SFCITM_FAC">
+            <key-map field-name="facilityId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Party" fk-name="SFCITM_PTY">
+            <key-map field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Product" fk-name="SFCITM_PROD">
+            <key-map field-name="productId"/>
+        </relation>
+
+    </entity>
+
+    <!--
+    Specialized entities for the marketing form templates currently in CRMSFA
+    -->
+
+    <entity entity-name="MergeFormCategory"
+            package-name="org.opentaps.common.forms"
+            title="Contact Merge Form Category Entity">
+      <field name="mergeFormCategoryId" type="id-ne"></field>
+      <field name="mergeFormCategoryName" type="name"></field>
+      <prim-key field="mergeFormCategoryId"/>
+    </entity>
+
+    <entity entity-name="MergeFormToCategory"
+            package-name="org.opentaps.common.forms"
+            title="Associates MergeForm and MergeFormCategory">
+      <field name="mergeFormCategoryId" type="id-ne"></field>
+      <field name="mergeFormId" type="id-ne"></field>
+      <prim-key field="mergeFormId"/>
+      <prim-key field="mergeFormCategoryId"/>
+      <relation type="one" fk-name="MFTC_TO_MERGEFORM" rel-entity-name="MergeForm">
+        <key-map field-name="mergeFormId"/>
+      </relation>
+      <relation type="one" fk-name="MFTC_TO_CATEGORY" rel-entity-name="MergeFormCategory">
+        <key-map field-name="mergeFormCategoryId"/>
+      </relation>
+    </entity>
+
+    <entity entity-name="MergeForm"
+            package-name="org.opentaps.common.forms"
+            title="Contact Merge Form Entity">
+      <field name="mergeFormId" type="id-ne"></field>
+      <field name="partyId" type="id"></field>
+      <field name="mergeFormName" type="name"></field>
+      <field name="subject" type="long-varchar"></field>
+      <field name="description" type="description"></field>
+      <field name="mergeFormText" type="very-long"></field>
+      <field name="showInSelect" type="indicator"></field>
+      <prim-key field="mergeFormId"/>
+      <relation type="many" fk-name="PARTY_MRG_FORM_FK" rel-entity-name="Party">
+        <key-map field-name="partyId"/>
+      </relation>
+    </entity>
+
+    <view-entity entity-name="MergeFormAndCategory"
+            package-name="org.opentaps.common.forms"
+            title="A MergeForm with its Category">
+
+        <member-entity entity-alias="MFTC" entity-name="MergeFormToCategory"/>
+        <member-entity entity-alias="MF"   entity-name="MergeForm"/>
+        <member-entity entity-alias="MFC"  entity-name="MergeFormCategory"/>
+
+        <alias-all entity-alias="MF" />
+        <alias-all entity-alias="MFC" />
+
+        <view-link entity-alias="MF" rel-entity-alias="MFTC" rel-optional="true">
+            <key-map field-name="mergeFormId"/>
+        </view-link>
+        <view-link entity-alias="MFTC" rel-entity-alias="MFC" rel-optional="true">
+            <key-map field-name="mergeFormCategoryId"/>
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="ProductStoreShipMethAndCarrier"
+            package-name="org.opentaps.common.order"
+            title="Product Store Carrier And Shipment Method Type View Entity">
+      <member-entity entity-alias="PSSM" entity-name="ProductStoreShipmentMeth"/>
+      <member-entity entity-alias="SM" entity-name="ShipmentMethodType"/>
+      <member-entity entity-alias="CSM" entity-name="CarrierShipmentMethod"/>
+      <alias entity-alias="PSSM" name="productStoreShipMethId"/>
+      <alias entity-alias="PSSM" name="productStoreId"/>
+      <alias entity-alias="PSSM" name="shipmentMethodTypeId"/>
+      <alias entity-alias="PSSM" name="partyId"/>
+      <alias entity-alias="PSSM" name="roleTypeId"/>
+      <alias entity-alias="PSSM" name="companyPartyId"/>
+      <alias entity-alias="PSSM" name="minSize"/>
+      <alias entity-alias="PSSM" name="maxSize"/>
+      <alias entity-alias="PSSM" name="minTotal"/>
+      <alias entity-alias="PSSM" name="maxTotal"/>
+      <alias entity-alias="PSSM" name="minWeight"/>
+      <alias entity-alias="PSSM" name="maxWeight"/>
+      <alias entity-alias="PSSM" name="allowUspsAddr"/>
+      <alias entity-alias="PSSM" name="requireUspsAddr"/>
+      <alias entity-alias="PSSM" name="allowCompanyAddr"/>
+      <alias entity-alias="PSSM" name="requireCompanyAddr"/>
+      <alias entity-alias="PSSM" name="includeNoChargeItems"/>
+      <alias entity-alias="PSSM" name="includeGeoId"/>
+      <alias entity-alias="PSSM" name="excludeGeoId"/>
+      <alias entity-alias="PSSM" name="includeFeatureGroup"/>
+      <alias entity-alias="PSSM" name="excludeFeatureGroup"/>
+      <alias entity-alias="PSSM" name="sequenceNumber"/>
+      <alias entity-alias="PSSM" name="serviceName"/>
+      <alias entity-alias="PSSM" name="codSurcharge"/>
+      <alias entity-alias="PSSM" name="userDescription"/>
+      <alias entity-alias="PSSM" name="minimumRate"/>
+      <alias entity-alias="SM" name="description"/>
+      <alias entity-alias="CSM" name="carrierServiceCode"/>
+      <view-link entity-alias="PSSM" rel-entity-alias="SM">
+        <key-map field-name="shipmentMethodTypeId"/>
+      </view-link>
+      <view-link entity-alias="PSSM" rel-entity-alias="CSM" rel-optional="true">
+        <key-map field-name="partyId"/>
+        <key-map field-name="roleTypeId"/>
+        <key-map field-name="shipmentMethodTypeId"/>
+      </view-link>
+      <relation type="one-nofk" rel-entity-name="Party">
+        <key-map field-name="companyPartyId" rel-field-name="partyId"/>
+      </relation>
+      <relation type="one-nofk" title="Include"  rel-entity-name="Geo">
+        <key-map field-name="includeGeoId" rel-field-name="geoId"/>
+      </relation>
+      <relation type="one-nofk" title="Exclude" rel-entity-name="Geo">
+        <key-map field-name="excludeGeoId" rel-field-name="geoId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PartyGroup">
+        <key-map field-name="partyId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="ShipmentMethodType">
+        <key-map field-name="shipmentMethodTypeId"/>
+      </relation>
+    </view-entity>
+
+    <view-entity entity-name="ReservedItemDetail"
+        package-name="org.opentaps.common.order"
+        title="View of Reserved Items with details spanning OrderHeader, OrderItem, OrderItemShipGroup, InventoryItem and OrderItemShipGrpInvRes">
+
+        <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+        <member-entity entity-alias="OI" entity-name="OrderItem"/>
+        <member-entity entity-alias="SG" entity-name="OrderItemShipGroup"/>
+        <member-entity entity-alias="RES" entity-name="OrderItemShipGrpInvRes"/>
+        <member-entity entity-alias="II" entity-name="InventoryItem"/>
+
+        <alias entity-alias="OH" name="orderId"/>
+        <alias entity-alias="OH" name="orderTypeId"/>
+        <alias entity-alias="OH" name="orderDate"/>
+        <alias entity-alias="OH" name="orderStatusId" field="statusId"/>
+        <alias entity-alias="OI" name="productId"/>
+        <alias entity-alias="OI" name="orderItemStatusId" field="statusId"/>
+        <alias entity-alias="SG" name="shipGroupSeqId"/>
+        <alias entity-alias="SG" name="carrierPartyId"/>
+        <alias entity-alias="SG" name="shipmentMethodTypeId"/>
+        <alias entity-alias="RES" name="sequenceId"/>
+        <alias entity-alias="RES" name="quantityReserved" field="quantity"/>
+        <alias entity-alias="RES" name="quantityNotAvailable"/>
+        <alias entity-alias="RES" name="reservedDatetime"/>
+        <alias entity-alias="RES" name="promisedDatetime"/>
+        <alias entity-alias="II" name="facilityId"/>
+
+        <view-link entity-alias="RES" rel-entity-alias="OH">
+            <key-map field-name="orderId"/>
+        </view-link>
+        <view-link entity-alias="RES" rel-entity-alias="OI">
+            <key-map field-name="orderId"/>
+            <key-map field-name="orderItemSeqId"/>
+        </view-link>
+        <view-link entity-alias="RES" rel-entity-alias="SG">
+            <key-map field-name="orderId"/>
+            <key-map field-name="shipGroupSeqId"/>
+        </view-link>
+        <view-link entity-alias="RES" rel-entity-alias="II">
+            <key-map field-name="inventoryItemId"/> 
+        </view-link>
+
+        <relation type="one-nofk" title="Order" rel-entity-name="StatusItem">
+            <key-map field-name="orderStatusId" rel-field-name="statusId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="ShipmentMethodType">
+            <key-map field-name="shipmentMethodTypeId"/>
+        </relation>
+    </view-entity>
+
+    <view-entity entity-name="ReservedItemOrderCount"
+        package-name="org.opentaps.common.order"
+        title="As ReservedItemDetail, but with a count of distinct orders that have reserved items">
+
+        <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+        <member-entity entity-alias="OI" entity-name="OrderItem"/>
+        <member-entity entity-alias="RES" entity-name="OrderItemShipGrpInvRes"/>
+        <member-entity entity-alias="II" entity-name="InventoryItem"/>
+
+        <alias entity-alias="OH" name="orderId" function="count-distinct"/>
+        <alias entity-alias="OH" name="orderTypeId" group-by="true"/>
+        <alias entity-alias="OH" name="orderStatusId" field="statusId" group-by="false"/>
+        <alias entity-alias="OI" name="orderItemStatusId" field="statusId" group-by="false"/>
+        <alias entity-alias="RES" name="quantityNotAvailable" group-by="false"/>
+        <alias entity-alias="II" name="facilityId" group-by="true"/>
+
+        <view-link entity-alias="RES" rel-entity-alias="OH">
+            <key-map field-name="orderId"/>
+        </view-link>
+        <view-link entity-alias="RES" rel-entity-alias="OI">
+            <key-map field-name="orderId"/>
+            <key-map field-name="orderItemSeqId"/>
+        </view-link>
+        <view-link entity-alias="RES" rel-entity-alias="II">
+            <key-map field-name="inventoryItemId"/> 
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="ReservedItemProductCount"
+        package-name="org.opentaps.common.order"
+        title="As ReservedItemDetail, but with a count of distinct products that are reserved">
+
+        <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+        <member-entity entity-alias="OI" entity-name="OrderItem"/>
+        <member-entity entity-alias="RES" entity-name="OrderItemShipGrpInvRes"/>
+        <member-entity entity-alias="II" entity-name="InventoryItem"/>
+
+        <alias entity-alias="OH" name="orderTypeId" group-by="true"/>
+        <alias entity-alias="OH" name="orderStatusId" field="statusId" group-by="false"/>
+        <alias entity-alias="OI" name="productId" function="count-distinct"/>
+        <alias entity-alias="OI" name="orderItemStatusId" field="statusId" group-by="false"/>
+        <alias entity-alias="RES" name="quantityNotAvailable" group-by="false"/>
+        <alias entity-alias="II" name="facilityId" group-by="true"/>
+
+        <view-link entity-alias="RES" rel-entity-alias="OH">
+            <key-map field-name="orderId"/>
+        </view-link>
+        <view-link entity-alias="RES" rel-entity-alias="OI">
+            <key-map field-name="orderId"/>
+            <key-map field-name="orderItemSeqId"/>
+        </view-link>
+        <view-link entity-alias="RES" rel-entity-alias="II">
+            <key-map field-name="inventoryItemId"/> 
+        </view-link>
+    </view-entity>
+
+    <!-- Extend the CustRequest entity with a fulfilledDateTime field in order to more easily track fulfilled catalog requests -->
+    <extend-entity entity-name="CustRequest">
+        <field name="fulfilledDateTime" type="date-time"/>
+    </extend-entity>
+
+    <view-entity entity-name="ShipGroupRouteSegAndInvoice"
+        package-name="org.opentaps.common.order"
+        title="ShipGroupRouteSegAndInvoice">
+
+        <member-entity entity-alias="OISG" entity-name="OrderItemShipGroup"/>
+        <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+        <member-entity entity-alias="OPP" entity-name="OrderPaymentPreference"/>
+        <member-entity entity-alias="S" entity-name="Shipment"/>
+        <member-entity entity-alias="SRS" entity-name="ShipmentRouteSegment"/>
+        <member-entity entity-alias="SIB" entity-name="ShipmentItemBilling"/>
+        <member-entity entity-alias="I" entity-name="Invoice"/>
+
+        <alias-all entity-alias="I"/>
+        <alias entity-alias="OISG" name="carrierPartyId"/> 
+        <alias entity-alias="OH" name="orderTypeId"/> 
+        <alias entity-alias="OPP" name="paymentMethodTypeId"/> 
+        <alias entity-alias="OPP" name="oppStatusId" field="statusId"/> 
+        <alias entity-alias="S" name="shipmentId"/>
+        <alias entity-alias="S" name="shipmentTypeId"/>
+        <alias entity-alias="S" name="shipmentStatusId" field="statusId"/> 
+        <alias entity-alias="SRS" name="trackingIdNumber"/> 
+
+        <view-link entity-alias="OISG" rel-entity-alias="OH">
+            <key-map field-name="orderId"/>
+        </view-link>
+        <view-link entity-alias="OISG" rel-entity-alias="OPP">
+            <key-map field-name="orderId"/>
+        </view-link>
+        <view-link entity-alias="OISG" rel-entity-alias="S">
+            <key-map field-name="orderId" rel-field-name="primaryOrderId"/>
+            <key-map field-name="shipGroupSeqId" rel-field-name="primaryShipGroupSeqId"/>
+        </view-link>
+        <view-link entity-alias="S" rel-entity-alias="SRS">
+            <key-map field-name="shipmentId"/>
+        </view-link>
+        <view-link entity-alias="S" rel-entity-alias="SIB">
+            <key-map field-name="shipmentId"/>
+        </view-link>
+        <view-link entity-alias="SIB" rel-entity-alias="I">
+            <key-map field-name="invoiceId"/>
+        </view-link>
+
+        <relation type="one-nofk" rel-entity-name="Invoice">
+            <key-map field-name="invoiceId"/>
+        </relation>
+    </view-entity>
+
+    <extend-entity entity-name="Requirement">
+        <!-- Since requirements can be created from multiple sources, we need a way to know what orderItemTypeId to use. -->
+        <field name="orderItemTypeId" type="id"/>
+        <!-- Meant for inventory transfer requirements -->
+        <field name="facilityIdTo" type="id-ne"/>
+        <relation type="one" rel-entity-name="OrderItemType" fk-name="REQ_ORDITM_TY">
+            <key-map field-name="orderItemTypeId"/>
+        </relation>
+        <relation type="one" title="To" rel-entity-name="Facility" fk-name="REQ_TO_FACILITY">
+            <key-map field-name="facilityIdTo" rel-field-name="facilityId"/>
+        </relation>
+    </extend-entity>
+
+    <!-- This is to track which outsourced tasks have been fulfilled. -->
+    <extend-entity entity-name="WorkOrderItemFulfillment">
+        <field name="quantityFulfilled" type="floating-point"/>
+    </extend-entity>
+
+    <entity entity-name="CashDrawer" package-name="org.opentaps.common.order" title="Cash Drawer">
+        <field name="cashDrawerId" type="id-ne"/>
+        <field name="openUserLoginId" type="id-vlong-ne"/>
+        <field name="operatorUserLoginId" type="id-vlong-ne"/>
+        <field name="closeUserLoginId" type="id-vlong-ne"/>
+        <field name="openTimestamp" type="date-time"/>
+        <field name="closeTimestamp" type="date-time"/>
+        <field name="currencyUomId" type="id"/>
+        <field name="initialAmount" type="currency-precise"/>
+        <field name="finalAmount" type="currency-precise"/>
+        <field name="closingVarianceAmount" type="currency-precise"/>
+        <field name="openingComments" type="comment"/>
+        <field name="closingComments" type="comment"/>
+        <field name="forcedClose" type="indicator"/>
+        <prim-key field="cashDrawerId"/>
+        <relation type="one" rel-entity-name="UserLogin" title="Open" fk-name="CD_OULID">
+            <key-map field-name="openUserLoginId" rel-field-name="userLoginId"/>
+        </relation>
+        <relation type="one" rel-entity-name="UserLogin" title="Operator" fk-name="CD_OPULID">
+            <key-map field-name="operatorUserLoginId" rel-field-name="userLoginId"/>
+        </relation>
+        <relation type="one" rel-entity-name="UserLogin" title="Close" fk-name="CD_CULID">
+            <key-map field-name="closeUserLoginId" rel-field-name="userLoginId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Uom" fk-name="CD_CUOM">
+            <key-map field-name="currencyUomId" rel-field-name="uomId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="CashDrawerTransaction" package-name="org.opentaps.common.order" title="Cash Drawer Transaction">
+        <field name="cashDrawerId" type="id-ne"/>
+        <field name="cashDrawerItemSeqId" type="id-ne"/>
+        <field name="paymentId" type="id"/>
+        <prim-key field="cashDrawerId"/>
+        <prim-key field="cashDrawerItemSeqId"/>
+        <relation type="one" rel-entity-name="CashDrawer" fk-name="CDT_CD">
+            <key-map field-name="cashDrawerId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Payment" fk-name="CDT_P">
+            <key-map field-name="paymentId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="CashDrawerTransPaymentAndMType"
+        package-name="org.opentaps.common.order"
+        title="CashDrawerTransPaymentAndMType">
+
+        <member-entity entity-alias="CDT" entity-name="CashDrawerTransaction"/>
+        <member-entity entity-alias="P" entity-name="Payment"/>
+        <member-entity entity-alias="PMT" entity-name="PaymentMethodType"/>
+
+        <alias-all entity-alias="P"/>
+        <alias entity-alias="CDT" name="cashDrawerId"/> 
+        <alias entity-alias="CDT" name="cashDrawerItemSeqId"/> 
+        <alias entity-alias="P" name="paymentMethodTypeId"/> 
+        <alias entity-alias="PMT" name="description"/> 
+
+        <view-link entity-alias="CDT" rel-entity-alias="P">
+            <key-map field-name="paymentId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PMT">
+            <key-map field-name="paymentMethodTypeId"/>
+        </view-link>
+
+        <relation type="one" rel-entity-name="PaymentType" fk-name="CDTPAMT_PT">
+            <key-map field-name="paymentTypeId"/>
+        </relation>
+    </view-entity>
+
+
+    <!-- Extend PartyCarrierAccount with postal and country codes, since some carriers require these in
+            addition to the account number (which exists in PCA already) -->
+    <extend-entity entity-name="PartyCarrierAccount">
+      <field name="postalCode" type="id"></field>
+      <field name="countryGeoCode" type="id"></field>
+      <field name="isDefault" type="indicator"/>
+    </extend-entity>
+
+    <view-entity entity-name="OrderPaymentPrefAndPayment"
+        package-name="org.opentaps.common.order"
+        title="Join of OPP and Payment">
+        <member-entity entity-alias="OPP" entity-name="OrderPaymentPreference"/>
+        <member-entity entity-alias="P" entity-name="Payment"/>
+        <alias-all entity-alias="OPP"/>
+        <alias-all entity-alias="P" prefix="payment"/>
+        <view-link entity-alias="OPP" rel-entity-alias="P">
+            <key-map field-name="orderPaymentPreferenceId" rel-field-name="paymentPreferenceId"/>
+        </view-link>
+        <relation type="one" rel-entity-name="PaymentType" fk-name="OPPAP_PT">
+            <key-map field-name="paymentPaymentTypeId" rel-field-name="paymentTypeId"/>
+        </relation>
+    </view-entity>
+    
+    <entity entity-name="ProductStoreFacilityByAddress"
+        package-name="org.opentaps.common.order"
+        table-name="PROD_STORE_FACILITY_BY_ADDR"
+        title="Associates addresses with facilities on a per store basis.">
+        <field name="productStoreId" type="id"></field>
+        <field name="contactMechId" type="id"></field>
+        <field name="facilityId" type="id"></field>
+        <prim-key field="productStoreId"/>
+        <prim-key field="contactMechId"/>
+        <relation type="one" rel-entity-name="ProductStore" fk-name="PSFBA_PS">
+            <key-map field-name="productStoreId"/>
+        </relation>
+        <relation type="one" rel-entity-name="PostalAddress" fk-name="PSFBA_PA">
+            <key-map field-name="contactMechId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Facility" fk-name="PSFBA_F">
+            <key-map field-name="facilityId"/>
+        </relation>
+    </entity>
+
+    <!-- Add some relations to the work effort views -->
+    <extend-entity entity-name="WorkEffortAndPartyAssign">
+        <relation type="one-nofk" title="Current" rel-entity-name="StatusItem">
+            <key-map field-name="currentStatusId" rel-field-name="statusId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="WorkEffortPurposeType">
+            <key-map field-name="workEffortPurposeTypeId"/>
+        </relation>
+    </extend-entity>
+    <extend-entity entity-name="WorkEffortAndSalesOpportunity">
+        <relation type="one-nofk" title="Current" rel-entity-name="StatusItem">
+            <key-map field-name="currentStatusId" rel-field-name="statusId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="WorkEffortType">
+            <key-map field-name="workEffortTypeId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="WorkEffortPurposeType">
+            <key-map field-name="workEffortPurposeTypeId"/>
+        </relation>
+    </extend-entity>
+    <extend-entity entity-name="WorkEffortCustRequestView">
+        <relation type="one-nofk" title="Current" rel-entity-name="StatusItem">
+            <key-map field-name="currentStatusId" rel-field-name="statusId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="WorkEffortType">
+            <key-map field-name="workEffortTypeId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="WorkEffortPurposeType">
+            <key-map field-name="workEffortPurposeTypeId"/>
+        </relation>
+    </extend-entity>
+
+    <view-entity entity-name="ShipmentAndOrderItemShipGroup"
+        package-name="org.opentaps.common.order"
+            title="Shipment and Order Item Ship Group">
+      <description>Relating OISG with shipment</description>
+      <member-entity entity-alias="SI" entity-name="ShipmentItem"/>
+      <member-entity entity-alias="II" entity-name="ItemIssuance"/>
+      <member-entity entity-alias="OISGA" entity-name="OrderItemShipGroupAssoc"/>
+      <alias entity-alias="SI" name="shipmentId"/>
+      <alias entity-alias="OISGA" name="orderId"/>
+      <alias entity-alias="OISGA" name="shipGroupSeqId"/>
+      <view-link entity-alias="SI" rel-entity-alias="II">
+        <key-map field-name="shipmentId"/>
+        <key-map field-name="shipmentItemSeqId"/>
+      </view-link>
+      <view-link entity-alias="II" rel-entity-alias="OISGA">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>
+      </view-link>
+      <relation type="one" rel-entity-name="Shipment" fk-name="SAOITSG_S">
+          <key-map field-name="shipmentId"/>
+      </relation>
+      <relation type="one" rel-entity-name="OrderItemShipGroup" fk-name="SAOITSG_OISG">
+          <key-map field-name="orderId"/>
+          <key-map field-name="shipGroupSeqId"/>
+      </relation>
+    </view-entity>
+
+    <view-entity entity-name="PicklistItemAndOdrItmShipGrp"
+        package-name="org.opentaps.common.shipment"
+            title="Picklist Item and OrderItemShipGroup">
+      <member-entity entity-alias="PL" entity-name="Picklist"/>
+      <member-entity entity-alias="PLB" entity-name="PicklistBin"/>
+      <member-entity entity-alias="PI" entity-name="PicklistItem"/>
+      <member-entity entity-alias="OISG" entity-name="OrderItemShipGroup"/>
+      <member-entity entity-alias="OI" entity-name="OrderItem"/>
+      <member-entity entity-alias="II" entity-name="InventoryItem"/>
+      <alias-all entity-alias="PL" prefix="p"/>
+      <alias-all entity-alias="PLB" prefix="pb"/>
+      <alias-all entity-alias="PI" prefix="pi"/>
+      <alias-all entity-alias="OISG" prefix="oisg"/>
+      <alias-all entity-alias="OI" prefix="oi"/>
+      <alias-all entity-alias="II" prefix="ii"/>
+      <view-link entity-alias="PL" rel-entity-alias="PLB">
+        <key-map field-name="picklistId"/>
+      </view-link>
+      <view-link entity-alias="PLB" rel-entity-alias="PI">
+        <key-map field-name="picklistBinId"/>
+      </view-link>
+      <view-link entity-alias="PI" rel-entity-alias="OISG">
+        <key-map field-name="orderId"/>
+        <key-map field-name="shipGroupSeqId"/>
+      </view-link>
+      <view-link entity-alias="PI" rel-entity-alias="OI">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>
+      </view-link>
+      <view-link entity-alias="PI" rel-entity-alias="II">
+        <key-map field-name="inventoryItemId"/>
+      </view-link>
+      <relation type="one" rel-entity-name="Picklist" fk-name="PIAOISG_P">
+          <key-map field-name="pPicklistId" rel-field-name="picklistId"/>
+      </relation>
+    </view-entity>
+
+
+    <entity entity-name="FacilityTransferPlan"
+            package-name="org.opentaps.common.shipment"
+            title="Time schedule of planned inventory transfers between facilities">
+        <field name="facilityTransferPlanId" type="id-ne"/>
+        <field name="facilityIdFrom" type="id-ne"/>
+        <field name="facilityIdTo" type="id-ne"/>
+        <field name="scheduledTransferDatetime" type="date-time"/>
+        <prim-key field="facilityTransferPlanId"/>
+        <relation type="one" rel-entity-name="Facility" title="From" fk-name="FACXFRPLAN_FACFROM">
+            <key-map field-name="facilityIdFrom" rel-field-name="facilityId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Facility" title="To" fk-name="FACXFERPLAN_FACTO">
+            <key-map field-name="facilityIdTo" rel-field-name="facilityId"/>
+        </relation>
+    </entity>
+
+    <!-- Extend Shipment with returnId to make the relation between the two -->
+    <extend-entity entity-name="Shipment">
+        <field name="returnId" type="id"/>
+        <relation type="one" rel-entity-name="ReturnHeader" fk-name="SHIPMENT_RETURN">
+            <key-map field-name="returnId"/>
+        </relation>
+    </extend-entity>
+
+    <!-- Extend ReturnHeader with fields to store information for creating a return shipment  -->
+    <extend-entity entity-name="ReturnHeader">
+        <field name="carrierReturnServiceId" type="id"/>
+        <field name="originPhoneContactMechId" type="id"/>
+        <field name="estimatedWeight" type="floating-point"/>
+        <field name="estimatedWeightUomId" type="id"/>
+        <relation type="one" rel-entity-name="CarrierReturnService" fk-name="RH_CRS">
+            <key-map field-name="carrierReturnServiceId"/>
+        </relation>
+        <relation type="one" fk-name="RH_OPCM" title="OriginPhone" rel-entity-name="ContactMech">
+            <key-map field-name="originPhoneContactMechId" rel-field-name="contactMechId"/>
+        </relation>
+        <relation type="one-nofk" title="Origin" rel-entity-name="TelecomNumber">
+            <key-map field-name="originPhoneContactMechId" rel-field-name="contactMechId"/>
+        </relation>
+    </extend-entity>
+
+    <entity entity-name="CarrierReturnService" package-name="org.opentaps.common.shipment">
+        <description>Stores definitions for Return Services from carriers (such as UPS' 1-Attempt Return service)</description>
+        <field name="carrierReturnServiceId" type="id-ne"/>
+        <field name="carrierPartyId" type="id-ne"/>
+        <field name="shipmentMethodTypeId" type="id-ne"/>
+        <field name="carrierServiceCode" type="short-varchar"/>
+        <field name="description" type="description"/>
+        <prim-key field="carrierReturnServiceId"/>
+        <relation type="one" rel-entity-name="Party" fk-name="CRS_CP">
+            <key-map field-name="carrierPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="ShipmentMethodType" fk-name="CRS_SMT">
+            <key-map field-name="shipmentMethodTypeId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="InventoryItemValueHistory" package-name="org.opentaps.common.facility">
+        <field name="inventoryItemValueHistId" type="id-ne"/>
+        <field name="inventoryItemId" type="id-ne"/>
+        <field name="dateTime" type="date-time"/>
+        <field name="unitCost" type="floating-point"/>
+        <field name="setByUserLogin" type="id-vlong-ne"/>
+        <prim-key field="inventoryItemValueHistId"/>
+        <relation type="one-nofk" rel-entity-name="InventoryItem">
+            <key-map field-name="inventoryItemId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="UserLogin">
+            <key-map field-name="setByUserLogin" rel-field-name="userLoginId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="WorkEffortPartyAssignCommEvent" package-name="org.opentaps.common.workeffort">
+        <member-entity entity-alias="WE" entity-name="WorkEffort"/>
+        <member-entity entity-alias="WEPA" entity-name="WorkEffortPartyAssignment"/>
+        <member-entity entity-alias="COMWE" entity-name="CommunicationEventWorkEff"/>
+        <member-entity entity-alias="COM" entity-name="CommunicationEvent"/>
+        <alias-all entity-alias="WE"/>
+        <alias-all entity-alias="WEPA">
+            <exclude field="facilityId"/>
+            <exclude field="statusId"/>
+        </alias-all>
+        <alias-all entity-alias="COMWE">
+            <exclude field="description"/>
+        </alias-all>
+        <alias-all entity-alias="COM">
+            <exclude field="statusId"/>
+        </alias-all>
+        <alias name="assignmentStatusId" entity-alias="WEPA" field="statusId"/>
+        <alias name="commEventStatusId" entity-alias="COM" field="statusId"/>
+        <view-link entity-alias="WE" rel-entity-alias="WEPA">
+            <key-map field-name="workEffortId"/>
+        </view-link>
+        <view-link entity-alias="WE" rel-entity-alias="COMWE">
+            <key-map field-name="workEffortId"/>
+        </view-link>
+        <view-link entity-alias="COMWE" rel-entity-alias="COM">
+            <key-map field-name="communicationEventId"/>
+        </view-link>
+        <relation type="one" rel-entity-name="WorkEffort">
+            <key-map field-name="workEffortId"/>
+        </relation>
+        <relation type="many" rel-entity-name="CustRequestWorkEffort">
+            <key-map field-name="workEffortId"/>
+        </relation>
+        <relation type="many" rel-entity-name="OrderHeaderWorkEffort">
+            <key-map field-name="workEffortId"/>
+        </relation>
+    </view-entity>
+
+    <!-- =========================== -->
+    <!-- org.opentaps.common.product -->
+    <!-- =========================== -->    
+
+    <view-entity entity-name="ProductAndGoodIdentification"
+        package-name="com.opensourcestrategies.crmsfa.product"
+        title="Product joined with optional GoodIdentification data for use with product lookups.">
+      <member-entity entity-alias="PR" entity-name="Product"/>
+      <member-entity entity-alias="GI" entity-name="GoodIdentification"/>
+      <member-entity entity-alias="PK" entity-name="ProductKeyword"/>
+      <alias-all entity-alias="PR" />
+      <alias-all entity-alias="GI" />
+      <alias-all entity-alias="PK" />
+      <view-link entity-alias="PR" rel-entity-alias="GI" rel-optional="true">
+        <key-map field-name="productId"/>
+      </view-link>
+      <view-link entity-alias="PR" rel-entity-alias="PK" rel-optional="true">
+        <key-map field-name="productId"/>
+      </view-link>
+    </view-entity>
+
+    <view-entity entity-name="ProductAndPriceAndGoodIdentificationView"
+            package-name="org.opentaps.common.product"
+            title="Product And Price View">
+      <member-entity entity-alias="PR" entity-name="Product"/>
+      <member-entity entity-alias="PP" entity-name="ProductPrice"/>
+      <alias entity-alias="PR" name="productId"/>
+      <alias entity-alias="PR" name="productTypeId"/>
+      <alias entity-alias="PR" name="productName"/>
+      <alias entity-alias="PR" name="internalName"/>
+      <alias entity-alias="PR" name="description"/>
+      <alias entity-alias="PR" name="primaryProductCategoryId"/>
+      <alias entity-alias="PR" name="isVirtual"/>
+      <alias entity-alias="PR" name="salesDiscontinuationDate"/>
+      <alias entity-alias="PP" name="productPriceTypeId"/>
+      <alias entity-alias="PP" name="productPricePurposeId"/>
+      <alias entity-alias="PP" name="currencyUomId"/>
+      <alias entity-alias="PP" name="fromDate"/>
+      <alias entity-alias="PP" name="thruDate"/>
+      <alias entity-alias="PP" name="price"/>
+      <view-link entity-alias="PR" rel-entity-alias="PP">
+        <key-map field-name="productId"/>
+      </view-link>
+    </view-entity>
+
+    <view-entity entity-name="ProductStoreGroupAndProductStore" package-name="org.opentaps.purchasing.mrp"
+            title="Links ProductStoreGroup and ProductStore">
+        <member-entity entity-alias="PSG" entity-name="ProductStoreGroup"/>
+        <member-entity entity-alias="PSGM" entity-name="ProductStoreGroupMember"/>        
+        <member-entity entity-alias="PS" entity-name="ProductStore"/>
+        <alias-all entity-alias="PSG"/>
+        <alias-all entity-alias="PSGM">
+            <exclude field="productStoreGroupId"/>
+            <exclude field="productStoreId"/>
+        </alias-all>
+        <alias-all entity-alias="PS"/>
+        <view-link entity-alias="PSG" rel-entity-alias="PSGM" rel-optional="true">
+            <key-map field-name="productStoreGroupId"/>
+        </view-link>
+        <view-link entity-alias="PSGM" rel-entity-alias="PS" rel-optional="true">
+            <key-map field-name="productStoreId"/>
+        </view-link>
+        <relation type="one-nofk" rel-entity-name="ProductStoreGroup">
+            <key-map field-name="productStoreGroupId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="ProductStore">
+            <key-map field-name="productStoreId"/>
+        </relation>  
+    </view-entity>        
+
+    <!-- =============== -->
+    <!-- Report Registry -->
+    <!-- =============== -->
+    <entity entity-name="ReportRegistry" package-name="org.opentaps.common.reporting">
+        <description>Available Reports Registry</description>
+        <field name="reportId" type="id-ne"/>
+        <field name="shortName" type="short-varchar"/>
+        <field name="description" type="very-long"/>
+        <field name="reportLocation" type="url"/>
+        <field name="setupUri" type="url"/>
+        <prim-key field="reportId"/>
+    </entity>
+
+    <entity entity-name="ReportGroup" package-name="org.opentaps.common.reporting">
+        <description>In order to split all available reports to logical groups this entity contains group names.</description>
+        <field name="reportGroupId" type="id-ne"/>
+        <field name="description" type="description"/>
+        <field name="application" type="name"/>
+        <field name="showInSelect" type="indicator"/>
+        <field name="sequenceNum" type="numeric"/>
+        <prim-key field="reportGroupId"/>
+        <relation rel-entity-name="ReportGroupMember" type="many" fk-name="RG_RGM">
+            <key-map field-name="reportGroupId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="ReportGroupMember" package-name="org.opentaps.common.reporting">
+        <description>Map between reports and groups.</description>
+        <field name="reportGroupId" type="id-ne"/>
+        <field name="reportId" type="id-ne"/>
+        <field name="sequenceNum" type="numeric"/>
+        <prim-key field="reportGroupId"/>
+        <prim-key field="reportId"/>
+        <relation rel-entity-name="ReportRegistry" type="one" fk-name="RGM_R">
+            <key-map field-name="reportId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="ReportGroupMemberRegistry" package-name="org.opentaps.common"
+                 title="Report group member and the associated ReportRegistry">
+        <member-entity entity-alias="RGM"  entity-name="ReportGroupMember"/>
+        <member-entity entity-alias="RR" entity-name="ReportRegistry"/>
+        <alias-all entity-alias="RR"/>   
+        <alias-all entity-alias="RGM"/>     
+        <view-link entity-alias="RGM" rel-entity-alias="RR">
+            <key-map field-name="reportId"/>
+        </view-link>
+    </view-entity>
+
+    <!-- =================================== -->
+    <!-- org.opentaps.common.reporting.tests -->
+    <!-- =================================== -->
+    <entity entity-name="TestGeoData" package-name="org.opentaps.common.reporting.tests">
+        <description>Geo data for generation of customer address data for analytics testing</description>
+        <field name="geoRowId" type="id-ne"/>
+        <field name="city" type="short-varchar"/>
+        <field name="stateGeoId" type="id"/>
+        <field name="postalCode" type="very-short"/>
+        <field name="countryGeoId" type="id"/>
+        <prim-key field="geoRowId"/>
+        <relation rel-entity-name="Geo" type="one" title="State" fk-name="TEST_STATE_GEO">
+            <key-map field-name="stateGeoId" rel-field-name="geoId"/>
+        </relation>
+        <relation rel-entity-name="Geo" type="one" title="Country" fk-name="TEST_COUNTRY_GEO">
+            <key-map field-name="countryGeoId" rel-field-name="geoId"/>
+        </relation>
+    </entity>
+
+    <!-- add specific fields from SupplierImport -->
+    <extend-entity entity-name="PartyGroup">
+        <field name="isIncorporated" type="indicator"/>
+        <field name="federalTaxId" type="long-varchar" encrypt="true"/>
+        <field name="requires1099" type="indicator"/>
+    </extend-entity>
+
+    <!-- ============================ -->
+    <!-- org.opentaps.common.voip -->
+    <!-- ============================ -->    
+    <entity entity-name="ExternalUser"
+            package-name="org.opentaps.common"
+            title="External User Entity">
+      <field name="autoId" type="id-ne" />
+      <field name="partyId" type="id" />
+      <field name="externalUserTypeId" type="id" />
+      <field name="externalUserId" type="short-varchar" />
+      <field name="externalPassword" type="short-varchar" encrypt="true"/>
+      <field name="fromDate" type="date-time" />
+      <field name="thruDate" type="date-time" /> 
+      <prim-key field="autoId"/>
+      <relation type="one" fk-name="EX_USER_USERTYPE" rel-entity-name="ExternalUserType">
+        <key-map field-name="externalUserTypeId"/>
+      </relation>
+    </entity>  
+    <entity entity-name="ExternalUserType"
+            package-name="org.opentaps.common"
+            title="External User Type Entity">
+      <field name="externalUserTypeId" type="id-ne"/>
+      <field name="description"  type="description"/>
+      <prim-key field="externalUserTypeId"/>
+    </entity>    
+    <!-- ========================= -->
+    <!-- org.opentaps.common.other -->
+    <!-- ========================= -->
+
+    <!-- Page view history -->
+    <entity entity-name="ViewHistory"
+            package-name="org.opentaps.common"
+            title="User navigation history records.">
+
+        <field name="viewHistoryId" type="id-ne"/>
+        <field name="uri" type="very-long"/>
+        <field name="userLoginId" type="long-varchar"/>
+        <field name="applicationName" type="name"/>
+        <field name="webAppName" type="name"/>
+        <field name="contextInfo" type="description"/>
+        <field name="expireAt" type="date-time"/>
+        <field name="digest" type="long-varchar"/>
+        <prim-key field="viewHistoryId"/>
+        <index name="contextIndex" unique="false">
+            <index-field name="userLoginId"/>
+            <index-field name="applicationName"/>
+            <index-field name="webAppName"/>
+        </index>
+
+    </entity>
+
+    <!-- Links for the help page on wiki -->
+    <entity entity-name="ContextHelpResource"
+            package-name="org.opentaps.common"
+            title="User contextual help.">
+
+        <field name="contextHelpResourceId" type="id-ne"/>
+        <field name="screenName" type="id-vlong"/>
+        <field name="applicationName" type="id"/>
+        <field name="screenState" type="id"/>
+        <field name="remotePageName" type="id-vlong-ne"/>
+        <field name="remotePageVersion" type="id"/>
+        <field name="overrideUrlPattern" type="long-varchar"/>
+        <prim-key field="contextHelpResourceId"/>
+
+    </entity>
+
+    <!-- Miscellaneous view user preferences -->
+    <entity entity-name="UserLoginViewPreference"
+            package-name="org.opentaps.common"
+            title="Miscellaneous view user preferences.">
+
+        <field name="userLoginId" type="id-ne"/>
+        <field name="applicationName" type="id"/>
+        <field name="screenName" type="id-vlong"/>
+        <field name="preferenceName" type="id-vlong"/>
+        <field name="preferenceValue" type="id-vlong"/>
+
+        <prim-key field="userLoginId"/>
+        <prim-key field="applicationName"/>
+        <prim-key field="screenName"/>
+        <prim-key field="preferenceName"/>
+
+    </entity>
+ 
+    <!-- =================== -->
+    <!-- org.opentaps.common -->
+    <!-- =================== -->
+    
+    <entity entity-name="KeyboardShortcutHandler" package-name="org.opentaps.common">
+        <field name="actionTypeId" type="id-ne"/>
+        <field name="shortcutHandler" type="short-varchar">
+          <description>The target JS function that is called for creating this type of shortcut, pasing two arguments "shortcut" and "actionTarget".</description>
+        </field>
+        <field name="description" type="description"/>
+        <prim-key field="actionTypeId"/>
+    </entity>
+
+    <entity entity-name="KeyboardShortcut" package-name="org.opentaps.common">
+       <field name="shortcutId" type="id-ne"/>
+        <field name="userLoginId" type="id-vlong-ne">
+          <description>The user for which the shortcut applies, optional, leave blank to match all users.</description>
+        </field>
+        <field name="applicationName" type="short-varchar">
+          <description>The application for which the sortcut applies (eg: crmsfa, financials, ...), optional, leave blank to match all applications.</description>
+        </field>
+        <field name="screenName" type="short-varchar">
+          <description>The screen for which the sortcut applies, optional, leave blank to match all screens.</description>
+        </field>
+        <field name="shortcut" type="short-varchar">
+          <description>The shortcut string defining the key strokes (eg: ctrl+alt+m).</description>
+        </field>
+        <field name="actionTypeId" type="id-ne">
+          <description>The type of action, for example "url" to go to the target url, "focus" to give focus to the target DOM element, ...</description>
+        </field>
+        <field name="actionTarget" type="short-varchar">
+          <description>The target of the action, for example the target url to go to, or the DOM element id to focus, ...</description>
+        </field>
+        <field name="description" type="description">
+          <description>A description of the shortcut, used for user help.</description>
+        </field>
+        <field name="sequenceNum" type="numeric"/>
+        <prim-key field="shortcutId"/>
+        <relation type="one" rel-entity-name="UserLogin" fk-name="KB_UL">
+            <key-map field-name="userLoginId" />
+        </relation>
+        <relation type="one" rel-entity-name="KeyboardShortcutHandler" fk-name="KB_TYPE_HANDLER">
+            <key-map field-name="actionTypeId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="KeyboardShortcutAndHandler" package-name="org.opentaps.common"
+                 title="The KeyboardShortcut and the associated Handler">
+        <member-entity entity-alias="KB"  entity-name="KeyboardShortcut"/>
+        <member-entity entity-alias="KBH" entity-name="KeyboardShortcutHandler"/>        
+        <alias-all entity-alias="KB"/>
+        <alias-all entity-alias="KBH">
+          <exclude field="description"/>
+        </alias-all>
+        <alias name="handlerDescription" field="description" entity-alias="KBH"/>
+
+        <view-link entity-alias="KB" rel-entity-alias="KBH">
+            <key-map field-name="actionTypeId"/>
+        </view-link>
+    </view-entity>
+
+  <!-- it come from ofbiz applications/manufacturing/entitydef/entitymodel.xml, we move it here because it no longer exists in ofbiz codes -->
+  <!-- ========================================================= -->
+  <!-- org.ofbiz.manufacturing.mrp -->
+  <!-- ========================================================= -->
+
+    <entity entity-name="InventoryEventPlanned"
+            package-name="org.ofbiz.manufacturing.mrp"
+            title="Inventory event planned">
+      <description>
+        Contains all the planned InventoryEvent by ProductId to be able to check the product availability 
+        and if necessary generate some requirements
+      </description>
+      <field name="productId" type="id-ne"></field>
+      <field name="eventDate" type="date-time"></field>
+      <field name="inventoryEventPlanTypeId" type="id-ne"></field>
+      <field name="eventQuantity" type="floating-point"></field>
+      <field name="facilityId" type="id"></field>
+      <field name="eventName" type="very-long"></field>
+      <field name="isLate" type="indicator"></field>
+      <prim-key field="productId"/>
+      <prim-key field="eventDate"/>
+      <prim-key field="inventoryEventPlanTypeId"/>
+      <relation type="one" fk-name="INV_EVNT_PLN_PRDT" rel-entity-name="Product">
+        <key-map field-name="productId"/>
+      </relation>
+      <relation type="one" fk-name="INV_EVNT_PLN_TYP" rel-entity-name="InventoryEventPlannedType">
+        <key-map field-name="inventoryEventPlanTypeId"/>
+      </relation>
+      <relation type="one" fk-name="INV_EVNT_PLN_FAC" rel-entity-name="Facility">
+        <key-map field-name="facilityId"/>
+      </relation>
+    </entity>
+    <entity entity-name="InventoryEventPlannedType"
+            package-name="org.ofbiz.manufacturing.mrp"
+            default-resource-name="ManufacturingEntityLabels"
+            title="Inventory  event Planned type">
+      <description>Used to describe the InventoryEventPlanned and give the information if it's an in or out event</description>
+      <field name="inventoryEventPlanTypeId" type="id-ne"></field>
+      <field name="description" type="description"></field>
+      <field name="inOut" type="indicator"></field>
+      <prim-key field="inventoryEventPlanTypeId"/>
+    </entity>
+    <view-entity entity-name="MrpInventoryEventPlanned" package-name="org.ofbiz.manufacturing.mrp" 
+        title="Inventory Event Planned view for MRP process">
+      <description>Uses for the MRP process to be able to read the InventoryEventPlanned By billOfMaterialLevel and by eventDate</description>
+      <member-entity entity-alias="IEP" entity-name="InventoryEventPlanned"></member-entity>
+      <member-entity entity-alias="IEPT" entity-name="InventoryEventPlannedType"></member-entity>
+      <member-entity entity-alias="PR" entity-name="Product"></member-entity>
+      <alias-all entity-alias="IEP"></alias-all>
+      <alias entity-alias="PR" name="billOfMaterialLevel"></alias>
+      <alias entity-alias="IEPT" name="inOut"></alias>
+      <view-link entity-alias="IEP" rel-entity-alias="PR">
+        <key-map field-name="productId"></key-map>
+      </view-link>
+      <view-link entity-alias="IEP" rel-entity-alias="IEPT">
+        <key-map field-name="inventoryEventPlanTypeId"></key-map>
+      </view-link>
+      <relation rel-entity-name="Product" type="one-nofk">
+        <key-map field-name="productId"/>
+      </relation>
+    </view-entity>
+
+  <!-- it come from ofbiz applications/order/entitydef/entitymodel.xml, we move it here because it no longer exists in ofbiz codes -->
+    <entity entity-name="CustRequestRole"
+            package-name="org.ofbiz.order.request"
+            title="Customer Request Role Entity">
+      <field name="custRequestId" type="id-ne"></field>
+      <field name="partyId" type="id-ne"></field>
+      <field name="roleTypeId" type="id-ne"></field>
+      <prim-key field="custRequestId"/>
+      <prim-key field="partyId"/>
+      <prim-key field="roleTypeId"/>
+      <relation type="one" fk-name="CUSTREQ_RL_CRQST" rel-entity-name="CustRequest">
+        <key-map field-name="custRequestId"/>
+      </relation>
+      <relation type="one" fk-name="CUSTREQ_RL_PARTY" rel-entity-name="Party">
+        <key-map field-name="partyId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="RoleType">
+        <key-map field-name="roleTypeId"/>
+      </relation>
+      <relation type="one" fk-name="CUSTREQ_RL_PROLE" rel-entity-name="PartyRole">
+        <key-map field-name="partyId"/>
+        <key-map field-name="roleTypeId"/>
+      </relation>
+    </entity>
+
+   <!-- add miss field contentPurposeEnumId for PartyContent -->
+    <extend-entity entity-name="PartyContent">
+        <field name="contentPurposeEnumId" type="id-ne"></field>
+        <relation type="one" fk-name="PARTY_CNT_PENUM" rel-entity-name="Enumeration">
+           <key-map field-name="contentPurposeEnumId" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>
+    
+    <!--  if come from applications/product/entitydef/entitymodel_old.xml -->
+    <entity entity-name="FacilityRole"
+            package-name="org.ofbiz.product.facility"
+            title="Facility Role Entity">
+      <field name="facilityId" type="id-ne"></field>
+      <field name="partyId" type="id"></field>
+      <field name="roleTypeId" type="id"></field>
+      <prim-key field="facilityId"/>
+      <prim-key field="partyId"/>
+      <prim-key field="roleTypeId"/>
+      <relation type="one" fk-name="FACILITY_RLE_FAC" rel-entity-name="Facility">
+        <key-map field-name="facilityId"/>
+      </relation>
+      <relation type="one" fk-name="FACILITY_RLE_PRTY" rel-entity-name="Party">
+        <key-map field-name="partyId"/>
+      </relation>
+      <relation type="one" fk-name="FACILITY_RLE_ROLE" rel-entity-name="RoleType">
+        <key-map field-name="roleTypeId"/>
+      </relation>
+    </entity>  
+ 
+    <!-- Registers data transformations time -->
+    <entity entity-name="DataWarehouseTransform" package-name="org.opentaps.common"
+        title="Data transformation runtime attributes">
+        <field name="transformId" type="id-ne"/>
+        <field name="organizationPartyId" type="id-ne"/>
+        <field name="transformEnumId" type="id"/>
+        <field name="transformTimestamp" type="date-time"/>
+        <field name="userLoginId" type="id-vlong-ne"/>
+
+        <prim-key field="transformId"/>
+
+        <relation rel-entity-name="Enumeration" type="one" fk-name="DWTR_ENUM_TP">
+            <key-map field-name="transformEnumId" rel-field-name="enumId"/>
+        </relation>
+        <relation rel-entity-name="UserLogin" type="one" fk-name="DWTR_USR_LOGIN" >
+            <key-map field-name="userLoginId"/>
+        </relation>
+    </entity>
+
+     <!--redefine OrderHeaderAndRoles to add some required fields for purchasing order gwt listview -->
+     <view-entity entity-name="OrderHeaderAndRoles"
+            package-name="org.ofbiz.order.order"
+            never-cache="true"
+            title="Order Header And Roles View Entity">
+      <member-entity entity-alias="ORLE" entity-name="OrderRole"/>
+      <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+      <alias-all entity-alias="ORLE"/>
+      <alias-all entity-alias="OH"/>
+
+      <view-link entity-alias="ORLE" rel-entity-alias="OH">
+        <key-map field-name="orderId"/>
+      </view-link>
+      <relation type="one-nofk" rel-entity-name="OrderType">
+        <key-map field-name="orderTypeId"/>
+      </relation>
+      <relation type="one-nofk" title="Origin" rel-entity-name="Facility">
+        <key-map field-name="originFacilityId" rel-field-name="facilityId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderTypeAttr">
+        <key-map field-name="orderTypeId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderAttribute">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderAdjustment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItem">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderContactMech">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItemBilling">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItemContactMech">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItemRole">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderRole">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderShipment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderStatus">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderTerm">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="WorkOrderItemFulfillment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="ProductOrderItem">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="BillingAccount">
+        <key-map field-name="billingAccountId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderPaymentPreference">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderHeaderNoteView">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="UserLogin">
+        <key-map field-name="createdBy" rel-field-name="userLoginId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
+      </relation>
+      <relation type="one-nofk" title="Sync" rel-entity-name="StatusItem">
+        <key-map field-name="syncStatusId" rel-field-name="statusId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderRequirementCommitment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="ShipmentReceipt">
+        <key-map field-name="orderId"/>
+      </relation>
+    </view-entity>
+
+    <entity entity-name="OpentapsWebApps"
+            package-name="org.opentaps.common.webapp"
+            title="Opentaps Home Web Applications Entity">
+      <field name="applicationId" type="id-long-ne"></field>
+      <field name="shortName" type="name"></field>
+      <field name="applicationName" type="long-varchar"></field>
+      <field name="description" type="description"></field>
+      <field name="imageUrl" type="long-varchar"></field>
+      <field name="imageHoverUrl" type="long-varchar"></field>
+      <field name="linkUrl" type="long-varchar"></field>
+      <field name="sequenceNum" type="numeric"/>
+      <prim-key field="applicationId"/>
+    </entity>   
+</entitymodel>

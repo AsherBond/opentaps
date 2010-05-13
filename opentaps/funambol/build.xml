@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!--
+ *  Copyright (c) 2001 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  This is the OTFM build script
+ *  $Id: $
+ *
+ *  @author Cameron Smith - Database, Lda - www.database.co.mz
+	
+	TODO: put classes and jars into build/classes and build/lib?
+-->
+
+<project name="opentaps - OTFM Component" default="classes" basedir=".">
+
+    <!-- ================================================================== -->
+    <!-- Initialization of all property settings                            -->
+    <!-- ================================================================== -->
+
+    <target name="init">
+     <property environment="env"/>
+     <property name="desc" value="OTFM Component"/>
+     <property name="name" value="opentaps-otfm"/>
+     <property name="src.dir" value="src"/>
+     <property name="lib.dir" value="lib"/>
+	 <property name="output.dir" value="build/classes"/>	
+     <!-- This parameter must point to your ofbiz/ directory or the libraries for the financials app would not be found.
+         The default setting would work if you have checked out the financials module into your ofbiz/opentaps/ directory.
+         It would NOT work if you checked it out somewhere else and symlinked to it in your opentaps/ directory.
+         If you experience build problems, put the full path here -->
+     <property name="ofbiz.dir" value="../../"/> 
+    </target>
+
+    <target name="classpath">
+      <path id="local.class.path">
+        <!-- external jars on OFBiz main classpath -->
+        <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
+        <fileset dir="${ofbiz.dir}/framework/base/lib/commons" includes="*.jar"/>
+        <fileset dir="${ofbiz.dir}/framework/base/lib/j2eespecs" includes="*.jar"/>
+    
+        <!-- OFBiz framework code -->	      
+        <fileset dir="${ofbiz.dir}/framework/base/build/lib" includes="*.jar"/>
+        <fileset dir="${ofbiz.dir}/framework/entity/build/lib" includes="*.jar"/>
+        <fileset dir="${ofbiz.dir}/framework/service/build/lib" includes="*.jar"/>
+	
+        <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/" includes="*.jar"/>
+        <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/hibernate" includes="*.jar"/>
+        <!-- OpenTAPs modules on which we depend -->	      
+        <path location="${ofbiz.dir}/opentaps/crmsfa/build/classes"/>
+ 	  
+        <!-- external jars specific to OTFM -->	 
+        <fileset dir="lib/core" includes="*.jar"/>
+        <fileset dir="lib/ext" includes="*.jar"/>	 
+        <fileset dir="lib/modules"> <!-- OTFM jar may go in this dir so do not use * -->
+          <include name="funambol-pim-framework-8.0.0.jar"/>
+          <include name="funambol-pim-parsers-8.0.0.jar"/>
+        </fileset>
+        <fileset dir="${ofbiz.dir}/opentaps/crmsfa/build/lib" includes="*.jar"/>
+      </path>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Removes all created files and directories                          -->
+    <!-- ================================================================== -->
+
+    <target name="clean" depends="init">
+        <delete failonerror="false">
+            <fileset dir="logs" includes="*.*"/>
+        </delete>
+        <delete dir="${output.dir}"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Makes sure the needed directory structure is in place              -->
+    <!-- ================================================================== -->
+
+    <target name="prepare" depends="clean">
+        <mkdir dir="${output.dir}"/>
+    </target>
+
+    <target name="prepare-docs" depends="init">
+        <mkdir dir="${build.dir}/javadocs"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Compilation of the source files                                                                                                                         -->
+    <!-- ================================================================== -->
+
+    <target name="classes" depends="prepare,classpath">
+    	<javac debug="on" deprecation="on" destdir="${output.dir}">
+            <classpath>
+                <path refid="local.class.path"/>
+            </classpath>
+            <src path="${src.dir}"/>
+        </javac>
+    </target>
+	
+    <!-- ================================================================== -->
+    <!-- Prepare "live" configuration tree for Funambol DSS                 -->
+    <!-- ================================================================== -->
+    <target name="config">
+      <!-- 0. Clean existing config TODO put a check here -->	
+      <input validargs="y,n" addproperty="in.cleanconfig">
+        This step will remove any manual configuration changes you made to the XML config tree,
+        and restore the default configuration.
+        Type 'y' only if you understand this and are sure you want to proceed.  Otherwise type 'n'.
+      </input>
+
+      <fail message="User chose 'n' so aborting, existing XML config tree will not be changed.">	 	
+        <condition><not><equals arg1="y" arg2="${in.cleanconfig}"/></not></condition>	
+      </fail>	
+      <delete dir="config"/>	
+	 	
+      <!-- 1. Copy _config to config -->
+      <copy todir="config"><fileset dir="_config"/></copy> 	
+	 	
+      <!-- 2. Strip out .SVN subdirs which confuse the DSS server -->
+      <delete>
+        <fileset dir="config" casesensitive="no">
+          <include name="**/.SVN"/>
+          <exclude name="**/*.xml"/>
+        </fileset>	
+      </delete>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Build JavaDoc                                                      -->
+    <!-- ================================================================== -->
+
+    <target name="docs" depends="prepare-docs,classpath">
+      <javadoc packagenames="org.opentaps.funambol.*"
+               classpathref="local.class.path"
+               destdir="${build.dir}/javadocs"
+               windowtitle="Open Source Strategies - ${desc}">
+        <sourcepath path="${src.dir}"/>
+      </javadoc>
+    </target>
+
+    <target name="all" depends="classes,docs,config"/>
+</project>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ofbiz-component name="dataimport"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
+    <resource-loader name="main" type="component"/>
+    <classpath type="jar" location="build/lib/*"/>
+    <classpath type="dir" location="script"/>
+    <classpath type="dir" location="config"/>
+    
+    <!-- seed data which will be loaded on "ant run-install" and "ant run-install-seed" -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/DataImportSecurity.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/DataImportSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ReportSeedData.xml"/>
+
+    <!-- these entities are to help importing data and can be removed if not needed -->    
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_customer.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_supplier.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_order.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_product.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_shoppinglist.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_tax.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_accounting.xml"/>
+
+    <!-- Import Entities to handle imports from other CRM systems -->
+    <!-- <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_mscrm.xml"/>     -->
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_netsuite.xml"/>
+
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoImportCustomers.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoImportSupplier.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoImportOrders.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoImportProducts.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoImportAccounting.xml"/>
+
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DataImportDemoUsers.xml"/>
+
+    <!-- services for data import -->
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_netsuite.xml"/>
+    
+    <webapp name="dataimport"
+        title="DataImport"
+        server="default-server"
+        location="webapp/dataimport"
+        base-permission="DATAIMPORT"
+        mount-point="/dataimport"
+        app-bar-display="false"/>
+
+</ofbiz-component>
+

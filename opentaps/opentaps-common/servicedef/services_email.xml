@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>Opentaps Content Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="opentaps.prepareEmailInterface" engine="interface" location="" invoke="">
+        <attribute name="sendTo" type="String" mode="IN" optional="true"/>
+        <attribute name="subject" type="String" mode="IN" optional="true"/>
+        <attribute name="content" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
+        <attribute name="communicationEventId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="opentaps.prepareQuoteEmail" engine="java" use-transaction="false"
+             location="org.opentaps.common.content.EmailServices" invoke="prepareQuoteEmail">
+        <description>Send an email to someone in the system. Associate a completed Quote and a completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the QuoteId of the saved data.
+            No security at the moment.</description>
+        <implements service="opentaps.prepareEmailInterface"/>
+        <attribute name="quoteId" type="String" mode="IN" optional="false"/>
+    </service>
+    <service name="opentaps.prepareSalesOrderEmail" engine="java" use-transaction="false"
+             location="org.opentaps.common.content.EmailServices" invoke="prepareSalesOrderEmail">
+        <description>Send an email to someone in the system. Associate a completed Order and a completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the OrderId of the saved data.
+            No security at the moment.</description>
+        <implements service="opentaps.prepareEmailInterface"/>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="skipAttachment" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="opentaps.preparePurchasingOrderEmail" engine="java" use-transaction="false"
+             location="org.opentaps.common.content.EmailServices" invoke="preparePurchasingOrderEmail">
+        <description>Send an email to someone in the system. Associate a completed Order and a completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the OrderId of the saved data.
+            No security at the moment.</description>
+        <implements service="opentaps.prepareEmailInterface"/>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+    </service> 
+    <service name="opentaps.prepareInvoiceEmail" engine="java" use-transaction="false"
+             location="org.opentaps.common.content.EmailServices" invoke="prepareInvoiceEmail">
+        <description>Send an email to someone in the system. Associate a completed Invoice and a completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the InvoiceId of the saved data.
+            No security at the moment.</description>
+        <implements service="opentaps.prepareEmailInterface"/>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>            
+</services>    

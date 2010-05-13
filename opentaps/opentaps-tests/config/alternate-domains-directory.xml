@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING?DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+ * Copyright (c) 2010 Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- This is for testing that an alternate domains directory can be loaded -->
+
+<beans>
+
+    <!-- The ids are used below to configure which domain class to use, so you can change the classes to reference
+		You should usually change the bean id's to be your own, such as myBillingDomain, but here let's keep them
+		the same as the default ones to show that the test still works -->
+	<bean id="opentapsBillingDomain" class="org.opentaps.tests.domains.TestBillingDomain"/>  <!-- this one is changed to a test billing domain -->
+    <bean id="opentapsOrderDomain" class="org.opentaps.common.domain.order.OrderDomain"/>
+    <bean id="opentapsPartyDomain" class="org.opentaps.common.domain.party.PartyDomain"/>
+    <bean id="opentapsInventoryDomain" class="org.opentaps.warehouse.domain.inventory.InventoryDomain"/>
+    <bean id="opentapsProductDomain" class="org.opentaps.common.domain.product.ProductDomain"/>
+    <bean id="opentapsOrganizationDomain" class="org.opentaps.common.domain.organization.OrganizationDomain"/>
+    <bean id="opentapsLedgerDomain" class="org.opentaps.financials.domain.ledger.LedgerDomain"/>
+    <bean id="opentapsShippingDomain" class="org.opentaps.warehouse.domain.shipping.ShippingDomain"/>
+    <bean id="opentapsManufacturingDomain" class="org.opentaps.warehouse.domain.manufacturing.ManufacturingDomain"/>
+    <bean id="opentapsPurchasingDomain" class="org.opentaps.purchasing.domain.PurchasingDomain"/>
+    <bean id="opentapsAsteriskVoipDomain" class="org.opentaps.asterisk.domain.AsteriskDomain"/>
+    <bean id="opentapsSearchDomain" class="org.opentaps.search.SearchDomain"/>
+    <bean id="opentapsWebAppDomain" class="org.opentaps.webapp.WebAppDomain"/>
+    <bean id="opentapsDataImportDomain" class="org.opentaps.dataimport.domain.DataImportDomain"/>
+    <!-- The bean id "domainsDirectory" is used by DomainsLoader, so do not change this.-->
+    <bean id="domainsDirectory" class="org.opentaps.domain.DomainsDirectory">
+        <!-- the property names reference members of DomainsDirectory class and are set using setters by Spring -->
+        <property name="billingDomain"><ref bean="opentapsBillingDomain"/></property>
+        <property name="orderDomain"><ref bean="opentapsOrderDomain"/></property>
+        <property name="partyDomain"><ref bean="opentapsPartyDomain"/></property>
+        <property name="inventoryDomain"><ref bean="opentapsInventoryDomain"/></property>
+        <property name="productDomain"><ref bean="opentapsProductDomain"/></property>
+        <property name="organizationDomain"><ref bean="opentapsOrganizationDomain"/></property>
+        <property name="ledgerDomain"><ref bean="opentapsLedgerDomain"/></property>
+        <property name="shippingDomain"><ref bean="opentapsShippingDomain"/></property>
+        <property name="manufacturingDomain"><ref bean="opentapsManufacturingDomain"/></property>
+        <property name="purchasingDomain"><ref bean="opentapsPurchasingDomain"/></property>
+        <property name="voipDomain"><ref bean="opentapsAsteriskVoipDomain"/></property>
+        <property name="searchDomain"><ref bean="opentapsSearchDomain"/></property>
+        <property name="webAppDomain"><ref bean="opentapsWebAppDomain"/></property>
+        <property name="dataImportDomain"><ref bean="opentapsDataImportDomain"/></property>
+    </bean>
+    
+</beans>
