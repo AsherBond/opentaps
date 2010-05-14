@@ -41,6 +41,7 @@ import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.ledger.InvoiceLedgerServiceInterface;
 import org.opentaps.domain.ledger.LedgerSpecificationInterface;
 import org.opentaps.foundation.entity.Entity;
+import org.opentaps.foundation.entity.util.EntityListIterator;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -258,8 +259,9 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
                     EntityCondition.makeCondition(Invoice.Fields.invoiceAdjustedTotal.name(), EntityOperator.EQUALS, null),
                     EntityCondition.makeCondition(Invoice.Fields.interestCharged.name(), EntityOperator.EQUALS, null)
             );
-            List<Invoice> invoices = invoiceRepository.findList(Invoice.class, condition);
-            for (Invoice invoice : invoices) {
+            EntityListIterator<Invoice> invoicesIt = invoiceRepository.findIterator(Invoice.class, condition);
+            Invoice invoice = null;
+            while ((invoice = invoicesIt.next()) != null) {
                 RecalcInvoiceAmountsService service = new RecalcInvoiceAmountsService();
                 service.setInInvoiceId(invoice.getInvoiceId());
                 runSync(service);
