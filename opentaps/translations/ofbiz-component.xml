@@ -25,6 +25,6 @@ for your language as well and plug it into opentaps -->
     <resource-loader name="main" type="component"/>
 
     <classpath type="dir" location="config/Bulgarian"/>
-    
+    <classpath type="dir" location="config/Chinese"/>
 </ofbiz-component>
 
