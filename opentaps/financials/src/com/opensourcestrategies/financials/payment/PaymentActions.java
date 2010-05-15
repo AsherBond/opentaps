@@ -159,8 +159,8 @@ public final class PaymentActions {
         String paymentMethodTypeId = ac.getParameter("paymentMethodTypeId");
         String paymentRefNum = ac.getParameter("paymentRefNum");
         String statusId = ac.getParameter("statusId");
-        Timestamp fromDate = UtilDate.toTimestamp(ac.getCompositeParameter("fromDate"), timeZone, locale);
-        Timestamp thruDate = UtilDate.toTimestamp(ac.getCompositeParameter("thruDate"), timeZone, locale);
+        Timestamp fromDate = UtilDate.toTimestamp(ac.getParameter("fromDate"), timeZone, locale);
+        Timestamp thruDate = UtilDate.toTimestamp(ac.getParameter("thruDate"), timeZone, locale);
         String amountFrom = ac.getParameter("amountFrom");
         String amountThru = ac.getParameter("amountThru");
         String openAmountFrom = ac.getParameter("openAmountFrom");
