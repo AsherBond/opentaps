@@ -1,36 +1,55 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Order" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="541" leftMargin="43" rightMargin="28" topMargin="28" bottomMargin="28">
-	<property name="ireport.scriptlethandling" value="0"/>
-	<property name="ireport.encoding" value="UTF-8"/>
-	<import value="org.opentaps.base.entities.*"/>
-	<import value="org.opentaps.domain.order.Order"/>
-	<import value="net.sf.jasperreports.engine.*"/>
-	<import value="org.opentaps.common.reporting.UtilReports"/>
-	<import value="java.util.*"/>
-	<import value="net.sf.jasperreports.engine.data.*"/>
-	<parameter name="organizationLogoImageUrl" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="organizationCompanyName" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="organizationPostalAddress" class="java.lang.Object" isForPrompting="false"/>
-	<parameter name="countryName" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="stateProvinceAbbrv" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="website" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="primaryPhone" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="primaryFax" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="order" class="java.lang.Object" isForPrompting="false"/>
-	<parameter name="supplierAddress" class="java.lang.Object" isForPrompting="false"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String">
-		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="Order"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="612"
+		 pageHeight="792"
+		 columnWidth="541"
+		 columnSpacing="0"
+		 leftMargin="43"
+		 rightMargin="28"
+		 topMargin="28"
+		 bottomMargin="28"
+		 whenNoDataType="AllSectionsNoDetail"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+	<import value="org.opentaps.base.entities.*" />
+	<import value="org.opentaps.domain.order.Order" />
+	<import value="org.opentaps.common.reporting.UtilReports" />
+
+	<parameter name="organizationLogoImageUrl" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="organizationCompanyName" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="organizationPostalAddress" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="countryName" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="stateProvinceAbbrv" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="website" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="primaryPhone" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="primaryFax" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="order" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="supplierAddress" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["./"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="currencyUomId" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["USD"]]></defaultValueExpression>
+	<parameter name="currencyUomId" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["USD"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="orderContactMechList" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
-	<parameter name="shipGroupList" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
-	<parameter name="orderTermList" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
-	<parameter name="shipAdjustmentList" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
-	<parameter name="otherAdjustmentList" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
-	<parameter name="notesList" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
-	<parameter name="paymentsList" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="orderContactMechList" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="shipGroupList" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="orderTermList" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="shipAdjustmentList" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="otherAdjustmentList" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="notesList" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="paymentsList" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+
 	<field name="productId" class="java.lang.String"/>
 	<field name="orderItemTypeId" class="java.lang.String"/>
 	<field name="itemDescription" class="java.lang.String"/>
@@ -38,516 +57,620 @@
 	<field name="orderUnitPrice" class="java.math.BigDecimal"/>
 	<field name="orderSubTotal" class="java.math.BigDecimal"/>
 	<field name="adjustmentsAmount" class="java.math.BigDecimal"/>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-	<title>
-		<band splitType="Stretch"/>
-	</title>
-	<pageHeader>
-		<band height="318" splitType="Stretch">
-			<image isLazy="true" onErrorType="Blank">
-				<reportElement key="companyLogo" x="0" y="0" width="241" height="40">
-					<printWhenExpression><![CDATA[new Boolean($P{organizationLogoImageUrl} != null)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<graphicElement>
-					<pen lineWidth="0.0" lineStyle="Solid"/>
-				</graphicElement>
-				<imageExpression class="java.net.URL"><![CDATA[new URL($P{organizationLogoImageUrl})]]></imageExpression>
-			</image>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-10" x="285" y="123" width="257" height="105" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[Boolean.valueOf($P{orderContactMechList} != null)]]></printWhenExpression>
-				</reportElement>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{orderContactMechList}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OrderContactMeches.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-11" x="1" y="273" width="541" height="42" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[Boolean.valueOf($P{orderTermList} != null)]]></printWhenExpression>
-				</reportElement>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{orderTermList}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OrderTerms.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-12" x="1" y="230" width="541" height="42" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[Boolean.valueOf($P{shipGroupList} != null)]]></printWhenExpression>
-				</reportElement>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{shipGroupList}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/ShipGroups.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-13" positionType="FixRelativeToBottom" x="285" y="0" width="257" height="114"/>
-				<subreportParameter name="order">
-					<subreportParameterExpression><![CDATA[$P{order}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OrderHeader.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-14" x="0" y="41" width="240" height="73"/>
-				<subreportParameter name="countryName">
-					<subreportParameterExpression><![CDATA[$P{countryName}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="primaryPhone">
-					<subreportParameterExpression><![CDATA[$P{primaryPhone}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="organizationPostalAddress">
-					<subreportParameterExpression><![CDATA[$P{organizationPostalAddress}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="website">
-					<subreportParameterExpression><![CDATA[$P{website}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="organizationCompanyName">
-					<subreportParameterExpression><![CDATA[$P{organizationCompanyName}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="primaryFax">
-					<subreportParameterExpression><![CDATA[$P{primaryFax}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="stateProvinceAbbrv">
-					<subreportParameterExpression><![CDATA[$P{stateProvinceAbbrv}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/CompanyInfo.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-15" x="0" y="139" width="241" height="89">
-					<printWhenExpression><![CDATA[new Boolean($P{supplierAddress} != null)]]></printWhenExpression>
-				</reportElement>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="postalAddress">
-					<subreportParameterExpression><![CDATA[$P{supplierAddress}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/PostalAddress.jrxml")]]></subreportExpression>
-			</subreport>
-			<textField isBlankWhenNull="false">
-				<reportElement key="textField-48" mode="Opaque" x="0" y="123" width="241" height="13" isRemoveLineWhenBlank="true" backcolor="#CCCCCC"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsPurchasedFrom} + ":"]]></textFieldExpression>
-			</textField>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band height="21" splitType="Stretch">
-			<line>
-				<reportElement key="line-1" positionType="FixRelativeToBottom" x="0" y="18" width="537" height="1"/>
-				<graphicElement>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-				</graphicElement>
-			</line>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-8" x="0" y="4" width="288" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="8" isBold="true" pdfFontName="DejaVuSansCondensed-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{ProductProduct}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-9" x="288" y="4" width="60" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSansCondensed-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderQuantity}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-10" x="408" y="4" width="60" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" isItalic="false" pdfFontName="DejaVuSansCondensed-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderAdjustments}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-12" x="468" y="4" width="70" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSansCondensed-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderSubTotal}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-19" x="348" y="4" width="60" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSansCondensed-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderUnitPrice}]]></textFieldExpression>
-			</textField>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="16" splitType="Stretch">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement key="textField-13" x="0" y="0" width="288" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{productId}==null ? ($F{orderItemTypeId}==null ? $F{itemDescription}: $F{orderItemTypeId} + " - " + $F{itemDescription}) :  $F{productId} + " - " +  $F{itemDescription}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement key="textField-14" x="288" y="0" width="60" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{orderQuantity}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-15" x="408" y="0" width="60" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{adjustmentsAmount}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-17" x="468" y="0" width="70" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{orderSubTotal}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-18" x="348" y="0" width="60" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{orderUnitPrice}]]></textFieldExpression>
-			</textField>
-		</band>
-	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="19" splitType="Stretch">
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-34" x="115" y="3" width="170" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage} + " " + $V{PAGE_NUMBER} + " " + $R{OpentapsOf} + " "]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report" pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-35" x="287" y="3" width="36" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-		</band>
-	</pageFooter>
-	<summary>
-		<band height="153" splitType="Stretch">
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-6" x="0" y="31" width="542" height="13" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[Boolean.valueOf($P{shipAdjustmentList} != null)]]></printWhenExpression>
-				</reportElement>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{shipAdjustmentList}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/Adjustments.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-7" x="0" y="57" width="542" height="13" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[Boolean.valueOf($P{otherAdjustmentList} != null)]]></printWhenExpression>
-				</reportElement>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{otherAdjustmentList}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OtherAdjustments.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-8" x="0" y="105" width="542" height="42" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[Boolean.valueOf($P{notesList} != null)]]></printWhenExpression>
-				</reportElement>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{notesList}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OrderNotes.jrxml")]]></subreportExpression>
-			</subreport>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-36" x="468" y="5" width="70" height="13" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getItemsSubTotal().doubleValue() != 0.0)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getItemsSubTotal()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-37" x="468" y="44" width="70" height="13" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getShippingAmount().doubleValue() != 0.0)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getShippingAmount()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-38" x="468" y="70" width="70" height="13" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getOtherAdjustmentsAmount().doubleValue() != 0.0)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getOtherAdjustmentsAmount()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-39" x="328" y="44" width="140" height="13" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getShippingAmount().doubleValue() != 0.0)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderTotalShippingAndHandling}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-40" x="328" y="70" width="140" height="13" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getOtherAdjustmentsAmount().doubleValue() != 0.0)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderTotalOtherOrderAdjustments}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-41" x="328" y="5" width="140" height="13" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getItemsSubTotal().doubleValue() != 0.0)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderItemsSubTotal}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-42" x="328" y="18" width="140" height="13" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getTaxAmount().doubleValue() != 0.0)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderTotalSalesTax}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-43" x="468" y="18" width="70" height="13" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getTaxAmount().doubleValue() != 0.0)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getTaxAmount()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-44" x="468" y="83" width="70" height="13" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getTotal().doubleValue() != 0.0)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getTotal()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-45" x="328" y="83" width="140" height="13" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getTotal().doubleValue() != 0.0)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderTotalDue}]]></textFieldExpression>
-			</textField>
-		</band>
-	</summary>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="337"  isSplitAllowed="true" >
+				<image  isLazy="true" onErrorType="Blank" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="241"
+						height="40"
+						key="companyLogo">
+							<printWhenExpression><![CDATA[new Boolean($P{organizationLogoImageUrl} != null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.net.URL"><![CDATA[new URL($P{organizationLogoImageUrl})]]></imageExpression>
+				</image>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="285"
+						y="123"
+						width="257"
+						height="105"
+						key="subreport-10"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.valueOf($P{orderContactMechList} != null)]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_DATA_SOURCE">
+						<subreportParameterExpression><![CDATA[$P{orderContactMechList}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OrderContactMeches.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="1"
+						y="273"
+						width="541"
+						height="42"
+						key="subreport-11"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.valueOf($P{orderTermList} != null)]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_DATA_SOURCE">
+						<subreportParameterExpression><![CDATA[$P{orderTermList}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OrderTerms.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="1"
+						y="230"
+						width="541"
+						height="42"
+						key="subreport-12"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.valueOf($P{shipGroupList} != null)]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_DATA_SOURCE">
+						<subreportParameterExpression><![CDATA[$P{shipGroupList}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/ShipGroups.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="285"
+						y="0"
+						width="257"
+						height="114"
+						key="subreport-13"
+						positionType="FixRelativeToBottom"/>
+					<subreportParameter  name="order">
+						<subreportParameterExpression><![CDATA[$P{order}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OrderHeader.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="41"
+						width="240"
+						height="73"
+						key="subreport-14"/>
+					<subreportParameter  name="countryName">
+						<subreportParameterExpression><![CDATA[$P{countryName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="primaryPhone">
+						<subreportParameterExpression><![CDATA[$P{primaryPhone}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="organizationPostalAddress">
+						<subreportParameterExpression><![CDATA[$P{organizationPostalAddress}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="website">
+						<subreportParameterExpression><![CDATA[$P{website}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="organizationCompanyName">
+						<subreportParameterExpression><![CDATA[$P{organizationCompanyName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="primaryFax">
+						<subreportParameterExpression><![CDATA[$P{primaryFax}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="stateProvinceAbbrv">
+						<subreportParameterExpression><![CDATA[$P{stateProvinceAbbrv}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/CompanyInfo.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="139"
+						width="241"
+						height="89"
+						key="subreport-15">
+							<printWhenExpression><![CDATA[new Boolean($P{supplierAddress} != null)]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="postalAddress">
+						<subreportParameterExpression><![CDATA[$P{supplierAddress}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/PostalAddress.jrxml")]]></subreportExpression>
+				</subreport>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="123"
+						width="241"
+						height="13"
+						backcolor="#CCCCCC"
+						key="textField-48"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OpentapsPurchasedFrom} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="320"
+						width="141"
+						height="13"
+						key="textField-49"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="9" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OpentapsOrderName} + ":"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="MMM d, yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="144"
+						y="320"
+						width="365"
+						height="13"
+						key="textField-50"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="DejaVuSans.ttf" size="9" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[((Order) $P{order}).getOrderName()]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="21"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="18"
+						width="537"
+						height="1"
+						key="line-1"
+						positionType="FixRelativeToBottom"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="4"
+						width="288"
+						height="13"
+						key="textField-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="DejaVuSansCondensed-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{ProductProduct}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="288"
+						y="4"
+						width="60"
+						height="13"
+						key="textField-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSansCondensed-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderQuantity}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="408"
+						y="4"
+						width="60"
+						height="13"
+						key="textField-10"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSansCondensed-Bold.ttf" size="8" isBold="true" isItalic="false" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderAdjustments}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="468"
+						y="4"
+						width="70"
+						height="13"
+						key="textField-12"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSansCondensed-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderSubTotal}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="348"
+						y="4"
+						width="60"
+						height="13"
+						key="textField-19"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSansCondensed-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderUnitPrice}]]></textFieldExpression>
+				</textField>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="288"
+						height="16"
+						key="textField-13"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font pdfFontName="DejaVuSans.ttf" size="8" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{productId}==null ? ($F{orderItemTypeId}==null ? $F{itemDescription}: $F{orderItemTypeId} + " - " + $F{itemDescription}) :  $F{productId} + " - " +  $F{itemDescription}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="###0;-###0" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="288"
+						y="0"
+						width="60"
+						height="16"
+						key="textField-14"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="DejaVuSans.ttf" size="8" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{orderQuantity}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="408"
+						y="0"
+						width="60"
+						height="16"
+						key="textField-15"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="DejaVuSans.ttf" size="8" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{adjustmentsAmount}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="468"
+						y="0"
+						width="70"
+						height="16"
+						key="textField-17"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="DejaVuSans.ttf" size="8" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{orderSubTotal}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="348"
+						y="0"
+						width="60"
+						height="16"
+						key="textField-18"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="DejaVuSans.ttf" size="8" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{orderUnitPrice}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="19"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="115"
+						y="3"
+						width="170"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-34"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans.ttf" size="10" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{CommonPage} + " " + $V{PAGE_NUMBER} + " " + $R{OpentapsOf} + " "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="287"
+						y="3"
+						width="36"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-35"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="DejaVuSans.ttf" size="10" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="153"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="31"
+						width="542"
+						height="13"
+						key="subreport-6"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[Boolean.valueOf($P{shipAdjustmentList} != null)]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_DATA_SOURCE">
+						<subreportParameterExpression><![CDATA[$P{shipAdjustmentList}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/Adjustments.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="57"
+						width="542"
+						height="13"
+						key="subreport-7"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[Boolean.valueOf($P{otherAdjustmentList} != null)]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_DATA_SOURCE">
+						<subreportParameterExpression><![CDATA[$P{otherAdjustmentList}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OtherAdjustments.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="105"
+						width="542"
+						height="42"
+						key="subreport-8"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[Boolean.valueOf($P{notesList} != null)]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_DATA_SOURCE">
+						<subreportParameterExpression><![CDATA[$P{notesList}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OrderNotes.jrxml")]]></subreportExpression>
+				</subreport>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="468"
+						y="5"
+						width="70"
+						height="13"
+						key="textField-36"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getItemsSubTotal().doubleValue() != 0.0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getItemsSubTotal()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="468"
+						y="44"
+						width="70"
+						height="13"
+						key="textField-37"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getShippingAmount().doubleValue() != 0.0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getShippingAmount()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="468"
+						y="70"
+						width="70"
+						height="13"
+						key="textField-38"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getOtherAdjustmentsAmount().doubleValue() != 0.0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getOtherAdjustmentsAmount()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="328"
+						y="44"
+						width="140"
+						height="13"
+						key="textField-39"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getShippingAmount().doubleValue() != 0.0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderTotalShippingAndHandling}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="328"
+						y="70"
+						width="140"
+						height="13"
+						key="textField-40"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getOtherAdjustmentsAmount().doubleValue() != 0.0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderTotalOtherOrderAdjustments}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="328"
+						y="5"
+						width="140"
+						height="13"
+						key="textField-41"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getItemsSubTotal().doubleValue() != 0.0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderItemsSubTotal}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="328"
+						y="18"
+						width="140"
+						height="13"
+						key="textField-42"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getTaxAmount().doubleValue() != 0.0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderTotalSalesTax}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="468"
+						y="18"
+						width="70"
+						height="13"
+						key="textField-43"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getTaxAmount().doubleValue() != 0.0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getTaxAmount()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="468"
+						y="83"
+						width="70"
+						height="13"
+						key="textField-44"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getTotal().doubleValue() != 0.0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[((Order) $P{order}).getTotal()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤ #,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="328"
+						y="83"
+						width="140"
+						height="13"
+						key="textField-45"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean(((Order) $P{order}).getTotal().doubleValue() != 0.0)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="DejaVuSans-Bold.ttf" size="8" isBold="true" isPdfEmbedded ="true" pdfEncoding ="Identity-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderTotalDue}]]></textFieldExpression>
+				</textField>
+			</band>
+		</summary>
 </jasperReport>
