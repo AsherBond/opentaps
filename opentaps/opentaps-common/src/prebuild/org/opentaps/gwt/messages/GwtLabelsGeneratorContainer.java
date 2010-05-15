@@ -45,7 +45,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -64,6 +63,7 @@ import org.ofbiz.base.container.Container;
 import org.ofbiz.base.container.ContainerException;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.service.ServiceDispatcher;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -162,15 +162,8 @@ public final class GwtLabelsGeneratorContainer implements Container {
         //  <gwtPropertiesDir>/<gwtLabelFileName>_<locale>.properties as the properties files containing the label definitions for other locales specified in the GWT configuration (common.gwt.xml)
         String gwtLabelFileName = "CommonMessages";
 
-        // bad localized labels are labels that do not have the same signature as the default label
-        // if set the true, the script will not generate them in the localized properties file
-        // if set to false the script will generate them but the compilation will fail with an error like "Required argument {n} not present"
-        boolean dumpBadLocalizedLabels = true;
-
         // load the list of UI labels to use as a source
         Properties sources = loadPropertiesFile("opentaps/opentaps-common/config/LabelConfiguration.properties");
-        // this Map stores the {locale => Map{label key => GwtLabelDefinition}}
-        Map<String, TreeMap<String, GwtLabelDefinition>> allGwtLabelDefinitionsMaps = new HashMap<String, TreeMap<String, GwtLabelDefinition>>();
 
 
         try {
@@ -183,6 +176,8 @@ public final class GwtLabelsGeneratorContainer implements Container {
             Element rootElement = document.getDocumentElement();
             // each locale is listed as a distinct "extend-property" XML tag, ie: <extend-property name="locale" values="fr"/>
             NodeList list = rootElement.getElementsByTagName("extend-property");
+            // the list to store the locale 
+            List<String> extendLocales = new ArrayList<String> ();
             // loop through all "extend-property tags
             for (int i = 0; i < list.getLength(); i++) {
                 Element element = (Element) list.item(i);
@@ -190,25 +185,24 @@ public final class GwtLabelsGeneratorContainer implements Container {
                 if (element.getAttribute("name").equals("locale")) {
                     // each tag only defines one locale
                     String locale = element.getAttribute("values");
-                    // label keys are sorted alphabetically by the TreeMap
-                    TreeMap<String, GwtLabelDefinition> gwtLabelDefinitionsMaps = new TreeMap<String, GwtLabelDefinition>();
-
-                    // iterate through the list of source properties files defined in LabelConfiguration.properties
-                    Set<Entry <Object, Object>> entries = sources.entrySet();
-                    for (Entry <Object, Object> entry : entries) {
-                        try {
-                            String fileName = (String) entry.getValue();
-                            readLabelsFromSourcePropertiesFile(fileName, locale, gwtLabelDefinitionsMaps);
-                        } catch (IllegalArgumentException e) {
-                            e.printStackTrace();
-                        }
+                    if (!extendLocales.contains(locale) && !DEFAULT_LOCALE.equals(locale)) {
+                        extendLocales.add(locale);
                     }
-                    allGwtLabelDefinitionsMaps.put(locale, gwtLabelDefinitionsMaps);
                 }
             }
 
             // use the default label definitions to generate the Java interface file
-            TreeMap<String, GwtLabelDefinition> defaultGwtLabelDefinitionsMaps = allGwtLabelDefinitionsMaps.get(DEFAULT_LOCALE);
+            TreeMap<String, GwtLabelDefinition> defaultGwtLabelDefinitionsMaps = new TreeMap<String, GwtLabelDefinition>();
+            Set<Entry <Object, Object>> entries = sources.entrySet();
+            for (Entry <Object, Object> entry : entries) {
+                try {
+                    String fileName = (String) entry.getValue();
+                    readLabelsFromSourcePropertiesFile(fileName, DEFAULT_LOCALE, defaultGwtLabelDefinitionsMaps);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+            }
+
             // render the GWT message interface Java file from the FTL template
             Writer writer = new StringWriter();
             Configuration ftlConfig = new Configuration();
@@ -224,47 +218,56 @@ public final class GwtLabelsGeneratorContainer implements Container {
             FileUtils.writeStringToFile(javaFile, writer.toString(), "UTF-8");
 
             // write the properties files
-            Iterator<Entry<String, TreeMap<String, GwtLabelDefinition>>> it = allGwtLabelDefinitionsMaps.entrySet().iterator();
-            while (it.hasNext()) {
-                String locale = it.next().getKey();
-                // iterate through the list of locale, and generated gwt properties for all locales defined in the GWT module configuration
-                TreeMap<String, GwtLabelDefinition> gwtLabelDefinitionsMaps = allGwtLabelDefinitionsMaps.get(locale);
-                // write the localized properties files
-                StringBuffer stringBuffer = new StringBuffer();
-                for (String key : gwtLabelDefinitionsMaps.keySet()) {
-                    // check the label has the same signature as the default label
-                    GwtLabelDefinition localizedLabel = gwtLabelDefinitionsMaps.get(key);
-                    GwtLabelDefinition defaultLabel = defaultGwtLabelDefinitionsMaps.get(key);
-                    if (defaultLabel == null) {
-                        Debug.logError("*** Localized label [" + key + "] defined in " + localizedLabel.getPropertiesFile() + " for locale [" + locale + "] has no default signature.", MODULE);
-                        continue;
-                    }
-
-                    boolean badLabel = !localizedLabel.matchesSignatureOf(defaultLabel);
-                    if (badLabel) {
-                        Debug.logError("*** Localized label [" + key + "] defined in " + localizedLabel.getPropertiesFile() + " for locale [" + locale + "] do not match the default signature.", MODULE);
-                    }
-                    if (!(badLabel && dumpBadLocalizedLabels)) {
-                        stringBuffer.append(key).append(" = ").append(localizedLabel.getText()).append("\n");
-                    }
-                }
-                String outGwtLabelPropertiesFile = gwtPropertiesDir + gwtLabelFileName + ".properties";
-                if (!locale.equals(DEFAULT_LOCALE)) {
-                    outGwtLabelPropertiesFile = gwtPropertiesDir + gwtLabelFileName + "_" + locale + ".properties";
-                }
-                File propertiesFile = new File(outGwtLabelPropertiesFile);
-                FileUtils.writeStringToFile(propertiesFile, stringBuffer.toString(), "UTF-8");
-
+            writeGwtLocaleProperties(defaultGwtLabelDefinitionsMaps, DEFAULT_LOCALE, gwtPropertiesDir, gwtLabelFileName);
+            for (String locale : extendLocales) {
+                // iterator all locale and write gwt labels properties file
+                writeGwtLocaleProperties(defaultGwtLabelDefinitionsMaps, locale, gwtPropertiesDir, gwtLabelFileName);
             }
+            
         } catch (Exception e) {
             Debug.logError(e, MODULE);
             return false;
         }
-
-
         return true;
     }
 
+    /**
+     * Writes gwt locale properties, generate locale properties files base default GWT label properties
+     * @param defaultGwtLabelDefinitionsMaps a <code>Map</code> of gwt label definitions
+     * @param locale a <code>String</code> value of Locale
+     * @param gwtPropertiesDir a <code>String</code> value
+     * @param gwtLabelFileName a <code>String</code> value
+     */
+    private void writeGwtLocaleProperties(TreeMap<String, GwtLabelDefinition> defaultGwtLabelDefinitionsMaps, String locale, String gwtPropertiesDir, String gwtLabelFileName) throws IOException {
+        // write the localized properties files
+        StringBuffer stringBuffer = new StringBuffer();
+        for (String key : defaultGwtLabelDefinitionsMaps.keySet()) {
+            // check the label has the same signature as the default label
+            GwtLabelDefinition defaultLabel = defaultGwtLabelDefinitionsMaps.get(key);
+            String localizedString = UtilProperties.getMessage(getResourceNameFromPath(defaultLabel.getPropertiesFile()), defaultLabel.getOriginKey(), new Locale(locale));
+            if (UtilValidate.isNotEmpty(localizedString)) {
+                stringBuffer.append(key).append(" = ").append(localizedString).append("\n");
+            }
+        }
+        String outGwtLabelPropertiesFile = gwtPropertiesDir + gwtLabelFileName + ".properties";
+        if (!locale.equals(DEFAULT_LOCALE)) {
+            outGwtLabelPropertiesFile = gwtPropertiesDir + gwtLabelFileName + "_" + locale + ".properties";
+        }
+        File propertiesFile = new File(outGwtLabelPropertiesFile);
+        FileUtils.writeStringToFile(propertiesFile, stringBuffer.toString(), "UTF-8");
+    }
+    
+    /**
+     * Gets resource name from file path.
+     * @param path the path of properties file
+     * @return the resource name
+     */
+    private String getResourceNameFromPath(String path) {
+        int beginIndex = path.lastIndexOf("/") < 0 ? 0 : path.lastIndexOf("/") + 1;
+        int endIndex = path.lastIndexOf(".") < 0 ? path.length() : path.lastIndexOf(".");
+        return path.substring(beginIndex, endIndex);
+    }
+    
     /**
      * Reads a properties file into a <code>Properties</code> object using the DEFAULT_LOCALE.
      * @param fileName the properties file name
@@ -362,7 +365,7 @@ public final class GwtLabelsGeneratorContainer implements Container {
         for (Entry<Object, Object> entry : entries) {
 
             try {
-
+                String originKey = (String) entry.getKey();
                 String labelKey = (String) entry.getKey();
                 String labelText = (String) entry.getValue();
 
@@ -515,9 +518,9 @@ public final class GwtLabelsGeneratorContainer implements Container {
 
                 // loop through the found placeholders and make the corresponding GwtLabelDefinition objects
                 if (parameters.size() > 0) {
-                    gwtLabelDefinitionsMap.put(labelKey, new GwtLabelDefinition(propertiesFileName, labelKey, labelText, parameters));
+                    gwtLabelDefinitionsMap.put(labelKey, new GwtLabelDefinition(propertiesFileName, labelKey, originKey, labelText, parameters));
                 } else {
-                    gwtLabelDefinitionsMap.put(labelKey, new GwtLabelDefinition(propertiesFileName, labelKey, labelText));
+                    gwtLabelDefinitionsMap.put(labelKey, new GwtLabelDefinition(propertiesFileName, labelKey, originKey, labelText));
                 }
 
             } catch (IllegalArgumentException e) {
