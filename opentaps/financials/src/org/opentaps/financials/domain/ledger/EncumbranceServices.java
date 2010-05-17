@@ -97,7 +97,11 @@ public class EncumbranceServices extends DomainService implements EncumbranceSer
                     encumbrance.setOriginalQuantity(item.getQuantity());
                     encumbrance.setInvoicedQuantity(item.getInvoicedQuantity());
                     encumbrance.setCancelQuantity(item.getCancelQuantity());
-                    encumbrance.setUnitAmount(item.getUnitPrice());
+                    BigDecimal unitAmount = item.getUnitPrice();
+                    if (unitAmount == null) {
+                        unitAmount = BigDecimal.ZERO;
+                    }
+                    encumbrance.setUnitAmount(unitAmount);
                     // encumberedQuantity = quantity - MAX(canceledQuantity, invoicedQuantity)
                     encumbrance.setEncumberedQuantity(
                             item.getQuantity().subtract(

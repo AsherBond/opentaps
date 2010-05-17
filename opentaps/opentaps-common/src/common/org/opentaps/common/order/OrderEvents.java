@@ -1400,6 +1400,10 @@ public final class OrderEvents {
         if (order.isPurchaseOrder() && order.getBillFromVendor() != null) {
             PostalAddress supplierAddress = partyRepository.getSupplierPostalAddress(order.getBillFromVendor());
             if (supplierAddress != null) {
+                // if there is no toName on the address, then the name of the supplier would be used
+                if (UtilValidate.isEmpty(supplierAddress.getToName())) {
+                    supplierAddress.setToName(order.getBillFromVendor().getName());
+                }
                 jrParameters.put("supplierAddress", supplierAddress);
             }
         }

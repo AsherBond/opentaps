@@ -17,13 +17,19 @@
 package org.opentaps.tests.financials;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.TreeSet;
+
+import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilMisc;
 
 import com.opensourcestrategies.financials.accounts.GLAccountInTree;
 import com.opensourcestrategies.financials.accounts.GLAccountTree;
-import org.ofbiz.base.util.*;
-import org.ofbiz.base.util.GeneralException;
-import org.ofbiz.base.util.UtilMisc;
 
 /**
  * GLAccountTree tests.
@@ -59,15 +65,15 @@ public class GLAccountTreeTests extends FinancialsTestCase {
         // build the tree with test values, normally those values are retreived
         // by the getIncomeStatementByDates service
         // the GLAccountTree is expecting a list of Map containing: (glAccountId, parentGlAccountId, accountSum)
-        List<Map> accounts = new ArrayList<Map>();
+        List<Map<String, Object>> accounts = new ArrayList<Map<String, Object>>();
 
         // the childrenTotal field here is added only to check balances later, it is not used by GLAccountTree
-        accounts.add(UtilMisc.toMap("glAccountId", "100000", "parentGlAccountId", null,     "accountSum", new BigDecimal(10.0), "childrenTotal" , new BigDecimal(280.0)));
-        accounts.add(UtilMisc.toMap("glAccountId", "200000", "parentGlAccountId", null,     "accountSum", new BigDecimal(100.0), "childrenTotal", new BigDecimal(0.0)));
-        accounts.add(UtilMisc.toMap("glAccountId", "110000", "parentGlAccountId", "100000", "accountSum", new BigDecimal(20.0), "childrenTotal",  new BigDecimal(0.0)));
-        accounts.add(UtilMisc.toMap("glAccountId", "120000", "parentGlAccountId", "100000", "accountSum", new BigDecimal(55.0), "childrenTotal",  new BigDecimal(205.0)));
-        accounts.add(UtilMisc.toMap("glAccountId", "300000", "parentGlAccountId", null,     "accountSum", new BigDecimal(310.0), "childrenTotal", new BigDecimal(0.0)));
-        accounts.add(UtilMisc.toMap("glAccountId", "121000", "parentGlAccountId", "120000", "accountSum", new BigDecimal(205.0), "childrenTotal", new BigDecimal(0.0)));
+        accounts.add(UtilMisc.<String, Object>toMap("glAccountId", "100000", "parentGlAccountId", null,     "accountSum", new BigDecimal(10.0), "childrenTotal" , new BigDecimal(280.0)));
+        accounts.add(UtilMisc.<String, Object>toMap("glAccountId", "200000", "parentGlAccountId", null,     "accountSum", new BigDecimal(100.0), "childrenTotal", new BigDecimal(0.0)));
+        accounts.add(UtilMisc.<String, Object>toMap("glAccountId", "110000", "parentGlAccountId", "100000", "accountSum", new BigDecimal(20.0), "childrenTotal",  new BigDecimal(0.0)));
+        accounts.add(UtilMisc.<String, Object>toMap("glAccountId", "120000", "parentGlAccountId", "100000", "accountSum", new BigDecimal(55.0), "childrenTotal",  new BigDecimal(205.0)));
+        accounts.add(UtilMisc.<String, Object>toMap("glAccountId", "300000", "parentGlAccountId", null,     "accountSum", new BigDecimal(310.0), "childrenTotal", new BigDecimal(0.0)));
+        accounts.add(UtilMisc.<String, Object>toMap("glAccountId", "121000", "parentGlAccountId", "120000", "accountSum", new BigDecimal(205.0), "childrenTotal", new BigDecimal(0.0)));
 
         // for testing balances later
         Map<String, Map> accountsById = new HashMap();

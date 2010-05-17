@@ -32,6 +32,11 @@ public class GwtLabelDefinition {
     private String key;
 
     /**
+     * The origin label key.
+     * Ex: "CommonWelcome"
+     */
+    private String originKey;
+    /**
      * The label text string.
      * Ex: "Welcome {0} {1}."
      */
@@ -78,6 +83,14 @@ public class GwtLabelDefinition {
     public String getKey() {
         return key;
     }
+    
+    /**
+     * Gets the origin label key. Used in the generated message interface as the method name.
+     * @return the label key
+     */
+    public String getOriginKey() {
+        return originKey;
+    }
 
     /**
      * Gets the <code>List</code> of parameters. Used in the generated message interface as the parameters name.
@@ -105,9 +118,10 @@ public class GwtLabelDefinition {
      * @param key the label key
      * @param text the label text
      */
-    public GwtLabelDefinition(String propertiesFile, String key, String text) {
+    public GwtLabelDefinition(String propertiesFile, String key, String originKey, String text) {
         this.propertiesFile = propertiesFile;
         this.key = key;
+        this.originKey = originKey;
         this.text = text;
     }
 
@@ -119,10 +133,11 @@ public class GwtLabelDefinition {
      * @param text the label text
      * @param parameters the <code>List</code> of parameter names
      */
-    public GwtLabelDefinition(String propertiesFile, String key, String text, List<String> parameters) {
+    public GwtLabelDefinition(String propertiesFile, String key, String text, String originKey, List<String> parameters) {
         this.propertiesFile = propertiesFile;
         this.key = key;
         this.text = text;
         this.parameters = parameters;
+        this.originKey = originKey;
     }
 }

@@ -23,30 +23,30 @@ import java.util.Set;
 
 import javolution.util.FastMap;
 import javolution.util.FastSet;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.constants.GlFiscalTypeConstants;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.ledger.AccountingTransaction;
+import org.opentaps.domain.ledger.AccountingTransaction.TagBalance;
 import org.opentaps.domain.ledger.GeneralLedgerAccount;
 import org.opentaps.domain.ledger.LedgerException;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.domain.ledger.LedgerServiceInterface;
 import org.opentaps.domain.ledger.LedgerSpecificationInterface;
-import org.opentaps.domain.ledger.AccountingTransaction.TagBalance;
 import org.opentaps.domain.organization.OrganizationDomainInterface;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.foundation.entity.util.EntityListIterator;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.base.constants.GlFiscalTypeConstants;
 
 /**
  * POJO Service class for services that interact with the ledger.
@@ -199,8 +199,9 @@ public class LedgerService extends DomainService implements LedgerServiceInterfa
         try {
             LedgerRepositoryInterface ledgerRepository = getRepository();
             EntityCondition condition = EntityCondition.makeCondition(AccountingTransaction.Fields.isPosted.name(), EntityOperator.EQUALS, "Y");
-            List<AccountingTransaction> acctgTrans = ledgerRepository.findList(AccountingTransaction.class, condition);
-            for (AccountingTransaction acctgTran : acctgTrans) {
+            EntityListIterator<AccountingTransaction> acctgTransIt = ledgerRepository.findIterator(AccountingTransaction.class, condition);
+            AccountingTransaction acctgTran = null;
+            while ((acctgTran = acctgTransIt.next()) != null) {
                 acctgTran.setPostedAmount(acctgTran.getDebitTotal());
                 getRepository().update(acctgTran);
             }

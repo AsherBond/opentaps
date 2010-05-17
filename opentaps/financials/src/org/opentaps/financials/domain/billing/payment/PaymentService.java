@@ -16,8 +16,6 @@
  */
 package org.opentaps.financials.domain.billing.payment;
 
-import java.util.List;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -26,6 +24,7 @@ import org.opentaps.domain.DomainService;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.billing.payment.PaymentServiceInterface;
+import org.opentaps.foundation.entity.util.EntityListIterator;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -82,8 +81,9 @@ public class PaymentService extends DomainService implements PaymentServiceInter
             EntityCondition condition = EntityCondition.makeCondition(EntityOperator.OR,
                     EntityCondition.makeCondition(Payment.Fields.openAmount.name(), EntityOperator.EQUALS, null),
                     EntityCondition.makeCondition(Payment.Fields.appliedAmount.name(), EntityOperator.EQUALS, null));
-            List<Payment> payments = paymentRepository.findList(Payment.class, condition);
-            for (Payment payment : payments) {
+            EntityListIterator<Payment> paymentsIt = paymentRepository.findIterator(Payment.class, condition);
+            Payment payment = null;
+            while ((payment = paymentsIt.next()) != null) {
                 RecalcPaymentAmountsService service = new RecalcPaymentAmountsService();
                 service.setInPaymentId(payment.getPaymentId());
                 runSync(service);
