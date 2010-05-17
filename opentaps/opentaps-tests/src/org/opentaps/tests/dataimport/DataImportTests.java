@@ -440,12 +440,16 @@ public class DataImportTests extends OpentapsTestCase {
         DataImportProduct product2 = product_repos.findOne(DataImportProduct.class, product_repos.map(DataImportProduct.Fields.productId, "excelImport2"));
         DataImportProduct product3 = product_repos.findOne(DataImportProduct.class, product_repos.map(DataImportProduct.Fields.productId, decimalDigitsId));
         
-        assertEquals("Field productName of entity DataImportProduct["+product1.getProductId()+"] not filled properly.", "Product name 1", product1.getProductName());
-        assertEquals("Field internalName of entity DataImportProduct["+product1.getProductId()+"] not filled properly.", "Product name 1", product1.getInternalName());
-        assertEquals("Field productName of entity DataImportProduct["+product2.getProductId()+"] not filled properly.", "Product name 2", product2.getProductName());
-        assertEquals("Field internalName of entity DataImportProduct["+product2.getProductId()+"] not filled properly.", "Product name 2", product2.getInternalName());
-        assertEquals("Field productName of entity DataImportProduct["+product3.getProductId()+"] not filled properly.", "Product name 3", product3.getProductName());
-        assertEquals("Field internalName of entity DataImportProduct["+product3.getProductId()+"] not filled properly.", "Product name 3", product3.getInternalName());
+        String productName1 = "Product name 1";
+        String productName2 = "Product name 2";
+        String productName3 = "Product name 3";
+        
+        assertEquals("Field productName of entity DataImportProduct["+product1.getProductId()+"] not filled properly.", productName1, product1.getProductName());
+        assertEquals("Field internalName of entity DataImportProduct["+product1.getProductId()+"] not filled properly.", productName1, product1.getInternalName());
+        assertEquals("Field productName of entity DataImportProduct["+product2.getProductId()+"] not filled properly.", productName2, product2.getProductName());
+        assertEquals("Field internalName of entity DataImportProduct["+product2.getProductId()+"] not filled properly.", productName2, product2.getInternalName());
+        assertEquals("Field productName of entity DataImportProduct["+product3.getProductId()+"] not filled properly.", productName3, product3.getProductName());
+        assertEquals("Field internalName of entity DataImportProduct["+product3.getProductId()+"] not filled properly.", productName3, product3.getInternalName());
         
     }
     
