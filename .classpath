@@ -45,9 +45,7 @@
 	<classpathentry kind="src" path="opentaps/opentaps-common/src/base"/>
 	<classpathentry kind="src" path="opentaps/opentaps-common/src/constants"/>
 	<classpathentry kind="src" path="opentaps/opentaps-common/src/common"/>
-	<classpathentry kind="src" path="opentaps/opentaps-common/src/entities"/>
 	<classpathentry kind="src" path="opentaps/opentaps-common/src/prebuild"/>
-	<classpathentry kind="src" path="opentaps/opentaps-common/src/services"/>
 	<classpathentry kind="src" path="opentaps/amazon/src"/>
 	<classpathentry kind="src" path="opentaps/analytics/src"/>
 	<classpathentry kind="src" path="opentaps/asterisk/src"/>
@@ -202,6 +200,8 @@
 	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/spring-beans-2.0.8.jar"/>
 	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/spring-context-2.0.8.jar"/>
 	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/spring-core-2.0.8.jar"/>
+  <classpathentry kind="lib" path="opentaps/opentaps-common/lib/opentaps-common-entities.jar"/>
+  <classpathentry kind="lib" path="opentaps/opentaps-common/lib/opentaps-common-services.jar"/>	
 	<classpathentry kind="lib" path="opentaps/opentaps-common/lib/hibernate/lucene-core-2.4.1.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/iText-2.1.7.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/jasperreports-3.5.2.jar"/>

@@ -22,7 +22,7 @@ under the License.
     <property name="site.dir" value="../site"/>
     <property name="memory.initial.param" value="-Xms512M"/>
     <property name="memory.max.param" value="-Xmx1024M"/>
-    <property name="permmemory.max.param" value="-XX:MaxPermSize=1024m"/>
+    <property name="permmemory.max.param" value="-XX:MaxPermSize=1024M"/>
     <property name="javadoc.maxmemory" value="1024M"/>
 
     <available file="applications/build.xml" property="applications.present"/>
@@ -785,6 +785,12 @@ under the License.
             <jvmarg value="${permmemory.max.param}"/>
             <arg value="pojoentities"/>
         </java>
+        <subant target="entities-jar">
+            <filelist dir="." files="./opentaps/opentaps-common/build.xml"/>
+        </subant>
+        <subant target="services-jar">
+            <filelist dir="." files="./opentaps/opentaps-common/build.xml"/>
+        </subant>        
     </target>
     <target name="refresh-hibernatecfg" depends="prebuild">
         <delete verbose="on">
