@@ -119,6 +119,33 @@ public final class GwtLabelsGeneratorContainer implements Container {
     /** Config file. */
     @SuppressWarnings("unused")
     private String configFile = null;
+    
+    static Pattern ftlPlaceholderPattern;
+    static Pattern indexedPlaceholderPattern;
+    static Pattern fakePlaceholderPattern;
+    static {
+
+        // this regex identifies FreeMarker placeholders in the label text
+        // eg: Welcome ${firstName} ${lastName}
+        // It supports first level recursions like ${amountApplied?currency(${isoCode})}
+        //  this matches ${... (?: ${..} ...)? }
+        String ftlPlaceholderRegex = "`$`{([^`}`$]+?(?:`$`{[^`}]+?`}[^`}`$]+?)?)`}"; // note: using ` instead of \\ for 'better' readability
+        ftlPlaceholderRegex = ftlPlaceholderRegex.replace('`', '\\');
+        ftlPlaceholderPattern = Pattern.compile(ftlPlaceholderRegex);
+
+        // this regex identifies indexed placeholders in the label text
+        // eg: Welcome {0} {1}
+        String indexedPlaceholderRegex = "`{([0-9]+)`}"; // note: using ` instead of \\ for 'better' readability
+        indexedPlaceholderRegex = indexedPlaceholderRegex.replace('`', '\\');
+        indexedPlaceholderPattern = Pattern.compile(indexedPlaceholderRegex);
+
+        // this regex identifies fake placeholders in the label text, this syntax is used in some rare places
+        // eg: Welcome {something}
+        // this also match FreeMarker placeholders so we only use it after substituting them by indexed placeholders
+        String fakePlaceholderRegex = "`{[^0-9]+`}"; // note: using ` instead of \\ for 'better' readability
+        fakePlaceholderRegex = fakePlaceholderRegex.replace('`', '\\');
+        fakePlaceholderPattern = Pattern.compile(fakePlaceholderRegex);
+    }
 
     /**
      * Creates a new <code>GwtLabelsGeneratorContainer</code> instance.
@@ -246,6 +273,17 @@ public final class GwtLabelsGeneratorContainer implements Container {
             GwtLabelDefinition defaultLabel = defaultGwtLabelDefinitionsMaps.get(key);
             String localizedString = UtilProperties.getMessage(getResourceNameFromPath(defaultLabel.getPropertiesFile()), defaultLabel.getOriginKey(), new Locale(locale));
             if (UtilValidate.isNotEmpty(localizedString)) {
+                if (!key.startsWith("_")) {
+                    // save the list of parameters that were parsed from the label text
+                    // and that will be used as the message interface method parameters
+                    List<String> parameters = new ArrayList<String>();
+                    localizedString = formatGwtLabel(localizedString, parameters);
+                    // replace extra quote character which add by UtilProperties
+                    localizedString = localizedString.replace("''{", "'{");
+                    localizedString = localizedString.replace("}''", "}'");
+                    localizedString = localizedString.replace("'''{", "''{");
+                    localizedString = localizedString.replace("}'''", "}''");
+                }
                 stringBuffer.append(key).append(" = ").append(localizedString).append("\n");
             }
         }
@@ -339,26 +377,6 @@ public final class GwtLabelsGeneratorContainer implements Container {
             return;
         }
 
-        // this regex identifies FreeMarker placeholders in the label text
-        // eg: Welcome ${firstName} ${lastName}
-        // It supports first level recursions like ${amountApplied?currency(${isoCode})}
-        //  this matches ${... (?: ${..} ...)? }
-        String ftlPlaceholderRegex = "`$`{([^`}`$]+?(?:`$`{[^`}]+?`}[^`}`$]+?)?)`}"; // note: using ` instead of \\ for 'better' readability
-        ftlPlaceholderRegex = ftlPlaceholderRegex.replace('`', '\\');
-        Pattern ftlPlaceholderPattern = Pattern.compile(ftlPlaceholderRegex);
-
-        // this regex identifies indexed placeholders in the label text
-        // eg: Welcome {0} {1}
-        String indexedPlaceholderRegex = "`{([0-9]+)`}"; // note: using ` instead of \\ for 'better' readability
-        indexedPlaceholderRegex = indexedPlaceholderRegex.replace('`', '\\');
-        Pattern indexedPlaceholderPattern = Pattern.compile(indexedPlaceholderRegex);
-
-        // this regex identifies fake placeholders in the label text, this syntax is used in some rare places
-        // eg: Welcome {something}
-        // this also match FreeMarker placeholders so we only use it after substituting them by indexed placeholders
-        String fakePlaceholderRegex = "`{[^0-9]+`}"; // note: using ` instead of \\ for 'better' readability
-        fakePlaceholderRegex = fakePlaceholderRegex.replace('`', '\\');
-        Pattern fakePlaceholderPattern = Pattern.compile(fakePlaceholderRegex);
 
         // loop over each labels from the loaded file
         Set<Entry<Object, Object>> entries = properties.entrySet();
@@ -411,106 +429,7 @@ public final class GwtLabelsGeneratorContainer implements Container {
                         indexStart += parseIndexedPlaceholders(quotedTexts[i], indexedPlaceholderPattern, parameters);
                     }
                 } else {
-                    // find each indexed placeholder the text string
-                    indexStart += parseIndexedPlaceholders(labelText, indexedPlaceholderPattern, parameters);
-
-                    // find empty freemarker placeholders (actually used in very few labels) and index them
-                    while (labelText.contains("${}")) {
-                        labelText = labelText.replaceFirst("\\$\\{\\}", "{" + indexStart + "}");
-                        indexStart++;
-                    }
-
-                    // save the list of FreeMarker placeholders strings
-                    // we will replace them by indexed parameters
-                    List<String> vars = new ArrayList<String>();
-
-                    // find each FreeMarker placeholder in the text string
-                    Matcher matchFtlPlaceholder = ftlPlaceholderPattern.matcher(labelText);
-                    while (matchFtlPlaceholder.find()) {
-                        // get the placeholder from the regex
-                        // eg: ${firstName}
-                        String placeholder = matchFtlPlaceholder.group(); // ${firstName}
-                        String placeholderName = matchFtlPlaceholder.group(1); // firstName
-
-                        // check the raw placeholder content against what we already parsed
-                        if (vars.contains(placeholder)) {
-                            continue;
-                        }
-
-                        // sanitize the placeholderName so that it can be used as a Java variable name
-                        //  handle special FTL like amountApplied?currency(${isoCode})
-                        Matcher matchFtlInnerPlaceholder = ftlPlaceholderPattern.matcher(placeholderName);
-                        if (matchFtlInnerPlaceholder.find()) {
-                            placeholderName = matchFtlInnerPlaceholder.group(1);
-                        }
-
-                        // in case of two level recursions, or special FTL construct that we did not handle
-                        // we need to cut the string at the first ? char (used in FTL to check the variable, like in ${firstName?default("Joe")}
-                        int idx = placeholderName.indexOf("?");
-                        if (idx > 0) {
-                            placeholderName = placeholderName.substring(0, idx);
-                        }
-
-                        // some FTL constructs use ${variable()}
-                        idx = placeholderName.indexOf("(");
-                        if (idx > 0) {
-                            placeholderName = placeholderName.substring(0, idx);
-                        }
-
-                        // remove characters not allowed in Java but used in FTL to access object attributes
-                        // eg: The order ${order.orderId} has been shipped.
-                        placeholderName = placeholderName.replace('.', '_');
-
-                        // check that we did not accidentally make a duplicate
-                        // else rename it to placeholderName + index
-                        // eg: firstName1, firstName2 ...
-                        if (parameters.contains(placeholderName)) {
-                            String placeholderNameOrig = placeholderName;
-                            int i = 1;
-                            while (parameters.contains(placeholderName)) {
-                                placeholderName = placeholderNameOrig + i;
-                                i++;
-                            }
-                        }
-
-                        // add the placeholder to the list of parameters for the message interface
-                        vars.add(placeholder);
-                        parameters.add(placeholderName);
-                    }
-
-                    // replace the FTL placeholders by GWT placeholders, note that this supports the case where
-                    //  the same placeholder is used multiple times
-                    // eg: Welcome ${firstName} ${lastName} ${firstName}  => Welcome {0} {1} {0}
-                    for (int i = 0; i < vars.size(); i++) {
-                        labelText = labelText.replace(vars.get(i), "{" + i + "}");
-                    }
-
-                    // find remaining fake placeholders in the text string
-                    Matcher matchFakePlaceholder = fakePlaceholderPattern.matcher(labelText);
-                    vars.clear();
-                    while (matchFakePlaceholder.find()) {
-                        String placeholder = matchFakePlaceholder.group();
-
-                        if (vars.contains(placeholder)) {
-                            continue;
-                        }
-
-                        vars.add(placeholder);
-                    }
-
-                    // alter fake placeholders
-                    // eg: {some text} => [some text]
-                    for (String s : vars) {
-                        labelText = labelText.replace(s, "[" + s.substring(1, s.length() - 1) + "]");
-                    }
-
-                    // sanitize white space chars like \n \r \t ...
-                    labelText = labelText.replace('\n', ' ');
-                    labelText = labelText.replace('\t', ' ');
-                    labelText = labelText.replace("\r", "");
-
-                    // in GWT labels quotes need to be doubled, quoted text has a special meaning.
-                    labelText = labelText.replace("'", "''");
+                    labelText = formatGwtLabel(labelText, parameters);
                 }
 
                 // trim the label text
@@ -527,6 +446,122 @@ public final class GwtLabelsGeneratorContainer implements Container {
                 e.printStackTrace();
             }
         }
+    }
+    
+    /**
+     * Format gwt label function
+     * @param origin a <code>String</code> value
+     * @return formatted gwt label
+     */    
+    private static String formatGwtLabel(String origin, List<String> parameters) {
+        String labelText = origin;
+
+        // keep track of the first numeric index available
+        // this is incremented if we find indexed parameters in the label text so that they cannot conflict with FreeMarker
+        // placeholders when they get indexed
+        int indexStart = 0;
+        // find each indexed placeholder the text string
+        indexStart += parseIndexedPlaceholders(labelText, indexedPlaceholderPattern, parameters);
+
+        // find empty freemarker placeholders (actually used in very few labels) and index them
+        while (labelText.contains("${}")) {
+            labelText = labelText.replaceFirst("\\$\\{\\}", "{" + indexStart + "}");
+            indexStart++;
+        }
+
+        // save the list of FreeMarker placeholders strings
+        // we will replace them by indexed parameters
+        List<String> vars = new ArrayList<String>();
+
+        // find each FreeMarker placeholder in the text string
+        Matcher matchFtlPlaceholder = ftlPlaceholderPattern.matcher(labelText);
+        while (matchFtlPlaceholder.find()) {
+            // get the placeholder from the regex
+            // eg: ${firstName}
+            String placeholder = matchFtlPlaceholder.group(); // ${firstName}
+            String placeholderName = matchFtlPlaceholder.group(1); // firstName
+
+            // check the raw placeholder content against what we already parsed
+            if (vars.contains(placeholder)) {
+                continue;
+            }
+
+            // sanitize the placeholderName so that it can be used as a Java variable name
+            //  handle special FTL like amountApplied?currency(${isoCode})
+            Matcher matchFtlInnerPlaceholder = ftlPlaceholderPattern.matcher(placeholderName);
+            if (matchFtlInnerPlaceholder.find()) {
+                placeholderName = matchFtlInnerPlaceholder.group(1);
+            }
+
+            // in case of two level recursions, or special FTL construct that we did not handle
+            // we need to cut the string at the first ? char (used in FTL to check the variable, like in ${firstName?default("Joe")}
+            int idx = placeholderName.indexOf("?");
+            if (idx > 0) {
+                placeholderName = placeholderName.substring(0, idx);
+            }
+
+            // some FTL constructs use ${variable()}
+            idx = placeholderName.indexOf("(");
+            if (idx > 0) {
+                placeholderName = placeholderName.substring(0, idx);
+            }
+
+            // remove characters not allowed in Java but used in FTL to access object attributes
+            // eg: The order ${order.orderId} has been shipped.
+            placeholderName = placeholderName.replace('.', '_');
+
+            // check that we did not accidentally make a duplicate
+            // else rename it to placeholderName + index
+            // eg: firstName1, firstName2 ...
+            if (parameters.contains(placeholderName)) {
+                String placeholderNameOrig = placeholderName;
+                int i = 1;
+                while (parameters.contains(placeholderName)) {
+                    placeholderName = placeholderNameOrig + i;
+                    i++;
+                }
+            }
+
+            // add the placeholder to the list of parameters for the message interface
+            vars.add(placeholder);
+            parameters.add(placeholderName);
+        }
+
+        // replace the FTL placeholders by GWT placeholders, note that this supports the case where
+        //  the same placeholder is used multiple times
+        // eg: Welcome ${firstName} ${lastName} ${firstName}  => Welcome {0} {1} {0}
+        for (int i = 0; i < vars.size(); i++) {
+            labelText = labelText.replace(vars.get(i), "{" + i + "}");
+        }
+
+        // find remaining fake placeholders in the text string
+        Matcher matchFakePlaceholder = fakePlaceholderPattern.matcher(labelText);
+        vars.clear();
+        while (matchFakePlaceholder.find()) {
+            String placeholder = matchFakePlaceholder.group();
+
+            if (vars.contains(placeholder)) {
+                continue;
+            }
+
+            vars.add(placeholder);
+        }
+
+        // alter fake placeholders
+        // eg: {some text} => [some text]
+        for (String s : vars) {
+            labelText = labelText.replace(s, "[" + s.substring(1, s.length() - 1) + "]");
+        }
+
+        // sanitize white space chars like \n \r \t ...
+        labelText = labelText.replace('\n', ' ');
+        labelText = labelText.replace('\t', ' ');
+        labelText = labelText.replace("\r", "");
+
+        // in GWT labels quotes need to be doubled, quoted text has a special meaning.
+        labelText = labelText.replace("'", "''");
+    
+        return labelText.trim();
     }
 
     private static String makeValidLabelKey(String labelKey) {
