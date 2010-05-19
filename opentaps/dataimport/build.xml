@@ -60,7 +60,8 @@
             <!-- for poi -->
             <fileset dir="${ofbiz.dir}/applications/content/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/accounting/build/lib" includes="*.jar"/>
-    	    <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/build/lib" includes="*.jar"/>
+    	      <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/build/lib" includes="*.jar"/>
+    	      <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib" includes="opentaps-common-entities.jar opentaps-common-services.jar"/>
             <fileset dir="${ofbiz.dir}/opentaps/opentaps-common/lib/hibernate" includes="*.jar"/>
             <!-- point this to your crmsfa installation build/lib -->
             <fileset dir="${ofbiz.dir}/opentaps/crmsfa/build/lib" includes="*.jar"/>
