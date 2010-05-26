@@ -54,7 +54,7 @@ public class FindOpportunitiesForm extends FindEntityForm<SalesOpportunityListVi
         super(UtilUi.MSG.crmFindOpportunities());
         opportunityStageInput = new SalesOpportunityStageAutocomplete(UtilUi.MSG.crmStage(), "opportunityStageId", getInputLength());
         typeEnumInput = new SalesOpportunityTypeAutocomplete(UtilUi.MSG.commonType(), "typeEnumId", getInputLength());
-        opportunityNameInput = new TextField(UtilUi.MSG.commonName(), "opportunityName", getInputLength());
+        opportunityNameInput = new TextField(UtilUi.MSG.crmOpportunityName(), "opportunityName", getInputLength());
         findAllInput = new CheckboxField(UtilUi.MSG.commonFindAll(), "findAll");
 
         // Build the filter by advanced tab

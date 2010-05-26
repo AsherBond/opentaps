@@ -43,7 +43,7 @@ public class AccountSearchListView extends AccountListView implements SearchResu
         setAutoLoad(false);
 
         init(PartyLookupConfiguration.URL_SEARCH_ACCOUNTS, "/crmsfa/control/viewAccount?partyId={0}", UtilUi.MSG.accountId(), new String[]{
-                PartyLookupConfiguration.INOUT_GROUP_NAME, UtilUi.MSG.accountName()
+                PartyLookupConfiguration.INOUT_GROUP_NAME, UtilUi.MSG.crmAccountName()
             });
     }
 

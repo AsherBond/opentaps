@@ -70,7 +70,7 @@ public class OpportunityContactsSubview extends FindPartyForm {
                 String entityViewUrl = "/crmsfa/control/viewContact?partyId={0}";
                 StringFieldDef idDefinition = new StringFieldDef(PartyLookupConfiguration.INOUT_PARTY_ID);
 
-                makeLinkColumn(UtilUi.MSG.contactId(), idDefinition, entityViewUrl, true);
+                makeLinkColumn(UtilUi.MSG.crmContactId(), idDefinition, entityViewUrl, true);
                 makeLinkColumn(UtilUi.MSG.crmContactName(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME), entityViewUrl, true);
                 makeColumn(UtilUi.MSG.city(), new StringFieldDef(PartyLookupConfiguration.INOUT_CITY));
                 makeColumn(UtilUi.MSG.crmPrimaryEmail(), new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL));

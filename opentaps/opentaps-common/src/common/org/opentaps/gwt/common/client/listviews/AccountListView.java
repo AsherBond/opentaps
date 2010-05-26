@@ -48,8 +48,8 @@ public class AccountListView extends PartyListView {
     @Override
     public void init() {
 
-        init(PartyLookupConfiguration.URL_FIND_ACCOUNTS, "/crmsfa/control/viewAccount?partyId={0}", UtilUi.MSG.accountId(), new String[]{
-                PartyLookupConfiguration.INOUT_GROUP_NAME, UtilUi.MSG.accountName()
+        init(PartyLookupConfiguration.URL_FIND_ACCOUNTS, "/crmsfa/control/viewAccount?partyId={0}", UtilUi.MSG.crmAccountId(), new String[]{
+                PartyLookupConfiguration.INOUT_GROUP_NAME, UtilUi.MSG.crmAccountName()
             });
     }
 

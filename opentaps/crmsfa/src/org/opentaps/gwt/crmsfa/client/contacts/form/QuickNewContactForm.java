@@ -43,7 +43,7 @@ public class QuickNewContactForm extends ScreenletFormPanel {
      * Constructor.
      */
     public QuickNewContactForm() {
-        this(UtilUi.MSG.createContact());
+        this(UtilUi.MSG.crmCreateContact());
     }
 
     /**
@@ -65,7 +65,7 @@ public class QuickNewContactForm extends ScreenletFormPanel {
         lastNameInput = new TextField(UtilUi.MSG.lastName(), QuickNewContactConfiguration.IN_LAST_NAME, getInputLength());
         addRequiredField(lastNameInput);
 
-        accountNameInput = new AccountAutocomplete(UtilUi.MSG.account(), QuickNewContactConfiguration.IN_ACCOUNT_PARTY_ID, getInputLength());
+        accountNameInput = new AccountAutocomplete(UtilUi.MSG.crmAccount(), QuickNewContactConfiguration.IN_ACCOUNT_PARTY_ID, getInputLength());
         addField(accountNameInput);
 
         phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), QuickNewContactConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewContactConfiguration.IN_PHONE_AREA_CODE, QuickNewContactConfiguration.IN_PHONE_NUMBER, getInputLength());
@@ -75,7 +75,7 @@ public class QuickNewContactForm extends ScreenletFormPanel {
         emailInput.setVtype(VType.EMAIL);
         addField(emailInput);
 
-        addStandardSubmitButton(UtilUi.MSG.createContact());
+        addStandardSubmitButton(UtilUi.MSG.crmCreateContact());
     }
 
     @Override public String getPreferenceTypeId() {

@@ -42,7 +42,7 @@ public class QuickNewLeadForm extends ScreenletFormPanel {
      * Constructor.
      */
     public QuickNewLeadForm() {
-        this(UtilUi.MSG.createLead());
+        this(UtilUi.MSG.crmCreateLead());
     }
 
     /**
@@ -58,7 +58,7 @@ public class QuickNewLeadForm extends ScreenletFormPanel {
         }
 
         setUrl(QuickNewLeadConfiguration.URL);     // this sets the action of the form
-        companyNameInput = new TextField(UtilUi.MSG.companyName(), QuickNewLeadConfiguration.IN_COMPANY_NAME, getInputLength());
+        companyNameInput = new TextField(UtilUi.MSG.crmCompanyName(), QuickNewLeadConfiguration.IN_COMPANY_NAME, getInputLength());
         addRequiredField(companyNameInput);
 
         firstNameInput = new TextField(UtilUi.MSG.firstName(), QuickNewLeadConfiguration.IN_FIRST_NAME, getInputLength());
@@ -74,7 +74,7 @@ public class QuickNewLeadForm extends ScreenletFormPanel {
         emailInput.setVtype(VType.EMAIL);
         addField(emailInput);
 
-        addStandardSubmitButton(UtilUi.MSG.createLead());
+        addStandardSubmitButton(UtilUi.MSG.crmCreateLead());
     }
 
     @Override public String getPreferenceTypeId() {

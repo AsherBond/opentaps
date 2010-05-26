@@ -38,7 +38,7 @@ public class FindLeadsForm extends FindPartyForm {
      * Default constructor.
      */
     public FindLeadsForm() {
-        super(UtilUi.MSG.leadId(), UtilUi.MSG.findLeads());
+        super(UtilUi.MSG.crmLeadId(), UtilUi.MSG.crmFindLeads());
         leadListView = new LeadListView();
         leadListView.init();
         addListView(leadListView);
@@ -48,7 +48,7 @@ public class FindLeadsForm extends FindPartyForm {
     protected void buildFilterByNameTab(SubFormPanel p) {
         firstNameInput = new TextField(UtilUi.MSG.firstName(), "firstName", getInputLength());
         lastNameInput = new TextField(UtilUi.MSG.lastName(), "lastName", getInputLength());
-        companyNameInput = new TextField(UtilUi.MSG.companyName(), "companyName", getInputLength());
+        companyNameInput = new TextField(UtilUi.MSG.crmCompanyName(), "companyName", getInputLength());
         p.addField(firstNameInput);
         p.addField(lastNameInput);
         p.addField(companyNameInput);

@@ -48,10 +48,10 @@ public class LeadListView extends PartyListView {
     @Override
     public void init() {
 
-        init(PartyLookupConfiguration.URL_FIND_LEADS, "/crmsfa/control/viewLead?partyId={0}", UtilUi.MSG.leadId(), new String[]{
+        init(PartyLookupConfiguration.URL_FIND_LEADS, "/crmsfa/control/viewLead?partyId={0}", UtilUi.MSG.crmLeadId(), new String[]{
                 PartyLookupConfiguration.INOUT_FIRST_NAME, UtilUi.MSG.firstName(),
                 PartyLookupConfiguration.INOUT_LAST_NAME, UtilUi.MSG.lastName(),
-                PartyLookupConfiguration.INOUT_COMPANY_NAME, UtilUi.MSG.companyName()
+                PartyLookupConfiguration.INOUT_COMPANY_NAME, UtilUi.MSG.crmCompanyName()
             });
     }
 

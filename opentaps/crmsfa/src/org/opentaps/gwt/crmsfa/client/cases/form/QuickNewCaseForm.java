@@ -63,7 +63,7 @@ public class QuickNewCaseForm extends ScreenletFormPanel {
         addField(new Hidden(QuickNewCaseConfiguration.PRIORITY, QuickNewCaseConfiguration.DEFAULT_PRIORITY));
 
         // account is a required field and will be the account autocomplete
-        accountNameInput = new AccountAutocomplete(UtilUi.MSG.account(), QuickNewCaseConfiguration.ACCOUNT_PARTY_ID, getInputLength());
+        accountNameInput = new AccountAutocomplete(UtilUi.MSG.crmAccount(), QuickNewCaseConfiguration.ACCOUNT_PARTY_ID, getInputLength());
         addRequiredField(accountNameInput);
 
         // add the button with ui label

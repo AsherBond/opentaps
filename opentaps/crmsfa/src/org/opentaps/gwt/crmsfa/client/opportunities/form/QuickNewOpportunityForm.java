@@ -80,7 +80,7 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
         addRequiredField(estimatedCloseDateInput);
 
         // add the button with ui label
-        addStandardSubmitButton(UtilUi.MSG.commonCreate());
+        addStandardSubmitButton(UtilUi.MSG.crmCreateOpportunity());
     }
 
     @Override public String getPreferenceTypeId() {
