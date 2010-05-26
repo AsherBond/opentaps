@@ -332,7 +332,16 @@ public class QueryBuilderServiceImpl extends RemoteServiceServlet implements Que
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-		}
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                connection = null;
+            }
+        }
 
         return lst;
     }
