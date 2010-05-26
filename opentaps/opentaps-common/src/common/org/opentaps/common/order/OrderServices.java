@@ -872,7 +872,33 @@ public final class OrderServices {
             } catch (GenericServiceException e) {
                 return ServiceUtil.returnError(e.getMessage());
             }
+            if (ServiceUtil.isError(results) || ServiceUtil.isFailure(results)) {
+                return results;
+            }
 
+            // check if all the order items are now completed
+            try {
+            	i = filteredItemQtyMap.keySet().iterator();
+                while (i.hasNext()) {
+                    // the filteredItemQtyMap key is orderItemSeqId:shipGroupSeqId or 00001:00001
+                    String key = (String) i.next();
+                    String[] itemInfo = key.split(":");
+                    String orderItemSeqId = itemInfo[0];
+                    OrderItem item = orderRepository.getOrderItem(order, orderItemSeqId);
+                    Debug.logVerbose("item [" + item.getOrderId() + "/" + item.getOrderItemSeqId() + "] remaining to ship [" + item.getRemainingToShipQuantity() + "]", MODULE);
+                    if (item.getRemainingToShipQuantity().signum() == 0) {
+                    	Map tmpResults = dispatcher.runSync("changeOrderItemStatus", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId, "fromStatusId", item.getStatusId(), "statusId", "ITEM_COMPLETED", "userLogin", userLogin), -1, false);
+                    	if (ServiceUtil.isError(tmpResults) || ServiceUtil.isFailure(tmpResults)) {
+                            return tmpResults;
+                        }
+                    } 
+                    
+                }
+                
+            } catch (Exception e) {
+            	return ServiceUtil.returnError(e.getMessage());
+            }
+            
             // manually updates the accounting tags since the ofbiz service does not support them
             try {
                 for (String itemId : filteredTagsMap.keySet()) {
