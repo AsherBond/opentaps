@@ -25,22 +25,46 @@
                 <include-condition id="customer-state"/>
                 <include-condition id="customer-region"/>
                 -->                
+                <include-condition id="customer-customer"/>
+                <include-condition id="customer-city"/>
+                <include-condition id="customer-state"/>
+                <include-condition id="customer-country"/>
             </parameters>
         </report>
         <report name="CustomerByCountry">
-            <parameters dimension="customer-dimension"/>
+            <parameters dimension="customer-dimension">
+                <include-condition id="customer-city"/>
+                <include-condition id="customer-state"/>
+                <include-condition id="customer-country"/>
+            </parameters>
         </report>
         <report name="CustomerByPostalCodeCountry">
-            <parameters dimension="customer-dimension"/>
+            <parameters dimension="customer-dimension">
+                <include-condition id="customer-city"/>
+                <include-condition id="customer-state"/>
+                <include-condition id="customer-country"/>
+            </parameters>
         </report>
         <report name="CustomerBy3DigCodeCountry">
-            <parameters dimension="customer-dimension"/>
+            <parameters dimension="customer-dimension">
+                <include-condition id="customer-city"/>
+                <include-condition id="customer-state"/>
+                <include-condition id="customer-country"/>
+            </parameters>
         </report>
         <report name="CustomerByStateCountry">
-            <parameters dimension="customer-dimension"/>
+            <parameters dimension="customer-dimension">
+                <include-condition id="customer-city"/>
+                <include-condition id="customer-state"/>
+                <include-condition id="customer-country"/>
+            </parameters>
         </report>
         <report name="CustomerByCityStateCountry">
-            <parameters dimension="customer-dimension"/>
+            <parameters dimension="customer-dimension">
+                <include-condition id="customer-city"/>
+                <include-condition id="customer-state"/>
+                <include-condition id="customer-country"/>
+            </parameters>
         </report>
     </reports>
 
