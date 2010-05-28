@@ -529,9 +529,9 @@ public abstract class UtilUi {
 
     public static String removeTrailingZeros(String number) {
         // convert XX.XX000 into XX.XX
-        String rep = number.replaceFirst("^(\\d+\\.0*[^0]+)0*\\s*$", "$1");
+        String rep = number.replaceFirst("^(-?\\d+\\.0*[^0]+)0*\\s*$", "$1");
         // convert XX.000 into XX
-        rep = rep.replaceFirst("^(\\d+)\\.0*$", "$1");
+        rep = rep.replaceFirst("^(-?\\d+)\\.0*$", "$1");
         return rep;
     }
 
