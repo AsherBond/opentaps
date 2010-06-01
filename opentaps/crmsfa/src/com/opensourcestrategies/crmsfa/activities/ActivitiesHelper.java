@@ -74,7 +74,7 @@ public final class ActivitiesHelper {
      * @param delegator
      * @return List of partyIds
      */
-    public static List findInternalWorkeffortPartyIds(String workEffortId, GenericDelegator delegator) {
+    public static List<String> findInternalWorkeffortPartyIds(String workEffortId, GenericDelegator delegator) {
         List<String> workEffortRoles = UtilMisc.toList("CAL_OWNER", "CAL_ATTENDEE");
         List<String> internalPartyIds = new ArrayList<String>();
         try {

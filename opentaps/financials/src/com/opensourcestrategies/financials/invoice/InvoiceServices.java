@@ -54,12 +54,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.security.FinancialsSecurity;
-import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
+
 import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.accounting.payment.PaymentWorker;
 import org.ofbiz.base.util.Debug;
@@ -90,13 +88,11 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.service.calendar.RecurrenceInfo;
 import org.ofbiz.service.calendar.RecurrenceInfoException;
-import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.base.entities.InvoiceRole;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.common.agreement.AgreementInvoiceFactory;
 import org.opentaps.common.agreement.UtilAgreement;
 import org.opentaps.common.invoice.InvoiceHelper;
-import org.opentaps.common.order.UtilOrder;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
@@ -111,6 +107,10 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.security.FinancialsSecurity;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * InvoiceServices - Services for creating invoices.
