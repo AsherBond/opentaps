@@ -134,7 +134,9 @@ under the License.
     
     <!-- Used to configure facility parties which can have inventory received for them, in addition to the owner of the facility-->
     <RoleType roleTypeId="RECV_INV_FOR" description="Receive Inventory For"/>
-
+    <!-- template for an organization, including accounting setup -->
+    <RoleType roleTypeId="ORGANIZATION_TEMPL" description="Organization Template"/>
+    
     <!-- Statuses for OrderItemShipGroups -->
     <StatusType statusTypeId="OISG_STATUS" hasTable="N" description="Order Item Ship Group status"/>
     <StatusItem statusId="OISG_CREATED" statusTypeId="OISG_STATUS" statusCode="CREATED" sequenceId="01" description="Created"/>
