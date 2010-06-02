@@ -66,5 +66,21 @@ sales managers, CSR's, warehouse, and financials users. -->
 
     <UserLogin userLoginId="system" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint="Do Not Enable This Account"/>
                                     
+	<!--For accessing CRMSFA -->
+    <PartyRole partyId="admin" roleTypeId="ACCOUNT_MANAGER"/>
+	<UserLoginSecurityGroup groupId="SALES_MANAGER" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
+	
+	<!-- access all functionality in financials
+		 this does not seem to be necessary
+	<UserLoginSecurityGroup groupId="FINANCIALS_ADMIN" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
+	 -->
+	
+	<!-- access all functionality in Purchasing -->
+	<UserLoginSecurityGroup groupId="PRCH_MANAGER" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
 
+	<!-- access all functionality in warehouse -->
+	<UserLoginSecurityGroup groupId="WRHS_ADMIN" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
+	
+	
+	 
 </entity-engine-xml>
