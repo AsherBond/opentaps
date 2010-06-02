@@ -81,6 +81,8 @@ sales managers, CSR's, warehouse, and financials users. -->
 	<!-- access all functionality in warehouse -->
 	<UserLoginSecurityGroup groupId="WRHS_ADMIN" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
 	
+	<!-- access all functionality in data import module -->
+	<UserLoginSecurityGroup groupId="DATAIMPORT_MANAGER" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
 	
 	 
 </entity-engine-xml>
