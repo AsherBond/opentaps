@@ -478,7 +478,14 @@ public final class ActivitiesServices {
             // don't think BCC addresses is needed: this variable is intended for creating owners for incoming emails, and those don't come with BCC
 
             // create the associations and finish
-            return createWorkEffortPartyAssociations(dctx, context, workEffortId, errorLabel, !existing);
+            serviceResults = createWorkEffortPartyAssociations(dctx, context, workEffortId, errorLabel, !existing);
+            if (ServiceUtil.isError(serviceResults)) {
+                return UtilMessage.createAndLogServiceError(serviceResults, errorLabel, locale, MODULE);
+            }
+
+            Map results = ServiceUtil.returnSuccess();
+            results.put("workEffortId", workEffortId);
+            return results;
 
         } catch (GenericEntityException e) {
             return UtilMessage.createAndLogServiceError(e, errorLabel, locale, MODULE);

@@ -80,6 +80,7 @@
         <implements service="crmsfa.emailInterface"/>
         <implements service="crmsfa.activityAssociationInterface"/>
         <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="OUT"/>
     </service>
 
     <service name="crmsfa.saveActivityEmail" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="saveActivityEmail">
@@ -89,6 +90,7 @@
         <implements service="crmsfa.emailInterface"/>
         <implements service="crmsfa.activityAssociationInterface"/>
         <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="OUT"/>
     </service>
 
     <service name="crmsfa.updateActivityAssociation" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="updateActivityAssociation">
