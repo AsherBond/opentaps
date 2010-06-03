@@ -20,9 +20,7 @@
 /* This file contains content which comes from the Apache OFBIZ project but may have been modified */
 /* This file has been modified by Open Source Strategies, Inc. */
 
-
-/* This CSS file is used for all OFBiz applications EXCEPT ecommerce. */
-/* See the "ecommain.css" file for ecommerce. */
+/* This file should be packed with http://www.cleancss.com/ and then saved as opentaps-packed.css */
 
 /* ===== General Styles ===== */
 BODY {
