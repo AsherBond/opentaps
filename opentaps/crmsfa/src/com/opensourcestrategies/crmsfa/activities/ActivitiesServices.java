@@ -1069,6 +1069,16 @@ public final class ActivitiesServices {
                     GenericValue commEvent = iter.next();
 
                     input = UtilMisc.toMap("communicationEventId", commEvent.getString("communicationEventId"), "statusId", "COM_COMPLETE", "userLogin", userLogin);
+                    // in some cases the datetimeEnded might still be empty, set it from the workeffort actualCompletionDate or by default now
+                    if (UtilValidate.isEmpty(commEvent.get("datetimeEnded"))) {
+                        Timestamp datetimeEnded = workEffort.getTimestamp("actualCompletionDate");
+                        if (datetimeEnded == null) {
+                            datetimeEnded = UtilDateTime.nowTimestamp();
+                        }
+
+                        input.put("datetimeEnded", datetimeEnded);
+                    }
+
                     serviceResults = dispatcher.runSync("updateCommunicationEvent", input);
                     if (ServiceUtil.isError(serviceResults)) {
                         return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateActivityCommEventFail", locale, MODULE);
