@@ -59,19 +59,19 @@ public class QuickNewContactForm extends ScreenletFormPanel {
         }
 
         setUrl(QuickNewContactConfiguration.URL);     // this sets the action of the form
-        firstNameInput = new TextField(UtilUi.MSG.firstName(), QuickNewContactConfiguration.IN_FIRST_NAME, getInputLength());
+        firstNameInput = new TextField(UtilUi.MSG.partyFirstName(), QuickNewContactConfiguration.IN_FIRST_NAME, getInputLength());
         addRequiredField(firstNameInput);
 
-        lastNameInput = new TextField(UtilUi.MSG.lastName(), QuickNewContactConfiguration.IN_LAST_NAME, getInputLength());
+        lastNameInput = new TextField(UtilUi.MSG.partyLastName(), QuickNewContactConfiguration.IN_LAST_NAME, getInputLength());
         addRequiredField(lastNameInput);
 
         accountNameInput = new AccountAutocomplete(UtilUi.MSG.crmAccount(), QuickNewContactConfiguration.IN_ACCOUNT_PARTY_ID, getInputLength());
         addField(accountNameInput);
 
-        phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), QuickNewContactConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewContactConfiguration.IN_PHONE_AREA_CODE, QuickNewContactConfiguration.IN_PHONE_NUMBER, getInputLength());
+        phoneInput = new PhoneNumberField(UtilUi.MSG.partyPhoneNumber(), QuickNewContactConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewContactConfiguration.IN_PHONE_AREA_CODE, QuickNewContactConfiguration.IN_PHONE_NUMBER, getInputLength());
         addField(phoneInput);
 
-        emailInput = new TextField(UtilUi.MSG.emailAddress(), QuickNewContactConfiguration.IN_EMAIL_ADDRESS, getInputLength());
+        emailInput = new TextField(UtilUi.MSG.partyEmailAddress(), QuickNewContactConfiguration.IN_EMAIL_ADDRESS, getInputLength());
         emailInput.setVtype(VType.EMAIL);
         addField(emailInput);
 

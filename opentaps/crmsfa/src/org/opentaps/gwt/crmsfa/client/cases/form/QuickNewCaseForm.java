@@ -54,7 +54,7 @@ public class QuickNewCaseForm extends ScreenletFormPanel {
         setUrl(QuickNewCaseConfiguration.URL);
 
         // subject is a required text input field
-        subjectInput = new TextField(UtilUi.MSG.opentapsSubject(), QuickNewCaseConfiguration.SUBJECT, getInputLength());
+        subjectInput = new TextField(UtilUi.MSG.partySubject(), QuickNewCaseConfiguration.SUBJECT, getInputLength());
         addRequiredField(subjectInput);
 
         // this parameter is required for the crmsfa.createCase service

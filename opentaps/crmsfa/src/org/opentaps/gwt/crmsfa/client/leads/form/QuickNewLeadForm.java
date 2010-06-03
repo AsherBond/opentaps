@@ -61,16 +61,16 @@ public class QuickNewLeadForm extends ScreenletFormPanel {
         companyNameInput = new TextField(UtilUi.MSG.crmCompanyName(), QuickNewLeadConfiguration.IN_COMPANY_NAME, getInputLength());
         addRequiredField(companyNameInput);
 
-        firstNameInput = new TextField(UtilUi.MSG.firstName(), QuickNewLeadConfiguration.IN_FIRST_NAME, getInputLength());
+        firstNameInput = new TextField(UtilUi.MSG.partyFirstName(), QuickNewLeadConfiguration.IN_FIRST_NAME, getInputLength());
         addRequiredField(firstNameInput);
 
-        lastNameInput = new TextField(UtilUi.MSG.lastName(), QuickNewLeadConfiguration.IN_LAST_NAME, getInputLength());
+        lastNameInput = new TextField(UtilUi.MSG.partyLastName(), QuickNewLeadConfiguration.IN_LAST_NAME, getInputLength());
         addRequiredField(lastNameInput);
 
-        phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), QuickNewLeadConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewLeadConfiguration.IN_PHONE_AREA_CODE, QuickNewLeadConfiguration.IN_PHONE_NUMBER, getInputLength());
+        phoneInput = new PhoneNumberField(UtilUi.MSG.partyPhoneNumber(), QuickNewLeadConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewLeadConfiguration.IN_PHONE_AREA_CODE, QuickNewLeadConfiguration.IN_PHONE_NUMBER, getInputLength());
         addField(phoneInput);
 
-        emailInput = new TextField(UtilUi.MSG.emailAddress(), QuickNewLeadConfiguration.IN_EMAIL_ADDRESS, getInputLength());
+        emailInput = new TextField(UtilUi.MSG.partyEmailAddress(), QuickNewLeadConfiguration.IN_EMAIL_ADDRESS, getInputLength());
         emailInput.setVtype(VType.EMAIL);
         addField(emailInput);
 
