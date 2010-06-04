@@ -115,8 +115,6 @@
     <target name="clean" depends="clean-lib">
         <delete dir="${build.dir}"/>
       	<delete file="${lib.dir}/${aspectname}.jar"/>
-        <delete file="${lib.dir}/${name}-entities.jar"/>
-      	<delete file="${lib.dir}/${name}-services.jar"/>        
     </target>
 
     <target name="clean-lib" depends="init">
@@ -240,7 +238,7 @@
         </jar>
     </target>
 
-    <target name="jar" depends="constants-jar,base-jar,entities-jar,services-jar,classes">
+    <target name="jar" depends="constants-jar,base-jar,classes">
         <jar jarfile="${build.dir}/lib/${name}.jar">
            <fileset dir="${build.dir}/classes/common" excludes="org/opentaps/aspect/**"/>
         </jar>
