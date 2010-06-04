@@ -2249,7 +2249,8 @@ public final class PaymentServices {
                     "billingAccountId", paymentApplication.get("billingAccountId"),
                     "paymentId", paymentApplication.get("paymentId"),
                     "toPaymentId", paymentApplication.get("toPaymentId"),
-                    "taxAuthGeoId", paymentApplication.get("taxAuthGeoId"));
+                    "taxAuthGeoId", paymentApplication.get("taxAuthGeoId"),
+                    "note", paymentApplication.get("note"));
             // add tags condition, just update the PaymentApplication who have same accounting tags
             for (int i = 1; i <= UtilAccountingTags.TAG_COUNT; i++) {
                 condition.put(UtilAccountingTags.ENTITY_TAG_PREFIX + i, paymentApplication.get(UtilAccountingTags.ENTITY_TAG_PREFIX + i));
