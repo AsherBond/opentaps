@@ -47,18 +47,18 @@
     The MySeedData.xml file can be used to create your own custom seed data, such as variance reasons, contact types, return reason codes,
     sales channels, etc. 
 
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/MySeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/MyextseedData.xml"/>
     -->
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/CRMSFATypes.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/CompanyData.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/Warehouses.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/Shipping.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/Store.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/Catalog.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/ChartOfAccount.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/DefaultInvoiceItemTypeGlAccounts.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/Accounting.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/Users.xml"/>
+    <entity-resource type="data" reader-name="ext" loader="main" location="data/CRMSFATypes.xml"/>
+    <entity-resource type="data" reader-name="ext" loader="main" location="data/CompanyData.xml"/>
+    <entity-resource type="data" reader-name="ext" loader="main" location="data/Warehouses.xml"/>
+    <entity-resource type="data" reader-name="ext" loader="main" location="data/Shipping.xml"/>
+    <entity-resource type="data" reader-name="ext" loader="main" location="data/Store.xml"/>
+    <entity-resource type="data" reader-name="ext" loader="main" location="data/Catalog.xml"/>
+    <entity-resource type="data" reader-name="ext" loader="main" location="data/ChartOfAccount.xml"/>
+    <entity-resource type="data" reader-name="ext" loader="main" location="data/Accounting.xml"/>
+    <entity-resource type="data" reader-name="ext" loader="main" location="data/DefaultInvoiceItemTypeGlAccounts.xml"/>
+    <entity-resource type="data" reader-name="ext" loader="main" location="data/Users.xml"/>
 
         
     <!-- if you have entity ECAs uncomment this

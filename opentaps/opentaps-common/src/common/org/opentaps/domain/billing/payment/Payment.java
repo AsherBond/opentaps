@@ -39,8 +39,10 @@ public class Payment extends org.opentaps.base.entities.Payment {
 
     private static final String MODULE = Payment.class.getName();
 
-    private static int DECIMALS = UtilNumber.getBigDecimalScale("invoice.decimals");
-    private static int ROUNDING = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
+    /** Number of decimals to use when rounding amounts. */
+    public static final int DECIMALS = UtilNumber.getBigDecimalScale("invoice.decimals");
+    /** Rounding method to use when rounding amounts. */
+    public static final int ROUNDING = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
 
     private PaymentMethod paymentMethod;
     private Party partyFrom;

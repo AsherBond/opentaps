@@ -1,0 +1,29 @@
+/* Section header images for financials */
+div#sectionHeaderTitle_receivables {
+    background: transparent url('/opentaps_images/openclipart.org/addressed_envelope_with_stamp_01.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
+}
+div#sectionHeaderTitle_myHome {
+    background: transparent url('/opentaps_images/openclipart.org/histogram_24x24.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
+}
+div#sectionHeaderTitle_payables {
+    background: transparent url('/opentaps_images/openclipart.org/ringing_24x24.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
+}
+div#sectionHeaderTitle_employees {
+    background: transparent url('/opentaps_images/openclipart.org/ppls_24x24.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
+}
+div#sectionHeaderTitle_transactions {
+    background: transparent url('/opentaps_images/openclipart.org/box_with_folders_nicu_bu_01.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
+}
+div#sectionHeaderTitle_partners {
+    background: transparent url('/opentaps_images/openclipart.org/earth_24x24.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
+}
+div#sectionHeaderTitle_reports {
+    background: transparent url('/opentaps_images/openclipart.org/inservice_presentation_01.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
+}

@@ -85,7 +85,7 @@ context.put("asOfDateTime", asOfDateTime);
 
 // create a balance summary list for pagination
 customerVendorBalanceList = FastList.newInstance();
-totalAmount = AccountsHelper.ZERO;
+totalAmount = BigDecimal.ZERO;
 for (partyId : keySet) {
     if (partyId != null) {
     	partyBalanceAmount = (BigDecimal) balances.get(partyId);
