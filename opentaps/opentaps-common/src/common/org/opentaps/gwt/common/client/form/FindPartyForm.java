@@ -75,17 +75,17 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
 
         // Filter by Phone Number
         filterByPhoneTab = getMainForm().addTab(UtilUi.MSG.findByPhone());
-        phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), getLabelLength(), getInputLength());
+        phoneInput = new PhoneNumberField(UtilUi.MSG.partyPhoneNumber(), getLabelLength(), getInputLength());
         filterByPhoneTab.addField(phoneInput);
 
         classificationInput = new PartyClassificationAutocomplete(UtilUi.MSG.classification(), "classification", getInputLength());
         toNameInput = new TextField(UtilUi.MSG.partyToName(), "toName", getInputLength());
         attnNameInput = new TextField(UtilUi.MSG.partyAttentionName(), "attnName", getInputLength());
-        addressInput = new TextField(UtilUi.MSG.address(), "address", getInputLength());
-        cityInput = new TextField(UtilUi.MSG.city(), "city", getInputLength());
-        postalCodeInput = new TextField(UtilUi.MSG.postalCode(), "postalCode", getInputLength());
-        countryInput = new CountryAutocomplete(UtilUi.MSG.country(), "country", getInputLength());
-        stateInput = new StateAutocomplete(UtilUi.MSG.stateOrProvince(), "state", countryInput, getInputLength());
+        addressInput = new TextField(UtilUi.MSG.partyAddressLine1(), "address", getInputLength());
+        cityInput = new TextField(UtilUi.MSG.partyCity(), "city", getInputLength());
+        postalCodeInput = new TextField(UtilUi.MSG.partyPostalCode(), "postalCode", getInputLength());
+        countryInput = new CountryAutocomplete(UtilUi.MSG.partyCountry(), "country", getInputLength());
+        stateInput = new StateAutocomplete(UtilUi.MSG.partyState(), "state", countryInput, getInputLength());
 
         // Build the filter by advanced tab
         filterByAdvancedTab = getMainForm().addTab(UtilUi.MSG.findByAdvanced());

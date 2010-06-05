@@ -127,16 +127,16 @@ public class PhoneNumberField extends Panel implements FieldInterface {
             fieldPanel.setMargins(0, 2, 0, 0);
         }
 
-        countryCodeInput = createInput(fieldLabel, countryCodeName, UtilUi.MSG.phoneCountryCode(), CODES_INPUT_CHAR_LENGTH, CODES_INPUT_PX_LENGTH);
+        countryCodeInput = createInput(fieldLabel, countryCodeName, UtilUi.MSG.partyCountryCode(), CODES_INPUT_CHAR_LENGTH, CODES_INPUT_PX_LENGTH);
 
         // all phone number fields should have a default country code
         OpentapsConfig config = new OpentapsConfig();
         countryCodeInput.setValue(config.getDefaultCountryCode());
 
-        areaCodeInput = createInput(fieldLabel, areaCodeName, UtilUi.MSG.phoneAreaCode(), CODES_INPUT_CHAR_LENGTH, CODES_INPUT_PX_LENGTH);
+        areaCodeInput = createInput(fieldLabel, areaCodeName, UtilUi.MSG.partyAreaCode(), CODES_INPUT_CHAR_LENGTH, CODES_INPUT_PX_LENGTH);
 
         int numberWidth = fieldWidth - (CODES_INPUT_PX_LENGTH + INPUT_PX_MARGIN) * 2;
-        numberInput = createInput(fieldLabel, numberName, UtilUi.MSG.phoneNumber(), PHONE_NUMBER_INPUT_CHAR_LENGTH, numberWidth);
+        numberInput = createInput(fieldLabel, numberName, UtilUi.MSG.partyPhoneNumber(), PHONE_NUMBER_INPUT_CHAR_LENGTH, numberWidth);
 
         fieldPanel.add(countryCodeInput);
         fieldPanel.add(areaCodeInput);

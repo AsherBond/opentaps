@@ -1,0 +1,7 @@
+/* Section header images */
+
+div#sectionHeaderTitle_myHome {
+    background: transparent url('/opentaps_images/openclipart.org/pitr_green_menu_24x24.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
+}
+

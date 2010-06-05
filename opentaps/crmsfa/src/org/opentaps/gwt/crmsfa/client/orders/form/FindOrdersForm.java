@@ -176,11 +176,11 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
         
         shippingToNameInput = new TextField(UtilUi.MSG.partyToName(), "toName", getInputLength());
         shippingAttnNameInput = new TextField(UtilUi.MSG.partyAttentionName(), "attnName", getInputLength());
-        shippingAddressInput = new TextField(UtilUi.MSG.address(), "address", getInputLength());
-        shippingCityInput = new TextField(UtilUi.MSG.city(), "city", getInputLength());
-        shippingPostalCodeInput = new TextField(UtilUi.MSG.postalCode(), "postalCode", getInputLength());
-        shippingCountryInput = new CountryAutocomplete(UtilUi.MSG.country(), "country", getInputLength());
-        shippingStateInput = new StateAutocomplete(UtilUi.MSG.stateOrProvince(), "state", shippingCountryInput, getInputLength());
+        shippingAddressInput = new TextField(UtilUi.MSG.partyAddressLine1(), "address", getInputLength());
+        shippingCityInput = new TextField(UtilUi.MSG.partyCity(), "city", getInputLength());
+        shippingPostalCodeInput = new TextField(UtilUi.MSG.partyPostalCode(), "postalCode", getInputLength());
+        shippingCountryInput = new CountryAutocomplete(UtilUi.MSG.partyCountry(), "country", getInputLength());
+        shippingStateInput = new StateAutocomplete(UtilUi.MSG.partyState(), "state", shippingCountryInput, getInputLength());
         // Build the filter by advanced tab
         filterByAdvancedTab = getMainForm().addTab(UtilUi.MSG.findByShippingAddress());
         Panel advancedPanel = new Panel();

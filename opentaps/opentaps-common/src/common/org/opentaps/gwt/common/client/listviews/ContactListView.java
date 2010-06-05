@@ -47,9 +47,9 @@ public class ContactListView extends PartyListView {
 
     @Override
     public void init() {
-        init(PartyLookupConfiguration.URL_FIND_CONTACTS, "/crmsfa/control/viewContact?partyId={0}", UtilUi.MSG.contactId(), new String[]{
-                PartyLookupConfiguration.INOUT_FIRST_NAME, UtilUi.MSG.firstName(),
-                PartyLookupConfiguration.INOUT_LAST_NAME, UtilUi.MSG.lastName()
+        init(PartyLookupConfiguration.URL_FIND_CONTACTS, "/crmsfa/control/viewContact?partyId={0}", UtilUi.MSG.crmContactId(), new String[]{
+                PartyLookupConfiguration.INOUT_FIRST_NAME, UtilUi.MSG.partyFirstName(),
+                PartyLookupConfiguration.INOUT_LAST_NAME, UtilUi.MSG.partyLastName()
             });
     }
 
