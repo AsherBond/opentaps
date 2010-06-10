@@ -839,6 +839,8 @@ public class PojoGeneratorContainer implements Container {
                                         String aName = relation.getTitle() + relation.getRelEntityName();
                                         //get ref field name
                                         refField = aName.substring(0, 1).toLowerCase() + aName.substring(1);
+                                        // replace all space characters
+                                        refField = refField.replaceAll("\\s*", "");
                                         break;
                                     }
                                 }
