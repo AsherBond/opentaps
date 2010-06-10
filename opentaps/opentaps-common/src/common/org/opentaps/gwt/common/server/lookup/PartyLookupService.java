@@ -89,6 +89,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     private static List<String> BY_PHONE_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_PHONE_COUNTRY_CODE,
                                                                    PartyLookupConfiguration.INOUT_PHONE_AREA_CODE,
                                                                    PartyLookupConfiguration.INOUT_PHONE_NUMBER);
+    private static List<String> BY_EMAIL_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_EMAIL);
     private static List<String> BY_ADVANCED_FILTERS = Arrays.asList(PartyLookupConfiguration.IN_CLASSIFICATION,
                                                                       PartyLookupConfiguration.INOUT_ADDRESS,
                                                                       PartyLookupConfiguration.INOUT_COUNTRY,
@@ -579,6 +580,10 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
 
         if (getProvider().oneParameterIsPresent(BY_PHONE_FILTERS)) {
             return findPartiesBy(entity, condition, BY_PHONE_FILTERS);
+        }
+        
+        if (getProvider().oneParameterIsPresent(BY_EMAIL_FILTERS)) {
+            return findPartiesBy(entity, condition, BY_EMAIL_FILTERS);
         }
 
         if (getProvider().oneParameterIsPresent(BY_ADVANCED_FILTERS)) {

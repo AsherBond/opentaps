@@ -44,6 +44,9 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
 
     private final SubFormPanel filterByPhoneTab;
     private final PhoneNumberField phoneInput;
+    
+    private final SubFormPanel filterByEmailTab;
+    private final TextField emailInput;
 
     protected final SubFormPanel filterByAdvancedTab;
     protected final PartyClassificationAutocomplete classificationInput;
@@ -77,6 +80,11 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
         filterByPhoneTab = getMainForm().addTab(UtilUi.MSG.findByPhone());
         phoneInput = new PhoneNumberField(UtilUi.MSG.partyPhoneNumber(), getLabelLength(), getInputLength());
         filterByPhoneTab.addField(phoneInput);
+        
+        // Filter by Email Address
+        filterByEmailTab = getMainForm().addTab(UtilUi.MSG.findByEmail());
+        emailInput = new TextField(UtilUi.MSG.emailAddress(), "emailAddress", getInputLength());
+        filterByEmailTab.addField(emailInput);
 
         classificationInput = new PartyClassificationAutocomplete(UtilUi.MSG.classification(), "classification", getInputLength());
         toNameInput = new TextField(UtilUi.MSG.partyToName(), "toName", getInputLength());
@@ -133,6 +141,10 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
         getListView().filterByPhoneNumber(phoneInput.getNumber());
     }
 
+    protected void filterByEmailAddress() {
+        getListView().filterByEmailAddress(emailInput.getText());
+    }
+
     protected void filterByAdvanced() {
         getListView().filterByClassification(classificationInput.getText());
         getListView().filterByAddress(addressInput.getText());
@@ -152,6 +164,8 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
             filterByNames();
         } else if (p == filterByPhoneTab) {
             filterByPhoneNumber();
+        } else if (p == filterByEmailTab) {
+            filterByEmailAddress();
         } else if (p == filterByAdvancedTab) {
             filterByAdvanced();
         }

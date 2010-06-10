@@ -127,11 +127,11 @@ public abstract class PartyListView extends EntityListView {
             }
         });
 
-        ColumnConfig columnEmail = makeLinkColumn(UtilUi.MSG.partyEmailAddress(), idDefinition, new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL), entityViewUrl, true);
+        ColumnConfig columnEmail = makeLinkColumn(UtilUi.MSG.partyEmailAddress(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_EMAIL), entityViewUrl, true);
         columnEmail.setRenderer(new Renderer() {
             public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
                 // bold priority field if record is updated
-                String email = record.getAsString(PartyLookupConfiguration.OUT_EMAIL);
+                String email = record.getAsString(PartyLookupConfiguration.INOUT_EMAIL);
                 String contactMechIdTo = record.getAsString(PartyLookupConfiguration.OUT_EMAIL_CONTACT_MECH_ID);
                 String internalPartyId = record.getAsString(PartyLookupConfiguration.INOUT_PARTY_ID);
                 int actionPos = entityViewUrl.lastIndexOf("/");
@@ -159,7 +159,7 @@ public abstract class PartyListView extends EntityListView {
         getColumn().setFixed(true);
         makeColumn("", new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER)).setHidden(true);
         getColumn().setFixed(true);
-        makeColumn("", new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL)).setHidden(true);
+        makeColumn("", new StringFieldDef(PartyLookupConfiguration.INOUT_EMAIL)).setHidden(true);
         getColumn().setFixed(true);
 
         configure(entityFindUrl, PartyLookupConfiguration.INOUT_PARTY_ID, SortDir.ASC);
@@ -295,6 +295,14 @@ public abstract class PartyListView extends EntityListView {
      */
     public void filterOutDisabledParties(boolean filter) {
         setFilter(PartyLookupConfiguration.IN_ACTIVE_PARTIES_ONLY, filter ? "Y" : "N", true);
+    }
+
+    /**
+     * Filters the records of the list by email of the party matching the given sub string.
+     * @param number a <code>String</code> value
+     */
+    public void filterByEmailAddress(String email) {
+        setFilter(PartyLookupConfiguration.INOUT_EMAIL, email);
     }
 
 }
