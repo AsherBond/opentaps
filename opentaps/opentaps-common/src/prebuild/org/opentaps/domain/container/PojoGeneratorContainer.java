@@ -824,8 +824,7 @@ public class PojoGeneratorContainer implements Container {
                         relationInfo.put("joinColumn", columnName);
                         //if this property is collection, and have only one primary key, and find it in child property
                         // this is useful for hibernate's cascading feature
-                        if ("many".equals(modelRelation.getType()) && modelEntity.getPkFieldNames().size() == 1
-                                && modelEntity.getPkFieldNames().contains(mappedByFieldId)) {
+                        if ("many".equals(modelRelation.getType()) && modelEntity.getPkFieldNames().size() == 1) {
                             try {
                                 ModelEntity refEntity = modelReader.getModelEntity(modelRelation.getRelEntityName());
                                 // manyToOne field
@@ -843,7 +842,7 @@ public class PojoGeneratorContainer implements Container {
                                         break;
                                     }
                                 }
-                                if (refEntity.getPkFieldNames().contains(joinField) && !refField.equals("")) {
+                                if (!refField.equals("") && refEntity.getPkFieldNames().size() == 1) {
                                     // if this collection should be a cascade collection property
                                     relationInfo.put("itemName", itemName(fieldName));
                                     relationInfo.put("refField", refField);
