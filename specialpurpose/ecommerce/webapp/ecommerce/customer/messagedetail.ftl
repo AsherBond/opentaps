@@ -59,7 +59,7 @@ under the License.
           <tr>
             <td>&nbsp;</td>
             <td>
-              <div class="tabletext">${communicationEvent.content?default("[${uiLabelMap.EcommerceEmptyBody}]")}</div>
+              <div class="tabletext">${StringUtil.wrapString(communicationEvent.content)?default("[${uiLabelMap.EcommerceEmptyBody}]")}</div>
             </td>
           </tr>
         </table>

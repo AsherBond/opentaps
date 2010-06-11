@@ -172,6 +172,12 @@ public class FreeMarkerWorker {
         Template template = getTemplate(templateLocation);
         renderTemplate(template, context, outWriter);
     }
+ 
+    public static void clearTemplateFromCache(String templateLocation) {
+        synchronized (cachedTemplates) {
+            cachedTemplates.remove(templateLocation);
+        }
+    }
 
     public static Environment renderTemplateFromString(String templateString, String templateLocation, Map<String, Object> context, Appendable outWriter) throws TemplateException, IOException {
         String cacheKey = templateLocation + "@" + templateString;
@@ -187,7 +193,6 @@ public class FreeMarkerWorker {
                 }
             }
         }
-
         return renderTemplate(template, context, outWriter);
     }
 
