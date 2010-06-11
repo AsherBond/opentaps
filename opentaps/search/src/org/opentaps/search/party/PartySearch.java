@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.search.HibernateSearchService;
 
@@ -44,7 +45,7 @@ public final class PartySearch {
      * @param roleTypeId the role of the party group to search
      */
     public static void makePartyGroupQuery(StringBuilder sb, String roleTypeId) {
-        sb.append("( +id.roleTypeId:").append(roleTypeId).append(" +(");
+        sb.append("( -party.statusId:").append(StatusItemConstants.PartyStatus.PARTY_DISABLED).append(" +id.roleTypeId:").append(roleTypeId).append(" +(");
         makePartyGroupFieldsQuery(sb);
         sb.append("))");
     }
@@ -56,7 +57,7 @@ public final class PartySearch {
      * @param roleTypeId the role of the party group to search
      */
     public static void makePersonQuery(StringBuilder sb, String roleTypeId) {
-        sb.append("( +id.roleTypeId:").append(roleTypeId).append(" +(");
+        sb.append("( -party.statusId:").append(StatusItemConstants.PartyStatus.PARTY_DISABLED).append(" +id.roleTypeId:").append(roleTypeId).append(" +(");
         makePersonFieldsQuery(sb);
         sb.append("))");
     }
@@ -74,8 +75,13 @@ public final class PartySearch {
         sb.append(")");
     }
 
+    /**
+     * Builds a Lucene query for each indexed field of a Lead entity.
+     * In the case of a lead, this is just like a Person but we also search in companyName / companyNameLocal.
+     * @param sb a <code>StringBuilder</code> value
+     */
     public static void makeLeadQuery(StringBuilder sb) {
-        sb.append("(+id.roleTypeId:").append(RoleTypeConstants.PROSPECT).append(" +(");
+        sb.append("( -party.statusId:").append(StatusItemConstants.PartyStatus.PARTY_DISABLED).append(" +id.roleTypeId:").append(RoleTypeConstants.PROSPECT).append(" +(");
         for (String f : Arrays.asList("partyId", "firstName", "lastName", "middleName", "firstNameLocal", "lastNameLocal", "nickname")) {
             sb.append("party.person.").append(f).append(":").append(HibernateSearchService.DEFAULT_PLACEHOLDER).append(" ");
         }
