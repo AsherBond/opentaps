@@ -838,22 +838,28 @@ public class PojoGeneratorContainer implements Container {
                                         //get access name
                                         String aName = relation.getTitle() + relation.getRelEntityName();
                                         //get ref field name
-                                        refField = aName.substring(0, 1).toLowerCase() + aName.substring(1);
+                                        String relateField = aName.substring(0, 1).toLowerCase() + aName.substring(1);
                                         // replace all space characters
-                                        refField = refField.replaceAll("\\s*", "");
-                                        break;
+                                        relateField = relateField.replaceAll("\\s*", "");
+                                        // if relate entity contain relate field
+                                        if (refEntity.getAllFieldNames().contains(relateField + "Id")) {
+                                            refField = relateField;
+                                            break;
+                                        }                                        
                                     }
                                 }
-                                if (!refField.equals("") && refEntity.getPkFieldNames().size() == 1) {
-                                    // if this collection should be a cascade collection property
+                                if (!refField.equals("") && (refEntity.getPkFieldNames().size() == 1 || refEntity.getPkFieldNames().contains(joinField))) {
                                     relationInfo.put("itemName", itemName(fieldName));
                                     relationInfo.put("refField", refField);
-                                    //put add item method of collection
-                                    relationInfo.put("addMethodName", addName(fieldName));
-                                    //put remove item method of collection
-                                    relationInfo.put("removeMethodName", removeName(fieldName));
-                                    //put clear item method of collection
-                                    relationInfo.put("clearMethodName", clearName(fieldName));
+                                    // if this collection contains current pk, it should be a cascade collection property
+                                    if (refEntity.getPkFieldNames().contains(joinField)) {
+                                        //put add item method of collection
+                                        relationInfo.put("addMethodName", addName(fieldName));
+                                        //put remove item method of collection
+                                        relationInfo.put("removeMethodName", removeName(fieldName));
+                                        //put clear item method of collection
+                                        relationInfo.put("clearMethodName", clearName(fieldName));
+                                    }
                                 }
                             } catch (GenericEntityException e) {
                                 Debug.logError(e, MODULE);
