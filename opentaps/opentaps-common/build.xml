@@ -194,15 +194,13 @@
         </javac>
     </target>
 
-    <target name="classes" depends="base-classes,services-classes,entities-classes,prepare,classpath">
+    <target name="classes" depends="base-classes,prepare,classpath">
 
         <javac debug="on" deprecation="on" destdir="${build.dir}/classes/common" fork="yes" memoryMaximumSize="1024M" encoding="utf-8">
             <classpath>
                 <path refid="local.class.path"/>
                 <pathelement location="${build.dir}/classes/constants"/>
                 <pathelement location="${build.dir}/classes/base"/>
-                <pathelement location="${build.dir}/classes/entities"/>
-                <pathelement location="${build.dir}/classes/services"/>
             </classpath>
             <src path="${src.dir}/common"/>
             <exclude name="org/opentaps/aspect/**"/>
