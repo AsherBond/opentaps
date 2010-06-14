@@ -59,10 +59,10 @@ public class QuickNewAccountForm extends ScreenletFormPanel {
         accountNameInput = new TextField(UtilUi.MSG.crmAccountName(), QuickNewAccountConfiguration.IN_ACCOUNT_NAME, getInputLength());
         addRequiredField(accountNameInput);
 
-        phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), QuickNewAccountConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewAccountConfiguration.IN_PHONE_AREA_CODE, QuickNewAccountConfiguration.IN_PHONE_NUMBER, getInputLength());
+        phoneInput = new PhoneNumberField(UtilUi.MSG.partyPhoneNumber(), QuickNewAccountConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewAccountConfiguration.IN_PHONE_AREA_CODE, QuickNewAccountConfiguration.IN_PHONE_NUMBER, getInputLength());
         addField(phoneInput);
 
-        emailInput = new TextField(UtilUi.MSG.emailAddress(), QuickNewAccountConfiguration.IN_EMAIL_ADDRESS, getInputLength());
+        emailInput = new TextField(UtilUi.MSG.partyEmailAddress(), QuickNewAccountConfiguration.IN_EMAIL_ADDRESS, getInputLength());
         emailInput.setVtype(VType.EMAIL);
         addField(emailInput);
 

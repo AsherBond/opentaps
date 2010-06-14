@@ -47,7 +47,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -66,6 +65,8 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.template.freemarker.FreemarkerUtil;
 import org.opentaps.common.util.UtilCommon;
+
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
 
 public final class CommunicationEventServices {
 
@@ -110,7 +111,7 @@ public final class CommunicationEventServices {
             GenericValue contactList = delegator.findByPrimaryKey("ContactList", UtilMisc.toMap("contactListId", contactListId));
 
             Map<String, Object> sendMailParams = new HashMap<String, Object>();
-            sendMailParams.put("sendFrom", communicationEvent.getRelatedOne("FromContactMech").getString("infoString"));
+            sendMailParams.put("sendFrom", UtilCommon.emailAndPersonalName(communicationEvent.getRelatedOne("FromContactMech").getString("contactMechId"), delegator));
             String subject = communicationEvent.getString("subject");
             String body = communicationEvent.getString("content");
             sendMailParams.put("contentType", communicationEvent.getString("contentMimeTypeId"));
@@ -234,7 +235,7 @@ public final class CommunicationEventServices {
                                                                                                 "thruDate", UtilDateTime.nowTimestamp(), "userLogin", userLogin));
                         if (ServiceUtil.isError(tmpResult)) {
 
-                            // If the expiry fails, just log and skip the email address
+                            // If the expiration fails, just log and skip the email address
                             Debug.logError(errorCallingUpdateContactListPartyService + ": " + ServiceUtil.getErrorMessage(tmpResult), MODULE);
                             errorMessages.add(errorCallingUpdateContactListPartyService + ": " + ServiceUtil.getErrorMessage(tmpResult));
                             continue;

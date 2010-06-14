@@ -34,7 +34,7 @@ public class FindAccountsForm extends FindPartyForm {
      * Default constructor.
      */
     public FindAccountsForm() {
-        super(UtilUi.MSG.accountId(), UtilUi.MSG.findAccounts());
+        super(UtilUi.MSG.crmAccountId(), UtilUi.MSG.crmFindAccounts());
         accountListView = new AccountListView();
         accountListView.init();
         addListView(accountListView);
@@ -50,7 +50,7 @@ public class FindAccountsForm extends FindPartyForm {
      * @param ignoreLinkColumn creates id column as plain column w/o hypelinks if true.
      */
     public FindAccountsForm(boolean autoLoad, boolean ignoreLinkColumn) {
-        super(UtilUi.MSG.accountId(), UtilUi.MSG.findAccounts());
+        super(UtilUi.MSG.crmAccountId(), UtilUi.MSG.crmFindAccounts());
         accountListView = new AccountListView();
         accountListView.setAutoLoad(autoLoad);
         accountListView.setIgnoreLinkColumn(ignoreLinkColumn);
@@ -61,7 +61,7 @@ public class FindAccountsForm extends FindPartyForm {
 
     @Override
     protected void buildFilterByNameTab(SubFormPanel p) {
-        accountNameInput = new TextField(UtilUi.MSG.accountName(), "accountName", getInputLength());
+        accountNameInput = new TextField(UtilUi.MSG.crmAccountName(), "accountName", getInputLength());
         p.addField(accountNameInput);
     }
 

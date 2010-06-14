@@ -99,17 +99,17 @@ public abstract class PartyListView extends EntityListView {
         }
 
         // add remaining fields
-        makeColumn(UtilUi.MSG.toName(), new StringFieldDef(PartyLookupConfiguration.INOUT_TO_NAME));
-        makeColumn(UtilUi.MSG.attnName(), new StringFieldDef(PartyLookupConfiguration.INOUT_ATTENTION_NAME));
-        makeColumn(UtilUi.MSG.address(), new StringFieldDef(PartyLookupConfiguration.INOUT_ADDRESS));
-        makeColumn(UtilUi.MSG.address2(), new StringFieldDef(PartyLookupConfiguration.OUT_ADDRESS_2));
-        makeColumn(UtilUi.MSG.city(), new StringFieldDef(PartyLookupConfiguration.INOUT_CITY));
-        makeColumn(UtilUi.MSG.stateOrProvince(), new StringFieldDef(PartyLookupConfiguration.INOUT_STATE));
-        makeColumn(UtilUi.MSG.country(), new StringFieldDef(PartyLookupConfiguration.INOUT_COUNTRY));
-        makeColumn(UtilUi.MSG.postalCode(), new StringFieldDef(PartyLookupConfiguration.INOUT_POSTAL_CODE));
-        makeColumn(UtilUi.MSG.postalCodeExt(), new StringFieldDef(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT));
+        makeColumn(UtilUi.MSG.partyToName(), new StringFieldDef(PartyLookupConfiguration.INOUT_TO_NAME));
+        makeColumn(UtilUi.MSG.partyAttentionName(), new StringFieldDef(PartyLookupConfiguration.INOUT_ATTENTION_NAME));
+        makeColumn(UtilUi.MSG.partyAddressLine1(), new StringFieldDef(PartyLookupConfiguration.INOUT_ADDRESS));
+        makeColumn(UtilUi.MSG.partyAddressLine2(), new StringFieldDef(PartyLookupConfiguration.OUT_ADDRESS_2));
+        makeColumn(UtilUi.MSG.partyCity(), new StringFieldDef(PartyLookupConfiguration.INOUT_CITY));
+        makeColumn(UtilUi.MSG.partyState(), new StringFieldDef(PartyLookupConfiguration.INOUT_STATE));
+        makeColumn(UtilUi.MSG.partyCountry(), new StringFieldDef(PartyLookupConfiguration.INOUT_COUNTRY));
+        makeColumn(UtilUi.MSG.partyPostalCode(), new StringFieldDef(PartyLookupConfiguration.INOUT_POSTAL_CODE));
+        makeColumn(UtilUi.MSG.crmPostalCodeExt(), new StringFieldDef(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT));
 
-        ColumnConfig columnPhone = makeLinkColumn(UtilUi.MSG.phoneNumber(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER), entityViewUrl, true);
+        ColumnConfig columnPhone = makeLinkColumn(UtilUi.MSG.partyPhoneNumber(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER), entityViewUrl, true);
         columnPhone.setRenderer(new Renderer() {
             public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
                 // bold priority field if record is updated
@@ -127,11 +127,11 @@ public abstract class PartyListView extends EntityListView {
             }
         });
 
-        ColumnConfig columnEmail = makeLinkColumn(UtilUi.MSG.emailAddress(), idDefinition, new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL), entityViewUrl, true);
+        ColumnConfig columnEmail = makeLinkColumn(UtilUi.MSG.partyEmailAddress(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_EMAIL), entityViewUrl, true);
         columnEmail.setRenderer(new Renderer() {
             public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
                 // bold priority field if record is updated
-                String email = record.getAsString(PartyLookupConfiguration.OUT_EMAIL);
+                String email = record.getAsString(PartyLookupConfiguration.INOUT_EMAIL);
                 String contactMechIdTo = record.getAsString(PartyLookupConfiguration.OUT_EMAIL_CONTACT_MECH_ID);
                 String internalPartyId = record.getAsString(PartyLookupConfiguration.INOUT_PARTY_ID);
                 int actionPos = entityViewUrl.lastIndexOf("/");
@@ -159,7 +159,7 @@ public abstract class PartyListView extends EntityListView {
         getColumn().setFixed(true);
         makeColumn("", new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER)).setHidden(true);
         getColumn().setFixed(true);
-        makeColumn("", new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL)).setHidden(true);
+        makeColumn("", new StringFieldDef(PartyLookupConfiguration.INOUT_EMAIL)).setHidden(true);
         getColumn().setFixed(true);
 
         configure(entityFindUrl, PartyLookupConfiguration.INOUT_PARTY_ID, SortDir.ASC);
@@ -295,6 +295,14 @@ public abstract class PartyListView extends EntityListView {
      */
     public void filterOutDisabledParties(boolean filter) {
         setFilter(PartyLookupConfiguration.IN_ACTIVE_PARTIES_ONLY, filter ? "Y" : "N", true);
+    }
+
+    /**
+     * Filters the records of the list by email of the party matching the given sub string.
+     * @param number a <code>String</code> value
+     */
+    public void filterByEmailAddress(String email) {
+        setFilter(PartyLookupConfiguration.INOUT_EMAIL, email);
     }
 
 }

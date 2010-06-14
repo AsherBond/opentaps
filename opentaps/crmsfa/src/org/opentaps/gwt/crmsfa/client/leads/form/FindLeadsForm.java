@@ -46,8 +46,8 @@ public class FindLeadsForm extends FindPartyForm {
 
     @Override
     protected void buildFilterByNameTab(SubFormPanel p) {
-        firstNameInput = new TextField(UtilUi.MSG.firstName(), "firstName", getInputLength());
-        lastNameInput = new TextField(UtilUi.MSG.lastName(), "lastName", getInputLength());
+        firstNameInput = new TextField(UtilUi.MSG.partyFirstName(), "firstName", getInputLength());
+        lastNameInput = new TextField(UtilUi.MSG.partyLastName(), "lastName", getInputLength());
         companyNameInput = new TextField(UtilUi.MSG.crmCompanyName(), "companyName", getInputLength());
         p.addField(firstNameInput);
         p.addField(lastNameInput);

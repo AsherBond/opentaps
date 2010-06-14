@@ -89,6 +89,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     private static List<String> BY_PHONE_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_PHONE_COUNTRY_CODE,
                                                                    PartyLookupConfiguration.INOUT_PHONE_AREA_CODE,
                                                                    PartyLookupConfiguration.INOUT_PHONE_NUMBER);
+    private static List<String> BY_EMAIL_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_EMAIL);
     private static List<String> BY_ADVANCED_FILTERS = Arrays.asList(PartyLookupConfiguration.IN_CLASSIFICATION,
                                                                       PartyLookupConfiguration.INOUT_ADDRESS,
                                                                       PartyLookupConfiguration.INOUT_COUNTRY,
@@ -99,7 +100,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                                                                       PartyLookupConfiguration.INOUT_POSTAL_CODE);
     private static List<String> ACCOUNT_CONTACTS_FILTERS = Arrays.asList(PartyLookupConfiguration.IN_PARTY_ID_TO);
 
-    private boolean activeOnly = false;
+    private boolean activeOnly = true;
 
     /**
      * Creates a new <code>PartyLookupService</code> instance.
@@ -135,7 +136,6 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
-        service.setActiveOnly(true);
         service.suggestContacts();
         return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
     }
@@ -166,7 +166,6 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
-        service.setActiveOnly(true);
         service.suggestAccounts();
         return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
     }
@@ -579,6 +578,10 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
 
         if (getProvider().oneParameterIsPresent(BY_PHONE_FILTERS)) {
             return findPartiesBy(entity, condition, BY_PHONE_FILTERS);
+        }
+        
+        if (getProvider().oneParameterIsPresent(BY_EMAIL_FILTERS)) {
+            return findPartiesBy(entity, condition, BY_EMAIL_FILTERS);
         }
 
         if (getProvider().oneParameterIsPresent(BY_ADVANCED_FILTERS)) {

@@ -1167,7 +1167,7 @@ public final class OrderServices {
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static void storeAdjustmentsForOrderItem(List<List> topLevelAdjustmentsList, int index, String orderId, String orderItemSeqId, String shipGroupSeqId, GenericDelegator delegator) throws GenericEntityException {
+    public static void storeAdjustmentsForOrderItem(List<List> topLevelAdjustmentsList, int index, String orderId, String orderItemSeqId, String shipGroupSeqId, GenericDelegator delegator) throws GenericEntityException {
         if (UtilValidate.isNotEmpty(topLevelAdjustmentsList)) {
             List<GenericValue> adjustments = topLevelAdjustmentsList.get(index);
             for (GenericValue adjustment : adjustments) {
@@ -1483,7 +1483,7 @@ public final class OrderServices {
      *  accounting tags are loaded from the loadCartFromOrder service
      */
     @SuppressWarnings("unchecked")
-    private static OpentapsShoppingCart loadCartForUpdate(LocalDispatcher dispatcher, GenericDelegator delegator, GenericValue userLogin, String orderId) throws GeneralException {
+    public static OpentapsShoppingCart loadCartForUpdate(LocalDispatcher dispatcher, GenericDelegator delegator, GenericValue userLogin, String orderId) throws GeneralException {
         // find ship group associations
         List<GenericValue> shipGroupAssocs = null;
         try {
@@ -1567,7 +1567,7 @@ public final class OrderServices {
      * Added accounting tags support.
      * Return false if the change need to recalculate the adjustments but some are already billed, and forceComplete was not set
      */
-    private static boolean saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId) throws GeneralException {
+    public static boolean saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId) throws GeneralException {
         return saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, null, false, true);
     }
 
@@ -1576,7 +1576,7 @@ public final class OrderServices {
      * (TODO: changeMap unused)
      */
     @SuppressWarnings("unchecked")
-    private static boolean saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId, Map changeMap, boolean forceComplete, boolean recalcAdjustments) throws GeneralException {
+    public static boolean saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId, Map changeMap, boolean forceComplete, boolean recalcAdjustments) throws GeneralException {
 
         // find out early if there are billed adjustment, this would need forceComplete to be set or fail
         boolean hasBilledAdjustments = false;
@@ -2181,7 +2181,7 @@ public final class OrderServices {
      * @return <code>null</code>, or a service error response <code>Map</code> if an error occurred
      */
     @SuppressWarnings("unchecked")
-    private static Map getItemTotalsFromItemQtyMap(Map<String, BigDecimal> itemTotals, Map<String, String> itemQtyMap) {
+    public static Map getItemTotalsFromItemQtyMap(Map<String, BigDecimal> itemTotals, Map<String, String> itemQtyMap) {
         for (String key : itemQtyMap.keySet()) {
             String quantityStr = itemQtyMap.get(key);
             BigDecimal groupQty = BigDecimal.ZERO;

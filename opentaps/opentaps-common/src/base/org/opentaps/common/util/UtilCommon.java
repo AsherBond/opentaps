@@ -1673,8 +1673,8 @@ public abstract class UtilCommon {
      * @param ids a <code>String</code> value
      * @return a <code>Vector</code> value
      */
-    public static Vector stringToVector(String ids) {
-        Vector vector = new Vector();
+    public static Vector<String> stringToVector(String ids) {
+        Vector<String> vector = new Vector<String>();
         List<String> idList = StringUtil.split(ids, ",");
         for (String id : idList) {
             vector.add(id);
@@ -1693,7 +1693,7 @@ public abstract class UtilCommon {
         return fieldName.startsWith("cust_");
     }
 
-    public static Map<String, Object> getCustomFieldsFromServiceMap(ModelEntity model, Map customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
+    public static Map<String, Object> getCustomFieldsFromServiceMap(ModelEntity model, Map<String, Object> customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
         Map<String, Object> out = new HashMap<String, Object>();
         if (customFieldsMap != null) {
             for (String n : model.getAllFieldNames()) {
@@ -1711,7 +1711,7 @@ public abstract class UtilCommon {
         return out;
     }
 
-    public static void setCustomFieldsFromServiceMap(GenericValue entity, Map customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
+    public static void setCustomFieldsFromServiceMap(GenericValue entity, Map<String, Object> customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
         ModelEntity model = entity.getModelEntity();
         if (customFieldsMap != null) {
             for (String n : model.getAllFieldNames()) {
@@ -1728,7 +1728,7 @@ public abstract class UtilCommon {
         }
     }
 
-    public static void setCustomFieldsFromServiceMap(EntityInterface entity, Map customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
+    public static void setCustomFieldsFromServiceMap(EntityInterface entity, Map<String, Object> customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
         ModelEntity model = delegator.getModelEntity(entity.getBaseEntityName());
         if (customFieldsMap != null) {
             for (String n : model.getAllFieldNames()) {
@@ -1743,5 +1743,56 @@ public abstract class UtilCommon {
                 }
             }
         }
+    }
+
+    /**
+     * Returns full email address containing a domain address and personal name for
+     * the specified contact mech identifier.
+     * @param contactMechId A contact mechanism identifier.
+     * @param delegator An instance of the <code>GenericDelegator</code>.
+     * @return
+     * @throws GenericEntityException
+     */
+    public static String emailAndPersonalName(String contactMechId, GenericDelegator delegator) throws GenericEntityException {
+        if (UtilValidate.isEmail(contactMechId)) {
+            throw new IllegalArgumentException();
+        }
+
+        GenericValue contactMech = delegator.findByPrimaryKey("ContactMech", UtilMisc.toMap("contactMechId", contactMechId));
+        if (contactMech == null) {
+            Debug.logWarning(String.format("There is no ContactMech entity w/ identifier [%1$s]", contactMechId), MODULE);
+    	    return null;
+        }
+
+        String emailAddr = contactMech.getString("infoString");
+
+        List<GenericValue> validPartyContactMechs =
+        delegator.findByCondition("PartyContactMech", 
+                    EntityCondition.makeCondition(
+                        UtilMisc.toList(EntityUtil.getFilterByDateExpr(), EntityCondition.makeCondition("contactMechId", contactMechId))
+                    ),
+                    UtilMisc.toList("partyId", "contactMechId"), null);
+
+        String partyId = EntityUtil.getFirst(validPartyContactMechs).getString("partyId");
+
+        // we will be careful and return the address only if multiple relations between
+        // party and contact exist.
+        if (validPartyContactMechs == null || validPartyContactMechs.size() != 1 || UtilValidate.isEmail(partyId)) {
+            return emailAddr;
+        }
+
+    	return emailAndPersonalName(emailAddr, partyId, delegator);
+    }
+
+    /**
+     * Returns full email address containing a domain address and personal name for
+     * the specified contact address and party identifier.
+     * @param email An email address in format user@host 
+     * @param partyId A party identifier
+     * @param delegator An instance of the <code>GenericDelegator</code>.
+     * @return
+     */
+    public static String emailAndPersonalName(String email, String partyId, GenericDelegator delegator) {
+        return String.format("%1$s <%2$s>", org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false), email);
     }
 }

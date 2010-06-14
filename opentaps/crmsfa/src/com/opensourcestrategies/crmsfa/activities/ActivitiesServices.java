@@ -55,18 +55,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import com.opensourcestrategies.crmsfa.cases.UtilCase;
-import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
-import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import javolution.util.FastList;
 import javolution.util.FastSet;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.StringUtil;
@@ -98,9 +96,13 @@ import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
+
+import com.opensourcestrategies.crmsfa.cases.UtilCase;
+import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 
 /**
  * Activities services. The service documentation is in services_activities.xml.
@@ -129,7 +131,8 @@ public final class ActivitiesServices {
      * and send existing email. Instead of creating four separate methods several hundred
      * lines each, we do everything here.
      */
-    private static Map<String, Object> sendOrSaveEmailHelper(DispatchContext dctx, Map<String, Object> context, boolean sending, String errorLabel) {
+    @SuppressWarnings("unchecked")
+	private static Map<String, Object> sendOrSaveEmailHelper(DispatchContext dctx, Map<String, Object> context, boolean sending, String errorLabel) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -158,7 +161,7 @@ public final class ActivitiesServices {
 
             // Retrieve, validate and parse the To addresses (assumed to be comma-delimited)
             String validToAddresses = null;
-            Set<String> toAddresses = UtilCommon.getValidEmailAddressesFromString(toEmail, false);
+            Set<String> toAddresses = UtilCommon.getValidEmailAddressesFromString(toEmail);
             if (UtilValidate.isNotEmpty(toAddresses)) {
                 validToAddresses = StringUtil.join(UtilMisc.toList(toAddresses), ",");
                 input.put("toString", validToAddresses);
@@ -203,13 +206,13 @@ public final class ActivitiesServices {
 
             // Retrieve, validate and parse the CC and BCC addresses (assumed to be comma-delimited)
             String validCCAddresses = null;
-            Set<String> ccAddresses = UtilCommon.getValidEmailAddressesFromString((String) context.get("ccEmail"), false);
+            Set<String> ccAddresses = UtilCommon.getValidEmailAddressesFromString((String) context.get("ccEmail"));
             if (UtilValidate.isNotEmpty(ccAddresses)) {
                 validCCAddresses = StringUtil.join(UtilMisc.toList(ccAddresses), ",");
                 input.put("ccString", validCCAddresses);
             }
             String validBCCAddresses = null;
-            Set<String> bccAddresses = UtilCommon.getValidEmailAddressesFromString((String) context.get("bccEmail"), false);
+            Set<String> bccAddresses = UtilCommon.getValidEmailAddressesFromString((String) context.get("bccEmail"));
             if (UtilValidate.isNotEmpty(bccAddresses)) {
                 validBCCAddresses = StringUtil.join(UtilMisc.toList(bccAddresses), ",");
                 input.put("bccString", validBCCAddresses);
@@ -291,8 +294,7 @@ public final class ActivitiesServices {
                 Map<String, Object> sendMailContext = new HashMap<String, Object>();
                 sendMailContext.put("subject", context.get("subject"));
                 String contactMechIdFrom = (String) context.get("contactMechIdFrom");
-                String sendFrom = delegator.findByPrimaryKey("ContactMech", UtilMisc.toMap("contactMechId", contactMechIdFrom)).getString("infoString");
-                sendMailContext.put("sendFrom", sendFrom);
+                sendMailContext.put("sendFrom", UtilCommon.emailAndPersonalName(contactMechIdFrom, delegator));
                 sendMailContext.put("partyId", context.get("partyId"));
                 sendMailContext.put("contentType", context.get("contentMimeTypeId"));
 
@@ -476,7 +478,14 @@ public final class ActivitiesServices {
             // don't think BCC addresses is needed: this variable is intended for creating owners for incoming emails, and those don't come with BCC
 
             // create the associations and finish
-            return createWorkEffortPartyAssociations(dctx, context, workEffortId, errorLabel, !existing);
+            serviceResults = createWorkEffortPartyAssociations(dctx, context, workEffortId, errorLabel, !existing);
+            if (ServiceUtil.isError(serviceResults)) {
+                return UtilMessage.createAndLogServiceError(serviceResults, errorLabel, locale, MODULE);
+            }
+
+            Map results = ServiceUtil.returnSuccess();
+            results.put("workEffortId", workEffortId);
+            return results;
 
         } catch (GenericEntityException e) {
             return UtilMessage.createAndLogServiceError(e, errorLabel, locale, MODULE);
@@ -488,7 +497,7 @@ public final class ActivitiesServices {
     /**
      * Creates a Work Effort and associates it with the Communication Event
      */
-    private static String associateCommunicationEventAndWorkEffort(GenericValue communicationEvent, String initialWorkEffortStatusId, LocalDispatcher dispatcher, GenericValue userLogin, DispatchContext dctx, Map context)
+    private static String associateCommunicationEventAndWorkEffort(GenericValue communicationEvent, String initialWorkEffortStatusId, LocalDispatcher dispatcher, GenericValue userLogin, DispatchContext dctx, Map<String, Object> context)
                    throws GenericEntityException, GenericServiceException {
         Map<String, Object> serviceResults = null;
         Map<String, Object> input = null;
@@ -634,7 +643,7 @@ public final class ActivitiesServices {
 
         try {
             if (wrapper == null) {
-                Debug.logError("Null message wrapper when trying to store email: " + wrapper.getMessage(), MODULE);
+                Debug.logError("Null message wrapper when trying to store email", MODULE);
                 return UtilMessage.createAndLogServiceError("Null message wrapper", locale, MODULE);
             }
 
@@ -750,17 +759,15 @@ public final class ActivitiesServices {
 
                 // looks through list of accounts and assign the workEffort to all of them
                 for (Account account : accounts) {
-                    Map callCtxt = UtilMisc.toMap("workEffortId", workEffortId, "partyId", account.getPartyId(), "statusId", "PRTYASGN_ASSIGNED", "roleTypeId", "ACCOUNT", "userLogin", userLogin);
+                    Map<String, Object> callCtxt = UtilMisc.toMap("workEffortId", workEffortId, "partyId", account.getPartyId(), "statusId", "PRTYASGN_ASSIGNED", "roleTypeId", "ACCOUNT", "userLogin", userLogin);
                     dispatcher.runSync("assignPartyToWorkEffort", callCtxt);
                 }
 
                 // Find a list of associated custRequestIds and orderIds by parsing the email
-                List custRequestIds = ActivitiesHelper.getCustRequestIdsFromCommEvent(communicationEvent, delegator);
+                List<String> custRequestIds = ActivitiesHelper.getCustRequestIdsFromCommEvent(communicationEvent, delegator);
                 List<String> orderIds = ActivitiesHelper.getOrderIdsFromString(communicationEvent.getString("subject"), delegator);
 
-                Iterator criit = custRequestIds.iterator();
-                while (criit.hasNext()) {
-                    String custRequestId = (String) criit.next();
+                for (String custRequestId : custRequestIds) {
                     GenericValue custRequest = delegator.findByPrimaryKey("CustRequest", UtilMisc.toMap("custRequestId", custRequestId));
                     if (UtilValidate.isEmpty(custRequest)) {
                         Debug.logWarning("Ignoring invalid custRequestId " + custRequestId + " in crmsfa.processIncomingEmail", MODULE);
@@ -769,7 +776,7 @@ public final class ActivitiesServices {
 
                     // If the case has been closed (CRQ_COMPLETED), reopen it (CRQ_REOPENED)
                     if ("CRQ_COMPLETED".equals(custRequest.getString("statusId"))) {
-                        Map reopenCaseResult = dispatcher.runSync("updateCustRequest", UtilMisc.toMap("custRequestId", custRequestId, "statusId", "CRQ_REOPENED", "userLogin", userLogin));
+                        Map<String, Object> reopenCaseResult = dispatcher.runSync("updateCustRequest", UtilMisc.toMap("custRequestId", custRequestId, "statusId", "CRQ_REOPENED", "userLogin", userLogin));
                         if (ServiceUtil.isError(reopenCaseResult)) {
                             return reopenCaseResult;
                         }
@@ -780,7 +787,7 @@ public final class ActivitiesServices {
                     if (UtilValidate.isNotEmpty(custRequestWorkEffort)) {
                         continue;
                     }
-                    Map createWorkEffortRequestResult = dispatcher.runSync("createWorkEffortRequest", UtilMisc.toMap("custRequestId", custRequestId, "workEffortId", workEffortId, "userLogin", userLogin));
+                    Map<String, Object> createWorkEffortRequestResult = dispatcher.runSync("createWorkEffortRequest", UtilMisc.toMap("custRequestId", custRequestId, "workEffortId", workEffortId, "userLogin", userLogin));
                     if (ServiceUtil.isError(createWorkEffortRequestResult)) {
                         return createWorkEffortRequestResult;
                     }
@@ -792,7 +799,7 @@ public final class ActivitiesServices {
                     if (UtilValidate.isNotEmpty(orderHeaderWorkEffort)) {
                         continue;
                     }
-                    Map createOrderHeaderWEResult = dispatcher.runSync("createOrderHeaderWorkEffort", UtilMisc.toMap("orderId", orderId, "workEffortId", workEffortId, "userLogin", userLogin));
+                    Map<String, Object> createOrderHeaderWEResult = dispatcher.runSync("createOrderHeaderWorkEffort", UtilMisc.toMap("orderId", orderId, "workEffortId", workEffortId, "userLogin", userLogin));
                     if (ServiceUtil.isError(createOrderHeaderWEResult)) {
                         return createOrderHeaderWEResult;
                     }
@@ -837,7 +844,7 @@ public final class ActivitiesServices {
             // check for conflicts
             String forceIfConflicts = (String) context.get("forceIfConflicts");
             if (forceIfConflicts == null || forceIfConflicts.equals("N")) {
-                List events = UtilActivity.getActivityConflicts(userLogin, estimatedStartDate, estimatedCompletionDate);
+                List<GenericValue> events = UtilActivity.getActivityConflicts(userLogin, estimatedStartDate, estimatedCompletionDate);
                 if (events.size() > 0) {
                     StringBuffer msg = new StringBuffer("You have one or more conflicting events during the specified time. ");
                     msg.append("<a class=\"messageLink\" href=\"/crmsfa/control/myHome?calendarView=day&start=");
@@ -932,7 +939,7 @@ public final class ActivitiesServices {
             // check for conflicts
             String forceIfConflicts = (String) context.get("forceIfConflicts");
             if (forceIfConflicts == null || forceIfConflicts.equals("N")) {
-                List events = UtilActivity.getActivityConflicts(userLogin, estimatedStartDate, estimatedCompletionDate, workEffortId);
+                List<GenericValue> events = UtilActivity.getActivityConflicts(userLogin, estimatedStartDate, estimatedCompletionDate, workEffortId);
                 if (events.size() > 0) {
                     StringBuffer msg = new StringBuffer("You have one or more conflicting events during the specified time. ");
                     msg.append("<a class=\"messageLink\" href=\"/crmsfa/control/myHome?calendarView=day&start=");
@@ -1069,6 +1076,16 @@ public final class ActivitiesServices {
                     GenericValue commEvent = iter.next();
 
                     input = UtilMisc.toMap("communicationEventId", commEvent.getString("communicationEventId"), "statusId", "COM_COMPLETE", "userLogin", userLogin);
+                    // in some cases the datetimeEnded might still be empty, set it from the workeffort actualCompletionDate or by default now
+                    if (UtilValidate.isEmpty(commEvent.get("datetimeEnded"))) {
+                        Timestamp datetimeEnded = workEffort.getTimestamp("actualCompletionDate");
+                        if (datetimeEnded == null) {
+                            datetimeEnded = UtilDateTime.nowTimestamp();
+                        }
+
+                        input.put("datetimeEnded", datetimeEnded);
+                    }
+
                     serviceResults = dispatcher.runSync("updateCommunicationEvent", input);
                     if (ServiceUtil.isError(serviceResults)) {
                         return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateActivityCommEventFail", locale, MODULE);
@@ -1493,7 +1510,8 @@ public final class ActivitiesServices {
     /*                           Find Activities                             */
     /*************************************************************************/
 
-    public static Map<String, Object> findActivities(DispatchContext dctx, Map<String, Object> context) {
+    @SuppressWarnings("unchecked")
+	public static Map<String, Object> findActivities(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1922,12 +1940,12 @@ public final class ActivitiesServices {
                 }
             }
 
-            Map messageMap = UtilMisc.toMap("partyId", partyId, "partyName", partyName, "workEffortId", workEffortId, "workEffortName", workEffortName);
+            Map<String, Object> messageMap = UtilMisc.<String, Object>toMap("partyId", partyId, "partyName", partyName, "workEffortId", workEffortId, "workEffortName", workEffortName);
             String url = UtilProperties.getMessage(notificationResource, "crmsfa.url.activity", messageMap, locale);
             messageMap.put("url", url);
             String subject = UtilProperties.getMessage(notificationResource, "subject." + eventTypeId + eventType, messageMap, locale);
 
-            Map bodyParameters = UtilMisc.toMap("eventType", eventTypeId + eventType);
+            Map<String, Object> bodyParameters = UtilMisc.<String, Object>toMap("eventType", eventTypeId + eventType);
             bodyParameters.putAll(messageMap);
 
             Map<String, Object>  sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.toMap("notifyPartyIds", UtilMisc.toList(partiesToNotify), "eventType", "activity" + eventType, "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
@@ -2002,7 +2020,6 @@ public final class ActivitiesServices {
     }
 
     public static Map<String, Object> deleteActivityEmail(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String communicationEventId = (String) context.get("communicationEventId");
         String workEffortId = (String) context.get("workEffortId");
@@ -2144,7 +2161,7 @@ public final class ActivitiesServices {
         String caseInsensitiveEmail = UtilProperties.getPropertyValue("general.properties", "mail.address.caseInsensitive", "N");
         boolean ci = "Y".equals(caseInsensitiveEmail);
 
-        List partyAndContactMechs;
+        List<GenericValue> partyAndContactMechs;
 
         // case insensitive condition does not work with the IN operator in the delegator
         if (ci) {

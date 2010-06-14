@@ -42,9 +42,9 @@ public class ContactSearchListView extends ContactListView implements SearchResu
         // the grid should not try to load before a query is made
         setAutoLoad(false);
 
-        init(PartyLookupConfiguration.URL_SEARCH_CONTACTS, "/crmsfa/control/viewContact?partyId={0}", UtilUi.MSG.contactId(), new String[]{
-                PartyLookupConfiguration.INOUT_FIRST_NAME, UtilUi.MSG.firstName(),
-                PartyLookupConfiguration.INOUT_LAST_NAME, UtilUi.MSG.lastName()
+        init(PartyLookupConfiguration.URL_SEARCH_CONTACTS, "/crmsfa/control/viewContact?partyId={0}", UtilUi.MSG.crmContactId(), new String[]{
+                PartyLookupConfiguration.INOUT_FIRST_NAME, UtilUi.MSG.partyFirstName(),
+                PartyLookupConfiguration.INOUT_LAST_NAME, UtilUi.MSG.partyLastName()
             });
     }
 

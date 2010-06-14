@@ -280,7 +280,7 @@ fieldMapColumns.put("${name}", fields);
 
 <#-- add methods for collection relations -->
   <#list relations as relation>
-  <#if relation.itemName?has_content>
+  <#if relation.addMethodName?has_content>
 <#-- add item method for collection property -->
     /**
      * Auto generated method that add item to collection.
@@ -291,6 +291,8 @@ fieldMapColumns.put("${name}", fields);
         }
         this.${relation.fieldName}.add(${relation.itemName});
     }
+    </#if>
+    <#if relation.removeMethodName?has_content>
 <#-- remove item method for collection property -->
     /**
      * Auto generated method that remove item from collection.
@@ -301,6 +303,8 @@ fieldMapColumns.put("${name}", fields);
         }
         this.${relation.fieldName}.remove(${relation.itemName});
     }
+    </#if>
+    <#if relation.clearMethodName?has_content>
 <#-- clear all items method for collection property -->
     /**
      * Auto generated method that clear items from collection.

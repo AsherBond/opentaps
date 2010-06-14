@@ -74,14 +74,15 @@ public final class NotificationServices {
     public static final String resource = "CRMSFAUiLabels";
     public static final String notificationResource = "notification";
 
-    public static Map<String, Object> sendCrmNotificationEmails(DispatchContext dctx, Map<String, Object> context) {
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> sendCrmNotificationEmails(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String eventType = (String) context.get("eventType");
         String subject = (String) context.get("subject");
-        Map bodyParameters = (Map) context.get("bodyParameters");
-        List notifyPartyIds = (List) context.get("notifyPartyIds");
-        Set uniquePartyIds = new HashSet(notifyPartyIds);
+        Map<String, Object> bodyParameters = (Map<String, Object>) context.get("bodyParameters");
+        List<String> notifyPartyIds = (List<String>) context.get("notifyPartyIds");
+        Set<String> uniquePartyIds = new HashSet<String>(notifyPartyIds);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
 
@@ -104,10 +105,7 @@ public final class NotificationServices {
                 sendFrom = UtilProperties.getMessage(notificationResource, "from", locale);
             }
 
-            Iterator npit = uniquePartyIds.iterator();
-            while (npit.hasNext()) {
-
-                String notifyPartyId = (String) npit.next();
+            for (String notifyPartyId : uniquePartyIds) {
 
                 try {
 

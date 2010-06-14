@@ -56,7 +56,7 @@ public class FindContactsForm extends FindPartyForm {
      * @param ignoreLinkColumn creates id column as plain column w/o hypelinks if true.
      */
     public FindContactsForm(boolean autoLoad, boolean ignoreLinkColumn) {
-        super(UtilUi.MSG.contactId(), UtilUi.MSG.findContacts());
+        super(UtilUi.MSG.contactId(), UtilUi.MSG.crmFindContacts());
         contactListView = new ContactListView();
         contactListView.setAutoLoad(autoLoad);
         contactListView.setIgnoreLinkColumn(ignoreLinkColumn);
@@ -66,8 +66,8 @@ public class FindContactsForm extends FindPartyForm {
 
     @Override
     protected void buildFilterByNameTab(SubFormPanel p) {
-        firstNameInput = new TextField(UtilUi.MSG.firstName(), "firstName", getInputLength());
-        lastNameInput = new TextField(UtilUi.MSG.lastName(), "lastName", getInputLength());
+        firstNameInput = new TextField(UtilUi.MSG.partyFirstName(), "firstName", getInputLength());
+        lastNameInput = new TextField(UtilUi.MSG.partyLastName(), "lastName", getInputLength());
         p.addField(firstNameInput);
         p.addField(lastNameInput);
     }

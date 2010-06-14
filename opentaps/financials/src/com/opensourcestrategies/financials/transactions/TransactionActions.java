@@ -49,8 +49,10 @@ import org.opentaps.foundation.action.ActionContext;
  * TransactionActions - Java Actions for Transactions.
  */
 public class TransactionActions {
-	private static final String MODULE = TransactionActions.class.getName();
-	   /**
+
+    private static final String MODULE = TransactionActions.class.getName();
+
+    /**
      * Action for the find / list transactions screen.
      * @param context the screen context
      * @throws GeneralException if an error occurs
@@ -62,8 +64,6 @@ public class TransactionActions {
         final Locale locale = ac.getLocale();
         String organizationPartyId = UtilCommon.getOrganizationPartyId(ac.getRequest());
 
-
-        
         // possible fields we're searching by
         String partyId = ac.getParameter("partyId");
         String acctgTransId = ac.getParameter("findAcctgTransId");
@@ -83,9 +83,9 @@ public class TransactionActions {
 
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
         final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain().getLedgerRepository();
-       
+
         // TODO: Put a currencyUomId on AcctgTrans and modify postAcctgTrans to set that in addition to postedAmount,
-        // instead of using the organization's base currency 
+        // instead of using the organization's base currency
         OrganizationRepositoryInterface organizationRepository = dd.getOrganizationDomain().getOrganizationRepository();
         Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
         if (organization != null) {
@@ -115,7 +115,10 @@ public class TransactionActions {
             List<EntityCondition> searchConditions = new FastList<EntityCondition>();
             // this needs to allow null organizationPartyId for new AcctgTrans which have no AcctgTransEntries yet
             if (UtilValidate.isNotEmpty(organizationPartyId)) {
-                searchConditions.add(EntityCondition.makeCondition(AcctgTransAndOrg.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
+                searchConditions.add(EntityCondition.makeCondition(EntityOperator.OR,
+                                         EntityCondition.makeCondition(AcctgTransAndOrg.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId),
+                                         EntityCondition.makeCondition(AcctgTransAndOrg.Fields.organizationPartyId.name(), EntityOperator.EQUALS, null))
+                                     );
             }
             if (UtilValidate.isNotEmpty(partyId)) {
                 searchConditions.add(EntityCondition.makeCondition(AcctgTransAndOrg.Fields.partyId.name(), EntityOperator.EQUALS, partyId));

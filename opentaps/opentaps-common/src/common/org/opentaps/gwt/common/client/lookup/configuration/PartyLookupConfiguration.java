@@ -71,7 +71,7 @@ public abstract class PartyLookupConfiguration {
     public static final String OUT_ADDRESS_2 = "primaryAddress2";
     public static final String OUT_POSTAL_CODE_EXT = "primaryPostalCodeExt";
     public static final String OUT_PHONE_ID = "primaryTelecomNumberId";
-    public static final String OUT_EMAIL = "primaryEmail";
+    public static final String INOUT_EMAIL = "primaryEmail";
     public static final String OUT_EMAIL_CONTACT_MECH_ID = "primaryEmailContactMechId";
     public static final String OUT_EMAIL_ID = "primaryEmailId";
     public static final String IN_PARTY_ID_TO = "partyIdTo";
@@ -100,7 +100,7 @@ public abstract class PartyLookupConfiguration {
         INOUT_ATTENTION_NAME,
         OUT_ADDRESS_2,
         OUT_POSTAL_CODE_EXT,
-        OUT_EMAIL,
+        INOUT_EMAIL,
         OUT_EMAIL_CONTACT_MECH_ID,
         OUT_EMAIL_ID,
         OUT_PHONE_ID,

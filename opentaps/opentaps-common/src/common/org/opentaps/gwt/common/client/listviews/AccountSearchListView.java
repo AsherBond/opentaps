@@ -42,7 +42,7 @@ public class AccountSearchListView extends AccountListView implements SearchResu
         // the grid should not try to load before a query is made
         setAutoLoad(false);
 
-        init(PartyLookupConfiguration.URL_SEARCH_ACCOUNTS, "/crmsfa/control/viewAccount?partyId={0}", UtilUi.MSG.accountId(), new String[]{
+        init(PartyLookupConfiguration.URL_SEARCH_ACCOUNTS, "/crmsfa/control/viewAccount?partyId={0}", UtilUi.MSG.crmAccountId(), new String[]{
                 PartyLookupConfiguration.INOUT_GROUP_NAME, UtilUi.MSG.crmAccountName()
             });
     }
