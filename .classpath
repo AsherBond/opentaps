@@ -57,7 +57,6 @@
 	<classpathentry kind="src" path="opentaps/purchasing/src"/>
 	<classpathentry kind="src" path="opentaps/search/src"/>
 	<classpathentry kind="src" path="opentaps/warehouse/src"/>
-	<classpathentry kind="src" path="opentaps/opentaps-osgi/src"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/velocity-1.6.1.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/DataVision-1.0.0.jar"/>
 	<classpathentry kind="lib" path="framework/service/lib/wsdl4j.jar"/>
@@ -220,10 +219,5 @@
 	<classpathentry kind="lib" path="opentaps/funambol/lib/modules/funambol-pim-framework-8.0.0.jar"/>
 	<classpathentry kind="lib" path="opentaps/funambol/lib/modules/funambol-pim-parsers-8.0.0.jar"/>
 	<classpathentry kind="lib" path="opentaps/amazon/lib/opentapsAmazon_Axis-1.0.jar"/>
-	<classpathentry kind="lib" path="opentaps/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.compendium-1.2.0.jar"/>
-	<classpathentry kind="lib" path="opentaps/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.compendium-4.0.0.jar"/>
-	<classpathentry kind="lib" path="opentaps/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.core-1.2.0.jar"/>
-	<classpathentry kind="lib" path="opentaps/opentaps-osgi/webapp/WEB-INF/lib/org.osgi.foundation-1.2.0.jar"/>
-	<classpathentry kind="lib" path="opentaps/opentaps-osgi/webapp/WEB-INF/lib/org.apache.felix.framework-1.8.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,8 +1,0 @@
-Bundle-Vendor: Open Source Strategies, Inc.
-Bundle-Copyright: Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
-Bundle-SymbolicName: org.opentaps.core.log
-Bundle-Name: opentaps Log Adapter
-Bundle-ManifestVersion: 2
-Bundle-Version: 1.0.0.0
-Bundle-Activator: org.opentaps.core.log.Activator
-Private-Package: org.opentaps.core.log

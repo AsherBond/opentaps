@@ -26,7 +26,6 @@
       <filelist dir="." files="dataimport/build.xml"/>
       <filelist dir="." files="funambol/build.xml"/>
       <filelist dir="." files="opentaps-tests/build.xml"/>
-      <filelist dir="." files="opentaps-osgi/build.xml"/>
     </subant>
     <echo message="[build] ========== Done Building Opentaps modules =========="/>
     <echo message="[build] ========== Start Building other opentaps modules =========="/>
@@ -42,7 +41,6 @@
         <exclude name="dataimport/build.xml"/>
         <exclude name="funambol/build.xml"/>
         <exclude name="opentaps-tests/build.xml"/>
-        <exclude name="opentaps-osgi/**/build.xml"/>
         <include name="**/build.xml"/>
       </fileset>
     </subant>

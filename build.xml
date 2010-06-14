@@ -355,7 +355,6 @@ under the License.
         <fileset dir="opentaps/opentaps-common/lib/" includes="*.jar"/>
         <fileset dir="opentaps/opentaps-common/lib/hibernate" includes="*.jar"/>
         <fileset dir="opentaps/opentaps-common/lib/aspectwerkz" includes="*.jar"/>
-        <fileset dir="opentaps/opentaps-osgi/webapp/WEB-INF/lib" includes="org.osgi.*.jar"/>
         <fileset dir="framework/base/lib" includes="*.jar"/>
         <fileset dir="framework/base/lib/commons" includes="*.jar"/>
         <fileset dir="framework/base/lib/scripting" includes="*.jar"/>

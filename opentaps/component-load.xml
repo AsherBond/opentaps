@@ -36,7 +36,6 @@ under the License.
     <load-component component-location="amazon"/>
     <load-component component-location="translations"/>
     <load-component component-location="analytics"/>
-    <!-- <load-component component-location="opentaps-osgi"/> -->
     <!--
     <load-component component-location="funambol"/>
     -->
