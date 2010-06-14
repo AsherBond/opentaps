@@ -183,5 +183,9 @@
                        periodTypeId="FISCAL_MONTH" fromDate="2010-06-01" thruDate="2010-07-01" isClosed="N" periodNum="12" periodName="Month"/>
 
 
+     <CustomTimePeriod customTimePeriodId="9400" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2010-07-01" thruDate="2011-07-01" isClosed="N" periodNum="2011" periodName="Fiscal Year"/>
+     <CustomTimePeriod customTimePeriodId="9500" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2011-07-01" thruDate="2012-07-01" isClosed="N" periodNum="2012" periodName="Fiscal Year"/>
+     <CustomTimePeriod customTimePeriodId="9600" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2012-07-01" thruDate="2013-07-01" isClosed="N" periodNum="2013" periodName="Fiscal Year"/>
+     <CustomTimePeriod customTimePeriodId="9700" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2013-07-01" thruDate="2014-07-01" isClosed="N" periodNum="2014" periodName="Fiscal Year"/>
 
 </entity-engine-xml>
