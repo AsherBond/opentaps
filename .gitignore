@@ -54,6 +54,7 @@ opentaps/funambol/build/
 opentaps/opentaps-common/build/
 opentaps/opentaps-common/lib/opentaps-common-aspect.jar
 opentaps/opentaps-common/webapp/commongwt/
+opentaps/opentaps-common/config/*.cfg.xml
 opentaps/purchasing/build/
 opentaps/purchasing/webapp/purchasinggwt/
 opentaps/search/build/
@@ -68,4 +69,5 @@ runtime/logs/*.html*
 runtime/logs/test-results/*
 runtime/data/derby/*
 runtime/catalina/work/*
-
+runtime/lucene
+runtime/output
