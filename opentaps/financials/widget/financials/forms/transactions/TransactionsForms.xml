@@ -172,7 +172,7 @@
             </display-entity>
         </field>
         <field name="partyId" widget-area-style="linktext">
-            <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTrans.get(&quot;partyId&quot;), false)} (${acctgTrans.partyId})"/>
+            <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTransEntry.get(&quot;partyId&quot;), false)} (${acctgTransEntry.partyId})"/>
         </field>
     </form>
 
