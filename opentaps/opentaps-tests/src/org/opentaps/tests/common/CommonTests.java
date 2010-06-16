@@ -35,6 +35,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.product.UtilProduct;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
+import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.tests.OpentapsTestCase;
 
 /**
@@ -276,6 +277,15 @@ public class CommonTests extends OpentapsTestCase {
         // leon failed test ?
         assertEquals(20, UtilDate.dateDifference(Timestamp.valueOf("2008-07-31 14:00:00.00"), Timestamp.valueOf("2008-08-20 20:00:00.00")).intValue());
 
+    }
+    
+    /**
+     * Test we can get configuration value
+     */
+    public void testGetConfiguration() throws GeneralException {
+    	Infrastructure infrastructure = new Infrastructure(dispatcher);
+    	String value = infrastructure.getConfigurationValue("TEST_CONFIG_TYPE");
+    	assertTrue("Test value".equals(value));
     }
 
 }

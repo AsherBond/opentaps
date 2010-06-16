@@ -205,5 +205,11 @@ under the License.
     <!-- org.opentaps.common.webapp -->
     <!-- =================== -->
     <entity-group group="org.ofbiz" entity="OpentapsWebApps"/>
+    
+    <!-- =================== -->
+    <!-- org.opentaps.common.config -->
+    <!-- =================== -->
+    <entity-group group="org.ofbiz" entity="OpentapsConfiguration"/>
+    <entity-group group="org.ofbiz" entity="OpentapsConfigurationType"/>
  
 </entitygroup>  

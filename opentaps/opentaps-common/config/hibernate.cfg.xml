@@ -1113,6 +1113,8 @@
   <mapping class="org.opentaps.base.entities.DataWarehouseTransform"/>
   <mapping class="org.opentaps.base.entities.OrderHeaderAndRoles"/>
   <mapping class="org.opentaps.base.entities.OpentapsWebApps"/>
+  <mapping class="org.opentaps.base.entities.OpentapsConfiguration"/>
+  <mapping class="org.opentaps.base.entities.OpentapsConfigurationType"/>
   <mapping class="org.opentaps.base.entities.PartyFromByRelnAndContactInfo"/>
   <mapping class="org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification"/>
   <mapping class="org.opentaps.base.entities.PartyFromSummaryByRelationship"/>

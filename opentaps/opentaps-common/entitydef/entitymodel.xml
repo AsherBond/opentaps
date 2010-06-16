@@ -2530,4 +2530,27 @@ under the License.
       <field name="sequenceNum" type="numeric"/>
       <prim-key field="applicationId"/>
     </entity>   
+    
+    <entity package-name="org.opentaps.common.config" entity-name="OpentapsConfiguration"
+        title="All purpose entity for entering configuration.  A replacement for .properties">
+        <field name="configTypeId" type="id-vlong"/>
+        <field name="value" type="long-varchar" encrypt="true"/>
+        <field name="comments" type="comment"/>
+        <prim-key field="configTypeId"/>
+        <relation rel-entity-name="OpentapsConfigurationType" type="one" fk-name="CONFIG_TYPE">
+            <key-map field-name="configTypeId"/>
+        </relation>
+    </entity>
+
+    <entity package-name="org.opentaps.common.config" entity-name="OpentapsConfigurationType"
+        title="A potentially hierarchical structure for configuration types.">
+        <field name="configTypeId" type="id-vlong"/>
+        <field name="parentConfigTypeId" type="id-vlong"/>
+        <field name="description" type="comment"/>
+        <prim-key field="configTypeId"/>
+        <relation rel-entity-name="OpentapsConfigurationType" type="one" title="Parent" fk-name="CONFIG_TYPE_PARENT">
+            <key-map field-name="parentConfigTypeId" rel-field-name="configTypeId"></key-map>
+        </relation>
+    </entity>
+    
 </entitymodel>

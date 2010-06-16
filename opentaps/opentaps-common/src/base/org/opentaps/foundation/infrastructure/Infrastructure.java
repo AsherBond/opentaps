@@ -40,6 +40,7 @@ import org.ofbiz.entity.config.DatasourceInfo;
 import org.ofbiz.entity.config.EntityConfigUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
+//import org.opentaps.base.entities.OpentapsConfiguration;
 import org.opentaps.foundation.entity.hibernate.EcaDeleteEventListener;
 import org.opentaps.foundation.entity.hibernate.EcaLoadEventListener;
 import org.opentaps.foundation.entity.hibernate.EcaPersistEventListener;
@@ -272,6 +273,37 @@ public class Infrastructure {
             loadSystemUserLogin();
         }
         return systemUser;
+    }
+    
+    /**
+     * Get a configuration value from the database or throw an exception if it's not configured
+     * 
+     * @param configTypeId
+     * @return
+     * @throws InfrastructureException
+     */
+    public String getConfigurationValue(String configTypeId) throws InfrastructureException {
+    	/**
+    	Currently this doesn't build because Infrastructure is part of base, and base is built before entities
+    	
+    	Session session = getSession();
+    	OpentapsConfiguration configuration = (OpentapsConfiguration) session.get(OpentapsConfiguration.class, configTypeId);
+    	if (configuration == null) {
+    		throw new InfrastructureException("No configuration found for [" + configurationTypeId + "]");
+    	}
+		return configuration.getValue();
+		*/
+    	
+    	GenericValue configuration;
+		try {
+			configuration = delegator.findByPrimaryKeyCache("OpentapsConfiguration", UtilMisc.toMap("configTypeId", configTypeId));
+		} catch (GenericEntityException e) {
+			throw new InfrastructureException(e);
+		}
+    	if (configuration == null) {
+    		throw new InfrastructureException("No configuration found for [" + configTypeId + "]");
+    	}
+		return configuration.getString("value");
     }
 
     /**
