@@ -189,6 +189,7 @@
         <attribute name="content" type="String" mode="IN" optional="true"/>
         <!-- time, which is a combination of start date duration in hours -->
         <attribute name="actualStartDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="actualCompletionDate" type="Timestamp" mode="IN" optional="true"/>
         <attribute name="duration" type="String" mode="IN" optional="true"/>
         <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
     </service>

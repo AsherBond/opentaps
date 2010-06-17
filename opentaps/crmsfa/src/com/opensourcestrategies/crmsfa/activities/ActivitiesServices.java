@@ -1282,7 +1282,11 @@ public final class ActivitiesServices {
             if (actualStartDate == null) {
                 actualStartDate = UtilDateTime.nowTimestamp();
             }
-            Timestamp actualCompletionDate = UtilCommon.getEndTimestamp(actualStartDate, (String) context.get("duration"), locale, timeZone);
+            Timestamp actualCompletionDate = (Timestamp) context.get("actualCompletionDate");
+            // if actualCompletionDate is not given, use the duration instead
+            if (actualCompletionDate == null) {
+                actualCompletionDate = UtilCommon.getEndTimestamp(actualStartDate, (String) context.get("duration"), locale, timeZone);
+            }
 
             // validate the associations
             Map<String, Object> serviceResults = validateWorkEffortAssociations(dctx, context);
