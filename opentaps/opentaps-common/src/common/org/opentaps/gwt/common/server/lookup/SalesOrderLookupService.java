@@ -29,6 +29,7 @@ import org.opentaps.domain.order.SalesOrderLookupRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.client.lookup.configuration.SalesOrderLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
@@ -182,8 +183,12 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
             salesOrderLookupRepository.setOrderBy(getOrderBy());
 
             // set the pagination
-            salesOrderLookupRepository.setPageStart(getPager().getPageStart());
-            salesOrderLookupRepository.setPageSize(getPager().getPageSize());
+            if (!"Y".equals(getProvider().getParameter(UtilLookup.PARAM_EXPORT_EXCEL))) { 
+            	salesOrderLookupRepository.setPageStart(getPager().getPageStart());
+            	salesOrderLookupRepository.setPageSize(getPager().getPageSize());
+            } else {
+            	salesOrderLookupRepository.enablePagination(false);
+            }
 
             // return the matching result
             List<OrderViewForListing> results = salesOrderLookupRepository.findOrders();
