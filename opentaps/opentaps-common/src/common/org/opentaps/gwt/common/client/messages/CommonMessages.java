@@ -3086,8 +3086,8 @@ public interface CommonMessages extends Messages {
     String crmErrorProcessIncomingEmailFail();
     @DefaultMessage("Failed to process incoming email: No valid FROM/TO/CC email addresses found")
     String crmErrorProcessIncomingEmailFailNoAddresses();
-    @DefaultMessage("Product Not Found")
-    String crmErrorProductNotFound();
+    @DefaultMessage("CrmErrorProductNotFound")
+    String crmErrorProductNotFound(String productId);
     @DefaultMessage("CrmErrorPropertyNotConfigured")
     String crmErrorPropertyNotConfigured(String propertyName, String fileName);
     @DefaultMessage("CrmErrorQuickCreateOrderIllegalAccount")
@@ -15544,9 +15544,9 @@ public interface CommonMessages extends Messages {
     String productPicking();
     @DefaultMessage("Detail")
     String productPickingDetail();
-    @DefaultMessage("Open Picklists")
+    @DefaultMessage("Manage Picklists")
     String productPicklistManage();
-    @DefaultMessage("Create Picklists")
+    @DefaultMessage("Picking Options")
     String productPicklistOptions();
     @DefaultMessage("Picks in progress")
     String productPicksInProgress();
