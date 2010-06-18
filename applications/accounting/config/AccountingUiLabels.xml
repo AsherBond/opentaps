@@ -6177,7 +6177,7 @@
         <value xml:lang="es">No tiene permiso para esta función.</value>
         <value xml:lang="fr">Vous n'avez pas l'autorisation d'exécuter cette opération</value>
         <value xml:lang="it">Tu non hai il permesso per questa funzione.</value>
-        <value xml:lang="nl">Toegangfout: Om ${methodShortDescription} te gebruiken moet u de ACCOUNTING${securityAction}- of ACCOUNTING_ADMIN permissie hebben</value>
+        <!--value xml:lang="nl">Toegangfout: Om ${methodShortDescription} te gebruiken moet u de ACCOUNTING${securityAction}- of ACCOUNTING_ADMIN permissie hebben</value -->
         <value xml:lang="ro">Tu nu hai permisul pentru a folosi aceasta functie.</value>
         <value xml:lang="ru">У вас нет прав на эту функцию.</value>
         <value xml:lang="th">คุณไม่ได้รับการอนุญาตสำหรับการทำงานนี้</value>
