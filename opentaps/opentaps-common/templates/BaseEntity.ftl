@@ -164,7 +164,7 @@ fieldMapColumns.put("${name}", fields);
   <#list relations as relation>
    <#if relation.joinColumn?has_content && !viewEntities.contains(relation.entityName) && "Y" == relation.isNeedMapping>
     <#if "many" == relation.type>
-     <#if primaryKeys.size() == 1>
+     <#if primaryKeys.size() == 1 && relation.itemName?has_content>
      <#-- oneToMany -->
    @OneToMany(fetch=FetchType.LAZY<#-- add cascade annotations --><#if relation.itemName?has_content>, mappedBy="${relation.refField}", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}</#if>)
    @JoinColumn(name="${relation.joinColumn}")
@@ -181,7 +181,7 @@ fieldMapColumns.put("${name}", fields);
      <#-- if not view entity and not one-to-one relation, then add IndexedEmbedded annotation -->
    <#if isNeedIndex && needIndexEntities.contains(relation.entityName)>@IndexedEmbedded(depth = 2)</#if>
     </#if>
-   private <#if "many" == relation.type><#if (primaryKeys.size() > 1) || (isView && !fieldMapAlias.containsKey(relation.fieldName))>transient </#if>List<${relation.entityName}><#else>${relation.entityName}</#if> ${relation.fieldName} = null;
+   private <#if "many" == relation.type><#if (primaryKeys.size() > 1) || (!relation.itemName?has_content) || (isView && !fieldMapAlias.containsKey(relation.fieldName))>transient </#if>List<${relation.entityName}><#else>${relation.entityName}</#if> ${relation.fieldName} = null;
     <#else>
     <#-- multi assocation, cannot map manyToOne and oneToMany -->
    private transient <#if "many" == relation.type>List<${relation.entityName}><#else>${relation.entityName}</#if> ${relation.fieldName} = null;
