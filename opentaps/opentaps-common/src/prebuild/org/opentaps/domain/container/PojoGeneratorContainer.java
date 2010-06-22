@@ -842,7 +842,7 @@ public class PojoGeneratorContainer implements Container {
                                         // replace all space characters
                                         relateField = relateField.replaceAll("\\s*", "");
                                         // if relate entity contain relate field
-                                        if (refEntity.getAllFieldNames().contains(relateField + "Id")) {
+                                        if (refEntity.getAllFieldNames().contains(relateField + "Id") || refEntity.getAllFieldNames().containsAll(modelEntity.getPkFieldNames())) {
                                             refField = relateField;
                                             break;
                                         }                                        
