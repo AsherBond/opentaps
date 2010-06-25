@@ -166,7 +166,10 @@ public class OpentapsTestCase extends TestCase {
         purchasingDomain = domainsDirectory.getPurchasingDomain();
         organizationRepository = organizationDomain.getOrganizationRepository();
         organization = organizationRepository.getOrganizationById(organizationPartyId);
-        defaultOrganizationCostingMethodId = organization.getPartyAcctgPreference().getCostingMethodId();
+        // there might be some special uses where this is not configured or needed
+        if ((organization != null) && (organization.getPartyAcctgPreference() != null)) {
+            defaultOrganizationCostingMethodId = organization.getPartyAcctgPreference().getCostingMethodId();
+        }
     }
 
     @Override
@@ -2322,8 +2325,11 @@ public class OpentapsTestCase extends TestCase {
         try {
             Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
             PartyAcctgPreference orgAcctgPref = organization.getPartyAcctgPreference();
-            orgAcctgPref.setCostingMethodId(costingMethodId);
-            organizationRepository.createOrUpdate(orgAcctgPref);
+            // again, the PartyAcctgPreference may not be configured for some special applications
+            if (orgAcctgPref != null) {
+                orgAcctgPref.setCostingMethodId(costingMethodId);
+                organizationRepository.createOrUpdate(orgAcctgPref);
+            }
         } catch (EntityNotFoundException ex) {
             throw new GeneralException(ex);
         }
