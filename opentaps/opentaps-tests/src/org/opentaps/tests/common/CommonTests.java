@@ -288,4 +288,25 @@ public class CommonTests extends OpentapsTestCase {
     	assertTrue("Test value".equals(value));
     }
 
+    /**
+     * Test default value during getConfigurationValue method
+     */
+    public void testGetConfigurationWithDefault() throws GeneralException {
+    	Infrastructure infrastructure = new Infrastructure(dispatcher);
+    	String DEFAULT_VALUE = "default value 1";
+    	String value = infrastructure.getConfigurationValue("TEST_CONFIG_UNCONFIGURED_TYPE", DEFAULT_VALUE);
+    	assertTrue(DEFAULT_VALUE.equals(value));
+    }
+
+    /**
+     * Test default value in OpentapsConfigurationType
+     */
+    public void testConfigurationTypeDefault() throws GeneralException {
+    	Infrastructure infrastructure = new Infrastructure(dispatcher);
+    	String DEFAULT_VALUE = "Default value 2";
+    	String value = infrastructure.getConfigurationValue("TEST_CONFIG_UNCONFIGURED_TYPE");
+    	assertTrue(DEFAULT_VALUE.equals(value));
+    }
+
+    
 }

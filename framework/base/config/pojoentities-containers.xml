@@ -53,7 +53,7 @@ under the License.
         <property name="pkTemplate" value="opentaps/opentaps-common/templates/BaseEntityPk.ftl"/>
         <property name="pkBridgeTemplate" value="opentaps/opentaps-common/templates/BaseEntityPkBridge.ftl"/>
         <property name="baseEntityOutputPath" value="opentaps/opentaps-common/src/base/org/opentaps/base/entities/"/>
-        <property name="baseEntities" value="SequenceValueItem"/>
+        <property name="baseEntities" value="OpentapsConfigurationType,OpentapsConfiguration,SequenceValueItem"/>
         <property name="entityOutputPath" value="opentaps/opentaps-common/src/entities/org/opentaps/base/entities/"/>
         <property name="serviceOutputPath" value="opentaps/opentaps-common/src/services/org/opentaps/base/services/"/>
         <property name="hibernateCfgTemplate" value="opentaps/opentaps-common/templates/HibernateCfg.ftl"/>

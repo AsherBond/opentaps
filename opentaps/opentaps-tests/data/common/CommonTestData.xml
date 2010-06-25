@@ -19,7 +19,8 @@
 
 <entity-engine-xml>
     
-    <OpentapsConfigurationType configTypeId="TEST_CONFIG_TYPE" description="For testing"/>
+    <OpentapsConfigurationType configTypeId="TEST_CONFIG_UNCONFIGURED_TYPE" description="For testing" defaultValue="Default value 2"/>
+    <OpentapsConfigurationType configTypeId="TEST_CONFIG_TYPE" description="For testing" />
     <OpentapsConfiguration configTypeId="TEST_CONFIG_TYPE" value="Test value" comments="Test value for configuration"/>
-    
+        
 </entity-engine-xml>

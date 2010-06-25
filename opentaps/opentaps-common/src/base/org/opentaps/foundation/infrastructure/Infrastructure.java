@@ -40,7 +40,8 @@ import org.ofbiz.entity.config.DatasourceInfo;
 import org.ofbiz.entity.config.EntityConfigUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
-//import org.opentaps.base.entities.OpentapsConfiguration;
+import org.opentaps.base.entities.OpentapsConfiguration;
+import org.opentaps.base.entities.OpentapsConfigurationType;
 import org.opentaps.foundation.entity.hibernate.EcaDeleteEventListener;
 import org.opentaps.foundation.entity.hibernate.EcaLoadEventListener;
 import org.opentaps.foundation.entity.hibernate.EcaPersistEventListener;
@@ -276,35 +277,46 @@ public class Infrastructure {
     }
     
     /**
-     * Get a configuration value from the database or throw an exception if it's not configured
+     * Get a configuration value from the database with null default value
      * 
      * @param configTypeId
      * @return
      * @throws InfrastructureException
      */
     public String getConfigurationValue(String configTypeId) throws InfrastructureException {
-    	/**
-    	Currently this doesn't build because Infrastructure is part of base, and base is built before entities
-    	
+        return getConfigurationValue(configTypeId, null);
+    }
+    
+    /**
+     * Get a configuration value from the database.  If it's not configured, use user supplied defaultValue, then OpentapsConfigurationType.defaultValue
+     * 
+     * @param configTypeId
+     * @param defaultValue
+     * @return
+     * @throws InfrastructureException
+     */
+    public String getConfigurationValue(String configTypeId, String defaultValue) throws InfrastructureException {
     	Session session = getSession();
     	OpentapsConfiguration configuration = (OpentapsConfiguration) session.get(OpentapsConfiguration.class, configTypeId);
     	if (configuration == null) {
-    		throw new InfrastructureException("No configuration found for [" + configurationTypeId + "]");
+    		if (defaultValue != null) {
+    			// if user supplied a non-null defaultValue, then use it
+    			Debug.logWarning("No value found for configuration [" + configTypeId + "] returning a default of ["  + defaultValue + "]", MODULE);
+    			return defaultValue;
+    		} else {
+    			// use the default value of the configuration type
+    			OpentapsConfigurationType configurationType = (OpentapsConfigurationType) session.get(OpentapsConfigurationType.class, configTypeId);
+    	    	if (configurationType != null) {
+        			Debug.logWarning("No value found for configuration [" + configTypeId + "] returning a default of ["  + configurationType.getDefaultValue() + "]", MODULE);
+        			return configurationType.getDefaultValue();
+    	    	} else {
+    	    		Debug.logWarning("No configuration type [" + configTypeId + "] returning null", MODULE);
+        			return null;
+    	    	}
+    		}
     	}
 		return configuration.getValue();
-		*/
-    	
-    	GenericValue configuration;
-		try {
-			configuration = delegator.findByPrimaryKeyCache("OpentapsConfiguration", UtilMisc.toMap("configTypeId", configTypeId));
-		} catch (GenericEntityException e) {
-			throw new InfrastructureException(e);
-		}
-    	if (configuration == null) {
-    		throw new InfrastructureException("No configuration found for [" + configTypeId + "]");
-    	}
-		return configuration.getString("value");
-    }
+	}
 
     /**
      * Evict all entries of entityName from the second-level cache.
