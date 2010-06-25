@@ -17,6 +17,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+<#if !("Y"==disableRequestCatalog?default("N"))>
 <a name="CatalogRequests"></a>
 <@frameSectionHeader title=uiLabelMap.CrmCatalogRequests/>
   <table class="listTable" cellspacing="0">
@@ -40,3 +41,4 @@
       </tr>
     </#list>
   </table>
+</#if>

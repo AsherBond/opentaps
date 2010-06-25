@@ -25,6 +25,12 @@ import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 
+// check permission first
+if (!security.hasEntityPermission("CRMSFA_CATALOG", "_REQ", session)) {
+    context.put("disableRequestCatalog", "Y");
+    return;
+}
+
 partyId = parameters.get("partyId");
 if (UtilValidate.isEmpty(partyId)) {
   return;

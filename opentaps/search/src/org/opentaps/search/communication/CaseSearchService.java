@@ -22,16 +22,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
+import org.opentaps.base.constants.SecurityPermissionConstants;
 import org.opentaps.base.entities.CustRequest;
 import org.opentaps.base.entities.CustRequestRole;
 import org.opentaps.base.entities.CustRequestRolePk;
+import org.opentaps.base.entities.PartyRelationshipAndPermission;
+import org.opentaps.base.entities.UserLogin;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
 import org.opentaps.domain.search.SearchResult;
 import org.opentaps.domain.search.communication.CaseSearchServiceInterface;
+import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.search.HibernateSearchRepository;
@@ -42,6 +49,8 @@ import org.opentaps.search.party.PartySearch;
  * The implementation of the Case search service.
  */
 public class CaseSearchService extends HibernateSearchService implements CaseSearchServiceInterface {
+    
+    private static final String MODULE = CaseSearchService.class.getName();
 
     /** Common set of class to query for Case related search. */
     public static final Set<Class<?>> CASE_CLASSES = new HashSet<Class<?>>(Arrays.asList(
@@ -104,7 +113,15 @@ public class CaseSearchService extends HibernateSearchService implements CaseSea
                 Class<?> c = o.getResultClass();
                 if (c.equals(CustRequestRole.class)) {
                     CustRequestRolePk pk = (CustRequestRolePk) o.getResultPk();
-                    caseIds.add(pk.getCustRequestId());
+                    
+                    if("Y".equals(this.getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER))){                            
+                        // Checking security if user has permisson to view case.                            
+                        if(this.hasUserSecurityPermissionToViewCase(repository, pk.getPartyId()) == true){                                         
+                            caseIds.add(pk.getCustRequestId());                               
+                        }                            
+                    }else{
+                        caseIds.add(pk.getCustRequestId());
+                    }
                 }
             }
 
@@ -121,8 +138,46 @@ public class CaseSearchService extends HibernateSearchService implements CaseSea
             } else {
                 cases = new ArrayList<CustRequest>();
             }
+        } catch (InfrastructureException e) {
+            throw new ServiceException(e);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
+    }
+
+    private boolean hasUserSecurityPermissionToViewCase(OrderRepositoryInterface repository, String casePartyId) throws RepositoryException {
+        boolean has = false;
+        
+        String userPartyId = this.getUser().getOfbizUserLogin().getString(UserLogin.Fields.partyId.name());
+                            
+        EntityCondition permissionCond = EntityCondition.makeCondition(EntityOperator.AND,
+            EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.partyIdFrom.name(), EntityOperator.EQUALS, userPartyId),
+            EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.partyIdTo.name(), EntityOperator.EQUALS, casePartyId),
+            EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.permissionId.name(), EntityOperator.EQUALS, SecurityPermissionConstants.CRMSFA_CASE_VIEW),
+            EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.fromDate.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.fromDate.name(), EntityOperator.LESS_THAN, UtilDateTime.nowTimestamp())
+                    ),
+            EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.thruDate.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.thruDate.name(), EntityOperator.GREATER_THAN, UtilDateTime.nowTimestamp())
+                    )
+        );
+
+        List<PartyRelationshipAndPermission> permission = repository.findList(PartyRelationshipAndPermission.class, permissionCond);
+
+        if(permission.size() > 0){         
+
+            has = true;
+
+            Debug.logInfo("User ["+userPartyId+"] has security permission to view case of party ["+casePartyId+"].", MODULE);
+
+        }else{
+
+            Debug.logInfo("User ["+userPartyId+"] has not passed security to view case of party ["+casePartyId+"].", MODULE);
+
+        }
+
+        return has;
     }
 }

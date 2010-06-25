@@ -32,6 +32,7 @@ import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.domain.product.ProductDomainInterface;
 import org.opentaps.domain.purchasing.PurchasingDomainInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
+import org.opentaps.domain.security.SecurityDomainInterface;
 import org.opentaps.domain.shipping.ShippingDomainInterface;
 import org.opentaps.domain.voip.VoipDomainInterface;
 import org.opentaps.domain.webapp.WebAppDomainInterface;
@@ -60,6 +61,8 @@ public class DomainsDirectory implements DomainContextInterface {
 	public static final String VOIP_DOMAIN = "VoipDomain";
 	public static final String WEBAPP_DOMAIN = "WebappDomain";
 	public static final String DATA_IMPORT_DOMAIN = "DataImportDomain";
+        public static final String SECURITY_DOMAIN = "SecurityDomain";
+        public static final String ACTIVITIES_DOMAIN = "ActivitiesDomain";
 
 	// Holds a map of Domain Key (the name of the domain) to DomainInterfaces.
 	private Map<String, DomainInterface> domainDirectories = new HashMap<String, DomainInterface>();
@@ -266,5 +269,12 @@ public class DomainsDirectory implements DomainContextInterface {
     public void setDataImportDomain(DataImportDomainInterface dataImportDomain) {
     	addDomain(DATA_IMPORT_DOMAIN, dataImportDomain);
     }
+    
+    public SecurityDomainInterface getSecurityDomain() {
+    	return (SecurityDomainInterface) getDomain(SECURITY_DOMAIN);
+    }
 
+    public void setSecurityDomain(SecurityDomainInterface securityDomain) {
+    	addDomain(SECURITY_DOMAIN, securityDomain);
+    }    
 }

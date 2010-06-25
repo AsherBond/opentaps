@@ -218,3 +218,8 @@ if (accountActive) {
 // get the generic content metadata for account, which should always be visible, even if account is deactivated
 context.put("content", ContentHelper.getContentInfoForParty(partyId, "ACCOUNT", delegator));
 
+// permission to use form letters
+if (security.hasEntityPermission("CRMSFA_FORMLTR", "_VIEW", userLogin)) {
+     context.put("hasFormLetterViewPermission", true);
+}
+

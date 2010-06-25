@@ -25,6 +25,10 @@ if (security.hasEntityPermission("CRMSFA_LEAD", "_CREATE", session)) {
     shortcuts.add(UtilMisc.toMap("uri", "createLeadForm", "uiLabel", "CrmCreateLead"));
 }
 shortcuts.add(UtilMisc.toMap("uri", "findLeads", "uiLabel", "CrmFindLeads"));
-shortcuts.add(UtilMisc.toMap("uri", "mergeLeadsForm", "uiLabel", "CrmMergeLeads"));
-shortcuts.add(UtilMisc.toMap("uri", "createCatalogRequestForm", "uiLabel", "CrmCreateCatalogRequest"));
+if (security.hasEntityPermission("CRMSFA_LEAD", "_MERGE", session)) {
+    shortcuts.add(UtilMisc.toMap("uri", "mergeLeadsForm", "uiLabel", "CrmMergeLeads"));
+}
+if (security.hasEntityPermission("CRMSFA_CATALOG", "_REQ", session)) {
+    shortcuts.add(UtilMisc.toMap("uri", "createCatalogRequestForm", "uiLabel", "CrmCreateCatalogRequest"));
+}
 context.put("shortcuts", shortcuts);

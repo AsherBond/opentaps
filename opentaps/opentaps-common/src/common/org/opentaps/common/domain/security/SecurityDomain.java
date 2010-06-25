@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2010 - 2011 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -14,21 +14,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.common.domain.party;
+package org.opentaps.common.domain.security;
 
-import org.opentaps.domain.party.PartyDomainInterface;
+import org.opentaps.domain.security.SecurityRepositoryInterface;
+import org.opentaps.domain.security.SecurityServiceInterface;
 import org.opentaps.foundation.domain.Domain;
+import org.opentaps.domain.security.SecurityDomainInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
-/**
- * This is an implementation of the Party domain.
- */
-public class PartyDomain extends Domain implements PartyDomainInterface {
+public class SecurityDomain extends Domain implements SecurityDomainInterface{
 
-    /** {@inheritDoc} */
-    public PartyRepository getPartyRepository() throws RepositoryException {
-        return instantiateRepository(PartyRepository.class);
+    public SecurityRepositoryInterface getSecurityRepository() throws RepositoryException {
+        return instantiateRepository(SecurityRepository.class);
+    }
+
+    public SecurityServiceInterface getSecurityService() throws ServiceException {
+        return instantiateService(SecurityService.class);
     }
 
 }

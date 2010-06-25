@@ -62,6 +62,8 @@ public final class PartyRelationshipTypeConstants {
     public static final String SALES_AFFILIATE = "SALES_AFFILIATE";
     public static final String SPOUSE = "SPOUSE";
     public static final String SUPPLIER_REL = "SUPPLIER_REL";
+    /** A subordinate member of a sales team.  A superior has full access to a subordinate's leads. */
+    public static final String TEAM_SUB = "TEAM_SUB";
     public static final String VISITOR_ISP = "VISITOR_ISP";
     public static final String WEB_MASTER_ASSIGNMEN = "WEB_MASTER_ASSIGNMEN";
 

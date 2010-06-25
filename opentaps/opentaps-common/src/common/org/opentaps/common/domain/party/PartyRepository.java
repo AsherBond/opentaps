@@ -63,6 +63,7 @@ import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
+import org.opentaps.base.entities.PartyRelationship;
 
 /**
  * Repository for Parties to handle interaction of Party-related domain with the entity engine (database) and the service engine.
@@ -479,5 +480,15 @@ public class PartyRepository extends DomainRepository implements PartyRepository
             throw new RepositoryException(e);
         }
         return resultSet;
+    }
+    
+    /** {@inheritDoc} */
+    public List<PartyRelationship> getPartyRelationship(String partyIdFrom, String partyIdTo)throws RepositoryException{    
+        EntityCondition filterByDateCondition = EntityUtil.getFilterByDateExpr();
+        EntityCondition indirectConditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                        EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, partyIdFrom),
+                                        EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyIdTo),
+                                        filterByDateCondition);
+        return this.findList(PartyRelationship.class, indirectConditions);
     }
 }

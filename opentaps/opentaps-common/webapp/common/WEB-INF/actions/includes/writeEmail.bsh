@@ -224,3 +224,33 @@ if (UtilValidate.isEmpty(partyId)) {
     partyId = parameters.get("partyId");
 }
 context.put("partyId", partyId);
+
+// now determine what other things to display -- ie, opportunity, case, order ID, etc.
+// currently this is for CRM, but we can expand it to support links to other things, i.e in purchasing, financials, etc.
+boolean displayLinks = false;
+boolean displayOpportunityLink = false;
+boolean displayCaseLink = false;
+boolean displayOrderLink = false;
+if (security.hasEntityPermission("CRMSFA_OPPS", "_VIEW", userLogin)) {
+    displayLinks = true;
+    displayOpportunityLink = true;
+}
+if (security.hasEntityPermission("CRMSFA_CASES", "_VIEW", userLogin)) {
+    displayLinks = true;
+    displayOpportunityLink = true;
+}
+if (security.hasEntityPermission("CRMSFA_ORDERS", "_VIEW", userLogin)) {
+    displayLinks = true;
+    displayOpportunityLink = true;
+}
+context.put("displayLinks", displayLinks);
+context.put("displayOpportunityLink", displayOpportunityLink);
+context.put("displayCaseLink", displayCaseLink);
+context.put("displayOrderLink", displayOrderLink);
+
+// determine if marketing campaign templates should be displayed
+boolean displayTemplates = false;
+if (security.hasEntityPermission("CRMSFA_FORMLTR", "_VIEW", userLogin)) {
+    displayTemplates = true;
+}
+context.put("displayTemplates", displayTemplates);

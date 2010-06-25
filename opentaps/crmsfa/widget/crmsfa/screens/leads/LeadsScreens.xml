@@ -253,53 +253,58 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
+                        <section>
+                        <condition><if-compare field="validView" operator="equals" value="true"/></condition>
+                        <widgets>
+                            <!-- Main leads section -->
+                            <container style="subSectionBlock">
+                               <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/leads/submenus/leadDetailsMenu.ftl"/></html></platform-specific>
+                                <container style="form">
+                                    <include-form name="viewLead" location="component://crmsfa/widget/crmsfa/forms/leads/LeadsForms.xml"/>
+                                    <include-form name="viewResponsibleFor" location="component://crmsfa/widget/crmsfa/forms/leads/LeadsForms.xml"/>
 
-                        <!-- Main leads section -->
-                        <container style="subSectionBlock">
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/leads/submenus/leadDetailsMenu.ftl"/></html></platform-specific>
-                            <container style="form">
-                                <include-form name="viewLead" location="component://crmsfa/widget/crmsfa/forms/leads/LeadsForms.xml"/>
-                                <include-form name="viewResponsibleFor" location="component://crmsfa/widget/crmsfa/forms/leads/LeadsForms.xml"/>
-
-                                <!-- If the user can reassign accounts, include the relevant form -->
-                                <section>
-                                    <condition><if-compare field="hasReassignPermission" operator="equals" value="true" type="Boolean"/></condition>
-                                    <widgets>
-                                        <include-form name="reassignToForm" location="component://crmsfa/widget/crmsfa/forms/leads/LeadsForms.xml"/>
-                                    </widgets>
-                                </section>
+                                    <!-- If the user can reassign accounts, include the relevant form -->
+                                    <section>
+                                        <condition><if-compare field="hasReassignPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                        <widgets>
+                                            <include-form name="reassignToForm" location="component://crmsfa/widget/crmsfa/forms/leads/LeadsForms.xml"/>
+                                        </widgets>
+                                    </section>
+                                </container>
                             </container>
-                        </container>
 
-                        <!-- lead contact info -->
-                        <container style="subSectionBlock">
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contactmech/viewprofile.ftl"/></html></platform-specific>
-                        </container>
+                            <!-- lead contact info -->
+                            <container style="subSectionBlock">
+                                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contactmech/viewprofile.ftl"/></html></platform-specific>
+                            </container>
 
-                        <!-- lead opportunities -->
-                        <include-screen name="leadOpportunities"/>
+                            <!-- lead opportunities -->
+                            <include-screen name="leadOpportunities"/>
 
-                        <!-- pending activities -->
-                        <include-screen name="pendingActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>
+                            <!-- pending activities -->
+                            <include-screen name="pendingActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>
 
-                        <!-- completed activities -->
-                        <include-screen name="completedActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>
-                        
-                        <!-- Catalog requests -->
-                        <container style="subSectionBlock">
-                          <platform-specific>
-                            <html><html-template location="component://crmsfa/webapp/crmsfa/includes/catalogRequests.ftl"/></html>
-                          </platform-specific>
-                        </container>
+                            <!-- completed activities -->
+                            <include-screen name="completedActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>
 
-                        <!-- attached content -->
-                        <include-screen name="contentList" location="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml"/>
+                            <!-- Catalog requests -->
+                            <container style="subSectionBlock">
+                              <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/includes/catalogRequests.ftl"/></html>
+                              </platform-specific>
+                            </container>
 
-                        <!-- Notes section -->
-                        <container style="subSectionBlock">
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/leads/submenus/leadNotesMenu.ftl"/></html></platform-specific>
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/common/ListNotes.ftl"/></html></platform-specific>
-                        </container>
+                            <!-- attached content -->
+                            <include-screen name="contentList" location="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml"/>
+
+                            <!-- Notes section -->
+                            <container style="subSectionBlock">
+                                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/leads/submenus/leadNotesMenu.ftl"/></html></platform-specific>
+                                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/common/ListNotes.ftl"/></html></platform-specific>
+                            </container>
+                        </widgets>
+                        <fail-widgets><label>${uiLabelMap.CrmErrorPermissionDenied}</label></fail-widgets>
+                        </section>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

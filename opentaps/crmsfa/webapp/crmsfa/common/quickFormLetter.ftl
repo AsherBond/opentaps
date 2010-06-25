@@ -18,7 +18,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#if parameters.partyId?has_content && templates?has_content>
+<#if hasFormLetterViewPermission?default(false) && parameters.partyId?has_content && templates?has_content>
 
   <#assign partyId = parameters.partyId/>
 

@@ -172,6 +172,8 @@ public final class RoleTypeConstants {
     public static final String ORDER_CLERK = "ORDER_CLERK";
     /** Organization. */
     public static final String ORGANIZATION_ROLE = "ORGANIZATION_ROLE";
+    /** Organization Template. */
+    public static final String ORGANIZATION_TEMPL = "ORGANIZATION_TEMPL";
     /** Organization Unit. */
     public static final String ORGANIZATION_UNIT = "ORGANIZATION_UNIT";
     /** Originator. */

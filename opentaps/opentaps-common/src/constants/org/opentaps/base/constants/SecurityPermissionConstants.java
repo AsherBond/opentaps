@@ -172,6 +172,8 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_CASE_UPDATE = "CRMSFA_CASE_UPDATE";
     /** View a Case.. */
     public static final String CRMSFA_CASE_VIEW = "CRMSFA_CASE_VIEW";
+    /** Request catalog features.. */
+    public static final String CRMSFA_CATALOG_REQ = "CRMSFA_CATALOG_REQ";
     /** Access to the Contacts function of the application.. */
     public static final String CRMSFA_CONTACTS_VIEW = "CRMSFA_CONTACTS_VIEW";
     /** Create a new Contact.. */
@@ -194,6 +196,8 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_LEAD_DEACTIVATE = "CRMSFA_LEAD_DEACTIVATE";
     /** Delete a lead that hasn't been converted.. */
     public static final String CRMSFA_LEAD_DELETE = "CRMSFA_LEAD_DELETE";
+    /** Merge two leads.. */
+    public static final String CRMSFA_LEAD_MERGE = "CRMSFA_LEAD_MERGE";
     /** Reassign owner of an existing lead.. */
     public static final String CRMSFA_LEAD_REASSIGN = "CRMSFA_LEAD_REASSIGN";
     /** Update any existing Lead.. */
@@ -408,6 +412,8 @@ public final class SecurityPermissionConstants {
     public static final String HUMANRES_VIEW = "HUMANRES_VIEW";
     /** View the Labels Info pages.. */
     public static final String LABEL_MANAGER_VIEW = "LABEL_MANAGER_VIEW";
+    /** Ability to access lead management application.. */
+    public static final String LEADMGMT_VIEW = "LEADMGMT_VIEW";
     /** Manual Payment Transaction.. */
     public static final String MANUAL_PAYMENT = "MANUAL_PAYMENT";
     /** ALL operations in the Manufacturing Manager.. */

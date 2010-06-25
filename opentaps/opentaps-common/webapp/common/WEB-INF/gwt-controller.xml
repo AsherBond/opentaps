@@ -370,4 +370,12 @@
         <response name="error" type="none"/>
     </request-map>    
     
+    <!-- Security requests -->
+    <request-map uri="gwtUserPermissions">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.form.SecurityService" invoke="userPermissions"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map> 
+    
 </site-conf>

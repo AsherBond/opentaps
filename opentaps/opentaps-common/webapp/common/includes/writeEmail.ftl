@@ -146,30 +146,38 @@
     </span>
   </div>
 
+  <#if displayLinks?default(false)>
   <div class="formRow">
+    <#if displayOpportunityLink?default(false)>
     <span class="formLabel">${uiLabelMap.CrmOpportunity}</span>
     <span class="formInputSpan">
       <input type="text" name="salesOpportunityId" class="inputBox" size="20" maxlength="20" value="${parameters.salesOpportunityId?if_exists}"></input>
       <a title="${uiLabelMap.CrmLookupOpportunities}" href="javascript:call_fieldlookup2(document.writeEmailForm.salesOpportunityId, 'LookupOpportunities');">
         <img src="<@ofbizContentUrl>/images/fieldlookup.gif</@ofbizContentUrl>" width="16" height="16" border="0" alt="Lookup"></img>
       </a>
+    </#if>
+    <#if displayCaseLink?default(false)>
       <span class="formLabel" style="float:none; width:auto">${uiLabelMap.CrmCase}</span>
       <input type="text" name="custRequestId" class="inputBox" size="20" maxlength="20" value="${parameters.custRequestId?if_exists}"></input>
       <a title="${uiLabelMap.CrmLookupCases}" href="javascript:call_fieldlookup2(document.writeEmailForm.custRequestId, 'LookupCases');">
         <img src="<@ofbizContentUrl>/images/fieldlookup.gif</@ofbizContentUrl>" width="16" height="16" border="0" alt="Lookup"></img>
       </a>
+    </#if>
+    <#if displayOrderLink?default(false)>
       <span class="formLabel" style="float:none; width:auto">${uiLabelMap.OrderOrder}</span>
       <input type="text" name="orderId" id="orderId" class="inputBox" size="20" maxlength="20" value="${parameters.orderId?if_exists}"></input>
       <a title="${uiLabelMap.CrmFindOrders}" href="javascript:call_fieldlookup2(document.writeEmailForm.orderId, 'LookupSalesOrders');">
         <img src="<@ofbizContentUrl>/images/fieldlookup.gif</@ofbizContentUrl>" width="16" height="16" border="0" alt="Lookup"></img>
       </a>
     </span>
+    </#if>
     </span>
   </div>
+  </#if>
 
   </#if>
   
-  <#if templates?has_content>
+  <#if templates?has_content && displayTemplates?default(false)>
       <div class="formRow">
         <span class="formLabel">${uiLabelMap.CrmTemplate}</span>
         <span class="formInputSpan">

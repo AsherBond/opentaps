@@ -21,18 +21,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.constants.SecurityPermissionConstants;
+import org.opentaps.base.entities.PartyRelationshipAndPermission;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.PartyRolePk;
+import org.opentaps.base.entities.UserLogin;
 import org.opentaps.domain.party.Lead;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
 import org.opentaps.domain.search.SearchResult;
 import org.opentaps.domain.search.party.LeadSearchServiceInterface;
+import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.repository.RepositoryInterface;
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.search.HibernateSearchService;
 
@@ -41,6 +49,8 @@ import org.opentaps.search.HibernateSearchService;
  */
 public class LeadSearchService extends HibernateSearchService implements LeadSearchServiceInterface {
 
+    private static final String MODULE = LeadSearchService.class.getName();
+    
     private List<Lead> leads = null;
 
     /** {@inheritDoc} */
@@ -74,6 +84,7 @@ public class LeadSearchService extends HibernateSearchService implements LeadSea
     /** {@inheritDoc} */
     public void readSearchResults(List<SearchResult> results) throws ServiceException {
         try {
+ 
             PartyRepositoryInterface partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
             // get the entities from the search results
             Set<String> leadIds = new HashSet<String>();
@@ -81,9 +92,20 @@ public class LeadSearchService extends HibernateSearchService implements LeadSea
                 Class<?> c = o.getResultClass();
                 if (c.equals(PartyRole.class)) {
                     PartyRolePk pk = (PartyRolePk) o.getResultPk();
-                    if (RoleTypeConstants.PROSPECT.equals(pk.getRoleTypeId())) {
-                        leadIds.add(pk.getPartyId());
+                    
+                    if(RoleTypeConstants.PROSPECT.equals(pk.getRoleTypeId())){
+                     
+                        if("Y".equals(this.getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER))){                            
+                            // Checking security if user has permisson to view lead.                            
+                            if(this.hasUserSecurityPermissionToViewLead(partyRepository, pk.getPartyId()) == true){                                         
+                                leadIds.add(pk.getPartyId());                               
+                            }                            
+                        }else{
+                            leadIds.add(pk.getPartyId());
+                        }
+                        
                     }
+                    
                 }
             }
 
@@ -100,8 +122,47 @@ public class LeadSearchService extends HibernateSearchService implements LeadSea
             } else {
                 leads = new ArrayList<Lead>();
             }
+            
+        } catch (InfrastructureException e) {
+            throw new ServiceException(e);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
+    }
+    
+    private boolean hasUserSecurityPermissionToViewLead(RepositoryInterface repository, String leadPartyId) throws RepositoryException{
+        boolean has = false;
+        
+        String userPartyId = this.getUser().getOfbizUserLogin().getString(UserLogin.Fields.partyId.name());
+                            
+        EntityCondition permissionCond = EntityCondition.makeCondition(EntityOperator.AND,
+            EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.partyIdFrom.name(), EntityOperator.EQUALS, leadPartyId),
+            EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.partyIdTo.name(), EntityOperator.EQUALS, userPartyId),
+            EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.permissionId.name(), EntityOperator.EQUALS, SecurityPermissionConstants.CRMSFA_LEAD_VIEW),
+            EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.fromDate.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.fromDate.name(), EntityOperator.LESS_THAN, UtilDateTime.nowTimestamp())
+                    ),
+            EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.thruDate.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(PartyRelationshipAndPermission.Fields.thruDate.name(), EntityOperator.GREATER_THAN, UtilDateTime.nowTimestamp())
+                    )
+        );
+
+        List<PartyRelationshipAndPermission> permission = repository.findList(PartyRelationshipAndPermission.class, permissionCond);
+
+        if(permission.size() > 0){         
+
+            has = true;
+
+            Debug.logInfo("User ["+userPartyId+"] has security permission to view lead ["+leadPartyId+"].", MODULE);
+
+        }else{
+
+            Debug.logInfo("User ["+userPartyId+"] has not passed security to view lead ["+leadPartyId+"].", MODULE);
+
+        }
+
+        return has;
     }
 }

@@ -42,6 +42,11 @@
     <SecurityPermission description="Deactivate any existing Lead." permissionId="CRMSFA_LEAD_DEACTIVATE"/>    
     <SecurityPermission description="Reassign owner of an existing lead." permissionId="CRMSFA_LEAD_REASSIGN"/>    
     <SecurityPermission description="Delete a lead that hasn't been converted." permissionId="CRMSFA_LEAD_DELETE"/>    
+    <SecurityPermission description="Merge two leads." permissionId="CRMSFA_LEAD_MERGE"/>    
+    <!-- general purpose, since it can show up in view contact for different parties -->
+    <SecurityPermission description="Request catalog features." permissionId="CRMSFA_CATALOG_REQ"/>  
+    <!-- also general purpose, since a user who can print form letters may not have other permissions related to marketing -->
+    <SecurityPermission description="Request catalog features." permissionId="CRMSFA_FORMLTR_VIEW"/>    
 
     <SecurityPermission description="Access to the Opportunities function of the application." permissionId="CRMSFA_OPPS_VIEW"/>
     <SecurityPermission description="View any Opportunity." permissionId="CRMSFA_OPP_VIEW"/>
@@ -140,6 +145,9 @@
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_DEACTIVATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_REASSIGN"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_MERGE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CATALOG_REQ"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_FORMLTR_VIEW"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_OPP_VIEW"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_OPP_CREATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_OPP_UPDATE"/>
@@ -250,6 +258,8 @@
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_CREATE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_UPDATE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CATALOG_REQ"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_FORMLTR_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_OPP_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_OPP_CREATE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_OPP_UPDATE"/>
@@ -324,7 +334,9 @@
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACCOUNT_CREATE"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_CONTACT_CREATE"/>
-    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_LEAD_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_LEAD_CREATE"/>  
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_CATALOG_REQ"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_FORMLTR_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_OPP_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_CASE_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACT_VIEW"/>
@@ -431,6 +443,8 @@
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_CREATE"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CATALOG_REQ"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_FORMLTR_VIEW"/>
     <!-- should customer service reps be able to do anything with opportunities? if so, add them here -->
     <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_4C_CREATE"/>
     <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_4C_UPDATE"/>
@@ -517,6 +531,8 @@
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_CREATE"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CATALOG_REQ"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_FORMLTR_VIEW"/>
 
     <!-- a customer service rep has the ability to work on cases but not close them. -->
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CASE_VIEW"/>

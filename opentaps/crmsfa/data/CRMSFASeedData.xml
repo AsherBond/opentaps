@@ -201,5 +201,9 @@
     <StatusValidChange condition="" statusId="QUO_SENT" statusIdTo="QUO_REJECTED" transitionName="Reject Quote"/>
     <StatusValidChange condition="" statusId="QUO_FINALIZED" statusIdTo="QUO_ORDERED" transitionName="Order Quote"/>
     <StatusValidChange condition="" statusId="QUO_FINALIZED" statusIdTo="QUO_REJECTED" transitionName="Reject Quote"/>
+    
+    <!-- Holding configuration settings. -->
+    <OpentapsConfigurationType configTypeId="CRMSFA_FIND_SEC_FILTER" description="Filter CRMSFA search and find results by security permission."/>
+    <OpentapsConfiguration configTypeId="CRMSFA_FIND_SEC_FILTER" value="Y" comments="Filter CRMSFA search and find results by security permission. Only results that the user has permission to see will be shown."/>
 
 </entity-engine-xml>

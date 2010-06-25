@@ -45,7 +45,7 @@ public class MultiSearchForm extends BaseFormPanel {
     private final Panel winInnerPanel;
     private List<SearchResultsListViewInterface> resultGrids = new ArrayList<SearchResultsListViewInterface>();
 
-    private static final int RESULT_GRID_HEIGHT = 200;
+    private static final int RESULT_GRID_HEIGHT = 500;
     private static final int RESULT_WINDOW_HEIGHT = 700;
     private static final int RESULT_WINDOW_WIDTH = 900;
 

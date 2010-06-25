@@ -191,3 +191,8 @@ if (contactActive) {
     isReassignRendered = isReassignAllowed && contactActive && isUserLoginContactOwner;
     context.put("isReassignRendered", isReassignRendered);
 }
+
+// permission to use form letters
+if (security.hasEntityPermission("CRMSFA_FORMLTR", "_VIEW", userLogin)) {
+     context.put("hasFormLetterViewPermission", true);
+}

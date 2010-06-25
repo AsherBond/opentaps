@@ -17,6 +17,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+<#if hasOpportunityViewPermission?default(false)>
 <@sectionHeader title=uiLabelMap.CrmOpportunities>
 <#if hasCreateOppPermission?exists>
     <div class="subMenuBar">
@@ -26,3 +27,4 @@
 </@sectionHeader>
 
 <@gwtWidget id="leadOpportunitiesSubListView" partyId="${partySummary.partyId}"/>
+</#if>

@@ -23,6 +23,7 @@ import java.util.Set;
 import org.opentaps.base.entities.ExternalUser;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyNoteView;
+import org.opentaps.base.entities.PartyRelationship;
 import org.opentaps.base.entities.PartySummaryCRMView;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.TelecomNumber;
@@ -229,5 +230,14 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @param roleTypeId the roleType Id to find
      * @throws RepositoryException if an error occurs
      */
-    public Set<PartyGroup> getPartyGroupByGroupNameAndRoleType(String groupName, String roleTypeId) throws RepositoryException; 
+    public Set<PartyGroup> getPartyGroupByGroupNameAndRoleType(String groupName, String roleTypeId) throws RepositoryException;
+    
+    /**
+     * Finds the list of non-expired <code>PartyRelationship</code> matching the given partyIdFrom and partyIdTo.
+     * @return the list of <code>PartyGroup</code> matching the name
+     * @param groupName the groupName to find
+     * @param roleTypeId the roleType Id to find
+     * @throws RepositoryException if an error occurs
+     */
+    public List<PartyRelationship> getPartyRelationship(String partyIdFrom, String partyIdTo)throws RepositoryException;
 }

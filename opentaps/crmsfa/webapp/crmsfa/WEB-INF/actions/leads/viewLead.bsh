@@ -23,11 +23,52 @@ import org.opentaps.common.util.UtilCommon;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import com.opensourcestrategies.crmsfa.content.ContentHelper;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.opentaps.base.entities.PartyRelationshipAndPermission;
+import org.opentaps.base.constants.SecurityPermissionConstants;
+import org.ofbiz.base.util.UtilDateTime;
+import org.opentaps.domain.party.PartyRepositoryInterface;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 
 /* finds all the information relevant to this lead and puts them in the context, so the various forms
 and FTLs of this screen can display them correctly */
 
 partyId = parameters.get("partyId");
+userPartyId = userLogin.getString("partyId");
+
+domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+partyRepository = domainsLoader.loadDomainsDirectory().getPartyDomain().getPartyRepository();
+
+//make suse that user has permission access the lead
+
+securityCndsFromDate = new ArrayList();
+securityCndsFromDate.add(new EntityExpr(PartyRelationshipAndPermission.Fields.fromDate.name(), EntityOperator.EQUALS, null));
+securityCndsFromDate.add(new EntityExpr(PartyRelationshipAndPermission.Fields.fromDate.name(), EntityOperator.LESS_THAN, UtilDateTime.nowTimestamp()));
+securityCndFromDateList = new EntityConditionList(securityCndsFromDate, EntityOperator.OR);
+
+securityCndsThruDate = new ArrayList();
+securityCndsThruDate.add(new EntityExpr(PartyRelationshipAndPermission.Fields.thruDate.name(), EntityOperator.EQUALS, null));
+securityCndsThruDate.add(new EntityExpr(PartyRelationshipAndPermission.Fields.thruDate.name(), EntityOperator.GREATER_THAN, UtilDateTime.nowTimestamp()));
+securityCndThruDateList = new EntityConditionList(securityCndsThruDate, EntityOperator.OR);
+
+securityCnds = new ArrayList();
+securityCnds.add(new EntityExpr(PartyRelationshipAndPermission.Fields.partyIdFrom.name(), EntityOperator.EQUALS, partyId));
+securityCnds.add(new EntityExpr(PartyRelationshipAndPermission.Fields.partyIdTo.name(), EntityOperator.EQUALS, userPartyId));
+securityCnds.add(new EntityExpr(PartyRelationshipAndPermission.Fields.permissionId.name(), EntityOperator.EQUALS, SecurityPermissionConstants.CRMSFA_LEAD_VIEW));
+securityCnds.add(securityCndFromDateList);
+securityCnds.add(securityCndThruDateList);
+securityCndList = new EntityConditionList(securityCnds, EntityOperator.AND);
+
+permission = partyRepository.findList(PartyRelationshipAndPermission.class, securityCndList);
+
+if(permission.size() == 0){
+    context.put("validView", false);
+    return;
+}
 
 //make sure that the partyId is actually a PROSPECT (i.e., a lead) before trying to display it as once
 delegator = request.getAttribute("delegator");
@@ -121,10 +162,21 @@ if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "C
     context.put("hasDeletePermission", true);
 }
 
+// permission to view opportunities
+if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_OPP", "_VIEW", request.getAttribute("userLogin"), partyId)) {
+    context.put("hasOpportunityViewPermission", true);
+}
+
 // permission to reassign leads
 if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_LEAD", "_REASSIGN", request.getAttribute("userLogin"), partyId)) {
     context.put("hasReassignPermission", true);
 }
+
+// permission to use form letters
+if (security.hasEntityPermission("CRMSFA_FORMLTR", "_VIEW", userLogin)) {
+     context.put("hasFormLetterViewPermission", true);
+}
+
 
 // set this flag to allow contact mechs to be shown
 request.setAttribute("displayContactMechs", "Y");
