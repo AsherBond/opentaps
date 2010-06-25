@@ -27,6 +27,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.base.constants.SalesOpportunityStageConstants;
+import org.opentaps.base.entities.OpentapsConfiguration;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.Product;
 import org.opentaps.base.entities.SalesOpportunity;
@@ -46,6 +47,7 @@ import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Lead;
 import org.opentaps.domain.party.Party;
+import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
@@ -60,6 +62,32 @@ public class SearchTests extends OpentapsTestCase {
 
     private static final String MODULE = SearchTests.class.getName();
     private static final long INDEX_PAUSE = 5000;
+    private String defaultCrmSearchParameter = null;
+    private PartyRepositoryInterface partyRepo = null; 
+    
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        partyRepo = domainsDirectory.getPartyDomain().getPartyRepository();
+        // save the default crm search setting (any repo can do this)
+        // otherwise, recent changes to crm search security will make these tests fail
+        OpentapsConfiguration defaultSearch = partyRepo.findOneNotNull(OpentapsConfiguration.class, 
+        		partyRepo.map(OpentapsConfiguration.Fields.configTypeId, org.opentaps.base.constants.OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER));
+        defaultCrmSearchParameter = defaultSearch.getValue();
+        defaultSearch.setValue("N");
+        partyRepo.createOrUpdate(defaultSearch);
+    }
+
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown(); 
+        // restore the default search setting
+        OpentapsConfiguration defaultSearch = partyRepo.findOneNotNull(OpentapsConfiguration.class, 
+        		partyRepo.map(OpentapsConfiguration.Fields.configTypeId, org.opentaps.base.constants.OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER));
+        defaultSearch.setValue(defaultCrmSearchParameter);
+        partyRepo.createOrUpdate(defaultSearch);
+        partyRepo = null;
+    }
 
     /**
      * Test party search.
