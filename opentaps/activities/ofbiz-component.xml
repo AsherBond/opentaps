@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!--
+ *  @author Si Chen (sichen@opensourcestrategies.com)
+ *  @author Leon Torres (leon@opensourcestrategies.com) 
+-->
+
+<!-- name of the component which is used in references starting with "component://" throughout.  Also must not duplicate any other component name -->
+<ofbiz-component name="activities"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
+    <resource-loader name="main" type="component"/>
+
+    <!-- class path for Java build files, config properties files, and script files 
+    <classpath type="dir" location="config"/>
+    <classpath type="dir" location="script"/>
+    <classpath type="jar" location="lib/*"/>
+     -->
+    <classpath type="jar" location="build/lib/*"/>
+    
+    <!-- entity group definition files -->
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+    
+    <!-- entitys definition files -->
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_datawarehouse.xml"/>
+    
+    <!-- service definition files -->
+    <service-resource type="model" loader="main" location="servicedef/services_datawarehouse.xml"/>
+    
+    <!-- eca service chain files -->
+    <service-resource type="eca" loader="main" location="servicedef/secas_activities.xml"/>
+
+</ofbiz-component>
+
+
