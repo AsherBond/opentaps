@@ -186,6 +186,8 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_CONTACT_UPDATE = "CRMSFA_CONTACT_UPDATE";
     /** View any Contact.. */
     public static final String CRMSFA_CONTACT_VIEW = "CRMSFA_CONTACT_VIEW";
+    /** Request catalog features.. */
+    public static final String CRMSFA_FORMLTR_VIEW = "CRMSFA_FORMLTR_VIEW";
     /** View an invoice.. */
     public static final String CRMSFA_INVOICE_VIEW = "CRMSFA_INVOICE_VIEW";
     /** Access to the Leads function of the application.. */
@@ -412,8 +414,6 @@ public final class SecurityPermissionConstants {
     public static final String HUMANRES_VIEW = "HUMANRES_VIEW";
     /** View the Labels Info pages.. */
     public static final String LABEL_MANAGER_VIEW = "LABEL_MANAGER_VIEW";
-    /** Ability to access lead management application.. */
-    public static final String LEADMGMT_VIEW = "LEADMGMT_VIEW";
     /** Manual Payment Transaction.. */
     public static final String MANUAL_PAYMENT = "MANUAL_PAYMENT";
     /** ALL operations in the Manufacturing Manager.. */
