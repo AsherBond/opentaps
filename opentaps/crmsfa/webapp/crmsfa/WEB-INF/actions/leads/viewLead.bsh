@@ -43,24 +43,12 @@ userPartyId = userLogin.getString("partyId");
 domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
 partyRepository = domainsLoader.loadDomainsDirectory().getPartyDomain().getPartyRepository();
 
-//make suse that user has permission access the lead
-
-securityCndsFromDate = new ArrayList();
-securityCndsFromDate.add(new EntityExpr(PartyRelationshipAndPermission.Fields.fromDate.name(), EntityOperator.EQUALS, null));
-securityCndsFromDate.add(new EntityExpr(PartyRelationshipAndPermission.Fields.fromDate.name(), EntityOperator.LESS_THAN, UtilDateTime.nowTimestamp()));
-securityCndFromDateList = new EntityConditionList(securityCndsFromDate, EntityOperator.OR);
-
-securityCndsThruDate = new ArrayList();
-securityCndsThruDate.add(new EntityExpr(PartyRelationshipAndPermission.Fields.thruDate.name(), EntityOperator.EQUALS, null));
-securityCndsThruDate.add(new EntityExpr(PartyRelationshipAndPermission.Fields.thruDate.name(), EntityOperator.GREATER_THAN, UtilDateTime.nowTimestamp()));
-securityCndThruDateList = new EntityConditionList(securityCndsThruDate, EntityOperator.OR);
-
+//make sure that user has permission access the lead
 securityCnds = new ArrayList();
 securityCnds.add(new EntityExpr(PartyRelationshipAndPermission.Fields.partyIdFrom.name(), EntityOperator.EQUALS, partyId));
 securityCnds.add(new EntityExpr(PartyRelationshipAndPermission.Fields.partyIdTo.name(), EntityOperator.EQUALS, userPartyId));
 securityCnds.add(new EntityExpr(PartyRelationshipAndPermission.Fields.permissionId.name(), EntityOperator.EQUALS, SecurityPermissionConstants.CRMSFA_LEAD_VIEW));
-securityCnds.add(securityCndFromDateList);
-securityCnds.add(securityCndThruDateList);
+securityCnds.add(EntityUtil.getFilterByDateExpr());
 securityCndList = new EntityConditionList(securityCnds, EntityOperator.AND);
 
 permission = partyRepository.findList(PartyRelationshipAndPermission.class, securityCndList);
