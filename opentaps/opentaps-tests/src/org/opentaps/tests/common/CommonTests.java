@@ -43,14 +43,18 @@ import org.opentaps.tests.OpentapsTestCase;
  */
 public class CommonTests extends OpentapsTestCase {
 
+	Infrastructure infrastructure = null;
+	
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        infrastructure = new Infrastructure(dispatcher);
     }
 
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
+        infrastructure = null;
     }
 
     /**
@@ -283,8 +287,8 @@ public class CommonTests extends OpentapsTestCase {
      * Test we can get configuration value
      */
     public void testGetConfiguration() throws GeneralException {
-    	Infrastructure infrastructure = new Infrastructure(dispatcher);
-    	String value = infrastructure.getConfigurationValue("TEST_CONFIG_TYPE");
+    	// defined in opentaps-tests/data/common/CommonTestData.xml
+    	String value = infrastructure.getConfigurationValue("TEST_CONFIG_TYPE");  
     	assertTrue("Test value".equals(value));
     }
 
@@ -292,7 +296,7 @@ public class CommonTests extends OpentapsTestCase {
      * Test default value during getConfigurationValue method
      */
     public void testGetConfigurationWithDefault() throws GeneralException {
-    	Infrastructure infrastructure = new Infrastructure(dispatcher);
+    	// defined in opentaps-tests/data/common/CommonTestData.xml
     	String DEFAULT_VALUE = "default value 1";
     	String value = infrastructure.getConfigurationValue("TEST_CONFIG_UNCONFIGURED_TYPE", DEFAULT_VALUE);
     	assertTrue(DEFAULT_VALUE.equals(value));
@@ -302,11 +306,24 @@ public class CommonTests extends OpentapsTestCase {
      * Test default value in OpentapsConfigurationType
      */
     public void testConfigurationTypeDefault() throws GeneralException {
-    	Infrastructure infrastructure = new Infrastructure(dispatcher);
+    	// defined in opentaps-tests/data/common/CommonTestData.xml
     	String DEFAULT_VALUE = "Default value 2";
     	String value = infrastructure.getConfigurationValue("TEST_CONFIG_UNCONFIGURED_TYPE");
     	assertTrue(DEFAULT_VALUE.equals(value));
     }
 
+    /**
+     * Tests setting a value in OpentapsConfiguration
+     * @throws GeneralException
+     */
+    public void testSetConfiguration() throws GeneralException {
+    	// defined in opentaps-tests/data/common/CommonTestData.xml
+    	String CONFIG_TYPE_ID = "TEST_CONFIG_SET_CONFIG_TYPE";
+    	String DEFAULT_VALUE = "Not set yet";
+    	String NEW_VALUE = "Has been set to new value";
+    	assertTrue(DEFAULT_VALUE.equals(infrastructure.getConfigurationValue(CONFIG_TYPE_ID)));
+    	infrastructure.setConfigurationValue(CONFIG_TYPE_ID, NEW_VALUE, null);
+    	assertTrue(NEW_VALUE.equals(infrastructure.getConfigurationValue(CONFIG_TYPE_ID)));
+    }
     
 }

@@ -21,6 +21,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
 import javolution.util.FastMap;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
@@ -318,6 +324,28 @@ public class Infrastructure {
 		return configuration.getValue();
 	}
 
+    /**
+     * Set the configuration value for a configTypeId inside its own transaction
+     * @param configTypeId
+     * @param value
+     * @param comments
+     * @throws InfrastructureException
+     */
+    public void setConfigurationValue(String configTypeId, String value, String comments) throws InfrastructureException {
+    	Session session = getSession();
+        OpentapsConfiguration configuration = new OpentapsConfiguration();
+        configuration.setConfigTypeId(configTypeId);
+        configuration.setValue(value);
+        configuration.setComments(comments);
+        UserTransaction tx = session.beginUserTransaction();
+        session.saveOrUpdate(configuration);
+        try {
+			tx.commit();
+		} catch (Exception e) {
+			throw new InfrastructureException(e);
+		} 
+    }
+    
     /**
      * Evict all entries of entityName from the second-level cache.
      * @param entityName a <code>String</code> value
