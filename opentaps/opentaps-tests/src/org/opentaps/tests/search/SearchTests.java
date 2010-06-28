@@ -62,31 +62,15 @@ public class SearchTests extends OpentapsTestCase {
 
     private static final String MODULE = SearchTests.class.getName();
     private static final long INDEX_PAUSE = 5000;
-    private String defaultCrmSearchParameter = null;
-    private PartyRepositoryInterface partyRepo = null; 
     
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        partyRepo = domainsDirectory.getPartyDomain().getPartyRepository();
-        // save the default crm search setting (any repo can do this)
-        // otherwise, recent changes to crm search security will make these tests fail
-        OpentapsConfiguration defaultSearch = partyRepo.findOneNotNull(OpentapsConfiguration.class, 
-        		partyRepo.map(OpentapsConfiguration.Fields.configTypeId, org.opentaps.base.constants.OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER));
-        defaultCrmSearchParameter = defaultSearch.getValue();
-        defaultSearch.setValue("N");
-        partyRepo.createOrUpdate(defaultSearch);
     }
 
     @Override
     public void tearDown() throws Exception {
         super.tearDown(); 
-        // restore the default search setting
-        OpentapsConfiguration defaultSearch = partyRepo.findOneNotNull(OpentapsConfiguration.class, 
-        		partyRepo.map(OpentapsConfiguration.Fields.configTypeId, org.opentaps.base.constants.OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER));
-        defaultSearch.setValue(defaultCrmSearchParameter);
-        partyRepo.createOrUpdate(defaultSearch);
-        partyRepo = null;
     }
 
     /**
