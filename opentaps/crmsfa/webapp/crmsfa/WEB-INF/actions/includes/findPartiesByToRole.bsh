@@ -32,6 +32,8 @@ import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import javolution.util.FastList;
+import javolution.util.FastMap;
 
 listIteratorNameToUse = parameters.get("listIteratorNameToUse");
 if (listIteratorNameToUse == null) return;
@@ -82,16 +84,29 @@ if (negateConditions.size() > 0) {
     combinedConditions.add(negateConditionsList);
 }
 conditionList = new EntityConditionList(combinedConditions, EntityOperator.AND);
-// We need to get a list iterator because 1) the forms are all set to use list iterators and 2) that seems to be the only way to find distinct records
-listIt = delegator.findListIteratorByCondition("PartyToSummaryByRole", conditionList, null, 
-        UtilMisc.toList("firstName", "lastName", "partyId"), // fields to select 
-        UtilMisc.toList("lastName", "firstName"), // fields to order by
-        // the first true here is for "specifyTypeAndConcur"
-        // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
-        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
 
-// this is the iterator to use in form-widgets
-context.put(listIteratorNameToUse, listIt);
+// use a page builder to fetch the crm party list, because we need some extra data
+buildCrmPartyList(delegator, conditions) {
+    entityName = "PartyToSummaryByRole";
+    fieldsToSelect = UtilMisc.toList("firstName", "lastName", "partyId");
+    orderBy = UtilMisc.toList("lastName", "firstName");
+    where = conditions;
+
+    build(page) {
+        newPage = FastList.newInstance();
+        for (iter = page.iterator(); iter.hasNext(); ) {
+            crmParty = iter.next();
+            // TODO: check view permission for this party first
+            row = FastMap.newInstance();
+            row.putAll(crmParty.getAllFields());
+            newPage.add(row);
+        }
+        return newPage;
+    }
+    return this; // remember this, very important
+}
+context.put("crmPartyListBuilder", buildCrmPartyList(delegator, conditionList));
+
 
 // this debugging code is kind of helpful so I'll keep it around for now 
 
@@ -102,3 +117,7 @@ if (listIt != null) { while ((next = listIt.next()) != null) { print(next); } }
 else { print("No list iterator found"); }
 print("*****************************************");
 */
+
+// Provide current SalesTeamRoleSecurity to the search options
+securityGroupsList = delegator.findAll("SalesTeamRoleSecurity");
+context.put("securityGroupsList", securityGroupsList);

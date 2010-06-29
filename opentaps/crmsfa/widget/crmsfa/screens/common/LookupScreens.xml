@@ -237,6 +237,8 @@
             <actions>
                 <set field="pageTitleLabel" value="CrmFindTeamMembers"/>
                 <set field="sectionHeaderUiLabel" value="CrmFindTeamMembers"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>                
                 <set field="parameters.listIteratorNameToUse" value="accountTeamMembers"/> <!-- iterator for list of teamMembers -->
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/findPartiesByToRole.bsh"/>
                 <set field="findTeamMembersTarget" value="LookupTeamMembers"/>
@@ -246,12 +248,15 @@
                     <decorator-section name="lookup-body">
                         <container style="subSectionBlock">
                             <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindTeamMembers}</label></container>
-                            <include-form name="FindTeamMembers" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindTeamMembers.ftl"/></html>
+                        </platform-specific>
                         </container>
-                        <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTeamMembers}</label></container>
-                            <include-form name="ListTeamMembers" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
-                        </container>
+
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/ListTeamMembers.ftl"/></html>
+                        </platform-specific>                        
                     </decorator-section>
                 </decorator-screen>
             </widgets>
