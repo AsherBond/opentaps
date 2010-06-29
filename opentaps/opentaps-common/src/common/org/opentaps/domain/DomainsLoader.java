@@ -47,24 +47,25 @@ public class DomainsLoader implements DomainContextInterface {
     private static String DOMAINS_DIRECTORY_FILE = "domains-directory.xml";
     private static String DOMAINS_DIRECTORY_BEAN_ID = "domainsDirectory";
     private static String MODULE = DomainsLoader.class.getName();
-   
+
     /* The domainsDirectory is static because the XML definitions should not
-     * change until the system restarts. Also, the directory will accept 
+     * change until the system restarts. Also, the directory will accept
      * registrations from various modules.  By having a single, centralized
      * directory all domains can access all other domains.
-     * 
+     *
      * To support separate domains directories for each component, we maintain
      * a Map of source file -> DomainsDirectory
      */
-    private static Map<String,DomainsDirectory> domainsDirectories = FastMap.newInstance();
-    private static Set<String> registeredLoaders = new HashSet<String>();
-    
-	private Infrastructure infrastructure = null;
+    private static Map<String, DomainsDirectory> DOMAINS_DIRECTORIES = FastMap.newInstance();
+    private static Set<String> REGISTERED_LOADERS = new HashSet<String>();
+
+    private Infrastructure infrastructure = null;
     private User user = null;
 
-    public DomainsLoader() {
-        // default constructor
-    }
+    /**
+     * Default constructor.
+     */
+    public DomainsLoader() { }
 
     /**
      * Creates a new <code>DomainsLoader</code> instance.
@@ -77,7 +78,14 @@ public class DomainsLoader implements DomainContextInterface {
         setInfrastructure(infrastructure);
         setUser(user);
     }
-    
+
+    /**
+     * Creates a new <code>DomainsLoader</code> instance.
+     *
+     * @param infrastructure an <code>Infrastructure</code> value
+     * @param user an <code>User</code> value
+     * @param domainsDirectoryFile a <code>String</code> value
+     */
     public DomainsLoader(Infrastructure infrastructure, User user, String domainsDirectoryFile) {
         this();
         setInfrastructure(infrastructure);
@@ -137,116 +145,121 @@ public class DomainsLoader implements DomainContextInterface {
         this.setInfrastructure(infrastructure);
         this.setUser(user);
     }
-    
+
     /**
-     * Returns the domains directory from the default DOMAINS_DIRECTORY_FILE. 
+     * Returns the domains directory from the default DOMAINS_DIRECTORY_FILE.
      * Overload in your extended class to return the custom domains for your class
-     * 
-     * @return
+     *
+     * @return a <code>DomainsDirectory</code> value
      */
     public DomainsDirectory getDomainsDirectory() {
-    	return getDomainsDirectory(DOMAINS_DIRECTORY_FILE);
+        return getDomainsDirectory(DOMAINS_DIRECTORY_FILE);
     }
-    
+
     /**
-     * Returns DomainsDirectory from your domainsDirectoryFile
-     * Use this method to create overloaded versions in custom domains loaders
-     * @param domainsDirectoryFile
-     * @return
+     * Returns DomainsDirectory from your domainsDirectoryFile.
+     * Use this method to create overloaded versions in custom domains loaders.
+     * @param domainsDirectoryFile name of the domain definition xml file
+     * @return a <code>DomainsDirectory</code> value
      */
     public DomainsDirectory getDomainsDirectory(String domainsDirectoryFile) {
-    	if (domainsDirectories.get(domainsDirectoryFile) == null) {
-    		initializeDomainsDirectory(infrastructure, user, domainsDirectoryFile);
-    	}
-    	
-		return domainsDirectories.get(domainsDirectoryFile);
+        DomainsDirectory directory = DOMAINS_DIRECTORIES.get(domainsDirectoryFile);
+        if (directory == null) {
+            initializeDomainsDirectory(domainsDirectoryFile);
+            directory = DOMAINS_DIRECTORIES.get(domainsDirectoryFile);
+        }
+
+        // clone the cached domains directory so we can set the proper User / Infrastructure
+        directory = new DomainsDirectory(directory);
+        directory.setUser(this.user);
+        directory.setInfrastructure(this.infrastructure);
+        return directory;
     }
-    
+
     /**
      * Initialize the DomainsDirectory for domainsDirectoryFile.  This is internally
      * synchronized to ensure two threads do not attempt to initialize two
      * copies of the domainsDirectory from the same domainsDirectoryFile.  The domains
      * directory is saved in a Map with the domains directory file as a key.
      *
-     * @param infrastructure
-     * @param user
-     * @param domainsDirectoryFile
+     * @param domainsDirectoryFile  name of the domain definition xml file
      */
-    private static synchronized void initializeDomainsDirectory(Infrastructure infrastructure, User user, String domainsDirectoryFile) {
-    	/* If this method was not synchronized it could lead to a temporary
-    	 * state of multiple domainsDirectories.  Registrations could randomly 
-    	 * occur against either.  When the earlier of two was garbage collected 
-    	 * the registrations within that instance would be lost.
-    	 */
-		if (domainsDirectories.get(domainsDirectoryFile) != null) {
-			Debug.logWarning("Domains directory for [" + domainsDirectoryFile + "] is not null, will not be reinitializing", MODULE);
-			return;
-		}
-		
-		// use default domains directory file unless another one has been set
-		if (domainsDirectoryFile == null) {
-		    Debug.logFatal("No domains directory file found, using default value [" + DOMAINS_DIRECTORY_FILE + "]", MODULE);
-			domainsDirectoryFile = DOMAINS_DIRECTORY_FILE;
-		}
-		
-		Debug.logFatal("Using domains directory file [" + domainsDirectoryFile + "]", MODULE);
+    private static synchronized void initializeDomainsDirectory(String domainsDirectoryFile) {
+        /* If this method was not synchronized it could lead to a temporary
+         * state of multiple domainsDirectories.  Registrations could randomly
+         * occur against either.  When the earlier of two was garbage collected
+         * the registrations within that instance would be lost.
+         */
+        if (DOMAINS_DIRECTORIES.get(domainsDirectoryFile) != null) {
+            Debug.logWarning("Domains directory for [" + domainsDirectoryFile + "] is not null, will not be reinitializing", MODULE);
+            return;
+        }
+
+        // use default domains directory file unless another one has been set
+        if (domainsDirectoryFile == null) {
+            Debug.logFatal("No domains directory file found, using default value [" + DOMAINS_DIRECTORY_FILE + "]", MODULE);
+            domainsDirectoryFile = DOMAINS_DIRECTORY_FILE;
+        }
+
+        Debug.logInfo("Using domains directory file [" + domainsDirectoryFile + "]", MODULE);
         Resource resource = new ClassPathResource(domainsDirectoryFile);
-    	ListableBeanFactory bf = new XmlBeanFactory(resource);
-    	DomainsDirectory myDomainsDirectory = (DomainsDirectory) bf.getBean(DOMAINS_DIRECTORY_BEAN_ID);
-    	myDomainsDirectory.setInfrastructure(infrastructure);
-    	myDomainsDirectory.setUser(user);
-    	
-    	// save using the domains directory file as key
-    	domainsDirectories.put(domainsDirectoryFile, myDomainsDirectory);
+        ListableBeanFactory bf = new XmlBeanFactory(resource);
+        DomainsDirectory myDomainsDirectory = (DomainsDirectory) bf.getBean(DOMAINS_DIRECTORY_BEAN_ID);
+
+        // save using the domains directory file as key
+        DOMAINS_DIRECTORIES.put(domainsDirectoryFile, myDomainsDirectory);
     }
-    
-    
+
+
     /**
      * Registers the domains configured in the specified domainsDirectoryFile.
      * Extending DomainsLoaders should invoke this method on instantiation. This
      * method will ignore attempts to re-register domains that have already
      * registered.
-     * 
-     * Note since this method is protected, only classes which extend DomainsLoaders,
-     * i.e. custom DomainsLoaders, can register additional domains.  
      *
-     * @param domainsDirectoryFile
+     * Note since this method is protected, only classes which extend DomainsLoaders,
+     * i.e. custom DomainsLoaders, can register additional domains.
+     *
+     * @param domainsDirectoryFile name of the domain definition xml file
      */
     protected void registerDomains(String domainsDirectoryFile) {
-    	/* Figure out the name of the DomainLoader attempting to register. If it
-    	 * has already registered, do not re-register
-    	 */
-    	final Throwable t = new Throwable();
+        /* Figure out the name of the DomainLoader attempting to register. If it
+         * has already registered, do not re-register
+         */
+        final Throwable t = new Throwable();
         final StackTraceElement methodCaller = t.getStackTrace()[1];
         final String domainLoaderName = methodCaller.getClassName();
-        if (registeredLoaders.contains(domainLoaderName)) {
-        	// TODO: should throw an exception here
-        	Debug.logWarning("Domain loader [" + domainLoaderName + "] has already been registered.  Will not be registering again.", MODULE);
-        	return;
+        if (REGISTERED_LOADERS.contains(domainLoaderName)) {
+            // TODO: should throw an exception here
+            Debug.logWarning("Domain loader [" + domainLoaderName + "] has already been registered.  Will not be registering again.", MODULE);
+            return;
         } else {
-        	Debug.logInfo("Now registering domain loader [" + domainLoaderName + "]", MODULE);
+            Debug.logInfo("Now registering domain loader [" + domainLoaderName + "]", MODULE);
         }
-        
+
         Resource resource = new ClassPathResource(domainsDirectoryFile);
         XmlBeanFactory bean = new XmlBeanFactory(resource);
-    	String[] domainsToRegister = bean.getBeanNamesForType(DomainInterface.class);
-    	DomainsDirectory domainsDirectory = getDomainsDirectory();
-    	for (String domainToRegister : domainsToRegister) {
-    		domainsDirectory.addDomain(domainToRegister, 
-    				(DomainInterface) bean.getBean(domainToRegister));
-    	}
-    	
-    	// Register the calling class so that it may not re-register
-    	registeredLoaders.add(domainLoaderName);
+        String[] domainsToRegister = bean.getBeanNamesForType(DomainInterface.class);
+        DomainsDirectory directory = DOMAINS_DIRECTORIES.get(domainsDirectoryFile);
+        if (directory == null) {
+            initializeDomainsDirectory(domainsDirectoryFile);
+            directory = DOMAINS_DIRECTORIES.get(domainsDirectoryFile);
+        }
+        for (String domainToRegister : domainsToRegister) {
+            directory.addDomain(domainToRegister, (DomainInterface) bean.getBean(domainToRegister));
+        }
+
+        // Register the calling class so that it may not re-register
+        REGISTERED_LOADERS.add(domainLoaderName);
     }
 
     /**
-     * same as getDomainsDirectory()
-     * @return
-     * 
+     * Same as getDomainsDirectory().
+     *
+     * @return a <code>DomainsDirectory</code> value
      * @deprecated {@link #getDomainsDirectory()}
      */
     public DomainsDirectory loadDomainsDirectory() {
-    	return getDomainsDirectory();
+        return getDomainsDirectory();
     }
 }

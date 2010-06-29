@@ -43,31 +43,45 @@ import org.opentaps.foundation.infrastructure.User;
 
 public class DomainsDirectory implements DomainContextInterface {
 
-	// these are public so you can refer to domains as literals outside this class well
-	// note that these string values aren't important -- it's the names of the set methods that need to match the domains-directory.xml's
-	// Spring bean definitions
-	public static final String BILLING_DOMAIN = "BillingDomain";
-	public static final String CRMSFA_DOMAIN = "CrmsfaDomain";
-	public static final String PURCHASING_DOMAIN = "PurchasingDomain";
-	public static final String MANUFACTURING_DOMAIN = "ManufacturingDomain";
-	public static final String SHIPPING_DOMAIN = "ShippingDomain";
-	public static final String ORGANIZATION_DOMAIN = "OrganizationDomain";
-	public static final String LEDGER_DOMAIN = "LedgerDomain";
-	public static final String PRODUCT_DOMAIN = "ProductDomain";
-	public static final String INVENTORY_DOMAIN = "InventoryDomain";
-	public static final String PARTY_DOMAIN = "PartyDomain";
-	public static final String ORDER_DOMAIN = "OrderDomain";
-	public static final String SEARCH_DOMAIN = "SearchDomain";
-	public static final String VOIP_DOMAIN = "VoipDomain";
-	public static final String WEBAPP_DOMAIN = "WebappDomain";
-	public static final String DATA_IMPORT_DOMAIN = "DataImportDomain";
-        public static final String SECURITY_DOMAIN = "SecurityDomain";
-        public static final String ACTIVITIES_DOMAIN = "ActivitiesDomain";
+    // these are public so you can refer to domains as literals outside this class well
+    // note that these string values aren't important -- it's the names of the set methods that need to match the domains-directory.xml's
+    // Spring bean definitions
+    public static final String BILLING_DOMAIN = "BillingDomain";
+    public static final String CRMSFA_DOMAIN = "CrmsfaDomain";
+    public static final String PURCHASING_DOMAIN = "PurchasingDomain";
+    public static final String MANUFACTURING_DOMAIN = "ManufacturingDomain";
+    public static final String SHIPPING_DOMAIN = "ShippingDomain";
+    public static final String ORGANIZATION_DOMAIN = "OrganizationDomain";
+    public static final String LEDGER_DOMAIN = "LedgerDomain";
+    public static final String PRODUCT_DOMAIN = "ProductDomain";
+    public static final String INVENTORY_DOMAIN = "InventoryDomain";
+    public static final String PARTY_DOMAIN = "PartyDomain";
+    public static final String ORDER_DOMAIN = "OrderDomain";
+    public static final String SEARCH_DOMAIN = "SearchDomain";
+    public static final String VOIP_DOMAIN = "VoipDomain";
+    public static final String WEBAPP_DOMAIN = "WebappDomain";
+    public static final String DATA_IMPORT_DOMAIN = "DataImportDomain";
+    public static final String SECURITY_DOMAIN = "SecurityDomain";
+    public static final String ACTIVITIES_DOMAIN = "ActivitiesDomain";
 
-	// Holds a map of Domain Key (the name of the domain) to DomainInterfaces.
-	private Map<String, DomainInterface> domainDirectories = new HashMap<String, DomainInterface>();
+    // Holds a map of Domain Key (the name of the domain) to DomainInterfaces.
+    private Map<String, DomainInterface> domainDirectories = new HashMap<String, DomainInterface>();
     private Infrastructure infrastructure;
     private User user;
+
+    /**
+     * Default constructor.
+     */
+    public DomainsDirectory() { }
+
+    /**
+    * Clone constructor.
+     * Copy the map of registered domains.
+     * @param dd a <code>DomainsDirectory</code> value
+     */
+    public DomainsDirectory(DomainsDirectory dd) {
+        this.domainDirectories = new HashMap<String, DomainInterface>(dd.domainDirectories);
+    }
 
     /** {@inheritDoc} */
     public Infrastructure getInfrastructure() {
@@ -109,6 +123,7 @@ public class DomainsDirectory implements DomainContextInterface {
     public static DomainsDirectory getDomainsDirectory(DomainContextInterface object) {
         return new DomainsLoader(object.getInfrastructure(), object.getUser()).loadDomainsDirectory();
     }
+
     /**
      * Adds the specified domain to the directory.  May be retrieved by using
      * the specified name.  If a domain is already registered for the specified
@@ -116,19 +131,17 @@ public class DomainsDirectory implements DomainContextInterface {
      *
      * @param name The name of the domain.
      * @param newDomain The DomainInterface for the domain.
-     * @return previous DomainInterface associated with specified key, or 
-     * 			<tt>null</tt> if there was no previous.
+     * @return previous DomainInterface associated with specified key, or <tt>null</tt> if there was no previous.
      */
     public DomainInterface addDomain(String name, DomainInterface newDomain) {
-    	if (StringUtils.isEmpty(name)) {
-    		throw new IllegalArgumentException("null is not a valid domain name key");
-    	}
-    	if (newDomain == null) {
-    		throw new IllegalArgumentException("Cannot add a null domain");
-    	}
-    	newDomain.setInfrastructure(this.infrastructure);
-    	newDomain.setUser(this.user);
-    	return domainDirectories.put(name, newDomain);
+        if (StringUtils.isEmpty(name)) {
+            throw new IllegalArgumentException("null is not a valid domain name key");
+        }
+        if (newDomain == null) {
+            throw new IllegalArgumentException("Cannot add a null domain");
+        }
+        domainDirectories.put(name, newDomain);
+        return getDomain(name);
     }
     /**
      * Return a Set of the names of registered domains.
@@ -136,24 +149,24 @@ public class DomainsDirectory implements DomainContextInterface {
      * @return Set of the names of registered domains.
      */
     public Set<String> listDomains() {
-    	return domainDirectories.keySet();
+        return domainDirectories.keySet();
     }
-    
+
     /**
      * Returns the DomainInterface registered to the specified name.
      *
      * @param name The name of the domain.
      * @return the DomainInterface registered for the specified name, or
-     *	       <tt>null</tt> if no such domain is registered.
+     *         <tt>null</tt> if no such domain is registered.
      */
-    public DomainInterface getDomain(String name) {    	
-    	DomainInterface domain = domainDirectories.get(name); 
-    	if (domain != null) {
-    		// for some reason these need to be set here again, or they will come up as null
-    		domain.setInfrastructure(infrastructure);
-    		domain.setUser(user);
-    	}
-    	return domain;
+    public DomainInterface getDomain(String name) {
+        DomainInterface domain = domainDirectories.get(name);
+        if (domain != null) {
+            // for some reason these need to be set here again, or they will come up as null
+            domain.setInfrastructure(getInfrastructure());
+            domain.setUser(getUser());
+        }
+        return domain;
     }
 
 
@@ -162,119 +175,119 @@ public class DomainsDirectory implements DomainContextInterface {
     }
 
     public BillingDomainInterface getBillingDomain() {
-    	return (BillingDomainInterface) getDomain(BILLING_DOMAIN);
+        return (BillingDomainInterface) getDomain(BILLING_DOMAIN);
     }
 
     public void setOrderDomain(OrderDomainInterface domain) {
-    	addDomain(ORDER_DOMAIN, domain);
+        addDomain(ORDER_DOMAIN, domain);
     }
 
     public OrderDomainInterface getOrderDomain() {
-    	return (OrderDomainInterface) getDomain(ORDER_DOMAIN);
+        return (OrderDomainInterface) getDomain(ORDER_DOMAIN);
     }
 
     public PartyDomainInterface getPartyDomain() {
-    	return (PartyDomainInterface) getDomain(PARTY_DOMAIN);
+        return (PartyDomainInterface) getDomain(PARTY_DOMAIN);
     }
 
     public void setPartyDomain(PartyDomainInterface partyDomain) {
-    	addDomain(PARTY_DOMAIN, partyDomain);
+        addDomain(PARTY_DOMAIN, partyDomain);
     }
 
     public InventoryDomainInterface getInventoryDomain() {
-    	return (InventoryDomainInterface) getDomain(INVENTORY_DOMAIN);
+        return (InventoryDomainInterface) getDomain(INVENTORY_DOMAIN);
     }
 
     public void setInventoryDomain(InventoryDomainInterface inventoryDomain) {
-    	addDomain(INVENTORY_DOMAIN, inventoryDomain);
+        addDomain(INVENTORY_DOMAIN, inventoryDomain);
     }
 
     public ProductDomainInterface getProductDomain() {
-    	return (ProductDomainInterface) getDomain(PRODUCT_DOMAIN);
+        return (ProductDomainInterface) getDomain(PRODUCT_DOMAIN);
     }
 
     public void setProductDomain(ProductDomainInterface productDomain) {
-    	addDomain(PRODUCT_DOMAIN, productDomain);
+        addDomain(PRODUCT_DOMAIN, productDomain);
     }
 
     public LedgerDomainInterface getLedgerDomain() {
-    	return (LedgerDomainInterface) getDomain(LEDGER_DOMAIN);
+        return (LedgerDomainInterface) getDomain(LEDGER_DOMAIN);
     }
 
     public void setLedgerDomain(LedgerDomainInterface ledgerDomain) {
-    	addDomain(LEDGER_DOMAIN, ledgerDomain);
+        addDomain(LEDGER_DOMAIN, ledgerDomain);
     }
 
     public OrganizationDomainInterface getOrganizationDomain() {
-    	return (OrganizationDomainInterface) getDomain(ORGANIZATION_DOMAIN);
+        return (OrganizationDomainInterface) getDomain(ORGANIZATION_DOMAIN);
     }
 
     public void setOrganizationDomain(OrganizationDomainInterface organizationDomain) {
-    	addDomain(ORGANIZATION_DOMAIN, organizationDomain);
+        addDomain(ORGANIZATION_DOMAIN, organizationDomain);
     }
 
     public ShippingDomainInterface getShippingDomain() {
-    	return (ShippingDomainInterface) getDomain(SHIPPING_DOMAIN);
+        return (ShippingDomainInterface) getDomain(SHIPPING_DOMAIN);
    }
 
     public void setShippingDomain(ShippingDomainInterface shippingDomain) {
-    	addDomain(SHIPPING_DOMAIN, shippingDomain);
+        addDomain(SHIPPING_DOMAIN, shippingDomain);
     }
 
     public ManufacturingDomainInterface getManufacturingDomain() {
-    	return (ManufacturingDomainInterface) getDomain(MANUFACTURING_DOMAIN);
+        return (ManufacturingDomainInterface) getDomain(MANUFACTURING_DOMAIN);
     }
 
     public void setManufacturingDomain(ManufacturingDomainInterface manufacturingDomain) {
-    	addDomain(MANUFACTURING_DOMAIN, manufacturingDomain);
+        addDomain(MANUFACTURING_DOMAIN, manufacturingDomain);
     }
 
     public PurchasingDomainInterface getPurchasingDomain() {
-    	return (PurchasingDomainInterface) getDomain(PURCHASING_DOMAIN);
+        return (PurchasingDomainInterface) getDomain(PURCHASING_DOMAIN);
     }
 
     public void setPurchasingDomain(PurchasingDomainInterface purchasingDomain) {
-    	addDomain(PURCHASING_DOMAIN, purchasingDomain);
+        addDomain(PURCHASING_DOMAIN, purchasingDomain);
     }
 
     public VoipDomainInterface getVoipDomain() {
-    	return (VoipDomainInterface) getDomain(VOIP_DOMAIN);
+        return (VoipDomainInterface) getDomain(VOIP_DOMAIN);
     }
 
     public void setVoipDomain(VoipDomainInterface voipDomain) {
-    	addDomain(VOIP_DOMAIN, voipDomain);
+        addDomain(VOIP_DOMAIN, voipDomain);
     }
 
     public SearchDomainInterface getSearchDomain() {
-    	return (SearchDomainInterface) getDomain(SEARCH_DOMAIN);
+        return (SearchDomainInterface) getDomain(SEARCH_DOMAIN);
 
     }
 
     public void setSearchDomain(SearchDomainInterface searchDomain) {
-    	addDomain(SEARCH_DOMAIN, searchDomain);
+        addDomain(SEARCH_DOMAIN, searchDomain);
     }
-    
+
     public WebAppDomainInterface getWebAppDomain() {
-    	return (WebAppDomainInterface) getDomain(WEBAPP_DOMAIN);
+        return (WebAppDomainInterface) getDomain(WEBAPP_DOMAIN);
     }
 
     public void setWebAppDomain(WebAppDomainInterface webAppDomain) {
-    	addDomain(WEBAPP_DOMAIN, webAppDomain);
+        addDomain(WEBAPP_DOMAIN, webAppDomain);
     }
 
     public DataImportDomainInterface getDataImportDomain() {
-    	return (DataImportDomainInterface) getDomain(DATA_IMPORT_DOMAIN);
+        return (DataImportDomainInterface) getDomain(DATA_IMPORT_DOMAIN);
     }
 
     public void setDataImportDomain(DataImportDomainInterface dataImportDomain) {
-    	addDomain(DATA_IMPORT_DOMAIN, dataImportDomain);
+        addDomain(DATA_IMPORT_DOMAIN, dataImportDomain);
     }
-    
+
     public SecurityDomainInterface getSecurityDomain() {
-    	return (SecurityDomainInterface) getDomain(SECURITY_DOMAIN);
+        return (SecurityDomainInterface) getDomain(SECURITY_DOMAIN);
     }
 
     public void setSecurityDomain(SecurityDomainInterface securityDomain) {
-    	addDomain(SECURITY_DOMAIN, securityDomain);
-    }    
+        addDomain(SECURITY_DOMAIN, securityDomain);
+    }
 }
