@@ -131,7 +131,10 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
       </#if>
       <#if callInEventIcon?has_content>
         callInEventIcon: "${callInEventIcon}",
-      </#if>      
+      </#if>
+      <#if infrastructure?has_content>
+        showTopNavMenu: "${infrastructure.getConfigurationValue("UI_NAV_SHOW_TOP_MENU")}",
+      </#if>
         applicationName: "${opentapsApplicationName}"
       };
     </script>

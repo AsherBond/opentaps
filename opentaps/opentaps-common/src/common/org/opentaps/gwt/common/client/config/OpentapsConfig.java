@@ -33,6 +33,7 @@ public class OpentapsConfig {
     private static final String DEFAULT_COUNTRY_GEO_KEY = "defaultCountryGeoId";
     private static final String DEFAULT_CURRENCY_KEY = "defaultCurrencyUomId";
     private static final String ICON_CALLIN_EVENT = "callInEventIcon";
+    private static final String UI_NAV_SHOW_TOP_MENU = "showTopNavMenu";
     private static final String APPLICATION_NAME_KEY = "applicationName";
 
     private static Dictionary dictionary = Dictionary.getDictionary("OpentapsConfig");
@@ -66,13 +67,21 @@ public class OpentapsConfig {
     public String getDefaultCurrencyUomId() {
         return dictionary.get(DEFAULT_CURRENCY_KEY);
     }
-    
+
     /**
      * Gets the icon for notification call in, defined in asterisk.properties.
      * @return a <code>String</code> representation of the country code or null if not configured
      */
     public String getCallInEventIcon() {
         return dictionary.get(ICON_CALLIN_EVENT);
+    }
+
+    /**
+     * Gets if the top navigation menu should be displayed.
+     * @return a <code>Boolean</code>
+     */
+    public Boolean getShowTopNavMenu() {
+        return "Y".equals(dictionary.get(UI_NAV_SHOW_TOP_MENU));
     }
 
     /**

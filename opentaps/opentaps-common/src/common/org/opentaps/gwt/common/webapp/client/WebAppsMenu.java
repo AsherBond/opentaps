@@ -16,11 +16,6 @@
  */
 package org.opentaps.gwt.common.webapp.client;
 
-import org.opentaps.gwt.common.client.BaseEntry;
-import org.opentaps.gwt.common.client.UtilUi;
-import org.opentaps.gwt.common.client.lookup.UtilLookup;
-import org.opentaps.gwt.common.client.lookup.configuration.WebAppLookupConfiguration;
-
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -33,6 +28,11 @@ import com.gwtext.client.data.RecordDef;
 import com.gwtext.client.data.Store;
 import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.data.event.StoreListenerAdapter;
+import org.opentaps.gwt.common.client.BaseEntry;
+import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.config.OpentapsConfig;
+import org.opentaps.gwt.common.client.lookup.UtilLookup;
+import org.opentaps.gwt.common.client.lookup.configuration.WebAppLookupConfiguration;
 
 /**
  * the Entry point classes of Webapps top Menu.
@@ -49,12 +49,14 @@ public class WebAppsMenu extends BaseEntry {
                 new StringFieldDef(WebAppLookupConfiguration.OUT_SHORT_NAME)
             }
     );
+
     /**
      * This is the entry point method.
      * It is loaded for page where the meta tag is found
      */
     public void onModuleLoad() {
-        if (RootPanel.get(WEBAPPS_MENU_ID) != null) {
+        OpentapsConfig config = new OpentapsConfig();
+        if (config.getShowTopNavMenu() && RootPanel.get(WEBAPPS_MENU_ID) != null) {
             init();
         }
     }

@@ -55,6 +55,8 @@ import org.opentaps.foundation.repository.ofbiz.Repository;
 
 if (userLogin != null) {
     globalContext.put("user", new User(userLogin, delegator));
+    // also set an infrastructure object
+    globalContext.put("infrastructure", new Infrastructure(dispatcher));
 }
 
 // Instead of using screens to define the uiLabelMap, grab it from UtilMessage
