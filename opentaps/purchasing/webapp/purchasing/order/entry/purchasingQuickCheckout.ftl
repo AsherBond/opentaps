@@ -111,9 +111,10 @@
 
       <#assign orderTermCount = 0 />
       <#list orderTerms as orderTerm>
+        <#if orderTerm.termTypeId?has_content>
         <#assign termType = cart.getShippingContactMechId()?default("") />
         <tr class="${tableRowClass(orderTerm_index)}">
-          <@displayCell text=orderTerm.getRelatedOne("TermType").get("description",locale) />
+          <@displayCell text=orderTerm.getRelatedOneCache("TermType").get("description",locale) />
           <@inputTextCell name="termValue" size="5" default=orderTerm.termValue maxlength="60" index=orderTerm_index  />
           <@inputTextCell name="termDays" size="5" default=orderTerm.termDays maxlength="60" index=orderTerm_index />
           <@inputTextCell name="textValue" size="20" default=orderTerm.textValue maxlength="200" index=orderTerm_index />
@@ -121,6 +122,7 @@
           <@inputButtonCell title="${uiLabelMap.CommonRemove}" onClick="javascript:removeOrderTerm('${orderTerm.termTypeId}')"/>
           <#assign orderTermCount = orderTermCount + 1 />
         </tr>
+        </#if> 
       </#list>
       <@inputHiddenUseRowSubmit />
       <@inputHiddenRowCount list=orderTerms />
