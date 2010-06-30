@@ -735,6 +735,9 @@
         <view-link entity-alias="C" rel-entity-alias="SOC">
             <key-map field-name="contentId"/>
         </view-link>
+        <relation type="one-nofk" rel-entity-name="Enumeration">
+            <key-map field-name="classificationEnumId" rel-field-name="enumId"/>
+        </relation>
         <relation type="one-nofk" rel-entity-name="ContentType">
             <key-map field-name="contentTypeId"/>
         </relation>
@@ -755,6 +758,9 @@
         <view-link entity-alias="C" rel-entity-alias="CRC">
             <key-map field-name="contentId"/>
         </view-link>
+        <relation type="one-nofk" rel-entity-name="Enumeration">
+            <key-map field-name="classificationEnumId" rel-field-name="enumId"/>
+        </relation>
         <relation type="one-nofk" rel-entity-name="ContentType">
             <key-map field-name="contentTypeId"/>
         </relation>
