@@ -17,8 +17,6 @@
 
 package org.opentaps.gwt.crmsfa.client;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
@@ -27,12 +25,12 @@ import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.i18n.client.Dictionary;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.gwtext.client.util.Format;
+import com.gwtext.client.widgets.Panel;
 import org.opentaps.gwt.common.client.BaseEntry;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindAccountsForm;
@@ -51,6 +49,7 @@ import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.Order
 import org.opentaps.gwt.common.client.listviews.SalesOpportunitySearchListView;
 import org.opentaps.gwt.common.client.listviews.SalesOrderSearchListView;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
+import org.opentaps.gwt.common.client.security.Permission;
 import org.opentaps.gwt.crmsfa.client.accounts.form.AccountsSublistView;
 import org.opentaps.gwt.crmsfa.client.accounts.form.QuickNewAccountForm;
 import org.opentaps.gwt.crmsfa.client.cases.form.CaseSublistView;
@@ -67,12 +66,6 @@ import org.opentaps.gwt.crmsfa.client.orders.form.FindOrdersForm;
 import org.opentaps.gwt.crmsfa.client.orders.form.ProductReReservationForm;
 import org.opentaps.gwt.crmsfa.client.orders.form.SalesOrdersSublistView;
 import org.opentaps.gwt.crmsfa.client.partners.form.FindPartnersForm;
-
-import com.google.gwt.user.client.ui.Button;
-import com.gwtext.client.widgets.Panel;
-import com.gwtext.client.util.JSON;
-import org.opentaps.base.constants.SecurityPermissionConstants;
-import org.opentaps.gwt.common.client.lookup.UtilLookup;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -171,17 +164,12 @@ public class Entry extends BaseEntry {
     private static final String FIND_CASES_ID = "findCases";
 
     private static final String CRMSFA_SEARCH_ID = "gwtSearch";
-    
-    private static final String URL_USER_PERMISSIONS = "gwtUserPermissions";
-    private static final String PERMISSIONS = "permissions";
 
     /**
      * This is the entry point method.
      * It is loaded for page where the meta tag is found.
      */
     public void onModuleLoad() {
-        
-        UtilUi.logInfo("onModuleLoad start", MODULE, "onModuleLoad");
 
         loadAccountsWidgets();
         loadContactsWidgets();
@@ -190,105 +178,30 @@ public class Entry extends BaseEntry {
         loadOrdersWidgets();
         loadPartnersWidgets();
         loadCasesWidgets();
-        
-        UtilUi.logInfo("onModuleLoad loaded widgets", MODULE, "onModuleLoad");
 
         if (RootPanel.get(CRMSFA_SEARCH_ID) != null) {
-            
-            //multiCrmsfaSearch = new MultiSearchForm();
-            
-            UtilUi.logInfo("onModuleLoad checked crmsfa search id", MODULE, "onModuleLoad");
-            
-            // Add search list views according to user security.
-            
-            try {
+            multiCrmsfaSearch = new MultiSearchForm();
 
-                RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, GWT.getHostPageBaseURL() + URL_USER_PERMISSIONS);
-                builder.setHeader("Content-type", "application/x-www-form-urlencoded");
-                builder.setTimeoutMillis(UtilLookup.getAjaxDefaultTimeout());
-                builder.sendRequest(null, new RequestCallback() {
-                    
-                    public void onError(Request request, Throwable exception) {
-                        UtilUi.errorMessage(exception.toString());
-                    }
-
-                    public void onResponseReceived(Request request, Response response) {
-                        if (!ServiceErrorReader.showErrorMessageIfAny(response, URL_USER_PERMISSIONS)) {
-                            
-                            UtilUi.logInfo("onModuleLoad onResponseReceived", MODULE, "onModuleLoad");
-            
-                            JavaScriptObject jsObj = JSON.decode(response.getText());
-                            JSONObject jsonObj = new JSONObject(jsObj);
-                            JSONArray permissions = jsonObj.get(PERMISSIONS).isArray();
-
-                            UtilUi.logInfo("onModuleLoad permissions = "+permissions, MODULE, "onModuleLoad");
-
-                            boolean isAccounsViewPermission = false;
-                            boolean isContactsViewPermisssion =false;
-                            boolean isLeadsViewPermisssion =false;
-                            boolean isCasesViewPermisssion =false;
-                            boolean isOppsViewPermisssion =false;
-                            boolean isOrdersViewPermisssion =false;
-
-                            for(int i = 0; i < permissions.size(); i++){
-                                String prm = permissions.get(i).isString().stringValue();                                
-                                if(prm.compareTo(SecurityPermissionConstants.CRMSFA_ACCOUNTS_VIEW) == 0){
-                                    isAccounsViewPermission = true;
-                                }                                                                  
-                                if(prm.compareTo(SecurityPermissionConstants.CRMSFA_CONTACTS_VIEW) == 0){
-                                    isContactsViewPermisssion =true;
-                                }                               
-                                if(prm.compareTo(SecurityPermissionConstants.CRMSFA_LEADS_VIEW) == 0){
-                                    isLeadsViewPermisssion =true;
-                                }                              
-                                if(prm.compareTo(SecurityPermissionConstants.CRMSFA_CASES_VIEW) == 0){
-                                    isCasesViewPermisssion =true;
-                                }                                
-                                if(prm.compareTo(SecurityPermissionConstants.CRMSFA_OPPS_VIEW) == 0){
-                                    isOppsViewPermisssion =true;
-                                }                             
-                                if(prm.compareTo(SecurityPermissionConstants.CRMSFA_ORDERS_VIEW) == 0){
-                                    isOrdersViewPermisssion =true;
-                                }           
-                            }
-
-                            UtilUi.logInfo("onModuleLoad did checks", MODULE, "onModuleLoad");
-                            
-                            multiCrmsfaSearch = new MultiSearchForm();
-                            
-                            UtilUi.logInfo("onModuleLoad created multiCrmsfaSearch ", MODULE, "onModuleLoad");
-
-                            if(isAccounsViewPermission == true){
-                                multiCrmsfaSearch.addResultsGrid(new AccountSearchListView());
-                            }                                                                   
-                            if(isContactsViewPermisssion == true){
-                                multiCrmsfaSearch.addResultsGrid(new ContactSearchListView());
-                            }                                
-                            if(isLeadsViewPermisssion == true){
-                                multiCrmsfaSearch.addResultsGrid(new LeadSearchListView());
-                            }                              
-                            if(isCasesViewPermisssion == true){
-                                multiCrmsfaSearch.addResultsGrid(new CaseSearchListView());
-                            }                              
-                            if(isOppsViewPermisssion == true){
-                                multiCrmsfaSearch.addResultsGrid(new SalesOpportunitySearchListView());
-                            }                             
-                            if(isOrdersViewPermisssion == true){
-                                multiCrmsfaSearch.addResultsGrid(new SalesOrderSearchListView());
-                            } 
-
-                            UtilUi.logInfo("onModuleLoad added views", MODULE, "onModuleLoad");
-
-                            RootPanel.get(CRMSFA_SEARCH_ID).add(multiCrmsfaSearch);
-                        }
-                     }
-                });
-            } catch (RequestException e) {
-                UtilUi.errorMessage(e.toString(), MODULE, "onModuleLoad");
+            if (Permission.hasPermission(Permission.CRMSFA_ACCOUNT_VIEW)) {
+                multiCrmsfaSearch.addResultsGrid(new AccountSearchListView());
             }
-            
-            UtilUi.logInfo("onModuleLoad response end", MODULE, "onModuleLoad");
+            if (Permission.hasPermission(Permission.CRMSFA_CONTACTS_VIEW)) {
+                multiCrmsfaSearch.addResultsGrid(new ContactSearchListView());
+            }
+            if (Permission.hasPermission(Permission.CRMSFA_LEADS_VIEW)) {
+                multiCrmsfaSearch.addResultsGrid(new LeadSearchListView());
+            }
+            if (Permission.hasPermission(Permission.CRMSFA_CASES_VIEW)) {
+                multiCrmsfaSearch.addResultsGrid(new CaseSearchListView());
+           }
+            if (Permission.hasPermission(Permission.CRMSFA_OPPS_VIEW)) {
+               multiCrmsfaSearch.addResultsGrid(new SalesOpportunitySearchListView());
+            }
+            if (Permission.hasPermission(Permission.CRMSFA_ORDERS_VIEW)) {
+                multiCrmsfaSearch.addResultsGrid(new SalesOrderSearchListView());
+            }
 
+            RootPanel.get(CRMSFA_SEARCH_ID).add(multiCrmsfaSearch);
         }
     }
 
