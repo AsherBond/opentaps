@@ -127,7 +127,7 @@
       <#assign hyperlink = false/>
       <#assign file = false/>
       <#assign data = item.getRelatedOne("DataResource")/>
-      <#assign classification = item.getRelatedOne("Enumeration")?if_exists/>
+      <#assign classification = item.getRelatedOneCache("Enumeration")?if_exists/>
       <#if data?exists && data.objectInfo?has_content>
         <#if item.contentTypeId == "HYPERLINK"><#assign hyperlink = true/>
         <#elseif item.contentTypeId == "FILE"><#assign file = true/>
