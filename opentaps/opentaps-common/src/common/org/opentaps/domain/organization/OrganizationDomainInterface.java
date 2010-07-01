@@ -18,6 +18,7 @@ package org.opentaps.domain.organization;
 
 import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.service.ServiceException;
 
 /**
  * This is the interface of the Organization domain.
@@ -30,5 +31,12 @@ public interface OrganizationDomainInterface extends DomainInterface {
      * @throws RepositoryException if an error occurs
      */
     public OrganizationRepositoryInterface getOrganizationRepository() throws RepositoryException;
+    
+    /**
+     * Returns services for managing organizations
+     * @return
+     * @throws ServiceException
+     */
+    public OrganizationServiceInterface getOrganizationService() throws ServiceException;
 
 }

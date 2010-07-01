@@ -45,8 +45,6 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
 import org.ofbiz.order.order.OrderReadHelper;
@@ -67,6 +65,7 @@ import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyAcctgPreference;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyRole;
+import org.opentaps.base.services.CopyOrganizationLedgerSetupService;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
@@ -2375,70 +2374,12 @@ public class OpentapsTestCase extends TestCase {
      */
     public String createOrganizationFromTemplate(String templatePartyId, String newOrganizationName) throws GeneralException {
         String newPartyId = createPartyFromTemplate(templatePartyId, newOrganizationName);
-        GenericValue partyAcctgPreference = delegator.findByPrimaryKey("PartyAcctgPreference", UtilMisc.toMap("partyId", templatePartyId));
-        List<GenericValue> glAccountOrganizations = delegator.findByCondition("GlAccountOrganization", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> customTimePeriods = delegator.findByCondition("CustomTimePeriod", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> glAccountTypeDefaults = delegator.findByCondition("GlAccountTypeDefault", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> paymentGlAccountTypeMaps = delegator.findByCondition("PaymentGlAccountTypeMap", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> paymentMethodTypeGlAccounts = delegator.findByCondition("PaymentMethodTypeGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> creditCardTypeGlAccounts = delegator.findByCondition("CreditCardTypeGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> varianceReasonGlAccounts = delegator.findByCondition("VarianceReasonGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> invoiceGlAccountTypes = delegator.findByCondition("InvoiceGlAccountType", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> invoiceAdjustmentGlAccounts = delegator.findByCondition("InvoiceAdjustmentGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> acctgTagEnumTypes = delegator.findByCondition("AcctgTagEnumType", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> taxAuthorityGlAccounts = delegator.findByCondition("TaxAuthorityGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> copies = new FastList<GenericValue>();
-        // copy PartyAcctgPreference
-        if (partyAcctgPreference != null) {
-            GenericValue copy = delegator.makeValue(partyAcctgPreference.getEntityName(), partyAcctgPreference);
-            copy.setString("partyId", newPartyId);
-            copies.add(copy);
-        }
-        // create new CustomTimePeriods with the same characteristics as the old organization's, except it's not closed yet
-        for (GenericValue customTimePeriod : customTimePeriods) {
-            GenericValue copy = delegator.makeValue(customTimePeriod.getEntityName(), customTimePeriod);
-            copy.setString("isClosed", "N");
-            copy.setString("organizationPartyId", newPartyId);
-            copy.put("customTimePeriodId", delegator.getNextSeqId("CustomTimePeriod"));
-            copies.add(copy);
-        }
-        // create new GlAccountOrganization values, but it's important to reset the postedBalances for the new organization
-        for (GenericValue glAccountOrganization : glAccountOrganizations) {
-            GenericValue copy = delegator.makeValue(glAccountOrganization.getEntityName(), glAccountOrganization);
-            copy.setString("organizationPartyId", newPartyId);
-            copy.set("postedBalance", BigDecimal.ZERO);
-            copies.add(copy);
-        }
-        // copy all the others
-        copies.addAll(copyEntitiesWithNewOrganizationPartyId(glAccountTypeDefaults, newPartyId));
-        copies.addAll(copyEntitiesWithNewOrganizationPartyId(paymentGlAccountTypeMaps, newPartyId));
-        copies.addAll(copyEntitiesWithNewOrganizationPartyId(paymentMethodTypeGlAccounts, newPartyId));
-        copies.addAll(copyEntitiesWithNewOrganizationPartyId(creditCardTypeGlAccounts, newPartyId));
-        copies.addAll(copyEntitiesWithNewOrganizationPartyId(varianceReasonGlAccounts, newPartyId));
-        copies.addAll(copyEntitiesWithNewOrganizationPartyId(invoiceGlAccountTypes, newPartyId));
-        copies.addAll(copyEntitiesWithNewOrganizationPartyId(invoiceAdjustmentGlAccounts, newPartyId));
-        copies.addAll(copyEntitiesWithNewOrganizationPartyId(acctgTagEnumTypes, newPartyId));
-        copies.addAll(copyEntitiesWithNewOrganizationPartyId(taxAuthorityGlAccounts, newPartyId));
-        delegator.storeAll(copies);
+        CopyOrganizationLedgerSetupService service = new CopyOrganizationLedgerSetupService();
+        service.setUser(new User(admin));
+        service.setInOrganizationPartyId(newPartyId);
+        service.setInTemplateOrganizationPartyId(templatePartyId);
         Debug.logInfo("call createOrganizationFromTemplate use template [" + templatePartyId + "], return partyId [" + newPartyId + "]", MODULE);
         return newPartyId;
-    }
-
-    /**
-     * Convenience method to copy over a list of entities and substitute the organization party ID.
-     * @param entities a <code>List</code> of <code>GenericValue</code>
-     * @param newOrganizationPartyId the new organization ID
-     * @return the modified list of entities
-     * @throws GeneralException if an error occurs
-     */
-    private List<GenericValue> copyEntitiesWithNewOrganizationPartyId(List<GenericValue> entities, String newOrganizationPartyId) throws GeneralException {
-        List<GenericValue> newEntities = new FastList<GenericValue>();
-        for (GenericValue entity : entities) {
-            GenericValue copy = delegator.makeValue(entity.getEntityName(), entity);
-            copy.setString("organizationPartyId", newOrganizationPartyId);
-            newEntities.add(copy);
-        }
-        return newEntities;
     }
 
     // GWT test related methods, for lookup services and autocompleters

@@ -18,8 +18,10 @@ package org.opentaps.common.domain.organization;
 
 import org.opentaps.domain.organization.OrganizationDomainInterface;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.domain.organization.OrganizationServiceInterface;
 import org.opentaps.foundation.domain.Domain;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.service.ServiceException;
 
 /**
  * This is an implementation of the Organization domain.
@@ -29,6 +31,12 @@ public class OrganizationDomain extends Domain implements OrganizationDomainInte
     /** {@inheritDoc} */
     public OrganizationRepositoryInterface getOrganizationRepository() throws RepositoryException {
         return instantiateRepository(OrganizationRepository.class);
+    }
+
+    /** {@inheritDoc} */
+    public OrganizationServiceInterface getOrganizationService()
+            throws ServiceException {
+        return this.instantiateService(OrganizationService.class);
     }
 
 }
