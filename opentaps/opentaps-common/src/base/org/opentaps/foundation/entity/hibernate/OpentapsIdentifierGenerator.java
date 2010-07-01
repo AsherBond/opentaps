@@ -44,6 +44,9 @@ import org.hibernate.type.Type;
 import org.hibernate.util.PropertiesHelper;
 import org.hibernate.util.StringHelper;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.model.ModelUtil;
+import org.opentaps.foundation.entity.Entity;
 
 /**
  * the IdentifierGenerator which for all opentaps POJOs generate Id.
@@ -68,6 +71,8 @@ public class OpentapsIdentifierGenerator extends TransactionHelper implements Pe
     private String selectQuery;
     private String insertQuery;
     private String updateQuery;
+    
+    private String idField;
 
     private Optimizer optimizer;
     //log access count
@@ -101,6 +106,8 @@ public class OpentapsIdentifierGenerator extends TransactionHelper implements Pe
         identifierType = type;
         // retrieve entity name, like org.opentaps.base.entities.TestEntity
         String entityName = params.getProperty("entity_name");
+        String targetColumn = params.getProperty("target_column");
+        idField = ModelUtil.dbNameToVarName(targetColumn);
         // get entity short name, like TestEntity
         sequenceType = entityName.substring(entityName.lastIndexOf(".") + 1);
         // get sequence query, for get current value of sequence
@@ -158,6 +165,13 @@ public class OpentapsIdentifierGenerator extends TransactionHelper implements Pe
      * @return the <code>Serializable</code> sequence value.
      */
     public synchronized Serializable generate(final SessionImplementor session, Object obj) {
+    	if (obj instanceof Entity) {
+    		Entity entity = (Entity) obj;
+    		String idValue = entity.getString(idField);
+    		if (UtilValidate.isNotEmpty(idValue)) {
+    			return idValue;
+    		}
+    	}
         Long seq = (Long) optimizer.generate(
                 new AccessCallback() {
                     public long getNextValue() {
@@ -239,7 +253,7 @@ public class OpentapsIdentifierGenerator extends TransactionHelper implements Pe
         while (rows == 0);
         //log access count
         accessCount++;
-
+        Debug.logInfo("get seq number " + result, MODULE);
         return new Integer(result);
     }
 
