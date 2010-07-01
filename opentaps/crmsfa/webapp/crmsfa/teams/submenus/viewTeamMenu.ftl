@@ -17,11 +17,11 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl" />
 
-<#if hasTeamDeactivatePermission?exists>
+<#if hasTeamDeactivatePermission!false>
 <@form name="deactivateTeamForm" url="deactivateTeam" partyId="${team.partyId}" />
 <#assign deactivateLink><@submitFormLinkConfirm form="deactivateTeamForm" class='subMenuButtonDangerous' text=uiLabelMap.CrmDeactivateTeam/></#assign>
 </#if>
-<#if hasTeamUpdatePermission?exists>
+<#if hasTeamUpdatePermission!false>
 <#assign updateLink = "<a class='subMenuButton' href='updateTeamForm?partyId=" + team.partyId + "'>" + uiLabelMap.CommonEdit + "</a>">
 </#if>
 
