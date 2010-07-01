@@ -48,6 +48,7 @@ import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.base.entities.OpentapsConfiguration;
 import org.opentaps.base.entities.OpentapsConfigurationType;
+import org.opentaps.base.entities.TestEntity;
 import org.opentaps.foundation.entity.hibernate.EcaDeleteEventListener;
 import org.opentaps.foundation.entity.hibernate.EcaLoadEventListener;
 import org.opentaps.foundation.entity.hibernate.EcaPersistEventListener;
@@ -321,7 +322,9 @@ public class Infrastructure {
     	    	}
     		}
     	}
-		return configuration.getValue();
+		String value = configuration.getValue();
+		session.close();
+		return value;
 	}
 
     /**
@@ -333,17 +336,18 @@ public class Infrastructure {
      */
     public void setConfigurationValue(String configTypeId, String value, String comments) throws InfrastructureException {
     	Session session = getSession();
-        OpentapsConfiguration configuration = new OpentapsConfiguration();
+    	// we should check if exists OpentapsConfiguration firstly
+        OpentapsConfiguration configuration = (OpentapsConfiguration) session.get(OpentapsConfiguration.class, configTypeId);
+        if (configuration == null) {
+        	configuration = new OpentapsConfiguration();
+        }
         configuration.setConfigTypeId(configTypeId);
         configuration.setValue(value);
         configuration.setComments(comments);
-        UserTransaction tx = session.beginUserTransaction();
-        session.saveOrUpdate(configuration);
-        try {
-			tx.commit();
-		} catch (Exception e) {
-			throw new InfrastructureException(e);
-		} 
+        // saveOrUpdate will try to update when id not null, so we should use save to instead of it.
+        session.save(configuration);
+        session.flush();
+		session.close();
     }
     
     /**
