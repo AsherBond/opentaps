@@ -612,13 +612,25 @@
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_OPP_VIEW"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_OPP_CREATE"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_OPP_UPDATE"/>
-
+    <!-- in case normal sales reps don't have permission to view activities -->
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
+   
     <SecurityGroup groupId="CONTACT_OWNER" description="Permissions granted to conact owners"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_VIEW"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_UPDATE"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_DEACTIVATE"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_REASSIGN"/>
-
+    <!-- in case normal sales reps don't have permission to view activities -->
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
+    
     <SecurityGroup groupId="LEAD_OWNER" description="Permissions granted to lead owners"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_UPDATE"/>
@@ -629,7 +641,13 @@
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_OPP_VIEW"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_OPP_CREATE"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_OPP_UPDATE"/>
-
+    <!-- in case normal sales reps don't have permission to view activities -->
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
+    
     <SecurityGroup groupId="PARTNER_OWNER" description="Permissions granted to parnter owners"/>
     <SecurityGroupPermission groupId="PARTNER_OWNER" permissionId="CRMSFA_PARTNER_VIEW"/>
     <SecurityGroupPermission groupId="PARTNER_OWNER" permissionId="CRMSFA_PARTNER_UPDATE"/>
