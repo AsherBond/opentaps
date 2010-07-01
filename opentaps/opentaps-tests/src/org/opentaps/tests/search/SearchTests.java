@@ -27,7 +27,6 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.base.constants.SalesOpportunityStageConstants;
-import org.opentaps.base.entities.OpentapsConfiguration;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.Product;
 import org.opentaps.base.entities.SalesOpportunity;
@@ -47,7 +46,6 @@ import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Lead;
 import org.opentaps.domain.party.Party;
-import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
@@ -62,15 +60,20 @@ public class SearchTests extends OpentapsTestCase {
 
     private static final String MODULE = SearchTests.class.getName();
     private static final long INDEX_PAUSE = 5000;
+    private String defaultCrmSearchSecurity = null;
+    private Infrastructure infrastructure = null;
     
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        infrastructure = new Infrastructure(dispatcher);
+        defaultCrmSearchSecurity = infrastructure.getConfigurationValue(org.opentaps.base.constants.OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER);
     }
 
     @Override
     public void tearDown() throws Exception {
         super.tearDown(); 
+        infrastructure.setConfigurationValue(org.opentaps.base.constants.OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER, defaultCrmSearchSecurity, "Restored to default by SearchTests");
     }
 
     /**
@@ -595,10 +598,125 @@ public class SearchTests extends OpentapsTestCase {
         assertTrue("Did not find salesOpportunityId2 [" + salesOpportunityId2 + "]", found2);
 
     }
+    
+    /**
+     * Test that if the find/security filter is on, only the original creator of the lead can find it through search
+     * @throws Exception
+     */
+    public void testLeadSearchSecurity() throws Exception {
 
+        // let's get 2 separate users
+        User demoSalesRep1 = new User(delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesRep1")));
+        User demoSalesRep2 = new User(delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesRep2")));
+        
+        // set search filter to secure
+        infrastructure.setConfigurationValue(org.opentaps.base.constants.OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER, "Y", "Temporarily set to secured by testLeadSearchSecurity");
+        
+        //  create a new lead as DemoSalesRep1
+        CrmsfaCreateLeadService createLead = new CrmsfaCreateLeadService();
+        createLead.setUser(demoSalesRep1);
+        createLead.setInFirstName("Samantha");
+        createLead.setInLastName("Secura");
+        createLead.setInCompanyName("Lead Search Security International");
+        runAndAssertServiceSuccess(createLead);
+        String partyId = createLead.getOutPartyId();
+
+        pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
+
+        //  call the CRM search with the name of the lead with DemoSalesRep1
+        CrmsfaSearchService crmSearch = crmsfaSearchParties("Lead Search Security", demoSalesRep1);
+
+        // verify new lead shows up in the list of Lead
+        List<Lead> leads = crmSearch.getLeads();
+        Set<String> leadIds = Entity.getDistinctFieldValues(String.class, leads, Lead.Fields.partyId);
+        assertTrue("Did not find the new lead [" + partyId + "] when searching with [" + demoSalesRep1.getUserId() + "]", leadIds.contains(partyId));
+
+        // now try with DemoSalesRep2
+        crmSearch = crmsfaSearchParties("searchlead", demoSalesRep2);
+        leads = crmSearch.getLeads();
+        leadIds = Entity.getDistinctFieldValues(String.class, leads, Lead.Fields.partyId);
+        assertFalse("Found the new lead [" + partyId + "] when searching with [" + demoSalesRep2.getUserId() + "]", leadIds.contains(partyId));
+    }
+    
+
+    /**
+     * Test that if the find/security filter is on, only the original creator of the contact can find it through search
+     * @throws Exception
+     */
+    public void testContactSearchSecurity() throws Exception {
+
+        // let's get 2 separate users
+        User demoSalesRep1 = new User(delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesRep1")));
+        User demoSalesRep2 = new User(delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesRep2")));
+        
+        // set search filter to secure
+        infrastructure.setConfigurationValue(org.opentaps.base.constants.OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER, "Y", "Temporarily set to secured by testContactSearchSecurity");
+        
+        //  create a new contact as DemoSalesRep1
+        CrmsfaCreateContactService createContactService = new CrmsfaCreateContactService();
+        createContactService.setUser(demoSalesRep1);
+        createContactService.setInFirstName("Constantine");
+        createContactService.setInLastName("Contactius");
+        runAndAssertServiceSuccess(createContactService);
+        String partyId = createContactService.getOutPartyId();
+
+        pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
+
+        //  call the CRM search with the name of the contact with DemoSalesRep1
+        CrmsfaSearchService crmSearch = crmsfaSearchParties("Contactius", demoSalesRep1);
+
+        // verify new contact shows up in the list of contacts
+        List<Contact> contacts = crmSearch.getContacts();
+        Set<String> contactIds = Entity.getDistinctFieldValues(String.class, contacts, Contact.Fields.partyId);
+        assertTrue("Did not find the new contact [" + partyId + "] when searching with [" + demoSalesRep1.getUserId() + "]", contactIds.contains(partyId));
+
+        // now try with DemoSalesRep2
+        crmSearch = crmsfaSearchParties("searchlead", demoSalesRep2);
+        contacts = crmSearch.getContacts();
+        contactIds = Entity.getDistinctFieldValues(String.class, contacts, Contact.Fields.partyId);
+        assertFalse("Found the new contact [" + partyId + "] when searching with [" + demoSalesRep2.getUserId() + "]", contactIds.contains(partyId));
+    }
+
+    /**
+     * Test that if the find/security filter is on, only the original creator of the account can find it through search
+     * @throws Exception
+     */
+    public void testAccountSearchSecurity() throws Exception {
+
+        // let's get 2 separate users
+        User demoSalesRep1 = new User(delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesRep1")));
+        User demoSalesRep2 = new User(delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesRep2")));
+        
+        // set search filter to secure
+        infrastructure.setConfigurationValue(org.opentaps.base.constants.OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER, "Y", "Temporarily set to secured by testAccountSearchSecurity");
+        
+        //  create a new account as DemoSalesRep1
+        CrmsfaCreateAccountService createAccountService = new CrmsfaCreateAccountService();
+        createAccountService.setUser(demoSalesRep1);
+        createAccountService.setInAccountName("Account Search Security LLC");
+        runAndAssertServiceSuccess(createAccountService);
+        String partyId = createAccountService.getOutPartyId();
+
+        pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
+
+        //  call the CRM search with the name of the account with DemoSalesRep1
+        CrmsfaSearchService crmSearch = crmsfaSearchParties("Account Search Security", demoSalesRep1);
+
+        // verify new contact shows up in the list of contacts
+        List<Account> accounts = crmSearch.getAccounts();
+        Set<String> accountIds = Entity.getDistinctFieldValues(String.class, accounts, Account.Fields.partyId);
+        assertTrue("Did not find the new account [" + partyId + "] when searching with [" + demoSalesRep1.getUserId() + "]", accountIds.contains(partyId));
+
+        // now try with DemoSalesRep2
+        crmSearch = crmsfaSearchParties("searchlead", demoSalesRep2);
+        accounts = crmSearch.getAccounts();
+        accountIds = Entity.getDistinctFieldValues(String.class, accounts, Account.Fields.partyId);
+        assertFalse("Found the new account [" + partyId + "] when searching with [" + demoSalesRep2.getUserId() + "]", accountIds.contains(partyId));
+    }
+    
     protected CrmsfaSearchService crmsfaSearchOrders(String keywords) throws Exception {
         CrmsfaSearchService crmSearch = new CrmsfaSearchService();
-        crmSearch.setInfrastructure(new Infrastructure(dispatcher));
+        crmSearch.setInfrastructure(infrastructure);
         crmSearch.setUser(new User(admin));
         crmSearch.setKeywords(keywords);
         crmSearch.setSearchSalesOrders(true);
@@ -606,10 +724,20 @@ public class SearchTests extends OpentapsTestCase {
         return crmSearch;
     }
 
+    /**
+     * By default search with admin user
+     * @param keywords
+     * @return
+     * @throws Exception
+     */
     protected CrmsfaSearchService crmsfaSearchParties(String keywords) throws Exception {
+        return crmsfaSearchParties(keywords, new User(admin));
+    }
+
+    protected CrmsfaSearchService crmsfaSearchParties(String keywords, User user) throws Exception {
         CrmsfaSearchService crmSearch = new CrmsfaSearchService();
-        crmSearch.setInfrastructure(new Infrastructure(dispatcher));
-        crmSearch.setUser(new User(admin));
+        crmSearch.setInfrastructure(infrastructure);
+        crmSearch.setUser(user);
         crmSearch.setKeywords(keywords);
         crmSearch.setSearchAccounts(true);
         crmSearch.setSearchContacts(true);
@@ -617,10 +745,10 @@ public class SearchTests extends OpentapsTestCase {
         crmSearch.search();
         return crmSearch;
     }
-
+    
     protected CrmsfaSearchService crmsfaSearchSalesOpportunities(String keywords) throws Exception {
         CrmsfaSearchService crmSearch = new CrmsfaSearchService();
-        crmSearch.setInfrastructure(new Infrastructure(dispatcher));
+        crmSearch.setInfrastructure(infrastructure);
         crmSearch.setUser(new User(admin));
         crmSearch.setKeywords(keywords);
         crmSearch.setSearchSalesOpportunities(true);
@@ -630,7 +758,7 @@ public class SearchTests extends OpentapsTestCase {
 
     protected PurchasingSearchService purchasingSearchParties(String keywords) throws Exception {
         PurchasingSearchService purchasingSearch = new PurchasingSearchService();
-        purchasingSearch.setInfrastructure(new Infrastructure(dispatcher));
+        purchasingSearch.setInfrastructure(infrastructure);
         purchasingSearch.setUser(new User(admin));
         purchasingSearch.setKeywords(keywords);
         purchasingSearch.setSearchSuppliers(true);
@@ -640,7 +768,7 @@ public class SearchTests extends OpentapsTestCase {
 
     protected PurchasingSearchService purchasingSearchOrders(String keywords) throws Exception {
         PurchasingSearchService purchasingSearch = new PurchasingSearchService();
-        purchasingSearch.setInfrastructure(new Infrastructure(dispatcher));
+        purchasingSearch.setInfrastructure(infrastructure);
         purchasingSearch.setUser(new User(admin));
         purchasingSearch.setKeywords(keywords);
         purchasingSearch.setSearchPurchaseOrders(true);
