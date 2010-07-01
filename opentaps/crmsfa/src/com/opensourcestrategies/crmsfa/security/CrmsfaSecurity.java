@@ -89,7 +89,7 @@ public final class CrmsfaSecurity {
             Debug.logError("userLogin is null or has no associated delegator", MODULE);
             return false;
         }
-
+        
         // check ${securityModule}_MANAGER permission
         if (security.hasEntityPermission(securityModule, "_MANAGER", userLogin)) {
             return true;

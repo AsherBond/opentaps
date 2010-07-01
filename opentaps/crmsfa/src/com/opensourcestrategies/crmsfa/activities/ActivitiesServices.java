@@ -1988,7 +1988,7 @@ public final class ActivitiesServices {
         if (!"TASK_CANCELLED".equals(currentStatusId)) {
             return ServiceUtil.returnSuccess();
         }
-
+        
         // Check if userLogin can update this work effort
         if (!CrmsfaSecurity.hasActivityPermission(security, "_UPDATE", userLogin, workEffortId)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);

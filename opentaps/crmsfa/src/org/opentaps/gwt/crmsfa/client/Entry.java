@@ -180,6 +180,9 @@ public class Entry extends BaseEntry {
         loadCasesWidgets();
 
         if (RootPanel.get(CRMSFA_SEARCH_ID) != null) {
+
+            // Add search list views according to user security.
+
             multiCrmsfaSearch = new MultiSearchForm();
 
             if (Permission.hasPermission(Permission.CRMSFA_ACCOUNT_VIEW)) {
@@ -193,7 +196,7 @@ public class Entry extends BaseEntry {
             }
             if (Permission.hasPermission(Permission.CRMSFA_CASES_VIEW)) {
                 multiCrmsfaSearch.addResultsGrid(new CaseSearchListView());
-           }
+            }
             if (Permission.hasPermission(Permission.CRMSFA_OPPS_VIEW)) {
                multiCrmsfaSearch.addResultsGrid(new SalesOpportunitySearchListView());
             }
