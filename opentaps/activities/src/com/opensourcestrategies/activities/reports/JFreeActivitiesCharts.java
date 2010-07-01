@@ -28,30 +28,19 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.servlet.ServletUtilities;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.RectangleInsets;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.common.util.UtilMessage;
 
 import java.awt.*;
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import org.jfree.data.category.IntervalCategoryDataset;
-import org.jfree.data.gantt.Task;
-import org.jfree.data.gantt.TaskSeries;
-import org.jfree.data.gantt.TaskSeriesCollection;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeriesCollection;
-import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilDateTime;
-import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.entities.ActivityFact;
@@ -60,10 +49,12 @@ import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
-import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.Service;
 import org.ofbiz.service.LocalDispatcher;
+import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
+import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.DateDim;
+import org.opentaps.base.entities.Party;
 import org.opentaps.common.reporting.etl.UtilEtl;
 
 /**
@@ -73,17 +64,31 @@ public class JFreeActivitiesCharts extends Service{
     
     private static String MODULE = JFreeActivitiesCharts.class.getName();
     
-    
+    /**
+     * Snapshot chart that shows party leads old an recent activities.
+     * @param cutoffDays Number of days that cuts off form today date and make it reading point for old and recent activties.
+     * @param locale
+     * @param dispatcher
+     * @param user
+     * @param timeZone
+     * @return Fale name of chart PNG.
+     * @throws java.lang.Exception
+     */
     public static String createActivitiesByLeadSnapshotChart(int cutoffDays, Locale locale, LocalDispatcher dispatcher, GenericValue user, TimeZone timeZone) throws Exception{
         Map<String, Object> uiLabelMap = UtilMessage.getUiLabels(locale);
         DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(user));
         PartyRepositoryInterface rep = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository();
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        //Get date dimension ID according to the work effort start date.
+        // Get activities reading date that is cut off days substracted from now.
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, Integer.parseInt("-"+cutoffDays));
+        Timestamp readingDate = new java.sql.Timestamp(cal.getTime().getTime());
+        
+        // Get date dimension ID according to the activities reading date.
 
         UtilEtl.setupDateDimension(rep.getInfrastructure().getDelegator(), timeZone, locale);
-        Timestamp readingDate = UtilDateTime.nowTimestamp();// TODO: substract cutoffdays
 
         DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
         DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
@@ -97,13 +102,18 @@ public class JFreeActivitiesCharts extends Service{
         EntityCondition.makeCondition(DateDim.Fields.monthOfYear.name(), monthOfYear),
         EntityCondition.makeCondition(DateDim.Fields.yearNumber.name(), yearNumber));
 
-        Long readingDateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, rep.getInfrastructure().getDelegator());
+        Long readingDateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, rep.getInfrastructure().getDelegator()); 
 
-        //Long readingDateDimId = Long.valueOf(14780);
-        EntityCondition cond = null;
+        // Get reacords that lead have taget party and group them by them.
+        
+        EntityCondition cond = EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), 
+                                                            EntityOperator.EQUALS, 
+                                                            RoleTypeConstants.PROSPECT);
         List<ActivityFact> prospectActivityFacts = rep.findList(ActivityFact.class, cond);
         Map<String, List<ActivityFact>> leads = Entity.groupByFieldValues(String.class, prospectActivityFacts, ActivityFact.Fields.targetPartyId);
-
+        
+        // Add grouparg0ed data to chart.
+        
         Iterator it = leads.keySet().iterator();
         while(it.hasNext() == true){
            String targetPartyId = (String) it.next();
@@ -111,8 +121,9 @@ public class JFreeActivitiesCharts extends Service{
 
            long oldActivityCount = 0;
            long newActivityCount = 0;
+           ActivityFact targetActivity = null;
            for(int i = 0; i < activities.size(); i++){
-               ActivityFact targetActivity = activities.get(i);
+               targetActivity = activities.get(i);   
 
                if(targetActivity.getDateDimId() < readingDateDimId){
                    oldActivityCount = oldActivityCount + 
@@ -130,23 +141,27 @@ public class JFreeActivitiesCharts extends Service{
                                      targetActivity.getOtherActivityCount();
                }
            }
+             
+           Party targetParty = targetActivity.gettargetParty();
+           String targetPartyLabel = targetParty.getPerson().getFirstName()+" "+targetParty.getPerson().getLastName();
+           if(targetParty.getPartySupplementalData() != null){
+               targetPartyLabel = targetParty.getPartySupplementalData().getCompanyName()+"("+targetPartyLabel+")";
+           }
 
-           dataset.addValue(oldActivityCount, (String) uiLabelMap.get("LeadManagementOldActivities"), targetPartyId);
-           dataset.addValue(newActivityCount, (String) uiLabelMap.get("LeadManagementRecentActivities"), targetPartyId);
-        }
+           dataset.addValue(newActivityCount, (String) uiLabelMap.get("LeadManagementRecentActivities"), targetPartyLabel);
+           dataset.addValue(oldActivityCount, (String) uiLabelMap.get("LeadManagementOldActivities"), targetPartyLabel);           
+        }        
 
-        Debug.logInfo("cutoffDays = "+cutoffDays, MODULE);      
-
-        // set up the chart
+        // set up the chart        
         JFreeChart chart = ChartFactory.createBarChart(
-                (String) uiLabelMap.get("LeadManagementActivityOfLeadsSnapshot"),     // chart title
-                (String) uiLabelMap.get("LeadManagementLead"),               // domain axis label
-                (String) uiLabelMap.get("LeadManagementActivity"),           // range axis label
-                dataset,                                                    // data
-                PlotOrientation.HORIZONTAL,                                   // orientation
-                true,                                                      // include legend
-                true,                                                       // tooltips
-                false                                                       // urls
+                (String) uiLabelMap.get("LeadManagementActivityByLead"), // chart title
+                (String) uiLabelMap.get("CrmLead"),                               // domain axis label
+                (String) uiLabelMap.get("LeadManagementActivities"),                           // range axis label
+                dataset,                                                          // data
+                PlotOrientation.HORIZONTAL,                                       // orientation
+                true,                                                             // include legend
+                true,                                                             // tooltips
+                false                                                             // urls
         );
         chart.setBackgroundPaint(Color.white);
         chart.setBorderVisible(true);
@@ -161,11 +176,17 @@ public class JFreeActivitiesCharts extends Service{
         renderer.setDrawBarOutline(false); // disable bar outlines
 
         // set up gradient paint on bar
-        final GradientPaint gp = new GradientPaint(
-            0.0f, 0.0f, Color.GREEN,
+        final GradientPaint recent_gp = new GradientPaint(
+            0.0f, 0.0f, Color.decode("#"+rep.getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.ACTIVITIES_DASHBOARD_LEADS_NEW_COLOR)),
             0.0f, 0.0f, Color.GRAY
         );
-        renderer.setSeriesPaint(0, gp);
+        renderer.setSeriesPaint(0, recent_gp);
+        
+        final GradientPaint old_gp = new GradientPaint(
+            0.0f, 0.0f, Color.decode("#"+rep.getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.ACTIVITIES_DASHBOARD_LEADS_OLD_COLOR)),
+            0.0f, 0.0f, Color.GRAY
+        );
+        renderer.setSeriesPaint(1, old_gp);        
 
         // change the auto tick unit selection to integer units only...
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -181,8 +202,140 @@ public class JFreeActivitiesCharts extends Service{
         return ServletUtilities.saveChartAsPNG(chart, 400, 300, null);
     }
 
-    public static String createActivitiesBySalesRepSnapshotChart(){
-        return null;
+    /**
+     * Snapshot chart that shows sales representatives old an recent activities.
+     * @param cutoffDays Number of days that cuts off form today date and make it reading point for old and recent activties.
+     * @param locale
+     * @param dispatcher
+     * @param user
+     * @param timeZone
+     * @return Fale name of chart PNG.
+     * @throws java.lang.Exception
+     */
+    public static String createActivitiesBySalesRepSnapshotChart(int cutoffDays, Locale locale, LocalDispatcher dispatcher, GenericValue user, TimeZone timeZone) throws Exception{
+        Map<String, Object> uiLabelMap = UtilMessage.getUiLabels(locale);
+        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(user));
+        PartyRepositoryInterface rep = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository();
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        // Get activities reading date that is cut off days substracted from now.
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, Integer.parseInt("-"+cutoffDays));
+        Timestamp readingDate = new java.sql.Timestamp(cal.getTime().getTime());
+        
+        // Get date dimension ID according to the activities reading date.
+
+        UtilEtl.setupDateDimension(rep.getInfrastructure().getDelegator(), timeZone, locale);
+
+        DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
+        DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
+        DateFormat yearNumberFmt = new SimpleDateFormat("yyyy");
+        String dayOfMonth = dayOfMonthFmt.format(readingDate);
+        String monthOfYear = monthOfYearFmt.format(readingDate);
+        String yearNumber = yearNumberFmt.format(readingDate);
+
+        EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
+        EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
+        EntityCondition.makeCondition(DateDim.Fields.monthOfYear.name(), monthOfYear),
+        EntityCondition.makeCondition(DateDim.Fields.yearNumber.name(), yearNumber));
+
+        Long readingDateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, rep.getInfrastructure().getDelegator());   
+
+        // Get reacords that lead have taget party and group them by them.
+        
+        EntityCondition cond = EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), 
+                                                            EntityOperator.EQUALS, 
+                                                            RoleTypeConstants.PROSPECT);
+        List<ActivityFact> prospectActivityFacts = rep.findList(ActivityFact.class, cond);
+        Map<String, List<ActivityFact>> leads = Entity.groupByFieldValues(String.class, prospectActivityFacts, ActivityFact.Fields.teamMemberPartyId);
+        
+        // Add grouped data to chart.
+        
+        Iterator it = leads.keySet().iterator();
+        while(it.hasNext() == true){
+           String teamMemberPartyId = (String) it.next();
+           List<ActivityFact> activities = leads.get(teamMemberPartyId);
+
+           long oldActivityCount = 0;
+           long newActivityCount = 0;
+           ActivityFact targetActivity = null;
+           for(int i = 0; i < activities.size(); i++){
+               targetActivity = activities.get(i);   
+
+               if(targetActivity.getDateDimId() < readingDateDimId){
+                   oldActivityCount = oldActivityCount + 
+                                     targetActivity.getPhoneCallActivityCount() + 
+                                     targetActivity.getEmailActivityCount() + 
+                                     targetActivity.getVisitActivityCount() + 
+                                     targetActivity.getOtherActivityCount();
+               }
+
+               if(targetActivity.getDateDimId() >= readingDateDimId){
+                   newActivityCount = newActivityCount + 
+                                     targetActivity.getPhoneCallActivityCount() + 
+                                     targetActivity.getEmailActivityCount() + 
+                                     targetActivity.getVisitActivityCount() + 
+                                     targetActivity.getOtherActivityCount();
+               }
+           }
+             
+           Party targetParty = targetActivity.getteamParty();
+           String targetPartyLabel = targetParty.getPerson().getFirstName()+" "+targetParty.getPerson().getLastName();
+
+           dataset.addValue(newActivityCount, (String) uiLabelMap.get("LeadManagementRecentActivities"), targetPartyLabel);
+           dataset.addValue(oldActivityCount, (String) uiLabelMap.get("LeadManagementOldActivities"), targetPartyLabel);           
+        }        
+
+        // set up the chart        
+        JFreeChart chart = ChartFactory.createBarChart(
+                (String) uiLabelMap.get("LeadManagementActivityBySalesRep"), // chart title
+                (String) uiLabelMap.get("LeadManagementSalesRep"),                               // domain axis label
+                (String) uiLabelMap.get("LeadManagementOfActivities"),                           // range axis label
+                dataset,                                                          // data
+                PlotOrientation.HORIZONTAL,                                       // orientation
+                true,                                                             // include legend
+                true,                                                             // tooltips
+                false                                                             // urls
+        );
+        chart.setBackgroundPaint(Color.white);
+        chart.setBorderVisible(true);
+        chart.setPadding(new RectangleInsets(5.0, 5.0, 5.0, 5.0));
+
+        // get a reference to the plot for further customisation...
+        final CategoryPlot plot = chart.getCategoryPlot();
+        plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
+
+        // get the bar renderer to put effects on the bars
+        final BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setDrawBarOutline(false); // disable bar outlines
+
+        // set up gradient paint on bar
+        final GradientPaint recent_gp = new GradientPaint(
+            0.0f, 0.0f, Color.decode("#"+rep.getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.ACTIVITIES_DASHBOARD_LEADS_NEW_COLOR)),
+            0.0f, 0.0f, Color.GRAY
+        );
+        renderer.setSeriesPaint(0, recent_gp);
+        
+        final GradientPaint old_gp = new GradientPaint(
+            0.0f, 0.0f, Color.decode("#"+rep.getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.ACTIVITIES_DASHBOARD_LEADS_OLD_COLOR)),
+            0.0f, 0.0f, Color.GRAY
+        );
+        renderer.setSeriesPaint(1, old_gp);       
+        
+
+        // change the auto tick unit selection to integer units only...
+        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
+        // tilt the category labels so they fit
+        CategoryAxis domainAxis = plot.getDomainAxis();
+        domainAxis.setCategoryLabelPositions(
+            CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 6.0)
+        );
+
+        // save as a png and return the file name
+        return ServletUtilities.saveChartAsPNG(chart, 400, 300, null);
     }
     
    
