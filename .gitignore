@@ -41,6 +41,7 @@ specialpurpose/oagis/build/
 specialpurpose/pos/build/
 specialpurpose/projectmgr/build/
 specialpurpose/webpos/build/
+opentaps/activities/build/
 opentaps/amazon/build/
 opentaps/analytics/build/
 opentaps/analytics/webapp/analyticsgwt/
@@ -71,3 +72,5 @@ runtime/data/derby/*
 runtime/catalina/work/*
 runtime/lucene
 runtime/output
+runtime/tempfiles
+runtime/uploads
