@@ -30,6 +30,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.constants.WorkEffortPurposeTypeConstants;
+import org.opentaps.base.constants.WorkEffortTypeConstants;
 import org.opentaps.base.entities.ActivityFact;
 import org.opentaps.base.entities.DateDim;
 import org.opentaps.base.entities.UserLogin;
@@ -79,18 +80,6 @@ public class ActivitiesTests extends OpentapsTestCase{
     
     @Override
     public void tearDown() throws Exception {
-        /*
-        //Clean up work effor data.        
-        String id_suffix = "testWorkEffort%";
-        act_rep.remove(act_rep.findList(WorkEffortKeyword.class, EntityCondition.makeCondition(WorkEffortKeyword.Fields.workEffortId.name(), EntityOperator.LIKE, id_suffix)));
-        act_rep.remove(act_rep.findList(WorkEffortPartyAssignment.class, EntityCondition.makeCondition(WorkEffortPartyAssignment.Fields.workEffortId.name(), EntityOperator.LIKE, id_suffix)));
-        act_rep.remove(act_rep.findList(WorkEffort.class, EntityCondition.makeCondition(WorkEffort.Fields.workEffortId.name(), EntityOperator.LIKE, id_suffix)));        
-        
-        //Clean up activity fact data.
-        id_suffix = "Demo%";
-        act_rep.remove(act_rep.findList(ActivityFact.class, EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.LIKE, id_suffix)));
-        */
-        
         super.tearDown();
         domainLoader = null;
         act_domain = null;
@@ -105,9 +94,9 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         //Get date dimention ID of work effort start date .
         
-        String dayOfMonth = dayOfMonthFmt.format(testTimestamp1);
-        String monthOfYear = monthOfYearFmt.format(testTimestamp1);
-        String yearNumber = yearNumberFmt.format(testTimestamp1);
+        String dayOfMonth = dayOfMonthFmt.format(testTimestamp2);
+        String monthOfYear = monthOfYearFmt.format(testTimestamp2);
+        String yearNumber = yearNumberFmt.format(testTimestamp2);
         
         EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
@@ -116,75 +105,87 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         Long dateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, act_domain.getInfrastructure().getDelegator());    
         
-        //Add the first work effor data to tranform from.
+        // Add the first visit work effor data to tranform from.
         
-        // FIXME: use crmsfa.createActivity and addWorkEffortPartyAssignment service
-        String workEffortId1 = act_rep.getNextSeqId(WorkEffort.class.getSimpleName());
+        UserLogin user = act_rep.findOne(UserLogin.class, act_rep.map(UserLogin.Fields.userLoginId, this.internalPartyId1));
+        GenericValue userLogin = act_rep.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());
         
-        WorkEffort weffort1 = new WorkEffort();
-        weffort1.setWorkEffortId(workEffortId1);
-        weffort1.setActualCompletionDate(testTimestamp1);
-        weffort1.setWorkEffortPurposeTypeId(WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL);
-        weffort1.setCurrentStatusId(StatusItemConstants.TaskStatus.TASK_COMPLETED);
-        act_rep.createOrUpdate(weffort1);
+        Map args = UtilMisc.toMap( "userLogin", userLogin,
+                "availabilityStatusId", StatusItemConstants.WepaAvailability.WEPA_AV_AVAILABLE, 
+                "forceIfConflicts",  "Y", 
+                "workEffortName",  testWorkEffortName, 
+                "workEffortTypeId", WorkEffortTypeConstants.TASK,
+                "workEffortPurposeTypeId", WorkEffortPurposeTypeConstants.WEPT_MEETING,
+                "currentStatusId", StatusItemConstants.TaskStatus.TASK_STARTED,
+                "estimatedStartDate", testTimestamp1,
+                "estimatedCompletionDate", testTimestamp2
+                );
+        Map results = this.runAndAssertServiceSuccess("crmsfa.createActivity", args);
+        String workEffortId1 = (String) results.get(WorkEffort.Fields.workEffortId.name());
         
-        WorkEffortPartyAssignment weassgn11 = new WorkEffortPartyAssignment();
-        weassgn11.setWorkEffortId(workEffortId1);
-        weassgn11.setPartyId(externalPartyId1);
-        weassgn11.setRoleTypeId(RoleTypeConstants.ACCOUNT);
-        weassgn11.setFromDate(testTimestamp2);
-        act_rep.createOrUpdate(weassgn11);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "workEffortId", workEffortId1, 
+                "partyId",  externalPartyId1
+                );
+        this.runAndAssertServiceSuccess("crmsfa.addWorkEffortPartyAssignment", args);
         
-        WorkEffortPartyAssignment weassgn12 = new WorkEffortPartyAssignment();
-        weassgn12.setWorkEffortId(workEffortId1);
-        weassgn12.setPartyId(internalPartyId1);
-        weassgn12.setRoleTypeId(RoleTypeConstants.CAL_OWNER);
-        weassgn12.setFromDate(testTimestamp2);
-        act_rep.createOrUpdate(weassgn12);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "workEffortId", workEffortId1, 
+                "partyId",  externalPartyId2
+                );
+        this.runAndAssertServiceSuccess("crmsfa.addWorkEffortPartyAssignment", args);
         
-        WorkEffortPartyAssignment weassgn13 = new WorkEffortPartyAssignment();
-        weassgn13.setWorkEffortId(workEffortId1);
-        weassgn13.setPartyId(internalPartyId2);
-        weassgn13.setRoleTypeId(RoleTypeConstants.CAL_ATTENDEE);
-        weassgn13.setFromDate(testTimestamp2);
-        act_rep.createOrUpdate(weassgn13);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "workEffortId", workEffortId1, 
+                "partyId",  internalPartyId2
+                );
+        this.runAndAssertServiceSuccess("crmsfa.addWorkEffortPartyAssignment", args);
         
-        WorkEffortPartyAssignment weassgn15 = new WorkEffortPartyAssignment();
-        weassgn15.setWorkEffortId(workEffortId1);
-        weassgn15.setPartyId(externalPartyId2);
-        weassgn15.setRoleTypeId(RoleTypeConstants.PROSPECT);
-        weassgn15.setFromDate(testTimestamp2);
-        act_rep.createOrUpdate(weassgn15);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "workEffortId", workEffortId1, 
+                "currentStatusId", StatusItemConstants.TaskStatus.TASK_COMPLETED,
+                "workEffortPurposeTypeId", WorkEffortPurposeTypeConstants.WEPT_MEETING,
+                "actualCompletionDate", testTimestamp2
+                );
+        this.runAndAssertServiceSuccess("crmsfa.updateActivityWithoutAssoc", args);
 
         // Look up activity fact's before transformation
         
         EntityCondition partiesCond1 = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.EQUALS, externalPartyId1),
         EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.EQUALS, internalPartyId1),
+        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.LEAD),
+        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.CAL_OWNER),
         EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), EntityOperator.EQUALS, dateDimId));
         List<ActivityFact> factsBefore1 = act_rep.findList(ActivityFact.class, partiesCond1);
         
         EntityCondition partiesCond2 = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.EQUALS, externalPartyId2),
         EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.EQUALS, internalPartyId1),
+        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.LEAD),
+        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.CAL_OWNER),
         EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), EntityOperator.EQUALS, dateDimId));
         List<ActivityFact> factsBefore2 = act_rep.findList(ActivityFact.class, partiesCond2);
         
         EntityCondition partiesCond3 = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.EQUALS, externalPartyId1),
         EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.EQUALS, internalPartyId2),
+        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.LEAD),
+        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.CAL_ATTENDEE),
         EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), EntityOperator.EQUALS, dateDimId));
         List<ActivityFact> factsBefore3 = act_rep.findList(ActivityFact.class, partiesCond3);
         
         EntityCondition partiesCond4 = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.EQUALS, externalPartyId2),
         EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.EQUALS, internalPartyId2),
+        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.LEAD),
+        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.CAL_ATTENDEE),
         EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), EntityOperator.EQUALS, dateDimId));
         List<ActivityFact> factsBefore4 = act_rep.findList(ActivityFact.class, partiesCond4);
         
         // Execute tranformition.
         
-        Map args = UtilMisc.toMap("workEffortId", workEffortId1);
+        args = UtilMisc.toMap("workEffortId", workEffortId1);
         this.runAndAssertServiceSuccess("activities.transformToAcitivityFacts", args);  
         
         // Check if proper records was found.
@@ -208,8 +209,8 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         ActivityFact fact1 = facts1.get(0);
         assertEquals("Email activity count is not good.", fact1.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact1.getPhoneCallActivityCount(), Long.valueOf(1 + phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact1.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Phone activity count is not good.", fact1.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", fact1.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
         assertEquals("Other activity count is not good.", fact1.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
         
         //==================================
@@ -231,8 +232,8 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         ActivityFact fact2 = facts2.get(0);
         assertEquals("Email activity count is not good.", fact2.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact2.getPhoneCallActivityCount(), Long.valueOf(1 + phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact2.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Phone activity count is not good.", fact2.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", fact2.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
         assertEquals("Other activity count is not good.", fact2.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
         
         //==================================
@@ -254,8 +255,8 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         ActivityFact fact3 = facts3.get(0);
         assertEquals("Email activity count is not good.", fact3.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact3.getPhoneCallActivityCount(), Long.valueOf(1 + phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact3.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Phone activity count is not good.", fact3.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", fact3.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
         assertEquals("Other activity count is not good.", fact3.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
         
         //==================================
@@ -277,42 +278,47 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         ActivityFact fact4 = facts4.get(0);
         assertEquals("Email activity count is not good.", fact4.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact4.getPhoneCallActivityCount(), Long.valueOf(1 + phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact4.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Phone activity count is not good.", fact4.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", fact4.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
         assertEquals("Other activity count is not good.", fact4.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
         
         //==================================
         
         //Add the second work effor data to tranform from.
-     
-        // FIXME: use crmsfa.createActivity and addWorkEffortPartyAssignment service
-        String workEffortId2 = act_rep.getNextSeqId(WorkEffort.class.getSimpleName());
         
-        WorkEffort weffort2 = new WorkEffort();
-        weffort2.setWorkEffortId(workEffortId2);
-        weffort2.setActualCompletionDate(testTimestamp1);
-        weffort2.setWorkEffortPurposeTypeId(WorkEffortPurposeTypeConstants.WEPT_MEETING);
-        weffort2.setCurrentStatusId(StatusItemConstants.EventStatus.EVENT_COMPLETED);
-        act_rep.createOrUpdate(weffort2);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "availabilityStatusId", StatusItemConstants.WepaAvailability.WEPA_AV_AVAILABLE, 
+                "forceIfConflicts",  "Y", 
+                "workEffortName",  testWorkEffortName, 
+                "workEffortTypeId", WorkEffortTypeConstants.TASK,
+                "workEffortPurposeTypeId", WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL,
+                "currentStatusId", StatusItemConstants.TaskStatus.TASK_STARTED,
+                "estimatedStartDate", testTimestamp2,
+                "estimatedCompletionDate", testTimestamp2
+                );
+        results = this.runAndAssertServiceSuccess("crmsfa.createActivity", args);
+        String workEffortId2 = (String) results.get(WorkEffort.Fields.workEffortId.name());
         
-        WorkEffortPartyAssignment weassgn21 = new WorkEffortPartyAssignment();
-        weassgn21.setWorkEffortId(workEffortId2);
-        weassgn21.setPartyId(externalPartyId1);
-        weassgn21.setRoleTypeId(RoleTypeConstants.PROSPECT);
-        weassgn21.setFromDate(testTimestamp2);
-        act_rep.createOrUpdate(weassgn21);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "workEffortId", workEffortId2, 
+                "partyId",  externalPartyId1
+                );
+        this.runAndAssertServiceSuccess("crmsfa.addWorkEffortPartyAssignment", args);
         
-        WorkEffortPartyAssignment weassgn22 = new WorkEffortPartyAssignment();
-        weassgn22.setWorkEffortId(workEffortId2);
-        weassgn22.setPartyId(internalPartyId1);
-        weassgn22.setRoleTypeId(RoleTypeConstants.VISITOR);
-        weassgn22.setFromDate(testTimestamp2);
-        act_rep.createOrUpdate(weassgn22);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "workEffortId", workEffortId2, 
+                "currentStatusId", StatusItemConstants.TaskStatus.TASK_COMPLETED,
+                "workEffortPurposeTypeId", WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL,
+                "actualCompletionDate", testTimestamp2
+                );
+        this.runAndAssertServiceSuccess("crmsfa.updateActivityWithoutAssoc", args);
         
         // Look up activity fact's before transformation
         EntityCondition partiesCond5 = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.EQUALS, externalPartyId1),
         EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.EQUALS, internalPartyId1),
+        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.LEAD),
+        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.CAL_OWNER),
         EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), EntityOperator.EQUALS, dateDimId));
         List<ActivityFact> factsBefore5 = act_rep.findList(ActivityFact.class, partiesCond5);
         
@@ -341,8 +347,8 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         ActivityFact fact5 = facts5.get(0);
         assertEquals("Email activity count is not good.", fact5.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact5.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact5.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
+        assertEquals("Phone activity count is not good.", fact5.getPhoneCallActivityCount(), Long.valueOf(1 + phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", fact5.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
         assertEquals("Other activity count is not good.", fact5.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
         
         //==================================
@@ -357,9 +363,9 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         //Get date dimention ID of work effort start date .
         
-        String dayOfMonth = dayOfMonthFmt.format(testTimestamp1);
-        String monthOfYear = monthOfYearFmt.format(testTimestamp1);
-        String yearNumber = yearNumberFmt.format(testTimestamp1);
+        String dayOfMonth = dayOfMonthFmt.format(testTimestamp2);
+        String monthOfYear = monthOfYearFmt.format(testTimestamp2);
+        String yearNumber = yearNumberFmt.format(testTimestamp2);
         
         EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
@@ -370,38 +376,47 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         //Add the second work effor data to tranform from.
         
-        String workEffortId = act_rep.getNextSeqId(WorkEffort.class.getSimpleName());
+        UserLogin user = act_rep.findOne(UserLogin.class, act_rep.map(UserLogin.Fields.userLoginId, this.internalPartyId1));
+        GenericValue userLogin = act_rep.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());
         
-        WorkEffort weffort = new WorkEffort();
-        weffort.setWorkEffortId(workEffortId);
-        weffort.setActualCompletionDate(testTimestamp1);
-        weffort.setWorkEffortPurposeTypeId(WorkEffortPurposeTypeConstants.WEPT_TASK_EMAIL);
-        weffort.setCurrentStatusId(StatusItemConstants.TaskStatus.TASK_CANCELLED);
-        act_rep.createOrUpdate(weffort);
+        Map args = UtilMisc.toMap( "userLogin", userLogin,
+                "availabilityStatusId", StatusItemConstants.WepaAvailability.WEPA_AV_AVAILABLE, 
+                "forceIfConflicts",  "Y", 
+                "workEffortName",  testWorkEffortName, 
+                "workEffortTypeId", WorkEffortTypeConstants.TASK,
+                "workEffortPurposeTypeId", WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL,
+                "currentStatusId", StatusItemConstants.TaskStatus.TASK_STARTED,
+                "estimatedStartDate", testTimestamp2,
+                "estimatedCompletionDate", testTimestamp2
+                );
+        Map results = this.runAndAssertServiceSuccess("crmsfa.createActivity", args);
+        String workEffortId = (String) results.get(WorkEffort.Fields.workEffortId.name());
         
-        WorkEffortPartyAssignment weassgn1 = new WorkEffortPartyAssignment();
-        weassgn1.setWorkEffortId(workEffortId);
-        weassgn1.setPartyId(externalPartyId1);
-        weassgn1.setRoleTypeId(RoleTypeConstants.PROSPECT);
-        weassgn1.setFromDate(testTimestamp2);
-        act_rep.createOrUpdate(weassgn1);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "workEffortId", workEffortId, 
+                "partyId",  externalPartyId1
+                );
+        this.runAndAssertServiceSuccess("crmsfa.addWorkEffortPartyAssignment", args);
         
-        WorkEffortPartyAssignment weassgn2 = new WorkEffortPartyAssignment();
-        weassgn2.setWorkEffortId(workEffortId);
-        weassgn2.setPartyId(internalPartyId1);
-        weassgn2.setRoleTypeId(RoleTypeConstants.VISITOR);
-        weassgn2.setFromDate(testTimestamp2);
-        act_rep.createOrUpdate(weassgn2);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "workEffortId", workEffortId, 
+                "currentStatusId", StatusItemConstants.TaskStatus.TASK_CANCELLED,
+                "workEffortPurposeTypeId", WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL,
+                "actualCompletionDate", testTimestamp2
+                );
+        this.runAndAssertServiceSuccess("crmsfa.updateActivityWithoutAssoc", args);
         
         // Look up activity fact's before transformation
         EntityCondition partiesCond = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.EQUALS, externalPartyId1),
         EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.EQUALS, internalPartyId1),
+        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.LEAD),
+        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.CAL_OWNER),
         EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), EntityOperator.EQUALS, dateDimId));
         List<ActivityFact> factsBefore = act_rep.findList(ActivityFact.class, partiesCond);
         
         //Execute tranformition.
-        Map args = UtilMisc.toMap("workEffortId", workEffortId);
+        args = UtilMisc.toMap("workEffortId", workEffortId);
         this.runAndAssertServiceSuccess("activities.transformToAcitivityFacts", args);
         
         // Check if proper records was found.
@@ -410,7 +425,8 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         List<ActivityFact> facts = act_rep.findList(ActivityFact.class, partiesCond);
         
-        assertEquals("Record with target party ["+externalPartyId1+"], team party ["+internalPartyId1+"] not added to ActivityFact entity.", 1, facts.size());
+        assertEquals("Record with target party ["+externalPartyId1+"], team party ["+internalPartyId1+"] must be not added to ActivityFact entity, " +
+                     "because work effor is chancelled.", factsBefore.size(), facts.size());
         
         long emailActivityCountBefore = 0;
         long phoneCallActivityCountBefore = 0;
@@ -439,9 +455,9 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         //Get date dimention ID of work effort start date .
         
-        String dayOfMonth = dayOfMonthFmt.format(testTimestamp1);
-        String monthOfYear = monthOfYearFmt.format(testTimestamp1);
-        String yearNumber = yearNumberFmt.format(testTimestamp1);
+        String dayOfMonth = dayOfMonthFmt.format(testTimestamp2);
+        String monthOfYear = monthOfYearFmt.format(testTimestamp2);
+        String yearNumber = yearNumberFmt.format(testTimestamp2);
         
         EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
@@ -452,45 +468,55 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         //Add the second work effor data to tranform from.
         
-        String workEffortId = act_rep.getNextSeqId(WorkEffort.class.getSimpleName());
+        UserLogin user = act_rep.findOne(UserLogin.class, act_rep.map(UserLogin.Fields.userLoginId, this.internalPartyId1));
+        GenericValue userLogin = act_rep.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());
         
-        WorkEffort weffort = new WorkEffort();
-        weffort.setWorkEffortId(workEffortId);
-        weffort.setActualCompletionDate(testTimestamp1);
-        weffort.setWorkEffortPurposeTypeId(WorkEffortPurposeTypeConstants.WEPT_MEETING);
-        weffort.setCurrentStatusId(StatusItemConstants.ComEventStatus.COM_PENDING);
-        act_rep.createOrUpdate(weffort);
+        Map args = UtilMisc.toMap( "userLogin", userLogin,
+                "availabilityStatusId", StatusItemConstants.WepaAvailability.WEPA_AV_AVAILABLE, 
+                "forceIfConflicts",  "Y", 
+                "workEffortName",  testWorkEffortName, 
+                "workEffortTypeId", WorkEffortTypeConstants.TASK,
+                "workEffortPurposeTypeId", WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL,
+                "currentStatusId", StatusItemConstants.TaskStatus.TASK_SCHEDULED,
+                "estimatedStartDate", testTimestamp2,
+                "estimatedCompletionDate", testTimestamp2
+                );
+        Map results = this.runAndAssertServiceSuccess("crmsfa.createActivity", args);
+        String workEffortId = (String) results.get(WorkEffort.Fields.workEffortId.name());
         
-        WorkEffortPartyAssignment weassgn1 = new WorkEffortPartyAssignment();
-        weassgn1.setWorkEffortId(workEffortId);
-        weassgn1.setPartyId(externalPartyId1);
-        weassgn1.setRoleTypeId(RoleTypeConstants.PROSPECT);
-        weassgn1.setFromDate(testTimestamp2);
-        act_rep.createOrUpdate(weassgn1);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "workEffortId", workEffortId, 
+                "partyId",  externalPartyId1
+                );
+        this.runAndAssertServiceSuccess("crmsfa.addWorkEffortPartyAssignment", args);
         
-        WorkEffortPartyAssignment weassgn2 = new WorkEffortPartyAssignment();
-        weassgn2.setWorkEffortId(workEffortId);
-        weassgn2.setPartyId(internalPartyId1);
-        weassgn2.setRoleTypeId(RoleTypeConstants.VISITOR);
-        weassgn2.setFromDate(testTimestamp2);
-        act_rep.createOrUpdate(weassgn2);
+        args = UtilMisc.toMap( "userLogin", userLogin,
+                "workEffortId", workEffortId, 
+                "currentStatusId", StatusItemConstants.TaskStatus.TASK_ON_HOLD,
+                "workEffortPurposeTypeId", WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL,
+                "actualCompletionDate", testTimestamp2
+                );
+        this.runAndAssertServiceSuccess("crmsfa.updateActivityWithoutAssoc", args);
         
         // Look up activity fact's before transformation.
         EntityCondition partiesCond = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.EQUALS, externalPartyId1),
         EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.EQUALS, internalPartyId1),
+        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.LEAD),
+        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.CAL_OWNER),
         EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), EntityOperator.EQUALS, dateDimId));
         List<ActivityFact> factsBefore = act_rep.findList(ActivityFact.class, partiesCond);
         
         //Execute tranformition.
-        Map args = UtilMisc.toMap("workEffortId", workEffortId);
+        args = UtilMisc.toMap("workEffortId", workEffortId);
         this.runAndAssertServiceSuccess("activities.transformToAcitivityFacts", args);
         
         // Check if proper records was found.
         
         List<ActivityFact> facts = act_rep.findList(ActivityFact.class, partiesCond);
         
-        assertEquals("Record with target party ["+externalPartyId1+"], team party ["+internalPartyId1+"] not added to ActivityFact entity.", 1, facts.size());
+        assertEquals("Record with target party ["+externalPartyId1+"], team party ["+internalPartyId1+"] must be not added to ActivityFact entity, " +
+                      "because work effort is pending.", factsBefore.size(), facts.size());
         
         long emailActivityCountBefore = 0;
         long phoneCallActivityCountBefore = 0;
@@ -534,6 +560,8 @@ public class ActivitiesTests extends OpentapsTestCase{
         EntityCondition partiesCond = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.EQUALS, externalPartyId1),
         EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.EQUALS, internalPartyId1),
+        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.LEAD),
+        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.CAL_OWNER),
         EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), EntityOperator.EQUALS, dateDimId));
         List<ActivityFact> factsBefore = act_rep.findList(ActivityFact.class, partiesCond);
         
@@ -597,6 +625,8 @@ public class ActivitiesTests extends OpentapsTestCase{
         EntityCondition partiesCond = EntityCondition.makeCondition(EntityOperator.AND,
         EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.EQUALS, externalPartyId1),
         EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.EQUALS, internalPartyId1),
+        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.LEAD),
+        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.CAL_OWNER),
         EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), EntityOperator.EQUALS, dateDimId));
         List<ActivityFact> factsBefore = act_rep.findList(ActivityFact.class, partiesCond);
 
