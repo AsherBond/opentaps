@@ -43,6 +43,8 @@
         <field name="phoneCallActivityCount" type="numeric"/>
         <field name="visitActivityCount" type="numeric"/>
         <field name="otherActivityCount" type="numeric"/>
+        <field name="targetPartyRoleTypeId" type="id-vlong"/>
+        <field name="teamMemberPartyRoleTypeId" type="id-vlong"/>
         <prim-key field="activityFactId"/>
         
         <relation type="one-nofk" rel-entity-name="DateDim">
@@ -53,6 +55,14 @@
         </relation>
         <relation type="one-nofk" rel-entity-name="Party" title="team">
           <key-map field-name="teamMemberPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="PartyRole" title="target">
+          <key-map field-name="targetPartyId" rel-field-name="partyId"/>
+          <key-map field-name="targetPartyRoleTypeId" rel-field-name="roleTypeId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="PartyRole" title="team">
+          <key-map field-name="teamMemberPartyId" rel-field-name="partyId"/>
+          <key-map field-name="teamMemberPartyRoleTypeId" rel-field-name="roleTypeId"/>
         </relation>
     </entity>
     
