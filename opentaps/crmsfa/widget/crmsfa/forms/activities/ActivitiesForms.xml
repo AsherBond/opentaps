@@ -407,7 +407,7 @@
         <field name="workEffortId"><hidden value="${parameters.workEffortId}"/></field>
         <field name="partyId" title="${uiLabelMap.CommonName}" widget-area-style="fieldWidth50pct">
             <hyperlink description="${groovy:org.opentaps.common.party.PartyHelper.getCrmsfaPartyName(partyId, delegator);}"
-                       target="${groovy:org.opentaps.common.party.PartyHelper.createViewPageURL(partyId, delegator, externalLoginKey);}"/>
+                       target="${groovy:org.opentaps.common.party.PartyHelper.createViewPageURL(partyId, delegator, externalLoginKey);}" target-type="plain"/>
         </field>
         <field name="roleTypeId" title="${uiLabelMap.PartyRole}" widget-area-style="fieldWidth100">
             <display-entity entity-name="RoleType"/> 
