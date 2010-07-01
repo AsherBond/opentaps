@@ -26,9 +26,19 @@ public final class OpentapsConfigurationTypeConstants {
 
     private OpentapsConfigurationTypeConstants() { }
 
+    /** Color for new activities on the activities dashboard. */
+    public static final String ACTIVITIES_DASHBOARD_LEADS_NEW_COLOR = "ACTIVITIES_DASHBOARD_LEADS_NEW_COLOR";
+    /** Color for older activities on the activities dashboard. */
+    public static final String ACTIVITIES_DASHBOARD_LEADS_OLD_COLOR = "ACTIVITIES_DASHBOARD_LEADS_OLD_COLOR";
+    /** Cut off in number of days for old versus new activities on the dashboard. */
+    public static final String ACTIVITIES_DASHBOARD_LEADS_OLD_NEW_CUTOFF = "ACTIVITIES_DASHBOARD_LEADS_OLD_NEW_CUTOFF";
     /** Filter CRMSFA search and find results by security permission.. */
     public static final String CRMSFA_FIND_SEC_FILTER = "CRMSFA_FIND_SEC_FILTER";
+    /** For testing set configuration. */
+    public static final String TEST_CONFIG_SET_CONFIG_TYPE = "TEST_CONFIG_SET_CONFIG_TYPE";
     /** For testing. */
     public static final String TEST_CONFIG_TYPE = "TEST_CONFIG_TYPE";
+    /** For testing. */
+    public static final String TEST_CONFIG_UNCONFIGURED_TYPE = "TEST_CONFIG_UNCONFIGURED_TYPE";
 
 }
