@@ -253,7 +253,6 @@ public class OpentapsIdentifierGenerator extends TransactionHelper implements Pe
         while (rows == 0);
         //log access count
         accessCount++;
-        Debug.logInfo("get seq number " + result, MODULE);
         return new Integer(result);
     }
 

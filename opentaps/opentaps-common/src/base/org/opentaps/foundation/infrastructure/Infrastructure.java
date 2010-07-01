@@ -21,13 +21,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-
 import javolution.util.FastMap;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.event.DeleteEventListener;
@@ -48,7 +43,6 @@ import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.base.entities.OpentapsConfiguration;
 import org.opentaps.base.entities.OpentapsConfigurationType;
-import org.opentaps.base.entities.TestEntity;
 import org.opentaps.foundation.entity.hibernate.EcaDeleteEventListener;
 import org.opentaps.foundation.entity.hibernate.EcaLoadEventListener;
 import org.opentaps.foundation.entity.hibernate.EcaPersistEventListener;
