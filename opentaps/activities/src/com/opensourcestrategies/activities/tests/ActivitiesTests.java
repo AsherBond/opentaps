@@ -90,7 +90,7 @@ public class ActivitiesTests extends OpentapsTestCase{
      * Performs data transformition to ActivityFacts table.
      * @throws java.lang.Exception
      */
-    public void testTransformToAcitivityFacts() throws Exception{
+    public void testTransformToActivityFacts() throws Exception{
         
         //Get date dimention ID of work effort start date .
         
@@ -186,7 +186,7 @@ public class ActivitiesTests extends OpentapsTestCase{
         // Execute tranformition.
         
         args = UtilMisc.toMap("workEffortId", workEffortId1);
-        this.runAndAssertServiceSuccess("activities.transformToAcitivityFacts", args);  
+        this.runAndAssertServiceSuccess("activities.transformToActivityFacts", args);  
         
         // Check if proper records was found.
         
@@ -324,7 +324,7 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         //Execute tranformition.
         args = UtilMisc.toMap("workEffortId", workEffortId2);
-        this.runAndAssertServiceSuccess("activities.transformToAcitivityFacts", args);
+        this.runAndAssertServiceSuccess("activities.transformToActivityFacts", args);
         
         // Check if proper records was found.
         
@@ -417,7 +417,7 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         //Execute tranformition.
         args = UtilMisc.toMap("workEffortId", workEffortId);
-        this.runAndAssertServiceSuccess("activities.transformToAcitivityFacts", args);
+        this.runAndAssertServiceSuccess("activities.transformToActivityFacts", args);
         
         // Check if proper records was found.
         
@@ -509,7 +509,7 @@ public class ActivitiesTests extends OpentapsTestCase{
         
         //Execute tranformition.
         args = UtilMisc.toMap("workEffortId", workEffortId);
-        this.runAndAssertServiceSuccess("activities.transformToAcitivityFacts", args);
+        this.runAndAssertServiceSuccess("activities.transformToActivityFacts", args);
         
         // Check if proper records was found.
         
