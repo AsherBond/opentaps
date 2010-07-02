@@ -51,14 +51,10 @@ public class ActivitiesDataWarehouseService extends DomainService {
 
     private static final String MODULE = ActivitiesDataWarehouseService.class.getName();
 
-    public static List<String> CLIENT_PARTY_ROLES = UtilMisc.toList(RoleTypeConstants.ACCOUNT,
-                                                                    RoleTypeConstants.CONTACT,
-                                                                    RoleTypeConstants.PROSPECT,
-                                                                    RoleTypeConstants.PARTNER);
     private String workEffortId;
 
     /**
-     * Sets the required input parameter for service {@link #transformToAcitivityFacts}.
+     * Sets the required input parameter for service {@link #transformToActivityFacts}.
      * @param workEffortId the ID of work effort
      */
     public void setWorkEffortId(String workEffortId) {
@@ -66,33 +62,31 @@ public class ActivitiesDataWarehouseService extends DomainService {
     }
 
     /**
-     * Transformation which transforms data from WorkEffort, WorkEffortPartyAssign entities to ActivitiesFact entity.
-     * It expands the WorkEffortPartyAssign to covers all target parties for all team members.
-     * The counts that is in ActivitiesFacts is based on the purpose of the WorkEffort.
+     * Transformation wich transforms data from WorkEffort, WorkEffortPartyAssign entities to ActivityFact entities.
+     *  It expands the WorkEffortPartyAssign to cover all target parties for all team members.
+     *  The counts that is in ActivityFacts is based on the purpose of the WorkEffort.
      * @throws ServiceException if an error occurs
      */
-    public void transformToAcitivityFacts() throws ServiceException {
+    public void transformToActivityFacts() throws ServiceException {
         try {
 
             PartyRepositoryInterface repository = getDomainsDirectory().getPartyDomain().getPartyRepository();
 
-            //Get WorkEffortPartyAssign and WorkEffort data by workEffortId.
+            // Get WorkEffortPartyAssign and WorkEffort data by workEffortId.
 
             WorkEffort workEffort = repository.findOne(WorkEffort.class, repository.map(WorkEffort.Fields.workEffortId, workEffortId));
-            List<WorkEffortPartyAssignment> assgmnts = repository.findList(WorkEffortPartyAssignment.class,
-                                repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
+            List<WorkEffortPartyAssignment> assignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
 
-            // Pass only completed workEfforts to do transformation.
+            // Pass only completed workEfforts to do the transformation.
             if (!Arrays.asList(StatusItemConstants.TaskStatus.TASK_COMPLETED, StatusItemConstants.EventStatus.EVENT_COMPLETED).contains(workEffort.getCurrentStatusId())) {
                 return;
             }
 
             // Fill 2 lists according to assigment of work effort to team members (internal parties) and clients (external parties).
 
-            List<WorkEffortPartyAssignment> internalPartiesAssignment = new ArrayList<WorkEffortPartyAssignment>();
-            List<WorkEffortPartyAssignment> externalPartiesAssignment = new ArrayList<WorkEffortPartyAssignment>();
-            for (int i = 0; i < assgmnts.size(); i++) {
-                WorkEffortPartyAssignment assignment = assgmnts.get(i);
+            List<WorkEffortPartyAssignment> internalPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
+            List<WorkEffortPartyAssignment> externalPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
+            for (WorkEffortPartyAssignment assignment : assignments) {
                 boolean isExternal = false;
 
                 Party assignedParty = repository.getPartyById(assignment.getPartyId());
@@ -107,13 +101,13 @@ public class ActivitiesDataWarehouseService extends DomainService {
                 }
 
                 if (isExternal) {
-                    externalPartiesAssignment.add(assignment);
+                    externalPartyAssignments.add(assignment);
                 } else {
-                    internalPartiesAssignment.add(assignment);
+                    internalPartyAssignments.add(assignment);
                 }
             }
 
-            //Get date dimension ID according to the work effort start date.
+            // Get date dimension ID according to the work effort start date.
 
             UtilEtl.setupDateDimension(repository.getInfrastructure().getDelegator(), timeZone, locale);
             Timestamp workEffortDate = null;
@@ -131,17 +125,16 @@ public class ActivitiesDataWarehouseService extends DomainService {
             String yearNumber = yearNumberFmt.format(workEffortDate);
 
             EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
-            EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
-            EntityCondition.makeCondition(DateDim.Fields.monthOfYear.name(), monthOfYear),
-            EntityCondition.makeCondition(DateDim.Fields.yearNumber.name(), yearNumber));
+                                                    EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
+                                                    EntityCondition.makeCondition(DateDim.Fields.monthOfYear.name(), monthOfYear),
+                                                    EntityCondition.makeCondition(DateDim.Fields.yearNumber.name(), yearNumber));
 
             Long dateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, repository.getInfrastructure().getDelegator());
 
-            // Associate all team member with clients (add this association if it is not in the place)
-            // and increase count according to WorkEffor workEffortPurposeTypeId.
+            // Associate all team member with clients (add this association if it is not there in the place)
+            // and increase count according to WorkEffort workEffortPurposeTypeId.
 
-            for (int i = 0; i < externalPartiesAssignment.size(); i++) {
-                WorkEffortPartyAssignment external = externalPartiesAssignment.get(i);
+            for (WorkEffortPartyAssignment external : externalPartyAssignments) {
 
                 // Find out what type is external party: is it lead, is it account, ...
 
@@ -157,18 +150,17 @@ public class ActivitiesDataWarehouseService extends DomainService {
                     targetPartyRoleTypeId = RoleTypeConstants.PARTNER;
                 }
 
-                for (int j = 0; j < internalPartiesAssignment.size(); j++) {
-                    WorkEffortPartyAssignment internal = internalPartiesAssignment.get(j);
+                for (WorkEffortPartyAssignment internal : internalPartyAssignments) {
 
                     // Try to find ActivityFact with such target party id and member party id and date dimension combination.
                     // If not such, then create it.
 
                     EntityCondition partiesCond = EntityCondition.makeCondition(EntityOperator.AND,
-                    EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.EQUALS, external.getPartyId()),
-                    EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), EntityOperator.EQUALS, internal.getPartyId()),
-                    EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), EntityOperator.EQUALS, targetPartyRoleTypeId),
-                    EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), EntityOperator.EQUALS, internal.getRoleTypeId()),
-                    EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), EntityOperator.EQUALS, dateDimId));
+                        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), external.getPartyId()),
+                        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), internal.getPartyId()),
+                        EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), targetPartyRoleTypeId),
+                        EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), internal.getRoleTypeId()),
+                        EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
                     List<ActivityFact> activityFacts = repository.findList(ActivityFact.class, partiesCond);
 
                     ActivityFact activityFact = null;
@@ -188,7 +180,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
                         activityFact.setTeamMemberPartyRoleTypeId(internal.getRoleTypeId());
                     }
 
-                    // Increase count according to WorkEffor workEffortPurposeTypeId.
+                    // Increase count according to WorkEffort workEffortPurposeTypeId.
 
                     String purpose = workEffort.getWorkEffortPurposeTypeId();
                     if (purpose == null) {

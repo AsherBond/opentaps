@@ -42,10 +42,10 @@
     <vendor>Open Source Strategies, Inc.</vendor>
     <version>1.0</version>
     
-    <service name="activities.transformToAcitivityFacts" engine="pojo" location="com.opensourcestrategies.activities.ActivitiesDataWarehouseService" invoke="transformToAcitivityFacts">
-        <description>Transformition wich transforms data from WorkEffort, WorkEffortPartyAssign entities to ActivitiesFact entity.
-        It expands the WorkEffortPartyAssign to covers all target parties for all team members.
-        The counts that is in ActivitiesFacts is based on the purpose of the WorkEffort.</description>
+    <service name="activities.transformToActivityFacts" engine="pojo" location="com.opensourcestrategies.activities.ActivitiesDataWarehouseService" invoke="transformToActivityFacts">
+        <description>Transformation wich transforms data from WorkEffort, WorkEffortPartyAssign entities to ActivityFact entities.
+        It expands the WorkEffortPartyAssign to cover all target parties for all team members.
+        The counts that is in ActivityFacts is based on the purpose of the WorkEffort.</description>
         <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
     </service>
 

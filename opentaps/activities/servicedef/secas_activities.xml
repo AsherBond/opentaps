@@ -19,11 +19,11 @@
 <service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
     
     <eca service="crmsfa.logTask" event="commit">
-        <action service="activities.transformToAcitivityFacts" mode="sync"/>
+        <action service="activities.transformToActivityFacts" mode="sync"/>
     </eca>
     
     <eca service="crmsfa.sendActivityEmail" event="commit">
-        <action service="activities.transformToAcitivityFacts" mode="sync"/>
+        <action service="activities.transformToActivityFacts" mode="sync"/>
     </eca>
     
 </service-eca>
