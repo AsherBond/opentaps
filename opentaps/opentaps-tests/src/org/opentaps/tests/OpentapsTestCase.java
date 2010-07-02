@@ -2378,6 +2378,7 @@ public class OpentapsTestCase extends TestCase {
         service.setUser(new User(admin));
         service.setInOrganizationPartyId(newPartyId);
         service.setInTemplateOrganizationPartyId(templatePartyId);
+        service.runSync(new Infrastructure(dispatcher));
         Debug.logInfo("call createOrganizationFromTemplate use template [" + templatePartyId + "], return partyId [" + newPartyId + "]", MODULE);
         return newPartyId;
     }
