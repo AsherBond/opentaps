@@ -24,8 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.RoleTypeConstants;
@@ -108,8 +106,6 @@ public class ActivitiesDataWarehouseService extends DomainService {
             }
 
             // Get date dimension ID according to the work effort start date.
-
-            UtilEtl.setupDateDimension(repository.getInfrastructure().getDelegator(), timeZone, locale);
             Timestamp workEffortDate = null;
             if (workEffort.getActualCompletionDate() != null) {
                 workEffortDate = workEffort.getActualCompletionDate();
@@ -202,9 +198,6 @@ public class ActivitiesDataWarehouseService extends DomainService {
             }
 
         } catch (RepositoryException ex) {
-            Debug.logError(ex, MODULE);
-            throw new ServiceException(ex);
-        } catch (GenericEntityException ex) {
             Debug.logError(ex, MODULE);
             throw new ServiceException(ex);
         } catch (InfrastructureException ex) {
