@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.RoleTypeConstants;
@@ -126,6 +127,15 @@ public class ActivitiesDataWarehouseService extends DomainService {
                                                     EntityCondition.makeCondition(DateDim.Fields.yearNumber.name(), yearNumber));
 
             Long dateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, repository.getInfrastructure().getDelegator());
+            if (dateDimId == 0L) {
+                // maybe the date dim was not initialized
+                UtilEtl.setupDateDimension(repository.getInfrastructure().getDelegator(), timeZone, locale);
+                dateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, repository.getInfrastructure().getDelegator());
+                if (dateDimId == 0L) {
+                    Debug.logWarning("Could not find a DateDim for date " + yearNumber + "-" + monthOfYear + "-" + dayOfMonth, MODULE);
+                }
+            }
+
 
             // Associate all team member with clients (add this association if it is not there in the place)
             // and increase count according to WorkEffort workEffortPurposeTypeId.
@@ -198,6 +208,9 @@ public class ActivitiesDataWarehouseService extends DomainService {
             }
 
         } catch (RepositoryException ex) {
+            Debug.logError(ex, MODULE);
+            throw new ServiceException(ex);
+        }  catch (GenericEntityException ex) {
             Debug.logError(ex, MODULE);
             throw new ServiceException(ex);
         } catch (InfrastructureException ex) {

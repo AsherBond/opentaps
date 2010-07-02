@@ -264,7 +264,12 @@ public class JFreeActivitiesCharts extends Service {
 
         Long dateDim = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, infrastructure.getDelegator());
         if (dateDim == 0L) {
-            Debug.logWarning("Could not find a DateDim for date " + yearNumber + "-" + monthOfYear + "-" + dayOfMonth, MODULE);
+            // maybe the date dim was not initialized
+            UtilEtl.setupDateDimension(infrastructure.getDelegator(), timeZone, locale);
+            dateDim = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, infrastructure.getDelegator());
+            if (dateDim == 0L) {
+                Debug.logWarning("Could not find a DateDim for date " + yearNumber + "-" + monthOfYear + "-" + dayOfMonth, MODULE);
+            }
         }
         return dateDim;
     }
