@@ -842,7 +842,7 @@ For more information, please see documentation/opentapsFormMacros.html
 <#macro inputDate name form="" default="" size=10 index=-1 popup=true weekNumbers=false onChange="" onUpdate="" onDateStatusFunc="" linkedName="" delta=0 id="" ignoreParameters=false errorField="" tabIndex="" calendarTabIndex="">
   <#assign indexedName = getIndexedName(name, index)>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
-  <#assign elId = indexedName />
+  <#assign elId = form + indexedName />
   <#if id?has_content><#assign elId = id /></#if>
   <input id="${elId}" type="text" size="${size}" maxlength="${size}" name="${indexedName}" class="inputBox" value="${getLocalizedDate(defaultValue, "DATE")}" onchange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>/>
   <a href="javascript:opentaps.toggleClass(document.getElementById('${elId}-calendar-placeholder'), 'hidden');"><img id="${elId}-button" src="/images/cal.gif" alt="View Calendar" title="View Calendar" border="0" height="16" width="16" <#if tabIndex?has_content>tabindex="${calendarTabIndex}"</#if>/></a>
