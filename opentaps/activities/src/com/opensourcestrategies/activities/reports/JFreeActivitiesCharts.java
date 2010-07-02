@@ -244,7 +244,6 @@ public class JFreeActivitiesCharts extends Service {
     }
 
     private static Long lookupDateDimIdForTimestamp(Timestamp timestamp, TimeZone timeZone, Locale locale, Infrastructure infrastructure) throws GenericEntityException {
-        UtilEtl.setupDateDimension(infrastructure.getDelegator(), timeZone, locale);
 
         DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
         DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
@@ -254,11 +253,15 @@ public class JFreeActivitiesCharts extends Service {
         String yearNumber = yearNumberFmt.format(timestamp);
 
         EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
-        EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
-        EntityCondition.makeCondition(DateDim.Fields.monthOfYear.name(), monthOfYear),
-        EntityCondition.makeCondition(DateDim.Fields.yearNumber.name(), yearNumber));
+                                                 EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
+                                                 EntityCondition.makeCondition(DateDim.Fields.monthOfYear.name(), monthOfYear),
+                                                 EntityCondition.makeCondition(DateDim.Fields.yearNumber.name(), yearNumber));
 
-        return UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, infrastructure.getDelegator());
+        Long dateDim = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, infrastructure.getDelegator());
+        if (dateDim == 0L) {
+            Debug.logWarning("Could not find a DateDim for date " + yearNumber + "-" + monthOfYear + "-" + dayOfMonth, MODULE);
+        }
+        return dateDim;
     }
 
     private static Map<String, List<ActivityFact>> findLeadsActivitiesGroupedBy(ActivityFact.Fields groupedByField, PartyRepositoryInterface repository) throws RepositoryException {
