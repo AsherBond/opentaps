@@ -50,17 +50,17 @@
         <relation type="one-nofk" rel-entity-name="DateDim">
           <key-map field-name="dateDimId"/>
         </relation>
-        <relation type="one-nofk" rel-entity-name="Party" title="target">
+        <relation type="one-nofk" rel-entity-name="Party" title="Target">
           <key-map field-name="targetPartyId" rel-field-name="partyId"/>
         </relation>
-        <relation type="one-nofk" rel-entity-name="Party" title="team">
+        <relation type="one-nofk" rel-entity-name="Party" title="Team">
           <key-map field-name="teamMemberPartyId" rel-field-name="partyId"/>
         </relation>
-        <relation type="one-nofk" rel-entity-name="PartyRole" title="target">
+        <relation type="one-nofk" rel-entity-name="PartyRole" title="Target">
           <key-map field-name="targetPartyId" rel-field-name="partyId"/>
           <key-map field-name="targetPartyRoleTypeId" rel-field-name="roleTypeId"/>
         </relation>
-        <relation type="one-nofk" rel-entity-name="PartyRole" title="team">
+        <relation type="one-nofk" rel-entity-name="PartyRole" title="Team">
           <key-map field-name="teamMemberPartyId" rel-field-name="partyId"/>
           <key-map field-name="teamMemberPartyRoleTypeId" rel-field-name="roleTypeId"/>
         </relation>
