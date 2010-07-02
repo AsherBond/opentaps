@@ -69,6 +69,11 @@ public class JFreeActivitiesCharts extends Service {
 
     private static String MODULE = JFreeActivitiesCharts.class.getName();
 
+    /** Width of the generated charts. */
+    public static final int CHART_WIDTH = 400;
+    /** Height of the generated charts. */
+    public static final int CHART_HEIGHT = 300;
+
     /**
      * Snapshot chart that shows party leads old and recent activities.
      * @param cutoffDays Number of days that cuts off from today date and make it reading point for old and recent activties.
@@ -230,7 +235,7 @@ public class JFreeActivitiesCharts extends Service {
         domainAxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 6.0));
 
         // save as a png and return the file name
-        return ServletUtilities.saveChartAsPNG(chart, 400, 300, null);
+        return ServletUtilities.saveChartAsPNG(chart, CHART_WIDTH, CHART_HEIGHT, null);
     }
 
     private static Timestamp getTimestampFromCutoffDays(int cutoffDays) {
