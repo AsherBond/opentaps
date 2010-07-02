@@ -276,64 +276,62 @@ public class Infrastructure {
         }
         return systemUser;
     }
-    
+
     /**
-     * Get a configuration value from the database with null default value
-     * 
-     * @param configTypeId
-     * @return
-     * @throws InfrastructureException
+     * Gets a configuration value from the database with null default value.
+     * @param configTypeId the config type to get
+     * @return a <code>String</code> value
+     * @exception InfrastructureException if an error occurs
      */
     public String getConfigurationValue(String configTypeId) throws InfrastructureException {
         return getConfigurationValue(configTypeId, null);
     }
-    
-    /**
-     * Get a configuration value from the database.  If it's not configured, use user supplied defaultValue, then OpentapsConfigurationType.defaultValue
-     * 
-     * @param configTypeId
-     * @param defaultValue
-     * @return
-     * @throws InfrastructureException
-     */
-    public String getConfigurationValue(String configTypeId, String defaultValue) throws InfrastructureException {
-    	Session session = getSession();
-    	OpentapsConfiguration configuration = (OpentapsConfiguration) session.get(OpentapsConfiguration.class, configTypeId);
-    	if (configuration == null) {
-    		if (defaultValue != null) {
-    			// if user supplied a non-null defaultValue, then use it
-    			Debug.logWarning("No value found for configuration [" + configTypeId + "] returning a default of ["  + defaultValue + "]", MODULE);
-    			return defaultValue;
-    		} else {
-    			// use the default value of the configuration type
-    			OpentapsConfigurationType configurationType = (OpentapsConfigurationType) session.get(OpentapsConfigurationType.class, configTypeId);
-    	    	if (configurationType != null) {
-        			Debug.logWarning("No value found for configuration [" + configTypeId + "] returning a default of ["  + configurationType.getDefaultValue() + "]", MODULE);
-        			return configurationType.getDefaultValue();
-    	    	} else {
-    	    		Debug.logWarning("No configuration type [" + configTypeId + "] returning null", MODULE);
-        			return null;
-    	    	}
-    		}
-    	}
-		String value = configuration.getValue();
-		session.close();
-		return value;
-	}
 
     /**
-     * Set the configuration value for a configTypeId inside its own transaction
-     * @param configTypeId
-     * @param value
-     * @param comments
-     * @throws InfrastructureException
+     * Gets a configuration value from the database.  If it's not configured, use user supplied defaultValue, then OpentapsConfigurationType.defaultValue
+     * @param configTypeId the config type to get
+     * @param defaultValue the value to return if no configuration is set
+     * @return a <code>String</code> value
+     * @exception InfrastructureException if an error occurs
      */
-    public void setConfigurationValue(String configTypeId, String value, String comments) throws InfrastructureException {
-    	Session session = getSession();
-    	// we should check if exists OpentapsConfiguration firstly
+    public String getConfigurationValue(String configTypeId, String defaultValue) throws InfrastructureException {
+        Session session = getSession();
         OpentapsConfiguration configuration = (OpentapsConfiguration) session.get(OpentapsConfiguration.class, configTypeId);
         if (configuration == null) {
-        	configuration = new OpentapsConfiguration();
+            if (defaultValue != null) {
+                // if user supplied a non-null defaultValue, then use it
+                Debug.logWarning("No value found for configuration [" + configTypeId + "] returning a default of ["  + defaultValue + "]", MODULE);
+                return defaultValue;
+            } else {
+                // use the default value of the configuration type
+                OpentapsConfigurationType configurationType = (OpentapsConfigurationType) session.get(OpentapsConfigurationType.class, configTypeId);
+                if (configurationType != null) {
+                    Debug.logWarning("No value found for configuration [" + configTypeId + "] returning a default of ["  + configurationType.getDefaultValue() + "]", MODULE);
+                    return configurationType.getDefaultValue();
+                } else {
+                    Debug.logWarning("No configuration type [" + configTypeId + "] returning null", MODULE);
+                    return null;
+                }
+            }
+        }
+        String value = configuration.getValue();
+        session.close();
+        return value;
+    }
+
+    /**
+     * Sets the configuration value for a configTypeId inside its own transaction.
+     * @param configTypeId a <code>String</code> value
+     * @param value a <code>String</code> value
+     * @param comments a <code>String</code> value
+     * @exception InfrastructureException if an error occurs
+     */
+    public void setConfigurationValue(String configTypeId, String value, String comments) throws InfrastructureException {
+        Session session = getSession();
+        // we should check if exists OpentapsConfiguration firstly
+        OpentapsConfiguration configuration = (OpentapsConfiguration) session.get(OpentapsConfiguration.class, configTypeId);
+        if (configuration == null) {
+            configuration = new OpentapsConfiguration();
         }
         configuration.setConfigTypeId(configTypeId);
         configuration.setValue(value);
@@ -341,9 +339,9 @@ public class Infrastructure {
         // saveOrUpdate will try to update when id not null, so we should use save to instead of it.
         session.save(configuration);
         session.flush();
-		session.close();
+        session.close();
     }
-    
+
     /**
      * Evict all entries of entityName from the second-level cache.
      * @param entityName a <code>String</code> value

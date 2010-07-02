@@ -63,8 +63,6 @@ public final class UtilEtl {
 
     private static final String STRING_KITCHEN = "Kitchen";
 
-
-
     /**
      * Runs an ETL job.
      * @param jobFilename the name of the job, eg: "sales_tax_statement_etl_job.kjb"
@@ -72,10 +70,10 @@ public final class UtilEtl {
      * @exception KettleException if an error occurs
      */
     public static void runJob(String jobFilename, String reportsPath) throws KettleException {
-        runJob(jobFilename,reportsPath,null);
+        runJob(jobFilename, reportsPath, null);
     }
 
-    
+
      /**
      * Runs an ETL job.
      * @param jobFileName the name of the job, eg: "sales_tax_statement_etl_job.kjb"
@@ -83,7 +81,7 @@ public final class UtilEtl {
      * @param jobParameters job parameters
      * @exception KettleException if an error occurs
      */
-    public static void runJob(String jobFileName,String reportsPath,Map<String,String>jobParameters) throws KettleException {
+    public static void runJob(String jobFileName, String reportsPath, Map<String, String> jobParameters) throws KettleException {
 
         EnvUtil.environmentInit();
         RepositoryMeta repinfo  = null;
@@ -302,14 +300,14 @@ public final class UtilEtl {
 
         try {
             job.initializeVariablesFrom(null);
-            if(jobParameters!=null){
+            if (jobParameters != null) {
                 job.getJobMeta().setInternalKettleVariables(job);
                 final Set<String> stringSet = jobParameters.keySet();
                 for (String key : stringSet) {
-                    job.setParameterValue(key,jobParameters.get(key));
-                    job.setVariable(key,jobParameters.get(key));
+                    job.setParameterValue(key, jobParameters.get(key));
+                    job.setVariable(key, jobParameters.get(key));
                 }
-            }            
+            }
 
             // set the path to where the transformation files are located
             job.setVariable("transformationsPath", jobDirPath);
@@ -372,7 +370,7 @@ public final class UtilEtl {
             transMeta.setArguments(arguments);
 
             Trans trans = new Trans(transMeta);
-            
+
             trans.prepareExecution(transMeta.getArguments());
             trans.startThreads();
             trans.waitUntilFinished();
@@ -390,7 +388,7 @@ public final class UtilEtl {
             throw new GenericServiceException(e);
         }
     }
-    
+
     /**
      * Runs an ETL transformation.
      *
@@ -412,17 +410,17 @@ public final class UtilEtl {
             transMeta.setArguments(arguments);
 
             Trans trans = new Trans(transMeta);
-            
+
             trans.initializeVariablesFrom(null);
-            if(parameters!=null){
+            if (parameters != null) {
                 trans.getTransMeta().setInternalKettleVariables(trans);
                 final Set<String> stringSet = parameters.keySet();
                 for (String key : stringSet) {
-                    trans.setParameterValue(key,parameters.get(key));
-                    trans.setVariable(key,parameters.get(key));
+                    trans.setParameterValue(key, parameters.get(key));
+                    trans.setVariable(key, parameters.get(key));
                 }
             }
-            
+
             trans.prepareExecution(transMeta.getArguments());
             trans.startThreads();
             trans.waitUntilFinished();
@@ -440,7 +438,7 @@ public final class UtilEtl {
             throw new GenericServiceException(e);
         }
     }
-    
+
 
     /**
      * This method allow look up surrogate key in dimension entity under certain conditions.
