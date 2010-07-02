@@ -43,6 +43,7 @@ public class OrganizationService extends DomainService implements OrganizationSe
             List<GenericValue> creditCardTypeGlAccounts = delegator.findByCondition("CreditCardTypeGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templateOrganizationPartyId), null, null);
             List<GenericValue> varianceReasonGlAccounts = delegator.findByCondition("VarianceReasonGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templateOrganizationPartyId), null, null);
             List<GenericValue> invoiceGlAccountTypes = delegator.findByCondition("InvoiceGlAccountType", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templateOrganizationPartyId), null, null);
+            List<GenericValue> invoiceItemTypeGlAccounts = delegator.findByCondition("InvoiceItemTypeGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templateOrganizationPartyId), null, null);
             List<GenericValue> invoiceAdjustmentGlAccounts = delegator.findByCondition("InvoiceAdjustmentGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templateOrganizationPartyId), null, null);
             List<GenericValue> acctgTagEnumTypes = delegator.findByCondition("AcctgTagEnumType", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templateOrganizationPartyId), null, null);
             List<GenericValue> taxAuthorityGlAccounts = delegator.findByCondition("TaxAuthorityGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templateOrganizationPartyId), null, null);
@@ -75,6 +76,7 @@ public class OrganizationService extends DomainService implements OrganizationSe
             copies.addAll(copyEntitiesWithNewOrganizationPartyId(creditCardTypeGlAccounts, organizationPartyId));
             copies.addAll(copyEntitiesWithNewOrganizationPartyId(varianceReasonGlAccounts, organizationPartyId));
             copies.addAll(copyEntitiesWithNewOrganizationPartyId(invoiceGlAccountTypes, organizationPartyId));
+            copies.addAll(copyEntitiesWithNewOrganizationPartyId(invoiceItemTypeGlAccounts, organizationPartyId));
             copies.addAll(copyEntitiesWithNewOrganizationPartyId(invoiceAdjustmentGlAccounts, organizationPartyId));
             copies.addAll(copyEntitiesWithNewOrganizationPartyId(acctgTagEnumTypes, organizationPartyId));
             copies.addAll(copyEntitiesWithNewOrganizationPartyId(taxAuthorityGlAccounts, organizationPartyId));
