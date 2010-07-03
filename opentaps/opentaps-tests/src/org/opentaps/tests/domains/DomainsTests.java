@@ -50,7 +50,7 @@ public class DomainsTests extends OpentapsTestCase {
     /**
      * Verify that the TestDomainsLoader returns the test domain successfully.
      */
-    public void testExtendedDomaintoLoader() {
+    public void testExtendedDomainLoader() {
         testDomain = testDomainsLoader.getDomainsDirectory().getDomain(TestDomainsLoader.TEST_DOMAIN);
         assertNotNull("Test domain was null from the TestDomainsLoader", testDomain);
         assertTrue("Test domain was not an instance of [" + testDomainClass.getName() + "]", testDomainClass.isInstance(testDomain));
