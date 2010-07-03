@@ -17,8 +17,6 @@
 package com.opensourcestrategies.activities;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +29,6 @@ import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.constants.WorkEffortPurposeTypeConstants;
 import org.opentaps.base.entities.ActivityFact;
-import org.opentaps.base.entities.DateDim;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.base.entities.WorkEffortPartyAssignment;
 import org.opentaps.common.reporting.etl.UtilEtl;
@@ -114,28 +111,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
                 workEffortDate = workEffort.getEstimatedCompletionDate();
             }
 
-            DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
-            DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
-            DateFormat yearNumberFmt = new SimpleDateFormat("yyyy");
-            String dayOfMonth = dayOfMonthFmt.format(workEffortDate);
-            String monthOfYear = monthOfYearFmt.format(workEffortDate);
-            String yearNumber = yearNumberFmt.format(workEffortDate);
-
-            EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                                    EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
-                                                    EntityCondition.makeCondition(DateDim.Fields.monthOfYear.name(), monthOfYear),
-                                                    EntityCondition.makeCondition(DateDim.Fields.yearNumber.name(), yearNumber));
-
-            Long dateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, repository.getInfrastructure().getDelegator());
-            if (dateDimId == 0L) {
-                // maybe the date dim was not initialized
-                UtilEtl.setupDateDimension(repository.getInfrastructure().getDelegator(), timeZone, locale);
-                dateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, repository.getInfrastructure().getDelegator());
-                if (dateDimId == 0L) {
-                    Debug.logWarning("Could not find a DateDim for date " + yearNumber + "-" + monthOfYear + "-" + dayOfMonth, MODULE);
-                }
-            }
-
+            Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(workEffortDate, repository.getInfrastructure().getDelegator());
 
             // Associate all team member with clients (add this association if it is not there in the place)
             // and increase count according to WorkEffort workEffortPurposeTypeId.

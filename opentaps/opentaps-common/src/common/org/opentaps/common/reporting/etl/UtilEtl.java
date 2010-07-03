@@ -17,6 +17,12 @@
 
 package org.opentaps.common.reporting.etl;
 
+import java.net.MalformedURLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 import org.ofbiz.base.location.ComponentLocationResolver;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -46,12 +52,6 @@ import org.pentaho.di.trans.Trans;
 import org.pentaho.di.trans.TransMeta;
 import org.pentaho.di.version.BuildVersion;
 
-import java.net.MalformedURLException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 /**
  * Utility class to deal with ETL jobs.
  */
@@ -59,9 +59,17 @@ public final class UtilEtl {
 
     private UtilEtl() { }
 
-    public static final String MODULE = UtilEtl.class.getName();
+    private static final String MODULE = UtilEtl.class.getName();
 
     private static final String STRING_KITCHEN = "Kitchen";
+
+    // prepare formats to obtain date components
+    private static final DateFormat DAY_OF_MONTH_FMT = new SimpleDateFormat("dd");
+    private static final DateFormat WEEK_OF_YEAR_FMT = new SimpleDateFormat("ww");
+    private static final DateFormat MONTH_OF_YEAR_FMT = new SimpleDateFormat("MM");
+    private static final DateFormat YEAR_NUMBER_FMT = new SimpleDateFormat("yyyy");
+    private static final DateFormat NAME_DAY_FMT = new SimpleDateFormat("E");
+    private static final DateFormat NAME_MONTH_FMT = new SimpleDateFormat("MMMM");
 
     /**
      * Runs an ETL job.
@@ -439,6 +447,36 @@ public final class UtilEtl {
         }
     }
 
+    /**
+     * Gets the dateDim ID for a given timestamp.
+     *
+     * @param timestamp a <code>Timestamp</code> value
+     * @param delegator a <code>GenericDelegator</code> value
+     * @return a <code>Long</code> value
+     * @exception GenericEntityException if an error occurs
+     */
+    public static Long lookupDateDimensionForTimestamp(Timestamp timestamp, GenericDelegator delegator) throws GenericEntityException {
+
+        String dayOfMonth = DAY_OF_MONTH_FMT.format(timestamp);
+        String monthOfYear = MONTH_OF_YEAR_FMT.format(timestamp);
+        String yearNumber = YEAR_NUMBER_FMT.format(timestamp);
+
+        EntityCondition dateDimConditions = EntityCondition.makeCondition(
+            EntityCondition.makeCondition("dayOfMonth", dayOfMonth),
+            EntityCondition.makeCondition("monthOfYear", monthOfYear),
+            EntityCondition.makeCondition("yearNumber", yearNumber));
+
+        Long dateDimId = UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator);
+        if (dateDimId == 0L) {
+            // maybe the date dim was not initialized
+            UtilEtl.setupDateDimension(delegator, TimeZone.getDefault(), Locale.getDefault());
+            dateDimId = UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator);
+            if (dateDimId == 0L) {
+                Debug.logWarning("Could not find a DateDim for date " + yearNumber + "-" + monthOfYear + "-" + dayOfMonth, MODULE);
+            }
+        }
+        return dateDimId;
+    }
 
     /**
      * This method allow look up surrogate key in dimension entity under certain conditions.
@@ -491,14 +529,6 @@ public final class UtilEtl {
         long sequentialKey = 1L;
         Timestamp current = startDate;
 
-        // prepare formats to obtain date components
-        DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
-        DateFormat weekOfYearFmt = new SimpleDateFormat("ww");
-        DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
-        DateFormat yearNumberFmt = new SimpleDateFormat("yyyy");
-        DateFormat nameDayFmt = new SimpleDateFormat("E");
-        DateFormat nameMonthFmt = new SimpleDateFormat("MMMM");
-
         // clear date dimension
         delegator.removeByCondition("DateDim", EntityCondition.makeCondition("dateDimId", EntityOperator.NOT_EQUAL, null));
 
@@ -514,12 +544,12 @@ public final class UtilEtl {
             // create a dimension row
             GenericValue dateDim = delegator.makeValue("DateDim");
             dateDim.set("dateDimId", Long.valueOf(sequentialKey));
-            dateDim.set("dayOfMonth", dayOfMonthFmt.format(currentDate));
-            dateDim.set("weekOfYear", weekOfYearFmt.format(currentDate));
-            dateDim.set("monthOfYear", monthOfYearFmt.format(currentDate));
-            dateDim.set("yearNumber", yearNumberFmt.format(currentDate));
-            dateDim.set("nameDay", nameDayFmt.format(currentDate));
-            dateDim.set("nameMonth", nameMonthFmt.format(currentDate));
+            dateDim.set("dayOfMonth", DAY_OF_MONTH_FMT.format(currentDate));
+            dateDim.set("weekOfYear", WEEK_OF_YEAR_FMT.format(currentDate));
+            dateDim.set("monthOfYear", MONTH_OF_YEAR_FMT.format(currentDate));
+            dateDim.set("yearNumber", YEAR_NUMBER_FMT.format(currentDate));
+            dateDim.set("nameDay", NAME_DAY_FMT.format(currentDate));
+            dateDim.set("nameMonth", NAME_MONTH_FMT.format(currentDate));
             Calendar cal = Calendar.getInstance(); // calendar for default locale and timezone
             cal.setTime(currentDate);
             int monthNum = cal.get(Calendar.MONTH);

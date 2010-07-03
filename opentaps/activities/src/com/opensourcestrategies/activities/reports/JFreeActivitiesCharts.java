@@ -20,8 +20,6 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -44,12 +42,10 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.ActivityFact;
-import org.opentaps.base.entities.DateDim;
 import org.opentaps.base.entities.Party;
 import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.common.util.UtilMessage;
@@ -245,33 +241,7 @@ public class JFreeActivitiesCharts extends Service {
     }
 
     private static Long lookupDateDimIdForCutoff(int cutoffDays, TimeZone timeZone, Locale locale, Infrastructure infrastructure) throws GenericEntityException {
-        return lookupDateDimIdForTimestamp(getTimestampFromCutoffDays(cutoffDays), timeZone, locale, infrastructure);
-    }
-
-    private static Long lookupDateDimIdForTimestamp(Timestamp timestamp, TimeZone timeZone, Locale locale, Infrastructure infrastructure) throws GenericEntityException {
-
-        DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
-        DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
-        DateFormat yearNumberFmt = new SimpleDateFormat("yyyy");
-        String dayOfMonth = dayOfMonthFmt.format(timestamp);
-        String monthOfYear = monthOfYearFmt.format(timestamp);
-        String yearNumber = yearNumberFmt.format(timestamp);
-
-        EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                                 EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
-                                                 EntityCondition.makeCondition(DateDim.Fields.monthOfYear.name(), monthOfYear),
-                                                 EntityCondition.makeCondition(DateDim.Fields.yearNumber.name(), yearNumber));
-
-        Long dateDim = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, infrastructure.getDelegator());
-        if (dateDim == 0L) {
-            // maybe the date dim was not initialized
-            UtilEtl.setupDateDimension(infrastructure.getDelegator(), timeZone, locale);
-            dateDim = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, infrastructure.getDelegator());
-            if (dateDim == 0L) {
-                Debug.logWarning("Could not find a DateDim for date " + yearNumber + "-" + monthOfYear + "-" + dayOfMonth, MODULE);
-            }
-        }
-        return dateDim;
+        return UtilEtl.lookupDateDimensionForTimestamp(getTimestampFromCutoffDays(cutoffDays), infrastructure.getDelegator());
     }
 
     private static Map<String, List<ActivityFact>> findLeadsActivitiesGroupedBy(ActivityFact.Fields groupedByField, PartyRepositoryInterface repository) throws RepositoryException {

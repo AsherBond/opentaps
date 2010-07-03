@@ -17,17 +17,12 @@
 package com.opensourcestrategies.activities.tests;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.opentaps.base.constants.RoleTypeConstants;
@@ -35,7 +30,6 @@ import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.constants.WorkEffortPurposeTypeConstants;
 import org.opentaps.base.constants.WorkEffortTypeConstants;
 import org.opentaps.base.entities.ActivityFact;
-import org.opentaps.base.entities.DateDim;
 import org.opentaps.base.entities.UserLogin;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.common.reporting.etl.UtilEtl;
@@ -65,10 +59,6 @@ public class ActivitiesTests extends OpentapsTestCase {
     private String externalPartyId2 = "DemoLead2";
     private String testWorkEffortName = "testWorkEffortName";
 
-    private DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
-    private DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
-    private DateFormat yearNumberFmt = new SimpleDateFormat("yyyy");
-
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -85,29 +75,6 @@ public class ActivitiesTests extends OpentapsTestCase {
         partyRepository = null;
     }
 
-    protected Long getDateDimIdForTimestamp(Timestamp timestamp, Infrastructure infrastructure) throws GenericEntityException {
-
-        String dayOfMonth = dayOfMonthFmt.format(timestamp);
-        String monthOfYear = monthOfYearFmt.format(timestamp);
-        String yearNumber = yearNumberFmt.format(timestamp);
-
-        EntityCondition dateDimConditions = EntityCondition.makeCondition(
-            EntityCondition.makeCondition(DateDim.Fields.dayOfMonth.name(), dayOfMonth),
-            EntityCondition.makeCondition(DateDim.Fields.monthOfYear.name(), monthOfYear),
-            EntityCondition.makeCondition(DateDim.Fields.yearNumber.name(), yearNumber));
-
-        Long dateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, infrastructure.getDelegator());
-        if (dateDimId == 0L) {
-            // maybe the date dim was not initialized
-            UtilEtl.setupDateDimension(infrastructure.getDelegator(), TimeZone.getDefault(), Locale.getDefault());
-            dateDimId = UtilEtl.lookupDimension(DateDim.class.getSimpleName(), DateDim.Fields.dateDimId.getName(), dateDimConditions, infrastructure.getDelegator());
-            if (dateDimId == 0L) {
-                Debug.logWarning("Could not find a DateDim for date " + yearNumber + "-" + monthOfYear + "-" + dayOfMonth, MODULE);
-            }
-        }
-        return dateDimId;
-    }
-
     /**
      * Performs data transformation to ActivityFacts table.
      * @exception Exception if an error occurs
@@ -115,7 +82,7 @@ public class ActivitiesTests extends OpentapsTestCase {
     public void testTransformToActivityFacts() throws Exception {
 
         // Get date dimention ID of work effort start date.
-        Long dateDimId = getDateDimIdForTimestamp(testTimestamp2, partyDomain.getInfrastructure());
+        Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(testTimestamp2, partyDomain.getInfrastructure().getDelegator());
 
         // Add the first visit work effor data to tranform from.
 
@@ -374,7 +341,7 @@ public class ActivitiesTests extends OpentapsTestCase {
     public void testNotTransformCancelledActivities() throws Exception {
 
         // Get date dimention ID of work effort start date.
-        Long dateDimId = getDateDimIdForTimestamp(testTimestamp2, partyDomain.getInfrastructure());
+        Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(testTimestamp2, partyDomain.getInfrastructure().getDelegator());
 
         // Add the second work effor data to tranform from.
 
@@ -455,7 +422,7 @@ public class ActivitiesTests extends OpentapsTestCase {
     public void testNotTransformPendingActivities() throws Exception {
 
         // Get date dimention ID of work effort start date.
-        Long dateDimId = getDateDimIdForTimestamp(testTimestamp2, partyDomain.getInfrastructure());
+        Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(testTimestamp2, partyDomain.getInfrastructure().getDelegator());
 
         // Add the second work effor data to tranform from.
 
@@ -534,7 +501,7 @@ public class ActivitiesTests extends OpentapsTestCase {
     public void testTransformLogTaskActivity() throws Exception {
 
         // Get date dimention ID of work effort start date.
-        Long dateDimId = getDateDimIdForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure());
+        Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure().getDelegator());
 
         // Look up activity fact's before transformation.
         EntityCondition partiesCond = EntityCondition.makeCondition(
@@ -589,7 +556,7 @@ public class ActivitiesTests extends OpentapsTestCase {
     public void testTransformSendEmailActivity() throws Exception {
 
         // Get date dimention ID of work effort start date.
-        Long dateDimId = getDateDimIdForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure());
+        Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure().getDelegator());
 
         // Look up activity fact's before transformation.
         EntityCondition partiesCond = EntityCondition.makeCondition(
