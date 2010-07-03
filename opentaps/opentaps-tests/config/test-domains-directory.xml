@@ -22,7 +22,7 @@
 
 <beans>
 
-	<!-- specify an additional domain to be loaded -->
-    <bean id="testDomain" class="org.opentaps.tests.domains.TestDomain"/>
-    
+  <!-- specify an additional domain to be loaded -->
+  <bean id="testDomain" class="org.opentaps.tests.domains.TestDomain"/>
+
 </beans>

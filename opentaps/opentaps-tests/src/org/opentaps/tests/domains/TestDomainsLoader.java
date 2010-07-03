@@ -22,22 +22,31 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 
 /**
- * A domains loader to test loading additional domains from an XML file
- * The domains should be retrievable from a DomainsDirectory retrieved from TestDomainsLoader
- *
+ * A domains loader to test loading additional domains from an XML file.
+ * The domains should be retrievable from a DomainsDirectory retrieved from TestDomainsLoader.
  */
 public class TestDomainsLoader extends DomainsLoader {
-	
-	public static String TEST_DOMAINS_DIRECTORY = "test-domains-directory.xml";
-	public static String TEST_DOMAIN = "testDomain";
-	
-	public TestDomainsLoader() {
-		super();
-	}
-	
-	public TestDomainsLoader(Infrastructure infrastructure, User user) {
-		super(infrastructure, user);
-		super.registerDomains(TEST_DOMAINS_DIRECTORY);	
-	}
+
+    /** The file defining the domains directory beans. */
+    public static final String TEST_DOMAINS_DIRECTORY = "test-domains-directory.xml";
+    /** The test domain bean name. */
+    public static final String TEST_DOMAIN = "testDomain";
+
+    /**
+     * Default constructor.
+     */
+    public TestDomainsLoader() {
+        super();
+    }
+
+    /**
+     * Creates a new <code>TestDomainsLoader</code> instance, and registers the test domains.
+     * @param infrastructure an <code>Infrastructure</code> value
+     * @param user an <code>User</code> value
+     */
+    public TestDomainsLoader(Infrastructure infrastructure, User user) {
+        super(infrastructure, user);
+        super.registerDomains(TEST_DOMAINS_DIRECTORY);
+    }
 
 }

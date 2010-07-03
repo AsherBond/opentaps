@@ -25,23 +25,34 @@ import org.opentaps.foundation.infrastructure.User;
  * This is an example of an alternate domains loader, which loads domains from an alternate domains directory XML file.
  */
 public class AlternateDomainsLoader extends DomainsLoader {
-	
-	public static String ALT_DOMAINS_DIRECTORY = "alternate-domains-directory.xml";
-	
-	public AlternateDomainsLoader() {
-		super();
-	}
-	
-	public AlternateDomainsLoader(Infrastructure infrastructure, User user) {
-		super(infrastructure, user);
+
+    /** The file defining the domains directory beans. */
+    public static final String ALT_DOMAINS_DIRECTORY = "alternate-domains-directory.xml";
+
+    /**
+     * Default constructor.
+     */
+    public AlternateDomainsLoader() {
+        super();
     }
-	
-	/**
-	 * Returns the domains directory from the alternate domains directory XML file by
-	 * overriding the super class method of the same name.
-	 */
-	public DomainsDirectory getDomainsDirectory() {
-		return super.getDomainsDirectory(ALT_DOMAINS_DIRECTORY);
-	}
+
+    /**
+     * Creates a new <code>AlternateDomainsLoader</code> instance.
+     * @param infrastructure an <code>Infrastructure</code> value
+     * @param user an <code>User</code> value
+     */
+    public AlternateDomainsLoader(Infrastructure infrastructure, User user) {
+        super(infrastructure, user);
+    }
+
+    /**
+     * Returns the domains directory from the alternate domains directory XML file by
+     * overriding the super class method of the same name.
+     * @return a <code>DomainsDirectory</code> value
+     */
+    @Override
+    public DomainsDirectory getDomainsDirectory() {
+        return super.getDomainsDirectory(ALT_DOMAINS_DIRECTORY);
+    }
 
 }
