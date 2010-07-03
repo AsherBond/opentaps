@@ -147,27 +147,39 @@ public class DomainsLoader implements DomainContextInterface {
     }
 
     /**
-     * Returns the domains directory from the default DOMAINS_DIRECTORY_FILE.
-     * Overload in your extended class to return the custom domains for your class
-     *
-     * @return a <code>DomainsDirectory</code> value
+     * Gets the default domains directory file, defining the beans for this domains loader.
+     * Override in custom domains loader that need to redefine the beans.
+     * @return a <code>String</code> value
      */
-    public DomainsDirectory getDomainsDirectory() {
-        return getDomainsDirectory(DOMAINS_DIRECTORY_FILE);
+    protected String getDefaultDomainsDirectoryFile() {
+        return DOMAINS_DIRECTORY_FILE;
     }
 
-    /**
-     * Returns DomainsDirectory from your domainsDirectoryFile.
-     * Use this method to create overloaded versions in custom domains loaders.
-     * @param domainsDirectoryFile name of the domain definition xml file
-     * @return a <code>DomainsDirectory</code> value
-     */
-    public DomainsDirectory getDomainsDirectory(String domainsDirectoryFile) {
+    private DomainsDirectory getCachedDomainsDirectory(String domainsDirectoryFile) {
         DomainsDirectory directory = DOMAINS_DIRECTORIES.get(domainsDirectoryFile);
         if (directory == null) {
             initializeDomainsDirectory(domainsDirectoryFile);
             directory = DOMAINS_DIRECTORIES.get(domainsDirectoryFile);
         }
+        return directory;
+    }
+
+    /**
+     * Returns the domains directory from the default domains directory file.
+     * @return a <code>DomainsDirectory</code> value
+     */
+    public final DomainsDirectory getDomainsDirectory() {
+        return getDomainsDirectory(getDefaultDomainsDirectoryFile());
+    }
+
+    /**
+     * Returns DomainsDirectory from the given domainsDirectoryFile.
+     * Use this method to create overloaded versions in custom domains loaders.
+     * @param domainsDirectoryFile name of the domain definition xml file
+     * @return a <code>DomainsDirectory</code> value
+     */
+    public final DomainsDirectory getDomainsDirectory(String domainsDirectoryFile) {
+        DomainsDirectory directory = getCachedDomainsDirectory(domainsDirectoryFile);
 
         // clone the cached domains directory so we can set the proper User / Infrastructure
         directory = new DomainsDirectory(directory);
@@ -240,11 +252,7 @@ public class DomainsLoader implements DomainContextInterface {
         Resource resource = new ClassPathResource(domainsDirectoryFile);
         XmlBeanFactory bean = new XmlBeanFactory(resource);
         String[] domainsToRegister = bean.getBeanNamesForType(DomainInterface.class);
-        DomainsDirectory directory = DOMAINS_DIRECTORIES.get(domainsDirectoryFile);
-        if (directory == null) {
-            initializeDomainsDirectory(domainsDirectoryFile);
-            directory = DOMAINS_DIRECTORIES.get(domainsDirectoryFile);
-        }
+        DomainsDirectory directory = getCachedDomainsDirectory(getDefaultDomainsDirectoryFile());
         for (String domainToRegister : domainsToRegister) {
             directory.addDomain(domainToRegister, (DomainInterface) bean.getBean(domainToRegister));
         }

@@ -45,14 +45,9 @@ public class AlternateDomainsLoader extends DomainsLoader {
         super(infrastructure, user);
     }
 
-    /**
-     * Returns the domains directory from the alternate domains directory XML file by
-     * overriding the super class method of the same name.
-     * @return a <code>DomainsDirectory</code> value
-     */
     @Override
-    public DomainsDirectory getDomainsDirectory() {
-        return super.getDomainsDirectory(ALT_DOMAINS_DIRECTORY);
+    protected String getDefaultDomainsDirectoryFile() {
+        return ALT_DOMAINS_DIRECTORY;
     }
 
 }
