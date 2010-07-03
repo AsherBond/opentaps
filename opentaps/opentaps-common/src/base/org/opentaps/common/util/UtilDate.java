@@ -17,6 +17,7 @@
 
 package org.opentaps.common.util;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -46,6 +47,8 @@ public abstract class UtilDate {
 
     /** Number of milliseconds in a day. */
     public static final long MS_IN_A_DAY = 24 * 60 * 60 * 1000;
+    
+    private static final String TIME_FORMAT = "HH:mm:ss";
 
     /**
      * Parses a timestamp into fields suitable for selection of default values for AM/PM based form widgets.
@@ -279,5 +282,27 @@ public abstract class UtilDate {
             }
         }
         return dateFormat;
+    }
+
+    /**
+     * Returns the time string of time value.
+     * @param time a <code>Time</code> value
+     * @return a <code>String</code> value
+     */
+    public static String timeToString(Time time) {
+    	DateFormat df = new SimpleDateFormat(TIME_FORMAT); 
+    	return df.format(time);
+    }
+    
+    
+    /**
+     * Returns the Time value of a time string.
+     * @param timeString a <code>String</code> value
+     * @return a <code>Time</code> value
+     * @throws ParseException 
+     */
+    public static Time stringToTime(String timeString) throws ParseException {
+    	DateFormat df = new SimpleDateFormat(TIME_FORMAT); 
+    	return new Time(df.parse(timeString).getTime());
     }
 }
