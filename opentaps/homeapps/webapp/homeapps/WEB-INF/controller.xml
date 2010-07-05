@@ -61,6 +61,7 @@
         <security https="true" auth="false"/>
         <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="login"/>
         <response name="success" type="view" value="main"/>
+        <response name="requirePasswordChange" type="view" value="requirePasswordChange"/>
         <response name="error" type="view" value="main"/>
     </request-map>
     <request-map uri="logout">
@@ -81,6 +82,7 @@
     <!-- end of request mappings -->
 
     <!-- View Mappings -->
+    <view-map name="requirePasswordChange" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#requirePasswordChange"/>
     <view-map name="error" page="/error/error.jsp"/>
     <view-map name="main" type="screen" page="component://homeapps/widget/screens/HomeWebAppsMain.xml#main"/>
    

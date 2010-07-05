@@ -80,6 +80,7 @@ under the License.
         <security https="true" auth="false"/>
         <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="login" />
         <response name="success" type="view" value="selectFacilityForm"/>
+        <response name="requirePasswordChange" type="view" value="requirePasswordChange"/>
         <response name="error" type="view" value="login"/>
     </request-map>
     <request-map uri="logout">
@@ -1405,6 +1406,7 @@ under the License.
 
     <view-map name="error" page="/error/error.jsp"/>
     <view-map name="login" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#login"/>
+    <view-map name="requirePasswordChange" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#requirePasswordChange"/>
     <view-map name="selectFacilityForm" type="screen" page="component://warehouse/widget/warehouse/screens/common/CommonScreens.xml#selectFacilityForm"/>
     <view-map name="createWarehouseForm" type="screen" page="component://warehouse/widget/warehouse/screens/configuration/ConfigurationScreens.xml#createWarehouseForm"/>
 

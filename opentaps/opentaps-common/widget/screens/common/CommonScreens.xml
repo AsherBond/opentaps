@@ -115,6 +115,24 @@
         </section>
     </screen>
 
+    <screen name="requirePasswordChange">
+        <section>
+            <widgets>
+                <decorator-screen name="main-application-decorator"
+                    location="${parameters.mainApplicationDecoratorLocation}">
+                    <decorator-section name="section-layout">
+                        <platform-specific>
+                            <html>
+                                <html-template
+                                    location="component://opentaps-common/webapp/common/includes/changePassword.ftl" />
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
     <!-- TODO: separate lookup screen file -->
     <screen name="LookupLot">
         <section>
