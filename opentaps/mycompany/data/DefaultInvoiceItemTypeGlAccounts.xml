@@ -20,116 +20,116 @@
 <entity-engine-xml>
 
     <!-- for sales invoice items -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INVOICE_ADJ" defaultGlAccountId="410000"/> <!-- default gl account: Discounts on Sales -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_PROMOTION_ADJ" defaultGlAccountId="410000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_DISCOUNT_ADJ" defaultGlAccountId="410000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="FEE" defaultGlAccountId="804000"/> <!-- Special Fees Collected -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_MISC_CHARGE" defaultGlAccountId="409000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INVOICE_ADJ" glAccountId="410000"/> <!-- default gl account: Discounts on Sales -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_PROMOTION_ADJ" glAccountId="410000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_DISCOUNT_ADJ" glAccountId="410000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="FEE" glAccountId="804000"/> <!-- Special Fees Collected -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_MISC_CHARGE" glAccountId="409000"/>
     <!-- NOTE: setting this here is a default, as usually overrideGlAccountId should be set in
         InvoiceItem for sales tax items, and that account which will be the actual GL account used -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_SALES_TAX" defaultGlAccountId="224100"/> <!-- Sales Tax Collected CA Current Liability account -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_SHIPPING_CHARGES" defaultGlAccountId="409000"/> <!-- Miscellaneous Sales -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_SURCHARGE_ADJ" defaultGlAccountId="409000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_ADD_FEATURE" defaultGlAccountId="409000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_WARRANTY_ADJ" defaultGlAccountId="409000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_INTRST_CHRG" defaultGlAccountId="810000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_SALES_TAX" glAccountId="224100"/> <!-- Sales Tax Collected CA Current Liability account -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_SHIPPING_CHARGES" glAccountId="409000"/> <!-- Miscellaneous Sales -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_SURCHARGE_ADJ" glAccountId="409000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_ADD_FEATURE" glAccountId="409000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_WARRANTY_ADJ" glAccountId="409000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_INTRST_CHRG" glAccountId="810000"/>
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INVOICE_ITM_ADJ" defaultGlAccountId="410000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_PROMOTION_ADJ" defaultGlAccountId="410000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_REPLACE_ADJ" defaultGlAccountId="410000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_DISCOUNT_ADJ" defaultGlAccountId="410000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_FEE" defaultGlAccountId="804000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_MISC_CHARGE" defaultGlAccountId="409000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_SALES_TAX" defaultGlAccountId="224100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_SHIPPING_CHARGES" defaultGlAccountId="408000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_SURCHARGE_ADJ" defaultGlAccountId="409000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_ADD_FEATURE" defaultGlAccountId="409000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_WARRANTY_ADJ" defaultGlAccountId="409000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INVOICE_ITM_ADJ" glAccountId="410000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_PROMOTION_ADJ" glAccountId="410000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_REPLACE_ADJ" glAccountId="410000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_DISCOUNT_ADJ" glAccountId="410000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_FEE" glAccountId="804000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_MISC_CHARGE" glAccountId="409000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_SALES_TAX" glAccountId="224100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_SHIPPING_CHARGES" glAccountId="408000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_SURCHARGE_ADJ" glAccountId="409000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_ADD_FEATURE" glAccountId="409000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="ITM_WARRANTY_ADJ" glAccountId="409000"/>
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_PROD_ITEM" defaultGlAccountId="401000"/> <!-- General Sales -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_FPROD_ITEM" defaultGlAccountId="401000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_DPROD_ITEM" defaultGlAccountId="401000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_FDPROD_ITEM" defaultGlAccountId="401000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_PROD_FEATR_ITEM" defaultGlAccountId="401000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_SPROD_ITEM" defaultGlAccountId="401000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_PROD_ITEM" glAccountId="401000"/> <!-- General Sales -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_FPROD_ITEM" glAccountId="401000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_DPROD_ITEM" glAccountId="401000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_FDPROD_ITEM" glAccountId="401000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_PROD_FEATR_ITEM" glAccountId="401000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_SPROD_ITEM" glAccountId="401000"/>
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_WE_ITEM" defaultGlAccountId="401000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_TE_ITEM" defaultGlAccountId="401000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_WE_ITEM" glAccountId="401000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_TE_ITEM" glAccountId="401000"/>
 
     <!-- usually, configure to same GL account as the "Lost or Damaged in Transit" inventory variance reason -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_LOST_ITEM_CLAIM" defaultGlAccountId="514100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="INV_LOST_ITEM_CLAIM" glAccountId="514100"/>
 
     <!-- for purchase invoice items -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_PROD_ITEM" defaultGlAccountId="140000"/> <!-- Inventory -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_FPROD_ITEM" defaultGlAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_DPROD_ITEM" defaultGlAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_FDPROD_ITEM" defaultGlAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_PROD_FEATR_ITEM" defaultGlAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SPROD_ITEM" defaultGlAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_PROD_ITEM" glAccountId="140000"/> <!-- Inventory -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_FPROD_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_DPROD_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_FDPROD_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_PROD_FEATR_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SPROD_ITEM" glAccountId="140000"/>
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_WE_ITEM" defaultGlAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_TE_ITEM" defaultGlAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_WE_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_TE_ITEM" glAccountId="140000"/>
     
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SHIP_CHARGES" defaultGlAccountId="510000"/> <!-- Freight In -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_SHIP_CHARGES" defaultGlAccountId="510000"/> <!-- Freight In -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SHIP_CHARGES" glAccountId="510000"/> <!-- Freight In -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_SHIP_CHARGES" glAccountId="510000"/> <!-- Freight In -->
     
     <!-- Miscellaneous adjustments on purchase orders posted to "PURCHASE ORDER ADJUSTMENTS"  Usually there shouldn't
         be any of these -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINVOICE_ADJ" defaultGlAccountId="516100"/> 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_PROMOTION_ADJ" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_DISCOUNT_ADJ" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="P_FEE" defaultGlAccountId="516100"/> 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_MISC_CHARGE" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SALES_TAX" defaultGlAccountId="516100"/> 
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINVOICE_ADJ" glAccountId="516100"/> 
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_PROMOTION_ADJ" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_DISCOUNT_ADJ" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="P_FEE" glAccountId="516100"/> 
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_MISC_CHARGE" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SALES_TAX" glAccountId="516100"/> 
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SURCHARGE_ADJ" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_ADD_FEATURE" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_WARRANTY_ADJ" defaultGlAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SURCHARGE_ADJ" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_ADD_FEATURE" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_WARRANTY_ADJ" glAccountId="516100"/>
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINVOICE_ITM_ADJ" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_PROMOTION_ADJ" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_REPLACE_ADJ" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_DISCOUNT_ADJ" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_FEE" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_MISC_CHARGE" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_SALES_TAX" defaultGlAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINVOICE_ITM_ADJ" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_PROMOTION_ADJ" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_REPLACE_ADJ" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_DISCOUNT_ADJ" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_FEE" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_MISC_CHARGE" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_SALES_TAX" glAccountId="516100"/>
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_SURCHARGE_ADJ" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_ADD_FEATURE" defaultGlAccountId="516100"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_WARRANTY_ADJ" defaultGlAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_SURCHARGE_ADJ" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_ADD_FEATURE" glAccountId="516100"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_WARRANTY_ADJ" glAccountId="516100"/>
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SUPLPRD_ITEM" defaultGlAccountId="650000"/>  <!-- this one is stationery & supplies, but feel free to set it to yours -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SUPLPRD_ITEM" glAccountId="650000"/>  <!-- this one is stationery & supplies, but feel free to set it to yours -->
 
     <!-- GL accounts for customer return invoice items.  You can go as detailed as you'd want and match sales to returns gl accounts.
         This is just an example. -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_PROD_ITEM" defaultGlAccountId="421000"/> <!-- Returns - Product.  May want to differentiate more here -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_FPROD_ITEM" defaultGlAccountId="421000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_DPROD_ITEM" defaultGlAccountId="421000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_FDPROD_ITEM" defaultGlAccountId="421000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_PROD_FEATR_ITEM" defaultGlAccountId="421000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_SPROD_ITEM" defaultGlAccountId="421000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_PROD_ITEM" glAccountId="421000"/> <!-- Returns - Product.  May want to differentiate more here -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_FPROD_ITEM" glAccountId="421000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_DPROD_ITEM" glAccountId="421000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_FDPROD_ITEM" glAccountId="421000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_PROD_FEATR_ITEM" glAccountId="421000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_SPROD_ITEM" glAccountId="421000"/>
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_WE_ITEM" defaultGlAccountId="424000"/> <!-- Returns - Work or Time Entry -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_TE_ITEM" defaultGlAccountId="424000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_WE_ITEM" glAccountId="424000"/> <!-- Returns - Work or Time Entry -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_TE_ITEM" glAccountId="424000"/>
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_PROMOTION_ADJ" defaultGlAccountId="422000"/> <!-- Returns - Promos -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_REPLACE_ADJ" defaultGlAccountId="423000"/> <!-- Returns - Adjustments -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_DISCOUNT_ADJ" defaultGlAccountId="423000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_FEE_ADJ" defaultGlAccountId="423000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_MISC_ADJ" defaultGlAccountId="423000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_SALES_TAX_ADJ" defaultGlAccountId="423000"/> <!-- sales tax: usually, though, overrideGlAccountId on InvoiceItem will be the real account used -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_SHIPPING_ADJ" defaultGlAccountId="423000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_SURCHARGE_ADJ" defaultGlAccountId="423000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_ADD_FEATURE_ADJ" defaultGlAccountId="423000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_WARRANTY_ADJ" defaultGlAccountId="423000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_MKTG_PKG_ADJ" defaultGlAccountId="423000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_MAN_ADJ" defaultGlAccountId="423000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_PROMOTION_ADJ" glAccountId="422000"/> <!-- Returns - Promos -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_REPLACE_ADJ" glAccountId="423000"/> <!-- Returns - Adjustments -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_DISCOUNT_ADJ" glAccountId="423000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_FEE_ADJ" glAccountId="423000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_MISC_ADJ" glAccountId="423000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_SALES_TAX_ADJ" glAccountId="423000"/> <!-- sales tax: usually, though, overrideGlAccountId on InvoiceItem will be the real account used -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_SHIPPING_ADJ" glAccountId="423000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_SURCHARGE_ADJ" glAccountId="423000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_ADD_FEATURE_ADJ" glAccountId="423000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_WARRANTY_ADJ" glAccountId="423000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_MKTG_PKG_ADJ" glAccountId="423000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="CRT_MAN_ADJ" glAccountId="423000"/>
     
     <!-- commissions invoice postings.  it is of course possible to configure these to point to the wages accounts as well -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="COMM_INV_ITEM" defaultGlAccountId="601300"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="COMM_INV_ADJ" defaultGlAccountId="601400"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="COMM_INV_ITEM" glAccountId="601300"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="COMM_INV_ADJ" glAccountId="601400"/>
     
     <!-- contract manufacturing invoice items will offset the GL account for contract manufacturing expenses -->
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_MFG_CONTRACT" defaultGlAccountId="600120"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_MFG_CONTRACT" glAccountId="600120"/>
     
 </entity-engine-xml>
