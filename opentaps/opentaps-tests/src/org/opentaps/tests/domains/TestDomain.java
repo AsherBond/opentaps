@@ -19,13 +19,15 @@ package org.opentaps.tests.domains;
 import org.opentaps.foundation.domain.Domain;
 
 /**
- * A test domain
- *
+ * A test domain.
  */
 public class TestDomain extends Domain {
-	
-	public TestDomain() {
-		super();
-	}
+
+    /**
+     * Default constructor.
+     */
+    public TestDomain() {
+        super();
+    }
 
 }
