@@ -797,6 +797,32 @@ under the License.
             <fileset dir="./opentaps/opentaps-common/build/classes/services/" includes="**/*.class"/>
         </delete>    	
     </target>
+    <target name="make-base-entities-all" depends="prebuild"
+            description="Generate the POJO base entities from the entity and service model.">
+        <mkdir dir="./opentaps/opentaps-common/src/base/org/opentaps/base/entities/"/>
+        <mkdir dir="./opentaps/opentaps-common/src/entities/org/opentaps/base/entities/"/>
+        <mkdir dir="./opentaps/opentaps-common/src/services/org/opentaps/base/services/"/>
+        <delete verbose="on">
+            <fileset dir="./opentaps/opentaps-common/src/base/org/opentaps/base/entities/" includes="**/*.java"/>
+            <fileset dir="./opentaps/opentaps-common/src/entities/org/opentaps/base/entities/" includes="**/*.java"/>
+            <fileset dir="./opentaps/opentaps-common/src/services/org/opentaps/base/services/" includes="**/*.java"/>
+        </delete>
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${permmemory.max.param}"/>
+            <arg value="allpojoentities"/>
+        </java>
+        <subant target="entities-jar">
+            <filelist dir="." files="./opentaps/opentaps-common/build.xml"/>
+        </subant>
+        <subant target="services-jar">
+            <filelist dir="." files="./opentaps/opentaps-common/build.xml"/>
+        </subant>
+        <delete verbose="off">
+            <fileset dir="./opentaps/opentaps-common/build/classes/entities/" includes="**/*.class"/>
+            <fileset dir="./opentaps/opentaps-common/build/classes/services/" includes="**/*.class"/>
+        </delete>     	
+    </target>	
     <target name="refresh-hibernatecfg" depends="prebuild">
         <delete verbose="on">
             <fileset dir="./opentaps/opentaps-common/config/" includes="*.cfg.xml" excludes="hibernate.cfg.xml"/>

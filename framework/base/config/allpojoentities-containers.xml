@@ -45,8 +45,9 @@ under the License.
     <!-- load the cached classloader container (always second) -->
     <container name="classloader-container" class="org.ofbiz.base.container.ClassLoaderContainer"/>
 
+    
     <!-- load the pojo generator load container, runs the entity data load stuff -->
-    <container name="pojo-generator-container" class="org.opentaps.domain.container.PojoGeneratorContainer">
+    <container name="all-pojo-generator-container" class="org.opentaps.domain.container.PojoGeneratorContainer">
         <property name="delegator-name" value="default"/>
         <property name="serviceTemplate" value="opentaps/opentaps-common/templates/BaseService.ftl"/>
         <property name="entityTemplate" value="opentaps/opentaps-common/templates/BaseEntity.ftl"/>
@@ -58,7 +59,9 @@ under the License.
         <property name="serviceOutputPath" value="opentaps/opentaps-common/src/services/org/opentaps/base/services/"/>
         <property name="hibernateCfgTemplate" value="opentaps/opentaps-common/templates/HibernateCfg.ftl"/>
         <property name="hibernateCfgPath" value="opentaps/opentaps-common/config/hibernate.cfg.xml"/>
-        <property name="generateAll" value="N"/>        
-    </container>
+        <property name="generateAll" value="Y"/>
+    </container>    
+    
+    
 </ofbiz-containers>
 
