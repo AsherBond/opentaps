@@ -320,6 +320,34 @@ public class Infrastructure {
     }
 
     /**
+     * Gets a configuration value as boolean from the database with null default value.
+     * This is a convenience method to get the common Y/N flags configuration values.
+     * @param configTypeId the config type to get
+     * @return <code>TRUE</code> if the config value is Y/y, <code>FALSE</code> otherwise (including for null values)
+     * @exception InfrastructureException if an error occurs
+     */
+    public Boolean getConfigurationValueAsBoolean(String configTypeId) throws InfrastructureException {
+        return "Y".equalsIgnoreCase(getConfigurationValue(configTypeId));
+    }
+
+    /**
+     * Gets a configuration value as boolean from the database with null default value.
+     * This is a convenience method to get the common Y/N flags configuration values.
+     * @param configTypeId the config type to get
+     * @param defaultValue the value to return if no configuration is set
+     * @return <code>TRUE</code> if the config value is Y/y, <code>FALSE</code> for any other non empty values, <code>defaultValue</code> if no configuration set
+     * @exception InfrastructureException if an error occurs
+     */
+    public Boolean getConfigurationValueAsBoolean(String configTypeId, Boolean defaultValue) throws InfrastructureException {
+         String configValue = getConfigurationValue(configTypeId);
+         if (configValue == null || configValue.length() == 0) {
+             return defaultValue;
+         } else {
+             return "Y".equalsIgnoreCase(configValue);
+         }
+    }
+
+    /**
      * Sets the configuration value for a configTypeId inside its own transaction.
      * @param configTypeId a <code>String</code> value
      * @param value a <code>String</code> value

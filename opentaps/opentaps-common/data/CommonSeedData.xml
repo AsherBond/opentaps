@@ -246,4 +246,11 @@ under the License.
     <!-- define ExternalUserType for voip -->
     <ExternalUserType externalUserTypeId="ASTERISK" description="Asterisk VOIP User"/>
 
+    <OpentapsConfigurationType configTypeId="UI" description="Parent configuration type for UI elements"/>
+    <OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_LOGO_SHOW" description="Configures whether the main logo will be shown or not" defaultValue="Y"/>
+    <OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_LOGO_IMG" description="Configures the image URI used for the main logo" defaultValue="/opentaps_images/opentaps_logo.png"/>
+    <OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_HELP_LINK_SHOW" description="Configures whether the help link will be shown or not" defaultValue="Y"/>
+    <OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_SUPPORT_LINK_SHOW" description="Configures whether the support link will be shown or not" defaultValue="Y"/>
+    <OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_FOOTER_TEXT_SHOW" description="Configures whether the footer will be shown or not" defaultValue="Y"/>
+
 </entity-engine-xml>

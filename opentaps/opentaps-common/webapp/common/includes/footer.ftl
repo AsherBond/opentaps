@@ -17,6 +17,7 @@
 
 <#-- This file is the common opentaps footer for every application that appears as a tab in OFBiz -->
 
+<#if (infrastructure.getConfigurationValueAsBoolean("UI_FOOTER_TEXT_SHOW"))!true>
 <div id="footer">
   <div class="tabletext"><a href="http://www.opentaps.org" class="tabletext">${uiLabelMap.OpentapsProductName}</a> ${uiLabelMap.OpentapsReleaseVersion}.
   opentaps is a trademark of <a href="http://www.opensourcestrategies.com">Open Source Strategies, Inc.</a></div>
@@ -26,3 +27,4 @@
   ${uiLabelMap.OpentapsToLearnMoreAboutOpentapsFollowUsOn} <a href="http://www.facebook.com/pages/opentaps/285070770315"/><img width="16" height="16" src="<@ofbizContentUrl>/opentaps_images/facebook_square_16x16.jpg</@ofbizContentUrl>" alt="Facebook"/></a> ${uiLabelMap.CommonAnd} <a href="http://twitter.com/opentaps"><img width="16" height="16" src="<@ofbizContentUrl>/opentaps_images/twitter_square_16x16.jpg</@ofbizContentUrl>" alt="twitter" /></a>
 </div>
 </div>
+</#if>

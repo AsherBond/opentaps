@@ -133,7 +133,7 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
         callInEventIcon: "${callInEventIcon}",
       </#if>
       <#if infrastructure?has_content>
-        showTopNavMenu: "${infrastructure.getConfigurationValue("UI_NAV_SHOW_TOP_MENU")}",
+        showTopNavMenu: "${infrastructure.getConfigurationValue("UI_TOP_NAV_MENU_SHOW")}",
       </#if>
         applicationName: "${opentapsApplicationName}"
       };
@@ -149,9 +149,11 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
     <div style="height:20px">
       <@gwtWidget id="webAppsMenu"/>
     </div>
-    <div style="margin-left: 10px; margin-top: 5px; margin-bottom: 10px;">
-    <#if ofbizAppUrl?exists><a href="${ofbizAppUrl}"></#if><img alt="${configProperties.get(opentapsApplicationName+".title")}" src="<@ofbizContentUrl>${configProperties.get("opentaps.logo")}</@ofbizContentUrl>" border="0"/><#if ofbizAppUrl?exists></a></#if>
-    </div>
+    <#if (infrastructure.getConfigurationValueAsBoolean("UI_LOGO_SHOW"))!true>
+      <div style="margin-left: 10px; margin-top: 5px; margin-bottom: 10px;">
+        <#if ofbizAppUrl?exists><a href="${ofbizAppUrl}"></#if><img alt="${configProperties.get(opentapsApplicationName+".title")}" src="<@ofbizContentUrl>${infrastructure.getConfigurationValue("UI_LOGO_IMG")!}</@ofbizContentUrl>" border="0"/><#if ofbizAppUrl?exists></a></#if>
+      </div>
+    </#if>
   </div>
 
   <div align="right" style="margin-left: 300px; margin-right: 10px; margin-top: 10px;">
@@ -185,7 +187,9 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
     </#if>
   
       <#-- live help link and search link.  -->
-      <#assign helpUrl = Static["org.opentaps.common.util.UtilCommon"].getUrlContextHelpResource(delegator, appName, parameters._CURRENT_VIEW_, screenState?default(""))!/>
+      <#if (infrastructure.getConfigurationValueAsBoolean("UI_HELP_LINK_SHOW"))!true>
+        <#assign helpUrl = Static["org.opentaps.common.util.UtilCommon"].getUrlContextHelpResource(delegator, appName, parameters._CURRENT_VIEW_, screenState?default(""))!/>
+      </#if>
       <div class="liveHelp">
         <#if helpUrl?exists && helpUrl?has_content>
            <#-- search button needs a little space to the right for help button -->
@@ -195,7 +199,9 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
            <#-- just search button, with room to the right for the contact button  -->
            <div style="padding:5px;position:absolute;right:30px" class="applicationSearch" id="gwtSearch"></div>
         </#if>
-        <a href="http://www.opentaps.org/contact" target="_blank" title="${uiLabelMap.OpentapsGetHelpFromAnOpentapsPartner}"><img src="<@ofbizContentUrl>/opentaps_images/openclipart.org/dholler_ok_16x16.png</@ofbizContentUrl>" alt="${uiLabelMap.OpentapsGetHelpFromAnOpentapsPartner}" width="16" height="16"/></a>
+        <#if (infrastructure.getConfigurationValueAsBoolean("UI_SUPPORT_LINK_SHOW"))!true>
+          <a href="http://www.opentaps.org/contact" target="_blank" title="${uiLabelMap.OpentapsGetHelpFromAnOpentapsPartner}"><img src="<@ofbizContentUrl>/opentaps_images/openclipart.org/dholler_ok_16x16.png</@ofbizContentUrl>" alt="${uiLabelMap.OpentapsGetHelpFromAnOpentapsPartner}" width="16" height="16"/></a>
+        </#if>
       </div>   
       
     <#-- voip notification -->
