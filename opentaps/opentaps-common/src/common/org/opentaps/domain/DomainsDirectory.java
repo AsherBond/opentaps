@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.opentaps.domain.billing.BillingDomainInterface;
+import org.opentaps.domain.crmsfa.teams.CrmTeamDomainInterface;
 import org.opentaps.domain.dataimport.DataImportDomainInterface;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
 import org.opentaps.domain.ledger.LedgerDomainInterface;
@@ -63,6 +64,7 @@ public class DomainsDirectory implements DomainContextInterface {
     public static final String DATA_IMPORT_DOMAIN = "DataImportDomain";
     public static final String SECURITY_DOMAIN = "SecurityDomain";
     public static final String ACTIVITIES_DOMAIN = "ActivitiesDomain";
+    public static final String CRM_TEAMS_DOMAIN = "CrmTeamsDomain";
 
     // Holds a map of Domain Key (the name of the domain) to DomainInterfaces.
     private Map<String, DomainInterface> domainDirectories = new HashMap<String, DomainInterface>();
@@ -208,6 +210,14 @@ public class DomainsDirectory implements DomainContextInterface {
 
     public void setProductDomain(ProductDomainInterface productDomain) {
         addDomain(PRODUCT_DOMAIN, productDomain);
+    }
+
+    public CrmTeamDomainInterface getCrmTeamDomain() {
+        return (CrmTeamDomainInterface) getDomain(CRM_TEAMS_DOMAIN);
+    }
+
+    public void setCrmTeamDomain(CrmTeamDomainInterface crmTeamDomain) {
+        addDomain(CRM_TEAMS_DOMAIN, crmTeamDomain);
     }
 
     public LedgerDomainInterface getLedgerDomain() {
