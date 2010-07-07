@@ -18,7 +18,6 @@ package org.opentaps.domain.party;
 
 import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.ServiceException;
 
 /**
  * This is the interface of the Party domain.
@@ -31,5 +30,5 @@ public interface PartyDomainInterface extends DomainInterface {
      * @throws RepositoryException if an error occurs
      */
     public PartyRepositoryInterface getPartyRepository() throws RepositoryException;
-    
+
 }

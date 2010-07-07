@@ -19,7 +19,6 @@ package org.opentaps.common.domain.party;
 import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.foundation.domain.Domain;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.ServiceException;
 
 /**
  * This is an implementation of the Party domain.
