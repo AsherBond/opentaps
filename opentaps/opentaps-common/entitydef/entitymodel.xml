@@ -2534,7 +2534,7 @@ under the License.
     <entity package-name="org.opentaps.common.config" entity-name="OpentapsConfiguration"
         title="All purpose entity for entering configuration.  A replacement for .properties">
         <field name="configTypeId" type="id-vlong"/>
-        <field name="value" type="long-varchar" encrypt="true"/>
+        <field name="value" type="very-long" encrypt="true"/>
         <field name="comments" type="comment"/>
         <prim-key field="configTypeId"/>
         <relation rel-entity-name="OpentapsConfigurationType" type="one" fk-name="CONFIG_TYPE">
@@ -2547,7 +2547,7 @@ under the License.
         <field name="configTypeId" type="id-vlong"/>
         <field name="parentConfigTypeId" type="id-vlong"/>
         <field name="description" type="comment"/>
-        <field name="defaultValue" type="long-varchar" encrypt="true"/>
+        <field name="defaultValue" type="very-long" encrypt="true"/>
         <prim-key field="configTypeId"/>
         <relation rel-entity-name="OpentapsConfigurationType" type="one" title="Parent" fk-name="CONFIG_TYPE_PARENT">
             <key-map field-name="parentConfigTypeId" rel-field-name="configTypeId"></key-map>
