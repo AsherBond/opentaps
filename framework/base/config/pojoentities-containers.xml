@@ -58,7 +58,6 @@ under the License.
         <property name="serviceOutputPath" value="opentaps/opentaps-common/src/services/org/opentaps/base/services/"/>
         <property name="hibernateCfgTemplate" value="opentaps/opentaps-common/templates/HibernateCfg.ftl"/>
         <property name="hibernateCfgPath" value="opentaps/opentaps-common/config/hibernate.cfg.xml"/>
-        <property name="generateAll" value="N"/>        
     </container>
 </ofbiz-containers>
 
