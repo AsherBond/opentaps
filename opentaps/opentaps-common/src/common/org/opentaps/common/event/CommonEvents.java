@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+
 import javax.print.PrintService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +44,7 @@ import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+
 import org.ofbiz.base.crypto.HashCrypt;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
@@ -80,6 +82,8 @@ public final class CommonEvents {
     private CommonEvents() { }
 
     private static final String MODULE = CommonEvents.class.getName();
+
+    public static final String SYSTEM_WIDE = "opentaps";
 
     /**
      * This method will read the donePage parameter and return it to the controller as the result.
@@ -128,9 +132,21 @@ public final class CommonEvents {
      * @return the event response string, "success" if an organization is set, else "selectOrganization"
      */
     public static String setOrganization(HttpServletRequest request, HttpServletResponse response) {
+        final String SCREEN_NAME = "selectOrganizationForm";
+        final String OPTION_DEF_ORGANIZATION = "organizationPartyId";
+
         String organizationPartyId = request.getParameter("organizationPartyId");
         if (organizationPartyId == null || organizationPartyId.trim().length() == 0) {
-            return "selectOrganization";
+            try {
+                organizationPartyId = UtilCommon.getUserLoginViewPreference(request, SYSTEM_WIDE, SCREEN_NAME, OPTION_DEF_ORGANIZATION);
+            } catch (GenericEntityException e) {
+                Debug.logError(e, "Error while retrieve default organization", MODULE);
+                return "selectOrganization";
+            }
+ 
+            if (organizationPartyId == null || organizationPartyId.trim().length() == 0) {
+                return "selectOrganization";
+            }
         }
 
         HttpSession session = request.getSession();
@@ -150,6 +166,14 @@ public final class CommonEvents {
         session.setAttribute("organizationParty", organization);
         session.setAttribute("organizationPartyId", organizationPartyId);
         session.setAttribute("applicationContextSet", Boolean.TRUE);
+
+        try {
+            UtilCommon.setUserLoginViewPreference(request, SYSTEM_WIDE, SCREEN_NAME, OPTION_DEF_ORGANIZATION, organizationPartyId);
+        } catch (GenericEntityException e) {
+            // log message and go ahead, application may work w/o default value
+            Debug.logWarning(e.getMessage(), MODULE);
+        }
+
         return "success";
     }
 

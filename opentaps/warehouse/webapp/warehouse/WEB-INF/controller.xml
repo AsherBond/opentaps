@@ -79,7 +79,7 @@ under the License.
     <request-map uri="login">
         <security https="true" auth="false"/>
         <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="login" />
-        <response name="success" type="view" value="selectFacilityForm"/>
+        <response name="success" type="request" value="setFacility"/>
         <response name="requirePasswordChange" type="view" value="requirePasswordChange"/>
         <response name="error" type="view" value="login"/>
     </request-map>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -26,6 +26,8 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.common.event.CommonEvents;
+import org.opentaps.common.util.UtilCommon;
 
 /**
  * ConfigurationEvents for configuration section.
@@ -45,6 +47,9 @@ public final class ConfigurationEvents {
      * @return the event response string, "success" if a facility is set, else "selectFacility"
      */
     public static String setFacility(HttpServletRequest request, HttpServletResponse response) {
+        final String SCREEN_NAME = "selectFacilityForm";
+        final String OPTION_DEF_FACILITY = "facilityId";
+
         HttpSession session = request.getSession();
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
 
@@ -54,7 +59,16 @@ public final class ConfigurationEvents {
             if (UtilValidate.isEmpty(facilityId)) {
                 facilityId = (String) session.getAttribute("facilityId");
                 if (UtilValidate.isEmpty(facilityId)) {
-                    return "selectFacility";
+                    try {
+                        facilityId = UtilCommon.getUserLoginViewPreference(request, CommonEvents.SYSTEM_WIDE, SCREEN_NAME, OPTION_DEF_FACILITY);
+                    } catch (GenericEntityException e) {
+                        Debug.logError(e, "Error while retrieve default facility", MODULE);
+                        return "selectFacility";
+                    }
+
+                    if (UtilValidate.isEmpty(facilityId)) {
+                        return "selectFacility";
+                    }
                 }
             }
         }
@@ -73,6 +87,14 @@ public final class ConfigurationEvents {
         session.setAttribute("facility", facility);
         session.setAttribute("facilityId", facilityId);
         session.setAttribute("applicationContextSet", Boolean.TRUE);
+
+        try {
+            UtilCommon.setUserLoginViewPreference(request, CommonEvents.SYSTEM_WIDE, SCREEN_NAME, OPTION_DEF_FACILITY, facilityId);
+        } catch (GenericEntityException e) {
+            // log message and go ahead, application may work w/o default value
+            Debug.logWarning(e.getMessage(), MODULE);
+        }
+
         return "success";
     }
 }

@@ -60,7 +60,7 @@
     <request-map uri="login">
         <security https="true" auth="false"/>
         <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="login" />
-        <response name="success" type="view" value="selectOrganizationForm"/>
+        <response name="success" type="request" value="setOrganization"/>
         <response name="requirePasswordChange" type="view" value="requirePasswordChange"/>
         <response name="error" type="view" value="login"/>
     </request-map>
