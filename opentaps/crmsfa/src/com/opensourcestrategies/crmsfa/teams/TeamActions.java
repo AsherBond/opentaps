@@ -16,13 +16,21 @@
  */
 package com.opensourcestrategies.crmsfa.teams;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityFunction;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.PartyRoleAndPartyDetail;
 import org.opentaps.base.entities.SalesTeamRoleSecurity;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.crmsfa.teams.CrmTeamRepositoryInterface;
@@ -116,5 +124,38 @@ public final class TeamActions {
                 ac.put("hasTeamDeactivatePermission", true);
             }
         }
+    }
+
+    /**
+     * Action for the find / list teams screen.
+     * @param context the screen context
+     * @throws GeneralException if an error occurs
+     */
+    public static void findTeams(Map<String, Object> context) throws GeneralException {
+
+        final ActionContext ac = new ActionContext(context);
+
+        // get the search parameters
+        String groupName = ac.getParameter("groupName");
+
+        // build search conditions
+        List<EntityCondition> search = new ArrayList<EntityCondition>();
+        if (groupName != null) {
+            search.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(PartyRoleAndPartyDetail.Fields.groupName.name()), EntityOperator.LIKE, EntityFunction.UPPER(groupName + "%")));
+        }
+
+        // required conditions
+        search.add(EntityCondition.makeCondition(PartyRoleAndPartyDetail.Fields.roleTypeId.name(), RoleTypeConstants.ACCOUNT_TEAM));
+        search.add(EntityCondition.makeCondition(PartyRoleAndPartyDetail.Fields.statusId.name(), EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED));
+
+        ac.put("teams", ac.getDelegator().findListIteratorByCondition("PartyRoleAndPartyDetail", EntityCondition.makeCondition(search), null,
+                                            // fields to select
+                                            Arrays.asList(PartyRoleAndPartyDetail.Fields.partyId.name(),
+                                                            PartyRoleAndPartyDetail.Fields.groupName.name(),
+                                                            PartyRoleAndPartyDetail.Fields.partyGroupComments.name()),
+                                            Arrays.asList(PartyRoleAndPartyDetail.Fields.groupName.desc()), // fields to order by
+                                            // the first true here is for "specifyTypeAndConcur"
+                                            // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
+                                            new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true)));
     }
 }

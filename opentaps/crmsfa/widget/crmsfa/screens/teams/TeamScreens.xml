@@ -58,7 +58,7 @@
                 <set field="listSortTarget" value="findTeams"/>
                 <set field="findTeamsTarget" value="findTeams"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/teams/findTeams.bsh"/>
+                <java location="com.opensourcestrategies.crmsfa.teams.TeamActions" invoke="findTeams"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
