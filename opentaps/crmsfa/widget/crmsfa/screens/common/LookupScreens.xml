@@ -240,8 +240,8 @@
                 <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/>
                 <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>                
                 <set field="parameters.listIteratorNameToUse" value="accountTeamMembers"/> <!-- iterator for list of teamMembers -->
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/findPartiesByToRole.bsh"/>
                 <set field="findTeamMembersTarget" value="LookupTeamMembers"/>
+                <java location="com.opensourcestrategies.crmsfa.teams.TeamActions" invoke="lookupTeamMembers"/>
             </actions>
             <widgets>
                 <decorator-screen name="CommonLookup">
@@ -249,9 +249,9 @@
                         <container style="subSectionBlock">
                             <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindTeamMembers}</label></container>
 
-                        <platform-specific>
-                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindTeamMembers.ftl"/></html>
-                        </platform-specific>
+                            <platform-specific>
+                              <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindTeamMembers.ftl"/></html>
+                            </platform-specific>
                         </container>
 
                         <platform-specific>

@@ -16,14 +16,26 @@
  */
 package com.opensourcestrategies.crmsfa.teams;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityFunction;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.PartyToSummaryByRole;
 import org.opentaps.base.entities.SalesTeamRoleSecurity;
+import org.opentaps.common.builder.EntityListBuilder;
+import org.opentaps.common.builder.PageBuilder;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.crmsfa.teams.CrmTeamRepositoryInterface;
 import org.opentaps.domain.crmsfa.teams.Team;
@@ -132,5 +144,72 @@ public final class TeamActions {
 
         // perform the search
         ac.put("teams", getRepository(ac).lookupTeams(groupName));
+    }
+
+    /**
+     * Action for the team member lookup.
+     * @param context the screen context
+     * @throws GeneralException if an error occurs
+     */
+    public static void lookupTeamMembers(Map<String, Object> context) throws GeneralException {
+
+        final ActionContext ac = new ActionContext(context);
+
+        CrmTeamRepositoryInterface repository = getRepository(ac);
+
+        // get the search parameters
+        String lastName = ac.getParameter("lastName");
+        String firstName = ac.getParameter("firstName");
+
+        List<EntityCondition> conditions = new ArrayList<EntityCondition>();
+
+        // construct role conditions
+        conditions.add(EntityCondition.makeCondition("roleTypeId", EntityOperator.IN, PartyHelper.TEAM_MEMBER_ROLES));
+
+        // construct search conditions
+        if (lastName != null) {
+            conditions.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("lastName"), EntityOperator.LIKE, EntityFunction.UPPER("%" + lastName + "%")));
+        }
+        if (firstName != null) {
+            conditions.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("firstName"), EntityOperator.LIKE, EntityFunction.UPPER("%" + firstName + "%")));
+        }
+
+        // remove disabled parties
+        conditions.add(EntityCondition.makeCondition(UtilMisc.toList(
+                                     EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
+                                     EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null))
+                            , EntityOperator.OR));
+
+        // use a page builder to fetch the crm party list, because we need some extra data
+        EntityListBuilder teamMemberListBuilder = new EntityListBuilder(repository, PartyToSummaryByRole.class, EntityCondition.makeCondition(conditions), Arrays.asList("firstName", "lastName", "partyId"), UtilMisc.toList("lastName", "firstName"));
+        PageBuilder teamMemberListPageBuilder = new PageBuilder<PartyToSummaryByRole>() {
+            public List<Map<String, Object>> build(List<PartyToSummaryByRole> page) throws Exception {
+                GenericDelegator delegator = ac.getDelegator();
+                List<Map<String, Object>> newPage = new ArrayList<Map<String, Object>>();
+                for (PartyToSummaryByRole member : page) {
+                    Map<String, Object> newRow = new HashMap<String, Object>();
+                    // TODO: check view permission for this party first
+                    newRow.putAll(member.toMap());
+                    newPage.add(newRow);
+                }
+                return newPage;
+            }
+        };
+        teamMemberListBuilder.setPageBuilder(teamMemberListPageBuilder);
+        context.put("crmPartyListBuilder", teamMemberListBuilder);
+
+
+        // this debugging code is kind of helpful so I'll keep it around for now 
+
+        /*
+          listIt = context.get(listIteratorNameToUse);
+          print("******* list iterator values: ***********");
+          if (listIt != null) { while ((next = listIt.next()) != null) { print(next); } }
+          else { print("No list iterator found"); }
+          print("*****************************************");
+        */
+
+        // perform the search
+        //        ac.put("teams", getRepository(ac).lookupTeamMembers(groupName));
     }
 }
