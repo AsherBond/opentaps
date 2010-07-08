@@ -18,25 +18,11 @@
 
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
 
-    <form name="viewTeam" type="single" default-map-name="team"
-        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
-        <field name="groupName" title="${uiLabelMap.CommonName}"><display/></field>
-        <field name="comments" title="${uiLabelMap.CommonComments}"><display/></field>
-    </form>
-
     <form name="createTeamForm" type="single" default-map-name="team" target="createTeam"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="groupName" title="${uiLabelMap.CommonName}"><text/></field>
         <field name="comments" title="${uiLabelMap.CommonComments}"><textarea/></field>
         <field name="submitButton" title="${uiLabelMap.CrmCreateTeam}" widget-style="smallSubmit"><submit/></field>
-    </form>
-
-    <form name="updateTeamForm" type="single" default-map-name="team" target="updateTeam"
-        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
-        <field name="partyId"><hidden/></field>
-        <field name="groupName" title="${uiLabelMap.CommonName}"><text/></field>
-        <field name="comments" title="${uiLabelMap.CommonComments}"><textarea/></field>
-        <field name="submitButton" title="${uiLabelMap.CrmUpdateTeam}" widget-style="smallSubmit"><submit/></field>
     </form>
 
     <form name="FindTeams" type="single" target="${findTeamsTarget}"

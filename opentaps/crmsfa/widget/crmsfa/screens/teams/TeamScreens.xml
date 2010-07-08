@@ -84,25 +84,26 @@
                 <set field="pageTitleLabel" value="CrmViewTeam"/>
                 <set field="sectionHeaderUiLabel" value="CrmViewTeam"/>
                 <set field="listSortTarget" value="viewTeam"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/teams/viewTeam.bsh"/>
+                <java location="com.opensourcestrategies.crmsfa.teams.TeamActions" invoke="getTeamPermissions"/>
+                <java location="com.opensourcestrategies.crmsfa.teams.TeamActions" invoke="viewTeam"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <container style="subSectionBlock">
                             <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/teams/submenus/viewTeamMenu.ftl"/></html></platform-specific>
-                            <container style="form">
-                                <include-form name="viewTeam" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
-                            </container>
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/teams/viewTeam.ftl"/></html></platform-specific>
                         </container>
                         <container style="subSectionBlock">
                             <frame-container-header title="${uiLabelMap.CrmTeamMembers}"/>
-                            <include-form name="ListTeamMembers" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/teams/viewTeamMembers.ftl"/></html></platform-specific>
                             <!-- If the user can add team members, include the relevant form -->
                             <section>
                                 <condition><if-compare field="hasTeamAssignPermission" operator="equals" value="true" type="Boolean"/></condition>
                                 <widgets>
+                                  <container style="form">
                                     <include-form name="addTeamMemberForm" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                                  </container>
                                 </widgets>
                             </section>
                         </container>
@@ -116,7 +117,7 @@
         <section>
             <actions>
                 <set field="sectionHeaderUiLabel" value="CrmCreateTeam"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/teams/viewTeam.bsh"/>
+                <java location="com.opensourcestrategies.crmsfa.teams.TeamActions" invoke="getTeamPermissions"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -136,15 +137,16 @@
         <section>
             <actions>
                 <set field="sectionHeaderUiLabel" value="CrmUpdateTeam"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/teams/viewTeam.bsh"/>
+                <java location="com.opensourcestrategies.crmsfa.teams.TeamActions" invoke="getTeamPermissions"/>
+                <java location="com.opensourcestrategies.crmsfa.teams.TeamActions" invoke="viewTeam"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <container style="subSectionBlock">
                             <container style="form">
-                                <include-form name="updateTeamForm" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
-                            </container>
+                                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/teams/updateTeam.ftl"/></html></platform-specific>
+                           </container>
                         </container>
                     </decorator-section>
                 </decorator-screen>
