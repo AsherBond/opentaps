@@ -12,6 +12,7 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.organization.OrganizationServiceInterface;
 import org.opentaps.foundation.service.ServiceException;
@@ -28,8 +29,12 @@ public class OrganizationService extends DomainService implements OrganizationSe
     /** {@inheritDoc} 
      * @throws ServiceException */
     public void copyOrganizationLedgerSetup() throws ServiceException {
-        // TODO Auto-generated method stub
         delegator = this.getInfrastructure().getDelegator();
+        
+        // check the security permission 
+        if (!getSecurity().hasPermission("ORG_CONFIG", getUser().getOfbizUserLogin())) {
+            throw new ServiceException(UtilMessage.expandLabel("OpentapsError_SecurityErrorToRunCopyOrganizationLedgerSetup", locale));
+        }
 
         GenericValue partyAcctgPreference;
         try {

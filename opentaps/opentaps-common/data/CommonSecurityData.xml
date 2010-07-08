@@ -98,4 +98,6 @@
 
     <SecurityPermission description="Access to the Cash Drawer functions" permissionId="OPENTAPS_CSHDRWR"/>
 
+    <SecurityPermission description="Permission to configure organizations." permissionId="ORG_CONFIG"/>
+    <SecurityGroupPermission groupId="FULLADMIN" permissionId="ORG_CONFIG"/>
 </entity-engine-xml>
