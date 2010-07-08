@@ -251,7 +251,5 @@ under the License.
     <OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_LOGO_IMG" description="Configures the image URI used for the main logo" defaultValue="/opentaps_images/opentaps_logo.png"/>
     <OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_HELP_LINK_SHOW" description="Configures whether the help link will be shown or not" defaultValue="Y"/>
     <OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_SUPPORT_LINK_SHOW" description="Configures whether the support link will be shown or not" defaultValue="Y"/>
-    <OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_FOOTER_TEXT_SHOW" description="Configures whether the footer will be shown or not" defaultValue="Y"/>
-    <OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_FOOTER_TEXT" description="Configures a custom the footer text which will replace the opentaps one"/>
 
 </entity-engine-xml>

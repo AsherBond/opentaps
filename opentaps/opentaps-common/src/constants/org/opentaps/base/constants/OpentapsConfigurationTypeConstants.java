@@ -40,5 +40,17 @@ public final class OpentapsConfigurationTypeConstants {
     public static final String TEST_CONFIG_TYPE = "TEST_CONFIG_TYPE";
     /** For testing. */
     public static final String TEST_CONFIG_UNCONFIGURED_TYPE = "TEST_CONFIG_UNCONFIGURED_TYPE";
+    /** Parent configuration type for UI elements. */
+    public static final String UI = "UI";
+    /** Configures whether the help link will be shown or not. */
+    public static final String UI_HELP_LINK_SHOW = "UI_HELP_LINK_SHOW";
+    /** Configures the image URI used for the main logo. */
+    public static final String UI_LOGO_IMG = "UI_LOGO_IMG";
+    /** Configures whether the main logo will be shown or not. */
+    public static final String UI_LOGO_SHOW = "UI_LOGO_SHOW";
+    /** Configures whether the support link will be shown or not. */
+    public static final String UI_SUPPORT_LINK_SHOW = "UI_SUPPORT_LINK_SHOW";
+    /** Configures whether the top navigation menu will be shown or not. */
+    public static final String UI_TOP_NAV_MENU_SHOW = "UI_TOP_NAV_MENU_SHOW";
 
 }
