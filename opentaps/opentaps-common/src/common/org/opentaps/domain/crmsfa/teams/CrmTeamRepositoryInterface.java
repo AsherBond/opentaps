@@ -18,8 +18,10 @@ package org.opentaps.domain.crmsfa.teams;
 
 import java.util.List;
 
+import org.ofbiz.entity.condition.EntityCondition;
 import org.opentaps.base.entities.PartyRelationship;
 import org.opentaps.base.entities.PartyRoleAndPartyDetail;
+import org.opentaps.base.entities.PartyToSummaryByRole;
 import org.opentaps.base.entities.SalesTeamRoleSecurity;
 import org.opentaps.base.entities.SecurityGroup;
 import org.opentaps.domain.party.Party;
@@ -135,10 +137,38 @@ public interface CrmTeamRepositoryInterface extends PartyRepositoryInterface {
     public SalesTeamRoleSecurity getSalesTeamRoleSecurity(TeamMemberInTeam member) throws RepositoryException;
 
     /**
-     * Perform a simple team lookup and returns the <code>PartyRoleAndPartyDetail</code>.
+     * Make the <code>EntityCondition</code> to use for a team lookup.
+     * This can be used instead of <code>lookupTeams</code> for doing a paginated lookup using <code>EntityListBuilder</code>.
+     * @param teamName the name to lookup
+     * @return an <code>EntityCondition</code>
+     * @exception RepositoryException if an error occurs
+     */
+    public EntityCondition makeLookupTeamsCondition(String teamName) throws RepositoryException;
+
+    /**
+     * Perform a simple team lookup and returns an iterator of matching <code>PartyRoleAndPartyDetail</code>.
      * @param teamName the name to lookup
      * @return an <code>EntityListIterator</code> of <code>PartyRoleAndPartyDetail</code>
      * @exception RepositoryException if an error occurs
      */
     public EntityListIterator<PartyRoleAndPartyDetail> lookupTeams(String teamName) throws RepositoryException;
+
+    /**
+     * Make the <code>EntityCondition</code> to use for a team lookup.
+     * This can be used instead of <code>lookupTeamMembers</code> for doing a paginated lookup using <code>EntityListBuilder</code>.
+     * @param firstName the first name to lookup
+     * @param lastName the last name to lookup
+     * @return an <code>EntityCondition</code>
+     * @exception RepositoryException if an error occurs
+     */
+    public EntityCondition makeLookupTeamMembersCondition(String firstName, String lastName) throws RepositoryException;
+
+    /**
+     * Perform a simple team members lookup and returns an iterator of matching <code>PartyToSummaryByRole</code>.
+     * @param firstName the first name to lookup
+     * @param lastName the last name to lookup
+     * @return an <code>EntityListIterator</code> of <code>PartyToSummaryByRole</code>
+     * @exception RepositoryException if an error occurs
+     */
+    public EntityListIterator<PartyToSummaryByRole> lookupTeamMembers(String firstName, String lastName) throws RepositoryException;
 }

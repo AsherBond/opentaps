@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -32,6 +33,7 @@ import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.PartyRelationship;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.PartyRoleAndPartyDetail;
+import org.opentaps.base.entities.PartyToSummaryByRole;
 import org.opentaps.base.entities.SalesTeamRoleSecurity;
 import org.opentaps.base.entities.SecurityGroup;
 import org.opentaps.common.domain.party.PartyRepository;
@@ -171,7 +173,7 @@ public class CrmTeamRepository extends PartyRepository implements CrmTeamReposit
     }
 
     /** {@inheritDoc} */
-    public EntityListIterator<PartyRoleAndPartyDetail> lookupTeams(String teamName) throws RepositoryException {
+    public EntityCondition makeLookupTeamsCondition(String teamName) throws RepositoryException {
 
         // build search conditions
         List<EntityCondition> search = new ArrayList<EntityCondition>();
@@ -183,10 +185,59 @@ public class CrmTeamRepository extends PartyRepository implements CrmTeamReposit
         search.add(EntityCondition.makeCondition(PartyRoleAndPartyDetail.Fields.roleTypeId.name(), RoleTypeConstants.ACCOUNT_TEAM));
         search.add(EntityCondition.makeCondition(PartyRoleAndPartyDetail.Fields.statusId.name(), EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED));
 
-        return findIterator(PartyRoleAndPartyDetail.class, EntityCondition.makeCondition(search),
+        return EntityCondition.makeCondition(search);
+    }
+
+    /** {@inheritDoc} */
+    public EntityListIterator<PartyRoleAndPartyDetail> lookupTeams(String teamName) throws RepositoryException {
+
+        return findIterator(PartyRoleAndPartyDetail.class, makeLookupTeamsCondition(teamName),
                             Arrays.asList(PartyRoleAndPartyDetail.Fields.partyId.name(),
                                           PartyRoleAndPartyDetail.Fields.groupName.name(),
                                           PartyRoleAndPartyDetail.Fields.partyGroupComments.name()),
                             Arrays.asList(PartyRoleAndPartyDetail.Fields.groupName.desc()));
+    }
+
+    /** {@inheritDoc} */
+    public EntityCondition makeLookupTeamMembersCondition(String firstName, String lastName) throws RepositoryException {
+
+        List<EntityCondition> conditions = new ArrayList<EntityCondition>();
+
+        // construct role conditions
+        conditions.add(EntityCondition.makeCondition(PartyToSummaryByRole.Fields.roleTypeId.name(), EntityOperator.IN, PartyHelper.TEAM_MEMBER_ROLES));
+
+        // construct search conditions
+        if (lastName != null) {
+            conditions.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(PartyToSummaryByRole.Fields.lastName.name()),
+                                                         EntityOperator.LIKE,
+                                                         EntityFunction.UPPER("%" + lastName + "%")));
+        }
+        if (firstName != null) {
+            conditions.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(PartyToSummaryByRole.Fields.firstName.name()),
+                                                         EntityOperator.LIKE,
+                                                         EntityFunction.UPPER("%" + firstName + "%")));
+        }
+
+        // remove disabled parties
+        conditions.add(EntityCondition.makeCondition(EntityOperator.OR,
+                                                     EntityCondition.makeCondition(PartyToSummaryByRole.Fields.statusId.name(),
+                                                                                   EntityOperator.NOT_EQUAL,
+                                                                                   StatusItemConstants.PartyStatus.PARTY_DISABLED),
+                                                     EntityCondition.makeCondition(PartyToSummaryByRole.Fields.statusId.name(),
+                                                                                   EntityOperator.EQUALS,
+                                                                                   null)));
+
+        return EntityCondition.makeCondition(conditions);
+    }
+
+    /** {@inheritDoc} */
+    public EntityListIterator<PartyToSummaryByRole> lookupTeamMembers(String firstName, String lastName) throws RepositoryException {
+
+        return findIterator(PartyToSummaryByRole.class, makeLookupTeamMembersCondition(firstName, lastName),
+                            Arrays.asList(PartyToSummaryByRole.Fields.partyId.name(),
+                                          PartyToSummaryByRole.Fields.firstName.name(),
+                                          PartyToSummaryByRole.Fields.lastName.name()),
+                            Arrays.asList(PartyToSummaryByRole.Fields.firstName.desc(),
+                                          PartyToSummaryByRole.Fields.lastName.desc()));
     }
 }
