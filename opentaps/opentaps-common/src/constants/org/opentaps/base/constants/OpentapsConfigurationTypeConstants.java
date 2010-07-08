@@ -42,6 +42,10 @@ public final class OpentapsConfigurationTypeConstants {
     public static final String TEST_CONFIG_UNCONFIGURED_TYPE = "TEST_CONFIG_UNCONFIGURED_TYPE";
     /** Parent configuration type for UI elements. */
     public static final String UI = "UI";
+    /** Configures a custom the footer text which will replace the opentaps one. */
+    public static final String UI_FOOTER_TEXT = "UI_FOOTER_TEXT";
+    /** Configures whether the footer will be shown or not. */
+    public static final String UI_FOOTER_TEXT_SHOW = "UI_FOOTER_TEXT_SHOW";
     /** Configures whether the help link will be shown or not. */
     public static final String UI_HELP_LINK_SHOW = "UI_HELP_LINK_SHOW";
     /** Configures the image URI used for the main logo. */
