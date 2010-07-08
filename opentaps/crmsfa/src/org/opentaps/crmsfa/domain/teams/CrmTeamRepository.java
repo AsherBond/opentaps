@@ -23,11 +23,17 @@ import java.util.List;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityFunction;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.base.constants.PartyRelationshipTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.PartyRelationship;
 import org.opentaps.base.entities.PartyRole;
+import org.opentaps.base.entities.PartyRoleAndPartyDetail;
+import org.opentaps.base.entities.SalesTeamRoleSecurity;
+import org.opentaps.base.entities.SecurityGroup;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.domain.crmsfa.teams.CrmTeamRepositoryInterface;
 import org.opentaps.domain.crmsfa.teams.Team;
@@ -36,11 +42,10 @@ import org.opentaps.domain.crmsfa.teams.TeamMemberInTeam;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.entity.util.EntityListIterator;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.base.entities.SecurityGroup;
-import org.opentaps.base.entities.SalesTeamRoleSecurity;
 
 /**
  * Repository for CRM team.
@@ -163,5 +168,25 @@ public class CrmTeamRepository extends PartyRepository implements CrmTeamReposit
     /** {@inheritDoc} */
     public SalesTeamRoleSecurity getSalesTeamRoleSecurity(TeamMemberInTeam member) throws RepositoryException {
         return findOne(SalesTeamRoleSecurity.class, map(SalesTeamRoleSecurity.Fields.securityGroupId, member.getSecurityGroupId()));
+    }
+
+    /** {@inheritDoc} */
+    public EntityListIterator<PartyRoleAndPartyDetail> lookupTeams(String teamName) throws RepositoryException {
+
+        // build search conditions
+        List<EntityCondition> search = new ArrayList<EntityCondition>();
+        if (teamName != null) {
+            search.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(PartyRoleAndPartyDetail.Fields.groupName.name()), EntityOperator.LIKE, EntityFunction.UPPER(teamName + "%")));
+        }
+
+        // required conditions
+        search.add(EntityCondition.makeCondition(PartyRoleAndPartyDetail.Fields.roleTypeId.name(), RoleTypeConstants.ACCOUNT_TEAM));
+        search.add(EntityCondition.makeCondition(PartyRoleAndPartyDetail.Fields.statusId.name(), EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED));
+
+        return findIterator(PartyRoleAndPartyDetail.class, EntityCondition.makeCondition(search),
+                            Arrays.asList(PartyRoleAndPartyDetail.Fields.partyId.name(),
+                                          PartyRoleAndPartyDetail.Fields.groupName.name(),
+                                          PartyRoleAndPartyDetail.Fields.partyGroupComments.name()),
+                            Arrays.asList(PartyRoleAndPartyDetail.Fields.groupName.desc()));
     }
 }

@@ -70,7 +70,7 @@
                         </container>
                         <container style="subSectionBlock">
                             <frame-container-header title="${uiLabelMap.CrmTeams}"/>
-                            <include-form name="ListTeams" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/teams/listTeams.ftl"/></html></platform-specific>
                         </container>
                     </decorator-section>
                 </decorator-screen>

@@ -19,11 +19,13 @@ package org.opentaps.domain.crmsfa.teams;
 import java.util.List;
 
 import org.opentaps.base.entities.PartyRelationship;
+import org.opentaps.base.entities.PartyRoleAndPartyDetail;
 import org.opentaps.base.entities.SalesTeamRoleSecurity;
 import org.opentaps.base.entities.SecurityGroup;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.entity.util.EntityListIterator;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
@@ -131,4 +133,12 @@ public interface CrmTeamRepositoryInterface extends PartyRepositoryInterface {
      * @exception RepositoryException if an error occurs
      */
     public SalesTeamRoleSecurity getSalesTeamRoleSecurity(TeamMemberInTeam member) throws RepositoryException;
+
+    /**
+     * Perform a simple team lookup and returns the <code>PartyRoleAndPartyDetail</code>.
+     * @param teamName the name to lookup
+     * @return an <code>EntityListIterator</code> of <code>PartyRoleAndPartyDetail</code>
+     * @exception RepositoryException if an error occurs
+     */
+    public EntityListIterator<PartyRoleAndPartyDetail> lookupTeams(String teamName) throws RepositoryException;
 }

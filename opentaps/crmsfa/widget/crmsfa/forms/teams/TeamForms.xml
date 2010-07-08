@@ -48,22 +48,6 @@
         </field>
     </form>
 
-    <form name="ListTeams" type="list" separate-columns="false"
-        title="List Teams"  default-title-style="tableheadtext"
-        default-widget-style="tabletext" default-tooltip-style="tabletext"
-        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
-        paginate-target="${listSortTarget}" paginate-size-field="teamsSize" paginate-index-field="teamsIndex"
-        list-name="teams">
-        <field name="groupName" title="${uiLabelMap.CommonName}" widget-style="linktext">
-            <hyperlink description="${groupName} (${partyId})" target="viewTeam">
-                <parameter param-name="partyId" from-field="partyId"/>
-            </hyperlink>
-        </field>
-        <field name="partyId" title="${uiLabelMap.CommonComments}">
-            <display-entity entity-name="PartyGroup" key-field-name="partyId" description="${comments}"/>
-        </field>
-    </form>   
-
     <form name="ListTeamMembers" type="list" separate-columns="false"
         title="List Team Members"  default-title-style="tableheadtext" target="setTeamMemberSecurityGroupIn${listSortTarget}"
         default-widget-style="tabletext" default-tooltip-style="tabletext"
