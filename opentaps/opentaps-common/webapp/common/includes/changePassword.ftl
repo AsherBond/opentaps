@@ -59,10 +59,6 @@ under the License.
       <input type="hidden" name="USERNAME" value="${username}"/>
       <table cellspacing="0">
         <tr>
-          <td align="right"><@display text="${uiLabelMap.CommonUsername}&nbsp;" class="tabletext"/></td>
-          <td>${username}</td>
-        </tr>
-        <tr>
           <td align="right"><@display text="${uiLabelMap.CommonCurrentPassword}&nbsp;" class="tabletext"/></td>
           <td align="left"><input type="password" name="PASSWORD" value="" size="20" class="inputBox"/></td>
         </tr>
@@ -71,12 +67,12 @@ under the License.
           <td align="left"><input type="password" name="newPassword" value="" size="20" class="inputBox"/></td>
         </tr>
         <tr>
-          <td align="right"><@display text="${uiLabelMap.CommonNewPasswordVerify}&nbsp;" class="tabletext"/></td>
+          <td align="right"><@display text="${uiLabelMap.OpentapsConfirmPassword}&nbsp;" class="tabletext"/></td>
           <td align="left"><input type="password" name="newPasswordVerify" value="" size="20" class="inputBox"/></td>
         </tr>
         <tr>
           <td colspan="2" align="center">
-            <input type="submit" value="${uiLabelMap.CommonSubmit}" class="loginButton"/>
+            <input type="submit" value="${uiLabelMap.PartyChangePassword}" class="loginButton"/>
           </td>
         </tr>
       </table>
