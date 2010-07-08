@@ -1313,6 +1313,5 @@
   <mapping class="org.opentaps.base.entities.ViewAmazonProducts"/>
   <mapping class="org.opentaps.base.entities.AmazonProductImageAndAck"/>
   <mapping class="org.opentaps.base.entities.AmazonBatchUpdateHistory"/>
-  <mapping class="org.opentaps.base.entities.ActivityFact"/>
   </session-factory>
 </hibernate-configuration>
