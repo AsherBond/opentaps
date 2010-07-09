@@ -209,4 +209,8 @@
     <OpentapsConfiguration configTypeId="CRMSFA_FIND_SEC_FILTER" value="Y" comments="Filter CRMSFA search and find results by security permission. Only results that the user has permission to see will be shown."/>
     -->
 
+    <OpentapsConfigurationType configTypeId="CRMSFA_MYLEADS_SHOW_OWNED_ONLY" description="If it is 'Y' then show only the owned ones as before, otherwise show all them" />
+    <OpentapsConfiguration configTypeId="CRMSFA_MYLEADS_SHOW_OWNED_ONLY" value="N" comments="Show all leads assigned to me in mylead list"/>
+
+
 </entity-engine-xml>

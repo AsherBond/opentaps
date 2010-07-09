@@ -34,6 +34,8 @@ public final class OpentapsConfigurationTypeConstants {
     public static final String ACTIVITIES_DASHBOARD_LEADS_OLD_NEW_CUTOFF = "ACTIVITIES_DASHBOARD_LEADS_OLD_NEW_CUTOFF";
     /** Filter CRMSFA search and find results by security permission.. */
     public static final String CRMSFA_FIND_SEC_FILTER = "CRMSFA_FIND_SEC_FILTER";
+    /** If it is 'Y' then show only the owned ones as before, otherwise show all them */
+    public static final String CRMSFA_MYLEADS_SHOW_OWNED_ONLY = "CRMSFA_MYLEADS_SHOW_OWNED_ONLY";
     /** For testing set configuration. */
     public static final String TEST_CONFIG_SET_CONFIG_TYPE = "TEST_CONFIG_SET_CONFIG_TYPE";
     /** For testing. */
