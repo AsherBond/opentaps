@@ -19,7 +19,6 @@ package org.opentaps.domain.crmsfa.teams;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.repository.RepositoryException;
-import java.util.List;
 
 /**
  * A special <code>Party</code> representing a TeamMember.
