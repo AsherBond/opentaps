@@ -39,6 +39,7 @@
                 
                 <!-- Data required by dashboard -->
                 <script location="component://dataimport/webapp/dataimport/WEB-INF/actions/myhome/myHome.groovy"/>
+                <java location="org.opentaps.dataimport.DataImportActions" invoke="copyLedgerSetup"/>
                 
             </actions>
             <widgets>

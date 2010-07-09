@@ -33,7 +33,10 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.PartyGroup;
+import org.opentaps.base.entities.PartyRole;
+import org.opentaps.base.entities.PartyRolePk;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.base.services.CrmsfaCreateAccountService;
@@ -41,6 +44,7 @@ import org.opentaps.base.services.CrmsfaDeactivateAccountService;
 import org.opentaps.base.services.PurchasingCreateSupplierService;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Party;
@@ -48,6 +52,7 @@ import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityInterface;
+import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.ofbiz.Repository;
@@ -1220,5 +1225,49 @@ public class PartyTests extends OpentapsTestCase {
         supplierParty.store();
     }
 
-
+    /**
+     * Test organizationRepository's getOrganizationTemplates returns the party group Company_Template.
+     * @throws GeneralException if an error occurs
+     */
+    public void testGetOrganizationTemplates() throws GeneralException {
+        OrganizationRepositoryInterface orgRepository = organizationDomain.getOrganizationRepository();
+        List<PartyGroup> partyGroups = orgRepository.getOrganizationTemplates();
+        PartyGroup partyGroup = partyGroups.get(0);
+        assertEquals("GetOrganizationTemplates should returns the party group Company_Template.", partyGroup.getPartyId(), "Company_Template");
+    }
+    
+    /**
+     * Test organizationRepository's getOrganizationWithoutLedgerSetup returns the new party with role INTERNAL_ORGANIZATIO.
+     * @throws GeneralException if an error occurs
+     */
+    public void testGetOrganizationWithoutLedgerSetup() throws GeneralException {
+        Session session = domainsLoader.getInfrastructure().getSession();
+        Party party = new Party();
+        party.setPartyTypeId("PARTY_GROUP");
+        session.save(party);
+        session.flush();
+        PartyGroup partyGroup = new PartyGroup();
+        partyGroup.setPartyId(party.getPartyId());
+        partyGroup.setGroupName("Test GroupName for testGetOrganizationWithoutLedgerSetup");
+        session.save(partyGroup);
+        PartyRole internalOrganizationRole = new PartyRole();
+        PartyRolePk pk = new PartyRolePk();
+        pk.setPartyId(party.getPartyId());
+        pk.setRoleTypeId("INTERNAL_ORGANIZATIO");
+        internalOrganizationRole.setId(pk);
+        session.save(internalOrganizationRole);
+        session.flush();
+        session.close();
+        
+        OrganizationRepositoryInterface orgRepository = organizationDomain.getOrganizationRepository();
+        List<PartyGroup> partyGroups = orgRepository.getOrganizationWithoutLedgerSetup();
+        boolean foundTheParty = false;
+        for (PartyGroup group : partyGroups) {
+            if (group.getPartyId().equals(party.getPartyId())) {
+                foundTheParty = true;
+                break;
+            }
+        }
+        assertTrue("We should found new party [" + party.getPartyId() + "] with role INTERNAL_ORGANIZATIO in the result", foundTheParty);
+    }
 }

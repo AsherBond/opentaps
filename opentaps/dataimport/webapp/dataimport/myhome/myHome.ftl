@@ -125,3 +125,22 @@
     </form>
   </@frameSection>
 </#if>
+
+  <@frameSection title=uiLabelMap.DataImportCopyLedgerSetup>
+    <form name="copyOrganizationLedgerSetupForm" method="post" action="scheduleService">
+      <@inputHidden name="SERVICE_NAME" value="copyOrganizationLedgerSetup"/>
+      <@inputHidden name="POOL_NAME" value="pool"/>
+      <@inputHidden name="_RUN_SYNC_" value="Y"/>
+      <@inputHidden name="sectionHeaderUiLabel" value="${uiLabelMap.DataImportCopyLedgerSetup}"/>
+
+      <table class="twoColumnForm">
+       <@inputSelectRow name="templateOrganizationPartyId" title=uiLabelMap.DataImportFromOrganizationTemplate list=fromOrganizationTemplates key="partyId" ; option>
+         ${option.groupName} (${option.partyId})
+       </@inputSelectRow>        
+       <@inputSelectRow name="organizationPartyId" title=uiLabelMap.DataImportToOrganization list=toOrganizations key="partyId" ; option>
+         ${option.groupName} (${option.partyId})
+       </@inputSelectRow>        
+       <@inputSubmitRow title="${uiLabelMap.CommonCopy}"/>
+      </table>
+    </form>
+  </@frameSection>

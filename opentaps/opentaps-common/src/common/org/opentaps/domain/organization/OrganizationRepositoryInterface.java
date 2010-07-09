@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.opentaps.base.entities.CustomTimePeriod;
+import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.base.entities.TermType;
 import org.opentaps.foundation.entity.EntityInterface;
@@ -175,4 +176,16 @@ public interface OrganizationRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(EntityInterface entity, String organizationPartyId, String accountingTagUsageTypeId) throws RepositoryException;
+
+    /**
+     * Returns a list of the party groups with role ORGANIZATION_TEMPL 
+     * @throws RepositoryException if an error occurs
+     */
+    public List<PartyGroup> getOrganizationTemplates() throws RepositoryException;
+    
+    /**
+     * Returns a list of party groups with role INTERNAL_ORGANIZATIO no PartyAcctgPreference 
+     * @throws RepositoryException if an error occurs
+     */
+    public List<PartyGroup> getOrganizationWithoutLedgerSetup() throws RepositoryException;
 }

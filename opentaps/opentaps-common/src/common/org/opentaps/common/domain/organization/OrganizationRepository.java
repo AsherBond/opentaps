@@ -46,6 +46,7 @@ import org.opentaps.base.entities.EnumerationType;
 import org.opentaps.base.entities.GlAccountTypeDefault;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyAcctgPreference;
+import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.base.entities.TermType;
@@ -316,5 +317,41 @@ public class OrganizationRepository extends PartyRepository implements Organizat
             }
         }
         return missings;
+    }
+
+    /** {@inheritDoc} */
+    public List<PartyGroup> getOrganizationTemplates() throws RepositoryException {
+        String hql = "select eo.party.partyGroup from PartyRole eo where eo.id.roleTypeId = 'ORGANIZATION_TEMPL'";
+        try {
+            Session session = getInfrastructure().getSession();
+            Query query = session.createQuery(hql);
+            List<PartyGroup> partyGroups = query.list();
+            return partyGroups;
+        } catch (InfrastructureException e) {
+            throw new RepositoryException(e);
+        }        
+    }
+    
+    /** {@inheritDoc} */
+    public List<PartyGroup> getOrganizationWithoutLedgerSetup() throws RepositoryException {
+        String hql = "select eo.party.partyGroup from PartyRole eo where eo.id.roleTypeId='INTERNAL_ORGANIZATIO'";
+        try {
+            Session session = getInfrastructure().getSession();
+            Query query = session.createQuery(hql);
+            List<PartyGroup> partyGroups1 = query.list();
+            hql = "select eo.party.partyGroup from PartyAcctgPreference eo";
+            query = session.createQuery(hql);
+            List<PartyGroup> partyGroups2 = query.list();
+            List<PartyGroup> partyGroups = new ArrayList<PartyGroup>();
+            for (PartyGroup partyGroup : partyGroups1) {
+                // filter the party group with role type INTERNAL_ORGANIZATIO and not have relate PartyAcctgPreference
+                if (!partyGroups2.contains(partyGroup)) {
+                    partyGroups.add(partyGroup);
+                }
+            }
+            return partyGroups;
+        } catch (InfrastructureException e) {
+            throw new RepositoryException(e);
+        }        
     }
 }
