@@ -39,6 +39,8 @@
     <bean id="opentapsSearchDomain" class="org.opentaps.search.SearchDomain"/>
     <bean id="opentapsWebAppDomain" class="org.opentaps.webapp.WebAppDomain"/>
     <bean id="opentapsDataImportDomain" class="org.opentaps.dataimport.domain.DataImportDomain"/>
+    <bean id="opentapsSecurityDomain" class="org.opentaps.common.domain.security.SecurityDomain"/>
+    <bean id="opentapsTeamDomain" class="org.opentaps.crmsfa.domain.teams.CrmTeamDomain"/>
     <!-- The bean id "domainsDirectory" is used by DomainsLoader, so do not change this.-->
     <bean id="domainsDirectory" class="org.opentaps.domain.DomainsDirectory">
         <!-- the property names reference members of DomainsDirectory class and are set using setters by Spring -->
