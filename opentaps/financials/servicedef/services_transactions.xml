@@ -77,6 +77,7 @@
             location="com.opensourcestrategies.financials.transactions.TransactionServices" invoke="reverseAcctgTrans" auth="true">
         <description>Reverse an AcctgTrans by creating another AcctgTrans with opposite AcctgTransEntries. Uses createAcctgTransAndEntries service.</description>
         <attribute name="acctgTransId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="postImmediately" type="String" mode="IN" optional="true"/>
     </service>
 
     <service name="voidPayment" engine="java" 

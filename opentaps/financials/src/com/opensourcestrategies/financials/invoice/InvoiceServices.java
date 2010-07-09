@@ -1971,8 +1971,7 @@ public final class InvoiceServices {
      * @param context the service parameters <code>Map</code>
      * @return the service response <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map voidInvoice(DispatchContext dctx, Map context) {
+    public static Map<String, Object> voidInvoice(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2006,7 +2005,7 @@ public final class InvoiceServices {
             for (GenericValue transaction : transactions) {
                 String acctgTransId = transaction.getString("acctgTransId");
                 Debug.logInfo("Reversing transaction [" + acctgTransId + "] triggered by voiding of invoice [" + invoiceId + "]", MODULE);
-                Map results = dispatcher.runSync("reverseAcctgTrans", UtilMisc.toMap("acctgTransId", acctgTransId, "userLogin", userLogin));
+                Map<String, Object> results = dispatcher.runSync("reverseAcctgTrans", UtilMisc.toMap("acctgTransId", acctgTransId, "postImmediately", "Y", "userLogin", userLogin));
                 if (ServiceUtil.isError(results)) {
                     return UtilMessage.createAndLogServiceError(results, MODULE);
                 }

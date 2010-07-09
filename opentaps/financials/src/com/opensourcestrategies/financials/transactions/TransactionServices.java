@@ -40,12 +40,12 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.PartyAcctgPreference;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.base.entities.AcctgTransEntry;
-import org.opentaps.base.entities.PartyAcctgPreference;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.Organization;
@@ -142,14 +142,14 @@ public final class TransactionServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map reverseAcctgTrans(DispatchContext dctx, Map context) {
+    public static Map<String, Object> reverseAcctgTrans(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
         String acctgTransId = (String) context.get("acctgTransId");
+        String postImmediately = (String) context.get("postImmediately");
 
         if (!security.hasEntityPermission("FINANCIALS", "_REVERSE", userLogin)) {
             return ServiceUtil.returnError(UtilProperties.getMessage("FinancialsUiLabels", "FinancialsServiceErrorNoPermission", locale));
@@ -164,16 +164,14 @@ public final class TransactionServices {
             }
 
             // Get the related AcctgTransEntry records
-            List acctgTransEntries = delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", acctgTransId), UtilMisc.toList("acctgTransEntrySeqId"));
+            List<GenericValue> acctgTransEntries = delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", acctgTransId), UtilMisc.toList("acctgTransEntrySeqId"));
             if (acctgTrans == null) {
                 return ServiceUtil.returnError(UtilProperties.getMessage("FinancialsUiLabels", "FinancialsServiceErrorReverseTransactionNoEntries", locale) + ":" + acctgTransId);
             }
 
             // Toggle the debit/credit flag, set the reconcileStatusId and remove the acctgTransId from each AcctgTransEntry
-            Iterator ateit = acctgTransEntries.iterator();
             String organizationPartyId = null;
-            while (ateit.hasNext()) {
-                GenericValue acctgTransEntry = (GenericValue) ateit.next();
+            for (GenericValue acctgTransEntry : acctgTransEntries) {
                 if (acctgTransEntry.getString("debitCreditFlag").equals("C")) {
                     acctgTransEntry.set("debitCreditFlag", "D");
                 } else if (acctgTransEntry.getString("debitCreditFlag").equals("D")) {
@@ -187,7 +185,7 @@ public final class TransactionServices {
             }
 
             // Assemble the context for the service that creates and posts AcctgTrans and AcctgTransEntry records
-            Map serviceMap = acctgTrans.getAllFields();
+            Map<String, Object> serviceMap = acctgTrans.getAllFields();
             serviceMap.remove("acctgTransId");
             serviceMap.remove("createdStamp");
             serviceMap.remove("createdTxStamp");
@@ -196,13 +194,17 @@ public final class TransactionServices {
 
             // check the PartyAcctgPreference autoPostReverseAcctgTrans flag: if set to N
             // set the createAcctgTransAndEntries service not to auto post the transaction and make sure the isPosted flag is set to N
-            if (UtilValidate.isEmpty(organizationPartyId)) {
-                Debug.logWarning("Got empty organizationPartyId for transaction [" + acctgTransId + "], cannot determine autoPostReverseAcctgTrans", MODULE);
-            } else {
-                GenericValue pref = delegator.findByPrimaryKeyCache("PartyAcctgPreference", UtilMisc.toMap("partyId", organizationPartyId));
-                if ("N".equals(pref.get("autoPostReverseAcctgTrans"))) {
-                    serviceMap.put("isPosted", "N");
-                    serviceMap.put("autoPostReverseAcctgTrans", "N");
+            // Also, we have to take into account postImmediately attribute that overrides autoPostReverseAcctgTrans and enforces posting
+            // in any case.
+            if (!"Y".equals(postImmediately)) {
+                if (UtilValidate.isEmpty(organizationPartyId)) {
+                    Debug.logWarning("Got empty organizationPartyId for transaction [" + acctgTransId + "], cannot determine autoPostReverseAcctgTrans", MODULE);
+                } else {
+                    GenericValue pref = delegator.findByPrimaryKeyCache("PartyAcctgPreference", UtilMisc.toMap("partyId", organizationPartyId));
+                    if ("N".equals(pref.get("autoPostReverseAcctgTrans"))) {
+                        serviceMap.put("isPosted", "N");
+                        serviceMap.put("autoPostReverseAcctgTrans", "N");
+                    }
                 }
             }
 
@@ -214,12 +216,12 @@ public final class TransactionServices {
             serviceMap.put("userLogin", userLogin);
 
             // Call the service
-            Map createAcctgTransAndEntriesResult = dispatcher.runSync("createAcctgTransAndEntries", serviceMap);
+            Map<String, Object> createAcctgTransAndEntriesResult = dispatcher.runSync("createAcctgTransAndEntries", serviceMap);
             if (ServiceUtil.isError(createAcctgTransAndEntriesResult)) {
                 return createAcctgTransAndEntriesResult;
             }
 
-            Map serviceResult = ServiceUtil.returnSuccess();
+            Map<String, Object> serviceResult = ServiceUtil.returnSuccess();
             serviceResult.put("acctgTransId", createAcctgTransAndEntriesResult.get("acctgTransId"));
             return serviceResult;
 
@@ -238,8 +240,7 @@ public final class TransactionServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map voidPayment(DispatchContext dctx, Map context) {
+    public static Map<String, Object> voidPayment(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -265,24 +266,21 @@ public final class TransactionServices {
             }
 
             // Change the Payment status to void
-            Map setPaymentStatusResult = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("paymentId", paymentId, "statusId", "PMNT_VOID", "userLogin", userLogin));
+            Map<String, Object> setPaymentStatusResult = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("paymentId", paymentId, "statusId", "PMNT_VOID", "userLogin", userLogin));
             if (ServiceUtil.isError(setPaymentStatusResult)) {
                 return setPaymentStatusResult;
             }
 
             // Iterate through related PaymentApplications
-            List paymentApplications = delegator.getRelated("PaymentApplication", payment);
-            Iterator pait = paymentApplications.iterator();
-            while (pait.hasNext()) {
-                GenericValue paymentApplication = (GenericValue) pait.next();
-
+            List<GenericValue> paymentApplications = delegator.getRelated("PaymentApplication", payment);
+            for (GenericValue paymentApplication : paymentApplications) {
                 // Set the status of related invoice from INVOICE_PAID to INVOICE_READY, if necessary
                 if (paymentApplication.getString("invoiceId") != null) {
                     GenericValue invoice = delegator.getRelatedOne("Invoice", paymentApplication);
                     if (invoice.getString("statusId").equals("INVOICE_PAID")) {
                         invoice.set("paidDate", null);
                         delegator.store(invoice);
-                        Map setInvoiceStatusResult = dispatcher.runSync("setInvoiceStatus", UtilMisc.toMap("invoiceId", invoice.getString("invoiceId"), "statusId", "INVOICE_READY", "userLogin", userLogin));
+                        Map<String, Object> setInvoiceStatusResult = dispatcher.runSync("setInvoiceStatus", UtilMisc.toMap("invoiceId", invoice.getString("invoiceId"), "statusId", "INVOICE_READY", "userLogin", userLogin));
                         if (ServiceUtil.isError(setInvoiceStatusResult)) {
                             return setInvoiceStatusResult;
                         }
@@ -291,20 +289,15 @@ public final class TransactionServices {
 
                 // Remove the PaymentApplication
                 delegator.removeValue(paymentApplication);
-
             }
 
             // Iterate through related AcctgTrans, calling the reverseAcctgTrans service on each
-            List acctgTransList = delegator.getRelated("AcctgTrans", payment);
-            Iterator atlit = acctgTransList.iterator();
-            while (atlit.hasNext()) {
-                GenericValue acctgTrans = (GenericValue) atlit.next();
-                Map reverseAcctgTransResult = dispatcher.runSync("reverseAcctgTrans", UtilMisc.toMap("acctgTransId", acctgTrans.getString("acctgTransId"), "userLogin", userLogin));
+            List<GenericValue> acctgTransList = delegator.getRelated("AcctgTrans", payment);
+            for (GenericValue acctgTrans : acctgTransList) {
+                Map<String, Object> reverseAcctgTransResult = dispatcher.runSync("reverseAcctgTrans", UtilMisc.toMap("acctgTransId", acctgTrans.getString("acctgTransId"), "postImmediately", "Y", "userLogin", userLogin));
                 if (ServiceUtil.isError(reverseAcctgTransResult)) {
                     return reverseAcctgTransResult;
                 }
-
-
             }
 
             return ServiceUtil.returnSuccess();
