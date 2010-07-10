@@ -498,6 +498,8 @@ public final class SecurityPermissionConstants {
     public static final String ORDERMGR_UPDATE = "ORDERMGR_UPDATE";
     /** View operations in the Order Manager.. */
     public static final String ORDERMGR_VIEW = "ORDERMGR_VIEW";
+    /** Permission to configure organizations.. */
+    public static final String ORG_CONFIG = "ORG_CONFIG";
     /** ALL operations in the Party Manager.. */
     public static final String PARTYMGR_ADMIN = "PARTYMGR_ADMIN";
     /** Create communication event, any from/to party.. */

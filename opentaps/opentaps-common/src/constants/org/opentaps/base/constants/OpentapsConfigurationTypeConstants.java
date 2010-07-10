@@ -34,7 +34,7 @@ public final class OpentapsConfigurationTypeConstants {
     public static final String ACTIVITIES_DASHBOARD_LEADS_OLD_NEW_CUTOFF = "ACTIVITIES_DASHBOARD_LEADS_OLD_NEW_CUTOFF";
     /** Filter CRMSFA search and find results by security permission.. */
     public static final String CRMSFA_FIND_SEC_FILTER = "CRMSFA_FIND_SEC_FILTER";
-    /** If it is 'Y' then show only the owned ones as before, otherwise show all them */
+    /** If it is 'Y' then show only the owned ones as before, otherwise show all them. */
     public static final String CRMSFA_MYLEADS_SHOW_OWNED_ONLY = "CRMSFA_MYLEADS_SHOW_OWNED_ONLY";
     /** For testing set configuration. */
     public static final String TEST_CONFIG_SET_CONFIG_TYPE = "TEST_CONFIG_SET_CONFIG_TYPE";
@@ -44,10 +44,6 @@ public final class OpentapsConfigurationTypeConstants {
     public static final String TEST_CONFIG_UNCONFIGURED_TYPE = "TEST_CONFIG_UNCONFIGURED_TYPE";
     /** Parent configuration type for UI elements. */
     public static final String UI = "UI";
-    /** Configures a custom the footer text which will replace the opentaps one. */
-    public static final String UI_FOOTER_TEXT = "UI_FOOTER_TEXT";
-    /** Configures whether the footer will be shown or not. */
-    public static final String UI_FOOTER_TEXT_SHOW = "UI_FOOTER_TEXT_SHOW";
     /** Configures whether the help link will be shown or not. */
     public static final String UI_HELP_LINK_SHOW = "UI_HELP_LINK_SHOW";
     /** Configures the image URI used for the main logo. */
