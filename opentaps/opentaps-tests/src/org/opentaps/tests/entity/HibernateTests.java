@@ -1518,5 +1518,22 @@ public class HibernateTests extends OpentapsTestCase {
         tx.commit();
         Debug.logInfo("createTestData: created [" + testEntityId1 + "] and [" + testEntityId2 + "]", MODULE);
     }
+    
+    /**
+     * Tests hibernate session getNextSeqId if sync with ofbiz
+     * @throws Exception if an error occurs
+     */    
+    public void testHibernateGetNextSeqIdSyncWithOfbiz() throws Exception {
+        reOpenSession();
+        // get testId from hibernate session firstly, then get testId from ofbiz
+        String nextTestIdFromHibernate = session.getNextSeqId("TestEntity");
+        String nextTestIdFromOfbiz = delegator.getNextSeqId("TestEntity");
+        assertNotEquals("We should get different ids from hibernate and ofbiz delegator on call getNextSeqId at the same time.", nextTestIdFromHibernate, nextTestIdFromOfbiz);
+        
+        // get testId from ofbiz firstly, then get testId from hibernate session
+        nextTestIdFromOfbiz = delegator.getNextSeqId("TestEntity");
+        nextTestIdFromHibernate = session.getNextSeqId("TestEntity");
+        assertNotEquals("We should get different ids from hibernate and ofbiz delegator on call getNextSeqId at the same time.", nextTestIdFromHibernate, nextTestIdFromOfbiz);
+    }
 
 }
