@@ -18,7 +18,6 @@ package org.opentaps.foundation.entity.hibernate;
 
 import java.io.Serializable;
 import java.sql.Connection;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -517,11 +516,7 @@ public class Session implements org.hibernate.Session {
      *@return next seq id for the given sequence name
      */
     public String getNextSeqId(String seqName) {
-        //open new transcation to do this job
-        org.hibernate.Session newSession = getSessionFactory().openSession();
-        // change format to String.
-        DecimalFormat df = new DecimalFormat("0000");
-        String nextSeqId = df.format(HibernateUtil.getNextSeqId(newSession, seqName));
+        String nextSeqId = delegator.getNextSeqId(seqName);
         Debug.logVerbose("Generate seqId [" + nextSeqId + "] for " + seqName, MODULE);
         return nextSeqId;
     }
