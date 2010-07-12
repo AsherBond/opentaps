@@ -28,10 +28,10 @@ public final class OpentapsConfigurationTypeConstants {
 
     /** Color for new activities on the activities dashboard. */
     public static final String ACTIVITIES_DASHBOARD_LEADS_NEW_COLOR = "ACTIVITIES_DASHBOARD_LEADS_NEW_COLOR";
-    /** Color for older activities on the activities dashboard. */
-    public static final String ACTIVITIES_DASHBOARD_LEADS_OLD_COLOR = "ACTIVITIES_DASHBOARD_LEADS_OLD_COLOR";
     /** Color for no activities on the activities dashboard. */
     public static final String ACTIVITIES_DASHBOARD_LEADS_NO_ACTIVITY_COLOR = "ACTIVITIES_DASHBOARD_LEADS_NO_ACTIVITY_COLOR";
+    /** Color for older activities on the activities dashboard. */
+    public static final String ACTIVITIES_DASHBOARD_LEADS_OLD_COLOR = "ACTIVITIES_DASHBOARD_LEADS_OLD_COLOR";
     /** Cut off in number of days for old versus new activities on the dashboard. */
     public static final String ACTIVITIES_DASHBOARD_LEADS_OLD_NEW_CUTOFF = "ACTIVITIES_DASHBOARD_LEADS_OLD_NEW_CUTOFF";
     /** Filter CRMSFA search and find results by security permission.. */
