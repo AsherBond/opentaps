@@ -39,6 +39,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
@@ -68,7 +69,7 @@ public class JFreeActivitiesCharts extends Service {
     public static final int CHART_HEIGHT = 300;
 
     /**
-     * Snapshot chart that shows party leads old and recent activities.
+     * Snapshot chart that shows the breakdown of leads according to their last activity, in Old / Recent / No activity categories.
      * @param cutoffDays Number of days that cuts off from today date and make it reading point for old and recent activties.
      * @param locale a <code>Locale</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
@@ -78,6 +79,21 @@ public class JFreeActivitiesCharts extends Service {
      * @exception Exception if an error occurs
      */
     public static String createActivitiesByLeadSnapshotChart(int cutoffDays, Locale locale, LocalDispatcher dispatcher, GenericValue user, TimeZone timeZone) throws Exception {
+        return createActivitiesByLeadSnapshotChart(cutoffDays, null, locale, dispatcher, user, timeZone);
+    }
+
+    /**
+     * Snapshot chart that shows the breakdown of leads according to their last activity, in Old / Recent / No activity categories.
+     * @param cutoffDays Number of days that cuts off from today date and make it reading point for old and recent activties.
+     * @param allowedLeadPartyIds if not null, will only account those leads in the chart
+     * @param locale a <code>Locale</code> value
+     * @param dispatcher a <code>LocalDispatcher</code> value
+     * @param user a <code>GenericValue</code> value
+     * @param timeZone a <code>TimeZone</code> value
+     * @return file name of the chart PNG
+     * @exception Exception if an error occurs
+     */
+    public static String createActivitiesByLeadSnapshotChart(int cutoffDays, Set<String> allowedLeadPartyIds, Locale locale, LocalDispatcher dispatcher, GenericValue user, TimeZone timeZone) throws Exception {
         Map<String, Object> uiLabelMap = UtilMessage.getUiLabels(locale);
         DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(user));
         PartyRepositoryInterface rep = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository();
@@ -87,14 +103,14 @@ public class JFreeActivitiesCharts extends Service {
         Long readingDateDimId = lookupDateDimIdForCutoff(cutoffDays, timeZone, locale, rep.getInfrastructure());
 
         // Get the ActivityFacts grouped by Lead
-        Map<String, List<ActivityFact>> facts = findLeadsActivitiesGroupedBy(ActivityFact.Fields.targetPartyId, rep);
+        Map<String, List<ActivityFact>> facts = findLeadsActivitiesGroupedBy(ActivityFact.Fields.targetPartyId, allowedLeadPartyIds, rep);
 
         // Get totals of old, recent and no activity leads
         Set<String> oldPartyIds = new TreeSet<String>();
         Set<String> recentPartyIds = new TreeSet<String>();
         Set<String> noActivityPartyIds = new TreeSet<String>();
         // get all leads
-        noActivityPartyIds.addAll(findAllLeadIds(rep));
+        noActivityPartyIds.addAll(findAllLeadIds(allowedLeadPartyIds, rep));
 
         for (String targetPartyId : facts.keySet()) {
            List<ActivityFact> activities = facts.get(targetPartyId);
@@ -165,13 +181,22 @@ public class JFreeActivitiesCharts extends Service {
         return UtilEtl.lookupDateDimensionForTimestamp(getTimestampFromCutoffDays(cutoffDays), infrastructure.getDelegator());
     }
 
-    private static Set<String> findAllLeadIds(PartyRepositoryInterface repository) throws RepositoryException {
-        return Entity.getDistinctFieldValues(String.class, repository.findList(PartyRole.class, repository.map(PartyRole.Fields.roleTypeId, RoleTypeConstants.PROSPECT)), PartyRole.Fields.partyId);
+    private static Set<String> findAllLeadIds(Set<String> allowedLeadPartyIds, PartyRepositoryInterface repository) throws RepositoryException {
+        EntityCondition condition = EntityCondition.makeCondition(PartyRole.Fields.roleTypeId.name(), RoleTypeConstants.PROSPECT);
+        if (allowedLeadPartyIds != null) {
+            condition = EntityCondition.makeCondition(condition, EntityCondition.makeCondition(PartyRole.Fields.partyId.name(), EntityOperator.IN, allowedLeadPartyIds));
+        }
+
+        return Entity.getDistinctFieldValues(String.class, repository.findList(PartyRole.class, condition), PartyRole.Fields.partyId);
     }
 
-    private static Map<String, List<ActivityFact>> findLeadsActivitiesGroupedBy(ActivityFact.Fields groupedByField, PartyRepositoryInterface repository) throws RepositoryException {
+    private static Map<String, List<ActivityFact>> findLeadsActivitiesGroupedBy(ActivityFact.Fields groupedByField, Set<String> allowedLeadPartyIds, PartyRepositoryInterface repository) throws RepositoryException {
         // Get the ActivityFact records grouped by team member or by lead
-        List<ActivityFact> prospectActivityFacts = repository.findList(ActivityFact.class, EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD));
+        EntityCondition condition = EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD);
+        if (allowedLeadPartyIds != null) {
+            condition = EntityCondition.makeCondition(condition, EntityCondition.makeCondition(PartyRole.Fields.partyId.name(), EntityOperator.IN, allowedLeadPartyIds));
+        }
+        List<ActivityFact> prospectActivityFacts = repository.findList(ActivityFact.class, condition);
         Debug.logInfo("findLeadsActivitiesGroupedBy, found ActivityFact [" + prospectActivityFacts + "]", MODULE);
         return Entity.groupByFieldValues(String.class, prospectActivityFacts, groupedByField);
     }
