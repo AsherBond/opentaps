@@ -39,6 +39,7 @@ import com.gwtext.client.widgets.form.Field;
 import com.gwtext.client.widgets.layout.FormLayoutData;
 import org.opentaps.gwt.common.client.messages.CommonMessages;
 import org.opentaps.gwt.common.client.suggest.EntityAutocomplete;
+import com.google.gwt.user.client.Window.Location;
 
 /**
  * Defines some utility methods.
@@ -102,12 +103,22 @@ public abstract class UtilUi {
     }-*/;
 
     /**
+     * Checks if the current URL has the given parameter.
+     * @param parameter a <code>String</code> value
+     * @return a <code>Boolean</code> value
+     */
+    public static Boolean hasUrlParameter(String parameter) {
+        Map<String, List<String>> params = Location.getParameterMap();
+        return params.containsKey(parameter);
+    }
+
+    /**
      * Gets a parameter from the current URL.
      * @param parameter a <code>String</code> value
      * @return the parameter value
      */
     public static String getUrlParameter(String parameter) {
-        return com.google.gwt.user.client.Window.Location.getParameter(parameter);
+        return Location.getParameter(parameter);
     }
 
     /**
@@ -126,7 +137,9 @@ public abstract class UtilUi {
      */
     public static String getAndSetUrlParameter(Field field) {
         String p = getUrlParameter(field.getName());
-        field.setValue(p);
+        if (p != null) {
+            field.setValue(p);
+        }
         return p;
     }
 
@@ -333,11 +346,20 @@ public abstract class UtilUi {
         return array[index][field];
     }-*/;
 
-    // a String empty test
+    /**
+     * Checks if the given String is empty or null.
+     * @param s a <code>String</code> value
+     * @return a <code>boolean</code> value
+     */
     public static boolean isEmpty(String s) {
         return (s == null) || (s.length() == 0);
     }
 
+    /**
+     * Checks if the given String is a number.
+     * @param s a <code>String</code> value
+     * @return a <code>boolean</code> value
+     */
     public static native boolean isNumber(String s) /*-{
         return (s - 0) == s && s.length > 0;
     }-*/;
@@ -373,6 +395,11 @@ public abstract class UtilUi {
 
     // Common toString methods, useful for debugging and logging
 
+    /**
+     * Formats a list of objects into a string value.
+     * @param list an <code>Iterable</code> of objects
+     * @return a <code>String</code> value
+     */
     public static String toString(Iterable<Object> list) {
         StringBuilder sb = new StringBuilder("[");
         for (Object o : list) {
@@ -382,6 +409,11 @@ public abstract class UtilUi {
         return sb.toString();
     }
 
+    /**
+     * Formats an array of Record into a string value.
+     * @param list an array of <code>Record</code>
+     * @return a <code>String</code> value
+     */
     public static String toString(Record[] list) {
         StringBuilder sb = new StringBuilder("[");
         for (Record r : list) {
@@ -391,6 +423,11 @@ public abstract class UtilUi {
         return sb.toString();
     }
 
+    /**
+     * Formats an object into a string value.
+     * @param o an <code>Object</code> value
+     * @return the <code>String</code> value of the given object, or the string "NULL" if the object was null
+     */
     public static String toString(Object o) {
         if (o == null) {
             return "NULL";
@@ -398,6 +435,11 @@ public abstract class UtilUi {
         return o.toString();
     }
 
+    /**
+     * Formats a Record into a string value.
+     * @param rec a <code>Record</code> value
+     * @return a <code>String</code> value
+     */
     public static String toString(Record rec) {
         if (rec == null) {
             return "NULL";
@@ -411,6 +453,11 @@ public abstract class UtilUi {
         return sb.toString();
     }
 
+    /**
+     * Formats an EntityAutocomplete into a string value.
+     * @param autocompleter a <code>EntityAutocomplete</code> value
+     * @return a <code>String</code> value
+     */
     public static String toString(EntityAutocomplete autocompleter) {
         StringBuilder sb = new StringBuilder("[");
         sb.append(autocompleter.getName()).append("{").append(autocompleter.getId()).append("}@").append(autocompleter.getUrl()).append("]");
@@ -509,6 +556,11 @@ public abstract class UtilUi {
         Log.error(formatLog(message, module, method), t);
     }
 
+    /**
+     * Formats a Date into a string value using the default DATE_FORMAT.
+     * @param date a <code>Date</code> value
+     * @return a <code>String</code> value
+     */
     public static String toDateString(Date date) {
         if (date == null) {
             return null;
@@ -516,6 +568,11 @@ public abstract class UtilUi {
         return DateTimeFormat.getFormat(DATE_FORMAT).format(date);
     }
 
+    /**
+     * Formats a Date into a string value using the default DATE_TIME_FORMAT.
+     * @param date a <code>Date</code> value
+     * @return a <code>String</code> value
+     */
     public static String toDateTimeString(Date date) {
         if (date == null) {
             return null;
@@ -523,10 +580,20 @@ public abstract class UtilUi {
         return DateTimeFormat.getFormat(DATE_TIME_FORMAT).format(date);
     }
 
+    /**
+     * Creates a blank widget which has the proper spacing to be used in a Form.
+     * @return a <code>Widget</code> value
+     */
     public static Widget makeBlankFormCell() {
         return new HTML("<span class='gwt-blank-field'>&nbsp;</span>");
     }
 
+    /**
+     * Removes trailing zeros after the 'comma' from a string representing a number.
+     * For example converts "100.00" into "100", "100.00100" into "100.001", etc ...
+     * @param number a <code>String</code> value
+     * @return a <code>String</code> value
+     */
     public static String removeTrailingZeros(String number) {
         // convert XX.XX000 into XX.XX
         String rep = number.replaceFirst("^(-?\\d+\\.0*[^0]+)0*\\s*$", "$1");
@@ -535,11 +602,14 @@ public abstract class UtilUi {
         return rep;
     }
 
+    /**
+     * A converter using {@link #removeTrailingZeros} to be used in grids or other widgets processing data records.
+     */
     public static final Converter CLEAN_TRAILING_ZERO_CONVERTER = new Converter() {
-                // trim trailing zeros
-                public String format(String input) {
-                    return removeTrailingZeros(input);
-                }
-            };
+            // trim trailing zeros
+            public String format(String input) {
+                return removeTrailingZeros(input);
+            }
+        };
 
 }
