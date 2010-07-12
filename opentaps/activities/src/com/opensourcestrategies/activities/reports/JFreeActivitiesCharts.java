@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -112,16 +113,18 @@ public class JFreeActivitiesCharts extends Service {
         // get all leads
         noActivityPartyIds.addAll(findAllLeadIds(allowedLeadPartyIds, rep));
 
+        // activities are sorted by dateDimId desc, so we can break early
         for (String targetPartyId : facts.keySet()) {
            List<ActivityFact> activities = facts.get(targetPartyId);
 
            for (ActivityFact fact : activities) {
+               noActivityPartyIds.remove(targetPartyId);
                if (fact.getDateDimId() < readingDateDimId) {
                    oldPartyIds.add(targetPartyId);
                } else {
                    recentPartyIds.add(targetPartyId);
                }
-               noActivityPartyIds.remove(targetPartyId);
+               break;
            }
         }
 
@@ -187,7 +190,7 @@ public class JFreeActivitiesCharts extends Service {
             condition = EntityCondition.makeCondition(condition, EntityCondition.makeCondition(PartyRole.Fields.partyId.name(), EntityOperator.IN, allowedLeadPartyIds));
         }
 
-        return Entity.getDistinctFieldValues(String.class, repository.findList(PartyRole.class, condition), PartyRole.Fields.partyId);
+        return Entity.getDistinctFieldValues(String.class, repository.findList(PartyRole.class, condition, Arrays.asList(PartyRole.Fields.partyId.name()), Arrays.asList(PartyRole.Fields.partyId.asc())), PartyRole.Fields.partyId);
     }
 
     private static Map<String, List<ActivityFact>> findLeadsActivitiesGroupedBy(ActivityFact.Fields groupedByField, Set<String> allowedLeadPartyIds, PartyRepositoryInterface repository) throws RepositoryException {
@@ -196,7 +199,8 @@ public class JFreeActivitiesCharts extends Service {
         if (allowedLeadPartyIds != null) {
             condition = EntityCondition.makeCondition(condition, EntityCondition.makeCondition(PartyRole.Fields.partyId.name(), EntityOperator.IN, allowedLeadPartyIds));
         }
-        List<ActivityFact> prospectActivityFacts = repository.findList(ActivityFact.class, condition);
+        // order by dateDimId desc, so we can skip older activities when doing the breakdown
+        List<ActivityFact> prospectActivityFacts = repository.findList(ActivityFact.class, condition, Arrays.asList(ActivityFact.Fields.targetPartyId.name(), ActivityFact.Fields.dateDimId.name()), Arrays.asList(ActivityFact.Fields.targetPartyId.asc(), ActivityFact.Fields.dateDimId.desc()));
         Debug.logInfo("findLeadsActivitiesGroupedBy, found ActivityFact [" + prospectActivityFacts + "]", MODULE);
         return Entity.groupByFieldValues(String.class, prospectActivityFacts, groupedByField);
     }
