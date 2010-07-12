@@ -1242,7 +1242,7 @@ public class PartyTests extends OpentapsTestCase {
      */
     public void testGetOrganizationWithoutLedgerSetup() throws GeneralException {
         Session session = domainsLoader.getInfrastructure().getSession();
-        Party party = new Party();
+        org.opentaps.base.entities.Party party = new org.opentaps.base.entities.Party();
         party.setPartyTypeId("PARTY_GROUP");
         session.save(party);
         session.flush();
