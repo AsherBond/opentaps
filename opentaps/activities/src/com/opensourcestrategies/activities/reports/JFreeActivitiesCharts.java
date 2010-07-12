@@ -92,8 +92,7 @@ public class JFreeActivitiesCharts extends Service {
         // Get the ActivityFacts grouped by Lead
         Map<String, List<ActivityFact>> leads = findLeadsActivitiesGroupedBy(ActivityFact.Fields.targetPartyId, rep);
 
-        // Add grouped data to chart.
-
+        // Get totals of old and recent activities per lead
         for (String targetPartyId : leads.keySet()) {
            List<ActivityFact> activities = leads.get(targetPartyId);
 
@@ -117,12 +116,12 @@ public class JFreeActivitiesCharts extends Service {
 
            Debug.logInfo("Activity by lead [" + targetPartyId + "]: old = " + oldActivityCount + ", new = " + newActivityCount, MODULE);
 
-           dataset.addValue(newActivityCount, (String) uiLabelMap.get("LeadManagementRecentActivities"), targetPartyLabel);
-           dataset.addValue(oldActivityCount, (String) uiLabelMap.get("LeadManagementOldActivities"), targetPartyLabel);
+           dataset.addValue(newActivityCount, (String) uiLabelMap.get("ActivitiesRecent"), targetPartyLabel);
+           dataset.addValue(oldActivityCount, (String) uiLabelMap.get("ActivitiesOlder"), targetPartyLabel);
         }
 
         // set up the chart
-        return chartDataSet(dataset, (String) uiLabelMap.get("LeadManagementActivityByLead"), (String) uiLabelMap.get("LeadManagementOfActivities"), (String) uiLabelMap.get("CrmLead"), rep.getInfrastructure());
+        return chartDataSet(dataset, (String) uiLabelMap.get("ActivitiesLeadBreakdown"), (String) uiLabelMap.get("ActivitiesNumberOfActivities"), (String) uiLabelMap.get("CrmLead"), rep.getInfrastructure());
     }
 
     /**
@@ -169,12 +168,12 @@ public class JFreeActivitiesCharts extends Service {
 
            Debug.logInfo("Activity by sales rep [" + teamMemberPartyId + "] : old = " + oldActivityCount + ", new = " + newActivityCount, MODULE);
 
-           dataset.addValue(newActivityCount, (String) uiLabelMap.get("LeadManagementRecentActivities"), targetPartyLabel);
-           dataset.addValue(oldActivityCount, (String) uiLabelMap.get("LeadManagementOldActivities"), targetPartyLabel);
+           dataset.addValue(newActivityCount, (String) uiLabelMap.get("ActivitiesRecent"), targetPartyLabel);
+           dataset.addValue(oldActivityCount, (String) uiLabelMap.get("ActivitiesOlder"), targetPartyLabel);
         }
 
         // set up the chart
-        return chartDataSet(dataset, (String) uiLabelMap.get("LeadManagementActivityBySalesRep"), (String) uiLabelMap.get("LeadManagementOfActivities"), (String) uiLabelMap.get("LeadManagementSalesRep"), rep.getInfrastructure());
+        return chartDataSet(dataset, (String) uiLabelMap.get("ActivitiesSalesRepBreakdown"), (String) uiLabelMap.get("ActivitiesNumberOfActivities"), (String) uiLabelMap.get("CrmSalesRep"), rep.getInfrastructure());
     }
 
     private static long countActivity(ActivityFact fact) {

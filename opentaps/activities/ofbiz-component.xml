@@ -26,11 +26,7 @@
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
     <resource-loader name="main" type="component"/>
 
-    <!-- class path for Java build files, config properties files, and script files 
     <classpath type="dir" location="config"/>
-    <classpath type="dir" location="script"/>
-    <classpath type="jar" location="lib/*"/>
-     -->
     <classpath type="jar" location="build/lib/*"/>
     
     <!-- entity group definition files -->
