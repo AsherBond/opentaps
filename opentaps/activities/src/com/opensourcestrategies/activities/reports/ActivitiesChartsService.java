@@ -182,7 +182,7 @@ public class ActivitiesChartsService extends DomainService {
     // Service methods
 
     /**
-     * Snapshot chart that shows the breakdown of leads according to their last activity, in Recent / Old / No activity categories.
+     * Snapshot chart that shows the breakdown of Leads according to their last activity, in Recent / Old / No activity categories.
      * @exception ServiceException if an error occurs
      */
     public void createActivitiesByLeadSnapshotChart() throws ServiceException {
@@ -194,7 +194,33 @@ public class ActivitiesChartsService extends DomainService {
 
             // Get the ActivityFacts grouped by Lead
             Map<String, List<ActivityFact>> facts = findLeadsActivitiesGroupedBy(ActivityFact.Fields.targetPartyId, rep);
+            createActivitiesSnapshotChartFromGroupedActivities(expandLabel("ActivitiesLeadBreakdown"), facts, readingDateDimId, rep);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
+    }
 
+    /**
+     * Snapshot chart that shows the breakdown of Sales Reps according to their last activity, in Recent / Old / No activity categories.
+     * @exception ServiceException if an error occurs
+     */
+    public void createActivitiesBySalesRepSnapshotChart() throws ServiceException {
+        try {
+            PartyRepositoryInterface rep = getDomainsDirectory().getPartyDomain().getPartyRepository();
+
+            // Get date dimension ID according to the cutoff
+            Long readingDateDimId = lookupDateDimIdForCutoff();
+
+            // Get the ActivityFacts grouped by Sales Representative
+            Map<String, List<ActivityFact>> facts = findLeadsActivitiesGroupedBy(ActivityFact.Fields.teamMemberPartyId, rep);
+            createActivitiesSnapshotChartFromGroupedActivities(expandLabel("ActivitiesSalesRepBreakdown"), facts, readingDateDimId, rep);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    private void createActivitiesSnapshotChartFromGroupedActivities(String chartTitle, Map<String, List<ActivityFact>> facts, Long readingDateDimId, PartyRepositoryInterface rep) throws ServiceException {
+        try {
             // Get totals of old, recent and no activity leads
             oldPartyIds = new TreeSet<String>();
             recentPartyIds = new TreeSet<String>();
@@ -203,15 +229,15 @@ public class ActivitiesChartsService extends DomainService {
             noActivityPartyIds.addAll(findAllLeadIds(allowedLeadPartyIds, rep));
 
             // activities are sorted by dateDimId desc, so we can break early
-            for (String targetPartyId : facts.keySet()) {
-                List<ActivityFact> activities = facts.get(targetPartyId);
+            for (String teamMemberPartyId : facts.keySet()) {
+                List<ActivityFact> activities = facts.get(teamMemberPartyId);
 
                 for (ActivityFact fact : activities) {
-                    noActivityPartyIds.remove(targetPartyId);
+                    noActivityPartyIds.remove(teamMemberPartyId);
                     if (fact.getDateDimId() < readingDateDimId) {
-                        oldPartyIds.add(targetPartyId);
+                        oldPartyIds.add(teamMemberPartyId);
                     } else {
-                        recentPartyIds.add(targetPartyId);
+                        recentPartyIds.add(teamMemberPartyId);
                     }
                     break;
                 }
@@ -220,7 +246,7 @@ public class ActivitiesChartsService extends DomainService {
             // make sure there is no double accounting of recent leads in old
             oldPartyIds.removeAll(recentPartyIds);
 
-            chartFileName = createRONPieChart(expandLabel("ActivitiesLeadBreakdown"), recentPartyIds.size(), oldPartyIds.size(), noActivityPartyIds.size());
+            chartFileName = createRONPieChart(chartTitle, recentPartyIds.size(), oldPartyIds.size(), noActivityPartyIds.size());
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         } catch (InfrastructureException e) {
