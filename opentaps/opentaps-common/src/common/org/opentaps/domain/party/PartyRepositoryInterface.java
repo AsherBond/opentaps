@@ -214,7 +214,7 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public Set<Party> getPartyByName(String firstName, String lastName) throws RepositoryException;
-    
+
     /**
      * Finds the list of <code>PartyGroup</code> matching the given group name.
      * @return the list of <code>PartyGroup</code> matching the name
@@ -222,7 +222,7 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public Set<PartyGroup> getPartyGroupByGroupName(String groupName) throws RepositoryException;
-    
+
     /**
      * Finds the list of <code>PartyGroup</code> matching the given group name and roleTypeId.
      * @return the list of <code>PartyGroup</code> matching the name
@@ -231,13 +231,13 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public Set<PartyGroup> getPartyGroupByGroupNameAndRoleType(String groupName, String roleTypeId) throws RepositoryException;
-    
+
     /**
      * Finds the list of non-expired <code>PartyRelationship</code> matching the given partyIdFrom and partyIdTo.
-     * @return the list of <code>PartyGroup</code> matching the name
-     * @param groupName the groupName to find
-     * @param roleTypeId the roleType Id to find
+     * @return the list of <code>PartyRelationship</code> matching the given parties
+     * @param partyIdFrom the party from
+     * @param partyIdTo the party to
      * @throws RepositoryException if an error occurs
      */
-    public List<PartyRelationship> getPartyRelationship(String partyIdFrom, String partyIdTo)throws RepositoryException;
+    public List<PartyRelationship> getPartyRelationship(String partyIdFrom, String partyIdTo) throws RepositoryException;
 }
