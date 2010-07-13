@@ -1251,7 +1251,7 @@ public class PartyTests extends OpentapsTestCase {
         session.close();
         // 3. Verify that it is returned from getOrganizationTemplates 
         OrganizationRepositoryInterface orgRepository = organizationDomain.getOrganizationRepository();
-        List<PartyGroup> partyGroups = orgRepository.getOrganizationWithoutLedgerSetup();
+        List<PartyGroup> partyGroups = orgRepository.getOrganizationTemplates();
         boolean foundTheParty = false;
         for (PartyGroup group : partyGroups) {
             if (group.getPartyId().equals(party.getPartyId())) {
