@@ -34,20 +34,27 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.opentaps.common.party.PartyContactHelper;
-import org.opentaps.domain.DomainRepository;
+import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.base.constants.ContactMechTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.constants.SecurityPermissionConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.ContactMech;
 import org.opentaps.base.entities.ExternalUser;
 import org.opentaps.base.entities.PartyContactDetailByPurpose;
+import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
 import org.opentaps.base.entities.PartyFromSummaryByRelationship;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyNoteView;
+import org.opentaps.base.entities.PartyRelationship;
 import org.opentaps.base.entities.PartySummaryCRMView;
 import org.opentaps.base.entities.PostalAddress;
+import org.opentaps.base.entities.SecurityGroupPermission;
 import org.opentaps.base.entities.TelecomNumber;
+import org.opentaps.base.entities.UserLogin;
 import org.opentaps.base.services.GetPartyNameForDateService;
+import org.opentaps.common.party.PartyContactHelper;
+import org.opentaps.domain.DomainRepository;
 import org.opentaps.domain.billing.payment.PaymentMethod;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.party.Account;
@@ -62,8 +69,6 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
-import org.opentaps.base.entities.PartyRelationship;
 
 /**
  * Repository for Parties to handle interaction of Party-related domain with the entity engine (database) and the service engine.
@@ -483,12 +488,71 @@ public class PartyRepository extends DomainRepository implements PartyRepository
     }
 
     /** {@inheritDoc} */
-    public List<PartyRelationship> getPartyRelationship(String partyIdFrom, String partyIdTo) throws RepositoryException{
+    public List<PartyRelationship> getPartyRelationship(String partyIdFrom, String partyIdTo) throws RepositoryException {
         EntityCondition filterByDateCondition = EntityUtil.getFilterByDateExpr();
         EntityCondition indirectConditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                        EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, partyIdFrom),
-                                        EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyIdTo),
+                                        EntityCondition.makeCondition(PartyRelationship.Fields.partyIdFrom.name(), partyIdFrom),
+                                        EntityCondition.makeCondition(PartyRelationship.Fields.partyIdTo, EntityOperator.EQUALS, partyIdTo),
                                         filterByDateCondition);
         return this.findList(PartyRelationship.class, indirectConditions);
+    }
+
+    /** {@inheritDoc} */
+    public EntityCondition makeLookupLeadsCondition() throws RepositoryException {
+        return EntityCondition.makeCondition(
+                          EntityCondition.makeCondition(PartyRelationship.Fields.roleTypeIdFrom.name(),
+                                                        RoleTypeConstants.PROSPECT),
+                          EntityCondition.makeCondition(Party.Fields.statusId.name(),
+                                                        EntityOperator.NOT_EQUAL,
+                                                        StatusItemConstants.PartyLeadStatus.PTYLEAD_CONVERTED));
+    }
+
+    /** {@inheritDoc} */
+    public EntityCondition makeLookupLeadsUserIsAllowedToViewCondition() throws RepositoryException {
+        return makeLookupLeadsPartyIsAllowedToViewCondition(getUser().getOfbizUserLogin().getString(UserLogin.Fields.partyId.name()));
+    }
+
+    /** {@inheritDoc} */
+    public EntityCondition makeLookupLeadsPartyIsAllowedToViewCondition(String partyId) throws RepositoryException {
+
+        // Search security groups that contains the security permission "CRMSFA_LEAD_VIEW"
+        List<SecurityGroupPermission> securityGrs = findList(SecurityGroupPermission.class, map(SecurityGroupPermission.Fields.permissionId,
+                                                                                                SecurityPermissionConstants.CRMSFA_LEAD_VIEW));
+
+        // Make permission condition
+        List<EntityCondition> securityGroupCong = new ArrayList<EntityCondition>();
+        for (int i = 0; i < securityGrs.size(); i++) {
+            SecurityGroupPermission securityGroupThatHasPerm = securityGrs.get(i);
+            securityGroupCong.add(EntityCondition.makeCondition(PartyRelationship.Fields.securityGroupId.name(),
+                                                                securityGroupThatHasPerm.getGroupId()));
+        }
+        EntityCondition crmFindSecFilter = EntityCondition.makeCondition(securityGroupCong, EntityOperator.OR);
+
+        // Add general leads conditions
+        EntityCondition leadsCond = EntityCondition.makeCondition(
+                                             makeLookupLeadsCondition(),
+                                             crmFindSecFilter,
+                                             EntityCondition.makeCondition(PartyRelationship.Fields.partyIdTo.name(), partyId));
+
+        return leadsCond;
+    }
+
+    /** {@inheritDoc} */
+    public Set<String> getLeadIdsUserIsAllowedToView() throws RepositoryException {
+        return getLeadIdsPartyIsAllowedToView(getUser().getOfbizUserLogin().getString(UserLogin.Fields.partyId.name()));
+    }
+
+    /** {@inheritDoc} */
+    public Set<String> getLeadIdsPartyIsAllowedToView(String partyId) throws RepositoryException {
+
+        EntityCondition leadsCond = makeLookupLeadsPartyIsAllowedToViewCondition(partyId);
+
+        // Find the lead ids
+        return Entity.getDistinctFieldValues(String.class,
+                                             findList(PartyFromByRelnAndContactInfoAndPartyClassification.class,
+                                                      leadsCond,
+                                                      Arrays.asList(PartyFromByRelnAndContactInfoAndPartyClassification.Fields.partyIdFrom.name()), // select fields
+                                                      Arrays.asList(PartyFromByRelnAndContactInfoAndPartyClassification.Fields.partyIdFrom.name())), // order by
+                                             PartyFromByRelnAndContactInfoAndPartyClassification.Fields.partyIdFrom);
     }
 }
