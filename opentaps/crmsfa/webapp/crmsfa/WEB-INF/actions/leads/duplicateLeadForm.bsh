@@ -47,12 +47,6 @@ if (partySummary == null) {
     return;
 }
 
-//if the lead has already been converted, then just put this in there and nothing
-if (partySummary.getString("statusId").equals("PTYLEAD_CONVERTED")) {
-    context.put("hasBeenConverted", true);
-    return;
-}
-
 // this is a Map of the current lead's information which is passed into pre-fill the form
 currentLead = new HashMap();
 currentLead.putAll(partySummary.getAllFields());
