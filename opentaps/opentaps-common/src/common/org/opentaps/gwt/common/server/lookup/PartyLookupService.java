@@ -36,6 +36,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
 import org.opentaps.base.constants.PartyRelationshipTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.SecurityPermissionConstants;
@@ -44,6 +45,7 @@ import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassific
 import org.opentaps.base.entities.PartyRoleNameDetailSupplementalData;
 import org.opentaps.base.entities.PartyToSummaryByRelationship;
 import org.opentaps.base.entities.SalesOpportunityRole;
+import org.opentaps.base.entities.SecurityGroupPermission;
 import org.opentaps.base.entities.UserLogin;
 import org.opentaps.common.util.ConvertMapToString;
 import org.opentaps.common.util.ICompositeValue;
@@ -55,8 +57,6 @@ import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
-import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
-import org.opentaps.base.entities.SecurityGroupPermission;
 
 /**
  * The RPC service used to populate the PartyListView and Party autocompleters widgets.
@@ -65,24 +65,24 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
 
     private static final String MODULE = PartyLookupService.class.getName();
 
-    private static final EntityCondition CONTACT_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "CONTACT");
-    private static final EntityCondition ACCOUNT_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT");
-    private static final EntityCondition LEAD_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT");
-    private static final EntityCondition PARTNER_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PARTNER");
-    private static final EntityCondition SUPPLIER_CONDITIONS = EntityCondition.makeCondition("roleTypeId", "SUPPLIER");
+    private static final EntityCondition CONTACT_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.CONTACT);
+    private static final EntityCondition ACCOUNT_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.ACCOUNT);
+    private static final EntityCondition LEAD_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PROSPECT);
+    private static final EntityCondition PARTNER_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PARTNER);
+    private static final EntityCondition SUPPLIER_CONDITIONS = EntityCondition.makeCondition("roleTypeId", RoleTypeConstants.SUPPLIER);
     private static final EntityCondition CUSTOMER_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
-                                                                    EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
-                                                                    EntityCondition.makeCondition("roleTypeIdFrom", "CONTACT"),
-                                                                    EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT"),
-                                                                    EntityCondition.makeCondition("roleTypeIdFrom", "PARTNER"));
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.ACCOUNT),
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.CONTACT),
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PROSPECT),
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PARTNER));
     private static final EntityCondition ACCOUNT_OR_LEAD_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
-                                                                                      EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
-                                                                                      EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT"));
+                                                                                      EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.ACCOUNT),
+                                                                                      EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PROSPECT));
     private static final EntityCondition ACCOUNT_OR_QUALIFIED_LEAD_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
-                                                                                      EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
+                                                                                      EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.ACCOUNT),
                                                                                       EntityCondition.makeCondition(EntityOperator.AND,
-                                                                                            EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT"),
-                                                                                            EntityCondition.makeCondition("statusId", "PTYLEAD_QUALIFIED")));
+                                                                                            EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PROSPECT),
+                                                                                            EntityCondition.makeCondition("statusId", StatusItemConstants.PartyLeadStatus.PTYLEAD_QUALIFIED)));
 
 
     private static List<String> BY_ID_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_PARTY_ID);
@@ -240,37 +240,31 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
      * @return the list of <code>Lead</code>, or <code>null</code> if an error occurred
      */
     public List<PartyFromByRelnAndContactInfoAndPartyClassification> findLeads() {
-        try{ 
-            
+        try {
+
             // Add general leads conditions.
             List<EntityCondition> leadsCond = UtilMisc.toList(
                                     LEAD_CONDITIONS,
-                                    EntityCondition.makeCondition(PartyFromByRelnAndContactInfoAndPartyClassification.Fields.statusId.name(), 
-                                                                  EntityOperator.NOT_EQUAL, 
-                                                                  StatusItemConstants.PartyLeadStatus.PTYLEAD_CONVERTED)
-                                    );
+                                    EntityCondition.makeCondition(PartyFromByRelnAndContactInfoAndPartyClassification.Fields.statusId.name(),
+                                                                  EntityOperator.NOT_EQUAL,
+                                                                  StatusItemConstants.PartyLeadStatus.PTYLEAD_CONVERTED));
 
-            if("Y".equals(this.getRepository().getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER))){
+            if ("Y".equals(this.getRepository().getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.CRMSFA_FIND_SEC_FILTER))) {
 
                 // Search security groups that that has security permision "CRMSFA_LEAD_VIEW".
-                List<SecurityGroupPermission> securityGrs = this.getRepository().findList(SecurityGroupPermission.class, 
-                                                                                            this.getRepository().map(
-                                                                                                SecurityGroupPermission.Fields.permissionId, 
-                                                                                                SecurityPermissionConstants.CRMSFA_LEAD_VIEW)
-                                                                                            );
+                List<SecurityGroupPermission> securityGrs = this.getRepository().findList(SecurityGroupPermission.class, this.getRepository().map(
+                                                                                                SecurityGroupPermission.Fields.permissionId,
+                                                                                                SecurityPermissionConstants.CRMSFA_LEAD_VIEW));
 
                 // Make entity condition : security group 1 OR security group 2 OR ....
 
                 List<EntityCondition> securityGroupCong = new ArrayList<EntityCondition>();
-                for(int i = 0; i < securityGrs.size(); i++){
+                for (int i = 0; i < securityGrs.size(); i++) {
                     SecurityGroupPermission securityGroupThatHasPerm = securityGrs.get(i);
-                    securityGroupCong.add(
-                                            EntityCondition.makeCondition(
-                                                PartyFromByRelnAndContactInfoAndPartyClassification.Fields.securityGroupId.name(), 
-                                                EntityOperator.EQUALS, 
-                                                securityGroupThatHasPerm.getGroupId()
-                                            )
-                                         );
+                    securityGroupCong.add(EntityCondition.makeCondition(
+                                                PartyFromByRelnAndContactInfoAndPartyClassification.Fields.securityGroupId.name(),
+                                                EntityOperator.EQUALS,
+                                                securityGroupThatHasPerm.getGroupId()));
                 }
 
                 EntityCondition crmFindSecFilter = EntityCondition.makeCondition(securityGroupCong, EntityOperator.OR);
@@ -283,16 +277,15 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                 leadsCond.add(EntityCondition.makeCondition(PartyFromByRelnAndContactInfoAndPartyClassification.Fields.partyIdTo.name(), EntityOperator.EQUALS, userId));
 
             }
-            
+
             // Do leads search according added conditions.
             List<PartyFromByRelnAndContactInfoAndPartyClassification> leads = findParties(
                     PartyFromByRelnAndContactInfoAndPartyClassification.class,
                     EntityCondition.makeCondition(leadsCond),
-                    "PROSPECT"
-            );
-            
+                    RoleTypeConstants.PROSPECT);
+
             return leads;
-        
+
         } catch (RepositoryException e) {
             storeException(e);
             return null;
@@ -307,7 +300,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
      * @return the list of <code>Partner</code>, or <code>null</code> if an error occurred
      */
     public List<PartyFromByRelnAndContactInfoAndPartyClassification> findPartners() {
-        return findParties(PartyFromByRelnAndContactInfoAndPartyClassification.class, PARTNER_CONDITIONS, "PARTNER");
+        return findParties(PartyFromByRelnAndContactInfoAndPartyClassification.class, PARTNER_CONDITIONS, RoleTypeConstants.PARTNER);
     }
 
     /**
@@ -318,7 +311,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         // suppliers don't have relationships and classifications, so use the basic party lookup entity
         // also note that to be able to change the entity like this, its fields must be coherent with PartyLookupConfiguration
         setActiveOnly(false);
-        return findParties(PartyRoleNameDetailSupplementalData.class, SUPPLIER_CONDITIONS, "SUPPLIER");
+        return findParties(PartyRoleNameDetailSupplementalData.class, SUPPLIER_CONDITIONS, RoleTypeConstants.SUPPLIER);
     }
 
     /**
@@ -471,6 +464,10 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         return sb.toString();
     }
 
+    /**
+     * Adds all the field converters to map the base fields to formatted columns.
+     * @param service an <code>EntityLookupAndSuggestService</code> value
+     */
     public static void prepareFindParties(EntityLookupAndSuggestService service) {
 
         /** Phone number custom formatter. */
@@ -588,14 +585,14 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         EntityCondition condition = roleCondition;
 
         // select parties assigned to current user or his team according to view preferences.
-        if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_RESPONSIBILTY)) {            
+        if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_RESPONSIBILTY)) {
             if (getProvider().getUser().getOfbizUserLogin() != null) {
                 setActiveOnly(true);
                 String userId = getProvider().getUser().getOfbizUserLogin().getString("partyId");
                 String viewPref = getProvider().getParameter(PartyLookupConfiguration.IN_RESPONSIBILTY);
                 if (PartyLookupConfiguration.MY_VALUES.equals(viewPref)) {
                     // my parties
-                    List<String> partyRelationshipTypeIds = Arrays.asList("RESPONSIBLE_FOR");
+                    List<String> partyRelationshipTypeIds = Arrays.asList(PartyRelationshipTypeConstants.RESPONSIBLE_FOR);
                     String showOwnLeadOnly = null;
                     try {
                         showOwnLeadOnly = this.getRepository().getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.CRMSFA_MYLEADS_SHOW_OWNED_ONLY);
@@ -608,27 +605,19 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                     if (showOwnLeadOnly == null) {
                         showOwnLeadOnly = "Y";
                     }
-                    if ("PROSPECT".equals(roleTypeId) && "N".equals(showOwnLeadOnly)) {
-                        partyRelationshipTypeIds = Arrays.asList("ASSIGNED_TO", "RESPONSIBLE_FOR");
+                    if (RoleTypeConstants.PROSPECT.equals(roleTypeId) && "N".equals(showOwnLeadOnly)) {
+                        partyRelationshipTypeIds = Arrays.asList(PartyRelationshipTypeConstants.ASSIGNED_TO, PartyRelationshipTypeConstants.RESPONSIBLE_FOR);
                     }
                     condition = EntityCondition.makeCondition(
-                            Arrays.asList(
                                     condition,
                                     EntityCondition.makeCondition("partyIdTo", userId),
-                                    EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.IN, partyRelationshipTypeIds)
-                            ),
-                            EntityOperator.AND
-                    );
+                                    EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.IN, partyRelationshipTypeIds));
                 } else if (PartyLookupConfiguration.TEAM_VALUES.equals(viewPref)) {
                     // my teams parties
                     condition = EntityCondition.makeCondition(
-                            Arrays.asList(
                                     condition,
                                     EntityCondition.makeCondition("partyIdTo", userId),
-                                    EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.IN, Arrays.asList("RESPONSIBLE_FOR", "ASSIGNED_TO"))
-                            ),
-                            EntityOperator.AND
-                    );
+                                    EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.IN, Arrays.asList(PartyRelationshipTypeConstants.RESPONSIBLE_FOR, PartyRelationshipTypeConstants.ASSIGNED_TO)));
                 }
             } else {
                 Debug.logError("Current session do not have any UserLogin set.", MODULE);
@@ -650,7 +639,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         if (getProvider().oneParameterIsPresent(BY_PHONE_FILTERS)) {
             return findPartiesBy(entity, condition, BY_PHONE_FILTERS);
         }
-        
+
         if (getProvider().oneParameterIsPresent(BY_EMAIL_FILTERS)) {
             return findPartiesBy(entity, condition, BY_EMAIL_FILTERS);
         }
@@ -658,7 +647,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         if (getProvider().oneParameterIsPresent(BY_ADVANCED_FILTERS)) {
             return findPartiesBy(entity, condition, BY_ADVANCED_FILTERS);
         }
-        
+
         /*
          * Find contacts which are assigned to an account.
          * Usually we use Account.getContacts() to retrieve related contacts but
@@ -672,7 +661,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             return findPartiesBy(entity,
                     EntityCondition.makeCondition(
                             condition,
-                            EntityCondition.makeCondition(PartyLookupConfiguration.IN_ROLE_TO, "ACCOUNT"),
+                            EntityCondition.makeCondition(PartyLookupConfiguration.IN_ROLE_TO, RoleTypeConstants.ACCOUNT),
                             EntityCondition.makeCondition(PartyLookupConfiguration.IN_RELATIONSHIP_TYPE_ID, PartyRelationshipTypeConstants.CONTACT_REL_INV)
                     ),
                     ACCOUNT_CONTACTS_FILTERS);
@@ -698,14 +687,11 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                         getRepository().findList(
                                 PartyToSummaryByRelationship.class,
                                 EntityCondition.makeCondition(
-                                        Arrays.asList(
                                                 EntityCondition.makeCondition(PartyToSummaryByRelationship.Fields.roleTypeIdFrom.getName(), RoleTypeConstants.CONTACT),
                                                 EntityCondition.makeCondition(PartyToSummaryByRelationship.Fields.roleTypeIdTo.getName(), RoleTypeConstants.ACCOUNT),
                                                 EntityCondition.makeCondition(PartyToSummaryByRelationship.Fields.partyRelationshipTypeId.getName(), PartyRelationshipTypeConstants.CONTACT_REL_INV),
                                                 EntityCondition.makeCondition(PartyToSummaryByRelationship.Fields.partyIdFrom.getName(), partyIdFrom),
-                                                EntityUtil.getFilterByDateExpr()),
-                                                EntityOperator.AND)
-                        ),
+                                                EntityUtil.getFilterByDateExpr())),
                         PartyToSummaryByRelationship.Fields.partyId
                 );
             } catch (RepositoryException e) {
@@ -732,11 +718,8 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                             getRepository().findList(
                                     SalesOpportunityRole.class,
                                     EntityCondition.makeCondition(
-                                            Arrays.asList(
                                                     EntityCondition.makeCondition(SalesOpportunityRole.Fields.roleTypeId.getName(), RoleTypeConstants.CONTACT),
-                                                    EntityCondition.makeCondition(SalesOpportunityRole.Fields.salesOpportunityId.getName(), opportunityId)),
-                                                    EntityOperator.AND)
-                            ),
+                                                    EntityCondition.makeCondition(SalesOpportunityRole.Fields.salesOpportunityId.getName(), opportunityId))),
                             SalesOpportunityRole.Fields.partyId
                     );
                 } catch (RepositoryException e) {
@@ -779,7 +762,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                                                          EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
                                                          EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null)));
         }
-        conditions.add(roleCondition);        
+        conditions.add(roleCondition);
         return findListWithFilters(entity, conditions, filters);
     }
 
@@ -1000,5 +983,5 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
 
         return getResults();
     }
-    
+
 }
