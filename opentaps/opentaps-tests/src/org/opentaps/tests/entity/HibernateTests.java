@@ -1521,19 +1521,27 @@ public class HibernateTests extends OpentapsTestCase {
     
     /**
      * Tests hibernate session getNextSeqId if sync with ofbiz
+     * Gets next id from hibernate session firstly, then get next id from ofbiz
      * @throws Exception if an error occurs
      */    
-    public void testHibernateGetNextSeqIdSyncWithOfbiz() throws Exception {
+    public void testHibernateGetNextSeqIdSyncWithOfbiz1() throws Exception {
         reOpenSession();
         // get testId from hibernate session firstly, then get testId from ofbiz
         String nextTestIdFromHibernate = session.getNextSeqId("TestEntity");
         String nextTestIdFromOfbiz = delegator.getNextSeqId("TestEntity");
         assertNotEquals("We should get different ids from hibernate and ofbiz delegator on call getNextSeqId at the same time.", nextTestIdFromHibernate, nextTestIdFromOfbiz);
-        
-        // get testId from ofbiz firstly, then get testId from hibernate session
-        nextTestIdFromOfbiz = delegator.getNextSeqId("TestEntity");
-        nextTestIdFromHibernate = session.getNextSeqId("TestEntity");
-        assertNotEquals("We should get different ids from hibernate and ofbiz delegator on call getNextSeqId at the same time.", nextTestIdFromHibernate, nextTestIdFromOfbiz);
     }
 
+    /**
+     * Tests hibernate session getNextSeqId if sync with ofbiz
+     * Gets next id from ofbiz firstly, then get next id from hibernate session
+     * @throws Exception if an error occurs
+     */    
+    public void testHibernateGetNextSeqIdSyncWithOfbiz2() throws Exception {
+        reOpenSession();
+        // get testId from ofbiz firstly, then get testId from hibernate session
+        String nextTestIdFromOfbiz = delegator.getNextSeqId("TestEntity");
+        String nextTestIdFromHibernate = session.getNextSeqId("TestEntity");
+        assertNotEquals("We should get different ids from hibernate and ofbiz delegator on call getNextSeqId at the same time.", nextTestIdFromHibernate, nextTestIdFromOfbiz);
+    }
 }
