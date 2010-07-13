@@ -17,12 +17,15 @@
 
 package org.opentaps.gwt.activities.client.leads.form;
 
+import org.opentaps.gwt.common.client.UtilUi;
+
 /**
  * An extended list of Leads that adds filters for activity cutoff and category (Recent / Old / No Activity).
  */
 public class LeadListView extends org.opentaps.gwt.common.client.listviews.LeadListView {
 
     private final String originalTitle;
+    private Integer cutoffDays;
     private boolean viewRecent = true;
     private boolean viewOld = true;
     private boolean viewNoActivity = true;
@@ -48,15 +51,18 @@ public class LeadListView extends org.opentaps.gwt.common.client.listviews.LeadL
 
     private void setTitleAccordingToCategories() {
         StringBuilder sb = new StringBuilder(originalTitle);
-        sb.append(" -");
-        if (viewRecent) {
-            sb.append(" Recent");
-        }
-        if (viewOld) {
-            sb.append(" Older");
-        }
-        if (viewNoActivity) {
-            sb.append(" No Activity");
+
+        if (cutoffDays != null && cutoffDays > 0 && (!viewRecent || !viewOld || !viewNoActivity) && (viewRecent || viewOld || viewNoActivity)) {
+            sb.append(" -");
+            if (viewRecent) {
+                sb.append(" ").append(UtilUi.MSG.activitiesRecent());
+            }
+            if (viewOld) {
+                sb.append(" ").append(UtilUi.MSG.activitiesOlder());
+            }
+            if (viewNoActivity) {
+                sb.append(" ").append(UtilUi.MSG.activitiesNoActivity());
+            }
         }
         setTitle(sb.toString());
     }
@@ -92,6 +98,7 @@ public class LeadListView extends org.opentaps.gwt.common.client.listviews.LeadL
      * @param cutoffDays a <code>String</code> value
      */
     public void filterByCutoffDays(String cutoffDays) {
+        this.cutoffDays = Integer.parseInt(cutoffDays);
         setFilter(ActivityLeadLookupConfiguration.IN_CUTOFF_DAYS, cutoffDays);
     }
 
