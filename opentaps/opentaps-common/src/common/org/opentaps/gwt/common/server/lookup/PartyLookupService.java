@@ -596,13 +596,17 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                 if (PartyLookupConfiguration.MY_VALUES.equals(viewPref)) {
                     // my parties
                     List<String> partyRelationshipTypeIds = Arrays.asList("RESPONSIBLE_FOR");
-                    String showOwnLeadOnly = "Y";
+                    String showOwnLeadOnly = null;
                     try {
-                        showOwnLeadOnly = this.getRepository().getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.CRMSFA_MYLEADS_SHOW_OWNED_ONLY, "Y");
+                        showOwnLeadOnly = this.getRepository().getInfrastructure().getConfigurationValue(OpentapsConfigurationTypeConstants.CRMSFA_MYLEADS_SHOW_OWNED_ONLY);
                     } catch (InfrastructureException e) {
                         Debug.logError(e, MODULE);
                     } catch (RepositoryException e) {
                         Debug.logError(e, MODULE);
+                    }
+                    // default list only owned by current user
+                    if (showOwnLeadOnly == null) {
+                        showOwnLeadOnly = "Y";
                     }
                     if ("PROSPECT".equals(roleTypeId) && "N".equals(showOwnLeadOnly)) {
                         partyRelationshipTypeIds = Arrays.asList("ASSIGNED_TO", "RESPONSIBLE_FOR");
