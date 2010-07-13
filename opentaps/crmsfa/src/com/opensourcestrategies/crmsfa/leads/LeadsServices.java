@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
@@ -57,11 +59,14 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.constants.EnumerationConstants;
+import org.opentaps.base.constants.PartyRelationshipTypeConstants;
+import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.constants.SecurityGroupConstants;
+import org.opentaps.base.constants.SecurityPermissionConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
-
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
-import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 
 /**
  * Leads services. The service documentation is in services_leads.xml.
@@ -82,7 +87,7 @@ public final class LeadsServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
 
-        if (!security.hasPermission("CRMSFA_LEAD_CREATE", userLogin)) {
+        if (!security.hasPermission(SecurityPermissionConstants.CRMSFA_LEAD_CREATE, userLogin)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
 
@@ -104,7 +109,7 @@ public final class LeadsServices {
 
             // set statusId is PTYLEAD_ASSIGNED, because we are assigning to the user down below.
             // perhaps a better alternative is to create the lead as NEW, call the reassignLeadResponsibleParty service below, and have it update it to ASSIGNED if not already so.
-            String statusId = "PTYLEAD_ASSIGNED";
+            String statusId = StatusItemConstants.PartyLeadStatus.PTYLEAD_ASSIGNED;
 
             // create the Party and Person, which results in a partyId
             Map<String, Object> input = UtilMisc.toMap("firstName", context.get("firstName"), "lastName", context.get("lastName"));
@@ -127,13 +132,13 @@ public final class LeadsServices {
             partyData.create();
 
             // create a PartyRole for the resulting Lead partyId with roleTypeId = PROSPECT
-            serviceResults = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", leadPartyId, "roleTypeId", "PROSPECT", "userLogin", userLogin));
+            serviceResults = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", leadPartyId, "roleTypeId", RoleTypeConstants.PROSPECT, "userLogin", userLogin));
             if (ServiceUtil.isError(serviceResults)) {
                 return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateLeadFail", locale, MODULE);
             }
 
             // create a party relationship between the userLogin and the Lead with partyRelationshipTypeId RESPONSIBLE_FOR
-            PartyHelper.createNewPartyToRelationship(userLogin.getString("partyId"), leadPartyId, "PROSPECT", "RESPONSIBLE_FOR", "LEAD_OWNER", PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
+            PartyHelper.createNewPartyToRelationship(userLogin.getString("partyId"), leadPartyId, RoleTypeConstants.PROSPECT, PartyRelationshipTypeConstants.RESPONSIBLE_FOR, SecurityGroupConstants.LEAD_OWNER, PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
 
             // if initial data source is provided, add it
             String dataSourceId = (String) context.get("dataSourceId");
@@ -269,7 +274,7 @@ public final class LeadsServices {
             GenericValue lead = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", leadPartyId));
 
             // create a PartyRole of type CONTACT for the lead
-            Map<String, Object> serviceResults = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", leadPartyId, "roleTypeId", "CONTACT", "userLogin", userLogin));
+            Map<String, Object> serviceResults = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", leadPartyId, "roleTypeId", RoleTypeConstants.CONTACT, "userLogin", userLogin));
             if (ServiceUtil.isError(serviceResults)) {
                 return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorConvertLeadFail", locale, MODULE);
             }
@@ -293,7 +298,7 @@ public final class LeadsServices {
                 accountPartyId = (String) serviceResults.get("partyId");
 
                 // copy all the marketing campaigns over to the new account
-                List<GenericValue> marketingCampaigns = delegator.findByAnd("MarketingCampaignRole", UtilMisc.toMap("partyId", leadPartyId, "roleTypeId", "PROSPECT"));
+                List<GenericValue> marketingCampaigns = delegator.findByAnd("MarketingCampaignRole", UtilMisc.toMap("partyId", leadPartyId, "roleTypeId", RoleTypeConstants.PROSPECT));
                 for (GenericValue marketingCampaign : marketingCampaigns) {
                     serviceResults = dispatcher.runSync("crmsfa.addAccountMarketingCampaign", UtilMisc.toMap("partyId", accountPartyId,
                             "marketingCampaignId", marketingCampaign.getString("marketingCampaignId"), "userLogin", userLogin));
@@ -352,12 +357,11 @@ public final class LeadsServices {
             }
 
             // expire all lead party relationships (roleTypeIdFrom = PROSPECT)
-            List<GenericValue> partyRelationships = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", leadPartyId, "roleTypeIdFrom", "PROSPECT"));
+            List<GenericValue> partyRelationships = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", leadPartyId, "roleTypeIdFrom", RoleTypeConstants.PROSPECT));
             PartyHelper.expirePartyRelationships(partyRelationships, UtilDateTime.nowTimestamp(), dispatcher, userLogin);
 
             // make the userLogin a RESPONSIBLE_FOR CONTACT_OWNER of the CONTACT
-            PartyHelper.createNewPartyToRelationship(userLogin.getString("partyId"), leadPartyId, "CONTACT", "RESPONSIBLE_FOR", "CONTACT_OWNER",
-                    PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
+            PartyHelper.createNewPartyToRelationship(userLogin.getString("partyId"), leadPartyId, RoleTypeConstants.CONTACT, PartyRelationshipTypeConstants.RESPONSIBLE_FOR, SecurityGroupConstants.CONTACT_OWNER, PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
 
             // now we need to assign the account and contact to the lead's work efforts and expire all the lead ones
             List<GenericValue> associations = EntityUtil.filterByDate(delegator.findByAnd("WorkEffortPartyAssignment", UtilMisc.toMap("partyId", leadPartyId)));
@@ -374,7 +378,7 @@ public final class LeadsServices {
                 input.put("partyId", accountPartyId);
                 input.put("fromDate", null);
                 input.put("thruDate", null);
-                input.put("roleTypeId", "ACCOUNT");
+                input.put("roleTypeId", RoleTypeConstants.ACCOUNT);
                 serviceResults = dispatcher.runSync("assignPartyToWorkEffort", input);
                 if (ServiceUtil.isError(serviceResults)) {
                     return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorConvertLeadFail", locale, MODULE);
@@ -384,7 +388,7 @@ public final class LeadsServices {
                 input.put("partyId", leadPartyId);
                 input.put("fromDate", null);
                 input.put("thruDate", null);
-                input.put("roleTypeId", "CONTACT");
+                input.put("roleTypeId", RoleTypeConstants.CONTACT);
                 serviceResults = dispatcher.runSync("assignPartyToWorkEffort", input);
                 if (ServiceUtil.isError(serviceResults)) {
                     return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorConvertLeadFail", locale, MODULE);
@@ -392,15 +396,15 @@ public final class LeadsServices {
             }
 
             // opportunities assigned to the lead have to be updated to refer to both contact and account
-            List<GenericValue> oppRoles = delegator.findByAnd("SalesOpportunityRole", UtilMisc.toMap("partyId", leadPartyId, "roleTypeId", "PROSPECT"));
+            List<GenericValue> oppRoles = delegator.findByAnd("SalesOpportunityRole", UtilMisc.toMap("partyId", leadPartyId, "roleTypeId", RoleTypeConstants.PROSPECT));
             for (GenericValue oppRole : oppRoles) {
                 // create a CONTACT role using the leadPartyId
-                input = UtilMisc.toMap("partyId", leadPartyId, "salesOpportunityId", oppRole.get("salesOpportunityId"), "roleTypeId", "CONTACT");
+                input = UtilMisc.toMap("partyId", leadPartyId, "salesOpportunityId", oppRole.get("salesOpportunityId"), "roleTypeId", RoleTypeConstants.CONTACT);
                 GenericValue contactOppRole = delegator.makeValue("SalesOpportunityRole", input);
                 contactOppRole.create();
 
                 // create an ACCOUNT role for the new accountPartyId
-                input = UtilMisc.toMap("partyId", accountPartyId, "salesOpportunityId", oppRole.get("salesOpportunityId"), "roleTypeId", "ACCOUNT");
+                input = UtilMisc.toMap("partyId", accountPartyId, "salesOpportunityId", oppRole.get("salesOpportunityId"), "roleTypeId", RoleTypeConstants.ACCOUNT);
                 GenericValue accountOppRole = delegator.makeValue("SalesOpportunityRole", input);
                 accountOppRole.create();
 
@@ -411,7 +415,7 @@ public final class LeadsServices {
             // associate any lead files and bookmarks with both account and contact
             List<EntityCondition> conditions = UtilMisc.toList(
                     EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, leadPartyId),
-                    EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "PROSPECT"),
+                    EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, RoleTypeConstants.PROSPECT),
                     EntityUtil.getFilterByDateExpr()
             );
             List<GenericValue> contentRoles = delegator.findByAnd("ContentRole", conditions);
@@ -422,14 +426,14 @@ public final class LeadsServices {
                 GenericValue contactContentRole = delegator.makeValue("ContentRole");
                 contactContentRole.set("partyId", leadPartyId);
                 contactContentRole.set("contentId", contentRole.get("contentId"));
-                contactContentRole.set("roleTypeId", "CONTACT");
+                contactContentRole.set("roleTypeId", RoleTypeConstants.CONTACT);
                 contactContentRole.set("fromDate", UtilDateTime.nowTimestamp());
                 contactContentRole.create();
 
                 GenericValue accountContent = delegator.makeValue("PartyContent");
                 accountContent.set("partyId", accountPartyId);
                 accountContent.set("contentId", contentRole.get("contentId"));
-                accountContent.set("contentPurposeEnumId", "PTYCNT_CRMSFA");
+                accountContent.set("contentPurposeEnumId", EnumerationConstants.PtycntPrpCrmsfa.PTYCNT_CRMSFA);
                 accountContent.set("partyContentTypeId", "USERDEF");
                 accountContent.set("fromDate", UtilDateTime.nowTimestamp());
                 accountContent.create();
@@ -437,13 +441,13 @@ public final class LeadsServices {
                 GenericValue accountContentRole = delegator.makeValue("ContentRole");
                 accountContentRole.set("partyId", accountPartyId);
                 accountContentRole.set("contentId", contentRole.get("contentId"));
-                accountContentRole.set("roleTypeId", "ACCOUNT");
+                accountContentRole.set("roleTypeId", RoleTypeConstants.ACCOUNT);
                 accountContentRole.set("fromDate", UtilDateTime.nowTimestamp());
                 accountContentRole.create();
             }
 
             // set the status of the lead to PTYLEAD_CONVERTED
-            serviceResults = dispatcher.runSync("setPartyStatus", UtilMisc.toMap("partyId", leadPartyId, "statusId", "PTYLEAD_CONVERTED", "userLogin", userLogin));
+            serviceResults = dispatcher.runSync("setPartyStatus", UtilMisc.toMap("partyId", leadPartyId, "statusId", StatusItemConstants.PartyLeadStatus.PTYLEAD_CONVERTED, "userLogin", userLogin));
             if (ServiceUtil.isError(serviceResults)) {
                 return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorConvertLeadFail", locale, MODULE);
             }
@@ -483,7 +487,7 @@ public final class LeadsServices {
 
         try {
             // reassign relationship with this helper method, which expires previous ones
-            boolean result = PartyHelper.createNewPartyToRelationship(newPartyId, leadPartyId, "PROSPECT", "RESPONSIBLE_FOR", "LEAD_OWNER", PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
+            boolean result = PartyHelper.createNewPartyToRelationship(newPartyId, leadPartyId, RoleTypeConstants.PROSPECT, PartyRelationshipTypeConstants.RESPONSIBLE_FOR, SecurityGroupConstants.LEAD_OWNER, PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
             if (!result) {
                 return UtilMessage.createAndLogServiceError("CrmErrorReassignFail", locale, MODULE);
             }
@@ -522,7 +526,7 @@ public final class LeadsServices {
                         "CrmErrorDeleteLeadFail", locale, MODULE);
             }
             String statusId = lead.getString("statusId");
-            if (statusId == null || !(statusId.equals("PTYLEAD_NEW") || statusId.equals("PTYLEAD_ASSIGNED") || statusId.equals("PTYLEAD_QUALIFIED"))) {
+            if (statusId == null || !(statusId.equals(StatusItemConstants.PartyLeadStatus.PTYLEAD_NEW) || statusId.equals(StatusItemConstants.PartyLeadStatus.PTYLEAD_ASSIGNED) || statusId.equals(StatusItemConstants.PartyLeadStatus.PTYLEAD_QUALIFIED))) {
                 return UtilMessage.createAndLogServiceError("Lead [" + leadPartyId + "] cannot be deleted. Only new, assigned or qualified leads may be deleted.",
                         "CrmErrorDeleteLeadFail", locale, MODULE);
             }
@@ -608,7 +612,7 @@ public final class LeadsServices {
             input = UtilMisc.<String, Object>toMap("custRequestTypeId", custRequestTypeId);
             input.put("userLogin", userLogin);
             input.put("fromPartyId", partyId);
-            input.put("statusId", "CRQ_SUBMITTED");
+            input.put("statusId", StatusItemConstants.CustreqStts.CRQ_SUBMITTED);
             input.put("custRequestDate", UtilDateTime.nowTimestamp());
             input.put("custRequestName", "Catalog Request");
             input.put("description", "Catalog Request for " + context.get("firstName") + " " + context.get("lastName") + " (" + partyId + ")");
