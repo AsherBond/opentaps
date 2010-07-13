@@ -1396,6 +1396,18 @@ public interface CommonMessages extends Messages {
     String acctgNewGlJournalEntry();
     @DefaultMessage("Summary")
     String acctgPartyGlJournalSummary();
+    @DefaultMessage("Lead Activities Breakdown")
+    String activitiesLeadBreakdown();
+    @DefaultMessage("No Activity")
+    String activitiesNoActivity();
+    @DefaultMessage("# Activities")
+    String activitiesNumberOfActivities();
+    @DefaultMessage("Older")
+    String activitiesOlder();
+    @DefaultMessage("Recent")
+    String activitiesRecent();
+    @DefaultMessage("Sales Rep Activities Breakdown")
+    String activitiesSalesRepBreakdown();
     @DefaultMessage("Address")
     String address();
     @DefaultMessage("Address (2)")
@@ -3890,6 +3902,10 @@ public interface CommonMessages extends Messages {
     String crmSalesChannel();
     @DefaultMessage("Total of Sales per Year")
     String crmSalesPerYear();
+    @DefaultMessage("Sales Rep")
+    String crmSalesRep();
+    @DefaultMessage("Sales Representative")
+    String crmSalesRepresentative();
     @DefaultMessage("Salutation")
     String crmSalutation();
     @DefaultMessage("Save as Quote")
@@ -4098,6 +4114,8 @@ public interface CommonMessages extends Messages {
     String crmsfa_sendCrmNotificationEmailsErrorNoAddress(String partyId);
     @DefaultMessage("Czeck")
     String cz();
+    @DefaultMessage("Copy Ledger Setup")
+    String dataImportCopyLedgerSetup();
     @DefaultMessage("Customers Import Report")
     String dataImportCustomersImportReport();
     @DefaultMessage("Company Name")
@@ -4110,6 +4128,8 @@ public interface CommonMessages extends Messages {
     String dataImportCustomersImportReport_lastName();
     @DefaultMessage("File to Import")
     String dataImportFileToImport();
+    @DefaultMessage("From Organization Template")
+    String dataImportFromOrganizationTemplate();
     @DefaultMessage("GL Accounts")
     String dataImportGlAccounts();
     @DefaultMessage("GL Accounts Import Report")
@@ -4200,6 +4220,8 @@ public interface CommonMessages extends Messages {
     String dataImportSuppliersImportReport_name();
     @DefaultMessage("Synchronously")
     String dataImportSync();
+    @DefaultMessage("To Organization")
+    String dataImportToOrganization();
     @DefaultMessage("Upload")
     String dataImportUpload();
     @DefaultMessage("Upload a File")
@@ -9044,6 +9066,8 @@ public interface CommonMessages extends Messages {
     String opentapsConfirmMerge();
     @DefaultMessage("A file with the same name is already associated to this order, do you want to overwrite it?")
     String opentapsConfirmOverwriteContent();
+    @DefaultMessage("Confirm Password")
+    String opentapsConfirmPassword();
     @DefaultMessage("Confirmed")
     String opentapsConfirmed();
     @DefaultMessage("Contains")
@@ -9302,6 +9326,8 @@ public interface CommonMessages extends Messages {
     String opentapsError_ReservedMoreThanRequested();
     @DefaultMessage("OpentapsError_ReturnNotFound")
     String opentapsError_ReturnNotFound(String returnId);
+    @DefaultMessage("Security Error : to run copyOrganizationLedgerSetup service you must have the ORG_CONFIG permission")
+    String opentapsError_SecurityErrorToRunCopyOrganizationLedgerSetup();
     @DefaultMessage("OpentapsError_ServiceErrorRequiredTagNotFound")
     String opentapsError_ServiceErrorRequiredTagNotFound(String tagName);
     @DefaultMessage("OpentapsError_ShipGroupNotFound")
@@ -15544,9 +15570,9 @@ public interface CommonMessages extends Messages {
     String productPicking();
     @DefaultMessage("Detail")
     String productPickingDetail();
-    @DefaultMessage("Manage Picklists")
+    @DefaultMessage("Open Picklists")
     String productPicklistManage();
-    @DefaultMessage("Picking Options")
+    @DefaultMessage("Create Picklists")
     String productPicklistOptions();
     @DefaultMessage("Picks in progress")
     String productPicksInProgress();
