@@ -57,12 +57,12 @@
     <service-resource type="model" loader="main" location="servicedef/services_netsuite.xml"/>
     
     <webapp name="dataimport"
-        title="DataImport"
+        title="Data Import"
         server="default-server"
         location="webapp/dataimport"
         base-permission="DATAIMPORT"
         mount-point="/dataimport"
-        app-bar-display="false"/>
+        app-bar-display="true"/>
 
 </ofbiz-component>
 
