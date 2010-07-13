@@ -39,14 +39,11 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
 import org.opentaps.base.constants.PartyRelationshipTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
-import org.opentaps.base.constants.SecurityPermissionConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
 import org.opentaps.base.entities.PartyRoleNameDetailSupplementalData;
 import org.opentaps.base.entities.PartyToSummaryByRelationship;
 import org.opentaps.base.entities.SalesOpportunityRole;
-import org.opentaps.base.entities.SecurityGroupPermission;
-import org.opentaps.base.entities.UserLogin;
 import org.opentaps.common.util.ConvertMapToString;
 import org.opentaps.common.util.ICompositeValue;
 import org.opentaps.domain.party.PartyRepositoryInterface;
@@ -66,36 +63,36 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
 
     private static final String MODULE = PartyLookupService.class.getName();
 
-    private static final EntityCondition CONTACT_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.CONTACT);
-    private static final EntityCondition ACCOUNT_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.ACCOUNT);
-    private static final EntityCondition LEAD_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PROSPECT);
-    private static final EntityCondition PARTNER_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PARTNER);
-    private static final EntityCondition SUPPLIER_CONDITIONS = EntityCondition.makeCondition("roleTypeId", RoleTypeConstants.SUPPLIER);
-    private static final EntityCondition CUSTOMER_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
+    protected static final EntityCondition CONTACT_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.CONTACT);
+    protected static final EntityCondition ACCOUNT_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.ACCOUNT);
+    protected static final EntityCondition LEAD_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PROSPECT);
+    protected static final EntityCondition PARTNER_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PARTNER);
+    protected static final EntityCondition SUPPLIER_CONDITIONS = EntityCondition.makeCondition("roleTypeId", RoleTypeConstants.SUPPLIER);
+    protected static final EntityCondition CUSTOMER_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
                                                                     EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.ACCOUNT),
                                                                     EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.CONTACT),
                                                                     EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PROSPECT),
                                                                     EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PARTNER));
-    private static final EntityCondition ACCOUNT_OR_LEAD_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
+    protected static final EntityCondition ACCOUNT_OR_LEAD_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
                                                                                       EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.ACCOUNT),
                                                                                       EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PROSPECT));
-    private static final EntityCondition ACCOUNT_OR_QUALIFIED_LEAD_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
+    protected static final EntityCondition ACCOUNT_OR_QUALIFIED_LEAD_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
                                                                                       EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.ACCOUNT),
                                                                                       EntityCondition.makeCondition(EntityOperator.AND,
                                                                                             EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PROSPECT),
                                                                                             EntityCondition.makeCondition("statusId", StatusItemConstants.PartyLeadStatus.PTYLEAD_QUALIFIED)));
 
 
-    private static List<String> BY_ID_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_PARTY_ID);
-    private static List<String> BY_NAME_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_GROUP_NAME,
+    protected static final List<String> BY_ID_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_PARTY_ID);
+    protected static final List<String> BY_NAME_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_GROUP_NAME,
                                                                   PartyLookupConfiguration.INOUT_COMPANY_NAME,
                                                                   PartyLookupConfiguration.INOUT_FIRST_NAME,
                                                                   PartyLookupConfiguration.INOUT_LAST_NAME);
-    private static List<String> BY_PHONE_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_PHONE_COUNTRY_CODE,
+    protected static final List<String> BY_PHONE_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_PHONE_COUNTRY_CODE,
                                                                    PartyLookupConfiguration.INOUT_PHONE_AREA_CODE,
                                                                    PartyLookupConfiguration.INOUT_PHONE_NUMBER);
-    private static List<String> BY_EMAIL_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_EMAIL);
-    private static List<String> BY_ADVANCED_FILTERS = Arrays.asList(PartyLookupConfiguration.IN_CLASSIFICATION,
+    protected static final List<String> BY_EMAIL_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_EMAIL);
+    protected static final List<String> BY_ADVANCED_FILTERS = Arrays.asList(PartyLookupConfiguration.IN_CLASSIFICATION,
                                                                       PartyLookupConfiguration.INOUT_ADDRESS,
                                                                       PartyLookupConfiguration.INOUT_COUNTRY,
                                                                       PartyLookupConfiguration.INOUT_STATE,
@@ -103,7 +100,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                                                                       PartyLookupConfiguration.INOUT_TO_NAME,
                                                                       PartyLookupConfiguration.INOUT_ATTENTION_NAME,
                                                                       PartyLookupConfiguration.INOUT_POSTAL_CODE);
-    private static List<String> ACCOUNT_CONTACTS_FILTERS = Arrays.asList(PartyLookupConfiguration.IN_PARTY_ID_TO);
+    protected static final List<String> ACCOUNT_CONTACTS_FILTERS = Arrays.asList(PartyLookupConfiguration.IN_PARTY_ID_TO);
 
     private boolean activeOnly = true;
 
@@ -121,7 +118,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         }
     }
 
-    private PartyRepositoryInterface getPartyRepository() throws RepositoryException {
+    protected PartyRepositoryInterface getPartyRepository() throws RepositoryException {
         try {
             return PartyRepositoryInterface.class.cast(getRepository());
         } catch (ClassCastException e) {
@@ -327,7 +324,15 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         this.activeOnly = bool;
     }
 
-    private List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestParties(EntityCondition roleCondition) {
+    /**
+     * Gets if the lookup methods should filter active parties only, defaults to <code>false</code>.
+     * @return a <code>boolean</code> value
+     */
+    public boolean getActiveOnly() {
+        return activeOnly;
+    }
+
+    protected List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestParties(EntityCondition roleCondition) {
         // use fast list to replace Arrays.asList because it is read only.
         List<EntityCondition> conditions = FastList.newInstance();
         conditions.add(roleCondition);
@@ -568,7 +573,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         service.makeCalculatedField(calcField);
     }
 
-    private <T extends EntityInterface> List<T> findParties(Class<T> entity, EntityCondition roleCondition, String roleTypeId)  {
+    protected <T extends EntityInterface> List<T> findParties(Class<T> entity, EntityCondition roleCondition, String roleTypeId)  {
 
         prepareFindParties(this);
         EntityCondition condition = roleCondition;
@@ -726,7 +731,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         return findAllParties(entity, condition);
     }
 
-    private <T extends EntityInterface> List<T> findAllParties(Class<T> entity, EntityCondition roleCondition) {
+    protected <T extends EntityInterface> List<T> findAllParties(Class<T> entity, EntityCondition roleCondition) {
         List<EntityCondition> conditions = UtilMisc.toList(roleCondition);
         if (activeOnly) {
             // simple lookups (without relationships) do not support date filtering
@@ -740,7 +745,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         return findList(entity, EntityCondition.makeCondition(conditions, EntityOperator.AND));
     }
 
-    private <T extends EntityInterface> List<T> findPartiesBy(Class<T> entity, EntityCondition roleCondition, List<String> filters) {
+    protected <T extends EntityInterface> List<T> findPartiesBy(Class<T> entity, EntityCondition roleCondition, List<String> filters) {
         List<EntityCondition> conditions = new ArrayList<EntityCondition>();
         if (activeOnly) {
             // simple lookups (without relationships) do not support date filtering
