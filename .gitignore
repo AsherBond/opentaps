@@ -42,6 +42,7 @@ specialpurpose/pos/build/
 specialpurpose/projectmgr/build/
 specialpurpose/webpos/build/
 opentaps/activities/build/
+opentaps/activities/webapp/activitiesgwt/
 opentaps/amazon/build/
 opentaps/analytics/build/
 opentaps/analytics/webapp/analyticsgwt/

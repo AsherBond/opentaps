@@ -39,9 +39,18 @@ public class FindLeadsForm extends FindPartyForm {
      */
     public FindLeadsForm() {
         super(UtilUi.MSG.crmLeadId(), UtilUi.MSG.crmFindLeads());
-        leadListView = new LeadListView();
-        leadListView.init();
-        addListView(leadListView);
+        leadListView = makeLeadListView();
+    }
+
+    /**
+     * Builds and add the list view in the form.
+     * @return a <code>LeadListView</code> value
+     */
+    protected LeadListView makeLeadListView() {
+        LeadListView v = new LeadListView();
+        v.init();
+        addListView(v);
+        return v;
     }
 
     @Override
