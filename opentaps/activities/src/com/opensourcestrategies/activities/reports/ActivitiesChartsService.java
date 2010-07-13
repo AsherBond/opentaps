@@ -70,6 +70,7 @@ public class ActivitiesChartsService extends DomainService {
     private int chartHeight = CHART_HEIGHT;
     private int cutoffDays = 10;
     private Set<String> allowedLeadPartyIds;
+    private boolean createChart = true;
 
     // output parameters
     private String chartFileName;
@@ -96,6 +97,14 @@ public class ActivitiesChartsService extends DomainService {
     }
 
     // Input parameters
+
+    /**
+     * Sets if the chart image should be generated, defaults to <code>true</code>.
+     * @param createChart a <code>boolean</code> value
+     */
+    public void setCreateChart(boolean createChart) {
+        this.createChart = createChart;
+    }
 
     /**
      * Sets the width of the chart to generate, defaults to {@link #CHART_WIDTH}.
@@ -182,6 +191,15 @@ public class ActivitiesChartsService extends DomainService {
     // Service methods
 
     /**
+     * Gets the breakdown of Lead according to their last activity, in Recent / Old / No activity categories, without creating a chart image.
+     * @exception ServiceException if an error occurs
+     */
+    public void getActivitiesByLeadSnapshot() throws ServiceException {
+        setCreateChart(false);
+        createActivitiesByLeadSnapshotChart();
+    }
+
+    /**
      * Snapshot chart that shows the breakdown of Leads according to their last activity, in Recent / Old / No activity categories.
      * @exception ServiceException if an error occurs
      */
@@ -198,6 +216,15 @@ public class ActivitiesChartsService extends DomainService {
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
+    }
+
+    /**
+     * Gets the breakdown of Sales Reps according to their last activity, in Recent / Old / No activity categories, without creating a chart image.
+     * @exception ServiceException if an error occurs
+     */
+    public void getActivitiesBySalesRepSnapshot() throws ServiceException {
+        setCreateChart(false);
+        createActivitiesBySalesRepSnapshotChart();
     }
 
     /**
@@ -233,6 +260,7 @@ public class ActivitiesChartsService extends DomainService {
                 List<ActivityFact> activities = facts.get(teamMemberPartyId);
 
                 for (ActivityFact fact : activities) {
+                    Debug.logInfo("Removing [" + teamMemberPartyId + "] from no activities [" + noActivityPartyIds + "]", MODULE);
                     noActivityPartyIds.remove(teamMemberPartyId);
                     if (fact.getDateDimId() < readingDateDimId) {
                         oldPartyIds.add(teamMemberPartyId);
@@ -246,7 +274,10 @@ public class ActivitiesChartsService extends DomainService {
             // make sure there is no double accounting of recent leads in old
             oldPartyIds.removeAll(recentPartyIds);
 
-            chartFileName = createRONPieChart(chartTitle, recentPartyIds.size(), oldPartyIds.size(), noActivityPartyIds.size());
+            if (createChart) {
+                chartFileName = createRONPieChart(chartTitle, recentPartyIds.size(), oldPartyIds.size(), noActivityPartyIds.size());
+            }
+
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         } catch (InfrastructureException e) {
