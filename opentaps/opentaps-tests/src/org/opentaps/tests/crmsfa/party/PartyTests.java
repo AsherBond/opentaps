@@ -1226,14 +1226,40 @@ public class PartyTests extends OpentapsTestCase {
     }
 
     /**
-     * Test organizationRepository's getOrganizationTemplates returns the party group Company_Template.
+     * Test organizationRepository's getOrganizationTemplates returns the new party with role ORGANIZATION_TEMPL.
      * @throws GeneralException if an error occurs
      */
     public void testGetOrganizationTemplates() throws GeneralException {
+        // 1. Create PartyGroup
+        Session session = domainsLoader.getInfrastructure().getSession();
+        org.opentaps.base.entities.Party party = new org.opentaps.base.entities.Party();
+        party.setPartyTypeId("PARTY_GROUP");
+        session.save(party);
+        session.flush();
+        PartyGroup partyGroup = new PartyGroup();
+        partyGroup.setPartyId(party.getPartyId());
+        partyGroup.setGroupName("Test GroupName for testGetOrganizationTemplates");
+        session.save(partyGroup);
+        // 2. Associate ORGANIZATION_TEMPL role with it
+        PartyRole internalOrganizationRole = new PartyRole();
+        PartyRolePk pk = new PartyRolePk();
+        pk.setPartyId(party.getPartyId());
+        pk.setRoleTypeId("ORGANIZATION_TEMPL");
+        internalOrganizationRole.setId(pk);
+        session.save(internalOrganizationRole);
+        session.flush();
+        session.close();
+        // 3. Verify that it is returned from getOrganizationTemplates 
         OrganizationRepositoryInterface orgRepository = organizationDomain.getOrganizationRepository();
-        List<PartyGroup> partyGroups = orgRepository.getOrganizationTemplates();
-        PartyGroup partyGroup = partyGroups.get(0);
-        assertEquals("GetOrganizationTemplates should returns the party group Company_Template.", partyGroup.getPartyId(), "Company_Template");
+        List<PartyGroup> partyGroups = orgRepository.getOrganizationWithoutLedgerSetup();
+        boolean foundTheParty = false;
+        for (PartyGroup group : partyGroups) {
+            if (group.getPartyId().equals(party.getPartyId())) {
+                foundTheParty = true;
+                break;
+            }
+        }
+        assertTrue("We should found new party [" + party.getPartyId() + "] with role ORGANIZATION_TEMPL in the result", foundTheParty);
     }
     
     /**
