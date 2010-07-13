@@ -326,7 +326,7 @@ public class ActivitiesChartsService extends DomainService {
         // Get the ActivityFact records grouped by team member or by lead
         EntityCondition condition = EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD);
         if (allowedLeadPartyIds != null) {
-            condition = EntityCondition.makeCondition(condition, EntityCondition.makeCondition(PartyRole.Fields.partyId.name(), EntityOperator.IN, allowedLeadPartyIds));
+            condition = EntityCondition.makeCondition(condition, EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.IN, allowedLeadPartyIds));
         }
         // order by dateDimId desc, so we can skip older activities when doing the breakdown
         List<ActivityFact> prospectActivityFacts = repository.findList(ActivityFact.class, condition, Arrays.asList(ActivityFact.Fields.targetPartyId.name(), ActivityFact.Fields.dateDimId.name()), Arrays.asList(ActivityFact.Fields.targetPartyId.asc(), ActivityFact.Fields.dateDimId.desc()));
