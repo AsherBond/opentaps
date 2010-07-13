@@ -28,8 +28,6 @@ Logging in, applications will be displayed if-and-only-if the authenticated user
 -->
 <entity-engine-xml>
 
-<OpentapsConfigurationType parentConfigTypeId="UI" configTypeId="UI_TOP_NAV_MENU_SHOW" description="Configures whether the top navigation menu will be shown or not" defaultValue="Y"/>
-
 <OpentapsWebApps applicationId="crmsfa" shortName="CRM/SFA" sequenceNum="10" applicationName="CRM, Customer Service, Order Entry, Marketing"
     description="Track leads, contacts, and accounts.  Email and calendars.  Manage customer service requests.  Enter quotes and sales orders.  Maintain marketing campaigns and contact lists, and print mailing labels or send emails.  Sales forecasts and reports." 
              imageUrl="/opentaps_images/integratingweb/crm.png" imageHoverUrl="/opentaps_images/integratingweb/crmHover.png" linkUrl="/crmsfa/control/main"
