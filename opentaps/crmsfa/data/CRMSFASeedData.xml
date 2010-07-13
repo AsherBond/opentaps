@@ -210,7 +210,6 @@
     -->
 
     <OpentapsConfigurationType configTypeId="CRMSFA_MYLEADS_SHOW_OWNED_ONLY" description="If it is 'Y' then show only the owned ones as before, otherwise show all them" defaultValue="Y"/>
-    <OpentapsConfiguration configTypeId="CRMSFA_MYLEADS_SHOW_OWNED_ONLY" value="N" comments="Show all leads assigned to me in mylead list"/>
 
 
 </entity-engine-xml>
