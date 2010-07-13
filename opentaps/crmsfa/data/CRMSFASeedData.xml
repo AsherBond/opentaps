@@ -20,6 +20,9 @@
 
 <entity-engine-xml>
 
+    <!-- relatinship between original and duplicated party -->
+    <PartyRelationshipType description="Relationship from an original to a duplicated party" hasTable="N" parentTypeId="" partyRelationshipName="Duplicated party" partyRelationshipTypeId="DUPLICATED" roleTypeIdValidFrom="" roleTypeIdValidTo=""/>
+
     <!-- sales opportunity stages -->
     <SalesOpportunityStage description="Prospect" defaultProbability="0.05" opportunityStageId="SOSTG_PROSPECT" sequenceNum="01"/>
     <SalesOpportunityStage description="Proposal" defaultProbability="0.20" opportunityStageId="SOSTG_PROPOSAL" sequenceNum="02"/>
