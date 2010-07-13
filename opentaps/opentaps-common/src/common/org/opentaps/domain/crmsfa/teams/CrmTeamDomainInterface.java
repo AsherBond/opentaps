@@ -20,7 +20,7 @@ import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
- * This is the interface of the Party domain.
+ * This is the interface of the Team domain.
  */
 public interface CrmTeamDomainInterface extends DomainInterface {
 
