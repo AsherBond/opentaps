@@ -140,6 +140,18 @@ public final class LeadsServices {
             // create a party relationship between the userLogin and the Lead with partyRelationshipTypeId RESPONSIBLE_FOR
             PartyHelper.createNewPartyToRelationship(userLogin.getString("partyId"), leadPartyId, RoleTypeConstants.PROSPECT, PartyRelationshipTypeConstants.RESPONSIBLE_FOR, SecurityGroupConstants.LEAD_OWNER, PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
 
+            // if the lead was duplicated, also create a relationship between the original lead and the new one with partyRelationshipTypeId DUPLICATED
+            String duplicatingPartyId = (String) context.get("duplicatingPartyId");
+            if (UtilValidate.isNotEmpty(duplicatingPartyId)) {
+                input = UtilMisc.<String, Object>toMap("partyIdTo", leadPartyId, "roleTypeIdTo", RoleTypeConstants.PROSPECT, "partyIdFrom", duplicatingPartyId, "roleTypeIdFrom", RoleTypeConstants.PROSPECT);
+                input.put("partyRelationshipTypeId", PartyRelationshipTypeConstants.DUPLICATED);
+                input.put("userLogin", userLogin);
+                serviceResults = dispatcher.runSync("createPartyRelationship", input);
+                if (ServiceUtil.isError(serviceResults)) {
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateLeadFail", locale, MODULE);
+                }
+            }
+
             // if initial data source is provided, add it
             String dataSourceId = (String) context.get("dataSourceId");
             if (dataSourceId != null) {

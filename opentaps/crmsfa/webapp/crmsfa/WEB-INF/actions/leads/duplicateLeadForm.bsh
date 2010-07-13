@@ -51,11 +51,14 @@ if (partySummary == null) {
 if (partySummary.getString("statusId").equals("PTYLEAD_CONVERTED")) {
     context.put("hasBeenConverted", true);
     return;
-} 
+}
 
 // this is a Map of the current lead's information which is passed into pre-fill the form
 currentLead = new HashMap();
 currentLead.putAll(partySummary.getAllFields());
+
+// put the original lead party id
+currentLead.put("duplicatingPartyId", partyId);
 
 // PRIMARY_PHONE telecom number
 phone = PartyContactHelper.getTelecomNumberMapByPurpose(partyId, "PRIMARY_PHONE", true, delegator);

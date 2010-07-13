@@ -75,6 +75,7 @@
         <implements service="crmsfa.leadInterface"/>
         <implements service="crmsfa.createBasicContactInfoForParty"/> 
         <attribute name="partyId" type="String" mode="OUT" optional="false"/>
+        <attribute name="duplicatingPartyId" type="String" mode="IN" optional="true"/> <!-- if created from the duplciate lead form -->
         <attribute name="dataSourceId" type="String" mode="IN" optional="true"/> <!-- initial data source -->
         <attribute name="marketingCampaignId" type="String" mode="IN" optional="true"/> <!-- initial marketing campaign -->
     </service>
