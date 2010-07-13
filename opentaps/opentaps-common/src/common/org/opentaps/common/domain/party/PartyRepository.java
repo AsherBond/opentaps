@@ -441,7 +441,7 @@ public class PartyRepository extends DomainRepository implements PartyRepository
         }
         return resultSet;
     }
-    
+
     /** {@inheritDoc} */
     public Set<PartyGroup> getPartyGroupByGroupName(String groupName) throws RepositoryException {
         Set<PartyGroup> resultSet = new FastSet<PartyGroup>();
@@ -481,9 +481,9 @@ public class PartyRepository extends DomainRepository implements PartyRepository
         }
         return resultSet;
     }
-    
+
     /** {@inheritDoc} */
-    public List<PartyRelationship> getPartyRelationship(String partyIdFrom, String partyIdTo)throws RepositoryException{    
+    public List<PartyRelationship> getPartyRelationship(String partyIdFrom, String partyIdTo) throws RepositoryException{
         EntityCondition filterByDateCondition = EntityUtil.getFilterByDateExpr();
         EntityCondition indirectConditions = EntityCondition.makeCondition(EntityOperator.AND,
                                         EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, partyIdFrom),
