@@ -69,7 +69,7 @@ public final class CommonImportServices {
             Debug.logWarning("Truncating mime type [" + mimeTypeId + "] to 60 characters.", MODULE);
             mimeTypeId = mimeTypeId.substring(0, 60);
         }
-       
+
         String fullFileName = getUploadPath() + fileName;
 
         // save the file to the system using the ofbiz service
@@ -84,20 +84,20 @@ public final class CommonImportServices {
         }
         // for now we only support EXCEL format
         if ("EXCEL".equalsIgnoreCase(fileFormat)) {
-        	ExcelImportServices excelImportService;
-			try {
-				excelImportService = new ExcelImportServices(new Infrastructure(dispatcher), new User(userLogin), (Locale) context.get("locale"));
-				excelImportService.setUploadedFileName(fileName);
-	        	excelImportService.parseFileForDataImport();
-	        } catch (ServiceException e) {
-				return UtilMessage.createAndLogServiceError(e, MODULE);
-			} catch (IllegalArgumentException e) {
-				return UtilMessage.createAndLogServiceError(e, MODULE);
-			}
+            ExcelImportServices excelImportService;
+            try {
+                excelImportService = new ExcelImportServices(new Infrastructure(dispatcher), new User(userLogin), (Locale) context.get("locale"));
+                excelImportService.setUploadedFileName(fileName);
+                excelImportService.parseFileForDataImport();
+            } catch (ServiceException e) {
+                return UtilMessage.createAndLogServiceError(e, MODULE);
+            } catch (IllegalArgumentException e) {
+                return UtilMessage.createAndLogServiceError(e, MODULE);
+            }
         } else {
             return UtilMessage.createAndLogServiceError("[" + fileFormat + "] is not a supported file format.", MODULE);
         }
-        
-		return ServiceUtil.returnSuccess();
+
+        return ServiceUtil.returnSuccess();
     }
 }
