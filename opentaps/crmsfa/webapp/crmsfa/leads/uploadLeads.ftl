@@ -21,7 +21,7 @@
   <form name="uploadFileAndImport" method="post" enctype="multipart/form-data" action="uploadLeads">
     <table class="twoColumnForm">
       <@inputFileRow title=uiLabelMap.DataImportFileToImport name="uploadedFile" />
-      <@inputSubmitRow title="${uiLabelMap.CrmUploadFileAndImport}"/>
+      <@inputSubmitRow title="${uiLabelMap.CrmUploadFileAndImport}" onClick="submitFormAndReplaceButtonTextWithSingleClick(this, '${uiLabelMap.OpentapsUploadingPleaseWait}');"/>
     </table>
   </form>
 </@frameSection>
