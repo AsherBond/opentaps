@@ -194,5 +194,13 @@
         <attribute name="custRequestId" type="String" mode="IN" optional="false"/>
     </service>
 
+    <service name="crmsfa.uploadLeads" engine="pojo" location="com.opensourcestrategies.crmsfa.leads.UploadLeadsServices"
+             invoke="uploadLeads" transaction-timeout="7200" auth="true">
+        <attribute name="uploadedFile" type="java.nio.ByteBuffer" mode="IN"/>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN"/>
+        <attribute name="_uploadedFile_contentType" type="String" mode="IN"/>
+        <attribute name="createdLeadIds" type="List" mode="OUT"/>
+    </service>
+
 </services>
 

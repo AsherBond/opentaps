@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -61,6 +62,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.ofbiz.base.component.ComponentConfig;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
@@ -982,6 +984,68 @@ public abstract class UtilCommon {
 
          return list;
      }
+
+    /**
+     * Reads a simply formatted, single sheet Excel document into a list of <code>Map</code> skipping the first row considered to be the header.
+     * @param stream an <code>InputStream</code> of the excel document
+     * @param columnNames a List containing the keys to use when mapping the columns into the Map (column 1 goes in the Map key columnNames 1, etc ...)
+     * @return the List of Map representing the rows
+     * @throws IOException if an error occurs
+     */
+    public static List<Map<String, String>> readExcelFile(InputStream stream, List<String> columnNames) throws IOException {
+        return readExcelFile(stream, columnNames, 1);
+    }
+
+    /**
+     * Reads a simply formatted, single sheet Excel document into a list of <code>Map</code>.
+     * @param stream an <code>InputStream</code> of the excel document
+     * @param columnNames a List containing the keys to use when mapping the columns into the Map (column 1 goes in the Map key columnNames 1, etc ...)
+     * @param skipRows number of rows to skip, typically 1 to skip the header row
+     * @return the List of Map representing the rows
+     * @throws IOException if an error occurs
+     */
+    public static List<Map<String, String>> readExcelFile(InputStream stream, List<String> columnNames, int skipRows) throws IOException {
+        POIFSFileSystem fs = new POIFSFileSystem(stream);
+        HSSFWorkbook wb = new HSSFWorkbook(fs);
+        HSSFSheet sheet = wb.getSheetAt(0);
+        int sheetLastRowNumber = sheet.getLastRowNum();
+        List<Map<String, String>> rows = new ArrayList<Map<String, String>>();
+        for (int j = skipRows; j <= sheetLastRowNumber; j++) {
+            HSSFRow erow = sheet.getRow(j);
+            Map<String, String> row = new HashMap<String, String>();
+            for (int i = 0; i < columnNames.size(); i++) {
+                String columnName = columnNames.get(i);
+                HSSFCell cell = erow.getCell(i);
+                String s = "";
+                if (cell != null) {
+
+                    // check if cell contains a number
+                    BigDecimal bd = null;
+                    try {
+                        double d = cell.getNumericCellValue();
+                        bd = BigDecimal.valueOf(d);
+                    } catch (Exception e) {
+                        // do nothing
+                    }
+                    if (bd == null) {
+                        s = cell.toString().trim();
+                    } else {
+                        // if cell contains number trim the tailing zeros so that for example postal code string
+                        // does not appear as a floating point number
+                        s = bd.toPlainString();
+                        // convert XX.XX000 into XX.XX
+                        s = s.replaceFirst("^(-?\\d+\\.0*[^0]+)0*\\s*$", "$1");
+                        // convert XX.000 into XX
+                        s = s.replaceFirst("^(-?\\d+)\\.0*$", "$1");
+                    }
+                }
+                Debug.logInfo("readExcelFile cell (" + j + ", " + i + ") as (" + columnName + ") == " + s, MODULE);
+                row.put(columnName, s);
+            }
+            rows.add(row);
+        }
+        return rows;
+    }
 
     /**
      * Creates an Excel document with a given column name list, and column data list.

@@ -1066,7 +1066,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.uploadLeads"/>
         <response name="success" type="request-redirect-noparam" value="leadsMain"/>
-        <response name="error" type="view" value="uploadLeadsForm"/>
+        <response name="error" type="view" value="uploadLeads"/>
     </request-map>
 
 
