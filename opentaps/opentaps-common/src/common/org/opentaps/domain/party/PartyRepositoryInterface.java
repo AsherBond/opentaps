@@ -49,6 +49,15 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
     public Party getPartyById(String partyId) throws RepositoryException, EntityNotFoundException;
 
     /**
+     * Finds a lead by its identifier.
+     * @param partyId Party identifier
+     * @return an instance of <code>Lead</code> or <code>null</code>
+     * @throws RepositoryException
+     * @throws EntityNotFoundException
+     */
+    public Lead getLeadById(String partyId) throws RepositoryException, EntityNotFoundException;
+
+    /**
      * Finds the <code>Set</code> of <code>Party</code> with given IDs.
      * @return never null but might be empty
      * @param partyIds set of Party identifiers

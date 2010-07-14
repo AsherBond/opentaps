@@ -52,6 +52,7 @@ import org.opentaps.domain.billing.payment.PaymentMethod;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
+import org.opentaps.domain.party.Lead;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
@@ -112,6 +113,16 @@ public class PartyRepository extends DomainRepository implements PartyRepository
         Set<Party> resultSet = new FastSet<Party>();
         resultSet.addAll(findList(Party.class, EntityCondition.makeCondition(Party.Fields.partyId.name(), EntityOperator.IN, partyIds)));
         return resultSet;
+    }
+
+    /** {@inheritDoc} */
+    public Lead getLeadById(String partyId) throws RepositoryException, EntityNotFoundException {
+        if (UtilValidate.isEmpty(partyId)) {
+            Debug.logWarning("Requested lead but identifier was null.", MODULE);
+            return null;
+        }
+
+        return findOneNotNull(Lead.class, map(Lead.Fields.partyId, partyId), "Lead [" + partyId + "] not found");
     }
 
     /** {@inheritDoc} */
