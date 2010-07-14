@@ -16,10 +16,6 @@
  */
 package org.opentaps.tests.dataimport;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.util.List;
@@ -395,8 +391,7 @@ public class DataImportTests extends OpentapsTestCase {
         String folderPath = "opentaps/dataimport/data/xls/";
         String fileFormat = "EXCEL";
         String contentType = "application/vnd.ms-excel";
-        File excelFile = new File(folderPath + fileName);
-        ByteBuffer fileBytes = ByteBuffer.wrap(getBytesFromFile(excelFile));
+        ByteBuffer fileBytes = getByteBufferFromFile(folderPath + fileName);
 
         Map params = UtilMisc.toMap("userLogin", this.admin,
                                     "uploadedFile", fileBytes,
@@ -452,31 +447,6 @@ public class DataImportTests extends OpentapsTestCase {
         assertEquals("Field productName of entity DataImportProduct[" + product3.getProductId() + "] not filled properly.", productName3, product3.getProductName());
         assertEquals("Field internalName of entity DataImportProduct[" + product3.getProductId() + "] not filled properly.", productName3, product3.getInternalName());
 
-    }
-
-    /**
-     * Helper method to get byte[] from a file.
-     *
-     * @param f a <code>File</code> value
-     * @throws Exception if an error occurs
-     * @return a <code>byte[]</code> value
-     * @throws IOException if an error occurs
-     */
-    private static byte[] getBytesFromFile(File f) throws IOException {
-        if (f == null) {
-            return null;
-        }
-
-        FileInputStream stream = new FileInputStream(f);
-        ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
-        byte[] b = new byte[1024];
-        int n;
-        while ((n = stream.read(b)) != -1) {
-            out.write(b, 0, n);
-        }
-        stream.close();
-        out.close();
-        return out.toByteArray();
     }
 
 }

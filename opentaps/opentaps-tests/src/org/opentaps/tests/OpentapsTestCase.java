@@ -16,8 +16,13 @@
  */
 package org.opentaps.tests;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,20 +57,18 @@ import org.ofbiz.service.GenericDispatcher;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-import org.opentaps.domain.manufacturing.bom.BomNodeInterface;
-import org.opentaps.domain.manufacturing.bom.BomTreeInterface;
-import org.opentaps.common.order.PurchaseOrderFactory;
-import org.opentaps.common.order.SalesOrderFactory;
-import org.opentaps.common.product.UtilProduct;
-import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.DomainsLoader;
 import org.opentaps.base.entities.InventoryItemTraceDetail;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyAcctgPreference;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.services.CopyOrganizationLedgerSetupService;
+import org.opentaps.common.order.PurchaseOrderFactory;
+import org.opentaps.common.order.SalesOrderFactory;
+import org.opentaps.common.product.UtilProduct;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
@@ -75,6 +78,8 @@ import org.opentaps.domain.inventory.InventoryServiceInterface;
 import org.opentaps.domain.ledger.LedgerDomainInterface;
 import org.opentaps.domain.manufacturing.ManufacturingDomainInterface;
 import org.opentaps.domain.manufacturing.ManufacturingRepositoryInterface;
+import org.opentaps.domain.manufacturing.bom.BomNodeInterface;
+import org.opentaps.domain.manufacturing.bom.BomTreeInterface;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderDomainInterface;
 import org.opentaps.domain.order.OrderRepositoryInterface;
@@ -2581,5 +2586,51 @@ public class OpentapsTestCase extends TestCase {
             }
         }
         return false;
+    }
+
+    /**
+     * Helper method to get a ByteBuffer from a file.
+     *
+     * @param filePath the path to the file
+     * @return a <code>ByteBuffer</code> value
+     * @throws IOException if an error occurs
+     */
+    public static ByteBuffer getByteBufferFromFile(String filePath) throws IOException {
+        return ByteBuffer.wrap(getBytesFromFile(new File(filePath)));
+    }
+
+    /**
+     * Helper method to get a ByteBuffer from a file.
+     *
+     * @param f a <code>File</code> value
+     * @return a <code>ByteBuffer</code> value
+     * @throws IOException if an error occurs
+     */
+    public static ByteBuffer getByteBufferFromFile(File f) throws IOException {
+        return ByteBuffer.wrap(getBytesFromFile(f));
+    }
+
+    /**
+     * Helper method to get byte[] from a file.
+     *
+     * @param f a <code>File</code> value
+     * @return a <code>byte[]</code> value
+     * @throws IOException if an error occurs
+     */
+    public static byte[] getBytesFromFile(File f) throws IOException {
+        if (f == null) {
+            return null;
+        }
+
+        FileInputStream stream = new FileInputStream(f);
+        ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+        byte[] b = new byte[1024];
+        int n;
+        while ((n = stream.read(b)) != -1) {
+            out.write(b, 0, n);
+        }
+        stream.close();
+        out.close();
+        return out.toByteArray();
     }
 }
