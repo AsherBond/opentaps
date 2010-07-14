@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import junit.framework.TestCase;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
@@ -36,10 +36,12 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.PartyRolePk;
+import org.opentaps.base.entities.Person;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.base.services.CrmsfaCreateAccountService;
 import org.opentaps.base.services.CrmsfaDeactivateAccountService;
+import org.opentaps.base.services.CrmsfaUploadLeadsService;
 import org.opentaps.base.services.PurchasingCreateSupplierService;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.domain.DomainsLoader;
@@ -61,8 +63,6 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 import org.opentaps.gwt.common.server.lookup.PartyLookupService;
 import org.opentaps.tests.OpentapsTestCase;
 import org.opentaps.tests.gwt.TestInputProvider;
-
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
 
 /**
  * Party related tests.
@@ -1294,5 +1294,39 @@ public class PartyTests extends OpentapsTestCase {
             }
         }
         assertTrue("We should found new party [" + party.getPartyId() + "] with role INTERNAL_ORGANIZATIO in the result", foundTheParty);
+    }
+
+    /**
+     * Test the crmsfa.uploadLeads service.
+     * @throws Exception if an error occurs
+     */
+    public void testUploadLeads() throws Exception {
+        // upload the test lead_import_example.xls file
+        String fileName = "lead_import_example.xls";
+        CrmsfaUploadLeadsService upSer = new CrmsfaUploadLeadsService();
+        upSer.setInUserLogin(admin);
+        upSer.setInUploadedFileFileName(fileName);
+        upSer.setInUploadedFileContentType("application/vnd.ms-excel");
+        upSer.setInUploadedFile(getByteBufferFromFile("opentaps/crmsfa/data/xls/" + fileName));
+        runAndAssertServiceSuccess(upSer);
+        List<String> leadIds = upSer.getOutCreatedLeadIds();
+
+        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));
+        PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
+        PartyRepository repo = (PartyRepository) partyDomain.getPartyRepository();
+
+        // check that Lana Lee can be found
+        List<Person> persons = repo.findList(Person.class, EntityCondition.makeCondition(
+                                                                 EntityCondition.makeCondition(Person.Fields.firstName.name(), "Lana"),
+                                                                 EntityCondition.makeCondition(Person.Fields.lastName.name(), "Lee"),
+                                                                 EntityCondition.makeCondition(Person.Fields.partyId.name(), EntityOperator.IN, leadIds)));
+        assertNotEmpty("Should have found the imported lead Lana Lee", persons);
+
+        // check that Leanne Chambers can be found
+        persons = repo.findList(Person.class, EntityCondition.makeCondition(
+                                                                 EntityCondition.makeCondition(Person.Fields.firstName.name(), "Leanne"),
+                                                                 EntityCondition.makeCondition(Person.Fields.lastName.name(), "Chambers"),
+                                                                 EntityCondition.makeCondition(Person.Fields.partyId.name(), EntityOperator.IN, leadIds)));
+        assertNotEmpty("Should have found the imported lead Leanne Chambers", persons);
     }
 }
