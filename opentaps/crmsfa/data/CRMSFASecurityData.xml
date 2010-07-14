@@ -36,6 +36,7 @@
     <SecurityPermission description="Reassign owner of an existing contact." permissionId="CRMSFA_CONTACT_REASSIGN"/>    
 
     <SecurityPermission description="Access to the Leads function of the application." permissionId="CRMSFA_LEADS_VIEW"/>
+    <SecurityPermission description="Upload a spreadsheet of leads." permissionId="CRMSFA_LEADS_UPLOAD"/>
     <SecurityPermission description="View any Lead." permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityPermission description="Create a new Lead." permissionId="CRMSFA_LEAD_CREATE"/>    
     <SecurityPermission description="Update any existing Lead." permissionId="CRMSFA_LEAD_UPDATE"/>    
@@ -139,6 +140,7 @@
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_UPDATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_DEACTIVATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_REASSIGN"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEADS_UPLOAD"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_CREATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_UPDATE"/>
