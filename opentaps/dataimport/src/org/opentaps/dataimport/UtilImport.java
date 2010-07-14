@@ -41,7 +41,7 @@ public class UtilImport {
 
     // makes a Map of format PostalAddress
     @SuppressWarnings("unchecked")
-    public static GenericValue makePostalAddress(GenericValue contactMech, String companyName, String firstName, String lastName, String attnName, String address1, String address2, String city, String stateGeoCode, String postalCode, String postalCodeExt, String provinceName, String countryGeoCode, GenericDelegator delegator) {
+    public static GenericValue makePostalAddress(GenericValue contactMech, String companyName, String firstName, String lastName, String attnName, String address1, String address2, String city, String stateGeoCode, String postalCode, String postalCodeExt, String countryGeoCode, GenericDelegator delegator) {
         Map<String, Object> postalAddress = FastMap.newInstance();
 
         // full name of the person built from first and last name

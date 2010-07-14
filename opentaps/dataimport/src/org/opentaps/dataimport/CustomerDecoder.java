@@ -158,7 +158,7 @@ public class CustomerDecoder implements ImportDecoder {
         if (!UtilValidate.isEmpty(entry.getString("address1"))) {
             // associate this as the GENERAL_LOCATION and BILLING_LOCATION
             GenericValue contactMech = delegator.makeValue("ContactMech", UtilMisc.toMap("contactMechId", delegator.getNextSeqId("ContactMech"), "contactMechTypeId", "POSTAL_ADDRESS"));
-            GenericValue mainPostalAddress = UtilImport.makePostalAddress(contactMech, entry.getString("companyName"), entry.getString("firstName"), entry.getString("lastName"), entry.getString("attnName"), entry.getString("address1"), entry.getString("address2"), entry.getString("city"), entry.getString("stateProvinceGeoId"), entry.getString("postalCode"), entry.getString("postalCodeExt"), entry.getString("stateProvinceGeoName"), entry.getString("countryGeoId"), delegator);
+            GenericValue mainPostalAddress = UtilImport.makePostalAddress(contactMech, entry.getString("companyName"), entry.getString("firstName"), entry.getString("lastName"), entry.getString("attnName"), entry.getString("address1"), entry.getString("address2"), entry.getString("city"), entry.getString("stateProvinceGeoId"), entry.getString("postalCode"), entry.getString("postalCodeExt"), entry.getString("countryGeoId"), delegator);
             toBeStored.add(contactMech);
             toBeStored.add(mainPostalAddress);
             if (personPartyId != null) {
@@ -179,7 +179,7 @@ public class CustomerDecoder implements ImportDecoder {
         if (!UtilValidate.isEmpty(entry.getString("shipToAddress1"))) {
             // associate this as SHIPPING_LOCATION
             GenericValue contactMech = delegator.makeValue("ContactMech", UtilMisc.toMap("contactMechId", delegator.getNextSeqId("ContactMech"), "contactMechTypeId", "POSTAL_ADDRESS"));
-            GenericValue secondaryPostalAddress = UtilImport.makePostalAddress(contactMech, entry.getString("shipToCompanyName"), entry.getString("shipToFirstName"), entry.getString("shipToLastName"), entry.getString("shipToAttnName"), entry.getString("shipToAddress1"), entry.getString("shipToAddress2"), entry.getString("shipToCity"), entry.getString("shipToStateProvinceGeoId"), entry.getString("shipToPostalCode"), entry.getString("shipToPostalCodeExt"), entry.getString("shipToStateProvGeoName"), entry.getString("shipToCountryGeoId"), delegator);
+            GenericValue secondaryPostalAddress = UtilImport.makePostalAddress(contactMech, entry.getString("shipToCompanyName"), entry.getString("shipToFirstName"), entry.getString("shipToLastName"), entry.getString("shipToAttnName"), entry.getString("shipToAddress1"), entry.getString("shipToAddress2"), entry.getString("shipToCity"), entry.getString("shipToStateProvinceGeoId"), entry.getString("shipToPostalCode"), entry.getString("shipToPostalCodeExt"), entry.getString("shipToCountryGeoId"), delegator);
             toBeStored.add(contactMech);
             toBeStored.add(secondaryPostalAddress);
             if (personPartyId != null) {
