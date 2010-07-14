@@ -53,28 +53,37 @@ import org.opentaps.foundation.service.ServiceException;
 public final class ExcelImportServices extends DomainService {
 
     private static final String MODULE = ExcelImportServices.class.getName();
-    
+
     private static final String EXCEL_PRODUCT_TAB = "Products";
     private static final String EXCEL_SUPPLIERS_TAB = "Suppliers";
     private static final String EXCEL_CUSTOMERS_TAB = "Customers";
     private static final String EXCEL_INVENTORY_TAB = "Inventory";
     private static final String EXCEL_GL_ACCOUNTS_TAB = "GL Accounts";
-    private static final List<String> EXCEL_TABS = Arrays.asList(EXCEL_PRODUCT_TAB, EXCEL_SUPPLIERS_TAB, 
-                                                                 EXCEL_CUSTOMERS_TAB, EXCEL_INVENTORY_TAB, 
+    private static final List<String> EXCEL_TABS = Arrays.asList(EXCEL_PRODUCT_TAB, EXCEL_SUPPLIERS_TAB,
+                                                                 EXCEL_CUSTOMERS_TAB, EXCEL_INVENTORY_TAB,
                                                                  EXCEL_GL_ACCOUNTS_TAB);
-    
-    private static final String USER_ABSOLUTE_FILE_PATH_PARAM = "USER_FILE_PATH";
 
     private String uploadedFileName;
-    
+
+    /**
+     * Default constructor.
+     */
     public ExcelImportServices() {
-    	super();
+        super();
     }
-   
+
+    /**
+     * Creates a new <code>ExcelImportServices</code> instance.
+     *
+     * @param infrastructure an <code>Infrastructure</code> value
+     * @param user an <code>User</code> value
+     * @param locale a <code>Locale</code> value
+     * @exception ServiceException if an error occurs
+     */
     public ExcelImportServices(Infrastructure infrastructure, User user, Locale locale) throws ServiceException {
         super(infrastructure, user, locale);
-    } 
-    
+    }
+
     /**
      * Gets the specified Excel File in the given directory.
      * @param path the path <code>String</code> of the directory to look files into
@@ -110,7 +119,7 @@ public final class ExcelImportServices extends DomainService {
     public File getUploadedExcelFile(String fileName) {
         return getUploadedExcelFile(CommonImportServices.getUploadPath(), fileName);
     }
-    
+
     /**
      * Helper method to check if an Excel row is empty.
      * @param row a <code>HSSFRow</code> value
@@ -139,23 +148,23 @@ public final class ExcelImportServices extends DomainService {
             return null;
         }
 
-        //check if cell contains a number
+        // check if cell contains a number
         BigDecimal bd = null;
-        try{
+        try {
             double d = cell.getNumericCellValue();
             bd = BigDecimal.valueOf(d);
-        }catch(Exception e){
-            //do nothing
+        } catch (Exception e) {
+            // do nothing
         }
-        
+
         String s = null;
-        if(bd == null){
+        if (bd == null) {
             s = cell.toString().trim();
-        }else{            
-            //if cell contains number parse it as long
+        } else {
+            // if cell contains number parse it as long
             s = Long.toString(bd.longValue());
         }
-        
+
         return s;
     }
 
@@ -194,298 +203,297 @@ public final class ExcelImportServices extends DomainService {
     }
 
     /**
-     * Take each row of an Excel sheet and put it into DataImportProduct
-     * @param sheet
-     * @param delegator
-     * @throws GenericEntityException
+     * Takes each row of an Excel sheet and put it into DataImportProduct.
+     * @param sheet the Excel sheet
+     * @return a <code>Collection</code> of DataImportProduct entities
+     * @throws RepositoryException if an error occurs
      */
     protected Collection<? extends EntityInterface> createDataImportProducts(HSSFSheet sheet) throws RepositoryException {
-    	 int sheetLastRowNumber = sheet.getLastRowNum();
-    	 List<DataImportProduct> products = FastList.newInstance();
-         
-         for (int j = 1; j <= sheetLastRowNumber; j++) {
-             HSSFRow row = sheet.getRow(j);
-             if (isNotEmpty(row)) {
-                 // row index starts at 0 here but is actually 1 in Excel
-                 int rowNum = row.getRowNum() + 1;
-                 // read productId from first column "sheet column index
-                 // starts from 0"
-                 String id = readStringCell(row, 0);
+        int sheetLastRowNumber = sheet.getLastRowNum();
+        List<DataImportProduct> products = FastList.newInstance();
 
-                 if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("productId")) {
-                     Debug.logWarning("Row number " + rowNum + " not imported from Products tab: invalid ID value [" + id + "].", MODULE);
-                     continue;
-                 }
+        for (int j = 1; j <= sheetLastRowNumber; j++) {
+            HSSFRow row = sheet.getRow(j);
+            if (isNotEmpty(row)) {
+                // row index starts at 0 here but is actually 1 in Excel
+                int rowNum = row.getRowNum() + 1;
+                // read productId from first column "sheet column index
+                // starts from 0"
+                String id = readStringCell(row, 0);
 
-                 DataImportProduct product = new DataImportProduct();
-                 product.setProductId(id);
-                 product.setProductName(readStringCell(row, 1));
-                 product.setInternalName(readStringCell(row, 1));
-                 product.setProductTypeId(readStringCell(row, 2));
-                 product.setDescription(readStringCell(row, 3));
-                 product.setPrice(readBigDecimalCell(row, 4));
-                 product.setPriceCurrencyUomId(readStringCell(row, 5));
-                 product.setSupplierPartyId(readStringCell(row, 6));
-                 product.setPurchasePrice(readBigDecimalCell(row, 7));
-                 products.add(product);
-             }
-         }
-         return products;
-     }
-    
+                if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("productId")) {
+                    Debug.logWarning("Row number " + rowNum + " not imported from Products tab: invalid ID value [" + id + "].", MODULE);
+                    continue;
+                }
+
+                DataImportProduct product = new DataImportProduct();
+                product.setProductId(id);
+                product.setProductName(readStringCell(row, 1));
+                product.setInternalName(readStringCell(row, 1));
+                product.setProductTypeId(readStringCell(row, 2));
+                product.setDescription(readStringCell(row, 3));
+                product.setPrice(readBigDecimalCell(row, 4));
+                product.setPriceCurrencyUomId(readStringCell(row, 5));
+                product.setSupplierPartyId(readStringCell(row, 6));
+                product.setPurchasePrice(readBigDecimalCell(row, 7));
+                products.add(product);
+            }
+        }
+        return products;
+    }
+
     /**
-     * Take each row of an Excel sheet and put it into DataImportSupplier
-     * @param sheet
-     * @param delegator
-     * @throws GenericEntityException
+     * Take each row of an Excel sheet and put it into DataImportSupplier.
+     * @param sheet the Excel sheet
+     * @return a <code>Collection</code> of DataImportSupplier entities
+     * @throws RepositoryException if an error occurs
      */
     protected Collection<? extends EntityInterface> createDataImportSuppliers(HSSFSheet sheet) throws RepositoryException {
-    	
-    	List<DataImportSupplier> suppliers = FastList.newInstance();
-    	int sheetLastRowNumber = sheet.getLastRowNum();
-    	for (int j = 1; j <= sheetLastRowNumber; j++) {
-    		HSSFRow row = sheet.getRow(j);
-    		if (isNotEmpty(row)) {
-    			// row index starts at 0 here but is actually 1 in Excel
-    			int rowNum = row.getRowNum() + 1;
-    			// read supplierId from first column "sheet column index
-    			// starts from 0"
-    			String id = readStringCell(row, 0);
 
-    			if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("supplierId")) {
-    				Debug.logWarning("Row number " + rowNum + " not imported from Suppliers tab: invalid ID value [" + id + "].", MODULE);
-    				continue;
-    			}
+        List<DataImportSupplier> suppliers = FastList.newInstance();
+        int sheetLastRowNumber = sheet.getLastRowNum();
+        for (int j = 1; j <= sheetLastRowNumber; j++) {
+            HSSFRow row = sheet.getRow(j);
+            if (isNotEmpty(row)) {
+                // row index starts at 0 here but is actually 1 in Excel
+                int rowNum = row.getRowNum() + 1;
+                // read supplierId from first column "sheet column index
+                // starts from 0"
+                String id = readStringCell(row, 0);
 
-    			DataImportSupplier supplier = new DataImportSupplier();
-    			supplier.setSupplierId(id);
-    			supplier.setSupplierName(readStringCell(row, 1));
-    			supplier.setAddress1(readStringCell(row, 2));
-    			supplier.setAddress2(readStringCell(row, 3));
-    			supplier.setCity(readStringCell(row, 4));
-    			supplier.setStateProvinceGeoId(readStringCell(row, 5));
-    			supplier.setPostalCode(readStringCell(row, 6));
-    			supplier.setCountryGeoId(readStringCell(row, 7));
-    			supplier.setPrimaryPhoneCountryCode(readStringCell(row, 8));
-    			supplier.setPrimaryPhoneAreaCode(readStringCell(row, 9));
-    			supplier.setPrimaryPhoneNumber(readStringCell(row, 10));
-    			supplier.setNetPaymentDays(readLongCell(row, 11));
-    			supplier.setIsIncorporated(readStringCell(row, 12));
-    			supplier.setFederalTaxId(readStringCell(row, 13));
-    			supplier.setRequires1099(readStringCell(row, 14));
-    			suppliers.add(supplier);
-    		}
-    	}
-    	
-    	return suppliers;
+                if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("supplierId")) {
+                    Debug.logWarning("Row number " + rowNum + " not imported from Suppliers tab: invalid ID value [" + id + "].", MODULE);
+                    continue;
+                }
+
+                DataImportSupplier supplier = new DataImportSupplier();
+                supplier.setSupplierId(id);
+                supplier.setSupplierName(readStringCell(row, 1));
+                supplier.setAddress1(readStringCell(row, 2));
+                supplier.setAddress2(readStringCell(row, 3));
+                supplier.setCity(readStringCell(row, 4));
+                supplier.setStateProvinceGeoId(readStringCell(row, 5));
+                supplier.setPostalCode(readStringCell(row, 6));
+                supplier.setCountryGeoId(readStringCell(row, 7));
+                supplier.setPrimaryPhoneCountryCode(readStringCell(row, 8));
+                supplier.setPrimaryPhoneAreaCode(readStringCell(row, 9));
+                supplier.setPrimaryPhoneNumber(readStringCell(row, 10));
+                supplier.setNetPaymentDays(readLongCell(row, 11));
+                supplier.setIsIncorporated(readStringCell(row, 12));
+                supplier.setFederalTaxId(readStringCell(row, 13));
+                supplier.setRequires1099(readStringCell(row, 14));
+                suppliers.add(supplier);
+            }
+        }
+
+        return suppliers;
     }
-    
+
     /**
-     * Take each row of an Excel sheet and put it into DataImportCustomer
-     * @param sheet
-     * @param delegator
-     * @throws GenericEntityException
+     * Take each row of an Excel sheet and put it into DataImportCustomer.
+     * @param sheet the Excel sheet
+     * @return a <code>Collection</code> of DataImportCustomer entities
+     * @throws RepositoryException if an error occurs
      */
     protected Collection<? extends EntityInterface> createDataImportCustomers(HSSFSheet sheet) throws RepositoryException {
-    	
-    	List<DataImportCustomer> customers = FastList.newInstance();
-    	int sheetLastRowNumber = sheet.getLastRowNum();
-    	for (int j = 1; j <= sheetLastRowNumber; j++) {
-    		HSSFRow row = sheet.getRow(j);
-    		if (isNotEmpty(row)) {
-    			// row index starts at 0 here but is actually 1 in Excel
-    			int rowNum = row.getRowNum() + 1;
-    			// read customerId from first column "sheet column index
-    			// starts from 0"
-    			String id = readStringCell(row, 0);
 
-    			if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("customerId")) {
-    				Debug.logWarning("Row number " + rowNum + " not imported from Customers tab: invalid ID value [" + id + "].", MODULE);
-    				continue;
-    			}
-                        
-                        DataImportCustomer customer = new DataImportCustomer();
-                        customer.setCustomerId(id);
-                        customer.setCompanyName(this.readStringCell(row, 1));
-                        customer.setFirstName(this.readStringCell(row, 2));
-                        customer.setLastName(this.readStringCell(row, 3));
-                        customer.setAttnName(this.readStringCell(row, 4));
-                        customer.setAddress1(this.readStringCell(row, 5));
-                        customer.setAddress2(this.readStringCell(row, 6));
-                        customer.setCity(this.readStringCell(row, 7));
-                        customer.setStateProvinceGeoId(this.readStringCell(row, 8));
-                        customer.setPostalCode(this.readStringCell(row, 9));
-                        customer.setPostalCodeExt(this.readStringCell(row, 10));
-                        customer.setStateProvinceGeoName(this.readStringCell(row, 11));
-                        customer.setCountryGeoId(this.readStringCell(row, 12));
-                        customer.setPrimaryPhoneCountryCode(this.readStringCell(row, 13));
-                        customer.setPrimaryPhoneAreaCode(this.readStringCell(row, 14));
-                        customer.setPrimaryPhoneNumber(this.readStringCell(row, 15));
-                        customer.setPrimaryPhoneExtension(this.readStringCell(row, 16));
-                        customer.setSecondaryPhoneCountryCode(this.readStringCell(row, 17));
-                        customer.setSecondaryPhoneAreaCode(this.readStringCell(row, 18));
-                        customer.setSecondaryPhoneNumber(this.readStringCell(row, 19));
-                        customer.setSecondaryPhoneExtension(this.readStringCell(row, 20));
-                        customer.setFaxCountryCode(this.readStringCell(row, 21));
-                        customer.setFaxAreaCode(this.readStringCell(row, 22));
-                        customer.setFaxNumber(this.readStringCell(row, 23));
-                        customer.setDidCountryCode(this.readStringCell(row, 24));
-                        customer.setDidAreaCode(this.readStringCell(row, 25));
-                        customer.setDidNumber(this.readStringCell(row, 26));
-                        customer.setDidExtension(this.readStringCell(row, 27));
-                        customer.setEmailAddress(this.readStringCell(row, 28));
-                        customer.setWebAddress(this.readStringCell(row, 29));
-                        customer.setDiscount(this.readBigDecimalCell(row, 30));
-                        customer.setPartyClassificationTypeId(this.readStringCell(row, 31));
-                        customer.setCreditCardNumber(this.readStringCell(row, 32));
-                        customer.setCreditCardExpDate(this.readStringCell(row, 33));
-                        customer.setOutstandingBalance(this.readBigDecimalCell(row, 34));
-                        customer.setCreditLimit(this.readBigDecimalCell(row, 35));
-                        customer.setCurrencyUomId(this.readStringCell(row, 36));
-                        customer.setDisableShipping(this.readStringCell(row, 37));
-                        customer.setNetPaymentDays(this.readLongCell(row, 38));
-                        customer.setShipToCompanyName(this.readStringCell(row, 39));
-                        customer.setShipToFirstName(this.readStringCell(row, 40));
-                        customer.setShipToLastName(this.readStringCell(row, 41));
-                        customer.setShipToAttnName(this.readStringCell(row, 42));
-                        customer.setShipToAddress1(this.readStringCell(row, 43));
-                        customer.setShipToAddress2(this.readStringCell(row, 44));
-                        customer.setShipToCity(this.readStringCell(row, 45));
-                        customer.setShipToStateProvinceGeoId(this.readStringCell(row, 46));
-                        customer.setShipToPostalCode(this.readStringCell(row, 47));
-                        customer.setShipToPostalCodeExt(this.readStringCell(row, 48));
-                        customer.setShipToStateProvGeoName(this.readStringCell(row, 49));
-                        customer.setShipToCountryGeoId(this.readStringCell(row, 50));
-                        customer.setNote(this.readStringCell(row, 51));
-                        customers.add(customer);    			
-    		}
-    	}
-    	
-    	return customers;
+        List<DataImportCustomer> customers = FastList.newInstance();
+        int sheetLastRowNumber = sheet.getLastRowNum();
+        for (int j = 1; j <= sheetLastRowNumber; j++) {
+            HSSFRow row = sheet.getRow(j);
+            if (isNotEmpty(row)) {
+                // row index starts at 0 here but is actually 1 in Excel
+                int rowNum = row.getRowNum() + 1;
+                // read customerId from first column "sheet column index
+                // starts from 0"
+                String id = readStringCell(row, 0);
+
+                if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("customerId")) {
+                    Debug.logWarning("Row number " + rowNum + " not imported from Customers tab: invalid ID value [" + id + "].", MODULE);
+                    continue;
+                }
+
+                DataImportCustomer customer = new DataImportCustomer();
+                customer.setCustomerId(id);
+                customer.setCompanyName(this.readStringCell(row, 1));
+                customer.setFirstName(this.readStringCell(row, 2));
+                customer.setLastName(this.readStringCell(row, 3));
+                customer.setAttnName(this.readStringCell(row, 4));
+                customer.setAddress1(this.readStringCell(row, 5));
+                customer.setAddress2(this.readStringCell(row, 6));
+                customer.setCity(this.readStringCell(row, 7));
+                customer.setStateProvinceGeoId(this.readStringCell(row, 8));
+                customer.setPostalCode(this.readStringCell(row, 9));
+                customer.setPostalCodeExt(this.readStringCell(row, 10));
+                customer.setStateProvinceGeoName(this.readStringCell(row, 11));
+                customer.setCountryGeoId(this.readStringCell(row, 12));
+                customer.setPrimaryPhoneCountryCode(this.readStringCell(row, 13));
+                customer.setPrimaryPhoneAreaCode(this.readStringCell(row, 14));
+                customer.setPrimaryPhoneNumber(this.readStringCell(row, 15));
+                customer.setPrimaryPhoneExtension(this.readStringCell(row, 16));
+                customer.setSecondaryPhoneCountryCode(this.readStringCell(row, 17));
+                customer.setSecondaryPhoneAreaCode(this.readStringCell(row, 18));
+                customer.setSecondaryPhoneNumber(this.readStringCell(row, 19));
+                customer.setSecondaryPhoneExtension(this.readStringCell(row, 20));
+                customer.setFaxCountryCode(this.readStringCell(row, 21));
+                customer.setFaxAreaCode(this.readStringCell(row, 22));
+                customer.setFaxNumber(this.readStringCell(row, 23));
+                customer.setDidCountryCode(this.readStringCell(row, 24));
+                customer.setDidAreaCode(this.readStringCell(row, 25));
+                customer.setDidNumber(this.readStringCell(row, 26));
+                customer.setDidExtension(this.readStringCell(row, 27));
+                customer.setEmailAddress(this.readStringCell(row, 28));
+                customer.setWebAddress(this.readStringCell(row, 29));
+                customer.setDiscount(this.readBigDecimalCell(row, 30));
+                customer.setPartyClassificationTypeId(this.readStringCell(row, 31));
+                customer.setCreditCardNumber(this.readStringCell(row, 32));
+                customer.setCreditCardExpDate(this.readStringCell(row, 33));
+                customer.setOutstandingBalance(this.readBigDecimalCell(row, 34));
+                customer.setCreditLimit(this.readBigDecimalCell(row, 35));
+                customer.setCurrencyUomId(this.readStringCell(row, 36));
+                customer.setDisableShipping(this.readStringCell(row, 37));
+                customer.setNetPaymentDays(this.readLongCell(row, 38));
+                customer.setShipToCompanyName(this.readStringCell(row, 39));
+                customer.setShipToFirstName(this.readStringCell(row, 40));
+                customer.setShipToLastName(this.readStringCell(row, 41));
+                customer.setShipToAttnName(this.readStringCell(row, 42));
+                customer.setShipToAddress1(this.readStringCell(row, 43));
+                customer.setShipToAddress2(this.readStringCell(row, 44));
+                customer.setShipToCity(this.readStringCell(row, 45));
+                customer.setShipToStateProvinceGeoId(this.readStringCell(row, 46));
+                customer.setShipToPostalCode(this.readStringCell(row, 47));
+                customer.setShipToPostalCodeExt(this.readStringCell(row, 48));
+                customer.setShipToStateProvGeoName(this.readStringCell(row, 49));
+                customer.setShipToCountryGeoId(this.readStringCell(row, 50));
+                customer.setNote(this.readStringCell(row, 51));
+                customers.add(customer);
+            }
+        }
+
+        return customers;
     }
-    
+
     /**
-     * Take each row of an Excel sheet and put it into DataImportInventory
-     * @param sheet
-     * @param delegator
-     * @throws GenericEntityException
+     * Take each row of an Excel sheet and put it into DataImportInventory.
+     * @param sheet the Excel sheet
+     * @return a <code>Collection</code> of DataImportInventory entities
+     * @throws RepositoryException if an error occurs
      */
     protected Collection<? extends EntityInterface> createDataImportInventory(HSSFSheet sheet) throws RepositoryException {
-    	
-    	List<DataImportInventory> inventory = FastList.newInstance();
-    	int sheetLastRowNumber = sheet.getLastRowNum();
-    	for (int j = 1; j <= sheetLastRowNumber; j++) {
-    		HSSFRow row = sheet.getRow(j);
-    		if (isNotEmpty(row)) {
-    			// row index starts at 0 here but is actually 1 in Excel
-    			int rowNum = row.getRowNum() + 1;
-    			// read itemId from first column "sheet column index
-    			// starts from 0"
-    			String id = readStringCell(row, 0);
 
-    			if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("itemId")) {
-    				Debug.logWarning("Row number " + rowNum + " not imported from Inventory tab: invalid ID value [" + id + "].", MODULE);
-    				continue;
-    			}
-                        
-                        DataImportInventory inventoryItem = new DataImportInventory();
-                        inventoryItem.setItemId(id);
-                        inventoryItem.setProductId(this.readStringCell(row, 1));
-                        inventoryItem.setFacilityId(this.readStringCell(row, 2));
-                        inventoryItem.setAvailableToPromise(this.readBigDecimalCell(row, 3));
-                        inventoryItem.setOnHand(this.readBigDecimalCell(row, 4));
-                        inventoryItem.setMinimumStock(this.readBigDecimalCell(row, 5));
-                        inventoryItem.setReorderQuantity(this.readBigDecimalCell(row, 6));
-                        inventoryItem.setDaysToShip(this.readBigDecimalCell(row, 7));
-                        inventoryItem.setInventoryValue(this.readBigDecimalCell(row, 8));
-                        inventory.add(inventoryItem);   		
-    		}
-    	}
-    	
-    	return inventory;
+        List<DataImportInventory> inventory = FastList.newInstance();
+        int sheetLastRowNumber = sheet.getLastRowNum();
+        for (int j = 1; j <= sheetLastRowNumber; j++) {
+            HSSFRow row = sheet.getRow(j);
+            if (isNotEmpty(row)) {
+                // row index starts at 0 here but is actually 1 in Excel
+                int rowNum = row.getRowNum() + 1;
+                // read itemId from first column "sheet column index
+                // starts from 0"
+                String id = readStringCell(row, 0);
+
+                if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("itemId")) {
+                    Debug.logWarning("Row number " + rowNum + " not imported from Inventory tab: invalid ID value [" + id + "].", MODULE);
+                    continue;
+                }
+
+                DataImportInventory inventoryItem = new DataImportInventory();
+                inventoryItem.setItemId(id);
+                inventoryItem.setProductId(this.readStringCell(row, 1));
+                inventoryItem.setFacilityId(this.readStringCell(row, 2));
+                inventoryItem.setAvailableToPromise(this.readBigDecimalCell(row, 3));
+                inventoryItem.setOnHand(this.readBigDecimalCell(row, 4));
+                inventoryItem.setMinimumStock(this.readBigDecimalCell(row, 5));
+                inventoryItem.setReorderQuantity(this.readBigDecimalCell(row, 6));
+                inventoryItem.setDaysToShip(this.readBigDecimalCell(row, 7));
+                inventoryItem.setInventoryValue(this.readBigDecimalCell(row, 8));
+                inventory.add(inventoryItem);
+            }
+        }
+
+        return inventory;
     }
-    
+
     /**
-     * Take each row of an Excel sheet and put it into DataImportGlAccount
-     * @param sheet
-     * @param delegator
-     * @throws GenericEntityException
+     * Take each row of an Excel sheet and put it into DataImportGlAccount.
+     * @param sheet the Excel sheet
+     * @return a <code>Collection</code> of DataImportGlAccount entities
+     * @throws RepositoryException if an error occurs
      */
     protected Collection<? extends EntityInterface> createDataImportGlAccounts(HSSFSheet sheet) throws RepositoryException {
-    	
-    	List<DataImportGlAccount> glAccounts = FastList.newInstance();
-    	int sheetLastRowNumber = sheet.getLastRowNum();
-    	for (int j = 1; j <= sheetLastRowNumber; j++) {
-    		HSSFRow row = sheet.getRow(j);
-    		if (isNotEmpty(row)) {
-    			// row index starts at 0 here but is actually 1 in Excel
-    			int rowNum = row.getRowNum() + 1;
-    			// read glAccountrId from first column "sheet column index
-    			// starts from 0"
-    			String id = readStringCell(row, 0);
 
-    			if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("glAccountId")) {
-    				Debug.logWarning("Row number " + rowNum + " not imported from GL Accounts tab: invalid ID value [" + id + "].", MODULE);
-    				continue;
-    			}
-                        
-                        DataImportGlAccount glAccount = new DataImportGlAccount();
-                        glAccount.setGlAccountId(id);
-                        glAccount.setParentGlAccountId(this.readStringCell(row, 1));
-                        glAccount.setClassification(this.readStringCell(row, 2));
-                        glAccount.setAccountName(this.readStringCell(row, 3));
-                        glAccounts.add(glAccount);
-    		}
-    	}
-    	
-    	return glAccounts;
+        List<DataImportGlAccount> glAccounts = FastList.newInstance();
+        int sheetLastRowNumber = sheet.getLastRowNum();
+        for (int j = 1; j <= sheetLastRowNumber; j++) {
+            HSSFRow row = sheet.getRow(j);
+            if (isNotEmpty(row)) {
+                // row index starts at 0 here but is actually 1 in Excel
+                int rowNum = row.getRowNum() + 1;
+                // read glAccountrId from first column "sheet column index
+                // starts from 0"
+                String id = readStringCell(row, 0);
+
+                if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1 || id.equalsIgnoreCase("glAccountId")) {
+                    Debug.logWarning("Row number " + rowNum + " not imported from GL Accounts tab: invalid ID value [" + id + "].", MODULE);
+                    continue;
+                }
+
+                DataImportGlAccount glAccount = new DataImportGlAccount();
+                glAccount.setGlAccountId(id);
+                glAccount.setParentGlAccountId(this.readStringCell(row, 1));
+                glAccount.setClassification(this.readStringCell(row, 2));
+                glAccount.setAccountName(this.readStringCell(row, 3));
+                glAccounts.add(glAccount);
+            }
+        }
+
+        return glAccounts;
     }
-    
+
     /**
      * Uploads an Excel file in the correct directory.
-     * @param dctx a <code>DispatchContext</code> value
-     * @param context a <code>Map</code> value
-     * @return the service result <code>Map</code>
+     * @exception ServiceException if an error occurs
      */
     public void parseFileForDataImport() throws ServiceException {
 
-    	// Get the uploaded file
-    	File file = getUploadedExcelFile(getUploadedFileName());
+        // Get the uploaded file
+        File file = getUploadedExcelFile(getUploadedFileName());
 
-    	// set it up as an Excel workbook
-    	POIFSFileSystem fs = null;
-    	HSSFWorkbook wb = null;
-    	try {
-    		// this will auto close the FileInputStream when the constructor completes
-    		fs = new POIFSFileSystem(new FileInputStream(file));
-    		wb = new HSSFWorkbook(fs);
-    	} catch (IOException e) {
-    		throw new ServiceException("Unable to read or create workbook from file [" + getUploadedFileName() + "] " + e.getMessage());
-    	}
+        // set it up as an Excel workbook
+        POIFSFileSystem fs = null;
+        HSSFWorkbook wb = null;
+        try {
+            // this will auto close the FileInputStream when the constructor completes
+            fs = new POIFSFileSystem(new FileInputStream(file));
+            wb = new HSSFWorkbook(fs);
+        } catch (IOException e) {
+            throw new ServiceException("Unable to read or create workbook from file [" + getUploadedFileName() + "] " + e.getMessage());
+        }
 
-    	// loop through the tabs and import them one by one
-    	try {
-            
+        // loop through the tabs and import them one by one
+        try {
+
             // a collection of all the records from all the excel spreadsheet tabs
-            FastList entitiesToCreate = FastList.newInstance();
+            FastList<EntityInterface> entitiesToCreate = FastList.newInstance();
 
-            for (String excelTab: EXCEL_TABS) {
-                    HSSFSheet sheet = wb.getSheet(excelTab);
-                    if (sheet == null) {
-                            Debug.logWarning("Did not find a sheet named " + excelTab + " in " + file.getName() + ".  Will not be importing anything.", MODULE);
-                    } else {
-                            if (EXCEL_PRODUCT_TAB.equals(excelTab)) {
-                                entitiesToCreate.addAll(createDataImportProducts(sheet));
-                            } else if (EXCEL_SUPPLIERS_TAB.equals(excelTab)) {
-                                entitiesToCreate.addAll(createDataImportSuppliers(sheet));
-                            } else if (EXCEL_CUSTOMERS_TAB.equals(excelTab)) {
-                                entitiesToCreate.addAll(createDataImportCustomers(sheet));
-                            } else if (EXCEL_INVENTORY_TAB.equals(excelTab)) {
-                                entitiesToCreate.addAll(createDataImportInventory(sheet));
-                            } else if (EXCEL_GL_ACCOUNTS_TAB.equals(excelTab)) {
-                                entitiesToCreate.addAll(createDataImportGlAccounts(sheet));
-                            }// etc.                                
+            for (String excelTab : EXCEL_TABS) {
+                HSSFSheet sheet = wb.getSheet(excelTab);
+                if (sheet == null) {
+                    Debug.logWarning("Did not find a sheet named " + excelTab + " in " + file.getName() + ".  Will not be importing anything.", MODULE);
+                } else {
+                    if (EXCEL_PRODUCT_TAB.equals(excelTab)) {
+                        entitiesToCreate.addAll(createDataImportProducts(sheet));
+                    } else if (EXCEL_SUPPLIERS_TAB.equals(excelTab)) {
+                        entitiesToCreate.addAll(createDataImportSuppliers(sheet));
+                    } else if (EXCEL_CUSTOMERS_TAB.equals(excelTab)) {
+                        entitiesToCreate.addAll(createDataImportCustomers(sheet));
+                    } else if (EXCEL_INVENTORY_TAB.equals(excelTab)) {
+                        entitiesToCreate.addAll(createDataImportInventory(sheet));
+                    } else if (EXCEL_GL_ACCOUNTS_TAB.equals(excelTab)) {
+                        entitiesToCreate.addAll(createDataImportGlAccounts(sheet));
                     }
+                    // etc ...
+                }
             }
 
             // create and store values from all the sheets in the workbook in database using the PartyRepositoryInterface
@@ -494,22 +502,22 @@ public final class ExcelImportServices extends DomainService {
             partyRepo.createOrUpdate(entitiesToCreate);
 
         } catch (RepositoryException e) {
-    		throw new ServiceException(e);
-    	}
+            throw new ServiceException(e);
+        }
 
 
-    	// remove the uploaded file now
-    	if (!file.delete()) {
-    		Debug.logWarning("Could not delete the file : " + file.getName(), MODULE);
-    	}
+        // remove the uploaded file now
+        if (!file.delete()) {
+            Debug.logWarning("Could not delete the file : " + file.getName(), MODULE);
+        }
     }
 
-	public void setUploadedFileName(String uploadedFileName) {
-		this.uploadedFileName = uploadedFileName;
-	}
+    public void setUploadedFileName(String uploadedFileName) {
+        this.uploadedFileName = uploadedFileName;
+    }
 
-	public String getUploadedFileName() {
-		return uploadedFileName;
-	}
+    public String getUploadedFileName() {
+        return uploadedFileName;
+    }
 
 }
