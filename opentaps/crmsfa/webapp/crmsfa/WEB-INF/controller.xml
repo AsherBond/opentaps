@@ -1058,6 +1058,16 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <response name="success" type="request-redirect-noparam" value="leadsMain"/>
         <response name="error" type="view" value="viewLead"/>
     </request-map>
+    <request-map uri="uploadLeadsForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadLeads"/>
+    </request-map>
+    <request-map uri="uploadLeads">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.uploadLeads"/>
+        <response name="success" type="request-redirect-noparam" value="leadsMain"/>
+        <response name="error" type="view" value="uploadLeadsForm"/>
+    </request-map>
 
 
     <!-- ============================= -->
@@ -3015,6 +3025,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <view-map name="duplicateLeadForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#duplicateLeadForm"/>
     <view-map name="convertLeadForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#convertLeadForm"/>
     <view-map name="updateLeadPassword" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#updateLeadPassword" />
+    <view-map name="uploadLeads" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#uploadLeads"/>
 
     <!-- opportunities screens -->
     <view-map name="myOpportunities" type="screen" page="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml#myOpportunities"/>
