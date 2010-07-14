@@ -22,6 +22,7 @@
     <!-- if a currentLead is set in the context, the form will fill out the form with its values -->
     <form name="createLeadForm" type="single" target="createLead" title="" default-map-name="currentLead" 
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="duplicatingPartyId"><hidden/></field>
         <field name="companyName" title="${uiLabelMap.CrmCompanyName}" position="1" title-style="requiredField"><text size="30" maxlength="100"/></field>
         <field name="parentPartyId" title="${uiLabelMap.CrmParentParty}" position="2">
             <lookup target-form-name="LookupAccounts" size="20" maxlength="20"/>

@@ -190,6 +190,8 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_FORMLTR_VIEW = "CRMSFA_FORMLTR_VIEW";
     /** View an invoice.. */
     public static final String CRMSFA_INVOICE_VIEW = "CRMSFA_INVOICE_VIEW";
+    /** Upload a spreadsheet of leads.. */
+    public static final String CRMSFA_LEADS_UPLOAD = "CRMSFA_LEADS_UPLOAD";
     /** Access to the Leads function of the application.. */
     public static final String CRMSFA_LEADS_VIEW = "CRMSFA_LEADS_VIEW";
     /** Create a new Lead.. */

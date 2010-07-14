@@ -61,6 +61,11 @@ hasDIAdminPermissions = Boolean.FALSE;
 
 globalContext.put("hasDIAdminPermissions", hasDIAdminPermissions);
 
+hasOrgConfigPermissions = Boolean.FALSE;
+hasOrgConfigPermissions = dataimportSecurity.hasPartyRelationSecurity("ORG", "_CONFIG", null);
+globalContext.put("hasOrgConfigPermissions", hasOrgConfigPermissions);
+
+
 // external login key
 extLogin = request.getAttribute("externalLoginKey"); 
 if (extLogin != null) {

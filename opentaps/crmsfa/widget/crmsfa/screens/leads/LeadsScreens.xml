@@ -387,5 +387,31 @@
         </section>
     </screen>
 
+   <screen name="uploadLeads">
+        <section>
+            <condition><if-has-permission permission="CRMSFA_LEADS" action="_UPLOAD"/></condition>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUploadLeads"/>
+                <set field="sectionHeaderUiLabel" value="CrmUploadLeads"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/leads/uploadLeads.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
+        </section>    
+    </screen>
+
 </screens>
 

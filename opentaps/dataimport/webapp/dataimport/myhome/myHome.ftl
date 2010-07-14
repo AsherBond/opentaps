@@ -126,6 +126,7 @@
   </@frameSection>
 </#if>
 
+<#if hasOrgConfigPermissions?default(false)>
   <@frameSection title=uiLabelMap.DataImportCopyLedgerSetup>
     <form name="copyOrganizationLedgerSetupForm" method="post" action="scheduleService">
       <@inputHidden name="SERVICE_NAME" value="copyOrganizationLedgerSetup"/>
@@ -144,3 +145,4 @@
       </table>
     </form>
   </@frameSection>
+</#if>

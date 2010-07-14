@@ -479,7 +479,9 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
 
     protected void setFilter(String columnName, String value, boolean sticky) {
         setFilter(columnName, value);
-        stickyFilters.put(columnName, value);
+        if (sticky) {
+            stickyFilters.put(columnName, value);
+        }
     }
 
     /**

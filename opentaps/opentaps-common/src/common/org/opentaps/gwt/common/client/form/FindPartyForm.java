@@ -35,7 +35,7 @@ import org.opentaps.gwt.common.client.suggest.StateAutocomplete;
  * @see org.opentaps.gwt.common.client.form.FindContactsForm
  * @see org.opentaps.gwt.crmsfa.client.leads.form.FindLeadsForm
  * @see org.opentaps.gwt.crmsfa.client.partners.form.FindPartnersForm
- * @see org.opentaps.gwt.purchasing.suppliers.client.form.FindSuppliersForm
+ * @see org.opentaps.gwt.purchasing.client.suppliers.form.FindSuppliersForm
  */
 public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
 
@@ -44,7 +44,7 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
 
     private final SubFormPanel filterByPhoneTab;
     private final PhoneNumberField phoneInput;
-    
+
     private final SubFormPanel filterByEmailTab;
     private final TextField emailInput;
 
@@ -80,7 +80,7 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
         filterByPhoneTab = getMainForm().addTab(UtilUi.MSG.findByPhone());
         phoneInput = new PhoneNumberField(UtilUi.MSG.partyPhoneNumber(), getLabelLength(), getInputLength());
         filterByPhoneTab.addField(phoneInput);
-        
+
         // Filter by Email Address
         filterByEmailTab = getMainForm().addTab(UtilUi.MSG.findByEmail());
         emailInput = new TextField(UtilUi.MSG.emailAddress(), "emailAddress", getInputLength());

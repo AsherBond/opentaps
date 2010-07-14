@@ -17,9 +17,10 @@
 -->
 
 <entity-engine-xml>
-    
-      <OpentapsConfigurationType configTypeId="ACTIVITIES_DASHBOARD_LEADS_NEW_COLOR" description="Color for new activities on the activities dashboard" defaultValue="5da2ff"/>
-      <OpentapsConfigurationType configTypeId="ACTIVITIES_DASHBOARD_LEADS_OLD_COLOR" description="Color for older activities on the activities dashboard" defaultValue="99CC66"/>
+
+      <OpentapsConfigurationType configTypeId="ACTIVITIES_DASHBOARD_LEADS_NEW_COLOR" description="Color for new activities on the activities dashboard" defaultValue="5FA8FF"/>
+      <OpentapsConfigurationType configTypeId="ACTIVITIES_DASHBOARD_LEADS_OLD_COLOR" description="Color for older activities on the activities dashboard" defaultValue="DF2E2B"/>
+      <OpentapsConfigurationType configTypeId="ACTIVITIES_DASHBOARD_LEADS_NO_ACTIVITY_COLOR" description="Color for no activities on the activities dashboard" defaultValue="FFF682"/>
       <OpentapsConfigurationType configTypeId="ACTIVITIES_DASHBOARD_LEADS_OLD_NEW_CUTOFF" description="Cut off in number of days for old versus new activities on the dashboard" defaultValue="10"/>
-    
+
 </entity-engine-xml>

@@ -20,6 +20,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.ofbiz.entity.condition.EntityCondition;
 import org.opentaps.base.entities.ExternalUser;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyNoteView;
@@ -223,7 +225,7 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public Set<Party> getPartyByName(String firstName, String lastName) throws RepositoryException;
-    
+
     /**
      * Finds the list of <code>PartyGroup</code> matching the given group name.
      * @return the list of <code>PartyGroup</code> matching the name
@@ -231,7 +233,7 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public Set<PartyGroup> getPartyGroupByGroupName(String groupName) throws RepositoryException;
-    
+
     /**
      * Finds the list of <code>PartyGroup</code> matching the given group name and roleTypeId.
      * @return the list of <code>PartyGroup</code> matching the name
@@ -240,13 +242,54 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public Set<PartyGroup> getPartyGroupByGroupNameAndRoleType(String groupName, String roleTypeId) throws RepositoryException;
-    
+
     /**
      * Finds the list of non-expired <code>PartyRelationship</code> matching the given partyIdFrom and partyIdTo.
-     * @return the list of <code>PartyGroup</code> matching the name
-     * @param groupName the groupName to find
-     * @param roleTypeId the roleType Id to find
+     * @return the list of <code>PartyRelationship</code> matching the given parties
+     * @param partyIdFrom the party from
+     * @param partyIdTo the party to
      * @throws RepositoryException if an error occurs
      */
-    public List<PartyRelationship> getPartyRelationship(String partyIdFrom, String partyIdTo)throws RepositoryException;
+    public List<PartyRelationship> getPartyRelationship(String partyIdFrom, String partyIdTo) throws RepositoryException;
+
+    /**
+     * Makes the <code>EntityCondition</code> to use for a lead lookup.
+     * Applies to a lookup on any entity having <code>PartyRelationship</code> roleTypeIdFrom and the <code>Party</code> statusId, to find all non converted leads.
+     * @return an <code>EntityCondition</code> value
+     * @exception RepositoryException if an error occurs
+     */
+    public EntityCondition makeLookupLeadsCondition() throws RepositoryException;
+
+    /**
+     * Makes the <code>EntityCondition</code> to use for a lead lookup.
+     * Applies to a lookup on any entity having <code>PartyRelationship</code> roleTypeIdFrom / partyIdTo / securityGroupId and the <code>Party</code> statusId, to find all non converted leads that the user is allowed to view.
+     * Applies to <code>PartyFromByRelnAndContactInfoAndPartyClassification</code>, to find non converted leads which the user is allowed to view.
+     * @return an <code>EntityCondition</code> value
+     * @exception RepositoryException if an error occurs
+     */
+    public EntityCondition makeLookupLeadsUserIsAllowedToViewCondition() throws RepositoryException;
+
+    /**
+     * Makes the <code>EntityCondition</code> to use for a lead lookup.
+     * Applies to a lookup on any entity having <code>PartyRelationship</code> roleTypeIdFrom / partyIdTo / securityGroupId and the <code>Party</code> statusId, to find all non converted leads that the given party is allowed to view.
+     * @param partyId the party to use when checking permissions
+     * @return an <code>EntityCondition</code> value
+     * @exception RepositoryException if an error occurs
+     */
+    public EntityCondition makeLookupLeadsPartyIsAllowedToViewCondition(String partyId) throws RepositoryException;
+
+    /**
+     * Finds the set of leads partyId that the current user is allowed to view.
+     * @return the set of leads partyId that the current user is allowed to view
+     * @throws RepositoryException if an error occurs
+     */
+    public Set<String> getLeadIdsUserIsAllowedToView() throws RepositoryException;
+
+    /**
+     * Finds the set of leads partyId that the given party is allowed to view.
+     * @param partyId the party to use when checking permissions
+     * @return the set of leads partyId that the given party is allowed to view
+     * @throws RepositoryException if an error occurs
+     */
+    public Set<String> getLeadIdsPartyIsAllowedToView(String partyId) throws RepositoryException;
 }

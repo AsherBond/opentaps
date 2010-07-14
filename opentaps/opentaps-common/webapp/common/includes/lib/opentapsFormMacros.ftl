@@ -59,21 +59,21 @@ For more information, please see documentation/opentapsFormMacros.html
   </tr>
 </#macro>
 
-<#macro displayLink href text class="linktext" target="" id="">
+<#macro displayLink href text class="linktext" style="" target="" id="">
 <#compress>
   <#assign idText = id?has_content?string("id=\"" + id + "\"", "")/>
   <#if href?starts_with("/")>
-    <a href="${href}<#if externalKeyParam?has_content>${StringUtil.wrapString(externalKeyParam)}</#if>" ${idText} class="${class}" target="${target}">${text}</a>
+    <a href="${href}<#if externalKeyParam?has_content>${StringUtil.wrapString(externalKeyParam)}</#if>" ${idText} style="${style}" class="${class}" target="${target}">${text}</a>
   <#elseif href?starts_with("javascript:")>
-    <a href="${href}" ${idText} class="${class}">${text}</a>
+    <a href="${href}" ${idText} style="${style}" class="${class}">${text}</a>
   <#else>
-    <a href="<@ofbizUrl>${href}</@ofbizUrl>" ${idText} class="${class}" target="${target}">${text}</a>
+    <a href="<@ofbizUrl>${href}</@ofbizUrl>" ${idText} style="${style}" class="${class}" target="${target}">${text}</a>
   </#if>
 </#compress>
 </#macro>
 
-<#macro displayLinkCell href text class="linktext" blockClass="" target="" id="">
-  <td class="${blockClass}"><@displayLink text=text href=href class=class target=target id=id /></td>
+<#macro displayLinkCell href text class="linktext" style="" blockStyle="" blockClass="" target="" id="">
+  <td class="${blockClass}" style="${blockStyle}"><@displayLink text=text href=href style=style class=class target=target id=id /></td>
 </#macro>
 
 <#macro displayLinkRow href title text class="linktext" blockClass="" titleClass="tableheadtext" target="" id="">

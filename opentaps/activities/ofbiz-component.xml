@@ -26,11 +26,7 @@
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
     <resource-loader name="main" type="component"/>
 
-    <!-- class path for Java build files, config properties files, and script files 
     <classpath type="dir" location="config"/>
-    <classpath type="dir" location="script"/>
-    <classpath type="jar" location="lib/*"/>
-     -->
     <classpath type="jar" location="build/lib/*"/>
     
     <!-- entity group definition files -->
@@ -48,6 +44,12 @@
     <!-- eca service chain files -->
     <service-resource type="eca" loader="main" location="servicedef/secas_activities.xml"/>
 
+    <webapp name="activitiesgwt"
+        title="GWT Part of Activities"
+        server="default-server"
+        location="webapp/activitiesgwt"
+        mount-point="/activitiesgwt"
+        app-bar-display="false"/>
 
 </ofbiz-component>
 

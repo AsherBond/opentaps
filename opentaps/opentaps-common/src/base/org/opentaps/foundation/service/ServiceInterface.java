@@ -115,10 +115,37 @@ public interface ServiceInterface extends DomainContextInterface {
 
     /**
      * Checks if the current user has the requested entity permission.
+     * Entity permissions are given in a form so that ENTITY + ACTION gives a permission ID,
+     *  and if the user has the "_ADMIN" action permission, any action is allowed.
+     *  for example <code>hasEntityPermission("MYAPP_CONTACT", "_VIEW")</code> succeeds
+     *  if the user has <code>MYAPP_CONTACT_VIEW</code> or <code>MYAPP_CONTACT_ADMIN</code>.
      * @param entity the name of the Entity corresponding to the desired permission
      * @param action the action on the Entity corresponding to the desired permission
      * @return <code>true</code> if the current user has the requested permission
      * @throws ServiceException if the <code>Security</code> or <code>User</code> is not set
      */
     public boolean hasEntityPermission(String entity, String action) throws ServiceException;
+
+    /**
+     * Checks if the current user has the requested permission or throw a service exception
+     * with a standard error message.
+     * @param permission the permission group to test for
+     * @throws ServiceException if the permission was denied, or if the <code>Security</code> or <code>User</code> is not set
+     * @see #hasPermission(String)
+     */
+    public void checkPermission(String permission) throws ServiceException;
+
+    /**
+     * Checks if the current user has the requested entity permission or throw a service
+     * exception with a standard error message.
+     * Entity permissions are given in a form so that ENTITY + ACTION gives a permission ID,
+     *  and if the user has the "_ADMIN" action permission, any action is allowed.
+     *  for example <code>hasEntityPermission("MYAPP_CONTACT", "_VIEW")</code> succeeds
+     *  if the user has <code>MYAPP_CONTACT_VIEW</code> or <code>MYAPP_CONTACT_ADMIN</code>.
+     * @param entity the name of the Entity corresponding to the desired permission
+     * @param action the action on the Entity corresponding to the desired permission
+     * @throws ServiceException if the permission was denied, or if the <code>Security</code> or <code>User</code> is not set
+     * @see #hasPermission(String)
+     */
+    public void checkEntityPermission(String entity, String action) throws ServiceException;
 }

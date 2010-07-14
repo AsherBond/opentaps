@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import junit.framework.TestCase;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
@@ -33,14 +33,15 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.PartyRolePk;
+import org.opentaps.base.entities.Person;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.base.services.CrmsfaCreateAccountService;
 import org.opentaps.base.services.CrmsfaDeactivateAccountService;
+import org.opentaps.base.services.CrmsfaUploadLeadsService;
 import org.opentaps.base.services.PurchasingCreateSupplierService;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.domain.DomainsLoader;
@@ -62,8 +63,6 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 import org.opentaps.gwt.common.server.lookup.PartyLookupService;
 import org.opentaps.tests.OpentapsTestCase;
 import org.opentaps.tests.gwt.TestInputProvider;
-
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
 
 /**
  * Party related tests.
@@ -1219,30 +1218,56 @@ public class PartyTests extends OpentapsTestCase {
         GenericValue supplierParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", supplierId));
         supplierParty.put("statusId", "PARTY_DISABLED");
         supplierParty.store();
-        
+
         supplierParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", duplicateSupplierId));
         supplierParty.put("statusId", "PARTY_DISABLED");
         supplierParty.store();
     }
 
     /**
-     * Test organizationRepository's getOrganizationTemplates returns the party group Company_Template.
+     * Test organizationRepository's getOrganizationTemplates returns the new party with role ORGANIZATION_TEMPL.
      * @throws GeneralException if an error occurs
      */
     public void testGetOrganizationTemplates() throws GeneralException {
+        // 1. Create PartyGroup
+        Session session = domainsLoader.getInfrastructure().getSession();
+        org.opentaps.base.entities.Party party = new org.opentaps.base.entities.Party();
+        party.setPartyTypeId("PARTY_GROUP");
+        session.save(party);
+        session.flush();
+        PartyGroup partyGroup = new PartyGroup();
+        partyGroup.setPartyId(party.getPartyId());
+        partyGroup.setGroupName("Test GroupName for testGetOrganizationTemplates");
+        session.save(partyGroup);
+        // 2. Associate ORGANIZATION_TEMPL role with it
+        PartyRole internalOrganizationRole = new PartyRole();
+        PartyRolePk pk = new PartyRolePk();
+        pk.setPartyId(party.getPartyId());
+        pk.setRoleTypeId("ORGANIZATION_TEMPL");
+        internalOrganizationRole.setId(pk);
+        session.save(internalOrganizationRole);
+        session.flush();
+        session.close();
+        // 3. Verify that it is returned from getOrganizationTemplates
         OrganizationRepositoryInterface orgRepository = organizationDomain.getOrganizationRepository();
         List<PartyGroup> partyGroups = orgRepository.getOrganizationTemplates();
-        PartyGroup partyGroup = partyGroups.get(0);
-        assertEquals("GetOrganizationTemplates should returns the party group Company_Template.", partyGroup.getPartyId(), "Company_Template");
+        boolean foundTheParty = false;
+        for (PartyGroup group : partyGroups) {
+            if (group.getPartyId().equals(party.getPartyId())) {
+                foundTheParty = true;
+                break;
+            }
+        }
+        assertTrue("We should found new party [" + party.getPartyId() + "] with role ORGANIZATION_TEMPL in the result", foundTheParty);
     }
-    
+
     /**
      * Test organizationRepository's getOrganizationWithoutLedgerSetup returns the new party with role INTERNAL_ORGANIZATIO.
      * @throws GeneralException if an error occurs
      */
     public void testGetOrganizationWithoutLedgerSetup() throws GeneralException {
         Session session = domainsLoader.getInfrastructure().getSession();
-        Party party = new Party();
+        org.opentaps.base.entities.Party party = new org.opentaps.base.entities.Party();
         party.setPartyTypeId("PARTY_GROUP");
         session.save(party);
         session.flush();
@@ -1258,7 +1283,7 @@ public class PartyTests extends OpentapsTestCase {
         session.save(internalOrganizationRole);
         session.flush();
         session.close();
-        
+
         OrganizationRepositoryInterface orgRepository = organizationDomain.getOrganizationRepository();
         List<PartyGroup> partyGroups = orgRepository.getOrganizationWithoutLedgerSetup();
         boolean foundTheParty = false;
@@ -1269,5 +1294,39 @@ public class PartyTests extends OpentapsTestCase {
             }
         }
         assertTrue("We should found new party [" + party.getPartyId() + "] with role INTERNAL_ORGANIZATIO in the result", foundTheParty);
+    }
+
+    /**
+     * Test the crmsfa.uploadLeads service.
+     * @throws Exception if an error occurs
+     */
+    public void testUploadLeads() throws Exception {
+        // upload the test lead_import_example.xls file
+        String fileName = "lead_import_example.xls";
+        CrmsfaUploadLeadsService upSer = new CrmsfaUploadLeadsService();
+        upSer.setInUserLogin(admin);
+        upSer.setInUploadedFileFileName(fileName);
+        upSer.setInUploadedFileContentType("application/vnd.ms-excel");
+        upSer.setInUploadedFile(getByteBufferFromFile("opentaps/crmsfa/data/xls/" + fileName));
+        runAndAssertServiceSuccess(upSer);
+        List<String> leadIds = upSer.getOutCreatedLeadIds();
+
+        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));
+        PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
+        PartyRepository repo = (PartyRepository) partyDomain.getPartyRepository();
+
+        // check that Lana Lee can be found
+        List<Person> persons = repo.findList(Person.class, EntityCondition.makeCondition(
+                                                                 EntityCondition.makeCondition(Person.Fields.firstName.name(), "Lana"),
+                                                                 EntityCondition.makeCondition(Person.Fields.lastName.name(), "Lee"),
+                                                                 EntityCondition.makeCondition(Person.Fields.partyId.name(), EntityOperator.IN, leadIds)));
+        assertNotEmpty("Should have found the imported lead Lana Lee", persons);
+
+        // check that Leanne Chambers can be found
+        persons = repo.findList(Person.class, EntityCondition.makeCondition(
+                                                                 EntityCondition.makeCondition(Person.Fields.firstName.name(), "Leanne"),
+                                                                 EntityCondition.makeCondition(Person.Fields.lastName.name(), "Chambers"),
+                                                                 EntityCondition.makeCondition(Person.Fields.partyId.name(), EntityOperator.IN, leadIds)));
+        assertNotEmpty("Should have found the imported lead Leanne Chambers", persons);
     }
 }

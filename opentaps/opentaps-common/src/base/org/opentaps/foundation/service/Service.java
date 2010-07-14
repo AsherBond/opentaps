@@ -26,6 +26,7 @@ import org.ofbiz.security.Security;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.infrastructure.DomainContextInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 
 /**
@@ -201,5 +202,29 @@ public class Service implements ServiceInterface {
         }
 
         return getSecurity().hasEntityPermission(entity, action, getUser().getOfbizUserLogin());
+    }
+
+    /** {@inheritDoc} */
+    public void checkPermission(String permission) throws ServiceException {
+        if (!hasPermission(permission)) {
+            try {
+                String err = UtilMessage.getPermissionDeniedError(locale) + ": user [" + getUser().getUserId() + "] does not have permission " + permission;
+                throw new ServiceException(err);
+            } catch (InfrastructureException e) {
+                throw new ServiceException(e);
+            }
+        }
+    }
+
+    /** {@inheritDoc} */
+    public void checkEntityPermission(String entity, String action) throws ServiceException {
+        if (!hasEntityPermission(entity, action)) {
+            try {
+                String err = UtilMessage.getPermissionDeniedError(locale) + ": user [" + getUser().getUserId() + "] does not have permission " + entity + " " + action;
+                throw new ServiceException(err);
+            } catch (InfrastructureException e) {
+                throw new ServiceException(e);
+            }
+        }
     }
 }

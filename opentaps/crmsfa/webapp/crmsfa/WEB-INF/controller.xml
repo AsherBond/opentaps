@@ -82,10 +82,13 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
     <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopViewHandler"/>
     <handler name="ftl" type="view" class="org.ofbiz.webapp.ftl.FreeMarkerViewHandler"/>
-    <handler name="jpublish" type="view" class="org.ofbiz.webapp.view.JPublishViewHandler"/>
     <handler name="jasperreports" type="view" class="org.opentaps.common.reporting.jasper.JasperReportsViewHandler"/>
     <handler name="json" type="request" class="org.ofbiz.webapp.event.JSONServiceEventHandler"/>
 
+    <!-- Uncomment this if you want to try jpublish
+    <handler name="jpublish" type="view" class="org.ofbiz.webapp.view.JPublishViewHandler"/>
+    -->
+    
     <!-- Merge Form Handler -->
     <handler name="mergeformfop" type="view" class="com.opensourcestrategies.crmsfa.handlers.CrmsfaMergeFormsFopViewHandler"/>
 
@@ -1057,6 +1060,16 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <event type="service" invoke="crmsfa.deleteLead"/>
         <response name="success" type="request-redirect-noparam" value="leadsMain"/>
         <response name="error" type="view" value="viewLead"/>
+    </request-map>
+    <request-map uri="uploadLeadsForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadLeads"/>
+    </request-map>
+    <request-map uri="uploadLeads">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.uploadLeads"/>
+        <response name="success" type="request-redirect-noparam" value="leadsMain"/>
+        <response name="error" type="view" value="uploadLeads"/>
     </request-map>
 
 
@@ -3015,6 +3028,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <view-map name="duplicateLeadForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#duplicateLeadForm"/>
     <view-map name="convertLeadForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#convertLeadForm"/>
     <view-map name="updateLeadPassword" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#updateLeadPassword" />
+    <view-map name="uploadLeads" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#uploadLeads"/>
 
     <!-- opportunities screens -->
     <view-map name="myOpportunities" type="screen" page="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml#myOpportunities"/>

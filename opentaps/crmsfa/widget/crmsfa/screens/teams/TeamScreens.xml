@@ -36,6 +36,7 @@
 
     <screen name="leftBarScreen">
         <section>
+            <condition><if-has-permission permission="CRMSFA_TEAM" action="_VIEW"/></condition>
             <widgets>
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/teams/screenlets/shortcuts.ftl"/></html>
@@ -52,6 +53,7 @@
 
     <screen name="findTeams">
         <section>
+            <condition><if-has-permission permission="CRMSFA_TEAM" action="_VIEW"/></condition>
             <actions>
                 <set field="pageTitleLabel" value="CrmFindTeams"/>
                 <set field="sectionHeaderUiLabel" value="CrmFindTeams"/>
@@ -75,11 +77,19 @@
                     </decorator-section>
                 </decorator-screen>
             </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
         </section>
     </screen>
 
     <screen name="viewTeam">
         <section>
+            <condition><if-has-permission permission="CRMSFA_TEAM" action="_VIEW"/></condition>
             <actions>
                 <set field="pageTitleLabel" value="CrmViewTeam"/>
                 <set field="sectionHeaderUiLabel" value="CrmViewTeam"/>
@@ -110,11 +120,19 @@
                     </decorator-section>
                 </decorator-screen>
             </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
         </section>
     </screen>
 
     <screen name="createTeamForm">
         <section>
+            <condition><if-has-permission permission="CRMSFA_TEAM" action="_VIEW"/></condition>
             <actions>
                 <set field="sectionHeaderUiLabel" value="CrmCreateTeam"/>
                 <java location="com.opensourcestrategies.crmsfa.teams.TeamActions" invoke="getTeamPermissions"/>
@@ -130,11 +148,19 @@
                     </decorator-section>
                 </decorator-screen>
             </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
         </section>
     </screen>
 
     <screen name="updateTeamForm">
         <section>
+            <condition><if-has-permission permission="CRMSFA_TEAM" action="_VIEW"/></condition>
             <actions>
                 <set field="sectionHeaderUiLabel" value="CrmUpdateTeam"/>
                 <java location="com.opensourcestrategies.crmsfa.teams.TeamActions" invoke="getTeamPermissions"/>
@@ -151,6 +177,13 @@
                     </decorator-section>
                 </decorator-screen>
             </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
         </section>
     </screen>
 

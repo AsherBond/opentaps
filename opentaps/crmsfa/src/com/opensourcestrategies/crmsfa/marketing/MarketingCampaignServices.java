@@ -36,6 +36,8 @@ import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.*;
+import org.opentaps.base.constants.ContactMechTypeConstants;
+import org.opentaps.base.entities.TrackingCodeAndContactListAndMarketingCampaign;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
@@ -150,9 +152,13 @@ public final class MarketingCampaignServices {
 
         // TODO: security
         try {
-            // create a communicaiton event for each contact list and invoke sendCommEventAsEmail
-            List<GenericValue> contactLists = delegator.findByAnd("ContactList", UtilMisc.toMap("marketingCampaignId", marketingCampaignId));
-            contactLists = EntityUtil.filterByAnd(contactLists, UtilMisc.toMap("contactMechTypeId", "EMAIL_ADDRESS"));
+            // create a communication event for each contact list and invoke sendCommEventAsEmail
+            EntityCondition condition = EntityCondition.makeCondition(
+                  EntityCondition.makeCondition(TrackingCodeAndContactListAndMarketingCampaign.Fields.marketingCampaignId.name(), marketingCampaignId),
+                  EntityCondition.makeCondition(TrackingCodeAndContactListAndMarketingCampaign.Fields.contactMechTypeId.name(), ContactMechTypeConstants.ElectronicAddress.EMAIL_ADDRESS),
+                  EntityUtil.getFilterByDateExpr());
+            List<GenericValue> contactLists = delegator.findByCondition("TrackingCodeAndContactListAndMarketingCampaign", condition, null, null);
+            contactLists = EntityUtil.filterByDate(contactLists);
             for (Iterator<GenericValue> iter = contactLists.iterator(); iter.hasNext();) {
                 GenericValue contactList = iter.next();
 

@@ -43,6 +43,8 @@ public final class PartyRelationshipTypeConstants {
     public static final String CONTACT_REL_INV = "CONTACT_REL_INV";
     public static final String CUSTOMER_REL = "CUSTOMER_REL";
     public static final String DISTRIBUTION_CHANNEL = "DISTRIBUTION_CHANNEL";
+    /** Relationship from an original to a duplicated party. */
+    public static final String DUPLICATED = "DUPLICATED";
     public static final String EMPLOYMENT = "EMPLOYMENT";
     public static final String FRIEND = "FRIEND";
     public static final String GROUP_ROLLUP = "GROUP_ROLLUP";

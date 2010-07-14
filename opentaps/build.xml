@@ -60,6 +60,7 @@
       <filelist dir="." files="financials/build.xml"/>
       <filelist dir="." files="warehouse/build.xml"/>
       <filelist dir="." files="analytics/build.xml"/>
+      <filelist dir="." files="activities/build.xml"/>
     </subant>
   </target>
 
@@ -71,6 +72,7 @@
       <filelist dir="." files="financials/build.xml"/>
       <filelist dir="." files="warehouse/build.xml"/>
       <filelist dir="." files="analytics/build.xml"/>
+      <filelist dir="." files="activities/build.xml"/>
     </subant>
   </target>
   
