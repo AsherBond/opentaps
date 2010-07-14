@@ -33,7 +33,6 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.PartyRolePk;
@@ -1219,7 +1218,7 @@ public class PartyTests extends OpentapsTestCase {
         GenericValue supplierParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", supplierId));
         supplierParty.put("statusId", "PARTY_DISABLED");
         supplierParty.store();
-        
+
         supplierParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", duplicateSupplierId));
         supplierParty.put("statusId", "PARTY_DISABLED");
         supplierParty.store();
@@ -1249,7 +1248,7 @@ public class PartyTests extends OpentapsTestCase {
         session.save(internalOrganizationRole);
         session.flush();
         session.close();
-        // 3. Verify that it is returned from getOrganizationTemplates 
+        // 3. Verify that it is returned from getOrganizationTemplates
         OrganizationRepositoryInterface orgRepository = organizationDomain.getOrganizationRepository();
         List<PartyGroup> partyGroups = orgRepository.getOrganizationTemplates();
         boolean foundTheParty = false;
@@ -1261,7 +1260,7 @@ public class PartyTests extends OpentapsTestCase {
         }
         assertTrue("We should found new party [" + party.getPartyId() + "] with role ORGANIZATION_TEMPL in the result", foundTheParty);
     }
-    
+
     /**
      * Test organizationRepository's getOrganizationWithoutLedgerSetup returns the new party with role INTERNAL_ORGANIZATIO.
      * @throws GeneralException if an error occurs
@@ -1284,7 +1283,7 @@ public class PartyTests extends OpentapsTestCase {
         session.save(internalOrganizationRole);
         session.flush();
         session.close();
-        
+
         OrganizationRepositoryInterface orgRepository = organizationDomain.getOrganizationRepository();
         List<PartyGroup> partyGroups = orgRepository.getOrganizationWithoutLedgerSetup();
         boolean foundTheParty = false;
