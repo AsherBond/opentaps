@@ -36,6 +36,7 @@
 
     <screen name="leftBarScreen">
         <section>
+            <condition><if-has-permission permission="CRMSFA_TEAM" action="_VIEW"/></condition>
             <widgets>
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/teams/screenlets/shortcuts.ftl"/></html>
