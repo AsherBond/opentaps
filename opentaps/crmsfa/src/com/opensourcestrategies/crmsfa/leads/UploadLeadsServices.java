@@ -121,7 +121,7 @@ public class UploadLeadsServices extends DomainService {
 
         // parse the Excel file
         List<String> fieldsToParse = Arrays.asList("companyName", "firstName", "lastName",
-                                                   "attnName", "address1", "address2", "city", "stateProvinceGeoId", "postalCode", "postalCodeExt", "stateProvinceGeoName", "countryGeoId",
+                                                   "attnName", "address1", "address2", "city", "stateProvinceGeoId", "postalCode", "postalCodeExt", "countryGeoId",
                                                    "primaryPhoneCountryCode", "primaryPhoneAreaCode", "primaryPhoneNumber", "primaryPhoneExtension",
                                                    "secondaryPhoneCountryCode", "secondaryPhoneAreaCode", "secondaryPhoneNumber", "secondaryPhoneExtension",
                                                    "faxCountryCode", "faxAreaCode", "faxNumber",
