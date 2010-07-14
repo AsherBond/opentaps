@@ -82,10 +82,13 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
     <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopViewHandler"/>
     <handler name="ftl" type="view" class="org.ofbiz.webapp.ftl.FreeMarkerViewHandler"/>
-    <handler name="jpublish" type="view" class="org.ofbiz.webapp.view.JPublishViewHandler"/>
     <handler name="jasperreports" type="view" class="org.opentaps.common.reporting.jasper.JasperReportsViewHandler"/>
     <handler name="json" type="request" class="org.ofbiz.webapp.event.JSONServiceEventHandler"/>
 
+    <!-- Uncomment this if you want to try jpublish
+    <handler name="jpublish" type="view" class="org.ofbiz.webapp.view.JPublishViewHandler"/>
+    -->
+    
     <!-- Merge Form Handler -->
     <handler name="mergeformfop" type="view" class="com.opensourcestrategies.crmsfa.handlers.CrmsfaMergeFormsFopViewHandler"/>
 
