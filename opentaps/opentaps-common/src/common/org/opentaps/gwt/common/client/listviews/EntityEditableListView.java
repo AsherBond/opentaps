@@ -1076,7 +1076,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
                     }
                 }
             });
-        
+
         pagingToolbar.doOnRender(new Function() {
             public void execute() { 
                 pagingToolbar.getRefreshButton().addListener(new ButtonListenerAdapter() {
@@ -1123,9 +1123,17 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
      * @param pageSizeField a <code>NumberField</code> value
      */
     private void changePageSize(NumberField pageSizeField) {
-        int pageSize = pageSizeField.getValue().intValue();
+        // Seems using getValue().intValue() sometimes does not work
+        String pageSizeString = pageSizeField.getRawValue();
+        int pageSize;
+        if (UtilUi.isEmpty(pageSizeString)) {
+            pageSize = defaultPageSize;
+        } else {
+            pageSize = Integer.valueOf(pageSizeString);
+        }
         // do not allow 0 as a page size
         if (pageSize > 0) {
+            pageSizeField.setValue(pageSize);
             pagingToolbar.setPageSize(pageSize);
         } else {
             pageSizeField.setValue(Integer.valueOf(pagingToolbar.getPageSize()));
