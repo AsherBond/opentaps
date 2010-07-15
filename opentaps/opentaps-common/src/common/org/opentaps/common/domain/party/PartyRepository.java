@@ -543,7 +543,8 @@ public class PartyRepository extends DomainRepository implements PartyRepository
         EntityCondition leadsCond = EntityCondition.makeCondition(
                                              makeLookupLeadsCondition(),
                                              crmFindSecFilter,
-                                             EntityCondition.makeCondition(PartyRelationship.Fields.partyIdTo.name(), partyId));
+                                             EntityCondition.makeCondition(PartyRelationship.Fields.partyIdTo.name(), partyId),
+                                             EntityUtil.getFilterByDateExpr());
 
         return leadsCond;
     }
