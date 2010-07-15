@@ -110,7 +110,7 @@ public class UploadLeadsServices extends DomainService {
      * Parses the uploaded Excel spreadsheet, and then uses the <code>crmsfa.createLead/createNote/createTelecomNumber</code> services to
      *  create the lead, the fax number, and the note from the spreadsheet.
      * For an example of the spreadsheet format, see <code>opentaps/crmsfa/data/xls/lead_import_example.xls</code>.
-     * The spreadsheet should contain the following fields: companyName, firstName, lastName, attnName, address1, address2, city, stateProvinceGeoId, postalCode, postalCodeExt, stateProvinceGeoName, countryGeoId, primaryPhoneCountryCode, primaryPhoneAreaCode, primaryPhoneNumber, primaryPhoneExtension, secondaryPhoneCountryCode, secondaryPhoneAreaCode, secondaryPhoneNumber, secondaryPhoneExtension, faxCountryCode, faxAreaCode, faxNumber, emailAddress, webAddress, note
+     * The spreadsheet should contain the following fields: companyName, firstName, lastName, attnName, address1, address2, city, stateProvinceGeoId, postalCode, postalCodeExt, countryGeoId, primaryPhoneCountryCode, primaryPhoneAreaCode, primaryPhoneNumber, primaryPhoneExtension, secondaryPhoneCountryCode, secondaryPhoneAreaCode, secondaryPhoneNumber, secondaryPhoneExtension, faxCountryCode, faxAreaCode, faxNumber, emailAddress, webAddress, note
      *
      * @exception ServiceException if an error occurs
      */
@@ -158,7 +158,6 @@ public class UploadLeadsServices extends DomainService {
                     addressSer.setInPostalCode(row.get("postalCode"));
                     addressSer.setInPostalCodeExt(row.get("postalCodeExt"));
                     addressSer.setInCountryGeoId(row.get("countryGeoId"));
-                    // TODO: what is the stateProvinceGeoName field for ?
                     // set the purpose as General Correspondence Address
                     addressSer.setInContactMechPurposeTypeId(ContactMechPurposeTypeConstants.GENERAL_LOCATION);
                     // set the toName to the lead names

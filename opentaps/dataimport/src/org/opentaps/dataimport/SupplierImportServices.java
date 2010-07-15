@@ -96,7 +96,7 @@ class SupplierDecoder implements ImportDecoder {
         if (!UtilValidate.isEmpty(entry.getString("address1"))) {
             // associate this as the GENERAL_LOCATION and BILLING_LOCATION
             GenericValue contactMech = delegator.makeValue("ContactMech", UtilMisc.toMap("contactMechId", delegator.getNextSeqId("ContactMech"), "contactMechTypeId", "POSTAL_ADDRESS"));
-            GenericValue mainPostalAddress = UtilImport.makePostalAddress(contactMech, entry.getString("supplierName"), "", "", entry.getString("attnName"), entry.getString("address1"), entry.getString("address2"), entry.getString("city"), entry.getString("stateProvinceGeoId"), entry.getString("postalCode"), entry.getString("postalCodeExt"), entry.getString("stateProvinceGeoName"), entry.getString("countryGeoId"), delegator);
+            GenericValue mainPostalAddress = UtilImport.makePostalAddress(contactMech, entry.getString("supplierName"), "", "", entry.getString("attnName"), entry.getString("address1"), entry.getString("address2"), entry.getString("city"), entry.getString("stateProvinceGeoId"), entry.getString("postalCode"), entry.getString("postalCodeExt"), entry.getString("countryGeoId"), delegator);
             toBeStored.add(contactMech);
             toBeStored.add(mainPostalAddress);
 
