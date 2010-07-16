@@ -118,10 +118,10 @@ public class InvoiceLookupRepository extends CommonLookupRepository implements I
         if (UtilValidate.isNotEmpty(thruPaidDateString)) {
             thruPaidDate = UtilDate.toTimestamp(thruPaidDateString, timeZone, locale);
         }
-
+        Session session = null;
         try {
             // get a hibernate session
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             Criteria criteria = session.createCriteria(Invoice.class);
 
             // always filter by invoice type
@@ -285,6 +285,10 @@ public class InvoiceLookupRepository extends CommonLookupRepository implements I
 
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 

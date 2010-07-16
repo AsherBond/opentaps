@@ -109,10 +109,10 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
         if (UtilValidate.isNotEmpty(thruDateStr)) {
             thruDate = UtilDate.toTimestamp(thruDateStr, timeZone, locale);
         }
-
+        Session session = null;
         try {
             // get a hibernate session
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             Criteria criteria = session.createCriteria(OrderHeader.class);
 
             // always filter by the current organization
@@ -319,6 +319,10 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
         } catch (InfrastructureException e) {
         	Debug.logError(e, MODULE);
             throw new RepositoryException(e);
+        }  finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 

@@ -264,13 +264,18 @@ public class OrganizationRepository extends PartyRepository implements Organizat
     @SuppressWarnings("unchecked")
     public List<Organization> getAllValidOrganizations() throws RepositoryException {
         String hql = "select eo.party from PartyRole eo where eo.id.roleTypeId = 'INTERNAL_ORGANIZATIO'";
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             Query query = session.createQuery(hql);
             List<Party> parties = query.list();
             return findList(Organization.class, Arrays.asList(EntityCondition.makeCondition(Party.Fields.partyId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(parties, Party.Fields.partyId))));
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        }  finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
@@ -322,21 +327,27 @@ public class OrganizationRepository extends PartyRepository implements Organizat
     /** {@inheritDoc} */
     public List<PartyGroup> getOrganizationTemplates() throws RepositoryException {
         String hql = "select eo.party.partyGroup from PartyRole eo where eo.id.roleTypeId = 'ORGANIZATION_TEMPL'";
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             Query query = session.createQuery(hql);
             List<PartyGroup> partyGroups = query.list();
             return partyGroups;
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
-        }        
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }       
     }
     
     /** {@inheritDoc} */
     public List<PartyGroup> getOrganizationWithoutLedgerSetup() throws RepositoryException {
         String hql = "select eo.party.partyGroup from PartyRole eo where eo.id.roleTypeId='INTERNAL_ORGANIZATIO'";
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             Query query = session.createQuery(hql);
             List<PartyGroup> partyGroups1 = query.list();
             hql = "select eo.party.partyGroup from PartyAcctgPreference eo";
@@ -352,6 +363,10 @@ public class OrganizationRepository extends PartyRepository implements Organizat
             return partyGroups;
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
-        }        
+        }  finally {
+            if (session != null) {
+                session.close();
+            }
+        }       
     }
 }

@@ -138,14 +138,19 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
     /** {@inheritDoc} */
     public List<GoodIdentification> getAlternateProductIds(String productId) throws RepositoryException {
         String hql = "from GoodIdentification eo where eo.id.productId = :productId";
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             Query query = session.createQuery(hql);
             query.setParameter("productId", productId);
             List<GoodIdentification> goodIdentifications = query.list();
             return goodIdentifications;
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
     

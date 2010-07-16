@@ -145,6 +145,10 @@ public class GlAccountImportService extends DomainService implements GlAccountIm
         } catch (RepositoryException ex) {
             Debug.logError(ex, MODULE);
             throw new ServiceException(ex.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
     

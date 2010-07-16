@@ -552,8 +552,9 @@ public class OrderRepository extends DomainRepository implements OrderRepository
     @SuppressWarnings("unchecked")
     public List<OrderItemShipGrpInvRes> getBackOrderedInventoryReservations(String productId, String facilityId) throws RepositoryException {
         String hql = "from OrderItemShipGrpInvRes eo where eo.inventoryItem.productId = :productId and eo.inventoryItem.facilityId = :facilityId and eo.quantityNotAvailable is not null order by eo.reservedDatetime, eo.sequenceId";
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             Query query = session.createQuery(hql);
             query.setParameter("productId", productId);
             query.setParameter("facilityId", facilityId);
@@ -569,6 +570,10 @@ public class OrderRepository extends DomainRepository implements OrderRepository
             return resultSet;
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
