@@ -102,6 +102,7 @@
         <section>
             <actions>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/setShortcutsForLogin.bsh"/>
+                 <java location="org.opentaps.domain.login.LoginScreenActions" invoke="getLatestNews"/>
             </actions>        
             <widgets>
                 <decorator-screen name="main-application-decorator" location="${parameters.mainApplicationDecoratorLocation}">
