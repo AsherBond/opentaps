@@ -1594,9 +1594,11 @@ public final class OrderServices {
             // return false if forceComplete is not set
             hasBilledAdjustments = true;
             if (!forceComplete) {
+                session.close();
                 return false;
             }
         }
+        session.close();
 
         // get/set the shipping estimates.  if it's a SALES ORDER, then return an error if there are no ship estimates
         int shipGroups = cart.getShipGroupSize();

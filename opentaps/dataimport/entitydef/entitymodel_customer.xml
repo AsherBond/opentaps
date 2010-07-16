@@ -49,7 +49,6 @@
         </field>
         <field name="postalCode" type="short-varchar"/>
         <field name="postalCodeExt" type="short-varchar"/>
-        <field name="stateProvinceGeoName" type="name"/>
         <field name="countryGeoId" type="id">
             <description>Must match OFBiz Geo.geoId</description>
         </field>

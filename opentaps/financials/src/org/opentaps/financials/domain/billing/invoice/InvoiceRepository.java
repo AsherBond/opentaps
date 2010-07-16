@@ -337,14 +337,19 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     public List<InvoiceAdjustmentType> getInvoiceAdjustmentTypes(Organization organization, Invoice invoice) throws RepositoryException {
         String hql = "select distinct eo.invoiceAdjustmentType from InvoiceAdjustmentGlAccount eo"
             + " where eo.id.organizationPartyId=:organizationPartyId and eo.id.invoiceTypeId=:invoiceTypeId";
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             Query query = session.createQuery(hql);
             query.setString("organizationPartyId", organization.getPartyId());
             query.setString("invoiceTypeId", invoice.getInvoiceTypeId());
             return query.list();
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 }

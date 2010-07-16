@@ -2706,7 +2706,9 @@ public final class FinancialReports {
             UtilEtl.runTrans("component://financials/script/etl/load_invoice_level_promotions.ktr", null);
             // ... and invoke other required services and methods
             dispatcher.runSync("financials.loadTaxInvoiceItemFact", UtilMisc.toMap("userLogin", userLogin, "locale", locale));
-            loadInvoiceAdjustments(new Infrastructure(dispatcher).getSession(), delegator);
+            Session session = new Infrastructure(dispatcher).getSession();
+            loadInvoiceAdjustments(session, delegator);
+            session.close();
 
             // unregister data source
             new InitialContext().unbind("java:comp/env/jdbc/default_delegator");

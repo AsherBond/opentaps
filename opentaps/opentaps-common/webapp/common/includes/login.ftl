@@ -110,6 +110,34 @@
     </@frameSection>
   </div>
 
+ <#if latestnews?exists>
+  <div align="center">
+    <@frameSection title="${uiLabelMap.OpentapsLatestNews}" style="width: 300px; margin-left: auto; margin-right: auto; margin-top: 20px;" innerStyle="text-align: center;">
+    <table width="290" border="0" cellpadding="0" cellspacing="2">
+            <tr>
+              <td align="left" colspan="2">
+                <span class="tabletext">
+                ${latestnews.get("publishedDate")}
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td align="left" colspan="2">
+              <div id="latestnews" style="cursor: pointer;" onClick="javascript: window.open('${latestnews.get("link")}')">${latestnews.get("title")}</div>               
+              </td>
+            </tr>
+            <tr>
+              <td align="right" colspan="2">
+                <span class="tabletext">
+                <a href="${latestnews.get("rss")}" target="_blank">${uiLabelMap.OpentapsReadMore}</a>
+                </span>
+              </td>
+            </tr>            
+    </table>            
+    </@frameSection>
+  </div>
+ </#if>  
+  
   <script type="text/javascript">
   /*<![CDATA[*/
     <#if focusName>
@@ -117,6 +145,18 @@
     <#else/>
       document.loginform.PASSWORD.focus();
     </#if>
+    
+    function breakWords(divObj, intLen){
+        var strContent=divObj.innerHTML;
+        var strTemp="";
+        while(strContent.length>intLen){
+          strTemp+=strContent.substr(0,intLen) + "<br/>";
+          strContent=strContent.substr(intLen,strContent.length);
+        }
+        strTemp+= ""+ strContent;
+        divObj.innerHTML=strTemp;
+    }
+    breakWords(document.getElementById("latestnews"),50);    
   /*]]>*/
   </script>
 </div>

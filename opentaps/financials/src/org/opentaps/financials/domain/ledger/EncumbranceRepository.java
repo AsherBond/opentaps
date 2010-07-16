@@ -111,7 +111,9 @@ public class EncumbranceRepository extends Repository implements  EncumbranceRep
         } catch (HibernateException e) {
             throw new RepositoryException(e.getMessage());
         } finally {
-            session.close();
+            if (session != null) {
+                session.close();
+            }
         }
 
         return encumbranceDetails;
@@ -158,7 +160,9 @@ public class EncumbranceRepository extends Repository implements  EncumbranceRep
         	// return the RepositoryException with the message of exception
             throw new RepositoryException(e.getMessage());
         } finally {
-            session.close();
+            if (session != null) {
+                session.close();
+            }
         }
 
         return encumberedValueTotal;

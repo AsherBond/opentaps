@@ -310,8 +310,9 @@ public class PartyRepository extends DomainRepository implements PartyRepository
      */
     public Set<Party> getPartyByPhoneNumber(String phoneNumber) throws RepositoryException {
         Set<Party> resultSet = new FastSet<Party>();
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             // prepare the SQL to get PartyContactMech formatted full number (countryCode + areaCode + contactNumber) removing delimiters
             // this returns something like 'CCACCN' with CC country code, AC area code and CN contact number
             String formatedPhoneNumber = "concat(concat(case when pcm.contactMech.telecomNumber.countryCode is null then '' else pcm.contactMech.telecomNumber.countryCode end, case when pcm.contactMech.telecomNumber.areaCode is null then '' else pcm.contactMech.telecomNumber.areaCode end), pcm.contactMech.telecomNumber.contactNumber)";
@@ -337,6 +338,10 @@ public class PartyRepository extends DomainRepository implements PartyRepository
             }
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return resultSet;
     }
@@ -408,8 +413,9 @@ public class PartyRepository extends DomainRepository implements PartyRepository
     /** {@inheritDoc} */
     public Set<Party> getPartyByEmail(String email) throws RepositoryException {
         Set<Party> resultSet = new FastSet<Party>();
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             // prepare the HQL to get Party
             String hql = "select pcm.party from PartyContactMech pcm where"
                 + " (pcm.thruDate is null or pcm.thruDate > current_timestamp())"
@@ -428,6 +434,10 @@ public class PartyRepository extends DomainRepository implements PartyRepository
             }
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return resultSet;
     }
@@ -435,8 +445,9 @@ public class PartyRepository extends DomainRepository implements PartyRepository
     /** {@inheritDoc} */
     public Set<Party> getPartyByName(String firstName, String lastName) throws RepositoryException {
         Set<Party> resultSet = new FastSet<Party>();
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             // prepare the HQL to get Party
             String hql = "select eo.party from Person eo where lower(trim(eo.firstName)) like :firstName"
                 + " and lower(trim(eo.lastName)) like :lastName"
@@ -454,6 +465,10 @@ public class PartyRepository extends DomainRepository implements PartyRepository
             }
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return resultSet;
     }
@@ -461,8 +476,9 @@ public class PartyRepository extends DomainRepository implements PartyRepository
     /** {@inheritDoc} */
     public Set<PartyGroup> getPartyGroupByGroupName(String groupName) throws RepositoryException {
         Set<PartyGroup> resultSet = new FastSet<PartyGroup>();
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             // prepare the HQL to get Party
             String hql = "from PartyGroup eo where lower(trim(eo.groupName)) like :groupName"
                 + " and (eo.party.statusId is null or 'PARTY_DISABLED' <> eo.party.statusId)";
@@ -473,6 +489,10 @@ public class PartyRepository extends DomainRepository implements PartyRepository
             resultSet.addAll(partyGroups);
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return resultSet;
     }
@@ -480,8 +500,9 @@ public class PartyRepository extends DomainRepository implements PartyRepository
     /** {@inheritDoc} */
     public Set<PartyGroup> getPartyGroupByGroupNameAndRoleType(String groupName, String roleTypeId) throws RepositoryException {
         Set<PartyGroup> resultSet = new FastSet<PartyGroup>();
+        Session session = null;
         try {
-            Session session = getInfrastructure().getSession();
+            session = getInfrastructure().getSession();
             // prepare the HQL to get Party
             String hql = "select distinct eo.party.partyGroup from PartyRole eo where eo.party.partyGroup is not null and lower(trim(eo.party.partyGroup.groupName)) like :groupName"
                 + " and (eo.party.statusId is null or 'PARTY_DISABLED' <> eo.party.statusId)"
@@ -494,6 +515,10 @@ public class PartyRepository extends DomainRepository implements PartyRepository
             resultSet.addAll(partyGroups);
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
         return resultSet;
     }
@@ -543,7 +568,8 @@ public class PartyRepository extends DomainRepository implements PartyRepository
         EntityCondition leadsCond = EntityCondition.makeCondition(
                                              makeLookupLeadsCondition(),
                                              crmFindSecFilter,
-                                             EntityCondition.makeCondition(PartyRelationship.Fields.partyIdTo.name(), partyId));
+                                             EntityCondition.makeCondition(PartyRelationship.Fields.partyIdTo.name(), partyId),
+                                             EntityUtil.getFilterByDateExpr());
 
         return leadsCond;
     }

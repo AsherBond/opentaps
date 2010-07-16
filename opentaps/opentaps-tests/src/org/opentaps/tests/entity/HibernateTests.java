@@ -962,33 +962,6 @@ public class HibernateTests extends OpentapsTestCase {
     }
 
     /**
-     * get byte[] from a file.
-     *
-     * @param f
-     *            a <code>File</code> value
-     * @throws Exception
-     *             if an error occurs
-     * @return a <code>byte[]</code> value
-     * @throws IOException if an error occurs
-     */
-    private static byte[] getBytesFromFile(File f) throws IOException {
-        if (f == null) {
-            return null;
-        }
-
-        FileInputStream stream = new FileInputStream(f);
-        ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
-        byte[] b = new byte[1024];
-        int n;
-        while ((n = stream.read(b)) != -1) {
-            out.write(b, 0, n);
-        }
-        stream.close();
-        out.close();
-        return out.toByteArray();
-    }
-
-    /**
      * Test to verify we can retrieve/store blob field in hibernate codes successfully.
      *
      * @throws Exception if an error occurs
