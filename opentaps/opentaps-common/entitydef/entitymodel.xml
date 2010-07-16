@@ -2530,11 +2530,11 @@ under the License.
       <field name="sequenceNum" type="numeric"/>
       <prim-key field="applicationId"/>
     </entity>   
-    
+
     <entity package-name="org.opentaps.common.config" entity-name="OpentapsConfiguration"
         title="All purpose entity for entering configuration.  A replacement for .properties">
         <field name="configTypeId" type="id-vlong"/>
-        <field name="value" type="very-long" encrypt="true"/>
+        <field name="value" type="very-long" encrypt="true" col-name="CONFIG_VALUE"/>
         <field name="comments" type="comment"/>
         <prim-key field="configTypeId"/>
         <relation rel-entity-name="OpentapsConfigurationType" type="one" fk-name="CONFIG_TYPE">
