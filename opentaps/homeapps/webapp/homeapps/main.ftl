@@ -16,6 +16,42 @@
 -->
 <#--/* @author: Michele Orru' (michele.orru@integratingweb.com) */-->
 
+<style type="text/css">
+.gray-panel-header {
+    background: gray;
+    color: white;
+    font:bold 11px tahoma,arial,verdana,sans-serif;
+    padding:5px 2px 4px 20px;
+    border:1px gray;
+    line-height:15px;
+}
+
+.rss-frame-section {
+    width: 245px; 
+    margin-left: 0px; 
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.rss-tabletext, .rss-tabletext a:link,.rss-tabletext a:visited {
+font-size: 10px;
+text-decoration: none;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+text-decoration: none;
+color: black;
+}
+
+.rss-tabletext a:hover {
+text-decoration: underline;
+}
+
+.rss-frame-section-body
+{
+background-color:#FFFFFF;
+padding:4px;
+border: 1px solid #999999;
+}
+</style>
 
     <div id="wrapper">
         	<div id="form">
@@ -118,6 +154,7 @@
            </form>
 
         </#if>
+        <@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>
         </div>
 
 

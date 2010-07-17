@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javolution.util.FastList;
+
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
@@ -43,8 +45,10 @@ import com.sun.syndication.io.XmlReader;
 public class LoginScreenActions {
     
     private static final String MODULE = LoginScreenActions.class.getName();
-    private static final String rss = "http://www.opentaps.org/news/rss";
+    private static final String RSS_URL = "http://www.opentaps.org/news/rss";
+    private static final String NEWS_URL = "http://www.opentaps.org/news";
     private static int MAX_DISPLAY_CHARS = 100;
+    private static int MAX_DISPLAY_RECORDS = 3;
     
     /**
      * Action for the display latest news feature.
@@ -55,25 +59,29 @@ public class LoginScreenActions {
         final ActionContext ac = new ActionContext(context);
         
         try {
-            URL url = new URL(rss);
+            URL url = new URL(RSS_URL);
             XmlReader reader = new XmlReader(url);
             SyndFeedInput input = new SyndFeedInput();  
             SyndFeed feed = input.build(reader);  
             List entries = feed.getEntries();
             if (entries.size() > 0) {
-                HashMap<String, String> latestnews = new HashMap<String, String>();
-                SyndEntry entry = (SyndEntry) entries.get(0);
-                latestnews.put("title", getIntro(entry.getTitle()));
-                latestnews.put("link", getIntro(entry.getLink()));
-                SyndContent description = entry.getDescription();
-                if (description != null) {
-                    latestnews.put("description", getIntro(description.getValue()));
+                List latestnews = new FastList();
+                for (int i=0; i < entries.size() && i < MAX_DISPLAY_RECORDS; i++) {
+                    HashMap<String, String> news = new HashMap<String, String>();
+                    SyndEntry entry = (SyndEntry) entries.get(i);
+                    news.put("title", getIntro(entry.getTitle()));
+                    news.put("link", getIntro(entry.getLink()));
+                    SyndContent description = entry.getDescription();
+                    if (description != null) {
+                        news.put("description", getIntro(description.getValue()));
+                    }
+                    DateFormat dateFormat =  new SimpleDateFormat(UtilDateTime.getDateTimeFormat(ac.getLocale()));
+                    String dateString = dateFormat.format(entry.getPublishedDate());
+                    news.put("publishedDate", dateString);
+                    latestnews.add(news);
                 }
-                DateFormat dateFormat =  new SimpleDateFormat(UtilDateTime.getDateTimeFormat(ac.getLocale()));
-                String dateString = dateFormat.format(entry.getPublishedDate());
-                latestnews.put("publishedDate", dateString);
-                latestnews.put("rss", rss);
                 ac.put("latestnews", latestnews);
+                ac.put("newsUrl", NEWS_URL);
             }
             
         } catch (MalformedURLException e) {

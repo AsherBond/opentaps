@@ -63,8 +63,37 @@
 .x-panel-noborder .x-panel-header-noborder { border:none !important; }
 <#-- center the section titles -->
 .x-panel-header {float:none !important;}
-</style>
 
+.gray-panel-header {
+    background: gray;
+    color: white;
+    font:bold 11px tahoma,arial,verdana,sans-serif;
+    padding:5px 2px 4px 20px;
+    border:1px gray;
+    line-height:15px;
+}
+
+.rss-frame-section {
+    width: 780px; 
+    margin-left: auto; 
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.rss-tabletext {
+font-size: 10px;
+text-decoration: none;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.rss-frame-section-body
+{
+background-color:#FFFFFF;
+padding:4px;
+border: 1px solid #999999;
+}
+
+</style>
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#assign greetingLabel = opentapsApplicationName?default("opentaps")?cap_first + "LoginGreeting"/>
@@ -110,53 +139,5 @@
     </@frameSection>
   </div>
 
- <#if latestnews?exists>
-  <div align="center">
-    <@frameSection title="${uiLabelMap.OpentapsLatestNews}" style="width: 300px; margin-left: auto; margin-right: auto; margin-top: 20px;" innerStyle="text-align: center;">
-    <table width="290" border="0" cellpadding="0" cellspacing="2">
-            <tr>
-              <td align="left" colspan="2">
-                <span class="tabletext">
-                ${latestnews.get("publishedDate")}
-                </span>
-              </td>
-            </tr>
-            <tr>
-              <td align="left" colspan="2">
-              <div id="latestnews" style="cursor: pointer;" onClick="javascript: window.open('${latestnews.get("link")}')">${latestnews.get("title")}</div>               
-              </td>
-            </tr>
-            <tr>
-              <td align="right" colspan="2">
-                <span class="tabletext">
-                <a href="${latestnews.get("rss")}" target="_blank">${uiLabelMap.OpentapsReadMore}</a>
-                </span>
-              </td>
-            </tr>            
-    </table>            
-    </@frameSection>
-  </div>
- </#if>  
-  
-  <script type="text/javascript">
-  /*<![CDATA[*/
-    <#if focusName>
-      document.loginform.USERNAME.focus();
-    <#else/>
-      document.loginform.PASSWORD.focus();
-    </#if>
-    
-    function breakWords(divObj, intLen){
-        var strContent=divObj.innerHTML;
-        var strTemp="";
-        while(strContent.length>intLen){
-          strTemp+=strContent.substr(0,intLen) + "<br/>";
-          strContent=strContent.substr(intLen,strContent.length);
-        }
-        strTemp+= ""+ strContent;
-        divObj.innerHTML=strTemp;
-    }
-    breakWords(document.getElementById("latestnews"),50);    
-  /*]]>*/
-  </script>
+<@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>
 </div>
