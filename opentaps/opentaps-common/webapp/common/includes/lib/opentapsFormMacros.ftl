@@ -358,19 +358,19 @@ For more information, please see documentation/opentapsFormMacros.html
   </tr>
 </#macro>
 
-<#macro inputTextarea name rows=5 cols=60 default="" index=-1 ignoreParameters=false errorField="" tabIndex="">
-  <textarea rows="${rows}" cols="${cols}" name="${getIndexedName(name, index)}" class="inputBox" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>${getDefaultValue(name, default, index, ignoreParameters)}</textarea>
+<#macro inputTextarea name rows=5 cols=60 default="" index=-1 ignoreParameters=false errorField="" tabIndex="" readonly=false>
+  <textarea rows="${rows}" cols="${cols}" name="${getIndexedName(name, index)}" class="inputBox" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>readonly="readonly"</#if>>${getDefaultValue(name, default, index, ignoreParameters)}</textarea>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputTextareaCell name rows=5 cols=60 default="" index=-1 ignoreParameters=false errorField="" tabIndex="" colspan="">
-  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputTextarea name=name rows=rows cols=cols default=default index=index ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex /></td>
+<#macro inputTextareaCell name rows=5 cols=60 default="" index=-1 ignoreParameters=false errorField="" tabIndex="" colspan="" readonly=false>
+  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputTextarea name=name rows=rows cols=cols default=default index=index ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex readonly=readonly /></td>
 </#macro>
 
-<#macro inputTextareaRow name title rows=5 cols=60 default="" titleClass="tableheadtext" index=-1 ignoreParameters=false errorField="" tabIndex="" colspan="">
+<#macro inputTextareaRow name title rows=5 cols=60 default="" titleClass="tableheadtext" index=-1 ignoreParameters=false errorField="" tabIndex="" colspan="" readonly=false>
   <tr>
     <td class="titleCellTop"><span class="${titleClass}">${title}</span></td>
-    <@inputTextareaCell name=name rows=rows cols=cols default=default index=index ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex colspan=colspan/>
+    <@inputTextareaCell name=name rows=rows cols=cols default=default index=index ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex colspan=colspan readonly=readonly/>
   </tr>
 </#macro>
 
