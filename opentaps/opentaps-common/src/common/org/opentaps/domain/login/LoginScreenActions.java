@@ -48,7 +48,7 @@ public class LoginScreenActions {
     private static final String RSS_URL = "http://www.opentaps.org/news/rss";
     private static final String NEWS_URL = "http://www.opentaps.org/news";
     private static int MAX_DISPLAY_CHARS = 100;
-    private static int MAX_DISPLAY_RECORDS = 3;
+    private static int MAX_DISPLAY_RECORDS = 5;
     
     /**
      * Action for the display latest news feature.

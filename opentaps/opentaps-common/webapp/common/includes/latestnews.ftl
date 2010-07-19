@@ -26,17 +26,18 @@
               <td align="left" colspan="2">
               <span class="rss-tabletext">
               <a href="${news.get("link")}" target="_blank">
-              ${news.get("publishedDate")} - ${news.get("title")}</a> 
+              ${news.get("publishedDate")} - ${news.get("title")}</a><br/> 
               </span>              
               </td>
             </tr>
+            <tr><td colspan="2">&nbsp;</td></tr>
         </#list>
             <tr>
               <td colspan="2" align="left">
                 <span class="rss-tabletext">
                 <a href="${newsUrl}" target="_blank">${uiLabelMap.OpentapsReadMore}</a>
                 </span>
-
+                <br/>
               </td>
             </tr>
     </tbody></table>            

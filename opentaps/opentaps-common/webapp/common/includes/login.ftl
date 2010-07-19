@@ -74,7 +74,7 @@
 }
 
 .rss-frame-section {
-    width: 780px; 
+    width: 100%; 
     margin-left: auto; 
     margin-right: auto;
     margin-top: 20px;
@@ -139,5 +139,5 @@ border: 1px solid #999999;
     </@frameSection>
   </div>
 
-<@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>
 </div>
+<@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>
