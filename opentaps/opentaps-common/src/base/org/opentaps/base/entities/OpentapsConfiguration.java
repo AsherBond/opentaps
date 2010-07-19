@@ -54,7 +54,7 @@ public class OpentapsConfiguration extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("configTypeId", "CONFIG_TYPE_ID");
-        fields.put("value", "VALUE");
+        fields.put("value", "CONFIG_VALUE");
         fields.put("comments", "COMMENTS");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -85,7 +85,7 @@ fieldMapColumns.put("OpentapsConfiguration", fields);
    @Id
    @Column(name="CONFIG_TYPE_ID")
    private String configTypeId;
-   @Column(name="VALUE")
+   @Column(name="CONFIG_VALUE")
    private String value;
    @Column(name="COMMENTS")
    private String comments;
