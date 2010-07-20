@@ -227,4 +227,30 @@ public class Service implements ServiceInterface {
             }
         }
     }
+    
+    /**
+     * Convenience method to call an Ofbiz service wrapper, setting the user and infrastructure.
+     * The service will NOT be run in a seprate transaction, since your service is probably inside of a transaction.
+     * @param service the service to run
+     * @throws ServiceException if an error occurs
+     */
+    public void runAsync(ServiceWrapper service) throws ServiceException {
+        runAsync(service, getUser());
+    }
+
+    /**
+     * Convenience method to call an Ofbiz service wrapper, setting the user and infrastructure.
+     * The service will NOT be run in a seprate transaction, since your service is probably inside of a transaction.
+     * @param service the service to run
+     * @param user the <code>User</code> to run the service as
+     * @throws ServiceException if an error occurs
+     */
+    public void runAsync(ServiceWrapper service, User user) throws ServiceException {
+        // run the service without creating a new transaction
+        service.setUser(user);
+        service.runAsync(getInfrastructure());
+        if (service.isError()) {
+            throw new ServiceException(service.getErrorMessage());
+        }
+    }
 }

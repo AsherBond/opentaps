@@ -181,4 +181,29 @@ public abstract class ServiceWrapper {
         return ServiceUtil.getErrorMessage(this.outputMap());
     }
 
+    
+    /**
+     * Runs the service with the wrapper's inputs
+     * @param infrastructure an <code>Infrastructure</code> value
+     * @exception ServiceException if an error occurs
+     */
+    public void runAsync(Infrastructure infrastructure) throws ServiceException {
+        runAsync(infrastructure, true);
+    }
+
+    /**
+     * Runs the service with the wrapper's inputs
+     * This overrides the default transaction timeout and require transaction settings.
+     * @param infrastructure an <code>Infrastructure</code> value
+     * @param persist True for store/run; False for run.
+     * @exception ServiceException if an error occurs
+     */
+    public void runAsync(Infrastructure infrastructure, boolean persist) throws ServiceException {
+        try {
+            infrastructure.getDispatcher().runAsync(name(), inputMap(), persist);
+        } catch (GenericServiceException e) {
+            throw new ServiceException(e);
+        }
+    }
+
 }
