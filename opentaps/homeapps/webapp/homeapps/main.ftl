@@ -154,6 +154,7 @@ border: 1px solid #999999;
            </form>
 
         </#if>
+        <br/><br/>
         <@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>
         </div>
 
