@@ -57,7 +57,7 @@
                 <script location="component://homeapps/webapp/homeapps/WEB-INF/actions/main-decorator.bsh"/>
                 <script location="component://homeapps/webapp/homeapps/WEB-INF/actions/getHomeApplications.bsh"/>
                 <script location="component://homeapps/webapp/homeapps/WEB-INF/actions/retrievePartyInfos.bsh"/>
-                <java location="org.opentaps.domain.login.LoginScreenActions" invoke="getLatestNews"/>
+                <java location="org.opentaps.common.event.LoginScreenActions" invoke="getLatestNews"/>
             </actions>
             <widgets>
                         <platform-specific>
