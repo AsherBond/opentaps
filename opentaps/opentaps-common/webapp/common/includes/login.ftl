@@ -139,5 +139,14 @@ border: 1px solid #999999;
     </@frameSection>
   </div>
 
+  <script type="text/javascript">
+  /*<![CDATA[*/
+    <#if focusName>
+      document.loginform.USERNAME.focus();
+    <#else/>
+      document.loginform.PASSWORD.focus();
+    </#if>
+  /*]]>*/
+  </script>
 </div>
 <@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>
