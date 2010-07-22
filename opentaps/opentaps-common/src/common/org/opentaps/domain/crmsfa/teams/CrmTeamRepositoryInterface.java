@@ -19,7 +19,7 @@ package org.opentaps.domain.crmsfa.teams;
 import java.util.List;
 
 import org.ofbiz.entity.condition.EntityCondition;
-import org.opentaps.base.entities.PartyRelationship;
+//import org.opentaps.base.entities.PartyRelationship;
 import org.opentaps.base.entities.PartyRoleAndPartyDetail;
 import org.opentaps.base.entities.PartyToSummaryByRole;
 import org.opentaps.base.entities.SalesTeamRoleSecurity;
@@ -64,14 +64,6 @@ public interface CrmTeamRepositoryInterface extends PartyRepositoryInterface {
     public TeamMemberInTeam getTeamMemberInTeam(String partyId, String teamPartyId) throws RepositoryException, EntityNotFoundException;
 
     /**
-     * Gets a <code>TeamMemberInTeam</code> by the given IDs.
-     * @param relationship the <code>PartyRelationship</code> representing the member association to the team
-     * @return the <code>TeamMemberInTeam</code> found
-     * @throws RepositoryException if an error occurs
-     */
-    public TeamMemberInTeam getTeamMemberInTeam(PartyRelationship relationship) throws RepositoryException;
-
-    /**
      * Checks if the given <code>Party</code> is a Team.
      * @param party the <code>Party</code> to check
      * @return <code>True</code> if the given party is a Team
@@ -102,23 +94,6 @@ public interface CrmTeamRepositoryInterface extends PartyRepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public List<TeamMemberInTeam> getTeamMembers(String teamPartyId) throws RepositoryException;
-
-    /**
-     * Gets the active <code>PartyRelationship</code> entities representing the members of the given team.
-     * @param teamPartyId the ID of the team
-     * @return the list of active <code>PartyRelationship</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<PartyRelationship> getTeamMembersPartyRelationships(String teamPartyId) throws RepositoryException;
-
-    /**
-     * Gets the active <code>PartyRelationship</code> entities representing the given member association to the given team.
-     * @param partyId the ID of the member
-     * @param teamPartyId the ID of the team
-     * @return the list of active <code>PartyRelationship</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<PartyRelationship> getTeamMemberPartyRelationships(String partyId, String teamPartyId) throws RepositoryException;
 
     /**
      * Gets the <code>SecurityGroup</code> for the given team member.

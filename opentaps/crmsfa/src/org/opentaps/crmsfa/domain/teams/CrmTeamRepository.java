@@ -96,8 +96,13 @@ public class CrmTeamRepository extends PartyRepository implements CrmTeamReposit
         return findOneNotNull(TeamMember.class, map(Party.Fields.partyId, partyId), "TeamMember [" + partyId + "] not found");
     }
 
-    /** {@inheritDoc} */
-    public TeamMemberInTeam getTeamMemberInTeam(PartyRelationship relationship) throws RepositoryException {
+    /**
+     * Gets a <code>TeamMemberInTeam</code> by the given IDs.
+     * @param relationship the <code>PartyRelationship</code> representing the member association to the team
+     * @return the <code>TeamMemberInTeam</code> found
+     * @throws RepositoryException if an error occurs
+     */
+    protected TeamMemberInTeam getTeamMemberInTeam(PartyRelationship relationship) throws RepositoryException {
         // note: member cannot be null here because of the FK on PartyRelationship
         TeamMemberInTeam member = findOne(TeamMemberInTeam.class, map(Party.Fields.partyId, relationship.getPartyIdTo()));
         member.setSecurityGroupId(relationship.getSecurityGroupId());
@@ -142,8 +147,14 @@ public class CrmTeamRepository extends PartyRepository implements CrmTeamReposit
         return members;
     }
 
-    /** {@inheritDoc} */
-    public List<PartyRelationship> getTeamMemberPartyRelationships(String partyId, String teamPartyId) throws RepositoryException {
+    /**
+     * Gets the active <code>PartyRelationship</code> entities representing the given member association to the given team.
+     * @param partyId the ID of the member
+     * @param teamPartyId the ID of the team
+     * @return the list of active <code>PartyRelationship</code>
+     * @throws RepositoryException if an error occurs
+     */
+    protected List<PartyRelationship> getTeamMemberPartyRelationships(String partyId, String teamPartyId) throws RepositoryException {
         return findList(PartyRelationship.class, EntityCondition.makeCondition(
                                      EntityCondition.makeCondition(PartyRelationship.Fields.partyIdFrom.name(), teamPartyId),
                                      EntityCondition.makeCondition(PartyRelationship.Fields.roleTypeIdFrom.name(), RoleTypeConstants.ACCOUNT_TEAM),
@@ -152,8 +163,13 @@ public class CrmTeamRepository extends PartyRepository implements CrmTeamReposit
                                      EntityUtil.getFilterByDateExpr()));
     }
 
-    /** {@inheritDoc} */
-    public List<PartyRelationship> getTeamMembersPartyRelationships(String teamPartyId) throws RepositoryException {
+    /**
+     * Gets the active <code>PartyRelationship</code> entities representing the members of the given team.
+     * @param teamPartyId the ID of the team
+     * @return the list of active <code>PartyRelationship</code>
+     * @throws RepositoryException if an error occurs
+     */
+    protected List<PartyRelationship> getTeamMembersPartyRelationships(String teamPartyId) throws RepositoryException {
         return findList(PartyRelationship.class, EntityCondition.makeCondition(
                                      EntityCondition.makeCondition(PartyRelationship.Fields.partyIdFrom.name(), teamPartyId),
                                      EntityCondition.makeCondition(PartyRelationship.Fields.roleTypeIdFrom.name(), RoleTypeConstants.ACCOUNT_TEAM),
