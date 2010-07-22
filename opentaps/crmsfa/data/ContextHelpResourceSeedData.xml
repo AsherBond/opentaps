@@ -25,6 +25,7 @@
     <ContextHelpResource contextHelpResourceId="1003" screenName="createLeadForm" applicationName="crmsfa" remotePageName="Create_Lead_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="1004" screenName="findLeads" applicationName="crmsfa" remotePageName="Find_Leads_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="1005" screenName="mergeLeadsForm" applicationName="crmsfa" remotePageName="Merge_Leads_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="CRM_LEADS_IMPORT" screenName="uploadLeads" applicationName="crmsfa" remotePageName="Upload_Leads_Screen" />
 
     <ContextHelpResource contextHelpResourceId="1006" screenName="contactsMain" applicationName="crmsfa" remotePageName="My_Contacts_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="1006B" screenName="myContacts" applicationName="crmsfa" remotePageName="My_Contacts_Screen" remotePageVersion="0" />
