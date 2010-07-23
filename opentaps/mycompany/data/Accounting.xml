@@ -588,18 +588,6 @@
     <PaymentGlAccountTypeMap paymentTypeId="COMMISSION_PAYMENT" organizationPartyId="Company_Template" glAccountTypeId="COMMISSIONS_PAYABLE"/>
     <PaymentGlAccountTypeMap paymentTypeId="INTEREST_RECEIPT" organizationPartyId="Company_Template" glAccountTypeId="INTRSTINC_RECEIVABLE"/>
 
-    <!-- sample payment method for this company -->
-    <PaymentMethod paymentMethodId="COCHECKING" description="Primary Checking Account" paymentMethodTypeId="COMPANY_CHECK" partyId="Company_Template" glAccountId="111100"/> <!-- GENERAL CHECKING ACCOUNT -->
-    <PaymentMethod paymentMethodId="COMMKT" description="Secondary Money Market Account" paymentMethodTypeId="COMPANY_CHECK" partyId="Company_Template" glAccountId="111400"/> <!-- MONEY MARKET -->
-    <PaymentMethod paymentMethodId="COVISA" description="Company VISA Business Card" paymentMethodTypeId="CREDIT_CARD" partyId="Company_Template" glAccountId="231000"/> <!-- SHORT TERM OBLIGATION -->
-    <CreditCard paymentMethodId="COVISA" cardType="Visa" cardNumber="4111111111111111" expireDate="02/2011" firstNameOnCard="JOHN" lastNameOnCard="PRESIDENT" companyNameOnCard="Company_Template" contactMechId="MYPOSTAL01"/>
-    <PaymentMethod paymentMethodId="COAMEX" description="Company AmEx Corporate Card" paymentMethodTypeId="CREDIT_CARD" partyId="Company_Template" glAccountId="231000"/>
-    <CreditCard paymentMethodId="COAMEX" cardType="AmericanExpress" cardNumber="340000000000009" expireDate="02/2011" firstNameOnCard="JOHN" lastNameOnCard="PRESIDENT" companyNameOnCard="Company_Template" contactMechId="MYPOSTAL01"/>
-    <PaymentMethodType paymentMethodTypeId="COMPANY_CHECK" defaultGlAccountId="112000"/> <!-- default to Undeposited Receipts -->
-
-    <!-- This will be default payment method for refunds, when no other payment method is available -->
-    <PartyAcctgPreference partyId="Company_Template" refundPaymentMethodId="COCHECKING"/>
-
     <!-- gl accounts for customer payments -->
     <PaymentMethodTypeGlAccount paymentMethodTypeId="CREDIT_CARD" organizationPartyId="Company_Template" glAccountId="122000"/> <!-- in transit from credit card processors -->
     <PaymentMethodTypeGlAccount paymentMethodTypeId="PERSONAL_CHECK" organizationPartyId="Company_Template" glAccountId="112000"/> <!-- Undeposited Receipts -->
