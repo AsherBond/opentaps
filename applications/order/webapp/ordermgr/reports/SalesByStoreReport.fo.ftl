@@ -67,6 +67,7 @@ under the License.
                 <fo:table-body>
                     <#assign rowColor = "white">
                     <#list productReportList as productReport>
+                      <#if productReport.quantityOrdered?exists && (productReport.quantityOrdered > 0)>
                         <fo:table-row>
                             <#if showProductStore>
                                 <fo:table-cell padding="2pt" background-color="${rowColor}">
@@ -77,7 +78,7 @@ under the License.
                                 <fo:block>${productReport.internalName?default("")} (${productReport.productId?if_exists})</fo:block>
                             </fo:table-cell>
                             <fo:table-cell padding="2pt" background-color="${rowColor}">
-                                <fo:block>${productReport.quantity?if_exists}</fo:block>
+                                <fo:block>${productReport.quantityOrdered?if_exists}</fo:block>
                             </fo:table-cell>
                             <fo:table-cell padding="2pt" background-color="${rowColor}">
                                 <fo:block>${productReport.unitPrice?if_exists}</fo:block>
@@ -89,6 +90,7 @@ under the License.
                         <#else>
                             <#assign rowColor = "white">
                         </#if>
+                      </#if>
                     </#list>
                 </fo:table-body>
             </fo:table>
