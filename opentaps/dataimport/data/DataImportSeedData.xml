@@ -22,9 +22,14 @@
     <StatusItem description="Not processed" sequenceId="00" statusCode="NOT_PROCESSED" statusId="DATAIMP_NOT_PROC" statusTypeId="DATAIMPORT"/>
     <StatusItem description="Imported" sequenceId="10" statusCode="IMPORTED" statusId="DATAIMP_IMPORTED" statusTypeId="DATAIMPORT"/>
     <StatusItem description="Failed" sequenceId="11" statusCode="FAILED" statusId="DATAIMP_FAILED" statusTypeId="DATAIMPORT"/>
+    
+    <OpentapsConfigurationType configTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Default parameters for data import services"/>
+    <OpentapsConfigurationType configTypeId="importCustomers::initialResponsiblePartyId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Default value for importCustomers initialResponsiblePartyId parameter" defaultValue="admin"/>
+    
     <OpentapsWebApps applicationId="dataimport" shortName="Data Import" sequenceNum="120" applicationName="Data Import"
              description="Import your data into opentaps" 
              imageUrl="/opentaps_images/homeapps/dataimport.png" imageHoverUrl="/opentaps_images/homeapps/dataimport_hover.png" linkUrl="/dataimport/control/main"
              lastUpdatedStamp="2009-07-16 19:49:23.679" lastUpdatedTxStamp="2009-07-16 19:49:23.679" createdStamp="2009-07-15 19:31:39.473" createdTxStamp="2009-07-15 19:31:39.473"/>
 
+    
 </entity-engine-xml>
