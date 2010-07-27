@@ -494,6 +494,7 @@ public class ConstantsGeneratorContainer implements Container {
             fieldName = fieldName.replace(' ', '_');
             fieldName = fieldName.replace('.', '_');
             fieldName = fieldName.replace('-', '_');
+            fieldName = fieldName.replace(':', '_');
             if (fieldName.substring(0, 1).matches("[0-9]")) {
                 fieldName = NUMERIC_PREFIX + fieldName;
             }
@@ -515,6 +516,7 @@ public class ConstantsGeneratorContainer implements Container {
             className = filterChar(className, ".");
             className = filterChar(className, "_");
             className = filterChar(className, "-");
+            className = filterChar(className, ":");
             return className;
         }
     }
