@@ -24,8 +24,26 @@
     <StatusItem description="Failed" sequenceId="11" statusCode="FAILED" statusId="DATAIMP_FAILED" statusTypeId="DATAIMPORT"/>
     
     <OpentapsConfigurationType configTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Default parameters for data import services"/>
-    <OpentapsConfigurationType configTypeId="importCustomers::initialResponsiblePartyId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Default value for importCustomers initialResponsiblePartyId parameter" defaultValue="admin"/>
-    
+    <OpentapsConfigurationType configTypeId="importCustomers::initialResponsiblePartyId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Default value for the user who will be responsible for the customers" defaultValue="admin"/>
+    <OpentapsConfigurationType configTypeId="importCustomers::organizationPartyId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Default value for your organization's party ID" defaultValue="Company"/>
+    <OpentapsConfigurationType configTypeId="importCustomers::arGlAccountId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Accounts Receivable GL account based on default chart of accounts for customer balances" defaultValue="120000"/>
+    <OpentapsConfigurationType configTypeId="importCustomers::offsettingGlAccountId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="GL account to offset Accounts Receivable GL account for customer balances" defaultValue="300000"/>
+    <OpentapsConfigurationType configTypeId="importSuppliers::organizationPartyId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Default value for your organization's party ID" defaultValue="Company"/>
+    <!-- no default values for these -->
+    <OpentapsConfigurationType configTypeId="importProducts:goodIdentificationTypeId1" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Type ID (SKU, UPC, ISBN, ASIN, etc.) for your first special product ID"/>
+    <OpentapsConfigurationType configTypeId="importProducts:goodIdentificationTypeId2" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Type ID (SKU, UPC, ISBN, ASIN, etc.) for your second special product ID"/>
+    <OpentapsConfigurationType configTypeId="importProductInventory::inventoryGlAccountId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Inventory GL account based on default chart of accounts for inventory values" defaultValue="140000"/>
+    <OpentapsConfigurationType configTypeId="importProductInventory::offsettingGlAccountId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="GL account to offset Inventory GL account for inventory values" defaultValue="300000"/>
+    <OpentapsConfigurationType configTypeId="importGlAccounts::organizationPartyId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Default value for your organization's party ID.  Leave blank if you don't want these GL accounts associated with your organization" defaultValue="Company"/>
+    <OpentapsConfigurationType configTypeId="importOrders::companyPartyId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Default value for your company(organization)'s party ID" defaultValue="Company"/>
+    <OpentapsConfigurationType configTypeId="importOrders::calculateGrandTotal" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Enter TRUE to calculate order grand totals based on imports or FALSE to use the values in the DataImportOrderHeader bridge table." defaultValue="TRUE"/>
+    <OpentapsConfigurationType configTypeId="importOrders::importEmptyOrders" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Enter TRUE to import order headers without any items or FALSE to skip them." defaultValue="TRUE"/>
+    <OpentapsConfigurationType configTypeId="importOrders::prodCatalogId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Enter the ID of the product catalog to associate the sales orders with or leave blank to skip it."/>
+    <OpentapsConfigurationType configTypeId="importOrders::productStoreId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Enter the ID of the product store to associate the sales orders with or leave blank to skip it."/>
+    <OpentapsConfigurationType configTypeId="importOrders::purchaseOrderShipToContactMechId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Enter PostalAddress.contactMechId to set as Purchase Orders' destination ship-to address."/>
+    <OpentapsConfigurationType configTypeId="importOrders::reserveInventory" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Enter TRUE to reserve inventory for open sales orders imported or FALSE to skip them." defaultValue="TRUE"/>
+
+ 
     <OpentapsWebApps applicationId="dataimport" shortName="Data Import" sequenceNum="120" applicationName="Data Import"
              description="Import your data into opentaps" 
              imageUrl="/opentaps_images/homeapps/dataimport.png" imageHoverUrl="/opentaps_images/homeapps/dataimport_hover.png" linkUrl="/dataimport/control/main"
