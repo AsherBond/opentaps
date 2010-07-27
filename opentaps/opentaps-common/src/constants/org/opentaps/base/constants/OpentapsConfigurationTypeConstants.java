@@ -38,6 +38,10 @@ public final class OpentapsConfigurationTypeConstants {
     public static final String CRMSFA_FIND_SEC_FILTER = "CRMSFA_FIND_SEC_FILTER";
     /** If it is 'Y' then show only the owned ones as before, otherwise show all them. */
     public static final String CRMSFA_MYLEADS_SHOW_OWNED_ONLY = "CRMSFA_MYLEADS_SHOW_OWNED_ONLY";
+    /** Default parameters for data import services. */
+    public static final String DATAIMPORT_SERVICE_PARAM_DEFAULTS = "DATAIMPORT_SERVICE_PARAM_DEFAULTS";
+    /** Default value for importCustomers initialResponsiblePartyId parameter. */
+    public static final String IMPORTCUSTOMERS__INITIALRESPONSIBLEPARTYID = "importCustomers::initialResponsiblePartyId";
     /** For testing set configuration. */
     public static final String TEST_CONFIG_SET_CONFIG_TYPE = "TEST_CONFIG_SET_CONFIG_TYPE";
     /** For testing. */
