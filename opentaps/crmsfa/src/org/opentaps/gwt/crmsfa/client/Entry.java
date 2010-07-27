@@ -663,7 +663,7 @@ public class Entry extends BaseEntry {
      */
     private void loadOpportunityContacts() {
         // setup contacts list view as subsection
-        ContactsSublistView opportunityContacts = new ContactsSublistView(getPartyId(), true, false);
+        ContactsSublistView opportunityContacts = new ContactsSublistView(getSalesOpportunityId(), true, false);
         // limit displayed contacts to the account and current opportunity
         opportunityContacts.filterByOpportunity(getSalesOpportunityId());
         opportunityContacts.applyFilters();
