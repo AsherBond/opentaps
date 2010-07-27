@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<project name="Opentaps Main Build" default="all" basedir=".">
+    <property file="build.properties" /> 
+    <!-- ================================================================== -->
+    <!-- Build GWT Modules                                                  -->
+    <!-- ================================================================== -->
+    <target name="gwt-code">
+        <echo message="[gwt code] ========== Start Building GWT Code (Compile) =========="/>
+        <subant inheritall="false" target="gwt-code">
+            <filelist dir="." files="opentaps/build.xml"/>
+        </subant>
+        <subant inheritall="false" target="gwt-code">
+            <fileset dir="${basedir}/hot-deploy" casesensitive="no">
+                <include name="**/build.xml"/>
+            </fileset>
+        </subant>
+        <echo message="[gwt code] ========== Done Building GWT Code (Compile) =========="/>
+    </target>
+
+    <target name="gwt-labels" description="Generate the GWT labels.">
+        <echo message="[gwt-labels] ========== Start Building GWT Labels (Compile) =========="/>
+        <delete verbose="on">
+            <fileset dir="./opentaps/opentaps-common/src/common/org/opentaps/gwt/common/client/messages/" includes="CommonMessages*.*"/>
+        </delete>
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${permmemory.max.param}"/>
+            <arg value="gwtlabels"/>
+        </java>
+        <echo message="[gwt-labels] ========== Done Building GWT Labels (Compile) =========="/>
+    </target>
+
+
+   <target name="make-constants" description="Generate the constants from the database.">
+        <mkdir dir="./opentaps/opentaps-common/src/constants/org/opentaps/base/constants/"/>
+        <delete verbose="on">
+            <fileset dir="./opentaps/opentaps-common/src/constants/org/opentaps/base/constants/" includes="**/*.java"/>
+        </delete>
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${permmemory.max.param}"/>
+            <arg value="constantsgeneration"/>
+        </java>
+    </target>
+    <target name="make-base-entities" description="Generate the POJO base entities from the entity and service model.">
+        <mkdir dir="./opentaps/opentaps-common/src/base/org/opentaps/base/entities/"/>
+        <mkdir dir="./opentaps/opentaps-common/src/entities/org/opentaps/base/entities/"/>
+        <mkdir dir="./opentaps/opentaps-common/src/services/org/opentaps/base/services/"/>
+        <delete verbose="on">
+            <fileset dir="./opentaps/opentaps-common/src/base/org/opentaps/base/entities/" includes="**/*.java"/>
+            <fileset dir="./opentaps/opentaps-common/src/entities/org/opentaps/base/entities/" includes="**/*.java"/>
+            <fileset dir="./opentaps/opentaps-common/src/services/org/opentaps/base/services/" includes="**/*.java"/>
+        </delete>
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${permmemory.max.param}"/>
+            <arg value="pojoentities"/>
+        </java>
+        <subant target="entities-jar">
+            <filelist dir="." files="./opentaps/opentaps-common/build.xml"/>
+        </subant>
+        <subant target="services-jar">
+            <filelist dir="." files="./opentaps/opentaps-common/build.xml"/>
+        </subant>
+        <delete verbose="off">
+            <fileset dir="./opentaps/opentaps-common/src/entities/org/opentaps/base/entities/" includes="**/*.java"/>
+            <fileset dir="./opentaps/opentaps-common/src/services/org/opentaps/base/services/" includes="**/*.java"/>
+            <fileset dir="./opentaps/opentaps-common/build/classes/entities/" includes="**/*.class"/>
+            <fileset dir="./opentaps/opentaps-common/build/classes/services/" includes="**/*.class"/>
+        </delete>       
+    </target>
+    <target name="refresh-hibernatecfg">
+        <delete verbose="on">
+            <fileset dir="./opentaps/opentaps-common/config/" includes="*.cfg.xml" excludes="hibernate.cfg.xml"/>
+        </delete>
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${permmemory.max.param}"/>
+            <arg value="hibernatecfg"/>
+        </java>
+    </target>
+    
+    <!-- ================================================================== -->
+    <!-- Call all targets in the build xml                                  -->
+    <!-- ================================================================== -->
+
+    <target name="all" depends="refresh-hibernatecfg, make-constants, make-base-entities,  gwt-labels, gwt-code" />
+    
+</project>
