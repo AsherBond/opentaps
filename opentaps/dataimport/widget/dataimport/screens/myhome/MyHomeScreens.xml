@@ -61,7 +61,7 @@
         <section>
             <actions>
                 <set field="pageTitleLabel" value="DataImportHome"/>
-                <script location="component://webtools/webapp/webtools/WEB-INF/actions/service/ScheduleJob.groovy"/>
+                <script location="component://dataimport/webapp/dataimport/WEB-INF/actions/myhome/ScheduleJob.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
