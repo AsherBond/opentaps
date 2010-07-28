@@ -1325,9 +1325,8 @@ width: auto;
 
 .tooltip {
 /* tooltip style */
-background-color: #ffffdd;
-border: 1px solid #999999;
-color: #000000;
+background-color: #fffff2;
+color: #444444;
 font-style: italic;
 margin: 1.0em;
 padding: 0.1em;
