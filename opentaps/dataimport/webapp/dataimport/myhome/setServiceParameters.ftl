@@ -99,9 +99,9 @@ function onRunSyncChange() {
     <table class="twoColumnForm">
       <#list serviceParameters as serviceParameter>
         <#if serviceParameter.optional == "N">
-          <@inputTextRow title="${serviceParameter.name}(${serviceParameter.type})" name="${serviceParameter.name}" default="${serviceParameter.value!serviceParameter.defaultValue!}" titleClass="requiredField"/>
+          <@inputTextRow title="${serviceParameter.name}(${serviceParameter.type})" name="${serviceParameter.name}" default="${serviceParameter.value!serviceParameter.defaultValue!}" titleClass="requiredField" tooltip=serviceParameter.description/>
           <#else>
-            <@inputTextRow title="${serviceParameter.name}(${serviceParameter.type})" name="${serviceParameter.name}" default="${serviceParameter.value!serviceParameter.defaultValue!}"/>
+            <@inputTextRow title="${serviceParameter.name}(${serviceParameter.type})" name="${serviceParameter.name}" default="${serviceParameter.value!serviceParameter.defaultValue!}" tooltip=serviceParameter.description/>
           </#if>
         </#list>
 

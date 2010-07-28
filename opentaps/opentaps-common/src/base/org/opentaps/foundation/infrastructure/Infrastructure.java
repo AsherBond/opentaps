@@ -278,6 +278,25 @@ public class Infrastructure {
     }
 
     /**
+     * Gets a configuration description from the database.
+     * @param configTypeId the config type to get
+     * @return a <code>String</code> value
+     * @exception InfrastructureException if an error occurs
+     */
+    public String getConfigurationDescription(String configTypeId) throws InfrastructureException {
+        Session session = getSession();
+        try {
+            OpentapsConfigurationType configuration = (OpentapsConfigurationType) session.get(OpentapsConfigurationType.class, configTypeId);
+            if (configuration == null) {
+                return null;
+            }
+            return configuration.getDescription();
+        } finally {
+            session.close();
+        }
+    }
+
+    /**
      * Gets a configuration value from the database with null default value.
      * @param configTypeId the config type to get
      * @return a <code>String</code> value
@@ -296,27 +315,29 @@ public class Infrastructure {
      */
     public String getConfigurationValue(String configTypeId, String defaultValue) throws InfrastructureException {
         Session session = getSession();
-        OpentapsConfiguration configuration = (OpentapsConfiguration) session.get(OpentapsConfiguration.class, configTypeId);
-        if (configuration == null) {
-            if (defaultValue != null) {
-                // if user supplied a non-null defaultValue, then use it
-                Debug.logWarning("No value found for configuration [" + configTypeId + "] returning a default of ["  + defaultValue + "]", MODULE);
-                return defaultValue;
-            } else {
-                // use the default value of the configuration type
-                OpentapsConfigurationType configurationType = (OpentapsConfigurationType) session.get(OpentapsConfigurationType.class, configTypeId);
-                if (configurationType != null) {
-                    Debug.logWarning("No value found for configuration [" + configTypeId + "] returning a default of ["  + configurationType.getDefaultValue() + "]", MODULE);
-                    return configurationType.getDefaultValue();
+        try {
+            OpentapsConfiguration configuration = (OpentapsConfiguration) session.get(OpentapsConfiguration.class, configTypeId);
+            if (configuration == null) {
+                if (defaultValue != null) {
+                    // if user supplied a non-null defaultValue, then use it
+                    Debug.logWarning("No value found for configuration [" + configTypeId + "] returning a default of ["  + defaultValue + "]", MODULE);
+                    return defaultValue;
                 } else {
-                    Debug.logWarning("No configuration type [" + configTypeId + "] returning null", MODULE);
-                    return null;
+                    // use the default value of the configuration type
+                    OpentapsConfigurationType configurationType = (OpentapsConfigurationType) session.get(OpentapsConfigurationType.class, configTypeId);
+                    if (configurationType != null) {
+                        Debug.logWarning("No value found for configuration [" + configTypeId + "] returning a default of ["  + configurationType.getDefaultValue() + "]", MODULE);
+                        return configurationType.getDefaultValue();
+                    } else {
+                        Debug.logWarning("No configuration type [" + configTypeId + "] returning null", MODULE);
+                        return null;
+                    }
                 }
             }
+            return configuration.getValue();
+        } finally {
+            session.close();
         }
-        String value = configuration.getValue();
-        session.close();
-        return value;
     }
 
     /**

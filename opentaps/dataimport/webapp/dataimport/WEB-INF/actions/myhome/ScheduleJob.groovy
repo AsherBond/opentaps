@@ -74,15 +74,17 @@ if (serviceName) {
             serviceParam = null;
 
             // for each parameter try to get the default value from OpentapsConfiguration value for "service_name::parameter_name"
-            defVal = infrastructure.getConfigurationValue(serviceName + "::" + par.name);
-            if (defVal == null) {
-                defVal = par.defaultValue;
+            confType = serviceName + "::" + par.name;
+            defaultValue = infrastructure.getConfigurationValue(confType);
+            description = infrastructure.getConfigurationDescription(confType);
+            if (defaultValue == null) {
+               defaultValue = par.defaultValue;
             }
 
             if (savedSyncResult?.get(par.name)) {
-                serviceParam = [name : par.name, type : par.type, optional : par.optional ? "Y" : "N", defaultValue : defVal, value : savedSyncResult.get(par.name)];
+                serviceParam = [description : description, name : par.name, type : par.type, optional : par.optional ? "Y" : "N", defaultValue : defaultValue, value : savedSyncResult.get(par.name)];
             } else {
-                serviceParam = [name : par.name, type : par.type, optional : par.optional ? "Y" : "N", defaultValue : defVal];
+                serviceParam = [description : description, name : par.name, type : par.type, optional : par.optional ? "Y" : "N", defaultValue : defaultValue];
             }
             serviceParameters.add(serviceParam);
         }

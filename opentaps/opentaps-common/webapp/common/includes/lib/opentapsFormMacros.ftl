@@ -279,41 +279,46 @@ For more information, please see documentation/opentapsFormMacros.html
   <#return default>
 </#function>
 
+<#macro displayTooltip text>
+  <span class="tooltip">${text}</span>
+</#macro>
+
 
 <#macro inputHidden name value index=-1>
   <input type="hidden" name="${getIndexedName(name, index)}" value="${value}"/>
 </#macro>
 
 
-<#macro inputText name size=30 maxlength="" default="" index=-1 password=false readonly=false onChange="" id="" ignoreParameters=false errorField="" tabIndex="">
+<#macro inputText name size=30 maxlength="" default="" index=-1 password=false readonly=false onChange="" id="" ignoreParameters=false errorField="" tabIndex="" tooltip="">
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <input id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" type="<#if password>password<#else>text</#if>" size="${size}" maxlength="${maxlength}" class="inputBox" <#if !password>value="${getDefaultValue(name, default, index, ignoreParameters)}"</#if> <#if readonly>readonly="readonly"</#if> onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>/>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputTextCell name size=30 maxlength="" default="" index=-1 password=false readonly=false onChange="" id="" ignoreParameters=false errorField="" tabIndex="" colspan="">
-  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputText name=name id=id size=size maxlength=maxlength default=default index=index password=password readonly=readonly onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex /></td>
+<#macro inputTextCell name size=30 maxlength="" default="" index=-1 password=false readonly=false onChange="" id="" ignoreParameters=false errorField="" tabIndex="" colspan="" tooltip="">
+  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputText name=name id=id size=size maxlength=maxlength default=default index=index password=password readonly=readonly onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputTextRow name title size=30 maxlength="" default="" titleClass="tableheadtext" index=-1 rowId="" hidden=false password=false readonly=false onChange="" id="" ignoreParameters=false errorField="" tabIndex="" colspan="">
+<#macro inputTextRow name title size=30 maxlength="" default="" titleClass="tableheadtext" index=-1 rowId="" hidden=false password=false readonly=false onChange="" id="" ignoreParameters=false errorField="" tabIndex="" colspan="" tooltip="">
   <tr<#if rowId?length != 0> id="${getIndexedName(rowId, index)}"</#if><#if hidden> style="display:none"</#if>>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputTextCell name=name id=id size=size maxlength=maxlength default=default index=index password=password readonly=readonly onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex colspan=colspan/>
+    <@inputTextCell name=name id=id size=size maxlength=maxlength default=default index=index password=password readonly=readonly onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex colspan=colspan tooltip=tooltip/>
   </tr>
 </#macro>
 
-<#macro inputRangeRow title fromName thruName titleClass="tableheadtext" size=20 ignoreParameters=false colspan="">
+<#macro inputRangeRow title fromName thruName titleClass="tableheadtext" size=20 ignoreParameters=false colspan="" tooltip="">
   <tr>
     <@displayTitleCell title=title titleClass=titleClass/>
-    <@inputRangeCell fromName=fromName thruName=thruName size=size ignoreParameters=ignoreParameters colspan=colspan/>
+    <@inputRangeCell fromName=fromName thruName=thruName size=size ignoreParameters=ignoreParameters colspan=colspan tooltip=tooltip/>
   </tr>
 </#macro>
 
-<#macro inputRangeCell fromName thruName size=20 ignoreParameters=false colspan="">
-  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputRange fromName=fromName thruName=thruName size=size ignoreParameters=ignoreParameters/></td>
+<#macro inputRangeCell fromName thruName size=20 ignoreParameters=false colspan="" tooltip="">
+  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputRange fromName=fromName thruName=thruName size=size ignoreParameters=ignoreParameters tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputRange fromName thruName size=20 ignoreParameters=false>
+<#macro inputRange fromName thruName size=20 ignoreParameters=false tooltip="">
   <span class="tabletext">
     ${uiLabelMap.CommonFrom} 
     <@inputText name=fromName size=size ignoreParameters=ignoreParameters/>
@@ -321,63 +326,67 @@ For more information, please see documentation/opentapsFormMacros.html
     ${uiLabelMap.CommonThru} 
     <@inputText name=thruName size=size ignoreParameters=ignoreParameters/>
   </span>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
 </#macro>
 
 
-<#macro inputCheckbox name value="Y" index=-1 onChange="" onClick="" id="" ignoreParameters=false errorField="" tabIndex="" default="">
+<#macro inputCheckbox name value="Y" index=-1 onChange="" onClick="" id="" ignoreParameters=false errorField="" tabIndex="" default="" tooltip="">
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <input id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" type="checkbox" value="${value}" onChange="${onChange}" onClick="${onClick}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if value == getDefaultValue(name, default, index, ignoreParameters)>checked="checked"</#if>/>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputCheckboxCell name value="Y" index=-1 onChange="" onClick="" id="" ignoreParameters=false errorField="" tabIndex="" default="" colspan="">
-  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputCheckbox name=name value=value id=id default=default index=index onChange=onChange onClick=onClick ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex /></td>
+<#macro inputCheckboxCell name value="Y" index=-1 onChange="" onClick="" id="" ignoreParameters=false errorField="" tabIndex="" default="" colspan="" tooltip="">
+  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputCheckbox name=name value=value id=id default=default index=index onChange=onChange onClick=onClick ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex tooltip=tooltip /></td>
 </#macro>
 
-<#macro inputCheckboxRow name title value="Y" index=-1 rowId="" hidden=false onChange="" onClick="" id="" ignoreParameters=false errorField="" tabIndex="" default="" titleClass="tableheadtext" colspan="">
+<#macro inputCheckboxRow name title value="Y" index=-1 rowId="" hidden=false onChange="" onClick="" id="" ignoreParameters=false errorField="" tabIndex="" default="" titleClass="tableheadtext" colspan="" tooltip="">
   <tr<#if rowId?length != 0> id="${getIndexedName(rowId, index)}"</#if><#if hidden> style="display:none"</#if>>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputCheckboxCell name=name value=value id=id default=default index=index onChange=onChange onClick=onClick ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex colspan=colspan/>
+    <@inputCheckboxCell name=name value=value id=id default=default index=index onChange=onChange onClick=onClick ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex colspan=colspan tooltip=tooltip/>
   </tr>
 </#macro>
 
-<#macro inputFile name size=30 maxlength="" default="" index=-1 onChange="" id="" errorField="" tabIndex="">
+<#macro inputFile name size=30 maxlength="" default="" index=-1 onChange="" id="" errorField="" tabIndex="" tooltip="">
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <input id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" type="file" size="${size}" maxlength="${maxlength}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>/>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputFileCell name size=30 maxlength="" default="" index=-1 onChange="" id="" errorField="" tabIndex="" colspan="">
-  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputFile name=name id=id size=size maxlength=maxlength default=default index=index onChange=onChange errorField=errorField tabIndex=tabIndex /></td>
+<#macro inputFileCell name size=30 maxlength="" default="" index=-1 onChange="" id="" errorField="" tabIndex="" colspan="" tooltip="">
+  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputFile name=name id=id size=size maxlength=maxlength default=default index=index onChange=onChange errorField=errorField tabIndex=tabIndex tooltip=tooltip /></td>
 </#macro>
 
-<#macro inputFileRow name title size=30 maxlength="" default="" titleClass="tableheadtext" index=-1 rowId="" hidden=false onChange="" id="" errorField="" tabIndex="" colspan="">
+<#macro inputFileRow name title size=30 maxlength="" default="" titleClass="tableheadtext" index=-1 rowId="" hidden=false onChange="" id="" errorField="" tabIndex="" colspan="" tooltip="">
   <tr<#if rowId?length != 0> id="${getIndexedName(rowId, index)}"</#if><#if hidden> style="display:none"</#if>>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputFileCell name=name id=id size=size maxlength=maxlength default=default index=index onChange=onChange errorField=errorField tabIndex=tabIndex colspan=colspan/>
+    <@inputFileCell name=name id=id size=size maxlength=maxlength default=default index=index onChange=onChange errorField=errorField tabIndex=tabIndex colspan=colspan tooltip=tooltip/>
   </tr>
 </#macro>
 
-<#macro inputTextarea name rows=5 cols=60 default="" index=-1 ignoreParameters=false errorField="" tabIndex="" readonly=false>
+<#macro inputTextarea name rows=5 cols=60 default="" index=-1 ignoreParameters=false errorField="" tabIndex="" readonly=false tooltip="">
   <textarea rows="${rows}" cols="${cols}" name="${getIndexedName(name, index)}" class="inputBox" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>readonly="readonly"</#if>>${getDefaultValue(name, default, index, ignoreParameters)}</textarea>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputTextareaCell name rows=5 cols=60 default="" index=-1 ignoreParameters=false errorField="" tabIndex="" colspan="" readonly=false>
-  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputTextarea name=name rows=rows cols=cols default=default index=index ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex readonly=readonly /></td>
+<#macro inputTextareaCell name rows=5 cols=60 default="" index=-1 ignoreParameters=false errorField="" tabIndex="" colspan="" readonly=false tooltip="">
+  <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputTextarea name=name rows=rows cols=cols default=default index=index ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex readonly=readonly tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputTextareaRow name title rows=5 cols=60 default="" titleClass="tableheadtext" index=-1 ignoreParameters=false errorField="" tabIndex="" colspan="" readonly=false>
+<#macro inputTextareaRow name title rows=5 cols=60 default="" titleClass="tableheadtext" index=-1 ignoreParameters=false errorField="" tabIndex="" colspan="" readonly=false tooltip="">
   <tr>
     <td class="titleCellTop"><span class="${titleClass}">${title}</span></td>
-    <@inputTextareaCell name=name rows=rows cols=cols default=default index=index ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex colspan=colspan readonly=readonly/>
+    <@inputTextareaCell name=name rows=rows cols=cols default=default index=index ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex colspan=colspan readonly=readonly tooltip=tooltip/>
   </tr>
 </#macro>
 
 
 <#-- these are duplicated because #nested only goes one level up -->
 
-<#macro inputSelectHash name hash required=true default="" index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="">
+<#macro inputSelectHash name hash required=true default="" index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="" tooltip="">
  <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
  <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
    <#if !required><option value=""></option></#if>
@@ -386,21 +395,22 @@ For more information, please see documentation/opentapsFormMacros.html
      <option <#if defaultValue = k>selected="selected"</#if> value="${k}">${hash[k]}</option>
    </#list>
  </select>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputSelectHashCell name hash required=true default="" index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="" colspan="">
- <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputSelectHash name=name required=required default=default hash=hash index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex/></td>
+<#macro inputSelectHashCell name hash required=true default="" index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="" colspan="" tooltip="">
+ <td<#if colspan?has_content> colspan="${colspan}"</#if>><@inputSelectHash name=name required=required default=default hash=hash index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputSelectHashRow name title hash required=true default="" index=-1 titleClass="tableheadtext" onChange="" ignoreParameters=false errorField="" tabIndex="" colspan="">
+<#macro inputSelectHashRow name title hash required=true default="" index=-1 titleClass="tableheadtext" onChange="" ignoreParameters=false errorField="" tabIndex="" colspan="" tooltip="">
  <tr>
    <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-   <@inputSelectHashCell name=name required=required default=default hash=hash index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex colspan=colspan/>
+   <@inputSelectHashCell name=name required=required default=default hash=hash index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex colspan=colspan tooltip=tooltip/>
  </tr>
 </#macro>
 
-<#macro inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false class="inputBox">
+<#macro inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false class="inputBox" tooltip="">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)/>
@@ -413,10 +423,11 @@ For more information, please see documentation/opentapsFormMacros.html
       </option>
     </#list>
   </select>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputSelectCell name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false colspan="">
+<#macro inputSelectCell name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false colspan="" tooltip="">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
@@ -430,11 +441,12 @@ For more information, please see documentation/opentapsFormMacros.html
       </option>
     </#list>
   </select>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
   </td>
 </#macro>
 
-<#macro inputSelectRow title name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" titleClass="tableheadtext" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false colspan="">
+<#macro inputSelectRow title name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" titleClass="tableheadtext" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false colspan="" tooltip="">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
@@ -450,12 +462,13 @@ For more information, please see documentation/opentapsFormMacros.html
       </option>
     </#list>
   </select>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
   </td>
   </tr>
 </#macro>
 
-<#macro inputMultiSelect title name list key="" displayField="" default=[] index=-1 defaultOptionText="" titleClass="tableheadtext" size=5 onChange="" id="" errorField="" tabIndex="">
+<#macro inputMultiSelect title name list key="" displayField="" default=[] index=-1 defaultOptionText="" titleClass="tableheadtext" size=5 onChange="" id="" errorField="" tabIndex="" tooltip="">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" multiple="multiple" size="${size}" style="height:auto" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
@@ -466,10 +479,11 @@ For more information, please see documentation/opentapsFormMacros.html
       </option>
     </#list>
   </select>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputMultiSelectCell title name list key="" displayField="" default=[] index=-1 defaultOptionText="" titleClass="tableheadtext" size=5 onChange="" id="" errorField="" tabIndex="" colspan="">
+<#macro inputMultiSelectCell title name list key="" displayField="" default=[] index=-1 defaultOptionText="" titleClass="tableheadtext" size=5 onChange="" id="" errorField="" tabIndex="" colspan="" tooltip="">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <td<#if colspan?has_content> colspan="${colspan}"</#if>>
@@ -481,11 +495,12 @@ For more information, please see documentation/opentapsFormMacros.html
       </option>
     </#list>
   </select>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
   </td>
 </#macro>
 
-<#macro inputMultiSelectRow title name list key="" displayField="" default=[] index=-1 defaultOptionText="" titleClass="tableheadtext" size=5 onChange="" id="" errorField="" tabIndex="" colspan="">
+<#macro inputMultiSelectRow title name list key="" displayField="" default=[] index=-1 defaultOptionText="" titleClass="tableheadtext" size=5 onChange="" id="" errorField="" tabIndex="" colspan="" tooltip="">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <tr>
@@ -499,29 +514,31 @@ For more information, please see documentation/opentapsFormMacros.html
       </option>
     </#list>
   </select>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
   </td>
   </tr>
 </#macro>
 
 
-<#macro inputLookup name lookup form default="" size=20 maxlength=20 index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="" readonly=false>
+<#macro inputLookup name lookup form default="" size=20 maxlength=20 index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="" readonly=false tooltip="">
   <#assign indexedName = getIndexedName(name, index)/>
   <input type="text" size="${size}" maxlength="${maxlength}" name="${indexedName}" class="inputBox" value="${getDefaultValue(name, default, index, ignoreParameters)}" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>readonly="readonly"</#if>/>
   <#if !readonly>
     <a href="javascript:call_fieldlookup2(document.${form}.${indexedName},'${lookup}');"><img src="/images/fieldlookup.gif" alt="Lookup" border="0" height="14" width="15"></a>
   </#if>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputLookupCell name lookup form default="" size=20 maxlength=20 index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="" readonly=false colspan="">
-<td nowrap="nowrap"<#if colspan?has_content> colspan="${colspan}"</#if>><@inputLookup name=name lookup=lookup form=form default=default size=size maxlength=maxlength index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex readonly=readonly/></td>
+<#macro inputLookupCell name lookup form default="" size=20 maxlength=20 index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="" readonly=false colspan="" tooltip="">
+<td nowrap="nowrap"<#if colspan?has_content> colspan="${colspan}"</#if>><@inputLookup name=name lookup=lookup form=form default=default size=size maxlength=maxlength index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex readonly=readonly tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputLookupRow name title lookup form size=20 maxlength=20 default="" titleClass="tableheadtext" onChange="" ignoreParameters=false errorField="" tabIndex="" readonly=false colspan="">
+<#macro inputLookupRow name title lookup form size=20 maxlength=20 default="" titleClass="tableheadtext" onChange="" ignoreParameters=false errorField="" tabIndex="" readonly=false colspan="" tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputLookupCell name=name lookup=lookup form=form default=default size=size maxlength=maxlength index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex readonly=readonly colspan=colspan/>
+    <@inputLookupCell name=name lookup=lookup form=form default=default size=size maxlength=maxlength index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex readonly=readonly colspan=colspan tooltip=tooltip/>
   </tr>
 </#macro>
 
@@ -529,7 +546,7 @@ For more information, please see documentation/opentapsFormMacros.html
 <#-- auto complete -->
 
 <#-- TODO: the way ID is handled here should be done for all macros.  We can remove the form parameter if we use id. -->
-<#macro inputAutoComplete name url form="" lookup="" styleClass="inputAutoCompleteQuick" id="" default="" index=-1 size=15 maxlength=20 ignoreParameters=false errorField="" tabIndex="" onChange="">
+<#macro inputAutoComplete name url form="" lookup="" styleClass="inputAutoCompleteQuick" id="" default="" index=-1 size=15 maxlength=20 ignoreParameters=false errorField="" tabIndex="" onChange="" tooltip="">
   <#assign indexedName = getIndexedName(name, index)/>
   <#assign realId = id/>
   <#if !realId?has_content>
@@ -564,171 +581,172 @@ For more information, please see documentation/opentapsFormMacros.html
     <#assign formElement = "document.getElementById('${realId}')"/>
     <a href="javascript:call_fieldlookup2autocomplete(${comboElement},${formElement},'${lookup}');"><img src="/images/fieldlookup.gif" alt="Lookup" border="0" height="14" width="15"/></a>
   </#if>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
 <#-- auto complete any Party -->
-<#macro inputAutoCompleteParty name id="" url="getAutoCompletePartyIds" styleClass="inputAutoCompleteQuick" form="" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name form=form url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+<#macro inputAutoCompleteParty name id="" url="getAutoCompletePartyIds" styleClass="inputAutoCompleteQuick" form="" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <@inputAutoComplete name=name form=form url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
 </#macro>
 
-<#macro inputAutoCompletePartyCell name id="" url="getAutoCompletePartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompleteParty name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+<#macro inputAutoCompletePartyCell name id="" url="getAutoCompletePartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <td><@inputAutoCompleteParty name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/></td>
 </#macro>
 
 <#macro inputAutoCompletePartyRow title name titleClass="tableheadtext" id="" url="getAutoCompletePartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompletePartyCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+    <@inputAutoCompletePartyCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
   </tr>
 </#macro>
 
 <#-- auto complete any PartyGroup -->
-<#macro inputAutoCompletePartyGroup name id="" url="getAutoCompletePartyGroupIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyGroup" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+<#macro inputAutoCompletePartyGroup name id="" url="getAutoCompletePartyGroupIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyGroup" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
 </#macro>
 
-<#macro inputAutoCompletePartyGroupCell name id="" url="getAutoCompletePartyGroupIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompletePartyGroup name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+<#macro inputAutoCompletePartyGroupCell name id="" url="getAutoCompletePartyGroupIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <td><@inputAutoCompletePartyGroup name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputAutoCompletePartyGroupRow title name titleClass="tableheadtext" id="" url="getAutoCompletePartyGroupIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+<#macro inputAutoCompletePartyGroupRow title name titleClass="tableheadtext" id="" url="getAutoCompletePartyGroupIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompletePartyGroupCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+    <@inputAutoCompletePartyGroupCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
   </tr>
 </#macro>
 
 <#-- auto complete any Person -->
-<#macro inputAutoCompletePerson name id="" url="getAutoCompletePersonIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+<#macro inputAutoCompletePerson name id="" url="getAutoCompletePersonIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
 </#macro>
 
-<#macro inputAutoCompletePersonCell name id="" url="getAutoCompletePersonIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompletePerson name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+<#macro inputAutoCompletePersonCell name id="" url="getAutoCompletePersonIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <td><@inputAutoCompletePerson name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputAutoCompletePersonRow title name titleClass="tableheadtext" id="" url="getAutoCompletePersonIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+<#macro inputAutoCompletePersonRow title name titleClass="tableheadtext" id="" url="getAutoCompletePersonIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompletePersonCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+    <@inputAutoCompletePersonCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
   </tr>
 </#macro>
 
 <#-- auto complete any Party with User Login -->
-<#macro inputAutoCompleteUserLoginParty name id="" url="getAutoCompleteUserLoginPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id lookup="LookupUserLoginAndPartyDetails" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+<#macro inputAutoCompleteUserLoginParty name id="" url="getAutoCompleteUserLoginPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <@inputAutoComplete name=name url=url id=id lookup="LookupUserLoginAndPartyDetails" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
 </#macro>
 
-<#macro inputAutoCompleteUserLoginPartyCell name id="" url="getAutoCompleteUserLoginPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompleteUserLoginParty name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+<#macro inputAutoCompleteUserLoginPartyCell name id="" url="getAutoCompleteUserLoginPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <td><@inputAutoCompleteUserLoginParty name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputAutoCompleteUserLoginPartyRow title name titleClass="tableheadtext" id="" url="getAutoCompleteUserLoginPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+<#macro inputAutoCompleteUserLoginPartyRow title name titleClass="tableheadtext" id="" url="getAutoCompleteUserLoginPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompleteUserLoginPartyCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+    <@inputAutoCompleteUserLoginPartyCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
   </tr>
 </#macro>
 
 <#-- auto complete any CRM Party (contact, accout, lead, partner) -->
-<#macro inputAutoCompleteCrmParty name id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+<#macro inputAutoCompleteCrmParty name id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
 </#macro>
 
-<#macro inputAutoCompleteCrmPartyCell name id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompleteCrmParty name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+<#macro inputAutoCompleteCrmPartyCell name id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <td><@inputAutoCompleteCrmParty name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputAutoCompleteCrmPartyRow title name titleClass="tableheadtext" id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+<#macro inputAutoCompleteCrmPartyRow title name titleClass="tableheadtext" id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompleteCrmPartyCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+    <@inputAutoCompleteCrmPartyCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
   </tr>
 </#macro>
 
 <#-- auto complete Supplier -->
-<#macro inputAutoCompleteSupplier name id="" url="getAutoCompleteSupplierPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id lookup="LookupSupplier" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+<#macro inputAutoCompleteSupplier name id="" url="getAutoCompleteSupplierPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <@inputAutoComplete name=name url=url id=id lookup="LookupSupplier" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
 </#macro>
 
-<#macro inputAutoCompleteSupplierCell name id="" url="getAutoCompleteSupplierPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompleteSupplier name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange /></td>
+<#macro inputAutoCompleteSupplierCell name id="" url="getAutoCompleteSupplierPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <td><@inputAutoCompleteSupplier name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputAutoCompleteSupplierRow title name titleClass="tableheadtext" id="" url="getAutoCompleteSupplierPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+<#macro inputAutoCompleteSupplierRow title name titleClass="tableheadtext" id="" url="getAutoCompleteSupplierPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompleteSupplierCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+    <@inputAutoCompleteSupplierCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
   </tr>
 </#macro>
 
 <#-- auto complete Account, Contact and Prospect -->
-<#macro inputAutoCompleteClient name id="" url="getAutoCompleteClientPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id lookup="LookupClients" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+<#macro inputAutoCompleteClient name id="" url="getAutoCompleteClientPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <@inputAutoComplete name=name url=url id=id lookup="LookupClients" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
 </#macro>
 
-<#macro inputAutoCompleteClientCell name id="" url="getAutoCompleteClientPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompleteAccount name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange /></td>
+<#macro inputAutoCompleteClientCell name id="" url="getAutoCompleteClientPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <td><@inputAutoCompleteAccount name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputAutoCompleteClientRow title name titleClass="tableheadtext" id="" url="getAutoCompleteClientPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+<#macro inputAutoCompleteClientRow title name titleClass="tableheadtext" id="" url="getAutoCompleteClientPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompleteAccountCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+    <@inputAutoCompleteAccountCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
   </tr>
 </#macro>
 
 <#-- auto complete Account -->
-<#macro inputAutoCompleteAccount name id="" url="getAutoCompleteAccountPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id  lookup="LookupAccounts" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+<#macro inputAutoCompleteAccount name id="" url="getAutoCompleteAccountPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <@inputAutoComplete name=name url=url id=id  lookup="LookupAccounts" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
 </#macro>
 
-<#macro inputAutoCompleteAccountCell name id="" url="getAutoCompleteAccountPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompleteAccount name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+<#macro inputAutoCompleteAccountCell name id="" url="getAutoCompleteAccountPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <td><@inputAutoCompleteAccount name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputAutoCompleteAccountRow title name titleClass="tableheadtext" id="" url="getAutoCompleteAccountPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+<#macro inputAutoCompleteAccountRow title name titleClass="tableheadtext" id="" url="getAutoCompleteAccountPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompleteAccountCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+    <@inputAutoCompleteAccountCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
   </tr>
 </#macro>
 
 <#-- auto complete GlAccount -->
-<#macro inputAutoCompleteGlAccount name id="" url="getAutoCompleteGlAccounts" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id lookup="LookupGlAccount" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+<#macro inputAutoCompleteGlAccount name id="" url="getAutoCompleteGlAccounts" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
+  <@inputAutoComplete name=name url=url id=id lookup="LookupGlAccount" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
 </#macro>
 
 <#macro inputAutoCompleteGlAccountCell name id="" url="getAutoCompleteGlAccounts" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompleteGlAccount name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+  <td><@inputAutoCompleteGlAccount name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputAutoCompleteGlAccountRow title name titleClass="tableheadtext" id="" url="getAutoCompleteGlAccounts" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+<#macro inputAutoCompleteGlAccountRow title name titleClass="tableheadtext" id="" url="getAutoCompleteGlAccounts" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="" tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompleteGlAccountCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+    <@inputAutoCompleteGlAccountCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
   </tr>
 </#macro>
 
 <#-- auto complete Product -->
-<#macro inputAutoCompleteProduct name url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 maxlength=50 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupProduct" styleClass=styleClass default=default index=index size=size maxlength=maxlength errorField=errorField tabIndex=tabIndex onChange=onChange/>
+<#macro inputAutoCompleteProduct name url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 maxlength=50 errorField="" tabIndex="" onChange="" tooltip="">
+  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupProduct" styleClass=styleClass default=default index=index size=size maxlength=maxlength errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
 </#macro>
 
-<#macro inputAutoCompleteProductCell name url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 maxlength=50 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompleteProduct name=name id=id url=url styleClass=styleClass default=default index=index size=size maxlength=maxlength errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+<#macro inputAutoCompleteProductCell name url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 maxlength=50 errorField="" tabIndex="" onChange="" tooltip="">
+  <td><@inputAutoCompleteProduct name=name id=id url=url styleClass=styleClass default=default index=index size=size maxlength=maxlength errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputAutoCompleteProductRow title name titleClass="tableheadtext" url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 maxlength=50 errorField="" tabIndex="" onChange="">
+<#macro inputAutoCompleteProductRow title name titleClass="tableheadtext" url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 maxlength=50 errorField="" tabIndex="" onChange="" tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompleteProductCell name=name id=id url=url styleClass=styleClass default=default index=index size=size maxlength=maxlength errorField=errorField tabIndex=tabIndex onChange=onChange/>
+    <@inputAutoCompleteProductCell name=name id=id url=url styleClass=styleClass default=default index=index size=size maxlength=maxlength errorField=errorField tabIndex=tabIndex onChange=onChange tooltip=tooltip/>
   </tr>
 </#macro>
 
 
-<#macro inputCurrencySelect list=[] name="currencyUomId" defaultCurrencyUomId="" id="" index=-1 useDescription=false ignoreParameters=false>
+<#macro inputCurrencySelect list=[] name="currencyUomId" defaultCurrencyUomId="" id="" index=-1 useDescription=false ignoreParameters=false tooltip="">
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign currencyDefault = getDefaultValue(name, defaultCurrencyUomId, index, ignoreParameters)>
   <#if currencyDefault?length == 0>
@@ -742,38 +760,39 @@ For more information, please see documentation/opentapsFormMacros.html
       <option ${selected} value="${option.uomId}">${option.abbreviation}<#if useDescription> - ${option.description}</#if></option>
     </#list>
   </select>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
 </#macro>
 
-<#macro inputCurrencySelectCell name="currencyUomId" list=[] defaultCurrencyUomId="" id="" index=-1 useDescription=false ignoreParameters=false>
-  <td nowrap="nowrap"><@inputCurrencySelect name=name id=id list=list defaultCurrencyUomId=defaultCurrencyUomId index=index useDescription=useDescription ignoreParameters=ignoreParameters /></td>
+<#macro inputCurrencySelectCell name="currencyUomId" list=[] defaultCurrencyUomId="" id="" index=-1 useDescription=false ignoreParameters=false tooltip="">
+  <td nowrap="nowrap"><@inputCurrencySelect name=name id=id list=list defaultCurrencyUomId=defaultCurrencyUomId index=index useDescription=useDescription ignoreParameters=ignoreParameters tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputCurrencySelectRow title name="currencyUomId" list=[] titleClass="tableheadtext" defaultCurrencyUomId="" id="" index=-1 useDescription=false ignoreParameters=false>
+<#macro inputCurrencySelectRow title name="currencyUomId" list=[] titleClass="tableheadtext" defaultCurrencyUomId="" id="" index=-1 useDescription=false ignoreParameters=false tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputCurrencySelectCell name=name id=id list=list defaultCurrencyUomId=defaultCurrencyUomId index=index useDescription=useDescription ignoreParameters=ignoreParameters />
+    <@inputCurrencySelectCell name=name id=id list=list defaultCurrencyUomId=defaultCurrencyUomId index=index useDescription=useDescription ignoreParameters=ignoreParameters tooltip=tooltip/>
   </tr>
 </#macro>
 
 
-<#macro inputCurrency name list=[] currencyName="currencyUomId" default="" defaultCurrencyUomId="" disableCurrencySelect=false index=-1 ignoreParameters=false>
+<#macro inputCurrency name list=[] currencyName="currencyUomId" default="" defaultCurrencyUomId="" disableCurrencySelect=false index=-1 ignoreParameters=false tooltip="">
   <input name="${getIndexedName(name, index)}" type="text" size="6" class="inputBox" value="${getDefaultValue(name, default, index, ignoreParameters)}"/>
   <#if disableCurrencySelect && defaultCurrencyUomId?size != 0>
     <input type="hidden" name="${getIndexedName(currencyName, index)}" value="${defaultCurrencyUomId}"/>
     ${defaultCurrencyUomId}
   <#else>
-  <@inputCurrencySelect list=list name=currencyName defaultCurrencyUomId=defaultCurrencyUomId index=index ignoreParameters=ignoreParameters />
+  <@inputCurrencySelect list=list name=currencyName defaultCurrencyUomId=defaultCurrencyUomId index=index ignoreParameters=ignoreParameters tooltip=tooltip/>
   </#if>
 </#macro>
 
-<#macro inputCurrencyCell name list=[] currencyName="currencyUomId" default="" defaultCurrencyUomId="" disableCurrencySelect=false index=-1 ignoreParameters=false>
-  <td nowrap="nowrap"><@inputCurrency name=name list=list currencyName=currencyName default=default defaultCurrencyUomId=defaultCurrencyUomId disableCurrencySelect=disableCurrencySelect index=index ignoreParameters=ignoreParameters /></td>
+<#macro inputCurrencyCell name list=[] currencyName="currencyUomId" default="" defaultCurrencyUomId="" disableCurrencySelect=false index=-1 ignoreParameters=false tooltip="">
+  <td nowrap="nowrap"><@inputCurrency name=name list=list currencyName=currencyName default=default defaultCurrencyUomId=defaultCurrencyUomId disableCurrencySelect=disableCurrencySelect index=index ignoreParameters=ignoreParameters tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputCurrencyRow name title list=[] currencyName="currencyUomId" default="" titleClass="tableheadtext" defaultCurrencyUomId="" disableCurrencySelect=false index=-1 ignoreParameters=false>
+<#macro inputCurrencyRow name title list=[] currencyName="currencyUomId" default="" titleClass="tableheadtext" defaultCurrencyUomId="" disableCurrencySelect=false index=-1 ignoreParameters=false tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputCurrencyCell name=name list=list currencyName=currencyName default=default defaultCurrencyUomId=defaultCurrencyUomId disableCurrencySelect=disableCurrencySelect index=index ignoreParameters=ignoreParameters />
+    <@inputCurrencyCell name=name list=list currencyName=currencyName default=default defaultCurrencyUomId=defaultCurrencyUomId disableCurrencySelect=disableCurrencySelect index=index ignoreParameters=ignoreParameters tooltip=tooltip/>
   </tr>
 </#macro>
 
@@ -818,28 +837,29 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 
-<#macro inputIndicator name required=true default="" index=-1 onChange="" id="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+<#macro inputIndicator name required=true default="" index=-1 onChange="" id="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo tooltip="">
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
   <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" id="${id}">
     <#if !required><option value=""></option></#if>
     <option <#if defaultValue == "Y">selected="selected"</#if> value="Y">${yesLabel}</option>
     <option <#if defaultValue == "N">selected="selected"</#if> value="N">${noLabel}</option>
   </select>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
 </#macro>
 
-<#macro inputIndicatorCell name required=true default="" index=-1 onChange=""  id=""ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
-  <td><@inputIndicator name=name required=required default=default index=index onChange=onChange id=id ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel /></td>
+<#macro inputIndicatorCell name required=true default="" index=-1 onChange=""  id=""ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo tooltip="">
+  <td><@inputIndicator name=name required=required default=default index=index onChange=onChange id=id ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputIndicatorRow name title required=true default="" titleClass="tableheadtext" index=-1 onChange="" id="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+<#macro inputIndicatorRow name title required=true default="" titleClass="tableheadtext" index=-1 onChange="" id="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo tooltip="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputIndicatorCell name=name required=required default=default index=index onChange=onChange id=id ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel />
+    <@inputIndicatorCell name=name required=required default=default index=index onChange=onChange id=id ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel tooltip=tooltip/>
   </tr>
 </#macro>
 
 <#-- Parameter 'form' is decreated and leaves here for compatibility w/ existent code. Don't use it any more. -->
-<#macro inputDate name form="" default="" size=10 index=-1 popup=true weekNumbers=false onChange="" onUpdate="" onDateStatusFunc="" linkedName="" delta=0 id="" ignoreParameters=false errorField="" tabIndex="" calendarTabIndex="">
+<#macro inputDate name form="" default="" size=10 index=-1 popup=true weekNumbers=false onChange="" onUpdate="" onDateStatusFunc="" linkedName="" delta=0 id="" ignoreParameters=false errorField="" tabIndex="" calendarTabIndex="" tooltip="">
   <#assign indexedName = getIndexedName(name, index)>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
   <#assign elId = form + indexedName />
@@ -847,6 +867,7 @@ For more information, please see documentation/opentapsFormMacros.html
   <input id="${elId}" type="text" size="${size}" maxlength="${size}" name="${indexedName}" class="inputBox" value="${getLocalizedDate(defaultValue, "DATE")}" onchange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>/>
   <a href="javascript:opentaps.toggleClass(document.getElementById('${elId}-calendar-placeholder'), 'hidden');"><img id="${elId}-button" src="/images/cal.gif" alt="View Calendar" title="View Calendar" border="0" height="16" width="16" <#if tabIndex?has_content>tabindex="${calendarTabIndex}"</#if>/></a>
   <#if !popup><div id="${elId}-calendar-placeholder" style="border: 0px; width: auto;" class="hidden"></div></#if>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
   <script type="text/javascript">
   /*<![CDATA[*/
@@ -903,30 +924,30 @@ For more information, please see documentation/opentapsFormMacros.html
   </script>
 </#macro>
 
-<#macro inputDateCell name form="" default="" size=10 index=-1 popup=true weekNumbers=false onUpdate="" onDateStatusFunc="" linkedName="" delta=0 id="" ignoreParameters=false errorField="" tabIndex="" calendarTabIndex="">
-  <td><@inputDate name=name form=form default=default size=size index=index popup=popup weekNumbers=weekNumbers onUpdate=onUpdate onDateStatusFunc=onDateStatusFunc linkedName=linkedName delta=delta id=id ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex calendarTabIndex=calendarTabIndex/></td>
+<#macro inputDateCell name form="" default="" size=10 index=-1 popup=true weekNumbers=false onUpdate="" onDateStatusFunc="" linkedName="" delta=0 id="" ignoreParameters=false errorField="" tabIndex="" calendarTabIndex="" tooltip="">
+  <td><@inputDate name=name form=form default=default size=size index=index popup=popup weekNumbers=weekNumbers onUpdate=onUpdate onDateStatusFunc=onDateStatusFunc linkedName=linkedName delta=delta id=id ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex calendarTabIndex=calendarTabIndex tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputDateRow name title form="" titleClass="tableheadtext" default="" size=10 index=-1 popup=true weekNumbers=false onUpdate="" onDateStatusFunc="" linkedName="" delta=0 id="" ignoreParameters=false errorField="" tabIndex="" calendarTabIndex="">
+<#macro inputDateRow name title form="" titleClass="tableheadtext" default="" size=10 index=-1 popup=true weekNumbers=false onUpdate="" onDateStatusFunc="" linkedName="" delta=0 id="" ignoreParameters=false errorField="" tabIndex="" calendarTabIndex="" tooltip="">
   <tr>
     <@displayTitleCell title=title titleClass=titleClass/>
-    <@inputDateCell name=name form=form default=default size=size index=index popup=popup weekNumbers=weekNumbers onUpdate=onUpdate onDateStatusFunc=onDateStatusFunc linkedName=linkedName delta=delta id=id ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex calendarTabIndex=calendarTabIndex/>
+    <@inputDateCell name=name form=form default=default size=size index=index popup=popup weekNumbers=weekNumbers onUpdate=onUpdate onDateStatusFunc=onDateStatusFunc linkedName=linkedName delta=delta id=id ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex calendarTabIndex=calendarTabIndex tooltip=tooltip/>
   </tr>
 </#macro>
 
 
-<#macro inputDateRangeRow title fromName thruName titleClass="tableheadtext" ignoreParameters=false>
+<#macro inputDateRangeRow title fromName thruName titleClass="tableheadtext" ignoreParameters=false tooltip="">
   <tr>
     <@displayTitleCell title=title titleClass=titleClass/>
-    <@inputDateRangeCell fromName=fromName thruName=thruName ignoreParameters=ignoreParameters/>
+    <@inputDateRangeCell fromName=fromName thruName=thruName ignoreParameters=ignoreParameters tooltip=tooltip/>
   </tr>
 </#macro>
 
-<#macro inputDateRangeCell fromName thruName ignoreParameters=false>
-  <td><@inputDateRange fromName=fromName thruName=thruName ignoreParameters=ignoreParameters/></td>
+<#macro inputDateRangeCell fromName thruName ignoreParameters=false tooltip="">
+  <td><@inputDateRange fromName=fromName thruName=thruName ignoreParameters=ignoreParameters tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputDateRange fromName thruName ignoreParameters=false>
+<#macro inputDateRange fromName thruName ignoreParameters=false tooltip="">
   <span class="tabletext">
     ${uiLabelMap.CommonFrom} 
     <@inputDate name=fromName ignoreParameters=ignoreParameters/>
@@ -934,11 +955,12 @@ For more information, please see documentation/opentapsFormMacros.html
     ${uiLabelMap.CommonThru} 
     <@inputDate name=thruName ignoreParameters=ignoreParameters/>
   </span>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
 </#macro>
 
 <#-- Enumeration Macros -->
 
-<#macro inputEnumeration name enumTypeId index=-1 required=false default="" onChange="" ignoreParameters=false>
+<#macro inputEnumeration name enumTypeId index=-1 required=false default="" onChange="" ignoreParameters=false tooltip="">
   <#assign enumerations = Static["org.opentaps.common.util.UtilCommon"].getEnumerations(enumTypeId, delegator)>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
   <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}">
@@ -947,15 +969,16 @@ For more information, please see documentation/opentapsFormMacros.html
       <option <#if defaultValue == enum.enumId>selected="selected"</#if> value="${enum.enumId}">${enum.get("description", locale)}</option>
     </#list>
   </select>
+  <#if tooltip?has_content><@displayTooltip text=tooltip/></#if>
 </#macro>
 
-<#macro inputEnumerationCell name enumTypeId index=-1 required=false default="" onChange="" ignoreParameters=false>
-  <td><@inputEnumeration name=name enumTypeId=enumTypeId index=index required=required default=default onChange=onChange ignoreParameters=ignoreParameters /></td>
+<#macro inputEnumerationCell name enumTypeId index=-1 required=false default="" onChange="" ignoreParameters=false tooltip="">
+  <td><@inputEnumeration name=name enumTypeId=enumTypeId index=index required=required default=default onChange=onChange ignoreParameters=ignoreParameters tooltip=tooltip/></td>
 </#macro>
 
-<#macro inputEnumerationRow title name enumTypeId index=-1 required=false titleClass="tableheadtext" default="" onChange="" ignoreParameters=false>
+<#macro inputEnumerationRow title name enumTypeId index=-1 required=false titleClass="tableheadtext" default="" onChange="" ignoreParameters=false tooltip="">
   <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-  <@inputEnumerationCell name=name enumTypeId=enumTypeId index=index required=required default=default onChange=onChange ignoreParameters=ignoreParameters />
+  <@inputEnumerationCell name=name enumTypeId=enumTypeId index=index required=required default=default onChange=onChange ignoreParameters=ignoreParameters tooltip=tooltip/>
 </#macro>
 
 <#macro displayEnumeration enumId="" class="tabletext" style="">
