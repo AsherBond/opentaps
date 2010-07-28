@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,6 +57,7 @@ import javolution.util.FastSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -1128,6 +1130,17 @@ public abstract class UtilCommon {
 
         // column data starts from the second element
         if (data.size() > 1) {
+
+            // Create the style used for dates.
+            HSSFCellStyle dateCellStyle = workBook.createCellStyle();
+            String dateFormat = "mm/dd/yyyy hh:mm:ss";
+            HSSFDataFormat hsfDateFormat = workBook.createDataFormat();
+            short dateFormatIdx = hsfDateFormat.getFormat(dateFormat);
+            if (dateFormatIdx == -1) {
+                Debug.logWarning("Date format [" + dateFormat + "] could be found or created, try one of the pre-built instead:" + HSSFDataFormat.getBuiltinFormats(), MODULE);
+            }
+            dateCellStyle.setDataFormat(dateFormatIdx);
+
             for (int dataRowIndex = 1; dataRowIndex < data.size(); dataRowIndex++) {
                 Map<String, Object> rowDataMap = data.get(dataRowIndex);
                 if (rowDataMap == null) {
@@ -1143,15 +1156,30 @@ public abstract class UtilCommon {
 
                     Object cellData = rowDataMap.get(columnNameList.get(i));
                     if (cellData != null) {
-                        if (cellData instanceof BigDecimal) {
+                        // Note: dates are actually numeric values in Excel and so the cell need to have
+                        //  a special style set so it actually displays as a date
+                        if (cellData instanceof Calendar) {
+                            Debug.logWarning("Found Calendar cell [" + cellData + "] ", MODULE);
+                            cell.setCellStyle(dateCellStyle);
+                            cell.setCellValue((Calendar) cellData);
+                        } else if (cellData instanceof Date) {
+                            Debug.logWarning("Found Date cell [" + cellData + "] ", MODULE);
+                            cell.setCellStyle(dateCellStyle);
+                            cell.setCellValue((Date) cellData);
+                        } else if (cellData instanceof BigDecimal) {
+                            Debug.logWarning("Found BigDecimal cell [" + cellData + "] ", MODULE);
                             cell.setCellValue(((BigDecimal) cellData).doubleValue());
                         } else if (cellData instanceof Double) {
+                            Debug.logWarning("Found Double cell [" + cellData + "] ", MODULE);
                             cell.setCellValue(((Double) cellData).doubleValue());
                         } else if (cellData instanceof Integer) {
+                            Debug.logWarning("Found Integer cell [" + cellData + "] ", MODULE);
                             cell.setCellValue(((Integer) cellData).doubleValue());
                         } else if (cellData instanceof BigInteger) {
+                            Debug.logWarning("Found BigInteger cell [" + cellData + "] ", MODULE);
                             cell.setCellValue(((BigInteger) cellData).doubleValue());
                         } else {
+                            Debug.logWarning("defaulting to String cell [" + cellData + "] ", MODULE);
                             cell.setCellValue(new HSSFRichTextString(cellData.toString()));
                         }
                     }
