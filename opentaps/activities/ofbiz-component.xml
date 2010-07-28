@@ -35,7 +35,7 @@
     <!-- entitys definition files -->
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_datawarehouse.xml"/>
  
-    <entity-resource type="data" reader-name="demo" loader="main" location="data/Seed.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/Seed.xml"/>
  
        
     <!-- service definition files -->
