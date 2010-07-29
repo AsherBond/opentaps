@@ -2091,7 +2091,6 @@ function fieldLookup1(obj_target, args) {
     return cal_error("Error calling the field lookup: parameter specified is not valid target control");
   //this.target = obj_target; 
   target = obj_target; 
-
   // register in global collections
   //this.id = lookups.length;
   //lookups[this.id] = this;
@@ -2158,7 +2157,14 @@ function lookup_popup2 (view_name) {
   }
   var viewWidth = 750;
   var viewHeight = 550;
-  var obj_lookupwindow = window.open(view_name + sep + 'id=' + this.id + argString,'FieldLookup', 'width='+viewWidth+',height='+viewHeight+',scrollbars=yes,status=no,resizable=yes,top='+getY(viewHeight)+',left='+getX(viewWidth)+',dependent=yes,alwaysRaised=yes');
+  var url = view_name;
+  if (this.id != null && this.id != "undefined") {
+     url += sep + 'id=' + this.id;
+  } else {
+     url += sep + 'id=';
+  }
+  url += argString;
+  var obj_lookupwindow = window.open(url,'FieldLookup', 'width='+viewWidth+',height='+viewHeight+',scrollbars=yes,status=no,resizable=yes,top='+getY(viewHeight)+',left='+getX(viewWidth)+',dependent=yes,alwaysRaised=yes');
   obj_lookupwindow.opener = window;
   obj_lookupwindow.focus();
 }
