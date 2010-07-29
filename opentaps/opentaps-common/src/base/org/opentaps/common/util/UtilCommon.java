@@ -1159,27 +1159,20 @@ public abstract class UtilCommon {
                         // Note: dates are actually numeric values in Excel and so the cell need to have
                         //  a special style set so it actually displays as a date
                         if (cellData instanceof Calendar) {
-                            Debug.logWarning("Found Calendar cell [" + cellData + "] ", MODULE);
                             cell.setCellStyle(dateCellStyle);
                             cell.setCellValue((Calendar) cellData);
                         } else if (cellData instanceof Date) {
-                            Debug.logWarning("Found Date cell [" + cellData + "] ", MODULE);
                             cell.setCellStyle(dateCellStyle);
                             cell.setCellValue((Date) cellData);
                         } else if (cellData instanceof BigDecimal) {
-                            Debug.logWarning("Found BigDecimal cell [" + cellData + "] ", MODULE);
                             cell.setCellValue(((BigDecimal) cellData).doubleValue());
                         } else if (cellData instanceof Double) {
-                            Debug.logWarning("Found Double cell [" + cellData + "] ", MODULE);
                             cell.setCellValue(((Double) cellData).doubleValue());
                         } else if (cellData instanceof Integer) {
-                            Debug.logWarning("Found Integer cell [" + cellData + "] ", MODULE);
                             cell.setCellValue(((Integer) cellData).doubleValue());
                         } else if (cellData instanceof BigInteger) {
-                            Debug.logWarning("Found BigInteger cell [" + cellData + "] ", MODULE);
                             cell.setCellValue(((BigInteger) cellData).doubleValue());
                         } else {
-                            Debug.logWarning("defaulting to String cell [" + cellData + "] ", MODULE);
                             cell.setCellValue(new HSSFRichTextString(cellData.toString()));
                         }
                     }
