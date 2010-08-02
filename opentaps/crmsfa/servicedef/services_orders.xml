@@ -102,7 +102,7 @@
         <description>Add a credit card to an existing order for a given amount.  This method validates CVV2, which is the securityCode input.</description>
         <attribute name="orderId" type="String" mode="IN" optional="false"/>
         <attribute name="paymentMethodId" type="String" mode="IN" optional="false"/>
-        <attribute name="securityCode" type="String" mode="IN" optional="false"/>
+        <attribute name="securityCode" type="String" mode="IN" optional="true"/>
         <attribute name="amount" type="Double" mode="IN" optional="false"/>
     </service>
 
