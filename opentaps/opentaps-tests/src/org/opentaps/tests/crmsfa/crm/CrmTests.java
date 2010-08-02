@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2010 Open Source Strategies, Inc. 
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -29,7 +29,6 @@ import org.ofbiz.service.GenericServiceException;
 import org.opentaps.tests.OpentapsTestCase;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.services.CrmsfaCreateLeadService;
-import org.opentaps.base.services.ConvertLeadToContactService;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.PartyDomainInterface;
@@ -61,89 +60,7 @@ public class CrmTests extends OpentapsTestCase {
 
         partyDomain = null;
         partyRep = null;
-    }
-    
-    /**
-     *    Test Leads creating and converts 
-     *    using ConvertLeadToContactService
-     *    
-     * 1. Create  lead #1
-     * 2. Qualify lead #1
-     * 3. Convert lead #1 to an account
-     * 4. Create  lead #2
-     * 5. Qualify lead #2
-     * 6. Convert lead #2 with same account as lead #1
-     * 7. Verify the following:
-     *    a) account name is the same as lead #1's company name
-     *    b) account has two contacts with name of lead #1 and lead #2
-     * @throws Exception
-     */
-    public void testCreateLeads0() throws Exception {   	
-    	Debug.logInfo("START --- testCreateLeads0 --- ", MODULE);
-    	
-    	String companyName = TEST_LEAD_COMPANY_NAME + System.currentTimeMillis();
-    	
-    	CrmsfaCreateLeadService createLeadService = new CrmsfaCreateLeadService();
-    	// First Lead
-    	createLeadService.setInUserLogin(this.admin);    	    	    	
-    	createLeadService.setInCompanyName(companyName);
-    	createLeadService.setInFirstName(TEST_LEAD_01_FIRST_NAME);
-    	createLeadService.setInLastName(TEST_LEAD_01_LAST_NAME);
-    	
-    	runAndAssertServiceSuccess(createLeadService);
-    	
-    	String partyIdFirst = createLeadService.getOutPartyId();    	
-    	qualifyLead(partyIdFirst);
-    	
-    	ConvertLeadToContactService convertLead = new ConvertLeadToContactService();
-    	convertLead.setInUserLogin(this.admin);
-    	convertLead.setInPartyId(partyIdFirst);    	
-    	
-    	runAndAssertServiceSuccess(convertLead);
-    	
-    	String contactId = convertLead.getOutPartyId();    	    
-    	
-    	Contact contact = partyRep.getContactById(contactId);
-    	Set<Account> setAccount = partyRep.getAccounts(contact);
-    	Account account = setAccount.iterator().next();
-    	
-    	String accountId = account.getPartyId();
-    	 	
-    	// Second Lead    
-    	createLeadService = new CrmsfaCreateLeadService();
-    	createLeadService.setInUserLogin(this.admin);
-    	createLeadService.setInCompanyName(companyName);
-    	createLeadService.setInFirstName(TEST_LEAD_02_FIRST_NAME);
-    	createLeadService.setInLastName(TEST_LEAD_02_LAST_NAME);
-    	
-    	runAndAssertServiceSuccess(createLeadService);
-    	
-    	String partyIdSecond = createLeadService.getOutPartyId();  	
-    	qualifyLead(partyIdSecond);
-    	
-    	convertLead = new ConvertLeadToContactService();
-    	convertLead.setInUserLogin(this.admin);
-    	convertLead.setInPartyId(partyIdSecond);
-    	convertLead.setInPartyGroupId(accountId);
-    	    	
-    	runAndAssertServiceSuccess(convertLead);
-    	
-    	// Verify     	    	
-    	assertEquals("Account name is not as lead 1s company name", account.getName(), companyName);
-    	
-    	Set<Contact> setContact = account.getContacts();
-    	
-    	assertEquals("Account contacts not equals 2", setContact.size(), 2);
-    	
-    	Iterator<Contact> contactIterator = setContact.iterator(); 
-    	
-    	assertEquals("Does not match the name of the first contact", 
-    			contactIterator.next().getName(), TEST_LEAD_01_FIRST_NAME + " " + TEST_LEAD_01_LAST_NAME);    	
-    	assertEquals("Does not match the name of the second contact", 
-    			contactIterator.next().getName(), TEST_LEAD_02_FIRST_NAME + " " + TEST_LEAD_02_LAST_NAME);
-    	
-    	Debug.logInfo("DOWN --- testCreateLeads0 --- ", MODULE);    	 
-    }
+    }       
         
     /**
      * Set Lead qualify
@@ -157,18 +74,8 @@ public class CrmTests extends OpentapsTestCase {
     }
     
     /**
-     *    Test Leads creating and converts 
-     *    using rmsfa.convertLead service
-     *    
-     * 1. Create  lead #1
-     * 2. Qualify lead #1
-     * 3. Convert lead #1 to an account
-     * 4. Create  lead #2
-     * 5. Qualify lead #2
-     * 6. Convert lead #2 with same account as lead #1
-     * 7. Verify the following:
-     *    a) account name is the same as lead #1's company name
-     *    b) account has two contacts with name of lead #1 and lead #2
+     * Test Leads creating and converts 
+     *
      * @throws Exception
      */
     public void testCreateLeads() throws Exception {
@@ -176,19 +83,21 @@ public class CrmTests extends OpentapsTestCase {
     	
     	String companyName = TEST_LEAD_COMPANY_NAME + System.currentTimeMillis();
     	
+    	// Create lead #1
     	CrmsfaCreateLeadService createLeadService = new CrmsfaCreateLeadService();
-    	// First Lead
     	createLeadService.setInUserLogin(this.admin);    	    	    	
     	createLeadService.setInCompanyName(companyName);
     	createLeadService.setInFirstName(TEST_LEAD_01_FIRST_NAME);
     	createLeadService.setInLastName(TEST_LEAD_01_LAST_NAME);
-    	
-    	
+    	   	
     	runAndAssertServiceSuccess(createLeadService);
     	
-    	String partyIdFirst = createLeadService.getOutPartyId();	    	    	
+    	String partyIdFirst = createLeadService.getOutPartyId();	
+    	
+    	// Qualify lead #1
     	qualifyLead(partyIdFirst);
     	
+    	// Convert lead #1 to an account
     	String contactId = convertLead(partyIdFirst, null);    	    	
     	
     	Contact contact = partyRep.getContactById(contactId);
@@ -197,7 +106,7 @@ public class CrmTests extends OpentapsTestCase {
     	
     	String accountId = account.getPartyId();
     	
-    	// Second Lead    
+    	// Create lead #2    
     	createLeadService = new CrmsfaCreateLeadService();
     	createLeadService.setInUserLogin(this.admin);
     	createLeadService.setInCompanyName(companyName);
@@ -205,22 +114,26 @@ public class CrmTests extends OpentapsTestCase {
     	createLeadService.setInLastName(TEST_LEAD_02_LAST_NAME);
     	
     	runAndAssertServiceSuccess(createLeadService);
+    	    	
+    	String partyIdSecond = createLeadService.getOutPartyId(); 
     	
-    	String partyIdSecond = createLeadService.getOutPartyId();  	
+    	// Qualify lead #2
     	qualifyLead(partyIdSecond);
     	
+    	// Convert lead #2 with same account as lead #1
     	convertLead(partyIdSecond, accountId);
-    	
-    	
-    	// Verify         	
+    	    	
+    	// Verify that account name is the same as lead #1's company name
     	assertEquals("Account name is not as lead 1s company name", account.getName(), companyName);
     	
     	Set<Contact> setContact = account.getContacts();
     	
+    	// Verify that account has two contacts
     	assertEquals("Account contacts not equals 2", setContact.size(), 2);
     	
     	Iterator<Contact> contactIterator = setContact.iterator(); 
     	
+    	// Verify contacts name
     	assertEquals("Does not match the name of the first contact", 
     			contactIterator.next().getName(), TEST_LEAD_01_FIRST_NAME + " " + TEST_LEAD_01_LAST_NAME);    	
     	assertEquals("Does not match the name of the second contact", 
@@ -261,5 +174,5 @@ public class CrmTests extends OpentapsTestCase {
 
         return (String) callResults.get("partyId");        
     }
-    
+    	
 }
