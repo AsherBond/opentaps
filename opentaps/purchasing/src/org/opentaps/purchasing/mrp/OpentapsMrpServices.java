@@ -1227,7 +1227,7 @@ public final class OpentapsMrpServices {
                                 // components if proposed quantity less than quantity of existent requirements.
                                 // Requirements for quantity greater than currently required may be created
                                 // if minimal quantity to order is specified for product.
-                                if (productQtyInReq.compareTo(positiveEventQuantity) < 0) {
+                                if (productQtyInReq.compareTo(positiveEventQuantity) <= 0) {
 
                                     // #####################################################
                                     // calculate the ProposedOrder requirementStartDate and update the requirementStartDate object property.
