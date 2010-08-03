@@ -17,22 +17,30 @@
 package org.opentaps.tests.crmsfa.crm;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Iterator;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
 
 import org.opentaps.tests.OpentapsTestCase;
 import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.services.CrmsfaCreateActivityService;
 import org.opentaps.base.services.CrmsfaCreateLeadService;
+import org.opentaps.base.services.CrmsfaFindActivitiesService;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
+import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.domain.party.PartyRepositoryInterface;
+import org.opentaps.foundation.entity.EntityNotFoundException;
+
 
 public class CrmTests extends OpentapsTestCase {
 	private static final String MODULE = CrmTests.class.getName();
@@ -42,6 +50,7 @@ public class CrmTests extends OpentapsTestCase {
     private static final String TEST_LEAD_01_LAST_NAME = "Twain";    
     private static final String TEST_LEAD_02_FIRST_NAME = "William";
     private static final String TEST_LEAD_02_LAST_NAME = "Collins";
+    private static final String TEST_EVENT_NAME = "Test Event";
     	
 	private PartyDomainInterface partyDomain = null;	
 	private PartyRepositoryInterface partyRep = null;
@@ -174,5 +183,93 @@ public class CrmTests extends OpentapsTestCase {
 
         return (String) callResults.get("partyId");        
     }
+	
+	/**
+	 * Test merge Leads
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public void testMergeLeads() throws Exception { 
+		Debug.logInfo("START --- testMergeLeads --- ", MODULE);
+		
+		// Create lead #1
+    	CrmsfaCreateLeadService createLeadService = new CrmsfaCreateLeadService();
+    	createLeadService.setInUserLogin(this.admin);    	    	    	
+    	createLeadService.setInCompanyName(TEST_LEAD_COMPANY_NAME);
+    	createLeadService.setInFirstName(TEST_LEAD_01_FIRST_NAME);
+    	createLeadService.setInLastName(TEST_LEAD_01_LAST_NAME);
     	
+    	runAndAssertServiceSuccess(createLeadService);
+    	
+    	String partyIdFirst = createLeadService.getOutPartyId();
+    	
+    	// Create lead #2    
+    	createLeadService = new CrmsfaCreateLeadService();
+    	createLeadService.setInUserLogin(this.admin);
+    	createLeadService.setInCompanyName(TEST_LEAD_COMPANY_NAME);
+    	createLeadService.setInFirstName(TEST_LEAD_02_FIRST_NAME);
+    	createLeadService.setInLastName(TEST_LEAD_02_LAST_NAME);
+    	
+    	runAndAssertServiceSuccess(createLeadService);
+    	
+    	String partyIdSecond = createLeadService.getOutPartyId();
+		
+    	// Create Event for lead#2 
+    	CrmsfaCreateActivityService createActivityService =  new CrmsfaCreateActivityService();
+    	createActivityService.setInUserLogin(this.admin);
+    	createActivityService.setInEstimatedStartDate(UtilDateTime.nowTimestamp());
+    	createActivityService.setInEstimatedCompletionDate(UtilDateTime.nowTimestamp());
+    	createActivityService.setInWorkEffortName(TEST_EVENT_NAME);
+    	createActivityService.setInWorkEffortTypeId("EVENT");
+    	createActivityService.setInInternalPartyId(partyIdSecond);    	
+    	createActivityService.setInAvailabilityStatusId(StatusItemConstants.WepaAvailability.WEPA_AV_AVAILABLE);
+    	createActivityService.setInCurrentStatusId(StatusItemConstants.EventStatus.EVENT_STARTED);
+    	createActivityService.setInForceIfConflicts("Y");
+    	
+    	runAndAssertServiceSuccess(createActivityService);
+    	
+    	String eventId = createActivityService.getOutWorkEffortId();
+
+    	// Verify that Event belongs lead#2
+    	CrmsfaFindActivitiesService findActivitiesService = new CrmsfaFindActivitiesService();     	
+    	findActivitiesService.setInUserLogin(this.admin);
+    	findActivitiesService.setInPartyId(partyIdSecond);
+    	
+    	runAndAssertServiceSuccess(findActivitiesService);
+    	
+    	List<GenericValue> activityList = findActivitiesService.getOutPendingActivities();    	    	    	
+    	assertEquals("Event not belongs lead#2", activityList.get(0).getString("workEffortId"), eventId);
+    	    	    	
+    	
+    	// Merge  lead#2 to lead#1
+    	Map<String, Object> callCtxt = new HashMap<String, Object>();
+    	callCtxt.put("userLogin", this.admin);
+    	callCtxt.put("partyIdFrom", partyIdSecond);
+    	callCtxt.put("partyIdTo", partyIdFirst);
+    	
+    	runAndAssertServiceSuccess("opentaps.mergeParties", callCtxt);
+    	
+    	// Verify that Event belongs lead#1
+    	findActivitiesService = new CrmsfaFindActivitiesService();     	
+    	findActivitiesService.setInUserLogin(this.admin);
+    	findActivitiesService.setInPartyId(partyIdFirst);
+    	
+    	runAndAssertServiceSuccess(findActivitiesService);    	
+    	activityList = findActivitiesService.getOutPendingActivities();
+        
+    	assertEquals("Event not belongs lead#1", activityList.get(0).getString("workEffortId"), eventId);
+    	
+    	// Verify that lead#2 is not present    
+    	Party partyAfterMerge = null;
+    	try {
+    		partyAfterMerge = partyRep.getPartyById(partyIdSecond);  
+    	}
+    	catch (EntityNotFoundException e) {
+    		partyAfterMerge = null;
+    	}
+    	assertNull("Lead#2 is present after merge", partyAfterMerge);
+    	
+		Debug.logInfo("DOWN --- testMergeLeads --- ", MODULE);
+	}	
 }
