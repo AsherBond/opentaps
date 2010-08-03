@@ -57,7 +57,13 @@ under the License.
             <fo:table-row>
               <fo:table-cell padding="3pt" number-columns-spanned="2" text-align="center">
                 <fo:block text-align="center">
-                  ${Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, payment.partyIdTo, false)}
+                <#assign address = Static["com.opensourcestrategies.financials.util.UtilFinancial"].getBillingAddress(payment.partyIdTo, delegator)?if_exists>
+                <#if address?has_content && address.toName?has_content>
+                   <#assign toName = address.toName>
+                <#else>
+                   <#assign toName = Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, payment.partyIdTo, false)>
+                </#if>
+                ${toName?default("")}
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell padding="3pt" number-columns-spanned="2" text-align="center">
