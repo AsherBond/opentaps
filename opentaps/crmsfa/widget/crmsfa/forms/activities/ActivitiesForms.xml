@@ -52,6 +52,11 @@
             header-link="${listSortTarget}?${activityValueParams}&amp;pendingActivitiesOrderBy=estimatedCompletionDate#ListPendingActivities" header-link-style="orderByHeaderLink">
             <display/>
         </field>
+        <field name="remove" title="${uiLabelMap.CommonRemove}" widget-style="buttontext">
+            <hyperlink target="deleteActivityEmail" description="${uiLabelMap.CommonRemove}">
+                <parameter param-name="workEffortId"/>
+            </hyperlink>
+        </field>
     </form>   
 
     <form name="ListCompletedActivities" type="list" separate-columns="true" 
@@ -85,6 +90,11 @@
         <field name="actualCompletionDate" title="${uiLabelMap.CrmActivityActualCompletionDate}"
             header-link="${listSortTarget}?${activityValueParams}&amp;completedActivitiesOrderBy=estimatedCompletionDate#ListCompletedActivities" header-link-style="orderByHeaderLink">
             <display/>
+        </field>
+        <field name="remove" title="${uiLabelMap.CommonRemove}" widget-style="buttontext">
+            <hyperlink target="deleteActivityEmail" description="${uiLabelMap.CommonRemove}">
+                <parameter param-name="workEffortId"/>
+            </hyperlink>
         </field>
     </form>   
 
@@ -123,7 +133,7 @@
             <text size="60"/>
         </field>
         <field name="description" title="${uiLabelMap.CommonDescription}">
-            <textarea/>
+            <textarea rows="20" cols="80"/>
         </field>
         <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}">
             <drop-down allow-empty="false" current="selected">
@@ -181,7 +191,7 @@
             <text default-value="1:00"/>
         </field>
         <field name="description" title="${uiLabelMap.CommonDescription}">
-            <textarea/>
+            <textarea rows="100"/>
         </field>
         <!-- TODO: do these really need to be here? if not, will have to modify service and service def too -->
         <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}">
@@ -248,7 +258,7 @@
             <text size="60"/>
         </field>
         <field name="description" title="${uiLabelMap.CommonDescription}">
-            <textarea/>
+            <textarea rows="20" cols="80"/>
         </field>
         <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}">
             <drop-down allow-empty="false" current="selected">
@@ -317,7 +327,7 @@
             <text default-value="1:00"/>
         </field>
         <field name="description" title="${uiLabelMap.CommonDescription}">
-            <textarea/>
+            <textarea rows="20" cols="80"/>
         </field>
         <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}">
             <drop-down allow-empty="false" current="selected">
@@ -386,7 +396,7 @@
             <text size="60"/>
         </field>
         <field name="content" title="${uiLabelMap.CommonMessage}"> <!-- this is a field of CommunicationEvent -->
-            <textarea/>
+            <textarea rows="20" cols="80"/>
         </field>
         <field name="actualStartDate" title="${uiLabelMap.CrmActivityStartDate}" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
