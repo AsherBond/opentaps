@@ -248,7 +248,7 @@
     <service name="crmsfa.deleteActivityEmail" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="deleteActivityEmail">
         <description>Removes a communicationEventWorkEff, communicationEvent and by default the attachments as well.</description>
         <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
-        <attribute name="communicationEventId" type="String" mode="IN" optional="false"/>
+        <attribute name="communicationEventId" type="String" mode="IN" optional="true"/>
         <attribute name="delContentDataResource" type="String" mode="IN" optional="true"/>
         <attribute name="donePage" type="String" mode="INOUT" optional="true"/>
     </service>

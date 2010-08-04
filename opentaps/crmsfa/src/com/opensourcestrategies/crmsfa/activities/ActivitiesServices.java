@@ -2025,6 +2025,7 @@ public final class ActivitiesServices {
 
     public static Map<String, Object> deleteActivityEmail(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericDelegator delegator = dctx.getDelegator();
         String communicationEventId = (String) context.get("communicationEventId");
         String workEffortId = (String) context.get("workEffortId");
         String delContentDataResourceStr = (String) context.get("delContentDataResource");
@@ -2041,21 +2042,23 @@ public final class ActivitiesServices {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
 
-
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         try {
-
-            // Call the deleteCommunicationEventWorkEff service
-            Map<String, Object> deleteCommunicationEventWorkEffResult = dispatcher.runSync("deleteCommunicationEventWorkEff", UtilMisc.toMap("workEffortId", workEffortId, "communicationEventId", communicationEventId, "userLogin", userLogin));
-            if (ServiceUtil.isError(deleteCommunicationEventWorkEffResult)) {
-                return deleteCommunicationEventWorkEffResult;
+            GenericValue workEffort = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
+            if (UtilValidate.isEmpty(workEffort)) {
+                return ServiceUtil.returnError("No activity found with work effort ID [" + workEffortId + "]");
             }
-
-            // Call the deleteCommunicationEvent service
-            Map<String, Object> deleteCommunicationEventResult = dispatcher.runSync("deleteCommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId, "delContentDataResource", delContentDataResource, "userLogin", userLogin));
-            if (ServiceUtil.isError(deleteCommunicationEventResult)) {
-                return deleteCommunicationEventResult;
+            
+            if (communicationEventId != null) {
+                // delete just this particular communicationEventId
+                results = deleteActivityCommEventAndDataResource(workEffortId, communicationEventId, delContentDataResource, userLogin, dispatcher);
+            } else {
+                List<GenericValue> communicationEvents = workEffort.getRelated("CommunicationEventWorkEff");
+                for (GenericValue communicationEvent: communicationEvents) {
+                    results = deleteActivityCommEventAndDataResource(workEffortId, communicationEvent.getString("communicationEventId"), delContentDataResource, userLogin, dispatcher);
+                }
+                
             }
-
             // Call the deleteWorkEffort service
             Map<String, Object> deleteWorkEffortResult = dispatcher.runSync("deleteWorkEffort", UtilMisc.toMap("workEffortId", workEffortId, "userLogin", userLogin));
             if (ServiceUtil.isError(deleteWorkEffortResult)) {
@@ -2063,13 +2066,29 @@ public final class ActivitiesServices {
             }
         } catch (GenericServiceException ex) {
             return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
+        } catch (GenericEntityException ex) {
+            return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
         }
 
-        Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("donePage", donePage);
         return results;
     }
 
+    private static Map deleteActivityCommEventAndDataResource(String workEffortId, String communicationEventId, String delContentDataResource, GenericValue userLogin, LocalDispatcher dispatcher) throws GenericServiceException {
+        Map<String, Object> deleteCommunicationEventWorkEffResult = dispatcher.runSync("deleteCommunicationEventWorkEff", UtilMisc.toMap("workEffortId", workEffortId, "communicationEventId", communicationEventId, "userLogin", userLogin));
+        if (ServiceUtil.isError(deleteCommunicationEventWorkEffResult)) {
+            return deleteCommunicationEventWorkEffResult;
+        }
+
+        // Call the deleteCommunicationEvent service
+        Map<String, Object> deleteCommunicationEventResult = dispatcher.runSync("deleteCommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId, "delContentDataResource", delContentDataResource, "userLogin", userLogin));
+        if (ServiceUtil.isError(deleteCommunicationEventResult)) {
+            return deleteCommunicationEventResult;
+        }
+        
+        return ServiceUtil.returnSuccess();
+    }
+    
     /**
      * Search all CommunicationEvent matching the given email address and associate them to the
      *  given partyId and contachMechId.
