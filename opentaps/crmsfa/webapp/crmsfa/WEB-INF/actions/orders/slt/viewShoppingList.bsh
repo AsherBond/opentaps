@@ -40,7 +40,9 @@
  shoppingListDetails = FastMap.newInstance();
  shoppingListDetails.putAll(shoppingList.getAllFields());
  shoppingListDetails.put("shoppingListTypeDescription", shoppingList.getRelatedOne("ShoppingListType").getString("description"));
- shoppingListDetails.put("productStoreName", shoppingList.getRelatedOne("ProductStore").getString("storeName"));
+ if (shoppingList.getRelatedOne("ProductStore") != null) {
+    shoppingListDetails.put("productStoreName", shoppingList.getRelatedOne("ProductStore").getString("storeName"));
+ }
  shoppingListDetails.put("partyName", PartyHelper.getPartyName(shoppingList.getRelatedOne("Party")));
  context{"shoppingListDetails"} = shoppingListDetails;
 
