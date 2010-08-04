@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
+ import org.ofbiz.base.util.UtilMisc;
  import org.ofbiz.base.util.UtilValidate;
  import org.ofbiz.entity.condition.EntityOperator;
  import org.ofbiz.entity.condition.EntityExpr;
@@ -38,6 +39,7 @@
      } else {
          where.add(new EntityExpr("partyId", EntityOperator.LIKE, "%"));
      }
+     orderBy = UtilMisc.toList("createdStamp DESC");
 
      build(page){
          return page;
