@@ -191,7 +191,7 @@
             <text default-value="1:00"/>
         </field>
         <field name="description" title="${uiLabelMap.CommonDescription}">
-            <textarea rows="100"/>
+            <textarea rows="20" cols="80"/>
         </field>
         <!-- TODO: do these really need to be here? if not, will have to modify service and service def too -->
         <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}">
