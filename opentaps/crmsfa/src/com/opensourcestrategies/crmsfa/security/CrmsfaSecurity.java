@@ -324,7 +324,7 @@ public final class CrmsfaSecurity {
 
     /**
      * As above, but checks permission for every single existing association for a work effort. As a short cut, this will only check for parties which are directly
-     * associated with the work effort through WorkEffortPartyAssociations. If the application changes to allow the existance of work efforts without any
+     * associated with the work effort through WorkEffortPartyAssociations. If the application changes to allow the existence of work efforts without any
      * party associations, then this method must be changed to relfect that. TODO: comprehensive (check case and opp security).
      */
     public static boolean hasActivityPermission(Security security, String securityOperation, GenericValue userLogin, String workEffortId) {
@@ -340,12 +340,6 @@ public final class CrmsfaSecurity {
             GenericValue workEffort = delegator.findByPrimaryKeyCache("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
             if (workEffort == null) {
                 Debug.logWarning("Tried to perform operation [" + securityOperation + "] on an non-existent activity [" + workEffortId + "]", MODULE);
-                return false;
-            }
-
-            // check for closed activities for actions that are not _VIEW
-            if (!"_VIEW".equals(securityOperation) && UtilActivity.activityIsInactive(workEffort)) {
-                Debug.logWarning("Tried to perform operation [" + securityOperation + "] on an inactive activity [" + workEffortId + "]", MODULE);
                 return false;
             }
 
