@@ -292,4 +292,30 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public Set<String> getLeadIdsPartyIsAllowedToView(String partyId) throws RepositoryException;
+
+    /**
+     * Checks if the current user is assigned to the given lead.
+     * @param leadPartyId the ID of the lead to check in
+     * @return a <code>Boolean</code> value
+     * @exception RepositoryException if an error occurs
+     */
+    public Boolean isUserAssignedToLead(String leadPartyId) throws RepositoryException;
+
+    /**
+     * Checks if the given user is assigned to the given lead.
+     * @param user an <code>User</code> value
+     * @param leadPartyId the ID of the lead to check in
+     * @return a <code>Boolean</code> value
+     * @exception RepositoryException if an error occurs
+     */
+    public Boolean isUserAssignedToLead(User user, String leadPartyId) throws RepositoryException;
+
+    /**
+     * Checks if the given party is assigned to the given lead.
+     * @param partyId the ID of the party to check as assigned
+     * @param leadPartyId the ID of the lead to check for
+     * @return a <code>Boolean</code> value
+     * @exception RepositoryException if an error occurs
+     */
+    public Boolean isPartyAssignedToLead(String partyId, String leadPartyId) throws RepositoryException;
 }
