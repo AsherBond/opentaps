@@ -77,11 +77,18 @@ by hand from a real template using a ruler.
                 </fo:table-row>
     
                 <#-- Party name and numerical amount row -->
+                <#assign address = billingAddresses.get(payment.paymentId)?if_exists>
+                <#assign toPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", payment.partyIdTo, "compareDate", payment.effectiveDate, "userLogin", userLogin))/>
+                <#if address?has_content && address.toName?has_content>
+                   <#assign toName = address.toName>
+                <#else>
+                   <#assign toName = toPartyNameResult.fullName>
+                </#if>
+                
                 <fo:table-row>
                   <fo:table-cell padding-before="0.8cm">
                     <fo:block margin-left="3.0cm">
-                      <#assign toPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", payment.partyIdTo, "compareDate", payment.effectiveDate, "userLogin", userLogin))/>
-                      ${toPartyNameResult.fullName?default("Name Not Found")}
+                      ${toName?default("Name Not Found")}
                     </fo:block>
                   </fo:table-cell>
                   <fo:table-cell padding-before="0.8cm">
@@ -101,9 +108,8 @@ by hand from a real template using a ruler.
                 <fo:table-row height="2.0cm">
                   <fo:table-cell padding-before="0.5cm" number-columns-spanned="2">
                     <fo:block margin-left="3.0cm">
-                      <#assign address = billingAddresses.get(payment.paymentId)?if_exists>
                       <#if address?has_content>
-                        <fo:block>${toPartyNameResult.fullName?default(address.toName)?default("Occupant")}</fo:block>
+                        <fo:block>${toName?default("Occupant")}</fo:block>
                         <#if address.attnName?exists>
                           <fo:block>${address.attnName}</fo:block>
                         </#if>

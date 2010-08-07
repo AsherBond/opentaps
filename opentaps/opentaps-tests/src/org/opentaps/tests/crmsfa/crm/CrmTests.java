@@ -87,7 +87,7 @@ public class CrmTests extends OpentapsTestCase {
      *
      * @throws Exception
      */
-    public void testCreateLeads() throws Exception {
+    public void testCreateAndConvertLeads() throws Exception {
     	Debug.logInfo("START --- testCreateLeads --- ", MODULE);
     	
     	String companyName = TEST_LEAD_COMPANY_NAME + System.currentTimeMillis();

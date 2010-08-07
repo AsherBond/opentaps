@@ -26,6 +26,7 @@ import java.util.Set;
 import javolution.util.FastList;
 import javolution.util.FastSet;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -36,6 +37,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.base.constants.ContactMechTypeConstants;
+import org.opentaps.base.constants.PartyRelationshipTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.SecurityPermissionConstants;
 import org.opentaps.base.constants.StatusItemConstants;
@@ -591,5 +593,56 @@ public class PartyRepository extends DomainRepository implements PartyRepository
                                                       Arrays.asList(PartyFromByRelnAndContactInfoAndPartyClassification.Fields.partyIdFrom.name()), // select fields
                                                       Arrays.asList(PartyFromByRelnAndContactInfoAndPartyClassification.Fields.partyIdFrom.name())), // order by
                                              PartyFromByRelnAndContactInfoAndPartyClassification.Fields.partyIdFrom);
+    }
+
+    /** {@inheritDoc} */
+    public Boolean isUserAssignedToLead(String leadPartyId) throws RepositoryException {
+        return isUserAssignedToLead(getUser(), leadPartyId);
+    }
+
+    /** {@inheritDoc} */
+    public Boolean isUserAssignedToLead(User user, String leadPartyId) throws RepositoryException {
+        return isPartyAssignedToLead(user.getOfbizUserLogin().getString(UserLogin.Fields.partyId.name()), leadPartyId);
+    }
+
+    /** {@inheritDoc} */
+    public Boolean isPartyAssignedToLead(String partyId, String leadPartyId) throws RepositoryException {
+        List<PartyRelationship> rels = getLeadAssignedPartyRelationships(partyId, leadPartyId);
+        return UtilValidate.isNotEmpty(rels);
+    }
+
+    /**
+     * Gets the active <code>PartyRelationship</code> entities representing the parties assignment to the given lead in any team.
+     * @param leadPartyId the ID of the lead
+     * @param pending if true also return the pending LeadAssignmentRequest relationships
+     * @return the list of active <code>PartyRelationship</code>
+     * @throws RepositoryException if an error occurs
+     */
+    protected List<PartyRelationship> getLeadAssignedPartyRelationships(String leadPartyId) throws RepositoryException {
+        return getLeadAssignedPartyRelationships(null, leadPartyId);
+    }
+
+    /**
+     * Gets the active <code>PartyRelationship</code> entities representing the given party assignment to the given lead in any team.
+     * @param partyId the ID of the party to check as assigned
+     * @param leadPartyId the ID of the lead
+     * @param pending if true also return the pending LeadAssignmentRequest relationships
+     * @return the list of active <code>PartyRelationship</code>
+     * @throws RepositoryException if an error occurs
+     */
+    protected List<PartyRelationship> getLeadAssignedPartyRelationships(String partyId, String leadPartyId) throws RepositoryException {
+        List<EntityCondition> conditions = UtilMisc.toList(
+                EntityCondition.makeCondition(PartyRelationship.Fields.partyIdFrom.name(), leadPartyId),
+                EntityCondition.makeCondition(PartyRelationship.Fields.roleTypeIdFrom.name(), RoleTypeConstants.PROSPECT),
+                EntityCondition.makeCondition(PartyRelationship.Fields.roleTypeIdTo.name(), RoleTypeConstants.ACCOUNT_REP),
+                EntityCondition.makeCondition(PartyRelationship.Fields.partyRelationshipTypeId.name(), PartyRelationshipTypeConstants.ASSIGNED_TO),
+                EntityUtil.getFilterByDateExpr()
+        );
+
+        if (UtilValidate.isNotEmpty(partyId)) {
+            conditions.add(EntityCondition.makeCondition(PartyRelationship.Fields.partyIdTo.name(), partyId));
+        }
+
+        return findList(PartyRelationship.class, EntityCondition.makeCondition(conditions));
     }
 }

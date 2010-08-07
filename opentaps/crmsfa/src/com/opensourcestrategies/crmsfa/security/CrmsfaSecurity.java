@@ -50,6 +50,7 @@ import com.opensourcestrategies.crmsfa.cases.UtilCase;
 import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
@@ -59,6 +60,14 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
+import org.ofbiz.service.GenericDispatcher;
+import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.entities.UserLogin;
+import org.opentaps.base.entities.WorkEffortPartyAssignment;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.party.PartyRepositoryInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Special security methods for the CRM/SFA Application.
@@ -89,7 +98,7 @@ public final class CrmsfaSecurity {
             Debug.logError("userLogin is null or has no associated delegator", MODULE);
             return false;
         }
-        
+
         // check ${securityModule}_MANAGER permission
         if (security.hasEntityPermission(securityModule, "_MANAGER", userLogin)) {
             return true;
@@ -255,7 +264,7 @@ public final class CrmsfaSecurity {
      * Then, if the custRequestId is supplied, the user must pass CRMSFA_CASE_${securityOperation}
      */
     public static boolean hasActivityPermission(Security security, String securityOperation, GenericValue userLogin,
-            String workEffortId, String internalPartyId, String salesOpportunityId, String custRequestId) {
+                                                String workEffortId, String internalPartyId, String salesOpportunityId, String custRequestId) {
 
         // first check general CRMSFA_ACT_${securityOperation} permission
         if (!security.hasEntityPermission("CRMSFA_ACT", securityOperation, userLogin)) {
@@ -313,7 +322,51 @@ public final class CrmsfaSecurity {
                     return false;
                 }
             }
-        } catch (GenericEntityException e) {
+
+            PartyRepositoryInterface repository = new DomainsLoader(new Infrastructure(GenericDispatcher.getLocalDispatcher(null, delegator)), new User(userLogin)).getDomainsDirectory().getPartyDomain().getPartyRepository();
+
+            // if the user is assigned to the activity, allow
+            List<WorkEffortPartyAssignment> partyAssignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId,
+                                                                                                                                   WorkEffortPartyAssignment.Fields.partyId, userLogin.getString(UserLogin.Fields.partyId.name())));
+
+            if (UtilValidate.isNotEmpty(partyAssignments)) {
+                return true;
+            }
+
+            // if the activity relates to some leads, check that all leads are assigned to the user (normally only one lead would be assigned or none)
+            List<WorkEffortPartyAssignment> leadAssignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId,
+                                                                                                                                  WorkEffortPartyAssignment.Fields.roleTypeId, RoleTypeConstants.PROSPECT));
+            for (WorkEffortPartyAssignment assignment : leadAssignments) {
+                if (!repository.isUserAssignedToLead(assignment.getPartyId())) {
+                    Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] is not assigned to lead [" + assignment.getPartyId() + "] for activity [" + workEffortId + "]", MODULE);
+                    return false;
+                }
+            }
+
+            // for other parties, check the user has either _UPDATE or _VIEW depending on what is being done to the activity
+            List<WorkEffortPartyAssignment> otherAssignments = repository.findList(WorkEffortPartyAssignment.class,
+                                                                                   EntityCondition.makeCondition(
+                                                                                         EntityCondition.makeCondition(WorkEffortPartyAssignment.Fields.workEffortId.name(), workEffortId),
+                                                                                         EntityCondition.makeCondition(WorkEffortPartyAssignment.Fields.roleTypeId, EntityOperator.NOT_EQUAL, RoleTypeConstants.PROSPECT)));
+            for (WorkEffortPartyAssignment assignment : otherAssignments) {
+
+                // determine the security module of internal party, such as CRMSFA_ACCOUNT for accounts
+                String securityModule = getSecurityModuleOfInternalParty(assignment.getPartyId(), delegator);
+                // ignore unknown roles
+                if (securityModule == null) {
+                    continue;
+                }
+
+                // the security operation to check against the internal party is either _UPDATE or _VIEW depending on what is being done to the activity
+                String internalPartySecurityOp = "_VIEW".equals(securityOperation) ? "_VIEW" : "_UPDATE";
+
+                // see if user can do this operation on this party
+                if (!hasPartyRelationSecurity(security, securityModule, internalPartySecurityOp, userLogin, assignment.getPartyId())) {
+                    Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] is not related to party [" + assignment.getPartyId() + "] for activity [" + workEffortId + "]", MODULE);
+                    return false;
+                }
+            }
+        } catch (GeneralException e) {
             Debug.logError(e, "Checked UserLogin [" + userLogin + "] for permission to perform [CRMSFA_ACT] + [" + securityOperation + "] on workEffortId = [" + workEffortId + "], internalPartyId=[" + internalPartyId + "], salesOpportunityId=[" + salesOpportunityId + "], custRequestId = [" + custRequestId + "], but permission was denied due to an exception: " + e.getMessage(), MODULE);
             return false;
         }
@@ -324,7 +377,7 @@ public final class CrmsfaSecurity {
 
     /**
      * As above, but checks permission for every single existing association for a work effort. As a short cut, this will only check for parties which are directly
-     * associated with the work effort through WorkEffortPartyAssociations. If the application changes to allow the existance of work efforts without any
+     * associated with the work effort through WorkEffortPartyAssociations. If the application changes to allow the existence of work efforts without any
      * party associations, then this method must be changed to relfect that. TODO: comprehensive (check case and opp security).
      */
     public static boolean hasActivityPermission(Security security, String securityOperation, GenericValue userLogin, String workEffortId) {
@@ -340,12 +393,6 @@ public final class CrmsfaSecurity {
             GenericValue workEffort = delegator.findByPrimaryKeyCache("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
             if (workEffort == null) {
                 Debug.logWarning("Tried to perform operation [" + securityOperation + "] on an non-existent activity [" + workEffortId + "]", MODULE);
-                return false;
-            }
-
-            // check for closed activities for actions that are not _VIEW
-            if (!"_VIEW".equals(securityOperation) && UtilActivity.activityIsInactive(workEffort)) {
-                Debug.logWarning("Tried to perform operation [" + securityOperation + "] on an inactive activity [" + workEffortId + "]", MODULE);
                 return false;
             }
 

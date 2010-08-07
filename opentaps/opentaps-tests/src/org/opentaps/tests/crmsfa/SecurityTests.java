@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -32,42 +32,42 @@ import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 
 /**
  * This is a class of unit tests for CRM/SFA application's security permissions.
- * To run these, from the command line do 
+ * To run these, from the command line do
  * $ java -jar ofbiz.jar -test
- * 
+ *
  * or
  * $ ant run-tests
- * 
+ *
  * This will be run along with other test suites, such as those for the entity engine or the service engine
- *   
- * This test suite requires crmsfa/data/CRMSFADemoData.xml and CRMSFASecurityData.xml to be installed  
+ *
+ * This test suite requires crmsfa/data/CRMSFADemoData.xml and CRMSFASecurityData.xml to be installed
  *
  * Also, make sure that your "test" delegator is set to the correct datasource in framework/entity/config/entityengine.xml
- *  
+ *
  * @author sichen
  *
  */
 public class SecurityTests extends TestCase {
-    
+
     public static final String module = SecurityTests.class.getName();
     public static final String DELEGATOR = "test";
     private GenericDelegator delegator = null;
     private Security security = null;
-    
+
     public SecurityTests (String name) {
         super(name);
     }
-    
+
     protected void setUp() throws Exception {
         this.delegator = GenericDelegator.getGenericDelegator(DELEGATOR);
         this.security = SecurityFactory.getInstance(delegator);
     }
-    
+
     // DemoSalesManager for DemoAccount1
-    
+
     /**
      * This is a template for a security unit case.  This tests if DemoSalesManager userLogin has permission to update
-     * DemoAccount1  
+     * DemoAccount1
      * @throws Exception
      */
     public void testDemoAccount1DemoSalesManagerUpdate() throws Exception {
@@ -118,7 +118,7 @@ public class SecurityTests extends TestCase {
             TestCase.fail(ex.getMessage());
         }
     }
-    
+
     // DemoSalesRep1 for DemoAccount1
     public void testDemoAccount1DemoSalesRep1View() throws Exception {
         try {
@@ -167,8 +167,8 @@ public class SecurityTests extends TestCase {
         } catch (GenericEntityException ex) {
             TestCase.fail(ex.getMessage());
         }
-    }    
-    
+    }
+
     // DemoSalesRep2 for DemoAccount1
     public void testDemoAccount1DemoSalesRep2View() throws Exception {
         try {
@@ -218,7 +218,7 @@ public class SecurityTests extends TestCase {
             TestCase.fail(ex.getMessage());
         }
     }
-    
+
     // DemoSalesRep3 for DemoAccount1
     public void testDemoAccount1DemoSalesRep3View() throws Exception {
         try {
@@ -268,7 +268,7 @@ public class SecurityTests extends TestCase {
             TestCase.fail(ex.getMessage());
         }
     }
-    
+
     // DemoSalesManager for DemoContact1
     public void testDemoContact1DemoSalesManagerView() throws Exception {
         try {
@@ -330,7 +330,7 @@ public class SecurityTests extends TestCase {
             TestCase.fail(ex.getMessage());
         }
     }
-    
+
     // DemoSalesRep1 for DemoContact1
     public void testDemoContact1DemoSalesRep1View() throws Exception {
         try {
@@ -391,7 +391,7 @@ public class SecurityTests extends TestCase {
         } catch (GenericEntityException ex) {
             TestCase.fail(ex.getMessage());
         }
-    }    
+    }
     // DemoSalesRep2 for DemoContact1
     public void testDemoContact1DemoSalesRep2View() throws Exception {
         try {
@@ -518,7 +518,7 @@ public class SecurityTests extends TestCase {
 
     /**
      * Test the CrmsfaSecurity.hasActivityPermission() method.
-     */ 
+     */
     public void testDemoTask1DemoSalesManagerView() throws Exception {
         try {
             GenericValue userLogin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesManager"));
@@ -594,7 +594,7 @@ public class SecurityTests extends TestCase {
 
     /**
      * Test the CrmsfaSecurity.hasCasePermission() method.
-     */ 
+     */
     public void testDemoCase1DemoSalesManagerView() throws Exception {
         try {
             GenericValue userLogin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesManager"));
@@ -667,5 +667,13 @@ public class SecurityTests extends TestCase {
         } catch (GenericEntityException ex) {
             TestCase.fail(ex.getMessage());
         }
+    }
+
+    public void testLeadActivityPermissions() throws Exception {
+        // DemoSalesManager creates a lead
+        // DemoSalesManager assign lead to DemoSalesRep1
+        // DemoSalesManager creates an event with the lead
+        // test that DemoSalesRep1 has VIEW permission on the event
+        // test that DemoSalesRep2 does not have VIEW permission on the event
     }
 }

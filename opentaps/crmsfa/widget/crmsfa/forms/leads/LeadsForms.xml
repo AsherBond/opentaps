@@ -191,7 +191,7 @@
         <field name="parentPartyId" title="${uiLabelMap.CrmParentParty}" position="2" title-style="requiredField" 
             use-when="partySummary.get(&quot;parentPartyId&quot;)!=void&amp;&amp;partySummary.get(&quot;parentPartyId&quot;)!=null">
             <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${groupName} (${partyId})">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount">
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount" link-type="anchor">
                     <parameter param-name="partyId" from-field="partySummary.parentPartyId"/>
                 </sub-hyperlink>
             </display-entity>

@@ -780,14 +780,16 @@ public final class CrmsfaOrderServices {
 
         // first verify that the CVV is entered and 3-4 digits
         String securityCode = (String) context.get("securityCode");
-        securityCode = securityCode.trim();
-        if (securityCode.length() < 3 || securityCode.length() > 4) {
-            return UtilMessage.createServiceError("CrmError_InvalidCVV", locale);
-        }
-        try {
-            Integer.parseInt(securityCode);
-        } catch (NumberFormatException e) {
-            return UtilMessage.createServiceError("CrmError_InvalidCVV", locale);
+        if (securityCode != null) {
+            securityCode = securityCode.trim();
+            if (securityCode.length() < 3 || securityCode.length() > 4) {
+                return UtilMessage.createServiceError("CrmError_InvalidCVV", locale);
+            }
+            try {
+                Integer.parseInt(securityCode);
+            } catch (NumberFormatException e) {
+                return UtilMessage.createServiceError("CrmError_InvalidCVV", locale);
+            }
         }
 
         String orderId = (String) context.get("orderId");
@@ -802,10 +804,12 @@ public final class CrmsfaOrderServices {
             String prefId = (String) results.get("orderPaymentPreferenceId");
 
             // save the security code directly because the updateOrderPaymentPrefernce does unwanted business logic
-            GenericValue pref = delegator.findByPrimaryKey("OrderPaymentPreference", UtilMisc.toMap("orderPaymentPreferenceId", prefId));
-            pref.set("securityCode", securityCode);
-            pref.store();
-
+            if (securityCode != null) {
+                GenericValue pref = delegator.findByPrimaryKey("OrderPaymentPreference", UtilMisc.toMap("orderPaymentPreferenceId", prefId));
+                pref.set("securityCode", securityCode);
+                pref.store();
+            }
+            
             // authorize the payment pref
             results = dispatcher.runSync("authOrderPaymentPreference", UtilMisc.toMap("userLogin", userLogin, "orderPaymentPreferenceId", prefId));
             if (ServiceUtil.isError(results)) {
