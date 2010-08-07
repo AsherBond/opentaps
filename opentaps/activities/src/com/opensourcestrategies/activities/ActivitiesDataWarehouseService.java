@@ -31,6 +31,7 @@ import org.opentaps.base.constants.WorkEffortPurposeTypeConstants;
 import org.opentaps.base.entities.ActivityFact;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.base.entities.WorkEffortPartyAssignment;
+import org.opentaps.base.services.ActivitiesTransformToActivityFactsService;
 import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.party.Party;
@@ -204,6 +205,40 @@ public class ActivitiesDataWarehouseService extends DomainService {
             }
         }
     }
+    
+    /**
+     * Transform all WorkEffort which are TASK_COMPLETED or EVENT_COMPLETED 
+     * into ActivityFact
+     * 
+     * @throws ServiceException
+     */    
+	public void transformAllActivities() throws ServiceException {
+    	ActivitiesTransformToActivityFactsService activitiesTransform = null;
+    	
+    	try {
+			PartyRepositoryInterface repository = getDomainsDirectory().getPartyDomain().getPartyRepository();						
+			 
+			// Find all WorkEffort which are TASK_COMPLETED or EVENT_COMPLETED 
+			EntityCondition workEffortCond = EntityCondition.makeCondition(EntityOperator.OR,
+			            EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.EQUALS, StatusItemConstants.TaskStatus.TASK_COMPLETED),			            
+			            EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.EQUALS, StatusItemConstants.EventStatus.EVENT_COMPLETED)			            
+			            );
+			                        
+			List<WorkEffort> workEffortList = repository.findList(WorkEffort.class, workEffortCond);
+			
+			// Each found WorkEffort transform into ActivityFact entities. 
+			for (WorkEffort workEffort : workEffortList) {
+				String workEffortId = workEffort.getWorkEffortId();
 
+				activitiesTransform = new ActivitiesTransformToActivityFactsService();
+				activitiesTransform.setInWorkEffortId(workEffortId);
+				activitiesTransform.runSync(infrastructure);
+			}
+			
+		} catch (RepositoryException e) {
+			 Debug.logError(e, MODULE);
+			 throw new ServiceException(e);
+		}
+    }
 }
 
