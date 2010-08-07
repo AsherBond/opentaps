@@ -17,6 +17,7 @@
 package com.opensourcestrategies.activities.tests;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -608,5 +609,22 @@ public class ActivitiesTests extends OpentapsTestCase {
         assertEquals("Other activity count is not good.", fact.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
     }
 
-
+    /**
+     * Test run service activities.transformAllActivities
+     * 
+     * @throws Exception
+     */
+    public void testTransformAllActivities() throws Exception {
+    	Debug.logInfo("START --- testTransformAllActivities --- ", MODULE);
+    	
+    	UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
+        GenericValue userLogin = partyRepository.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());        
+        
+        Map<String, Object> callContext = new HashMap<String, Object>();
+        callContext.put("userLogin", userLogin);
+        
+    	runAndAssertServiceSuccess("activities.transformAllActivities", callContext);
+    	
+    	Debug.logInfo("DOWN --- testTransformAllActivities --- ", MODULE);
+    }
 }

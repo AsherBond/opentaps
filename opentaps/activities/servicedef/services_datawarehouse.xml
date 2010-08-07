@@ -48,6 +48,12 @@
         The counts that is in ActivityFacts is based on the purpose of the WorkEffort.</description>
         <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
     </service>
+    
+    <service name="activities.transformAllActivities" engine="pojo" location="com.opensourcestrategies.activities.ActivitiesDataWarehouseService" invoke="transformAllActivities">
+        <description>Find all WorkEffort which are TASK_COMPLETED or EVENT_COMPLETED and then run the 
+        activities.transformToActivityFacts service for this workEffortId. .</description>        
+    </service>
+    
 
 </services>
 

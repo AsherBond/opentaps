@@ -26,4 +26,8 @@
         <action service="activities.transformToActivityFacts" mode="sync"/>
     </eca>
     
+    <eca service="crmsfa.deleteActivityEmail" event="commit">
+        <action service="activities.transformAllActivities" mode="sync"/>
+    </eca>
+    
 </service-eca>
