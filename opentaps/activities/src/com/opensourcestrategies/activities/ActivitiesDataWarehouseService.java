@@ -29,6 +29,7 @@ import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.constants.WorkEffortPurposeTypeConstants;
 import org.opentaps.base.entities.ActivityFact;
+import org.opentaps.base.entities.UserLogin;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.base.entities.WorkEffortPartyAssignment;
 import org.opentaps.common.reporting.etl.UtilEtl;
@@ -86,14 +87,18 @@ public class ActivitiesDataWarehouseService extends DomainService {
                 boolean isExternal = false;
 
                 Party assignedParty = repository.getPartyById(assignment.getPartyId());
-                if (assignedParty.isAccount()) {
-                    isExternal = true;
-                } else if (assignedParty.isContact()) {
-                    isExternal = true;
-                } else if (assignedParty.isLead()) {
-                    isExternal = true;
-                } else if (assignedParty.isPartner()) {
-                    isExternal = true;
+
+                // always consider the current user as internal
+                if (!assignedParty.getPartyId().equals(getUser().getOfbizUserLogin().getString(UserLogin.Fields.partyId.name()))) {
+                    if (assignedParty.isAccount()) {
+                        isExternal = true;
+                    } else if (assignedParty.isContact()) {
+                        isExternal = true;
+                    } else if (assignedParty.isLead()) {
+                        isExternal = true;
+                    } else if (assignedParty.isPartner()) {
+                        isExternal = true;
+                    }
                 }
 
                 Debug.logInfo("External = " + isExternal + " for WorkEffortPartyAssignment [" + assignment.getWorkEffortId() + "] with party [" + assignment.getPartyId() + "]", MODULE);
