@@ -83,13 +83,14 @@
 
   <div class="formRow">
     <span class="formFullRowText">
-    <#if (communicationEvent.contentMimeTypeId?has_content) && communicationEvent.contentMimeTypeId.equals("text/plain")>
-    <textarea class="inputBox" cols="100" rows="20" readonly="readonly">${communicationEvent.content?if_exists}</textarea>
-    <#else>
+    <#if (communicationEvent.contentMimeTypeId?has_content) && communicationEvent.contentMimeTypeId.equals("text/html")>
     <#-- wrap html emails around a little box -->
     <div style="white-space:normal">
     <#if communicationEvent.content?has_content>${StringUtil.wrapString(communicationEvent.content)}</#if>
     </div>
+    <#else>
+    <#-- put other emails inside a textarea -->
+    <textarea class="inputBox" cols="100" rows="20" readonly="readonly">${communicationEvent.content?if_exists}</textarea>
     </#if>
     </span>
   </div>

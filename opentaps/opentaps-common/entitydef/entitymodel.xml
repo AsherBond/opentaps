@@ -2221,7 +2221,7 @@ under the License.
             package-name="org.opentaps.common"
             title="Miscellaneous view user preferences.">
 
-        <field name="userLoginId" type="id-ne"/>
+        <field name="userLoginId" type="id-vlong-ne"/>
         <field name="applicationName" type="id"/>
         <field name="screenName" type="id-vlong"/>
         <field name="preferenceName" type="id-vlong"/>

@@ -29,6 +29,7 @@ import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.constants.WorkEffortPurposeTypeConstants;
 import org.opentaps.base.entities.ActivityFact;
+import org.opentaps.base.entities.UserLogin;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.base.entities.WorkEffortPartyAssignment;
 import org.opentaps.base.services.ActivitiesTransformToActivityFactsService;
@@ -37,8 +38,6 @@ import org.opentaps.domain.DomainService;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
-import org.opentaps.foundation.entity.hibernate.Session;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -66,19 +65,17 @@ public class ActivitiesDataWarehouseService extends DomainService {
      * @throws ServiceException if an error occurs
      */
     public void transformToActivityFacts() throws ServiceException {
-        Session session = null;
         try {
 
             PartyRepositoryInterface repository = getDomainsDirectory().getPartyDomain().getPartyRepository();
 
-            session = repository.getInfrastructure().getSession();
             // Get WorkEffortPartyAssign and WorkEffort data by workEffortId.
 
             WorkEffort workEffort = repository.findOne(WorkEffort.class, repository.map(WorkEffort.Fields.workEffortId, workEffortId));
-            List<WorkEffortPartyAssignment> assignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
 
             // Pass only completed workEfforts to do the transformation.
             if (!Arrays.asList(StatusItemConstants.TaskStatus.TASK_COMPLETED, StatusItemConstants.EventStatus.EVENT_COMPLETED).contains(workEffort.getCurrentStatusId())) {
+                Debug.logInfo("WorkEffort [" + workEffort.getWorkEffortId() + "] is not completed, not accounting for", MODULE);
                 return;
             }
 
@@ -86,19 +83,32 @@ public class ActivitiesDataWarehouseService extends DomainService {
 
             List<WorkEffortPartyAssignment> internalPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
             List<WorkEffortPartyAssignment> externalPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
+            List<WorkEffortPartyAssignment> assignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
             for (WorkEffortPartyAssignment assignment : assignments) {
                 boolean isExternal = false;
 
                 Party assignedParty = repository.getPartyById(assignment.getPartyId());
-                if (assignedParty.isAccount()) {
-                    isExternal = true;
-                } else if (assignedParty.isContact()) {
-                    isExternal = true;
-                } else if (assignedParty.isLead()) {
-                    isExternal = true;
-                } else if (assignedParty.isPartner()) {
-                    isExternal = true;
+
+                // Note: in case of multi-tenant setup there is a case
+                //   where A B X Y are involved in a WorkEffort; A and B being supposed to be
+                //   internal (as in two sales rep) but B would be considered external if
+                //   he is a contact somewhere else.
+                //   All parties could be both have the contact role and be an internal user.
+
+                // always consider the current user as internal
+                if (!assignedParty.getPartyId().equals(getUser().getOfbizUserLogin().getString(UserLogin.Fields.partyId.name()))) {
+                    if (assignedParty.isAccount()) {
+                        isExternal = true;
+                    } else if (assignedParty.isContact()) {
+                        isExternal = true;
+                    } else if (assignedParty.isLead()) {
+                        isExternal = true;
+                    } else if (assignedParty.isPartner()) {
+                        isExternal = true;
+                    }
                 }
+
+                Debug.logInfo("External = " + isExternal + " for WorkEffortPartyAssignment [" + assignment.getWorkEffortId() + "] with party [" + assignment.getPartyId() + "]", MODULE);
 
                 if (isExternal) {
                     externalPartyAssignments.add(assignment);
@@ -107,11 +117,15 @@ public class ActivitiesDataWarehouseService extends DomainService {
                 }
             }
 
+            if (externalPartyAssignments.size() == 0 || internalPartyAssignments.size() == 0) {
+                Debug.logWarning("Missing internal or external assignments for WorkEffort [" + workEffort.getWorkEffortId() + "] (found: " + internalPartyAssignments.size() + " internal and " + externalPartyAssignments.size() + " external)", MODULE);
+                return;
+            }
+
+
             // Get date dimension ID according to the work effort start date.
-            Timestamp workEffortDate = null;
-            if (workEffort.getActualCompletionDate() != null) {
-                workEffortDate = workEffort.getActualCompletionDate();
-            } else {
+            Timestamp workEffortDate = workEffort.getActualCompletionDate();
+            if (workEffortDate == null) {
                 workEffortDate = workEffort.getEstimatedCompletionDate();
             }
 
@@ -154,7 +168,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
                         activityFact = activityFacts.get(0);
                     } else {
                         activityFact = new ActivityFact();
-                        activityFact.setActivityFactId(session.getNextSeqId(ActivityFact.class.getSimpleName()));
+                        activityFact.setActivityFactId(repository.getNextSeqId(activityFact));
                         activityFact.setTargetPartyId(external.getPartyId());
                         activityFact.setTeamMemberPartyId(internal.getPartyId());
                         activityFact.setDateDimId(dateDimId);
@@ -193,16 +207,9 @@ public class ActivitiesDataWarehouseService extends DomainService {
         }  catch (GenericEntityException ex) {
             Debug.logError(ex, MODULE);
             throw new ServiceException(ex);
-        } catch (InfrastructureException ex) {
-            Debug.logError(ex, MODULE);
-            throw new ServiceException(ex);
         } catch (EntityNotFoundException ex) {
             Debug.logError(ex, MODULE);
             throw new ServiceException(ex);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
     
