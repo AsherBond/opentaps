@@ -36,8 +36,6 @@ import org.opentaps.domain.DomainService;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
-import org.opentaps.foundation.entity.hibernate.Session;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -65,12 +63,10 @@ public class ActivitiesDataWarehouseService extends DomainService {
      * @throws ServiceException if an error occurs
      */
     public void transformToActivityFacts() throws ServiceException {
-        Session session = null;
         try {
 
             PartyRepositoryInterface repository = getDomainsDirectory().getPartyDomain().getPartyRepository();
 
-            session = repository.getInfrastructure().getSession();
             // Get WorkEffortPartyAssign and WorkEffort data by workEffortId.
 
             WorkEffort workEffort = repository.findOne(WorkEffort.class, repository.map(WorkEffort.Fields.workEffortId, workEffortId));
@@ -153,7 +149,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
                         activityFact = activityFacts.get(0);
                     } else {
                         activityFact = new ActivityFact();
-                        activityFact.setActivityFactId(session.getNextSeqId(ActivityFact.class.getSimpleName()));
+                        activityFact.setActivityFactId(repository.getNextSeqId(activityFact));
                         activityFact.setTargetPartyId(external.getPartyId());
                         activityFact.setTeamMemberPartyId(internal.getPartyId());
                         activityFact.setDateDimId(dateDimId);
@@ -192,16 +188,9 @@ public class ActivitiesDataWarehouseService extends DomainService {
         }  catch (GenericEntityException ex) {
             Debug.logError(ex, MODULE);
             throw new ServiceException(ex);
-        } catch (InfrastructureException ex) {
-            Debug.logError(ex, MODULE);
-            throw new ServiceException(ex);
         } catch (EntityNotFoundException ex) {
             Debug.logError(ex, MODULE);
             throw new ServiceException(ex);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 
