@@ -70,10 +70,10 @@ public class ActivitiesDataWarehouseService extends DomainService {
             // Get WorkEffortPartyAssign and WorkEffort data by workEffortId.
 
             WorkEffort workEffort = repository.findOne(WorkEffort.class, repository.map(WorkEffort.Fields.workEffortId, workEffortId));
-            List<WorkEffortPartyAssignment> assignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
 
             // Pass only completed workEfforts to do the transformation.
             if (!Arrays.asList(StatusItemConstants.TaskStatus.TASK_COMPLETED, StatusItemConstants.EventStatus.EVENT_COMPLETED).contains(workEffort.getCurrentStatusId())) {
+                Debug.logInfo("WorkEffort [" + workEffort.getWorkEffortId() + "] is not completed, not accounting for", MODULE);
                 return;
             }
 
@@ -81,6 +81,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
 
             List<WorkEffortPartyAssignment> internalPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
             List<WorkEffortPartyAssignment> externalPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
+            List<WorkEffortPartyAssignment> assignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
             for (WorkEffortPartyAssignment assignment : assignments) {
                 boolean isExternal = false;
 
@@ -95,6 +96,8 @@ public class ActivitiesDataWarehouseService extends DomainService {
                     isExternal = true;
                 }
 
+                Debug.logInfo("External = " + isExternal + " for WorkEffortPartyAssignment [" + assignment.getWorkEffortId() + "] with party [" + assignment.getPartyId() + "]", MODULE);
+
                 if (isExternal) {
                     externalPartyAssignments.add(assignment);
                 } else {
@@ -102,11 +105,15 @@ public class ActivitiesDataWarehouseService extends DomainService {
                 }
             }
 
+            if (externalPartyAssignments.size() == 0 || internalPartyAssignments.size() == 0) {
+                Debug.logWarning("Missing internal or external assignments for WorkEffort [" + workEffort.getWorkEffortId() + "] (found: " + internalPartyAssignments.size() + " internal and " + externalPartyAssignments.size() + " external)", MODULE);
+                return;
+            }
+
+
             // Get date dimension ID according to the work effort start date.
-            Timestamp workEffortDate = null;
-            if (workEffort.getActualCompletionDate() != null) {
-                workEffortDate = workEffort.getActualCompletionDate();
-            } else {
+            Timestamp workEffortDate = workEffort.getActualCompletionDate();
+            if (workEffortDate == null) {
                 workEffortDate = workEffort.getEstimatedCompletionDate();
             }
 
