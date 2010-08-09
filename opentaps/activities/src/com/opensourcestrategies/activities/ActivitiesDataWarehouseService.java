@@ -88,6 +88,12 @@ public class ActivitiesDataWarehouseService extends DomainService {
 
                 Party assignedParty = repository.getPartyById(assignment.getPartyId());
 
+                // Note: in case of multi-tenant setup there is a case
+                //   where A B X Y are involved in a WorkEffort; A and B being supposed to be
+                //   internal (as in two sales rep) but B would be considered external if
+                //   he is a contact somewhere else.
+                //   All parties could be both have the contact role and be an internal user.
+
                 // always consider the current user as internal
                 if (!assignedParty.getPartyId().equals(getUser().getOfbizUserLogin().getString(UserLogin.Fields.partyId.name()))) {
                     if (assignedParty.isAccount()) {
