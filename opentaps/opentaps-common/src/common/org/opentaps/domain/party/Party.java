@@ -16,24 +16,25 @@
 */
 package org.opentaps.domain.party;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.sql.Timestamp;
 
 import org.ofbiz.base.util.Debug;
-import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.PartyClassification;
 import org.opentaps.base.entities.PartyContactMech;
 import org.opentaps.base.entities.PartyContactMechPurpose;
+import org.opentaps.base.entities.PartyNoteView;
+import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.PartySummaryCRMView;
 import org.opentaps.base.entities.PostalAddress;
-import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.TelecomNumber;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.billing.payment.PaymentMethod;
-import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.entity.EntityNotFoundException;
-import org.opentaps.base.entities.PartyNoteView;
+import org.opentaps.foundation.repository.RepositoryException;
 
 /**
  * Party entity and domain.
@@ -110,17 +111,27 @@ public class Party extends org.opentaps.base.entities.Party {
     }
 
     /**
+     * Checks if this party has the given role.
+     * @param roleTypeId a <code>String</code> value
+     * @return a <code>Boolean</code> value
+     * @exception RepositoryException if an error occurs
+     */
+    public Boolean hasRole(String roleTypeId) throws RepositoryException {
+        for (PartyRole role : getPartyRoles()) {
+            if (roleTypeId.equals(role.getRoleTypeId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Checks if this party is a contact.
      * @return a <code>Boolean</code> value
      * @throws RepositoryException if an error occurs
      */
     public Boolean isContact() throws RepositoryException {
-        for (PartyRole role : getPartyRoles()) {
-            if ("CONTACT".equals(role.getRoleTypeId())) {
-                return true;
-            }
-        }
-        return false;
+        return hasRole(RoleTypeConstants.CONTACT);
     }
 
     /**
@@ -129,12 +140,7 @@ public class Party extends org.opentaps.base.entities.Party {
      * @throws RepositoryException if an error occurs
      */
     public Boolean isLead() throws RepositoryException {
-        for (PartyRole role : getPartyRoles()) {
-            if ("PROSPECT".equals(role.getRoleTypeId())) {
-                return true;
-            }
-        }
-        return false;
+        return hasRole(RoleTypeConstants.PROSPECT);
     }
 
     /**
@@ -143,12 +149,7 @@ public class Party extends org.opentaps.base.entities.Party {
      * @throws RepositoryException if an error occurs
      */
     public Boolean isPartner() throws RepositoryException {
-        for (PartyRole role : getPartyRoles()) {
-            if ("PARTNER".equals(role.getRoleTypeId())) {
-                return true;
-            }
-        }
-        return false;
+        return hasRole(RoleTypeConstants.PARTNER);
     }
 
     /**
@@ -157,12 +158,7 @@ public class Party extends org.opentaps.base.entities.Party {
      * @throws RepositoryException if an error occurs
      */
     public Boolean isSupplier() throws RepositoryException {
-        for (PartyRole role : getPartyRoles()) {
-            if ("SUPPLIER".equals(role.getRoleTypeId())) {
-                return true;
-            }
-        }
-        return false;
+        return hasRole(RoleTypeConstants.SUPPLIER);
     }
 
     /**
