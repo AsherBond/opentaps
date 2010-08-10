@@ -215,6 +215,7 @@
                 <set field="listSortTarget" value="viewAccount"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkPartyNoteSecurity.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/viewAccount.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/viewSalesPaymentPerYear.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contactmech/viewprofile.bsh"/>

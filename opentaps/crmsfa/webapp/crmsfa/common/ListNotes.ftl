@@ -40,22 +40,26 @@
       <#assign name = Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, note.noteParty, false)>
       <td><span class="tabletext">${name}</span></td>
       <td><span class="tabletext"><@displayDate date=note.noteDateTime format="DATE_TIME"/></span></td>
-      <td>
-        <a style="display: block;" id="${getIndexedName('editNoteInfo', counter)}" name="${getIndexedName('editNoteInfo', counter)}" href="javascript:editNotes(${counter})">
-          <img src="<@ofbizContentUrl>/opentaps_images/edit.gif</@ofbizContentUrl>" width="22" height="21" border="0" alt="${uiLabelMap.CommonEdit}"/>
-        </a>
-        <a style="display: none;" id="${getIndexedName('saveNoteInfo', counter)}" name="${getIndexedName('saveNoteInfo', counter)}" href="javascript:saveNotes(${counter}, ${note.noteId})">
-          <img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/save.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonSave}"/>
-        </a>
-      </td>
-      <td>
-        <a style="display: block;" id="${getIndexedName('deleteNoteInfo', counter)}" name="${getIndexedName('deleteNoteInfo', counter)}" href="javascript:deleteNotes(${counter}, ${note.noteId})">
-          <img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/delete.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonDelete}"/>
-        </a>
-        <a style="display: none;" id="${getIndexedName('cancelNoteInfo', counter)}" name="${getIndexedName('cancelNoteInfo', counter)}" href="javascript:cancelNotes(${counter})">
-          <img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/cancel.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonCancel}"/>
-        </a>
-      </td>
+      <#if (true == noteOwnerChangeOnly!false) && (note.noteParty != (userLogin.partyId)?if_exists)>
+        <td colspan="2"/>
+      <#else>
+        <td>
+          <a style="display: block;" id="${getIndexedName('editNoteInfo', counter)}" name="${getIndexedName('editNoteInfo', counter)}" href="javascript:editNotes(${counter})">
+            <img src="<@ofbizContentUrl>/opentaps_images/edit.gif</@ofbizContentUrl>" width="22" height="21" border="0" alt="${uiLabelMap.CommonEdit}"/>
+          </a>
+          <a style="display: none;" id="${getIndexedName('saveNoteInfo', counter)}" name="${getIndexedName('saveNoteInfo', counter)}" href="javascript:saveNotes(${counter}, ${note.noteId})">
+            <img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/save.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonSave}"/>
+          </a>
+        </td>
+        <td>
+          <a style="display: block;" id="${getIndexedName('deleteNoteInfo', counter)}" name="${getIndexedName('deleteNoteInfo', counter)}" href="javascript:deleteNotes(${counter}, ${note.noteId})">
+            <img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/delete.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonDelete}"/>
+          </a>
+          <a style="display: none;" id="${getIndexedName('cancelNoteInfo', counter)}" name="${getIndexedName('cancelNoteInfo', counter)}" href="javascript:cancelNotes(${counter})">
+            <img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/cancel.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonCancel}"/>
+          </a>
+        </td>
+      </#if>
     </tr>
     <#assign counter = counter + 1>
     <#if note.targetPartyId?exists>
@@ -68,7 +72,7 @@
   </#list>
 
   <script type="text/javascript">
-
+  /*<![CDATA[*/
     function displayEditDelete(i) {
       var edit = document.getElementById('editNoteInfo_o_' + i);
       var save = document.getElementById('saveNoteInfo_o_' + i);
@@ -149,7 +153,7 @@
       var node = document.getElementById('noteInfoRow_o_' + data.counter);
       node.innerHTML = '';
     }
-
+  /*]]>*/
   </script>
 
 </#if>

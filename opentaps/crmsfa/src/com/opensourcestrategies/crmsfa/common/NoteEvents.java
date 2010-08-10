@@ -25,15 +25,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
+import org.ofbiz.service.LocalDispatcher;
+import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
 import org.opentaps.common.event.AjaxEvents;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.foundation.infrastructure.Infrastructure;
 
 /**
  * Ajax events to edit or delete notes.
@@ -80,6 +83,8 @@ public final class NoteEvents {
     public static String saveNotesJSON(HttpServletRequest request, HttpServletResponse response) {
         Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        Infrastructure infrastructure = new Infrastructure(dispatcher);
         Security security = (Security) request.getAttribute("security");
         HttpSession session = request.getSession();
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
@@ -117,9 +122,18 @@ public final class NoteEvents {
         try {
             // get the note entity
             GenericValue note = delegator.findByPrimaryKey("NoteData", UtilMisc.toMap("noteId", noteId));
+
+            // if true, throw a permission denied error if the current user is not also the owner of the note
+            boolean noteOwnerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.NOTE_OWNER_CHANGE_ONLY);
+            if (noteOwnerChangeOnly && (userLogin == null || !userLogin.getString("partyId").equals(note.getString("noteParty")))) {
+                resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
+                return AjaxEvents.doJSONResponse(response, resp);
+            }
+
+            // update the note
             note.setString("noteInfo", text);
             note.store();
-        } catch (GenericEntityException e) {
+        } catch (GeneralException e) {
             resp.put("text", UtilMessage.expandLabel("OpentapsError_EditNoteFail", locale));
             return AjaxEvents.doJSONResponse(response, resp);
         }
@@ -152,6 +166,8 @@ public final class NoteEvents {
     public static String deleteNotesJSON(HttpServletRequest request, HttpServletResponse response) {
         Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        Infrastructure infrastructure = new Infrastructure(dispatcher);
         Security security = (Security) request.getAttribute("security");
         HttpSession session = request.getSession();
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
@@ -196,14 +212,24 @@ public final class NoteEvents {
         }
 
         try {
+            // get the note entity
+            GenericValue note = delegator.findByPrimaryKey("NoteData", UtilMisc.toMap("noteId", noteId));
+
+            // if true, throw a permission denied error if the current user is not also the owner of the note
+            boolean noteOwnerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.NOTE_OWNER_CHANGE_ONLY);
+            if (noteOwnerChangeOnly && (userLogin == null || !userLogin.getString("partyId").equals(note.getString("noteParty")))) {
+                resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
+                return AjaxEvents.doJSONResponse(response, resp);
+            }
+
             // delete the relation entity
             GenericValue relationEntity = delegator.findByPrimaryKey(relationEntityName, conditions);
             relationEntity.remove();
 
-            // delete the note entity
-            GenericValue note = delegator.findByPrimaryKey("NoteData", UtilMisc.toMap("noteId", noteId));
+            // delete the note
             note.remove();
-        } catch (GenericEntityException e) {
+
+        } catch (GeneralException e) {
             resp.put("text", UtilMessage.expandLabel("OpentapsError_DeleteNoteFail", locale));
             return AjaxEvents.doJSONResponse(response, resp);
         }
