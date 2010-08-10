@@ -68,6 +68,7 @@ import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
 
 /**
  * Special security methods for the CRM/SFA Application.
@@ -266,6 +267,7 @@ public final class CrmsfaSecurity {
     public static boolean hasActivityPermission(Security security, String securityOperation, GenericValue userLogin,
                                                 String workEffortId, String internalPartyId, String salesOpportunityId, String custRequestId) {
 
+
         // first check general CRMSFA_ACT_${securityOperation} permission
         if (!security.hasEntityPermission("CRMSFA_ACT", securityOperation, userLogin)) {
             Debug.logWarning("Checked UserLogin [" + userLogin.getString("userLoginId") + "] for permission to perform [CRMSFA_ACT] + [" + securityOperation + "] in general but permission was denied.", MODULE);
@@ -273,6 +275,8 @@ public final class CrmsfaSecurity {
         }
 
         GenericDelegator delegator = userLogin.getDelegator();
+        Infrastructure infrastructure = new Infrastructure(GenericDispatcher.getLocalDispatcher(null, delegator));
+
         try {
             // check for existance first
             GenericValue workEffort = delegator.findByPrimaryKeyCache("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
@@ -285,6 +289,21 @@ public final class CrmsfaSecurity {
             if (UtilActivity.activityIsInactive(workEffort) && !"_VIEW".equals(securityOperation)) {
                 Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] cannot attempt operation [" + securityOperation + "] on activity [" + workEffortId + "] whose status is [" + workEffort.getString("currentStatusId"), MODULE);
                 return false;
+            }
+
+            DomainsLoader dl = new DomainsLoader(infrastructure, new User(userLogin));
+            PartyRepositoryInterface repository = dl.getDomainsDirectory().getPartyDomain().getPartyRepository();
+
+            // if ACTIVITY_OWNER_CHANGE_ONLY configuration value is set to Y, deny any non view operation not made by the activity owner
+            Boolean ownerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.ACTIVITY_OWNER_CHANGE_ONLY);
+            if (ownerChangeOnly && !"_VIEW".equals(securityOperation)) {
+                List<WorkEffortPartyAssignment> owners = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId,
+                                                                                                                             WorkEffortPartyAssignment.Fields.roleTypeId, RoleTypeConstants.CAL_OWNER,
+                                                                                                                             WorkEffortPartyAssignment.Fields.partyId, userLogin.getString(UserLogin.Fields.partyId.name())));
+                if (UtilValidate.isEmpty(owners)) {
+                    Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] is not the owner of the activity [" + workEffortId + "], permission to perform [" + securityOperation + "] denied because the ACTIVITY_OWNER_CHANGE_ONLY setting is set to Y.", MODULE);
+                    return false;
+                }
             }
 
             // if there is an internalPartyId, check to see if user has permission for a party
@@ -322,8 +341,6 @@ public final class CrmsfaSecurity {
                     return false;
                 }
             }
-
-            PartyRepositoryInterface repository = new DomainsLoader(new Infrastructure(GenericDispatcher.getLocalDispatcher(null, delegator)), new User(userLogin)).getDomainsDirectory().getPartyDomain().getPartyRepository();
 
             // if the user is assigned to the activity, allow
             List<WorkEffortPartyAssignment> partyAssignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId,
@@ -388,12 +405,29 @@ public final class CrmsfaSecurity {
         }
 
         GenericDelegator delegator = userLogin.getDelegator();
+        Infrastructure infrastructure = new Infrastructure(GenericDispatcher.getLocalDispatcher(null, delegator));
+
         try {
             // check for existance first
             GenericValue workEffort = delegator.findByPrimaryKeyCache("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
             if (workEffort == null) {
                 Debug.logWarning("Tried to perform operation [" + securityOperation + "] on an non-existent activity [" + workEffortId + "]", MODULE);
                 return false;
+            }
+
+            DomainsLoader dl = new DomainsLoader(infrastructure, new User(userLogin));
+            PartyRepositoryInterface repository = dl.getDomainsDirectory().getPartyDomain().getPartyRepository();
+
+            // if ACTIVITY_OWNER_CHANGE_ONLY configuration value is set to Y, deny any non view operation not made by the activity owner
+            Boolean ownerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.ACTIVITY_OWNER_CHANGE_ONLY);
+            if (ownerChangeOnly && !"_VIEW".equals(securityOperation)) {
+                List<WorkEffortPartyAssignment> owners = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId,
+                                                                                                                             WorkEffortPartyAssignment.Fields.roleTypeId, RoleTypeConstants.CAL_OWNER,
+                                                                                                                             WorkEffortPartyAssignment.Fields.partyId, userLogin.getString(UserLogin.Fields.partyId.name())));
+                if (UtilValidate.isEmpty(owners)) {
+                    Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] is not the owner of the activity [" + workEffortId + "], permission to perform [" + securityOperation + "] denied because the ACTIVITY_OWNER_CHANGE_ONLY setting is set to Y.", MODULE);
+                    return false;
+                }
             }
 
             List<GenericValue> parties = UtilActivity.getActivityParties(delegator, workEffortId, PartyHelper.CLIENT_PARTY_ROLES);
@@ -404,7 +438,7 @@ public final class CrmsfaSecurity {
                     return false;
                 }
             }
-        } catch (GenericEntityException e) {
+        } catch (GeneralException e) {
             Debug.logError(e, "Checked UserLogin [" + userLogin + "] for permission to perform [CRMSFA_ACT] + [" + securityOperation + "] on all associations with workEffortId=[" + workEffortId + "] but permission was denied due to an exception: " + e.getMessage(), MODULE);
             return false;
         }
