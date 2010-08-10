@@ -210,9 +210,9 @@ public abstract class GenericService {
     /**
      * Checks if any validation errors are present.
      * Those are added by the <code>addFieldError</code> methods.
-     * @throws GenericServiceException if a validation error is present
+     * @throws CustomServiceValidationException if a validation error is present
      */
-    public final void checkValidationErrors() throws GenericServiceException {
+    public final void checkValidationErrors() throws CustomServiceValidationException {
         if (hasValidationErrors()) {
             throw new CustomServiceValidationException(missingFields, extraFields, customErrors);
         }
