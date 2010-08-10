@@ -69,7 +69,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallsubmit"><submit/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallSubmit"><submit/></field>
     </form>
 
     <!-- simple, parameterized marketing campaigns list (the full one is in MarketingForms.xml) -->
@@ -103,13 +103,13 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallsubmit"><submit/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallSubmit"><submit/></field>
     </form>
 
     <form name="testDateTime" type="single" title="Test form" target="testDateTimeInput" 
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext" >
         <field name="sampleTimestamp" title="Timestamp" encode-output="false"><date-time default-value="${testTimestampValue}" type="date"/></field>
-        <field name="submitButton" title="Submit" widget-style="smallsubmit"><submit/></field>
+        <field name="submitButton" title="Submit" widget-style="smallSubmit"><submit/></field>
     </form>   
 
 </forms>
