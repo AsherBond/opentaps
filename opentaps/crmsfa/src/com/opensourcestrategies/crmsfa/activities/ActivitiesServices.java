@@ -973,8 +973,12 @@ public final class ActivitiesServices {
             ModelService service = dctx.getModelService("updateWorkEffort");
             Map<String, Object> input = service.makeValid(context, "IN");
             input.put("estimatedCompletionDate", estimatedCompletionDate);
-            if ("TASK_STARTED".equals((String) input.get("currentStatusId")) && UtilValidate.isEmpty(input.get("actualStartDate"))) {
-                input.put("actualStartDate", UtilDateTime.nowTimestamp());
+            if (UtilValidate.isNotEmpty(input.get("currentStatusId"))) {
+                if (((String) input.get("currentStatusId")).endsWith("_STARTED") && UtilValidate.isEmpty(input.get("actualStartDate"))) {
+                    input.put("actualStartDate", UtilDateTime.nowTimestamp());
+                } else if (((String) input.get("currentStatusId")).endsWith("_COMPLETED") && UtilValidate.isEmpty(input.get("actualCompletionDate"))) {
+                    input.put("actualCompletionDate", UtilDateTime.nowTimestamp());
+                }
             }
             serviceResults = dispatcher.runSync("updateWorkEffort", input);
             if (ServiceUtil.isError(serviceResults)) {

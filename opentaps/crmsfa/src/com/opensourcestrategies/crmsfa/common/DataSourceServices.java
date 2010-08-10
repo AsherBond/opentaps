@@ -40,6 +40,7 @@
 
 package com.opensourcestrategies.crmsfa.common;
 
+import java.sql.Timestamp;
 import java.util.Locale;
 import java.util.Map;
 
@@ -85,6 +86,7 @@ public final class DataSourceServices {
 
         String partyId = (String) context.get("partyId");
         String dataSourceId = (String) context.get("dataSourceId");
+        Timestamp fromDate = (Timestamp) context.get("fromDate");
 
         // check parametrized security
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, module, operation, userLogin, partyId)) {
@@ -92,7 +94,7 @@ public final class DataSourceServices {
         }
         try {
             // create the PartyDataSource to relate the optional data source to this party
-            Map<String, Object> serviceResults = dispatcher.runSync("createPartyDataSource", UtilMisc.toMap("partyId", partyId , "dataSourceId", dataSourceId, "userLogin", userLogin));
+        	Map<String, Object> serviceResults = dispatcher.runSync("createPartyDataSource", UtilMisc.toMap("partyId", partyId , "dataSourceId", dataSourceId, "userLogin", userLogin, "fromDate", fromDate));
             if (ServiceUtil.isError(serviceResults)) {
                 return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorAddDataSource", locale, MODULE);
             }

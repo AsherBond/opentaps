@@ -17,32 +17,36 @@
 
 package com.opensourcestrategies.crmsfa.common;
 
-import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
-
-import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilHttp;
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.security.Security;
-
-import org.opentaps.common.event.AjaxEvents;
-import org.opentaps.common.util.UtilMessage;
-
-import java.util.*;
-
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.security.Security;
+import org.ofbiz.service.LocalDispatcher;
+import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
+import org.opentaps.common.event.AjaxEvents;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+
 /**
+ * Ajax events to edit or delete notes.
  * @author Fabien Carrion (gkfabs@opensourcestrategies.com)
  */
-public class NoteEvents {
+public final class NoteEvents {
 
-    public static final String module = NoteEvents.class.getName();
+    private NoteEvents() { }
+
+    private static final String MODULE = NoteEvents.class.getName();
 
     private static String getPermission(String modulePermission) {
         if ("CRMSFA_LEADS".equals(modulePermission)) {
@@ -56,19 +60,41 @@ public class NoteEvents {
         return "";
     }
 
+    /**
+     * Saves a note.
+     *
+     * This event accepts the following parameters:<ul>
+     *  <li><b>noteId</b>: the ID of the note</li>
+     *  <li><b>text</b>: the content of the note</li>
+     *  <li>one of <b>partyId</b> <b>custRequestId</b>: for a party note or a case note respectively</li>
+     *  <li><b>modulePermission</b>: the module in which the event is called (eg: CRMSFA_LEAD, CRMSFA_CONTACT, ...), used to check base permissions</li>
+     *  <li><b>counter</b>: an index value that will also be included in the response (to identify the element)</li>
+     * </ul>
+     *
+     * The response contains:<ul>
+     *  <li><b>text</b>: the content of note, or an error message</li>
+     *  <li><b>counter</b>: same as the input value (to identify the element), or <code>-1</code> if the reponse is an error</li>
+     * </ul>
+     *
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
+     */
     public static String saveNotesJSON(HttpServletRequest request, HttpServletResponse response) {
-        Locale locale = UtilMisc.ensureLocale( UtilHttp.getLocale(request));
-        GenericDelegator delegator = (GenericDelegator)request.getAttribute("delegator");
+        Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        Infrastructure infrastructure = new Infrastructure(dispatcher);
         Security security = (Security) request.getAttribute("security");
         HttpSession session = request.getSession();
-        GenericValue userLogin = (GenericValue)session.getAttribute("userLogin");
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
 
-        String counter = (String) request.getParameter("counter");
-        String noteId = (String) request.getParameter("noteId");
-        String text = (String) request.getParameter("text");
+        String counter = request.getParameter("counter");
+        String noteId = request.getParameter("noteId");
+        String text = request.getParameter("text");
         // a note may be for a Party or a Case
-        String partyId = (String) request.getParameter("partyId");
-        String custRequestId = (String) request.getParameter("custRequestId");
+        String partyId = request.getParameter("partyId");
+        String custRequestId = request.getParameter("custRequestId");
 
         Map<String, Object> resp = new HashMap<String, Object>();
         resp.put("counter", "-1");
@@ -76,7 +102,7 @@ public class NoteEvents {
 
         if (UtilValidate.isNotEmpty(partyId)) {
             // make sure userLogin has permission (module, operation) for this party
-            String modulePermission = getPermission((String) request.getParameter("modulePermission"));
+            String modulePermission = getPermission(request.getParameter("modulePermission"));
             if (!CrmsfaSecurity.hasPartyRelationSecurity(security, modulePermission, "_UPDATE", userLogin, partyId)) {
                 resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
                 return AjaxEvents.doJSONResponse(response, resp);
@@ -96,9 +122,18 @@ public class NoteEvents {
         try {
             // get the note entity
             GenericValue note = delegator.findByPrimaryKey("NoteData", UtilMisc.toMap("noteId", noteId));
+
+            // if true, throw a permission denied error if the current user is not also the owner of the note
+            boolean noteOwnerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.NOTE_OWNER_CHANGE_ONLY);
+            if (noteOwnerChangeOnly && (userLogin == null || !userLogin.getString("partyId").equals(note.getString("noteParty")))) {
+                resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
+                return AjaxEvents.doJSONResponse(response, resp);
+            }
+
+            // update the note
             note.setString("noteInfo", text);
             note.store();
-        } catch (GenericEntityException e) {
+        } catch (GeneralException e) {
             resp.put("text", UtilMessage.expandLabel("OpentapsError_EditNoteFail", locale));
             return AjaxEvents.doJSONResponse(response, resp);
         }
@@ -109,30 +144,51 @@ public class NoteEvents {
         return AjaxEvents.doJSONResponse(response, resp);
     }
 
+    /**
+     * Deletes a note.
+     *
+     * This event accepts the following parameters:<ul>
+     *  <li><b>noteId</b>: the ID of the note</li>
+     *  <li>one of <b>partyId</b> <b>custRequestId</b>: for a party note or a case note respectively</li>
+     *  <li><b>modulePermission</b>: the module in which the event is called (eg: CRMSFA_LEAD, CRMSFA_CONTACT, ...), used to check base permissions</li>
+     *  <li><b>counter</b>: an index value that will also be included in the response (to identify the element)</li>
+     * </ul>
+     *
+     * The response contains:<ul>
+     *  <li><b>text</b>: the content of note, or an error message</li>
+     *  <li><b>counter</b>: same as the input value (to identify the element), or <code>-1</code> if the reponse is an error</li>
+     * </ul>
+     *
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
+     */
     public static String deleteNotesJSON(HttpServletRequest request, HttpServletResponse response) {
-        Locale locale = UtilMisc.ensureLocale( UtilHttp.getLocale(request));
-        GenericDelegator delegator = (GenericDelegator)request.getAttribute("delegator");
+        Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        Infrastructure infrastructure = new Infrastructure(dispatcher);
         Security security = (Security) request.getAttribute("security");
         HttpSession session = request.getSession();
-        GenericValue userLogin = (GenericValue)session.getAttribute("userLogin");
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
 
-        String counter = (String) request.getParameter("counter");
-        String noteId = (String) request.getParameter("noteId");
+        String counter = request.getParameter("counter");
+        String noteId = request.getParameter("noteId");
         // a note may be for a Party or a Case
-        String partyId = (String) request.getParameter("partyId");
-        String custRequestId = (String) request.getParameter("custRequestId");
+        String partyId = request.getParameter("partyId");
+        String custRequestId = request.getParameter("custRequestId");
 
         Map<String, Object> resp = new HashMap<String, Object>();
         resp.put("counter", "-1");
         resp.put("text", "Error");
 
-        // to find and deleted the relation entity
-        Map conditions;
+        // to find and delete the relation entity
+        Map<String, String> conditions;
         String relationEntityName;
 
         if (UtilValidate.isNotEmpty(partyId)) {
             // make sure userLogin has permission (module, operation) for this party
-            String modulePermission = getPermission((String) request.getParameter("modulePermission"));
+            String modulePermission = getPermission(request.getParameter("modulePermission"));
             if (!CrmsfaSecurity.hasPartyRelationSecurity(security, modulePermission, "_UPDATE", userLogin, partyId)) {
                 resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
                 return AjaxEvents.doJSONResponse(response, resp);
@@ -156,14 +212,24 @@ public class NoteEvents {
         }
 
         try {
+            // get the note entity
+            GenericValue note = delegator.findByPrimaryKey("NoteData", UtilMisc.toMap("noteId", noteId));
+
+            // if true, throw a permission denied error if the current user is not also the owner of the note
+            boolean noteOwnerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.NOTE_OWNER_CHANGE_ONLY);
+            if (noteOwnerChangeOnly && (userLogin == null || !userLogin.getString("partyId").equals(note.getString("noteParty")))) {
+                resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
+                return AjaxEvents.doJSONResponse(response, resp);
+            }
+
             // delete the relation entity
             GenericValue relationEntity = delegator.findByPrimaryKey(relationEntityName, conditions);
             relationEntity.remove();
-            
-            // delete the note entity
-            GenericValue note = delegator.findByPrimaryKey("NoteData", UtilMisc.toMap("noteId", noteId));
+
+            // delete the note
             note.remove();
-        } catch (GenericEntityException e) {
+
+        } catch (GeneralException e) {
             resp.put("text", UtilMessage.expandLabel("OpentapsError_DeleteNoteFail", locale));
             return AjaxEvents.doJSONResponse(response, resp);
         }

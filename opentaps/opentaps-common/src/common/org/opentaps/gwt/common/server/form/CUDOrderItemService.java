@@ -80,10 +80,15 @@ public class CUDOrderItemService extends GenericCUDService {
         try {
             // check the product ID
             String productId = getProvider().getParameter(OrderItemsCartLookupConfiguration.INOUT_PRODUCT);
+            Product product = null;
             if (productId == null) {
                 addMissingFieldError(OrderItemsCartLookupConfiguration.INOUT_PRODUCT);
+            } else {
+                product = repository.getProductById(productId);
+                if (product == null) {
+                    addFieldError(OrderItemsCartLookupConfiguration.INOUT_PRODUCT, UtilUi.MSG.crmErrorProductNotFound(productId));
+                }
             }
-            Product product = repository.getProductById(productId);
 
             // check the quantity
             String quantityString = getProvider().getParameter(OrderItemsCartLookupConfiguration.INOUT_QUANTITY);
@@ -95,6 +100,20 @@ public class CUDOrderItemService extends GenericCUDService {
                     addFieldError(OrderItemsCartLookupConfiguration.INOUT_QUANTITY, UtilUi.MSG.opentapsFieldError_BadDoubleFormat());
                 }
             }
+
+            // check the unit price
+            BigDecimal unitPrice = null;
+            String priceStr = getProvider().getParameter(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE);
+            if (priceStr != null) {
+                try {
+                    unitPrice = new BigDecimal(priceStr);
+                } catch (NumberFormatException e) {
+                    addFieldError(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE, UtilUi.MSG.opentapsFieldError_BadDoubleFormat());
+                }
+            }
+
+            // check if any errors has been noted, and throw the appropriate exception which send them back to the UI
+            checkValidationErrors();
 
             Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -110,18 +129,14 @@ public class CUDOrderItemService extends GenericCUDService {
             }
 
             // override the unit price if given
-            String priceStr = getProvider().getParameter(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE);
-            if (priceStr != null) {
-                try {
-                    BigDecimal price = new BigDecimal(priceStr);
-                    ShoppingCartItem item = cart.findCartItem(index);
-                    item.setBasePrice(price);
-                    item.setDisplayPrice(price);
-                } catch (NumberFormatException e) {
-                    addFieldError(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE, UtilUi.MSG.opentapsFieldError_BadDoubleFormat());
-                }
+            if (unitPrice != null) {
+                ShoppingCartItem item = cart.findCartItem(index);
+                item.setBasePrice(unitPrice);
+                item.setDisplayPrice(unitPrice);
             }
 
+        } catch (CustomServiceValidationException e) {
+            throw e;
         } catch (GeneralException e) {
             throw new GenericServiceException(e);
         }

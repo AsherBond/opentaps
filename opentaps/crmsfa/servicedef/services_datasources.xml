@@ -46,6 +46,7 @@
         <description>Adds a DataSource to the Account. The userLogin is required to have CRMSFA_ACCOUNT_UPDATE permission on this account.</description>
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="dataSourceId" type="String" mode="IN" optional="false"/>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="true"/>
     </service>
 
     <service name="crmsfa.removeAccountDataSource" engine="java" location="com.opensourcestrategies.crmsfa.common.DataSourceServices" invoke="removeAccountDataSource">
@@ -58,6 +59,7 @@
         <description>Adds a DataSource to the Lead. The userLogin is required to have CRMSFA_LEAD_UPDATE permission on this lead.</description>
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="dataSourceId" type="String" mode="IN" optional="false"/>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="true"/>
     </service>
 
     <service name="crmsfa.removeLeadDataSource" engine="java" location="com.opensourcestrategies.crmsfa.common.DataSourceServices" invoke="removeLeadDataSource">
