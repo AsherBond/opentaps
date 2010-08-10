@@ -371,7 +371,12 @@
     <!-- small form for input of start time for a scheduled activity -->
     <screen name="startActivityForm">
         <section>
-            <condition><if-compare field="isScheduled" operator="equals" value="true" type="Boolean"/></condition>
+            <condition>
+              <and>
+                <if-compare field="isScheduled" operator="equals" value="true" type="Boolean"/>
+                <if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/>
+              </and>
+            </condition>
             <widgets>
                 <include-form name="startActivityForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
             </widgets>
@@ -381,7 +386,12 @@
     <!-- small form for input of end time for a scheduled activity -->
     <screen name="endActivityForm">
         <section>
-            <condition><if-compare field="isStarted" operator="equals" value="true" type="Boolean"/></condition>
+            <condition>
+              <and>
+                <if-compare field="isStarted" operator="equals" value="true" type="Boolean"/>
+                <if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/>
+              </and>
+            </condition>
             <widgets>
                 <include-form name="endActivityForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
             </widgets>
