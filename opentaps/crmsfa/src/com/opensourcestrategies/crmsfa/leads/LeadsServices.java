@@ -330,8 +330,12 @@ public final class LeadsServices {
             // copy all the datasources over to account
             List<GenericValue> dataSources = delegator.findByAnd("PartyDataSource", UtilMisc.toMap("partyId", leadPartyId));
             for (GenericValue dataSource : dataSources) {
-                serviceResults = dispatcher.runSync("crmsfa.addAccountDataSource", UtilMisc.toMap("partyId", accountPartyId,
-                        "dataSourceId", dataSource.getString("dataSourceId"), "userLogin", userLogin));
+            	ModelService service = dctx.getModelService("crmsfa.addAccountDataSource");
+            	input = service.makeValid(dataSource, "IN");
+            	input.put("userLogin", userLogin);
+            	input.put("partyId", accountPartyId);
+            	serviceResults = dispatcher.runSync("crmsfa.addAccountDataSource", input);
+
                 if (ServiceUtil.isError(serviceResults)) {
                     return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorConvertLeadFail", locale, MODULE);
                 }
