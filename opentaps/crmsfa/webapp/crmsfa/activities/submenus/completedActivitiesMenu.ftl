@@ -20,7 +20,9 @@
 
 <#assign extraOptions>
   <#if hasNewActivityPermission?exists>
-    <a class="subMenuButton" href="logTaskForm?${activityValueParams}&workEffortPurposeTypeId=WEPT_TASK_PHONE_CALL">${uiLabelMap.CrmLogCall}</a><a class="subMenuButton" href="logTaskForm?${activityValueParams}&workEffortPurposeTypeId=WEPT_TASK_EMAIL">${uiLabelMap.CrmLogEmail}</a>
+    <a class="subMenuButton" href="logTaskForm?${activityValueParams}&workEffortPurposeTypeId=WEPT_TASK_PHONE_CALL">${uiLabelMap.CrmLogCall}</a>
+    <#-- this duration parameter causes the duration on the next form to be 0, which is logical for old emails you're copying in -->
+    <a class="subMenuButton" href="logTaskForm?${activityValueParams}&workEffortPurposeTypeId=WEPT_TASK_EMAIL&duration=0%3A00">${uiLabelMap.CrmLogEmail}</a>
   </#if>
 </#assign>
 
