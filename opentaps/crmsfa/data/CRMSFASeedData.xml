@@ -214,5 +214,7 @@
 
     <OpentapsConfigurationType configTypeId="CRMSFA_MYLEADS_SHOW_OWNED_ONLY" description="If it is 'Y' then show only the owned ones as before, otherwise show all them" defaultValue="Y"/>
 
+    <OpentapsConfigurationType configTypeId="ACTIVITY_OWNER_CHANGE_ONLY" description="If it is 'Y' then if the user is not the owner of the activity, then the user cannot update or delete the activity" defaultValue="N"/>
+    <OpentapsConfigurationType configTypeId="NOTE_OWNER_CHANGE_ONLY" description="If it is 'Y' then if the user is not the owner of the note, then the user cannot update or delete the note" defaultValue="N"/>
 
 </entity-engine-xml>
