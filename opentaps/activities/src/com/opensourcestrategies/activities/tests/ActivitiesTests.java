@@ -97,12 +97,12 @@ public class ActivitiesTests extends OpentapsTestCase {
                 "workEffortName",  testWorkEffortName,
                 "workEffortTypeId", WorkEffortTypeConstants.TASK,
                 "workEffortPurposeTypeId", WorkEffortPurposeTypeConstants.WEPT_MEETING,
-                "currentStatusId", StatusItemConstants.TaskStatus.TASK_STARTED,                
+                "currentStatusId", StatusItemConstants.TaskStatus.TASK_STARTED,
                 "estimatedStartDate", testTimestamp1,
                 "estimatedCompletionDate", testTimestamp2
                 );
         Map<String, Object> results = runAndAssertServiceSuccess("crmsfa.createActivity", args);
-        String workEffortId1 = (String) results.get(WorkEffort.Fields.workEffortId.name());       
+        String workEffortId1 = (String) results.get(WorkEffort.Fields.workEffortId.name());
 
         args = UtilMisc.toMap("userLogin", userLogin,
                 "workEffortId", workEffortId1,
@@ -264,7 +264,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         assertEquals("Other activity count is not good.", fact4.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
 
         //==================================
-     
+
         //Add the second work effor data to tranform from.
 
         args = UtilMisc.toMap("userLogin", userLogin,
@@ -613,21 +613,21 @@ public class ActivitiesTests extends OpentapsTestCase {
 
     /**
      * Test run service activities.transformAllActivities
-     * 
+     *
      * @throws Exception
      */
     public void testTransformAllActivities() throws Exception {
-    	Debug.logInfo("START --- testTransformAllActivities --- ", MODULE);
-    	
-    	UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
-        GenericValue userLogin = partyRepository.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());        
-        
+        Debug.logInfo("START --- testTransformAllActivities --- ", MODULE);
+
+        UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
+        GenericValue userLogin = partyRepository.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());
+
         Map<String, Object> callContext = new HashMap<String, Object>();
         callContext.put("userLogin", userLogin);
-        
-    	runAndAssertServiceSuccess("activities.transformAllActivities", callContext);
-    	
-    	Debug.logInfo("DOWN --- testTransformAllActivities --- ", MODULE);
+
+        runAndAssertServiceSuccess("activities.transformAllActivities", callContext);
+
+        Debug.logInfo("DOWN --- testTransformAllActivities --- ", MODULE);
     }
-            
+
 }

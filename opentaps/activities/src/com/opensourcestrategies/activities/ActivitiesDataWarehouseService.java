@@ -82,14 +82,14 @@ public class ActivitiesDataWarehouseService extends DomainService {
             }
 
             // Fill 2 lists according to assigment of work effort to team members (internal parties) and clients (external parties).
-                                    
+
             List<WorkEffortPartyAssignment> internalPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
             List<WorkEffortPartyAssignment> externalPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
-            List<WorkEffortPartyAssignment> assignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));                        
-            
+            List<WorkEffortPartyAssignment> assignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
+
             for (WorkEffortPartyAssignment assignment : assignments) {
                 boolean isExternal = false;
-                
+
                 Party assignedParty = repository.getPartyById(assignment.getPartyId());
 
                 // Note: in case of multi-tenant setup there is a case
@@ -97,10 +97,10 @@ public class ActivitiesDataWarehouseService extends DomainService {
                 //   internal (as in two sales rep) but B would be considered external if
                 //   he is a contact somewhere else.
                 //   All parties could be both have the contact role and be an internal user.
-               
+
                 // always consider the current user as internal
                 if (!assignedParty.getPartyId().equals(getUser().getOfbizUserLogin().getString(UserLogin.Fields.partyId.name()))) {
-                	
+
                     if (assignedParty.isAccount()) {
                         isExternal = true;
                     } else if (assignedParty.isContact()) {
@@ -111,7 +111,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
                         isExternal = true;
                     }
                 }
-                                               
+
                 Debug.logInfo("External = " + isExternal + " for WorkEffortPartyAssignment [" + assignment.getWorkEffortId() + "] with party [" + assignment.getPartyId() + "]", MODULE);
 
                 if (isExternal) {
@@ -124,7 +124,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
             if (externalPartyAssignments.size() == 0 || internalPartyAssignments.size() == 0) {
                 Debug.logWarning("Missing internal or external assignments for WorkEffort [" + workEffort.getWorkEffortId() + "] (found: " + internalPartyAssignments.size() + " internal and " + externalPartyAssignments.size() + " external)", MODULE);
                 return;
-            }            
+            }
 
             // Get date dimension ID according to the work effort start date.
             Timestamp workEffortDate = workEffort.getActualCompletionDate();
@@ -215,41 +215,41 @@ public class ActivitiesDataWarehouseService extends DomainService {
             throw new ServiceException(ex);
         }
     }
-    
-    /**
-     * Transform all WorkEffort which are TASK_COMPLETED or EVENT_COMPLETED 
-     * into ActivityFact
-     * 
-     * @throws ServiceException
-     */    
-	public void transformAllActivities() throws ServiceException {
-    	ActivitiesTransformToActivityFactsService activitiesTransform = null;
-    	
-    	try {
-			PartyRepositoryInterface repository = getDomainsDirectory().getPartyDomain().getPartyRepository();						
-			 
-			// Find all WorkEffort which are TASK_COMPLETED or EVENT_COMPLETED 
-			EntityCondition workEffortCond = EntityCondition.makeCondition(EntityOperator.OR,
-			            EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.EQUALS, StatusItemConstants.TaskStatus.TASK_COMPLETED),			            
-			            EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.EQUALS, StatusItemConstants.EventStatus.EVENT_COMPLETED)			            
-			            );
-			                        
-			List<WorkEffort> workEffortList = repository.findList(WorkEffort.class, workEffortCond);
-			
-			// Each found WorkEffort transform into ActivityFact entities. 
-			for (WorkEffort workEffort : workEffortList) {
-				String workEffortId = workEffort.getWorkEffortId();
 
-				activitiesTransform = new ActivitiesTransformToActivityFactsService();
-				activitiesTransform.setInWorkEffortId(workEffortId);
-				activitiesTransform.setInUserLogin(getUser().getOfbizUserLogin());
-				activitiesTransform.runSync(infrastructure);
-			}
-			
-		} catch (RepositoryException e) {
-			 Debug.logError(e, MODULE);
-			 throw new ServiceException(e);
-		}
+    /**
+     * Transform all WorkEffort which are TASK_COMPLETED or EVENT_COMPLETED
+     * into ActivityFact
+     *
+     * @throws ServiceException
+     */
+    public void transformAllActivities() throws ServiceException {
+        ActivitiesTransformToActivityFactsService activitiesTransform = null;
+
+        try {
+            PartyRepositoryInterface repository = getDomainsDirectory().getPartyDomain().getPartyRepository();
+
+            // Find all WorkEffort which are TASK_COMPLETED or EVENT_COMPLETED
+            EntityCondition workEffortCond = EntityCondition.makeCondition(EntityOperator.OR,
+                                                                           EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.EQUALS, StatusItemConstants.TaskStatus.TASK_COMPLETED),
+                                                                           EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.EQUALS, StatusItemConstants.EventStatus.EVENT_COMPLETED)
+                                                                           );
+
+            List<WorkEffort> workEffortList = repository.findList(WorkEffort.class, workEffortCond);
+
+            // Each found WorkEffort transform into ActivityFact entities.
+            for (WorkEffort workEffort : workEffortList) {
+                String workEffortId = workEffort.getWorkEffortId();
+
+                activitiesTransform = new ActivitiesTransformToActivityFactsService();
+                activitiesTransform.setInWorkEffortId(workEffortId);
+                activitiesTransform.setInUserLogin(getUser().getOfbizUserLogin());
+                activitiesTransform.runSync(infrastructure);
+            }
+
+        } catch (RepositoryException e) {
+            Debug.logError(e, MODULE);
+            throw new ServiceException(e);
+        }
     }
 }
 
