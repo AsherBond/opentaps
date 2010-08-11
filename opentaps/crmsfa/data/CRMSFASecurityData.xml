@@ -69,6 +69,8 @@
     <SecurityPermission description="Allows manipulation of activites even when not the owner of said activities (bypass the Owner only configurable restriction)." permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityPermission description="View and set scope for public, private and confidential activities." permissionId="CRMSFA_ACT_ADMIN"/>
 
+    <SecurityPermission description="Allows manipulation of notes even when not the owner of said notes (bypass the Owner only configurable restriction)." permissionId="CRMSFA_NOTE_OVRD_OWN_ONLY"/>
+
     <SecurityPermission description="Access to the Team Management function of the application." permissionId="CRMSFA_TEAM_VIEW"/>
     <SecurityPermission description="Create a new sales team" permissionId="CRMSFA_TEAM_CREATE"/>
     <SecurityPermission description="Assign new members to an account or team" permissionId="CRMSFA_TEAM_ASSIGN"/>
@@ -677,6 +679,7 @@
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_NOTE_OVRD_OWN_ONLY"/>
    
     <SecurityGroup groupId="CONTACT_OWNER" description="Permissions granted to conact owners"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_VIEW"/>
@@ -690,6 +693,7 @@
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_NOTE_OVRD_OWN_ONLY"/>
     
     <SecurityGroup groupId="LEAD_OWNER" description="Permissions granted to lead owners"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_VIEW"/>
@@ -708,6 +712,7 @@
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_NOTE_OVRD_OWN_ONLY"/>
     
     <SecurityGroup groupId="PARTNER_OWNER" description="Permissions granted to parnter owners"/>
     <SecurityGroupPermission groupId="PARTNER_OWNER" permissionId="CRMSFA_PARTNER_VIEW"/>
