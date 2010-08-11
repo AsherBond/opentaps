@@ -263,6 +263,14 @@ public final class CrmsfaSecurity {
      * Then, if the internalPartyId is supplied, the user must pass the appropriate CRMSFA_ACCOUNT/CONTACT/LEAD_${securityOperation} check.
      * Then, if the salesOpportunityId is supplied, the user must pass CRMSFA_OPP_${securityOperation}
      * Then, if the custRequestId is supplied, the user must pass CRMSFA_CASE_${securityOperation}
+     * @param security a <code>Security</code> value
+     * @param securityOperation a <code>String</code> value
+     * @param userLogin a <code>GenericValue</code> value
+     * @param workEffortId a <code>String</code> value
+     * @param internalPartyId an optional party ID to check permission for
+     * @param salesOpportunityId an optional sales opportunity ID to check permission for
+     * @param custRequestId an opportunity case ID to check permission for
+     * @return a <code>boolean</code> value
      */
     public static boolean hasActivityPermission(Security security, String securityOperation, GenericValue userLogin,
                                                 String workEffortId, String internalPartyId, String salesOpportunityId, String custRequestId) {
@@ -287,7 +295,7 @@ public final class CrmsfaSecurity {
 
             // check for closed activities for actions that are not _VIEW
             if (UtilActivity.activityIsInactive(workEffort) && !"_VIEW".equals(securityOperation)) {
-                Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] cannot attempt operation [" + securityOperation + "] on activity [" + workEffortId + "] whose status is [" + workEffort.getString("currentStatusId"), MODULE);
+                Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] cannot attempt operation [" + securityOperation + "] on activity [" + workEffortId + "] whose status is [" + workEffort.getString("currentStatusId") + "]", MODULE);
                 return false;
             }
 
@@ -307,7 +315,7 @@ public final class CrmsfaSecurity {
             }
 
             // if there is an internalPartyId, check to see if user has permission for a party
-            if ((internalPartyId != null) && !internalPartyId.equals("")) {
+            if (UtilValidate.isNotEmpty(internalPartyId)) {
 
                 // determine the security module of internal party, such as CRMSFA_ACCOUNT for accounts
                 String securityModule = getSecurityModuleOfInternalParty(internalPartyId, delegator);
@@ -327,7 +335,7 @@ public final class CrmsfaSecurity {
             }
 
             // if there is an opportunity, check to see if user has OPP permission
-            if ((salesOpportunityId != null) && !salesOpportunityId.equals("")) {
+            if (UtilValidate.isNotEmpty(salesOpportunityId)) {
                 if (!hasOpportunityPermission(security, securityOperation, userLogin, salesOpportunityId)) {
                     Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] does not have permission for opportunity [" + salesOpportunityId + "] for activity [" + workEffortId + "]", MODULE);
                     return false;
@@ -335,7 +343,7 @@ public final class CrmsfaSecurity {
             }
 
             // if there is a case, check to see if user has CASE permission
-            if ((custRequestId != null) && !custRequestId.equals("")) {
+            if (UtilValidate.isNotEmpty(custRequestId)) {
                 if (!hasCasePermission(security, securityOperation, userLogin, custRequestId)) {
                     Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] does not have permission for case [" + custRequestId + "] for activity [" + workEffortId + "]", MODULE);
                     return false;
@@ -393,59 +401,15 @@ public final class CrmsfaSecurity {
     }
 
     /**
-     * As above, but checks permission for every single existing association for a work effort. As a short cut, this will only check for parties which are directly
-     * associated with the work effort through WorkEffortPartyAssociations. If the application changes to allow the existence of work efforts without any
-     * party associations, then this method must be changed to relfect that. TODO: comprehensive (check case and opp security).
+     * Checks if a userLogin has permission to perform an operation on a activity.
+     * @param security a <code>Security</code> value
+     * @param securityOperation a <code>String</code> value
+     * @param userLogin a <code>GenericValue</code> value
+     * @param workEffortId a <code>String</code> value
+     * @return a <code>boolean</code> value
      */
     public static boolean hasActivityPermission(Security security, String securityOperation, GenericValue userLogin, String workEffortId) {
-        // first check general CRMSFA_ACT_${securityOperation} permission
-        if (!security.hasEntityPermission("CRMSFA_ACT", securityOperation, userLogin)) {
-            Debug.logWarning("Checked UserLogin [" + userLogin + "] for permission to perform [CRMSFA_ACT] + [" + securityOperation + "] in general but permission was denied.", MODULE);
-            return false;
-        }
-
-        GenericDelegator delegator = userLogin.getDelegator();
-        Infrastructure infrastructure = new Infrastructure(GenericDispatcher.getLocalDispatcher(null, delegator));
-
-        try {
-            // check for existance first
-            GenericValue workEffort = delegator.findByPrimaryKeyCache("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
-            if (workEffort == null) {
-                Debug.logWarning("Tried to perform operation [" + securityOperation + "] on an non-existent activity [" + workEffortId + "]", MODULE);
-                return false;
-            }
-
-            DomainsLoader dl = new DomainsLoader(infrastructure, new User(userLogin));
-            PartyRepositoryInterface repository = dl.getDomainsDirectory().getPartyDomain().getPartyRepository();
-
-            // if ACTIVITY_OWNER_CHANGE_ONLY configuration value is set to Y, deny any non view operation not made by the activity owner
-            Boolean ownerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.ACTIVITY_OWNER_CHANGE_ONLY);
-            if (ownerChangeOnly && !"_VIEW".equals(securityOperation)) {
-                List<WorkEffortPartyAssignment> owners = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId,
-                                                                                                                             WorkEffortPartyAssignment.Fields.roleTypeId, RoleTypeConstants.CAL_OWNER,
-                                                                                                                             WorkEffortPartyAssignment.Fields.partyId, userLogin.getString(UserLogin.Fields.partyId.name())));
-                if (UtilValidate.isEmpty(owners)) {
-                    Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] is not the owner of the activity [" + workEffortId + "], permission to perform [" + securityOperation + "] denied because the ACTIVITY_OWNER_CHANGE_ONLY setting is set to Y.", MODULE);
-                    return false;
-                }
-            }
-
-            List<GenericValue> parties = UtilActivity.getActivityParties(delegator, workEffortId, PartyHelper.CLIENT_PARTY_ROLES);
-            for (Iterator<GenericValue> iter = parties.iterator(); iter.hasNext();) {
-                String internalPartyId = iter.next().getString("partyId");
-                String securityModule = getSecurityModuleOfInternalParty(internalPartyId, delegator);
-                if (!hasPartyRelationSecurity(security, securityModule, securityOperation, userLogin, internalPartyId)) {
-                    return false;
-                }
-            }
-        } catch (GeneralException e) {
-            Debug.logError(e, "Checked UserLogin [" + userLogin + "] for permission to perform [CRMSFA_ACT] + [" + securityOperation + "] on all associations with workEffortId=[" + workEffortId + "] but permission was denied due to an exception: " + e.getMessage(), MODULE);
-            return false;
-        }
-
-        // the user has passed everything
-        return true;
-
+        return hasActivityPermission(security, securityOperation, userLogin, workEffortId, null, null, null);
     }
 
     /**
