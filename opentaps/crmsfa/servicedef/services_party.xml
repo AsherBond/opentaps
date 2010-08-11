@@ -188,6 +188,25 @@
         <auto-attributes mode="IN" include="nonpk" optional="true"/>
     </service>
 
+    <service name="opentaps.createPartyAttribute" engine="pojo" location="com.opensourcestrategies.crmsfa.party.PartyAttributeService"
+             invoke="createPartyAttribute" auth="true">
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="attrName" type="String" mode="IN" optional="false"/>
+        <attribute name="attrValue" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="opentaps.updatePartyAttribute" engine="pojo" location="com.opensourcestrategies.crmsfa.party.PartyAttributeService"
+             invoke="updatePartyAttribute" auth="true">
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="attrName" type="String" mode="IN" optional="false"/>
+        <attribute name="attrValue" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="opentaps.removePartyAttribute" engine="pojo" location="com.opensourcestrategies.crmsfa.party.PartyAttributeService"
+             invoke="removePartyAttribute" auth="true">
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="attrName" type="String" mode="IN" optional="false"/>
+    </service>        
 </services>
 
 

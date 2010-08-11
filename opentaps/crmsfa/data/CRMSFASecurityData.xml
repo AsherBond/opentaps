@@ -117,6 +117,21 @@
     
     <SecurityPermission description="View operations in the  [Reports] tab and all of the reports inside it." permissionId="CRMSFA_RPT_VIEW"/>    
     
+    <SecurityPermission description="Access to the lead custom fields" permissionId="CRMSFA_LEAD_CUST_VIEW"/>
+    <SecurityPermission description="Access to the contact custom fields" permissionId="CRMSFA_CONTACT_CUST_VIEW"/>
+    <SecurityPermission description="Access to the account custom fields" permissionId="CRMSFA_ACCOUNT_CUST_VIEW"/>
+
+    <SecurityPermission description="Create the lead custom fields" permissionId="CRMSFA_LEAD_CUST_CREATE"/>
+    <SecurityPermission description="Create the contact custom fields" permissionId="CRMSFA_CONTACT_CUST_CREATE"/>
+    <SecurityPermission description="Create the account custom fields" permissionId="CRMSFA_ACCOUNT_CUST_CREATE"/>
+
+    <SecurityPermission description="Update the lead custom fields" permissionId="CRMSFA_LEAD_CUST_UPDATE"/>
+    <SecurityPermission description="Update the contact custom fields" permissionId="CRMSFA_CONTACT_CUST_UPDATE"/>
+    <SecurityPermission description="Update the account custom fields" permissionId="CRMSFA_ACCOUNT_CUST_UPDATE"/>
+
+    <SecurityPermission description="Delete the lead custom fields" permissionId="CRMSFA_LEAD_CUST_DELETE"/>
+    <SecurityPermission description="Delete the contact custom fields" permissionId="CRMSFA_CONTACT_CUST_DELETE"/>
+    <SecurityPermission description="Delete the account custom fields" permissionId="CRMSFA_ACCOUNT_CUST_DELETE"/>
 
     <!-- These are groups of permissions which, when assigned to a user login, give the logged in user a set of permissions in the system 
         Note that some of the permissions referred to here may be defined elsewhere in OFBIZ.  The idea is that we give the user permission
@@ -238,6 +253,14 @@
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_UPDATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_DELETE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_RPT_VIEW"/>
+    
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_CUST_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_CUST_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_CUST_UPDATE"/>
+    
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_CUST_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_CUST_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_CUST_DELETE"/>    
 
     <!-- A sales rep has the ability to view and update accounts, contacts, and leads but does not have the ability
         to manage team members or deactivate accounts.  Only in the context of relationship to their accounts do they
@@ -320,6 +343,14 @@
     <!-- Required to update/delete shopping list item -->
     <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_UPDATE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_DELETE"/>
+    
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_CUST_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CONTACT_CUST_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACCOUNT_CUST_VIEW"/>
+    
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_CUST_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CONTACT_CUST_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACCOUNT_CUST_CREATE"/>      
 
     <!-- This is permissions available to a sales rep when he/she has been assigned to an acccount -->
     <SecurityGroup groupId="SALES_REP_LIMITED" description="Sales Rep with ability to view only."/>
@@ -379,6 +410,14 @@
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="ORDERMGR_SEND_CONFIRMATION"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="WORKEFFORTMGR_ADMIN"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_SLT_VIEW"/>
+    
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_LEAD_CUST_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_CONTACT_CUST_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACCOUNT_CUST_VIEW"/>
+    
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_LEAD_CUST_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_CONTACT_CUST_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACCOUNT_CUST_CREATE"/>       
 
     <!-- This permission is for a trainee rep who cannot view any account/contact/lead he has not bee assigned
         or did not create himself.  Alternatively, it can be used to set up a sales organization where reps can't
@@ -512,6 +551,14 @@
     <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_DELETE"/>
     <!-- Required to work with billing accounts -->
     <SecurityGroupPermission groupId="CSR" permissionId="ACCOUNTING_ADMIN"/>
+    
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_CUST_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CONTACT_CUST_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACCOUNT_CUST_VIEW"/>
+    
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_CUST_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CONTACT_CUST_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACCOUNT_CUST_CREATE"/>      
 
     <!-- a B2C customer service rep -->
     <SecurityGroup groupId="CSR_B2C" description="B2C Customer Service Rep with permissions accounts, leads, contacts, cases, activities, orders"/>
@@ -590,6 +637,14 @@
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_UPDATE"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_DELETE"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="ACCOUNTING_ADMIN"/>
+    
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_CUST_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CONTACT_CUST_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACCOUNT_CUST_VIEW"/>
+    
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_CUST_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CONTACT_CUST_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACCOUNT_CUST_CREATE"/>          
 
     <SecurityGroup groupId="CRMSFA_LOGIN_ONLY" description="For testing: Permission to login and view basic screens only.  No permission to see or modify data"/>
     <SecurityGroupPermission groupId="CRMSFA_LOGIN_ONLY" permissionId="CRMSFA_VIEW"/>

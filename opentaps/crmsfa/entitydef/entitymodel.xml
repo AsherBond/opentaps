@@ -1130,4 +1130,10 @@
         </relation>       
     </view-entity>
 
+    <extend-entity entity-name="PartyAttribute">
+        <field name="createdByUserLoginId" type="id-vlong-ne"/>
+        <relation rel-entity-name="UserLogin" type="one" fk-name="PA_UL">
+            <key-map field-name="createdByUserLoginId" rel-field-name="userLoginId"/>
+        </relation>        
+    </extend-entity>
 </entitymodel>

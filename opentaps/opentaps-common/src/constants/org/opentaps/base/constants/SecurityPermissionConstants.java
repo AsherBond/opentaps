@@ -138,6 +138,14 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_ACCOUNTS_VIEW = "CRMSFA_ACCOUNTS_VIEW";
     /** Create a new account.. */
     public static final String CRMSFA_ACCOUNT_CREATE = "CRMSFA_ACCOUNT_CREATE";
+    /** Create the account custom fields. */
+    public static final String CRMSFA_ACCOUNT_CUST_CREATE = "CRMSFA_ACCOUNT_CUST_CREATE";
+    /** Delete the account custom fields. */
+    public static final String CRMSFA_ACCOUNT_CUST_DELETE = "CRMSFA_ACCOUNT_CUST_DELETE";
+    /** Update the account custom fields. */
+    public static final String CRMSFA_ACCOUNT_CUST_UPDATE = "CRMSFA_ACCOUNT_CUST_UPDATE";
+    /** Access to the account custom fields. */
+    public static final String CRMSFA_ACCOUNT_CUST_VIEW = "CRMSFA_ACCOUNT_CUST_VIEW";
     /** Deactivate any existing account.. */
     public static final String CRMSFA_ACCOUNT_DEACTIVATE = "CRMSFA_ACCOUNT_DEACTIVATE";
     /** Reassign owner of an existing account.. */
@@ -178,6 +186,14 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_CONTACTS_VIEW = "CRMSFA_CONTACTS_VIEW";
     /** Create a new Contact.. */
     public static final String CRMSFA_CONTACT_CREATE = "CRMSFA_CONTACT_CREATE";
+    /** Create the contact custom fields. */
+    public static final String CRMSFA_CONTACT_CUST_CREATE = "CRMSFA_CONTACT_CUST_CREATE";
+    /** Delete the contact custom fields. */
+    public static final String CRMSFA_CONTACT_CUST_DELETE = "CRMSFA_CONTACT_CUST_DELETE";
+    /** Update the contact custom fields. */
+    public static final String CRMSFA_CONTACT_CUST_UPDATE = "CRMSFA_CONTACT_CUST_UPDATE";
+    /** Access to the contact custom fields. */
+    public static final String CRMSFA_CONTACT_CUST_VIEW = "CRMSFA_CONTACT_CUST_VIEW";
     /** Deactivate any existing Contact.. */
     public static final String CRMSFA_CONTACT_DEACTIVATE = "CRMSFA_CONTACT_DEACTIVATE";
     /** Reassign owner of an existing contact.. */
@@ -196,6 +212,14 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_LEADS_VIEW = "CRMSFA_LEADS_VIEW";
     /** Create a new Lead.. */
     public static final String CRMSFA_LEAD_CREATE = "CRMSFA_LEAD_CREATE";
+    /** Create the lead custom fields. */
+    public static final String CRMSFA_LEAD_CUST_CREATE = "CRMSFA_LEAD_CUST_CREATE";
+    /** Delete the lead custom fields. */
+    public static final String CRMSFA_LEAD_CUST_DELETE = "CRMSFA_LEAD_CUST_DELETE";
+    /** Update the lead custom fields. */
+    public static final String CRMSFA_LEAD_CUST_UPDATE = "CRMSFA_LEAD_CUST_UPDATE";
+    /** Access to the lead custom fields. */
+    public static final String CRMSFA_LEAD_CUST_VIEW = "CRMSFA_LEAD_CUST_VIEW";
     /** Deactivate any existing Lead.. */
     public static final String CRMSFA_LEAD_DEACTIVATE = "CRMSFA_LEAD_DEACTIVATE";
     /** Delete a lead that hasn't been converted.. */

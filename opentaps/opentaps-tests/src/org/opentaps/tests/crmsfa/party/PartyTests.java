@@ -1329,4 +1329,50 @@ public class PartyTests extends OpentapsTestCase {
                                                                  EntityCondition.makeCondition(Person.Fields.partyId.name(), EntityOperator.IN, leadIds)));
         assertNotEmpty("Should have found the imported lead Leanne Chambers", persons);
     }
+    
+    /**
+     * Test the custom party fields service,
+     * opentaps.createPartyAttribute/opentaps.updatePartyAttribute/opentaps.removePartyAttribute.
+     * @throws Exception if an error occurs
+     */
+    public void testCustomFieldsForParty() throws Exception {
+        // DemoSalesRep1 creates a custom field (PartyAttribute) for a lead, ie DemoLead1
+        GenericValue demoSalesRep1 = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesRep1"));
+        Map input = UtilMisc.toMap("userLogin", demoSalesRep1);
+        input.put("partyId", "DemoLead1");
+        input.put("attrName", "customField1");
+        input.put("attrValue", "initValue1");
+        Map output = runAndAssertServiceSuccess("opentaps.createPartyAttribute", input);
+        
+        // verify:
+        // DemoSalesRep2 update the PartyAttribute fails
+        GenericValue demoSalesRep2 = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesRep2"));
+        input = UtilMisc.toMap("userLogin", demoSalesRep2);
+        input.put("partyId", "DemoLead1");
+        input.put("attrName", "customField1");
+        input.put("attrValue", "newValue1");
+        output = runAndAssertServiceError("opentaps.updatePartyAttribute", input);
+        
+        // DemoSalesRep2 delete the PartyAttribute fails
+        input = UtilMisc.toMap("userLogin", demoSalesRep2);
+        input.put("partyId", "DemoLead1");
+        input.put("attrName", "customField1");
+        output = runAndAssertServiceError("opentaps.removePartyAttribute", input);
+        
+        // DemoSalesManager update the PartyAttribute success
+        GenericValue demoSalesManager = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesManager"));
+        input = UtilMisc.toMap("userLogin", demoSalesManager);
+        input.put("partyId", "DemoLead1");
+        input.put("attrName", "customField1");
+        input.put("attrValue", "newValue1");
+        output = runAndAssertServiceSuccess("opentaps.updatePartyAttribute", input);
+        
+        // DemoSalesManager delete the PartyAttribute success 
+        input = UtilMisc.toMap("userLogin", demoSalesManager);
+        input.put("partyId", "DemoLead1");
+        input.put("attrName", "customField1");
+        output = runAndAssertServiceSuccess("opentaps.removePartyAttribute", input);
+        
+        
+    }
 }
