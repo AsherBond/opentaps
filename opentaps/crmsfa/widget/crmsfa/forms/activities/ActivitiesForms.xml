@@ -52,7 +52,7 @@
             header-link="${listSortTarget}?${activityValueParams}&amp;pendingActivitiesOrderBy=estimatedCompletionDate#ListPendingActivities" header-link-style="orderByHeaderLink">
             <display/>
         </field>
-        <field name="remove" title="${uiLabelMap.CommonRemove}" widget-style="buttontext">
+        <field name="remove" title="${uiLabelMap.CommonRemove}" widget-style="buttontext" use-when="com.opensourcestrategies.crmsfa.security.CrmsfaSecurity.hasActivityPermission(security, &quot;_DELETE&quot;, userLogin, workEffortId)">
             <hyperlink target="deleteActivityEmail" description="${uiLabelMap.CommonRemove}">
                 <parameter param-name="workEffortId"/>
             </hyperlink>
@@ -91,7 +91,7 @@
             header-link="${listSortTarget}?${activityValueParams}&amp;completedActivitiesOrderBy=estimatedCompletionDate#ListCompletedActivities" header-link-style="orderByHeaderLink">
             <display/>
         </field>
-        <field name="remove" title="${uiLabelMap.CommonRemove}" widget-style="buttontext">
+        <field name="remove" title="${uiLabelMap.CommonRemove}" widget-style="buttontext" use-when="com.opensourcestrategies.crmsfa.security.CrmsfaSecurity.hasActivityPermission(security, &quot;_DELETE&quot;, userLogin, workEffortId)">
             <hyperlink target="deleteActivityEmail" description="${uiLabelMap.CommonRemove}">
                 <parameter param-name="workEffortId"/>
             </hyperlink>
