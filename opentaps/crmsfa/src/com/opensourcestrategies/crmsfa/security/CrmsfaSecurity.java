@@ -309,8 +309,24 @@ public final class CrmsfaSecurity {
                                                                                                                              WorkEffortPartyAssignment.Fields.roleTypeId, RoleTypeConstants.CAL_OWNER,
                                                                                                                              WorkEffortPartyAssignment.Fields.partyId, userLogin.getString(UserLogin.Fields.partyId.name())));
                 if (UtilValidate.isEmpty(owners)) {
-                    Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] is not the owner of the activity [" + workEffortId + "], permission to perform [" + securityOperation + "] denied because the ACTIVITY_OWNER_CHANGE_ONLY setting is set to Y.", MODULE);
-                    return false;
+                    // user is not the owner of the activity, allow only if user is the owner of the main party (Lead / Account / .. this activity is related to).
+                    List<WorkEffortPartyAssignment> partiesAssignments = repository.findList(WorkEffortPartyAssignment.class,
+                                                                                   EntityCondition.makeCondition(
+                                                                                         EntityCondition.makeCondition(WorkEffortPartyAssignment.Fields.workEffortId.name(), workEffortId),
+                                                                                         EntityCondition.makeCondition(WorkEffortPartyAssignment.Fields.roleTypeId.name(), EntityOperator.IN, PartyHelper.CLIENT_PARTY_ROLES)));
+                    boolean bypassOwnerOnly = false;
+                    for (WorkEffortPartyAssignment assignment : partiesAssignments) {
+                        // note: do use "CRMSFA_ACT", "_OVRD_OWN_ONLY" as we want an exact match and not be allowed with CRMSFA_ACT_MANAGER
+                        if (hasPartyRelationSecurity(security, "CRMSFA_ACT_OVRD_OWN_ONLY", "", userLogin, assignment.getPartyId())) {
+                            bypassOwnerOnly = true;
+                            break;
+                        }
+                    }
+
+                    if (!bypassOwnerOnly) {
+                        Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] is not the owner of the activity [" + workEffortId + "] or of any of the main parties, permission to perform [" + securityOperation + "] denied because the ACTIVITY_OWNER_CHANGE_ONLY setting is set to Y.", MODULE);
+                        return false;
+                    }
                 }
             }
 
@@ -372,7 +388,7 @@ public final class CrmsfaSecurity {
             List<WorkEffortPartyAssignment> otherAssignments = repository.findList(WorkEffortPartyAssignment.class,
                                                                                    EntityCondition.makeCondition(
                                                                                          EntityCondition.makeCondition(WorkEffortPartyAssignment.Fields.workEffortId.name(), workEffortId),
-                                                                                         EntityCondition.makeCondition(WorkEffortPartyAssignment.Fields.roleTypeId, EntityOperator.NOT_EQUAL, RoleTypeConstants.PROSPECT)));
+                                                                                         EntityCondition.makeCondition(WorkEffortPartyAssignment.Fields.roleTypeId.name(), EntityOperator.NOT_EQUAL, RoleTypeConstants.PROSPECT)));
             for (WorkEffortPartyAssignment assignment : otherAssignments) {
 
                 // determine the security module of internal party, such as CRMSFA_ACCOUNT for accounts
