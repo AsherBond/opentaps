@@ -66,6 +66,7 @@
     <SecurityPermission description="Create a new Activity: Event or Task." permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityPermission description="Update an existing Activity: Event or Task." permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityPermission description="Close an existing Activity: Event or Task." permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityPermission description="Allows manipulation of activites even when not the owner of said activities (bypass the Owner only configurable restriction)." permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityPermission description="View and set scope for public, private and confidential activities." permissionId="CRMSFA_ACT_ADMIN"/>
 
     <SecurityPermission description="Access to the Team Management function of the application." permissionId="CRMSFA_TEAM_VIEW"/>
@@ -674,6 +675,7 @@
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
    
     <SecurityGroup groupId="CONTACT_OWNER" description="Permissions granted to conact owners"/>
@@ -686,6 +688,7 @@
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
     
     <SecurityGroup groupId="LEAD_OWNER" description="Permissions granted to lead owners"/>
@@ -703,6 +706,7 @@
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
     
     <SecurityGroup groupId="PARTNER_OWNER" description="Permissions granted to parnter owners"/>
