@@ -123,8 +123,14 @@ public final class NoteEvents {
             // get the note entity
             GenericValue note = delegator.findByPrimaryKey("NoteData", UtilMisc.toMap("noteId", noteId));
 
-            // if true, throw a permission denied error if the current user is not also the owner of the note
+            // if true, throw a permission denied error if the current user is not also the owner of the note and user does not have the CRMSFA_NOTE_OVRD_OWN_ONLY permission on the related party
             boolean noteOwnerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.NOTE_OWNER_CHANGE_ONLY);
+            if (noteOwnerChangeOnly && UtilValidate.isNotEmpty(partyId)) {
+                if (CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_NOTE_OVRD_OWN_ONLY", "", userLogin, partyId)) {
+                    noteOwnerChangeOnly = false;
+                }
+            }
+
             if (noteOwnerChangeOnly && (userLogin == null || !userLogin.getString("partyId").equals(note.getString("noteParty")))) {
                 resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
                 return AjaxEvents.doJSONResponse(response, resp);
