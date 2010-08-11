@@ -33,6 +33,7 @@ import org.opentaps.base.constants.WorkEffortTypeConstants;
 import org.opentaps.base.entities.ActivityFact;
 import org.opentaps.base.entities.UserLogin;
 import org.opentaps.base.entities.WorkEffort;
+import org.opentaps.base.services.CrmsfaCreateActivityService;
 import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.party.PartyDomainInterface;
@@ -96,12 +97,12 @@ public class ActivitiesTests extends OpentapsTestCase {
                 "workEffortName",  testWorkEffortName,
                 "workEffortTypeId", WorkEffortTypeConstants.TASK,
                 "workEffortPurposeTypeId", WorkEffortPurposeTypeConstants.WEPT_MEETING,
-                "currentStatusId", StatusItemConstants.TaskStatus.TASK_STARTED,
+                "currentStatusId", StatusItemConstants.TaskStatus.TASK_STARTED,                
                 "estimatedStartDate", testTimestamp1,
                 "estimatedCompletionDate", testTimestamp2
                 );
         Map<String, Object> results = runAndAssertServiceSuccess("crmsfa.createActivity", args);
-        String workEffortId1 = (String) results.get(WorkEffort.Fields.workEffortId.name());
+        String workEffortId1 = (String) results.get(WorkEffort.Fields.workEffortId.name());       
 
         args = UtilMisc.toMap("userLogin", userLogin,
                 "workEffortId", workEffortId1,
@@ -164,8 +165,8 @@ public class ActivitiesTests extends OpentapsTestCase {
         List<ActivityFact> factsBefore4 = partyRepository.findList(ActivityFact.class, partiesCond4);
 
         // Execute transformation.
-
         args = UtilMisc.<String, Object>toMap("workEffortId", workEffortId1);
+        args.put("userLogin", userLogin);
         runAndAssertServiceSuccess("activities.transformToActivityFacts", args);
 
         // Check if proper records was found.
@@ -263,7 +264,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         assertEquals("Other activity count is not good.", fact4.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
 
         //==================================
-
+     
         //Add the second work effor data to tranform from.
 
         args = UtilMisc.toMap("userLogin", userLogin,
@@ -304,6 +305,7 @@ public class ActivitiesTests extends OpentapsTestCase {
 
         //Execute transformation.
         args = UtilMisc.<String, Object>toMap("workEffortId", workEffortId2);
+        args.put("userLogin", userLogin);
         runAndAssertServiceSuccess("activities.transformToActivityFacts", args);
 
         // Check if proper records was found.
@@ -627,4 +629,5 @@ public class ActivitiesTests extends OpentapsTestCase {
     	
     	Debug.logInfo("DOWN --- testTransformAllActivities --- ", MODULE);
     }
+            
 }

@@ -38,6 +38,8 @@ import org.opentaps.domain.DomainService;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.infrastructure.InfrastructureException;
+import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -80,13 +82,14 @@ public class ActivitiesDataWarehouseService extends DomainService {
             }
 
             // Fill 2 lists according to assigment of work effort to team members (internal parties) and clients (external parties).
-
+                                    
             List<WorkEffortPartyAssignment> internalPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
             List<WorkEffortPartyAssignment> externalPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
-            List<WorkEffortPartyAssignment> assignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
+            List<WorkEffortPartyAssignment> assignments = repository.findList(WorkEffortPartyAssignment.class, repository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));                        
+            
             for (WorkEffortPartyAssignment assignment : assignments) {
                 boolean isExternal = false;
-
+                
                 Party assignedParty = repository.getPartyById(assignment.getPartyId());
 
                 // Note: in case of multi-tenant setup there is a case
@@ -94,9 +97,10 @@ public class ActivitiesDataWarehouseService extends DomainService {
                 //   internal (as in two sales rep) but B would be considered external if
                 //   he is a contact somewhere else.
                 //   All parties could be both have the contact role and be an internal user.
-
+               
                 // always consider the current user as internal
                 if (!assignedParty.getPartyId().equals(getUser().getOfbizUserLogin().getString(UserLogin.Fields.partyId.name()))) {
+                	
                     if (assignedParty.isAccount()) {
                         isExternal = true;
                     } else if (assignedParty.isContact()) {
@@ -107,7 +111,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
                         isExternal = true;
                     }
                 }
-
+                                               
                 Debug.logInfo("External = " + isExternal + " for WorkEffortPartyAssignment [" + assignment.getWorkEffortId() + "] with party [" + assignment.getPartyId() + "]", MODULE);
 
                 if (isExternal) {
@@ -120,8 +124,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
             if (externalPartyAssignments.size() == 0 || internalPartyAssignments.size() == 0) {
                 Debug.logWarning("Missing internal or external assignments for WorkEffort [" + workEffort.getWorkEffortId() + "] (found: " + internalPartyAssignments.size() + " internal and " + externalPartyAssignments.size() + " external)", MODULE);
                 return;
-            }
-
+            }            
 
             // Get date dimension ID according to the work effort start date.
             Timestamp workEffortDate = workEffort.getActualCompletionDate();
@@ -239,6 +242,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
 
 				activitiesTransform = new ActivitiesTransformToActivityFactsService();
 				activitiesTransform.setInWorkEffortId(workEffortId);
+				activitiesTransform.setInUserLogin(getUser().getOfbizUserLogin());
 				activitiesTransform.runSync(infrastructure);
 			}
 			
