@@ -1,0 +1,60 @@
+/*
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+
+hasLeadCustViewPermission = false;
+hasLeadCustCreatePermission = false;
+hasLeadCustUpdatePermission = false;
+hasLeadCustDeletePermission = false;
+
+if (security != null && userLogin != null) {
+  if (security.hasEntityPermission("CRMSFA", "_LEAD_CUST_VIEW", userLogin)) {
+    hasLeadCustViewPermission = true;
+  }
+  if (security.hasEntityPermission("CRMSFA", "_LEAD_CUST_CREATE", userLogin)) {
+    hasLeadCustCreatePermission = true;
+  }
+  if (security.hasEntityPermission("CRMSFA", "_LEAD_CUST_UPDATE", userLogin)) {
+    hasLeadCustUpdatePermission = true;
+  } 
+  if (security.hasEntityPermission("CRMSFA", "_LEAD_CUST_DELETE", userLogin)) {
+    hasLeadCustDeletePermission = true;
+  }  
+}
+context.put("hasLeadCustViewPermission", hasLeadCustViewPermission);
+context.put("hasLeadCustCreatePermission", hasLeadCustCreatePermission);
+context.put("hasLeadCustUpdatePermission", hasLeadCustUpdatePermission);
+context.put("hasLeadCustDeletePermission", hasLeadCustDeletePermission);
+
+partyId = parameters.get("partyId");
+
+dispatcher = request.getAttribute("dispatcher");
+infrastructure = new Infrastructure(dispatcher);
+session = infrastructure.getSession();
+hql = "from PartyAttribute eo where eo.id.partyId = :partyId";
+query = session.createQuery(hql);
+query.setString("partyId", partyId);
+partyAttributes = query.list();
+if (UtilValidate.isNotEmpty(partyAttributes)) {
+  context.put("partyAttributes", partyAttributes);
+}

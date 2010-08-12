@@ -2939,7 +2939,33 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
        <security https="true" auth="true"/>
        <response name="success" type="view" value="QuoteReport"/>
     </request-map>
+    
+    <request-map uri="createLeadCustomField">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.createPartyAttribute"/>
+        <response name="success" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="view" value="viewLead"/>
+    </request-map>   
+    
+    <request-map uri="updateLeadCustomField">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.updatePartyAttribute"/>
+        <response name="success" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="view" value="viewLead"/>
+    </request-map>      
 
+    <request-map uri="removeLeadCustomField">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.removePartyAttribute"/>
+        <response name="success" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="view" value="viewLead"/>
+    </request-map> 
     <!-- ============= -->
     <!-- View Mappings -->
     <!-- ============= -->
