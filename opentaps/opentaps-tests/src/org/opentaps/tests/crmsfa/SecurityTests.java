@@ -668,12 +668,4 @@ public class SecurityTests extends TestCase {
             TestCase.fail(ex.getMessage());
         }
     }
-
-    public void testLeadActivityPermissions() throws Exception {
-        // DemoSalesManager creates a lead
-        // DemoSalesManager assign lead to DemoSalesRep1
-        // DemoSalesManager creates an event with the lead
-        // test that DemoSalesRep1 has VIEW permission on the event
-        // test that DemoSalesRep2 does not have VIEW permission on the event
-    }
 }
