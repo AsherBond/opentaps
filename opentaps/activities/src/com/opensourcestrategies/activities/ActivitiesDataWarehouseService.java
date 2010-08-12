@@ -242,7 +242,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
 
                 activitiesTransform = new ActivitiesTransformToActivityFactsService();
                 activitiesTransform.setInWorkEffortId(workEffortId);
-                activitiesTransform.setInUserLogin(getUser().getOfbizUserLogin());
+                activitiesTransform.setUser(getUser());
                 activitiesTransform.runSync(infrastructure);
             }
 
