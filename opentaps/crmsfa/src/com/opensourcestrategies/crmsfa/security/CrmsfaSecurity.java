@@ -403,7 +403,7 @@ public final class CrmsfaSecurity {
 
                 // see if user can do this operation on this party
                 if (!hasPartyRelationSecurity(security, securityModule, internalPartySecurityOp, userLogin, assignment.getPartyId())) {
-                    Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] is not related to party [" + assignment.getPartyId() + "] for activity [" + workEffortId + "]", MODULE);
+                    Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] does not have [" + securityModule + internalPartySecurityOp + "] permission to related party [" + assignment.getPartyId() + "] for activity [" + workEffortId + "]", MODULE);
                     return false;
                 }
             }
