@@ -4038,6 +4038,10 @@ public interface CommonMessages extends Messages {
     String crmUpdateTeam();
     @DefaultMessage("Upload File")
     String crmUploadFile();
+    @DefaultMessage("Upload and Import")
+    String crmUploadFileAndImport();
+    @DefaultMessage("Upload Leads")
+    String crmUploadLeads();
     @DefaultMessage("URL Address")
     String crmUrlAddress();
     @DefaultMessage("User Login")
@@ -9458,6 +9462,8 @@ public interface CommonMessages extends Messages {
     String opentapsKeyboardShortcutsSpecificToPage();
     @DefaultMessage("OpentapsLastUpdatedAt")
     String opentapsLastUpdatedAt(String lastUpdatedStamp);
+    @DefaultMessage("Latest News")
+    String opentapsLatestNews();
     @DefaultMessage("Live help for this page on opentaps Wiki")
     String opentapsLiveHelp();
     @DefaultMessage("opentaps Login")
@@ -9630,13 +9636,15 @@ public interface CommonMessages extends Messages {
     String opentapsReReserve();
     @DefaultMessage("Re-reserve product")
     String opentapsReReserveProduct();
+    @DefaultMessage("Read all")
+    String opentapsReadMore();
     @DefaultMessage("Received")
     String opentapsReceived();
     @DefaultMessage("Reference")
     String opentapsReference();
     @DefaultMessage("Region")
     String opentapsRegion();
-    @DefaultMessage("Developer Version")
+    @DefaultMessage("1.5M1")
     String opentapsReleaseVersion();
     @DefaultMessage("Reply")
     String opentapsReply();
@@ -9740,6 +9748,8 @@ public interface CommonMessages extends Messages {
     String opentapsUnset();
     @DefaultMessage("Edit Profile")
     String opentapsUpdateProfile();
+    @DefaultMessage("Uploading... Please Wait")
+    String opentapsUploadingPleaseWait();
     @DefaultMessage("User")
     String opentapsUser();
     @DefaultMessage("My Language")
