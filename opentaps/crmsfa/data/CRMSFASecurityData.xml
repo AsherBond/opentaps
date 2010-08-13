@@ -66,6 +66,7 @@
     <SecurityPermission description="Create a new Activity: Event or Task." permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityPermission description="Update an existing Activity: Event or Task." permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityPermission description="Close an existing Activity: Event or Task." permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityPermission description="Delete an existing Activity: Event or Task." permissionId="CRMSFA_ACT_DELETE"/>
     <SecurityPermission description="Allows manipulation of activites even when not the owner of said activities (bypass the Owner only configurable restriction)." permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityPermission description="View and set scope for public, private and confidential activities." permissionId="CRMSFA_ACT_ADMIN"/>
 
@@ -181,6 +182,7 @@
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACT_DELETE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACT_ADMIN"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_VIEW"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_TEAM_VIEW"/>
@@ -677,6 +679,7 @@
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_DELETE"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_NOTE_OVRD_OWN_ONLY"/>
@@ -691,6 +694,7 @@
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_DELETE"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_NOTE_OVRD_OWN_ONLY"/>
@@ -710,6 +714,7 @@
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_DELETE"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_OVRD_OWN_ONLY"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_ACT_ADMIN"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_NOTE_OVRD_OWN_ONLY"/>
@@ -726,6 +731,7 @@
     <SecurityGroupPermission groupId="CRMSFA_TASKS_ONLY" permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityGroupPermission groupId="CRMSFA_TASKS_ONLY" permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityGroupPermission groupId="CRMSFA_TASKS_ONLY" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="CRMSFA_TASKS_ONLY" permissionId="CRMSFA_ACT_DELETE"/>
 
     <SecurityGroup groupId="CRMSFA_CONTACT_TASKS" description="Use CRMSFA for tasks, activities, and emails only"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_VIEW"/>
@@ -734,6 +740,7 @@
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_ACT_CREATE"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_ACT_UPDATE"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_ACT_DELETE"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACTS_VIEW"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_VIEW"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_CREATE"/>
