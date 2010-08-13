@@ -169,6 +169,11 @@ public class ActivitiesDataWarehouseService extends DomainService {
 
                 for (WorkEffortPartyAssignment internal : internalPartyAssignments) {
 
+                    // skip if it is the same party as the external one
+                    if (external.getPartyId().equals(internal.getPartyId())) {
+                        continue;
+                    }
+
                     // Try to find ActivityFact with such target party id and member party id and date dimension combination.
                     // If not such, then create it.
 
