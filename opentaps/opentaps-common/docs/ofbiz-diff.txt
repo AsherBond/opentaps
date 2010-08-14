@@ -366,6 +366,23 @@ applications/party/webapp/partymgr/party/editeftaccount.ftl
 applications/party/webapp/partymgr/party/profileblocks/PaymentMethods.ftl
 r15359 Modified a few italian labels with a better translation, added 2 null checks to prevent verbose FTL exceptions.
 
+applications/accounting/entitydef/entitymodel.xml
+applications/content/entitydef/entitymodel.xml
+applications/humanres/entitydef/entitymodel.xml
+applications/manufacturing/entitydef/entitymodel.xml
+applications/marketing/entitydef/entitymodel.xml
+applications/order/entitydef/entitymodel.xml
+applications/order/entitydef/entitymodel_old.xml
+applications/party/entitydef/entitymodel.xml
+applications/product/entitydef/entitymodel.xml
+applications/workeffort/entitydef/entitymodel.xml
+framework/common/entitydef/entitymodel.xml
+framework/entityext/entitydef/entitymodel.xml
+framework/example/entitydef/entitymodel.xml
+specialpurpose/shark/entitydef/entitymodel.xml
+specialpurpose/workflow/entitydef/entitymodel.xml
+commit 1501771bb8ad401855454230b329b778585269f1 #1565 use type fixed-point to instead of floating-point in ofbiz entity xmls
+
 Other API Changes
 -----------------
 
