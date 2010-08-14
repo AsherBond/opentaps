@@ -137,18 +137,18 @@
             title="Predefined specification for address labels.  All values must be filled, so specify 0 if the field does not apply.">
         <field name="addressLabelId" type="id-ne"></field>        
         <field name="description" type="description"></field>
-        <field name="topMargin" type="floating-point"></field>
-        <field name="bottomMargin" type="floating-point"></field>        
-        <field name="leftMargin" type="floating-point"></field>
-        <field name="rightMargin" type="floating-point"></field>
-        <field name="pageColumns" type="floating-point"></field>
-        <field name="pageRows" type="floating-point"></field>
-        <field name="labelHeight" type="floating-point"></field>
-        <field name="labelWidth" type="floating-point"></field>       
-        <field name="heightBtwLabel" type="floating-point"></field>
-        <field name="widthBtwLabel" type="floating-point"></field>        
-        <field name="pageWidth" type="floating-point"></field>        
-        <field name="pageHeight" type="floating-point"></field>        
+        <field name="topMargin" type="fixed-point"></field>
+        <field name="bottomMargin" type="fixed-point"></field>        
+        <field name="leftMargin" type="fixed-point"></field>
+        <field name="rightMargin" type="fixed-point"></field>
+        <field name="pageColumns" type="fixed-point"></field>
+        <field name="pageRows" type="fixed-point"></field>
+        <field name="labelHeight" type="fixed-point"></field>
+        <field name="labelWidth" type="fixed-point"></field>       
+        <field name="heightBtwLabel" type="fixed-point"></field>
+        <field name="widthBtwLabel" type="fixed-point"></field>        
+        <field name="pageWidth" type="fixed-point"></field>        
+        <field name="pageHeight" type="fixed-point"></field>        
         <field name="continuousFeed" type="indicator"><description>If continuous feed, then no page breaks based on number of rows</description></field>
         <field name="uomId" type="id"></field>
         <prim-key field="addressLabelId"/>

@@ -129,10 +129,10 @@ under the License.
         <!-- these fields relate to when the encumbrance detail is the result of an order -->
         <field name="orderId" type="id-ne"/>
         <field name="orderItemSeqId" type="id-ne"/>
-        <field name="originalQuantity" type="floating-point"/>
-        <field name="cancelQuantity" type="floating-point"/>
-        <field name="invoicedQuantity" type="floating-point"/>
-        <field name="encumberedQuantity" type="floating-point"/>
+        <field name="originalQuantity" type="fixed-point"/>
+        <field name="cancelQuantity" type="fixed-point"/>
+        <field name="invoicedQuantity" type="fixed-point"/>
+        <field name="encumberedQuantity" type="fixed-point"/>
         <field name="unitAmount" type="currency-amount"/>
 
         <!-- these fields relate to when the encumbrance detail is the result of an accounting transaction entry -->
@@ -731,7 +731,7 @@ under the License.
         <field name="partyId" type="id-ne"/>
         <field name="asOfDatetime" type="date-time"/>
         <field name="balanceTypeEnumId" type="id-ne"/>
-        <field name="totalBalance" type="floating-point"/>
+        <field name="totalBalance" type="fixed-point"/>
         <prim-key field="accountBalanceHistoryId"/>
         <relation type="one" fk-name="ACCT_BLCHIS_ORGPTY" title="Organization" rel-entity-name="Party">
             <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
@@ -1487,7 +1487,7 @@ under the License.
        <field name="productAverageCostId" type="id-ne"/>
        <field name="organizationPartyId" type="id-ne"/>
        <field name="productId" type="id-ne"/>
-       <field name="averageCost" type="floating-point"/>
+       <field name="averageCost" type="fixed-point"/>
        <field name="fromDate" type="date-time"/>
        <field name="thruDate" type="date-time"/>
        <prim-key field="productAverageCostId"/>

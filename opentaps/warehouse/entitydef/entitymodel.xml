@@ -446,7 +446,7 @@
         <field name="inventoryItemUsageTypeId" type="id"/>
         <field name="usageDatetime" type="date-time"/>
         <field name="toInventoryItemId" type="id"/>
-        <field name="quantity" type="floating-point"/>
+        <field name="quantity" type="fixed-point"/>
         <field name="receiptId" type="id"/>
         <field name="inventoryTransferId" type="id"/>
         <field name="itemIssuanceId" type="id"/>

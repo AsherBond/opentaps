@@ -95,7 +95,7 @@
         <field name="amazonOrderItemCode" type="id-long-ne"/>
         <field name="sku" type="short-varchar"/>
         <field name="title" type="very-long"/>
-        <field name="quantity" type="floating-point"/>
+        <field name="quantity" type="fixed-point"/>
         <field name="productTaxCode" type="id"/>
         <prim-key field="amazonOrderId"/>
         <prim-key field="amazonOrderItemCode"/>
@@ -184,7 +184,7 @@
         <field name="amazonOrderItemCode" type="id-long-ne"/>
         <field name="itemTaxJurisTypeId" type="id-ne"/>
         <field name="taxJurisdictionType" type="id"/>
-        <field name="taxRate" type="floating-point"/>
+        <field name="taxRate" type="fixed-point"/>
         <prim-key field="amazonOrderId"/>
         <prim-key field="amazonOrderItemCode"/>
         <prim-key field="itemTaxJurisTypeId"/>
@@ -220,7 +220,7 @@
     <entity entity-name="AmazonOrderItemFulfillment" package-name="org.opentaps.amazon.order">
         <field name="amazonOrderId" type="id-long-ne"/>
         <field name="amazonOrderItemCode" type="id-long-ne"/>
-        <field name="quantity" type="floating-point"/>
+        <field name="quantity" type="fixed-point"/>
         <field name="fulfillmentDate" type="date-time"/>
         <field name="shipmentId" type="id-ne"/>
         <field name="shipmentItemSeqId" type="id-ne"/>

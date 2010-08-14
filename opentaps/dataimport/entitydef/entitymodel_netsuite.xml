@@ -36,7 +36,7 @@
         <field name="cost_0" type="currency-amount"/>
         <field name="costingMethod" type="very-short"/>
         <field name="created" type="date-time"/>
-        <field name="currentOnOrderCount" type="floating-point"/> <!-- TODO change field type -->
+        <field name="currentOnOrderCount" type="fixed-point"/> <!-- TODO change field type -->
         <field name="dateOfLastTransaction" type="date-time"/>
         <field name="departmentId" type="id"/>
         <field name="deposit" type="very-short"/>
@@ -65,8 +65,8 @@
         <field name="prefSaleTaxId" type="id"/> <!-- TODO change field type -->
         <field name="printSubItems" type="very-short"/>
         <field name="purchasedescription" type="long-varchar"/>
-        <field name="quantityavailable" type="floating-point"/>
-        <field name="quantityonhand" type="floating-point"/>
+        <field name="quantityavailable" type="fixed-point"/>
+        <field name="quantityonhand" type="fixed-point"/>
         <field name="reorderpoint" type="id"/> <!-- TODO change field type -->
         <field name="resalable" type="very-short"/>
         <field name="salesdescription" type="very-long"/>
@@ -88,7 +88,7 @@
         <field name="vsoeDelivered" type="very-short"/>
         <field name="vsoeDiscount" type="id"/> <!-- TODO change field type -->
         <field name="vsoePrice" type="id"/> <!-- TODO change field type -->
-        <field name="weight" type="floating-point"/>
+        <field name="weight" type="fixed-point"/>
         <field name="weightUnitIndex" type="id"/>
         <field name="productCatagory" type="name"/>
         <field name="upcitemCode" type="id"/>
@@ -144,7 +144,7 @@
         <field name="parentId" type="id"/>
         <field name="partnerId" type="id"/>
         <field name="paymentTermsId" type="id"/>
-        <field name="probability" type="floating-point"/>
+        <field name="probability" type="fixed-point"/>
         <field name="reminderdays" type="numeric"/>
         <field name="renewal" type="date-time"/>
         <field name="resalenumber" type="description"/>
@@ -153,7 +153,7 @@
         <field name="stateProvince" type="id"/>
         <field name="country" type="id"/>
         <field name="statusId" type="name"/>
-        <field name="statusProbability" type="floating-point"/>
+        <field name="statusProbability" type="fixed-point"/>
         <field name="statusReadOnly" type="id"/>
         <field name="subsidiaryId" type="id"/>
         <field name="taxItemId" type="id"/>
@@ -302,7 +302,7 @@
         <field name="minimumDays" type="numeric"/>
         <field name="termName" type="description"/>
         <field name="paymentTermsExtid" type="id"/>
-        <field name="percentageDiscount" type="floating-point"/>
+        <field name="percentageDiscount" type="fixed-point"/>
 
         <prim-key field="paymentTermsId"/>
     </entity>

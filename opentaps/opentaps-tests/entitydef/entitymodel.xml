@@ -50,7 +50,7 @@
         <field name="testDateTimeField" type="date-time"/>
         <field name="testBlobField" type="blob"/>
         <field name="testNumericField" type="numeric"/>
-        <field name="testFloatingPointField" type="floating-point"/>
+        <field name="testFloatingPointField" type="fixed-point"/>
         <field name="testCurrencyPreciseField" type="currency-precise"/>
         <field name="testCreditCardNumberField" type="credit-card-number"/>
         <field name="testCreditCardDateField" type="credit-card-date"/>

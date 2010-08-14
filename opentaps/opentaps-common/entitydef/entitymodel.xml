@@ -277,7 +277,7 @@ under the License.
         <field name="origPaymentApplicationId" type="id"><description>Payment application which paid the original invoice (if we're generating invoices on payment receipt)</description></field>
         <field name="origPaymentAmount" type="currency-amount"><description>Payment application amount</description></field>
         <field name="origAmount" type="currency-amount"><description>Original invoice item amount applicable to term or the original invoice total</description></field>
-        <field name="origCommissionRate" type="floating-point"><description>Commission rate if we're doing item (term) level data (agreementTermId not null)</description></field>
+        <field name="origCommissionRate" type="fixed-point"><description>Commission rate if we're doing item (term) level data (agreementTermId not null)</description></field>
         <field name="agentPartyId" type="id"><description>Who the generated agreement is from</description></field>
         <field name="billingDatetime" type="date-time"/>
         <prim-key field="agreementTermBillingId"/>
@@ -1053,8 +1053,8 @@ under the License.
 
     <!-- Extend the InvoiceTerm entity with some of AgreementTerm's fields -->
     <extend-entity entity-name="InvoiceTerm">
-      <field name="minQuantity" type="floating-point"></field>
-      <field name="maxQuantity" type="floating-point"></field>
+      <field name="minQuantity" type="fixed-point"></field>
+      <field name="maxQuantity" type="fixed-point"></field>
     </extend-entity>
 
     <!--
@@ -1063,7 +1063,7 @@ under the License.
         Support minimumRate for lower bounds on estimates (currency is in context of shipping estimates).
      -->
     <extend-entity entity-name="ProductStoreShipmentMeth">
-      <field name="codSurcharge" type="floating-point"></field>
+      <field name="codSurcharge" type="fixed-point"></field>
       <field name="userDescription" type="description"/>
       <field name="minimumRate" type="currency-amount"/>
     </extend-entity>
@@ -1366,7 +1366,7 @@ under the License.
         <field name="facilityId" type="id-ne"/>
         <field name="partyId" type="id-ne"/>
         <field name="productId" type="id-ne"/>
-        <field name="forecastQuantity" type="floating-point"/>
+        <field name="forecastQuantity" type="fixed-point"/>
         <field name="forecastUnitPrice" type="currency-precise"/>
         <field name="forecastTotalAmount" type="currency-precise"/>
         <prim-key field="salesForecastItemId"/>
@@ -1681,7 +1681,7 @@ under the License.
 
     <!-- This is to track which outsourced tasks have been fulfilled. -->
     <extend-entity entity-name="WorkOrderItemFulfillment">
-        <field name="quantityFulfilled" type="floating-point"/>
+        <field name="quantityFulfilled" type="fixed-point"/>
     </extend-entity>
 
     <entity entity-name="CashDrawer" package-name="org.opentaps.common.order" title="Cash Drawer">
@@ -1922,7 +1922,7 @@ under the License.
     <extend-entity entity-name="ReturnHeader">
         <field name="carrierReturnServiceId" type="id"/>
         <field name="originPhoneContactMechId" type="id"/>
-        <field name="estimatedWeight" type="floating-point"/>
+        <field name="estimatedWeight" type="fixed-point"/>
         <field name="estimatedWeightUomId" type="id"/>
         <relation type="one" rel-entity-name="CarrierReturnService" fk-name="RH_CRS">
             <key-map field-name="carrierReturnServiceId"/>
@@ -1955,7 +1955,7 @@ under the License.
         <field name="inventoryItemValueHistId" type="id-ne"/>
         <field name="inventoryItemId" type="id-ne"/>
         <field name="dateTime" type="date-time"/>
-        <field name="unitCost" type="floating-point"/>
+        <field name="unitCost" type="fixed-point"/>
         <field name="setByUserLogin" type="id-vlong-ne"/>
         <prim-key field="inventoryItemValueHistId"/>
         <relation type="one-nofk" rel-entity-name="InventoryItem">
@@ -2310,7 +2310,7 @@ under the License.
       <field name="productId" type="id-ne"></field>
       <field name="eventDate" type="date-time"></field>
       <field name="inventoryEventPlanTypeId" type="id-ne"></field>
-      <field name="eventQuantity" type="floating-point"></field>
+      <field name="eventQuantity" type="fixed-point"></field>
       <field name="facilityId" type="id"></field>
       <field name="eventName" type="very-long"></field>
       <field name="isLate" type="indicator"></field>

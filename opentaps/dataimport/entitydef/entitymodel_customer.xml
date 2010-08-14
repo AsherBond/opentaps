@@ -69,7 +69,7 @@
         <field name="didExtension" type="long-varchar"/>
         <field name="emailAddress" type="long-varchar"/>
         <field name="webAddress" type="long-varchar"/>
-        <field name="discount" type="floating-point"/>
+        <field name="discount" type="fixed-point"/>
         <field name="partyClassificationTypeId" type="id"/>
         <field name="creditCardNumber" type="short-varchar">
             <description>All numeric no spaces</description>
@@ -137,7 +137,7 @@
         title="These customers in DataImportCustomer are also commission agents and earn a commission"
         table-name="DATA_IMP_COMM_RATES">
         <field name="customerId" type="id-ne"/>
-        <field name="commissionRate" type="floating-point"/>
+        <field name="commissionRate" type="fixed-point"/>
         <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
         <field name="processedTimestamp" type="date-time"><description>When the record was processed</description></field>
         <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>

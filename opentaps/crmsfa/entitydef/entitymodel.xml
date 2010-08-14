@@ -924,7 +924,7 @@
             title="Prioritization entity for order ship groups">
         <field name="orderId" type="id-ne"></field>
         <field name="shipGroupSeqId" type="id-ne"></field>
-        <field name="priorityValue" type="floating-point"></field>
+        <field name="priorityValue" type="fixed-point"></field>
         <prim-key field="orderId"/>
         <prim-key field="shipGroupSeqId"/>
         <relation type="one" fk-name="OSGP_OH" rel-entity-name="OrderHeader">

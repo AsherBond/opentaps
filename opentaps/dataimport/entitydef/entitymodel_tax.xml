@@ -54,7 +54,7 @@
         title="Tax rates by county.">
         <field name="county" type="description"><description>Name of the county preferrably in all upper case letters.  Must correspond to those in DataImportUSZipCodes</description></field>
         <field name="stateCode" type="id-ne"><description>Two letter state code such as NY</description></field>
-        <field name="taxRate" type="floating-point"><description>Component rate for county that is added to any other tax rates for the jurdistiction.</description></field>
+        <field name="taxRate" type="fixed-point"><description>Component rate for county that is added to any other tax rates for the jurdistiction.</description></field>
         <field name="inheritExemptions" type="indicator"></field>
 
         <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>

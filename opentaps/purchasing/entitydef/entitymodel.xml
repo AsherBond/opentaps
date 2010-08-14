@@ -171,8 +171,8 @@
       <field name="productId" type="id-ne"></field>
       <field name="eventDate" type="date-time"></field>
       <field name="inventoryEventPlanTypeId" type="id-ne"></field>
-      <field name="eventQuantity" type="floating-point"></field>
-      <field name="netQoh" type="floating-point"></field>       
+      <field name="eventQuantity" type="fixed-point"></field>
+      <field name="netQoh" type="fixed-point"></field>       
       <field name="facilityId" type="id"></field>
       <field name="eventName" type="very-long"></field>
       <field name="isLate" type="indicator"></field>
@@ -210,7 +210,7 @@
       <field name="mrpInvEvtDetSeqId" type="id"></field>
       <field name="orderId" type="id"></field>
       <field name="orderItemSeqId" type="id"></field>      
-      <field name="quantity" type="floating-point"></field>      
+      <field name="quantity" type="fixed-point"></field>      
       <prim-key field="productId"/>
       <prim-key field="eventDate"/>
       <prim-key field="inventoryEventPlanTypeId"/>
@@ -434,8 +434,8 @@
     </view-entity>      
 
     <extend-entity entity-name="WorkEffortGoodStandard">
-        <field name="minQuantity" type="floating-point"/>
-        <field name="maxQuantity" type="floating-point"/>
+        <field name="minQuantity" type="fixed-point"/>
+        <field name="maxQuantity" type="fixed-point"/>
     </extend-entity>
 
 <!-- Redefine this entity for add RequirementType.description and StatusItem.description -->

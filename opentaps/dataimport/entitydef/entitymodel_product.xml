@@ -47,13 +47,13 @@
         <field name="productName" type="name" />
         <field name="description" type="very-long"/>
         <field name="longDescription" type="very-long" />
-        <field name="weight" type="floating-point"/>
+        <field name="weight" type="fixed-point"/>
         <field name="weightUomId" type="id"/>
-        <field name="productLength" type="floating-point"/>
+        <field name="productLength" type="fixed-point"/>
         <field name="productLengthUomId" type="id"/>
-        <field name="width" type="floating-point"/>
+        <field name="width" type="fixed-point"/>
         <field name="widthUomId" type="id"/>
-        <field name="height" type="floating-point"/>
+        <field name="height" type="fixed-point"/>
         <field name="heightUomId" type="id"/>
         <field name="price" type="currency-precise"/>
         <field name="priceCurrencyUomId" type="id"/>
@@ -84,11 +84,11 @@
         <field name="productId" type="id"/>
         <!--<field name="productName" type="description"/>-->
         <field name="facilityId" type="id"/>
-        <field name="availableToPromise" type="floating-point"/>
-        <field name="onHand" type="floating-point"/>
-        <field name="minimumStock" type="floating-point"/>
-        <field name="reorderQuantity" type="floating-point"/>
-        <field name="daysToShip" type="floating-point"/>
+        <field name="availableToPromise" type="fixed-point"/>
+        <field name="onHand" type="fixed-point"/>
+        <field name="minimumStock" type="fixed-point"/>
+        <field name="reorderQuantity" type="fixed-point"/>
+        <field name="daysToShip" type="fixed-point"/>
         <field name="inventoryValue" type="currency-amount"/>
         <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
         <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>

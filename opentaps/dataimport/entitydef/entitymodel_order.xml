@@ -123,8 +123,8 @@
         <field name="goodIdentificationTypeId"  type="id" />
         <field name="productName"           type="description" />
         <field name="productSku"            type="id"/>
-        <field name="quantity"              type="floating-point" />
-        <field name="quantityShipped"       type="floating-point">
+        <field name="quantity"              type="fixed-point" />
+        <field name="quantityShipped"       type="fixed-point">
             <description>Quantity of this order item already shipped, meaningful only for not closed orders.
             </description>
         </field>
