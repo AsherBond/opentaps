@@ -76,7 +76,7 @@ under the License.
       <field name="objectName" type="name"></field>
       <field name="objectPriority" type="numeric"></field>
       <field name="description" type="description"></field>
-      <field name="timeLimit" type="floating-point"></field>
+      <field name="timeLimit" type="fixed-point"></field>
       <field name="startModeEnumId" type="id"></field>
       <field name="finishModeEnumId" type="id"></field>
       <field name="performerParticipantId" type="id"></field>
@@ -84,9 +84,9 @@ under the License.
       <field name="iconUrl" type="url"></field>
       <field name="cost" type="currency-amount"></field>
       <field name="instantiationLimitEnumId" type="id"></field>
-      <field name="duration" type="floating-point"></field>
-      <field name="workingTime" type="floating-point"></field>
-      <field name="waitingTime" type="floating-point"></field>
+      <field name="duration" type="fixed-point"></field>
+      <field name="workingTime" type="fixed-point"></field>
+      <field name="waitingTime" type="fixed-point"></field>
       <field name="activityTypeEnumId" type="id"></field>
       <field name="canStart" type="indicator"></field>
       <field name="isInlineBlock" type="indicator"></field>
@@ -518,16 +518,16 @@ under the License.
       <field name="codepage" type="short-varchar"></field>
       <field name="countryGeoId" type="id"></field>
       <field name="publicationStatusId" type="id"></field>
-      <field name="timeLimit" type="floating-point"></field>
+      <field name="timeLimit" type="fixed-point"></field>
       <field name="validFromDate" type="date-time"></field>
       <field name="validToDate" type="date-time"></field>
       <field name="responsibleListId" type="id"></field>
       <field name="participantListId" type="id"></field>
       <field name="documentationUrl" type="url"></field>
       <field name="durationUomId" type="id"></field>
-      <field name="duration" type="floating-point"></field>
-      <field name="workingTime" type="floating-point"></field>
-      <field name="waitingTime" type="floating-point"></field>
+      <field name="duration" type="fixed-point"></field>
+      <field name="workingTime" type="fixed-point"></field>
+      <field name="waitingTime" type="fixed-point"></field>
       <field name="defaultStartActivityId" type="id-long"></field>
       <field name="sourceReferenceField" type="name"></field>
       <prim-key field="packageId"/>

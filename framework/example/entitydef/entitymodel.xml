@@ -68,7 +68,7 @@ under the License.
         <field name="exampleId" type="id-ne"></field>
         <field name="exampleItemSeqId" type="id-ne"><description>secondary sequenced ID</description></field>
         <field name="description" type="description"></field>
-        <field name="amount" type="floating-point"></field>
+        <field name="amount" type="fixed-point"></field>
         <field name="amountUomId" type="id"></field>
         <prim-key field="exampleId"/>
         <prim-key field="exampleItemSeqId"/>

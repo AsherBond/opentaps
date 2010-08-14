@@ -175,7 +175,7 @@ under the License.
       <field name="valueField" type="name"></field>
       <field name="strValue" type="long-varchar"></field>
       <field name="numValue" type="numeric"></field>
-      <field name="dblValue" type="floating-point"></field>
+      <field name="dblValue" type="fixed-point"></field>
       <field name="objValue" type="blob"></field>
       <field name="isModified" type="indicator"></field>
       <prim-key field="activityVariableId"/>
@@ -275,7 +275,7 @@ under the License.
       <field name="valueField" type="name"></field>
       <field name="strValue" type="long-varchar"></field>
       <field name="numValue" type="numeric"></field>
-      <field name="dblValue" type="floating-point"></field>
+      <field name="dblValue" type="fixed-point"></field>
       <field name="objValue" type="blob"></field>
       <prim-key field="processVariableId"/>
     </entity>

@@ -218,9 +218,9 @@ under the License.
         title="Geographic Location">
         <field name="geoPointId" type="id-ne"></field>
         <field name="dataSourceId" type="id"></field>
-        <field name="latitude" type="floating-point" not-null="true"></field>
-        <field name="longitude" type="floating-point" not-null="true"></field>
-        <field name="elevation" type="floating-point"></field>
+        <field name="latitude" type="fixed-point" not-null="true"></field>
+        <field name="longitude" type="fixed-point" not-null="true"></field>
+        <field name="elevation" type="fixed-point"></field>
         <field name="elevationUomId" type="id"><description>We need an UOM for elevation (feet, meters, etc.)</description></field>
         <field name="information" type="comment"><description>To enter any related information</description></field>
         <prim-key field="geoPointId"/>
@@ -467,7 +467,7 @@ under the License.
             title="Unit Of Measure Conversion Type Entity">
       <field name="uomId" type="id-ne"></field>
       <field name="uomIdTo" type="id-ne"></field>
-      <field name="conversionFactor" type="floating-point"></field>
+      <field name="conversionFactor" type="fixed-point"></field>
       <field name="customMethodId" type="id-ne"></field>
       <field name="decimalScale" type="numeric"></field>
       <field name="roundingMode" type="id"></field>
@@ -490,7 +490,7 @@ under the License.
       <field name="uomIdTo" type="id-ne"></field>
       <field name="fromDate" type="date-time"></field>
       <field name="thruDate" type="date-time"></field>
-      <field name="conversionFactor" type="floating-point"></field>
+      <field name="conversionFactor" type="fixed-point"></field>
       <field name="customMethodId" type="id-ne"></field>
       <field name="decimalScale" type="numeric"></field>
       <field name="roundingMode" type="id"></field>

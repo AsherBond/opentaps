@@ -1360,7 +1360,7 @@ under the License.
       <field name="sequenceNum" type="numeric"/>
       <field name="amountBase" type="currency-amount"/>
       <field name="amountBaseUomId" type="id"/>
-      <field name="weightFactor" type="floating-point"/>
+      <field name="weightFactor" type="fixed-point"/>
       <field name="duration" type="numeric"/>
       <field name="durationUomId" type="id"/>
       <prim-key field="surveyQuestionId"/>
@@ -1449,7 +1449,7 @@ under the License.
       <field name="surveyMultiRespId" type="id-ne"><description>This is not part of the primary key, but should be populated so that the SurveyMultiRespColumn can be more easily looked up.</description></field>
       <field name="booleanResponse" type="indicator"></field>
       <field name="currencyResponse" type="currency-amount"></field>
-      <field name="floatResponse" type="floating-point"></field>
+      <field name="floatResponse" type="fixed-point"></field>
       <field name="numericResponse" type="numeric"></field>
       <field name="textResponse" type="very-long"></field>
       <field name="surveyOptionSeqId" type="id"></field>
@@ -1457,7 +1457,7 @@ under the License.
       <field name="answeredDate" type="date-time"></field>
       <field name="amountBase" type="currency-amount"/>
       <field name="amountBaseUomId" type="id"/>
-      <field name="weightFactor" type="floating-point"/>
+      <field name="weightFactor" type="fixed-point"/>
       <field name="duration" type="numeric"/>
       <field name="durationUomId" type="id"/>
       <field name="sequenceNum" type="numeric"/>

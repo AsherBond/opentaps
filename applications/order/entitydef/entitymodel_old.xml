@@ -76,8 +76,8 @@ under the License.
       <field name="orderItemSeqId" type="id-ne"></field>
       <field name="inventoryItemId" type="id-ne"></field>
       <field name="reserveOrderEnumId" type="id-ne"></field>
-      <field name="quantity" type="floating-point"></field>
-      <field name="quantityNotAvailable" type="floating-point"></field>
+      <field name="quantity" type="fixed-point"></field>
+      <field name="quantityNotAvailable" type="fixed-point"></field>
       <field name="reservedDatetime" type="date-time"></field>
       <field name="createdDatetime" type="date-time"></field>
       <field name="promisedDatetime" type="date-time"></field>

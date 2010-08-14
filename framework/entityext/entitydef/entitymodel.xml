@@ -80,7 +80,7 @@ under the License.
       <field name="maxRunningNoUpdateMillis" type="numeric"></field>
       <field name="targetServiceName" type="long-varchar"></field>
       <field name="targetDelegatorName" type="long-varchar"></field>
-      <field name="keepRemoveInfoHours" type="floating-point"></field>
+      <field name="keepRemoveInfoHours" type="fixed-point"></field>
       <field name="forPullOnly" type="indicator"></field>
       <field name="forPushOnly" type="indicator"></field>
       <prim-key field="entitySyncId"/>

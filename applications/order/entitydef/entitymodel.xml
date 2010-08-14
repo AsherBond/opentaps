@@ -100,7 +100,7 @@ under the License.
       </field>
       <!-- old fields, deprecated -->
         <field name="oldAmountPerQuantity" col-name="AMOUNT_PER_QUANTITY" type="currency-amount"></field>
-        <field name="oldPercentage" col-name="PERCENTAGE" type="floating-point"></field>
+        <field name="oldPercentage" col-name="PERCENTAGE" type="fixed-point"></field>
       <prim-key field="orderAdjustmentId"/>
       <relation type="one" fk-name="ORDER_ADJ_TYPE" rel-entity-name="OrderAdjustmentType">
         <key-map field-name="orderAdjustmentTypeId"/>
