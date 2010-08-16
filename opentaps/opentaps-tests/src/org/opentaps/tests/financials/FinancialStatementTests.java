@@ -138,10 +138,11 @@ public class FinancialStatementTests extends FinancialsTestCase {
 
         assertEquals("There should be no revenue account balances", new BigDecimal(((Map) results.get("revenueAccountBalances")).keySet().size()), BigDecimal.ZERO);
         assertEquals("There should be no expense account balances", new BigDecimal(((Map) results.get("expenseAccountBalances")).keySet().size()), BigDecimal.ZERO);
-        assertEquals("There should be no income account balances", new BigDecimal(((Map) results.get("incomeAccountBalances")).keySet().size()), BigDecimal.ZERO);
 
-        Map expectedOtherAccountBalances = UtilMisc.toMap("890000", new BigDecimal("0.0"));
-        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("otherAccountBalances")), expectedOtherAccountBalances);
+        Map expectedIncomeAccountBalances = UtilMisc.toMap("890000", BigDecimal.ZERO);
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("incomeAccountBalances")), expectedIncomeAccountBalances);
+        
+        assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("otherAccountBalances")).keySet().size()), BigDecimal.ZERO);
     }
 
     /**
@@ -150,6 +151,9 @@ public class FinancialStatementTests extends FinancialsTestCase {
      */
     @SuppressWarnings("unchecked")
     public void testComplexTrialBalanceForAsOfDate() throws Exception {
+
+        // TODO: Change it to test as of 7/1/09, then close and test again to verify revenue/expense moved to equities and net income
+        
         Timestamp asOfDate = UtilDateTime.toTimestamp(7, 1, 2009, 0, 0, 0);
         Map<String, Object> params = UtilMisc.toMap("organizationPartyId", trialBalanceOrganizationPartyId, "asOfDate", asOfDate, "glFiscalTypeId", "ACTUAL", "userLogin", admin);
         Map<String, Object> results = dispatcher.runSync("getTrialBalanceForDate", params);
@@ -185,17 +189,13 @@ public class FinancialStatementTests extends FinancialsTestCase {
         Map<String, BigDecimal> expectedEquityAccountBalances = UtilMisc.toMap("340000", new BigDecimal("10000.00"), "341000", new BigDecimal("300000.00"), "336000", new BigDecimal("99174.22"), "334000", new BigDecimal("-1000"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("equityAccountBalances")), expectedEquityAccountBalances);
 
-        Map<String, BigDecimal> expectedRevenueAccountBalances = UtilMisc.toMap("400000", new BigDecimal("374000.00"), "408000", new BigDecimal("42000.00"));
-        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("revenueAccountBalances")), expectedRevenueAccountBalances);
+        assertEquals("There should be no revenue account balances", new BigDecimal(((Map) results.get("revenueAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no expense account balances", new BigDecimal(((Map) results.get("expenseAccountBalances")).keySet().size()), BigDecimal.ZERO);
 
-        // this will verify the listed gl accounts of them
-        Map<String, BigDecimal> expectedExpenseAccountBalances = UtilMisc.toMap("500000", new BigDecimal("157000.00"), "510000", new BigDecimal("24625.78"), "601000", new BigDecimal("46300.00"), "611000", new BigDecimal("24000"), "675000", new BigDecimal("12500"), "787000", new BigDecimal("2500.0"));
-        expectedExpenseAccountBalances.put("901000", new BigDecimal("10000.0"));
-        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("expenseAccountBalances")), expectedExpenseAccountBalances);
-
-        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("incomeAccountBalances")), new HashMap<GenericValue, BigDecimal>());
-        Map<String, BigDecimal> expectedOtherAccountBalances = UtilMisc.toMap("890000", new BigDecimal("99174.22"));
-        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("otherAccountBalances")), expectedOtherAccountBalances);
+        Map expectedIncomeAccountBalances = UtilMisc.toMap("890000", BigDecimal.ZERO);
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("incomeAccountBalances")), expectedIncomeAccountBalances);
+        
+        assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("otherAccountBalances")).keySet().size()), BigDecimal.ZERO);
     }
 
     /**
