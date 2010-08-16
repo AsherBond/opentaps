@@ -239,7 +239,6 @@
                 <set field="listSortTarget" value="viewLead"/>
                 <set field="findActivitiesKey" value="partyId"/>  <!-- we want activities based on the partyId parameter -->
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkPartyNoteSecurity.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
                 <!-- data for the various subsections -->
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/leads/viewLead.bsh"/>

@@ -33,7 +33,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
-import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
 import org.opentaps.common.event.AjaxEvents;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.infrastructure.Infrastructure;
@@ -47,18 +46,6 @@ public final class NoteEvents {
     private NoteEvents() { }
 
     private static final String MODULE = NoteEvents.class.getName();
-
-    private static String getPermission(String modulePermission) {
-        if ("CRMSFA_LEADS".equals(modulePermission)) {
-            return "CRMSFA_LEAD";
-        } else if ("CRMSFA_ACCOUNT".equals(modulePermission)) {
-            return "CRMSFA_ACCOUNT";
-        } else if ("CRMSFA_CONTACT".equals(modulePermission)) {
-            return "CRMSFA_CONTACT";
-        }
-
-        return "";
-    }
 
     /**
      * Saves a note.
@@ -100,38 +87,11 @@ public final class NoteEvents {
         resp.put("counter", "-1");
         resp.put("text", "Error");
 
-        if (UtilValidate.isNotEmpty(partyId)) {
-            // make sure userLogin has permission (module, operation) for this party
-            String modulePermission = getPermission(request.getParameter("modulePermission"));
-            if (!CrmsfaSecurity.hasPartyRelationSecurity(security, modulePermission, "_UPDATE", userLogin, partyId)) {
-                resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
-                return AjaxEvents.doJSONResponse(response, resp);
-            }
-        } else if (UtilValidate.isNotEmpty(custRequestId)) {
-            // make sure userLogin has permission (module, operation) for this case
-            if (!CrmsfaSecurity.hasCasePermission(security, "_UPDATE", userLogin, custRequestId)) {
-                resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
-                return AjaxEvents.doJSONResponse(response, resp);
-            }
-        } else {
-            // this error should never happen except due to programming error on the webpage
-            resp.put("text", UtilMessage.expandLabel("OpentapsError_EditNoteFail", locale));
-            return AjaxEvents.doJSONResponse(response, resp);
-        }
-
         try {
             // get the note entity
             GenericValue note = delegator.findByPrimaryKey("NoteData", UtilMisc.toMap("noteId", noteId));
 
-            // if true, throw a permission denied error if the current user is not also the owner of the note and user does not have the CRMSFA_NOTE_OVRD_OWN_ONLY permission on the related party
-            boolean noteOwnerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.NOTE_OWNER_CHANGE_ONLY);
-            if (noteOwnerChangeOnly && UtilValidate.isNotEmpty(partyId)) {
-                if (CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_NOTE_OVRD_OWN_ONLY", "", userLogin, partyId)) {
-                    noteOwnerChangeOnly = false;
-                }
-            }
-
-            if (noteOwnerChangeOnly && (userLogin == null || !userLogin.getString("partyId").equals(note.getString("noteParty")))) {
+            if (!CrmsfaSecurity.hasNotePermission(security, request.getParameter("modulePermission"), "_UPDATE", userLogin, note, partyId, custRequestId)) {
                 resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
                 return AjaxEvents.doJSONResponse(response, resp);
             }
@@ -192,39 +152,23 @@ public final class NoteEvents {
         Map<String, String> conditions;
         String relationEntityName;
 
-        if (UtilValidate.isNotEmpty(partyId)) {
-            // make sure userLogin has permission (module, operation) for this party
-            String modulePermission = getPermission(request.getParameter("modulePermission"));
-            if (!CrmsfaSecurity.hasPartyRelationSecurity(security, modulePermission, "_UPDATE", userLogin, partyId)) {
-                resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
-                return AjaxEvents.doJSONResponse(response, resp);
-            }
-            // set conditions
-            conditions = UtilMisc.toMap("noteId", noteId, "partyId", partyId);
-            relationEntityName = "PartyNote";
-        } else if (UtilValidate.isNotEmpty(custRequestId)) {
-            // make sure userLogin has permission (module, operation) for this case
-            if (!CrmsfaSecurity.hasCasePermission(security, "_UPDATE", userLogin, custRequestId)) {
-                resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
-                return AjaxEvents.doJSONResponse(response, resp);
-            }
-            // set conditions
-            conditions = UtilMisc.toMap("noteId", noteId, "custRequestId", custRequestId);
-            relationEntityName = "CustRequestNote";
-        } else {
-            // this error should never happen except due to programming error on the webpage
-            resp.put("text", UtilMessage.expandLabel("OpentapsError_DeleteNoteFail", locale));
-            return AjaxEvents.doJSONResponse(response, resp);
-        }
-
         try {
             // get the note entity
             GenericValue note = delegator.findByPrimaryKey("NoteData", UtilMisc.toMap("noteId", noteId));
 
-            // if true, throw a permission denied error if the current user is not also the owner of the note
-            boolean noteOwnerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.NOTE_OWNER_CHANGE_ONLY);
-            if (noteOwnerChangeOnly && (userLogin == null || !userLogin.getString("partyId").equals(note.getString("noteParty")))) {
+            if (!CrmsfaSecurity.hasNotePermission(security, request.getParameter("modulePermission"), "_DELETE", userLogin, note, partyId, custRequestId)) {
                 resp.put("text", UtilMessage.expandLabel("CrmErrorPermissionDenied", locale));
+                return AjaxEvents.doJSONResponse(response, resp);
+            }
+
+            if (UtilValidate.isNotEmpty(partyId)) {
+                conditions = UtilMisc.toMap("noteId", noteId, "partyId", partyId);
+                relationEntityName = "PartyNote";
+            } else if (UtilValidate.isNotEmpty(custRequestId)) {
+                conditions = UtilMisc.toMap("noteId", noteId, "custRequestId", custRequestId);
+                relationEntityName = "CustRequestNote";
+            } else {
+                resp.put("text", UtilMessage.expandLabel("OpentapsError_DeleteNoteFail", locale));
                 return AjaxEvents.doJSONResponse(response, resp);
             }
 

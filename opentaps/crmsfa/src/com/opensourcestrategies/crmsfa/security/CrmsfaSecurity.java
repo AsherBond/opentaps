@@ -61,14 +61,15 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.GenericDispatcher;
+import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.constants.SecurityPermissionConstants;
 import org.opentaps.base.entities.UserLogin;
 import org.opentaps.base.entities.WorkEffortPartyAssignment;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
-import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
 
 /**
  * Special security methods for the CRM/SFA Application.
@@ -317,7 +318,7 @@ public final class CrmsfaSecurity {
                     boolean bypassOwnerOnly = false;
                     for (WorkEffortPartyAssignment assignment : partiesAssignments) {
                         // note: do use "CRMSFA_ACT", "_OVRD_OWN_ONLY" as we want an exact match and not be allowed with CRMSFA_ACT_MANAGER
-                        if (hasPartyRelationSecurity(security, "CRMSFA_ACT_OVRD_OWN_ONLY", "", userLogin, assignment.getPartyId())) {
+                        if (hasPartyRelationSecurity(security, SecurityPermissionConstants.CRMSFA_ACT_OVRD_OWN_ONLY, "", userLogin, assignment.getPartyId())) {
                             bypassOwnerOnly = true;
                             break;
                         }
@@ -601,6 +602,125 @@ public final class CrmsfaSecurity {
             Debug.logError(e, "Checked UserLogin [" + userLogin + "] for permission to perform [CRMSFA_CASE] + [" + securityOperation + "] on orderId = [" + orderId + "], but permission was denied due to exception: " + e.getMessage(), MODULE);
         }
         return false;
+    }
+
+    /**
+     * Checks if a UserLogin has permission to perform an operation on a Note.
+     *
+     * @param security a <code>Security</code> value
+     * @param modulePermission a <code>String</code> value
+     * @param securityOperation a <code>String</code> value
+     * @param userLogin a <code>GenericValue</code> value
+     * @param note a <code>GenericValue</code> value
+     * @param partyId a <code>String</code> value
+     * @param custRequestId a <code>String</code> value
+     * @return a <code>boolean</code> value
+     */
+    public static boolean hasNotePermission(Security security, String modulePermission, String securityOperation, GenericValue userLogin, GenericValue note, String partyId, String custRequestId) {
+
+        try {
+            GenericDelegator delegator = userLogin.getDelegator();
+            Infrastructure infrastructure = new Infrastructure(GenericDispatcher.getLocalDispatcher(null, delegator));
+
+            if (note == null) {
+                Debug.logError("Given Note was null", MODULE);
+                return false;
+            }
+
+            // the following applies to UPDATE and DELETE actions only, for the rest just allow
+            if ("_VIEW".equals(securityOperation)) {
+                return true;
+            }
+
+            String noteId = note.getString("noteId");
+            modulePermission = getModulePermission(modulePermission);
+
+            // can be a party Note or a case Note
+            if (UtilValidate.isNotEmpty(partyId)) {
+                // make sure userLogin has UPDATE permission for the party
+                if (!CrmsfaSecurity.hasPartyRelationSecurity(security, modulePermission, "_UPDATE", userLogin, partyId)) {
+                    Debug.logWarning("Checked UserLogin [" + userLogin + "] for permission to perform [" + modulePermission + "_UPDATE] on partyId = [" + partyId + "], but permission was denied.", MODULE);
+                    return false;
+                }
+            } else if (UtilValidate.isNotEmpty(custRequestId)) {
+                // make sure userLogin has UPDATE permission for the case
+                if (!CrmsfaSecurity.hasCasePermission(security, "_UPDATE", userLogin, custRequestId)) {
+                    Debug.logWarning("Checked UserLogin [" + userLogin + "] for permission to perform [" + modulePermission + "_UPDATE] on custRequestId = [" + custRequestId + "], but permission was denied.", MODULE);
+                    return false;
+                }
+            } else {
+                // this error should never happen except due to programming error
+                Debug.logError("Missing partyId or custRequestId in hasNotePermission.", MODULE);
+                return false;
+            }
+
+            // if true, throw a permission denied error if the current user is not also the owner of the note and user does not have the CRMSFA_NOTE_OVRD_OWN_ONLY permission on the related party
+            boolean noteOwnerChangeOnly = infrastructure.getConfigurationValueAsBoolean(OpentapsConfigurationTypeConstants.NOTE_OWNER_CHANGE_ONLY);
+            if (noteOwnerChangeOnly && UtilValidate.isNotEmpty(partyId)) {
+                if (CrmsfaSecurity.hasPartyRelationSecurity(security, SecurityPermissionConstants.CRMSFA_NOTE_OVRD_OWN_ONLY, "", userLogin, partyId)) {
+                    noteOwnerChangeOnly = false;
+                }
+            }
+
+            if (noteOwnerChangeOnly && (userLogin == null || !userLogin.getString("partyId").equals(note.getString("noteParty")))) {
+                Debug.logWarning("UserLogin [" + userLogin + "] is not the owner of note = [" + noteId + "], permission [" + modulePermission + securityOperation + "] denied.", MODULE);
+                return false;
+            }
+        } catch (GeneralException e) {
+            Debug.logError(e, "Checked UserLogin [" + userLogin + "] for permission [" + modulePermission + securityOperation + "] on note = [" + note + "], but permission was denied due to exception : " + e.getMessage(), MODULE);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if a UserLogin has permission to perform an operation on a Note.
+     *
+     * @param security a <code>Security</code> value
+     * @param modulePermission a <code>String</code> value
+     * @param securityOperation a <code>String</code> value
+     * @param userLogin a <code>GenericValue</code> value
+     * @param noteId a <code>String</code> value
+     * @param partyId a <code>String</code> value
+     * @param custRequestId a <code>String</code> value
+     * @return a <code>boolean</code> value
+     */
+    public static boolean hasNotePermission(Security security, String modulePermission, String securityOperation, GenericValue userLogin, String noteId, String partyId, String custRequestId) {
+        try {
+            GenericDelegator delegator = userLogin.getDelegator();
+            GenericValue note = delegator.findByPrimaryKeyCache("NoteData", UtilMisc.toMap("noteId", noteId));
+
+            if (note == null) {
+                Debug.logWarning("Note [" + noteId + "] cannot be found", MODULE);
+                return false;
+            }
+
+            return hasNotePermission(security, modulePermission, securityOperation, userLogin, note, partyId, custRequestId);
+
+        }  catch (GeneralException e) {
+            Debug.logError(e, "Checked UserLogin [" + userLogin + "] for permission [" + modulePermission + securityOperation + "] on note = [" + noteId + "], but permission was denied due to exception : " + e.getMessage(), MODULE);
+            return false;
+        }
+    }
+
+
+    /**
+     * Converts the main module into its corresponding permission module.
+     *
+     * @param modulePermission a <code>String</code> value
+     * @return a <code>String</code> value
+     */
+    public static String getModulePermission(String modulePermission) {
+        if ("CRMSFA_LEADS".equals(modulePermission)) {
+            return "CRMSFA_LEAD";
+        } else if ("CRMSFA_ACCOUNT".equals(modulePermission)) {
+            return "CRMSFA_ACCOUNT";
+        } else if ("CRMSFA_CONTACT".equals(modulePermission)) {
+            return "CRMSFA_CONTACT";
+        }
+
+        return "";
     }
 
 }
