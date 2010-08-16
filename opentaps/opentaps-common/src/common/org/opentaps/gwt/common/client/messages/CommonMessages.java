@@ -1396,6 +1396,8 @@ public interface CommonMessages extends Messages {
     String acctgNewGlJournalEntry();
     @DefaultMessage("Summary")
     String acctgPartyGlJournalSummary();
+    @DefaultMessage("Last Assigned To")
+    String activitiesLastAssignedTo();
     @DefaultMessage("Lead Activities Breakdown")
     String activitiesLeadBreakdown();
     @DefaultMessage("No Activity")
@@ -2910,6 +2912,12 @@ public interface CommonMessages extends Messages {
     String crmCreateTrackingCode();
     @DefaultMessage("Create Web URL")
     String crmCreateWebUrl();
+    @DefaultMessage("Key")
+    String crmCustomFieldName();
+    @DefaultMessage("Value")
+    String crmCustomFieldValue();
+    @DefaultMessage("Custom Fields")
+    String crmCustomFields();
     @DefaultMessage("Customer")
     String crmCustomer();
     @DefaultMessage("Customer Details")
@@ -3168,8 +3176,12 @@ public interface CommonMessages extends Messages {
     String crmError_ConfirmationEmailWithoutOrder();
     @DefaultMessage("Unable to find productStore for Order while sending confirmation email")
     String crmError_ConfirmationOrderWithoutProductStore();
+    @DefaultMessage("CrmError_ExistingSameCustomFieldAlready")
+    String crmError_ExistingSameCustomFieldAlready(String attrName, String partyId);
     @DefaultMessage("CVV must be 3 or 4 digits.")
     String crmError_InvalidCVV();
+    @DefaultMessage("CrmError_InvalidPartyRoleOnCustomFields")
+    String crmError_InvalidPartyRoleOnCustomFields(String partyId);
     @DefaultMessage("Please enter information in all the required address fields")
     String crmError_MissingAddressFields();
     @DefaultMessage("Billing address line 1 is required.")
@@ -3218,6 +3230,8 @@ public interface CommonMessages extends Messages {
     String crmError_MissingShippingToName();
     @DefaultMessage("CrmError_NoRoleForCreateParty")
     String crmError_NoRoleForCreateParty(String userPartyName, String requiredRoleTypes);
+    @DefaultMessage("CrmError_NotExistingTheCustomField")
+    String crmError_NotExistingTheCustomField(String attrName, String partyId);
     @DefaultMessage("CrmError_OrderHasNoValue")
     String crmError_OrderHasNoValue(String orderId);
     @DefaultMessage("CrmError_OrderItemRequiresSurveyInBulkAdd")
@@ -4038,6 +4052,10 @@ public interface CommonMessages extends Messages {
     String crmUpdateTeam();
     @DefaultMessage("Upload File")
     String crmUploadFile();
+    @DefaultMessage("Upload and Import")
+    String crmUploadFileAndImport();
+    @DefaultMessage("Upload Leads")
+    String crmUploadLeads();
     @DefaultMessage("URL Address")
     String crmUrlAddress();
     @DefaultMessage("User Login")
@@ -9458,6 +9476,8 @@ public interface CommonMessages extends Messages {
     String opentapsKeyboardShortcutsSpecificToPage();
     @DefaultMessage("OpentapsLastUpdatedAt")
     String opentapsLastUpdatedAt(String lastUpdatedStamp);
+    @DefaultMessage("Latest News")
+    String opentapsLatestNews();
     @DefaultMessage("Live help for this page on opentaps Wiki")
     String opentapsLiveHelp();
     @DefaultMessage("opentaps Login")
@@ -9630,6 +9650,8 @@ public interface CommonMessages extends Messages {
     String opentapsReReserve();
     @DefaultMessage("Re-reserve product")
     String opentapsReReserveProduct();
+    @DefaultMessage("Read all")
+    String opentapsReadMore();
     @DefaultMessage("Received")
     String opentapsReceived();
     @DefaultMessage("Reference")
@@ -9740,6 +9762,8 @@ public interface CommonMessages extends Messages {
     String opentapsUnset();
     @DefaultMessage("Edit Profile")
     String opentapsUpdateProfile();
+    @DefaultMessage("Uploading... Please Wait")
+    String opentapsUploadingPleaseWait();
     @DefaultMessage("User")
     String opentapsUser();
     @DefaultMessage("My Language")
