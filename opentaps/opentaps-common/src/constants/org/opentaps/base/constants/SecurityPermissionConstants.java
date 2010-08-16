@@ -162,6 +162,10 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_ACT_CLOSE = "CRMSFA_ACT_CLOSE";
     /** Create a new Activity: Event or Task.. */
     public static final String CRMSFA_ACT_CREATE = "CRMSFA_ACT_CREATE";
+    /** Delete an existing Activity: Event or Task.. */
+    public static final String CRMSFA_ACT_DELETE = "CRMSFA_ACT_DELETE";
+    /** Allows manipulation of activites even when not the owner of said activities (bypass the Owner only configurable restriction).. */
+    public static final String CRMSFA_ACT_OVRD_OWN_ONLY = "CRMSFA_ACT_OVRD_OWN_ONLY";
     /** Update an existing Activity: Event or Task.. */
     public static final String CRMSFA_ACT_UPDATE = "CRMSFA_ACT_UPDATE";
     /** View an Activity: Event or Task.. */
@@ -234,6 +238,8 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_LEAD_VIEW = "CRMSFA_LEAD_VIEW";
     /** Access to the Marketing function of the application. */
     public static final String CRMSFA_MKTG_VIEW = "CRMSFA_MKTG_VIEW";
+    /** Allows manipulation of notes even when not the owner of said notes (bypass the Owner only configurable restriction).. */
+    public static final String CRMSFA_NOTE_OVRD_OWN_ONLY = "CRMSFA_NOTE_OVRD_OWN_ONLY";
     /** Access to the Opportunities function of the application.. */
     public static final String CRMSFA_OPPS_VIEW = "CRMSFA_OPPS_VIEW";
     /** Create a new Opportunity.. */
