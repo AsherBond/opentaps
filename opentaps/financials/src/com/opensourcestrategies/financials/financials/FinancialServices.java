@@ -50,14 +50,21 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.constants.GlAccountTypeConstants;
+import org.opentaps.base.services.FindLastClosedDateService;
+import org.opentaps.base.services.GetBalanceSheetForDateService;
+import org.opentaps.base.services.GetIncomeStatementByDatesService;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.ledger.GeneralLedgerAccount;
+import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationDomainInterface;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.financials.domain.ledger.LedgerRepository;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
@@ -302,13 +309,19 @@ public final class FinancialServices {
         Timestamp asOfDate = (Timestamp) context.get("asOfDate");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String glFiscalTypeId = (String) context.get("glFiscalTypeId");
+        Map tags = UtilAccountingTags.getTagParameters(context);
+
         // default to generating "ACTUAL" balance sheets
         if (UtilValidate.isEmpty(glFiscalTypeId)) {
             glFiscalTypeId = "ACTUAL";
             context.put("glFiscalTypeId", glFiscalTypeId);
         }
-
+        User user = new User(userLogin);
+        Infrastructure infrastructure = new Infrastructure(dispatcher);
+        DomainsLoader dl = new DomainsLoader(infrastructure, user);
         try {
+            LedgerRepositoryInterface ledgerRepository = dl.loadDomainsDirectory().getLedgerDomain().getLedgerRepository();
+
             // for totals of balances, debits and credits
             Map<GenericValue, BigDecimal> accountBalances = new HashMap<GenericValue, BigDecimal>();
             Map<GenericValue, BigDecimal> accountDebits = new HashMap<GenericValue, BigDecimal>();
@@ -339,68 +352,167 @@ public final class FinancialServices {
             Map<GenericValue, BigDecimal> incomeAccountCredits = new HashMap<GenericValue, BigDecimal>();
             Map<GenericValue, BigDecimal> otherAccountCredits = new HashMap<GenericValue, BigDecimal>();
 
-            // for now, just get balances from a very early date.  Later we can modify to find last closed time period, get balances since then
-            Timestamp lastClosedDate = UtilDateTime.toTimestamp(1, 1, 1970, 0, 0, 0);
+            // try to get the ending date of the most recent accounting time period which has been closed
+            Timestamp lastClosedDate = UtilDateTime.toTimestamp(1, 1, 1970, 0, 0, 0);   // default if there never has been a period closing
+            FindLastClosedDateService findLastClosedDate = new FindLastClosedDateService();
+            findLastClosedDate.setInOrganizationPartyId(organizationPartyId);
+            findLastClosedDate.setUser(user);
+            findLastClosedDate.runSyncNoNewTransaction(infrastructure);
+            
+            // these are null unless there has been a closed time period before this
+            BigDecimal netIncomeSinceLastClosing = null;
+            GeneralLedgerAccount retainedEarningsGlAccount = ledgerRepository.getDefaultLedgerAccount(GlAccountTypeConstants.RETAINED_EARNINGS, organizationPartyId);;
+            GeneralLedgerAccount profitLossGlAccount = ledgerRepository.getDefaultLedgerAccount(GlAccountTypeConstants.PROFIT_LOSS_ACCOUNT, organizationPartyId);
+            
+            // balance sheet account balances as of the previous closed time period, null if there has been no previous closed time periods
+            Map balanceSheetAccountBalances = null;  
+            // if there has been a previous period closing, then we need both the income statement and balance sheet since the last closing
+            if (findLastClosedDate.getOutLastClosedDate() != null) {
+                lastClosedDate = findLastClosedDate.getOutLastClosedDate();
 
-            Map tags = UtilAccountingTags.getTagParameters(context);
-
+                GetIncomeStatementByDatesService getIncomeStatement = new GetIncomeStatementByDatesService();
+                getIncomeStatement.setInFromDate(lastClosedDate);
+                getIncomeStatement.setInThruDate(asOfDate);
+                getIncomeStatement.setInOrganizationPartyId(organizationPartyId);
+                getIncomeStatement.setInGlFiscalTypeId(glFiscalTypeId);
+                getIncomeStatement.setInTag1((String) tags.get("tag1")); 
+                getIncomeStatement.setInTag2((String) tags.get("tag2")); 
+                getIncomeStatement.setInTag3((String) tags.get("tag3")); 
+                getIncomeStatement.setInTag4((String) tags.get("tag4")); 
+                getIncomeStatement.setInTag5((String) tags.get("tag5")); 
+                getIncomeStatement.setInTag6((String) tags.get("tag6")); 
+                getIncomeStatement.setInTag7((String) tags.get("tag7")); 
+                getIncomeStatement.setInTag8((String) tags.get("tag8")); 
+                getIncomeStatement.setInTag9((String) tags.get("tag9")); 
+                getIncomeStatement.setInTag10((String) tags.get("tag10")); 
+                getIncomeStatement.setUser(user);
+                getIncomeStatement.runSyncNoNewTransaction(infrastructure);
+                
+                netIncomeSinceLastClosing = getIncomeStatement.getOutNetIncome();
+                
+                GetBalanceSheetForDateService getBalanceSheet = new GetBalanceSheetForDateService();
+                getBalanceSheet.setInAsOfDate(lastClosedDate);
+                getBalanceSheet.setInGlFiscalTypeId(glFiscalTypeId);
+                getBalanceSheet.setInOrganizationPartyId(organizationPartyId);
+                getBalanceSheet.setInTag1((String) tags.get("tag1")); 
+                getBalanceSheet.setInTag2((String) tags.get("tag2")); 
+                getBalanceSheet.setInTag3((String) tags.get("tag3")); 
+                getBalanceSheet.setInTag4((String) tags.get("tag4")); 
+                getBalanceSheet.setInTag5((String) tags.get("tag5")); 
+                getBalanceSheet.setInTag6((String) tags.get("tag6")); 
+                getBalanceSheet.setInTag7((String) tags.get("tag7")); 
+                getBalanceSheet.setInTag8((String) tags.get("tag8")); 
+                getBalanceSheet.setInTag9((String) tags.get("tag9")); 
+                getBalanceSheet.setInTag10((String) tags.get("tag10")); 
+                getBalanceSheet.setUser(user);
+                getBalanceSheet.runSyncNoNewTransaction(infrastructure);
+                
+                balanceSheetAccountBalances = getBalanceSheet.getOutAssetAccountBalances();
+                balanceSheetAccountBalances.putAll(getBalanceSheet.getOutLiabilityAccountBalances());
+                balanceSheetAccountBalances.putAll(getBalanceSheet.getOutEquityAccountBalances());
+            }
+            Debug.logInfo("Last closed date is [" + lastClosedDate + "] net income [" + netIncomeSinceLastClosing + "] profit loss account is [" + profitLossGlAccount.getGlAccountId() + "] and retained earnings account [" + retainedEarningsGlAccount.getGlAccountId() + "]", MODULE);
+            
             //  a little bit of a hack, using this method with a "null" for GL account class  causes it to return the sum of the transaction entries for all the GL accounts
             accountBalances = getAcctgTransAndEntriesForClassWithDetails(accountBalances, accountDebits, accountCredits, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, null, tags, userLogin, dispatcher);
+            
+            // if there are balance sheet balances from the last closed time period, then add them to the account balances we just got, thus merging the last closed balance sheet with the trial balance since then
+            if (balanceSheetAccountBalances != null) {
+                Set<GenericValue> balanceSheetGlAccounts = balanceSheetAccountBalances.keySet();
+                for (GenericValue glAccount: balanceSheetGlAccounts) {
+                    UtilCommon.addInMapOfBigDecimal(accountBalances, glAccount, (BigDecimal) balanceSheetAccountBalances.get(glAccount));
+                }
+            }
 
             //  now we sort them out into separate sections for assets, liabilities, equities, revenue, expense, income
+            // this is also where we add the net income since last time period closing to the retained earnings and profit loss accounts
             Set<GenericValue> glAccounts = accountBalances.keySet();
-            BigDecimal totalBalances = BigDecimal.ZERO;
+            BigDecimal netBalance = BigDecimal.ZERO;   // net of debit minus credit
             BigDecimal totalDebits = BigDecimal.ZERO;
             BigDecimal totalCredits = BigDecimal.ZERO;
+      
+            // we need to track if this has been done, and if not do it later manually
+            boolean addedNetIncomeSinceLastClosingToRetainedEarnings = false;
+            boolean addedNetIncomeSinceLastCLosingToProfitLoss = false;
+            
             for (GenericValue glAccount : glAccounts) {
-                BigDecimal balance = accountBalances.get(glAccount);
-                if (balance != null) {
-                    balance = accountBalances.get(glAccount);
-
-                    if (UtilAccounting.isDebitAccount(glAccount)) {
-                        totalDebits = totalDebits.add(balance);
-                        totalBalances = totalBalances.subtract(balance);
-                    } else {
-                        totalCredits = totalCredits.add(balance);
-                        totalBalances = totalBalances.add(balance);
+                BigDecimal balance = accountBalances.get(glAccount);              
+                String glAccountId = glAccount.getString("glAccountId");
+                
+                // add net income since last closing to the retained earnings and profit loss accounts
+                if (netIncomeSinceLastClosing != null) {
+                    if (glAccountId.equals(retainedEarningsGlAccount.getGlAccountId())) {
+                        balance = balance.add(netIncomeSinceLastClosing).setScale(decimals, rounding);
+                        addedNetIncomeSinceLastClosingToRetainedEarnings = true;
+                        Debug.logInfo("Adding retained earnings of [" + netIncomeSinceLastClosing + "] to GL account ["+ glAccountId + "] balance is now [" + balance + "]", MODULE);
                     }
-
+                    if (glAccountId.equals(profitLossGlAccount.getGlAccountId())) {
+                        balance = balance.add(netIncomeSinceLastClosing).setScale(decimals, rounding);
+                        addedNetIncomeSinceLastCLosingToProfitLoss = true;
+                        Debug.logInfo("Adding retained earnings of [" + netIncomeSinceLastClosing + "] to GL account ["+ glAccountId + "] balance is now [" + balance + "]", MODULE);
+                    }
                 }
 
-                BigDecimal debit = accountDebits.get(glAccount);
-                BigDecimal credit = accountCredits.get(glAccount);
+                // add to net balance and total debits and total credits
+                if (balance != null) {
+                    if (UtilAccounting.isDebitAccount(glAccount)) {
+                        totalDebits = totalDebits.add(balance);
+                        netBalance = netBalance.add(balance);
+                    } else {
+                        totalCredits = totalCredits.add(balance);
+                        netBalance = netBalance.subtract(balance);
+                    }
+                }
+
 
                 if (UtilAccounting.isAssetAccount(glAccount)) {
                     assetAccountBalances.put(glAccount, balance);
-                    assetAccountDebits.put(glAccount, debit);
-                    assetAccountCredits.put(glAccount, credit);
+                    assetAccountDebits.put(glAccount, balance);
                 } else if (UtilAccounting.isLiabilityAccount(glAccount)) {
                     liabilityAccountBalances.put(glAccount, balance);
-                    liabilityAccountDebits.put(glAccount, debit);
-                    liabilityAccountCredits.put(glAccount, credit);
+                    liabilityAccountCredits.put(glAccount, balance);
                 } else if (UtilAccounting.isEquityAccount(glAccount)) {
                     equityAccountBalances.put(glAccount, balance);
-                    equityAccountDebits.put(glAccount, debit);
-                    equityAccountCredits.put(glAccount, credit);
+                    equityAccountCredits.put(glAccount, balance);
                 } else if (UtilAccounting.isRevenueAccount(glAccount)) {
                     revenueAccountBalances.put(glAccount, balance);
-                    revenueAccountDebits.put(glAccount, debit);
-                    revenueAccountCredits.put(glAccount, credit);
+                    revenueAccountCredits.put(glAccount, balance);
                 } else if (UtilAccounting.isExpenseAccount(glAccount)) {
                     expenseAccountBalances.put(glAccount, balance);
-                    expenseAccountDebits.put(glAccount, debit);
-                    expenseAccountCredits.put(glAccount, credit);
+                    expenseAccountDebits.put(glAccount, balance);
                 } else if (UtilAccounting.isIncomeAccount(glAccount)) {
                     incomeAccountBalances.put(glAccount, balance);
-                    incomeAccountDebits.put(glAccount, debit);
-                    incomeAccountCredits.put(glAccount, credit);
+                    incomeAccountDebits.put(glAccount, balance);
                 } else {
-                    Debug.logWarning("Classification of GL account [" + glAccount.getString("glAccountId") + "] is unknown", MODULE);
+                    Debug.logWarning("Classification of GL account [" + glAccount.getString("glAccountId") + "] is unknown, putting balance [" + balance + "] under debit", MODULE);
                     otherAccountBalances.put(glAccount, balance);
-                    otherAccountDebits.put(glAccount, debit);
-                    otherAccountCredits.put(glAccount, credit);
+                    otherAccountDebits.put(glAccount, balance);
                 }
             }
+            
+            // now manually put in the retained earnings if that was not done already
+            // this assume that since there was no retained earnings from before, it should be zero
+            if ((lastClosedDate != null) && !addedNetIncomeSinceLastClosingToRetainedEarnings) { 
+                equityAccountBalances.put(LedgerRepository.genericValueFromEntity(retainedEarningsGlAccount), netIncomeSinceLastClosing);
+                equityAccountDebits.put(LedgerRepository.genericValueFromEntity(retainedEarningsGlAccount), netIncomeSinceLastClosing);
+                equityAccountCredits.put(LedgerRepository.genericValueFromEntity(retainedEarningsGlAccount), netIncomeSinceLastClosing);
+                totalCredits.add(netIncomeSinceLastClosing);
+                netBalance.subtract(netIncomeSinceLastClosing);
+                Debug.logInfo("Did not find retained earnings account, so put [" + netIncomeSinceLastClosing + "] for [" + retainedEarningsGlAccount.getGlAccountId() + "]", MODULE);
+            }
+            // do the same for profit loss.  this should be OK -- an offsetting amount should've been added to retained earnings or put there right above
+            if ((lastClosedDate != null) && !addedNetIncomeSinceLastCLosingToProfitLoss) { 
+                incomeAccountBalances.put(LedgerRepository.genericValueFromEntity(profitLossGlAccount), netIncomeSinceLastClosing);
+                incomeAccountDebits.put(LedgerRepository.genericValueFromEntity(profitLossGlAccount), netIncomeSinceLastClosing);
+                incomeAccountCredits.put(LedgerRepository.genericValueFromEntity(profitLossGlAccount), netIncomeSinceLastClosing);
+                totalDebits.add(netIncomeSinceLastClosing);
+                netBalance.add(netIncomeSinceLastClosing);
+                Debug.logInfo("Did not find profit loss account, so put [" + netIncomeSinceLastClosing + "] for [" + profitLossGlAccount.getGlAccountId() + "]", MODULE);
+            }
+            
+            // calculate net income from the last closed date
+            
+            // add it to the retained earnings account and profit and loss account
 
             Map<String, Object> results = ServiceUtil.returnSuccess();
             results.put("assetAccountBalances", assetAccountBalances);
@@ -427,15 +539,15 @@ public final class FinancialServices {
             results.put("incomeAccountDebits", incomeAccountDebits);
             results.put("otherAccountDebits", otherAccountDebits);
 
-            results.put("totalBalances", totalBalances);
+            results.put("totalBalances", netBalance);
             results.put("totalDebits", totalDebits);
             results.put("totalCredits", totalCredits);
 
-            Debug.logInfo("getTrialBalanceForDate totals => balance = " + totalBalances + ", credits = " + totalCredits + ", debits = " + totalDebits + ", calculated balance = " + totalCredits.subtract(totalDebits), MODULE);
+            Debug.logInfo("getTrialBalanceForDate totals => balance = " + netBalance + ", credits = " + totalCredits + ", debits = " + totalDebits + ", calculated balance = " + totalCredits.subtract(totalDebits), MODULE);
 
             return results;
 
-        } catch (GenericEntityException ex) {
+        } catch (GeneralException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         }
     }
