@@ -625,7 +625,7 @@ under the License.
             <arg value="-ant"/>
         </java>
     </target>
-    <target name="run-single-test" description="Run a single test, eg: ant run-single-test-suite -Dtest.component=opentaps-tests -Dtest.case=financials-tests">
+    <target name="run-single-test" description="Run a single test, eg: ant run-single-test -Dtest.component=opentaps-tests -Dtest.case=financials-tests">
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
