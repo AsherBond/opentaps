@@ -213,6 +213,7 @@ public class FinancialStatementTests extends FinancialsTestCase {
 
     /**
      * Test trial balance service with accounting tags.
+     * NOTE: This trial balance does not actually balance in net debits and credits because of the way the tags are set up.
      * @throws Exception if an error occurs
      */
     @SuppressWarnings("unchecked")
@@ -226,12 +227,14 @@ public class FinancialStatementTests extends FinancialsTestCase {
 
         // Because assertMapCorrect  will only check the values for the keys in the expected Map,  if we pass an empty map,  it will not check anything.
         //  So, to check that there are no accounts, we need to check the size of the key set
-        assertEquals("There should be no asset account balances", new BigDecimal(((Map) results.get("equityAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no asset account balances", new BigDecimal(((Map) results.get("assetAccountBalances")).keySet().size()), BigDecimal.ZERO);
         assertEquals("There should be no liability account balances", new BigDecimal(((Map) results.get("liabilityAccountBalances")).keySet().size()), BigDecimal.ZERO);
-        assertEquals("There should be no equity account balances", new BigDecimal(((Map) results.get("equityAccountBalances")).keySet().size()), BigDecimal.ZERO);
         assertEquals("There should be no revenue account balances", new BigDecimal(((Map) results.get("revenueAccountBalances")).keySet().size()), BigDecimal.ZERO);
-        assertEquals("There should be no income account balances", new BigDecimal(((Map) results.get("incomeAccountBalances")).keySet().size()), BigDecimal.ZERO);
         assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("otherAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("equityAccountBalances")), UtilMisc.toMap("336000", new BigDecimal("-59490.00")));
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("incomeAccountBalances")), UtilMisc.toMap("890000", new BigDecimal("-59490.00")));
+        
         Map<String, BigDecimal> expectedExpenseAccountBalances = UtilMisc.toMap("601000", new BigDecimal("50000.00"), "604100", new BigDecimal("3000.00"), "605100", new BigDecimal("5000.00"), "608000", new BigDecimal("1200.0"), "680000", new BigDecimal("290.00"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("expenseAccountBalances")), expectedExpenseAccountBalances);
 
