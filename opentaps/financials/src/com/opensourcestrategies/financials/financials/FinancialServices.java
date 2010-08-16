@@ -356,6 +356,7 @@ public final class FinancialServices {
             Timestamp lastClosedDate = UtilDateTime.toTimestamp(1, 1, 1970, 0, 0, 0);   // default if there never has been a period closing
             FindLastClosedDateService findLastClosedDate = new FindLastClosedDateService();
             findLastClosedDate.setInOrganizationPartyId(organizationPartyId);
+            findLastClosedDate.setInFindDate(asOfDate);
             findLastClosedDate.setUser(user);
             findLastClosedDate.runSyncNoNewTransaction(infrastructure);
             
