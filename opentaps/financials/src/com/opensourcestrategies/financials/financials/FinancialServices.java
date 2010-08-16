@@ -497,8 +497,8 @@ public final class FinancialServices {
                 equityAccountBalances.put(LedgerRepository.genericValueFromEntity(retainedEarningsGlAccount), netIncomeSinceLastClosing);
                 equityAccountDebits.put(LedgerRepository.genericValueFromEntity(retainedEarningsGlAccount), netIncomeSinceLastClosing);
                 equityAccountCredits.put(LedgerRepository.genericValueFromEntity(retainedEarningsGlAccount), netIncomeSinceLastClosing);
-                totalCredits.add(netIncomeSinceLastClosing);
-                netBalance.subtract(netIncomeSinceLastClosing);
+                totalCredits = totalCredits.add(netIncomeSinceLastClosing);
+                netBalance = netBalance.subtract(netIncomeSinceLastClosing);
                 Debug.logInfo("Did not find retained earnings account, so put [" + netIncomeSinceLastClosing + "] for [" + retainedEarningsGlAccount.getGlAccountId() + "]", MODULE);
             }
             // do the same for profit loss.  this should be OK -- an offsetting amount should've been added to retained earnings or put there right above
@@ -506,8 +506,8 @@ public final class FinancialServices {
                 incomeAccountBalances.put(LedgerRepository.genericValueFromEntity(profitLossGlAccount), netIncomeSinceLastClosing);
                 incomeAccountDebits.put(LedgerRepository.genericValueFromEntity(profitLossGlAccount), netIncomeSinceLastClosing);
                 incomeAccountCredits.put(LedgerRepository.genericValueFromEntity(profitLossGlAccount), netIncomeSinceLastClosing);
-                totalDebits.add(netIncomeSinceLastClosing);
-                netBalance.add(netIncomeSinceLastClosing);
+                totalDebits = totalDebits.add(netIncomeSinceLastClosing);
+                netBalance = netBalance.add(netIncomeSinceLastClosing);
                 Debug.logInfo("Did not find profit loss account, so put [" + netIncomeSinceLastClosing + "] for [" + profitLossGlAccount.getGlAccountId() + "]", MODULE);
             }
             
