@@ -121,7 +121,7 @@ public abstract class EntityLookupService {
      */
     protected EntityLookupService(InputProviderInterface provider, List<String> fields) {
         this.provider = provider;
-        this.fields = fields;
+        this.fields = new ArrayList<String>(fields);
 
         // special parameter to force disabling the pager and return all records
         if ("Y".equalsIgnoreCase(provider.getParameter(UtilLookup.PARAM_NO_PAGER))) {
@@ -330,6 +330,14 @@ public abstract class EntityLookupService {
      */
     public List<String> getFields() {
         return fields;
+    }
+
+    /**
+     * Adds a field to be retrieved from the database for the given entity.
+     * @param field a <code>String</code> value
+     */
+    public void addField(String field) {
+        fields.add(field);
     }
 
     /**
