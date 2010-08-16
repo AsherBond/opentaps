@@ -294,12 +294,6 @@ public final class CrmsfaSecurity {
                 return false;
             }
 
-            // check for closed activities for actions that are not _VIEW
-            if (UtilActivity.activityIsInactive(workEffort) && !"_VIEW".equals(securityOperation)) {
-                Debug.logWarning("User [" + userLogin.getString("userLoginId") + "] cannot attempt operation [" + securityOperation + "] on activity [" + workEffortId + "] whose status is [" + workEffort.getString("currentStatusId") + "]", MODULE);
-                return false;
-            }
-
             DomainsLoader dl = new DomainsLoader(infrastructure, new User(userLogin));
             PartyRepositoryInterface repository = dl.getDomainsDirectory().getPartyDomain().getPartyRepository();
 
