@@ -18,6 +18,7 @@
 package org.opentaps.gwt.activities.client.leads.form;
 
 import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 
 /**
  * An extended list of Leads that adds filters for activity cutoff and category (Recent / Old / No Activity).
@@ -47,6 +48,17 @@ public class LeadListView extends org.opentaps.gwt.common.client.listviews.LeadL
         originalTitle = getTitle();
         setTitleAccordingToCategories();
         init();
+    }
+
+    @Override
+    public void init() {
+
+        init(PartyLookupConfiguration.URL_FIND_LEADS, "/crmsfa/control/viewLead?partyId={0}", UtilUi.MSG.crmLeadId(), new String[]{
+                PartyLookupConfiguration.INOUT_FIRST_NAME, UtilUi.MSG.partyFirstName(),
+                PartyLookupConfiguration.INOUT_LAST_NAME, UtilUi.MSG.partyLastName(),
+                PartyLookupConfiguration.INOUT_COMPANY_NAME, UtilUi.MSG.crmCompanyName(),
+                PartyLookupConfiguration.OUT_PARTY_STATUS_DESCRIPTION, UtilUi.MSG.commonStatus()
+            });
     }
 
     private void setTitleAccordingToCategories() {

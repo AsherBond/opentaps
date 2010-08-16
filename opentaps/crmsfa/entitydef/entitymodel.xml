@@ -115,6 +115,7 @@
                  title="PartySummary related from the fromPartyId of a PartyRelationship, plus contact info and party classification group">
         <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
         <member-entity entity-alias="P" entity-name="Party"/>
+        <member-entity entity-alias="STATUS" entity-name="StatusItem"/>
         <member-entity entity-alias="PG" entity-name="PartyGroup"/>
         <member-entity entity-alias="PER" entity-name="Person"/>
         <member-entity entity-alias="PSD" entity-name="PartySupplementalData"/>
@@ -189,8 +190,12 @@
         <alias entity-alias="CTRYG" name="primaryCountryAbbreviation" field="abbreviation"/>
         <alias entity-alias="STTG" name="primaryStateProvinceAbbreviation" field="abbreviation"/>
         <alias entity-alias="CTYG" name="primaryCountyAbbreviation" field="abbreviation"/>
+        <alias entity-alias="STATUS" name="statusDescription" field="description"/>
         <view-link entity-alias="PR" rel-entity-alias="P">
             <key-map field-name="partyIdFrom" rel-field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="STATUS" rel-optional="true">
+            <key-map field-name="statusId"/>
         </view-link>
         <view-link entity-alias="P" rel-entity-alias="PG" rel-optional="true">
             <key-map field-name="partyId"/>
