@@ -57,7 +57,8 @@ public class LeadListView extends org.opentaps.gwt.common.client.listviews.LeadL
                 PartyLookupConfiguration.INOUT_FIRST_NAME, UtilUi.MSG.partyFirstName(),
                 PartyLookupConfiguration.INOUT_LAST_NAME, UtilUi.MSG.partyLastName(),
                 PartyLookupConfiguration.INOUT_COMPANY_NAME, UtilUi.MSG.crmCompanyName(),
-                PartyLookupConfiguration.OUT_PARTY_STATUS_DESCRIPTION, UtilUi.MSG.commonStatus()
+                PartyLookupConfiguration.OUT_PARTY_STATUS_DESCRIPTION, UtilUi.MSG.commonStatus(),
+                org.opentaps.gwt.activities.client.leads.lookup.configuration.PartyLookupConfiguration.OUT_LAST_ASSIGNED_REP_NAME, "Last Assigned To",
             });
     }
 

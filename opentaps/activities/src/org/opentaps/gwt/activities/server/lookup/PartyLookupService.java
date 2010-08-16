@@ -17,8 +17,11 @@
 
 package org.opentaps.gwt.activities.server.lookup;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,8 +31,12 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.OpentapsConfigurationTypeConstants;
+import org.opentaps.base.constants.PartyRelationshipTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
+import org.opentaps.base.entities.PartyRelationshipAndDetail;
+import org.opentaps.common.util.ConvertMapToString;
+import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
@@ -138,6 +145,41 @@ public class PartyLookupService extends org.opentaps.gwt.common.server.lookup.Pa
                     leadsCond,
                     RoleTypeConstants.PROSPECT);
 
+            // find the last assigned sales reps for each lead
+            Map<String, String> lastAssignedReps = new HashMap<String, String>();
+            for (PartyFromByRelnAndContactInfoAndPartyClassification lead : leads) {
+                Debug.logInfo("For lead : " + lead.getPartyId(), MODULE);
+                List<PartyRelationshipAndDetail> rels = getRepository().findList(PartyRelationshipAndDetail.class,
+                                                  EntityCondition.makeCondition(
+                                                        EntityCondition.makeCondition(PartyRelationshipAndDetail.Fields.partyIdFrom.name(), lead.getPartyId()),
+                                                        EntityCondition.makeCondition(PartyRelationshipAndDetail.Fields.partyRelationshipTypeId.name(), PartyRelationshipTypeConstants.ASSIGNED_TO)),
+                                                  Arrays.asList(PartyRelationshipAndDetail.Fields.partyIdTo.name(),
+                                                                PartyRelationshipAndDetail.Fields.fromDate.name()),
+                                                  Arrays.asList(PartyRelationshipAndDetail.Fields.fromDate.desc()));
+                PartyRelationshipAndDetail rel = Entity.getFirst(rels);
+                if (rel != null) {
+                    StringBuilder name = new StringBuilder();
+                    if (rel.getGroupName() != null) {
+                        name.append(rel.getGroupName()).append(" ");
+                    }
+                    if (rel.getFirstName() != null) {
+                        name.append(rel.getFirstName()).append(" ");
+                    }
+                    if (rel.getLastName() != null) {
+                        name.append(rel.getLastName()).append(" ");
+                    }
+                    name.append("(").append(rel.getPartyIdTo()).append(")");
+
+                    lastAssignedReps.put(lead.getPartyId(), name.toString());
+                    Debug.logInfo("For lead : " + lead.getPartyId() + " got lastAssignedRep " + name.toString(), MODULE);
+                }
+            }
+
+            // keep rules for calculated fields
+            Map<String, ConvertMapToString> calcField = new HashMap<String, ConvertMapToString>();
+            calcField.put(org.opentaps.gwt.activities.client.leads.lookup.configuration.PartyLookupConfiguration.OUT_LAST_ASSIGNED_REP_NAME, new LastAssignedSalesRep(lastAssignedReps));
+            makeCalculatedField(calcField);
+
             return leads;
 
         } catch (RepositoryException e) {
@@ -149,4 +191,19 @@ public class PartyLookupService extends org.opentaps.gwt.common.server.lookup.Pa
         }
     }
 
+
+    /** To insert the last assigned sales rep info. */
+    static class LastAssignedSalesRep extends ConvertMapToString {
+        private Map<String, String> map;
+        public LastAssignedSalesRep(Map<String, String> map) {
+            this.map = map;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public String convert(Map<String, ?> value) {
+            String partyId = (String) value.get(PartyLookupConfiguration.INOUT_PARTY_ID);
+            return map.get(partyId);
+        }
+    }
 }
