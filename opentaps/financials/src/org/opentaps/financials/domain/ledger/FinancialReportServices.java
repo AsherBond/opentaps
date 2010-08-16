@@ -82,6 +82,12 @@ public class FinancialReportServices extends DomainService implements FinancialR
 
             // look through transaction posted entries
             for (AcctgTransAndEntries trans : transactions) {
+
+                // skip some transaction types
+                if ("PERIOD_CLOSING".equals(trans.getAcctgTransTypeId())) {
+                    continue;
+                }
+
                 GlAccountTransEntryFact fact = new GlAccountTransEntryFact();
 
                 FiscalType fiscalType = null;
