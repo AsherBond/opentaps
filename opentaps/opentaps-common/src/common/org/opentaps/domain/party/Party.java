@@ -45,6 +45,7 @@ public class Party extends org.opentaps.base.entities.Party {
     private PartySummaryCRMView completeView;
     private List<PaymentMethod> paymentMethods;
     private List<PostalAddress> shippingAddresses;
+    private List<PostalAddress> billingAddresses;
     private List<TelecomNumber> phoneNumbers;
     private List<ContactMech> emailAddresses;
 
@@ -395,6 +396,18 @@ public class Party extends org.opentaps.base.entities.Party {
             shippingAddresses = getRepository().getPostalAddresses(this, ContactPurpose.SHIPPING_ADDRESS);
         }
         return shippingAddresses;
+    }
+
+    /**
+     * Gets the list of <code>PostalAddress</code> of this party that can be used as billing address.
+     * @return the list of billing <code>PostalAddress</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<PostalAddress> getBillingAddresses() throws RepositoryException {
+        if (billingAddresses == null) {
+            billingAddresses = getRepository().getPostalAddresses(this, ContactPurpose.BILLING_ADDRESS);
+        }
+        return billingAddresses;
     }
 
     /**
