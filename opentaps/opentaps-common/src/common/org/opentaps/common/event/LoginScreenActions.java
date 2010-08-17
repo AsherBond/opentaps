@@ -19,6 +19,7 @@ package org.opentaps.common.event;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 import javolution.util.FastList;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
@@ -84,6 +86,9 @@ public class LoginScreenActions {
                 ac.put("newsUrl", NEWS_URL);
             }
             
+        } catch (UnknownHostException e) {
+            // we cannot connect the internet, so just ignore the exception
+            Debug.logError(e, MODULE);
         } catch (MalformedURLException e) {
             throw new GeneralException(e);
         } catch (IOException e) {
