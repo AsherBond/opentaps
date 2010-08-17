@@ -38,6 +38,22 @@ under the License.
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if order?has_content>
+
+  <script type="text/javascript">
+  /*<![CDATA[*/
+  function autoOverridePriceIfValuePresent() {
+    var priceInput = document.getElementById("appendOrderItemPriceInput");
+    var overrideInput = document.getElementById("appendOrderItemPriceOverrideInput");
+    var value = priceInput.value;
+    if (value && value.trim() != "") {
+      overrideInput.checked = true;
+    } else {
+      overrideInput.checked = false;
+   }
+  }
+  /*]]>*/
+  </script>
+
   <table border="0" width="100%" cellspacing="0" cellpadding="0" class="boxoutside">
     <tr>
       <td width="100%">
@@ -83,8 +99,8 @@ under the License.
                   <tr>
                     <@displayTitleCell title=uiLabelMap.OrderPrice />
                     <td>
-                      <@inputText name="basePrice" size=6 />
-                      <input type="checkbox" name="overridePrice" value="Y" checked="checked"/>
+                      <@inputText name="basePrice" size=6 onChange="javascript:autoOverridePriceIfValuePresent()" id="appendOrderItemPriceInput"/>
+                      <input type="checkbox" name="overridePrice" value="Y" id="appendOrderItemPriceOverrideInput" onClick="javascript:autoOverridePriceIfValuePresent()"/>
                       <@display text=uiLabelMap.OrderOverridePrice />
                     </td>
                   </tr>
