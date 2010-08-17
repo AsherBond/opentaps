@@ -2966,6 +2966,61 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         </response>
         <response name="error" type="view" value="viewLead"/>
     </request-map> 
+    
+    <request-map uri="createAccountCustomField">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.createPartyAttribute"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="view" value="viewAccount"/>
+    </request-map>   
+    
+    <request-map uri="updateAccountCustomField">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.updatePartyAttribute"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="view" value="viewAccount"/>
+    </request-map>      
+
+    <request-map uri="removeAccountCustomField">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.removePartyAttribute"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="view" value="viewAccount"/>
+    </request-map> 
+    
+    <request-map uri="createContactCustomField">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.createPartyAttribute"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="view" value="viewContact"/>
+    </request-map>   
+    
+    <request-map uri="updateContactCustomField">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.updatePartyAttribute"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="view" value="viewContact"/>
+    </request-map>      
+
+    <request-map uri="removeContactCustomField">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.removePartyAttribute"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="view" value="viewContact"/>
+    </request-map>  
+        
     <!-- ============= -->
     <!-- View Mappings -->
     <!-- ============= -->

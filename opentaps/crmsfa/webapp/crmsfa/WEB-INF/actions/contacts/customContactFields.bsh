@@ -1,0 +1,60 @@
+/*
+ * Copyright (c) 2010 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+
+hasContactCustViewPermission = false;
+hasContactCustCreatePermission = false;
+hasContactCustUpdatePermission = false;
+hasContactCustDeletePermission = false;
+
+if (security != null && userLogin != null) {
+  if (security.hasEntityPermission("CRMSFA", "_CONTACT_CUST_VIEW", userLogin)) {
+    hasContactCustViewPermission = true;
+  }
+  if (security.hasEntityPermission("CRMSFA", "_CONTACT_CUST_CREATE", userLogin)) {
+    hasContactCustCreatePermission = true;
+  }
+  if (security.hasEntityPermission("CRMSFA", "_CONTACT_CUST_UPDATE", userLogin)) {
+    hasContactCustUpdatePermission = true;
+  } 
+  if (security.hasEntityPermission("CRMSFA", "_CONTACT_CUST_DELETE", userLogin)) {
+    hasContactCustDeletePermission = true;
+  }  
+}
+context.put("hasContactCustViewPermission", hasContactCustViewPermission);
+context.put("hasContactCustCreatePermission", hasContactCustCreatePermission);
+context.put("hasContactCustUpdatePermission", hasContactCustUpdatePermission);
+context.put("hasContactCustDeletePermission", hasContactCustDeletePermission);
+
+partyId = parameters.get("partyId");
+
+dispatcher = request.getAttribute("dispatcher");
+infrastructure = new Infrastructure(dispatcher);
+session = infrastructure.getSession();
+hql = "from PartyAttribute eo where eo.id.partyId = :partyId";
+query = session.createQuery(hql);
+query.setString("partyId", partyId);
+partyAttributes = query.list();
+if (UtilValidate.isNotEmpty(partyAttributes)) {
+  context.put("partyAttributes", partyAttributes);
+}

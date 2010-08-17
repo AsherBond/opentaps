@@ -221,6 +221,7 @@
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/findActivities.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/getCatalogRequests.bsh"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/getMergeFormsForCurrentUser.bsh" />
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/customAccountFields.bsh"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -243,6 +244,11 @@
                             </widgets>
                         </section>
 
+                        <!-- custom fields info -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/accounts/customAccountFields.ftl"/></html></platform-specific>
+                        </container>
+                        
                         <!-- account contact info -->
                         <container style="subSectionBlock">
                             <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contactmech/viewprofile.ftl"/></html></platform-specific>
