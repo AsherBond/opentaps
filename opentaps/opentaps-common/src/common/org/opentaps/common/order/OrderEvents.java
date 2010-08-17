@@ -1806,7 +1806,8 @@ public final class OrderEvents {
                 shippingTotal = shippingTotal.add(genericAmt);
             }
         } catch (GeneralException e) {
-            return ServiceUtil.returnError(standardMessage);
+            // return failure instead of error so the item can be added to order still
+            return ServiceUtil.returnFailure(standardMessage);
         }
 
         // add COD surcharges
