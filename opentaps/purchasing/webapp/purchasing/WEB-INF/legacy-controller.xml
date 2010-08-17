@@ -628,7 +628,7 @@ under the License.
     <request-map uri="updateOrderContactMech">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateOrderContactMech"/>
-        <response name="success" type="view" value="orderview"/>
+        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-attributes="orderId" allowed-params="orderId"/>
         <response name="error" type="view" value="orderview"/>
     </request-map>
     
