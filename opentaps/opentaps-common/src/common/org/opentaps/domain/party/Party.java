@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
 import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.entities.ContactMech;
 import org.opentaps.base.entities.PartyClassification;
 import org.opentaps.base.entities.PartyContactMech;
 import org.opentaps.base.entities.PartyContactMechPurpose;
@@ -45,6 +46,7 @@ public class Party extends org.opentaps.base.entities.Party {
     private List<PaymentMethod> paymentMethods;
     private List<PostalAddress> shippingAddresses;
     private List<TelecomNumber> phoneNumbers;
+    private List<ContactMech> emailAddresses;
 
     /** Enumeration of contact purposes. */
     public enum ContactPurpose {
@@ -175,18 +177,34 @@ public class Party extends org.opentaps.base.entities.Party {
         return getRepository().getAccountById(this.getPartyId());
     }
 
+    /**
+     * Gets the first name of this party.
+     * @return the first name of this party
+     */
     public String getFirstName() {
         return completeView.getFirstName();
     }
 
+    /**
+     * Gets the last name of this party.
+     * @return the last name of this party
+     */
     public String getLastName() {
         return completeView.getLastName();
     }
 
+    /**
+     * Gets the middle name of this party.
+     * @return the middle name of this party
+     */
     public String getMiddleName() {
         return completeView.getMiddleName();
     }
 
+    /**
+     * Gets the group name of this party; only relevant for a Party Group.
+     * @return the group name of this party
+     */
     public String getGroupName() {
         return completeView.getGroupName();
     }
@@ -311,6 +329,18 @@ public class Party extends org.opentaps.base.entities.Party {
      */
     public String getPrimaryEmail() {
         return completeView.getPrimaryEmail();
+    }
+
+    /**
+     * Gets the list of currently active Email Addresses <code>ContactMech</code> for this party.
+     * @return the list of <code>ContactMech</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<ContactMech> getEmailAddresses() throws RepositoryException {
+        if (emailAddresses == null) {
+            emailAddresses = getRepository().getEmailAddresses(this);
+        }
+        return emailAddresses;
     }
 
     /**

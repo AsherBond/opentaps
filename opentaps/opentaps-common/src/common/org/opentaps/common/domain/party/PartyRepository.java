@@ -239,7 +239,19 @@ public class PartyRepository extends DomainRepository implements PartyRepository
     }
 
     /** {@inheritDoc} */
-    public List<TelecomNumber>  getPhoneNumbers(Party party) throws RepositoryException {
+    public List<ContactMech> getEmailAddresses(Party party) throws RepositoryException {
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition(PartyContactDetailByPurpose.Fields.partyId.name(), party.getPartyId()),
+                        EntityCondition.makeCondition(PartyContactDetailByPurpose.Fields.contactMechTypeId.name(), ContactMechTypeConstants.ElectronicAddress.EMAIL_ADDRESS),
+                        EntityUtil.getFilterByDateExpr(),
+                        EntityUtil.getFilterByDateExpr(PartyContactDetailByPurpose.Fields.purposeFromDate.name(), PartyContactDetailByPurpose.Fields.purposeThruDate.name()));
+
+        List<PartyContactDetailByPurpose> partyContactPurposes = findList(PartyContactDetailByPurpose.class, conditions);
+        return findList(ContactMech.class, Arrays.asList(EntityCondition.makeCondition(ContactMech.Fields.contactMechId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(partyContactPurposes, PartyContactDetailByPurpose.Fields.contactMechId))));
+    }
+
+    /** {@inheritDoc} */
+    public List<TelecomNumber> getPhoneNumbers(Party party) throws RepositoryException {
         EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
                         EntityCondition.makeCondition(PartyContactDetailByPurpose.Fields.partyId.name(), party.getPartyId()),
                         EntityCondition.makeCondition(PartyContactDetailByPurpose.Fields.contactMechTypeId.name(), ContactMechTypeConstants.TELECOM_NUMBER),

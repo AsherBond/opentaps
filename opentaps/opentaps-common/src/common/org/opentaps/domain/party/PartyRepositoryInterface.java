@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.ofbiz.entity.condition.EntityCondition;
+import org.opentaps.base.entities.ContactMech;
 import org.opentaps.base.entities.ExternalUser;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyNoteView;
@@ -127,6 +128,15 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public List<PostalAddress> getPostalAddresses(Party party, Party.ContactPurpose purpose) throws RepositoryException;
+
+    /**
+     * Finds the list of currently active Email Addresses <code>ContactMech</code> for the given party.
+     * They are ordered oldest first.
+     * @return the list of <code>ContactMech</code>
+     * @param party a <code>Party</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<ContactMech> getEmailAddresses(Party party) throws RepositoryException;
 
     /**
      * Finds the list of currently active <code>TelecomNumber</code> for the given party.
