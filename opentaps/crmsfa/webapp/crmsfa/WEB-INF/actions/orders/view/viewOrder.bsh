@@ -101,6 +101,9 @@ if (UtilValidate.isNotEmpty(orderId)) {
 if (order != null) {
     // put to history
     context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("CrmNavHistoryOrder", locale, UtilMisc.toMap("orderId", order.getOrderId(), "orderName", order.getOrderName() == null ? "" : order.getOrderName())), "orderview", UtilMisc.toList("orderId"));
+
+    // contact mechs: get the available alternative contact mechs from the order mainExternalParty
+    context.put("mainPartyEmailAddresses", order.getMainExternalParty().getEmailAddresses());
     
     // note these are overridden in the orderviewwebsecure.bsh script if run
     context.put("hasPermission", true);

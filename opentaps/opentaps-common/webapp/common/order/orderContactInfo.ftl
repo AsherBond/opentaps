@@ -90,6 +90,7 @@ under the License.
                     <div class="errorMessage">${uiLabelMap.CrmOrderCannotShipUntilShippingAddressSet}</div>
                   </#if>
                 </#if>
+                
               <#elseif contactMech.contactMechTypeId == "EMAIL_ADDRESS">
                 <div class="tabletext">
                   <@form name="writeOrderEmailAction" url="writeOrderEmail" orderId=order.orderId sendTo=contactMech.infoString />
@@ -99,6 +100,14 @@ under the License.
                     <br/>(<@submitFormLink form="writeOrderConfirmationEmailAction" class="linktext" text=uiLabelMap.OrderSendConfirmationEmail />)
                   </#if>
                 </div>
+                <#if mainPartyEmailAddresses?has_content>
+                  <div class="tabletext">
+                    <@form name="updateOrderEmailContact" url="updateOrderContactMech" orderId=order.orderId contactMechPurposeTypeId=orderContactMech.contactMechPurposeTypeId contactMechTypeId="EMAIL_ADDRESS" oldContactMechId=contactMech.contactMechId >
+                      <@inputSelect name="contactMechId" list=mainPartyEmailAddresses default=contactMech.contactMechId key="contactMechId" displayField="infoString" />
+                      <@inputSubmit title=uiLabelMap.CommonUpdate />
+                    </@form>
+                  </div>
+                </#if>
               <#elseif contactMech.contactMechTypeId == "WEB_ADDRESS">
                 <div class="tabletext">
                   ${contactMech.infoString}
