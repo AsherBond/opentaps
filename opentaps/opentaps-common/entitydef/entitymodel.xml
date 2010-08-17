@@ -792,6 +792,7 @@ under the License.
         package-name="org.opentaps.common.party"
         title="Party Role, Party Detail and supplemental data View Entity">
         <member-entity entity-alias="PTY" entity-name="Party"/>
+        <member-entity entity-alias="STATUS" entity-name="StatusItem"/>
         <member-entity entity-alias="PR" entity-name="PartyRole"/>
         <member-entity entity-alias="PERSON" entity-name="Person"/>
         <member-entity entity-alias="PTYGRP" entity-name="PartyGroup"/>
@@ -833,9 +834,13 @@ under the License.
         <alias entity-alias="CMEM" name="primaryEmailContactMechId" field="contactMechId"/>
         <alias entity-alias="CTRYG" name="primaryCountryAbbreviation" field="abbreviation"/>
         <alias entity-alias="STTG" name="primaryStateProvinceAbbreviation" field="abbreviation"/>
-        <alias entity-alias="CTYG" name="primaryCountyAbbreviation" field="abbreviation"/>        
+        <alias entity-alias="CTYG" name="primaryCountyAbbreviation" field="abbreviation"/>
+        <alias entity-alias="STATUS" name="statusDescription" field="description"/>
         <view-link entity-alias="PTY" rel-entity-alias="PR">
             <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PTY" rel-entity-alias="STATUS" rel-optional="true">
+            <key-map field-name="statusId"/>
         </view-link>
         <view-link entity-alias="PTY" rel-entity-alias="PERSON" rel-optional="true">
             <key-map field-name="partyId"/>
