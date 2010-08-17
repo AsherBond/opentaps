@@ -101,9 +101,11 @@ under the License.
                   </#if>
                 </div>
                 <#if mainPartyEmailAddresses?has_content>
+                  <#assign altEmailAddresses = mainPartyEmailAddresses.clone() />
+                  <#assign dummy = altEmailAddresses.add(contactMech) />
                   <div class="tabletext">
                     <@form name="updateOrderEmailContact" url="updateOrderContactMech" orderId=order.orderId contactMechPurposeTypeId=orderContactMech.contactMechPurposeTypeId contactMechTypeId="EMAIL_ADDRESS" oldContactMechId=contactMech.contactMechId >
-                      <@inputSelect name="contactMechId" list=mainPartyEmailAddresses default=contactMech.contactMechId key="contactMechId" displayField="infoString" />
+                      <@inputSelect name="contactMechId" list=altEmailAddresses default=contactMech.contactMechId key="contactMechId" displayField="infoString" />
                       <@inputSubmit title=uiLabelMap.CommonUpdate />
                     </@form>
                   </div>
