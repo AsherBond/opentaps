@@ -104,11 +104,18 @@ public class FinancialStatementTests extends FinancialsTestCase {
             runAndAssertServiceSuccess("postAcctgTrans", UtilMisc.toMap("userLogin", demofinadmin, "acctgTransId", acctgTransId));
         }
 
+        return newOrganizationPartyId;
+    }
+
+    /*
+     * closes all fiscal years of the organization
+     */
+    private void closeAllFiscalYears(String organizationPartyId) throws Exception {
         // get the fiscal year ends.  Note this is hardcoded right now.  A better way is to get the fiscal years from STATEMENT_TEST_ORG
         // and then find the same time periods
         OrganizationRepositoryInterface orgRepo = organizationDomain.getOrganizationRepository();
-        List<CustomTimePeriod> fiscalYearsToClose = orgRepo.getOpenFiscalTimePeriods(newOrganizationPartyId, UtilMisc.toList("FISCAL_YEAR"), UtilDateTime.toTimestamp(1, 1, 2008, 0, 0, 0));
-        fiscalYearsToClose.addAll(orgRepo.getOpenFiscalTimePeriods(newOrganizationPartyId, UtilMisc.toList("FISCAL_YEAR"), UtilDateTime.toTimestamp(1, 1, 2009, 0, 0, 0)));
+        List<CustomTimePeriod> fiscalYearsToClose = orgRepo.getOpenFiscalTimePeriods(organizationPartyId, UtilMisc.toList("FISCAL_YEAR"), UtilDateTime.toTimestamp(1, 1, 2008, 0, 0, 0));
+        fiscalYearsToClose.addAll(orgRepo.getOpenFiscalTimePeriods(organizationPartyId, UtilMisc.toList("FISCAL_YEAR"), UtilDateTime.toTimestamp(1, 1, 2009, 0, 0, 0)));
 
         // close all the fiscal years
         for (CustomTimePeriod fiscalYear : fiscalYearsToClose) {
@@ -116,15 +123,18 @@ public class FinancialStatementTests extends FinancialsTestCase {
                 runAndAssertServiceSuccess("closeTimePeriod", UtilMisc.toMap("organizationPartyId", fiscalYear.getOrganizationPartyId(), "customTimePeriodId", fiscalYear.getCustomTimePeriodId(), "userLogin", demofinadmin));
             }
         }
-        return newOrganizationPartyId;
+        
     }
-
+    
     /**
      * Verify the trial balance by gl account class is correct for a past date.
      * @throws Exception if an error occurs
      */
     @SuppressWarnings("unchecked")
     public void testTrialBalanceForAsOfDate() throws Exception {
+        // first close all time periods
+        closeAllFiscalYears(trialBalanceOrganizationPartyId);
+        
         Timestamp asOfDate = UtilDateTime.toTimestamp(7, 1, 2008, 0, 0, 0);
         Map params = UtilMisc.toMap("organizationPartyId", trialBalanceOrganizationPartyId, "asOfDate", asOfDate, "glFiscalTypeId", "ACTUAL", "userLogin", admin);
         Map results = dispatcher.runSync("getTrialBalanceForDate", params);
@@ -151,7 +161,9 @@ public class FinancialStatementTests extends FinancialsTestCase {
      */
     @SuppressWarnings("unchecked")
     public void testComplexTrialBalanceForAsOfDate() throws Exception {
-
+        // first close all time periods
+        closeAllFiscalYears(trialBalanceOrganizationPartyId);
+        
         // TODO: Change it to test as of 7/1/09, then close and test again to verify revenue/expense moved to equities and net income
         
         Timestamp asOfDate = UtilDateTime.toTimestamp(7, 1, 2009, 0, 0, 0);
