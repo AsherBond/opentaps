@@ -64,7 +64,8 @@ under the License.
         </@infoRowNested>
 
         <#-- List the contact mech associated to the order that are not phone numbers (they are displayed in a special section) -->
-        <#list order.orderContactMeches as orderContactMech>
+        <#if !orderContactMechs?exists><#assign orderContactMechs = order.orderContactMeches /></#if> <#-- we now order the contact mechs by type, fallback to the previous method for compatibility -->
+        <#list orderContactMechs as orderContactMech>
           <#assign contactMech = orderContactMech.contactMech/>
           <#-- Telecom numbers will be shown in separate loop -->
           <#if contactMech.contactMechTypeId != "TELECOM_NUMBER">
@@ -83,6 +84,22 @@ under the License.
                       ${contactMech.postalAddress.postalCode?if_exists}<br/>
                       <#if contactMech.postalAddress.countryGeoId?has_content ><@displayGeo geoId=contactMech.postalAddress.countryGeoId /><br/></#if>
                     </div>
+                  </#if>
+                  <#if orderContactMech.contactMechPurposeTypeId == "BILLING_LOCATION">
+                    <#if mainPartyBillingAddresses?has_content>
+                      <#assign altBillingAddresses = mainPartyBillingAddresses.clone() />
+                      <#assign dummy = altBillingAddresses.add(contactMech.postalAddress) />
+                      <div class="tabletext">
+                        <@form name="updateOrderBillingContact" url="updateOrderContactMech" orderId=order.orderId contactMechPurposeTypeId=orderContactMech.contactMechPurposeTypeId contactMechTypeId=contactMech.contactMechTypeId oldContactMechId=contactMech.contactMechId >
+                          <@inputSelect name="contactMechId" list=altBillingAddresses default=contactMech.contactMechId key="contactMechId" ; address>
+                            ${address.address1!}
+                            <#if address.city?has_content> - ${address.city!}</#if>
+                            <#if address.stateProvinceGeoId?has_content> - ${address.stateProvinceGeoId!} </#if>
+                          </@inputSelect>
+                          <@inputSubmit title=uiLabelMap.CommonUpdate />
+                        </@form>
+                      </div>
+                    </#if>
                   </#if>
                 <#else/>
                   <div class="tabletext">${uiLabelMap.CrmAddressUnknown}</div>
@@ -104,7 +121,7 @@ under the License.
                   <#assign altEmailAddresses = mainPartyEmailAddresses.clone() />
                   <#assign dummy = altEmailAddresses.add(contactMech) />
                   <div class="tabletext">
-                    <@form name="updateOrderEmailContact" url="updateOrderContactMech" orderId=order.orderId contactMechPurposeTypeId=orderContactMech.contactMechPurposeTypeId contactMechTypeId="EMAIL_ADDRESS" oldContactMechId=contactMech.contactMechId >
+                    <@form name="updateOrderEmailContact" url="updateOrderContactMech" orderId=order.orderId contactMechPurposeTypeId=orderContactMech.contactMechPurposeTypeId contactMechTypeId=contactMech.contactMechTypeId oldContactMechId=contactMech.contactMechId >
                       <@inputSelect name="contactMechId" list=altEmailAddresses default=contactMech.contactMechId key="contactMechId" displayField="infoString" />
                       <@inputSubmit title=uiLabelMap.CommonUpdate />
                     </@form>

@@ -56,6 +56,7 @@ import org.ofbiz.product.inventory.InventoryWorker;
 import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.base.entities.ContactMech;
 import org.opentaps.base.entities.OrderContactMech;
+import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.Shipment;
 import org.opentaps.common.party.PartyReader;
 import org.opentaps.common.util.UtilCommon;
@@ -106,18 +107,30 @@ if (order != null) {
     // get the currently used order contact mechs
     ocms = Entity.groupByFieldValues(String.class, order.getOrderContactMeches(), OrderContactMech.Fields.contactMechPurposeTypeId);
 
-    // contact mechs: get the available alternative contact mechs from the order mainExternalParty
+    // contact mechs: get the available alternative email addresses from the order mainExternalParty
     altEmailAddresses = new ArrayList();
     usedEmailAddresses = ocms.get(ContactMechPurposeTypeConstants.ORDER_EMAIL);
-    if (usedEmailAddresses != null) {
-        usedEmailAddressIds = Entity.getDistinctFieldValues(String.class, usedEmailAddresses, OrderContactMech.Fields.contactMechId);
-        for (ContactMech emailAddress : order.getMainExternalParty().getEmailAddresses()) {
-            if (!usedEmailAddressIds.contains(emailAddress.getContactMechId())) {
-                altEmailAddresses.add(emailAddress);
-            }
+    usedEmailAddressIds = Entity.getDistinctFieldValues(String.class, usedEmailAddresses, OrderContactMech.Fields.contactMechId);
+    for (ContactMech emailAddress : order.getMainExternalParty().getEmailAddresses()) {
+        if (!usedEmailAddressIds.contains(emailAddress.getContactMechId())) {
+            altEmailAddresses.add(emailAddress);
         }
     }
     context.put("mainPartyEmailAddresses", altEmailAddresses);
+
+    // contact mechs: get the available alternative billing addresses from the order mainExternalParty
+    altBillingAddresses = new ArrayList();
+    usedBillingAddresses = ocms.get(ContactMechPurposeTypeConstants.BILLING_LOCATION);
+    usedBillingAddressIds = Entity.getDistinctFieldValues(String.class, usedBillingAddresses, OrderContactMech.Fields.contactMechId);
+    for (PostalAddress billingAddress : order.getMainExternalParty().getBillingAddresses()) {
+        if (!usedBillingAddressIds.contains(billingAddress.getContactMechId())) {
+            altBillingAddresses.add(billingAddress);
+        }
+    }
+    context.put("mainPartyBillingAddresses", altBillingAddresses);
+
+    // put the orderContactMechs in context, ordered by type
+    context.put("orderContactMechs", order.getRelated(OrderContactMech.class, UtilMisc.toList(OrderContactMech.Fields.contactMechPurposeTypeId.name())));
     
     // note these are overridden in the orderviewwebsecure.bsh script if run
     context.put("hasPermission", true);
