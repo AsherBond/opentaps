@@ -25,8 +25,8 @@
         <field name="productId" title="" widget-style="buttontext">
             <hyperlink also-hidden="false" target-type="plain" description="${productId}" target="javascript:set_values('${productId}', '${groovy:org.ofbiz.base.util.StringUtil.htmlEncoder.encode(internalName)}')"/>
         </field>
-        <field name="goodIdentificationTypeId" title="${goodIdentificationTypeIdDescription}"><display/></field>
-        <field name="idValue" title="${goodIdentificationTypeDescription}"><display/></field>
+        <field name="goodIdentificationTypeId" title="${goodIdentificationTypeIdDescription}" use-when="goodIdentificationTypeIdDescription != void &amp;&amp; !&quot;&quot;.equals(goodIdentificationTypeIdDescription)"><display/></field>
+        <field name="idValue" title="${goodIdentificationTypeDescription}" use-when="goodIdentificationTypeDescription != void &amp;&amp; !&quot;&quot;.equals(goodIdentificationTypeDescription)"><display/></field>
         <field name="productTypeId" title="${uiLabelMap.ProductProductType}"><display/></field>
         <field name="brandName" title="${uiLabelMap.ProductBrandName}"><display/></field>
         <field name="internalName" title="${uiLabelMap.ProductInternalName}"><display/></field>

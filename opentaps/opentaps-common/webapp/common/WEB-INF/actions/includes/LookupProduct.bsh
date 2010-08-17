@@ -50,7 +50,13 @@ if (!ignoreGoodId) {
 }
 
 // because of the way the form is set up, we need to remove the type variable if no ID is filled in
-if (ignoreGoodId) inputFields.remove("goodIdentificationTypeId");
+if (ignoreGoodId) {
+    inputFields.remove("idValue");
+    ignoreGoodType = true;
+}
+if (ignoreGoodType) {
+    inputFields.remove("goodIdentificationTypeId");
+}
 inputFields.remove("facilityId");
 
 // prepare the find first, because we want to control the actual find by condition
