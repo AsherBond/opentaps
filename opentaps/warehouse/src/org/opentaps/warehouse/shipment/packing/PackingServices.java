@@ -39,13 +39,13 @@
 
 package org.opentaps.warehouse.shipment.packing;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import javolution.util.FastList;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -54,9 +54,15 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.Facility;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
-import java.math.BigDecimal;
+import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.shipping.ShippingRepositoryInterface;
+import org.opentaps.foundation.exception.FoundationException;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Services for Warehouse application Shipping section.
@@ -84,6 +90,16 @@ public final class PackingServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         org.opentaps.warehouse.shipment.packing.PackingSession session = (PackingSession) context.get("packingSession");
 
+        DomainsDirectory dd = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin)).loadDomainsDirectory();
+        ShippingRepositoryInterface repo;
+        Facility facility;
+        try {
+            repo = dd.getShippingDomain().getShippingRepository();
+            facility = repo.findOneNotNullCache(Facility.class, repo.map(Facility.Fields.facilityId, session.getFacilityId()));
+        } catch (FoundationException e) {
+            return UtilMessage.createAndLogServiceError(e, MODULE);
+        }
+
         Map<String, String> packageWeights = (Map<String, String>) context.get("packageWeights");
         org.ofbiz.shipment.packing.PackingServices.setSessionPackageWeights(session, packageWeights);
         context.remove("packageWeights");
@@ -103,6 +119,10 @@ public final class PackingServices {
         session.setHandlingInstructions((String) context.get("handlingInstructions"));
 
         Boolean force = (Boolean) context.get("forceComplete");
+        if ("Y".equals(facility.getSkipPackOrderInventoryCheck())) {
+            force = true;
+        }
+
         if (force == null || !force.booleanValue()) {
             List<String> errMsgs = FastList.newInstance();
             Map<String, BigDecimal> productQuantities = session.getProductQuantities();
