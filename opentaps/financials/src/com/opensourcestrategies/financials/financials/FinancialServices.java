@@ -491,7 +491,7 @@ public final class FinancialServices {
                     expenseAccountDebits.put(glAccount, balance);
                 } else if (UtilAccounting.isIncomeAccount(glAccount)) {
                     incomeAccountBalances.put(glAccount, balance);
-                    incomeAccountDebits.put(glAccount, balance);
+                    incomeAccountCredits.put(glAccount, balance);
                 } else {
                     Debug.logWarning("Classification of GL account [" + glAccount.getString("glAccountId") + "] is unknown, putting balance [" + balance + "] under debit", MODULE);
                     otherAccountBalances.put(glAccount, balance);
