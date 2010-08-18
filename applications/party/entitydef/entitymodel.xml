@@ -320,8 +320,8 @@ under the License.
       <field name="termValue" type="currency-precise"></field>
       <field name="termDays" type="numeric"></field>
       <field name="textValue" type="description"></field>
-      <field name="minQuantity" type="fixed-point"></field>
-      <field name="maxQuantity" type="fixed-point"></field>
+      <field name="minQuantity" type="floating-point"></field>
+      <field name="maxQuantity" type="floating-point"></field>
       <field name="description" type="description"></field>
       <prim-key field="agreementTermId"/>
       <relation type="one" fk-name="AGRMNT_TERM_TTYP" rel-entity-name="TermType">
@@ -2515,14 +2515,14 @@ under the License.
       <field name="memberId" type="id"></field>
       <field name="gender" type="indicator"></field>
       <field name="birthDate" type="date"></field>
-      <field name="height" type="fixed-point"></field>
-      <field name="weight" type="fixed-point"></field>
+      <field name="height" type="floating-point"></field>
+      <field name="weight" type="floating-point"></field>
       <field name="mothersMaidenName" type="long-varchar" encrypt="true"></field>
       <field name="maritalStatus" type="indicator"></field>
       <field name="socialSecurityNumber" type="long-varchar" encrypt="true"></field>
       <field name="passportNumber" type="long-varchar" encrypt="true"></field>
       <field name="passportExpireDate" type="date"></field>
-      <field name="totalYearsWorkExperience" type="fixed-point"></field>
+      <field name="totalYearsWorkExperience" type="floating-point"></field>
       <field name="comments" type="comment"></field>
       <field name="employmentStatusEnumId" type="id"></field>
       <field name="residenceStatusEnumId" type="id"></field>

@@ -3516,7 +3516,7 @@ under the License.
     <field name="partyId" type="id-ne"/>
     <field name="rateTypeId" type="id-ne"/>
     <field name="defaultRate" type="indicator"/>
-    <field name="percentageUsed" type="fixed-point"><description>The percentage of the actual hours registered in timeEntries, used for the task and invoice actuals, if the field is null 100% will be used</description></field>
+    <field name="percentageUsed" type="floating-point"><description>The percentage of the actual hours registered in timeEntries, used for the task and invoice actuals, if the field is null 100% will be used</description></field>
     <field name="fromDate" type="date-time"/>
     <field name="thruDate" type="date-time"/>
     <prim-key field="partyId"/>

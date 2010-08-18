@@ -295,7 +295,7 @@ under the License.
       <field name="parentTypeId" type="id-ne"></field>
       <field name="hasTable" type="indicator"></field>
       <field name="description" type="description"></field>
-      <field name="employerPaidPercentage" type="fixed-point"></field>
+      <field name="employerPaidPercentage" type="floating-point"></field>
       <prim-key field="benefitTypeId"/>
       <relation type="one" fk-name="BEN_TYPE_PAR" title="Parent" rel-entity-name="BenefitType">
         <key-map field-name="parentTypeId" rel-field-name="benefitTypeId"/>
@@ -448,7 +448,7 @@ under the License.
       <field name="thruDate" type="date-time"></field>
       <field name="periodTypeId" type="id"></field>
       <field name="cost" type="currency-amount"></field>
-      <field name="actualEmployerPaidPercent" type="fixed-point"></field>
+      <field name="actualEmployerPaidPercent" type="floating-point"></field>
       <field name="availableTime" type="numeric"></field>
       <prim-key field="roleTypeIdFrom"/>
       <prim-key field="roleTypeIdTo"/>
@@ -533,7 +533,7 @@ under the License.
       <field name="periodTypeId" type="id"></field>
       <field name="fromDate" type="date-time"></field>
       <field name="thruDate" type="date-time"></field>
-      <field name="percentage" type="fixed-point"></field>
+      <field name="percentage" type="floating-point"></field>
       <field name="flatAmount" type="currency-amount"></field>
       <field name="routingNumber" type="short-varchar"></field>
       <field name="accountNumber" type="short-varchar"></field>
@@ -754,7 +754,7 @@ under the License.
       <field name="emplPositionClassTypeId" type="id-ne"></field>
       <field name="fromDate" type="date-time"></field>
       <field name="thruDate" type="date-time"></field>
-      <field name="standardHoursPerWeek" type="fixed-point"></field>
+      <field name="standardHoursPerWeek" type="floating-point"></field>
       <prim-key field="emplPositionTypeId"/>
       <prim-key field="emplPositionClassTypeId"/>
       <prim-key field="fromDate"/>

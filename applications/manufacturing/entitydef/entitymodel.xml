@@ -55,7 +55,7 @@ under the License.
       <field name="productIdInSubst" type="id"></field>
       <field name="productFeature" type="id"></field>
       <field name="ruleOperator" type="id"></field>
-      <field name="quantity" type="fixed-point"></field>
+      <field name="quantity" type="floating-point"></field>
       <field name="description" type="description"></field>
       <field name="thruDate" type="date-time"></field>
       <prim-key field="ruleId"/>
@@ -102,8 +102,8 @@ under the License.
       </description>
       <field name="calendarId" type="id-ne"></field>
       <field name="exceptionDateStartTime" type="date-time"></field>
-      <field name="exceptionCapacity" type="fixed-point"></field>
-      <field name="usedCapacity" type="fixed-point"></field>
+      <field name="exceptionCapacity" type="floating-point"></field>
+      <field name="usedCapacity" type="floating-point"></field>
       <field name="description" type="description"></field>
       <prim-key field="calendarId"/>
       <prim-key field="exceptionDateStartTime"/>
@@ -136,19 +136,19 @@ under the License.
       <field name="calendarWeekId" type="id-ne"></field>
       <field name="description" type="description"></field>
       <field name="mondayStartTime" type="time"></field>
-      <field name="mondayCapacity" type="fixed-point"></field>
+      <field name="mondayCapacity" type="floating-point"></field>
       <field name="tuesdayStartTime" type="time"></field>
-      <field name="tuesdayCapacity" type="fixed-point"></field>
+      <field name="tuesdayCapacity" type="floating-point"></field>
       <field name="wednesdayStartTime" type="time"></field>
-      <field name="wednesdayCapacity" type="fixed-point"></field>
+      <field name="wednesdayCapacity" type="floating-point"></field>
       <field name="thursdayStartTime" type="time"></field>
-      <field name="thursdayCapacity" type="fixed-point"></field>
+      <field name="thursdayCapacity" type="floating-point"></field>
       <field name="fridayStartTime" type="time"></field>
-      <field name="fridayCapacity" type="fixed-point"></field>
+      <field name="fridayCapacity" type="floating-point"></field>
       <field name="saturdayStartTime" type="time"></field>
-      <field name="saturdayCapacity" type="fixed-point"></field>
+      <field name="saturdayCapacity" type="floating-point"></field>
       <field name="sundayStartTime" type="time"></field>
-      <field name="sundayCapacity" type="fixed-point"></field>
+      <field name="sundayCapacity" type="floating-point"></field>
       <prim-key field="calendarWeekId"/>
     </entity>
 
@@ -175,7 +175,7 @@ under the License.
       <field name="eventDate" type="date-time"></field>
       <field name="mrpEventTypeId" type="id-ne"></field>
       <field name="facilityId" type="id"></field>
-      <field name="quantity" type="fixed-point"></field>
+      <field name="quantity" type="floating-point"></field>
       <field name="eventName" type="very-long"></field>
       <field name="isLate" type="indicator"></field>
       <prim-key field="mrpId"/>
