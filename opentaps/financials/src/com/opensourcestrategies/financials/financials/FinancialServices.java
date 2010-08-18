@@ -200,6 +200,7 @@ public final class FinancialServices {
                 Map result = ServiceUtil.returnSuccess();
                 result.put("netIncome", tmpResult.get("netIncome"));
                 result.put("retainedEarningsGlAccount", tmpResult.get("retainedEarningsGlAccount"));
+                result.put("glAccountSumsFlat", tmpResult.get("glAccountSumsFlat"));
                 return result;
             }
         } catch (GenericServiceException ex) {
@@ -356,7 +357,14 @@ public final class FinancialServices {
             Timestamp lastClosedDate = UtilDateTime.toTimestamp(1, 1, 1970, 0, 0, 0);   // default if there never has been a period closing
             FindLastClosedDateService findLastClosedDate = new FindLastClosedDateService();
             findLastClosedDate.setInOrganizationPartyId(organizationPartyId);
-            findLastClosedDate.setInFindDate(asOfDate);
+            // this is in case the current time period is already closed, and you try to run a report at the end of the time period
+            // adjust as of date forward 1 second, so if report date is 12/31/XX at 23:59:59.999, but CustomTimePeriod ends at 1/1/XX+1 00:00:00 and the CustomTimePeriod has been
+            // closed, it will get the CustomTimePeriod as the last closed period.  Otherwise, it will get the previous time period and add everything again.
+            // but don't change the actual as of date because it may cause inconsistencies with other reports 
+            // does not appear to be an issue for balance sheet, income statement, because if it is missed you just re-calculate that time period again
+            // but this report actually adds both, so if you miss a closed time period, it could cause double-counting
+            findLastClosedDate.setInFindDate(UtilDateTime.adjustTimestamp(asOfDate, java.util.Calendar.SECOND, new Integer(1)));
+
             findLastClosedDate.setUser(user);
             findLastClosedDate.runSyncNoNewTransaction(infrastructure);
             
@@ -578,7 +586,7 @@ public final class FinancialServices {
         Map<GenericValue, BigDecimal> assetAccountBalances = new HashMap<GenericValue, BigDecimal>();
         Map<GenericValue, BigDecimal> liabilityAccountBalances = new HashMap<GenericValue, BigDecimal>();
         Map<GenericValue, BigDecimal> equityAccountBalances = new HashMap<GenericValue, BigDecimal>();
-
+        
         try {
 
             // figure the date and the last closed time period

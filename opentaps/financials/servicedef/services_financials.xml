@@ -98,7 +98,11 @@
     <service name="getIncomeStatementByTimePeriods" engine="java"
             location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getIncomeStatementByTimePeriods" auth="true" use-transaction="false">
         <description>Generates an income statement for a company from the start date of the start CustomTimePeriod to the thru (ending) date
-            of the ending CustomTimePeriod</description>
+            of the ending CustomTimePeriod.
+        glAccountSums is a Map of glAccountTypeId (REVENUE, COGS, OPERATING_EXPENSE, etc.) to List of Map of GlAccount, BigDecimal amount
+        glAccountGroupSums is a Map of glAccountTypeId to total amounts for each type
+        glAccountSumsFlat is a Map of GlAccount, BigDecimal amount
+        </description>
         <implements service="accountingTagsInterface"/>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
         <attribute name="fromTimePeriodId" mode="IN" type="String" optional="false"/>
@@ -142,6 +146,7 @@
         <attribute name="periodTypeId" mode="IN" type="String" optional="true"/>
         <attribute name="retainedEarningsGlAccount" mode="OUT" type="org.ofbiz.entity.GenericValue" optional="false"/>
         <attribute name="netIncome" mode="OUT" type="BigDecimal" optional="false"/>
+        <attribute name="glAccountSumsFlat" mode="OUT" type="java.util.Map"/>
     </service>
 
     <!-- ========= Balance Sheet Services ========= -->
