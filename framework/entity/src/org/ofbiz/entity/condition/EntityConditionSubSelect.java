@@ -110,6 +110,14 @@ public class EntityConditionSubSelect extends EntityConditionValue {
         return new EntityConditionSubSelect(localModelEntity, keyFieldName, (whereCond != null ? whereCond.freeze() : null), requireAll);
     }
 
+    public String getKeyFieldName() {
+        return this.keyFieldName;
+    }
+
+    public ModelEntity getModelEntity() {
+        return this.localModelEntity;
+    }
+
     public ModelField getModelField(ModelEntity modelEntity) {
         // do nothing for now
         return null;

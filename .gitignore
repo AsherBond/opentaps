@@ -75,3 +75,4 @@ runtime/lucene
 runtime/output
 runtime/tempfiles
 runtime/uploads
+runtime/merge-state

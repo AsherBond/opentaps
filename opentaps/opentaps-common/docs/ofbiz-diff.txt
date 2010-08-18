@@ -1,5 +1,5 @@
 Based on revisions:
-https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@978897
+https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@985905
 svn://svn.opentaps.org/opentaps_all/versions/1.0/tags/tests-passed-20091026
 
 Note: Opentaps is now using GIT, you can clone and/or contribute at http://gitorious.org/opentaps

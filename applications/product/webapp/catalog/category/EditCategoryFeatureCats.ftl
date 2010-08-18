@@ -17,7 +17,11 @@ specific language governing permissions and limitations
 under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
-<a href="<@ofbizUrl>attachProductFeaturesToCategory?productCategoryId=${productCategoryId?if_exists}</@ofbizUrl>" class="buttontext">[${uiLabelMap.ProductFeatureCategoryAttach}]</a>
+<form method="post" action="<@ofbizUrl>attachProductFeaturesToCategory</@ofbizUrl>" name="attachProductFeaturesToCategory">
+    <input type="hidden" name="productCategoryId" value="${productCategoryId?if_exists}" />
+</form>
+<a href="javascript:document.attachProductFeaturesToCategory.submit()" class="buttontext">${uiLabelMap.ProductFeatureCategoryAttach}</a>
+
 <#if productCategoryId?exists && productCategory?exists>
     <div class="screenlet-title-bar">
         <h3>${uiLabelMap.PageTitleEditCategoryFeatureCategories}</h3>
