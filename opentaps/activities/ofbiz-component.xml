@@ -44,13 +44,6 @@
     <!-- eca service chain files -->
     <service-resource type="eca" loader="main" location="servicedef/secas_activities.xml"/>
 
-    <webapp name="activitiesgwt"
-        title="GWT Part of Activities"
-        server="default-server"
-        location="webapp/activitiesgwt"
-        mount-point="/activitiesgwt"
-        app-bar-display="false"/>
-
 </ofbiz-component>
 
 
