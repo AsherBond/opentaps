@@ -266,6 +266,14 @@
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_CUST_DELETE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_CUST_DELETE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_CUST_DELETE"/>    
+    
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_CUST_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_CUST_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_CUST_VIEW"/>
+    
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_CUST_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_CUST_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_CUST_CREATE"/>         
 
     <!-- A sales rep has the ability to view and update accounts, contacts, and leads but does not have the ability
         to manage team members or deactivate accounts.  Only in the context of relationship to their accounts do they
