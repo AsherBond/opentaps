@@ -403,6 +403,7 @@
 
     <extend-entity entity-name="Facility">
         <field name="inventoryReserveOrderEnumId" col-name="RESERVE_ORDER_ENUM_ID" type="id"/>
+        <field name="skipPackOrderInventoryCheck" col-name="SKIP_PACK_INV_CHECK" type="indicator"/>
         <relation type="one" fk-name="FCLT_RORDENUM" rel-entity-name="Enumeration">
             <key-map field-name="inventoryReserveOrderEnumId" rel-field-name="enumId"/>
         </relation>
