@@ -422,6 +422,10 @@ public class FinancialsTestCase extends OpentapsTestCase {
         // because organizationAcctgPref is load by delegator on previous transaction and hibernate session commit it before
         // so we using delegator to store these new entities.
         for (AcctgTrans acctgTrans : acctgTranes) {
+            if (org.opentaps.base.constants.AcctgTransTypeConstants.PERIOD_CLOSING.equals(acctgTrans.getAcctgTransTypeId())) {
+                Debug.logInfo("Not copying acctg trans [" + acctgTrans.getAcctgTransId() + "] from [" + fromOrganizationPartyId + "] to [" + toOrganizationPartyId + "] because it is a period closing transaction", MODULE);
+                continue;
+            }
             Map<String, Object> acctgTransMap = acctgTrans.toMap();
             acctgTransMap.put("acctgTransId", delegator.getNextSeqId("AcctgTrans"));
             acctgTransMap.put("isPosted", "N");
