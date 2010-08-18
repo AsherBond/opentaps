@@ -111,19 +111,31 @@ public class FinancialStatementTests extends FinancialsTestCase {
      * closes all fiscal years of the organization
      */
     private void closeAllFiscalYears(String organizationPartyId) throws Exception {
-        // get the fiscal year ends.  Note this is hardcoded right now.  A better way is to get the fiscal years from STATEMENT_TEST_ORG
+        // Note this is hardcoded right now.  A better way is to get the fiscal years from STATEMENT_TEST_ORG
         // and then find the same time periods
+        closeFiscalYear(organizationPartyId, UtilDateTime.toTimestamp(1, 1, 2008, 0, 0, 0));
+        closeFiscalYear(organizationPartyId, UtilDateTime.toTimestamp(1, 1, 2009, 0, 0, 0));
+    }
+    
+    /**
+     * close fiscal year ending in the endingDate for the organization
+     * @param organizationPartyId
+     * @param endingDate
+     * @throws Exception
+     */
+    
+    private void closeFiscalYear(String organizationPartyId, Timestamp endingDate) throws Exception {
+         // get the fiscal year ends.  
         OrganizationRepositoryInterface orgRepo = organizationDomain.getOrganizationRepository();
-        List<CustomTimePeriod> fiscalYearsToClose = orgRepo.getOpenFiscalTimePeriods(organizationPartyId, UtilMisc.toList("FISCAL_YEAR"), UtilDateTime.toTimestamp(1, 1, 2008, 0, 0, 0));
-        fiscalYearsToClose.addAll(orgRepo.getOpenFiscalTimePeriods(organizationPartyId, UtilMisc.toList("FISCAL_YEAR"), UtilDateTime.toTimestamp(1, 1, 2009, 0, 0, 0)));
-
+        List<CustomTimePeriod> fiscalYearsToClose = orgRepo.getOpenFiscalTimePeriods(organizationPartyId, endingDate);
+        
         // close all the fiscal years
         for (CustomTimePeriod fiscalYear : fiscalYearsToClose) {
             if (!"Y".equals(fiscalYear.getIsClosed())) {
                 runAndAssertServiceSuccess("closeTimePeriod", UtilMisc.toMap("organizationPartyId", fiscalYear.getOrganizationPartyId(), "customTimePeriodId", fiscalYear.getCustomTimePeriodId(), "userLogin", demofinadmin));
             }
         }
-        
+            
     }
     
     /**
@@ -161,11 +173,10 @@ public class FinancialStatementTests extends FinancialsTestCase {
      */
     @SuppressWarnings("unchecked")
     public void testComplexTrialBalanceForAsOfDate() throws Exception {
-        // first close all time periods
-        closeAllFiscalYears(trialBalanceOrganizationPartyId);
-        
-        // TODO: Change it to test as of 7/1/09, then close and test again to verify revenue/expense moved to equities and net income
-        
+        // close FY ending 7/1/08
+        closeFiscalYear(trialBalanceOrganizationPartyId, UtilDateTime.toTimestamp(1, 1, 2008, 0, 0, 0));
+
+        // trial balance prior to closing time period should have income, expenses, and the net income offset in profit/loss account
         Timestamp asOfDate = UtilDateTime.toTimestamp(7, 1, 2009, 0, 0, 0);
         Map<String, Object> params = UtilMisc.toMap("organizationPartyId", trialBalanceOrganizationPartyId, "asOfDate", asOfDate, "glFiscalTypeId", "ACTUAL", "userLogin", admin);
         Map<String, Object> results = dispatcher.runSync("getTrialBalanceForDate", params);
@@ -201,13 +212,49 @@ public class FinancialStatementTests extends FinancialsTestCase {
         Map<String, BigDecimal> expectedEquityAccountBalances = UtilMisc.toMap("340000", new BigDecimal("10000.00"), "341000", new BigDecimal("300000.00"), "336000", new BigDecimal("99174.22"), "334000", new BigDecimal("-1000"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("equityAccountBalances")), expectedEquityAccountBalances);
 
-        assertEquals("There should be no revenue account balances", new BigDecimal(((Map) results.get("revenueAccountBalances")).keySet().size()), BigDecimal.ZERO);
-        assertEquals("There should be no expense account balances", new BigDecimal(((Map) results.get("expenseAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        Map<String, BigDecimal> expectedRevenueAccountBalances = new HashMap<String, BigDecimal>();
+        expectedRevenueAccountBalances.put("400000", new BigDecimal("374000"));
+        expectedRevenueAccountBalances.put("408000", new BigDecimal("42000"));
+        
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("revenueAccountBalances")), expectedRevenueAccountBalances);
 
-        Map expectedIncomeAccountBalances = UtilMisc.toMap("890000", BigDecimal.ZERO);
+        Map<String, BigDecimal> expectedExpenseAccountBalances = new HashMap<String, BigDecimal>();
+        expectedExpenseAccountBalances.put("500000", new BigDecimal("157000.00"));
+        expectedExpenseAccountBalances.put("510000", new BigDecimal("24625.78"));
+        expectedExpenseAccountBalances.put("601000", new BigDecimal("46300"));
+        expectedExpenseAccountBalances.put("611000", new BigDecimal("24000"));
+        expectedExpenseAccountBalances.put("518100", new BigDecimal("-250"));
+        expectedExpenseAccountBalances.put("675000", new BigDecimal("12500"));
+        expectedExpenseAccountBalances.put("781000", new BigDecimal("8000"));
+        expectedExpenseAccountBalances.put("821000", new BigDecimal("10000"));
+        expectedExpenseAccountBalances.put("902000", new BigDecimal("3000"));
+        expectedExpenseAccountBalances.put("608000", new BigDecimal("1200"));
+
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("expenseAccountBalances")), expectedExpenseAccountBalances);
+
+        Map expectedIncomeAccountBalances = UtilMisc.toMap("890000", new BigDecimal("99174.22"));
+        // but these are actually credits, so we'll check them to make sure they're on the credit side
+        expectedIncomeAccountBalances.put("800000", new BigDecimal("750"));
+        expectedIncomeAccountBalances.put("810000", new BigDecimal("500"));
+        
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("incomeAccountBalances")), expectedIncomeAccountBalances);
+      
+        Map<String, BigDecimal> expectedIncomeAccountCredits = new HashMap<String, BigDecimal>();
+        expectedIncomeAccountCredits.put("800000", new BigDecimal("750"));
+        expectedIncomeAccountCredits.put("810000", new BigDecimal("500"));
+        
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("incomeAccountCredits")), expectedIncomeAccountCredits);
+      
         
         assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("otherAccountBalances")).keySet().size()), BigDecimal.ZERO);
+
+        assertEquals("Total debit balance not correct",  (BigDecimal) results.get("totalDebits"), new BigDecimal("1442593.22"));
+        assertEquals("Total credit balance not correct", (BigDecimal) results.get("totalCredits"), new BigDecimal("1442593.22"));
+        assertEquals("Net balance is not zero", (BigDecimal) results.get("totalBalances"), BigDecimal.ZERO);
+        
+        // now close FY 2009 and check again.  There should be no revenue, expense, income, or other accounts, and the total debit/credit should have changed
+        // also run the trial balance at the end of 6/30/09 to make sure the right time period is found
+    
     }
 
     /**
