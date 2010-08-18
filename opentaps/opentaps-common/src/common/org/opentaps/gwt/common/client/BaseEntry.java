@@ -17,7 +17,9 @@
 package org.opentaps.gwt.common.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.i18n.client.Dictionary;
 import com.google.gwt.core.client.GWT;
+
 /**
  * Defines UncaughtExceptionHandler in GWT Base Entry.
  */
@@ -41,4 +43,32 @@ public abstract class BaseEntry implements EntryPoint {
             }
           });
         }
+
+    /**
+     * Retrieve the <code>Dictionary</code> containing the custom parameters for the given GWT widget.
+     * @param widgetId the ID of the widget
+     * @return a <code>Dictionary</code> value if it was given, <code>null</code> otherwise
+     */
+    protected static Dictionary getWidgetParameters(String widgetId) {
+        Dictionary dictionary = Dictionary.getDictionary(widgetId);
+        return dictionary;
+    }
+
+    /**
+     * Retrieve a custom parameter for the given GWT widget.
+     * @param widgetId the ID of the widget
+     * @param parameterName the name of the parameter
+     * @return the parameter value if it was given, <code>null</code> otherwise
+     */
+    protected static String getWidgetParameter(String widgetId, String parameterName) {
+        Dictionary dictionary = getWidgetParameters(widgetId);
+        if (dictionary == null) {
+            return null;
+        }
+        try {
+            return dictionary.get(parameterName);
+        } catch (java.util.MissingResourceException e) {
+            return null;
+        }
+    }
 }

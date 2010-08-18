@@ -1483,6 +1483,11 @@ For more information, please see documentation/opentapsFormMacros.html
     <#list gwtParameters?keys as param>
       var ${param} = "${gwtParameters[param]}";
     </#list>
+    var ${id} = {
+      <#list gwtParameters?keys as param>
+        ${param}: "${gwtParameters[param]}" <#if param_has_next>,</#if>
+      </#list>
+    };
     /*]]>*/
     </script>
   </#if>
