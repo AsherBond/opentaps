@@ -55,13 +55,13 @@
         <property name="src.dir" value="src"/>
         <property name="dtd.dir" value="dtd"/>
         <property name="lib.dir" value="lib"/>
-        <property name="build.dir" value="build"/>        
+        <property name="build.dir" value="build"/>
         <property name="gwt.deploy.dir" value="./webapp/activitiesgwt"/>
         <property name="gwt.module.base" value="org.opentaps.gwt"/>
         <property name="gwt.src.common" value="../opentaps-common/src/common/org/opentaps/gwt"/>
         <property name="gwt.src.constants" value="../opentaps-common/src/constants/org/opentaps/base"/>
         <property name="gwt.src.base" value="./src/org/opentaps/gwt"/>
-        <property name="gwt.module.list" value="activities"/>      
+        <property name="gwt.module.list" value="activities"/>
         <!-- This parameter must point to your ofbiz/ directory or the libraries for the financials app would not be found.
          The default setting would work if you have checked out the financials module into your ofbiz/opentaps/ directory.
          It would NOT work if you checked it out somewhere else and symlinked to it in your opentaps/ directory.
@@ -146,7 +146,7 @@
     </target>
 
     <target name="prepare-gwt" depends="gwtclasspath">
-      <!-- <mkdir dir="${gwt.deploy.dir}"/> -->
+      <mkdir dir="${gwt.deploy.dir}"/>
     </target>
 
     <!-- ================================================================== -->
@@ -176,9 +176,9 @@
     <!-- ================================================================== -->
 
     <target name="gwt-code" depends="prepare-gwt">
-        <subant target="gwt-compile-modules" inheritall="true" inheritrefs="true">
-            <filelist dir="." files="../opentaps-common/build.xml"/>
-        </subant>
+        <!-- <subant target="gwt-compile-modules" inheritall="true" inheritrefs="true"> -->
+        <!--     <filelist dir="." files="../opentaps-common/build.xml"/> -->
+        <!-- </subant> -->
     </target>
 
     <!-- ================================================================== -->
