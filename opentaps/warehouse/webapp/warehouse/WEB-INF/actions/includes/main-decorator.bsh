@@ -44,6 +44,7 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
 import org.opentaps.common.util.UtilConfig;
 import org.opentaps.warehouse.security.WarehouseSecurity;
+import org.opentaps.warehouse.configuration.ConfigurationEvents;
 
 // default setup screen to choose a facility (if no setup screen is already defined)
 applicationSetupScreen = context.get("applicationSetupScreen");
@@ -63,6 +64,10 @@ security = request.getAttribute("security");
 context.put("security", security);
 
 // warehouse-specific security
+applicationContextSet = session.getAttribute("applicationContextSet");
+if (applicationContextSet == null) {
+    ConfigurationEvents.setFacility(request, null);
+}
 facilityId = session.getAttribute("facilityId");
 facility = session.getAttribute("facility");
 if (UtilValidate.isNotEmpty(facility)) {
