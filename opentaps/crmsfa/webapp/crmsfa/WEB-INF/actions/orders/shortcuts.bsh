@@ -16,6 +16,7 @@
  */
 
 import javolution.util.FastList;
+import org.opentaps.common.party.ViewPrefWorker;
 import org.ofbiz.base.util.UtilMisc;
 
 if (session.getAttribute("shoppingCart") != null) {
@@ -25,7 +26,19 @@ if (session.getAttribute("shoppingCart") != null) {
 }
 
 shortcuts = FastList.newInstance();
-shortcuts.add(UtilMisc.toMap("uri", "myOrders", "uiLabel", "CrmMyOrders"));
+
+myPref = "MY_VALUES";
+viewPreferences = ViewPrefWorker.getViewPreferencesByLocation(userLogin, "crmsfa", context.get("sectionName"));
+if (viewPreferences != null) {
+    myPref = viewPreferences.get("MY_OR_TEAM_ORDERS");
+}
+
+if ("MY_VALUES".equals(myPref)) {
+    shortcuts.add(UtilMisc.toMap("uri", "myOrders", "uiLabel", "CrmMyOrders"));
+} else {
+    shortcuts.add(UtilMisc.toMap("uri", "myOrders", "uiLabel", "CrmOpenOrders"));
+}
+
 shortcuts.add(UtilMisc.toMap("uri", "createOrderMainScreen", "uiLabel", orderLabel));
 shortcuts.add(UtilMisc.toMap("uri", "findOrders", "uiLabel", "OrderFindOrder"));
 shortcuts.add(UtilMisc.toMap("uri", "manageOrderQueue", "uiLabel", "CrmOrderQueue"));

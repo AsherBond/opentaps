@@ -16,10 +16,8 @@
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-<#if viewPreferences?has_content && viewPreferences.MY_OR_TEAM_ORDERS?has_content> 
+<#if viewPreferences?has_content && viewPreferences.MY_OR_TEAM_ORDERS?has_content && "ALL_OPEN_ORDERS" != viewPreferences.MY_OR_TEAM_ORDERS>
     <@gwtWidget id=findOrderWidget class="subSectionBlock" viewPref="${viewPreferences.MY_OR_TEAM_ORDERS}"/>
-<#elseif findOrderWidget?has_content && "myOrders" == findOrderWidget> 
-    <@gwtWidget id=findOrderWidget class="subSectionBlock" viewPref="MY_VALUES"/>
 <#else>
     <@gwtWidget id=findOrderWidget class="subSectionBlock"/>
 </#if>

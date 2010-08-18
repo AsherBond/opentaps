@@ -81,12 +81,22 @@ under the License.
         </section>
     </screen>
 
+    <screen name="myOrdersHeaderScreen">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaOrdersMenu.ftl"/></html>
+                </platform-specific>                
+            </widgets>
+        </section>
+    </screen>
+
     <!-- show a list of the orders of the logged in user -->
    <screen name="myOrders">
         <section>
             <actions>
                 <set field="pageTitleLabel" value="OrderOrders"/>
-                <set field="sectionHeaderUiLabel" value="OrderOrders"/>
+                <set field="sectionHeaderScreen" value="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#myOrdersHeaderScreen"/>
                 <set field="findOrderWidget" value="myOrders"/>
             </actions>
             <widgets>
