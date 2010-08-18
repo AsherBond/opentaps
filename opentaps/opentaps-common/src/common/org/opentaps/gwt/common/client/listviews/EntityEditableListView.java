@@ -148,6 +148,9 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
 
     // the default page size when the grid and pager are initialized
     private int defaultPageSize = UtilLookup.DEFAULT_LIST_PAGE_SIZE;
+    // the pagingToolbar.setPageSize method is not working properly, so we use this value as a workaround
+    private int pageSize = -1;
+    private NumberField pageSizeField;
 
     private List<LoadableListener> listeners = new ArrayList<LoadableListener>();
 
@@ -524,6 +527,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
      * Resets the pager setting to the first page and reloads the store associated to this list view.
      */
     private void loadFirstPageAsync() {
+        UtilUi.logDebug("list page size = " + pagingToolbar.getPageSize(), MODULE, "loadFirstPageAsync");
         List<UrlParam> params = new ArrayList<UrlParam>();
         // if the pager is disabled explicitly, pass the NO_PAGER option to the service so it knows not to paginate the results
         // else pass the paging parameters as defined in the pagingToolbar (user given defaultPageSize is set in the pagingToolbar at this point)
@@ -531,7 +535,10 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
             params.add(new UrlParam(UtilLookup.PARAM_NO_PAGER, "Y"));
         } else if (pagingToolbar != null) {
             params.add(new UrlParam(UtilLookup.PARAM_PAGER_START, 0));
-            params.add(new UrlParam(UtilLookup.PARAM_PAGER_LIMIT, pagingToolbar.getPageSize()));
+            if (pageSize <= 0) {
+                pageSize = defaultPageSize;
+            }
+            params.add(new UrlParam(UtilLookup.PARAM_PAGER_LIMIT, pageSize));
         }
         UrlParam[] urlParams = new UrlParam[params.size()];
         store.reload(params.toArray(urlParams));
@@ -1064,7 +1071,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
         pagingToolbar.setBeforePageText(UtilUi.MSG.pagerBeforePage());
         pagingToolbar.setAfterPageText(UtilUi.MSG.pagerAfterPage());
 
-        final NumberField pageSizeField = new NumberField();
+        pageSizeField = new NumberField();
         pageSizeField.setAllowDecimals(false);
         pageSizeField.setWidth(40);
         pageSizeField.setValue(Integer.valueOf(pagingToolbar.getPageSize()));
@@ -1078,7 +1085,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
             });
 
         pagingToolbar.doOnRender(new Function() {
-            public void execute() { 
+            public void execute() {
                 pagingToolbar.getRefreshButton().addListener(new ButtonListenerAdapter() {
                     public void onClick(Button button, EventObject e) {
                         changePageSize(pageSizeField);
@@ -1119,6 +1126,21 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
     }
 
     /**
+     * Sets the page size for this list.
+     * @param pageSize an integer value
+     */
+    public void setPageSize(int pageSize) {
+        // do not allow 0 as a page size
+        if (pageSize > 0) {
+            this.pageSize = pageSize;
+            pagingToolbar.setPageSize(pageSize);
+            pageSizeField.setValue(pageSize);
+        } else {
+            UtilUi.logError("NOT setting negative list page size " + pageSize, MODULE, "setPageSize");
+        }
+    }
+
+    /**
      * Change page size value to pageSizeField.getValue().
      * @param pageSizeField a <code>NumberField</code> value
      */
@@ -1134,6 +1156,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
         // do not allow 0 as a page size
         if (pageSize > 0) {
             pageSizeField.setValue(pageSize);
+            this.pageSize = pageSize;
             pagingToolbar.setPageSize(pageSize);
         } else {
             pageSizeField.setValue(Integer.valueOf(pagingToolbar.getPageSize()));

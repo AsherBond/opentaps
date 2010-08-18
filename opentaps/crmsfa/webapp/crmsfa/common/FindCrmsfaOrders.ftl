@@ -19,5 +19,9 @@
 <#if viewPreferences?has_content && viewPreferences.MY_OR_TEAM_ORDERS?has_content && "ALL_OPEN_ORDERS" != viewPreferences.MY_OR_TEAM_ORDERS>
     <@gwtWidget id=findOrderWidget class="subSectionBlock" viewPref="${viewPreferences.MY_OR_TEAM_ORDERS}"/>
 <#else>
-    <@gwtWidget id=findOrderWidget class="subSectionBlock"/>
+    <#if viewPreferences?has_content && viewPreferences.MY_OR_TEAM_ORDERS?has_content && "ALL_OPEN_ORDERS" == viewPreferences.MY_OR_TEAM_ORDERS>
+      <@gwtWidget id=findOrderWidget class="subSectionBlock" pageSize="200"/>
+    <#else>
+      <@gwtWidget id=findOrderWidget class="subSectionBlock"/>
+    </#if>
 </#if>

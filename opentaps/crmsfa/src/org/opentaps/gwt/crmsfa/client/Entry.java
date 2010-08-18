@@ -917,6 +917,12 @@ public class Entry extends BaseEntry {
     private void loadMyOrders() {
         myOrdersForm = new FindOrdersForm(false);
         myOrdersForm.hideFilters();
+        String pageSize = getWidgetParameter(MY_ORDERS_ID, "pageSize");
+        if (pageSize != null) {
+            Integer size = Integer.parseInt(pageSize);
+            myOrdersForm.getListView().setPageSize(size);
+            myOrdersForm.getListView().setDefaultPageSize(size);
+        }
         myOrdersForm.getListView().filterMyOrTeamParties(getViewPref());
         myOrdersForm.getListView().applyFilters();
         RootPanel.get(MY_ORDERS_ID).add(myOrdersForm.getMainPanel());
