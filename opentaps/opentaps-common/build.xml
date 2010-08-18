@@ -298,7 +298,7 @@
       </if>
       <!-- create WEB-INF/web.xml for enable gzip javascript and css files -->
       <mkdir dir="${gwt.deploy.dir}/WEB-INF" />
-      <copy file="${gwt.deploy.dir}/../../../opentaps-common/templates/web.xml.ftl" tofile="${gwt.deploy.dir}/WEB-INF/web.xml" overwrite="true"/>    	
+      <copy file="${gwt.deploy.dir}/../../../../opentaps/opentaps-common/templates/web.xml.ftl" tofile="${gwt.deploy.dir}/WEB-INF/web.xml" overwrite="true"/>    	
     </target>
 
     <target name="prebuild" depends="prepare,classpath">
