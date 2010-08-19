@@ -17,8 +17,9 @@
 
 import javolution.util.FastList;
 import org.ofbiz.base.util.UtilMisc;
+import org.opentaps.warehouse.facility.UtilWarehouse;
 
-facilityId = session.getAttribute("facilityId");
+facilityId = UtilWarehouse.getFacilityId(request);
 
 shortcuts = FastList.newInstance();
 shortcuts.add( UtilMisc.toMap("uri", "backOrderedItems", "uiLabel", "WarehouseBackOrderedItems") );

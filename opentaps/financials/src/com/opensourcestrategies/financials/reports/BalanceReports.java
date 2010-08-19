@@ -84,7 +84,7 @@ public final class BalanceReports {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map balanceStatementReport(DispatchContext dctx, Map context) {
+    public static Map<String, Object> balanceStatementReport(DispatchContext dctx, Map<String, ?> context) {
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -200,9 +200,9 @@ public final class BalanceReports {
             UtilMessage.addError(request, "OpentapsError_MissingPaginator");
             return "error";
         }
-        String organizationPartyId = (String) session.getAttribute("organizationPartyId");
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         if (organizationPartyId == null) {
-            UtilMessage.addError(request, "OpentapsError_MissingPaginator");
+            UtilMessage.addError(request, "OpentapsError_OrganizationNotSet");
             return "error";
         }
 

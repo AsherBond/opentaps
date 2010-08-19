@@ -21,7 +21,7 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.product.UtilProduct;
 import org.opentaps.purchasing.mrp.UtilMrp;
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 facilities = UtilCommon.getOrganizationReceivingFacilities(organizationPartyId, delegator);
 facilityGroups = delegator.findAllCache("FacilityGroup");

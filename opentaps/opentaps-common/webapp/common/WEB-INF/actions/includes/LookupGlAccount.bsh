@@ -28,7 +28,7 @@ if (! "Y".equals(performFind)) {
     return;
 }
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 accountCode = UtilCommon.getParameter(request, "accountCode");
 accountName = UtilCommon.getParameter(request, "accountName");
 

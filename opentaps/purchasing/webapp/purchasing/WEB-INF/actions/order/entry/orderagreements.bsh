@@ -21,7 +21,7 @@ import org.opentaps.common.util.UtilCommon;
 
 cart = context.get("shoppingCart");
 if ((UtilValidate.isNotEmpty(cart)) && ("PURCHASE_ORDER".equals(cart.getOrderType()))) {
-    organizationPartyId = session.getAttribute("organizationPartyId");
+    organizationPartyId = UtilCommon.getOrganizationPartyId(request);
     context.put("agreements", delegator.findByAnd("Agreement", UtilMisc.toList(
         new EntityExpr("agreementTypeId", EntityOperator.EQUALS, "PURCHASE_AGREEMENT"),
         new EntityExpr("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"),

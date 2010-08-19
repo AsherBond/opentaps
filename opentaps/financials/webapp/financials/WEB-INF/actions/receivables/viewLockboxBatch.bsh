@@ -36,7 +36,7 @@ if (UtilValidate.isNotEmpty(lockboxBatchId)) {
     }
 }
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 context.put("organizationPartyId", organizationPartyId);
 context.put("batch", batch);

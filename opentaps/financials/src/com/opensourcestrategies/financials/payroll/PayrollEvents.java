@@ -17,31 +17,21 @@
 
 package com.opensourcestrategies.financials.payroll;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
-import net.sf.json.JSONObject;
-import net.sf.json.JSONArray;
-import net.sf.json.util.JSONBuilder;
-import net.sf.json.util.JSONUtils;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.ofbiz.base.util.Debug;
+import javolution.util.FastList;
+
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilHttp;
-import org.ofbiz.entity.util.*;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.opentaps.common.util.UtilCommon;
-import org.opentaps.common.util.UtilMessage;
-
+import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.event.AjaxEvents;
-import com.opensourcestrategies.financials.payroll.PayrollHelper;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import javolution.util.FastList;
+import org.opentaps.common.util.UtilCommon;
 
 public class PayrollEvents {
 
@@ -56,15 +46,14 @@ public class PayrollEvents {
 
     /** Gets a list of payment (paycheck) options that are associated with a given partyId (employee). */
     public static String getPaymentTypeDataJSON(HttpServletRequest request, HttpServletResponse response) {
-    	HttpSession session = (HttpSession)request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
-        
-        String organizationPartyId = (String)session.getAttribute("organizationPartyId");
+    	GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         String partyId = (String) request.getParameter("partyId");
 
         try {
         	PayrollHelper payrollHelper = new PayrollHelper(organizationPartyId, delegator);
-        	Collection paymentTypeOptions = (Collection)EntityUtil.getRelated("PaymentType", (List)payrollHelper.getAvailablePaycheckTypes(UtilMisc.toList(partyId)));
+        	Collection<GenericValue> paymentTypeOptions = (Collection<GenericValue>) EntityUtil.getRelated("PaymentType", (List<GenericValue>) payrollHelper.getAvailablePaycheckTypes(UtilMisc.toList(partyId)));
             return AjaxEvents.doJSONResponse(response, paymentTypeOptions);
         } catch (GenericEntityException e) {
             return AjaxEvents.doJSONResponse(response, FastList.newInstance());

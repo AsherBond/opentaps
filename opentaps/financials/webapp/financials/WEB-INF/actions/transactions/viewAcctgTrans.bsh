@@ -66,7 +66,7 @@ if (UtilValidate.isEmpty(acctgTransEntries)) {
 context.put("acctgTransEntries", acctgTransEntries);
 context.put("canDeleteTrans", canDeleteTrans);
 // better to use sesison than parameters, in case somebody puts organizationPartyId into URL
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 // if the transaction is still not posted then populate some data for editing forms
 if (!acctgTrans.isPosted()) {

@@ -39,7 +39,7 @@ import org.opentaps.domain.billing.lockbox.LockboxBatch;
 locale = UtilHttp.getLocale(request);
 timeZone = UtilCommon.getTimeZone(request);
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 context.put("organizationPartyId", organizationPartyId);
 
 domain = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin)).loadDomainsDirectory().getBillingDomain();

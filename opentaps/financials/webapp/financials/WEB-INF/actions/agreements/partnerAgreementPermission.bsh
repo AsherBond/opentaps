@@ -17,10 +17,11 @@
 
 import org.ofbiz.base.util.UtilMisc;
 import com.opensourcestrategies.financials.security.FinancialsSecurity;
+import org.opentaps.common.util.UtilCommon;
 
 if (security == null || security == null) return;
 
-partyId = session.getAttribute("organizationPartyId");
+partyId = UtilCommon.getOrganizationPartyId(request);
 agreementId = parameters.get("agreementId");
 if (agreementId != null) {
     agreement = delegator.findByPrimaryKey("Agreement", UtilMisc.toMap("agreementId", agreementId));

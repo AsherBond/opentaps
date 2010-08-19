@@ -21,10 +21,11 @@ import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.common.order.UtilOrder;
 import org.opentaps.warehouse.security.WarehouseSecurity;
+import org.opentaps.warehouse.facility.UtilWarehouse;
 
 facilityId = parameters.get("facilityId");
 if (UtilValidate.isEmpty(facilityId)) {
-    facilityId = session.getAttribute("facilityId");
+    facilityId = UtilWarehouse.getFacilityId(request);
 }
 warehouseSecurity = parameters.get("warehouseSecurity");
 if (UtilValidate.isEmpty(warehouseSecurity)) {

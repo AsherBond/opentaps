@@ -74,7 +74,7 @@ if (!"Y".equals(performFind)) {
 
 // base condition is status of requirements for the organization's facilities
 searchConditions = UtilMisc.toList(
-                new EntityExpr("facilityId", EntityOperator.IN, UtilCommon.getOrgReceivingFacilityIds(session.getAttribute("organizationPartyId"), delegator)));
+                new EntityExpr("facilityId", EntityOperator.IN, UtilCommon.getOrgReceivingFacilityIds(UtilCommon.getOrganizationPartyId(request), delegator)));
 findOpenRequirement = parameters.get("findOpenRequirement");
 if (findOpenRequirement != null && findOpenRequirement.equals("Y")) {
 	searchConditions.add(new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("REQ_CREATED", "REQ_PROPOSED")));

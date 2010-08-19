@@ -59,9 +59,9 @@ timeZone = UtilCommon.getTimeZone(request);
 GenericDelegator delegator = request.getAttribute("delegator");
 LocalDispatcher dispatcher = request.getAttribute("dispatcher");
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
-facilities = UtilCommon.getOrganizationReceivingFacilities(session.getAttribute("organizationPartyId"), delegator);
+facilities = UtilCommon.getOrganizationReceivingFacilities(organizationPartyId, delegator);
 context.put("facilities", facilities);
 
 // get list of productStores to allow the user the option to do a product store specific MRP

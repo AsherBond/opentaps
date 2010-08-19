@@ -27,10 +27,11 @@ import org.ofbiz.entity.condition.*;
 import org.ofbiz.service.ServiceUtil;
 
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.order.UtilOrder;
 
 // get the current select organization
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 // get the given parameters
 orderId = parameters.get("orderId");

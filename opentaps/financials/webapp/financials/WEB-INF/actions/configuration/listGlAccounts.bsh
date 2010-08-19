@@ -24,7 +24,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilCommon;
 import com.opensourcestrategies.financials.accounts.GLAccountTree;
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 if (UtilValidate.isEmpty(organizationPartyId)) {
     return;

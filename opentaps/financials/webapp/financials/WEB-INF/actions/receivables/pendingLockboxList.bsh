@@ -20,11 +20,12 @@ import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.common.util.UtilCommon;
 
 domain = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin)).loadDomainsDirectory().getBillingDomain();
 repository = domain.getLockboxRepository();
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 context.put("organizationPartyId", organizationPartyId);
 
 batches = repository.getPendingBatches();

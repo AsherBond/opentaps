@@ -56,7 +56,7 @@ daysInPeriod = (thruCal.getTimeInMillis() - fromCal.getTimeInMillis())*1.0/1000/
 // constants
 orderAndSelect = UtilMisc.toList("productId");
 options = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 currencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
 
 // function to get the sum of acctg transactions for each of the three classes of accounts (skips products with no sum)

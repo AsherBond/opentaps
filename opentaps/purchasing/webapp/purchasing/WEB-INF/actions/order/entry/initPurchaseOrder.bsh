@@ -44,7 +44,7 @@
  }
  context.put("hasParty", hasParty);
 
- organizationPartyId = session.getAttribute("organizationPartyId");
+ organizationPartyId = UtilCommon.getOrganizationPartyId(request);
  context.put("organizationPartyId", organizationPartyId);
  
  // get the produt store that's presently set and put in context

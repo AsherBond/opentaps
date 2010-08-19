@@ -44,12 +44,12 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilConfig;
 import org.opentaps.purchasing.security.PurchasingSecurity;
 
 // organization party
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 organizationParty = session.getAttribute("organizationParty");
 if (UtilValidate.isNotEmpty(organizationParty)) {
     context.put("applicationSetupOrganization", organizationParty);

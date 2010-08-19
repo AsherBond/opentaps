@@ -19,12 +19,19 @@ package org.opentaps.warehouse.facility;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilConfig;
 
 
 /**
@@ -99,7 +106,7 @@ public final class UtilWarehouse {
     }
 
     /**
-     * Conveniance method to call findFacilityTransfer.
+     * Convenience method to call findFacilityTransfer.
      *
      * @param   facilityId        The Id of the warehouse to look on
      * @param   delegator         The delegator object to look up on
@@ -129,4 +136,38 @@ public final class UtilWarehouse {
         return UtilWarehouse.findFacilityTransfer(facilityId, false, true, false, delegator);
     }
 
+    /**
+     * Get facility id from session taking into consideration user's preferences.
+     */
+    public static String getFacilityId(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session == null) {
+            return null;
+        }
+
+        Boolean applicationContextSet = (Boolean) session.getAttribute("applicationContextSet");
+        if (applicationContextSet == null) {
+            GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+            try {
+                String facilityId = UtilCommon.getUserLoginViewPreference(request, UtilConfig.SYSTEM_WIDE, UtilConfig.SET_FACILITY_FORM, UtilConfig.OPTION_DEF_FACILITY);
+                if (UtilValidate.isNotEmpty(facilityId)) {
+                    GenericValue facility = delegator.findByPrimaryKeyCache("Facility", UtilMisc.toMap("facilityId", facilityId));
+                    if (facility != null) {
+                        session.setAttribute("facility", facility);
+                        session.setAttribute("facilityId", facilityId);
+                        session.setAttribute("applicationContextSet", Boolean.TRUE);
+                    }
+                }
+            } catch (GenericEntityException e) {
+                Debug.logError(e.getMessage(), MODULE);
+            }
+        }
+
+        String facilityId = (String) session.getAttribute("facilityId");
+        if (UtilValidate.isEmpty(facilityId)) {
+            return null;
+        }
+
+        return facilityId;
+    }
 }

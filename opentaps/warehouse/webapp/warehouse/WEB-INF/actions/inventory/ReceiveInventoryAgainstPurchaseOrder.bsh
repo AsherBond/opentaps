@@ -50,11 +50,12 @@ import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.domain.product.ProductDomainInterface;
+import org.opentaps.warehouse.facility.UtilWarehouse;
 
 delegator = request.getAttribute("delegator");
 dispatcher = request.getAttribute("dispatcher");
 userLogin = session.getAttribute("userLogin");
-facilityId = session.getAttribute("facilityId");
+facilityId = UtilWarehouse.getFacilityId(request);
 
 orderId = request.getParameter("purchaseOrderId");
 context.put("orderId", orderId);

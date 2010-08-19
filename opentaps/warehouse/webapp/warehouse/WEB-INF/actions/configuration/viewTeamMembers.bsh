@@ -18,6 +18,7 @@
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.warehouse.facility.UtilWarehouse;
 
 
 // check for facility configuration permission
@@ -27,7 +28,7 @@ hasConfigPermission = warehouseSecurity.hasFacilityPermission("WRHS_CONFIG");
 context.put("hasConfigPermission", hasConfigPermission);
 
 // get the facility team members
-UtilMisc.toMap("facilityId", session.getAttribute("facilityId"));
+UtilMisc.toMap("facilityId", UtilWarehouse.getFacilityId(request));
 conditions = UtilMisc.toList(
         new EntityExpr("facilityId", EntityOperator.EQUALS, session.getAttribute("facilityId")),
         EntityUtil.getFilterByDateExpr()

@@ -72,7 +72,7 @@ glAccountId = parameters.get("glAccountId");
 if (glAccountId == null || glAccountId.trim().length() == 0) return;
 
 // Since these are receipts, the partyIdTo of the payment should be the organization
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 conditionList = UtilMisc.toList(
             new EntityExpr("glAccountId", EntityOperator.EQUALS, glAccountId),

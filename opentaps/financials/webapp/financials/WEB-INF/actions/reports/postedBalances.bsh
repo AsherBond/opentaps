@@ -31,7 +31,7 @@ import com.opensourcestrategies.financials.accounts.GLAccountTree;
 
 delegator = request.getAttribute("delegator");
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
         new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),

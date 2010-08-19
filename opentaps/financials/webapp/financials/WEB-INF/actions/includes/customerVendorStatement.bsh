@@ -67,7 +67,7 @@ timeAxisLabel = "";
 valueAxisLabel = "";
 
 // our organization
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 // Get the base currency for the organization
 orgCurrencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
 context.put("orgCurrencyUomId", orgCurrencyUomId);

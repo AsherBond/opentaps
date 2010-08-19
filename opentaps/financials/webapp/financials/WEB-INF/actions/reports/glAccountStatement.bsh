@@ -77,7 +77,7 @@ thruDate = context.get("thruDate");
 if (fromDate == null || thruDate == null) return;
 
 // our organization
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 // Get the base currency for the organization
 context.put("orgCurrencyUomId", UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));
 

@@ -35,6 +35,7 @@ import org.opentaps.domain.inventory.InventoryDomainInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.warehouse.facility.UtilWarehouse;
 import org.opentaps.warehouse.security.WarehouseSecurity;
 
 public final class ShippingEvents {
@@ -56,7 +57,7 @@ public final class ShippingEvents {
         // ensure warehouse invoice view
         String facilityId = UtilCommon.getParameter(request, "facilityId");
         if (UtilValidate.isEmpty(facilityId)) {
-            facilityId = (String) request.getSession().getAttribute("facilityId");
+            facilityId = UtilWarehouse.getFacilityId(request);
         }
         if (UtilValidate.isEmpty(facilityId)) {
             return UtilMessage.createAndLogEventError(request, "Facility ID is not set in the request.", MODULE);

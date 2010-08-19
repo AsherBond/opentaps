@@ -27,7 +27,7 @@ import javolution.util.FastList;
 timeZone = UtilCommon.getTimeZone(request);
 locale = UtilHttp.getLocale(request);
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 context{"tagTypes"} = UtilAccountingTags.getAccountingTagFiltersForOrganization(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, locale);
 
 accountActivitiesDetailsBuilder(organizationPartyId, transactionFromDate, transactionThruDate) {
@@ -81,8 +81,7 @@ accountActivitiesDetailsBuilder(organizationPartyId, transactionFromDate, transa
 transactionFromDate = UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "transactionFromDate", locale), timeZone, locale);
 transactionThruDate = UtilDateTime.getDayEnd(UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "transactionThruDate", locale), timeZone, locale));
 
-/* some links from other screens provide organizationPartyId in the URL */
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 /* pass the query builder for pagination */
 context.put("accountActivitiesDetailsBuilder", accountActivitiesDetailsBuilder(organizationPartyId, transactionFromDate, transactionThruDate));

@@ -92,9 +92,9 @@ public class AccountsEvents {
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
-        String organizationPartyId = (String) session.getAttribute("organizationPartyId");
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         if (organizationPartyId == null) {
-            UtilMessage.addError(request, "OpentapsError_MissingPaginator");
+            UtilMessage.addError(request, "OpentapsError_OrganizationNotSet");
             return "error";
         }
 

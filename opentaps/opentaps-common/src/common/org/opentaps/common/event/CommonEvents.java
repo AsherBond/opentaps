@@ -69,6 +69,7 @@ import org.opentaps.common.reporting.UtilReports;
 import org.opentaps.common.reporting.jasper.JRResourceBundle;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilConfig;
 import org.opentaps.common.util.UtilMessage;
 
 /**
@@ -82,8 +83,6 @@ public final class CommonEvents {
     private CommonEvents() { }
 
     private static final String MODULE = CommonEvents.class.getName();
-
-    public static final String SYSTEM_WIDE = "opentaps";
 
     /**
      * This method will read the donePage parameter and return it to the controller as the result.
@@ -132,13 +131,10 @@ public final class CommonEvents {
      * @return the event response string, "success" if an organization is set, else "selectOrganization"
      */
     public static String setOrganization(HttpServletRequest request, HttpServletResponse response) {
-        final String SCREEN_NAME = "selectOrganizationForm";
-        final String OPTION_DEF_ORGANIZATION = "organizationPartyId";
-
         String organizationPartyId = request.getParameter("organizationPartyId");
         if (organizationPartyId == null || organizationPartyId.trim().length() == 0) {
             try {
-                organizationPartyId = UtilCommon.getUserLoginViewPreference(request, SYSTEM_WIDE, SCREEN_NAME, OPTION_DEF_ORGANIZATION);
+                organizationPartyId = UtilCommon.getUserLoginViewPreference(request, UtilConfig.SYSTEM_WIDE, UtilConfig.SET_ORGANIZATION_FORM, UtilConfig.OPTION_DEF_ORGANIZATION);
             } catch (GenericEntityException e) {
                 Debug.logError(e, "Error while retrieve default organization", MODULE);
                 return "selectOrganization";
@@ -168,7 +164,7 @@ public final class CommonEvents {
         session.setAttribute("applicationContextSet", Boolean.TRUE);
 
         try {
-            UtilCommon.setUserLoginViewPreference(request, SYSTEM_WIDE, SCREEN_NAME, OPTION_DEF_ORGANIZATION, organizationPartyId);
+            UtilCommon.setUserLoginViewPreference(request, UtilConfig.SYSTEM_WIDE, UtilConfig.SET_ORGANIZATION_FORM, UtilConfig.OPTION_DEF_ORGANIZATION, organizationPartyId);
         } catch (GenericEntityException e) {
             // log message and go ahead, application may work w/o default value
             Debug.logWarning(e.getMessage(), MODULE);

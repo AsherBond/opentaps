@@ -22,6 +22,7 @@ import org.ofbiz.entity.*;
 import org.ofbiz.entity.util.*;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.accounting.util.UtilAccounting;
+import org.opentaps.common.util.UtilCommon;
  
 delegator = request.getAttribute("delegator");
 security = request.getAttribute("security");
@@ -33,7 +34,7 @@ if(security.hasEntityPermission("ACCOUNTING", "_VIEW", session)) {
 }
 
 glAccountId = parameters.get("glAccountId");
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 context.put("organizationPartyId", organizationPartyId);
 
 // Get the GlAccount

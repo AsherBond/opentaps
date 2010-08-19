@@ -47,7 +47,7 @@ import org.opentaps.common.util.UtilCommon;
 
 // base condition is status of requirements for the organization's facilities
 searchConditions = UtilMisc.toList(
-                new EntityExpr("facilityId", EntityOperator.IN, UtilCommon.getOrgReceivingFacilityIds(session.getAttribute("organizationPartyId"), delegator)),
+                new EntityExpr("facilityId", EntityOperator.IN, UtilCommon.getOrgReceivingFacilityIds(UtilCommon.getOrganizationPartyId(request), delegator)),
                 new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("REQ_CREATED", "REQ_PROPOSED")));
 
 // productIds to search.  Note it's important to remove the productId now so that it's not part of the condition made by prepareFind again

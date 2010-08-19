@@ -32,7 +32,7 @@ import org.opentaps.domain.inventory.InventoryDomainInterface;
 
 timeZone = UtilCommon.getTimeZone(request);
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 if (organizationPartyId == null) {
     return;
 }

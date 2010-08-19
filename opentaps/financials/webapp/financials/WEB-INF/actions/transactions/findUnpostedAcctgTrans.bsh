@@ -29,11 +29,12 @@ import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
 
 listIteratorNameToUse = parameters.get("listIteratorNameToUse");
 if (listIteratorNameToUse == null) return;
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 // construct search conditions
 searchConditions = new ArrayList();

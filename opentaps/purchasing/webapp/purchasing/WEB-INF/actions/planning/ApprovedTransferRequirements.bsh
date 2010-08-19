@@ -28,7 +28,7 @@ facilityIdTo = UtilCommon.getParameter(request, "facilityIdTo");
 
 options = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
 orderBy = UtilMisc.toList("productId");
-organizationFacilities = UtilCommon.getOrgReceivingFacilityIds(session.getAttribute("organizationPartyId"), delegator);
+organizationFacilities = UtilCommon.getOrgReceivingFacilityIds(UtilCommon.getOrganizationPartyId(request), delegator);
 exprListFacility = new ArrayList();
 expr = new EntityExpr("facilityId", EntityOperator.IN, organizationFacilities);
 exprListFacility.add(expr); 

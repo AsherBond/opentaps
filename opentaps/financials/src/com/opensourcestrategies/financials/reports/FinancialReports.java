@@ -118,7 +118,7 @@ public final class FinancialReports {
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
-        String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         String glFiscalTypeId = UtilCommon.getParameter(request, "glFiscalTypeId");
         String dateOption = UtilCommon.getParameter(request, "reportDateOption");
         String fromDateText = UtilCommon.getParameter(request, "fromDate");
@@ -187,7 +187,7 @@ public final class FinancialReports {
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
-        String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         String glFiscalTypeId1 = UtilCommon.getParameter(request, "glFiscalTypeId1");
         String glFiscalTypeId2 = UtilCommon.getParameter(request, "glFiscalTypeId2");
         String fromDateText1 = null;
@@ -251,7 +251,7 @@ public final class FinancialReports {
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
-        String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         String glFiscalTypeId1 = UtilCommon.getParameter(request, "glFiscalTypeId1");
         String glFiscalTypeId2 = UtilCommon.getParameter(request, "glFiscalTypeId2");
         String fromDateText = null;
@@ -1566,7 +1566,7 @@ public final class FinancialReports {
             List<String> fieldsToSelectForDetail = null; // all fields
 
             // since these are all receipts, we need to constrain to Payment.partyIdTo = organizationPartyId
-            String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
+            String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
             // conditions for detail report
             EntityConditionList<EntityCondition> commonConditions =
@@ -1713,7 +1713,7 @@ public final class FinancialReports {
                 "Y".equals(UtilCommon.getParameter(request, "showInvoiceLevelDetail")) ? true : false;
 
             // Since these are receipts, the partyIdTo of the payment should be the organization
-            String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
+            String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
             BigDecimal totalCash = BigDecimal.ZERO;
             BigDecimal total = BigDecimal.ZERO;
@@ -1827,7 +1827,7 @@ public final class FinancialReports {
         String reportType = UtilCommon.getParameter(request, "type");
 
         String dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
-        String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
         try {
 
@@ -2021,7 +2021,7 @@ public final class FinancialReports {
      */
     public static String createGlAccountTransEntryFacts(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
 
         Map<String, Object> context = FastMap.<String, Object>newInstance();

@@ -30,8 +30,9 @@ import org.ofbiz.entity.condition.*;
 import org.ofbiz.service.*;
 import com.opensourcestrategies.financials.financials.FinancialServices;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 userLogin = context.get("userLogin");
 
 // see if we're searching by productId

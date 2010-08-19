@@ -64,7 +64,7 @@ partyIdField = (isReceivablesReport ? "partyId" : "partyIdFrom");
 
 // constants
 options = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 // Get the base currency for the organization
 currencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
 

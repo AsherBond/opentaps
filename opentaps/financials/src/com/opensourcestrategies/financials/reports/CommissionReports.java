@@ -73,9 +73,9 @@ public final class CommissionReports {
         TimeZone timeZone = UtilCommon.getTimeZone(request);
 
         // get the report constraints
-        String organizationPartyId = (String) session.getAttribute("organizationPartyId");
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         if (organizationPartyId == null) {
-            UtilMessage.addError(request, "OpentapsError_MissingPaginator");
+            UtilMessage.addError(request, "OpentapsError_OrganizationNotSet");
             return "error";
         }
 

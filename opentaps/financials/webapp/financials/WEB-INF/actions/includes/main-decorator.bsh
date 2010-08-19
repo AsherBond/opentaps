@@ -22,6 +22,8 @@ import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilCommon;
 import com.opensourcestrategies.financials.security.FinancialsSecurity;
 
+userLogin = request.getAttribute("userLogin");
+
 // get the organization party ID
 organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 organizationParty = session.getAttribute("organizationParty");

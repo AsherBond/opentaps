@@ -22,8 +22,9 @@ import org.ofbiz.entity.condition.*;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.warehouse.security.WarehouseSecurity;
+import org.opentaps.warehouse.facility.UtilWarehouse;
 
-facilityId = session.getAttribute("facilityId");
+facilityId = UtilWarehouse.getFacilityId(request);
 facility = delegator.findByPrimaryKeyCache("Facility", UtilMisc.toMap("facilityId", facilityId));
 context.put("facility", facility);
 context.put("facilityId", facilityId);

@@ -30,7 +30,7 @@ orderBy = UtilMisc.toList("productId");
 conditions = UtilMisc.toList(
             new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_APPROVED"),
             new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "PENDING_INTERNAL_REQ"),
-            new EntityExpr("facilityId", EntityOperator.IN, UtilCommon.getOrgReceivingFacilityIds(session.getAttribute("organizationPartyId"), delegator))
+            new EntityExpr("facilityId", EntityOperator.IN, UtilCommon.getOrgReceivingFacilityIds(UtilCommon.getOrganizationPartyId(request), delegator))
             );
 
 if (productId != null) {

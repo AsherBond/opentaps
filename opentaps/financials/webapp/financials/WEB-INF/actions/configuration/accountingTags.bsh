@@ -21,8 +21,9 @@ import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.base.entities.AcctgTagEnumType;
 import org.opentaps.base.entities.AcctgTagPostingCheck;
 import org.opentaps.base.entities.AcctgTagUsageType;
+import org.opentaps.common.util.UtilCommon;
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 context.put("organizationPartyId", organizationPartyId);
 
 OrganizationRepository repository = new OrganizationRepository(delegator);

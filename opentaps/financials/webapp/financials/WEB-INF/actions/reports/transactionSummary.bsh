@@ -34,7 +34,7 @@ import java.text.ParseException;
 locale = UtilHttp.getLocale(request);
 timeZone = UtilCommon.getTimeZone(request);
 dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 //put to history
 context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsTransactionSummary"), null, FastList.newInstance());

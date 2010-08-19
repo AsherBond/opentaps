@@ -24,13 +24,20 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
 
 /**
  * Configuration utilities for opentaps applications.
@@ -47,6 +54,18 @@ public class UtilConfig {
     private static Map addressFunctionCache = null;
 
     private static String addressFormatKey = "opentaps.formatter.address.";
+
+    // constants to work w/ organization stored in user's preferences
+    public static final String SET_ORGANIZATION_FORM = "selectOrganizationForm";
+    public static final String SET_FACILITY_FORM = "selectFacilityForm";
+    public static final String OPTION_DEF_ORGANIZATION = "organizationPartyId";
+    public static final String OPTION_DEF_FACILITY = "facilityId";
+
+    /**
+     * This constant used as application name in case user preferences value may be used
+     * across all components
+     */
+    public static final String SYSTEM_WIDE = "opentaps";
 
     static {
         configCache = FastMap.newInstance();
@@ -81,21 +100,21 @@ public class UtilConfig {
         return configProperties;
     }
 
-    private static List getCachedFiles(String opentapsApplicationName, Map cache, String property) {
+    private static List<String> getCachedFiles(String opentapsApplicationName, Map cache, String property) {
         if (cache == null) {
             cache = FastMap.newInstance();
             String[] values = UtilProperties.getPropertyValue("opentaps.properties", property).split("\\s*,\\s*");
-            List files = FastList.newInstance();
+            List<String> files = FastList.<String>newInstance();
             files.addAll(Arrays.asList(values));
             files.remove("");
             cache.put("opentaps", files);
         }
 
-        List files = (List) cache.get(opentapsApplicationName);
+        List<String> files = (List<String>) cache.get(opentapsApplicationName);
         if (files == null) {
             files = FastList.newInstance();
             String[] values = UtilProperties.getPropertyValue(opentapsApplicationName + ".properties", property).split("\\s*,\\s*");
-            files.addAll((List) cache.get("opentaps")); // Add opentaps ones first, so they get loaded first
+            files.addAll((List<String>) cache.get("opentaps")); // Add opentaps ones first, so they get loaded first
             files.addAll(Arrays.asList(values));
             files.remove("");
             cache.put(opentapsApplicationName, files);
@@ -104,7 +123,7 @@ public class UtilConfig {
     }
 
     /** Gets a list of javascript files for the application. */
-    public static List getJavascriptFiles(String opentapsApplicationName, Locale locale) {
+    public static List<String> getJavascriptFiles(String opentapsApplicationName, Locale locale) {
         List<String> javascriptFiles = getCachedFiles(opentapsApplicationName, javascriptFileCache, "opentaps.files.javascript");
 
         /*
@@ -152,7 +171,7 @@ public class UtilConfig {
     }
 
     /** Gets a list of css files for the application. */
-    public static List getStylesheetFiles(String opentapsApplicationName) {
+    public static List<String> getStylesheetFiles(String opentapsApplicationName) {
         return getCachedFiles(opentapsApplicationName, stylesheetFileCache, "opentaps.files.stylesheets");
     }
 
@@ -182,8 +201,8 @@ public class UtilConfig {
         if (addressFunctionCache == null) {
             addressFunctionCache = FastMap.newInstance();
             Map properties = getConfigProperties("opentaps");
-            for (Iterator iter = properties.keySet().iterator(); iter.hasNext();) {
-                String key = (String) iter.next();
+            for (Iterator<String> iter = properties.keySet().iterator(); iter.hasNext();) {
+                String key = iter.next();
                 if (!key.startsWith(addressFormatKey)) {
                     continue;
                 }
@@ -265,8 +284,8 @@ public class UtilConfig {
         String prefixWithPeriod = prefix + ".";
         int size = prefixWithPeriod.length();
         Map properties = getConfigProperties(opentapsApplicationName);
-        for (Iterator iter = properties.keySet().iterator(); iter.hasNext();) {
-            String propertyKey = (String) iter.next();
+        for (Iterator<String> iter = properties.keySet().iterator(); iter.hasNext();) {
+            String propertyKey = iter.next();
 
             int index = propertyKey.indexOf(prefixWithPeriod);
             if (index == -1 || propertyKey.length() == size) {
@@ -289,4 +308,40 @@ public class UtilConfig {
         return map;
     }
 
+    /**
+     * Setup organization in session if some organization stored in user preferences.
+     */
+    public static void checkDefaultOrganization(HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+
+        if (userLogin == null) {
+            return;
+        }
+
+        String organizationPartyId = null;
+
+        try {
+
+            organizationPartyId = UtilCommon.getUserLoginViewPreference(request, "opentaps", SET_ORGANIZATION_FORM, OPTION_DEF_ORGANIZATION);
+            if (UtilValidate.isEmpty(organizationPartyId)) {
+                return;
+            }
+
+            GenericValue organization = delegator.findByPrimaryKeyCache("PartyGroup", UtilMisc.toMap("partyId", organizationPartyId));
+            if (organization == null) {
+                return;
+            }
+
+            session.setAttribute("organizationParty", organization);
+            session.setAttribute("organizationPartyId", organizationPartyId);
+            session.setAttribute("applicationContextSet", Boolean.TRUE);
+
+        } catch (GenericEntityException e) {
+            Debug.logError(e, "Error while retrieve default organization", module);
+            return;
+        }
+    }
 }

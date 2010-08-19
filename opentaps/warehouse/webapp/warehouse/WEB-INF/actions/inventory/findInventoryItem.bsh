@@ -28,6 +28,7 @@ import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.warehouse.facility.UtilWarehouse;
 
 // get the accounting tag filters
 domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
@@ -57,7 +58,7 @@ if (UtilValidate.isEmpty(parameters.get("performFind"))) {
     return;
 }
 
-facilityId = session.getAttribute("facilityId");
+facilityId = UtilWarehouse.getFacilityId(request);
 searchConditions = UtilMisc.toList(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));
 
 if (!UtilValidate.isEmpty(parameters.get("productId"))) {

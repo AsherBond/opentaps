@@ -22,9 +22,10 @@ import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.order.UtilOrder;
 import org.opentaps.common.product.UtilProduct;
+import org.opentaps.warehouse.facility.UtilWarehouse;
 
 conditions = new ArrayList();
-conditions.add( new EntityExpr("pFacilityId", EntityOperator.EQUALS, session.getAttribute("facilityId")) );
+conditions.add( new EntityExpr("pFacilityId", EntityOperator.EQUALS, UtilWarehouse.getFacilityId(request)) );
 conditions.add( new EntityExpr("pStatusId", EntityOperator.EQUALS, "PICKLIST_PICKED") );
 conditions.add( new EntityExpr("piItemStatusId", EntityOperator.EQUALS, "PICKITEM_PENDING") );
 conditions.add( new EntityExpr("piQuantity", EntityOperator.GREATER_THAN, new Double(0)) );

@@ -23,6 +23,7 @@ import com.opensourcestrategies.financials.payroll.PayrollHelper;
 import com.opensourcestrategies.financials.payroll.PaycheckReader;
 import javolution.util.FastList;
 import javolution.util.FastMap;
+import org.opentaps.common.util.UtilCommon;
 
 delegator = request.getAttribute("delegator");
 
@@ -60,7 +61,7 @@ hasCreatePermission = security.hasEntityPermission("FINANCIALS", "_EMP_PCCRTE", 
 context.put("hasCreatePermission", hasCreatePermission);
 
 
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 organizationParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", organizationPartyId));
 // paychecks can only be made from a checking account

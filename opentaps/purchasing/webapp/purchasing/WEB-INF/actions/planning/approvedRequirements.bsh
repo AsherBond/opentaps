@@ -17,4 +17,4 @@
 
 import org.opentaps.common.util.UtilCommon;
 
-context.put("facilities", UtilCommon.getOrganizationReceivingFacilities(session.getAttribute("organizationPartyId"), delegator));
+context.put("facilities", UtilCommon.getOrganizationReceivingFacilities(UtilCommon.getOrganizationPartyId(request), delegator));

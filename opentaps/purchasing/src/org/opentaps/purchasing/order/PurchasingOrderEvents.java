@@ -156,7 +156,7 @@ public final class PurchasingOrderEvents {
         if (billFromVendorPartyId == null) {
             billFromVendorPartyId = UtilCommon.getParameter(request, "supplierPartyId_o_0"); // get it from the requirement multi form
         }
-        String billToCustomerPartyId = (String) session.getAttribute("organizationPartyId");
+        String billToCustomerPartyId = UtilCommon.getOrganizationPartyId(request);
         if (UtilValidate.isEmpty(billToCustomerPartyId)) {
             throw new IllegalArgumentException("No organization found in session.  Cannot create purchase order.");
         }
@@ -292,8 +292,8 @@ public final class PurchasingOrderEvents {
         // Create WorkOrderItemFulfillment for MFG_CONTRACT items.  These are normally created by BOM system, but for
         // non-BOM tasks, such as outsourced, we need to do these by hand
         // also make the accounting tags from the cart item attributes
-        for (Iterator iter = cart.iterator(); iter.hasNext();) {
-            ShoppingCartItem item = (ShoppingCartItem) iter.next();
+        for (Iterator<ShoppingCartItem> iter = cart.iterator(); iter.hasNext();) {
+            ShoppingCartItem item = iter.next();
             String requirementId = item.getRequirementId();
             String orderItemSeqId = item.getOrderItemSeqId();
 
@@ -643,8 +643,8 @@ public final class PurchasingOrderEvents {
     @SuppressWarnings("unchecked")
     public static boolean updateCartWithRequirement(ShoppingCart cart, GenericDelegator delegator) throws GenericEntityException {
         // update each item to the correct orderItemType for the requirement type
-        for (Iterator iter = cart.iterator(); iter.hasNext();) {
-            ShoppingCartItem item = (ShoppingCartItem) iter.next();
+        for (Iterator<ShoppingCartItem> iter = cart.iterator(); iter.hasNext();) {
+            ShoppingCartItem item = iter.next();
             String requirementId = item.getRequirementId();
             if (UtilValidate.isEmpty(requirementId)) {
                 continue;
@@ -684,8 +684,8 @@ public final class PurchasingOrderEvents {
         //Check for errors
         StringBuffer errMsg = new StringBuffer();
         if (result.containsKey(ModelService.ERROR_MESSAGE_LIST)) {
-            List errorMsgs = (List) result.get(ModelService.ERROR_MESSAGE_LIST);
-            Iterator iterator = errorMsgs.iterator();
+            List<String> errorMsgs = (List<String>) result.get(ModelService.ERROR_MESSAGE_LIST);
+            Iterator<String> iterator = errorMsgs.iterator();
             errMsg.append("<ul>");
             while (iterator.hasNext()) {
                 errMsg.append("<li>");

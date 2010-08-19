@@ -96,7 +96,7 @@ if (thruDate != null) conditions.add( new EntityExpr("effectiveDate", EntityOper
 
 // required conditions
 conditions.add( UtilFinancial.getPaymentTypeExpr(delegator, "PAY_CHECK") );
-conditions.add( new EntityExpr("partyIdFrom", EntityOperator.EQUALS, session.getAttribute("organizationPartyId")) );
+conditions.add( new EntityExpr("partyIdFrom", EntityOperator.EQUALS, UtilCommon.getOrganizationPartyId(request)) );
 
 // use a page builder to fetch the list, because we need some extra data
 buildPaymentList(delegator, conditions) {

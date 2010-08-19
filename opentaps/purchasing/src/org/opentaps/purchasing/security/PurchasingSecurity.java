@@ -16,12 +16,12 @@
  */
 package org.opentaps.purchasing.security;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
 import org.opentaps.common.security.OpentapsSecurity;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import org.opentaps.common.util.UtilCommon;
 
 /**
  * Security methods for the Purchasing application.
@@ -48,8 +48,7 @@ public class PurchasingSecurity extends OpentapsSecurity {
      * Checks section security.  For purchasing, this is based on party relation security between the organizationPartyId and userLogin.
      */
     public boolean checkSectionSecurity(String section, String module, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String organizationPartyId = (String) session.getAttribute("organizationPartyId");
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         return hasPartyRelationSecurity(module, "_VIEW", organizationPartyId);
     }
 }

@@ -380,10 +380,17 @@ public abstract class UtilCommon {
         if (session == null) {
             return null;
         }
+
+        Boolean applicationContextSet = (Boolean) session.getAttribute("applicationContextSet");
+        if (applicationContextSet == null) {
+            UtilConfig.checkDefaultOrganization(request);
+        }
+
         String org = (String) session.getAttribute("organizationPartyId");
         if (UtilValidate.isEmpty(org)) {
             return null;
         }
+
         return org;
     }
 

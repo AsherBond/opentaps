@@ -21,7 +21,7 @@ import org.opentaps.common.util.UtilCommon;
 import com.opensourcestrategies.financials.payroll.PayrollHelper;
 
 delegator = request.getAttribute("delegator");
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
 // if request is comming from viewPaycheck->Create New set default paycheck type
 paymentTypeId = request.getParameter("paymentTypeId");
