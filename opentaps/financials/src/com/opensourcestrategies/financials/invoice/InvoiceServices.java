@@ -83,7 +83,6 @@ import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
-import org.ofbiz.service.ModelParam;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.service.calendar.RecurrenceInfo;
@@ -1070,15 +1069,9 @@ public final class InvoiceServices {
                 GenericValue term = (GenericValue) iter.next();
 
                 // Assemble the context for the createInvoiceTerm service from the AgreementTerm
-                Map createInvoiceTermContext = UtilMisc.toMap("userLogin", userLogin, "locale", locale, "invoiceId", invoiceId);
-                ModelService modelService = dispatcher.getDispatchContext().getModelService("createInvoiceTerm");
-                Iterator implit = modelService.getInModelParamList().iterator();
-                while (implit.hasNext()) {
-                    ModelParam modelParam = (ModelParam) implit.next();
-                    if (term.containsKey(modelParam.name)) {
-                        createInvoiceTermContext.put(modelParam.name, term.get(modelParam.name));
-                    }
-                }
+                ModelService modelService = dctx.getModelService("createInvoiceTerm");
+                Map createInvoiceTermContext = modelService.makeValid(term, "IN");
+                createInvoiceTermContext.putAll(UtilMisc.toMap("userLogin", userLogin, "locale", locale, "invoiceId", invoiceId));
 
                 // Call the createInvoiceTerm service
                 Map createInvoiceTermResult = dispatcher.runSync("createInvoiceTerm", createInvoiceTermContext);
