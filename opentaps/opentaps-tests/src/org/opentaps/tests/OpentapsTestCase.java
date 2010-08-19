@@ -1368,7 +1368,7 @@ public class OpentapsTestCase extends TestCase {
                 GenericValue productStore =  delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
                 String facilityId = productStore.getString("inventoryFacilityId");
                 GenericValue productFacility = delegator.findByPrimaryKey("ProductFacility", UtilMisc.toMap("facilityId", facilityId, "productId", product.get("productId")));
-                assertTrue("Product [" + product.get("productId") + "] has ProductFacility rule", productFacility != null && productFacility.get("minimumStock") != null);
+                assertTrue("Product [" + product.get("productId") + "] does not have ProductFacility.minimumStock for facility [" + facilityId + "]", productFacility != null && productFacility.get("minimumStock") != null);
                 BigDecimal minimumStock = productFacility.getBigDecimal("minimumStock");
                 BigDecimal stock = initialRequirement.add(initialAtp);
                 // the requirement created is for the minimum of (quantity ordered | quantity to make ATP go up to minimumStock)
