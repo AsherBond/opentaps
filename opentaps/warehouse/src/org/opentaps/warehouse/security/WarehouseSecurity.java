@@ -156,7 +156,7 @@ public class WarehouseSecurity extends OpentapsSecurity {
      * @return List of GenericValue facilities
      */
     public List<GenericValue> getUserFacilities(GenericValue userLogin) {
-        GenericDelegator delegator = GenericDelegator.getGenericDelegator(null);
+        GenericDelegator delegator = GenericDelegator.getGenericDelegator("default");
         List<GenericValue> facilities = new ArrayList<GenericValue>();
         try {
             if (getSecurity().hasPermission("WRHS_ADMIN", getUserLogin())) {
