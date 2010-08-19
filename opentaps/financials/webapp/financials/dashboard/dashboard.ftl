@@ -57,16 +57,16 @@
     <#if parameters.hasFinancialsReceivablesPermission>
     <div class="tableheadtext" style="margin-top: 20px;">${uiLabelMap.FinancialsCashEquivalents}</div>
     <table>
-       <#list cashEquivalentAccounts as account>
+       <#list cashEquivalentAccounts?default([]) as account>
           <@displayAccount account/>
        </#list>
     </table>
     <div class="tableheadtext" style="margin-top: 20px;">${uiLabelMap.FinancialsReceivables}</div>
        <table>
-        <#list creditCardAccounts as account>
+        <#list creditCardAccounts?default([]) as account>
           <@displayAccount account/>
        </#list>
-       <#list accountsReceivablesAccounts as account>
+       <#list accountsReceivablesAccounts?default([]) as account>
           <@displayAccount account/>
        </#list>
     </table>
@@ -75,7 +75,7 @@
     <#if parameters.hasFinancialsReportsPermission>
     <div class="tableheadtext" style="margin-top: 20px;">${uiLabelMap.FinancialsBalanceSheet}</div>
     <table>
-      <#list inventoryAccounts as account>
+      <#list inventoryAccounts?default([]) as account>
           <@displayAccount account/>
       </#list>
     </table>
@@ -84,7 +84,7 @@
     <#if parameters.hasFinancialsPayablesPermission>
     <div class="tableheadtext" style="margin-top: 20px;">${uiLabelMap.FinancialsPayables}</div>
     <table>
-      <#list accountsPayablesAccounts as account>
+      <#list accountsPayablesAccounts?default([]) as account>
           <@displayAccount account/>
       </#list>
     </table>
