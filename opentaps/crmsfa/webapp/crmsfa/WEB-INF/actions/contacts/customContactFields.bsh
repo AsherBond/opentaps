@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -21,6 +21,9 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+
+partyId = parameters.get("partyId");
 
 hasContactCustViewPermission = false;
 hasContactCustCreatePermission = false;
@@ -28,25 +31,23 @@ hasContactCustUpdatePermission = false;
 hasContactCustDeletePermission = false;
 
 if (security != null && userLogin != null) {
-  if (security.hasEntityPermission("CRMSFA", "_CONTACT_CUST_VIEW", userLogin)) {
+  if (CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CONTACT", "_CUST_VIEW", userLogin, partyId)) {
     hasContactCustViewPermission = true;
   }
-  if (security.hasEntityPermission("CRMSFA", "_CONTACT_CUST_CREATE", userLogin)) {
+  if (CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CONTACT", "_CUST_CREATE", userLogin, partyId)) {
     hasContactCustCreatePermission = true;
   }
-  if (security.hasEntityPermission("CRMSFA", "_CONTACT_CUST_UPDATE", userLogin)) {
+  if (CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CONTACT", "_CUST_UPDATE", userLogin, partyId)) {
     hasContactCustUpdatePermission = true;
-  } 
-  if (security.hasEntityPermission("CRMSFA", "_CONTACT_CUST_DELETE", userLogin)) {
+  }
+  if (CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CONTACT", "_CUST_DELETE", userLogin, partyId)) {
     hasContactCustDeletePermission = true;
-  }  
+  }
 }
 context.put("hasContactCustViewPermission", hasContactCustViewPermission);
 context.put("hasContactCustCreatePermission", hasContactCustCreatePermission);
 context.put("hasContactCustUpdatePermission", hasContactCustUpdatePermission);
 context.put("hasContactCustDeletePermission", hasContactCustDeletePermission);
-
-partyId = parameters.get("partyId");
 
 dispatcher = request.getAttribute("dispatcher");
 infrastructure = new Infrastructure(dispatcher);
