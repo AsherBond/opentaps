@@ -51,9 +51,9 @@ under the License.
               <span>${order.mainExternalParty.createViewPageLink(externalLoginKey)}</span>
               <span>
                 <#if order.isPurchaseOrder()>
-                  (<a href="<@ofbizUrl>/findOrders?supplierPartyId=${order.mainExternalParty.partyId}&amp;performFind=Y</@ofbizUrl>" class="linktext">${uiLabelMap.OrderOtherOrders}</a>)
+                  (<a href="<@ofbizUrl>/findOrders?performFind=Y&partyIdSearch=${order.mainExternalParty.partyId}&amp;performFind=Y</@ofbizUrl>" class="linktext">${uiLabelMap.OrderOtherOrders}</a>)
                 <#else>
-                  (<a href="<@ofbizUrl>/findOrders?partyId=${order.mainExternalParty.partyId}</@ofbizUrl>" class="linktext">${uiLabelMap.OrderOtherOrders}</a>)
+                  (<a href="<@ofbizUrl>/findOrders?performFind=Y&partyIdSearch=${order.mainExternalParty.partyId}</@ofbizUrl>" class="linktext">${uiLabelMap.OrderOtherOrders}</a>)
                 </#if>
               </span>
             </#if>
