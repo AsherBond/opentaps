@@ -27,6 +27,7 @@ import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
 
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.warehouse.facility.UtilWarehouse;
 import java.text.SimpleDateFormat;
 
 import org.jfree.chart.axis.NumberAxis;
@@ -53,10 +54,12 @@ context.put("totalConfirmedProdRuns", 0);
 context.put("totalRunningProdRuns", 0);
 context.put("lastUpdatedStamp", "none");
 
+facilityId = UtilWarehouse.getFacilityId(request);
 if (UtilValidate.isEmpty(facilityId)) {
     Debug.logError("myHome.bsh: no facilityId set", "");
     return;
 }
+context.put("facilityId", facilityId);
 
 if (!UtilValidate.isEmpty(refresh)) {
     dispatcher.runSync("populateWarehouseSummaryData", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
