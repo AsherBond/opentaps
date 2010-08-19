@@ -102,7 +102,6 @@ under the License.
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <frame-container-header title="${uiLabelMap.CrmMyOrders}"/>
                         <platform-specific>
                             <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaOrders.ftl"/></html>
                         </platform-specific>
