@@ -110,10 +110,14 @@ if (order != null) {
     // contact mechs: get the available alternative email addresses from the order mainExternalParty
     altEmailAddresses = new ArrayList();
     usedEmailAddresses = ocms.get(ContactMechPurposeTypeConstants.ORDER_EMAIL);
-    usedEmailAddressIds = Entity.getDistinctFieldValues(String.class, usedEmailAddresses, OrderContactMech.Fields.contactMechId);
-    for (ContactMech emailAddress : order.getMainExternalParty().getEmailAddresses()) {
-        if (!usedEmailAddressIds.contains(emailAddress.getContactMechId())) {
-            altEmailAddresses.add(emailAddress);
+    if (UtilValidate.isEmpty(usedEmailAddresses)) {
+        altEmailAddresses.addAll(order.getMainExternalParty().getEmailAddresses());
+    } else {
+        usedEmailAddressIds = Entity.getDistinctFieldValues(String.class, usedEmailAddresses, OrderContactMech.Fields.contactMechId);
+        for (ContactMech emailAddress : order.getMainExternalParty().getEmailAddresses()) {
+            if (!usedEmailAddressIds.contains(emailAddress.getContactMechId())) {
+                altEmailAddresses.add(emailAddress);
+            }
         }
     }
     context.put("mainPartyEmailAddresses", altEmailAddresses);
@@ -121,10 +125,14 @@ if (order != null) {
     // contact mechs: get the available alternative billing addresses from the order mainExternalParty
     altBillingAddresses = new ArrayList();
     usedBillingAddresses = ocms.get(ContactMechPurposeTypeConstants.BILLING_LOCATION);
-    usedBillingAddressIds = Entity.getDistinctFieldValues(String.class, usedBillingAddresses, OrderContactMech.Fields.contactMechId);
-    for (PostalAddress billingAddress : order.getMainExternalParty().getBillingAddresses()) {
-        if (!usedBillingAddressIds.contains(billingAddress.getContactMechId())) {
-            altBillingAddresses.add(billingAddress);
+    if (UtilValidate.isEmpty(usedBillingAddresses)) {
+        altBillingAddresses.addAll(order.getMainExternalParty().getBillingAddresses());
+    } else {
+        usedBillingAddressIds = Entity.getDistinctFieldValues(String.class, usedBillingAddresses, OrderContactMech.Fields.contactMechId);
+        for (PostalAddress billingAddress : order.getMainExternalParty().getBillingAddresses()) {
+            if (!usedBillingAddressIds.contains(billingAddress.getContactMechId())) {
+                altBillingAddresses.add(billingAddress);
+            }
         }
     }
     context.put("mainPartyBillingAddresses", altBillingAddresses);
