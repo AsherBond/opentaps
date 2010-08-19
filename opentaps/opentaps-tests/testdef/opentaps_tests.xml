@@ -44,7 +44,7 @@
     <test-case case-name="teams-tests"><junit-test-suite class-name="org.opentaps.tests.crmsfa.teams.TeamsTests"/></test-case>
     <test-case case-name="sales-tax-tests"><junit-test-suite class-name="org.opentaps.tests.crmsfa.orders.SalesTaxTests"/></test-case>
     <test-case case-name="multi-ship-group-tests"><junit-test-suite class-name="org.opentaps.tests.crmsfa.orders.MultiShipGroupTests"/></test-case>
-    <test-case case-name="order-tests"><junit-test-suite class-name="org.opentaps.tests.crmsfa.orders.OrderPickingTests"/></test-case>
+    <test-case case-name="order-picking-tests"><junit-test-suite class-name="org.opentaps.tests.crmsfa.orders.OrderPickingTests"/></test-case>
     <test-case case-name="crm-tests"><junit-test-suite class-name="org.opentaps.tests.crmsfa.crm.CrmTests"/></test-case>
 
     <!-- financials -->
