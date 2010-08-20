@@ -38,25 +38,27 @@ under the License.
 
 <tr>
   <@displayTitleCell title=uiLabelMap.PartyBillingAddress/>
-  <td>
-    <select name="contactMechId" class="selectBox">
-      <#if curPostalAddress?exists>
-        <option value="${curContactMech.contactMechId}" selected="selected" >
-          ${curPostalAddress.toName?if_exists}, ${curPostalAddress.address1?if_exists}, ${curPostalAddress.city?if_exists}, ${curPostalAddress.stateProvinceGeoId?if_exists}
-        </option>
-      </#if>
-      <#list postalAddressInfos as postalAddressInfo>
-        <#assign contactMech = postalAddressInfo.contactMech/>
-        <#assign partyContactMechPurposes = postalAddressInfo.partyContactMechPurposes/>
-        <#assign postalAddress = postalAddressInfo.postalAddress/>
-        <#assign partyContactMech = postalAddressInfo.partyContactMech/>
+  <#if postalAddressInfos?has_content || curContactMech?exists>
+    <td> 
+      <select name="contactMechId" class="selectBox">
+        <#if curPostalAddress?exists>
+          <option value="${curContactMech.contactMechId}" selected="selected" >
+            <#if curPostalAddress.toName?exists>${curPostalAddress.toName?if_exists},</#if> ${curPostalAddress.address1?if_exists}, ${curPostalAddress.city?if_exists}<#if curPostalAddress.stateProvinceGeoId?exists>, ${curPostalAddress.stateProvinceGeoId?if_exists}</#if>
+          </option>
+        </#if>
+        <#list postalAddressInfos as postalAddressInfo>
+          <#assign contactMech = postalAddressInfo.contactMech/>
+          <#assign postalAddress = postalAddressInfo.postalAddress/>
 
-        <option value="${contactMech.contactMechId}">
-          ${postalAddress.toName?if_exists}, ${postalAddress.address1?if_exists}, ${postalAddress.city?if_exists}, ${postalAddress.stateProvinceGeoId?if_exists}
-        </option>
-      </#list>
-    </select>
-  </td>
+          <option value="${contactMech.contactMechId}">
+            <#if postalAddress.toName?exists>${postalAddress.toName?if_exists},</#if>  ${postalAddress.address1?if_exists}, ${postalAddress.city?if_exists}<#if postalAddress.stateProvinceGeoId?exists>, ${postalAddress.stateProvinceGeoId?if_exists}</#if>
+          </option>
+        </#list>
+      </select>
+    </td>
+  <#else>
+    <td>${uiLabelMap.PartyNoContactInformation}.</td>
+  </#if>
 </tr>
 
 
