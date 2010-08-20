@@ -44,28 +44,36 @@ public class OpentapsConfig {
     public OpentapsConfig() {
     }
 
+    protected String getConfigValue(String key) {
+        try {
+            return dictionary.get(key);
+        } catch (java.util.MissingResourceException e) {
+            return null;
+        }
+    }
+
     /**
      * Gets the default country code for phone numbers from opentaps.properties.
      * @return a <code>String</code> representation of the country code or null if not configured
      */
     public String getDefaultCountryCode() {
-        return dictionary.get(DEFAULT_COUNTRY_CODE_KEY);
+        return getConfigValue(DEFAULT_COUNTRY_CODE_KEY);
     }
 
     /**
      * Gets the default country geo ID for country selects.
-     * @return a <code>String</code> of the country geoId
+     * @return a <code>String</code> of the country geoId or null if not configured
      */
     public String getDefaultCountryGeoId() {
-        return dictionary.get(DEFAULT_COUNTRY_GEO_KEY);
+        return getConfigValue(DEFAULT_COUNTRY_GEO_KEY);
     }
 
     /**
      * Gets the default currency uom ID.
-     * @return a <code>String</code> of the currency uomId
+     * @return a <code>String</code> of the currency uomId or null if not configured
      */
     public String getDefaultCurrencyUomId() {
-        return dictionary.get(DEFAULT_CURRENCY_KEY);
+        return getConfigValue(DEFAULT_CURRENCY_KEY);
     }
 
     /**
@@ -73,23 +81,23 @@ public class OpentapsConfig {
      * @return a <code>String</code> representation of the country code or null if not configured
      */
     public String getCallInEventIcon() {
-        return dictionary.get(ICON_CALLIN_EVENT);
+        return getConfigValue(ICON_CALLIN_EVENT);
     }
 
     /**
      * Gets if the top navigation menu should be displayed.
-     * @return a <code>Boolean</code>
+     * @return a <code>Boolean</code>, default to <code>False</code> if not configured
      */
     public Boolean getShowTopNavMenu() {
-        return "Y".equals(dictionary.get(UI_NAV_SHOW_TOP_MENU));
+        return "Y".equals(getConfigValue(UI_NAV_SHOW_TOP_MENU));
     }
 
     /**
      * Get the name of the current application (e.g., "crmsfa").
-     * @return a <code>String</code> of the application name
+     * @return a <code>String</code> of the application name or null if not configured
      */
     public String getApplicationName() {
-        return dictionary.get(APPLICATION_NAME_KEY);
+        return getConfigValue(APPLICATION_NAME_KEY);
     }
 
 }
