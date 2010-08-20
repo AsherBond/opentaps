@@ -121,6 +121,8 @@ public final class PackingServices {
         Boolean force = (Boolean) context.get("forceComplete");
         if ("Y".equals(facility.getSkipPackOrderInventoryCheck())) {
             force = true;
+            // passing it to the ofbiz service will also skip reservation checks
+            context.put("forceComplete", Boolean.TRUE);
         }
 
         if (force == null || !force.booleanValue()) {
