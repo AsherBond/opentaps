@@ -42,7 +42,7 @@ function removePartyAttribute(/*String*/ partyAttributeIndex) {
                 <@inputHidden name="partyId" value="${partyAttribute.partyId}"/>
                 <@inputHidden name="attrName" value="${partyAttribute.attrName}"/>
                 <@displayCell text="${partyAttribute.attrName}" />
-                <@inputTextCell name="attrValue" default="${partyAttribute.attrValue}" />
+                <@inputTextCell name="attrValue" default="${partyAttribute.attrValue}" ignoreParameters=true/>
                 <td>
                 <#if hasContactCustUpdatePermission || userLogin.userLoginId==partyAttribute.createdByUserLoginId>
                 <a href="javascript:document.updateCustomField_${partyAttribute_index}.submit();"><img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/save.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonSave}"/></a>

@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericEntityException;
-import org.opentaps.base.constants.SecurityPermissionConstants;
 import org.opentaps.base.entities.PartyAttribute;
 import org.opentaps.base.entities.PartyAttributePk;
 import org.opentaps.common.util.UtilMessage;
@@ -30,6 +29,8 @@ import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.service.ServiceException;
+
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 
 /**
  * Service to create/update/remove PartyAttribute 
@@ -62,15 +63,20 @@ public class PartyAttributeService extends DomainService {
             if (roleTypeId == null) {
                 throw new ServiceException("CrmError_InvalidPartyRoleOnCustomFields", UtilMisc.toMap("partyId", partyId));
             }
-            // check the create permission
+            String securityModule = null;
             if ("PROSPECT".equals(roleTypeId)) {
-                checkPermission(SecurityPermissionConstants.CRMSFA_LEAD_CUST_CREATE);
+                securityModule = "CRMSFA_LEAD";
             } else if ("ACCOUNT".equals(roleTypeId)) {
-                checkPermission(SecurityPermissionConstants.CRMSFA_ACCOUNT_CUST_CREATE);
+                securityModule = "CRMSFA_ACCOUNT";
             } else if ("CONTACT".equals(roleTypeId)) {
-                checkPermission(SecurityPermissionConstants.CRMSFA_CONTACT_CUST_CREATE);
+                securityModule = "CRMSFA_CONTACT";
             }
-            
+
+        	if (!CrmsfaSecurity.hasPartyRelationSecurity(security, securityModule, "_CUST_CREATE", getUser().getOfbizUserLogin(), partyId)) {
+        		String err = UtilMessage.getPermissionDeniedError(locale) + ": user [" + getUser().getUserId() + "] does not have permission " + securityModule + "_CUST_CREATE";
+                throw new ServiceException(err);
+        	}
+
             Session session = getInfrastructure().getSession();
             
             // check if existing same party attribute alreay
@@ -110,14 +116,13 @@ public class PartyAttributeService extends DomainService {
             if (roleTypeId == null) {
                 throw new ServiceException("CrmError_InvalidPartyRoleOnCustomFields", UtilMisc.toMap("partyId", partyId));
             }
-            // the update permission
-            String permission = null;
+            String securityModule = null;
             if ("PROSPECT".equals(roleTypeId)) {
-                permission = SecurityPermissionConstants.CRMSFA_LEAD_CUST_UPDATE;
+                securityModule = "CRMSFA_LEAD";
             } else if ("ACCOUNT".equals(roleTypeId)) {
-                permission = SecurityPermissionConstants.CRMSFA_ACCOUNT_CUST_UPDATE;
+                securityModule = "CRMSFA_ACCOUNT";
             } else if ("CONTACT".equals(roleTypeId)) {
-                permission = SecurityPermissionConstants.CRMSFA_CONTACT_CUST_UPDATE;
+                securityModule = "CRMSFA_CONTACT";
             }
             Session session = getInfrastructure().getSession();
             
@@ -132,12 +137,12 @@ public class PartyAttributeService extends DomainService {
             }
             PartyAttribute attribute = attributes.get(0);
             // UPDATE permission is required to update the custom fields if the user was not the original creator of the custom field.
-            if (attribute.getCreatedByUserLoginId().equals(this.getUser().getUserId()) || hasPermission(permission)) {
+            if (attribute.getCreatedByUserLoginId().equals(this.getUser().getUserId()) || CrmsfaSecurity.hasPartyRelationSecurity(security, securityModule, "_CUST_UPDATE", getUser().getOfbizUserLogin(), partyId)) {
                 attribute.setAttrValue(attrValue);
                 session.save(attribute);
                 session.flush();
             } else {
-                String err = UtilMessage.getPermissionDeniedError(locale) + ": user [" + getUser().getUserId() + "] does not have permission " + permission;
+                String err = UtilMessage.getPermissionDeniedError(locale) + ": user [" + getUser().getUserId() + "] does not have permission " + securityModule + "_CUST_UPDATE";
                 throw new ServiceException(err);
             }
             session.close();
@@ -159,14 +164,13 @@ public class PartyAttributeService extends DomainService {
             if (roleTypeId == null) {
                 throw new ServiceException("CrmError_InvalidPartyRoleOnCustomFields", UtilMisc.toMap("partyId", partyId));
             }
-            // the update permission
-            String permission = null;
+            String securityModule = null;
             if ("PROSPECT".equals(roleTypeId)) {
-                permission = SecurityPermissionConstants.CRMSFA_LEAD_CUST_DELETE;
+                securityModule = "CRMSFA_LEAD";
             } else if ("ACCOUNT".equals(roleTypeId)) {
-                permission = SecurityPermissionConstants.CRMSFA_ACCOUNT_CUST_DELETE;
+                securityModule = "CRMSFA_ACCOUNT";
             } else if ("CONTACT".equals(roleTypeId)) {
-                permission = SecurityPermissionConstants.CRMSFA_CONTACT_CUST_DELETE;
+                securityModule = "CRMSFA_CONTACT";
             }
             
             Session session = getInfrastructure().getSession();
@@ -182,11 +186,11 @@ public class PartyAttributeService extends DomainService {
             }
             PartyAttribute attribute = attributes.get(0);
             // DELETE permission is required to delete the custom fields if the user was not the original creator of the custom field.
-            if (attribute.getCreatedByUserLoginId().equals(this.getUser().getUserId()) || hasPermission(permission)) {
+            if (attribute.getCreatedByUserLoginId().equals(this.getUser().getUserId()) || CrmsfaSecurity.hasPartyRelationSecurity(security, securityModule, "_CUST_DELETE", getUser().getOfbizUserLogin(), partyId)) {
                 session.delete(attribute);
                 session.flush();
             } else {
-                String err = UtilMessage.getPermissionDeniedError(locale) + ": user [" + getUser().getUserId() + "] does not have permission " + permission;
+                String err = UtilMessage.getPermissionDeniedError(locale) + ": user [" + getUser().getUserId() + "] does not have permission " + securityModule + "_CUST_DELETE";
                 throw new ServiceException(err);
             }
             session.close();
