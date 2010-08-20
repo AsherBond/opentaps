@@ -50,8 +50,11 @@ public abstract class BaseEntry implements EntryPoint {
      * @return a <code>Dictionary</code> value if it was given, <code>null</code> otherwise
      */
     protected static Dictionary getWidgetParameters(String widgetId) {
-        Dictionary dictionary = Dictionary.getDictionary(widgetId);
-        return dictionary;
+        try {
+            return Dictionary.getDictionary(widgetId);
+        } catch (java.util.MissingResourceException e) {
+            return null;
+        }
     }
 
     /**

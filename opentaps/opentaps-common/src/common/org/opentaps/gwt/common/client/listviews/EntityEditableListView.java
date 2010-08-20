@@ -527,7 +527,6 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
      * Resets the pager setting to the first page and reloads the store associated to this list view.
      */
     private void loadFirstPageAsync() {
-        UtilUi.logDebug("list page size = " + pagingToolbar.getPageSize(), MODULE, "loadFirstPageAsync");
         List<UrlParam> params = new ArrayList<UrlParam>();
         // if the pager is disabled explicitly, pass the NO_PAGER option to the service so it knows not to paginate the results
         // else pass the paging parameters as defined in the pagingToolbar (user given defaultPageSize is set in the pagingToolbar at this point)
