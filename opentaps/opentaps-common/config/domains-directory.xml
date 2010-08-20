@@ -37,6 +37,7 @@
     <bean id="opentapsDataImportDomain" class="org.opentaps.dataimport.domain.DataImportDomain"/>
     <bean id="opentapsSecurityDomain" class="org.opentaps.common.domain.security.SecurityDomain"/>
     <bean id="opentapsTeamDomain" class="org.opentaps.crmsfa.domain.teams.CrmTeamDomain"/>
+    <bean id="opentapsActivitiesDomain" class="com.opensourcestrategies.activities.domain.ActivitiesDomain"/>
     <!-- The bean id "domainsDirectory" is used by DomainsLoader, so do not change this.-->
     <bean id="domainsDirectory" class="org.opentaps.domain.DomainsDirectory">
         <!-- the property names reference members of DomainsDirectory class and are set using setters by Spring -->
@@ -56,6 +57,7 @@
         <property name="dataImportDomain"><ref bean="opentapsDataImportDomain"/></property>
         <property name="securityDomain"><ref bean="opentapsSecurityDomain"/></property>
         <property name="crmTeamDomain"><ref bean="opentapsTeamDomain"/></property>
+        <property name="activitiesDomain"><ref bean="opentapsActivitiesDomain"/></property>
     </bean>
     
 </beans>
