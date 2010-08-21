@@ -84,7 +84,7 @@ public class DomainRepository extends Repository {
 
     public DomainsDirectory getDomainsDirectory() {
         if (domainsDirectory == null) {
-            domainsDirectory = getDomainsLoader().loadDomainsDirectory();
+            domainsDirectory = getDomainsLoader().getDomainsDirectory();
         }
         return domainsDirectory;
     }

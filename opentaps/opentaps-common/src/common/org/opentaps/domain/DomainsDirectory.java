@@ -123,7 +123,7 @@ public class DomainsDirectory implements DomainContextInterface {
      * @return the domain directory
      */
     public static DomainsDirectory getDomainsDirectory(DomainContextInterface object) {
-        return new DomainsLoader(object.getInfrastructure(), object.getUser()).loadDomainsDirectory();
+        return new DomainsLoader(object.getInfrastructure(), object.getUser()).getDomainsDirectory();
     }
 
     /**
