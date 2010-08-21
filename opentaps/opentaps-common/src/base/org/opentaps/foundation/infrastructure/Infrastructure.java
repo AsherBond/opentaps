@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2007 - 2010 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -277,6 +277,22 @@ public class Infrastructure {
             loadSystemUserLogin();
         }
         return systemUser;
+    }
+
+    /**
+     * Gets a User object by user's login.
+     * @return an instance of the <code>User</code>
+     */
+    public User getUserFromLogin(String login) {
+        try {
+            GenericValue userLogin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", login));
+            if (userLogin == null) {
+                throw new IllegalStateException(String.format("Could not find the [%1$s] UserLogin, it was either not loaded yet or missing.", login));
+            }
+            return new User(userLogin, delegator);
+        } catch (GenericEntityException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /**
