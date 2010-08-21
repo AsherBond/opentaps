@@ -112,7 +112,7 @@ public class Infrastructure {
      * @param delegatorName a <code>String</code> value
      * @return a Hibernate <code>SessionFactory</code> value
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static synchronized SessionFactory getSessionFactory(String delegatorName) {
         SessionFactory sessionFactory = sessionFactories.get(delegatorName);
         // the sessionFactory haven't init before
@@ -157,12 +157,14 @@ public class Infrastructure {
             Debug.logVerbose("init sessionFactory by datasoure " + datasourceName, MODULE);
             sessionFactory = annotationConfiguration.configure(datasourceName + HIBERNATE_CFG_EXT).buildSessionFactory();
             Debug.logVerbose("listing loaded entities ...", MODULE);
-            Map metadata = sessionFactory.getAllClassMetadata();
             //iterator all classes which are success load of hibernate, it just only for debug use.
-            for (Iterator i = metadata.values().iterator(); i.hasNext();) {
-                EntityPersister persister = (EntityPersister) i.next();
-                String className = persister.getClassMetadata().getEntityName();
-                Debug.logVerbose("SessionFactory Successfully Loaded AnnotatedClass : " + className, MODULE);
+            if (Debug.isOn(Debug.VERBOSE)) {
+                Map metadata = sessionFactory.getAllClassMetadata();
+                for (Iterator<EntityPersister> i = metadata.values().iterator(); i.hasNext();) {
+                    EntityPersister persister = i.next();
+                    String className = persister.getClassMetadata().getEntityName();
+                    Debug.logVerbose("SessionFactory Successfully Loaded AnnotatedClass : " + className, MODULE);
+                }
             }
             sessionFactories.put(delegatorName, sessionFactory);
         }

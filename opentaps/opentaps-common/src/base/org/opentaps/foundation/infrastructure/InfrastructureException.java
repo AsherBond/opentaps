@@ -18,6 +18,7 @@ import org.opentaps.foundation.exception.FoundationException;
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 */
+@SuppressWarnings("serial")
 public class InfrastructureException extends FoundationException {
     public InfrastructureException() {
         super();
