@@ -30,6 +30,8 @@ public abstract class ProductLookupConfiguration {
     private ProductLookupConfiguration() { }
 
     public static final String URL_SUGGEST = "gwtSuggestProduct";
+    // filter out virtual products in result
+    public static final String URL_SUGGEST_FOR_CART = "gwtSuggestProductForCart";
 
     public static final String OUT_PRODUCT_ID = "productId";
     public static final String OUT_IDENTIFIER = "idValue";

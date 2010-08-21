@@ -33,7 +33,7 @@ import org.opentaps.gwt.common.client.lookup.configuration.InvoiceItemLookupConf
 import org.opentaps.gwt.common.client.suggest.AccountingTagConfigurationStore;
 import org.opentaps.gwt.common.client.suggest.GlAccountAutocomplete;
 import org.opentaps.gwt.common.client.suggest.InvoiceItemTypeAutocomplete;
-import org.opentaps.gwt.common.client.suggest.ProductAutocomplete;
+import org.opentaps.gwt.common.client.suggest.ProductForCartAutocomplete;
 import org.opentaps.gwt.common.client.suggest.ProductInfoForInvoiceStore;
 import org.opentaps.gwt.common.client.suggest.TaxAuthorityAutocomplete;
 
@@ -65,7 +65,7 @@ public class InvoiceItemEditableListView extends EntityEditableListView {
     private final InvoiceItemTypeAutocomplete itemTypeEditor;
     private final TextField descriptionEditor;
     private final GlAccountAutocomplete glAccountEditor;
-    private final ProductAutocomplete productEditor;
+    private final ProductForCartAutocomplete productEditor;
     private final NumberField quantityEditor;
     private final NumberField amountEditor;
     private final TaxAuthorityAutocomplete taxAuthEditor;
@@ -88,7 +88,7 @@ public class InvoiceItemEditableListView extends EntityEditableListView {
         itemTypeEditor = new InvoiceItemTypeAutocomplete(UtilUi.MSG.commonType(), InvoiceItemLookupConfiguration.INOUT_ITEM_TYPE, INPUT_LENGTH, organizationPartyId, invoiceTypeId);
         descriptionEditor = new TextField(UtilUi.MSG.commonDescription(), InvoiceItemLookupConfiguration.INOUT_DESCRIPTION, INPUT_LENGTH);
         glAccountEditor = new GlAccountAutocomplete(UtilUi.MSG.accountingGlAccount(), InvoiceItemLookupConfiguration.INOUT_GL_ACCOUNT, INPUT_LENGTH);
-        productEditor = new ProductAutocomplete(UtilUi.MSG.productProduct(), InvoiceItemLookupConfiguration.INOUT_PRODUCT, INPUT_LENGTH);
+        productEditor = new ProductForCartAutocomplete(UtilUi.MSG.productProduct(), InvoiceItemLookupConfiguration.INOUT_PRODUCT, INPUT_LENGTH);
         quantityEditor = new NumberField(UtilUi.MSG.commonQuantity(), InvoiceItemLookupConfiguration.INOUT_QUANTITY, INPUT_LENGTH);
         quantityEditor.setAllowNegative(false);
         amountEditor = new NumberField(UtilUi.MSG.commonAmount(), InvoiceItemLookupConfiguration.INOUT_AMOUNT, INPUT_LENGTH);
@@ -163,7 +163,7 @@ public class InvoiceItemEditableListView extends EntityEditableListView {
 
         makeEditableColumn(UtilUi.MSG.commonType(), new StringFieldDef(InvoiceItemLookupConfiguration.INOUT_ITEM_TYPE), new InvoiceItemTypeAutocomplete(itemTypeEditor));
         if (hasProductInput) {
-            makeEditableColumn(UtilUi.MSG.productProduct(), new StringFieldDef(InvoiceItemLookupConfiguration.INOUT_PRODUCT), new ProductAutocomplete(productEditor), "{1}:{0}");
+            makeEditableColumn(UtilUi.MSG.productProduct(), new StringFieldDef(InvoiceItemLookupConfiguration.INOUT_PRODUCT), new ProductForCartAutocomplete(productEditor), "{1}:{0}");
         }
 
         // description column, made larger

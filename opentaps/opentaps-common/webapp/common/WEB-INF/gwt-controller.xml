@@ -180,6 +180,12 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
+    <request-map uri="gwtSuggestProductForCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.ProductLookupService" invoke="suggestProductForCart"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map> 
 
     <!-- Invoice Item Type lookup request -->
     <request-map uri="gwtSuggestInvoiceItemType">
