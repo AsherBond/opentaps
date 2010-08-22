@@ -36,20 +36,9 @@ under the License.
                         <container>
                             <link target="EditInventoryItemLabel" text="${uiLabelMap.CommonNew}" style="buttontext"/>
                         </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleFindInventoryItemLabels}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListInventoryItemLabels" location="component://product/webapp/facility/labels/InventoryItemLabelForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleFindInventoryItemLabels}">
+                            <include-form name="ListInventoryItemLabels" location="component://product/widget/facility/InventoryItemLabelForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -67,9 +56,9 @@ under the License.
                 <decorator-screen name="CommonInventoryItemLabelsDecorator" location="${parameters.commonFacilityDecoratorLocation}">
                     <decorator-section name="body">
                         <screenlet id="AddInventoryItemLabelTypePanel" title="${uiLabelMap.PageTitleAddInventoryItemLabelTypes}" collapsible="true">
-                            <include-form name="AddInventoryItemLabelType" location="component://product/webapp/facility/labels/InventoryItemLabelForms.xml"/>
+                            <include-form name="AddInventoryItemLabelType" location="component://product/widget/facility/InventoryItemLabelForms.xml"/>
                         </screenlet>
-                        <include-form name="UpdateInventoryItemLabelTypes" location="component://product/webapp/facility/labels/InventoryItemLabelForms.xml"/>
+                        <include-form name="UpdateInventoryItemLabelTypes" location="component://product/widget/facility/InventoryItemLabelForms.xml"/>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -92,20 +81,9 @@ under the License.
                     <widgets>
                         <decorator-screen name="CommonInventoryItemLabelDecorator" location="${parameters.commonFacilityDecoratorLocation}">
                             <decorator-section name="body">
-                                <container style="screenlet">
-                                    <container style="screenlet-title-bar">
-                                        <container style="h3">
-                                            <label text="${uiLabelMap.ProductInventoryItemLabel}"/>
-                                        </container>
-                                    </container>
-                                    <container style="screenlet-body">
-                                        <section>
-                                            <widgets>
-                                                <include-form name="EditInventoryItemLabel" location="component://product/webapp/facility/labels/InventoryItemLabelForms.xml"/>
-                                            </widgets>
-                                        </section>
-                                    </container>
-                                </container>
+                                <screenlet title="${uiLabelMap.ProductInventoryItemLabel}">
+                                    <include-form name="EditInventoryItemLabel" location="component://product/widget/facility/InventoryItemLabelForms.xml"/>
+                                </screenlet>
                             </decorator-section>
                         </decorator-screen>
                     </widgets>
@@ -115,20 +93,9 @@ under the License.
                                 <container>
                                     <link target="EditInventoryItemLabel" text="${uiLabelMap.CommonNew}" style="buttontext"/>
                                 </container>
-                                <container style="screenlet">
-                                    <container style="screenlet-title-bar">
-                                        <container style="h3">
-                                            <label text="${uiLabelMap.ProductInventoryItemLabel}"/>
-                                        </container>
-                                    </container>
-                                    <container style="screenlet-body">
-                                        <section>
-                                            <widgets>
-                                                <include-form name="EditInventoryItemLabel" location="component://product/webapp/facility/labels/InventoryItemLabelForms.xml"/>
-                                            </widgets>
-                                        </section>
-                                    </container>
-                                </container>
+                                <screenlet title="${uiLabelMap.ProductInventoryItemLabel}">
+                                    <include-form name="EditInventoryItemLabel" location="component://product/widget/facility/InventoryItemLabelForms.xml"/>
+                                </screenlet>
                             </decorator-section>
                         </decorator-screen>
                     </fail-widgets>
@@ -152,9 +119,9 @@ under the License.
                     <decorator-section name="body">
                         <container><label style="h2">${uiLabelMap.CommonType}: ${inventoryItemLabelType.description} [${inventoryItemLabelType.inventoryItemLabelTypeId}]</label></container>
                         <screenlet id="AddInventoryItemLabelApplPanel" title="${uiLabelMap.PageTitleAddInventoryItemLabelAppls}" collapsible="true">
-                            <include-form name="AddInventoryItemLabelAppl" location="component://product/webapp/facility/labels/InventoryItemLabelForms.xml"/>
+                            <include-form name="AddInventoryItemLabelAppl" location="component://product/widget/facility/InventoryItemLabelForms.xml"/>
                         </screenlet>
-                        <include-form name="UpdateInventoryItemLabelAppls" location="component://product/webapp/facility/labels/InventoryItemLabelForms.xml"/>
+                        <include-form name="UpdateInventoryItemLabelAppls" location="component://product/widget/facility/InventoryItemLabelForms.xml"/>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

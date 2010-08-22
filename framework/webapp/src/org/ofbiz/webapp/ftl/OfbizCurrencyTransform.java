@@ -46,6 +46,7 @@ public class OfbizCurrencyTransform implements TemplateTransformModel {
 
     public static final String module = OfbizCurrencyTransform.class.getName();
 
+    @SuppressWarnings("unchecked")
     private static String getArg(Map args, String key) {
         String  result = "";
         Object o = args.get(key);
@@ -65,6 +66,7 @@ public class OfbizCurrencyTransform implements TemplateTransformModel {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     private static BigDecimal getAmount(Map args, String key) {
         if (args.containsKey(key)) {
             Object o = args.get(key);
@@ -84,6 +86,7 @@ public class OfbizCurrencyTransform implements TemplateTransformModel {
         return BigDecimal.ZERO;
     }
 
+    @SuppressWarnings("unchecked")
     private static Integer getInteger(Map args, String key) {
         if (args.containsKey(key)) {
             Object o = args.get(key);
@@ -91,7 +94,7 @@ public class OfbizCurrencyTransform implements TemplateTransformModel {
 
             // handle nulls better
             if (o == null) {
-                o = 0;
+                return null;
             }
 
             if (o instanceof NumberModel) {
@@ -104,13 +107,14 @@ public class OfbizCurrencyTransform implements TemplateTransformModel {
             }
             if (o instanceof SimpleScalar) {
                 SimpleScalar s = (SimpleScalar) o;
-                return Integer.valueOf( s.getAsString() );
+                return Integer.valueOf(s.getAsString());
             }
             return Integer.valueOf(o.toString());
         }
-        return 0;
+        return null;
     }
 
+    @SuppressWarnings("unchecked")
     public Writer getWriter(final Writer out, Map args) {
         final StringBuilder buf = new StringBuilder();
 
@@ -121,19 +125,22 @@ public class OfbizCurrencyTransform implements TemplateTransformModel {
         // check the rounding -- DEFAULT is 10 to not round for display, only use this when necessary
         // rounding should be handled by the code, however some times the numbers are coming from
         // someplace else (i.e. an integration)
-        int roundingNumber = getInteger(args, "rounding");
-        if (roundingNumber == 0) roundingNumber = 10;
+        Integer roundingNumber = getInteger(args, "rounding");
+        if (roundingNumber == null) roundingNumber = 10;
         final int rounding = roundingNumber;
 
         return new Writer(out) {
+            @Override
             public void write(char cbuf[], int off, int len) {
                 buf.append(cbuf, off, len);
             }
 
+            @Override
             public void flush() throws IOException {
                 out.flush();
             }
 
+            @Override
             public void close() throws IOException {
                 try {
                     if (Debug.verboseOn()) Debug.logVerbose("parms: " + amount + " " + isoCode + " " + locale, module);

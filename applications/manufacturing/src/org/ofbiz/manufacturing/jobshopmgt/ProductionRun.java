@@ -30,7 +30,7 @@ import java.util.Map;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -72,7 +72,7 @@ public class ProductionRun {
      */
     private boolean quantityIsUpdated = false;
 
-    public ProductionRun(String productionRunId, GenericDelegator delegator, LocalDispatcher dispatcher) {
+    public ProductionRun(String productionRunId, Delegator delegator, LocalDispatcher dispatcher) {
         try {
             if (! UtilValidate.isEmpty(productionRunId)) {
                 this.dispatcher = dispatcher;
@@ -282,7 +282,7 @@ public class ProductionRun {
      */
     public Timestamp recalculateEstimatedCompletionDate() {
         this.updateCompletionDate = false;
-        return recalculateEstimatedCompletionDate(new Long(0), estimatedStartDate);
+        return recalculateEstimatedCompletionDate(Long.valueOf(0), estimatedStartDate);
     }
     /**
      * get the productionRunName property.
@@ -379,7 +379,7 @@ public class ProductionRun {
                     Debug.logWarning(e.getMessage(), module);
                 }
             }
-            return (GenericValue)(productionRunRoutingTasks != null && productionRunRoutingTasks.size() > 0? productionRunRoutingTasks.get(productionRunRoutingTasks.size() - 1): null);
+            return (GenericValue) (UtilValidate.isNotEmpty(productionRunRoutingTasks) ? productionRunRoutingTasks.get(productionRunRoutingTasks.size() - 1): null);
         }
         return null;
     }

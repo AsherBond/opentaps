@@ -90,7 +90,7 @@ sub copylink($$$) {
 }
 system('rm', '-rf', 'debian/ofbiz', 'debian/ofbiz-specialpurpose');
 
-open(FIND, '-|', qw(find -printf %P\0)) || die("Couldn't run find");
+open(FIND, '-|', qw(find -not -path */.git/* -not -name .gitignore -printf %P\0)) || die("Couldn't run find");
 $/ = "\0";
 while (<FIND>) {
 	chomp;
@@ -107,7 +107,7 @@ while (<FIND>) {
 	my $type = undef;
 	if ($_ eq 'framework/entity/config/entityengine.xml') {
 		$type = 'ucf';
-	} elsif (m,(^|.*/)[^/]+\.css$,) {
+	} elsif (-f m,(^|.*/)[^/]+\.css$,) {
 		$type = 'conffile';
 	} elsif (m,^$appDirsRe/[^/]+/webapp/.*/WEB-INF/(controller|web|regions)\.xml$,) {
 		$type = 'conffile';
@@ -161,6 +161,8 @@ while (<FIND>) {
 		$type = 'varlib';
 	} elsif (-f) {
 		$type = 'code';
+	} elsif ($_ eq 'rc.ofbiz.for.debian') {
+		next;
 	} else {
 		next;
 	}
@@ -190,7 +192,7 @@ while (<FIND>) {
 trap 'rm -f "\$tmpconffile"' EXIT
 tmpconffile=`tempfile -m 644`
 munge_conffile "\$tmpconffile" "$file"
-ucf "\$tmpconffile" /etc/ofbiz/$file
+ucf --debconf-ok "\$tmpconffile" /etc/ofbiz/$file
 ucfr ofbiz /etc/ofbiz/$file
 rm -f "\$tmpconffile"
 trap '' EXIT
@@ -199,12 +201,12 @@ _EOF_
 		my $postrm = <<_EOF_;
 for ext in '~' '%' .bak .dpkg-tmp .dpkg-new .dpkg-old .dpkg-dist;  do rm -f /etc/ofbiz/$file\$ext; done
 rm -f /etc/ofbiz/$file
-if which ucf >/dev/null; then ucf --purge /etc/ofbiz/$file; fi
+if which ucf >/dev/null; then ucf --debconf-ok --purge /etc/ofbiz/$file; fi
 if which ucfr >/dev/null; then ucfr --purge ofbiz /etc/ofbiz/$file; fi
 _EOF_
 		push(@{$scripts{$pkg}->{'postrm'}->{'purge'}}, $postrm);
 	} elsif ($type =~ m/^var(cache|lib|log|tmp)$/) {
-		my $new = "/var/$1/$pkg";
+		my $new = "/var/$1/ofbiz";
 		copylink($base, $new, $file);
 		my $postrm = <<_EOF_;
 if dpkg-statoverride --list "$new/$file" > /dev/null; then dpkg-statoverride --remove "$new/$file"; fi

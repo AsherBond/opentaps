@@ -77,6 +77,13 @@ under the License.
         </section>
     </screen>
 
+    <screen name="compareproductslist">
+        <section>
+            <widgets>
+                <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/catalog/compareproductslist.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
     <!-- =========== Top-Level and Stand-Alone Screens =========== -->
 
     <!-- Category Screens -->
@@ -129,9 +136,6 @@ under the License.
     <screen name="product">
         <section>
             <actions>
-<!--                <set field="leftbarScreenName" value="leftbar"/>
-                <set field="rightbarScreenName" value="rightbar"/>
-                <set field="MainColumnStyle" value="center"/>-->
                 <set field="layoutSettings.javaScripts[]" value="/images/prototypejs/prototype.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/images/prototypejs/popup.js" global="true"/>
                 <set field="layoutSettings.styleSheets[]" value="/images/prototypejs/popup.css" global="true"/>
@@ -205,9 +209,6 @@ under the License.
     <screen name="keywordsearch">
         <section>
             <actions>
-                <!--<set field="leftbarScreenName" value="leftbar"/>
-                <set field="MainColumnStyle" value="center"/>-->
-
                 <set field="title-property" value="PageTitleSearchResults"/>
                 <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/KeywordSearch.groovy"/>
@@ -224,9 +225,6 @@ under the License.
     <screen name="advancedsearch">
         <section>
             <actions>
-                <!--<set field="leftbarScreenName" value="leftbar"/>
-                <set field="MainColumnStyle" value="center"/>-->
-
                 <set field="title-property" value="PageTitleAdvancedSearch"/>
                 <set field="headerItem" value="Advanced Search"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/AdvancedSearchOptions.groovy"/>
@@ -250,8 +248,6 @@ under the License.
     <screen name="quickadd">
         <section>
             <actions>
-                <!--<set field="leftbarScreenName" value="leftbar"/>
-                <set field="MainColumnStyle" value="center"/>-->
                 <set field="title-property" value="PageTitleQuickAdd"/>
                 <set field="quickaddsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#quickaddsummary"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/QuickAdd.groovy"/>
@@ -272,6 +268,27 @@ under the License.
             </actions>
             <widgets>
                 <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/catalog/quickaddsummary.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="compareProducts">
+        <section>
+            <actions>
+                <set field="titleProperty" value="ProductCompareProducts"/>
+                <property-map resource="ProductUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="title" from-field="uiLabelMap.ProductCompareProducts"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/CompareProducts.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonPopUpDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://order/webapp/ordermgr/entry/catalog/compareproducts.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>

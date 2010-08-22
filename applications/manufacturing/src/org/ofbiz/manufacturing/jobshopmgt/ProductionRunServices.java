@@ -41,7 +41,8 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.common.CommonWorkers;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
@@ -49,6 +50,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.manufacturing.bom.BOMTree;
+import org.ofbiz.manufacturing.bom.BOMNode;
 import org.ofbiz.manufacturing.techdata.TechDataServices;
 import org.ofbiz.product.config.ProductConfigWrapper;
 import org.ofbiz.product.config.ProductConfigWrapper.ConfigOption;
@@ -88,7 +90,7 @@ public class ProductionRunServices {
      */
     public static Map cancelProductionRun(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -180,7 +182,7 @@ public class ProductionRunServices {
      */
     public static Map createProductionRun(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -232,7 +234,6 @@ public class ProductionRunServices {
         } catch (GenericServiceException gse) {
             Debug.logWarning(gse.getMessage(), module);
         }
-        // =================================
         if (routing == null) {
             return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductRoutingNotExist", locale));
         }
@@ -330,6 +331,7 @@ public class ProductionRunServices {
                 serviceContext.put("currentStatusId","PRUN_CREATED");
                 serviceContext.put("workEffortParentId", productionRunId);
                 serviceContext.put("facilityId", facilityId);
+                serviceContext.put("reservPersons", routingTask.get("reservPersons"));
                 serviceContext.put("estimatedStartDate",startDate);
                 serviceContext.put("estimatedCompletionDate",endDate);
                 serviceContext.put("estimatedSetupMillis", routingTask.get("estimatedSetupMillis"));
@@ -344,6 +346,7 @@ public class ProductionRunServices {
                 }
                 String productionRunTaskId = (String) resultService.get("workEffortId");
                 if (Debug.infoOn()) Debug.logInfo("ProductionRunTaskId created: " + productionRunTaskId, module);
+
                 // The newly created production run task is associated to the routing task
                 // to keep track of the template used to generate it.
                 serviceContext.clear();
@@ -356,34 +359,11 @@ public class ProductionRunServices {
                 } catch (GenericServiceException e) {
                     Debug.logError(e, "Problem calling the createWorkEffortAssoc service", module);
                 }
-                // copy date valid WorkEffortPartyAssignments from the routing task to the run task
-                List workEffortPartyAssignments = null;
-                try {
-                    workEffortPartyAssignments = EntityUtil.filterByDate(delegator.findByAnd("WorkEffortPartyAssignment",
-                            UtilMisc.toMap("workEffortId", routingTaskAssoc.getString("workEffortIdTo"))));
-                } catch (GenericEntityException e) {
-                    Debug.logError(e.getMessage(),  module);
-                }
-                if (workEffortPartyAssignments != null) {
-                    Iterator i = workEffortPartyAssignments.iterator();
-                    while (i.hasNext()) {
-                        GenericValue workEffortPartyAssignment = (GenericValue) i.next();
-                        Map partyToWorkEffort = UtilMisc.toMap(
-                                "workEffortId",  productionRunTaskId,
-                                "partyId",  workEffortPartyAssignment.getString("partyId"),
-                                "roleTypeId",  workEffortPartyAssignment.getString("roleTypeId"),
-                                "fromDate",  workEffortPartyAssignment.getTimestamp("fromDate"),
-                                "statusId",  workEffortPartyAssignment.getString("statusId"),
-                                "userLogin", userLogin
-                        );
-                        try {
-                            resultService = dispatcher.runSync("assignPartyToWorkEffort", partyToWorkEffort);
-                        } catch (GenericServiceException e) {
-                            Debug.logError(e, "Problem calling the assignPartyToWorkEffort service", module);
-                        }
-                        if (Debug.infoOn()) Debug.logInfo("ProductionRunPartyassigment for party: " + workEffortPartyAssignment.get("partyId") + " created", module);
-                    }
-                }
+
+                // clone associated objects from the routing task to the run task
+                String routingTaskId = routingTaskAssoc.getString("workEffortIdTo");
+                cloneWorkEffortPartyAssignments(ctx, userLogin, routingTaskId, productionRunTaskId);
+                cloneWorkEffortCostCalcs(ctx, userLogin, routingTaskId, productionRunTaskId);
 
                 // Now we iterate thru the components returned by the getManufacturingComponents service
                 // TODO: if in the BOM a routingWorkEffortId is specified, but the task is not in the routing
@@ -392,7 +372,7 @@ public class ProductionRunServices {
                 while (pb.hasNext()) {
                     // The components variable contains a list of BOMNodes:
                     // each node represents a product (component).
-                    org.ofbiz.manufacturing.bom.BOMNode node = (org.ofbiz.manufacturing.bom.BOMNode) pb.next();
+                    BOMNode node = (BOMNode) pb.next();
                     GenericValue productBom = node.getProductAssoc();
                     if ((productBom.getString("routingWorkEffortId") == null && first) || (productBom.getString("routingWorkEffortId") != null && productBom.getString("routingWorkEffortId").equals(routingTask.getString("workEffortId")))) {
                         serviceContext.clear();
@@ -438,6 +418,74 @@ public class ProductionRunServices {
         result.put(ModelService.SUCCESS_MESSAGE, UtilProperties.getMessage(resource, "ManufacturingProductionRunCreated",UtilMisc.toMap("productionRunId", productionRunId), locale));
         return result;
     }
+
+    /**
+     * Make a copy of the party assignments that were defined on the template routing task to the new production run task.
+     */
+    private static void cloneWorkEffortPartyAssignments(DispatchContext dctx, GenericValue userLogin, String routingTaskId, String productionRunTaskId) {
+        List workEffortPartyAssignments = null;
+        try {
+            workEffortPartyAssignments = EntityUtil.filterByDate(
+                    dctx.getDelegator().findByAnd("WorkEffortPartyAssignment", UtilMisc.toMap("workEffortId", routingTaskId)));
+        } catch (GenericEntityException e) {
+            Debug.logError(e.getMessage(),  module);
+        }
+
+        if (workEffortPartyAssignments != null) {
+            Iterator i = workEffortPartyAssignments.iterator();
+            while (i.hasNext()) {
+                GenericValue workEffortPartyAssignment = (GenericValue) i.next();
+                Map partyToWorkEffort = UtilMisc.toMap(
+                        "workEffortId",  productionRunTaskId,
+                        "partyId",  workEffortPartyAssignment.getString("partyId"),
+                        "roleTypeId",  workEffortPartyAssignment.getString("roleTypeId"),
+                        "fromDate",  workEffortPartyAssignment.getTimestamp("fromDate"),
+                        "statusId",  workEffortPartyAssignment.getString("statusId"),
+                        "userLogin", userLogin
+               );
+                try {
+                    dctx.getDispatcher().runSync("assignPartyToWorkEffort", partyToWorkEffort);
+                } catch (GenericServiceException e) {
+                    Debug.logError(e, "Problem calling the assignPartyToWorkEffort service", module);
+                }
+                if (Debug.infoOn()) Debug.logInfo("ProductionRunPartyassigment for party: " + workEffortPartyAssignment.get("partyId") + " created", module);
+            }
+        }
+    }
+
+    /**
+     * Make a copy of the cost calc entities that were defined on the template routing task to the new production run task.
+     */
+    private static void cloneWorkEffortCostCalcs(DispatchContext dctx, GenericValue userLogin, String routingTaskId, String productionRunTaskId) {
+        List<GenericValue> workEffortCostCalcs = null;
+        try {
+            workEffortCostCalcs = EntityUtil.filterByDate(
+                    dctx.getDelegator().findByAnd("WorkEffortCostCalc", UtilMisc.toMap("workEffortId", routingTaskId)));
+        } catch (GenericEntityException e) {
+            Debug.logError(e.getMessage(),  module);
+        }
+
+        if (workEffortCostCalcs != null) {
+            for (GenericValue costCalc : workEffortCostCalcs) {
+                Map<String, Object> createCostCalc = UtilMisc.toMap(
+                        "workEffortId", productionRunTaskId,
+                        "costComponentTypeId", costCalc.getString("costComponentTypeId"),
+                        "costComponentCalcId", costCalc.getString("costComponentCalcId"),
+                        "fromDate", costCalc.get("fromDate"),
+                        "thruDate", costCalc.get("thruDate"),
+                        "userLogin", userLogin
+                );
+
+                try {
+                    dctx.getDispatcher().runSync("createWorkEffortCostCalc", createCostCalc);
+                } catch (GenericServiceException gse) {
+                    Debug.logError(gse, "Problem calling the createWorkEffortCostCalc service", module);
+                }
+                if (Debug.infoOn()) Debug.logInfo("ProductionRun CostCalc for cost calc: " + costCalc.getString("costComponentCalcId") + " created", module);
+            }
+        }
+    }
+
     /**
      * Update a Production Run.
      *  <li> update field and after recalculate the entire ProductionRun data (routingTask and productComponent)
@@ -451,7 +499,7 @@ public class ProductionRunServices {
      */
     public static Map updateProductionRun(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -467,7 +515,7 @@ public class ProductionRunServices {
                 }
 
                 BigDecimal quantity = (BigDecimal) context.get("quantity");
-                if (quantity != null &&  ! quantity.equals(productionRun.getQuantity())) {
+                if (quantity != null &&  quantity.compareTo(productionRun.getQuantity()) != 0) {
                     productionRun.setQuantity(quantity);
                 }
 
@@ -517,7 +565,7 @@ public class ProductionRunServices {
 
     public static Map changeProductionRunStatus(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -538,7 +586,7 @@ public class ProductionRunServices {
         }
 
         // PRUN_CREATED --> PRUN_SCHEDULED
-        if (currentStatusId.equals("PRUN_CREATED") && (statusId != null && statusId.equals("PRUN_SCHEDULED"))) {
+        if ("PRUN_CREATED".equals(currentStatusId) && "PRUN_SCHEDULED".equals(statusId)) {
             // change the production run status to PRUN_SCHEDULED
             Map serviceContext = new HashMap();
             serviceContext.clear();
@@ -552,7 +600,7 @@ public class ProductionRunServices {
                 Debug.logError(e, "Problem calling the updateWorkEffort service", module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunStatusNotChanged", locale));
             }
-            // change the production run tasks status to PRUN_CLOSED
+            // change the production run tasks status to PRUN_SCHEDULED
             Iterator tasks = productionRun.getProductionRunRoutingTasks().iterator();
             while (tasks.hasNext()) {
                 GenericValue task = (GenericValue)tasks.next();
@@ -573,7 +621,7 @@ public class ProductionRunServices {
             return result;
         }
 
-        // PRUN_CREATED or PRON_SCHEDULED --> PRUN_DOC_PRINTED
+        // PRUN_CREATED or PRUN_SCHEDULED --> PRUN_DOC_PRINTED
         if ((currentStatusId.equals("PRUN_CREATED") || currentStatusId.equals("PRUN_SCHEDULED")) && (statusId == null || statusId.equals("PRUN_DOC_PRINTED"))) {
             // change only the production run (header) status to PRUN_DOC_PRINTED
             Map serviceContext = new HashMap();
@@ -587,6 +635,22 @@ public class ProductionRunServices {
             } catch (GenericServiceException e) {
                 Debug.logError(e, "Problem calling the updateWorkEffort service", module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunStatusNotChanged", locale));
+            }
+            // change the production run tasks status to PRUN_DOC_PRINTED
+            Iterator tasks = productionRun.getProductionRunRoutingTasks().iterator();
+            while (tasks.hasNext()) {
+                GenericValue task = (GenericValue)tasks.next();
+                serviceContext.clear();
+                serviceContext.put("workEffortId", task.getString("workEffortId"));
+                serviceContext.put("currentStatusId", "PRUN_DOC_PRINTED");
+                serviceContext.put("userLogin", userLogin);
+                resultService = null;
+                try {
+                    resultService = dispatcher.runSync("updateWorkEffort", serviceContext);
+                } catch (GenericServiceException e) {
+                    Debug.logError(e, "Problem calling the updateWorkEffort service", module);
+                    return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunStatusNotChanged", locale));
+                }
             }
             result.put("newStatusId", "PRUN_DOC_PRINTED");
             result.put(ModelService.SUCCESS_MESSAGE, UtilProperties.getMessage(resource, "ManufacturingProductionRunStatusChanged",UtilMisc.toMap("newStatusId", "PRUN_DOC_PRINTED"), locale));
@@ -604,6 +668,7 @@ public class ProductionRunServices {
                     GenericValue mandatoryWorkEffortAssoc = (GenericValue)mandatoryWorkEfforts.get(i);
                     GenericValue mandatoryWorkEffort = mandatoryWorkEffortAssoc.getRelatedOne("FromWorkEffort");
                     if (!(mandatoryWorkEffort.getString("currentStatusId").equals("PRUN_COMPLETED") ||
+                         mandatoryWorkEffort.getString("currentStatusId").equals("PRUN_RUNNING") ||
                          mandatoryWorkEffort.getString("currentStatusId").equals("PRUN_CLOSED"))) {
                         return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunStatusNotChangedMandatoryProductionRunNotCompleted", locale));
                     }
@@ -694,7 +759,7 @@ public class ProductionRunServices {
 
     public static Map changeProductionRunTaskStatus(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -743,9 +808,9 @@ public class ProductionRunServices {
             return result;
         }
 
-        // PRUN_CREATED or PRUN_SCHEDULED --> PRUN_RUNNING
+        // PRUN_CREATED or PRUN_SCHEDULED or PRUN_DOC_PRINTED --> PRUN_RUNNING
         // this should be called only when the first task is started
-        if ((currentStatusId.equals("PRUN_CREATED") || currentStatusId.equals("PRUN_SCHEDULED")) && (statusId == null || statusId.equals("PRUN_RUNNING"))) {
+        if ((currentStatusId.equals("PRUN_CREATED") || currentStatusId.equals("PRUN_SCHEDULED") || currentStatusId.equals("PRUN_DOC_PRINTED")) && (statusId == null || statusId.equals("PRUN_RUNNING"))) {
             // change the production run task status to PRUN_RUNNING
             // if necessary change the production run (header) status to PRUN_RUNNING
             if (!allPrecTaskCompletedOrRunning) {
@@ -845,6 +910,17 @@ public class ProductionRunServices {
                 Debug.logError(e, "Problem calling the updateWorkEffort service", module);
                 return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunStatusNotChanged", locale));
             }
+            // Calculate and store the production run task actual costs
+            serviceContext.clear();
+            serviceContext.put("productionRunTaskId", taskId);
+            serviceContext.put("userLogin", userLogin);
+            resultService = null;
+            try {
+                resultService = dispatcher.runSync("createProductionRunTaskCosts", serviceContext);
+            } catch (GenericServiceException e) {
+                Debug.logError(e, "Problem calling the createProductionRunTaskCosts service", module);
+                return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunStatusNotChanged", locale));
+            }
             // If this is the last task, then the production run is marked as 'completed'
             if (allTaskCompleted) {
                 serviceContext.clear();
@@ -858,17 +934,50 @@ public class ProductionRunServices {
                     Debug.logError(e, "Problem calling the updateWorkEffort service", module);
                     return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunStatusNotChanged", locale));
                 }
-            }
-            // Calculate and store the production run task actual costs
-            serviceContext.clear();
-            serviceContext.put("productionRunTaskId", taskId);
-            serviceContext.put("userLogin", userLogin);
-            resultService = null;
-            try {
-                resultService = dispatcher.runSync("createProductionRunTaskCosts", serviceContext);
-            } catch (GenericServiceException e) {
-                Debug.logError(e, "Problem calling the createProductionRunTaskCosts service", module);
-                return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunStatusNotChanged", locale));
+                // and compute the overhead costs associated to the finished product
+                try {
+                    // get the currency
+                    GenericValue facility = productionRun.getGenericValue().getRelatedOne("Facility");
+                    Map outputMap = dispatcher.runSync("getPartyAccountingPreferences", UtilMisc.<String, Object>toMap("userLogin", userLogin, "organizationPartyId", facility.getString("ownerPartyId")));
+                    Map partyAccountingPreference = (Map)outputMap.get("partyAccountingPreference");
+                    if (partyAccountingPreference == null) {
+                        return ServiceUtil.returnError("Unable to find a currency for production run costs");
+                    }
+                    outputMap = dispatcher.runSync("getProductionRunCost", UtilMisc.<String, Object>toMap("userLogin", userLogin, "workEffortId", productionRunId));
+
+                    BigDecimal totalCost = (BigDecimal)outputMap.get("totalCost");
+                    if (totalCost == null) {
+                        totalCost = ZERO;
+                    }
+
+                    List productCostComponentCalcs = delegator.findByAnd("ProductCostComponentCalc", UtilMisc.toMap("productId", productionRun.getProductProduced().getString("productId")), UtilMisc.toList("sequenceNum"));
+                    for (int i = 0; i < productCostComponentCalcs.size(); i++) {
+                        GenericValue productCostComponentCalc = (GenericValue)productCostComponentCalcs.get(i);
+                        GenericValue costComponentCalc = productCostComponentCalc.getRelatedOne("CostComponentCalc");
+                        GenericValue customMethod = costComponentCalc.getRelatedOne("CustomMethod");
+                        if (customMethod == null) {
+                            // TODO: not supported for CostComponentCalc entries directly associated to a product
+                            Debug.logWarning("Unable to create cost component for cost component calc with id [" + costComponentCalc.getString("costComponentCalcId") + "] because customMethod is not set", module);
+                        } else {
+                            Map costMethodResult = dispatcher.runSync(customMethod.getString("customMethodName"), UtilMisc.toMap("productCostComponentCalc", productCostComponentCalc,
+                                                                                                                                 "costComponentCalc", costComponentCalc,
+                                                                                                                                 "costComponentTypePrefix", "ACTUAL",
+                                                                                                                                 "baseCost", totalCost,
+                                                                                                                                 "currencyUomId", (String)partyAccountingPreference.get("baseCurrencyUomId"),
+                                                                                                                                 "userLogin", userLogin));
+                            BigDecimal productCostAdjustment = (BigDecimal)costMethodResult.get("productCostAdjustment");
+                            totalCost = totalCost.add(productCostAdjustment);
+                            Map inMap = UtilMisc.toMap("userLogin", userLogin, "workEffortId", productionRunId);
+                            inMap.put("costComponentCalcId", costComponentCalc.getString("costComponentCalcId"));
+                            inMap.put("costComponentTypeId", "ACTUAL_" + productCostComponentCalc.getString("costComponentTypeId"));
+                            inMap.put("costUomId", (String)partyAccountingPreference.get("baseCurrencyUomId"));
+                            inMap.put("cost", productCostAdjustment);
+                            dispatcher.runSync("createCostComponent", inMap);
+                        }
+                    }
+                } catch(Exception e) {
+                    return ServiceUtil.returnError("Unable to compute overhead costs for production run: " + e.getMessage());
+                }
             }
 
             result.put("oldStatusId", oldStatusId);
@@ -884,7 +993,7 @@ public class ProductionRunServices {
 
     public static Map getWorkEffortCosts(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         String workEffortId = (String)context.get("workEffortId");
         try {
             GenericValue workEffort = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
@@ -918,7 +1027,7 @@ public class ProductionRunServices {
 
     public static Map getProductionRunCost(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String workEffortId = (String)context.get("workEffortId");
@@ -926,9 +1035,12 @@ public class ProductionRunServices {
             List tasks = delegator.findByAnd("WorkEffort", UtilMisc.toMap("workEffortParentId", workEffortId), UtilMisc.toList("workEffortId"));
             Iterator tasksIt = tasks.iterator();
             BigDecimal totalCost = ZERO;
+            Map outputMap = dispatcher.runSync("getWorkEffortCosts", UtilMisc.<String, Object>toMap("userLogin", userLogin, "workEffortId", workEffortId));
+            BigDecimal productionRunHeaderCost = (BigDecimal)outputMap.get("totalCost");
+            totalCost = totalCost.add(productionRunHeaderCost);
             while (tasksIt.hasNext()) {
                 GenericValue task = (GenericValue)tasksIt.next();
-                Map outputMap = dispatcher.runSync("getWorkEffortCosts", UtilMisc.<String, Object>toMap("userLogin", userLogin, "workEffortId", task.getString("workEffortId")));
+                outputMap = dispatcher.runSync("getWorkEffortCosts", UtilMisc.<String, Object>toMap("userLogin", userLogin, "workEffortId", task.getString("workEffortId")));
                 BigDecimal taskCost = (BigDecimal)outputMap.get("totalCost");
                 totalCost = totalCost.add(taskCost);
             }
@@ -940,7 +1052,7 @@ public class ProductionRunServices {
     }
 
     public static Map createProductionRunTaskCosts(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -954,26 +1066,27 @@ public class ProductionRunServices {
             double actualTotalMilliSeconds = 0.0;
             Double actualSetupMillis = workEffort.getDouble("actualSetupMillis");
             Double actualMilliSeconds = workEffort.getDouble("actualMilliSeconds");
-            if (actualSetupMillis != null) {
-                actualTotalMilliSeconds += actualSetupMillis.doubleValue();
+            if (actualSetupMillis == null) {
+                actualSetupMillis = new Double(0.0);
             }
-            if (actualMilliSeconds != null) {
-                actualTotalMilliSeconds += actualMilliSeconds.doubleValue();
+            if (actualMilliSeconds == null) {
+                actualMilliSeconds = new Double(0.0);
             }
+            actualTotalMilliSeconds += actualSetupMillis.doubleValue();
+            actualTotalMilliSeconds += actualMilliSeconds.doubleValue();
             // Get the template (aka routing task) of the work effort
-            List routingTasks = EntityUtil.filterByDate(delegator.findByAnd("WorkEffortAssoc",
-                                                                            UtilMisc.toMap("workEffortIdTo", productionRunTaskId,
-                                                                                           "workEffortAssocTypeId", "WORK_EFF_TEMPLATE")));
-            GenericValue routingTask = EntityUtil.getFirst(routingTasks);
-            List workEffortCostCalcs = null;
-            if (UtilValidate.isEmpty(routingTask)) {
-                // there is no template, try to get the cost entries for the actual production run task, if any
-                workEffortCostCalcs = delegator.findByAnd("WorkEffortCostCalc", UtilMisc.toMap("workEffortId", productionRunTaskId));
-            } else {
-                workEffortCostCalcs = delegator.findByAnd("WorkEffortCostCalc", UtilMisc.toMap("workEffortId", routingTask.getString("workEffortIdFrom")));
+            GenericValue routingTaskAssoc = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("WorkEffortAssoc",
+                                                            UtilMisc.toMap("workEffortIdTo", productionRunTaskId,
+                                                                           "workEffortAssocTypeId", "WORK_EFF_TEMPLATE"))));
+            GenericValue routingTask = null;
+            if (UtilValidate.isNotEmpty(routingTaskAssoc)) {
+                routingTask = routingTaskAssoc.getRelatedOne("FromWorkEffort");
             }
+
             // Get all the valid CostComponentCalc entries
+            List workEffortCostCalcs = workEffortCostCalcs = delegator.findByAnd("WorkEffortCostCalc", UtilMisc.toMap("workEffortId", productionRunTaskId));
             workEffortCostCalcs = EntityUtil.filterByDate(workEffortCostCalcs);
+
             Iterator workEffortCostCalcsIt = workEffortCostCalcs.iterator();
             while (workEffortCostCalcsIt.hasNext()) {
                 GenericValue workEffortCostCalc = (GenericValue)workEffortCostCalcsIt.next();
@@ -1011,6 +1124,38 @@ public class ProductionRunServices {
                     inMap.put("workEffortCostCalc", workEffortCostCalc);
                     inMap.put("costComponentCalc", costComponentCalc);
                     dispatcher.runSync(customMethod.getString("customMethodName"), inMap);
+                }
+            }
+
+            // Now get the cost information associated to the fixed asset and compute the costs
+            GenericValue fixedAsset = workEffort.getRelatedOne("FixedAsset");
+            if (UtilValidate.isEmpty(fixedAsset) && UtilValidate.isNotEmpty(routingTask)) {
+                fixedAsset = routingTask.getRelatedOne("FixedAsset");
+            }
+            if (UtilValidate.isNotEmpty(fixedAsset)) {
+                List setupCosts = fixedAsset.getRelatedByAnd("FixedAssetStdCost", UtilMisc.toMap("fixedAssetStdCostTypeId", "SETUP_COST"));
+                GenericValue setupCost = EntityUtil.getFirst(EntityUtil.filterByDate(setupCosts));
+                List usageCosts = fixedAsset.getRelatedByAnd("FixedAssetStdCost", UtilMisc.toMap("fixedAssetStdCostTypeId", "USAGE_COST"));
+                GenericValue usageCost = EntityUtil.getFirst(EntityUtil.filterByDate(usageCosts));
+                if (UtilValidate.isNotEmpty(setupCost) || UtilValidate.isNotEmpty(usageCost)) {
+                    String currencyUomId = (setupCost != null? setupCost.getString("amountUomId"): usageCost.getString("amountUomId"));
+                    BigDecimal setupCostAmount = ZERO;
+                    if (setupCost != null) {
+                        setupCostAmount = setupCost.getBigDecimal("amount").multiply(BigDecimal.valueOf(actualSetupMillis.doubleValue()));
+                    }
+                    BigDecimal usageCostAmount = ZERO;
+                    if (usageCost != null) {
+                        usageCostAmount = usageCost.getBigDecimal("amount").multiply(BigDecimal.valueOf(actualMilliSeconds.doubleValue()));
+                    }
+                    BigDecimal fixedAssetCost = setupCostAmount.add(usageCostAmount).setScale(decimals, rounding);
+                    fixedAssetCost = fixedAssetCost.divide(BigDecimal.valueOf(3600000), decimals, rounding);
+                    // store the cost
+                    Map inMap = UtilMisc.toMap("userLogin", userLogin, "workEffortId", productionRunTaskId);
+                    inMap.put("costComponentTypeId", "ACTUAL_ROUTE_COST");
+                    inMap.put("costUomId", currencyUomId);
+                    inMap.put("cost", fixedAssetCost);
+                    inMap.put("fixedAssetId", fixedAsset.get("fixedAssetId"));
+                    dispatcher.runSync("createCostComponent", inMap);
                 }
             }
         } catch (Exception e) {
@@ -1064,7 +1209,7 @@ public class ProductionRunServices {
      */
     public static Map checkUpdatePrunRoutingTask(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1109,7 +1254,7 @@ public class ProductionRunServices {
                         if (! priority.equals(routingTask.get("priority"))) {
                             routingTask.set("priority", priority);
                             // update the routingTask List and re-read it to be able to have it sorted with the new value
-                            if ( ! productionRun.store()) {
+                            if (! productionRun.store()) {
                                 Debug.logError("productionRun.store(), in routingTask.priority update, fail for productionRunId ="+productionRunId,module);
                                 return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunNotUpdated", locale));
                             }
@@ -1136,7 +1281,7 @@ public class ProductionRunServices {
 
     public static Map addProductionRunComponent(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Timestamp now = UtilDateTime.nowTimestamp();
         Locale locale = (Locale) context.get("locale");
@@ -1207,7 +1352,7 @@ public class ProductionRunServices {
 
     public static Map updateProductionRunComponent(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1282,7 +1427,7 @@ public class ProductionRunServices {
 
     public static Map addProductionRunRoutingTask(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1402,7 +1547,7 @@ public class ProductionRunServices {
                         "fromDate",  workEffortPartyAssignment.getTimestamp("fromDate"),
                         "statusId",  workEffortPartyAssignment.getString("statusId"),
                         "userLogin", userLogin
-                );
+               );
                 try {
                     resultService = dispatcher.runSync("assignPartyToWorkEffort", partyToWorkEffort);
                 } catch (GenericServiceException e) {
@@ -1420,7 +1565,7 @@ public class ProductionRunServices {
 
     public static Map productionRunProduce(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1494,7 +1639,7 @@ public class ProductionRunServices {
                 GenericValue lot = delegator.findByPrimaryKey("Lot", UtilMisc.toMap("lotId", lotId));
                 if (lot == null) {
                     if (createLotIfNeeded.booleanValue()) {
-                        lot = delegator.makeValue("Lot", UtilMisc.toMap("lotId", lotId, "creationDate", UtilDateTime.nowDate()));
+                        lot = delegator.makeValue("Lot", UtilMisc.toMap("lotId", lotId, "creationDate", UtilDateTime.nowTimestamp()));
                         lot.create();
                     } else {
                         return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingLotNotExists", locale));
@@ -1515,14 +1660,23 @@ public class ProductionRunServices {
             Debug.logWarning(e.getMessage(), module);
             return ServiceUtil.returnError(e.getMessage());
         }
-        // calculate the inventory item unit cost
+        // the inventory item unit cost is the product's standard cost
         BigDecimal unitCost = ZERO;
         try {
-            Map outputMap = dispatcher.runSync("getProductionRunCost", UtilMisc.<String, Object>toMap("userLogin", userLogin, "workEffortId", productionRunId));
-            BigDecimal totalCost = (BigDecimal)outputMap.get("totalCost");
-            // FIXME
-            unitCost = totalCost.divide(quantity, decimals, rounding);
-        } catch (GenericServiceException e) {
+            // get the currency
+            GenericValue facility = productionRun.getGenericValue().getRelatedOne("Facility");
+            Map outputMap = dispatcher.runSync("getPartyAccountingPreferences", UtilMisc.<String, Object>toMap("userLogin", userLogin, "organizationPartyId", facility.getString("ownerPartyId")));
+            Map partyAccountingPreference = (Map)outputMap.get("partyAccountingPreference");
+            if (partyAccountingPreference == null) {
+                return ServiceUtil.returnError("Unable to find a currency for production run costs");
+            }
+            outputMap = dispatcher.runSync("getProductCost", UtilMisc.<String, Object>toMap("userLogin", userLogin, "productId", productionRun.getProductProduced().getString("productId"), "currencyUomId", (String)partyAccountingPreference.get("baseCurrencyUomId"), "costComponentTypePrefix", "EST_STD"));
+            unitCost = (BigDecimal)outputMap.get("productCost");
+            if (unitCost == null) {
+                unitCost = ZERO;
+            }
+
+        } catch (Exception e) {
             Debug.logWarning(e.getMessage(), module);
             return ServiceUtil.returnError(e.getMessage());
         }
@@ -1626,7 +1780,7 @@ public class ProductionRunServices {
 
     public static Map productionRunDeclareAndProduce(DispatchContext ctx, Map context) {
         Map result = FastMap.newInstance();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1691,7 +1845,7 @@ public class ProductionRunServices {
 
     public static Map productionRunTaskProduce(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         // Mandatory input fields
@@ -1797,7 +1951,7 @@ public class ProductionRunServices {
     }
 
     public static Map productionRunTaskReturnMaterial(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         // Mandatory input fields
@@ -1860,7 +2014,7 @@ public class ProductionRunServices {
 
     public static Map updateProductionRunTask(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1898,12 +2052,6 @@ public class ProductionRunServices {
         if (addQuantityRejected == null) {
             addQuantityRejected = BigDecimal.ZERO;
         }
-        if (addSetupTime == null) {
-            addSetupTime = BigDecimal.ZERO;
-        }
-        if (addTaskTime == null) {
-            addTaskTime =  BigDecimal.ZERO;
-        }
         if (comments == null) {
             comments = "";
         }
@@ -1932,15 +2080,6 @@ public class ProductionRunServices {
             return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunTaskNotRunning", locale));
         }
 
-        BigDecimal actualMilliSeconds = theTask.getBigDecimal("actualMilliSeconds");
-        if (actualMilliSeconds == null) {
-            actualMilliSeconds = BigDecimal.ZERO;
-        }
-        BigDecimal actualSetupMillis = theTask.getBigDecimal("actualSetupMillis");
-        if (actualSetupMillis == null) {
-            actualSetupMillis = BigDecimal.ZERO;
-        }
-
         BigDecimal quantityProduced = theTask.getBigDecimal("quantityProduced");
         if (quantityProduced == null) {
             quantityProduced = BigDecimal.ZERO;
@@ -1949,8 +2088,6 @@ public class ProductionRunServices {
         if (quantityRejected == null) {
             quantityRejected = BigDecimal.ZERO;
         }
-        BigDecimal totalMillis = actualMilliSeconds.add(addTaskTime);
-        BigDecimal totalSetupMillis = actualSetupMillis.add(addSetupTime);
         BigDecimal totalQuantityProduced = quantityProduced.add(addQuantityProduced);
         BigDecimal totalQuantityRejected = quantityRejected.add(addQuantityRejected);
 
@@ -2001,10 +2138,11 @@ public class ProductionRunServices {
 
         // Create a new TimeEntry
         try {
+            /*
             String timeEntryId = delegator.getNextSeqId("TimeEntry");
             Map timeEntryFields = UtilMisc.toMap("timeEntryId", timeEntryId,
                                                  "workEffortId", workEffortId);
-            Double totalTime = new Double(addSetupTime.doubleValue() + addTaskTime.doubleValue());
+            Double totalTime = Double.valueOf(addSetupTime.doubleValue() + addTaskTime.doubleValue());
             timeEntryFields.put("partyId", partyId);
             timeEntryFields.put("fromDate", fromDate);
             timeEntryFields.put("thruDate", toDate);
@@ -2016,11 +2154,24 @@ public class ProductionRunServices {
             GenericValue timeEntry = delegator.makeValue("TimeEntry", timeEntryFields);
             timeEntry.create();
 
+            */
             Map serviceContext = new HashMap();
             serviceContext.clear();
             serviceContext.put("workEffortId", workEffortId);
-            serviceContext.put("actualMilliSeconds", totalMillis);
-            serviceContext.put("actualSetupMillis", totalSetupMillis);
+            if (addTaskTime != null) {
+                Double actualMilliSeconds = theTask.getDouble("actualMilliSeconds");
+                if (actualMilliSeconds == null) {
+                    actualMilliSeconds = Double.valueOf(0);
+                }
+                serviceContext.put("actualMilliSeconds", Double.valueOf(actualMilliSeconds.doubleValue() + addTaskTime.doubleValue()));
+            }
+            if (addSetupTime != null) {
+                Double actualSetupMillis = theTask.getDouble("actualSetupMillis");
+                if (actualSetupMillis == null) {
+                    actualSetupMillis = Double.valueOf(0);
+                }
+                serviceContext.put("actualSetupMillis", Double.valueOf(actualSetupMillis.doubleValue() + addSetupTime.doubleValue()));
+            }
             serviceContext.put("quantityProduced", totalQuantityProduced);
             serviceContext.put("quantityRejected", totalQuantityRejected);
             serviceContext.put("userLogin", userLogin);
@@ -2034,7 +2185,7 @@ public class ProductionRunServices {
 
     public static Map approveRequirement(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2059,7 +2210,7 @@ public class ProductionRunServices {
 
     public static Map createProductionRunFromRequirement(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2120,7 +2271,7 @@ public class ProductionRunServices {
 
     public static Map createProductionRunFromConfiguration(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2197,7 +2348,39 @@ public class ProductionRunServices {
                     BigDecimal totalQuantity = (BigDecimal)components.get(componentProductId);
                     componentQuantity = totalQuantity.add(componentQuantity);
                 }
-                components.put(componentProductId, componentQuantity);
+
+                // check if a bom exists
+                List bomList = null;
+                try {
+                    bomList = delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productId", componentProductId, "productAssocTypeId", "MANUF_COMPONENT"));
+                    bomList = EntityUtil.filterByDate(bomList, UtilDateTime.nowTimestamp());
+                } catch (GenericEntityException e) {
+                    return ServiceUtil.returnError("try to get BOM list from productAssoc");
+                }
+                // if so create a mandatory predecessor to this production run
+                if (UtilValidate.isNotEmpty(bomList)) {
+                    serviceContext.clear();
+                    serviceContext.put("productId", componentProductId);
+                    serviceContext.put("quantity", componentQuantity);
+                    serviceContext.put("startDate", UtilDateTime.nowTimestamp());
+                    serviceContext.put("facilityId", facilityId);
+                    serviceContext.put("userLogin", userLogin);
+                    resultService = null;
+                    try {
+                        resultService = dispatcher.runSync("createProductionRunsForProductBom", serviceContext);
+                        GenericValue workEffortPreDecessor = delegator.makeValue("WorkEffortAssoc", UtilMisc.toMap(
+                                "workEffortIdTo", productionRunId, "workEffortIdFrom", resultService.get("productionRunId"),
+                                "workEffortAssocTypeId", "WORK_EFF_PRECEDENCY", "fromDate", UtilDateTime.nowTimestamp()));
+                        workEffortPreDecessor.create();
+                    } catch (GenericServiceException e) {
+                        return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunNotCreated", locale));
+                    } catch (GenericEntityException e) {
+                        return ServiceUtil.returnError("try to create workeffort assoc");
+                    }
+
+                } else {
+                    components.put(componentProductId, componentQuantity);
+                }
 
                 //  create production run notes from comments
                 String comments = co.getComments();
@@ -2254,7 +2437,7 @@ public class ProductionRunServices {
 
     public static Map createProductionRunForMktgPkg(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2328,6 +2511,12 @@ public class ProductionRunServices {
                     result.put("productionRunId", productionRunId);
 
                     try {
+                        delegator.create("WorkOrderItemFulfillment", UtilMisc.toMap("workEffortId", productionRunId, "orderId", orderId, "orderItemSeqId", orderItemSeqId));
+                    } catch (GenericEntityException e) {
+                       return ServiceUtil.returnError("Error creating a production run for marketing package for order [" + orderId + " " + orderItemSeqId + "]: " + e.getMessage());
+                   }
+
+                    try {
                         serviceContext.clear();
                         serviceContext.put("productionRunId", productionRunId);
                         serviceContext.put("statusId", "PRUN_COMPLETED");
@@ -2359,7 +2548,7 @@ public class ProductionRunServices {
     public static Map createProductionRunsForOrder(DispatchContext dctx, Map context) {
 
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue)context.get("userLogin");
 
@@ -2367,10 +2556,10 @@ public class ProductionRunServices {
 
         String shipmentId = (String) context.get("shipmentId");
         String orderItemSeqId = (String) context.get("orderItemSeqId");
+        String shipGroupSeqId = (String) context.get("shipGroupSeqId");
         BigDecimal quantity = (BigDecimal) context.get("quantity");
         String fromDateStr = (String) context.get("fromDate");
 
-        BigDecimal amount = null;
         Date fromDate = null;
         if (UtilValidate.isNotEmpty(fromDateStr)) {
             try {
@@ -2386,7 +2575,12 @@ public class ProductionRunServices {
 
         if (orderItemSeqId != null) {
             try {
-                GenericValue orderItem = delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
+                GenericValue orderItem = null;
+                if (UtilValidate.isNotEmpty(shipGroupSeqId)) {
+                    orderItem = delegator.findByPrimaryKey("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId, "shipGroupSeqId", shipGroupSeqId));
+                } else {
+                    orderItem = delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
+                }
                 if (orderItem == null) {
                     return ServiceUtil.returnError("OrderItem [" + orderItemSeqId + "] not found.");
                 }
@@ -2407,24 +2601,25 @@ public class ProductionRunServices {
                 return ServiceUtil.returnError("Error reading the OrderItems: " + gee.getMessage());
             }
         }
+        ArrayList productionRuns = new ArrayList();
         for (int i = 0; i < orderItems.size(); i++) {
-            GenericValue orderItem = (GenericValue)orderItems.get(i);
-            if (orderItem.get("productId") == null) {
-                continue;
-            }
-            if (orderItem.get("quantity") != null) {
-                quantity = orderItem.getBigDecimal("quantity");
-            } else {
-                continue;
-            }
-            try {
-                List existingProductionRuns = delegator.findByAndCache("WorkOrderItemFulfillment", UtilMisc.toMap("orderId", orderItem.getString("orderId"), "orderItemSeqId", orderItem.getString("orderItemSeqId")));
-                if (UtilValidate.isNotEmpty(existingProductionRuns)) {
-                    Debug.logWarning("Production Run for order item [" + orderItem.getString("orderId") + "/" + orderItem.getString("orderItemSeqId") + "] already exists.", module);
-                    continue;
+            GenericValue orderItemOrShipGroupAssoc = (GenericValue)orderItems.get(i);
+            String productId = null;
+            BigDecimal amount = null;
+            GenericValue orderItem = null;
+            if ("OrderItemShipGroupAssoc".equals(orderItemOrShipGroupAssoc.getEntityName())) {
+                try {
+                    orderItem = orderItemOrShipGroupAssoc.getRelatedOne("OrderItem");
+                } catch(GenericEntityException gee) {
+                    Debug.logInfo("Unable to find order item for " + orderItemOrShipGroupAssoc, module);
                 }
-            } catch (GenericEntityException gee) {
-                return ServiceUtil.returnError("Error reading the WorkOrderItemFulfillment: " + gee.getMessage());
+            } else {
+                orderItem = orderItemOrShipGroupAssoc;
+            }
+            if (orderItem == null || orderItem.get("productId") == null) {
+                continue;
+            } else {
+                productId = orderItem.getString("productId");
             }
             if (orderItem.get("selectedAmount") != null) {
                 amount = orderItem.getBigDecimal("selectedAmount");
@@ -2432,25 +2627,43 @@ public class ProductionRunServices {
             if (amount == null) {
                 amount = BigDecimal.ZERO;
             }
+            if (orderItemOrShipGroupAssoc.get("quantity") != null) {
+                quantity = orderItemOrShipGroupAssoc.getBigDecimal("quantity");
+            } else {
+                continue;
+            }
+            try {
+                List existingProductionRuns = null;
+                if (UtilValidate.isNotEmpty(shipGroupSeqId)) {
+                    existingProductionRuns = delegator.findByAndCache("WorkOrderItemFulfillment", UtilMisc.toMap("orderId", orderItemOrShipGroupAssoc.getString("orderId"), "orderItemSeqId", orderItemOrShipGroupAssoc.getString("orderItemSeqId"), "shipGroupSeqId", shipGroupSeqId));
+                } else {
+                    existingProductionRuns = delegator.findByAndCache("WorkOrderItemFulfillment", UtilMisc.toMap("orderId", orderItemOrShipGroupAssoc.getString("orderId"), "orderItemSeqId", orderItemOrShipGroupAssoc.getString("orderItemSeqId")));
+                }
+                if (UtilValidate.isNotEmpty(existingProductionRuns)) {
+                    Debug.logWarning("Production Run for order item [" + orderItemOrShipGroupAssoc.getString("orderId") + "/" + orderItemOrShipGroupAssoc.getString("orderItemSeqId") + "] and ship group [" + shipGroupSeqId + "] already exists.", module);
+                    continue;
+                }
+            } catch (GenericEntityException gee) {
+                return ServiceUtil.returnError("Error reading the WorkOrderItemFulfillment: " + gee.getMessage());
+            }
             try {
                 ArrayList components = new ArrayList();
-                BOMTree tree = new BOMTree(orderItem.getString("productId"), "MANUF_COMPONENT", fromDate, BOMTree.EXPLOSION_MANUFACTURING, delegator, dispatcher, userLogin);
+                BOMTree tree = new BOMTree(productId, "MANUF_COMPONENT", fromDate, BOMTree.EXPLOSION_MANUFACTURING, delegator, dispatcher, userLogin);
                 tree.setRootQuantity(quantity);
                 tree.setRootAmount(amount);
                 tree.print(components);
-                tree.createManufacturingOrders(null, fromDate, null, null, null, orderId, orderItem.getString("orderItemSeqId"), shipmentId, userLogin);
+                productionRuns.add(tree.createManufacturingOrders(null, fromDate, null, null, null, orderId, orderItem.getString("orderItemSeqId"), shipGroupSeqId, shipmentId, userLogin));
             } catch (GenericEntityException gee) {
                 return ServiceUtil.returnError("Error creating bill of materials tree: " + gee.getMessage());
             }
         }
-        ArrayList productionRuns = new ArrayList();
         result.put("productionRuns" , productionRuns);
         return result;
     }
 
     public static Map createProductionRunsForProductBom(DispatchContext dctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin =(GenericValue)context.get("userLogin");
 
@@ -2471,7 +2684,7 @@ public class ProductionRunServices {
             tree.setRootQuantity(quantity);
             tree.setRootAmount(BigDecimal.ZERO);
             tree.print(components);
-            workEffortId = tree.createManufacturingOrders(facilityId, startDate, workEffortName, description, routingId, null, null, null, userLogin);
+            workEffortId = tree.createManufacturingOrders(facilityId, startDate, workEffortName, description, routingId, null, null, null, null, userLogin);
         } catch (GenericEntityException gee) {
             return ServiceUtil.returnError("Error creating bill of materials tree: " + gee.getMessage());
         }
@@ -2493,7 +2706,7 @@ public class ProductionRunServices {
      */
     public static Map quickRunProductionRunTask(DispatchContext ctx, Map context) {
         Map result = ServiceUtil.returnSuccess();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2537,7 +2750,7 @@ public class ProductionRunServices {
      */
     public static Map quickRunAllProductionRunTasks(DispatchContext ctx, Map context) {
         Map result = ServiceUtil.returnSuccess();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2572,7 +2785,7 @@ public class ProductionRunServices {
 
     public static Map quickStartAllProductionRunTasks(DispatchContext ctx, Map context) {
         Map result = ServiceUtil.returnSuccess();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2589,7 +2802,9 @@ public class ProductionRunServices {
         for (int i = 0; i < tasks.size(); i++) {
             oneTask = (GenericValue)tasks.get(i);
             taskId = oneTask.getString("workEffortId");
-            if ("PRUN_CREATED".equals(oneTask.getString("currentStatusId"))) {
+            if ("PRUN_CREATED".equals(oneTask.getString("currentStatusId")) ||
+                    "PRUN_SCHEDULED".equals(oneTask.getString("currentStatusId")) ||
+                    "PRUN_DOC_PRINTED".equals(oneTask.getString("currentStatusId"))) {
                 try {
                     Map serviceContext = UtilMisc.toMap("productionRunId", productionRunId, "workEffortId", taskId);
                     serviceContext.put("statusId", "PRUN_RUNNING");
@@ -2682,7 +2897,7 @@ public class ProductionRunServices {
      */
     public static Map getProductionRunTotResQty(DispatchContext ctx, Map context) {
         Map result = ServiceUtil.returnSuccess();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
         String productId = (String) context.get("productId");
@@ -2724,7 +2939,7 @@ public class ProductionRunServices {
 
     public static Map checkDecomposeInventoryItem(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String inventoryItemId = (String)context.get("inventoryItemId");
@@ -2746,7 +2961,7 @@ public class ProductionRunServices {
             if (product == null) {
                 return ServiceUtil.returnError("Error: product with id [" + inventoryItem.get("productId") + "] not found.");
             }
-            if ("MARKETING_PKG_AUTO".equals(product.getString("productTypeId"))) {
+            if (CommonWorkers.hasParentType(delegator, "ProductType", "productTypeId", product.getString("productTypeId"), "parentTypeId", "MARKETING_PKG_AUTO")) {
                 Map serviceContext = UtilMisc.toMap("inventoryItemId", inventoryItemId,
                                                     "userLogin", userLogin);
                 /*
@@ -2765,7 +2980,7 @@ public class ProductionRunServices {
 
     public static Map decomposeInventoryItem(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Timestamp now = UtilDateTime.nowTimestamp();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2872,7 +3087,7 @@ public class ProductionRunServices {
 
     public static Map setEstimatedDeliveryDates(DispatchContext ctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Timestamp now = UtilDateTime.nowTimestamp();
 
         Map products = FastMap.newInstance();

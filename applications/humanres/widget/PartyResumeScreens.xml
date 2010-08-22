@@ -37,7 +37,7 @@
                                 <section>
                                     <widgets>
                                         <container style="button-bar">
-                                            <link target="EditPartyResume" text="${uiLabelMap.HumanResNewPartyResume}" style="buttontext"/>
+                                            <link target="EditPartyResume" text="${uiLabelMap.HumanResNewPartyResume}" style="buttontext create"/>
                                         </container>
                                     </widgets>
                                 </section>

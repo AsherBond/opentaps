@@ -20,7 +20,7 @@
 package org.ofbiz.shark.mapping;
 
 import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.shark.container.SharkContainer;
@@ -33,11 +33,11 @@ import org.enhydra.shark.api.RootException;
  */
 public class EntityApplicationMap implements ApplicationMap {
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected GenericValue application = null;
     protected boolean isNew = false;
 
-    protected EntityApplicationMap(GenericDelegator delegator, String packageId, String processDefId, String applicationDefId) throws RootException {
+    protected EntityApplicationMap(Delegator delegator, String packageId, String processDefId, String applicationDefId) throws RootException {
         this.delegator = delegator;
         try {
             this.application = delegator.findByPrimaryKey(org.ofbiz.shark.SharkConstants.WfApplicationMap, UtilMisc.toMap(org.ofbiz.shark.SharkConstants.packageId, packageId, org.ofbiz.shark.SharkConstants.processDefId, processDefId, org.ofbiz.shark.SharkConstants.applicationDefId, applicationDefId));
@@ -51,7 +51,7 @@ public class EntityApplicationMap implements ApplicationMap {
         this.delegator = application.getDelegator();
     }
 
-    public EntityApplicationMap(GenericDelegator delegator) {
+    public EntityApplicationMap(Delegator delegator) {
         this.isNew = true;
         this.delegator = delegator;
         this.application = delegator.makeValue("SharkApplicationMap");
@@ -145,14 +145,14 @@ public class EntityApplicationMap implements ApplicationMap {
     }
 
     public boolean equalsByKeys(ApplicationMap applicationMap) {
-        if (applicationMap == null ) return false;
+        if (applicationMap == null) return false;
 
         if ((applicationMap.getPackageId() != null && this.getPackageId() != null))
             if (!(applicationMap.getPackageId().equals(this.getPackageId())))
                 return false;
 
         if ((applicationMap.getProcessDefinitionId() != null && this.getProcessDefinitionId() != null))
-            if ( !(applicationMap.getProcessDefinitionId().equals(this.getProcessDefinitionId())))
+            if (!(applicationMap.getProcessDefinitionId().equals(this.getProcessDefinitionId())))
                 return false;
 
         if ((applicationMap.getApplicationDefinitionId() != null && this.getApplicationDefinitionId() != null))

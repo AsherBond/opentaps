@@ -19,8 +19,12 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.entity.eca;
 
-import java.util.*;
-import org.ofbiz.entity.*;
+import java.util.List;
+import java.util.Map;
+
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.GenericEntity;
+import org.ofbiz.entity.GenericEntityException;
 
 /**
  * EntityEcaHandler interface
@@ -41,7 +45,7 @@ public interface EntityEcaHandler<T> {
     public static final String OP_FIND = "find";
 
 
-    public void setDelegator(GenericDelegator delegator);
+    public void setDelegator(Delegator delegator);
 
     public Map<String, List<T>> getEntityEventMap(String entityName);
 

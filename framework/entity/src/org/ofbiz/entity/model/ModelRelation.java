@@ -70,8 +70,8 @@ public class ModelRelation extends ModelChild {
 
     /** Default Constructor */
     public ModelRelation(String type, String title, String relEntityName, String fkName, List<ModelKeyMap> keyMaps) {
-        this.title = title;
         if (title == null) title = "";
+        this.title = title;
         this.type = type;
         this.relEntityName = relEntityName;
         this.fkName = fkName;
@@ -108,9 +108,6 @@ public class ModelRelation extends ModelChild {
 
     /** the title, gives a name/description to the relation */
     public String getTitle() {
-        if (this.title == null) {
-            this.title = "";
-        }
         return this.title;
     }
 
@@ -148,13 +145,8 @@ public class ModelRelation extends ModelChild {
         this.fkName = fkName;
     }
 
-    /** @deprecated
-      * the main entity of this relation */
-    public ModelEntity getMainEntity() {
-        return getModelEntity();
-    }
-
     /** @deprecated */
+    @Deprecated
     public void setMainEntity(ModelEntity mainEntity) {
         setModelEntity(mainEntity);
     }
@@ -223,19 +215,19 @@ public class ModelRelation extends ModelChild {
         if (keyMaps.size() < 1)
             return "";
 
-        StringBuilder returnString = new StringBuilder( keyMaps.size() * 10 );
+        StringBuilder returnString = new StringBuilder(keyMaps.size() * 10);
         int i=0;
         while (true) {
             ModelKeyMap kmap = keyMaps.get(i);
-            returnString.append( ModelUtil.upperFirstChar( kmap.fieldName));
+            returnString.append(ModelUtil.upperFirstChar(kmap.fieldName));
 
             i++;
             if (i >= keyMaps.size()) {
-                returnString.append( afterLast );
+                returnString.append(afterLast);
                 break;
             }
 
-            returnString.append( separator );
+            returnString.append(separator);
         }
 
         return returnString.toString();
@@ -245,19 +237,19 @@ public class ModelRelation extends ModelChild {
         if (keyMaps.size() < 1)
             return "";
 
-        StringBuilder returnString = new StringBuilder( keyMaps.size() * 10 );
+        StringBuilder returnString = new StringBuilder(keyMaps.size() * 10);
         int i=0;
         while (true) {
             ModelKeyMap kmap = keyMaps.get(i);
-            returnString.append( ModelUtil.upperFirstChar( kmap.relFieldName ));
+            returnString.append(ModelUtil.upperFirstChar(kmap.relFieldName));
 
             i++;
             if (i >= keyMaps.size()) {
-                returnString.append( afterLast );
+                returnString.append(afterLast);
                 break;
             }
 
-            returnString.append( separator );
+            returnString.append(separator);
         }
 
         return returnString.toString();
@@ -276,6 +268,7 @@ public class ModelRelation extends ModelChild {
     }
 
     // FIXME: CCE
+    @Override
     public boolean equals(Object other) {
         ModelRelation otherRel = (ModelRelation) other;
 

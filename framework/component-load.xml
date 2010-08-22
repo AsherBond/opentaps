@@ -22,6 +22,7 @@ under the License.
 <component-loader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/component-loader.xsd">
     <load-component component-location="geronimo"/>
+    <load-component component-location="sql"/>
     <load-component component-location="entity"/>
     <load-component component-location="catalina"/>
     <!-- <load-component component-location="jetty"/> -->
@@ -33,6 +34,7 @@ under the License.
     <load-component component-location="entityext"/>
     <!-- This is superseded by Pentaho in opentaps but the other ofbiz components depend on it ... -->
     <load-component component-location="bi"/>
+    <load-component component-location="birt"/>
     <load-component component-location="webapp"/>
     <load-component component-location="guiapp"/>
     <load-component component-location="widget"/>

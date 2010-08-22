@@ -31,7 +31,6 @@ under the License.
     <!-- place the config directory on the classpath to access configuration files -->
     <classpath type="dir" location="config"/>
 
-    <classpath type="dir" location="script"/>
 
     <!-- entity resources: model(s), eca(s) and group definitions -->
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
@@ -49,6 +48,8 @@ under the License.
     <service-resource type="model" loader="main" location="servicedef/services_mrp.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_formula.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
+
+    <test-suite loader="main" location="testdef/productionruntests.xml"/>
 
     <!-- web applications; will be mounted when using the embedded container -->
     <webapp name="manufacturing"

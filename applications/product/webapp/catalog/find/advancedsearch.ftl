@@ -25,9 +25,12 @@ under the License.
     <form name="advtokeywordsearchform" method="post" action="<@ofbizUrl>keywordsearch</@ofbizUrl>" style="margin: 0;">
       <input type="hidden" name="VIEW_SIZE" value="25"/>
       <input type="hidden" name="PAGING" value="Y"/>
+      <input type="hidden" name="noConditionFind" value="Y"/>
+      <#if searchCategory?has_content>
+          <input type="hidden" name="SEARCH_CATEGORY_ID" value="${searchCategoryId?if_exists}"/>
+      </#if>
       <table cellspacing="0" class="basic-table">
         <#if searchCategory?has_content>
-            <input type="hidden" name="SEARCH_CATEGORY_ID" value="${searchCategoryId?if_exists}"/>
             <tr>
               <td class="label" align="right" valign="middle">
                 ${uiLabelMap.ProductCategory}:
@@ -35,7 +38,7 @@ under the License.
               <td valign="middle">
                 <div>
                   <b>"${(searchCategory.description)?if_exists}" [${(searchCategory.productCategoryId)?if_exists}]</b> ${uiLabelMap.ProductIncludeSubCategories}?
-                  ${uiLabelMap.CommonYes}<input type="radio" name="SEARCH_SUB_CATEGORIES" value="Y" checked/>
+                  ${uiLabelMap.CommonYes}<input type="radio" name="SEARCH_SUB_CATEGORIES" value="Y" checked="checked" />
                   ${uiLabelMap.CommonNo}<input type="radio" name="SEARCH_SUB_CATEGORIES" value="N"/>
                 </div>
               </td>
@@ -66,8 +69,7 @@ under the License.
               </td>
               <td valign="middle">
                 <div>
-                  <input type="text" name="SEARCH_CATEGORY_ID" size="20" maxlength="20" value="${requestParameters.SEARCH_CATEGORY_ID?if_exists}"/>
-                  <a href="javascript:call_fieldlookup2(document.advtokeywordsearchform.SEARCH_CATEGORY_ID,'LookupProductCategory');"><img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/></a>
+                  <@htmlTemplate.lookupField value="${requestParameters.SEARCH_CATEGORY_ID?if_exists}" formName="advtokeywordsearchform" name="SEARCH_CATEGORY_ID" id="SEARCH_CATEGORY_ID" fieldFormName="LookupProductCategory"/>
                   ${uiLabelMap.ProductIncludeSubCategories}?
                   ${uiLabelMap.CommonYes}<input type="radio" name="SEARCH_SUB_CATEGORIES" value="Y" checked="checked"/>
                   ${uiLabelMap.CommonNo}<input type="radio" name="SEARCH_SUB_CATEGORIES" value="N"/>
@@ -80,13 +82,33 @@ under the License.
         </#if>
         <tr>
           <td class="label" align="right" valign="top">
+            ${uiLabelMap.ProductProductName}:
+          </td>
+          <td valign="middle">
+            <div>
+              <input type="text" name="SEARCH_PRODUCT_NAME" size="20" value="${requestParameters.SEARCH_PRODUCT_NAME?if_exists}"/>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label" align="right" valign="top">
+            ${uiLabelMap.ProductInternalName}:
+          </td>
+          <td valign="middle">
+            <div>
+              <input type="text" name="SEARCH_INTERNAL_PROD_NAME" size="20" value="${requestParameters.SEARCH_INTERNAL_PROD_NAME?if_exists}"/>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label" align="right" valign="top">
             ${uiLabelMap.ProductKeywords}:
           </td>
           <td valign="middle">
             <div>
               <input type="text" name="SEARCH_STRING" size="40" value="${requestParameters.SEARCH_STRING?if_exists}"/>&nbsp;
-              ${uiLabelMap.CommonAny}<input type="radio" name="SEARCH_OPERATOR" value="OR" <#if searchOperator == "OR">checked</#if>/>
-              ${uiLabelMap.CommonAll}<input type="radio" name="SEARCH_OPERATOR" value="AND" <#if searchOperator == "AND">checked</#if>/>
+              ${uiLabelMap.CommonAny}<input type="radio" name="SEARCH_OPERATOR" value="OR" <#if searchOperator == "OR">checked="checked"</#if>/>
+              ${uiLabelMap.CommonAll}<input type="radio" name="SEARCH_OPERATOR" value="AND" <#if searchOperator == "AND">checked="checked"</#if>/>
             </div>
           </td>
         </tr>
@@ -231,7 +253,7 @@ under the License.
                 <option value="SortProductPrice:MINIMUM_PRICE">${uiLabelMap.ProductMinimumPrice}</option>
                 <option value="SortProductPrice:MAXIMUM_PRICE">${uiLabelMap.ProductMaximumPrice}</option>
               </select>
-              ${uiLabelMap.ProductLowToHigh}<input type="radio" name="sortAscending" value="Y" checked/>
+              ${uiLabelMap.ProductLowToHigh}<input type="radio" name="sortAscending" value="Y" checked="checked" />
               ${uiLabelMap.ProductHighToLow}<input type="radio" name="sortAscending" value="N"/>
             </div>
           </td>
@@ -241,8 +263,7 @@ under the License.
             ${uiLabelMap.ProductPrioritizeProductsInCategory}:
           </td>
           <td valign="middle">
-            <input type="text" name="PRIORITIZE_CATEGORY_ID" size="20" maxlength="20" value="${requestParameters.PRIORITIZE_CATEGORY_ID?if_exists}"/>
-            <a href="javascript:call_fieldlookup2(document.advtokeywordsearchform.PRIORITIZE_CATEGORY_ID,'LookupProductCategory');"><img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/></a>
+            <@htmlTemplate.lookupField value="${requestParameters.PRIORITIZE_CATEGORY_ID?if_exists}" formName="advtokeywordsearchform" name="PRIORITIZE_CATEGORY_ID" id="PRIORITIZE_CATEGORY_ID" fieldFormName="LookupProductCategory"/>
           </td>
         </tr>
         <tr>
@@ -280,14 +301,14 @@ under the License.
                 <span class="label">${uiLabelMap.CommonSortedBy}:</span>${searchSortOrderString}
                 <div>
                   ${uiLabelMap.ProductNewSearch}<input type="radio" name="clearSearch" value="Y" checked="checked"/>
-                  ${uiLabelMap.ProductRefineSearch}<input type="radio" name="clearSearch" value="N"/>
+                  ${uiLabelMap.CommonRefineSearch}<input type="radio" name="clearSearch" value="N"/>
                 </div>
             </td>
           </tr>
         </#if>
         <tr>
           <td align="center" colspan="2">
-            <hr/>
+            <hr />
             <a href="javascript:document.advtokeywordsearchform.submit()" class="buttontext">${uiLabelMap.CommonFind}</a>
           </td>
         </tr>

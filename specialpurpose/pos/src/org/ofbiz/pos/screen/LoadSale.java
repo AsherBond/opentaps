@@ -19,7 +19,6 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.pos.screen;
 
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -28,7 +27,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 
 import javolution.util.FastMap;
-
 import net.xoetrope.swing.XButton;
 import net.xoetrope.swing.XDialog;
 import net.xoetrope.swing.XList;
@@ -40,6 +38,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.pos.PosTransaction;
 
 
+@SuppressWarnings("serial")
 public class LoadSale extends XPage {
 
     /**
@@ -85,11 +84,8 @@ public class LoadSale extends XPage {
         XEventHelper.addMouseHandler(this, m_replaceAndDelete, "replaceSaleAndDeleteShoppingList");
 
         m_listModel = new DefaultListModel();
-        for (Iterator i = m_saleMap.entrySet().iterator(); i.hasNext();) {
-            Object o = i.next();
-            Map.Entry entry = (Map.Entry)o;
-            String val = entry.getValue().toString();
-            m_listModel.addElement(val);
+        for (Map.Entry<String, String> o : m_saleMap.entrySet()) {
+            m_listModel.addElement(o.getValue().toString());
         }
         m_salesList.setModel(m_listModel);
         m_salesList.setVisibleRowCount(-1);
@@ -159,9 +155,9 @@ public class LoadSale extends XPage {
                 int index = m_salesList.getSelectedIndex();
                 m_saleMap.remove(shoppingListId);
                 m_listModel = new DefaultListModel();
-                for (Iterator i = m_saleMap.entrySet().iterator(); i.hasNext();) {
+                for (Iterator<?> i = m_saleMap.entrySet().iterator(); i.hasNext();) {
                     Object o = i.next();
-                    Map.Entry entry = (Map.Entry)o;
+                    Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
                     String val = entry.getValue().toString();
                     m_listModel.addElement(val);
                 }
@@ -198,10 +194,10 @@ public class LoadSale extends XPage {
         String saleSelected = null;
         if (null != m_salesList.getSelectedValue()) {
             String sale = (String) m_salesList.getSelectedValue();
-            Iterator i = m_saleMap.entrySet().iterator();
+            Iterator<?> i = m_saleMap.entrySet().iterator();
             while (i.hasNext()) {
                 Object o = i.next();
-                Map.Entry entry = (Map.Entry)o;
+                Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
                 String val = entry.getValue().toString();
                 if (val.equals(sale)) {
                     saleSelected = entry.getKey().toString();

@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <#--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -78,7 +77,7 @@ under the License.
             ${extraHead}
         </#list>
     </#if>
-    <#if lastParameters?exists><#assign parametersURL = "&" + lastParameters></#if>
+    <#if lastParameters?exists><#assign parametersURL = "&amp;" + lastParameters></#if>
 </head>
 <#if layoutSettings.headerImageLinkUrl?exists>
   <#assign logoLinkURL = "${layoutSettings.headerImageLinkUrl}">
@@ -97,7 +96,7 @@ under the License.
       <#if (userPreferences.COMPACT_HEADER)?default("N") == "Y">
         <li class="logo-area">
           <#if shortcutIcon?has_content>
-            <a href="<@ofbizUrl>${logoLinkURL}</@ofbizUrl>"><img src="<@ofbizContentUrl>${StringUtil.wrapString(shortcutIcon)}</@ofbizContentUrl>"/></a>
+            <a href="<@ofbizUrl>${logoLinkURL}</@ofbizUrl>"><img src="<@ofbizContentUrl>${StringUtil.wrapString(shortcutIcon)}</@ofbizContentUrl>" alt=""/></a>
           </#if>
         </li>
         <#if layoutSettings.topLines?has_content>
@@ -119,7 +118,7 @@ under the License.
           <p class="collapsed">
             <a href="<@ofbizUrl>logout</@ofbizUrl>">${uiLabelMap.CommonLogout}</a>&nbsp;&nbsp;
               <a href="javascript:document.setUserPreferenceCompactHeaderN.submit()">&nbsp;&nbsp;</a>
-              <form name="setUserPreferenceCompactHeaderN" method="post" action="<@ofbizUrl>setUserPreference</@ofbizUrl>" onSubmit="javascript:submitFormDisableSubmits(this)">
+              <form name="setUserPreferenceCompactHeaderN" method="post" action="<@ofbizUrl>setUserPreference</@ofbizUrl>" onsubmit="javascript:submitFormDisableSubmits(this)">
                 <input name="userPrefGroupTypeId" value="GLOBAL_PREFERENCES" type="hidden"/>
                 <input name="userPrefTypeId" value="COMPACT_HEADER" type="hidden"/>
                 <input name="userPrefValue" value="N" type="hidden"/>
@@ -137,21 +136,32 @@ under the License.
         <#if headerImageUrl?exists>
           <li class="logo-area"><a href="<@ofbizUrl>${logoLinkURL}</@ofbizUrl>"><img alt="${layoutSettings.companyName}" src="<@ofbizContentUrl>${StringUtil.wrapString(headerImageUrl)}</@ofbizContentUrl>"/></a></li>
         </#if>
+        <li/>
+        <#if layoutSettings.middleTopMessage1?has_content && layoutSettings.middleTopMessage1 != " ">
+          <li class="h4">
+          <div class="divHidden">
+          <center>${layoutSettings.middleTopHeader?if_exists}</center>
+          <a href="${layoutSettings.middleTopLink1?if_exists}">${layoutSettings.middleTopMessage1?if_exists}</a><br/>
+          <a href="${layoutSettings.middleTopLink2?if_exists}">${layoutSettings.middleTopMessage2?if_exists}</a><br/>
+          <a href="${layoutSettings.middleTopLink3?if_exists}">${layoutSettings.middleTopMessage3?if_exists}</a>
+          </div>
+          </li>
+        </#if>
         <li class="control-area"<#if layoutSettings.headerRightBackgroundUrl?has_content> background="${layoutSettings.headerRightBackgroundUrl}"</#if>>
           <#if userLogin?exists>
             <p class="expanded">
               <a href="<@ofbizUrl>logout</@ofbizUrl>">${uiLabelMap.CommonLogout}</a>&nbsp;&nbsp;
               <a href="javascript:document.setUserPreferenceCompactHeaderY.submit()">&nbsp;&nbsp;</a>
-              <form name="setUserPreferenceCompactHeaderY" method="post" action="<@ofbizUrl>setUserPreference</@ofbizUrl>" onSubmit="javascript:submitFormDisableSubmits(this)">
-                <input name="userPrefGroupTypeId" value="GLOBAL_PREFERENCES" type="hidden"/>
-                <input name="userPrefTypeId" value="COMPACT_HEADER" type="hidden"/>
-                <input name="userPrefValue" value="Y" type="hidden"/>
-              </form
            </p>
+           <form name="setUserPreferenceCompactHeaderY" method="post" action="<@ofbizUrl>setUserPreference</@ofbizUrl>" onsubmit="javascript:submitFormDisableSubmits(this)">
+             <input name="userPrefGroupTypeId" value="GLOBAL_PREFERENCES" type="hidden"/>
+             <input name="userPrefTypeId" value="COMPACT_HEADER" type="hidden"/>
+             <input name="userPrefValue" value="Y" type="hidden"/>
+           </form>
             <#if layoutSettings.topLines?has_content>
               <#list layoutSettings.topLines as topLine>
               <#if topLine.text?exists>
-                <p>${topLine.text}<a href="${topLine.url?if_exists}&externalLoginKey=${externalLoginKey}">${topLine.urlText?if_exists}</a></p>
+                <p>${topLine.text}<a href="${StringUtil.wrapString(topLine.url?if_exists)}&amp;externalLoginKey=${externalLoginKey}">${topLine.urlText?if_exists}</a></p>
               <#elseif topLine.dropDownList?exists>
                 <p><#include "component://common/webcommon/includes/insertDropDown.ftl"/></p>
               <#else>
@@ -166,11 +176,14 @@ under the License.
           </#if>
           <ul id="preferences-menu">
             <!-- <li class="first"><a href="<@ofbizUrl>Preferences</@ofbizUrl>">${uiLabelMap.CommonPreferences}</a></li> -->
-            <li class="first"><a href="<@ofbizUrl>LookupLocales</@ofbizUrl>">${uiLabelMap.CommonLanguageTitle} : ${locale.getDisplayName(locale)}</a></li>
+            <li class="first"><a href="<@ofbizUrl>ListLocales</@ofbizUrl>">${uiLabelMap.CommonLanguageTitle} : ${locale.getDisplayName(locale)}</a></li>
             <#if userLogin?exists>
-              <li><a href="<@ofbizUrl>LookupVisualThemes</@ofbizUrl>">${uiLabelMap.CommonVisualThemes}</a></li>
+              <li><a href="<@ofbizUrl>ListVisualThemes</@ofbizUrl>">${uiLabelMap.CommonVisualThemes}</a></li>
             </#if>
-            <#include "component://common/webcommon/includes/helplink.ftl" />
+            <#if webSiteId?exists && requestAttributes._CURRENT_VIEW_?exists>
+              <#include "component://common/webcommon/includes/helplink.ftl" />
+              <li><a <#if pageAvail?has_content>class="alert"</#if> href="javascript:lookup_popup2('showHelp?helpTopic=${helpTopic}&amp;portalPageId=${parameters.portalPageId?if_exists}','help' ,500,500);">${uiLabelMap.CommonHelp}</a></li>
+           </#if>
           </ul>
         </li>
       </#if>

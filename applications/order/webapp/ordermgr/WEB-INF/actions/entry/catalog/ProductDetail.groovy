@@ -39,6 +39,7 @@ import org.ofbiz.product.catalog.*;
 import org.ofbiz.product.store.*;
 import org.ofbiz.webapp.stats.VisitHandler;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
+import org.ofbiz.order.shoppingcart.ShoppingCart;
 
 String buildNext(Map map, List order, String current, String prefix, Map featureTypes) {
     def ct = 0;
@@ -138,11 +139,15 @@ if (product) {
         }
     }
 
-    // get the product store
-    productStore = ProductStoreWorker.getProductStore(request);
-    productStoreId = productStore.productStoreId;
-    context.productStoreId = productStoreId;
-
+    // get the product store for only Sales Order not for Purchase Order.
+    productStore = null;
+    productStoreId = null;
+    cart = ShoppingCartEvents.getCartObject(request);
+    if (cart.isSalesOrder()) {
+        productStore = ProductStoreWorker.getProductStore(request);
+        productStoreId = productStore.productStoreId;
+        context.productStoreId = productStoreId;
+    }
     // get a defined survey
     productSurvey = ProductStoreWorker.getProductSurveys(delegator, productStoreId, productId, "CART_ADD");
     if (productSurvey) {
@@ -179,7 +184,12 @@ if (product) {
     }
 
     // get the product review(s)
-    reviewByAnd = [statusId : "PRR_APPROVED", productStoreId : productStoreId];
+    // get all product review in case of Purchase Order.
+    reviewByAnd = [:];
+    reviewByAnd.statusId = "PRR_APPROVED";
+    if (cart.isSalesOrder()) {
+        reviewByAnd.productStoreId = productStoreId;
+    }
     reviews = product.getRelatedCache("ProductReview", reviewByAnd, ["-postedDateTime"]);
     context.productReviews = reviews;
     // get the average rating
@@ -192,18 +202,20 @@ if (product) {
     }
 
     // get the days to ship
-
-    facilityId = productStore.inventoryFacilityId;
-    /*
-    productFacility = delegator.findByPrimaryKeyCache("ProductFacility", [productId : productId, facilityId : facilityId);
-    context.daysToShip = productFacility?.daysToShip
-    */
-
-    resultOutput = dispatcher.runSync("getInventoryAvailableByFacility", [productId : productId, facilityId : facilityId, useCache : false]);
-    totalAvailableToPromise = resultOutput.availableToPromiseTotal;
-    if (totalAvailableToPromise) {
-        productFacility = delegator.findByPrimaryKeyCache("ProductFacility", [productId : productId, facilityId : facilityId]);
+    // if order is purchase then don't calculate available inventory for product.
+    if (cart.isSalesOrder()) {
+        facilityId = productStore.inventoryFacilityId;
+        /*
+        productFacility = delegator.findByPrimaryKeyCache("ProductFacility", [productId : productId, facilityId : facilityId);
         context.daysToShip = productFacility?.daysToShip
+        */
+
+        resultOutput = dispatcher.runSync("getInventoryAvailableByFacility", [productId : productId, facilityId : facilityId, useCache : false]);
+        totalAvailableToPromise = resultOutput.availableToPromiseTotal;
+        if (totalAvailableToPromise) {
+            productFacility = delegator.findByPrimaryKeyCache("ProductFacility", [productId : productId, facilityId : facilityId]);
+            context.daysToShip = productFacility?.daysToShip
+        }
     } else {
        supplierProducts = delegator.findByAndCache("SupplierProduct", [productId : productId], ["-availableFromDate"]);
        supplierProduct = EntityUtil.getFirst(supplierProducts);
@@ -231,7 +243,12 @@ if (product) {
             featureMap = dispatcher.runSync("getProductFeatureSet", [productId : productId]);
             featureSet = featureMap.featureSet;
             if (featureSet) {
-                variantTreeMap = dispatcher.runSync("getProductVariantTree", [productId : productId, featureOrder : featureSet, productStoreId : productStoreId]);
+                //if order is purchase then don't calculate available inventory for product.
+                if (cart.isPurchaseOrder()) {
+                    variantTreeMap = dispatcher.runSync("getProductVariantTree", [productId : productId, featureOrder : featureSet, checkInventory: false]);
+                } else {
+                    variantTreeMap = dispatcher.runSync("getProductVariantTree", [productId : productId, featureOrder : featureSet, productStoreId : productStoreId]);
+                }
                 variantTree = variantTreeMap.variantTree;
                 imageMap = variantTreeMap.variantSample;
                 virtualVariant = variantTreeMap.virtualVariant;
@@ -239,6 +256,10 @@ if (product) {
                 if (variantTree) {
                     context.variantTree = variantTree;
                     context.variantTreeSize = variantTree.size();
+                }
+                unavailableVariants = variantTreeMap.unavailableVariants;
+                if (unavailableVariants) {
+                    context.unavailableVariants = unavailableVariants;
                 }
                 if (imageMap) {
                     context.variantSample = imageMap;
@@ -263,7 +284,7 @@ if (product) {
 
                 if (variantTree && imageMap) {
                     jsBuf = new StringBuffer();
-                    jsBuf.append("<script language=\"JavaScript\">");
+                    jsBuf.append("<script language=\"JavaScript\" type=\"text/javascript\">");
                     jsBuf.append("var DET = new Array(" + variantTree.size() + ");");
                     jsBuf.append("var IMG = new Array(" + variantTree.size() + ");");
                     jsBuf.append("var OPT = new Array(" + featureOrder.size() + ");");
@@ -344,6 +365,7 @@ if (product) {
                     // make a list of variant sku with requireAmount
                     variantsRes = dispatcher.runSync("getAssociatedProducts", [productId : productId, type : "PRODUCT_VARIANT", checkViewAllow : true, prodCatalogId : currentCatalogId]);
                     variants = variantsRes.assocProducts;
+                    variantPriceList = [];
                     if (variants) {
                         amt = new StringBuffer();
                         amt.append("function checkAmtReq(sku) { ");
@@ -351,25 +373,56 @@ if (product) {
                         variantPriceJS = new StringBuffer();
                         variantPriceJS.append("function getVariantPrice(sku) { ");
                         // Format to apply the currency code to the variant price in the javascript
-                        localeString = productStore.defaultLocaleString;
-                        if (localeString) {
-                            locale = UtilMisc.parseLocale(localeString);
+                        if (productStore) {
+                            localeString = productStore.defaultLocaleString;
+                            if (localeString) {
+                                locale = UtilMisc.parseLocale(localeString);
+                            }
                         }
                         numberFormat = NumberFormat.getCurrencyInstance(locale);
                         variants.each { variantAssoc ->
                             variant = variantAssoc.getRelatedOne("AssocProduct");
                             // Get the price for each variant. Reuse the priceContext already setup for virtual product above and replace the product
+                            priceContext.product = variant;
                             if (cart.isSalesOrder()) {
                                 // sales order: run the "calculateProductPrice" service
-                                priceContext.product = variant;
                                 variantPriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+                                BigDecimal calculatedPrice = (BigDecimal)variantPriceMap.get("price");
+                                // Get the minimum quantity for variants if MINIMUM_ORDER_PRICE is set for variants.
+                                variantPriceMap.put("minimumQuantity", ShoppingCart.getMinimumOrderQuantity(delegator, calculatedPrice, variant.get("productId")));
+                                Iterator treeMapIter = variantTree.entrySet().iterator();
+                                while (treeMapIter.hasNext()) {
+                                    Map.Entry entry = treeMapIter.next();
+                                    if (entry.getValue() instanceof  Map) {
+                                        Iterator entryIter = entry.getValue().entrySet().iterator();
+                                        while (entryIter.hasNext()) {
+                                            Map.Entry innerentry = entryIter.next();
+                                            if (variant.get("productId").equals(innerentry.getValue().get(0))) {
+                                                variantPriceMap.put("variantName", innerentry.getKey());
+                                                variantPriceMap.put("secondVariantName", entry.getKey());
+                                                break;
+                                            }
+                                        }
+                                    } else if (UtilValidate.isNotEmpty(entry.getValue())) {
+                                        if (variant.get("productId").equals(entry.getValue().get(0))) {
+                                            variantPriceMap.put("variantName", entry.getKey());
+                                            break;
+                                        }
+                                    }
+                                }
+                                variantPriceList.add(variantPriceMap);
+                            } else {
+                                variantPriceMap = dispatcher.runSync("calculatePurchasePrice", priceContext);
                             }
                             amt.append(" if (sku == \"" + variant.productId + "\") return \"" + (variant.requireAmount ?: "N") + "\"; ");
-                            variantPriceJS.append("  if (sku == \"" + variant.productId + "\") return \"" + numberFormat.format(variantPriceMap.basePrice) + "\"; ");
+                            if (variantPriceMap && variantPriceMap.basePrice) {
+                                variantPriceJS.append("  if (sku == \"" + variant.productId + "\") return \"" + numberFormat.format(variantPriceMap.basePrice) + "\"; ");
+                            }
                         }
                         amt.append(" } ");
                         variantPriceJS.append(" } ");
                     }
+                    context.variantPriceList = variantPriceList;
                     jsBuf.append(amt.toString());
                     jsBuf.append(variantPriceJS.toString());
                     jsBuf.append("</script>");
@@ -378,9 +431,27 @@ if (product) {
                 }
             }
         }
+    } else {
+        context.minimumQuantity= ShoppingCart.getMinimumOrderQuantity(delegator, priceMap.price, productId);
     }
 
+    //get last inventory count from product facility for the product
+    facilities = delegator.findList("ProductFacility", EntityCondition.makeCondition([productId : product.productId]), null, null, null, false);
+    availableInventory = 0.0;
+    if(facilities) {
+        facilities.each { facility ->
+            lastInventoryCount = facility.lastInventoryCount;
+            if (lastInventoryCount != null && availableInventory.compareTo(lastInventoryCount) != 0) {
+                availableInventory += lastInventoryCount;
+            }
+        }
+    }
+    context.availableInventory = availableInventory;
+
     // get product associations
+    alsoBoughtProducts = dispatcher.runSync("getAssociatedProducts", [productId : productId, type : "ALSO_BOUGHT", checkViewAllow : true, prodCatalogId : currentCatalogId, bidirectional : true, sortDescending : true]);
+    context.alsoBoughtProducts = alsoBoughtProducts.assocProducts;
+
     obsoleteProducts = dispatcher.runSync("getAssociatedProducts", [productId : productId, type : "PRODUCT_OBSOLESCENCE", checkViewAllow : true, prodCatalogId : currentCatalogId]);
     context.obsoleteProducts = obsoleteProducts.assocProducts;
 
@@ -392,6 +463,9 @@ if (product) {
 
     obsolenscenseProducts = dispatcher.runSync("getAssociatedProducts", [productIdTo : productId, type : "PRODUCT_OBSOLESCENCE", checkViewAllow : true, prodCatalogId : currentCatalogId]);
     context.obsolenscenseProducts = obsolenscenseProducts.assocProducts;
+
+    accessoryProducts = dispatcher.runSync("getAssociatedProducts", [productId : productId, type : "PRODUCT_ACCESSORY", checkViewAllow : true, prodCatalogId : currentCatalogId]);
+    context.accessoryProducts = accessoryProducts.assocProducts;
 
     // get other cross-sell information: product with a common feature
     commonProductFeatureId = "SYMPTOM";

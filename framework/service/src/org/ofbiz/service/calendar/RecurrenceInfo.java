@@ -20,7 +20,7 @@
 package org.ofbiz.service.calendar;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -30,7 +30,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.service.calendar.TemporalExpression;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 
@@ -297,17 +297,17 @@ public class RecurrenceInfo {
         return info.getString("recurrenceInfoId");
     }
 
-    public static RecurrenceInfo makeInfo(GenericDelegator delegator, long startTime, int frequency,
+    public static RecurrenceInfo makeInfo(Delegator delegator, long startTime, int frequency,
             int interval, int count) throws RecurrenceInfoException {
         return makeInfo(delegator, startTime, frequency, interval, count, 0);
     }
 
-    public static RecurrenceInfo makeInfo(GenericDelegator delegator, long startTime, int frequency,
+    public static RecurrenceInfo makeInfo(Delegator delegator, long startTime, int frequency,
             int interval, long endTime) throws RecurrenceInfoException {
         return makeInfo(delegator, startTime, frequency, interval, -1, endTime);
     }
 
-    public static RecurrenceInfo makeInfo(GenericDelegator delegator, long startTime, int frequency,
+    public static RecurrenceInfo makeInfo(Delegator delegator, long startTime, int frequency,
             int interval, int count, long endTime) throws RecurrenceInfoException {
         try {
             RecurrenceRule r = RecurrenceRule.makeRule(delegator, frequency, interval, count, endTime);
@@ -377,5 +377,9 @@ public class RecurrenceInfo {
         }
         @Override
         public void accept(TemporalExpressionVisitor visitor) {}
+        @Override
+        public boolean isSubstitutionCandidate(Calendar cal, TemporalExpression expressionToTest) {
+            return false;
+        }
     }
 }

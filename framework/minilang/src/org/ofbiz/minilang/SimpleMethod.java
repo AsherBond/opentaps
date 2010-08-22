@@ -19,6 +19,7 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.minilang;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
@@ -27,9 +28,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
 
-import javax.imageio.spi.ServiceRegistry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -83,27 +84,37 @@ import org.ofbiz.service.ModelService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import org.webslinger.invoker.Wrap;
+
 /**
  * SimpleMethod Mini Language Core Object
  */
 public class SimpleMethod {
-    private static final Map<String, MethodOperation.Factory> methodOperationFactories;
+    private static final Map<String, MethodOperation.Factory<MethodOperation>> methodOperationFactories;
+    // never read locally: private static final Method simpleMethodExecMethod;
+    private static final Method methodOperationExecMethod;
     static {
-        Map<String, MethodOperation.Factory> mapFactories = new HashMap<String, MethodOperation.Factory>();
-        Iterator<MethodOperation.Factory> it = ServiceRegistry.lookupProviders(MethodOperation.Factory.class, SimpleMethod.class.getClassLoader());
+        Map<String, MethodOperation.Factory<MethodOperation>> mapFactories = new HashMap<String, MethodOperation.Factory<MethodOperation>>();
+        Iterator<MethodOperation.Factory<MethodOperation>> it = UtilGenerics.cast(ServiceLoader.load(MethodOperation.Factory.class, SimpleMethod.class.getClassLoader()).iterator());
         while (it.hasNext()) {
-            MethodOperation.Factory factory = it.next();
+            MethodOperation.Factory<MethodOperation> factory = it.next();
             mapFactories.put(factory.getName(), factory);
         }
         methodOperationFactories = Collections.unmodifiableMap(mapFactories);
+        try {
+            // never read locally: simpleMethodExecMethod = SimpleMethod.class.getDeclaredMethod("exec", MethodContext.class);
+            methodOperationExecMethod = MethodOperation.class.getDeclaredMethod("exec", MethodContext.class);
+        } catch (NoSuchMethodException e) {
+            throw UtilMisc.initCause(new InternalError(e.getMessage()), e);
+        }
     }
 
     public static final String module = SimpleMethod.class.getName();
     public static final String err_resource = "MiniLangErrorUiLabels";
 
-    protected static UtilCache<String, Map<String, SimpleMethod>> simpleMethodsDirectCache = new UtilCache<String, Map<String, SimpleMethod>>("minilang.SimpleMethodsDirect", 0, 0);
-    protected static UtilCache<String, Map<String, SimpleMethod>> simpleMethodsResourceCache = new UtilCache<String, Map<String, SimpleMethod>>("minilang.SimpleMethodsResource", 0, 0);
-    protected static UtilCache<URL, Map<String, SimpleMethod>> simpleMethodsURLCache = new UtilCache<URL, Map<String, SimpleMethod>>("minilang.SimpleMethodsURL", 0, 0);
+    protected static UtilCache<String, Map<String, SimpleMethod>> simpleMethodsDirectCache = UtilCache.createUtilCache("minilang.SimpleMethodsDirect", 0, 0);
+    protected static UtilCache<String, Map<String, SimpleMethod>> simpleMethodsResourceCache = UtilCache.createUtilCache("minilang.SimpleMethodsResource", 0, 0);
+    protected static UtilCache<URL, Map<String, SimpleMethod>> simpleMethodsURLCache = UtilCache.createUtilCache("minilang.SimpleMethodsURL", 0, 0);
 
     // ----- Event Context Invokers -----
 
@@ -187,6 +198,43 @@ public class SimpleMethod {
         return simpleMethods;
     }
 
+    public static List<SimpleMethod> getSimpleMethodsList(String xmlResource, ClassLoader loader) throws MiniLangException {
+        List<SimpleMethod> simpleMethods = FastList.newInstance();
+
+        // Let the standard Map returning method take care of caching and compilation
+        Map<String, SimpleMethod> simpleMethodMap = SimpleMethod.getSimpleMethods(xmlResource, loader);
+
+        // Load and traverse the document again to get a correctly ordered list of methods
+        URL xmlURL = null;
+        try {
+            xmlURL = FlexibleLocation.resolveLocation(xmlResource, loader);
+        } catch (MalformedURLException e) {
+            throw new MiniLangException("Could not find SimpleMethod XML document in resource: " + xmlResource + "; error was: " + e.toString(), e);
+        }
+        // read in the file
+        Document document = null;
+        try {
+            document = UtilXml.readXmlDocument(xmlURL, true, true);
+        } catch (java.io.IOException e) {
+            throw new MiniLangException("Could not read XML file", e);
+        } catch (org.xml.sax.SAXException e) {
+            throw new MiniLangException("Could not parse XML file", e);
+        } catch (javax.xml.parsers.ParserConfigurationException e) {
+            throw new MiniLangException("XML parser not setup correctly", e);
+        }
+
+        if (document == null) {
+            throw new MiniLangException("Could not find SimpleMethod XML document: " + xmlURL.toString());
+        }
+
+        Element rootElement = document.getDocumentElement();
+        for (Element simpleMethodElement: UtilXml.childElementList(rootElement, "simple-method")) {
+            simpleMethods.add(simpleMethodMap.get(simpleMethodElement.getAttribute("method-name")));
+        }
+
+        return simpleMethods;
+    }
+
     public static Map<String, SimpleMethod> getSimpleMethods(URL xmlURL) throws MiniLangException {
         Map<String, SimpleMethod> simpleMethods = simpleMethodsURLCache.get(xmlURL);
 
@@ -211,7 +259,7 @@ public class SimpleMethod {
         // read in the file
         Document document = null;
         try {
-            document = UtilXml.readXmlDocument(xmlURL, true);
+            document = UtilXml.readXmlDocument(xmlURL, true, true);
         } catch (java.io.IOException e) {
             throw new MiniLangException("Could not read XML file", e);
         } catch (org.xml.sax.SAXException e) {
@@ -226,11 +274,15 @@ public class SimpleMethod {
 
         Element rootElement = document.getDocumentElement();
         for (Element simpleMethodElement: UtilXml.childElementList(rootElement, "simple-method")) {
-            SimpleMethod simpleMethod = new SimpleMethod(simpleMethodElement, simpleMethods, xmlURL.toString());
+            SimpleMethod simpleMethod = compileSimpleMethod(simpleMethodElement, simpleMethods, xmlURL.toString());
             simpleMethods.put(simpleMethod.getMethodName(), simpleMethod);
         }
 
         return simpleMethods;
+    }
+
+    protected static SimpleMethod compileSimpleMethod(Element simpleMethodElement, Map<String, SimpleMethod> simpleMethods, String location) {
+        return new SimpleMethod(simpleMethodElement, simpleMethods, location);
     }
 
     public static Map<String, SimpleMethod> getDirectSimpleMethods(String name, String content, String fromLocation) throws MiniLangException {
@@ -263,7 +315,7 @@ public class SimpleMethod {
 
         try {
             if (content != null) {
-                document = UtilXml.readXmlDocument(content, true);
+                document = UtilXml.readXmlDocument(content, true, true);
             }
         } catch (java.io.IOException e) {
             throw new MiniLangException("Could not read XML content", e);
@@ -279,7 +331,7 @@ public class SimpleMethod {
 
         Element rootElement = document.getDocumentElement();
         for (Element simpleMethodElement: UtilXml.childElementList(rootElement, "simple-method")) {
-            SimpleMethod simpleMethod = new SimpleMethod(simpleMethodElement, simpleMethods, fromLocation);
+            SimpleMethod simpleMethod = compileSimpleMethod(simpleMethodElement, simpleMethods, fromLocation);
             simpleMethods.put(simpleMethod.getMethodName(), simpleMethod);
         }
 
@@ -330,102 +382,36 @@ public class SimpleMethod {
         this.methodName = simpleMethodElement.getAttribute("method-name");
         this.shortDescription = simpleMethodElement.getAttribute("short-description");
 
-        defaultErrorCode = simpleMethodElement.getAttribute("default-error-code");
-        if (defaultErrorCode == null || defaultErrorCode.length() == 0) {
-            defaultErrorCode = "error";
-        }
-        defaultSuccessCode = simpleMethodElement.getAttribute("default-success-code");
-        if (defaultSuccessCode == null || defaultSuccessCode.length() == 0) {
-            defaultSuccessCode = "success";
-        }
+        defaultErrorCode = UtilXml.elementAttribute(simpleMethodElement, "default-error-code", "error");
+        defaultSuccessCode = UtilXml.elementAttribute(simpleMethodElement, "default-success-code", "success");
 
-        parameterMapName = simpleMethodElement.getAttribute("parameter-map-name");
-        if (parameterMapName == null || parameterMapName.length() == 0) {
-            parameterMapName = "parameters";
-        }
+        parameterMapName = UtilXml.elementAttribute(simpleMethodElement, "parameter-map-name", "parameters");
 
-        eventRequestName = simpleMethodElement.getAttribute("event-request-object-name");
-        if (eventRequestName == null || eventRequestName.length() == 0) {
-            eventRequestName = "request";
-        }
-        eventSessionName = simpleMethodElement.getAttribute("event-session-object-name");
-        if (eventSessionName == null || eventSessionName.length() == 0) {
-            eventSessionName = "session";
-        }
-        eventResponseName = simpleMethodElement.getAttribute("event-response-object-name");
-        if (eventResponseName == null || eventResponseName.length() == 0) {
-            eventResponseName = "response";
-        }
-        eventResponseCodeName = simpleMethodElement.getAttribute("event-response-code-name");
-        if (eventResponseCodeName == null || eventResponseCodeName.length() == 0) {
-            eventResponseCodeName = "_response_code_";
-        }
-        eventErrorMessageName = simpleMethodElement.getAttribute("event-error-message-name");
-        if (eventErrorMessageName == null || eventErrorMessageName.length() == 0) {
-            eventErrorMessageName = "_error_message_";
-        }
-        eventErrorMessageListName = simpleMethodElement.getAttribute("event-error-message-list-name");
-        if (eventErrorMessageListName == null || eventErrorMessageListName.length() == 0) {
-            eventErrorMessageListName = "_error_message_list_";
-        }
-        eventEventMessageName = simpleMethodElement.getAttribute("event-event-message-name");
-        if (eventEventMessageName == null || eventEventMessageName.length() == 0) {
-            eventEventMessageName = "_event_message_";
-        }
-        eventEventMessageListName = simpleMethodElement.getAttribute("event-event-message-list-name");
-        if (eventEventMessageListName == null || eventEventMessageListName.length() == 0) {
-            eventEventMessageListName = "_event_message_list_";
-        }
+        eventRequestName = UtilXml.elementAttribute(simpleMethodElement, "event-request-object-name", "request");
+        eventSessionName = UtilXml.elementAttribute(simpleMethodElement, "event-session-object-name", "session");
+        eventResponseName = UtilXml.elementAttribute(simpleMethodElement, "event-response-object-name", "response");
+        eventResponseCodeName = UtilXml.elementAttribute(simpleMethodElement, "event-response-code-name", "_response_code_");
+        eventErrorMessageName = UtilXml.elementAttribute(simpleMethodElement, "event-error-message-name", "_error_message_");
+        eventErrorMessageListName = UtilXml.elementAttribute(simpleMethodElement, "event-error-message-list-name", "_error_message_list_");
+        eventEventMessageName = UtilXml.elementAttribute(simpleMethodElement, "event-event-message-name", "_event_message_");
+        eventEventMessageListName = UtilXml.elementAttribute(simpleMethodElement, "event-event-message-list-name", "_event_message_list_");
 
-        serviceResponseMessageName = simpleMethodElement.getAttribute("service-response-message-name");
-        if (serviceResponseMessageName == null || serviceResponseMessageName.length() == 0) {
-            serviceResponseMessageName = "responseMessage";
-        }
-        serviceErrorMessageName = simpleMethodElement.getAttribute("service-error-message-name");
-        if (serviceErrorMessageName == null || serviceErrorMessageName.length() == 0) {
-            serviceErrorMessageName = "errorMessage";
-        }
-        serviceErrorMessageListName = simpleMethodElement.getAttribute("service-error-message-list-name");
-        if (serviceErrorMessageListName == null || serviceErrorMessageListName.length() == 0) {
-            serviceErrorMessageListName = "errorMessageList";
-        }
-        serviceErrorMessageMapName = simpleMethodElement.getAttribute("service-error-message-map-name");
-        if (serviceErrorMessageMapName == null || serviceErrorMessageMapName.length() == 0) {
-            serviceErrorMessageMapName = "errorMessageMap";
-        }
+        serviceResponseMessageName = UtilXml.elementAttribute(simpleMethodElement, "service-response-message-name", "responseMessage");
+        serviceErrorMessageName = UtilXml.elementAttribute(simpleMethodElement, "service-error-message-name", "errorMessage");
+        serviceErrorMessageListName = UtilXml.elementAttribute(simpleMethodElement, "service-error-message-list-name", "errorMessageList");
+        serviceErrorMessageMapName = UtilXml.elementAttribute(simpleMethodElement, "service-error-message-map-name", "errorMessageMap");
 
-        serviceSuccessMessageName = simpleMethodElement.getAttribute("service-success-message-name");
-        if (serviceSuccessMessageName == null || serviceSuccessMessageName.length() == 0) {
-            serviceSuccessMessageName = "successMessage";
-        }
-        serviceSuccessMessageListName = simpleMethodElement.getAttribute("service-success-message-list-name");
-        if (serviceSuccessMessageListName == null || serviceSuccessMessageListName.length() == 0) {
-            serviceSuccessMessageListName = "successMessageList";
-        }
+        serviceSuccessMessageName = UtilXml.elementAttribute(simpleMethodElement, "service-success-message-name", "successMessage");
+        serviceSuccessMessageListName = UtilXml.elementAttribute(simpleMethodElement, "service-success-message-list-name", "successMessageList");
 
         loginRequired = !"false".equals(simpleMethodElement.getAttribute("login-required"));
         useTransaction = !"false".equals(simpleMethodElement.getAttribute("use-transaction"));
 
-        localeName = simpleMethodElement.getAttribute("locale-name");
-        if (localeName == null || localeName.length() == 0) {
-            localeName = "locale";
-        }
-        delegatorName = simpleMethodElement.getAttribute("delegator-name");
-        if (delegatorName == null || delegatorName.length() == 0) {
-            delegatorName = "delegator";
-        }
-        securityName = simpleMethodElement.getAttribute("security-name");
-        if (securityName == null || securityName.length() == 0) {
-            securityName = "security";
-        }
-        dispatcherName = simpleMethodElement.getAttribute("dispatcher-name");
-        if (dispatcherName == null || dispatcherName.length() == 0) {
-            dispatcherName = "dispatcher";
-        }
-        userLoginName = simpleMethodElement.getAttribute("user-login-name");
-        if (userLoginName == null || userLoginName.length() == 0) {
-            userLoginName = "userLogin";
-        }
+        localeName = UtilXml.elementAttribute(simpleMethodElement, "locale-name", "locale");
+        delegatorName = UtilXml.elementAttribute(simpleMethodElement, "delegator-name", "delegator");
+        securityName = UtilXml.elementAttribute(simpleMethodElement, "security-name", "security");
+        dispatcherName = UtilXml.elementAttribute(simpleMethodElement, "dispatcher-name", "dispatcher");
+        userLoginName = UtilXml.elementAttribute(simpleMethodElement, "user-login-name", "userLogin");
 
         readOperations(simpleMethodElement, this.methodOperations, this);
     }
@@ -499,6 +485,10 @@ public class SimpleMethod {
 
     public String getServiceErrorMessageListName() {
         return this.serviceErrorMessageListName;
+    }
+
+    public String getServiceErrorMessageMapName() {
+        return this.serviceErrorMessageMapName;
     }
 
     public String getServiceSuccessMessageName() {
@@ -763,7 +753,7 @@ public class SimpleMethod {
             boolean forceError = false;
 
             String tempErrorMsg = (String) methodContext.getEnv(eventErrorMessageName);
-            if (errorMsg.length() > 0 || (tempErrorMsg != null && tempErrorMsg.length() > 0)) {
+            if (errorMsg.length() > 0 || UtilValidate.isNotEmpty(tempErrorMsg)) {
                 errorMsg += tempErrorMsg;
                 methodContext.getRequest().setAttribute("_ERROR_MESSAGE_", errorMsg);
                 forceError = true;
@@ -780,7 +770,7 @@ public class SimpleMethod {
             }
 
             String eventMsg = (String) methodContext.getEnv(eventEventMessageName);
-            if (eventMsg != null && eventMsg.length() > 0) {
+            if (UtilValidate.isNotEmpty(eventMsg)) {
                 methodContext.getRequest().setAttribute("_EVENT_MESSAGE_", eventMsg);
             }
             List<String> eventMsgList = UtilGenerics.checkList(methodContext.getEnv(eventEventMessageListName));
@@ -789,7 +779,7 @@ public class SimpleMethod {
             }
 
             response = (String) methodContext.getEnv(eventResponseCodeName);
-            if (response == null || response.length() == 0) {
+            if (UtilValidate.isEmpty(response)) {
                 if (forceError) {
                     //override response code, always use error code
                     Debug.logInfo("No response code string found, but error messages found so assuming error; returning code [" + defaultErrorCode + "]", module);
@@ -806,7 +796,7 @@ public class SimpleMethod {
             boolean forceError = false;
 
             String tempErrorMsg = (String) methodContext.getEnv(serviceErrorMessageName);
-            if (errorMsg.length() > 0 || (tempErrorMsg != null && tempErrorMsg.length() > 0)) {
+            if (errorMsg.length() > 0 || UtilValidate.isNotEmpty(tempErrorMsg)) {
                 errorMsg += tempErrorMsg;
                 methodContext.putResult(ModelService.ERROR_MESSAGE, errorMsg);
                 forceError = true;
@@ -833,7 +823,7 @@ public class SimpleMethod {
             }
 
             String successMsg = (String) methodContext.getEnv(serviceSuccessMessageName);
-            if (successMsg != null && successMsg.length() > 0) {
+            if (UtilValidate.isNotEmpty(successMsg)) {
                 methodContext.putResult(ModelService.SUCCESS_MESSAGE, successMsg);
             }
 
@@ -843,7 +833,7 @@ public class SimpleMethod {
             }
 
             response = (String) methodContext.getEnv(serviceResponseMessageName);
-            if (response == null || response.length() == 0) {
+            if (UtilValidate.isEmpty(response)) {
                 if (forceError) {
                     //override response code, always use error code
                     Debug.logVerbose("No response code string found, but error messages found so assuming error; returning code [" + defaultErrorCode + "]", module);
@@ -897,7 +887,7 @@ public class SimpleMethod {
                 String nodeName = curOperElem.getNodeName();
                 MethodOperation methodOp = null;
 
-                MethodOperation.Factory factory = methodOperationFactories.get(nodeName);
+                MethodOperation.Factory<MethodOperation> factory = methodOperationFactories.get(nodeName);
                 if (factory != null) {
                     methodOp = factory.createMethodOperation(curOperElem, simpleMethod);
                 } else if ("else".equals(nodeName)) {
@@ -906,6 +896,15 @@ public class SimpleMethod {
                     Debug.logWarning("Operation element \"" + nodeName + "\" no recognized", module);
                 }
                 if (methodOp == null) continue;
+                if (UtilProperties.propertyValueEquals("webslinger-invoker.properties", "wrap-calls", "true")) {
+                    Wrap<MethodOperation> wrap = new Wrap<MethodOperation>().fileName(simpleMethod.getLocationAndName()).wrappedClass(methodOp.getClass());
+                    wrap.wrap(methodOperationExecMethod);
+                    Object startLine = curOperElem.getUserData("startLine");
+                    if (startLine != null) {
+                        wrap.lineNumber(((Integer) startLine).intValue());
+                    }
+                    methodOp = wrap.newInstance(new Class<?>[] {Element.class, SimpleMethod.class}, new Object[] {curOperElem, simpleMethod});
+                }
                 methodOperations.add(methodOp);
                 DeprecatedOperation depOp = methodOp.getClass().getAnnotation(DeprecatedOperation.class);
                 if (depOp != null) Debug.logInfo("The " + nodeName + " operation has been deprecated in favor of the " + depOp.value() + " operation; found use of this in [" + simpleMethod.getShortDescription() + "]: " + methodOp.rawString(), module);

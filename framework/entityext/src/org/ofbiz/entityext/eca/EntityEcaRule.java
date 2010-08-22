@@ -19,14 +19,13 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.entityext.eca;
 
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-import javolution.util.FastSet;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilXml;
@@ -41,6 +40,12 @@ import org.w3c.dom.Element;
 public class EntityEcaRule implements java.io.Serializable {
 
     public static final String module = EntityEcaRule.class.getName();
+
+    private static final Set<String> nameSet = new HashSet<String>(2);
+    static {
+        nameSet.add("set");
+        nameSet.add("action");
+    }
 
     protected String entityName = null;
     protected String operationName = null;
@@ -68,9 +73,6 @@ public class EntityEcaRule implements java.io.Serializable {
 
         if (Debug.verboseOn()) Debug.logVerbose("Conditions: " + conditions, module);
 
-        Set<String> nameSet = FastSet.newInstance();
-        nameSet.add("set");
-        nameSet.add("action");
         for (Element actionOrSetElement: UtilXml.childElementList(eca, nameSet)) {
             if ("action".equals(actionOrSetElement.getNodeName())) {
                 this.actionsAndSets.add(new EntityEcaAction(actionOrSetElement));
@@ -114,10 +116,9 @@ public class EntityEcaRule implements java.io.Serializable {
                     EntityEcaAction ea = (EntityEcaAction) actionOrSet;
                     // in order to enable OR logic without multiple calls to the given service,
                     //only execute a given service name once per service call phase
-                    if (!actionsRun.contains(ea.serviceName)) {
+                    if (actionsRun.add(ea.serviceName)) {
                         if (Debug.infoOn()) Debug.logInfo("Running Entity ECA Service: " + ea.serviceName + ", triggered by rule on Entity: " + value.getEntityName(), module);
                         ea.runAction(dctx, context, value);
-                        actionsRun.add(ea.serviceName);
                     }
                 } else {
                     EntityEcaSetField sf = (EntityEcaSetField) actionOrSet;

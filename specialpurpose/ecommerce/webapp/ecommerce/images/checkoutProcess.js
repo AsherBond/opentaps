@@ -258,8 +258,8 @@ function createUpdateCustomerAndShippingAddress() {
                 // Process Shipping data response.
                 $('shipToPartyId').value = data.partyId;
                 $('billToPartyId').value = data.partyId;
-                $('shipToContactMechId').value = data.shipToContactMechId;
-                $('shipToPhoneContactMechId').value = data.shipToPhoneContactMechId;
+                $('shipToContactMechId').value = data.contactMechId;
+                $('shipToPhoneContactMechId').value = data.phoneContactMechId;
                 $('emailContactMechId').value = data.emailContactMechId;
                 //$('completedShippingMethod').update(data.shippingDescription);
                 updateShippingSummary();
@@ -276,7 +276,7 @@ function getShipOptions() {
     var shipOptions = null;
     var optionList = [];
     if ($F('shipMethod') == "" || $F('shipMethod') == null) {
-	    new Ajax.Request('getShipOptions', {
+        new Ajax.Request('getShipOptions', {
             asynchronous: false,
             onSuccess: function(transport) {
                 var data = transport.responseText.evalJSON(true);
@@ -368,9 +368,9 @@ function processBillingAndPayment() {
             } else {
                 Effect.Fade('billingFormServerError');
                 isBillStepValidate = true;
-                $('billToContactMechId').value = data.billToContactMechId;
+                $('billToContactMechId').value = data.contactMechId;
                 $('paymentMethodId').value = data.paymentMethodId;
-                $('billToPhoneContactMechId').value = data.billToPhoneContactMechId;
+                $('billToPhoneContactMechId').value = data.phoneContactMechId;
                 updateBillingSummary();
                 result = true;
             }
@@ -383,6 +383,11 @@ function processBillingAndPayment() {
 function initCartProcessObservers() {
     var cartForm = $('cartForm');
     Event.observe($('productPromoCode'), 'change', addPromoCode);
+    Event.observe($('updateShoppingCart'), 'click', showEditShippingPanel);
+    Event.observe($('openCartPanel'), 'click', function() {
+        showEditCartPanel();
+        updateShippingSummary();
+    });
     var inputs = cartForm.getInputs('text');
     inputs.each(function(e) {
         if(e.id != 'productPromoCode') {
@@ -392,7 +397,10 @@ function initCartProcessObservers() {
     var removeLinks = cartForm.getElementsByTagName('a');
     var links = $A(removeLinks);
     links.each( function(e) {
-        Event.observe(e, 'click', removeItem);
+        var removeLink = e.id;
+        if (removeLink.startsWith('removeItemLink_')) {
+            Event.observe(e, 'click', removeItem);
+        }
     });
     if ($('initializedCompletedCartDiscount') != undefined && $('initializedCompletedCartDiscount').value == 0) {
         $('completedCartDiscountRow').hide();
@@ -451,13 +459,11 @@ function cartItemQtyChanged(event) {
     var elementId = qtyElement.id;
     var productIdElementId = elementId.sub('qty_', 'cartLineProductId_');
     var productId = $(productIdElementId).value;
-    if (qtyElement.value >= 0 && !isNaN(qtyElement.value)) {
+    if (qtyElement.value && qtyElement.value >= 0 && !isNaN(qtyElement.value)) {
         var itemIndex = getProductLineItemIndex(event, productId);
         qtyParam = "update_" + itemIndex +"="+qtyElement.value;
         var formValues = $('cartForm').serialize() + '&' + qtyParam;
         updateCartData(elementId, formValues, qtyElement.value, itemIndex);
-    } else {
-        qtyElement.value = "";
     }
 }
 
@@ -475,9 +481,18 @@ function updateCartData(elementId, formValues, itemQty, itemIndex) {
                 $('quickCheckoutDisabled').show();
                 $('onePageCheckoutEnabled').hide();
                 $('onePageCheckoutDisabled').show();
+                $('googleCheckoutEnabled').hide();
+                $('googleCheckoutDisabled').show();
+                $('microCartPayPalCheckout').hide();
             } else {
-                // Used for edit cart
-                $('microCartQuantity').update(data.totalQuantity);
+                // Replace whole cart panel with updated cart values for updating line item in case of gift item is added or remove in cart after applying coupon code
+                // No need to calculate indivisual value for shopping cart when whole cart is updating
+                 new Ajax.Updater($('cartPanel'), 'UpdateCart', {evalScripts: true, method: '', onComplete:function()
+                    {
+                        initCartProcessObservers();
+                     }
+                });
+                /*$('microCartQuantity').update(data.totalQuantity);
                 $('cartSubTotal').update(data.subTotalCurrencyFormatted);
                 $('cartDiscountValue').update(data.displayOrderAdjustmentsTotalCurrencyFormatted);
                 $('cartTotalShipping').update(data.totalShippingCurrencyFormatted);
@@ -516,7 +531,7 @@ function updateCartData(elementId, formValues, itemQty, itemIndex) {
                         var completedCartItemSubTotalId = elementId.sub('qty_','completedCartItemSubTotal_');
                         $(completedCartItemSubTotalId).update(lineItemTotal);
                     }
-                }
+                }*/
             }
         },
         parameters: formValues
@@ -572,7 +587,7 @@ function updateShippingSummary() {
 }
 
 function updateBillingSummary() {
-	var fullName = $F('firstNameOnCard') + " " +$F('lastNameOnCard');
+    var fullName = $F('firstNameOnCard') + " " +$F('lastNameOnCard');
     $('completedBillToAttn').update("Attn: " + fullName);
     var extension = "";
     if ($F('billToExtension')) {

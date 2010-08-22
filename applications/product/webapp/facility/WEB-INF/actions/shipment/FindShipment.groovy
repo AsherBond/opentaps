@@ -27,15 +27,13 @@ import org.ofbiz.entity.transaction.*
 import org.ofbiz.base.util.*
 
 
-delegator = request.getAttribute("delegator");
-
-lookupFlag = request.getParameter("lookupFlag");
-shipmentTypeId = request.getParameter("shipmentTypeId");
-originFacilityId = request.getParameter("originFacilityId");
-destinationFacilityId = request.getParameter("destinationFacilityId");
-statusId = request.getParameter("statusId");
-minDate = request.getParameter("minDate");
-maxDate = request.getParameter("maxDate");
+lookupFlag = parameters.lookupFlag;
+shipmentTypeId = parameters.shipmentTypeId;
+originFacilityId = parameters.originFacilityId;
+destinationFacilityId = parameters.destinationFacilityId;
+statusId = parameters.statusId;
+minDate = parameters.minDate;
+maxDate = parameters.maxDate;
 
 // set the page parameters
 viewIndex = Integer.valueOf(parameters.VIEW_INDEX  ?: 0);
@@ -45,6 +43,11 @@ context.viewSize = viewSize;
 
 findShipmentExprs = [] as LinkedList;
 paramListBuffer = new StringBuffer();
+
+if (parameters.shipmentId) {
+    findShipmentExprs.add(EntityCondition.makeCondition("shipmentId", EntityOperator.EQUALS, parameters.shipmentId));
+}
+
 if (shipmentTypeId) {
     paramListBuffer.append("&shipmentTypeId=");
     paramListBuffer.append(shipmentTypeId);
@@ -95,59 +98,52 @@ if (maxDate && maxDate.length() > 8) {
 if ("Y".equals(lookupFlag)) {
     context.paramList = paramListBuffer.toString();
 
+    findOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+    mainCond = null;
     if (findShipmentExprs.size() > 0) {
-        findOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
         mainCond = EntityCondition.makeCondition(findShipmentExprs, EntityOperator.AND);
-        orderBy = ['-estimatedShipDate'];
+    }
+    orderBy = ['-estimatedShipDate'];
 
-        beganTransaction = false;
-        try {
-            beganTransaction = TransactionUtil.begin();
+    beganTransaction = false;
+    try {
+        beganTransaction = TransactionUtil.begin();
 
-            // using list iterator
-            orli = delegator.find("Shipment", mainCond, null, null, orderBy, findOpts);
+        // get the indexes for the partial list
+        lowIndex = viewIndex * viewSize + 1;
+        highIndex = (viewIndex + 1) * viewSize;
+        findOpts.setMaxRows(highIndex);
+        // using list iterator
+        orli = delegator.find("Shipment", mainCond, null, null, orderBy, findOpts);
 
-            // get the indexes for the partial list
-            lowIndex = (((viewIndex - 1) * viewSize) + 1);
-            highIndex = viewIndex * viewSize;
-
-            // attempt to get the full size
-            orli.last();
-            shipmentListSize = orli.currentIndex();
-            if (highIndex > shipmentListSize) {
-                highIndex = shipmentListSize;
-            }
-
-            // get the partial list for this page
-            orli.beforeFirst();
-            if (shipmentListSize > 0) {
-                shipmentList = orli.getPartialList(lowIndex, viewSize);
-            } else {
-                shipmentList = [] as ArrayList;
-            }
-
-            // close the list iterator
-            orli.close();
-        } catch (GenericEntityException e) {
-            errMsg = "Failure in operation, rolling back transaction";
-            Debug.logError(e, errMsg, module);
-            try {
-                // only rollback the transaction if we started one...
-                TransactionUtil.rollback(beganTransaction, errMsg, e);
-            } catch (GenericEntityException e2) {
-                Debug.logError(e2, "Could not rollback transaction: " + e2.toString(), module);
-            }
-            // after rolling back, rethrow the exception
-            throw e;
-        } finally {
-            // only commit the transaction if we started one... this will throw an exception if it fails
-            TransactionUtil.commit(beganTransaction);
+        shipmentListSize = orli.getResultsSizeAfterPartialList();
+        if (highIndex > shipmentListSize) {
+            highIndex = shipmentListSize;
         }
-    } else {
-        shipmentList = [] as ArrayList;
-        shipmentListSize = 0;
-        highIndex = 0;
-        lowIndex = 0;
+
+        // get the partial list for this page
+        if (shipmentListSize > 0) {
+            shipmentList = orli.getPartialList(lowIndex, viewSize);
+        } else {
+            shipmentList = [] as ArrayList;
+        }
+
+        // close the list iterator
+        orli.close();
+    } catch (GenericEntityException e) {
+        errMsg = "Failure in operation, rolling back transaction";
+        Debug.logError(e, errMsg, module);
+        try {
+            // only rollback the transaction if we started one...
+            TransactionUtil.rollback(beganTransaction, errMsg, e);
+        } catch (GenericEntityException e2) {
+            Debug.logError(e2, "Could not rollback transaction: " + e2.toString(), module);
+        }
+        // after rolling back, rethrow the exception
+        throw e;
+    } finally {
+        // only commit the transaction if we started one... this will throw an exception if it fails
+        TransactionUtil.commit(beganTransaction);
     }
 
     context.shipmentList = shipmentList;

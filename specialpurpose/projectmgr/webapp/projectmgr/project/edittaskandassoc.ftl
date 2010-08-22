@@ -34,7 +34,7 @@ under the License.
     <#if task?has_content>
       <form name="addTaskAndAssocForm" method="get" action="<@ofbizUrl>updateTaskAndAssoc</@ofbizUrl>">
     <#else>
-      <br/>
+      <br />
       <form name="addTaskAndAssocForm" method="get" action="<@ofbizUrl>createTaskAndAssoc</@ofbizUrl>">
     </#if>
         <table width="100%" cellpadding="2" cellspacing="0">
@@ -59,8 +59,8 @@ under the License.
         </tr>
         <tr>
           <td class="label" >${uiLabelMap.ProjectMgrQuickAssignPartyId}</td>
-          <td><input type="text" name="quickAssignPartyId" value=""/>
-            <a href="javascript:call_fieldlookup2(document.addTaskAndAssocForm.quickAssignPartyId,'LookupPartyName');"><img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/></a></td>
+          <td>
+            <@htmlTemplate.lookupField formName="addTaskAndAssocForm" name="quickAssignPartyId" id="quickAssignPartyId" fieldFormName="LookupPartyName"/>
           </td>
         </tr>
         <tr>
@@ -91,7 +91,7 @@ under the License.
             <select name="currentStatusId">
               <#if task?exists>
                 <#assign currentStatus = task.geRelatedOne("CurrentStatusItem")?if_exists>
-                <option SELECTED value="${currentStatus.currentStatusId}">${currentStatus.description}</option>
+                <option selected="selected" value="${currentStatus.currentStatusId}">${currentStatus.description}</option>
                 <#assign statusValidChangeToDetailList = delegator.findByAnd("StatusValidChangeToDetail", Static["org.ofbiz.base.util.UtilMisc"].toMap("statusId", currentStatus.currentStatusId))>
                 <#list statusValidChangeToDetailList as statusValidChangeToDetail>
                   <option value=${statusValidChangeToDetail.statusId}>[${uiLabelMap.WorkEffortGeneral}]${statusValidChangeToDetail.description}</option>
@@ -121,7 +121,7 @@ under the License.
             </#if>
             <select name="priority" size="1">
               <#if priority?exists>
-                <option SELECTED value="${priority}">${priority}</option>
+                <option selected="selected" value="${priority}">${priority}</option>
                 <option></option>
                 <option value=1>${uiLabelMap.WorkEffortPriorityOne}</option>
                 <option value=2>${uiLabelMap.WorkEffortPriorityTwo}</option>

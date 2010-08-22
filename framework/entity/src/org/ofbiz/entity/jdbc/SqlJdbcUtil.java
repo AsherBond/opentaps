@@ -27,10 +27,10 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Clob;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -56,7 +56,6 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityConditionParam;
 import org.ofbiz.entity.condition.OrderByList;
 import org.ofbiz.entity.config.DatasourceInfo;
-import org.ofbiz.entity.datasource.GenericDAO;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
 import org.ofbiz.entity.model.ModelFieldType;
@@ -69,7 +68,7 @@ import org.ofbiz.entity.model.ModelViewEntity;
  *
  */
 public class SqlJdbcUtil {
-    public static final String module = GenericDAO.class.getName();
+    public static final String module = SqlJdbcUtil.class.getName();
 
     public static final int CHAR_BUFFER_SIZE = 4096;
 
@@ -177,6 +176,10 @@ public class SqlJdbcUtil {
                     if (condBuffer.length() == 0) {
                         throw new GenericModelException("No view-link/join key-maps found for the " + viewLink.getEntityAlias() + " and the " + viewLink.getRelEntityAlias() + " member-entities of the " + modelViewEntity.getEntityName() + " view-entity.");
                     }
+
+                    // TODO add expression from entity-condition on view-link
+
+
                     restOfStatement.append(condBuffer.toString());
 
                     // don't put ending parenthesis
@@ -227,18 +230,18 @@ public class SqlJdbcUtil {
     }
 
     /** Makes a WHERE clause String with "<col name>=?" if not null or "<col name> IS null" if null, all AND separated */
-    public static String makeWhereStringFromFields(List modelFields, Map<String, Object> fields, String operator) {
+    public static String makeWhereStringFromFields(List<ModelField> modelFields, Map<String, Object> fields, String operator) {
         return makeWhereStringFromFields(modelFields, fields, operator, null);
     }
 
     /** Makes a WHERE clause String with "<col name>=?" if not null or "<col name> IS null" if null, all AND separated */
-    public static String makeWhereStringFromFields(List modelFields, Map<String, Object> fields, String operator, List<EntityConditionParam> entityConditionParams) {
+    public static String makeWhereStringFromFields(List<ModelField> modelFields, Map<String, Object> fields, String operator, List<EntityConditionParam> entityConditionParams) {
         if (modelFields.size() < 1) {
             return "";
         }
 
-        StringBuffer returnString = new StringBuffer("");
-        Iterator iter = modelFields.iterator();
+        StringBuilder returnString = new StringBuilder();
+        Iterator<ModelField> iter = modelFields.iterator();
         while (iter.hasNext()) {
             Object item = iter.next();
             Object name = null;
@@ -270,7 +273,7 @@ public class SqlJdbcUtil {
         return returnString.toString();
     }
 
-    public static String makeWhereClause(ModelEntity modelEntity, List modelFields, Map<String, Object> fields, String operator, String joinStyle) throws GenericEntityException {
+    public static String makeWhereClause(ModelEntity modelEntity, List<ModelField> modelFields, Map<String, Object> fields, String operator, String joinStyle) throws GenericEntityException {
         StringBuilder whereString = new StringBuilder("");
 
         if (UtilValidate.isNotEmpty(modelFields)) {
@@ -491,6 +494,7 @@ public class SqlJdbcUtil {
             throw new GenericModelException("definition fieldType " + curField.getType() + " not found, cannot getValue for field " +
                     entity.getEntityName() + "." + curField.getName() + ".");
         }
+
         String fieldType = mft.getJavaType();
 
         try {
@@ -812,7 +816,7 @@ public class SqlJdbcUtil {
                 break;
 
             case 15:
-                sqlP.setValue((java.util.Collection) fieldValue);
+                sqlP.setValue(UtilGenerics.<Collection<?>>cast(fieldValue));
                 break;
             }
         } catch (GenericNotImplementedException e) {
@@ -904,14 +908,14 @@ public class SqlJdbcUtil {
 
     public static void addValue(StringBuilder buffer, ModelField field, Object value, List<EntityConditionParam> params) {
         if (value instanceof Collection) {
-            buffer.append("( ");
+            buffer.append("(");
             Iterator<Object> it = UtilGenerics.checkCollection(value).iterator();
             while (it.hasNext()) {
                 Object thisValue = it.next();
                 addValueSingle(buffer, field, thisValue, params);
                 if (it.hasNext()) buffer.append(", ");
             }
-            buffer.append(" )");
+            buffer.append(")");
         } else {
             addValueSingle(buffer, field, value, params);
         }

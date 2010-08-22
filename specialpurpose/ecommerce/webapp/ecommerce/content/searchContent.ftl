@@ -18,8 +18,8 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
-<hr/>
-    <form method="post"  action="<@ofbizUrl>searchContent</@ofbizUrl>"  name="searchQuery" style="margin: 0;">
+
+<form method="post"  action="<@ofbizUrl>searchContent</@ofbizUrl>"  name="searchQuery">
 <table border="0" cellpadding="2" cellspacing="0">
 
 <tr>
@@ -36,15 +36,15 @@ under the License.
 
 <!-- category form -->
 <tr>
-  <table border="0" wdith="100%">
+  <table>
     <tr>
       <td align="right" valign="middle">
         <div class="tabletext">${uiLabelMap.ProductFeatures}:</div>
       </td>
       <td align="right" valign="middle">
         <div class="tabletext">
-          ${uiLabelMap.CommonAll} <input type="radio" name="any_or_all" value="all" checked>
-          ${uiLabelMap.CommonAny} <input type="radio" name="any_or_all" value="any">
+          ${uiLabelMap.CommonAll} <input type="radio" name="any_or_all" value="all" checked="checked" />
+          ${uiLabelMap.CommonAny} <input type="radio" name="any_or_all" value="any" />
         </div>
       </td>
     </tr>
@@ -79,8 +79,8 @@ under the License.
             </#list>
             <div class="tabletext">${uiLabelMap.ProductSortedBy}: ${searchSortOrderString}</div>
             <div class="tabletext">
-              ${uiLabelMap.ProductNewSearch}<input type="radio" name="clearSearch" value="Y" checked>
-              ${uiLabelMap.ProductRefineSearch}<input type="radio" name="clearSearch" value="N">
+              ${uiLabelMap.ProductNewSearch}<input type="radio" name="clearSearch" value="Y" checked="checked" />
+              ${uiLabelMap.CommonRefineSearch}<input type="radio" name="clearSearch" value="N" />
             </div>
         </td>
       </tr>
@@ -97,7 +97,7 @@ under the License.
 </form>
 
 
-<hr/>
+
     ${listWrapper.renderFormString()}
 
 <#macro listSiteIds contentId indentIndex=0>

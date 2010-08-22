@@ -19,7 +19,7 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.service.calendar;
 
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -27,7 +27,7 @@ import java.util.TreeSet;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -60,7 +60,7 @@ public class TemporalExpressionWorker {
      * @return A <code>TemporalExpression</code> instance based on <code>tempExprId</code>
      * @throws GenericEntityException
      */
-    public static TemporalExpression getTemporalExpression(GenericDelegator delegator, String tempExprId) throws GenericEntityException {
+    public static TemporalExpression getTemporalExpression(Delegator delegator, String tempExprId) throws GenericEntityException {
         if (UtilValidate.isEmpty(tempExprId)) {
             throw new IllegalArgumentException("tempExprId argument cannot be empty");
         }
@@ -69,6 +69,10 @@ public class TemporalExpressionWorker {
             throw new IllegalArgumentException("tempExprId argument invalid - expression not found");
         }
         TemporalExpression result = makeTemporalExpression(delegator, exprValue);
+        if (Debug.verboseOn()) {
+            TemporalExpressionPrinter printer = new TemporalExpressionPrinter(result);
+            Debug.logVerbose(printer.toString(), module);
+        }
         return result;
     }
 
@@ -81,7 +85,7 @@ public class TemporalExpressionWorker {
      * @throws GenericEntityException
      */
     @SuppressWarnings("deprecation")
-    public static TemporalExpression makeTemporalExpression(GenericDelegator delegator, GenericValue exprValue) throws GenericEntityException {
+    public static TemporalExpression makeTemporalExpression(Delegator delegator, GenericValue exprValue) throws GenericEntityException {
         String tempExprId = exprValue.getString("tempExprId");
         String tempExprTypeId = exprValue.getString("tempExprTypeId");
         if (DateRange.equals(tempExprTypeId)) {
@@ -116,6 +120,23 @@ public class TemporalExpressionWorker {
             return setExpressionId(exprValue, new TemporalExpressions.MinuteRange(exprValue.getLong("integer1").intValue(), exprValue.getLong("integer2").intValue()));
         } else if (MonthRange.equals(tempExprTypeId)) {
             return setExpressionId(exprValue, new TemporalExpressions.MonthRange(exprValue.getLong("integer1").intValue(), exprValue.getLong("integer2").intValue()));
+        } else if (Substitution.equals(tempExprTypeId)) {
+            List<GenericValue> childExpressions = delegator.findList("TemporalExpressionAssoc", EntityCondition.makeCondition("fromTempExprId", tempExprId), null, null, null, true);
+            GenericValue inclAssoc = null;
+            GenericValue exclAssoc = null;
+            GenericValue substAssoc = null;
+            for (GenericValue childExpression : childExpressions) {
+                if ("INCLUDE".equals(childExpression.get("exprAssocType"))) {
+                    inclAssoc = childExpression;
+                } else if ("EXCLUDE".equals(childExpression.get("exprAssocType"))) {
+                    exclAssoc = childExpression;
+                } else if ("SUBSTITUTION".equals(childExpression.get("exprAssocType"))) {
+                    substAssoc = childExpression;
+                }
+            }
+            if (inclAssoc != null && exclAssoc != null && substAssoc != null) {
+                return setExpressionId(exprValue, new TemporalExpressions.Substitution(getTemporalExpression(delegator, inclAssoc.getString("toTempExprId")), getTemporalExpression(delegator, exclAssoc.getString("toTempExprId")), getTemporalExpression(delegator, substAssoc.getString("toTempExprId"))));
+            }
         } else if (TimeOfDayRange.equals(tempExprTypeId)) {
             Debug.logWarning(TimeOfDayRange + " has been deprecated. Use " + HourRange + " and/or " + MinuteRange, module);
             int interval = Calendar.HOUR_OF_DAY;
@@ -135,7 +156,7 @@ public class TemporalExpressionWorker {
         return TemporalExpressions.NullExpression;
     }
 
-    protected static Set<TemporalExpression> getChildExpressions(GenericDelegator delegator, String tempExprId) throws GenericEntityException {
+    protected static Set<TemporalExpression> getChildExpressions(Delegator delegator, String tempExprId) throws GenericEntityException {
         List<GenericValue> valueList = delegator.findList("TemporalExpressionAssoc", EntityCondition.makeCondition("fromTempExprId", tempExprId), null, null, null, true);
         if (UtilValidate.isEmpty(valueList)) {
             throw new IllegalArgumentException("tempExprId argument invalid - no child expressions found");

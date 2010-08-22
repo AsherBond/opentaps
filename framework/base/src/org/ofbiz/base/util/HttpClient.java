@@ -29,6 +29,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.cert.CertificateException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -367,7 +368,7 @@ public class HttpClient {
             }
 
             BufferedReader post = new BufferedReader(charset == null ? new InputStreamReader(in) : new InputStreamReader(in, charset));
-            String line = new String();
+            String line = "";
 
             if (Debug.verboseOn() || debug) Debug.log("---- HttpClient Response Content ----", module);
             while ((line = post.readLine()) != null) {
@@ -389,7 +390,7 @@ public class HttpClient {
 
     private InputStream sendHttpRequestStream(String method, boolean overrideTrust) throws HttpClientException {
         // setup some SSL variables
-        SSLUtil.loadJsseProperties();
+        SSLUtil.loadJsseProperties(this.debug);
 
         String arguments = null;
         InputStream in = null;
@@ -478,7 +479,7 @@ public class HttpClient {
             }
 
             if (Debug.verboseOn() || debug) {
-                Map headerFields = con.getHeaderFields();
+                Map<String, List<String>> headerFields = con.getHeaderFields();
                 Debug.log("Header Fields : " + headerFields, module);
             }
 

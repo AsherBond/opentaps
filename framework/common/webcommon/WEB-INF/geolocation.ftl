@@ -19,10 +19,10 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 <#if geoPoint?has_content>
   <#if geoPoint.latitude?has_content && geoPoint.longitude?has_content>
-    ${uiLabelMap.CommonLatitude}${geoPoint.latitude}<br>
+    ${uiLabelMap.CommonLatitude}${geoPoint.latitude}<br/>
     ${uiLabelMap.CommonLongitude}${geoPoint.longitude}
     <#if geoPoint.elevation?has_content>
-      <br>${uiLabelMap.CommonElevation}${geoPoint.elevation} ${elevationUomAbbr}
+      <br/>${uiLabelMap.CommonElevation}${geoPoint.elevation} ${elevationUomAbbr?if_exists}
     </#if>
     <#if geoPoint.dataSourceId?has_content>
       <#if geoPoint.dataSourceId == "GEOPT_GOOGLE">

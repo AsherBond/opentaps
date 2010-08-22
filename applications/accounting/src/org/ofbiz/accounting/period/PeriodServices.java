@@ -20,13 +20,14 @@
 
 package org.ofbiz.accounting.period;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -42,14 +43,14 @@ public class PeriodServices {
      * CustomTimePeriod
      */
     public static Map<String, Object> findLastClosedDate(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String organizationPartyId = (String) context.get("organizationPartyId"); // input parameters
         String periodTypeId = (String) context.get("periodTypeId");
-        Timestamp findDate = (Timestamp) context.get("findDate");
+        Date findDate = (Date) context.get("findDate");
 
         // default findDate to now
         if (findDate == null) {
-            findDate = UtilDateTime.nowTimestamp();
+            findDate = new Date(UtilDateTime.nowTimestamp().getTime());
         }
 
         Timestamp lastClosedDate = null;          // return parameters

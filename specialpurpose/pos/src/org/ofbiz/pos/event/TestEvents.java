@@ -53,7 +53,7 @@ public class TestEvents {
             NumericKeypad numericKeypad = new NumericKeypad(pos);
             numericKeypad.setMinus(true);
             numericKeypad.setPercent(false);
-            String results = numericKeypad.openDlg();
+            numericKeypad.openDlg();
         } catch (Exception e) {
             Debug.logError(e, module);
         }

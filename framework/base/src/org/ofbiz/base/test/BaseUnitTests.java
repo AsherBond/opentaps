@@ -22,6 +22,7 @@ package org.ofbiz.base.test;
 import junit.framework.TestCase;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilValidate;
 
@@ -36,7 +37,7 @@ public class BaseUnitTests extends TestCase {
         assertTrue(Debug.verboseOn());
 
         Debug.set(Debug.VERBOSE, false);
-        assertTrue(!Debug.verboseOn());
+        assertFalse(Debug.verboseOn());
 
         Debug.set(Debug.INFO, true);
         assertTrue(Debug.infoOn());
@@ -71,4 +72,11 @@ public class BaseUnitTests extends TestCase {
     public void testIsFloat_2() {
         assertTrue(UtilValidate.isFloat("10.000", true, true, 3, 3));
     }
+
+    public void testStringUtil() {
+        byte[] testArray = {-1};
+        byte[] result = StringUtil.fromHexString(StringUtil.toHexString(testArray));
+        assertEquals("Hex conversions", testArray[0], result[0]);
+    }
+
 }

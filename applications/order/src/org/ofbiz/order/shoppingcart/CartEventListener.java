@@ -29,7 +29,8 @@ import javax.servlet.http.HttpSessionListener;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.webapp.stats.VisitHandler;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.transaction.TransactionUtil;
@@ -57,9 +58,9 @@ public class CartEventListener implements HttpSessionListener {
         }
 
         String delegatorName = (String) session.getAttribute("delegatorName");
-        GenericDelegator delegator = null;
+        Delegator delegator = null;
         if (UtilValidate.isNotEmpty(delegatorName)) {
-            delegator = GenericDelegator.getGenericDelegator(delegatorName);
+            delegator = DelegatorFactory.getDelegator(delegatorName);
         }
         if (delegator == null) {
             Debug.logError("Could not find delegator with delegatorName in session, not saving abandoned cart info.", module);
@@ -84,7 +85,7 @@ public class CartEventListener implements HttpSessionListener {
                 GenericValue cartAbandonedLine = delegator.makeValue("CartAbandonedLine");
 
                 cartAbandonedLine.set("visitId", visit.get("visitId"));
-                cartAbandonedLine.set("cartAbandonedLineSeqId", (new Integer(seqId)).toString());
+                cartAbandonedLine.set("cartAbandonedLineSeqId", (Integer.valueOf(seqId)).toString());
                 cartAbandonedLine.set("productId", cartItem.getProductId());
                 cartAbandonedLine.set("prodCatalogId", cartItem.getProdCatalogId());
                 cartAbandonedLine.set("quantity", cartItem.getQuantity());

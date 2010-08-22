@@ -73,9 +73,9 @@ context.addedFeatureTypeIds = addedFeatureTypes.keySet();
 context.addedFeatureTypes = addedFeatureTypes;
 context.featuresByType = featuresByType;
 
-productId = request.getParameter("productId");
+productId = parameters.get("productId");
 if (!productId) {
-    productId = request.getParameter("PRODUCT_ID");
+    productId = parameters.get("PRODUCT_ID");
 }
 if (!productId) {
     productId = request.getAttribute("productId");
@@ -219,9 +219,9 @@ if (product) {
     if (!salesThru) {
         salesthru = "[&nbsp;]";
     } else if (salesThru.after(new java.util.Date())) {
-        salesthru = "<div style='color: blue'>[x]</div>";
+        salesthru = "<span style='color: blue'>[x]</span>";
     } else {
-        salesthru = "<div style='color: red'>[x]</div>";
+        salesthru = "<span style='color: red'>[x]</span>";
     }
     context.salesthru = salesthru;
     thrudate = "";
@@ -263,19 +263,19 @@ if (product) {
             }
             salesThru = assocProduct.getTimestamp("salesDiscontinuationDate");
             if (!salesThru) {
-                featureSalesThru.put(assocProduct.productId, "<div style='color: blue'>[&nbsp;]</div>");
+                featureSalesThru.put(assocProduct.productId, "<span style='color: blue'>[&nbsp;]</span>");
             } else if (salesThru.after(new java.util.Date())) {
-                featureSalesThru.put(assocProduct.productId, "<div style='color: blue'>[x]</div>");
+                featureSalesThru.put(assocProduct.productId, "<span style='color: blue'>[x]</span>");
             } else {
-                featureSalesThru.put(assocProduct.productId, "<div style='color: red'>[x]</div>");
+                featureSalesThru.put(assocProduct.productId, "<span style='color: red'>[x]</span>");
             }
             java.sql.Timestamp thruDate = productAssoc.getTimestamp("thruDate");
             if (!thruDate) {
-                featureThruDate.put(assocProduct.productId, "<div style='color: blue'>[&nbsp;]</div>");
+                featureThruDate.put(assocProduct.productId, "<span style='color: blue'>[&nbsp;]</span>");
             } else if (thruDate.after(new java.util.Date())) {
-                featureThruDate.put(assocProduct.productId, "<div style='color: blue'>[x]</div>");
+                featureThruDate.put(assocProduct.productId, "<span style='color: blue'>[x]</span>");
             } else {
-                featureThruDate.put(assocProduct.productId, "<div style='color: red'>[x]</div>");
+                featureThruDate.put(assocProduct.productId, "<span style='color: red'>[x]</span>");
             }
 
             prodFeaturesFiltered = EntityUtil.filterByAnd(assocProductFeatureAndAppls, [productFeatureTypeId : productFeatureTypeId]);

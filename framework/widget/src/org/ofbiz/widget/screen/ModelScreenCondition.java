@@ -46,6 +46,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entityext.permission.EntityPermissionChecker;
 import org.ofbiz.minilang.operation.BaseCompare;
 import org.ofbiz.security.Security;
+import org.ofbiz.security.authz.Authorization;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
@@ -123,6 +124,8 @@ public class ModelScreenCondition implements Serializable {
             return new IfEmpty(modelScreen, conditionElement);
         } else if ("if-entity-permission".equals(conditionElement.getNodeName())) {
             return new IfEntityPermission(modelScreen, conditionElement);
+        } else if ("if-empty-section".equals(conditionElement.getNodeName())) {
+            return new IfEmptySection(modelScreen, conditionElement);
         } else {
             throw new IllegalArgumentException("Condition element not supported with name: " + conditionElement.getNodeName());
         }
@@ -136,6 +139,7 @@ public class ModelScreenCondition implements Serializable {
             this.subConditions = readSubConditions(modelScreen, condElement);
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             // return false for the first one in the list that is false, basic and algo
             for (ScreenCondition subCondition: this.subConditions) {
@@ -155,6 +159,7 @@ public class ModelScreenCondition implements Serializable {
             this.subConditions = readSubConditions(modelScreen, condElement);
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             // if more than one is true stop immediately and return false; if all are false return false; if only one is true return true
             boolean foundOneTrue = false;
@@ -180,6 +185,7 @@ public class ModelScreenCondition implements Serializable {
             this.subConditions = readSubConditions(modelScreen, condElement);
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             // return true for the first one in the list that is true, basic or algo
             for (ScreenCondition subCondition: this.subConditions) {
@@ -200,6 +206,7 @@ public class ModelScreenCondition implements Serializable {
             this.subCondition = readCondition(modelScreen, firstChildElement);
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             return !this.subCondition.eval(context);
         }
@@ -219,6 +226,7 @@ public class ModelScreenCondition implements Serializable {
             this.resExdr = FlexibleStringExpander.getInstance(condElement.getAttribute("resource-description"));
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             // if no user is logged in, treat as if the user does not have permission
             GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -298,6 +306,7 @@ public class ModelScreenCondition implements Serializable {
             this.actionExdr = FlexibleStringExpander.getInstance(condElement.getAttribute("action"));
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             // if no user is logged in, treat as if the user does not have permission
             GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -305,15 +314,17 @@ public class ModelScreenCondition implements Serializable {
                 String permission = permissionExdr.expandString(context);
                 String action = actionExdr.expandString(context);
 
+                Authorization authz = (Authorization) context.get("authz");
                 Security security = (Security) context.get("security");
-                if (action != null && action.length() > 0) {
+                if (UtilValidate.isNotEmpty(action)) {
+                    //Debug.logWarning("Deprecated method hasEntityPermission() was called; the action field should no longer be used", module);
                     // run hasEntityPermission
                     if (security.hasEntityPermission(permission, action, userLogin)) {
                         return true;
                     }
                 } else {
                     // run hasPermission
-                    if (security.hasPermission(permission, userLogin)) {
+                    if (authz.hasPermission(userLogin.getString("userLoginId"), permission, context)) {
                         return true;
                     }
                 }
@@ -335,6 +346,7 @@ public class ModelScreenCondition implements Serializable {
             this.classExdr = FlexibleStringExpander.getInstance(condElement.getAttribute("class"));
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             String methodName = this.methodExdr.expandString(context);
             String className = this.classExdr.expandString(context);
@@ -352,7 +364,7 @@ public class ModelScreenCondition implements Serializable {
             // always use an empty string by default
             if (fieldString == null) fieldString = "";
 
-            Class[] paramTypes = new Class[] {String.class};
+            Class<?>[] paramTypes = new Class[] {String.class};
             Object[] params = new Object[] {fieldString};
 
             Class<?> valClass;
@@ -402,6 +414,7 @@ public class ModelScreenCondition implements Serializable {
             this.formatExdr = FlexibleStringExpander.getInstance(condElement.getAttribute("format"));
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             String value = this.valueExdr.expandString(context);
             String format = this.formatExdr.expandString(context);
@@ -452,6 +465,7 @@ public class ModelScreenCondition implements Serializable {
             this.formatExdr = FlexibleStringExpander.getInstance(condElement.getAttribute("format"));
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             String format = this.formatExdr.expandString(context);
 
@@ -495,6 +509,7 @@ public class ModelScreenCondition implements Serializable {
             this.exprExdr = FlexibleStringExpander.getInstance(condElement.getAttribute("expr"));
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             Object fieldVal = this.fieldAcsr.get(context);
             String expr = this.exprExdr.expandString(context);
@@ -529,6 +544,7 @@ public class ModelScreenCondition implements Serializable {
             if (this.fieldAcsr.isEmpty()) this.fieldAcsr = FlexibleMapAccessor.getInstance(condElement.getAttribute("field-name"));
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             Object fieldVal = this.fieldAcsr.get(context);
             return ObjectType.isEmpty(fieldVal);
@@ -542,11 +558,24 @@ public class ModelScreenCondition implements Serializable {
             this.permissionChecker = new EntityPermissionChecker(condElement);
         }
 
+        @Override
         public boolean eval(Map<String, Object> context) {
             return permissionChecker.runPermissionCheck(context);
         }
     }
+
+    public static class IfEmptySection extends ScreenCondition {
+        protected FlexibleStringExpander sectionExdr;
+
+        public IfEmptySection(ModelScreen modelScreen, Element condElement) {
+            super (modelScreen, condElement);
+            this.sectionExdr = FlexibleStringExpander.getInstance(condElement.getAttribute("section-name"));
+        }
+
+        @Override
+        public boolean eval(Map<String, Object> context) {
+            Map<String, Object> sectionsList = UtilGenerics.toMap(context.get("sections"));
+            return !sectionsList.containsKey(this.sectionExdr.expandString(context));
+        }
+    }
 }
-
-
-

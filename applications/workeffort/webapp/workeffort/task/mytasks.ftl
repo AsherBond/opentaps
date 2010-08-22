@@ -19,10 +19,10 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 <h1>${uiLabelMap.PageTitleViewActivityAndTaskList}</h1>
 <div class="button-bar">
-  <a href="<@ofbizUrl>EditWorkEffort?workEffortTypeId=TASK&amp;currentStatusId=CAL_NEEDS_ACTION</@ofbizUrl>" class="buttontext">${uiLabelMap.WorkEffortNewTask}</a>
+  <a href="<@ofbizUrl>EditWorkEffort?workEffortTypeId=TASK&amp;currentStatusId=CAL_NEEDS_ACTION</@ofbizUrl>" class="buttontext create">${uiLabelMap.WorkEffortNewTask}</a>
 </div>
   <h2>${uiLabelMap.WorkEffortAssignedTasks}</h2>
-  <br/>
+  <br />
   <table class="basic-table hover-bar" cellspacing="0">
     <tr class="header-row-2">
       <td>${uiLabelMap.CommonStartDateTime}</td>
@@ -43,7 +43,7 @@ under the License.
   </table>
   <#if (activities.size() > 0)>
     <h2>${uiLabelMap.WorkEffortWorkflowActivitiesUser}</h2>
-    <br/>
+    <br />
     <table class="basic-table hover-bar" cellspacing="0">
       <tr class="header-row-2">
         <td>${uiLabelMap.CommonStartDateTime}</td>
@@ -73,7 +73,7 @@ under the License.
   </#if>
   <#if (roleActivities.size() > 0)>
     <h2>${uiLabelMap.WorkEffortWorkflowActivitiesUserRole}</h2>
-    <br/>
+    <br />
     <table class="basic-table hover-bar" cellspacing="0">
       <tr class="header-row-2">
         <td>${uiLabelMap.CommonStartDateTime}</td>
@@ -95,7 +95,7 @@ under the License.
           <#-- <td>${workEffort.partyId}</td> -->
           <td>${workEffort.roleTypeId}</td>
           <td><a href="<@ofbizUrl>WorkEffortSummary?workEffortId=${workEffort.workEffortId}</@ofbizUrl>">${workEffort.workEffortName}</a></td>
-          <td class="button-col"><a href="<@ofbizUrl>acceptRoleAssignment?workEffortId=${workEffort.workEffortId}&partyId=${workEffort.partyId}&roleTypeId=${workEffort.roleTypeId}&fromDate=${workEffort.fromDate.toString()}</@ofbizUrl>">${uiLabelMap.WorkEffortAcceptAssignment}&nbsp;[${workEffort.workEffortId}]</a></td>
+          <td class="button-col"><a href="<@ofbizUrl>acceptRoleAssignment?workEffortId=${workEffort.workEffortId}&amp;partyId=${workEffort.partyId}&amp;roleTypeId=${workEffort.roleTypeId}&amp;fromDate=${workEffort.fromDate.toString()}</@ofbizUrl>">${uiLabelMap.WorkEffortAcceptAssignment}&nbsp;[${workEffort.workEffortId}]</a></td>
         </tr>
         <#assign alt_row = !alt_row>
       </#list>
@@ -103,7 +103,7 @@ under the License.
   </#if>
   <#if (groupActivities.size() > 0)>
     <h2>${uiLabelMap.WorkEffortWorkflowActivitiesUserGroup}</h2>
-    <br/>
+    <br />
     <table class="basic-table hover-bar" cellspacing="0">
       <tr class="header-row-2">
         <td>${uiLabelMap.CommonStartDateTime}</td>
@@ -125,7 +125,7 @@ under the License.
           <td>${workEffort.groupPartyId}</td>
           <#-- <td>${workEffort.roleTypeId}</td> -->
           <td><a href="<@ofbizUrl>WorkEffortSummary?workEffortId=${workEffort.workEffortId}</@ofbizUrl>">${workEffort.workEffortName}</a></td>
-          <td class="button-col"><a href="<@ofbizUrl>acceptassignment?workEffortId=${workEffort.workEffortId}&partyId=${workEffort.partyId}&roleTypeId=${workEffort.roleTypeId}&fromDate=${workEffort.fromDate}</@ofbizUrl>">${uiLabelMap.WorkEffortAcceptAssignment}&nbsp;[${workEffort.workEffortId}]</a></td>
+          <td class="button-col"><a href="<@ofbizUrl>acceptassignment?workEffortId=${workEffort.workEffortId}&amp;partyId=${workEffort.partyId}&amp;roleTypeId=${workEffort.roleTypeId}&amp;fromDate=${workEffort.fromDate}</@ofbizUrl>">${uiLabelMap.WorkEffortAcceptAssignment}&nbsp;[${workEffort.workEffortId}]</a></td>
         </tr>
         <#assign alt_row = !alt_row>
       </#list>

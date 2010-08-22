@@ -22,7 +22,6 @@ package org.ofbiz.order.shoppingcart;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,11 +35,13 @@ import java.util.Set;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -71,7 +72,7 @@ public class ShoppingCartHelper {
     private ShoppingCart cart = null;
 
     // The entity engine delegator
-    private GenericDelegator delegator = null;
+    private Delegator delegator = null;
 
     // The service invoker
     private LocalDispatcher dispatcher = null;
@@ -82,7 +83,7 @@ public class ShoppingCartHelper {
      *
      * @param cart The cart to manipulate
      */
-    public ShoppingCartHelper(GenericDelegator delegator, LocalDispatcher dispatcher, ShoppingCart cart) {
+    public ShoppingCartHelper(Delegator delegator, LocalDispatcher dispatcher, ShoppingCart cart) {
         this.dispatcher = dispatcher;
         this.delegator = delegator;
         this.cart = cart;
@@ -163,7 +164,7 @@ public class ShoppingCartHelper {
         }
 
         // stores the default desired delivery date in the cart if need
-        if (!UtilValidate.isEmpty((String) context.get("useAsDefaultDesiredDeliveryDate"))) {
+        if (!UtilValidate.isEmpty(context.get("useAsDefaultDesiredDeliveryDate"))) {
             cart.setDefaultItemDeliveryDate((String) context.get("itemDesiredDeliveryDate"));
         } else {
             // do we really want to clear this if it isn't checked?
@@ -171,7 +172,7 @@ public class ShoppingCartHelper {
         }
 
         // stores the default comment in session if need
-        if (!UtilValidate.isEmpty((String) context.get("useAsDefaultComment"))) {
+        if (!UtilValidate.isEmpty(context.get("useAsDefaultComment"))) {
             cart.setDefaultItemComment((String) context.get("itemComment"));
         } else {
             // do we really want to clear this if it isn't checked?
@@ -405,7 +406,7 @@ public class ShoppingCartHelper {
                 continue;
             }
 
-            if (quantStr != null && quantStr.length() > 0) {
+            if (UtilValidate.isNotEmpty(quantStr)) {
                 BigDecimal quantity = BigDecimal.ZERO;
 
                 try {
@@ -481,11 +482,11 @@ public class ShoppingCartHelper {
                     return ServiceUtil.returnError("Requirement with id [" + requirementId + "] doesn't exist.");
                 }
 
-                if (quantStr != null && quantStr.length() > 0) {
+                if (UtilValidate.isNotEmpty(quantStr)) {
                     BigDecimal quantity = BigDecimal.ZERO;
                     try {
-                        quantity = new BigDecimal(nf.parse(quantStr).doubleValue());
-                    } catch (ParseException nfe) {
+                        quantity = (BigDecimal) ObjectType.simpleTypeConvert(quantStr, "BigDecimal", null, cart.getLocale());
+                    } catch (GeneralException ge) {
                         quantity = BigDecimal.ZERO;
                     }
                     if (quantity.compareTo(BigDecimal.ZERO) > 0) {
@@ -627,7 +628,6 @@ public class ShoppingCartHelper {
         if (locale == null) {
             locale = this.cart.getLocale();
         }
-        NumberFormat nf = NumberFormat.getNumberInstance(locale);
 
         ArrayList deleteList = new ArrayList();
         ArrayList errorMsgs = new ArrayList();
@@ -689,30 +689,30 @@ public class ShoppingCartHelper {
                         }
                     } else if (parameterName.startsWith("reservLength")) {
                         if (item != null) {
-                            BigDecimal reservLength = new BigDecimal(nf.parse(quantString).doubleValue());
+                            BigDecimal reservLength = (BigDecimal) ObjectType.simpleTypeConvert(quantString, "BigDecimal", null, locale);
                             item.setReservLength(reservLength);
                         }
                     } else if (parameterName.startsWith("reservPersons")) {
                         if (item != null) {
-                            BigDecimal reservPersons = new BigDecimal(nf.parse(quantString).doubleValue());
+                            BigDecimal reservPersons = (BigDecimal) ObjectType.simpleTypeConvert(quantString, "BigDecimal", null, locale);
                             item.setReservPersons(reservPersons);
                         }
                     } else if (parameterName.startsWith("shipBeforeDate")) {
-                        if (item != null && quantString.length() > 0) {
+                        if (UtilValidate.isNotEmpty(quantString)) {
                             // input is either yyyy-mm-dd or a full timestamp
                             if (quantString.length() == 10)
                                 quantString += " 00:00:00.000";
                             item.setShipBeforeDate(Timestamp.valueOf(quantString));
                         }
                     } else if (parameterName.startsWith("shipAfterDate")) {
-                        if (item != null && quantString.length() > 0) {
+                        if (UtilValidate.isNotEmpty(quantString)) {
                             // input is either yyyy-mm-dd or a full timestamp
                             if (quantString.length() == 10)
                                 quantString += " 00:00:00.000";
                             item.setShipAfterDate(Timestamp.valueOf(quantString));
                         }
                     } else if (parameterName.startsWith("amount")) {
-                        if (item != null && quantString.length() > 0) {
+                        if (UtilValidate.isNotEmpty(quantString)) {
                             BigDecimal amount = new BigDecimal(quantString);
                             if (amount.compareTo(BigDecimal.ZERO) <= 0) {
                                 String errMsg = UtilProperties.getMessage(resource_error, "cart.amount_not_positive_number", this.cart.getLocale());
@@ -723,11 +723,11 @@ public class ShoppingCartHelper {
                             item.setSelectedAmount(amount);
                         }
                     } else if (parameterName.startsWith("itemType")) {
-                        if (item != null && quantString.length() > 0) {
+                        if (UtilValidate.isNotEmpty(quantString)) {
                             item.setItemType(quantString);
                         }
                     } else {
-                        quantity = new BigDecimal(nf.parse(quantString).doubleValue());
+                        quantity = (BigDecimal) ObjectType.simpleTypeConvert(quantString, "BigDecimal", null, locale);
                         if (quantity.compareTo(BigDecimal.ZERO) < 0) {
                             String errMsg = UtilProperties.getMessage(resource_error, "cart.quantity_not_positive_number", this.cart.getLocale());
                             errorMsgs.add(errMsg);
@@ -756,9 +756,9 @@ public class ShoppingCartHelper {
                                             oldPrice = item.getBasePrice();
 
 
-                                            GenericValue productSupplier = this.getProductSupplier(item.getProductId(), quantity, cart.getCurrency());
+                                            GenericValue supplierProduct = this.cart.getSupplierProduct(item.getProductId(), quantity, this.dispatcher);
 
-                                            if (productSupplier == null) {
+                                            if (supplierProduct == null) {
                                                 if ("_NA_".equals(cart.getPartyId())) {
                                                     // no supplier does not require the supplier product
                                                     item.setQuantity(quantity, dispatcher, this.cart);
@@ -770,12 +770,17 @@ public class ShoppingCartHelper {
                                                     errorMsgs.add(errMsg);
                                                 }
                                             } else {
+                                                item.setSupplierProductId(supplierProduct.getString("supplierProductId"));
                                                 item.setQuantity(quantity, dispatcher, this.cart);
-                                                item.setBasePrice(productSupplier.getBigDecimal("lastPrice"));
-                                                item.setName(ShoppingCartItem.getPurchaseOrderItemDescription(item.getProduct(), productSupplier, cart.getLocale()));
+                                                item.setBasePrice(supplierProduct.getBigDecimal("lastPrice"));
+                                                item.setName(ShoppingCartItem.getPurchaseOrderItemDescription(item.getProduct(), supplierProduct, cart.getLocale()));
                                             }
                                         }
                                     } else {
+                                        BigDecimal minQuantity = ShoppingCart.getMinimumOrderQuantity(delegator, item.getBasePrice(), item.getProductId());
+                                        if (quantity.compareTo(minQuantity) < 0) {
+                                            quantity = minQuantity;
+                                        }
                                         item.setQuantity(quantity, dispatcher, this.cart, true, false);
                                         cart.setItemShipGroupQty(item, quantity, 0);
                                     }
@@ -816,8 +821,6 @@ public class ShoppingCartHelper {
                     }
                 } catch (NumberFormatException nfe) {
                     Debug.logWarning(nfe, UtilProperties.getMessage(resource_error, "OrderCaughtNumberFormatExceptionOnCartUpdate", cart.getLocale()));
-                } catch (ParseException pe) {
-                    Debug.logWarning(pe, UtilProperties.getMessage(resource_error, "OrderCaughtParseExceptionOnCartUpdate", cart.getLocale()));
                 } catch (Exception e) {
                     Debug.logWarning(e, UtilProperties.getMessage(resource_error, "OrderCaughtExceptionOnCartUpdate", cart.getLocale()));
                 }
@@ -1037,7 +1040,13 @@ public class ShoppingCartHelper {
         return result;
     }
 
-    /** Get the first SupplierProduct record for productId with matching quantity and currency */
+    /**
+     * Get the first SupplierProduct record for productId with matching quantity and currency
+     *
+     * @deprecated replaced by {@link ShoppingCart#getSupplierProduct(String, java.math.BigDecimal, org.ofbiz.service.LocalDispatcher)}
+     *
+     * */
+    @Deprecated
     public GenericValue getProductSupplier(String productId, BigDecimal quantity, String currencyUomId) {
         GenericValue productSupplier = null;
         Map params = UtilMisc.toMap("productId", productId, "partyId", cart.getPartyId(), "currencyUomId", currencyUomId, "quantity", quantity);

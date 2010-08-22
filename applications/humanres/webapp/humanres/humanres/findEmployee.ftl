@@ -55,23 +55,23 @@ under the License.
                     </td>
                 </tr>
                 <tr><td class='label'>${uiLabelMap.PartyPartyId}</td>
-                    <td><input type='text' name='partyId' value='${requestParameters.partyId?if_exists}'/>
-                    <a href="javascript:call_fieldlookup2(document.lookupparty.partyId,'LookupPerson');">
-                        <img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/>
-                    </a></td>
+                    <td>
+                      <@htmlTemplate.lookupField value='${requestParameters.partyId?if_exists}' formName="lookupparty" name="partyId" id="partyId" fieldFormName="LookupPerson"/>
+                    </td>
                 </tr>
                 <tr><td class="label">${uiLabelMap.PartyUserLogin}</td>
                     <td><input type="text" name="userLoginId" value="${parameters.userLoginId?if_exists}"/></td>
                 </tr>
                 <tr><td class="label">${uiLabelMap.PartyLastName}</td>
                     <td><input type="text" name="lastName" value="${parameters.lastName?if_exists}"/></td>
-                </tr><td class="label">${uiLabelMap.PartyFirstName}</td>
+                </tr>
+                <tr><td class="label">${uiLabelMap.PartyFirstName}</td>
                     <td><input type="text" name="firstName" value="${parameters.firstName?if_exists}"/></td>
                 </tr>
                 <tr><td><input type="hidden" name="groupName" value="${parameters.groupName?if_exists}"/></td></tr>
-                <tr><input type="hidden" name="roleTypeId" value="EMPLOYEE"/></tr>
+                <tr><td><input type="hidden" name="roleTypeId" value="EMPLOYEE"/></td></tr>
             <#if extInfo == "P">
-                <tr><td colspan="3"><hr/></td></tr><tr>
+                <tr><td colspan="3"><hr /></td></tr><tr>
                     <td class="label">${uiLabelMap.CommonAddress1}</td>
                     <td><input type="text" name="address1" value="${parameters.address1?if_exists}"/></td>
                 </tr>
@@ -97,7 +97,7 @@ under the License.
                 </tr>
             </#if>
             <#if extInfo == "T">
-                <tr><td colspan="3"><hr/></td></tr>
+                <tr><td colspan="3"><hr /></td></tr>
                 <tr><td class="label">${uiLabelMap.PartyCountryCode}</td>
                     <td><input type="text" name="countryCode" value="${parameters.countryCode?if_exists}"/></td>
                 </tr>
@@ -109,15 +109,15 @@ under the License.
                 </tr>
             </#if>
             <#if extInfo == "O">
-                <tr><td colspan="3"><hr/></td></tr>
+                <tr><td colspan="3"><hr /></td></tr>
                 <tr><td class="label">${uiLabelMap.PartyContactInformation}</td>
                     <td><input type="text" name="infoString" value="${parameters.infoString?if_exists}"/></td>
                 </tr>
             </#if>
-                <tr><td colspan="3"><hr/></td></tr>
+                <tr><td colspan="3"><hr /></td></tr>
                 <tr align="center">
                     <td>&nbsp;</td>
-                    <td><input type="submit" value="${uiLabelMap.PartyLookupParty}" onClick="javascript:document.lookupparty.submit();"/>
+                    <td><input type="submit" value="${uiLabelMap.PartyLookupParty}" onclick="javascript:document.lookupparty.submit();"/>
                         <a href="<@ofbizUrl>findEmployees?roleTypeId=EMPLOYEE&amp;hideFields=Y&amp;lookupFlag=Y</@ofbizUrl>" class="smallSubmit">${uiLabelMap.CommonShowAllRecords}</a>
                     </td>
                 </tr>
@@ -134,7 +134,7 @@ under the License.
         </script>
     </#if>
     <#if partyList?exists>
-    <br/>
+    <br />
     <div id="findEmployeeResults" class="screenlet">
         <div class="screenlet-title-bar">
             <ul>

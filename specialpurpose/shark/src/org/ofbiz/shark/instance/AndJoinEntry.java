@@ -19,7 +19,7 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.shark.instance;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.base.util.UtilMisc;
@@ -39,7 +39,7 @@ public class AndJoinEntry extends InstanceEntityObject implements AndJoinEntryIn
     protected GenericValue andJoin = null;
     protected boolean newValue = false;
 
-    protected AndJoinEntry(EntityPersistentMgr mgr, GenericDelegator delegator, String andJoinId) {
+    protected AndJoinEntry(EntityPersistentMgr mgr, Delegator delegator, String andJoinId) {
         super(mgr, delegator);
         if (this.delegator != null) {
             try {
@@ -57,7 +57,7 @@ public class AndJoinEntry extends InstanceEntityObject implements AndJoinEntryIn
         this.andJoin = andJoin;
     }
 
-    public AndJoinEntry(EntityPersistentMgr mgr, GenericDelegator delegator) {
+    public AndJoinEntry(EntityPersistentMgr mgr, Delegator delegator) {
         super(mgr, delegator);
         this.newValue = true;
         this.andJoin = delegator.makeValue(org.ofbiz.shark.SharkConstants.WfAndJoin, UtilMisc.toMap(org.ofbiz.shark.SharkConstants.andJoinId, delegator.getNextSeqId(org.ofbiz.shark.SharkConstants.WfAndJoin)));

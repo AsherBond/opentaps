@@ -32,7 +32,7 @@ import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.FlexibleMapAccessor;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
@@ -43,6 +43,7 @@ import org.w3c.dom.Element;
  * Uses the delegator to find entity values by a condition
  *
  */
+@SuppressWarnings("serial")
 public class PrimaryKeyFinder extends Finder {
     public static final String module = PrimaryKeyFinder.class.getName();
 
@@ -67,7 +68,8 @@ public class PrimaryKeyFinder extends Finder {
         selectFieldExpanderList = EntityFinderUtil.makeSelectFieldExpanderList(entityOneElement);
     }
 
-    public void runFind(Map<String, Object> context, GenericDelegator delegator) throws GeneralException {
+    @Override
+    public void runFind(Map<String, Object> context, Delegator delegator) throws GeneralException {
         String entityName = this.entityNameExdr.expandString(context);
 
         String useCacheString = this.useCacheStrExdr.expandString(context);
@@ -92,7 +94,7 @@ public class PrimaryKeyFinder extends Finder {
         }
     }
 
-    public static GenericValue runFind(ModelEntity modelEntity, Map<String, Object> context, GenericDelegator delegator, boolean useCache, boolean autoFieldMap,
+    public static GenericValue runFind(ModelEntity modelEntity, Map<String, Object> context, Delegator delegator, boolean useCache, boolean autoFieldMap,
             Map<FlexibleMapAccessor<Object>, Object> fieldMap, List<FlexibleStringExpander> selectFieldExpanderList) throws GeneralException {
 
         // assemble the field map
@@ -100,9 +102,9 @@ public class PrimaryKeyFinder extends Finder {
         if (autoFieldMap) {
             GenericValue tempVal = delegator.makeValue(modelEntity.getEntityName());
 
-            // try a map called "parameters", try it first so values from here are overriden by values in the main context
+            // try a map called "parameters", try it first so values from here are overridden by values in the main context
             Object parametersObj = context.get("parameters");
-            if (parametersObj != null && parametersObj instanceof Map) {
+            if (parametersObj != null && parametersObj instanceof Map<?, ?>) {
                 tempVal.setAllFields(UtilGenerics.checkMap(parametersObj), true, null, Boolean.TRUE);
             }
 
@@ -114,7 +116,13 @@ public class PrimaryKeyFinder extends Finder {
         EntityFinderUtil.expandFieldMapToContext(fieldMap, context, entityContext);
         //Debug.logInfo("PrimaryKeyFinder: entityContext=" + entityContext, module);
         // then convert the types...
+        
+        // need the timeZone and locale for conversion, so add here and remove after
+        entityContext.put("locale", context.get("locale"));
+        entityContext.put("timeZone", context.get("timeZone"));
         modelEntity.convertFieldMapInPlace(entityContext, delegator, (Locale) context.get("locale"));
+        entityContext.remove("locale");
+        entityContext.remove("timeZone");
 
         // get the list of fieldsToSelect from selectFieldExpanderList
         Set<String> fieldsToSelect = EntityFinderUtil.makeFieldsToSelect(selectFieldExpanderList, context);

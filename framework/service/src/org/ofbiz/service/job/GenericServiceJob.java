@@ -60,6 +60,7 @@ public class GenericServiceJob extends AbstractJob {
     /**
      * Invokes the service.
      */
+    @Override
     public void exec() throws InvalidJobException {
         init();
 

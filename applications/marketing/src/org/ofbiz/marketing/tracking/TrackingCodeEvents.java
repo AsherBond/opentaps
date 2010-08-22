@@ -20,14 +20,14 @@
 package org.ofbiz.marketing.tracking;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import javolution.util.FastList;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -36,7 +36,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.webapp.stats.VisitHandler;
 import org.ofbiz.webapp.website.WebSiteWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.product.category.CategoryWorker;
@@ -58,7 +58,7 @@ public class TrackingCodeEvents {
 
         if (UtilValidate.isNotEmpty(trackingCodeId)) {
             //tracking code is specified on the request, get the TrackingCode value and handle accordingly
-            GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+            Delegator delegator = (Delegator) request.getAttribute("delegator");
             GenericValue trackingCode;
             try {
                 trackingCode = delegator.findByPrimaryKeyCache("TrackingCode", UtilMisc.toMap("trackingCodeId", trackingCodeId));
@@ -95,7 +95,7 @@ public class TrackingCodeEvents {
 
         if (UtilValidate.isNotEmpty(trackingCodeId)) {
             //partner managed tracking code is specified on the request
-            GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+            Delegator delegator = (Delegator) request.getAttribute("delegator");
             GenericValue trackingCode;
             try {
                 trackingCode = delegator.findByPrimaryKeyCache("TrackingCode", UtilMisc.toMap("trackingCodeId", trackingCodeId));
@@ -172,7 +172,7 @@ public class TrackingCodeEvents {
     }
 
     private static String processTrackingCode(GenericValue trackingCode, HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String trackingCodeId = trackingCode.getString("trackingCodeId");
 
         //check effective dates
@@ -247,7 +247,7 @@ public class TrackingCodeEvents {
         // if site id exist in cookies then it is not required to create it, if exist with different site then create it
         int siteIdCookieAge = (60 * 60 * 24 * 365); // should this be configurable?
         String siteId = request.getParameter("siteId");
-        if (siteId != null && siteId.length() > 0) {
+        if (UtilValidate.isNotEmpty(siteId)) {
             String visitorSiteIdCookieName = "Ofbiz.TKCD.SiteId";
             String visitorSiteId = null;
             // first try to get the current ID from the visitor cookie
@@ -261,7 +261,7 @@ public class TrackingCodeEvents {
                 }
             }
 
-            if ( visitorSiteId == null || (visitorSiteId != null && !visitorSiteId.equals(siteId)) ) {
+            if (visitorSiteId == null || (visitorSiteId != null && !visitorSiteId.equals(siteId))) {
                 // if trackingCode.siteId is  not null  write a trackable cookie with name in the form: Ofbiz.TKCSiteId and timeout will be 60 * 60 * 24 * 365
                 Cookie siteIdCookie = new Cookie("Ofbiz.TKCD.SiteId" ,siteId);
                 siteIdCookie.setMaxAge(siteIdCookieAge);
@@ -286,9 +286,9 @@ public class TrackingCodeEvents {
         if (overrideCss != null)
             session.setAttribute("overrideCss", overrideCss);
         String prodCatalogId = trackingCode.getString("prodCatalogId");
-        if (prodCatalogId != null && prodCatalogId.length() > 0) {
+        if (UtilValidate.isNotEmpty(prodCatalogId)) {
             session.setAttribute("CURRENT_CATALOG_ID", prodCatalogId);
-            CategoryWorker.setTrail(request, new ArrayList());
+            CategoryWorker.setTrail(request, FastList.<String>newInstance());
         }
 
         // if forward/redirect is needed, do a response.sendRedirect and return null to tell the control servlet to not do any other requests/views
@@ -309,7 +309,7 @@ public class TrackingCodeEvents {
      * of events that run on the first hit in a visit.
      */
     public static String checkTrackingCodeCookies(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         java.sql.Timestamp nowStamp = UtilDateTime.nowTimestamp();
         GenericValue visit = VisitHandler.getVisit(request.getSession());
         if (visit == null) {
@@ -366,7 +366,7 @@ public class TrackingCodeEvents {
     }
 
     public static String checkAccessTrackingCode(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         java.sql.Timestamp nowStamp = UtilDateTime.nowTimestamp();
 
         String trackingCodeId = request.getParameter("autoTrackingCode");
@@ -436,10 +436,10 @@ public class TrackingCodeEvents {
     }
 
     /** Makes a list of TrackingCodeOrder entities to be attached to the current order; called by the createOrder event; the values in the returned List will not have the orderId set */
-    public static List makeTrackingCodeOrders(HttpServletRequest request) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+    public static List<GenericValue> makeTrackingCodeOrders(HttpServletRequest request) {
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         java.sql.Timestamp nowStamp = UtilDateTime.nowTimestamp();
-        List trackingCodeOrders = new LinkedList();
+        List<GenericValue> trackingCodeOrders = FastList.newInstance();
 
         Cookie[] cookies = request.getCookies();
         Timestamp affiliateReferredTimeStamp = null;
@@ -500,7 +500,7 @@ public class TrackingCodeEvents {
             GenericValue trackingCodeOrder = delegator.makeValue("TrackingCodeOrder",
                     UtilMisc.toMap("trackingCodeTypeId", trackingCode.get("trackingCodeTypeId"),
                     "trackingCodeId", trackingCodeId, "isBillable", isBillable, "siteId", siteId,
-                    "hasExported", "N", "affiliateReferredTimeStamp",affiliateReferredTimeStamp ));
+                    "hasExported", "N", "affiliateReferredTimeStamp",affiliateReferredTimeStamp));
 
             Debug.logInfo(" trackingCodeOrder is " + trackingCodeOrder, module);
             trackingCodeOrders.add(trackingCodeOrder);

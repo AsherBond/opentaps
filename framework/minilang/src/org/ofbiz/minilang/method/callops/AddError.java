@@ -64,6 +64,7 @@ public class AddError extends MethodOperation {
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
 
         List<Object> messages = errorListAcsr.get(methodContext);
@@ -87,7 +88,7 @@ public class AddError extends MethodOperation {
             //String propMsg = UtilProperties.getPropertyValue(UtilURL.fromResource(propertyResource, loader), message);
             String propMsg = UtilProperties.getMessage(propertyResource, message, methodContext.getEnvMap(), methodContext.getLocale());
 
-            if (propMsg == null || propMsg.length() == 0) {
+            if (UtilValidate.isEmpty(propMsg)) {
                 messages.add("Simple Method error occurred, but no message was found, sorry.");
             } else {
                 messages.add(methodContext.expandString(propMsg));
@@ -99,10 +100,12 @@ public class AddError extends MethodOperation {
         }
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<add-error/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

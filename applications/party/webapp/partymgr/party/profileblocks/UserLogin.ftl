@@ -29,7 +29,7 @@ under the License.
       <br class="clear" />
     </div>
     <div class="screenlet-body">
-      <#if userLogins?exists>
+      <#if userLogins?has_content>
         <table class="basic-table" cellspacing="0">
           <#list userLogins as userUserLogin>
             <tr>
@@ -49,10 +49,10 @@ under the License.
               </td>
               <td class="button-col">
                 <#if security.hasEntityPermission("PARTYMGR", "_CREATE", session)>
-                  <a href="<@ofbizUrl>editlogin?partyId=${party.partyId}&userLoginId=${userUserLogin.userLoginId}</@ofbizUrl>">${uiLabelMap.CommonEdit}</a>
+                  <a href="<@ofbizUrl>editlogin?partyId=${party.partyId}&amp;userLoginId=${userUserLogin.userLoginId}</@ofbizUrl>">${uiLabelMap.CommonEdit}</a>
                 </#if>
                 <#if security.hasEntityPermission("SECURITY", "_VIEW", session)>
-                  <a href="<@ofbizUrl>EditUserLoginSecurityGroups?partyId=${party.partyId}&userLoginId=${userUserLogin.userLoginId}</@ofbizUrl>">${uiLabelMap.PartySecurityGroups}</a>
+                  <a href="<@ofbizUrl>EditUserLoginSecurityGroups?partyId=${party.partyId}&amp;userLoginId=${userUserLogin.userLoginId}</@ofbizUrl>">${uiLabelMap.PartySecurityGroups}</a>
                 </#if>
               </td>
             </tr>

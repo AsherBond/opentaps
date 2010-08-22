@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -56,7 +56,7 @@ public class ProductDisplayWorker {
     /* ============================= Special Data Retreival Methods ===========================*/
 
     public static List getRandomCartProductAssoc(ServletRequest request, boolean checkViewAllow) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         ShoppingCart cart = (ShoppingCart) httpRequest.getSession().getAttribute("shoppingCart");
 
@@ -149,7 +149,7 @@ public class ProductDisplayWorker {
     }
 
     public static Map getQuickReorderProducts(ServletRequest request) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         GenericValue userLogin = (GenericValue) httpRequest.getSession().getAttribute("userLogin");
         Map results = new HashMap();
@@ -201,8 +201,8 @@ public class ProductDisplayWorker {
 
                                 Integer curOcc = (Integer) productOccurances.get(product.get("productId"));
 
-                                if (curOcc == null) curOcc = new Integer(0);
-                                productOccurances.put(product.get("productId"), new Integer(curOcc.intValue() + 1));
+                                if (curOcc == null) curOcc = Integer.valueOf(0);
+                                productOccurances.put(product.get("productId"), Integer.valueOf(curOcc.intValue() + 1));
                             }
                         }
                     }
@@ -234,7 +234,7 @@ public class ProductDisplayWorker {
 
             // remove all products that are already in the cart
             ShoppingCart cart = (ShoppingCart) httpRequest.getSession().getAttribute("shoppingCart");
-            if (cart != null && cart.size() > 0) {
+            if (UtilValidate.isNotEmpty(cart)) {
                 Iterator cartiter = cart.iterator();
                 while (cartiter.hasNext()) {
                     ShoppingCartItem item = (ShoppingCartItem) cartiter.next();
@@ -342,6 +342,7 @@ public class ProductDisplayWorker {
             return ((Comparable) value).compareTo(value2);
         }
 
+        @Override
         public boolean equals(java.lang.Object obj) {
             if ((obj != null) && (obj instanceof ProductByMapComparator)) {
                 ProductByMapComparator that = (ProductByMapComparator) obj;

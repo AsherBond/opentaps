@@ -33,6 +33,7 @@ public class PinPad extends GenericDevice {
         this.control = new jpos.PINPad();
     }
 
+    @Override
     public void initialize() throws JposException {
         throw new JposException(JposConst.JPOS_E_NOEXIST, "Device not yet implemented");
     }

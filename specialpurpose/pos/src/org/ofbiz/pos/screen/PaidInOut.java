@@ -66,7 +66,6 @@ public class PaidInOut extends XPage {
     protected static PosTransaction m_trans = null;
     protected String m_type = null;
     protected boolean cancelled = false;
-    private static boolean ShowKeyboardInSaveSale = UtilProperties.propertyValueEqualsIgnoreCase("parameters", "ShowKeyboardInSaveSale", "Y");
 
     //TODO : make getter and setter for members (ie m_*) if needed (extern calls). For that in Eclipse use Source/Generate Getters and setters
 
@@ -147,11 +146,12 @@ public class PaidInOut extends XPage {
     }
 
     public synchronized void editAmount() {
-        if (wasMouseClicked() && ShowKeyboardInSaveSale) {
+        if (wasMouseClicked() && UtilProperties.propertyValueEqualsIgnoreCase("parameters", "ShowKeyboardInSaveSale", "Y")) {
             try {
                 NumericKeypad numericKeypad = new NumericKeypad(m_pos);
-                numericKeypad.setMinus(true);
-                numericKeypad.setPercent(false);
+                numericKeypad.setMinus(true); // this order must be respected
+                numericKeypad.setPercent(true);
+                numericKeypad.setText(m_amountEdit.getText());
                 m_amountEdit.setText(numericKeypad.openDlg());
             } catch (Exception e) {
                 Debug.logError(e, module);

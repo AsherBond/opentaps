@@ -18,8 +18,8 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">&nbsp;${uiLabelMap.CommonDate}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">${uiLabelMap.CommonDate}</div>
     </div>
     <div class="screenlet-body">
         <table cellspacing="0" class="basic-table">
@@ -32,7 +32,7 @@ under the License.
                     ${(quote.issueDate.toString())?if_exists}
                 </td>
             </tr>
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
             <tr>
                 <td align="right" valign="top" width="15%" class="label">
                     &nbsp;${uiLabelMap.CommonValidFromDate}
@@ -42,7 +42,7 @@ under the License.
                     ${(quote.validFromDate.toString())?if_exists}
                 </td>
             </tr>
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
             <tr>
                 <td align="right" valign="top" width="15%" class="label">
                     &nbsp;${uiLabelMap.CommonValidThruDate}

@@ -20,7 +20,6 @@
 package org.ofbiz.testtools;
 
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 
 import javolution.util.FastList;
@@ -30,13 +29,16 @@ import junit.framework.TestSuite;
 import org.apache.commons.lang.RandomStringUtils;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.ObjectType;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.testtools.EntityTestCase;
+import org.ofbiz.minilang.MiniLangException;
+import org.ofbiz.minilang.SimpleMethod;
 import org.ofbiz.service.GenericDispatcher;
-import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.testtools.OFBizTestCase;
 import org.w3c.dom.Element;
@@ -52,7 +54,7 @@ public class ModelTestSuite {
     protected String originalDelegatorName;
     protected String originalDispatcherName;
 
-    protected GenericDelegator delegator;
+    protected Delegator delegator;
     protected LocalDispatcher dispatcher;
 
     protected List<Test> testList = FastList.newInstance();
@@ -65,10 +67,10 @@ public class ModelTestSuite {
 
         this.originalDispatcherName = mainElement.getAttribute("dispatcher-name");
         if (UtilValidate.isEmpty(this.originalDispatcherName)) this.originalDispatcherName = "test-dispatcher";
-        
+
         String uniqueSuffix = "-" + RandomStringUtils.randomAlphanumeric(10);
 
-        this.delegator = GenericDelegator.getGenericDelegator(this.originalDelegatorName).makeTestDelegator(this.originalDelegatorName + uniqueSuffix);
+        this.delegator = DelegatorFactory.getDelegator(this.originalDelegatorName).makeTestDelegator(this.originalDelegatorName + uniqueSuffix);
         this.dispatcher = GenericDispatcher.getLocalDispatcher(originalDispatcherName + uniqueSuffix, delegator);
 
         for (Element testCaseElement : UtilXml.childElementList(mainElement, UtilMisc.toSet("test-case", "test-group"))) {
@@ -94,10 +96,10 @@ public class ModelTestSuite {
             String className = testElement.getAttribute("class-name");
 
             try {
-                Class clz = ObjectType.loadClass(className);
+                Class<?> clz = ObjectType.loadClass(className);
                 TestSuite suite = new TestSuite();
                 suite.addTestSuite(clz);
-                Enumeration testEnum = suite.tests();
+                Enumeration<?> testEnum = suite.tests();
                 int testsAdded = 0;
                 int casesAdded = 0;
                 while (testEnum.hasMoreElements()) {
@@ -114,7 +116,23 @@ public class ModelTestSuite {
         } else if ("service-test".equals(nodeName)) {
             this.testList.add(new ServiceTest(caseName, testElement));
         } else if ("simple-method-test".equals(nodeName)) {
-            this.testList.add(new SimpleMethodTest(caseName, testElement));
+            if (UtilValidate.isNotEmpty(testElement.getAttribute("name"))) {
+                this.testList.add(new SimpleMethodTest(caseName, testElement));
+            } else {
+                String methodLocation = testElement.getAttribute("location");
+                List<SimpleMethod> simpleMethods;
+                try {
+                    simpleMethods = SimpleMethod.getSimpleMethodsList(methodLocation, null);
+                    for (SimpleMethod simpleMethod : simpleMethods) {
+                        String methodName = simpleMethod.getMethodName();
+                        if (methodName.startsWith("test")) {
+                            this.testList.add(new SimpleMethodTest(caseName + "." + methodName, methodLocation, methodName));
+                        }
+                    }
+                } catch (MiniLangException e) {
+                    Debug.logError(e, module);
+                }
+            }
         } else if ("entity-xml".equals(nodeName)) {
             this.testList.add(new EntityXmlAssertTest(caseName, testElement));
         } else if ("entity-xml-assert".equals(nodeName)) {
@@ -130,15 +148,15 @@ public class ModelTestSuite {
         return this.suiteName;
     }
 
-    GenericDelegator getDelegator() {
+    Delegator getDelegator() {
         return this.delegator;
     }
-    
+
     List<Test> getTestList() {
         return testList;
     }
-    
-    
+
+
     public TestSuite makeTestSuite() {
         TestSuite suite = new TestSuite();
         suite.setName(this.getSuiteName());
@@ -149,11 +167,11 @@ public class ModelTestSuite {
 
         return suite;
     }
-    
+
     private void prepareTest(Test test)
     {
         if (test instanceof TestSuite) {
-            Enumeration<Test> subTests = ((TestSuite) test).tests();
+            Enumeration<Test> subTests = UtilGenerics.cast(((TestSuite) test).tests());
             while (subTests.hasMoreElements()) {
                 prepareTest(subTests.nextElement());
             }

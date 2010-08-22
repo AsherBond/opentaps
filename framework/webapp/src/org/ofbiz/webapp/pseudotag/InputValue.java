@@ -24,6 +24,8 @@ import java.util.Map;
 import javax.servlet.jsp.PageContext;
 
 import org.ofbiz.base.util.UtilFormatOut;
+import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
 
 /**
@@ -93,7 +95,7 @@ public class InputValue {
 
         String paramName = param;
 
-        if (paramName == null || paramName.length() == 0)
+        if (UtilValidate.isEmpty(paramName))
             paramName = field;
 
         Boolean tempBool = null;
@@ -117,7 +119,7 @@ public class InputValue {
                     if (fieldVal != null)
                         inputValue = fieldVal.toString();
                 } else if (entTemp instanceof Map) {
-                    Map map = (Map) entTemp;
+                    Map<String, ?> map = UtilGenerics.cast(entTemp);
                     Object fieldVal = map.get(field);
 
                     if (fieldVal != null)
@@ -133,7 +135,7 @@ public class InputValue {
             inputValue = pageContext.getRequest().getParameter(paramName);
         }
 
-        if (inputValue == null || inputValue.length() == 0)
+        if (UtilValidate.isEmpty(inputValue))
             inputValue = defaultStr;
 
         if (fullattrs) {

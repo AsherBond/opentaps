@@ -33,16 +33,18 @@ import java.util.TimeZone;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastSet;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.ObjectType;
+import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilPlist;
 import org.ofbiz.base.util.UtilTimer;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -56,11 +58,13 @@ import org.w3c.dom.Element;
  * Generic Entity - Entity model class
  *
  */
+@SuppressWarnings("serial")
 public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, Serializable {
 
+    @SuppressWarnings("hiding")
     public static final String module = ModelEntity.class.getName();
 
-    /** The name of the time stamp field for locking/syncronization */
+    /** The name of the time stamp field for locking/synchronization */
     public static final String STAMP_FIELD = "lastUpdatedStamp";
     public static final String STAMP_TX_FIELD = "lastUpdatedTxStamp";
     public static final String CREATE_STAMP_FIELD = "createdStamp";
@@ -77,9 +81,6 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
 
     /** The package-name of the Entity */
     protected String packageName = "";
-
-    /** The default-resource-name of the Entity, used with the getResource call to check for a value in a resource bundle */
-    protected String defaultResourceName = "";
 
     /** The entity-name of the Entity that this Entity is dependent on, if empty then no dependency */
     protected String dependentOn = "";
@@ -103,8 +104,14 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
     /** indexes on fields/columns in this entity */
     protected List<ModelIndex> indexes = FastList.newInstance();
 
+    /** The reference of the dependentOn entity model */
+    protected ModelEntity specializationOfModelEntity = null;
+
+    /** The list of entities that are specialization of on this entity */
+    protected Map<String, ModelEntity> specializedEntities = FastMap.newInstance();
+
     /** map of ModelViewEntities that references this model */
-    protected Map<String, ModelViewEntity> viewEntities = FastMap.newInstance();
+    protected Set<String> viewEntities = FastSet.newInstance();
 
     /** An indicator to specify if this entity requires locking for updates */
     protected boolean doLock = false;
@@ -129,11 +136,19 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
     /** Default Constructor */
     public ModelEntity() {}
 
+    protected ModelEntity(ModelReader reader) {
+        this.modelReader = reader;
+    }
+
+    protected ModelEntity(ModelReader reader, ModelInfo def) {
+        super(def);
+        this.modelReader = reader;
+    }
+
     /** XML Constructor */
     protected ModelEntity(ModelReader reader, Element entityElement, ModelInfo def) {
-        super(def);
+        this(reader, def);
         populateFromAttributes(entityElement);
-        this.modelReader = reader;
     }
 
     /** XML Constructor */
@@ -200,6 +215,7 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
             if (field != null) {
                 this.pks.add(field);
                 field.isPk = true;
+                field.isNotNull = true;
             } else {
                 Debug.logError("[ModelReader.createModelEntity] ERROR: Could not find field \"" +
                         pkElement.getAttribute("field") + "\" specified in a prim-key", module);
@@ -238,7 +254,6 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
         this.entityName = UtilXml.checkEmpty(entityElement.getAttribute("entity-name")).intern();
         this.tableName = UtilXml.checkEmpty(entityElement.getAttribute("table-name"), ModelUtil.javaNameToDbName(this.entityName)).intern();
         this.packageName = UtilXml.checkEmpty(entityElement.getAttribute("package-name")).intern();
-        this.defaultResourceName = UtilXml.checkEmpty(entityElement.getAttribute("default-resource-name")).intern();
         this.dependentOn = UtilXml.checkEmpty(entityElement.getAttribute("dependent-on")).intern();
         this.doLock = UtilXml.checkBoolean(entityElement.getAttribute("enable-lock"), false);
         this.noAutoStamp = UtilXml.checkBoolean(entityElement.getAttribute("no-auto-stamp"), false);
@@ -299,8 +314,16 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
             }
         }
 
+        // override the default resource file
+        String defResourceName = StringUtil.internString(extendEntityElement.getAttribute("default-resource-name"));
+        //Debug.log("Extended entity - " + extendEntityElement.getAttribute("entity-name") + " new resource name : " + defResourceName, module);
+        if (UtilValidate.isNotEmpty(defResourceName)) {
+            this.setDefaultResourceName(defResourceName);
+        }
+
         this.populateRelated(reader, extendEntityElement);
         this.populateIndexes(extendEntityElement);
+        this.dependentOn = UtilXml.checkEmpty(extendEntityElement.getAttribute("dependent-on")).intern();
     }
 
     // ===== GETTERS/SETTERS =====
@@ -331,7 +354,7 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
 
     /** The table-name of the Entity including a Schema name if specified in the datasource config */
     public String getTableName(DatasourceInfo datasourceInfo) {
-        if (datasourceInfo != null && datasourceInfo.schemaName != null && datasourceInfo.schemaName.length() > 0) {
+        if (UtilValidate.isNotEmpty(datasourceInfo.schemaName)) {
             return datasourceInfo.schemaName + "." + this.tableName;
         } else {
             return this.tableName;
@@ -349,15 +372,6 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
-    }
-
-    /** The default-resource-name of the Entity */
-    public String getDefaultResourceName() {
-        return this.defaultResourceName;
-    }
-
-    public void setDefaultResourceName(String defaultResourceName) {
-        this.defaultResourceName = defaultResourceName;
     }
 
     /** The entity-name of the Entity that this Entity is dependent on, if empty then no dependency */
@@ -467,13 +481,6 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
         return this.pks.size();
     }
 
-    /**
-     * @deprecated
-     */
-    public ModelField getPk(int index) {
-        return this.pks.get(index);
-    }
-
     public ModelField getOnlyPk() {
         if (this.pks.size() == 1) {
             return this.pks.get(0);
@@ -484,15 +491,6 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
 
     public Iterator<ModelField> getPksIterator() {
         return this.pks.iterator();
-    }
-
-    /**
-     * @deprecated Use getPkFieldsUnmodifiable instead.
-     */
-    public List<ModelField> getPksCopy() {
-        List<ModelField> newList = FastList.newInstance();
-        newList.addAll(this.pks);
-        return newList;
     }
 
     public List<ModelField> getPkFieldsUnmodifiable() {
@@ -512,13 +510,6 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
         return this.nopks.size();
     }
 
-    /**
-     * @deprecated
-     */
-    public ModelField getNopk(int index) {
-        return this.nopks.get(index);
-    }
-
     public Iterator<ModelField> getNopksIterator() {
         return this.nopks.iterator();
     }
@@ -533,24 +524,8 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
         return this.fields.size();
     }
 
-    /**
-     * @deprecated
-     */
-    public ModelField getField(int index) {
-        return this.fields.get(index);
-    }
-
     public Iterator<ModelField> getFieldsIterator() {
         return this.fields.iterator();
-    }
-
-    /**
-     * @deprecated Use getFieldsUnmodifiable instead.
-     */
-    public List<ModelField> getFieldsCopy() {
-        List<ModelField> newList = FastList.newInstance();
-        newList.addAll(this.fields);
-        return newList;
     }
 
     public List<ModelField> getFieldsUnmodifiable() {
@@ -759,29 +734,25 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
         return this.viewEntities.size();
     }
 
-    public ModelViewEntity getViewEntity(String viewEntityName) {
-        return this.viewEntities.get(viewEntityName);
-    }
-
-    public Iterator<Map.Entry<String, ModelViewEntity>> getViewConvertorsIterator() {
-        return this.viewEntities.entrySet().iterator();
+    public Iterator<String> getViewConvertorsIterator() {
+        return this.viewEntities.iterator();
     }
 
     public void addViewEntity(ModelViewEntity view) {
-        this.viewEntities.put(view.getEntityName(), view);
+        this.viewEntities.add(view.getEntityName());
     }
 
     public List<? extends Map<String, Object>> convertToViewValues(String viewEntityName, GenericEntity entity) {
         if (entity == null || entity == GenericEntity.NULL_ENTITY || entity == GenericValue.NULL_VALUE) return UtilMisc.toList(entity);
-        ModelViewEntity view = this.viewEntities.get(viewEntityName);
+        ModelViewEntity view = (ModelViewEntity) entity.getDelegator().getModelEntity(viewEntityName);
         return view.convert(getEntityName(), entity);
     }
 
-    public ModelViewEntity removeViewEntity(String viewEntityName) {
+    public boolean removeViewEntity(String viewEntityName) {
         return this.viewEntities.remove(viewEntityName);
     }
 
-    public ModelViewEntity removeViewEntity(ModelViewEntity viewEntity) {
+    public boolean removeViewEntity(ModelViewEntity viewEntity) {
        return removeViewEntity(viewEntity.getEntityName());
     }
 
@@ -1118,7 +1089,7 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
                 returnString.append(ModelUtil.upperFirstChar(keyMap.fieldName));
                 returnString.append("() + \"&\" + ");
             } else {
-                Debug.logWarning("-- -- ENTITYGEN ERROR:httpRelationArgList: Related Key in Key Map not found for name: " + ((ModelField) flds.get(i)).name + " related entity: " + relation.relEntityName + " main entity: " + relation.mainEntity.entityName + " type: " + relation.type, module);
+                Debug.logWarning("-- -- ENTITYGEN ERROR:httpRelationArgList: Related Key in Key Map not found for name: " + flds.get(i).name + " related entity: " + relation.relEntityName + " main entity: " + relation.mainEntity.entityName + " type: " + relation.type, module);
             }
         }
         ModelKeyMap keyMap = relation.findKeyMapByRelated(flds.get(i).name);
@@ -1134,7 +1105,7 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
             returnString.append(ModelUtil.upperFirstChar(keyMap.fieldName));
             returnString.append("()");
         } else {
-            Debug.logWarning("-- -- ENTITYGEN ERROR:httpRelationArgList: Related Key in Key Map not found for name: " + ((ModelField) flds.get(i)).name + " related entity: " + relation.relEntityName + " main entity: " + relation.mainEntity.entityName + " type: " + relation.type, module);
+            Debug.logWarning("-- -- ENTITYGEN ERROR:httpRelationArgList: Related Key in Key Map not found for name: " + flds.get(i).name + " related entity: " + relation.relEntityName + " main entity: " + relation.mainEntity.entityName + " type: " + relation.type, module);
         }
         return returnString.toString();
     }
@@ -1253,19 +1224,22 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
         return this.getEntityName().compareTo(otherModelEntity.getEntityName());
     }
 
-    public void convertFieldMapInPlace(Map<String, Object> inContext, GenericDelegator delegator, Locale locale) {
+    public void convertFieldMapInPlace(Map<String, Object> inContext, Delegator delegator, Locale locale) {
+        convertFieldMapInPlace(inContext, delegator.getModelFieldTypeReader(this));
+    }
+    public void convertFieldMapInPlace(Map<String, Object> inContext, ModelFieldTypeReader modelFieldTypeReader) {
         Iterator<ModelField> modelFields = this.getFieldsIterator();
         while (modelFields.hasNext()) {
             ModelField modelField = modelFields.next();
             String fieldName = modelField.getName();
             Object oldValue = inContext.get(fieldName);
             if (oldValue != null) {
-                inContext.put(fieldName, this.convertFieldValue(modelField, oldValue, delegator, inContext, locale));
+                inContext.put(fieldName, this.convertFieldValue(modelField, oldValue, modelFieldTypeReader, inContext));
             }
         }
     }
 
-    public Object convertFieldValue(String fieldName, Object value, GenericDelegator delegator) {
+    public Object convertFieldValue(String fieldName, Object value, Delegator delegator) {
         ModelField modelField = this.getField(fieldName);
         if (modelField == null) {
             String errMsg = "Could not convert field value: could not find an entity field for the name: [" + fieldName + "] on the [" + this.getEntityName() + "] entity.";
@@ -1274,7 +1248,7 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
         return convertFieldValue(modelField, value, delegator);
     }
 
-    public Object convertFieldValue(ModelField modelField, Object value, GenericDelegator delegator) {
+    public Object convertFieldValue(ModelField modelField, Object value, Delegator delegator) {
         if (value == null || value == GenericEntity.NULL_FIELD) {
             return null;
         }
@@ -1298,25 +1272,23 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
     /** Convert a field value from one Java data type to another. This is the preferred method -
      * which takes into consideration the user's locale and time zone (for conversions that
      * require them).
-     * @param modelField
-     * @param value
-     * @param delegator
-     * @param context
      * @param locale This is required in very specific case when context can't has locale. One known issue - entity fields automapping.
      * @return the converted value
      */
-    public Object convertFieldValue(ModelField modelField, Object value, GenericDelegator delegator, Map<String, ? extends Object> context, Locale locale) {
+    public Object convertFieldValue(ModelField modelField, Object value, Delegator delegator, Map<String, ? extends Object> context, Locale locale) {
+        ModelFieldTypeReader modelFieldTypeReader = delegator.getModelFieldTypeReader(this);
+        return this.convertFieldValue(modelField, value, modelFieldTypeReader, context, locale);
+    }
+    /** Convert a field value from one Java data type to another. This is the preferred method -
+     * which takes into consideration the user's locale and time zone (for conversions that
+     * require them).
+     * @return the converted value
+     */
+    public Object convertFieldValue(ModelField modelField, Object value, ModelFieldTypeReader modelFieldTypeReader, Map<String, ? extends Object> context, Locale locale) {
         if (value == null || value == GenericEntity.NULL_FIELD) {
             return null;
         }
-        String fieldJavaType = null;
-        try {
-            fieldJavaType = delegator.getEntityFieldType(this, modelField.getType()).getJavaType();
-        } catch (GenericEntityException e) {
-            String errMsg = "Could not convert field value: could not find Java type for the field: [" + modelField.getName() + "] on the [" + this.getEntityName() + "] entity: " + e.toString();
-            Debug.logError(e, errMsg, module);
-            throw new IllegalArgumentException(errMsg);
-        }
+        String fieldJavaType = modelFieldTypeReader.getModelFieldType(modelField.getType()).getJavaType();
         try {
             return ObjectType.simpleTypeConvert(value, fieldJavaType, null, (TimeZone) context.get("timeZone"), (locale == null ? (Locale) context.get("locale") : locale), true);
         } catch (GeneralException e) {
@@ -1340,6 +1312,7 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
         this.noAutoStamp = noAutoStamp;
     }
 
+    @Override
     public String toString() {
         return "ModelEntity[" + getEntityName() + "]";
     }
@@ -1426,16 +1399,16 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
         }
 
         // append relation elements
-        Iterator relIter = this.getRelationsIterator();
+        Iterator<ModelRelation> relIter = this.getRelationsIterator();
         while (relIter != null && relIter.hasNext()) {
-            ModelRelation rel = (ModelRelation) relIter.next();
-
+            ModelRelation rel = relIter.next();
+            root.appendChild(rel.toXmlElement(document));
         }
 
         // append index elements
-        Iterator idxIter = this.getIndexesIterator();
+        Iterator<ModelIndex> idxIter = this.getIndexesIterator();
         while (idxIter != null && idxIter.hasNext()) {
-            ModelIndex idx = (ModelIndex) idxIter.next();
+            ModelIndex idx = idxIter.next();
             root.appendChild(idx.toXmlElement(document));
 
         }

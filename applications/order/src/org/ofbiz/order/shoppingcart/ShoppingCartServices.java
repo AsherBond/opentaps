@@ -37,7 +37,7 @@ import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -45,6 +45,7 @@ import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
+import org.ofbiz.order.shoppingcart.ShoppingCart.CartShipInfo;
 import org.ofbiz.product.config.ProductConfigWorker;
 import org.ofbiz.product.config.ProductConfigWrapper;
 import org.ofbiz.service.DispatchContext;
@@ -155,12 +156,13 @@ public class ShoppingCartServices {
 
     public static Map<String, Object>loadCartFromOrder(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String orderId = (String) context.get("orderId");
         Boolean skipInventoryChecks = (Boolean) context.get("skipInventoryChecks");
         Boolean skipProductChecks = (Boolean) context.get("skipProductChecks");
+        boolean includePromoItems = Boolean.TRUE.equals(context.get("includePromoItems"));
         Locale locale = (Locale) context.get("locale");
 
         if (UtilValidate.isEmpty(skipInventoryChecks)) {
@@ -189,6 +191,7 @@ public class ShoppingCartServices {
 
         // create the cart
         ShoppingCart cart = new ShoppingCart(delegator, productStoreId, website, locale, currency);
+        cart.setDoPromotions(!includePromoItems);
         cart.setOrderType(orderTypeId);
         cart.setChannelType(orderHeader.getString("salesChannelEnumId"));
         cart.setInternalCode(orderHeader.getString("internalCode"));
@@ -299,6 +302,38 @@ public class ShoppingCartServices {
             Debug.log("No payment preferences found for order #" + orderId, module);
         }
 
+        List<GenericValue> orderItemShipGroupList = orh.getOrderItemShipGroups();
+        for (GenericValue orderItemShipGroup: orderItemShipGroupList) {
+            // should be sorted by shipGroupSeqId
+            int newShipInfoIndex = cart.addShipInfo();
+
+            // shouldn't be gaps in it but allow for that just in case
+            String cartShipGroupIndexStr = orderItemShipGroup.getString("shipGroupSeqId");
+            int cartShipGroupIndex = NumberUtils.toInt(cartShipGroupIndexStr);
+
+            if (newShipInfoIndex != (cartShipGroupIndex - 1)) {
+                int groupDiff = cartShipGroupIndex - cart.getShipGroupSize();
+                for (int i = 0; i < groupDiff; i++) {
+                    newShipInfoIndex = cart.addShipInfo();
+                }
+            }
+
+            CartShipInfo cartShipInfo = cart.getShipInfo(newShipInfoIndex);
+
+            cartShipInfo.shipAfterDate = orderItemShipGroup.getTimestamp("shipAfterDate");
+            cartShipInfo.shipBeforeDate = orderItemShipGroup.getTimestamp("shipByDate");
+            cartShipInfo.shipmentMethodTypeId = orderItemShipGroup.getString("shipmentMethodTypeId");
+            cartShipInfo.carrierPartyId = orderItemShipGroup.getString("carrierPartyId");
+            cartShipInfo.supplierPartyId = orderItemShipGroup.getString("supplierPartyId");
+            cartShipInfo.setMaySplit(orderItemShipGroup.getBoolean("maySplit"));
+            cartShipInfo.giftMessage = orderItemShipGroup.getString("giftMessage");
+            cartShipInfo.setContactMechId(orderItemShipGroup.getString("contactMechId"));
+            cartShipInfo.shippingInstructions = orderItemShipGroup.getString("shippingInstructions");
+            cartShipInfo.setFacilityId(orderItemShipGroup.getString("facilityId"));
+            cartShipInfo.setVendorPartyId(orderItemShipGroup.getString("vendorPartyId"));
+            cartShipInfo.setShipGroupSeqId(orderItemShipGroup.getString("shipGroupSeqId"));
+        }
+
         List<GenericValue> orderItems = orh.getValidOrderItems();
         long nextItemSeq = 0;
         if (UtilValidate.isNotEmpty(orderItems)) {
@@ -306,6 +341,34 @@ public class ShoppingCartServices {
                 // get the next item sequence id
                 String orderItemSeqId = item.getString("orderItemSeqId");
                 orderItemSeqId = orderItemSeqId.replaceAll("\\P{Digit}", "");
+                // get product Id
+                String productId = item.getString("productId");
+                GenericValue product = null;
+                // creates survey responses for Gift cards same as last Order created
+                Map surveyResponseResult = null;
+                try {
+                    product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
+                    if ("DIGITAL_GOOD".equals(product.getString("productTypeId"))) {
+                        Map<String, Object> surveyResponseMap = FastMap.newInstance();
+                        Map<String, Object> answers = FastMap.newInstance();
+                        List<GenericValue> surveyResponseAndAnswers = delegator.findByAnd("SurveyResponseAndAnswer", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
+                        if (UtilValidate.isNotEmpty(surveyResponseAndAnswers)) {
+                            String surveyId = EntityUtil.getFirst(surveyResponseAndAnswers).getString("surveyId");
+                            for (GenericValue surveyResponseAndAnswer : surveyResponseAndAnswers) {
+                                answers.put((surveyResponseAndAnswer.get("surveyQuestionId").toString()), surveyResponseAndAnswer.get("textResponse"));
+                            }
+                            surveyResponseMap.put("answers", answers);
+                            surveyResponseMap.put("surveyId", surveyId);
+                            surveyResponseResult = dispatcher.runSync("createSurveyResponse", surveyResponseMap);
+                        }
+                    }
+                } catch (GenericEntityException e) {
+                    Debug.logError(e, module);
+                    return ServiceUtil.returnError(e.getMessage());
+                } catch (GenericServiceException e) {
+                    Debug.logError(e.toString(), module);
+                    return ServiceUtil.returnError(e.toString());
+                }
                 try {
                     long seq = Long.parseLong(orderItemSeqId);
                     if (seq > nextItemSeq) {
@@ -317,7 +380,7 @@ public class ShoppingCartServices {
                 }
 
                 // do not include PROMO items
-                if (item.get("isPromo") != null && "Y".equals(item.getString("isPromo"))) {
+                if (!includePromoItems && item.get("isPromo") != null && "Y".equals(item.getString("isPromo"))) {
                     continue;
                 }
 
@@ -351,7 +414,6 @@ public class ShoppingCartServices {
                 } else {
                     // product item
                     String prodCatalogId = item.getString("prodCatalogId");
-                    String productId = item.getString("productId");
 
                     //prepare the rental data
                     Timestamp reservStart = null;
@@ -382,7 +444,7 @@ public class ShoppingCartServices {
                     ProductConfigWrapper configWrapper = null;
                     String configId = null;
                     try {
-                        GenericValue product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
+                        product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
                         if ("AGGREGATED_CONF".equals(product.getString("productTypeId"))) {
                             List<GenericValue>productAssocs = delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productAssocTypeId", "PRODUCT_CONF", "productIdTo", product.getString("productId")));
                             productAssocs = EntityUtil.filterByDate(productAssocs);
@@ -411,8 +473,19 @@ public class ShoppingCartServices {
 
                 // flag the item w/ the orderItemSeqId so we can reference it
                 ShoppingCartItem cartItem = cart.findCartItem(itemIndex);
+                cartItem.setIsPromo(item.get("isPromo") != null && "Y".equals(item.getString("isPromo")));
                 cartItem.setOrderItemSeqId(item.getString("orderItemSeqId"));
 
+                try {
+                    cartItem.setItemGroup(cart.addItemGroup(item.getRelatedOneCache("OrderItemGroup")));
+                } catch (GenericEntityException e) {
+                    Debug.logError(e, module);
+                    return ServiceUtil.returnError(e.getMessage());
+                }
+                // attach surveyResponseId for each item
+                if (UtilValidate.isNotEmpty(surveyResponseResult)){
+                    cartItem.setAttribute("surveyResponseId",surveyResponseResult.get("surveyResponseId"));
+                }
                 // attach addition item information
                 cartItem.setStatusId(item.getString("statusId"));
                 cartItem.setItemType(item.getString("orderItemTypeId"));
@@ -470,53 +543,28 @@ public class ShoppingCartServices {
                 }
             }
 
+            // setup the OrderItemShipGroupAssoc records
             if (UtilValidate.isNotEmpty(orderItems)) {
                 int itemIndex = 0;
                 for (GenericValue item : orderItems) {
 
                     // set the item's ship group info
-                    List<GenericValue> shipGroups = orh.getOrderItemShipGroupAssocs(item);
-                    for (int g = 0; g < shipGroups.size(); g++) {
-                        GenericValue sgAssoc = (GenericValue) shipGroups.get(g);
+                    List<GenericValue> shipGroupAssocs = orh.getOrderItemShipGroupAssocs(item);
+                    for (int g = 0; g < shipGroupAssocs.size(); g++) {
+                        GenericValue sgAssoc = (GenericValue) shipGroupAssocs.get(g);
                         BigDecimal shipGroupQty = OrderReadHelper.getOrderItemShipGroupQuantity(sgAssoc);
                         if (shipGroupQty == null) {
                             shipGroupQty = BigDecimal.ZERO;
                         }
 
-                        GenericValue sg = null;
-                        try {
-                            sg = sgAssoc.getRelatedOne("OrderItemShipGroup");
-                        } catch (GenericEntityException e) {
-                            Debug.logError(e, module);
-                            return ServiceUtil.returnError(e.getMessage());
-                        }
-                        String cartShipGroupIndexStr = sg.getString("shipGroupSeqId");
+                        String cartShipGroupIndexStr = sgAssoc.getString("shipGroupSeqId");
                         int cartShipGroupIndex = NumberUtils.toInt(cartShipGroupIndexStr);
-
-                        if (cart.getShipGroupSize() < cartShipGroupIndex) {
-                            int groupDiff = cartShipGroupIndex - cart.getShipGroupSize();
-                            for (int i = 0; i < groupDiff; i++) {
-                                cart.addShipInfo();
-                            }
-                        }
 
                         cartShipGroupIndex = cartShipGroupIndex - 1;
                         if (cartShipGroupIndex > 0) {
                             cart.positionItemToGroup(itemIndex, shipGroupQty, 0, cartShipGroupIndex, false);
                         }
 
-                        cart.setShipAfterDate(cartShipGroupIndex, sg.getTimestamp("shipAfterDate"));
-                        cart.setShipBeforeDate(cartShipGroupIndex, sg.getTimestamp("shipByDate"));
-                        cart.setShipmentMethodTypeId(cartShipGroupIndex, sg.getString("shipmentMethodTypeId"));
-                        cart.setCarrierPartyId(cartShipGroupIndex, sg.getString("carrierPartyId"));
-                        cart.setSupplierPartyId(cartShipGroupIndex, sg.getString("supplierPartyId"));
-                        cart.setMaySplit(cartShipGroupIndex, sg.getBoolean("maySplit"));
-                        cart.setGiftMessage(cartShipGroupIndex, sg.getString("giftMessage"));
-                        cart.setShippingContactMechId(cartShipGroupIndex, sg.getString("contactMechId"));
-                        cart.setShippingInstructions(cartShipGroupIndex, sg.getString("shippingInstructions"));
-                        cart.setShipGroupFacilityId(cartShipGroupIndex, sg.getString("facilityId"));
-                        cart.setShipGroupVendorPartyId(cartShipGroupIndex, sg.getString("vendorPartyId"));
-                        cart.setShipGroupSeqId(cartShipGroupIndex, sg.getString("shipGroupSeqId"));
                         cart.setItemShipGroupQty(itemIndex, shipGroupQty, cartShipGroupIndex);
                     }
                     itemIndex ++;
@@ -534,6 +582,15 @@ public class ShoppingCartServices {
             }
         }
 
+        if (includePromoItems) {
+            for (String productPromoCode: orh.getProductPromoCodesEntered()) {
+                cart.addProductPromoCode(productPromoCode, dispatcher);
+            }
+            for (GenericValue productPromoUse: orh.getProductPromoUse()) {
+                cart.addProductPromoUse(productPromoUse.getString("productPromoId"), productPromoUse.getString("productPromoCodeId"), productPromoUse.getBigDecimal("totalDiscountAmount"), productPromoUse.getBigDecimal("quantityLeftInActions"));
+            }
+        }
+
         List adjustments = orh.getOrderHeaderAdjustments();
         // If applyQuoteAdjustments is set to false then standard cart adjustments are used.
         if (!adjustments.isEmpty()) {
@@ -548,7 +605,7 @@ public class ShoppingCartServices {
 
     public static Map<String, Object> loadCartFromQuote(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String quoteId = (String) context.get("quoteId");
@@ -775,7 +832,12 @@ public class ShoppingCartServices {
                 Iterator i = cart.iterator();
                 while (i.hasNext()) {
                     ShoppingCartItem item = (ShoppingCartItem) i.next();
-                    adjs = (List)orderAdjsMap.get(item.getOrderItemSeqId());
+                    String orderItemSeqId = item.getOrderItemSeqId();
+                    if (orderItemSeqId != null) {
+                        adjs = (List)orderAdjsMap.get(orderItemSeqId);
+                    } else {
+                        adjs = null;
+                    }
                     if (adjs != null) {
                         item.getAdjustments().addAll(adjs);
                     }
@@ -799,7 +861,7 @@ public class ShoppingCartServices {
 
     public static Map<String, Object>loadCartFromShoppingList(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String shoppingListId = (String) context.get("shoppingListId");
@@ -987,7 +1049,7 @@ public class ShoppingCartServices {
 
     public static Map<String, Object>prepareVendorShipGroups(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         ShoppingCart cart = (ShoppingCart) context.get("shoppingCart");
         Map<String, Object> result = ServiceUtil.returnSuccess();
         try {

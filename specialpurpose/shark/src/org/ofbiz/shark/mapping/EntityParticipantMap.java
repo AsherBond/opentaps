@@ -19,7 +19,7 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.shark.mapping;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.base.util.UtilMisc;
@@ -37,11 +37,11 @@ public class EntityParticipantMap implements ParticipantMap {
 
     public static final String module = EntityParticipantMap.class.getName();
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected GenericValue participant = null;
     protected boolean newValue = false;
 
-    protected EntityParticipantMap(GenericDelegator delegator, String packageId, String processDefId, String participantId) throws RootException {
+    protected EntityParticipantMap(Delegator delegator, String packageId, String processDefId, String participantId) throws RootException {
         this.delegator = delegator;
         try {
             this.participant = delegator.findByPrimaryKey(org.ofbiz.shark.SharkConstants.WfParticipantMap, UtilMisc.toMap(org.ofbiz.shark.SharkConstants.packageId, packageId, org.ofbiz.shark.SharkConstants.processDefId, processDefId, org.ofbiz.shark.SharkConstants.participantId, participantId));
@@ -55,7 +55,7 @@ public class EntityParticipantMap implements ParticipantMap {
         this.delegator = application.getDelegator();
     }
 
-    public EntityParticipantMap(GenericDelegator delegator) {
+    public EntityParticipantMap(Delegator delegator) {
         this.newValue = true;
         this.delegator = delegator;
 
@@ -122,7 +122,7 @@ public class EntityParticipantMap implements ParticipantMap {
     }
 
     public void setIsGroupUser(boolean isGroupUser) {
-        participant.set(org.ofbiz.shark.SharkConstants.isGroupUser, new Boolean(isGroupUser));
+        participant.set(org.ofbiz.shark.SharkConstants.isGroupUser, isGroupUser);
     }
 
     public void store() throws RootException {

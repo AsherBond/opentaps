@@ -59,6 +59,7 @@ public class StringToList extends MethodOperation {
         messageFieldName = UtilValidate.isNotEmpty(element.getAttribute("message-field")) ? element.getAttribute("message-field") : element.getAttribute("message-field-name");
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         String valueStr = methodContext.expandString(string);
         if (!argListAcsr.isEmpty()) {
@@ -69,7 +70,7 @@ public class StringToList extends MethodOperation {
         }
 
         Object value;
-        if (this.messageFieldName != null && this.messageFieldName.length() > 0) {
+        if (UtilValidate.isNotEmpty(this.messageFieldName)) {
             value = new MessageString(valueStr, this.messageFieldName, true);
         } else {
             value = valueStr;
@@ -86,10 +87,12 @@ public class StringToList extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<string-to-list string=\"" + this.string + "\" list-name=\"" + this.listAcsr + "\"/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

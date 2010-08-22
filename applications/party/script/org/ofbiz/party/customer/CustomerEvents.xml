@@ -66,7 +66,7 @@ under the License.
             <set field="userLoginExistsMap.userLoginId" from-field="userLoginContext.userLoginId"/>
             <find-by-primary-key entity-name="UserLogin" map="userLoginExistsMap" value-field="existingUserLogin"/>
             <if-not-empty field="existingUserLogin">
-                <set field="tempErrorMessage" value="Username in use, please choose another."/>
+                <set field="tempErrorMessage" value="${uiLabelMap.PartyUserNameInUse}"/>
                 <field-to-list field="tempErrorMessage" list="error_list"/>
             </if-not-empty>
         </if-not-empty>
@@ -93,6 +93,7 @@ under the License.
                 <process field="USER_TITLE"><copy to-field="personalTitle"/></process>
                 <process field="USER_SUFFIX"><copy to-field="suffix"/></process>
                 <process field="USER_BIRTHDATE"><convert type="Date" to-field="birthDate"><fail-property resource="PartyUiLabels" property="PartyBirthDateMissingError"/></convert></process>
+                <process field="USER_DECEASEDDATE"><convert type="Date" to-field="deceasedDate"><fail-property resource="PartyUiLabels" property="PartyDeceasedDateMissingError"/></convert></process>
                 <process field="USER_GENDER"><copy to-field="gender"/></process>
             </simple-map-processor>
         </call-map-processor>

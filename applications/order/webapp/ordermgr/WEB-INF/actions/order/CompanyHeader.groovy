@@ -20,7 +20,7 @@
 
  // this script is used to get the company's logo header information for orders, invoices, and returns.  It can either take order, invoice, returnHeader from
  // parameters or use orderId, invoiceId, or returnId to look them up.
- // if none of these parameters are available then fromPartyId is used or "Company" as fallback
+ // if none of these parameters are available then fromPartyId is used or "ORGANIZATION_PARTY" from general.properties as fallback
 
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.*;
@@ -94,6 +94,8 @@ if (orderHeader) {
 } else if (returnHeader) {
     if ("CUSTOMER_RETURN".equals(returnHeader.returnHeaderTypeId) && returnHeader.toPartyId) {
         partyId = returnHeader.toPartyId;
+    } else if ("VENDOR_RETURN".equals(returnHeader.returnHeaderTypeId) && returnHeader.fromPartyId) {
+        partyId = returnHeader.fromPartyId;
     }
 } else if (quote) {
     productStore = quote.getRelatedOne("ProductStore");
@@ -107,7 +109,7 @@ if (!partyId) {
     if (fromPartyId) {
         partyId = fromPartyId;
     } else {
-        partyId = "Company";
+        partyId = UtilProperties.getPropertyValue("general.properties", "ORGANIZATION_PARTY");
     }
 }
 
@@ -136,7 +138,7 @@ if (address)    {
    // get the country name and state/province abbreviation
    country = address.getRelatedOneCache("CountryGeo");
    if (country) {
-      context.countryName = country.geoName;
+      context.countryName = country.get("geoName", locale);
    }
    stateProvince = address.getRelatedOneCache("StateProvinceGeo");
    if (stateProvince) {
@@ -150,6 +152,13 @@ phones = delegator.findByAnd("PartyContactMechPurpose", [partyId : partyId, cont
 selPhones = EntityUtil.filterByDate(phones, nowTimestamp, "fromDate", "thruDate", true);
 if (selPhones) {
     context.phone = delegator.findByPrimaryKey("TelecomNumber", [contactMechId : selPhones[0].contactMechId]);
+}
+
+// Fax
+faxNumbers = delegator.findByAnd("PartyContactMechPurpose", [partyId : partyId, contactMechPurposeTypeId : "FAX_NUMBER"]);
+faxNumbers = EntityUtil.filterByDate(faxNumbers, nowTimestamp, null, null, true);
+if (faxNumbers) {
+    context.fax = delegator.findOne("TelecomNumber", [contactMechId : faxNumbers[0].contactMechId], false);
 }
 
 //Email

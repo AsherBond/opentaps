@@ -17,23 +17,13 @@ specific language governing permissions and limitations
 under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
-<h1>${uiLabelMap.EcommerceOrderConfirmation}</h1>
+<h2>${uiLabelMap.EcommerceOrderConfirmation}</h2>
 <#if !isDemoStore?exists || isDemoStore><p>${uiLabelMap.OrderDemoFrontNote}.</p></#if>
-
 <#if orderHeader?has_content>
   ${screens.render("component://ecommerce/widget/OrderScreens.xml#orderheader")}
-  <br/>
   ${screens.render("component://ecommerce/widget/OrderScreens.xml#orderitems")}
-  <table border="0" cellpadding="1" width="100%">
-   <tr>
-      <td colspan="4">
-        <a href="<@ofbizUrl>main</@ofbizUrl>" class="buttontextbig">${uiLabelMap.EcommerceContinueShopping}</a>
-      </td>
-      <td align="right">
-        <a href="<@ofbizUrl>main</@ofbizUrl>" class="buttontextbig">${uiLabelMap.EcommerceContinueShopping}</a>
-      </td>
-    </tr>
-  </table>
+  <a href="<@ofbizUrl>main</@ofbizUrl>" class="buttontextbig">${uiLabelMap.EcommerceContinueShopping}</a>
+  <a href="<@ofbizUrl>main</@ofbizUrl>" class="buttontextbig">${uiLabelMap.EcommerceContinueShopping}</a>
 <#else>
   <h3>${uiLabelMap.OrderSpecifiedNotFound}.</h3>
 </#if>

@@ -19,11 +19,12 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.common.olap;
 
-import java.io.*;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 import javax.transaction.xa.XAException;
@@ -37,7 +38,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import static org.ofbiz.base.util.UtilGenerics.checkList;
 import static org.ofbiz.base.util.UtilGenerics.checkMap;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -65,7 +66,7 @@ public class CommonDimensionServices {
      * the default strategy to handle data change is "Type 1" (i.e. overwrite the values).
      */
     public static Map loadDateDimension(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
 
         Date fromDate = (Date) context.get("fromDate");

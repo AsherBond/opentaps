@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericModelException;
 import org.ofbiz.entity.config.DatasourceInfo;
@@ -34,6 +34,7 @@ import org.ofbiz.entity.model.ModelField;
  * Encapsulates operations between entities and entity fields. This is a immutable class.
  *
  */
+@SuppressWarnings("serial")
 public abstract class EntityConditionValue extends EntityConditionBase {
 
     public abstract ModelField getModelField(ModelEntity modelEntity);
@@ -55,7 +56,7 @@ public abstract class EntityConditionValue extends EntityConditionBase {
         return getValue(entity.getDelegator(), entity);
     }
 
-    public abstract Object getValue(GenericDelegator delegator, Map<String, ? extends Object> map);
+    public abstract Object getValue(Delegator delegator, Map<String, ? extends Object> map);
 
     public abstract EntityConditionValue freeze();
 
@@ -69,6 +70,7 @@ public abstract class EntityConditionValue extends EntityConditionBase {
         addSqlValue(sb, null, new ArrayList<EntityConditionParam>(), false, null);
     }
 
+    @Override
     public String toString() {
         StringBuilder sql = new StringBuilder();
         toString(sql);

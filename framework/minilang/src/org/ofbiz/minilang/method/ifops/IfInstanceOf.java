@@ -70,6 +70,7 @@ public class IfInstanceOf extends MethodOperation {
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         // only run subOps if element is instanceOf
         boolean runSubOps = false;
@@ -107,10 +108,12 @@ public class IfInstanceOf extends MethodOperation {
         return allSubOps;
     }
 
+    @Override
     public String rawString() {
         // TODO: add all attributes and other info
         return "<if-instance-of field-name=\"" + this.fieldAcsr + "\" map-name=\"" + this.mapAcsr + "\"/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
 
 import org.ofbiz.base.component.AlreadyLoadedException;
@@ -51,6 +50,8 @@ public class ComponentContainer implements Container {
     protected Classpath classPath = new Classpath(System.getProperty("java.class.path"));
     protected String configFileLocation = null;
     private boolean loaded = false;
+    private String instrumenterClassName;
+    private String instrumenterFile;
 
     /**
      * @see org.ofbiz.base.container.Container#init(java.lang.String[], java.lang.String)
@@ -72,10 +73,22 @@ public class ComponentContainer implements Container {
         if (cc.getProperty("update-classpath") != null) {
             updateClassPath = "true".equalsIgnoreCase(cc.getProperty("update-classpath").value);
         }
+        String instrumenterClassName;
+        if (cc.getProperty("ofbiz.instrumenterClassName") != null) {
+            instrumenterClassName = cc.getProperty("ofbiz.instrumenterClassName").value;
+        } else {
+            instrumenterClassName = null;
+        }
+        String instrumenterFile;
+        if (cc.getProperty("ofbiz.instrumenterFile") != null) {
+            instrumenterFile = cc.getProperty("ofbiz.instrumenterFile").value;
+        } else {
+            instrumenterFile = null;
+        }
 
         // load the components
         try {
-            loadComponents(loaderConfig, updateClassPath);
+            loadComponents(loaderConfig, updateClassPath, instrumenterClassName, instrumenterFile);
         } catch (AlreadyLoadedException e) {
             throw new ContainerException(e);
         } catch (ComponentException e) {
@@ -91,6 +104,10 @@ public class ComponentContainer implements Container {
     }
 
     public synchronized void loadComponents(String loaderConfig, boolean updateClasspath) throws AlreadyLoadedException, ComponentException {
+        loadComponents(loaderConfig, updateClasspath, null, null);
+    }
+
+    public synchronized void loadComponents(String loaderConfig, boolean updateClasspath, String instrumenterClassName, String instrumenterFile) throws AlreadyLoadedException, ComponentException {
         // set the loaded list; and fail if already loaded
         //if (loadedComponents == null) {
         //    loadedComponents = new LinkedList();
@@ -120,6 +137,7 @@ public class ComponentContainer implements Container {
 
         // set the new classloader/classpath on the current thread
         if (updateClasspath) {
+            classPath.instrument(instrumenterFile, instrumenterClassName);
             System.setProperty("java.class.path", classPath.toString());
             ClassLoader cl = classPath.getClassLoader();
             Thread.currentThread().setContextClassLoader(cl);
@@ -242,7 +260,6 @@ public class ComponentContainer implements Container {
                     if (path.exists()) {
                         if (path.isDirectory()) {
                             // load all .jar and .zip files in this directory
-                            File files[] = path.listFiles();
                             for (File file: path.listFiles()) {
                                 String fileName = file.getName();
                                 if (fileName.endsWith(".jar") || fileName.endsWith(".zip")) {

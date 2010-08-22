@@ -85,8 +85,8 @@ public class UtilJavaParse {
         if (methodNameIndex < 0) methodNameIndex = javaFile.indexOf(" Map " + methodName + "(DispatchContext ");
         if (methodNameIndex < 0) methodNameIndex = javaFile.indexOf(" Map  " + methodName + "(DispatchContext ");
         if (methodNameIndex < 0) methodNameIndex = javaFile.indexOf(" Map " + methodName + " (DispatchContext ");
-        if (methodNameIndex < 0) methodNameIndex = javaFile.indexOf(" Map " + methodName + "( DispatchContext ");
-        if (methodNameIndex < 0) methodNameIndex = javaFile.indexOf(" Map " + methodName + " ( DispatchContext ");
+        if (methodNameIndex < 0) methodNameIndex = javaFile.indexOf(" Map " + methodName + "(DispatchContext ");
+        if (methodNameIndex < 0) methodNameIndex = javaFile.indexOf(" Map " + methodName + " (DispatchContext ");
 
         // not found!
         if (methodNameIndex < 0) return -1;
@@ -101,7 +101,7 @@ public class UtilJavaParse {
         int nextOpen = javaFile.indexOf("{", blockStart+1);
         int nextClose = javaFile.indexOf("}", blockStart+1);
         if (nextOpen > 0 && nextClose > 0 && nextClose > nextOpen) {
-            String javaFragment = javaFile.substring(nextOpen, nextClose);
+            javaFile.substring(nextOpen, nextClose);
         }
         // if no close, end with couldn't find
         if (nextClose < 0) return -1;
@@ -183,10 +183,7 @@ public class UtilJavaParse {
         entityMethodNames.add("removeAll");
         entityMethodNames.add("findOne");
         entityMethodNames.add("findByPrimaryKey");
-        entityMethodNames.add("findByPrimaryKeySingle");
         entityMethodNames.add("findByPrimaryKeyCache");
-        entityMethodNames.add("findByPrimaryKeyCacheSingle");
-        entityMethodNames.add("findAll");
         entityMethodNames.add("findAllCache");
         entityMethodNames.add("findByAnd");
         entityMethodNames.add("findByOr");

@@ -39,7 +39,7 @@ public abstract class BaseCompare extends SimpleMapOperation {
         this.format = element.getAttribute("format");
 
         /* -- Let ObjectType handle the default --
-         if (this.format == null || this.format.length() == 0) {
+         if (UtilValidate.isEmpty(this.format)) {
          if ("Date".equals(type)) {
          this.format = "yyyy-MM-dd";
          } else if ("Time".equals(type)) {
@@ -59,6 +59,7 @@ public abstract class BaseCompare extends SimpleMapOperation {
         }
     }
 
+    @Override
     public void exec(Map<String, Object> inMap, Map<String, Object> results, List<Object> messages, Locale locale, ClassLoader loader) {}
 
     public static Boolean doRealCompare(Object value1, Object value2, String operator, String type, String format,

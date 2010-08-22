@@ -29,7 +29,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -49,7 +49,7 @@ public class BOMTree {
     public static final int IMPLOSION = 3;
 
     protected LocalDispatcher dispatcher = null;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
 
     BOMNode root;
     BigDecimal rootQuantity;
@@ -70,7 +70,7 @@ public class BOMTree {
      * @throws GenericEntityException If a db problem occurs.
      *
      */
-    public BOMTree(String productId, String bomTypeId, Date inDate, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
+    public BOMTree(String productId, String bomTypeId, Date inDate, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
         this(productId, bomTypeId, inDate, EXPLOSION, delegator, dispatcher, userLogin);
     }
 
@@ -91,7 +91,7 @@ public class BOMTree {
      * @throws GenericEntityException If a db problem occurs.
      *
      */
-    public BOMTree(String productId, String bomTypeId, Date inDate, int type, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
+    public BOMTree(String productId, String bomTypeId, Date inDate, int type, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
         // If the parameters are not valid, return.
         if (productId == null || bomTypeId == null || delegator == null || dispatcher == null) return;
         // If the date is null, set it to today.
@@ -306,7 +306,7 @@ public class BOMTree {
 
     /** It visits the in-memory tree that represents a bill of materials
      * and it collects all the productId it contains.
-     * @return ArrayLsit conatining all the tree's productId.
+     * @return ArrayList containing all the tree's productId.
      */
     public ArrayList getAllProductsId() {
         ArrayList nodeArr = new ArrayList();
@@ -326,7 +326,7 @@ public class BOMTree {
      * @param delegator The delegator used.
      * @throws GenericEntityException If a db problem occurs.
      */
-    public String createManufacturingOrders(String facilityId, Date date, String workEffortName, String description, String routingId, String orderId, String orderItemSeqId, String shipmentId, GenericValue userLogin)  throws GenericEntityException {
+    public String createManufacturingOrders(String facilityId, Date date, String workEffortName, String description, String routingId, String orderId, String orderItemSeqId, String shipGroupSeqId, String shipmentId, GenericValue userLogin)  throws GenericEntityException {
         String workEffortId = null;
         if (root != null) {
             if (UtilValidate.isEmpty(facilityId)) {
@@ -346,7 +346,7 @@ public class BOMTree {
                     facilityId = shipment.getString("originFacilityId");
                 }
             }
-            Map tmpMap = root.createManufacturingOrder(facilityId, date, workEffortName, description, routingId, orderId, orderItemSeqId, shipmentId, true, true);
+            Map tmpMap = root.createManufacturingOrder(facilityId, date, workEffortName, description, routingId, orderId, orderItemSeqId, shipGroupSeqId, shipmentId, true, true);
             workEffortId = (String)tmpMap.get("productionRunId");
         }
         return workEffortId;

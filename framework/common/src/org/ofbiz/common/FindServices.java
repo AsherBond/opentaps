@@ -18,15 +18,15 @@
  *******************************************************************************/
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.common;
+ 
+import static org.ofbiz.base.util.UtilGenerics.checkList;
+import static org.ofbiz.base.util.UtilGenerics.checkMap;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -36,36 +36,35 @@ import java.util.TimeZone;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastSet;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilHttp;
-import static org.ofbiz.base.util.UtilGenerics.checkList;
-import static org.ofbiz.base.util.UtilGenerics.checkMap;
-import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityComparisonOperator;
-import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityExpr;
-import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityFunction;
-import org.ofbiz.entity.condition.EntityFieldValue;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
-import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ServiceUtil;
 
 /**
  * FindServices Class
@@ -74,11 +73,10 @@ public class FindServices {
 
     public static final String module = FindServices.class.getName();
 
-    public static HashMap<String, EntityOperator> entityOperators;
+    public static Map<String, EntityComparisonOperator<?, ?>> entityOperators;
 
     static {
-        entityOperators = new HashMap<String, EntityOperator>();
-        entityOperators.put("and", EntityOperator.AND);
+        entityOperators = FastMap.newInstance();
         entityOperators.put("between", EntityOperator.BETWEEN);
         entityOperators.put("equals", EntityOperator.EQUALS);
         entityOperators.put("greaterThan", EntityOperator.GREATER_THAN);
@@ -87,9 +85,9 @@ public class FindServices {
         entityOperators.put("lessThan", EntityOperator.LESS_THAN);
         entityOperators.put("lessThanEqualTo", EntityOperator.LESS_THAN_EQUAL_TO);
         entityOperators.put("like", EntityOperator.LIKE);
+        entityOperators.put("notLike", EntityOperator.NOT_LIKE);
         entityOperators.put("not", EntityOperator.NOT);
         entityOperators.put("notEqual", EntityOperator.NOT_EQUAL);
-        entityOperators.put("or", EntityOperator.OR);
     }
 
     public FindServices() {}
@@ -102,7 +100,7 @@ public class FindServices {
      * @param inputFields     Input parameters run thru UtilHttp.getParameterMap
      * @return a map with field name and operator
      */
-    public static HashMap<String, HashMap<String, HashMap<String, Object>>> prepareField(Map<String, ?> inputFields, Map<String, Object> queryStringMap, Map<String, List<Object[]>> origValueMap) {
+    public static Map<String, Map<String, Map<String, Object>>> prepareField(Map<String, ?> inputFields, Map<String, Object> queryStringMap, Map<String, List<Object[]>> origValueMap) {
         // Strip the "_suffix" off of the parameter name and
         // build a three-level map of values keyed by fieldRoot name,
         //    fld0 or fld1,  and, then, "op" or "value"
@@ -117,7 +115,7 @@ public class FindServices {
         // Note that "normalizedFields" will contain values other than those
         // Contained in the associated entity.
         // Those extra fields will be ignored in the second half of this method.
-        HashMap<String, HashMap<String, HashMap<String, Object>>> normalizedFields = new HashMap<String, HashMap<String, HashMap<String, Object>>>();
+        Map<String, Map<String, Map<String, Object>>> normalizedFields = FastMap.newInstance();
         //StringBuffer queryStringBuf = new StringBuffer();
         for (String fieldNameRaw: inputFields.keySet()) { // The name as it appeas in the HTML form
             String fieldNameRoot = null; // The entity field name. Everything to the left of the first "_" if
@@ -127,8 +125,8 @@ public class FindServices {
                                                         // If it is an "op" field, it will be "equals", "greaterThan", etc.
             int iPos = -1;
             int iPos2 = -1;
-            HashMap<String, HashMap<String, Object>> subMap = null;
-            HashMap<String, Object> subMap2 = null;
+            Map<String, Map<String, Object>> subMap = null;
+            Map<String, Object> subMap2 = null;
             String fieldMode = null;
 
             fieldValue = inputFields.get(fieldNameRaw);
@@ -189,25 +187,166 @@ public class FindServices {
             }
             subMap = normalizedFields.get(fieldNameRoot);
             if (subMap == null) {
-                subMap = new HashMap<String, HashMap<String, Object>>();
+                subMap = FastMap.newInstance();
                 normalizedFields.put(fieldNameRoot, subMap);
             }
             subMap2 = subMap.get(fieldPair);
             if (subMap2 == null) {
-                subMap2 = new HashMap<String, Object>();
+                subMap2 = FastMap.newInstance();
                 subMap.put(fieldPair, subMap2);
             }
             subMap2.put(fieldMode, fieldValue);
 
             List<Object[]> origList = origValueMap.get(fieldNameRoot);
             if (origList == null) {
-                origList = new ArrayList<Object[]>();
+                origList = FastList.newInstance();
                 origValueMap.put(fieldNameRoot, origList);
             }
             Object [] origValues = {fieldNameRaw, fieldValue};
             origList.add(origValues);
         }
         return normalizedFields;
+    }
+
+    /**
+     * Parses input parameters and returns an <code>EntityCondition</code> list.
+     *
+     * @param parameters
+     * @param fieldList
+     * @param queryStringMap
+     * @param delegator
+     * @param context
+     * @return
+     */
+    public static List<EntityCondition> createConditionList(Map<String, ? extends Object> parameters, List<ModelField> fieldList, Map<String, Object> queryStringMap, Delegator delegator, Map<String, ?> context) {
+        Set<String> processed = FastSet.newInstance();
+        Set<String> keys = FastSet.newInstance();
+        Map<String, ModelField> fieldMap = FastMap.newInstance();
+        for (ModelField modelField : fieldList) {
+            fieldMap.put(modelField.getName(), modelField);
+        }
+        List<EntityCondition> result = FastList.newInstance();
+        for (Map.Entry<String, ? extends Object> entry : parameters.entrySet()) {
+            String parameterName = entry.getKey();
+            if (processed.contains(parameterName)) {
+                continue;
+            }
+            keys.clear();
+            String fieldName = parameterName;
+            Object fieldValue = null;
+            String operation = null;
+            boolean ignoreCase = false;
+            if (parameterName.endsWith("_ic") || parameterName.endsWith("_op")) {
+                fieldName = parameterName.substring(0, parameterName.length() - 3);
+            } else if (parameterName.endsWith("_value")) {
+                fieldName = parameterName.substring(0, parameterName.length() - 6);
+            }
+            String key = fieldName.concat("_ic");
+            if (parameters.containsKey(key)) {
+                keys.add(key);
+                ignoreCase = "Y".equals(parameters.get(key));
+            }
+            key = fieldName.concat("_op");
+            if (parameters.containsKey(key)) {
+                keys.add(key);
+                operation = (String) parameters.get(key);
+            }
+            key = fieldName.concat("_value");
+            if (parameters.containsKey(key)) {
+                keys.add(key);
+                fieldValue = parameters.get(key);
+            }
+            if (fieldName.endsWith("_fld0") || fieldName.endsWith("_fld1")) {
+                if (parameters.containsKey(fieldName)) {
+                    keys.add(fieldName);
+                }
+                fieldName = fieldName.substring(0, fieldName.length() - 5);
+            }
+            if (parameters.containsKey(fieldName)) {
+                keys.add(fieldName);
+            }
+            processed.addAll(keys);
+            ModelField modelField = fieldMap.get(fieldName);
+            if (modelField == null) {
+                continue;
+            }
+            if (fieldValue == null) {
+                fieldValue = parameters.get(fieldName);
+            }
+            if (ObjectType.isEmpty(fieldValue)) {
+                continue;
+            }
+            result.add(createSingleCondition(modelField, operation, fieldValue, ignoreCase, delegator, context));
+            for (String mapKey : keys) {
+                queryStringMap.put(mapKey, parameters.get(mapKey));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Creates a single <code>EntityCondition</code> based on a set of parameters.
+     *
+     * @param modelField
+     * @param operation
+     * @param fieldValue
+     * @param ignoreCase
+     * @param delegator
+     * @param context
+     * @return
+     */
+    public static EntityCondition createSingleCondition(ModelField modelField, String operation, Object fieldValue, boolean ignoreCase, Delegator delegator, Map<String, ?> context) {
+        EntityCondition cond = null;
+        String fieldName = modelField.getName();
+        EntityComparisonOperator<?, ?> fieldOp = null;
+        if (operation != null) {
+            if (operation.equals("contains")) {
+                fieldOp = EntityOperator.LIKE;
+                fieldValue = "%" + fieldValue + "%";
+            } else if ("not-contains".equals(operation) || "notContains".equals(operation)) {
+                fieldOp = EntityOperator.NOT_LIKE;
+                fieldValue = "%" + fieldValue + "%";
+            } else if (operation.equals("empty")) {
+                return EntityCondition.makeCondition(fieldName, EntityOperator.EQUALS, null);
+            } else if (operation.equals("like")) {
+                fieldOp = EntityOperator.LIKE;
+                fieldValue = fieldValue + "%";
+            } else if ("not-like".equals(operation) || "notLike".equals(operation)) {
+                fieldOp = EntityOperator.NOT_LIKE;
+                fieldValue = fieldValue + "%";
+            } else if (operation.equals("greaterThanFromDayStart")) {
+                String timeStampString = (String) fieldValue;
+                Object startValue = modelField.getModelEntity().convertFieldValue(modelField, dayStart(timeStampString, 0), delegator, context);
+                return EntityCondition.makeCondition(fieldName, EntityOperator.GREATER_THAN_EQUAL_TO, startValue);
+            } else if (operation.equals("sameDay")) {
+                String timeStampString = (String) fieldValue;
+                Object startValue = modelField.getModelEntity().convertFieldValue(modelField, dayStart(timeStampString, 0), delegator, context);
+                EntityCondition startCond = EntityCondition.makeCondition(fieldName, EntityOperator.GREATER_THAN_EQUAL_TO, startValue);
+                Object endValue = modelField.getModelEntity().convertFieldValue(modelField, dayStart(timeStampString, 1), delegator, context);
+                EntityCondition endCond = EntityCondition.makeCondition(fieldName, EntityOperator.LESS_THAN, endValue);
+                return EntityCondition.makeCondition(startCond, endCond);
+            } else {
+                fieldOp = entityOperators.get(operation);
+            }
+        } else {
+            fieldOp = EntityOperator.EQUALS;
+        }
+        Object fieldObject = fieldValue;
+        if (fieldOp != EntityOperator.IN || !(fieldValue instanceof Collection<?>)) {
+            fieldObject = modelField.getModelEntity().convertFieldValue(modelField, fieldValue, delegator, context);
+        }
+        if (ignoreCase && fieldObject instanceof String) {
+            cond = EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(fieldName), fieldOp, EntityFunction.UPPER(((String)fieldValue).toUpperCase()));
+        } else {
+            if (fieldObject.equals(GenericEntity.NULL_FIELD.toString())) {
+                fieldObject = null;
+            }
+            cond = EntityCondition.makeCondition(fieldName, fieldOp, fieldObject);
+        }
+        if (EntityOperator.NOT_EQUAL.equals(fieldOp) && fieldObject != null) {
+            cond = EntityCondition.makeCondition(UtilMisc.toList(cond, EntityCondition.makeCondition(fieldName, null)), EntityOperator.OR);
+        }
+        return cond;
     }
 
     /**
@@ -219,17 +358,16 @@ public class FindServices {
      * @param normalizedFields     list of field the user have populated
      * @return a arrayList usable to create an entityCondition
      */
-    public static ArrayList<EntityCondition> createCondition(ModelEntity modelEntity, HashMap<String, HashMap<String, HashMap<String, Object>>> normalizedFields, Map<String, Object> queryStringMap, Map<String, List<Object[]>> origValueMap, GenericDelegator delegator, Map<String, ?> context,  List<String> dateTimeFields, TimeZone timeZone, Locale locale) {
-        HashMap<String, HashMap<String, Object>> subMap = null;
-        HashMap<String, Object> subMap2 = null;
-        EntityOperator fieldOp = null;
+    public static List<EntityCondition> createCondition(ModelEntity modelEntity, Map<String, Map<String, Map<String, Object>>> normalizedFields, Map<String, Object> queryStringMap, Map<String, List<Object[]>> origValueMap, Delegator delegator, Map<String, ?> context,  List<String> dateTimeFields, TimeZone timeZone, Locale locale) {
+        Map<String, Map<String, Object>> subMap = null;
+        Map<String, Object> subMap2 = null;
+        EntityComparisonOperator<?, ?> fieldOp = null;
         Object fieldValue = null; // If it is a "value" field, it will be the value to be used in the query.
                                   // If it is an "op" field, it will be "equals", "greaterThan", etc.
-        EntityExpr cond = null;
-        ArrayList<EntityCondition> tmpList = new ArrayList<EntityCondition>();
+        EntityCondition cond = null;
+        List<EntityCondition> tmpList = FastList.newInstance();
         String opString = null;
-        String ignoreCase = null;
-        int count = 0;
+        boolean ignoreCase = false;
         List<ModelField> fields = modelEntity.getFieldsUnmodifiable();
         for (ModelField modelField: fields) {
             String fieldName = modelField.getName();
@@ -237,21 +375,43 @@ public class FindServices {
             if (subMap == null) {
                 continue;
             }
-
             subMap2 = subMap.get("fld0");
-            opString = (String) subMap2.get("op");
-            ignoreCase = (String) subMap2.get("ic");
-
-            if (opString != null) {
-                if (opString.equals("contains")) {
-                    fieldOp = EntityOperator.LIKE;
-                } else if (opString.equals("empty")) {
-                    fieldOp = EntityOperator.EQUALS;
-                } else {
-                    fieldOp = entityOperators.get(opString);
+            fieldValue = subMap2.get("value");
+            if (fieldValue == null) {
+                continue;
+            }
+            //check if this value of date-time type
+            if (dateTimeFields.contains(fieldName)) {
+                // this value is date/time in localized format and should be
+                // converted to timestamp representation. Just have in mind that 
+                // can be only date w/o time portion.
+                DateFormat df = null;
+                Date dateObj = null;
+                try {
+                    // assume full date/time format
+                    df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                    dateObj = df.parse((String) fieldValue);
+                } catch (ParseException e) {
+                    try {
+                        // parse error. try date only format.
+                        df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateFormat(locale), timeZone, locale);
+                        dateObj = df.parse((String) fieldValue);
+                    } catch (ParseException e1) {
+                        Debug.logError(e1, module);
+                    }
                 }
-            } else {
-                fieldOp = EntityOperator.EQUALS;
+                if (dateObj != null) {
+                    Timestamp timeStamp = new Timestamp(dateObj.getTime());
+                    fieldValue = timeStamp.toString();
+                }
+            }
+            opString = (String) subMap2.get("op");
+            ignoreCase = "Y".equals(subMap2.get("ic"));
+            cond = createSingleCondition(modelField, opString, fieldValue, ignoreCase, delegator, context); 
+            tmpList.add(cond);
+            subMap2 = subMap.get("fld1");
+            if (subMap2 == null) {
+                continue;
             }
 
             fieldValue = subMap2.get("value");
@@ -284,127 +444,10 @@ public class FindServices {
                     fieldValue = timeStamp.toString();
                 }
             }
-
-            if (opString != null) {
-                if (opString.equals("contains")) {
-                    fieldOp = EntityOperator.LIKE;
-                    fieldValue = "%" + fieldValue + "%";
-                } else if (opString.equals("empty")) {
-                    fieldOp = EntityOperator.EQUALS;
-                    fieldValue = null;
-                    ignoreCase = null;
-                } else if (opString.equals("like")) {
-                    fieldOp = EntityOperator.LIKE;
-                    fieldValue = fieldValue + "%";
-                } else if (opString.equals("greaterThanFromDayStart")) {
-                    fieldValue = dayStart((String) fieldValue, 0);
-                    fieldOp = EntityOperator.GREATER_THAN;
-                    ignoreCase = null;
-                } else if (opString.equals("sameDay")) {
-                    String timeStampString = (String) fieldValue;
-                    fieldValue = dayStart(timeStampString, 0);
-                    fieldOp = EntityOperator.GREATER_THAN_EQUAL_TO;
-                    ignoreCase = null;
-                    // Set up so next part finds ending conditions for same day
-                    subMap2 = subMap.get("fld1");
-                    if (subMap2 == null) {
-                        subMap2 = new HashMap<String, Object>();
-                        subMap.put("fld1", subMap2);
-                    }
-                    String endOfDay = dayStart(timeStampString, 1);
-                    subMap2.put("value", endOfDay);
-                    subMap2.put("op", "lessThan");
-                } else {
-                    fieldOp = entityOperators.get(opString);
-                }
-            } else {
-                fieldOp = EntityOperator.EQUALS;
-            }
-
-            Object fieldObject = null;
-            if (fieldOp != EntityOperator.IN || ! (fieldValue instanceof Collection)) {
-                fieldObject = modelEntity.convertFieldValue(modelField, fieldValue, delegator, context, null);
-            } else {
-                fieldObject = fieldValue;
-            }
-
-            if (ignoreCase != null && ignoreCase.equals("Y") && "java.lang.String".equals(fieldObject.getClass().getName())) {
-                cond = EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(fieldName), (EntityComparisonOperator) fieldOp, EntityFunction.UPPER(((String)fieldValue).toUpperCase()));
-            } else {
-                cond = EntityCondition.makeCondition(fieldName, (EntityComparisonOperator) fieldOp, fieldObject);
-            }
-            tmpList.add(cond);
-            count++;
-
-            // Repeat above operations if there is a "range" - second value
-            subMap2 = subMap.get("fld1");
-            if (subMap2 == null) {
-                continue;
-            }
             opString = (String) subMap2.get("op");
-
-            if (opString != null) {
-                if (opString.equals("contains")) {
-                    fieldOp = EntityOperator.LIKE;
-                } else if (opString.equals("empty")) {
-                    fieldOp = EntityOperator.EQUALS;
-                } else {
-                    fieldOp = entityOperators.get(opString);
-                }
-            } else {
-                fieldOp = EntityOperator.EQUALS;
-            }
-
-            fieldValue = (String) subMap2.get("value");
-            if (fieldValue == null) {
-                continue;
-            }
-
-            //check if this value of date-time type
-            if (dateTimeFields.contains(fieldName)) {
-                // this value is date/time in localized format and should be
-                // converted to timestamp representation. Just have in mind that 
-                // can be only date w/o time portion.
-                DateFormat df = null;
-                Date dateObj = null;
-                try {
-                    // assume full date/time format
-                    df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
-                    dateObj = df.parse((String) fieldValue);
-                } catch (ParseException e) {
-                    try {
-                        // parse error. try date only format.
-                        df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateFormat(locale), timeZone, locale);
-                        dateObj = df.parse((String) fieldValue);
-                    } catch (ParseException e1) {
-                        Debug.logError(e1, module);
-                    }
-                }
-                if (dateObj != null) {
-                    Timestamp timeStamp = new Timestamp(dateObj.getTime());
-                    fieldValue = timeStamp.toString();
-                }
-            }
-
-            if (opString.equals("like")) {
-                fieldValue = fieldValue + "%";
-            } else if (opString.equals("contains")) {
-                fieldValue = fieldValue + "%" + fieldValue + "%";
-            } else if (opString.equals("empty")) {
-                fieldOp = EntityOperator.EQUALS;
-                fieldValue = null;
-            } else if (opString.equals("upToDay")) {
-                fieldValue = dayStart((String) fieldValue, 0);
-                fieldOp = EntityOperator.LESS_THAN;
-            } else if (opString.equals("upThruDay")) {
-                fieldValue = dayStart((String) fieldValue, 1);
-                fieldOp = EntityOperator.LESS_THAN;
-            }
-            // String rhs = fieldValue.toString();
-            fieldObject = modelEntity.convertFieldValue(modelField, fieldValue, delegator, context, null);
-            cond = EntityCondition.makeCondition(fieldName, (EntityComparisonOperator) fieldOp, fieldObject);
+            ignoreCase = "Y".equals(subMap2.get("ic"));
+            cond = createSingleCondition(modelField, opString, fieldValue, ignoreCase, delegator, context); 
             tmpList.add(cond);
-
             // add to queryStringMap
             List<Object[]> origList = origValueMap.get(fieldName);
             if (UtilValidate.isNotEmpty(origList)) {
@@ -428,22 +471,23 @@ public class FindServices {
      * @param context
      * @return Map
      */
-    public static Map<String, Object> performFindList(DispatchContext dctx, Map<String, ?> context) {
-        Map<String, Object> result = performFind(dctx,context);
-
+    public static Map<String, Object> performFindList(DispatchContext dctx, Map<String, Object> context) {
         Integer viewSize = (Integer) context.get("viewSize");
         if (viewSize == null) viewSize = Integer.valueOf(20);       // default
+        context.put("viewSize", viewSize);
         Integer viewIndex = (Integer) context.get("viewIndex");
         if (viewIndex == null)  viewIndex = Integer.valueOf(0);  // default
+        context.put("viewIndex", viewIndex);
+
+        Map<String, Object> result = performFind(dctx,context);
 
         int start = viewIndex.intValue() * viewSize.intValue();
         List<GenericValue> list = null;
         Integer listSize = null;
         try {
             EntityListIterator it = (EntityListIterator) result.get("listIt");
-            list = it.getPartialList(start+1, viewSize.intValue()); // list starts at '1'
-            it.last();
-            listSize = Integer.valueOf(it.currentIndex());
+            list = it.getPartialList(start+1, viewSize); // list starts at '1'
+            listSize = it.getResultsSizeAfterPartialList();
             it.close();
         } catch (Exception e) {
             Debug.logInfo("Problem getting partial list" + e,module);
@@ -467,7 +511,7 @@ public class FindServices {
         Map<String, ?> inputFields = checkMap(context.get("inputFields"), String.class, Object.class); // Input
         String noConditionFind = (String) context.get("noConditionFind");
         String distinct = (String) context.get("distinct");
-        List fieldList =  (List) context.get("fieldList");
+        List<String> fieldList =  UtilGenerics.<String>checkList(context.get("fieldList"));
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         if (UtilValidate.isEmpty(noConditionFind)) {
             // try finding in inputFields Map
@@ -484,11 +528,21 @@ public class FindServices {
         }
         Timestamp filterByDateValue = (Timestamp) context.get("filterByDateValue");
 
+        Integer viewSize = (Integer) context.get("viewSize");
+        Integer viewIndex = (Integer) context.get("viewIndex");
+        Integer maxRows = null;
+        if (viewSize != null && viewIndex != null) {
+            maxRows = viewSize * (viewIndex + 1);
+        }
+
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         Map<String, Object> prepareResult = null;
         try {
-            prepareResult = dispatcher.runSync("prepareFind", UtilMisc.toMap("entityName", entityName, "orderBy", orderBy, "inputFields", inputFields, "filterByDate", filterByDate,"filterByDateValue", filterByDateValue, "userLogin", userLogin, "locale", context.get("locale"), "timeZone", context.get("timeZone")));
+            prepareResult = dispatcher.runSync("prepareFind", UtilMisc.toMap("entityName", entityName, "orderBy", orderBy,
+                                               "inputFields", inputFields, "filterByDate", filterByDate, "noConditionFind", noConditionFind,
+                                               "filterByDateValue", filterByDateValue, "userLogin", userLogin,
+                                               "locale", context.get("locale"), "timeZone", context.get("timeZone")));
         } catch (GenericServiceException gse) {
             return ServiceUtil.returnError("Error preparing conditions: " + gse.getMessage());
         }
@@ -497,7 +551,11 @@ public class FindServices {
 
         Map<String, Object> executeResult = null;
         try {
-            executeResult = dispatcher.runSync("executeFind", UtilMisc.toMap("entityName", entityName, "orderByList", orderByList, "fieldList", fieldList, "entityConditionList", exprList, "noConditionFind", noConditionFind, "distinct", distinct, "locale", context.get("locale"), "timeZone", context.get("timeZone")));
+            executeResult = dispatcher.runSync("executeFind", UtilMisc.toMap("entityName", entityName, "orderByList", orderByList,
+                                                                             "fieldList", fieldList, "entityConditionList", exprList,
+                                                                             "noConditionFind", noConditionFind, "distinct", distinct,
+                                                                             "locale", context.get("locale"), "timeZone", context.get("timeZone"),
+                                                                             "maxRows", maxRows));
         } catch (GenericServiceException gse) {
             return ServiceUtil.returnError("Error finding iterator: " + gse.getMessage());
         }
@@ -541,18 +599,10 @@ public class FindServices {
         }
         Timestamp filterByDateValue = (Timestamp) context.get("filterByDateValue");
 
-        // parameters run thru UtilHttp.getParameterMap
         Map<String, Object> queryStringMap = FastMap.newInstance();
-        Map<String, List<Object[]>> origValueMap = FastMap.newInstance();
-        HashMap<String, HashMap<String, HashMap<String, Object>>> normalizedFields = prepareField(inputFields, queryStringMap, origValueMap);
-
-        // Now use only the values that correspond to entity fields to build
-        //   an EntityConditionList
-        GenericDelegator delegator = dctx.getDelegator();
-
-        GenericValue entityValue = delegator.makeValue(entityName, FastMap.newInstance());
-
-        ModelEntity modelEntity = entityValue.getModelEntity();
+        Delegator delegator = dctx.getDelegator();
+        ModelEntity modelEntity = delegator.getModelEntity(entityName);
+        List<EntityCondition> tmpList = createConditionList(inputFields, modelEntity.getFieldsUnmodifiable(), queryStringMap, delegator, context);
 
         // createCondition method has to convert localized dates to timestamp string. That's why
         // we collect list of fields that have type "date-time"
@@ -571,12 +621,14 @@ public class FindServices {
          * the user has specified a noConditionFind.  Otherwise, specifying filterByDate will become
          * its own condition.
          */
-        if ((tmpList.size() > 0) || ((noConditionFind != null) && (noConditionFind.equals("Y")))) {
-            if (!UtilValidate.isEmpty(filterByDate) && "Y".equals(filterByDate)) {
+        if (tmpList.size() > 0 || "Y".equals(noConditionFind)) {
+            if ("Y".equals(filterByDate)) {
+                queryStringMap.put("filterByDate", filterByDate);
                 if (UtilValidate.isEmpty(filterByDateValue)) {
                     EntityCondition filterByDateCondition = EntityUtil.getFilterByDateExpr();
                     tmpList.add(filterByDateCondition);
                 } else {
+                    queryStringMap.put("filterByDateValue", filterByDateValue);
                     EntityCondition filterByDateCondition = EntityUtil.getFilterByDateExpr(filterByDateValue);
                     tmpList.add(filterByDateCondition);
                 }
@@ -594,14 +646,10 @@ public class FindServices {
         }
 
         Map<String, Object> results = ServiceUtil.returnSuccess();
-        Map<String, Object> reducedQueryStringMap = buildReducedQueryString(inputFields, entityName, delegator);
-        reducedQueryStringMap.put("noConditionFind", noConditionFind);
-        reducedQueryStringMap.put("filterByDate", filterByDate);
-        reducedQueryStringMap.put("filterByDateValue", filterByDateValue);
-        String queryString = UtilHttp.urlEncodeArgs(reducedQueryStringMap);
+        queryStringMap.put("noConditionFind", noConditionFind);
+        String queryString = UtilHttp.urlEncodeArgs(queryStringMap);
         results.put("queryString", queryString);
-        results.put("queryStringMap", reducedQueryStringMap);
-
+        results.put("queryStringMap", queryStringMap);
         results.put("orderByList", orderByList);
         results.put("entityConditionList", exprList);
         return results;
@@ -618,18 +666,20 @@ public class FindServices {
         List<String> orderByList = checkList(context.get("orderByList"), String.class);
         boolean noConditionFind = "Y".equals((String) context.get("noConditionFind"));
         boolean distinct = "Y".equals((String) context.get("distinct"));
-        List fieldList =  (List) context.get("fieldList");
-        Set fieldSet = null;
+        List<String> fieldList =  UtilGenerics.checkList(context.get("fieldList"));
+        Set<String> fieldSet = null;
         if (fieldList != null) {
-            fieldSet = new HashSet(fieldList);
+            fieldSet = UtilMisc.makeSetWritable(fieldList);
         }
-        GenericDelegator delegator = dctx.getDelegator();
+        Integer maxRows = (Integer) context.get("maxRows");
+        maxRows = maxRows != null ? maxRows : -1;
+        Delegator delegator = dctx.getDelegator();
         // Retrieve entities  - an iterator over all the values
         EntityListIterator listIt = null;
         try {
             if (noConditionFind || (entityConditionList != null && entityConditionList.getConditionListSize() > 0)) {
                 listIt = delegator.find(entityName, entityConditionList, null, fieldSet, orderByList,
-                        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, distinct));
+                        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, -1, maxRows, distinct));
             }
         } catch (GenericEntityException e) {
             return ServiceUtil.returnError("Error running Find on the [" + entityName + "] entity: " + e.getMessage());
@@ -659,7 +709,7 @@ public class FindServices {
         return retValue;
     }
 
-    public static HashMap<String, Object> buildReducedQueryString(Map<String, ?> inputFields, String entityName, GenericDelegator delegator) {
+    public static Map<String, Object> buildReducedQueryString(Map<String, ?> inputFields, String entityName, Delegator delegator) {
         // Strip the "_suffix" off of the parameter name and
         // build a three-level map of values keyed by fieldRoot name,
         //    fld0 or fld1,  and, then, "op" or "value"
@@ -675,7 +725,7 @@ public class FindServices {
         // Contained in the associated entity.
         // Those extra fields will be ignored in the second half of this method.
         ModelEntity modelEntity = delegator.getModelEntity(entityName);
-        HashMap<String, Object> normalizedFields = new HashMap<String, Object>();
+        Map<String, Object> normalizedFields = FastMap.newInstance();
         //StringBuffer queryStringBuf = new StringBuffer();
         for (String fieldNameRaw: inputFields.keySet()) { // The name as it appeas in the HTML form
             String fieldNameRoot = null; // The entity field name. Everything to the left of the first "_" if
@@ -730,7 +780,9 @@ public class FindServices {
      * @param context
      * @return
      */
-    public static Map<String, Object> performFindItem(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> performFindItem(DispatchContext dctx, Map<String, Object> context) {
+        context.put("viewSize", 1);
+        context.put("viewIndex", 0);
         Map<String, Object> result = org.ofbiz.common.FindServices.performFind(dctx,context);
 
         List<GenericValue> list = null;
@@ -738,7 +790,7 @@ public class FindServices {
         try {
             EntityListIterator it = (EntityListIterator) result.get("listIt");
             list = it.getPartialList(1, 1); // list starts at '1'
-            if (list != null && list.size() > 0 ) {
+            if (UtilValidate.isNotEmpty(list)) {
                 item = list.get(0);
             }
             it.close();

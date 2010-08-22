@@ -19,16 +19,14 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <div id="browse-blogs" class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.ProductBrowseBlogs}</div>
-    </div>
+    <h3>${uiLabelMap.ProductBrowseBlogs}</h3>
     <div class="screenlet-body">
-      <div class="browsecategorylist">
+      <ul class="browsecategorylist">
         <#list blogs as blog>
-            <div class="browsecategorytext">
+            <li class="browsecategorytext">
                 <a href="<@ofbizUrl>MainBlog?blogContentId=${blog.contentId}</@ofbizUrl>" class="browsecategorybutton">${blog.contentName}</a>
-            </div>
+            </li>
         </#list>
-      </div>
+      </ul>
     </div>
 </div>

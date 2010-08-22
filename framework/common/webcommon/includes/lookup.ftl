@@ -19,6 +19,7 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <#assign docLangAttr = locale.toString()?replace("_", "-")>
+<#assign initialLocale = locale.toString()>
 <#assign langDir = "ltr">
 <#if "ar.iw"?contains(docLangAttr?substring(0, 2))>
     <#assign langDir = "rtl">
@@ -26,12 +27,24 @@ under the License.
 <html lang="${docLangAttr}" dir="${langDir}" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>${title}</title>
+    <title>${title?if_exists}</title>
     <script language="javascript" src="<@ofbizContentUrl>/images/prototypejs/prototype.js</@ofbizContentUrl>" type="text/javascript"></script>
     <script language="javascript" src="<@ofbizContentUrl>/images/prototypejs/scriptaculous.js</@ofbizContentUrl>" type="text/javascript"></script>
     <script language="javascript" src="<@ofbizContentUrl>/images/fieldlookup.js</@ofbizContentUrl>" type="text/javascript"></script>
     <script language="javascript" src="<@ofbizContentUrl>/images/selectall.js</@ofbizContentUrl>" type="text/javascript"></script>
-    <script language="javascript" src="<@ofbizContentUrl>/images/calendar_date_select.js</@ofbizContentUrl>" type="text/javascript"></script>
+    <script language="javascript" src="<@ofbizContentUrl>/images/calendarDateSelect/calendar_date_select.js</@ofbizContentUrl>" type="text/javascript"></script>
+    <script language="javascript" src="<@ofbizContentUrl>/images/calendarDateSelect/locale/${(parameters.userLogin.lastLocale?substring(0,2))!initialLocale?substring(0,2)!'en'}.js</@ofbizContentUrl>" type="text/javascript"></script>
+    <#if layoutSettings.javaScripts?has_content>
+        <#--layoutSettings.javaScripts is a list of java scripts. -->
+        <#-- use a Set to make sure each javascript is declared only once, but iterate the list to maintain the correct order -->
+        <#assign javaScriptsSet = Static["org.ofbiz.base.util.UtilMisc"].toSet(layoutSettings.javaScripts)/>
+        <#list layoutSettings.javaScripts as javaScript>
+            <#if javaScriptsSet.contains(javaScript)>
+                <#assign nothing = javaScriptsSet.remove(javaScript)/>
+                <script src="<@ofbizContentUrl>${StringUtil.wrapString(javaScript)}</@ofbizContentUrl>" type="text/javascript"></script>
+            </#if>
+        </#list>
+    </#if>
     <#if layoutSettings.styleSheets?has_content>
         <#list layoutSettings.styleSheets as styleSheet>
             <link rel="stylesheet" href="<@ofbizContentUrl>${styleSheet}</@ofbizContentUrl>" type="text/css"/>
@@ -39,6 +52,11 @@ under the License.
     </#if>
     <#if layoutSettings.VT_STYLESHEET?has_content>
         <#list layoutSettings.VT_STYLESHEET as styleSheet>
+            <link rel="stylesheet" href="<@ofbizContentUrl>${styleSheet}</@ofbizContentUrl>" type="text/css"/>
+        </#list>
+    </#if>
+    <#if layoutSettings.VT_HELPSTYLESHEET?has_content && lookupType?has_content>
+        <#list layoutSettings.VT_HELPSTYLESHEET as styleSheet>
             <link rel="stylesheet" href="<@ofbizContentUrl>${styleSheet}</@ofbizContentUrl>" type="text/css"/>
         </#list>
     </#if>
@@ -68,34 +86,20 @@ under the License.
              src.style.backgroundColor = bkColor;
         }
         // function passing selected value to calling window
-        function set_value(value) {
-                if (!obj_caller) return;
-                setSourceColor(obj_caller.target);
-                obj_caller.target.value = value;
-                window.close();
-        }
-        // function passing selected value to calling window
-        function set_values(value, value2) {
-                set_value(value);
-                if (!obj_caller.target2) return;
-                if (obj_caller.target2 == null) return;
-                setSourceColor(obj_caller.target2);
-                obj_caller.target2.value = value2;
-        }
         function set_multivalues(value) {
             obj_caller.target.value = value;
             var thisForm = obj_caller.target.form;
             var evalString = "";
 
-    		if (arguments.length > 2 ) {
-        		for(var i=1; i < arguments.length; i=i+2) {
+            if (arguments.length > 2 ) {
+                for(var i=1; i < arguments.length; i=i+2) {
                     evalString = "setSourceColor(thisForm." + arguments[i] + ")";
                     eval(evalString);
-        			evalString = "thisForm." + arguments[i] + ".value='" + arguments[i+1] + "'";
-        			eval(evalString);
-        		}
-    		}
-    		window.close();
+                    evalString = "thisForm." + arguments[i] + ".value='" + arguments[i+1] + "'";
+                    eval(evalString);
+                }
+            }
+            window.close();
          }
     </script>
 </head>

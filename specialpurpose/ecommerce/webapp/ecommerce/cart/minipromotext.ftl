@@ -19,23 +19,21 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <#if showPromoText>
-<div id="minipromotext" class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.OrderSpecialOffers}</div>
-    </div>
-    <div class="screenlet-body">
-        <#-- show promotions text -->
-        <#list productPromos as productPromo>
-            <p>
-                <a href="<@ofbizUrl>showPromotionDetails?productPromoId=${productPromo.productPromoId}</@ofbizUrl>" class="linktext">${uiLabelMap.CommonDetails}</a>
-                ${StringUtil.wrapString(productPromo.promoText?if_exists)}
-            </p>
-            <#if productPromo_has_next>
-                <div><hr/></div>
-            </#if>
-        </#list>
-        <div><hr/></div>
-        <a href="<@ofbizUrl>showAllPromotions</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderViewAllPromotions}</a>
-    </div>
+<div id="minipromotext">
+  <h3>${uiLabelMap.OrderSpecialOffers}</h3>
+  <#-- show promotions text -->
+  <ul>
+    <#list productPromos as productPromo>
+      <li>
+        <p>
+          <a href="<@ofbizUrl>showPromotionDetails?productPromoId=${productPromo.productPromoId}</@ofbizUrl>" class="linktext">${uiLabelMap.CommonDetails}</a>
+          ${StringUtil.wrapString(productPromo.promoText?if_exists)}
+        </p>
+      </li>
+    </#list>
+    <li>
+      <a href="<@ofbizUrl>showAllPromotions</@ofbizUrl>" class="button">${uiLabelMap.OrderViewAllPromotions}</a>
+    </li>
+  </ul>
 </div>
 </#if>

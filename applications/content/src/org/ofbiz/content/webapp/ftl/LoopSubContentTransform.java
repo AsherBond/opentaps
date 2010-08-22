@@ -34,7 +34,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
 import org.ofbiz.content.content.ContentServicesComplex;
 import org.ofbiz.content.content.ContentWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.webapp.ftl.LoopWriter;
@@ -70,7 +70,7 @@ public class LoopSubContentTransform implements TemplateTransformModel {
         return FreeMarkerWorker.getArg(args, key, ctx);
     }
 
-    public static boolean prepCtx(GenericDelegator delegator, Map ctx) {
+    public static boolean prepCtx(Delegator delegator, Map ctx) {
         List lst = (List) ctx.get("entityList");
         Integer idx = (Integer) ctx.get("entityIndex");
         if (idx == null) idx = Integer.valueOf(0);
@@ -141,7 +141,7 @@ public class LoopSubContentTransform implements TemplateTransformModel {
         final Environment env = Environment.getCurrentEnvironment();
         final Map templateCtx = (Map) FreeMarkerWorker.getWrappedObject("context", env);
         final LocalDispatcher dispatcher = (LocalDispatcher) FreeMarkerWorker.getWrappedObject("dispatcher", env);
-        final GenericDelegator delegator = (GenericDelegator) FreeMarkerWorker.getWrappedObject("delegator", env);
+        final Delegator delegator = (Delegator) FreeMarkerWorker.getWrappedObject("delegator", env);
         final Map savedValues = FreeMarkerWorker.saveValues(templateCtx, saveKeyNames);
         FreeMarkerWorker.overrideWithArgs(templateCtx, args);
 
@@ -179,14 +179,17 @@ public class LoopSubContentTransform implements TemplateTransformModel {
 
         return new LoopWriter(out) {
 
+            @Override
             public void write(char cbuf[], int off, int len) {
                 buf.append(cbuf, off, len);
             }
 
+            @Override
             public void flush() throws IOException {
                 out.flush();
             }
 
+            @Override
             public int onStart() throws TemplateModelException, IOException {
                 templateCtx.put("entityIndex", Integer.valueOf(0));
                 boolean inProgress = prepCtx(delegator, templateCtx);
@@ -197,6 +200,7 @@ public class LoopSubContentTransform implements TemplateTransformModel {
                 }
             }
 
+            @Override
             public int afterBody() throws TemplateModelException, IOException {
                 boolean inProgress = prepCtx(delegator, templateCtx);
                 if (inProgress) {
@@ -206,6 +210,7 @@ public class LoopSubContentTransform implements TemplateTransformModel {
                 }
             }
 
+            @Override
             public void close() throws IOException {
 
                 String wrappedFTL = buf.toString();
@@ -229,7 +234,7 @@ public class LoopSubContentTransform implements TemplateTransformModel {
                     if (locale == null) locale = Locale.getDefault();
                     String mimeTypeId = (String) templateCtx.get("mimeTypeId");
                     try {
-                        ContentWorker.renderContentAsText(dispatcher, delegator, wrapTemplateId, out, templateRoot, locale, mimeTypeId, true);
+                        ContentWorker.renderContentAsText(dispatcher, delegator, wrapTemplateId, out, templateRoot, locale, mimeTypeId, null, null, true);
                     } catch (GeneralException e) {
                         Debug.logError(e, "Error rendering content", module);
                         throw new IOException("Error rendering content" + e.toString());

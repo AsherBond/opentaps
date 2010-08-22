@@ -141,10 +141,11 @@ public class ServiceXaWrapper extends GenericXaResource {
     /**
      * @return The context used when running the rollback() service
      */
-    public Map getRollbackContext() {
+    public Map<String, ? extends Object> getRollbackContext() {
         return this.rollbackContext;
     }
 
+    @Override
     public void enlist() throws XAException {
         super.enlist();
         if (Debug.verboseOn()) Debug.logVerbose("Enlisted in transaction : " + this.toString(), module);
@@ -154,6 +155,7 @@ public class ServiceXaWrapper extends GenericXaResource {
     /**
      * @see javax.transaction.xa.XAResource#commit(javax.transaction.xa.Xid xid, boolean onePhase)
      */
+    @Override
     public void commit(Xid xid, boolean onePhase) throws XAException {
         if (Debug.verboseOn()) Debug.logVerbose("ServiceXaWrapper#commit() : " + onePhase + " / " + xid.toString(), module);
         // the commit listener
@@ -170,6 +172,7 @@ public class ServiceXaWrapper extends GenericXaResource {
         final boolean async = commitAsync;
 
         Thread thread = new Thread() {
+            @Override
             public void run() {
                 try {
                     runService(service, context, persist, (async ? MODE_ASYNC : MODE_SYNC), TYPE_COMMIT);
@@ -187,6 +190,7 @@ public class ServiceXaWrapper extends GenericXaResource {
     /**
      * @see javax.transaction.xa.XAResource#rollback(javax.transaction.xa.Xid xid)
      */
+    @Override
     public void rollback(Xid xid) throws XAException {
         if (Debug.verboseOn()) Debug.logVerbose("ServiceXaWrapper#rollback() : " + xid.toString(), module);
         // the rollback listener
@@ -203,6 +207,7 @@ public class ServiceXaWrapper extends GenericXaResource {
         final boolean async = rollbackAsync;
 
         Thread thread = new Thread() {
+            @Override
             public void run() {
                 try {
                     runService(service, context, persist, (async ? MODE_ASYNC : MODE_SYNC), TYPE_ROLLBACK);
@@ -217,6 +222,7 @@ public class ServiceXaWrapper extends GenericXaResource {
         this.active = false;
     }
 
+    @Override
     public int prepare(Xid xid) throws XAException {
         // overriding to log two phase commits
         if (Debug.verboseOn()) Debug.logVerbose("ServiceXaWrapper#prepare() : " + xid.toString(), module);

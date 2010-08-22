@@ -18,13 +18,13 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 <div class="screenlet">
-    <div class="screenlet-header">
+    <div class="screenlet-title-bar">
         <div class="boxlink">
             <#if maySelectItems?default("N") == "Y">
                 <a href="javascript:document.addCommonToCartForm.add_all.value='true';document.addCommonToCartForm.submit()" class="buttontext">${uiLabelMap.OrderAddAllToCart}</a>
             </#if>
         </div>
-        <div class="boxhead">&nbsp; ${uiLabelMap.OrderOrderQuoteItems}</div>
+        <div class="h3">${uiLabelMap.OrderOrderQuoteItems}</div>
     </div>
     <div class="screenlet-body">
         <table cellspacing="0" class="basic-table">
@@ -46,7 +46,11 @@ under the License.
                 <#else>
                     <#assign product = null> <#-- don't drag it along to the next iteration -->
                 </#if>
-                <#assign quoteItemAmount = quoteItem.quoteUnitPrice?default(0) * quoteItem.quantity?default(0) * quoteItem.selectedAmount?default(1)>
+                <#assign selectedAmount = quoteItem.selectedAmount?default(1)>
+                <#if selectedAmount == 0>
+                    <#assign selectedAmount = 1/>
+                </#if>
+                <#assign quoteItemAmount = quoteItem.quoteUnitPrice?default(0) * quoteItem.quantity?default(0) * selectedAmount>
                 <#assign quoteItemAdjustments = quoteItem.getRelated("QuoteAdjustment")>
                 <#assign totalQuoteItemAdjustmentAmount = 0.0>
                 <#list quoteItemAdjustments as quoteItemAdjustment>
@@ -98,12 +102,12 @@ under the License.
                 <#-- toggle the row color -->
                 <#assign alt_row = !alt_row>
             </#list>
-            <tr><td colspan="10"><hr/></td></tr>
+            <tr><td colspan="10"><hr /></td></tr>
             <tr>
                 <td align="right" colspan="6" class="label">${uiLabelMap.CommonSubtotal}</td>
                 <td align="right"><@ofbizCurrency amount=totalQuoteAmount isoCode=quote.currencyUomId/></td>
             </tr>
-            <tr><td colspan="5"></td><td colspan="6"><hr/></td></tr>
+            <tr><td colspan="5"></td><td colspan="6"><hr /></td></tr>
             <#assign totalQuoteHeaderAdjustmentAmount = 0.0>
             <#assign findAdjustment = false>
             <#list quoteAdjustments as quoteAdjustment>
@@ -119,7 +123,7 @@ under the License.
             </#list>
             <#assign grandTotalQuoteAmount = totalQuoteAmount + totalQuoteHeaderAdjustmentAmount>
             <#if findAdjustment>
-            <tr><td colspan="5"></td><td colspan="6"><hr/></td></tr>
+            <tr><td colspan="5"></td><td colspan="6"><hr /></td></tr>
             </#if>
             <tr>
                 <td align="right" colspan="6" class="label">${uiLabelMap.OrderGrandTotal}</td>

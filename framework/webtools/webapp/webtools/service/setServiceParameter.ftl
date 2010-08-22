@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
-<form name="scheduleForm" method="POST" action="<@ofbizUrl>scheduleService</@ofbizUrl>">
+<form name="scheduleForm" method="post" action="<@ofbizUrl>scheduleService</@ofbizUrl>">
     <#list scheduleOptions as scheduleOption>
       <input type="hidden" name="${scheduleOption.name}" value="${scheduleOption.value}"/>
     </#list>
@@ -35,7 +35,7 @@ under the License.
       </tr>
     </#list>
       <tr>
-        <td colspan="2" align="center"><input type="submit" value="${uiLabelMap.CommonSubmit}"></td>
+        <td colspan="2" align="center"><input type="submit" value="${uiLabelMap.CommonSubmit}" /></td>
       </tr>
     </table>
 </form>

@@ -24,6 +24,7 @@ import org.ofbiz.party.contact.ContactHelper;
 if (userLogin) {
     party = userLogin.getRelatedOne("Party");
     person = delegator.findByPrimaryKey("Person", [partyId : party.partyId]);
+    context.partyId = person.partyId;
     context.firstName = person.firstName;
     context.lastName = person.lastName;
 
@@ -32,6 +33,8 @@ if (userLogin) {
         postalAddress = contactMech.getRelatedOne("PostalAddress");
         context.shipToContactMechId = postalAddress.contactMechId;
 
+        context.shipToName = postalAddress.toName;
+        context.shipToAttnName = postalAddress.attnName;
         context.shipToAddress1 = postalAddress.address1;
         context.shipToAddress2 = postalAddress.address2;
         context.shipToCity = postalAddress.city;
@@ -58,4 +61,11 @@ if (userLogin) {
         context.shipToExtension = pcm.extension;
     }
 
+    shipToFaxNumberList = ContactHelper.getContactMech(party, "FAX_SHIPPING", "TELECOM_NUMBER", false)
+    if (shipToFaxNumberList) {
+        shipToFaxNumber = (EntityUtil.getFirst(shipToFaxNumberList)).getRelatedOne("TelecomNumber");
+        faxPartyContactMech = EntityUtil.getFirst(shipToFaxNumber.getRelated("PartyContactMech"));
+        context.shipToFaxNumber = shipToFaxNumber;
+        context.shipToFaxExtension = faxPartyContactMech.extension;
+    }
 }

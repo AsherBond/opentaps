@@ -30,10 +30,12 @@ import javolution.util.FastList;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralRuntimeException;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericResultSetClosedException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.datasource.GenericDAO;
 import org.ofbiz.entity.jdbc.SQLProcessor;
 import org.ofbiz.entity.jdbc.SqlJdbcUtil;
 import org.ofbiz.entity.model.ModelEntity;
@@ -56,16 +58,29 @@ public class EntityListIterator implements ListIterator<GenericValue> {
     protected ModelFieldTypeReader modelFieldTypeReader;
     protected boolean closed = false;
     protected boolean haveMadeValue = false;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
+    protected GenericDAO genericDAO = null;
+    protected EntityCondition whereCondition = null;
+    protected EntityCondition havingCondition = null;
+    protected boolean distinctQuery = false;
 
     private boolean haveShowHasNextWarning = false;
+    private Integer resultSize = null;
 
     public EntityListIterator(SQLProcessor sqlp, ModelEntity modelEntity, List<ModelField> selectFields, ModelFieldTypeReader modelFieldTypeReader) {
+        this(sqlp, modelEntity, selectFields, modelFieldTypeReader, null, null, null, false);
+    }
+
+    public EntityListIterator(SQLProcessor sqlp, ModelEntity modelEntity, List<ModelField> selectFields, ModelFieldTypeReader modelFieldTypeReader, GenericDAO genericDAO, EntityCondition whereCondition, EntityCondition havingCondition, boolean distinctQuery) {
         this.sqlp = sqlp;
         this.resultSet = sqlp.getResultSet();
         this.modelEntity = modelEntity;
         this.selectFields = selectFields;
         this.modelFieldTypeReader = modelFieldTypeReader;
+        this.genericDAO = genericDAO;
+        this.whereCondition = whereCondition;
+        this.havingCondition = havingCondition;
+        this.distinctQuery = distinctQuery;
     }
 
     public EntityListIterator(ResultSet resultSet, ModelEntity modelEntity, List<ModelField> selectFields, ModelFieldTypeReader modelFieldTypeReader) {
@@ -76,7 +91,7 @@ public class EntityListIterator implements ListIterator<GenericValue> {
         this.modelFieldTypeReader = modelFieldTypeReader;
     }
 
-    public void setDelegator(GenericDelegator delegator) {
+    public void setDelegator(Delegator delegator) {
         this.delegator = delegator;
     }
 
@@ -119,7 +134,7 @@ public class EntityListIterator implements ListIterator<GenericValue> {
         }
     }
 
-    /** Sets the cursor position to last result; if result set is empty returns false */
+    /** Sets the cursor position to first result; if result set is empty returns false */
     public boolean first() throws GenericEntityException {
         try {
             return resultSet.first();
@@ -455,7 +470,7 @@ public class EntityListIterator implements ListIterator<GenericValue> {
                 }
             } else {
                 // if can't reposition to desired index, throw exception
-                if (!resultSet.absolute(start)) {
+                if (!this.absolute(start)) {
                     // maybe better to just return an empty list here...
                     return list;
                     //throw new GenericEntityException("Could not move to the start position of " + start + ", there are probably not that many results for this find.");
@@ -491,7 +506,17 @@ public class EntityListIterator implements ListIterator<GenericValue> {
     }
 
     public int getResultsSizeAfterPartialList() throws GenericEntityException {
-        if (this.last()) {
+        if (genericDAO != null) {
+            if (resultSize == null) {
+                EntityFindOptions efo = null;
+                if (distinctQuery) {
+                    efo = new EntityFindOptions();
+                    efo.setDistinct(distinctQuery);
+                }
+                resultSize = (int) genericDAO.selectCountByCondition(modelEntity, whereCondition, havingCondition, selectFields, efo);
+            }
+            return resultSize;
+        } else if (this.last()) {
             return this.currentIndex();
         } else {
             // evidently no valid rows in the ResultSet, so return 0
@@ -511,6 +536,7 @@ public class EntityListIterator implements ListIterator<GenericValue> {
         throw new GeneralRuntimeException("CursorListIterator currently only supports read-only access");
     }
 
+    @Override
     protected void finalize() throws Throwable {
         try {
             if (!closed) {

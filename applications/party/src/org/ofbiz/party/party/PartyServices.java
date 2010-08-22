@@ -33,10 +33,11 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -101,7 +102,7 @@ public class PartyServices {
      */
     public static Map<String, Object> createPerson(DispatchContext ctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Timestamp now = UtilDateTime.nowTimestamp();
         List<GenericValue> toBeStored = FastList.newInstance();
         Locale locale = (Locale) context.get("locale");
@@ -112,12 +113,12 @@ public class PartyServices {
         String description = (String) context.get("description");
 
         // if specified partyId starts with a number, return an error
-        if (partyId != null && partyId.length() > 0 && Character.isDigit(partyId.charAt(0))) {
+        if (UtilValidate.isNotEmpty(partyId) && partyId.matches("\\d+")) {
             return ServiceUtil.returnError(UtilProperties.getMessage(resource, "party.id_is_digit", locale));
         }
 
         // partyId might be empty, so check it and get next seq party id if empty
-        if (partyId == null || partyId.length() == 0) {
+        if (UtilValidate.isEmpty(partyId)) {
             try {
                 partyId = delegator.getNextSeqId("Party");
             } catch (IllegalArgumentException e) {
@@ -199,7 +200,7 @@ public class PartyServices {
      * <b>security check</b>: the status change must be defined in StatusValidChange.
      */
     public static Map<String, Object> setPartyStatus(DispatchContext ctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
         String partyId = (String) context.get("partyId");
@@ -212,22 +213,40 @@ public class PartyServices {
         try {
             GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyId));
 
-            // check that status is defined as a valid change
-            GenericValue statusValidChange = delegator.findByPrimaryKey("StatusValidChange", UtilMisc.toMap("statusId", party.getString("statusId"), "statusIdTo", statusId));
-            if (statusValidChange == null) {
-                String errorMsg = "Cannot change party status from " + party.getString("statusId") + " to " + statusId;
-                Debug.logWarning(errorMsg, module);
-                return ServiceUtil.returnError(errorMsg);
+            if (party.get("statusId") == null) { // old records
+                party.set("statusId", "PARTY_ENABLED");
             }
 
-            // record the oldStatusId and change the party status
             String oldStatusId = party.getString("statusId");
-            party.set("statusId", statusId);
-            party.store();
+            if (!party.getString("statusId").equals(statusId)) {
 
-            // record this status change in PartyStatus table
-            GenericValue partyStatus = delegator.makeValue("PartyStatus", UtilMisc.toMap("partyId", partyId, "statusId", statusId, "statusDate", statusDate));
-            partyStatus.create();
+                // check that status is defined as a valid change
+                GenericValue statusValidChange = delegator.findByPrimaryKey("StatusValidChange", UtilMisc.toMap("statusId", party.getString("statusId"), "statusIdTo", statusId));
+                if (statusValidChange == null) {
+                    String errorMsg = "Cannot change party status from " + party.getString("statusId") + " to " + statusId;
+                    Debug.logWarning(errorMsg, module);
+                    return ServiceUtil.returnError(errorMsg);
+                }
+
+                party.set("statusId", statusId);
+                party.store();
+
+                // record this status change in PartyStatus table
+                GenericValue partyStatus = delegator.makeValue("PartyStatus", UtilMisc.toMap("partyId", partyId, "statusId", statusId, "statusDate", statusDate));
+                partyStatus.create();
+
+                // disable all userlogins for this user when the new status is disabled
+                if (("PARTY_DISABLED").equals(statusId)) {
+                    List <GenericValue> userLogins = delegator.findByAnd("UserLogin", UtilMisc.toMap("partyId", partyId));
+                    for(GenericValue userLogin : userLogins) {
+                        if (!"N".equals(userLogin.getString("enabled"))) {
+                            userLogin.set("enabled", "N");
+                            userLogin.set("disabledDateTime", UtilDateTime.nowTimestamp());
+                            userLogin.store();
+                        }
+                    }
+                }
+            }
 
             Map<String, Object> results = ServiceUtil.returnSuccess();
             results.put("oldStatusId", oldStatusId);
@@ -246,7 +265,8 @@ public class PartyServices {
      */
     public static Map<String, Object> updatePerson(DispatchContext ctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
+        LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
 
         String partyId = getPartyId(context);
@@ -269,8 +289,16 @@ public class PartyServices {
             return ServiceUtil.returnError(UtilProperties.getMessage(resource, "person.update.not_found", locale));
         }
 
+        // update status by separate service
+        String oldStatusId = party.getString("statusId");
+        if (party.get("statusId") == null) { // old records
+            party.set("statusId", "PARTY_ENABLED");
+        }
+
         person.setNonPKFields(context);
         party.setNonPKFields(context);
+
+        party.set("statusId", oldStatusId);
 
         try {
             person.store();
@@ -278,6 +306,15 @@ public class PartyServices {
         } catch (GenericEntityException e) {
             Debug.logWarning(e.getMessage(), module);
             return ServiceUtil.returnError(UtilProperties.getMessage(resource, "person.update.write_failure", new Object[] { e.getMessage() }, locale));
+        }
+
+        if (UtilValidate.isNotEmpty(context.get("statusId")) && !context.get("statusId").equals(oldStatusId)) {
+            try {
+                dispatcher.runSync("setPartyStatus", UtilMisc.toMap("partyId", partyId, "statusId", context.get("statusId"), "userLogin", context.get("userLogin")));
+            } catch (GenericServiceException e) {
+                Debug.logWarning(e.getMessage(), module);
+                return ServiceUtil.returnError(UtilProperties.getMessage(resource, "person.update.write_failure", new Object[] { e.getMessage() }, locale));
+            }
         }
 
         result.put(ModelService.RESPONSE_MESSAGE, ModelService.RESPOND_SUCCESS);
@@ -294,7 +331,7 @@ public class PartyServices {
      */
     public static Map<String, Object> createPartyGroup(DispatchContext ctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Timestamp now = UtilDateTime.nowTimestamp();
 
@@ -303,7 +340,7 @@ public class PartyServices {
         String errMsg = null;
 
         // partyId might be empty, so check it and get next seq party id if empty
-        if (partyId == null || partyId.length() == 0) {
+        if (UtilValidate.isEmpty(partyId)) {
             try {
                 partyId = delegator.getNextSeqId("Party");
             } catch (IllegalArgumentException e) {
@@ -312,7 +349,7 @@ public class PartyServices {
             }
         } else {
             // if specified partyId starts with a number, return an error
-            if (Character.isDigit(partyId.charAt(0))) {
+            if (partyId.matches("\\d+")) {
                 errMsg = UtilProperties.getMessage(resource,"partyservices.could_not_create_party_ID_digit", locale);
                 return ServiceUtil.returnError(errMsg);
             }
@@ -339,7 +376,7 @@ public class PartyServices {
                 // create a party if one doesn't already exist
                 String partyTypeId = "PARTY_GROUP";
 
-                if (UtilValidate.isNotEmpty(((String) context.get("partyTypeId")))) {
+                if (UtilValidate.isNotEmpty(context.get("partyTypeId"))) {
                     GenericValue desiredPartyType = delegator.findByPrimaryKeyCache("PartyType", UtilMisc.toMap("partyTypeId", context.get("partyTypeId")));
                     if (desiredPartyType != null && EntityTypeUtil.isType(desiredPartyType, partyGroupPartyType)) {
                         partyTypeId = desiredPartyType.getString("partyTypeId");
@@ -379,6 +416,7 @@ public class PartyServices {
             partyGroup = delegator.makeValue("PartyGroup", UtilMisc.toMap("partyId", partyId));
             partyGroup.setNonPKFields(context);
             partyGroup.create();
+
         } catch (GenericEntityException e) {
             Debug.logWarning(e, module);
             Map<String, String> messageMap = UtilMisc.toMap("errMessage", e.getMessage());
@@ -399,7 +437,8 @@ public class PartyServices {
      */
     public static Map<String, Object> updatePartyGroup(DispatchContext ctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
+        LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
 
         String partyId = getPartyId(context);
@@ -426,8 +465,12 @@ public class PartyServices {
             return ServiceUtil.returnError(errMsg);
         }
 
+
+        // update status by separate service
+        String oldStatusId = party.getString("statusId");
         partyGroup.setNonPKFields(context);
         party.setNonPKFields(context);
+        party.set("statusId", oldStatusId);
 
         try {
             partyGroup.store();
@@ -437,6 +480,15 @@ public class PartyServices {
             Map<String, String> messageMap = UtilMisc.toMap("errMessage", e.getMessage());
             errMsg = UtilProperties.getMessage(resource,"partyservices.could_not_update_party_information_write", messageMap, locale);
             return ServiceUtil.returnError(errMsg);
+        }
+
+        if (UtilValidate.isNotEmpty(context.get("statusId")) && !context.get("statusId").equals(oldStatusId)) {
+            try {
+                dispatcher.runSync("setPartyStatus", UtilMisc.toMap("partyId", partyId, "statusId", context.get("statusId"), "userLogin", context.get("userLogin")));
+            } catch (GenericServiceException e) {
+                Debug.logWarning(e.getMessage(), module);
+                return ServiceUtil.returnError(UtilProperties.getMessage(resource, "person.update.write_failure", new Object[] { e.getMessage() }, locale));
+            }
         }
 
         result.put(ModelService.RESPONSE_MESSAGE, ModelService.RESPOND_SUCCESS);
@@ -451,7 +503,7 @@ public class PartyServices {
      */
     public static Map<String, Object> createAffiliate(DispatchContext ctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Timestamp now = UtilDateTime.nowTimestamp();
 
         Locale locale = (Locale) context.get("locale");
@@ -460,13 +512,13 @@ public class PartyServices {
         String partyId = getPartyId(context);
 
         // if specified partyId starts with a number, return an error
-        if (Character.isDigit(partyId.charAt(0))) {
+        if (UtilValidate.isNotEmpty(partyId) && partyId.matches("\\d+")) {
             errMsg = UtilProperties.getMessage(resource,"partyservices.cannot_create_affiliate_digit", locale);
             return ServiceUtil.returnError(errMsg);
         }
 
         // partyId might be empty, so check it and get next seq party id if empty
-        if (partyId == null || partyId.length() == 0) {
+        if (UtilValidate.isEmpty(partyId)) {
             try {
                 partyId = delegator.getNextSeqId("Party");
             } catch (IllegalArgumentException e) {
@@ -527,7 +579,7 @@ public class PartyServices {
      * @return Map with the result of the service, the output parameters.
      */
     public static Map<String, Object> updateAffiliate(DispatchContext ctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
         String partyId = getPartyId(context);
@@ -572,7 +624,7 @@ public class PartyServices {
      */
     public static Map<String, Object> createPartyNote(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String noteString = (String) context.get("note");
@@ -614,7 +666,7 @@ public class PartyServices {
 
             noteId = (String) noteRes.get("noteId");
 
-            if (noteId == null || noteId.length() == 0) {
+            if (UtilValidate.isEmpty(noteId)) {
                 errMsg = UtilProperties.getMessage(resource,"partyservices.problem_creating_note_no_noteId_returned", locale);
                 return ServiceUtil.returnError(errMsg);
             }
@@ -645,7 +697,7 @@ public class PartyServices {
      */
     public static Map<String, Object> getPartyFromExactEmail(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Collection<Map<String, GenericValue>> parties = FastList.newInstance();
         String email = (String) context.get("email");
         Locale locale = (Locale) context.get("locale");
@@ -681,7 +733,7 @@ public class PartyServices {
 
     public static Map<String, Object> getPartyFromEmail(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Collection<Map<String, GenericValue>> parties = FastList.newInstance();
         String email = (String) context.get("email");
         Locale locale = (Locale) context.get("locale");
@@ -724,7 +776,7 @@ public class PartyServices {
     public static Map<String, Object> getPartyFromUserLogin(DispatchContext dctx, Map<String, ? extends Object> context) {
         Debug.logWarning("Running the getPartyFromUserLogin Service...", module);
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Collection<Map<String, GenericValue>> parties = FastList.newInstance();
         String userLoginId = (String) context.get("userLoginId");
         Locale locale = (Locale) context.get("locale");
@@ -734,7 +786,7 @@ public class PartyServices {
 
         try {
             EntityExpr ee = EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("userLoginId"), EntityOperator.LIKE, EntityFunction.UPPER("%" + userLoginId.toUpperCase() + "%"));
-            Collection<GenericValue> ulc = delegator.findList("PartyAndUserLogin", ee, null, UtilMisc.toList("userloginId"), null, false);
+            Collection<GenericValue> ulc = delegator.findList("PartyAndUserLogin", ee, null, UtilMisc.toList("userLoginId"), null, false);
 
             if (Debug.verboseOn()) Debug.logVerbose("Collection: " + ulc, module);
             if (Debug.infoOn()) Debug.logInfo("PartyFromUserLogin number found: " + ulc.size(), module);
@@ -764,7 +816,7 @@ public class PartyServices {
      */
     public static Map<String, Object> getPartyFromPerson(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Collection<Map<String, GenericValue>> parties = FastList.newInstance();
         String firstName = (String) context.get("firstName");
         String lastName = (String) context.get("lastName");
@@ -814,7 +866,7 @@ public class PartyServices {
      */
     public static Map<String, Object> getPartyFromPartyGroup(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Collection<Map<String, GenericValue>> parties = FastList.newInstance();
         String groupName = (String) context.get("groupName");
         Locale locale = (Locale) context.get("locale");
@@ -848,7 +900,7 @@ public class PartyServices {
 
     public static Map<String, Object> getPerson(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String partyId = (String) context.get("partyId");
         GenericValue person = null;
 
@@ -865,7 +917,7 @@ public class PartyServices {
 
     public static Map<String, Object> createRoleType(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue roleType = null;
 
         try {
@@ -884,7 +936,7 @@ public class PartyServices {
     }
 
     public static Map<String, Object> createPartyDataSource(DispatchContext ctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
 
         // input data
         String partyId = (String) context.get("partyId");
@@ -916,7 +968,7 @@ public class PartyServices {
 
     public static Map<String, Object> findParty(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String extInfo = (String) context.get("extInfo");
@@ -935,7 +987,7 @@ public class PartyServices {
         String roleTypeId;
         try {
             roleTypeId = (String) context.get("roleTypeId");
-            if (roleTypeId != null && roleTypeId.length() > 0) {
+            if (UtilValidate.isNotEmpty(roleTypeId)) {
                 GenericValue currentRole = delegator.findByPrimaryKeyCache("RoleType", UtilMisc.toMap("roleTypeId", roleTypeId));
                 result.put("currentRole", currentRole);
             }
@@ -959,7 +1011,7 @@ public class PartyServices {
         String partyTypeId;
         try {
             partyTypeId = (String) context.get("partyTypeId");
-            if (partyTypeId != null && partyTypeId.length() > 0) {
+            if (UtilValidate.isNotEmpty(partyTypeId)) {
                 GenericValue currentPartyType = delegator.findByPrimaryKeyCache("PartyType", UtilMisc.toMap("partyTypeId", partyTypeId));
                 result.put("currentPartyType", currentPartyType);
             }
@@ -973,7 +1025,7 @@ public class PartyServices {
         String stateProvinceGeoId;
         try {
             stateProvinceGeoId = (String) context.get("stateProvinceGeoId");
-            if (stateProvinceGeoId != null && stateProvinceGeoId.length() > 0) {
+            if (UtilValidate.isNotEmpty(stateProvinceGeoId)) {
                 GenericValue currentStateGeo = delegator.findByPrimaryKeyCache("Geo", UtilMisc.toMap("geoId", stateProvinceGeoId));
                 result.put("currentStateGeo", currentStateGeo);
             }
@@ -1042,17 +1094,23 @@ public class PartyServices {
                 String partyRelationshipTypeId = (String) context.get("partyRelationshipTypeId");
                 if (UtilValidate.isNotEmpty(partyRelationshipTypeId)) {
                     // add relation to view
-                    dynamicView.addMemberEntity("PR", "PartyRelationship");
-                    dynamicView.addAlias("PR", "partyIdTo");
-                    dynamicView.addAlias("PR", "partyRelationshipTypeId");
-                    dynamicView.addViewLink("PT", "PR", Boolean.FALSE, ModelKeyMap.makeKeyMapList("partyId", "partyIdTo"));
-                    String partyIdFrom = userLogin.getString("partyId");
-                    paramList = paramList + "&partyIdFrom=" + StringUtil.defaultWebEncoder.encodeForURL(partyIdFrom);
-                    dynamicView.addAlias("PR", "partyIdFrom");
+                    dynamicView.addMemberEntity("PRSHP", "PartyRelationship");
+                    dynamicView.addAlias("PRSHP", "partyIdTo");
+                    dynamicView.addAlias("PRSHP", "partyRelationshipTypeId");
+                    dynamicView.addViewLink("PT", "PRSHP", Boolean.FALSE, ModelKeyMap.makeKeyMapList("partyId", "partyIdTo"));
+                    List<String> ownerPartyIds = UtilGenerics.cast(context.get("ownerPartyIds"));
+                    EntityCondition relationshipCond = null;
+                    if (UtilValidate.isEmpty(ownerPartyIds)) {
+                        String partyIdFrom = userLogin.getString("partyId");
+                        paramList = paramList + "&partyIdFrom=" + StringUtil.defaultWebEncoder.encodeForURL(partyIdFrom);
+                        relationshipCond = EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("partyIdFrom"), EntityOperator.EQUALS, EntityFunction.UPPER(partyIdFrom));
+                    } else {
+                        relationshipCond = EntityCondition.makeCondition("partyIdFrom", EntityOperator.IN, ownerPartyIds);
+                    }
+                    dynamicView.addAlias("PRSHP", "partyIdFrom");
                     // add the expr
                     andExprs.add(EntityCondition.makeCondition(
-                                                               EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("partyIdFrom"), EntityOperator.EQUALS, EntityFunction.UPPER(partyIdFrom)),
-                                                               EntityOperator.AND,
+                                                               relationshipCond, EntityOperator.AND,
                                                                EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("partyRelationshipTypeId"), EntityOperator.EQUALS, EntityFunction.UPPER(partyRelationshipTypeId))));
                     fieldsToSelect.add("partyIdTo");
                 }
@@ -1067,7 +1125,7 @@ public class PartyServices {
 
                 if (!"Y".equals(showAll)) {
                     // check for a partyId
-                    if (partyId != null && partyId.length() > 0) {
+                    if (UtilValidate.isNotEmpty(partyId)) {
                         paramList = paramList + "&partyId=" + StringUtil.defaultWebEncoder.encodeForURL(partyId);
                         andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("partyId"), EntityOperator.LIKE, EntityFunction.UPPER("%"+partyId+"%")));
                     }
@@ -1093,7 +1151,7 @@ public class PartyServices {
                     // ----
 
                     // filter on user login
-                    if (userLoginId != null && userLoginId.length() > 0) {
+                    if (UtilValidate.isNotEmpty(userLoginId)) {
                         paramList = paramList + "&userLoginId=" + StringUtil.defaultWebEncoder.encodeForURL(userLoginId);
 
                         // modify the dynamic view
@@ -1112,7 +1170,7 @@ public class PartyServices {
                     // ----
 
                     // filter on groupName
-                    if (groupName != null && groupName.length() > 0) {
+                    if (UtilValidate.isNotEmpty(groupName)) {
                         paramList = paramList + "&groupName=" + StringUtil.defaultWebEncoder.encodeForURL(groupName);
 
                         // modify the dynamic view
@@ -1131,7 +1189,7 @@ public class PartyServices {
                     // ----
 
                     // modify the dynamic view
-                    if ((firstName != null && firstName.length() > 0) || (lastName != null && lastName.length() > 0)) {
+                    if (UtilValidate.isNotEmpty(firstName) || UtilValidate.isNotEmpty(lastName)) {
                         dynamicView.addMemberEntity("PE", "Person");
                         dynamicView.addAlias("PE", "firstName");
                         dynamicView.addAlias("PE", "lastName");
@@ -1144,13 +1202,13 @@ public class PartyServices {
                     }
 
                     // filter on firstName
-                    if (firstName != null && firstName.length() > 0) {
+                    if (UtilValidate.isNotEmpty(firstName)) {
                         paramList = paramList + "&firstName=" + StringUtil.defaultWebEncoder.encodeForURL(firstName);
                         andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("firstName"), EntityOperator.LIKE, EntityFunction.UPPER("%"+firstName+"%")));
                     }
 
                     // filter on lastName
-                    if (lastName != null && lastName.length() > 0) {
+                    if (UtilValidate.isNotEmpty(lastName)) {
                         paramList = paramList + "&lastName=" + StringUtil.defaultWebEncoder.encodeForURL(lastName);
                         andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("lastName"), EntityOperator.LIKE, EntityFunction.UPPER("%"+lastName+"%")));
                     }
@@ -1232,23 +1290,23 @@ public class PartyServices {
 
                         // filter on address1
                         String address1 = (String) context.get("address1");
-                        if (address1 != null && address1.length() > 0) {
+                        if (UtilValidate.isNotEmpty(address1)) {
                             paramList = paramList + "&address1=" + StringUtil.defaultWebEncoder.encodeForURL(address1);
                             andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("address1"), EntityOperator.LIKE, EntityFunction.UPPER("%" + address1 + "%")));
                         }
 
                         // filter on address2
                         String address2 = (String) context.get("address2");
-                        if (address2 != null && address2.length() > 0) {
+                        if (UtilValidate.isNotEmpty(address2)) {
                             paramList = paramList + "&address2=" + StringUtil.defaultWebEncoder.encodeForURL(address2);
                             andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("address2"), EntityOperator.LIKE, EntityFunction.UPPER("%" + address2 + "%")));
                         }
 
                         // filter on city
                         String city = (String) context.get("city");
-                        if (city != null && city.length() > 0) {
+                        if (UtilValidate.isNotEmpty(city)) {
                             paramList = paramList + "&city=" + StringUtil.defaultWebEncoder.encodeForURL(city);
-                            andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("city"), EntityOperator.EQUALS, EntityFunction.UPPER(city)));
+                            andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("city"), EntityOperator.LIKE, EntityFunction.UPPER("%" + city + "%")));
                         }
 
                         // filter on state geo
@@ -1259,7 +1317,7 @@ public class PartyServices {
 
                         // filter on postal code
                         String postalCode = (String) context.get("postalCode");
-                        if (postalCode != null && postalCode.length() > 0) {
+                        if (UtilValidate.isNotEmpty(postalCode)) {
                             paramList = paramList + "&postalCode=" + StringUtil.defaultWebEncoder.encodeForURL(postalCode);
                             andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("postalCode"), EntityOperator.LIKE, EntityFunction.UPPER("%" + postalCode + "%")));
                         }
@@ -1283,12 +1341,12 @@ public class PartyServices {
 
                         // filter on infoString
                         String infoString = (String) context.get("infoString");
-                        if (infoString != null && infoString.length() > 0) {
+                        if (UtilValidate.isNotEmpty(infoString)) {
                             paramList = paramList + "&infoString=" + StringUtil.defaultWebEncoder.encodeForURL(infoString);
                             andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("infoString"), EntityOperator.LIKE, EntityFunction.UPPER("%"+infoString+"%")));
+                            fieldsToSelect.add("infoString");
                         }
 
-                        fieldsToSelect.add("infoString");
                     }
 
                     // ----
@@ -1307,21 +1365,21 @@ public class PartyServices {
 
                         // filter on countryCode
                         String countryCode = (String) context.get("countryCode");
-                        if (countryCode != null && countryCode.length() > 0) {
+                        if (UtilValidate.isNotEmpty(countryCode)) {
                             paramList = paramList + "&countryCode=" + StringUtil.defaultWebEncoder.encodeForURL(countryCode);
                             andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("countryCode"), EntityOperator.EQUALS, EntityFunction.UPPER(countryCode)));
                         }
 
                         // filter on areaCode
                         String areaCode = (String) context.get("areaCode");
-                        if (areaCode != null && areaCode.length() > 0) {
+                        if (UtilValidate.isNotEmpty(areaCode)) {
                             paramList = paramList + "&areaCode=" + StringUtil.defaultWebEncoder.encodeForURL(areaCode);
                             andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("areaCode"), EntityOperator.EQUALS, EntityFunction.UPPER(areaCode)));
                         }
 
                         // filter on contact number
                         String contactNumber = (String) context.get("contactNumber");
-                        if (contactNumber != null && contactNumber.length() > 0) {
+                        if (UtilValidate.isNotEmpty(contactNumber)) {
                             paramList = paramList + "&contactNumber=" + StringUtil.defaultWebEncoder.encodeForURL(contactNumber);
                             andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("contactNumber"), EntityOperator.EQUALS, EntityFunction.UPPER(contactNumber)));
                         }
@@ -1341,25 +1399,23 @@ public class PartyServices {
                 // do the lookup
                 if (mainCond != null || "Y".equals(showAll)) {
                     try {
-                        // set distinct on so we only get one row per order
-                        EntityFindOptions findOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
-                        // using list iterator
-                        EntityListIterator pli = delegator.findListIteratorByCondition(dynamicView, mainCond, null, fieldsToSelect, orderBy, findOpts);
-
                         // get the indexes for the partial list
                         lowIndex = viewIndex * viewSize + 1;
                         highIndex = (viewIndex + 1) * viewSize;
+
+                        // set distinct on so we only get one row per order
+                        EntityFindOptions findOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, -1, highIndex, true);
+                        // using list iterator
+                        EntityListIterator pli = delegator.findListIteratorByCondition(dynamicView, mainCond, null, fieldsToSelect, orderBy, findOpts);
 
                         // get the partial list for this page
                         partyList = pli.getPartialList(lowIndex, viewSize);
 
                         // attempt to get the full size
-                        pli.last();
-                        partyListSize = pli.currentIndex();
+                        partyListSize = pli.getResultsSizeAfterPartialList();
                         if (highIndex > partyListSize) {
                             highIndex = partyListSize;
                         }
-
                         // close the list iterator
                         pli.close();
                     } catch (GenericEntityException e) {
@@ -1398,8 +1454,8 @@ public class PartyServices {
      * @return
      */
     public static Map<String, Object> linkParty(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator _delegator = dctx.getDelegator();
-        GenericDelegator delegator = _delegator.cloneDelegator();
+        Delegator _delegator = dctx.getDelegator();
+        Delegator delegator = _delegator.cloneDelegator();
         delegator.setEntityEcaHandler(null);
 
         String partyIdTo = (String) context.get("partyIdTo");
@@ -1624,7 +1680,7 @@ public class PartyServices {
     }
 
     public static Map<String, Object> importAddressMatchMapCsv(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         ByteBuffer fileBytes = (ByteBuffer) context.get("uploadedFile");
         String encoding = System.getProperty("file.encoding");
         String csvFile = Charset.forName(encoding).decode(fileBytes).toString();
@@ -1686,4 +1742,46 @@ public class PartyServices {
         }
         return partyId;
     }
+
+
+    /**
+     * Finds partyId(s) corresponding to a party reference, partyId or a GoodIdentification idValue
+     * @param dctx
+     * @param context
+     * @param context.partyId use to search with partyId or goodIdentification.idValue
+     * @return a GenericValue with a partyId and a List of complementary partyId found
+     */
+    public static Map<String, Object> findPartyById(DispatchContext ctx, Map<String, Object> context) {
+        Delegator delegator = ctx.getDelegator();
+        String idToFind = (String) context.get("idToFind");
+        String partyIdentificationTypeId = (String) context.get("partyIdentificationTypeId");
+        String searchPartyFirstContext = (String) context.get("searchPartyFirst");
+        String searchAllIdContext = (String) context.get("searchAllId");
+
+        boolean searchPartyFirst = UtilValidate.isNotEmpty(searchPartyFirstContext) && "N".equals(searchPartyFirstContext) ? false : true;
+        boolean searchAllId = UtilValidate.isNotEmpty(searchAllIdContext)&& "Y".equals(searchAllIdContext) ? true : false;
+
+        GenericValue party = null;
+        List<GenericValue> partiesFound = null;
+        try {
+            partiesFound = PartyWorker.findPartiesById(delegator, idToFind, partyIdentificationTypeId, searchPartyFirst, searchAllId);
+        } catch (GenericEntityException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(e.getMessage());
+        }
+
+        if (UtilValidate.isNotEmpty(partiesFound)) {
+            // gets the first partyId of the List
+            party = EntityUtil.getFirst(partiesFound);
+            // remove this partyId
+            partiesFound.remove(0);
+        }
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        result.put("party", party);
+        result.put("partiesFound", partiesFound);
+
+        return result;
+    }
+
 }

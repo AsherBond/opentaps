@@ -41,16 +41,17 @@ under the License.
 </#if>
 </#macro>
 
+<#macro renderTooltip tooltip tooltipStyle></#macro>
 <#macro renderCheckField items className alert allChecked currentValue name event action></#macro>
 <#macro renderRadioField items className alert currentValue noCurrentSelectedKey name event ation></#macro>
 
-<#macro renderSubmitField buttonType className alert formName title name event action imgSrc containerId ajaxUrl></#macro>
+<#macro renderSubmitField buttonType className alert formName title name event action imgSrc confirmation containerId ajaxUrl></#macro>
 <#macro renderResetField className alert name title></#macro>
 
-<#macro renderHiddenField name value></#macro>
+<#macro renderHiddenField name value id event action></#macro>
 <#macro renderIgnoredField></#macro>
 
-<#macro renderFieldTitle style title><@renderField title /></#macro>
+<#macro renderFieldTitle style title fieldHelpText=""><@renderField title /></#macro>
 <#macro renderSingleFormFieldTitle></#macro>
 
 <#macro renderFormOpen linkUrl formType targetWindow containerId containerStyle autocomplete name useRowSubmit></#macro>
@@ -61,7 +62,9 @@ under the License.
 <#macro renderFormatListWrapperClose formName></#macro>
 
 <#macro renderFormatHeaderRowOpen style></#macro>
-<#macro renderFormatHeaderRowClose> </#macro>
+<#macro renderFormatHeaderRowClose>
+
+</#macro>
 <#macro renderFormatHeaderRowCellOpen style positionSpan></#macro>
 <#macro renderFormatHeaderRowCellClose></#macro>
 
@@ -70,17 +73,21 @@ under the License.
 <#macro renderFormatHeaderRowFormCellTitleSeparator style isLast></#macro>
 
 <#macro renderFormatItemRowOpen formName itemIndex altRowStyles evenRowStyle oddRowStyle></#macro>
-<#macro renderFormatItemRowClose formName></#macro>
+<#macro renderFormatItemRowClose formName>
+
+</#macro>
 <#macro renderFormatItemRowCellOpen fieldName style positionSpan></#macro>
 <#macro renderFormatItemRowCellClose fieldName></#macro>
 <#macro renderFormatItemRowFormCellOpen style></#macro>
 <#macro renderFormatItemRowFormCellClose></#macro>
 
 <#macro renderFormatSingleWrapperOpen formName style></#macro>
-<#macro renderFormatSingleWrapperClose formName></#macro>
+<#macro renderFormatSingleWrapperClose formName>
+</#macro>
 
 <#macro renderFormatFieldRowOpen></#macro>
-<#macro renderFormatFieldRowClose></#macro>
+<#macro renderFormatFieldRowClose>
+</#macro>
 <#macro renderFormatFieldRowTitleCellOpen style> </#macro>
 <#macro renderFormatFieldRowTitleCellClose></#macro>
 <#macro renderFormatFieldRowSpacerCell></#macro>
@@ -97,8 +104,8 @@ under the License.
 <@renderField value />
 </#macro>
 
-<#macro renderLookupField className alert name value size maxlength autocomplete descriptionFieldName formName lookupFieldFormName targetParameterIter imgSrc><@renderField value /></#macro>
-<#macro renderNextPrev paginateStyle paginateFirstStyle viewIndex highIndex listSize viewSize ajaxEnabled javaScriptEnabled ajaxFirstUrl firstUrl paginateFirstLabel paginatePreviousStyle ajaxPreviousUrl previousUrl paginatePreviousLabel pageLabel ajaxSelectUrl selectUrl commonDisplaying paginateNextStyle ajaxNextUrl nextUrl paginateNextLabel paginateLastStyle ajaxLastUrl lastUrl paginateLastLabel></#macro>
+<#macro renderLookupField className alert name value size maxlength id event action disabled autocomplete descriptionFieldName formName fieldFormName targetParameterIter imgSrc ajaxUrl ajaxEnabled presentation width height position fadeBackground clearText showDescription><@renderField value /></#macro>
+<#macro renderNextPrev paginateStyle paginateFirstStyle viewIndex highIndex listSize viewSize ajaxEnabled javaScriptEnabled ajaxFirstUrl firstUrl paginateFirstLabel paginatePreviousStyle ajaxPreviousUrl previousUrl paginatePreviousLabel pageLabel ajaxSelectUrl selectUrl ajaxSelectSizeUrl selectSizeUrl commonDisplaying paginateNextStyle ajaxNextUrl nextUrl paginateNextLabel paginateLastStyle ajaxLastUrl lastUrl paginateLastLabel paginateViewSizeLabel></#macro>
 <#macro renderFileField className alert name value size maxlength autocomplete><@renderField value /></#macro>
 <#macro renderPasswordField className alert name value size maxlength id autocomplete></#macro>
 <#macro renderImageFiel value border width height event action></#macro>
@@ -106,8 +113,8 @@ under the License.
 <#macro renderFieldGroupOpen style id title collapsed collapsibleAreaId collapsible expandToolTip collapseToolTip></#macro>
 <#macro renderFieldGroupClose style id title></#macro>
 
-<#macro renderHyperlinkTitle name title></#macro>
-<#macro renderSortField style title linkUrl ajaxEnabled></#macro>
+<#macro renderHyperlinkTitle name title showSelectAll="N"></#macro>
+<#macro renderSortField style title linkUrl ajaxEnabled><@renderFieldTitle style title /></#macro>
 <#macro formatBoundaryComment boundaryType widgetType widgetName></#macro>
 <#macro makeHiddenFormLinkAnchor linkStyle hiddenFormName event action imgSrc description><@renderField description /></#macro>
-<#macro makeHyperlinkString linkStyle hiddenFormName event action imgSrc linkUrl targetWindow description><@renderField description /></#macro>
+<#macro makeHyperlinkString linkStyle hiddenFormName event action imgSrc alternate linkUrl targetWindow description><@renderField description /></#macro>

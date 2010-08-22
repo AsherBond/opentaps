@@ -19,6 +19,12 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.base.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -46,6 +52,36 @@ public class UtilMisc {
     public static final String module = UtilMisc.class.getName();
 
     public static final BigDecimal ZERO_BD = BigDecimal.ZERO;
+
+    public static final <T extends Throwable> T initCause(T throwable, Throwable cause) {
+        throwable.initCause(cause);
+        return throwable;
+    }
+
+    public static <T> int compare(Comparable<T> obj1, T obj2) {
+        if (obj1 == null) {
+            if (obj2 == null) {
+                return 0;
+            } else {
+                return 1;
+            }
+        } else {
+            return obj1.compareTo(obj2);
+        }
+    }
+
+    public static <E> int compare(List<E> obj1, List<E> obj2) {
+        if (obj1 == obj2) {
+            return 0;
+        }
+        try {
+            if (obj1.size() == obj2.size() && obj1.containsAll(obj2) && obj2.containsAll(obj1)) {
+                return 0;
+            }
+
+        } catch (Exception e) {}
+        return 1;
+    }
 
     /**
      * Get an iterator from a collection, returning null if collection is null
@@ -161,7 +197,7 @@ public class UtilMisc {
             throw new IllegalArgumentException("You must pass an even sized array to the toMap method");
         }
         Map<String, V> map = FastMap.newInstance();
-        for (int i = 0; i < data.length; ) {
+        for (int i = 0; i < data.length;) {
             map.put((String) data[i++], (V) data[i++]);
         }
         return map;
@@ -201,7 +237,6 @@ public class UtilMisc {
      *
      * @param <V>
      * @param map
-     * @return
      */
     public static <V> void makeMapSerializable(Map<String, V> map) {
         // now filter out all non-serializable values
@@ -247,8 +282,8 @@ public class UtilMisc {
     /**
      * Assuming outerMap not null; if null will throw a NullPointerException
      */
-    public static <K, IK, V> Map<IK, V> getMapFromMap(Map<K, Map<IK, V>> outerMap, K key) {
-        Map<IK, V> innerMap = outerMap.get(key);
+    public static <K, IK, V> Map<IK, V> getMapFromMap(Map<K, Object> outerMap, K key) {
+        Map<IK, V> innerMap = UtilGenerics.<IK, V>checkMap(outerMap.get(key));
         if (innerMap == null) {
             innerMap = FastMap.newInstance();
             outerMap.put(key, innerMap);
@@ -259,8 +294,8 @@ public class UtilMisc {
     /**
      * Assuming outerMap not null; if null will throw a NullPointerException
      */
-    public static <K, V> List<V> getListFromMap(Map<K, List<V>> outerMap, K key) {
-        List<V> innerList = outerMap.get(key);
+    public static <K, V> List<V> getListFromMap(Map<K, Object> outerMap, K key) {
+        List<V> innerList = UtilGenerics.<V>checkList(outerMap.get(key));
         if (innerList == null) {
             innerList = FastList.newInstance();
             outerMap.put(key, innerList);
@@ -286,7 +321,7 @@ public class UtilMisc {
             throw new IllegalArgumentException("In addToBigDecimalInMap found a Map value of a type not supported: " + currentNumberObj.getClass().getName());
         }
 
-        if (addNumber == null || ZERO_BD.equals(addNumber)) {
+        if (addNumber == null || ZERO_BD.compareTo(addNumber) == 0) {
             return currentNumber;
         }
         currentNumber = currentNumber.add(addNumber);
@@ -593,7 +628,7 @@ public class UtilMisc {
             return (Integer) obj;
         }
         if (obj instanceof Number) {
-            return new Integer(((Number)obj).intValue());
+            return ((Number)obj).intValue();
         }
         Integer result = null;
         try {
@@ -655,7 +690,7 @@ public class UtilMisc {
      * @return Locale The new Locale object or null if no valid locale can be interpreted
      */
     public static Locale parseLocale(String localeString) {
-        if (localeString == null || localeString.length() == 0) {
+        if (UtilValidate.isEmpty(localeString)) {
             return null;
         }
 
@@ -702,7 +737,7 @@ public class UtilMisc {
                 if (availableLocaleList == null) {
                     TreeMap<String, Locale> localeMap = new TreeMap<String, Locale>();
                     String localesString = UtilProperties.getPropertyValue("general", "locales.available");
-                    if (localesString != null && localesString.length() > 0) { // check if available locales need to be limited according general.properties file
+                    if (UtilValidate.isNotEmpty(localesString)) { // check if available locales need to be limited according general.properties file
                         int end = -1;
                         int start = 0;
                         for (int i=0; start < localesString.length(); i++) {
@@ -728,6 +763,7 @@ public class UtilMisc {
     }
 
     /** This is meant to be very quick to create and use for small sized maps, perfect for how we usually use UtilMisc.toMap */
+    @SuppressWarnings("serial")
     protected static class SimpleMap<V> implements Map<String, V>, java.io.Serializable {
         protected Map<String, V> realMapIfNeeded = null;
 
@@ -907,6 +943,7 @@ public class UtilMisc {
             }
         }
 
+        @Override
         public String toString() {
             if (realMapIfNeeded != null) {
                 return realMapIfNeeded.toString();
@@ -925,6 +962,7 @@ public class UtilMisc {
             }
         }
 
+        @Override
         public int hashCode() {
             if (realMapIfNeeded != null) {
                 return realMapIfNeeded.hashCode();
@@ -940,11 +978,12 @@ public class UtilMisc {
             }
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (realMapIfNeeded != null) {
                 return realMapIfNeeded.equals(obj);
             } else {
-                Map mapObj = (Map) obj;
+                Map<String, V> mapObj = UtilGenerics.<String, V>checkMap(obj);
 
                 //first check the size
                 if (mapObj.size() != names.length) return false;
@@ -974,6 +1013,24 @@ public class UtilMisc {
     protected static class UtilMiscWaiter {
         public synchronized void safeWait(long timeout) throws InterruptedException {
             this.wait(timeout);
+        }
+    }
+    public static void copyFile(File sourceLocation , File targetLocation) throws IOException {
+        if (sourceLocation.isDirectory()) {
+            throw new IOException("File is a directory, not a file, cannot copy") ;
+        } else {
+
+            InputStream in = new FileInputStream(sourceLocation);
+            OutputStream out = new FileOutputStream(targetLocation);
+
+            // Copy the bits from instream to outstream
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
         }
     }
 }

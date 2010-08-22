@@ -54,6 +54,7 @@ under the License.
         <attribute name="serialNumber" type="String" mode="IN" optional="true"/> <!-- does a LIKE compare on this -->
         <attribute name="softIdentifier" type="String" mode="IN" optional="true"/> <!-- does a LIKE compare on this -->
         <attribute name="partyRelationshipTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="ownerPartyIds" type="List" mode="IN" optional="true"/><!-- Lead Owners Parties -->
 
         <attribute name="roleTypes" type="List" mode="OUT" optional="false"/>
         <attribute name="partyTypes" type="List" mode="OUT" optional="false"/>
@@ -185,6 +186,7 @@ under the License.
     <service name="getAssociatedStateList" engine="simple" auth="false"
             location="component://party/script/org/ofbiz/party/party/PartyServices.xml" invoke="getAssociatedStateList">
         <attribute name="countryGeoId" mode="IN" type="String" optional="false"/>
+        <attribute name="listOrderBy" mode="IN" type="String" optional="true"/>
         <attribute name="stateList" mode="OUT" type="java.util.List"/>
     </service>
 

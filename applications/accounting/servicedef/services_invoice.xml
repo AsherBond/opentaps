@@ -44,6 +44,8 @@ under the License.
         <override name="statusId" mode = "IN" optional="false"/>
         <override name="partyIdFrom" mode = "IN" optional="false"/>
         <override name="partyId" mode = "IN" optional="false"/>
+        <override name="description" allow-html="safe"/>
+        <override name="invoiceMessage" allow-html="safe"/>
     </service>
     <service name="copyInvoice" engine="simple" default-entity-name="Invoice"
         location="component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml" invoke="copyInvoice">
@@ -66,6 +68,8 @@ under the License.
         <permission-service service-name="acctgInvoicePermissionCheck" main-action="UPDATE"/>
         <auto-attributes mode="IN" include="pk" optional="false"/>
         <auto-attributes mode="IN" include="nonpk" optional="true"/>
+        <override name="description" allow-html="safe"/>
+        <override name="invoiceMessage" allow-html="safe"/>
     </service>
     <service name="setInvoiceStatus" engine="simple"
         location="component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml" invoke="setInvoiceStatus">
@@ -91,7 +95,7 @@ under the License.
     null taxableFlag is considered to be "N" when it should be "unknown". At some point we'll have to implement the adjustment.includeInTax
     field properly so we don't have to rely on Product.taxable and checking by hand each type that is not taxable. The old way is already
     creating an issue with return-wide adjustments: How do we know that such an adjustment is to be taxed or not?  Because of this problem,
-    we will continue to have null taxableFlags for awhile yet, which is why the mantadory taxableFlag of this method was taken out.
+    we will continue to have null taxableFlags for awhile yet, which is why the mandatory taxableFlag of this method was taken out.
     -->
     <service name="createInvoiceItem" engine="simple" default-entity-name="InvoiceItem"
         location="component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml" invoke="createInvoiceItem">
@@ -153,7 +157,8 @@ under the License.
         </description>
         <attribute name="orderId" type="String" mode="IN" optional="false"/>
         <attribute name="billItems" type="List" mode="IN" optional="false"/>
-        <attribute name="invoiceId" type="String" mode="OUT" optional="true"/>
+        <attribute name="eventDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="invoiceId" type="String" mode="INOUT" optional="true"/>
         <attribute name="invoiceTypeId" type="String" mode="OUT" optional="true"/>
     </service>
     <service name="createInvoiceFromReturn" engine="java"
@@ -170,13 +175,13 @@ under the License.
     <service name="createCommissionInvoices" engine="java"
         location="org.ofbiz.accounting.invoice.InvoiceServices" invoke="createCommissionInvoices">
         <description>
-            Create commission invoices from an order or return invoice. It
-            does not create any OrderItemBilling or ReturnItemBilling entities for partial commissions. Therefore, correct value
-            of the amountApplied needs to be supplied.
+            Create commission invoice for the list of sales invoices.
+            Returns a List of Maps, one for each invoice created containing:
+                commissionInvoiceId: the invoiceId of the invoice created
+                salesRepresentative: the invoice partyIdFrom
         </description>
-        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
-        <attribute name="invoiceItemSeqId" type="String" mode="IN" optional="true"/>
-        <attribute name="amountApplied" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="partyIds" type="List" mode="IN" optional="true"/>
+        <attribute name="invoiceIds" type="List" mode="IN" optional="false"/>
         <attribute name="invoicesCreated" type="List" mode="OUT" optional="true"/>
     </service>
     <service name="sampleInvoiceAffiliateCommission" engine="simple"
@@ -205,8 +210,15 @@ under the License.
             invoicesCreated = List of invoiceIds which were created by this service
         </description>
         <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+        <attribute name="eventDate" type="Timestamp" mode="IN" optional="true"/>
         <attribute name="invoicesCreated" type="List" mode="OUT" optional="true"/>
     </service>
+    <service name="setInvoicesToReadyFromShipment" engine="java"
+        location="org.ofbiz.accounting.invoice.InvoiceServices" invoke="setInvoicesToReadyFromShipment">
+        <description>Set invoice(s) to Ready from Shipment</description>
+        <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+    </service>
+
     <service name="createSalesInvoicesFromDropShipment" engine="java"
         location="org.ofbiz.accounting.invoice.InvoiceServices" invoke="createSalesInvoicesFromDropShipment">
         <description>
@@ -229,6 +241,7 @@ under the License.
         </description>
         <attribute name="shipmentIds" type="List" mode="IN" optional="false"/>
         <attribute name="createSalesInvoicesForDropShipments" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="eventDate" type="Timestamp" mode="IN" optional="true"/>
         <attribute name="invoicesCreated" type="List" mode="OUT" optional="true"/>
     </service>
     <service name="createInvoicesFromReturnShipment" engine="java"
@@ -270,12 +283,6 @@ under the License.
         <attribute name="invoicedTotal" type="BigDecimal" mode="OUT" optional="false"/>
     </service>
 
-    <!-- Permission services -->
-    <service name="acctgInvoicePermissionCheck" engine="simple"
-            location="component://accounting/script/org/ofbiz/accounting/permissions/PermissionServices.xml" invoke="acctgInvoicePermissionCheck">
-        <description>Accounting Invoice Permission Checking Logic</description>
-        <implements service="permissionInterface"/>
-    </service>
     <service name="updateInvoiceItemType" engine="simple" default-entity-name="InvoiceItemType"
         location="component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml" invoke="updateInvoiceItemType">
         <description>Update Invoice Item Type Record</description>
@@ -287,4 +294,65 @@ under the License.
         <description>Scheduled service to generate Invoice from an existing Invoice</description>
         <attribute name="recurrenceInfoId" mode="IN" type="String" optional="false"/>
     </service>
+
+    <service name="cancelInvoice" engine="simple"
+            location="component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml" invoke="cancelInvoice">
+        <description>Cancel Invoice</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceTypeId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="getInvoiceRunningTotal" engine="simple"
+            location="component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml" invoke="getInvoiceRunningTotal" auth="true">
+        <description>calculate running total for selected Invoices</description>
+        <attribute name="invoiceIds" type="List" mode="IN" optional="false"/>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="invoiceRunningTotal" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="addtax" engine="simple"
+        location="component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml" invoke="addtax">
+        <description>Call Tax Calculate Service</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="getInvoicesFilterByAssocType" engine="simple"
+            location="component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml" invoke="getInvoicesFilterByAssocType" auth="true">
+        <description>Filter invoices by invoiceItemAssocTypeId</description>
+        <attribute name="invoiceList" type="List" mode="IN" optional="false"/>
+        <attribute name="invoiceItemAssocTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="filteredInvoiceList" type="List" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- Invoice Association Services -->
+    <service name="createInvoiceItemAssoc" default-entity-name="InvoiceItemAssoc" engine="entity-auto" invoke="create" auth="true">
+        <description>Create a InvoiceItemAssoc</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="fromDate" optional="true"/>
+    </service>
+    <service name="updateInvoiceItemAssoc" default-entity-name="InvoiceItemAssoc" engine="entity-auto" invoke="update" auth="true">
+        <description>Update a InvoiceItemAssoc</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="deleteInvoiceItemAssoc" default-entity-name="InvoiceItemAssoc" engine="entity-auto" invoke="delete" auth="true">
+        <description>Delete a InvoiceItemAssoc</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="removeInvoiceItemAssocOnCancelInvoice" engine="simple"
+            location="component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml" invoke="removeInvoiceItemAssocOnCancelInvoice" auth="true">
+        <description>Remove invoiceItemAssoc record on cancel invoice</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="massChangeInvoiceStatus" engine="simple"
+            location="component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml" invoke="massChangeInvoiceStatus" auth="true">
+        <description>Set status of invoices in bulk.</description>
+        <attribute name="invoiceIds" type="List" mode="IN" optional="false"/>
+        <attribute name="statusId" type="String" mode="IN" optional="false"/>
+        <attribute name="errorMessage" type="String" optional="true" mode="OUT"/>
+    </service>
+
 </services>

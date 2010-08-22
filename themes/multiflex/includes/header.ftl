@@ -16,12 +16,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<#include "component://ecommerce/webapp/ecommerce/includes/headerHead.ftl" />
 
 <!-- Global IE fix to avoid layout crash when single word size wider than column width -->
 <!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
 
-<body>
   <div class="page-container">
     <div class="header">
       <div class="header-top">
@@ -39,10 +37,10 @@ under the License.
         <!-- Navigation Level 0 -->
         <div class="nav0">
           <ul>
-            <li><a href="<@ofbizUrl>setSessionLocale?newLocale=it</@ofbizUrl>"><img src="/multiflex/flag_it.gif" /></a></li>
-            <li><a href="<@ofbizUrl>setSessionLocale?newLocale=en</@ofbizUrl>"><img src="/multiflex/flag_en.gif" /></a></li>
-            <li><a href="<@ofbizUrl>setSessionLocale?newLocale=de</@ofbizUrl>"><img src="/multiflex/flag_de.gif" /></a></li>
-            <li><a href="<@ofbizUrl>setSessionLocale?newLocale=fr</@ofbizUrl>"><img src="/multiflex/flag_fr.gif" /></a></li>
+            <li><a href="<@ofbizUrl>setSessionLocale?newLocale=it</@ofbizUrl>"><img src="/multiflex/flag_it.gif" alt="" /></a></li>
+            <li><a href="<@ofbizUrl>setSessionLocale?newLocale=en</@ofbizUrl>"><img src="/multiflex/flag_en.gif" alt="" /></a></li>
+            <li><a href="<@ofbizUrl>setSessionLocale?newLocale=de</@ofbizUrl>"><img src="/multiflex/flag_de.gif" alt="" /></a></li>
+            <li><a href="<@ofbizUrl>setSessionLocale?newLocale=fr</@ofbizUrl>"><img src="/multiflex/flag_fr.gif" alt="" /></a></li>
           </ul>
         </div>
 
@@ -96,7 +94,7 @@ under the License.
             </ul>
           </#if>
 
-          <#if catalogQuickaddUse>
+          <#if catalogQuickaddUse?has_content && catalogQuickaddUse>
             <!-- Navigation item -->
             <ul>
               <li id="header-bar-quickadd"><a href="<@ofbizUrl>quickadd</@ofbizUrl>">${uiLabelMap.CommonQuickAdd}</a></li>
@@ -121,7 +119,7 @@ under the License.
           </#if>
 
         </div>
-	  </div>
+      </div>
 
       <!-- Breadcrumbs -->
       <div class="header-breadcrumbs">

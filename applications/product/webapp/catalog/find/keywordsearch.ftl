@@ -23,13 +23,13 @@ under the License.
   </div>
   <div class="screenlet-body">
     <#list searchConstraintStrings as searchConstraintString>
-      <div>&nbsp;<a href="<@ofbizUrl>keywordsearch?removeConstraint=${searchConstraintString_index}&clearSearch=N</@ofbizUrl>" class="buttontext">X</a>&nbsp;${searchConstraintString}</div>
+      <div>&nbsp;<a href="<@ofbizUrl>keywordsearch?removeConstraint=${searchConstraintString_index}&amp;clearSearch=N</@ofbizUrl>" class="buttontext">X</a>&nbsp;${searchConstraintString}</div>
     </#list>
     <span class="label">${uiLabelMap.CommonSortedBy}:</span>${searchSortOrderString}
-    <div><a href="<@ofbizUrl>advancedsearch?SEARCH_CATEGORY_ID=${(requestParameters.SEARCH_CATEGORY_ID)?if_exists}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonRefine} ${uiLabelMap.CommonSearch}</a></div>
+    <div><a href="<@ofbizUrl>advancedsearch?SEARCH_CATEGORY_ID=${(requestParameters.SEARCH_CATEGORY_ID)?if_exists}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonRefineSearch}</a></div>
 
     <#if !productIds?has_content>
-      <br/><h2>&nbsp;${uiLabelMap.ProductNoResultsFound}.</h2>
+      <br /><h2>&nbsp;${uiLabelMap.ProductNoResultsFound}.</h2>
     </#if>
 
     <#if productIds?has_content>
@@ -74,26 +74,27 @@ under the License.
           <td align="right">
             <b>
             <#if 0 < viewIndex?int>
-              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=${viewIndex-1}/~VIEW_SIZE=${viewSize}/~clearSearch=N/~PAGING=${paging}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPrevious}</a> |
+              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=${viewIndex-1}/~VIEW_SIZE=${viewSize}/~clearSearch=N/~PAGING=${paging}/~noConditionFind=${noConditionFind}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPrevious}</a> |
             </#if>
             <#if 0 < listSize?int>
               ${lowIndex+1} - ${highIndex} ${uiLabelMap.CommonOf} ${listSize}
             </#if>
             <#if highIndex?int < listSize?int>
-              | <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=${viewIndex+1}/~VIEW_SIZE=${viewSize}/~clearSearch=N/~PAGING=${paging}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonNext}</a>
+              | <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=${viewIndex+1}/~VIEW_SIZE=${viewSize}/~clearSearch=N/~PAGING=${paging}/~noConditionFind=${noConditionFind}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonNext}</a>
             </#if>
             <#if paging == "Y">
-              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=0/~VIEW_SIZE=99999/~clearSearch=N/~PAGING=N</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPagingOff}</a>
+              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=0/~VIEW_SIZE=99999/~clearSearch=N/~PAGING=N/~noConditionFind=${noConditionFind}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPagingOff}</a>
             <#else>
-              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=0/~VIEW_SIZE=${previousViewSize}/~clearSearch=N/~PAGING=Y</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPagingOn}</a>
+              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=0/~VIEW_SIZE=${previousViewSize}/~clearSearch=N/~PAGING=Y/~noConditionFind=${noConditionFind}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPagingOn}</a>
             </#if>
             </b>
           </td>
         </tr>
-        <tr><td colspan="2"><hr/></td></tr>
+        <tr><td colspan="2"><hr /></td></tr>
     </table>
 
     <form method="post" name="products">
+      <input type="hidden" name="productStoreId" value="${parameters.productStoreId?if_exists}" />
       <table cellspacing="0" class="basic-table">
         <#assign listIndex = lowIndex>
         <#assign rowClass = "2">
@@ -116,23 +117,23 @@ under the License.
     </form>
 
     <table cellspacing="0" class="basic-table">
-        <tr><td colspan="2"><hr/></td></tr>
+        <tr><td colspan="2"><hr /></td></tr>
         <tr>
           <td align="right">
             <b>
             <#if 0 < viewIndex?int>
-              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=${viewIndex-1}/~VIEW_SIZE=${viewSize}/~clearSearch=N/~PAGING=${paging}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPrevious}</a> |
+              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=${viewIndex-1}/~VIEW_SIZE=${viewSize}/~clearSearch=N/~PAGING=${paging}/~noConditionFind=${noConditionFind}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPrevious}</a> |
             </#if>
             <#if 0 < listSize?int>
               ${lowIndex+1} - ${highIndex} ${uiLabelMap.CommonOf} ${listSize}
             </#if>
             <#if highIndex?int < listSize?int>
-              | <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=${viewIndex+1}/~VIEW_SIZE=${viewSize}/~clearSearch=N/~PAGING=${paging}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonNext}</a>
+              | <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=${viewIndex+1}/~VIEW_SIZE=${viewSize}/~clearSearch=N/~PAGING=${paging}/~noConditionFind=${noConditionFind}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonNext}</a>
             </#if>
             <#if paging == "Y">
-              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=0/~VIEW_SIZE=99999/~clearSearch=N/~PAGING=N</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPagingOff}</a>
+              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=0/~VIEW_SIZE=99999/~clearSearch=N/~PAGING=N/~noConditionFind=${noConditionFind}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPagingOff}</a>
             <#else>
-              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=0/~VIEW_SIZE=${previousViewSize}/~clearSearch=N/~PAGING=Y</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPagingOn}</a>
+              <a href="<@ofbizUrl>keywordsearch/~VIEW_INDEX=0/~VIEW_SIZE=${previousViewSize}/~clearSearch=N/~PAGING=Y/~noConditionFind=${noConditionFind}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonPagingOn}</a>
             </#if>
             </b>
           </td>

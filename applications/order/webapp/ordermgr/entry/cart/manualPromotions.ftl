@@ -20,8 +20,8 @@ under the License.
 
 <#if allProductPromos?has_content>
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">&nbsp;${uiLabelMap.OrderManualPromotions}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">&nbsp;${uiLabelMap.OrderManualPromotions}</div>
     </div>
     <div class="screenlet-body">
       <div>
@@ -39,7 +39,7 @@ under the License.
               <option value="${productPromo.productPromoId}">${productPromo.promoName?if_exists}</option>
             </#list>
           </select>
-          <input type="submit" class="smallSubmit" value="${uiLabelMap.OrderDoPromotions}">
+          <input type="submit" class="smallSubmit" value="${uiLabelMap.OrderDoPromotions}" />
         </form>
       </div>
     </div>

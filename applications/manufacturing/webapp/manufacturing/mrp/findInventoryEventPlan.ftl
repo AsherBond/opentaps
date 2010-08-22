@@ -27,7 +27,10 @@ function lookupInventory() {
 </script>
 <div class="screenlet">
   <div class="screenlet-title-bar">
-    <h3>${uiLabelMap.PageTitleFindInventoryEventPlan}</h3>
+    <ul>
+      <li class="h3">${uiLabelMap.PageTitleFindInventoryEventPlan}</li>
+    </ul>
+    <br class="clear"/>
   </div>
   <div class="screenlet-body">
     <form method="post" name="lookupinventory" action="<@ofbizUrl>FindInventoryEventPlan</@ofbizUrl>">
@@ -47,7 +50,6 @@ function lookupInventory() {
                     <#if inventoryList?exists>
                         <a href="<@ofbizUrl>FindInventoryEventPlan?hideFields=Y${paramList}</@ofbizUrl>" class="smallSubmit">${uiLabelMap.CommonHideFields}</a>
                     </#if>
-                    <a href="javascript:lookupInventory();" class="smallSubmit">${uiLabelMap.CommonLookup}</a>
                   </#if>
                 </p>
               </td>
@@ -62,13 +64,10 @@ function lookupInventory() {
                     <td width='20%' align='right' class="label">${uiLabelMap.ManufacturingProductId}</td>
                     <td width='5%'>&nbsp;</td>
                     <td>
-                        <input type='text' size='25' name='productId' value='${requestParameters.productId?if_exists}'/>
-                        <span>
-                          <a href="javascript:call_fieldlookup2(document.lookupinventory.productId,'LookupProduct');">
-                            <a href="javascript:call_fieldlookup2(document.copyCategoryProductMembersForm.productCategoryIdTo,'LookupProductCategory');"><img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/></a>
-                          </a>
-                        </span>
-                        <input type='text' size='25' readonly name='productId_description' value=''/>
+                      <span>
+                        <@htmlTemplate.lookupField value='${requestParameters.productId?if_exists}' formName="lookupinventory" name="productId" id="productId" fieldFormName="LookupProduct"/>
+                      </span>
+                      <input type='text' size='25' readonly="readonly" name='productId_description' value=''/>${uiLabelMap.CommonDescription}
                      </td>
                   </tr>
                   <tr>
@@ -82,9 +81,9 @@ function lookupInventory() {
                     </td>
                   </tr>
                   <tr>
-                    <td width="25%" align="center" valign="top">
-                    <td width="5">&nbsp;</td>
-                    <td width="75%"> <a href="javascript:lookupInventory();" class="smallSubmit">&nbsp; ${uiLabelMap.CommonLookup} &nbsp;</a></td>
+                    <td width="20%" align="center" valign="top">&nbsp;</td>
+                    <td width="5%">&nbsp;</td>
+                    <td width="75%"> <a href="javascript:lookupInventory();" class="smallSubmit">&nbsp; ${uiLabelMap.CommonFind} &nbsp;</a></td>
                   </tr>
                 </table>
               </td>
@@ -119,7 +118,7 @@ document.lookupinventory.productId.focus();
              <div class="boxhead" align="right">
 
                 <#if 0 < viewIndex>
-                  <a href="<@ofbizUrl>FindInventoryEventPlan?VIEW_SIZE=${viewSize}&VIEW_INDEX=${viewIndex-1}&hideFields=${requestParameters.hideFields?default("N")}${paramList}</@ofbizUrl>" class="submenutext">${uiLabelMap.CommonPrevious}</a>
+                  <a href="<@ofbizUrl>FindInventoryEventPlan?VIEW_SIZE=${viewSize}&amp;VIEW_INDEX=${viewIndex-1}&amp;hideFields=${requestParameters.hideFields?default("N")}${paramList}</@ofbizUrl>" class="submenutext">${uiLabelMap.CommonPrevious}</a>
                 <#else>
                   <span class="submenutextdisabled">${uiLabelMap.CommonPrevious}</span>
                 </#if>
@@ -127,7 +126,7 @@ document.lookupinventory.productId.focus();
                   <span class="submenutextinfo">${lowIndex+1} - ${highIndex} ${uiLabelMap.CommonOf} ${listSize}</span>
                 </#if>
                 <#if highIndex < listSize>
-                  <a href="<@ofbizUrl>FindInventoryEventPlan?VIEW_SIZE=${viewSize}&VIEW_INDEX=${viewIndex+1}&hideFields=${requestParameters.hideFields?default("N")}${paramList}</@ofbizUrl>" class="submenutextright">${uiLabelMap.CommonNext}</a>
+                  <a href="<@ofbizUrl>FindInventoryEventPlan?VIEW_SIZE=${viewSize}&amp;VIEW_INDEX=${viewIndex+1}&amp;hideFields=${requestParameters.hideFields?default("N")}${paramList}</@ofbizUrl>" class="submenutextright">${uiLabelMap.CommonNext}</a>
                 <#else>
                   <span class="submenutextrightdisabled">${uiLabelMap.CommonNext}</span>
                 </#if>
@@ -141,15 +140,15 @@ document.lookupinventory.productId.focus();
       <table class="basic-table" cellspacing="0">
         <tr class="header-row">
           <td>${uiLabelMap.CommonType}</td>
-          <td align="center">&nbsp</td>
+          <td align="center">&nbsp;</td>
           <td>${uiLabelMap.CommonDescription}</td>
           <td>${uiLabelMap.CommonDate}</td>
-          <td align="center">&nbsp</td>
+          <td align="center">&nbsp;</td>
           <td align="right">${uiLabelMap.CommonQuantity}</td>
           <td align="right">${uiLabelMap.ManufacturingTotalQuantity}</td>
         </tr>
         <tr>
-          <td colspan="7"><hr/></td>
+          <td colspan="7"><hr /></td>
         </tr>
         <#assign count = lowIndex>
         <#assign productTmp = "">
@@ -217,10 +216,10 @@ document.lookupinventory.productId.focus();
             <#assign MrpEventType = inven.getRelatedOne("MrpEventType")>
             <tr class="${rowClass}">
               <td>${MrpEventType.get("description",locale)}</td>
-              <td>&nbsp</td>
+              <td>&nbsp;</td>
               <td>${inven.eventName?if_exists}</td>
               <td><font <#if inven.isLate?default("N") == "Y">color='red'</#if>>${inven.getString("eventDate")}</font></td>
-              <td>&nbsp</td>
+              <td>&nbsp;</td>
               <td align="right">${inven.getString("quantity")}</td>
               <td align="right">${quantityAvailableAtDate?if_exists}</td>
             </tr>
@@ -229,9 +228,9 @@ document.lookupinventory.productId.focus();
 
        </table>
       <#else>
-       <br/>
+       <br />
        <div align="center">${uiLabelMap.CommonNoElementFound}</div>
-       <br/>
+       <br />
       </#if>
     </#if>
     </td>

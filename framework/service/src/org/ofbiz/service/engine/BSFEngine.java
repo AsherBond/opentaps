@@ -41,7 +41,7 @@ import org.apache.bsf.BSFManager;
 public class BSFEngine extends GenericAsyncEngine {
 
     public static final String module = BSFEngine.class.getName();
-    public static UtilCache<String, String> scriptCache = new UtilCache<String, String>("BSFScripts", 0, 0);
+    public static UtilCache<String, String> scriptCache = UtilCache.createUtilCache("BSFScripts", 0, 0);
 
     public BSFEngine(ServiceDispatcher dispatcher) {
         super(dispatcher);
@@ -50,6 +50,7 @@ public class BSFEngine extends GenericAsyncEngine {
     /**
      * @see org.ofbiz.service.engine.GenericEngine#runSyncIgnore(java.lang.String, org.ofbiz.service.ModelService, java.util.Map)
      */
+    @Override
     public void runSyncIgnore(String localName, ModelService modelService, Map<String, Object> context) throws GenericServiceException {
         runSync(localName, modelService, context);
     }
@@ -57,6 +58,7 @@ public class BSFEngine extends GenericAsyncEngine {
     /**
      * @see org.ofbiz.service.engine.GenericEngine#runSync(java.lang.String, org.ofbiz.service.ModelService, java.util.Map)
      */
+    @Override
     public Map<String, Object> runSync(String localName, ModelService modelService, Map<String, Object> context) throws GenericServiceException {
         Object result = serviceInvoker(localName, modelService, context);
 

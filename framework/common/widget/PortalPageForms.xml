@@ -103,10 +103,10 @@ under the License.
         <field name="createButton"><submit button-type="button"/></field>
     </form>
 
-    <form name="PortletCategoryAndPortlet" type="list" list-name="portletCat" paginate-target="AddPortlet" separate-columns="true"
+    <form name="PortletCategoryAndPortlet" type="list" list-name="portletCat" paginate-target="AddPortlet${Adm}" separate-columns="true"
         odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
         <field name="portletCategoryId" title="Category">
-            <hyperlink description="${portletCategoryId}" target="AddPortlet">
+            <hyperlink description="${portletCategoryId}" target="AddPortlet${Adm}">
                 <parameter param-name="portletCategoryId"/>
                 <parameter param-name="portalPortletId"/>
                 <parameter param-name="portalPageId" from-field="parameters.portalPageId"/>
@@ -117,4 +117,29 @@ under the License.
         <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
     </form>
 
+    <form name="PortletList" type="list" separate-columns="true" list-name="portlets"
+        odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-and entity-name="PortalPagePortletView" list="portlets">
+                <field-map field-name="portalPageId" from-field="parameters.portalPageId"/>
+            </entity-and>
+        </actions>
+        <field name="portletName">
+            <hyperlink also-hidden="false" target="showHelp?helpTopic=HELP_${portalPortletId}" description="${portletName}" ></hyperlink>
+        </field>
+        <field name="description"><display/></field>
+    </form>
+
+    <form name="FindGenericEntity" type="single" target="list${entity}" title="" focus-field-name="idName">
+        <field name="hideSearch"><hidden value="Y"/></field>
+        <field name="idName" title="${uiLabelMap.FormFieldTitle_${pkIdName}"><text size="16"/></field>
+        <field name="idName_op" ><hidden value="contains"/></field>
+        <field name="idName_ic" ><hidden value="Y"/></field>
+        <field name="description" ><text size="16"/></field>
+        <field name="description_op" ><hidden value="contains"/></field>
+        <field name="description_ic" ><hidden value="Y"/></field>
+        <field name="submitButton" title=" " widget-style="smallSubmit">
+            <hyperlink target="javascript:ajaxUpdateArea('List${entity}Area', 'list${entity}', $(FindGenericEntity).serialize());" target-type="plain"  description="${uiLabelMap.CommonSearch}"/>
+        </field>
+    </form>
 </forms>

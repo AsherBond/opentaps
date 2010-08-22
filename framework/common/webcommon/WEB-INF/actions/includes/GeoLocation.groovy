@@ -18,7 +18,7 @@
  */
 /* This file has been modified by Open Source Strategies, Inc. */
 
-if (geoPoint) {
+if (geoPoint && geoPoint.elevationUomId) {
     elevationUom = delegator.findOne("Uom", [uomId : geoPoint.elevationUomId], false);
     context.elevationUomAbbr = elevationUom.abbreviation;
 }

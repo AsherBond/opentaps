@@ -20,6 +20,7 @@
 
 package org.ofbiz.product.config;
 
+@SuppressWarnings("serial")
 public class ProductConfigWrapperException extends Exception {
 
     /** Creates a new instance of ProductConfigWrapperException */

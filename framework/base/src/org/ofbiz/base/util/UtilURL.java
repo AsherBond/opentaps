@@ -21,7 +21,6 @@ package org.ofbiz.base.util;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,7 +35,7 @@ public class UtilURL {
 
     public static final String module = UtilURL.class.getName();
 
-    public static URL fromClass(Class contextClass) {
+    public static <C> URL fromClass(Class<C> contextClass) {
         String resourceName = contextClass.getName();
         int dotIndex = resourceName.lastIndexOf('.');
 
@@ -50,7 +49,7 @@ public class UtilURL {
         return fromResource(resourceName, null);
     }
 
-    public static URL fromResource(Class contextClass, String resourceName) {
+    public static <C> URL fromResource(Class<C> contextClass, String resourceName) {
         if (contextClass == null)
             return fromResource(resourceName, null);
         else

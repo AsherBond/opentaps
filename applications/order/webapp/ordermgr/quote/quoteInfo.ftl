@@ -18,8 +18,8 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.OrderOrderQuoteId}&nbsp;${quote.quoteId}&nbsp;${uiLabelMap.CommonInformation}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">${uiLabelMap.OrderOrderQuoteId}&nbsp;${quote.quoteId}&nbsp;${uiLabelMap.CommonInformation}</div>
     </div>
     <div class="screenlet-body">
         <table cellspacing="0" class="basic-table">
@@ -33,19 +33,19 @@ under the License.
                     ${(quoteType.get("description",locale))?default(quote.quoteTypeId?if_exists)}
                 </td>
             </tr>
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
 
             <#-- quote Channel information -->
             <tr>
                 <td align="right" valign="top" width="15%" class="label">
-                    &nbsp;${uiLabelMap.OrderSalesChannel}</div>
+                    &nbsp;${uiLabelMap.OrderSalesChannel}
                 </td>
                 <td width="5%">&nbsp;</td>
                 <td valign="top" width="80%">
                     ${(salesChannel.get("description",locale))?default(quote.salesChannelEnumId?if_exists)}
                 </td>
             </tr>
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
 
             <#-- quote status information -->
             <tr>
@@ -58,7 +58,7 @@ under the License.
                 </td>
             </tr>
             <#-- party -->
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
             <tr>
                 <td align="right" valign="top" width="15%" class="label">
                     &nbsp;${uiLabelMap.PartyPartyId}
@@ -69,7 +69,7 @@ under the License.
                 </td>
             </tr>
             <#-- quote name -->
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
             <tr>
                 <td align="right" valign="top" width="15%" class="label">
                     &nbsp;${uiLabelMap.OrderOrderQuoteName}
@@ -80,7 +80,7 @@ under the License.
                 </td>
             </tr>
             <#-- quote description -->
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
             <tr>
                 <td align="right" valign="top" width="15%" class="label">
                     &nbsp;${uiLabelMap.CommonDescription}
@@ -91,7 +91,7 @@ under the License.
                 </td>
             </tr>
             <#-- quote currency -->
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
             <tr>
                 <td align="right" valign="top" width="15%" class="label">
                     &nbsp;${uiLabelMap.CommonCurrency}
@@ -102,7 +102,7 @@ under the License.
                 </td>
             </tr>
             <#-- quote currency -->
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
             <tr>
                 <td align="right" valign="top" width="15%" class="label">
                     &nbsp;${uiLabelMap.ProductProductStore}

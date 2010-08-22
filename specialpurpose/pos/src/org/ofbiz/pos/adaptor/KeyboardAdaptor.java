@@ -23,7 +23,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,8 +49,8 @@ public class KeyboardAdaptor {
     public static final int MSR_DATA = 102;
     public static final int ALL_DATA = 999;
 
-    protected static List loadedComponents = new LinkedList();
-    protected static Map receivers = new LinkedHashMap();
+    protected static List<Component> loadedComponents = new LinkedList<Component>();
+    protected static Map<KeyboardReceiver, Integer> receivers = new LinkedHashMap<KeyboardReceiver, Integer>();
     protected static KeyboardAdaptor adaptor = null;
     protected static boolean running = true;
 
@@ -67,7 +66,7 @@ public class KeyboardAdaptor {
         }
 
         if (receiver != null && dataType > -1) {
-            receivers.put(receiver, new Integer(dataType));
+            receivers.put(receiver, dataType);
         }
         return adaptor;
     }
@@ -123,8 +122,8 @@ public class KeyboardAdaptor {
         // By default keyboard entry (login & password 1st)
         public Long MAX_WAIT = MAX_WAIT_KEYBOARD;
 
-        private List keyCodeData = new LinkedList();
-        private List keyCharData = new LinkedList();
+        private List<Integer> keyCodeData = new LinkedList<Integer>();
+        private List<Character> keyCharData = new LinkedList<Character>();
         private long lastKey = -1;
         private KeyReader reader = null;
 
@@ -149,7 +148,7 @@ public class KeyboardAdaptor {
         }
 
         protected synchronized void receiveCode(int keycode) {
-            keyCodeData.add(new Integer(keycode));
+            keyCodeData.add(keycode);
         }
 
         protected synchronized void receiveChar(char keychar) {
@@ -175,9 +174,7 @@ public class KeyboardAdaptor {
                         chars[i] = ch.charValue();
                     }
 
-                    Iterator ri = KeyboardAdaptor.receivers.keySet().iterator();
-                    while (ri.hasNext()) {
-                        KeyboardReceiver receiver = (KeyboardReceiver) ri.next();
+                    for (KeyboardReceiver receiver : receivers.keySet()) {
                         int receiverType = ((Integer) receivers.get(receiver)).intValue();
                         int thisDataType = this.checkDataType(chars);
                         if (receiverType == ALL_DATA || receiverType == thisDataType) {
@@ -185,8 +182,8 @@ public class KeyboardAdaptor {
                         }
                     }
 
-                    keyCharData = new LinkedList();
-                    keyCodeData = new LinkedList();
+                    keyCharData = new LinkedList<Character>();
+                    keyCodeData = new LinkedList<Integer>();
                     lastKey = -1;
                     MAX_WAIT = MAX_WAIT_KEYBOARD;
                 }
@@ -198,9 +195,7 @@ public class KeyboardAdaptor {
         protected synchronized void sendEvent(int eventType, KeyEvent event) {
             lastKey = System.currentTimeMillis();
             if (KeyboardAdaptor.receivers.size() > 0) {
-                Iterator ri = KeyboardAdaptor.receivers.keySet().iterator();
-                while (ri.hasNext()) {
-                    KeyboardReceiver receiver = (KeyboardReceiver) ri.next();
+                for (KeyboardReceiver receiver : KeyboardAdaptor.receivers.keySet()) {
                     if (receiver instanceof KeyListener) {
                         switch (eventType) {
                             case 1:
@@ -220,6 +215,7 @@ public class KeyboardAdaptor {
             }
         }
 
+        @Override
         public void run() {
             while (running) {
                 long now = System.currentTimeMillis();

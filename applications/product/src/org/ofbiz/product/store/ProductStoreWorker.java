@@ -37,7 +37,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.common.geo.GeoWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -56,7 +56,7 @@ public class ProductStoreWorker {
 
     public static final String module = ProductStoreWorker.class.getName();
 
-    public static GenericValue getProductStore(String productStoreId, GenericDelegator delegator) {
+    public static GenericValue getProductStore(String productStoreId, Delegator delegator) {
         if (productStoreId == null || delegator == null) {
             return null;
         }
@@ -70,15 +70,15 @@ public class ProductStoreWorker {
     }
 
     public static GenericValue getProductStore(ServletRequest request) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String productStoreId = ProductStoreWorker.getProductStoreId(request);
         return ProductStoreWorker.getProductStore(productStoreId, delegator);
     }
 
     public static String getProductStoreId(ServletRequest request) {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpSession session = httpRequest.getSession();
-        if (session.getAttribute("productStoreId") != null) {
+        HttpSession session = httpRequest.getSession(false);
+        if (session != null && session.getAttribute("productStoreId") != null) {
             return (String) session.getAttribute("productStoreId");
         } else {
             GenericValue webSite = CatalogWorker.getWebSite(request);
@@ -113,7 +113,7 @@ public class ProductStoreWorker {
         }
     }
 
-    public static String determineSingleFacilityForStore(GenericDelegator delegator, String productStoreId) {
+    public static String determineSingleFacilityForStore(Delegator delegator, String productStoreId) {
         GenericValue productStore = null;
         try {
             productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
@@ -128,7 +128,7 @@ public class ProductStoreWorker {
         return null;
     }
 
-    public static boolean autoSaveCart(GenericDelegator delegator, String productStoreId) {
+    public static boolean autoSaveCart(Delegator delegator, String productStoreId) {
         return autoSaveCart(getProductStore(productStoreId, delegator));
     }
 
@@ -136,7 +136,7 @@ public class ProductStoreWorker {
         return productStore == null ? false : "Y".equalsIgnoreCase(productStore.getString("autoSaveCart"));
     }
 
-    public static String getProductStorePayToPartyId(String productStoreId, GenericDelegator delegator) {
+    public static String getProductStorePayToPartyId(String productStoreId, Delegator delegator) {
         return getProductStorePayToPartyId(getProductStore(productStoreId, delegator));
     }
 
@@ -149,12 +149,12 @@ public class ProductStoreWorker {
     }
 
     public static String getProductStorePaymentProperties(ServletRequest request, String paymentMethodTypeId, String paymentServiceTypeEnumId, boolean anyServiceType) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String productStoreId = ProductStoreWorker.getProductStoreId(request);
         return ProductStoreWorker.getProductStorePaymentProperties(delegator, productStoreId, paymentMethodTypeId, paymentServiceTypeEnumId, anyServiceType);
     }
 
-    public static String getProductStorePaymentProperties(GenericDelegator delegator, String productStoreId, String paymentMethodTypeId, String paymentServiceTypeEnumId, boolean anyServiceType) {
+    public static String getProductStorePaymentProperties(Delegator delegator, String productStoreId, String paymentMethodTypeId, String paymentServiceTypeEnumId, boolean anyServiceType) {
         GenericValue setting = ProductStoreWorker.getProductStorePaymentSetting(delegator, productStoreId, paymentMethodTypeId, paymentServiceTypeEnumId, anyServiceType);
 
         String payProps = "payment.properties";
@@ -164,7 +164,7 @@ public class ProductStoreWorker {
         return payProps;
     }
 
-    public static GenericValue getProductStorePaymentSetting(GenericDelegator delegator, String productStoreId, String paymentMethodTypeId, String paymentServiceTypeEnumId, boolean anyServiceType) {
+    public static GenericValue getProductStorePaymentSetting(Delegator delegator, String productStoreId, String paymentMethodTypeId, String paymentServiceTypeEnumId, boolean anyServiceType) {
         GenericValue storePayment = null;
         try {
             storePayment = delegator.findByPrimaryKeyCache("ProductStorePaymentSetting", UtilMisc.toMap("productStoreId", productStoreId, "paymentMethodTypeId", paymentMethodTypeId, "paymentServiceTypeEnumId", paymentServiceTypeEnumId));
@@ -195,7 +195,7 @@ public class ProductStoreWorker {
         return storePayment;
     }
 
-    public static List<GenericValue> getProductStoreShipmentMethods(GenericDelegator delegator, String productStoreId,
+    public static List<GenericValue> getProductStoreShipmentMethods(Delegator delegator, String productStoreId,
                                                              String shipmentMethodTypeId, String carrierPartyId, String carrierRoleTypeId) {
         // check for an external service call
         Map<String, String> storeFields = UtilMisc.toMap("productStoreId", productStoreId, "shipmentMethodTypeId", shipmentMethodTypeId,
@@ -211,14 +211,14 @@ public class ProductStoreWorker {
         return storeShipMethods;
     }
 
-    public static GenericValue getProductStoreShipmentMethod(GenericDelegator delegator, String productStoreId,
+    public static GenericValue getProductStoreShipmentMethod(Delegator delegator, String productStoreId,
                                                              String shipmentMethodTypeId, String carrierPartyId, String carrierRoleTypeId) {
         // TODO: selecting the first record is a far from optimal solution but, since the productStoreShipmentMethod
         //       is currently used to get the service name to get the online estimate, this should not be a huge deal for now.
         return EntityUtil.getFirst(getProductStoreShipmentMethods(delegator, productStoreId, shipmentMethodTypeId, carrierPartyId, carrierRoleTypeId));
     }
 
-    public static List<GenericValue> getAvailableStoreShippingMethods(GenericDelegator delegator, String productStoreId, GenericValue shippingAddress, List<BigDecimal> itemSizes, Map<String, BigDecimal> featureIdMap, BigDecimal weight, BigDecimal orderTotal) {
+    public static List<GenericValue> getAvailableStoreShippingMethods(Delegator delegator, String productStoreId, GenericValue shippingAddress, List<BigDecimal> itemSizes, Map<String, BigDecimal> featureIdMap, BigDecimal weight, BigDecimal orderTotal) {
         if (featureIdMap == null) {
             featureIdMap = FastMap.newInstance();
         }
@@ -334,7 +334,7 @@ public class ProductStoreWorker {
                 // check the items excluded from shipping
                 String includeFreeShipping = method.getString("includeNoChargeItems");
                 if (includeFreeShipping != null && "N".equalsIgnoreCase(includeFreeShipping)) {
-                    if ((itemSizes == null || itemSizes.size() == 0) && orderTotal.compareTo(BigDecimal.ZERO) == 0) {
+                    if (UtilValidate.isEmpty(itemSizes) && orderTotal.compareTo(BigDecimal.ZERO) == 0) {
                         returnShippingMethods.remove(method);
                         //Debug.logInfo("Removed shipping method due to all items being exempt from shipping", module);
                         continue;
@@ -344,14 +344,14 @@ public class ProductStoreWorker {
                 // check the geos
                 String includeGeoId = method.getString("includeGeoId");
                 String excludeGeoId = method.getString("excludeGeoId");
-                if ((includeGeoId != null && includeGeoId.length() > 0) || (excludeGeoId != null && excludeGeoId.length() > 0)) {
+                if (UtilValidate.isNotEmpty(includeGeoId) || UtilValidate.isNotEmpty(excludeGeoId)) {
                     if (shippingAddress == null) {
                         returnShippingMethods.remove(method);
                         //Debug.logInfo("Removed shipping method due to empty shipping adresss (may not have been selected yet)", module);
                         continue;
                     }
                 }
-                if (includeGeoId != null && includeGeoId.length() > 0) {
+                if (UtilValidate.isNotEmpty(includeGeoId)) {
                     List<GenericValue> includeGeoGroup = GeoWorker.expandGeoGroup(includeGeoId, delegator);
                     if (!GeoWorker.containsGeo(includeGeoGroup, shippingAddress.getString("countryGeoId"), delegator) &&
                             !GeoWorker.containsGeo(includeGeoGroup, shippingAddress.getString("stateProvinceGeoId"), delegator) &&
@@ -362,7 +362,7 @@ public class ProductStoreWorker {
                         continue;
                     }
                 }
-                if (excludeGeoId != null && excludeGeoId.length() > 0) {
+                if (UtilValidate.isNotEmpty(excludeGeoId)) {
                     List<GenericValue> excludeGeoGroup = GeoWorker.expandGeoGroup(excludeGeoId, delegator);
                     if (GeoWorker.containsGeo(excludeGeoGroup, shippingAddress.getString("countryGeoId"), delegator) ||
                             GeoWorker.containsGeo(excludeGeoGroup, shippingAddress.getString("stateProvinceGeoId"), delegator) ||
@@ -377,7 +377,7 @@ public class ProductStoreWorker {
                 // check the features
                 String includeFeatures = method.getString("includeFeatureGroup");
                 String excludeFeatures = method.getString("excludeFeatureGroup");
-                if (includeFeatures != null && includeFeatures.length() > 0) {
+                if (UtilValidate.isNotEmpty(includeFeatures)) {
                     List<GenericValue> includedFeatures = null;
                     try {
                         includedFeatures = delegator.findByAndCache("ProductFeatureGroupAppl", UtilMisc.toMap("productFeatureGroupId", includeFeatures));
@@ -399,7 +399,7 @@ public class ProductStoreWorker {
                         }
                     }
                 }
-                if (excludeFeatures != null && excludeFeatures.length() > 0) {
+                if (UtilValidate.isNotEmpty(excludeFeatures)) {
                     List<GenericValue> excludedFeatures = null;
                     try {
                         excludedFeatures = delegator.findByAndCache("ProductFeatureGroupAppl", UtilMisc.toMap("productFeatureGroupId", excludeFeatures));
@@ -441,7 +441,7 @@ public class ProductStoreWorker {
         return getRandomSurveyWrapper(productStore.getDelegator(), productStore.getString("productStoreId"), groupName, partyId, passThruFields);
     }
 
-    public static ProductStoreSurveyWrapper getRandomSurveyWrapper(GenericDelegator delegator, String productStoreId, String groupName, String partyId, Map<String, Object> passThruFields) {
+    public static ProductStoreSurveyWrapper getRandomSurveyWrapper(Delegator delegator, String productStoreId, String groupName, String partyId, Map<String, Object> passThruFields) {
         List<GenericValue> randomSurveys = getSurveys(delegator, productStoreId, groupName, null, "RANDOM_POLL", null);
         if (!UtilValidate.isEmpty(randomSurveys)) {
             Random rand = new Random();
@@ -453,15 +453,15 @@ public class ProductStoreWorker {
         }
     }
 
-    public static List<GenericValue> getProductSurveys(GenericDelegator delegator, String productStoreId, String productId, String surveyApplTypeId) {
+    public static List<GenericValue> getProductSurveys(Delegator delegator, String productStoreId, String productId, String surveyApplTypeId) {
         return getSurveys(delegator, productStoreId, null, productId, surveyApplTypeId, null);
     }
 
-    public static List<GenericValue> getProductSurveys(GenericDelegator delegator, String productStoreId, String productId, String surveyApplTypeId, String parentProductId) {
+    public static List<GenericValue> getProductSurveys(Delegator delegator, String productStoreId, String productId, String surveyApplTypeId, String parentProductId) {
         return getSurveys(delegator, productStoreId, null, productId, surveyApplTypeId,parentProductId);
     }
 
-    public static List<GenericValue> getSurveys(GenericDelegator delegator, String productStoreId, String groupName, String productId, String surveyApplTypeId, String parentProductId) {
+    public static List<GenericValue> getSurveys(Delegator delegator, String productStoreId, String groupName, String productId, String surveyApplTypeId, String parentProductId) {
         List<GenericValue> surveys = FastList.newInstance();
         List<GenericValue> storeSurveys = null;
         try {
@@ -514,7 +514,7 @@ public class ProductStoreWorker {
                     try {
                         categoryMembers = delegator.findByAndCache("ProductCategoryMember", UtilMisc.toMap("productCategoryId", surveyAppl.get("productCategoryId")));
                     } catch (GenericEntityException e) {
-                        Debug.logError(e, "Unable to get ProductCategoryMemebr records for survey application : " + surveyAppl, module);
+                        Debug.logError(e, "Unable to get ProductCategoryMember records for survey application : " + surveyAppl, module);
                     }
                     if (categoryMembers != null) {
                         for (GenericValue member: categoryMembers) {
@@ -538,7 +538,7 @@ public class ProductStoreWorker {
 
     /** Returns the number of responses for this survey by party */
     public static int checkSurveyResponse(HttpServletRequest request, String surveyId) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         String productStoreId = getProductStoreId(request);
         if (userLogin == null) {
@@ -549,7 +549,7 @@ public class ProductStoreWorker {
     }
 
     /** Returns the number of responses for this survey by party */
-    public static int checkSurveyResponse(GenericDelegator delegator, String partyId, String productStoreId, String surveyId) {
+    public static int checkSurveyResponse(Delegator delegator, String partyId, String productStoreId, String surveyId) {
         if (delegator == null || partyId == null || productStoreId == null) {
             return -1;
         }
@@ -562,7 +562,7 @@ public class ProductStoreWorker {
             return -1;
         }
 
-        if (surveyResponse == null || surveyResponse.size() == 0) {
+        if (UtilValidate.isEmpty(surveyResponse)) {
             return 0;
         } else {
             return surveyResponse.size();
@@ -645,13 +645,13 @@ public class ProductStoreWorker {
         }
 
         String productStoreId = productStore.getString("productStoreId");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         return isStoreInventoryAvailable(productStoreId, productConfig, quantity, delegator, dispatcher);
     }
 
     /** check inventory availability for the given catalog, product, quantity, etc */
-    public static boolean isStoreInventoryAvailable(String productStoreId, ProductConfigWrapper productConfig, BigDecimal quantity, GenericDelegator delegator, LocalDispatcher dispatcher) {
+    public static boolean isStoreInventoryAvailable(String productStoreId, ProductConfigWrapper productConfig, BigDecimal quantity, Delegator delegator, LocalDispatcher dispatcher) {
         GenericValue productStore = getProductStore(productStoreId, delegator);
 
         if (productStore == null) {
@@ -675,13 +675,7 @@ public class ProductStoreWorker {
                 return false;
             }
 
-            try {
-                isInventoryAvailable = ProductWorker.isProductInventoryAvailableByFacility(productConfig, inventoryFacilityId, quantity, dispatcher);
-            } catch (GenericServiceException e) {
-                Debug.logWarning(e, "Error invoking isProductInventoryAvailableByFacility in isCatalogInventoryAvailable", module);
-                return false;
-            }
-            return isInventoryAvailable;
+            return ProductWorker.isProductInventoryAvailableByFacility(productConfig, inventoryFacilityId, quantity, dispatcher);
 
         } else {
             GenericValue product = productConfig.getProduct();
@@ -696,14 +690,9 @@ public class ProductStoreWorker {
 
             if (UtilValidate.isNotEmpty(productFacilities)) {
                 for (GenericValue pfValue: productFacilities) {
-                    try {
-                        isInventoryAvailable = ProductWorker.isProductInventoryAvailableByFacility(productConfig, pfValue.getString("facilityId"), quantity, dispatcher);
-                        if (isInventoryAvailable == true) {
-                            return isInventoryAvailable;
-                        }
-                    } catch (GenericServiceException e) {
-                        Debug.logWarning(e, "Error invoking isProductInventoryAvailableByFacility in isCatalogInventoryAvailable", module);
-                        return false;
+                    isInventoryAvailable = ProductWorker.isProductInventoryAvailableByFacility(productConfig, pfValue.getString("facilityId"), quantity, dispatcher);
+                    if (isInventoryAvailable == true) {
+                        return isInventoryAvailable;
                     }
                 }
             }

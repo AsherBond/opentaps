@@ -20,16 +20,16 @@
 package org.ofbiz.minilang.method.entityops;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntity;
-import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.minilang.SimpleMethod;
 import org.ofbiz.minilang.method.ContextAccessor;
 import org.ofbiz.minilang.method.MethodContext;
@@ -69,6 +69,7 @@ public class FindByPrimaryKey extends MethodOperation {
         useCacheStr = element.getAttribute("use-cache");
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         String entityName = methodContext.expandString(this.entityName);
         String delegatorName = methodContext.expandString(this.delegatorName);
@@ -76,9 +77,9 @@ public class FindByPrimaryKey extends MethodOperation {
 
         boolean useCache = "true".equals(useCacheStr);
 
-        GenericDelegator delegator = methodContext.getDelegator();
-        if (delegatorName != null && delegatorName.length() > 0) {
-            delegator = GenericDelegator.getGenericDelegator(delegatorName);
+        Delegator delegator = methodContext.getDelegator();
+        if (UtilValidate.isNotEmpty(delegatorName)) {
+            delegator = DelegatorFactory.getDelegator(delegatorName);
         }
 
         Map<String, ? extends Object> inMap = mapAcsr.get(methodContext);
@@ -111,10 +112,12 @@ public class FindByPrimaryKey extends MethodOperation {
         return this.entityName;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<find-by-primary-key/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

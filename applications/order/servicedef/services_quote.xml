@@ -188,6 +188,7 @@ under the License.
         <auto-attributes mode="IN" include="nonpk" optional="true" entity-name="WorkEffort"/>
         <auto-attributes mode="INOUT" include="pk" optional="true" entity-name="WorkEffort"/>
         <override name="quoteId" optional="false"/>
+        <override name="workEffortId" optional="false"/>
     </service>
     <service name="deleteQuoteWorkEffort" default-entity-name="QuoteWorkEffort" engine="simple" auth="true"
             location="component://order/script/org/ofbiz/order/quote/QuoteServices.xml" invoke="deleteQuoteWorkEffort">
@@ -224,6 +225,8 @@ under the License.
         <attribute name="sendCc" type="String" mode="IN" optional="true"/>
         <attribute name="note" type="String" mode="IN" optional="true"/>
         <attribute name="body" type="String" mode="OUT" optional="true"/>
+        <attribute name="subject" type="String" mode="OUT" optional="true"/>
+        <attribute name="messageWrapper" type="org.ofbiz.service.mail.MimeMessageWrapper" mode="OUT" optional="true"/>
     </service>
      <service name="storeQuote" engine="java" default-entity-name="Quote" validate="true" auth="true"
             location="org.ofbiz.order.quote.QuoteServices" invoke="storeQuote">

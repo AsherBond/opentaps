@@ -53,14 +53,14 @@ public interface WfProcess extends WfExecutionObject {
      * @throws WfException
      * @return
      */
-    public Iterator getIteratorStep() throws WfException;
+    public Iterator<WfActivity> getIteratorStep() throws WfException;
 
     /**
      * @param maxNumber
      * @throws WfException
      * @return List of WfActivity objects.
      */
-    public List getSequenceStep(int maxNumber) throws WfException;
+    public List<WfActivity> getSequenceStep(int maxNumber) throws WfException;
 
     /**
      * @param member
@@ -82,7 +82,7 @@ public interface WfProcess extends WfExecutionObject {
      * @throws ResultNotAvailable
      * @return result Map of results from this process
      */
-    public Map result() throws WfException, ResultNotAvailable;
+    public Map<String, Object> result() throws WfException, ResultNotAvailable;
 
     /**
      * Receives activity results.
@@ -90,7 +90,7 @@ public interface WfProcess extends WfExecutionObject {
      * @param results Map of the results.
      * @throws WfException
      */
-    public void receiveResults(WfActivity activity, Map results) throws WfException;
+    public void receiveResults(WfActivity activity, Map<String, Object> results) throws WfException;
 
     /**
      * Receives notification when an activity has completed.
@@ -122,6 +122,6 @@ public interface WfProcess extends WfExecutionObject {
      * @throws InvalidState
      * @return
      */
-    public Iterator getActivitiesInState(String state) throws WfException, InvalidState;
+    public Iterator<WfActivity> getActivitiesInState(String state) throws WfException, InvalidState;
 
 } // interface WfProcessOperations

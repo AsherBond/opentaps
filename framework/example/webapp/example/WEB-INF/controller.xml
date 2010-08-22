@@ -28,7 +28,7 @@ under the License.
     <include location="component://common/webcommon/WEB-INF/portal-controller.xml"/>
 
     <description>Example Component Site Configuration File</description>
-    <owner>Copyright 2001-2008 The Apache Software Foundation</owner>
+    <owner>Copyright 2001-2009 The Apache Software Foundation</owner>
 
     <!--
       These can be used to return the reports as views; make sure the classes are compiled and available
@@ -76,9 +76,9 @@ under the License.
     </request-map>
     <request-map uri="createExampleAjax">
         <security https="true" auth="true"/>
-        <event type="jsonservice" invoke="createExample"/>
-        <response name="success" type="none"/>
-        <response name="error" type="none"/>
+        <event type="service" invoke="createExample"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
     </request-map>
     <request-map uri="updateExampleAjax">
         <security https="true" auth="true"/>
@@ -194,6 +194,8 @@ under the License.
     <request-map uri="FormWidgetExamples"><security https="true" auth="true"/><response name="success" type="view" value="FormWidgetExamples"/></request-map>
 
     <request-map uri="LookupExampleFeature"><security https="true" auth="true"/><response name="success" type="view" value="LookupExampleFeature"/></request-map>
+    <request-map uri="LookupPartyExample"><security https="true" auth="true"/><response name="success" type="view" value="LookupPartyExample"/></request-map>
+    <request-map uri="LookupPartyExampleByName"><security https="true" auth="true"/><response name="success" type="view" value="LookupPartyExampleByName"/></request-map>
 
     <request-map uri="ListExampleFormOnly"><security https="true" auth="false"/><response name="success" type="view" value="ListExampleFormOnly"/></request-map>
     <request-map uri="CreateExampleFormOnly"><security https="true" auth="false"/><response name="success" type="view" value="CreateExampleFormOnly"/></request-map>
@@ -202,11 +204,45 @@ under the License.
       <security https="true" auth="true"/>
       <response name="success" type="view" value="printExampleFOPFonts"/>
     </request-map>
+
+    <request-map uri="views">
+        <security https="true" auth="false"/>
+        <response name="success" type="request" value="main"/>
+    </request-map>
+
+    <request-map uri="ExampleGeoLocationPointSet1"><security https="true" auth="true"/><response name="success" type="view" value="ExampleGeoLocationPointSet1"/></request-map>
+    <request-map uri="ExampleGeoLocationPointSet2"><security https="true" auth="true"/><response name="success" type="view" value="ExampleGeoLocationPointSet2"/></request-map>
+    <request-map uri="ExampleGeoLocationPointSet3"><security https="true" auth="true"/><response name="success" type="view" value="ExampleGeoLocationPointSet3"/></request-map>
+    <request-map uri="ExampleGeoLocationPointSet4"><security https="true" auth="true"/><response name="success" type="view" value="ExampleGeoLocationPointSet4"/></request-map>
+    <request-map uri="ExampleGeoLocationAddress"><security https="true" auth="true"/><response name="success" type="view" value="ExampleGeoLocationAddress"/></request-map>
+
+    <!-- Birt example Requests -->
+    <request-map uri="BirtMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="BirtMain"/>
+    </request-map>
+    <request-map uri="Report">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="Report"/>
+    </request-map>
+    <request-map uri="Mail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="Mail"/>
+    </request-map>
+    <request-map uri="sendBirtMail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="sendBirtMail"/>
+        <response name="success" type="view" value="Mail"/>
+        <response name="error" type="view" value="Mail"/>
+    </request-map>
+    <request-map uri="ViewHandler">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ViewHandler"/>
+    </request-map>
     <!-- end of request mappings -->
 
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://example/widget/example/CommonScreens.xml#main"/>
-    <view-map name="help" type="screen" page="component://example/widget/example/ExampleScreens.xml#help"/>
 
     <view-map name="FindExample" type="screen" page="component://example/widget/example/ExampleScreens.xml#FindExample"/>
     <view-map name="EditExample" type="screen" page="component://example/widget/example/ExampleScreens.xml#EditExample"/>
@@ -222,10 +258,34 @@ under the License.
     <view-map name="FormWidgetExamples" type="screen" page="component://example/widget/example/FormWidgetExampleScreens.xml#FormWidgetExamples"/>
 
     <view-map name="LookupExampleFeature" type="screen" page="component://example/widget/example/ExampleFeatureScreens.xml#LookupExampleFeature"/>
+    <view-map name="LookupPartyExample" type="screen" page="component://example/widget/example/FormWidgetExampleLookupScreens.xml#LookupParty"/>
+    <view-map name="LookupPartyExampleByName" type="screen" page="component://example/widget/example/FormWidgetExampleLookupScreens.xml#LookupPartyByName"/>
+
     <!-- ajax view mappings -->
     <view-map name="findExampleAjax" type="screen" page="component://example/widget/example/ExampleAjaxScreens.xml#AjaxExample"/>
     <view-map name="ListExampleFormOnly" type="screen" page="component://example/widget/example/ExampleAjaxScreens.xml#ListExampleFormOnly"/>
     <view-map name="CreateExampleFormOnly" type="screen" page="component://example/widget/example/ExampleAjaxScreens.xml#CreateExampleFormOnly"/>
     <view-map name="printExampleFOPFonts" type="screenfop" page="component://example/widget/example/FormWidgetExampleScreens.xml#printExampleFOPFonts" content-type="application/pdf"  encoding="none"/>
+
+    <view-map name="ExampleGeoLocationPointSet1" type="screen" page="component://example/widget/example/ExampleScreens.xml#ExampleGeoLocationPointSet1"/>
+    <view-map name="ExampleGeoLocationPointSet2" type="screen" page="component://example/widget/example/ExampleScreens.xml#ExampleGeoLocationPointSet2"/>
+    <view-map name="ExampleGeoLocationPointSet3" type="screen" page="component://example/widget/example/ExampleScreens.xml#ExampleGeoLocationPointSet3"/>
+    <view-map name="ExampleGeoLocationPointSet4" type="screen" page="component://example/widget/example/ExampleScreens.xml#ExampleGeoLocationPointSet4"/>
+    <view-map name="ExampleGeoLocationAddress" type="screen" page="component://example/widget/example/ExampleScreens.xml#ExampleGeoLocationAddress"/>
+
+    <!-- Birt example View Mappings -->
+    <view-map name="BirtMain" type="screen" page="component://example/widget/example/BirtScreens.xml#main"/>
+    <view-map name="Report" type="screen" page="component://example/widget/example/BirtScreens.xml#Report"/>
+    <view-map name="Mail" type="screen" page="component://example/widget/example/BirtScreens.xml#EditMail"/>
+    <view-map name="ViewHandler" type="birt" page="component://example/webapp/birt/report/product.rptdesign" content-type="application/pdf"/>
+    <!-- Supported Content Types -->
+    <!--
+        text/html
+        application/pdf
+        application/vnd.ms-excel
+        application/vnd.ms-word
+        application/vnd.ms-powerpoint
+     -->
+
     <!-- end of view mappings -->
 </site-conf>

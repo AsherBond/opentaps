@@ -22,6 +22,7 @@ package org.ofbiz.minilang.method;
 import java.util.Map;
 
 import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.FlexibleMapAccessor;
 
 /**
@@ -39,7 +40,7 @@ public class ContextAccessor<T> {
     }
 
     public ContextAccessor(String name, String defaultName) {
-        if (name == null || name.length() == 0) {
+        if (UtilValidate.isEmpty(name)) {
             init(defaultName);
         } else {
             init(name);
@@ -96,11 +97,13 @@ public class ContextAccessor<T> {
     }
 
     /** The equals and hashCode methods are imnplemented just case this object is ever accidently used as a Map key */
+    @Override
     public int hashCode() {
         return this.name.hashCode();
     }
 
     /** The equals and hashCode methods are imnplemented just case this object is ever accidently used as a Map key */
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof ContextAccessor) {
             ContextAccessor<?> contextAccessor = (ContextAccessor<?>) obj;
@@ -118,6 +121,7 @@ public class ContextAccessor<T> {
     }
 
     /** To be used for a string representation of the accessor, returns the original name. */
+    @Override
     public String toString() {
         return this.name;
     }

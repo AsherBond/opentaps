@@ -22,10 +22,13 @@ package org.ofbiz.base.util.collections;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
-import javax.el.*;
+import javax.el.PropertyNotFoundException;
 
+import org.ofbiz.base.lang.SourceMonitored;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.base.util.UtilObject;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.cache.UtilCache;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.base.util.string.UelUtil;
@@ -35,10 +38,11 @@ import org.ofbiz.base.util.string.UelUtil;
  * accessing sub-map values and the "[]" (square bracket) syntax for accessing
  * list elements. See individual Map operations for more information.
  */
+@SourceMonitored
 @SuppressWarnings("serial")
 public class FlexibleMapAccessor<T> implements Serializable {
     public static final String module = FlexibleMapAccessor.class.getName();
-    protected static final UtilCache<String, FlexibleMapAccessor<?>> fmaCache = new UtilCache<String, FlexibleMapAccessor<?>>("flexibleMapAccessor.ExpressionCache");
+    protected static final UtilCache<String, FlexibleMapAccessor<?>> fmaCache = UtilCache.createUtilCache("flexibleMapAccessor.ExpressionCache");
     @SuppressWarnings("unchecked")
     protected static final FlexibleMapAccessor nullFma = new FlexibleMapAccessor(null);
 
@@ -51,7 +55,7 @@ public class FlexibleMapAccessor<T> implements Serializable {
         this.original = name;
         FlexibleStringExpander fse = null;
         String bracketedOriginal = null;
-        if (name != null && name.length() > 0) {
+        if (UtilValidate.isNotEmpty(name)) {
             if (name.charAt(0) == '-') {
                 this.isAscending = false;
                 name = name.substring(1);
@@ -78,18 +82,13 @@ public class FlexibleMapAccessor<T> implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public static <T> FlexibleMapAccessor<T> getInstance(String original) {
-        if (original == null || original.length() == 0 || "null".equals(original)) {
+        if (UtilValidate.isEmpty(original) || "null".equals(original)) {
             return nullFma;
         }
         FlexibleMapAccessor fma = fmaCache.get(original);
         if (fma == null) {
-            synchronized (fmaCache) {
-                fma = fmaCache.get(original);
-                if (fma == null) {
-                    fma = new FlexibleMapAccessor(original);
-                    fmaCache.put(original, fma);
-                }
-            }
+            fmaCache.put(original, new FlexibleMapAccessor(original));
+            fma = fmaCache.get(original);
         }
         return fma;
     }
@@ -103,7 +102,7 @@ public class FlexibleMapAccessor<T> implements Serializable {
     }
 
     public boolean isEmpty() {
-         return this.original == null || this.original.length() == 0;
+         return this.original == null;
     }
 
     /** Given the name based information in this accessor, get the value from the passed in Map.
@@ -139,7 +138,7 @@ public class FlexibleMapAccessor<T> implements Serializable {
                 Debug.logVerbose("UEL exception while getting value: " + e + ", original = " + this.original, module);
             }
         } catch (Exception e) {
-            Debug.logInfo("UEL exception while getting value: " + e + ", original = " + this.original, module);
+            Debug.logError("UEL exception while getting value: " + e + ", original = " + this.original, module);
         }
         return UtilGenerics.<T>cast(obj);
     }
@@ -182,7 +181,7 @@ public class FlexibleMapAccessor<T> implements Serializable {
             Map<String, Object> writableMap = UtilGenerics.cast(base);
             UelUtil.removeValue(writableMap, getExpression(base));
         } catch (Exception e) {
-            Debug.logInfo("UEL exception while removing value: " + e + ", original = " + this.original, module);
+            Debug.logError("UEL exception while removing value: " + e + ", original = " + this.original, module);
         }
         return object;
     }
@@ -197,6 +196,7 @@ public class FlexibleMapAccessor<T> implements Serializable {
         return expression;
     }
 
+    @Override
     public String toString() {
         if (this.isEmpty()) {
             return super.toString();
@@ -204,6 +204,7 @@ public class FlexibleMapAccessor<T> implements Serializable {
         return this.original;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -211,14 +212,12 @@ public class FlexibleMapAccessor<T> implements Serializable {
         }
         try {
             FlexibleMapAccessor that = (FlexibleMapAccessor) obj;
-            if (this.original == null && that.original == null) {
-                return true;
-            }
-            return this.original.equals(that.original);
+            return UtilObject.equalsHelper(this.original, that.original);
         } catch (Exception e) {}
         return false;
     }
 
+    @Override
     public int hashCode() {
         return this.original == null ? super.hashCode() : this.original.hashCode();
     }

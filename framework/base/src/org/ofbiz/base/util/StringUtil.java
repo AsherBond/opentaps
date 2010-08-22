@@ -40,6 +40,7 @@ import javolution.util.FastSet;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.ofbiz.base.lang.Appender;
 import org.owasp.esapi.Encoder;
 import org.owasp.esapi.ValidationErrorList;
 import org.owasp.esapi.Validator;
@@ -57,6 +58,7 @@ import org.owasp.esapi.reference.DefaultValidator;
 public class StringUtil {
 
     public static final String module = StringUtil.class.getName();
+    protected static final Map<String, Pattern> substitutionPatternMap;
 
     /** OWASP ESAPI canonicalize strict flag; setting false so we only get warnings about double encoding, etc; can be set to true for exceptions and more security */
     public static final boolean esapiCanonicalizeStrict = false;
@@ -67,10 +69,18 @@ public class StringUtil {
         List<Codec> codecList = Arrays.asList(new HTMLEntityCodec(), new PercentCodec());
         defaultWebEncoder = new DefaultEncoder(codecList);
         defaultWebValidator = new DefaultValidator();
+        substitutionPatternMap = FastMap.newInstance();
+        substitutionPatternMap.put("&&", Pattern.compile("@and", Pattern.LITERAL));
+        substitutionPatternMap.put("||", Pattern.compile("@or", Pattern.LITERAL));
+        substitutionPatternMap.put("<=", Pattern.compile("@lteq", Pattern.LITERAL));
+        substitutionPatternMap.put(">=", Pattern.compile("@gteq", Pattern.LITERAL));
+        substitutionPatternMap.put("<", Pattern.compile("@lt", Pattern.LITERAL));
+        substitutionPatternMap.put(">", Pattern.compile("@gt", Pattern.LITERAL));
     }
 
     public static final SimpleEncoder htmlEncoder = new HtmlEncoder();
     public static final SimpleEncoder xmlEncoder = new XmlEncoder();
+    public static final SimpleEncoder stringEncoder = new StringEncoder();
 
     public static interface SimpleEncoder {
         public String encode(String original);
@@ -88,6 +98,15 @@ public class StringUtil {
         }
     }
 
+    public static class StringEncoder implements SimpleEncoder {
+        public String encode(String original) {
+            if (original != null) {
+                original = original.replace("\"", "\\\"");
+            }
+            return original;
+        }
+    }
+
     // ================== Begin General Functions ==================
 
     public static SimpleEncoder getEncoder(String type) {
@@ -95,6 +114,8 @@ public class StringUtil {
             return StringUtil.xmlEncoder;
         } else if ("html".equals(type)) {
             return StringUtil.htmlEncoder;
+        } else if ("string".equals(type)) {
+            return StringUtil.stringEncoder;
         } else {
             return null;
         }
@@ -115,7 +136,7 @@ public class StringUtil {
         if (mainString == null) {
             return null;
         }
-        if (oldString == null || oldString.length() == 0) {
+        if (UtilValidate.isEmpty(oldString)) {
             return mainString;
         }
         if (newString == null) {
@@ -368,7 +389,7 @@ public class StringUtil {
 
     /** Make sure the string starts with a forward slash but does not end with one; converts back-slashes to forward-slashes; if in String is null or empty, returns zero length string. */
     public static String cleanUpPathPrefix(String prefix) {
-        if (prefix == null || prefix.length() == 0) return "";
+        if (UtilValidate.isEmpty(prefix)) return "";
 
         StringBuilder cppBuff = new StringBuilder(prefix.replace('\\', '/'));
 
@@ -411,11 +432,11 @@ public class StringUtil {
 
     private static char[] hexChar = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     public static int convertChar(char c) {
-        if ( '0' <= c && c <= '9' ) {
+        if ('0' <= c && c <= '9') {
             return c - '0' ;
-        } else if ( 'a' <= c && c <= 'f' ) {
+        } else if ('a' <= c && c <= 'f') {
             return c - 'a' + 0xa ;
-        } else if ( 'A' <= c && c <= 'F' ) {
+        } else if ('A' <= c && c <= 'F') {
             return c - 'A' + 0xa ;
         } else {
             throw new IllegalArgumentException("Invalid hex character: [" + c + "]");
@@ -473,6 +494,34 @@ public class StringUtil {
             outStrBfr.insert(0, '0');
         }
         return outStrBfr.toString();
+    }
+
+    /** Converts operator substitutions (@and, @or, etc) back to their original form.
+     * <p>OFBiz script syntax provides special forms of common operators to make
+     * it easier to embed logical expressions in XML:
+     * <table border="1" cellpadding="2">
+     * <tr><td><strong>@and</strong></td><td>&amp;&amp;</td></tr>
+     * <tr><td><strong>@or</strong></td><td>||</td></tr>
+     * <tr><td><strong>@gt</strong></td><td>&gt;</td></tr>
+     * <tr><td><strong>@gteq</strong></td><td>&gt;=</td></tr>
+     * <tr><td><strong>@lt</strong></td><td>&lt;</td></tr>
+     * <tr><td><strong>@lteq</strong></td><td>&lt;=</td></tr>
+     * </table></p>
+     * @param expression The <code>String</code> to convert
+     * @return The converted <code>String</code>
+     */
+    public static String convertOperatorSubstitutions(String expression) {
+        String result = expression;
+        if (result != null && (result.contains("@") || result.contains("'"))) {
+            for (Map.Entry<String, Pattern> entry: substitutionPatternMap.entrySet()) {
+                Pattern pattern = entry.getValue();
+                result = pattern.matcher(result).replaceAll(entry.getKey());
+            }
+            if (Debug.verboseOn()) {
+                Debug.logVerbose("Converted " + expression + " to " + result, module);
+            }
+        }
+        return result;
     }
 
     /**
@@ -551,13 +600,12 @@ public class StringUtil {
      * Translates various HTML characters in a string so that the string can be displayed in a browser safely
      * <p>
      * This function is useful in preventing user-supplied text from containing HTML markup, such as in a message board or
-     * guest book application. The optional arguments doubleQuotes and singleQuotes allow the control of the substitution of
-     * the quote characters.  The default is to translate them with the HTML equivalent.
+     * guest book application.
      * </p>
      * The translations performed are: <ol>
      *    <li>'&' (ampersand) becomes '&amp;'
-     *    <li>'"' (double quote) becomes '&quot;' when doubleQuotes is true.
-     *    <li>''' (single quote) becomes '&#039;' when singleQuotes is true.
+     *    <li>'"' (double quote) becomes '&quot;'
+     *    <li>''' (single quote) becomes '&#039;'
      *    <li>'<' (less than) becomes '&lt;'
      *    <li>'>' (greater than) becomes '&gt;'
      *    <li>\n (Carriage Return) becomes '&lt;br&gt;gt;'
@@ -565,41 +613,15 @@ public class StringUtil {
      *
      * @deprecated Use StringUtil.htmlEncoder instead.
      */
-    public static String htmlSpecialChars(String html, boolean doubleQuotes, boolean singleQuotes, boolean insertBR) {
+    @Deprecated
+    public static String htmlSpecialChars(String html) {
         html = StringUtil.replaceString(html, "&", "&amp;");
         html = StringUtil.replaceString(html, "<", "&lt;");
         html = StringUtil.replaceString(html, ">", "&gt;");
-        if (doubleQuotes) {
-            html = StringUtil.replaceString(html, "\"", "&quot;");
-        }
-        if (singleQuotes) {
-            html = StringUtil.replaceString(html, "'", "&#039");
-        }
-        if (insertBR) {
-            html = StringUtil.replaceString(html, "\n", "<br>");
-        }
+        html = StringUtil.replaceString(html, "\"", "&quot;");
+        html = StringUtil.replaceString(html, "'", "&#039");
+        html = StringUtil.replaceString(html, "\n", "<br>");
 
-        return html;
-    }
-
-    public static String htmlSpecialChars(String html) {
-        return htmlSpecialChars(html, true, true, true);
-    }
-
-    public static String fromHtmlToSpecialChars(String html, boolean doubleQuotes, boolean singleQuotes, boolean insertBR) {
-        html = StringUtil.replaceString(html, "&amp;", "&");
-        html = StringUtil.replaceString(html, "&lt;", "<");
-        html = StringUtil.replaceString(html, "&gt;", ">");
-        if (doubleQuotes) {
-            html = StringUtil.replaceString(html, "&quot;", "\"");
-        }
-        if (singleQuotes) {
-            html = StringUtil.replaceString(html, "&#039", "'");
-        }
-        if (insertBR) {
-            html = StringUtil.replaceString(html, "<br>", "\n");
-        }
-        html = html.replace("&nbsp;", " ");
         return html;
     }
 
@@ -631,7 +653,7 @@ public class StringUtil {
      * @return the converted string
      */
     public static String collapseCharacter(String str, char c) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         char last = str.charAt(0);
 
         for (int i = 0; i < str.length(); i++) {
@@ -654,6 +676,28 @@ public class StringUtil {
         return new StringWrapper(theString);
     }
 
+    public static StringBuilder appendTo(StringBuilder sb, Iterable<? extends Appender<StringBuilder>> iterable, String prefix, String suffix, String sep) {
+        Iterator<? extends Appender<StringBuilder>> it = iterable.iterator();
+        while (it.hasNext()) {
+            if (prefix != null) sb.append(prefix);
+            it.next().appendTo(sb);
+            if (suffix != null) sb.append(suffix);
+            if (it.hasNext() && sep != null) sb.append(sep);
+        }
+        return sb;
+    }
+
+    public static StringBuilder append(StringBuilder sb, Iterable<? extends Object> iterable, String prefix, String suffix, String sep) {
+        Iterator<? extends Object> it = iterable.iterator();
+        while (it.hasNext()) {
+            if (prefix != null) sb.append(prefix);
+            sb.append(it.next());
+            if (suffix != null) sb.append(suffix);
+            if (it.hasNext() && sep != null) sb.append(sep);
+        }
+        return sb;
+    }
+
     /**
      * A super-lightweight object to wrap a String object. Mainly used with FTL templates
      * to avoid the general HTML auto-encoding that is now done through the Screen Widget.
@@ -671,7 +715,7 @@ public class StringUtil {
          * Fairly simple method used for the plus (+) base concatenation in Groovy.
          *
          * @param value
-         * @return
+         * @return the wrapped string, plus the value
          */
         public String plus(Object value) {
             return this.theString + value;
@@ -680,6 +724,7 @@ public class StringUtil {
         /**
          * @return The String this object wraps.
          */
+        @Override
         public String toString() {
             return this.theString;
         }
@@ -691,8 +736,9 @@ public class StringUtil {
      */
     public static class HtmlEncodingMapWrapper<K> implements Map<K, Object>, Reusable {
         protected static final ObjectFactory<HtmlEncodingMapWrapper<?>> mapStackFactory = new ObjectFactory<HtmlEncodingMapWrapper<?>>() {
+            @Override
             protected HtmlEncodingMapWrapper<?> create() {
-                return new HtmlEncodingMapWrapper();
+                return new HtmlEncodingMapWrapper<Object>();
             }
         };
         public static <K> HtmlEncodingMapWrapper<K> getHtmlEncodingMapWrapper(Map<K, Object> mapToWrap, SimpleEncoder encoder) {
@@ -740,6 +786,7 @@ public class StringUtil {
         public Set<K> keySet() { return this.internalMap.keySet(); }
         public Collection<Object> values() { return this.internalMap.values(); }
         public Set<Map.Entry<K, Object>> entrySet() { return this.internalMap.entrySet(); }
+        @Override
         public String toString() { return this.internalMap.toString(); }
     }
 }

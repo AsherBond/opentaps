@@ -34,7 +34,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -64,7 +64,7 @@ public class BOMServices {
     public static Map getMaxDepth(DispatchContext dctx, Map context) {
 
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String productId = (String) context.get("productId");
         String fromDateStr = (String) context.get("fromDate");
         String bomType = (String) context.get("bomType");
@@ -108,7 +108,7 @@ public class BOMServices {
         } catch (GenericEntityException gee) {
             return ServiceUtil.returnError("Error running max depth algorithm: " + gee.getMessage());
         }
-        result.put("depth", new Long(maxDepth));
+        result.put("depth", Long.valueOf(maxDepth));
 
         return result;
     }
@@ -123,7 +123,7 @@ public class BOMServices {
      */
     public static Map updateLowLevelCode(DispatchContext dctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String productId = (String) context.get("productIdTo");
         Boolean alsoComponents = (Boolean) context.get("alsoComponents");
@@ -160,7 +160,7 @@ public class BOMServices {
                 }
             }
             if (virtualMaxDepth > llc.intValue()) {
-                llc = new Long(virtualMaxDepth);
+                llc = Long.valueOf(virtualMaxDepth);
             }
             product.set("billOfMaterialLevel", llc);
             product.store();
@@ -177,7 +177,7 @@ public class BOMServices {
                         lev = oneProduct.getLong("billOfMaterialLevel").intValue();
                     }
                     if (lev < oneNode.getDepth()) {
-                        oneProduct.set("billOfMaterialLevel", new Long(oneNode.getDepth()));
+                        oneProduct.set("billOfMaterialLevel", Long.valueOf(oneNode.getDepth()));
                         oneProduct.store();
                     }
                 }
@@ -208,13 +208,13 @@ public class BOMServices {
      */
     public static Map initLowLevelCode(DispatchContext dctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         try {
             List products = delegator.findList("Product", null, null, UtilMisc.toList("isVirtual DESC"), null, false);
             Iterator productsIt = products.iterator();
-            Long zero = new Long(0);
+            Long zero = Long.valueOf(0);
             List allProducts = new ArrayList();
             while (productsIt.hasNext()) {
                 GenericValue product = (GenericValue)productsIt.next();
@@ -251,7 +251,7 @@ public class BOMServices {
      */
     public static Map searchDuplicatedAncestor(DispatchContext dctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue)context.get("userLogin");
 
@@ -285,7 +285,7 @@ public class BOMServices {
     public static Map getBOMTree(DispatchContext dctx, Map context) {
 
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue)context.get("userLogin");
         String productId = (String) context.get("productId");
@@ -295,7 +295,7 @@ public class BOMServices {
         BigDecimal quantity = (BigDecimal) context.get("quantity");
         BigDecimal amount = (BigDecimal) context.get("amount");
         if (type == null) {
-            type = new Integer(0);
+            type = Integer.valueOf(0);
         }
 
         Date fromDate = null;
@@ -336,7 +336,7 @@ public class BOMServices {
     public static Map getManufacturingComponents(DispatchContext dctx, Map context) {
 
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue)context.get("userLogin");
 
@@ -413,7 +413,7 @@ public class BOMServices {
             Map componentMap = new HashMap();
             BOMNode node = (BOMNode)componentsIt.next();
             componentMap.put("product", node.getProduct());
-            componentMap.put("quantity", node);
+            componentMap.put("quantity", node.getQuantity());
             componentsMap.add(componentMap);
         }
         result.put("componentsMap", componentsMap);
@@ -422,7 +422,7 @@ public class BOMServices {
 
     public static Map getNotAssembledComponents(DispatchContext dctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String productId = (String) context.get("productId");
         BigDecimal quantity = (BigDecimal) context.get("quantity");
@@ -475,7 +475,7 @@ public class BOMServices {
     //
     public static Map createShipmentPackages(DispatchContext dctx, Map context) {
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue)context.get("userLogin");
@@ -585,7 +585,7 @@ public class BOMServices {
                         BOMNode component = (BOMNode)productsInPackages.get(j);
                         HashMap boxTypeContentMap = new HashMap();
                         boxTypeContentMap.put("content", orderShipmentReadMap);
-                        boxTypeContentMap.put("componentIndex", new Integer(j));
+                        boxTypeContentMap.put("componentIndex", Integer.valueOf(j));
                         GenericValue product = component.getProduct();
                         String boxTypeId = product.getString("shipmentBoxTypeId");
                         if (boxTypeId != null) {
@@ -730,7 +730,7 @@ public class BOMServices {
                         } catch (GenericServiceException e) {
                             return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingPackageConfiguratorError", locale));
                         }
-                        totalWidth = totalWidth.add( qty.multiply(productDepth) );
+                        totalWidth = totalWidth.add(qty.multiply(productDepth));
                         if (qty.compareTo(maxQuantity) == 0) shipmentPackageSeqId = null;
                         remQuantity = remQuantity.subtract(qty);
                     }
@@ -750,7 +750,7 @@ public class BOMServices {
     public static Map getProductsInPackages(DispatchContext dctx, Map context) {
 
         Map result = new HashMap();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue)context.get("userLogin");
 

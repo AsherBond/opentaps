@@ -68,7 +68,7 @@ public class ControllerRequestArtifactInfo extends ArtifactInfoBase {
     public void populateAll() throws GeneralException {
         // populate serviceCalledByRequestEvent, requestsThatAreResponsesToThisRequest, viewsThatAreResponsesToThisRequest and related reverse maps
 
-        if (this.requestInfoMap.event != null && "service".equals(this.requestInfoMap.event.type)) {
+        if (this.requestInfoMap.event != null && this.requestInfoMap.event.type != null && (this.requestInfoMap.event.type.indexOf("service") >= 0)) {
             String serviceName = (String) this.requestInfoMap.event.invoke;
             try {
                 this.serviceCalledByRequestEvent = this.aif.getServiceArtifactInfo(serviceName);
@@ -130,6 +130,7 @@ public class ControllerRequestArtifactInfo extends ArtifactInfoBase {
         return this.requestUri;
     }
 
+    @Override
     public String getDisplayName() {
         String location = UtilURL.getOfbizHomeRelativeLocation(this.controllerXmlUrl);
         if (location.endsWith("/WEB-INF/controller.xml")) {
@@ -138,22 +139,27 @@ public class ControllerRequestArtifactInfo extends ArtifactInfoBase {
         return this.requestUri + " (" + location + ")";
     }
 
+    @Override
     public String getDisplayType() {
         return "Controller Request";
     }
 
+    @Override
     public String getType() {
         return ArtifactInfoFactory.ControllerRequestInfoTypeId;
     }
 
+    @Override
     public String getUniqueId() {
         return this.controllerXmlUrl.toExternalForm() + "#" + this.requestUri;
     }
 
+    @Override
     public URL getLocationURL() throws MalformedURLException {
         return this.controllerXmlUrl;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof ControllerRequestArtifactInfo) {
             ControllerRequestArtifactInfo that = (ControllerRequestArtifactInfo) obj;

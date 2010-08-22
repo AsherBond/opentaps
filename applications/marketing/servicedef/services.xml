@@ -77,6 +77,7 @@ under the License.
             The intent is for anonymous sign ups to email lists.  Also validates email format.</description>
         <attribute name="contactListId" type="String" mode="IN" optional="false"/>
         <attribute name="email" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
     </service>
 
     <!-- MarketingCampaignRole Services -->
@@ -144,7 +145,10 @@ under the License.
         <description>Update Party to ContactList Join</description>
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="contactListId" type="String" mode="INOUT" optional="true"/>
         <attribute name="optInVerifyCode" type="String" mode="IN" optional="true"/>
+        <override name="fromDate" optional="true"/>
     </service>
     <service name="updatePartyEmailContactListParty" engine="simple"
             location="component://marketing/script/org/ofbiz/marketing/contact/ContactListServices.xml" invoke="updatePartyEmailContactListParty" auth="true">
@@ -167,13 +171,40 @@ under the License.
             <exclude field-name="setByUserLoginId"/>
         </auto-attributes>
         <override name="statusId" optional="false"/>
+        <override name="fromDate" optional="true"/>
     </service>
     <service name="sendContactListPartyVerifyEmail" engine="simple" max-retry="3"
         location="component://marketing/script/org/ofbiz/marketing/contact/ContactListServices.xml" invoke="sendContactListPartyVerifyEmail" auth="true">
         <description>Send ContactListParty Verify Email</description>
         <auto-attributes entity-name="ContactListParty" include="pk" mode="IN" optional="false"/>
     </service>
+    <service name="optOutOfListFromCommEvent" engine="simple"
+            location="component://marketing/script/org/ofbiz/marketing/contact/ContactListServices.xml" invoke="optOutOfListFromCommEvent" auth="false">
+        <description>Uses the communication event infromation to locate the contact list party information and removes the contact from the list</description>
+        <attribute name="communicationEventId" type="String" mode="IN" optional="false"/>
+        <attribute name="contactListId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="sendContactListPartyUnSubscribeEmail" engine="simple"
+        location="component://marketing/script/org/ofbiz/marketing/contact/ContactListServices.xml" invoke="sendContactListPartyUnSubscribeEmail" auth="false">
+        <attribute name="productStoreId" mode="IN" type="String" optional="true"/>
+        <attribute name="partyId" mode="IN" type="String" optional="true"/>
+        <attribute name="contactListId" mode="IN" type="String" optional="true"/>
+        <attribute name="fromDate" mode="IN" type="String" optional="true"/>
+        <attribute name="statusId" mode="IN" type="String" optional="true"/>
+    </service>
 
+    <!--  ContactList Comm Status Services -->
+    <service name="updateContactListCommStatus" engine="simple" default-entity-name="ContactListCommStatus"
+            location="component://marketing/script/org/ofbiz/marketing/contact/ContactListServices.xml" invoke="updateContactListCommStatus">
+        <auto-attributes include="all" mode="IN" optional="false"/>
+        <override name="partyId" optional="true"/>
+        <override name="messageId" allow-html="any" optional="true"/>
+    </service>
+    <service name="updateCommStatusFromCommEvent" engine="simple"
+            location="component://marketing/script/org/ofbiz/marketing/contact/ContactListServices.xml" invoke="updateCommStatusFromCommEvent">
+        <attribute name="communicationEventId" type="String" mode="IN"/>
+        <attribute name="statusId" type="String" mode="IN"/>
+    </service>
 
     <!-- TrackingCode Services -->
     <service name="createTrackingCode" default-entity-name="TrackingCode" engine="simple"
@@ -369,25 +400,12 @@ under the License.
         <attribute name="altPermission" type="String" mode="IN" optional="true"/>
     </service>
 
-    <!-- opportunity service -->
-    <service name="createOpportunity" engine="simple" default-entity-name="SalesOpportunity"
-        location="component://marketing/script/org/ofbiz/sfa/opportunity/OpportunityServices.xml" invoke="createOpportunity">
-        <description>Create an opportunity</description>
-        <auto-attributes mode="INOUT" include="pk" optional="true"/>
-        <auto-attributes mode="IN" include="nonpk" optional="true">
-            <exclude field-name="createdByUserLogin"/>
-        </auto-attributes>
-    </service>
-    <service name="updateOpportunity" engine="simple" default-entity-name="SalesOpportunity"
-        location="component://marketing/script/org/ofbiz/sfa/opportunity/OpportunityServices.xml" invoke="updateOpportunity">
-        <description>Update an opportnity</description>
-        <auto-attributes mode="IN" include="pk" optional="false"/>
-        <auto-attributes mode="IN" include="nonpk" optional="true"/>
-    </service>
-
     <!-- lead services -->
     <service name="createLead" engine="simple" location="component://marketing/script/org/ofbiz/sfa/lead/LeadServices.xml" invoke="createLead">
-        <description>Create a Lead Person or Group</description>
+        <description>
+            Sales Lead can be just a person or a person representing a company or a company (party group).
+            createLead works 1) If person information is passed. 2) If company (party group) information is passed. 3) If Person and company (party group) information is passed.
+        </description>
         <auto-attributes entity-name="Person" mode="IN" optional="true">
             <exclude field-name="partyId"/>
         </auto-attributes>
@@ -397,19 +415,20 @@ under the License.
         <auto-attributes entity-name="TelecomNumber" mode="IN" optional="true">
             <exclude field-name="contactMechId"/>
         </auto-attributes>
-        <attribute name="partyId" type="String" mode="OUT"/>
-        <attribute name="contactMechId" type="String" mode="OUT" optional="true"/>
         <attribute name="emailAddress" type="String" mode="IN" optional="true"/>
         <attribute name="groupName" type="String" mode="IN" optional="true"/>
         <attribute name="title" type="String" mode="IN" optional="true"/>
         <attribute name="numEmployees" type="String" mode="IN" optional="true"/>
         <attribute name="officeSiteName" type="String" mode="IN" optional="true"/>
         <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
-        <attribute name="leadSource" type="String" mode="IN" optional="true"/>
-        <attribute name="roleTypeId" type="String" mode="OUT"/>
-        <attribute name="quickAdd" type="String" mode="IN" optional="true"/>
+        <attribute name="dataSourceId" type="String" mode="IN" optional="true"/>
         <attribute name="extension" type="String" mode="IN" optional="true"/>
         <attribute name="contactListId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="partyId" type="String" mode="OUT" optional="true"/>
+        <attribute name="partyGroupPartyId" type="String" mode="OUT" optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="OUT" optional="true"/>
+        <attribute name="contactMechId" type="String" mode="OUT" optional="true"/>
     </service>
     <service name="createContact" engine="simple"
         location="component://marketing/script/org/ofbiz/sfa/contact/ContactServices.xml" invoke="createContact">
@@ -465,14 +484,15 @@ under the License.
     </service>
     <service name="convertLeadToContact" engine="simple" location="component://marketing/script/org/ofbiz/sfa/lead/LeadServices.xml" invoke="convertLeadToContact">
         <attribute name="partyId" type="String" mode="INOUT" optional="false"/>
-        <attribute name="partyGroupId" type="String" mode="IN" optional="true"/>
-        <attribute name="partyGroupId" type="String" mode="OUT" optional="false"/>
+        <attribute name="partyGroupId" type="String" mode="INOUT" optional="false"/>
     </service>
 
     <!-- VCard services -->
     <service name="importVCard" engine="java" location="org.ofbiz.sfa.vcard.VCard" invoke="importVCard">
         <attribute name="infile" type="java.nio.ByteBuffer" mode="IN" optional="false"/>
         <attribute name="partyId" type="String" mode="OUT" optional="false"/>
+        <attribute name="partyType" type="String" mode="IN" optional="true"/>
+        <attribute name="serviceContext" type="Map" mode="IN" optional="true"/>
         <attribute name="serviceName" type="String" mode="IN" optional="false"/>
     </service>
     <service name="exportVCard" engine="java" location="org.ofbiz.sfa.vcard.VCard" invoke="exportVCard">

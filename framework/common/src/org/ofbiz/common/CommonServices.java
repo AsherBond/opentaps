@@ -19,14 +19,27 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.common;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
+import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.mail.internet.MimeMessage;
 import javax.transaction.xa.XAException;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.apache.log4j.Level;
@@ -38,7 +51,7 @@ import org.ofbiz.base.util.UtilValidate;
 import static org.ofbiz.base.util.UtilGenerics.checkList;
 import static org.ofbiz.base.util.UtilGenerics.checkMap;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -86,6 +99,29 @@ public class CommonServices {
         return response;
     }
 
+    /**
+     * Generic Test SOAP Service
+     *@param dctx The DispatchContext that this service is operating in
+     *@param context Map containing the input parameters
+     *@return Map with the result of the service, the output parameters
+     */
+    public static Map<String, Object> testSOAPService(DispatchContext dctx, Map<String, ?> context) {
+        Delegator delegator = dctx.getDelegator();
+        Map<String, Object> response = ServiceUtil.returnSuccess();
+
+        GenericValue testing = (GenericValue) context.get("testing");
+        List<GenericValue> testingNodes = FastList.newInstance();
+        for (int i = 0; i < 3; i ++) {
+            GenericValue testingNode = delegator.makeValue("TestingNode");
+            testingNode.put("testingNodeId", "TESTING_NODE" + i);
+            testingNode.put("description", "Testing Node " + i);
+            testingNode.put("createdStamp", UtilDateTime.nowTimestamp());
+            testingNodes.add(testingNode);
+        }
+        response.put("testingNodes", testingNodes);
+        return response;
+    }
+
     public static Map<String, Object> blockingTestService(DispatchContext dctx, Map<String, ?> context) {
         Long duration = (Long) context.get("duration");
         if (duration == null) {
@@ -97,12 +133,6 @@ public class CommonServices {
         } catch (InterruptedException e) {
         }
         return CommonServices.testService(dctx, context);
-    }
-
-    public static Map<String, Object> testWorkflowCondition(DispatchContext dctx, Map<String, ?> context) {
-        Map<String, Object> result = FastMap.newInstance();
-        result.put("evaluationResult", Boolean.TRUE);
-        return result;
     }
 
     public static Map<String, Object> testRollbackListener(DispatchContext dctx, Map<String, ?> context) {
@@ -134,7 +164,7 @@ public class CommonServices {
      *@return Map with the result of the service, the output parameters
      */
     public static Map<String, Object> createNote(DispatchContext ctx, Map<String, ?> context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Timestamp noteDate = (Timestamp) context.get("noteDate");
         String partyId = (String) context.get("partyId");
@@ -165,6 +195,7 @@ public class CommonServices {
         Map<String, Object> result = ServiceUtil.returnSuccess();
 
         result.put("noteId", noteId);
+        result.put("partyId", partyId);
         return result;
     }
 
@@ -246,7 +277,7 @@ public class CommonServices {
 
     /** Cause a Referential Integrity Error */
     public static Map<String, Object> entityFailTest(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         // attempt to create a DataSource entity w/ an invalid dataSourceTypeId
         GenericValue newEntity = delegator.makeValue("DataSource");
@@ -273,7 +304,7 @@ public class CommonServices {
 
     /** Test entity sorting */
     public static Map<String, Object> entitySortTest(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Set<ModelEntity> set = new TreeSet<ModelEntity>();
 
         set.add(delegator.getModelEntity("Person"));
@@ -295,10 +326,10 @@ public class CommonServices {
     }
 
     public static Map<String, Object> makeALotOfVisits(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         int count = ((Integer) context.get("count")).intValue();
 
-        for (int i = 0; i < count; i++ ) {
+        for (int i = 0; i < count; i++) {
             GenericValue v = delegator.makeValue("Visit");
             String seqId = delegator.getNextSeqId("Visit");
 
@@ -482,7 +513,7 @@ public class CommonServices {
     }
 
     public static Map<String, Object> ping(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String message = (String) context.get("message");
         if (message == null) {
             message = "PONG";

@@ -35,14 +35,17 @@ under the License.
   <div class="screenlet-body">
         <form method="post" action="<@ofbizUrl>appendItemToOrder</@ofbizUrl>" name="appendItemForm">
             <input type="hidden" size="25" name="orderId" value="${orderId?if_exists}"/>
-            <#if catalogCol?size == 1>
+            <#if !catalogCol?has_content>
+                <input type="hidden" name="prodCatalogId" value=""/>
+            </#if>
+            <#if catalogCol?has_content && catalogCol?size == 1>
                 <input type="hidden" name="prodCatalogId" value="${catalogCol.first}"/>
             </#if>
             <#if shipGroups?size == 1>
                 <input type="hidden" name="shipGroupSeqId" value="${shipGroups.first.shipGroupSeqId}"/>
             </#if>
             <table class="basic-table" cellspacing="0">
-              <#if (catalogCol?size > 1)>
+              <#if catalogCol?has_content && (catalogCol?size > 1)>
                 <tr>
                   <td class="label">${uiLabelMap.ProductChooseCatalog}</td>
                   <td><select name='prodCatalogId'>
@@ -56,13 +59,12 @@ under the License.
               </#if>
                 <tr>
                   <td class="label">${uiLabelMap.ProductProductId}</td>
-                  <td><input type="text" size="25" name="productId" value="${requestParameters.productId?if_exists}"/>
+                  <td>
+                      <#-- FIXME Problem here: the input field is shared -->
+                      <@htmlTemplate.lookupField formName="appendItemForm" name="productId" id="productId" fieldFormName="LookupProduct"/>
                       <#if "PURCHASE_ORDER" == orderHeader.orderTypeId>
                           <a href="javascript:quicklookup(document.appendItemForm.orderId)" class="buttontext">${uiLabelMap.OrderQuickLookup}</a>
                       </#if>
-                      <a href="javascript:call_fieldlookup2(document.appendItemForm.productId,'LookupProduct');">
-                        <img src="<@ofbizContentUrl>/images/fieldlookup.gif</@ofbizContentUrl>" width="15" height="14" border="0" alt="${uiLabelMap.CommonClickHereForFieldLookup}"/>
-                      </a>
                   </td>
                 </tr>
                 <tr>
@@ -80,13 +82,13 @@ under the License.
                 <tr>
                   <td class="label">${uiLabelMap.OrderShipGroup}</td>
                   <td><select name="shipGroupSeqId">
-	                  <#list shipGroups as shipGroup>
-	                     <option value="${shipGroup.shipGroupSeqId}">${shipGroup.shipGroupSeqId}</option>
-	                  </#list>
-	                  </select>
-	              </td>
+                      <#list shipGroups as shipGroup>
+                         <option value="${shipGroup.shipGroupSeqId}">${shipGroup.shipGroupSeqId}</option>
+                      </#list>
+                      </select>
+                  </td>
                 </tr>
-	          </#if>
+              </#if>
                 <tr>
                   <td class="label">${uiLabelMap.OrderDesiredDeliveryDate}</td>
                   <td>

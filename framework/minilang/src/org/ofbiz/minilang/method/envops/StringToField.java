@@ -63,6 +63,7 @@ public class StringToField extends MethodOperation {
         messageFieldName = element.getAttribute("message-field-name");
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         String valueStr = methodContext.expandString(string);
 
@@ -74,7 +75,7 @@ public class StringToField extends MethodOperation {
         }
 
         Object value;
-        if (this.messageFieldName != null && this.messageFieldName.length() > 0) {
+        if (UtilValidate.isNotEmpty(this.messageFieldName)) {
             value = new MessageString(valueStr, this.messageFieldName, true);
         } else {
             value = valueStr;
@@ -96,10 +97,12 @@ public class StringToField extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<string-to-field string=\"" + this.string + "\" field-name=\"" + this.fieldAcsr + "\" map-name=\"" + this.mapAcsr + "\"/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

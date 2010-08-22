@@ -36,7 +36,11 @@ under the License.
     </xs:element>
     <xs:attributeGroup name="attlist.screen">
         <xs:attribute type="xs:string" name="name" use="required"/>
-        <xs:attribute type="xs:string" name="transaction-timeout" use="optional"/>
+        <xs:attribute type="xs:string" name="transaction-timeout" use="optional">
+            <xs:annotation>
+                <xs:documentation>Transaction timeout in seconds</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
         <xs:attribute name="use-cache" default="false">
             <xs:simpleType>
                 <xs:restriction base="xs:token">
@@ -299,6 +303,14 @@ under the License.
     </xs:element>
     <xs:attributeGroup name="attlist.if-empty">
         <xs:attribute type="xs:string" name="field" use="required"/>
+    </xs:attributeGroup>
+    <xs:element name="if-empty-section" substitutionGroup="AllConditionals">
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.if-empty-section"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.if-empty-section">
+        <xs:attribute type="xs:string" name="section-name" use="required"/>
     </xs:attributeGroup>
 
     <!-- ================ ACTIONS ================ -->
@@ -964,6 +976,15 @@ under the License.
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
+        <xs:attribute name="save-collapsed" default="true">
+            <xs:annotation><xs:documentation>When set to true, screenlet collapse status is saved as user preference. Defaults to true.</xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="true"/>
+                    <xs:enumeration value="false"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
         <xs:attribute name="padded" default="true">
             <xs:annotation><xs:documentation>When set to true, screenlet content will be padded. Defaults to true.</xs:documentation></xs:annotation>
             <xs:simpleType>
@@ -1150,13 +1171,8 @@ under the License.
         <xs:attribute type="xs:string" name="key"/>
         <xs:attribute type="xs:string" name="view-size"/>
         <xs:attribute type="xs:string" name="paginate-target"/>
-        <xs:attribute name="paginate" default="false">
-            <xs:simpleType>
-                <xs:restriction base="xs:token">
-                    <xs:enumeration value="true"/>
-                    <xs:enumeration value="false"/>
-                </xs:restriction>
-            </xs:simpleType>
+        <xs:attribute type="xs:string" name="paginate" default="${paginate}">
+            <xs:annotation><xs:documentation>Indicate if this section is paginated or not, true by default.</xs:documentation></xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
 

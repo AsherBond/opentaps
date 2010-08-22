@@ -30,12 +30,13 @@ import java.util.Map;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
@@ -73,7 +74,7 @@ import freemarker.template.TemplateException;
  * An optional parameter available to all message templates is <code>baseUrl</code>
  * which can either be specified when the service is invoked or let the
  * <code>NotificationService</code> attempt to resolve it as best it can,
- * see {@link #setBaseUrl(GenericDelegator, String, Map) setBaseUrl(Map)} for details on how this is achieved.
+ * see {@link #setBaseUrl(Delegator, String, Map) setBaseUrl(Map)} for details on how this is achieved.
  * <p>
  * The following example shows what a simple notification message template,
  * associated with the above service, might contain:
@@ -119,7 +120,7 @@ public class NotificationServices {
      */
     public static Map<String, Object> sendNotification(DispatchContext ctx, Map<String, ? extends Object> context) {
         LocalDispatcher dispatcher = ctx.getDispatcher();
-        Map result = null;
+        Map<String, Object> result = null;
 
         try {
             // see whether the optional 'body' attribute was specified or needs to be processed
@@ -128,7 +129,7 @@ public class NotificationServices {
 
             if (body == null) {
                 // prepare the body of the notification email
-                Map bodyResult = prepareNotification(ctx, context);
+                Map<String, Object> bodyResult = prepareNotification(ctx, context);
 
                 // ensure the body was generated successfully
                 if (bodyResult.get(ModelService.RESPONSE_MESSAGE).equals(ModelService.RESPOND_SUCCESS)) {
@@ -143,7 +144,7 @@ public class NotificationServices {
             // make sure we have a valid body before sending
             if (body != null) {
                 // retain only the required attributes for the sendMail service
-                Map emailContext = FastMap.newInstance();
+                Map<String, Object> emailContext = FastMap.newInstance();
                 emailContext.put("sendTo", context.get("sendTo"));
                 emailContext.put("body", body);
                 emailContext.put("sendCc", context.get("sendCc"));
@@ -184,12 +185,12 @@ public class NotificationServices {
      * body generated from the template and the input parameters.
      */
     public static Map<String, Object> prepareNotification(DispatchContext ctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         String templateName = (String) context.get("templateName");
-        Map templateData = (Map) context.get("templateData");
+        Map<String, Object> templateData = UtilGenerics.checkMap(context.get("templateData"));
         String webSiteId = (String) context.get("webSiteId");
 
-        Map result = null;
+        Map<String, Object> result = null;
         if (templateData == null) {
             templateData = FastMap.newInstance();
         }
@@ -249,7 +250,7 @@ public class NotificationServices {
      * @param context   The context to check and, if necessary, set the
      * <code>baseUrl</code>.
      */
-    public static void setBaseUrl(GenericDelegator delegator, String webSiteId, Map context) {
+    public static void setBaseUrl(Delegator delegator, String webSiteId, Map<String, Object> context) {
         // If the baseUrl was not specified we can do a best effort instead
         if (!context.containsKey("baseUrl")) {
             StringBuilder httpBase = null;

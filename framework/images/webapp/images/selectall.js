@@ -164,6 +164,23 @@ function popUpPrint(printserver, screen1, screen2, screen3) {
     }
 }
 
+// Post a form from a pop up using the parent window
+function doPostViaParent(formName) {
+    var theForm = document[formName];
+    var newForm = theForm.cloneNode(true);
+    var hiddenDiv = document.createElement('div');
+    hiddenDiv.style.visibility = 'hidden';
+    hiddenDiv.appendChild(newForm);
+    window.opener.document.body.appendChild(hiddenDiv);
+    newForm.submit();
+    window.opener.focus();
+}
+// From a child window, navigate the parent window to the supplied url
+function doGetViaParent(url) {
+    window.opener.location = url;
+    window.opener.focus();
+}
+
 // hidden div functions
 
 function getStyleObject(objectId) {
@@ -289,15 +306,15 @@ function ajaxSubmitFormUpdateAreas(form, areaCsvString) {
         if (data._ERROR_MESSAGE_LIST_ != undefined || data._ERROR_MESSAGE_ != undefined) {
             if(!$('content-messages')) {
                //add this div just after app-navigation
-               if($('app-navigation')){
-                   $('app-navigation' ).insert({after: '<div id="content-messages"></div>'});
+               if($('content-main-section')){
+                   $('content-main-section' ).insert({before: '<div id="content-messages"></div>'});
                }
             }
            $('content-messages').addClassName('errorMessage');
            $('content-messages' ).update(data._ERROR_MESSAGE_LIST_ + " " + data._ERROR_MESSAGE_);
            new Effect.Appear('content-messages',{duration: 0.5});
         }else {
-        	if($('content-messages')) {
+            if($('content-messages')) {
                 $('content-messages').removeClassName('errorMessage');
                 new Effect.Fade('content-messages',{duration: 0.0});
             }
@@ -313,13 +330,41 @@ function ajaxSubmitFormUpdateAreas(form, areaCsvString) {
   * @param areaCsvString The area CSV string. The CSV string is a flat array in the
   * form of: areaId, target, target parameters [, areaId, target, target parameters...].
 */
-function ajaxAutoCompleter(areaCsvString) {
-    var areaArray = areaCsvString.split(",");
+function ajaxAutoCompleter(areaCsvString, showDescription) {
+    var areaArray = areaCsvString.replace('&amp;','&').split(",");
     var numAreas = parseInt(areaArray.length / 3);
     for (var i = 0; i < numAreas * 3; i = i + 3) {
-	    var optionsDivId = areaArray[i] + "_autoCompleterOptions";
-	    $(areaArray[i]).insert({after: '<div class="autocomplete"' + 'id=' + optionsDivId + '></div>'});
-        new Ajax.Autocompleter($(areaArray[i]), optionsDivId, areaArray[i + 1], {parameters: areaArray[i + 2]});
+        var optionsDivId = areaArray[i] + "_autoCompleterOptions";
+        var indicatorId = areaArray[i] + "_indicator";
+        $(areaArray[i]).insert({after: '<div class="autocomplete"' + 'id=' + optionsDivId + '></div>'});
+        new Ajax.Autocompleter($(areaArray[i]), optionsDivId, areaArray[i + 1], {parameters: areaArray[i + 2], indicator: indicatorId, afterUpdateElement : setSelection});
+        if (showDescription) {
+            new lookupDescriptionLoaded(areaArray[i], areaArray[i + 1], areaArray[i + 2]);
+        }
+    }
+}
+
+function setSelection(text, li) {
+    text.value = li.id;
+    var delay = function() { text.fire("lookup:changed"); };
+    setTimeout(delay, 100);
+}
+
+function setLookDescription(textFieldId, description) {
+    if (description) {
+        var start = description.lastIndexOf(' [');
+        if (start != -1) {
+            description = description.substring(0, start);
+        }
+    }
+    var lookupWrapperEl = $(textFieldId).up('.field-lookup');
+    if (lookupWrapperEl) {
+        var tooltipElement = $(textFieldId + '_lookupDescription');
+        if (!tooltipElement) {
+            tooltipElement = new Element('span', {id : textFieldId + '_lookupDescription', 'class' : 'tooltip'});
+        }
+        tooltipElement.update(description);
+        lookupWrapperEl.appendChild(tooltipElement);
     }
 }
 
@@ -367,16 +412,22 @@ function toggleCollapsiblePanel(link, areaId, expandTxt, collapseTxt){
   * @param expandTxt Localized 'Expand' text
   * @param collapseTxt Localized 'Collapse' text
 */
-function toggleScreenlet(link, areaId, expandTxt, collapseTxt){
+function toggleScreenlet(link, areaId, saveCollapsed, expandTxt, collapseTxt){
     toggleCollapsiblePanel(link, areaId, expandTxt, collapseTxt);
     var container = $(areaId);
     var screenlet = container.up('div');
     if(container.visible()){
         var currentParam = screenlet.id + "_collapsed=false";
         var newParam = screenlet.id + "_collapsed=true";
+        if(saveCollapsed=='true'){
+            setUserLayoutPreferences('GLOBAL_PREFERENCES',screenlet.id+"_collapsed",'true');
+        }
     } else {
         var currentParam = screenlet.id + "_collapsed=true";
         var newParam = screenlet.id + "_collapsed=false";
+        if(saveCollapsed=='true'){
+            setUserLayoutPreferences('GLOBAL_PREFERENCES',screenlet.id+"_collapsed",'false');
+        }
     }
     var paginationMenus = $$('div.nav-pager');
     paginationMenus.each(function(menu) {
@@ -479,4 +530,23 @@ function expandAll(expanded) {
       }
     }
   }
+}
+
+//calls ajax request for storing user layout preferences
+function setUserLayoutPreferences(userPrefGroupTypeId, userPrefTypeId, userPrefValue){
+  new Ajax.Request('ajaxSetUserPreference',{
+    method: "post",
+    parameters: {userPrefGroupTypeId: userPrefGroupTypeId, userPrefTypeId: userPrefTypeId, userPrefValue: userPrefValue},
+    onLoading: function(transport){
+    },
+
+    onSuccess: function(transport){
+    },
+
+    onComplete: function(transport){
+    }
+ });
+}
+
+function toggleLeftColumn(){
 }

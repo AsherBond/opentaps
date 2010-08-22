@@ -40,7 +40,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -69,19 +69,20 @@ public class ShoppingListEvents {
     public static final String PERSISTANT_LIST_NAME = "auto-save";
 
     public static String addBulkFromCart(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
 
         String shoppingListId = request.getParameter("shoppingListId");
+        String shoppingListTypeId = request.getParameter("shoppingListTypeId");
         String selectedCartItems[] = request.getParameterValues("selectedItem");
         if (UtilValidate.isEmpty(selectedCartItems)) {
             selectedCartItems = makeCartItemsArray(cart);
         }
 
         try {
-            shoppingListId = addBulkFromCart(delegator, dispatcher, cart, userLogin, shoppingListId, selectedCartItems, true, true);
+            shoppingListId = addBulkFromCart(delegator, dispatcher, cart, userLogin, shoppingListId, shoppingListTypeId, selectedCartItems, true, true);
         } catch (IllegalArgumentException e) {
             request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
             return "error";
@@ -91,7 +92,7 @@ public class ShoppingListEvents {
         return "success";
     }
 
-    public static String addBulkFromCart(GenericDelegator delegator, LocalDispatcher dispatcher, ShoppingCart cart, GenericValue userLogin, String shoppingListId, String[] items, boolean allowPromo, boolean append) throws IllegalArgumentException {
+    public static String addBulkFromCart(Delegator delegator, LocalDispatcher dispatcher, ShoppingCart cart, GenericValue userLogin, String shoppingListId, String shoppingListTypeId, String[] items, boolean allowPromo, boolean append) throws IllegalArgumentException {
         String errMsg = null;
 
         if (items == null || items.length == 0) {
@@ -103,7 +104,7 @@ public class ShoppingListEvents {
             // create a new shopping list
             Map newListResult = null;
             try {
-                newListResult = dispatcher.runSync("createShoppingList", UtilMisc.<String, Object>toMap("userLogin", userLogin, "productStoreId", cart.getProductStoreId(), "partyId", cart.getOrderPartyId(), "currencyUom", cart.getCurrency()));
+                newListResult = dispatcher.runSync("createShoppingList", UtilMisc.<String, Object>toMap("userLogin", userLogin, "productStoreId", cart.getProductStoreId(), "partyId", cart.getOrderPartyId(), "shoppingListTypeId", shoppingListTypeId, "currencyUom", cart.getCurrency()));
             } catch (GenericServiceException e) {
                 Debug.logError(e, "Problems creating new ShoppingList", module);
                 errMsg = UtilProperties.getMessage(resource_error,"shoppinglistevents.cannot_create_new_shopping_list", cart.getLocale());
@@ -137,7 +138,7 @@ public class ShoppingListEvents {
         for (int i = 0; i < items.length; i++) {
             Integer cartIdInt = null;
             try {
-                cartIdInt = new Integer(items[i]);
+                cartIdInt = Integer.valueOf(items[i]);
             } catch (Exception e) {
                 Debug.logWarning(e, UtilProperties.getMessage(resource_error,"OrderIllegalCharacterInSelectedItemField", cart.getLocale()), module);
             }
@@ -176,7 +177,7 @@ public class ShoppingListEvents {
     }
 
     public static String addListToCart(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
 
@@ -192,14 +193,14 @@ public class ShoppingListEvents {
             return "error";
         }
 
-        if (eventMessage != null && eventMessage.length() > 0) {
+        if (UtilValidate.isNotEmpty(eventMessage)) {
             request.setAttribute("_EVENT_MESSAGE_", eventMessage);
         }
 
         return "success";
     }
 
-    public static String addListToCart(GenericDelegator delegator, LocalDispatcher dispatcher, ShoppingCart cart, String prodCatalogId, String shoppingListId, boolean includeChild, boolean setAsListItem, boolean append) throws java.lang.IllegalArgumentException {
+    public static String addListToCart(Delegator delegator, LocalDispatcher dispatcher, ShoppingCart cart, String prodCatalogId, String shoppingListId, boolean includeChild, boolean setAsListItem, boolean append) throws java.lang.IllegalArgumentException {
         String errMsg = null;
 
         // no list; no add
@@ -241,7 +242,7 @@ public class ShoppingListEvents {
         }
 
         // no items; not an error; just mention that nothing was added
-        if (shoppingListItems == null || shoppingListItems.size() == 0) {
+        if (UtilValidate.isEmpty(shoppingListItems)) {
             errMsg = UtilProperties.getMessage(resource_error,"shoppinglistevents.no_items_added", cart.getLocale());
             return errMsg;
         }
@@ -255,7 +256,7 @@ public class ShoppingListEvents {
         Map shoppingListSurveyInfo = getItemSurveyInfos(shoppingListItems);
 
         // add the items
-        StringBuffer eventMessage = new StringBuffer();
+        StringBuilder eventMessage = new StringBuilder();
         Iterator i = shoppingListItems.iterator();
         while (i.hasNext()) {
             GenericValue shoppingListItem = (GenericValue) i.next();
@@ -297,17 +298,17 @@ public class ShoppingListEvents {
                 }
                 Map messageMap = UtilMisc.toMap("productId", productId);
                 errMsg = UtilProperties.getMessage(resource_error,"shoppinglistevents.added_product_to_cart", messageMap, cart.getLocale());
-                eventMessage.append(errMsg + "\n");
+                eventMessage.append(errMsg).append("\n");
             } catch (CartItemModifyException e) {
                 Debug.logWarning(e, UtilProperties.getMessage(resource_error,"OrderProblemsAddingItemFromListToCart", cart.getLocale()));
                 Map messageMap = UtilMisc.toMap("productId", productId);
                 errMsg = UtilProperties.getMessage(resource_error,"shoppinglistevents.problem_adding_product_to_cart", messageMap, cart.getLocale());
-                eventMessage.append(errMsg + "\n");
+                eventMessage.append(errMsg).append("\n");
             } catch (ItemNotFoundException e) {
                 Debug.logWarning(e, UtilProperties.getMessage(resource_error,"OrderProductNotFound", cart.getLocale()));
                 Map messageMap = UtilMisc.toMap("productId", productId);
                 errMsg = UtilProperties.getMessage(resource_error,"shoppinglistevents.problem_adding_product_to_cart", messageMap, cart.getLocale());
-                eventMessage.append(errMsg + "\n");
+                eventMessage.append(errMsg).append("\n");
             }
         }
 
@@ -362,7 +363,7 @@ public class ShoppingListEvents {
     /**
      * Finds or creates a specialized (auto-save) shopping list used to record shopping bag contents between user visits.
      */
-    public static String getAutoSaveListId(GenericDelegator delegator, LocalDispatcher dispatcher, String partyId, GenericValue userLogin, String productStoreId) throws GenericEntityException, GenericServiceException {
+    public static String getAutoSaveListId(Delegator delegator, LocalDispatcher dispatcher, String partyId, GenericValue userLogin, String productStoreId) throws GenericEntityException, GenericServiceException {
         if (partyId == null && userLogin != null) {
             partyId = userLogin.getString("partyId");
         }
@@ -398,13 +399,13 @@ public class ShoppingListEvents {
         if (cart != null && dispatcher != null) {
             GenericValue userLogin = ShoppingListEvents.getCartUserLogin(cart);
             if (userLogin == null) return; //only save carts when a user is logged in....
-            GenericDelegator delegator = cart.getDelegator();
+            Delegator delegator = cart.getDelegator();
             String autoSaveListId = getAutoSaveListId(delegator, dispatcher, null, userLogin, cart.getProductStoreId());
 
             try {
                 String[] itemsArray = makeCartItemsArray(cart);
                 if (itemsArray != null && itemsArray.length != 0) {
-                    addBulkFromCart(delegator, dispatcher, cart, userLogin, autoSaveListId, itemsArray, false, false);
+                    addBulkFromCart(delegator, dispatcher, cart, userLogin, autoSaveListId, null, itemsArray, false, false);
                 }
             } catch (IllegalArgumentException e) {
                 throw new GeneralException(e.getMessage(), e);
@@ -432,7 +433,7 @@ public class ShoppingListEvents {
      * Restores the specialized (auto-save) shopping list back into the shopping cart
      */
     public static String restoreAutoSaveList(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue productStore = ProductStoreWorker.getProductStore(request);
 
@@ -511,7 +512,7 @@ public class ShoppingListEvents {
     /**
      * Remove all items from the given list.
      */
-    public static int clearListInfo(GenericDelegator delegator, String shoppingListId) throws GenericEntityException {
+    public static int clearListInfo(Delegator delegator, String shoppingListId) throws GenericEntityException {
         // remove the survey responses first
         delegator.removeByAnd("ShoppingListItemSurvey", UtilMisc.toMap("shoppingListId", shoppingListId));
 
@@ -522,7 +523,7 @@ public class ShoppingListEvents {
     /**
      * Creates records for survey responses on survey items
      */
-    public static int makeListItemSurveyResp(GenericDelegator delegator, GenericValue item, List surveyResps) throws GenericEntityException {
+    public static int makeListItemSurveyResp(Delegator delegator, GenericValue item, List surveyResps) throws GenericEntityException {
         if (UtilValidate.isNotEmpty(surveyResps)) {
             Iterator i = surveyResps.iterator();
             int count = 0;

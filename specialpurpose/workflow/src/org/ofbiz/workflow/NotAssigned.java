@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * NotAssigned Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class NotAssigned extends WfException {
 
     public NotAssigned() {}

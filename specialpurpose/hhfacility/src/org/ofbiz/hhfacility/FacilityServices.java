@@ -20,17 +20,14 @@
 
 package org.ofbiz.hhfacility;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Map;
 
-import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.base.util.GeneralRuntimeException;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.GeneralRuntimeException;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.product.product.ProductWorker;
@@ -43,11 +40,9 @@ public class FacilityServices {
 
     public static final String module = FacilityServices.class.getName();
 
-    public static Map findProductsById(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
-        String facilityId = (String) context.get("facilityId");
+    public static Map<String, Object> findProductsById(DispatchContext dctx, Map<String, Object> context) {
+        Delegator delegator = dctx.getDelegator();
         String idValue = (String) context.get("idValue");
-        GenericValue product = null;
         List<GenericValue> productsFound = null;
 
         try {
@@ -58,15 +53,15 @@ public class FacilityServices {
         }
 
         // Send back the results
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         if (UtilValidate.isNotEmpty(productsFound)) {
             result.put("productList", productsFound);
         }
         return result;
     }
 
-    public static Map fixProductNegativeQOH(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+    public static Map<String, Object> fixProductNegativeQOH(DispatchContext dctx, Map<String, Object> context) {
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         String facilityId = (String) context.get("facilityId");
@@ -75,7 +70,7 @@ public class FacilityServices {
 
         // Now we build a list of inventory items against the facility and product.
         // todo: change this to a select from inv_items where productId and facilityId matches distinct (locationSeqId).
-        List invItemList = null;
+        List<GenericValue> invItemList = null;
         try {
             invItemList = delegator.findByAnd("InventoryItem",
                 UtilMisc.toMap("productId", productId, "facilityId", facilityId));
@@ -84,16 +79,13 @@ public class FacilityServices {
             throw new GeneralRuntimeException(e.getMessage());
         }
 
-        Map locations = new HashMap();
-        Iterator invItemListIter = invItemList.iterator();
-        while (invItemListIter.hasNext()) {
-            GenericValue invItem = (GenericValue)invItemListIter.next();
-            if ( invItem != null) {
+        for (GenericValue invItem : invItemList) {
+            if (invItem != null) {
                 int qoh = ((Double)invItem.get("quantityOnHandTotal")).intValue();
 
-                if ( qoh < 0 ) {
+                if (qoh < 0) {
                     // Got a negative qoh so lets balance if off to zero.
-                    Map contextInput = UtilMisc.toMap("userLogin", userLogin, "inventoryItemId", invItem.get("inventoryItemId"),
+                    Map<String, Object> contextInput = UtilMisc.toMap("userLogin", userLogin, "inventoryItemId", invItem.get("inventoryItemId"),
                             "varianceReasonId", "VAR_LOST", "availableToPromiseVar", new Double(qoh*-1),
                             "quantityOnHandVar", new Double(qoh*-1), "comments", "QOH < 0 stocktake correction");
                     try {
@@ -105,48 +97,45 @@ public class FacilityServices {
                 }
             }
         }
-        Map result = ServiceUtil.returnSuccess();
-        return result;
+        return ServiceUtil.returnSuccess();
     }
 
-    public static Map updateProductStocktake(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+    public static Map<String, Object> updateProductStocktake(DispatchContext dctx, Map<String, Object> context) {
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         String facilityId = (String) context.get("facilityId");
         String productId = (String) context.get("productId");
         String locationSeqId = (String) context.get("locationSeqId");
-        String locationSeqIdNew = (String) context.get("locationSeqIdNew");
         Double quantity = (Double) context.get("quantity");
-        if ( UtilValidate.isEmpty(productId) || UtilValidate.isEmpty(facilityId) ) {
+        if (UtilValidate.isEmpty(productId) || UtilValidate.isEmpty(facilityId)) {
             return ServiceUtil.returnError("productId or facilityId not found");
         }
 
         // First identify the location and get a list of inventoryItemIds for that location.
-        if ( UtilValidate.isEmpty(locationSeqId) ) {
+        if (UtilValidate.isEmpty(locationSeqId)) {
             // Assume this is the null field version
             locationSeqId = "nullField";
         }
 
         // Get the current atp/qoh values for the location(s).
-        Map contextInput = UtilMisc.toMap("productId",productId, "facilityId", facilityId, "locationSeqId", locationSeqId);
-        Map invAvailability = null;
+        Map<String, Object> contextInput = UtilMisc.toMap("productId", (Object) productId, "facilityId", facilityId, "locationSeqId", locationSeqId);
+        Map<String, Object> invAvailability = null;
         try {
             invAvailability = dispatcher.runSync("getInventoryAvailableByLocation",contextInput);
         } catch (GenericServiceException e) {
             Debug.logError(e, "updateProductStocktake failed getting inventory counts", module);
             return ServiceUtil.returnError("updateProductStocktake failed getting inventory counts");
         }
-        int atp = ((Double)invAvailability.get("availableToPromiseTotal")).intValue();
         int qoh = ((Double)invAvailability.get("quantityOnHandTotal")).intValue();
-        if ( quantity.intValue() == qoh ) {
+        if (quantity.intValue() == qoh) {
             // No change required.
             Debug.logInfo("updateProductStocktake No change required quantity("+quantity+") = qoh("+qoh+")", module);
             return ServiceUtil.returnSuccess();
         }
 
         // Now get the inventory items that are found for that location, facility and product
-        List invItemList = null;
+        List<GenericValue> invItemList = null;
         try {
             invItemList = delegator.findByAnd("InventoryItem",
                 UtilMisc.toMap("productId", productId, "facilityId", facilityId, "locationSeqId", locationSeqId));
@@ -155,19 +144,16 @@ public class FacilityServices {
             return ServiceUtil.returnError("updateProductStocktake failed getting inventory items");
         }
 
-        Iterator invItemListIter = invItemList.iterator();
-        while (invItemListIter.hasNext()) {
-            GenericValue invItem = (GenericValue)invItemListIter.next();
+        for (GenericValue invItem : invItemList) {
             String locationFound = invItem.getString("locationSeqId");
             Debug.logInfo("updateProductStocktake: InvItemId("+invItem.getString("inventoryItemId")+")", module);
-            if ( locationFound == null ) {
+            if (locationFound == null) {
                 locationFound = "nullField";
             }
         }
         // Check if there is a request to change the locationSeqId
-        GenericValue product = null;
         try {
-            Map resultOutput = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", productId,
+            dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", productId,
                     "facilityId", facilityId));
         } catch (GenericServiceException e) {
             Debug.logError(e, module);

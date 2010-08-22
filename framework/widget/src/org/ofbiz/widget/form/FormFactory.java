@@ -32,7 +32,7 @@ import org.ofbiz.base.location.FlexibleLocation;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.cache.UtilCache;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.model.ModelReader;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
@@ -48,8 +48,8 @@ import org.xml.sax.SAXException;
 public class FormFactory {
 
     public static final String module = FormFactory.class.getName();
-    public static final UtilCache<String, ModelForm> formLocationCache = new UtilCache<String, ModelForm>("widget.form.locationResource", 0, 0, false);
-    public static final UtilCache<String, ModelForm> formWebappCache = new UtilCache<String, ModelForm>("widget.form.webappResource", 0, 0, false);
+    public static final UtilCache<String, ModelForm> formLocationCache = UtilCache.createUtilCache("widget.form.locationResource", 0, 0, false);
+    public static final UtilCache<String, ModelForm> formWebappCache = UtilCache.createUtilCache("widget.form.webappResource", 0, 0, false);
 
     public static Map<String, ModelForm> getFormsFromLocation(String resourceName, ModelReader entityModelReader, DispatchContext dispatchContext)
             throws IOException, SAXException, ParserConfigurationException {
@@ -104,7 +104,7 @@ public class FormFactory {
                 modelForm = formWebappCache.get(cacheKey);
                 if (modelForm == null) {
                     ServletContext servletContext = (ServletContext) request.getAttribute("servletContext");
-                    GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+                    Delegator delegator = (Delegator) request.getAttribute("delegator");
                     LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
                     URL formFileUrl = servletContext.getResource(resourceName);
                     Document formFileDoc = UtilXml.readXmlDocument(formFileUrl, true);

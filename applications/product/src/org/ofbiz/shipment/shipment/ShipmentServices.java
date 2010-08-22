@@ -28,7 +28,7 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.common.geo.GeoWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -57,7 +57,7 @@ public class ShipmentServices {
 
     public static Map<String, Object> createShipmentEstimate(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         List<GenericValue> storeAll = FastList.newInstance();
 
         String productStoreShipMethId = (String)context.get("productStoreShipMethId");
@@ -93,13 +93,13 @@ public class ShipmentServices {
         estimate.set("featurePercent", context.get("featurePercent"));
         estimate.set("featurePrice", context.get("featurePrice"));
         estimate.set("weightBreakId", context.get("weightBreakId"));
-        estimate.set("weightUnitPrice", (BigDecimal)context.get("wprice"));
+        estimate.set("weightUnitPrice", context.get("wprice"));
         estimate.set("weightUomId", context.get("wuom"));
         estimate.set("quantityBreakId", context.get("quantityBreakId"));
-        estimate.set("quantityUnitPrice", (BigDecimal)context.get("qprice"));
+        estimate.set("quantityUnitPrice", context.get("qprice"));
         estimate.set("quantityUomId", context.get("quom"));
         estimate.set("priceBreakId", context.get("priceBreakId"));
-        estimate.set("priceUnitPrice", (BigDecimal)context.get("pprice"));
+        estimate.set("priceUnitPrice", context.get("pprice"));
         estimate.set("priceUomId", context.get("puom"));
         storeAll.add(estimate);
 
@@ -129,7 +129,7 @@ public class ShipmentServices {
     }
 
     public static Map<String, Object> removeShipmentEstimate(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String shipmentCostEstimateId = (String) context.get("shipmentCostEstimateId");
 
         GenericValue estimate = null;
@@ -141,6 +141,7 @@ public class ShipmentServices {
             Debug.logError(e, module);
             return ServiceUtil.returnError("Problem removing entity or related entities (" + e.toString() + ")");
         }
+        /* Commented out this code because QuantityBreak may be used by other records
         try {
             if (estimate.get("weightBreakId") != null) {
                 delegator.removeRelated("WeightQuantityBreak", estimate);
@@ -162,10 +163,11 @@ public class ShipmentServices {
         } catch (GenericEntityException e) {
             Debug.logInfo("Not removing PriceQuantityBreak records related to ShipmentCostEstimate [" + shipmentCostEstimateId + "] because they are used by other entities.", module);
         }
+        */
         return ServiceUtil.returnSuccess();
     }
 
-    private static boolean applyQuantityBreak(Map context, Map<String, Object> result, List<GenericValue> storeAll, GenericDelegator delegator,
+    private static boolean applyQuantityBreak(Map<String, ? extends Object> context, Map<String, Object> result, List<GenericValue> storeAll, Delegator delegator,
                                               GenericValue estimate, String prefix, String breakType, String breakTypeString) {
         BigDecimal min = (BigDecimal) context.get(prefix + "min");
         BigDecimal max = (BigDecimal) context.get(prefix + "max");
@@ -180,13 +182,13 @@ public class ShipmentServices {
                         weightBreak.set("fromQuantity", min);
                         weightBreak.set("thruQuantity", max);
                         estimate.set(breakType + "BreakId", newSeqId);
-                        estimate.set(breakType + "UnitPrice", (BigDecimal) context.get(prefix + "price"));
+                        estimate.set(breakType + "UnitPrice", context.get(prefix + "price"));
                         if (context.containsKey(prefix + "uom")) {
-                            estimate.set(breakType + "UomId", (String) context.get(prefix + "uom"));
+                            estimate.set(breakType + "UomId", context.get(prefix + "uom"));
                         }
                         storeAll.add(0, weightBreak);
                     }
-                    catch ( Exception e ) {
+                    catch (Exception e) {
                         Debug.logError(e, module);
                     }
                 }
@@ -208,7 +210,7 @@ public class ShipmentServices {
 
     // ShippingEstimate Calc Service
     public static Map<String, Object> calcShipmentCostEstimate(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         // prepare the data
         String productStoreShipMethId = (String) context.get("productStoreShipMethId");
@@ -286,7 +288,7 @@ public class ShipmentServices {
                 Debug.logError(e, module);
                 return ServiceUtil.returnError("Cannot get shipping address entity");
             }
-        } else if ( shippingPostalCode != null) {
+        } else if (shippingPostalCode != null) {
             shipAddress = delegator.makeValue("PostalAddress");
             shipAddress.set("countryGeoId", shippingCountryCode);
             shipAddress.set("postalCodeGeoId", shippingPostalCode);
@@ -302,7 +304,7 @@ public class ShipmentServices {
             }
             List<GenericValue> toGeoList = GeoWorker.expandGeoGroup(toGeo, delegator);
             // Make sure we have a valid GEOID.
-            if (toGeoList == null || toGeoList.size() == 0 ||
+            if (UtilValidate.isEmpty(toGeoList) ||
                     GeoWorker.containsGeo(toGeoList, shipAddress.getString("countryGeoId"), delegator) ||
                     GeoWorker.containsGeo(toGeoList, shipAddress.getString("stateProvinceGeoId"), delegator) ||
                     GeoWorker.containsGeo(toGeoList, shipAddress.getString("postalCodeGeoId"), delegator)) {
@@ -411,7 +413,7 @@ public class ShipmentServices {
                 Set<String> featureSet = UtilGenerics.checkSet(itemMap.get("featureSet"));
                 if (UtilValidate.isNotEmpty(featureSet)) {
                     for (String featureId: featureSet) {
-                        BigDecimal featureQuantity = (BigDecimal) shippableFeatureMap.get(featureId);
+                        BigDecimal featureQuantity = shippableFeatureMap.get(featureId);
                         if (featureQuantity == null) {
                             featureQuantity = BigDecimal.ZERO;
                         }
@@ -529,7 +531,7 @@ public class ShipmentServices {
             featurePrice = BigDecimal.ZERO;
         }
 
-        if (featureGroupId != null && featureGroupId.length() > 0 && shippableFeatureMap != null) {
+        if (UtilValidate.isNotEmpty(featureGroupId) && shippableFeatureMap != null) {
             for (Map.Entry<String, BigDecimal> entry: shippableFeatureMap.entrySet()) {
                 String featureId = entry.getKey();
                 BigDecimal quantity = entry.getValue();
@@ -543,7 +545,7 @@ public class ShipmentServices {
                     Debug.logError(e, "Unable to lookup feature/group" + fields, module);
                 }
                 if (appl != null) {
-                    featureSurcharge = featureSurcharge.add( shippableTotal.multiply( featurePercent.movePointLeft(2) ).multiply(quantity) );
+                    featureSurcharge = featureSurcharge.add(shippableTotal.multiply(featurePercent.movePointLeft(2)).multiply(quantity));
                     featureSurcharge = featureSurcharge.add(featurePrice.multiply(quantity));
                 }
             }
@@ -585,7 +587,7 @@ public class ShipmentServices {
     }
 
     public static Map<String, Object> fillShipmentStagingTables(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String shipmentId = (String) context.get("shipmentId");
 
         GenericValue shipment = null;
@@ -622,7 +624,7 @@ public class ShipmentServices {
                 return ServiceUtil.returnError(e.getMessage());
             }
 
-            if (packages == null || packages.size() == 0) {
+            if (UtilValidate.isEmpty(packages)) {
                 return ServiceUtil.returnError("No packages are available for shipping!");
             }
 
@@ -689,7 +691,7 @@ public class ShipmentServices {
 
     public static Map<String, Object> updateShipmentsFromStaging(DispatchContext dctx, Map<String, ? extends Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         List<String> orderBy = UtilMisc.toList("shipmentId", "shipmentPackageSeqId", "voidIndicator");
@@ -850,7 +852,7 @@ public class ShipmentServices {
     }
 
     public static Map<String, Object> clearShipmentStagingInfo(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String shipmentId = (String) context.get("shipmentId");
         try {
             delegator.removeByAnd("OdbcPackageIn", UtilMisc.toMap("shipmentId", shipmentId));
@@ -871,7 +873,7 @@ public class ShipmentServices {
      * products received (from ShipmentReceipt).
      */
     public static Map<String, Object> updatePurchaseShipmentFromReceipt(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String shipmentId = (String) context.get("shipmentId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -930,7 +932,7 @@ public class ShipmentServices {
     }
 
     public static Map<String, Object> duplicateShipmentRouteSegment(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -972,7 +974,7 @@ public class ShipmentServices {
      * Service to call a ShipmentRouteSegment.carrierPartyId's confirm shipment method asynchronously
      */
     public static Map<String, Object> quickScheduleShipmentRouteSegment(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -1019,7 +1021,7 @@ public class ShipmentServices {
      */
     public static Map<String, Object> getShipmentPackageValueFromOrders(DispatchContext dctx, Map<String, ? extends Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
 
@@ -1093,7 +1095,7 @@ public class ShipmentServices {
 
     public static Map<String, Object> sendShipmentCompleteNotification(DispatchContext dctx, Map<String, ? extends Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String shipmentId = (String) context.get("shipmentId");
         String sendTo = (String) context.get("sendTo");
@@ -1120,12 +1122,8 @@ public class ShipmentServices {
         }
         // the override screenUri
         if (UtilValidate.isEmpty(screenUri)) {
-            if (productStoreEmail != null) {
-                String bodyScreenLocation = productStoreEmail.getString("bodyScreenLocation");
-                sendMap.put("bodyScreenUri", bodyScreenLocation);
-            } else {
-                sendMap.put("bodyScreenUri", "component://ecommerce/widget/EmailOrderScreens.xml#ShipmentCompleteNotice");
-            }
+            String bodyScreenLocation = productStoreEmail.getString("bodyScreenLocation");
+            sendMap.put("bodyScreenUri", bodyScreenLocation);
         } else {
             sendMap.put("bodyScreenUri", screenUri);
         }
@@ -1146,7 +1144,7 @@ public class ShipmentServices {
         if (locale == null) {
             locale = Locale.getDefault();
         }
-        ResourceBundleMapWrapper uiLabelMap = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("EcommerceUiLabels", locale);
+        ResourceBundleMapWrapper uiLabelMap = UtilProperties.getResourceBundleMap("EcommerceUiLabels", locale);
         uiLabelMap.addBottomResourceBundle("OrderUiLabels");
         uiLabelMap.addBottomResourceBundle("CommonUiLabels");
 
@@ -1154,16 +1152,12 @@ public class ShipmentServices {
         sendMap.put("bodyParameters", bodyParameters);
         sendMap.put("userLogin",userLogin);
 
-        if (productStoreEmail != null) {
-            sendMap.put("subject", productStoreEmail.getString("subject"));
-            sendMap.put("contentType", productStoreEmail.get("contentType"));
-            sendMap.put("sendFrom", productStoreEmail.get("fromAddress"));
-            sendMap.put("sendCc", productStoreEmail.get("ccAddress"));
-            sendMap.put("sendBcc", productStoreEmail.get("bccAddress"));
-        } else {
-            sendMap.put("subject", "Shipment Complete Notification");
-            sendMap.put("contentType", "text/html");
-        }
+        sendMap.put("subject", productStoreEmail.getString("subject"));
+        sendMap.put("contentType", productStoreEmail.get("contentType"));
+        sendMap.put("sendFrom", productStoreEmail.get("fromAddress"));
+        sendMap.put("sendCc", productStoreEmail.get("ccAddress"));
+        sendMap.put("sendBcc", productStoreEmail.get("bccAddress"));
+
         if ((sendTo != null) && UtilValidate.isEmail(sendTo)) {
             sendMap.put("sendTo", sendTo);
         } else {

@@ -22,8 +22,6 @@ package org.ofbiz.service;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-
 import javax.transaction.Transaction;
 
 import javolution.util.FastList;
@@ -33,10 +31,13 @@ import org.ofbiz.base.config.GenericConfigException;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralRuntimeException;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilTimer;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.collections.LRUMap;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -46,6 +47,8 @@ import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.security.SecurityConfigurationException;
 import org.ofbiz.security.SecurityFactory;
+import org.ofbiz.security.authz.Authorization;
+import org.ofbiz.security.authz.AuthorizationFactory;
 import org.ofbiz.service.config.ServiceConfigUtil;
 import org.ofbiz.service.eca.ServiceEcaRule;
 import org.ofbiz.service.eca.ServiceEcaUtil;
@@ -72,16 +75,18 @@ public class ServiceDispatcher {
     protected static boolean enableJM = true;
     protected static boolean enableJMS = true;
     protected static boolean enableSvcs = true;
+    protected static boolean serviceDebugMode = true;
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected GenericEngineFactory factory = null;
+    protected Authorization authz = null;
     protected Security security = null;
     protected Map<String, DispatchContext> localContext = null;
     protected Map<String, List<GenericServiceCallback>> callbacks = null;
     protected JobManager jm = null;
     protected JmsListenerFactory jlf = null;
 
-    protected ServiceDispatcher(GenericDelegator delegator, boolean enableJM, boolean enableJMS, boolean enableSvcs) {
+    protected ServiceDispatcher(Delegator delegator, boolean enableJM, boolean enableJMS, boolean enableSvcs) {
         Debug.logInfo("[ServiceDispatcher] : Creating new instance.", module);
         factory = new GenericEngineFactory(this);
         ServiceGroupReader.readConfig();
@@ -93,6 +98,7 @@ public class ServiceDispatcher {
 
         if (delegator != null) {
             try {
+                this.authz = AuthorizationFactory.getInstance(delegator);
                 this.security = SecurityFactory.getInstance(delegator);
             } catch (SecurityConfigurationException e) {
                 Debug.logError(e, "[ServiceDispatcher.init] : No instance of security implementation found.", module);
@@ -101,9 +107,9 @@ public class ServiceDispatcher {
 
         // job manager needs to always be running, but the poller thread does not
         try {
-            GenericDelegator origDelegator = this.delegator;
+            Delegator origDelegator = this.delegator;
             if (!this.delegator.getOriginalDelegatorName().equals(this.delegator.getDelegatorName())) {
-                origDelegator = GenericDelegator.getGenericDelegator(this.delegator.getOriginalDelegatorName());
+                origDelegator = DelegatorFactory.getDelegator(this.delegator.getOriginalDelegatorName());
             }
             this.jm = JobManager.getInstance(origDelegator, enableJM);
         } catch (GeneralRuntimeException e) {
@@ -118,9 +124,10 @@ public class ServiceDispatcher {
         if (enableSvcs) {
             this.runStartupServices();
         }
+        serviceDebugMode = "true".equals(UtilProperties.getPropertyValue("service", "servicedispatcher.servicedebugmode", "true"));
     }
 
-    protected ServiceDispatcher(GenericDelegator delegator) {
+    protected ServiceDispatcher(Delegator delegator) {
         this(delegator, enableJM, enableJMS, enableSvcs);
     }
 
@@ -129,7 +136,7 @@ public class ServiceDispatcher {
      * @param delegator the local delegator
      * @return A reference to this global ServiceDispatcher
      */
-    public static ServiceDispatcher getInstance(String name, GenericDelegator delegator) {
+    public static ServiceDispatcher getInstance(String name, Delegator delegator) {
         ServiceDispatcher sd = getInstance(null, null, delegator);
 
         if (!sd.containsContext(name)) {
@@ -145,7 +152,7 @@ public class ServiceDispatcher {
      * @param delegator the local delegator
      * @return A reference to this global ServiceDispatcher
      */
-    public static ServiceDispatcher getInstance(String name, DispatchContext context, GenericDelegator delegator) {
+    public static ServiceDispatcher getInstance(String name, DispatchContext context, Delegator delegator) {
         ServiceDispatcher sd;
 
         String dispatcherKey = delegator != null ? delegator.getDelegatorName() : "null";
@@ -388,8 +395,14 @@ public class ServiceDispatcher {
 
                     // ===== invoke the service =====
                     if (!isError && !isFailure) {
-                        Map<String, Object> invokeResult = engine.runSync(localName, modelService, context);
-                        engine.sendCallbacks(modelService, context, invokeResult, GenericEngine.SYNC_MODE);
+                        Map<String, Object> invokeResult = null;
+                        if (serviceDebugMode) {
+                            invokeResult = modelService.invoker.runSync(localName, engine, context);
+                            modelService.invoker.sendCallbacks(engine, context, invokeResult, null, GenericEngine.SYNC_MODE);
+                        } else {
+                            invokeResult = engine.runSync(localName, modelService, context);
+                            engine.sendCallbacks(modelService, context, invokeResult, GenericEngine.SYNC_MODE);
+                        }
                         if (invokeResult != null) {
                             result.putAll(invokeResult);
                         } else {
@@ -480,8 +493,7 @@ public class ServiceDispatcher {
                     try {
                         modelService.validate(result, ModelService.OUT_PARAM, locale);
                     } catch (ServiceValidationException e) {
-                        Debug.logError(e, "Outgoing result (in runSync : " + modelService.name + ") does not match expected requirements", module);
-                        throw e;
+                        throw new GenericServiceException("Outgoing result (in runSync : " + modelService.name + ") does not match expected requirements", e);
                     }
                 }
 
@@ -504,8 +516,11 @@ public class ServiceDispatcher {
                     UtilTimer.closeTimer(localName + " / " + modelService.name, "Sync service failed...", module);
                 }
                 String errMsg = "Service [" + modelService.name + "] threw an unexpected exception/error";
-                Debug.logError(t, errMsg, module);
-                engine.sendCallbacks(modelService, context, t, GenericEngine.SYNC_MODE);
+                if (serviceDebugMode) {
+                    modelService.invoker.sendCallbacks(engine, context, null, t, GenericEngine.SYNC_MODE);
+                } else {
+                    engine.sendCallbacks(modelService, context, t, GenericEngine.SYNC_MODE);
+                }
                 try {
                     TransactionUtil.rollback(beganTrans, errMsg, t);
                 } catch (GenericTransactionException te) {
@@ -607,7 +622,7 @@ public class ServiceDispatcher {
         }
         boolean debugging = checkDebug(service, 1, true);
         if (Debug.verboseOn()) {
-            Debug.logVerbose("[ServiceDispatcher.runAsync] : prepareing service " + service.name + " [" + service.location + "/" + service.invoke +
+            Debug.logVerbose("[ServiceDispatcher.runAsync] : preparing service " + service.name + " [" + service.location + "/" + service.invoke +
                 "] (" + service.engineName + ")", module);
         }
 
@@ -691,12 +706,17 @@ public class ServiceDispatcher {
 
                 // run the service
                 if (!isError && !isFailure) {
-                    if (requester != null) {
-                        engine.runAsync(localName, service, context, requester, persist);
+                    if (serviceDebugMode) {
+                        service.invoker.runAsync(localName, engine, context, requester, persist);
+                        service.invoker.sendCallbacks(engine, context, null, null, GenericEngine.ASYNC_MODE);
                     } else {
-                        engine.runAsync(localName, service, context, persist);
+                        if (requester != null) {
+                            engine.runAsync(localName, service, context, requester, persist);
+                        } else {
+                            engine.runAsync(localName, service, context, persist);
+                        }
+                        engine.sendCallbacks(service, context, GenericEngine.ASYNC_MODE);
                     }
-                    engine.sendCallbacks(service, context, GenericEngine.ASYNC_MODE);
                 }
 
                 if (Debug.timingOn()) {
@@ -709,7 +729,11 @@ public class ServiceDispatcher {
                 }
                 String errMsg = "Service [" + service.name + "] threw an unexpected exception/error";
                 Debug.logError(t, errMsg, module);
-                engine.sendCallbacks(service, context, t, GenericEngine.ASYNC_MODE);
+                if (serviceDebugMode) {
+                    service.invoker.sendCallbacks(engine, context, null, t, GenericEngine.ASYNC_MODE);
+                } else {
+                    engine.sendCallbacks(service, context, t, GenericEngine.ASYNC_MODE);
+                }
                 try {
                     TransactionUtil.rollback(beganTrans, errMsg, t);
                 } catch (GenericTransactionException te) {
@@ -790,17 +814,26 @@ public class ServiceDispatcher {
     }
 
     /**
-     * Gets the GenericDelegator associated with this dispatcher
-     * @return GenericDelegator associated with this dispatcher
+     * Gets the Delegator associated with this dispatcher
+     * @return Delegator associated with this dispatcher
      */
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return this.delegator;
+    }
+
+    /**
+     * Gets the Authorization object associated with this dispatcher
+     * @return Authorization object associated with this dispatcher
+     */
+    public Authorization getAuthorization() {
+        return this.authz;
     }
 
     /**
      * Gets the Security object associated with this dispatcher
      * @return Security object associated with this dispatcher
      */
+    @Deprecated
     public Security getSecurity() {
         return this.security;
     }
@@ -851,11 +884,11 @@ public class ServiceDispatcher {
             return context;
         }
 
-        if (context.containsKey("login.username")) {
+        if (UtilValidate.isNotEmpty(context.get("login.username"))) {
             // check for a username/password, if there log the user in and make the userLogin object
             String username = (String) context.get("login.username");
 
-            if (context.containsKey("login.password")) {
+            if (UtilValidate.isNotEmpty(context.get("login.password"))) {
                 String password = (String) context.get("login.password");
 
                 context.put("userLogin", getLoginObject(service, localName, username, password, (Locale) context.get("locale")));

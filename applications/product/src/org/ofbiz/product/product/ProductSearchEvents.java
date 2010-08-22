@@ -38,7 +38,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.webapp.stats.VisitHandler;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.transaction.GenericTransactionException;
@@ -63,7 +63,7 @@ public class ProductSearchEvents {
      *@return String specifying the exit status of this event
      */
     public static String searchRemoveFromCategory(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String productCategoryId = request.getParameter("SE_SEARCH_CATEGORY_ID");
         String errMsg=null;
 
@@ -81,7 +81,7 @@ public class ProductSearchEvents {
                 GenericValue searchResultView = null;
                 while ((searchResultView = eli.next()) != null) {
                     String productId = searchResultView.getString("mainProductId");
-                    numRemoved += delegator.removeByAnd("ProductCategoryMember", UtilMisc.toMap("productCategoryId", productCategoryId, "productId", productId )) ;
+                    numRemoved += delegator.removeByAnd("ProductCategoryMember", UtilMisc.toMap("productCategoryId", productCategoryId, "productId", productId)) ;
                 }
                 eli.close();
                 Map<String, String> messageMap = UtilMisc.toMap("numRemoved", Integer.toString(numRemoved));
@@ -113,7 +113,7 @@ public class ProductSearchEvents {
     *@return String specifying the exit status of this event
     */
    public static String searchExpireFromCategory(HttpServletRequest request, HttpServletResponse response) {
-       GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+       Delegator delegator = (Delegator) request.getAttribute("delegator");
        String productCategoryId = request.getParameter("SE_SEARCH_CATEGORY_ID");
        String thruDateStr = request.getParameter("thruDate");
        String errMsg=null;
@@ -144,7 +144,7 @@ public class ProductSearchEvents {
                while ((searchResultView = eli.next()) != null) {
                    String productId = searchResultView.getString("mainProductId");
                    //get all tuples that match product and category
-                   List<GenericValue> pcmList = delegator.findByAnd("ProductCategoryMember", UtilMisc.toMap("productCategoryId", productCategoryId, "productId", productId ));
+                   List<GenericValue> pcmList = delegator.findByAnd("ProductCategoryMember", UtilMisc.toMap("productCategoryId", productCategoryId, "productId", productId));
 
                    //set those thrudate to that specificed maybe remove then add new one
                    for (GenericValue pcm: pcmList) {
@@ -186,7 +186,7 @@ public class ProductSearchEvents {
     *@return String specifying the exit status of this event
     */
    public static String searchAddToCategory(HttpServletRequest request, HttpServletResponse response) {
-       GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+       Delegator delegator = (Delegator) request.getAttribute("delegator");
        String productCategoryId = request.getParameter("SE_SEARCH_CATEGORY_ID");
        String fromDateStr = request.getParameter("fromDate");
        Timestamp fromDate = null;
@@ -255,7 +255,7 @@ public class ProductSearchEvents {
      *@return String specifying the exit status of this event
      */
     public static String searchAddFeature(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
 
         String productFeatureId = request.getParameter("productFeatureId");
@@ -344,7 +344,7 @@ public class ProductSearchEvents {
      *@return String specifying the exit status of this event
      */
     public static String searchRemoveFeature(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
 
         String productFeatureId = request.getParameter("productFeatureId");
@@ -394,7 +394,7 @@ public class ProductSearchEvents {
      *@return String specifying the exit status of this event
      */
     public static String searchExportProductList(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String errMsg = null;
         List<Map<String, Object>> productExportList = FastList.newInstance();
 
@@ -414,14 +414,14 @@ public class ProductSearchEvents {
                     String productId = searchResultView.getString("mainProductId");
                     productMap.put("productId", productId);
 
-                    List<GenericValue> productFeaturesCustomRaw = delegator.findByAnd("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureTypeId", "HAZMAT") );
+                    List<GenericValue> productFeaturesCustomRaw = delegator.findByAnd("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureTypeId", "HAZMAT"));
                     List<GenericValue> productFeaturesCustom = EntityUtil.filterByDate(productFeaturesCustomRaw);
                     productMap.put("productFeatureCustom", EntityUtil.getFirst(productFeaturesCustom));
 
                     List<GenericValue> productCategoriesRaw = delegator.findByAnd("ProductCategoryAndMember", UtilMisc.toMap("productId", productId));
                     List<GenericValue> productCategories = EntityUtil.filterByDate(productCategoriesRaw);
                     productMap.put("productCategories", productCategories);
-                    List<GenericValue> productFeaturesRaw = delegator.findByAnd("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId) );
+                    List<GenericValue> productFeaturesRaw = delegator.findByAnd("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId));
                     List<GenericValue> productFeatures = EntityUtil.filterByDate(productFeaturesRaw);
                     productMap.put("productFeatures", productFeatures);
                     productExportList.add(productMap);
@@ -451,7 +451,7 @@ public class ProductSearchEvents {
 
     public static EntityListIterator getProductSearchResults(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String visitId = VisitHandler.getVisitId(session);
 
         List<ProductSearch.ProductSearchConstraint> productSearchConstraintList = ProductSearchSession.ProductSearchOptions.getConstraintList(session);

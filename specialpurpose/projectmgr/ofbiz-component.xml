@@ -23,13 +23,13 @@ under the License.
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
     <resource-loader name="main" type="component"/>
-    <classpath type="dir" location="script"/>
     <classpath type="dir" location="config"/>
     <classpath type="jar" location="build/lib/*"/>
 
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
 
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ProjectMgrTypeData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ProjectMgrHelpData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ProjectMgrSecurityData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ProjectMgrPortletData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/ProjectMgrDemoData.xml"/>

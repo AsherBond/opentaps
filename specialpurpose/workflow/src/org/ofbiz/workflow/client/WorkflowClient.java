@@ -24,7 +24,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.job.Job;
@@ -46,19 +47,19 @@ public class WorkflowClient {
 
     public static final String module = WorkflowClient.class.getName();
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected LocalDispatcher dispatcher = null;
 
     protected WorkflowClient() {}
 
     /**
      * Get a new instance of the Workflow Client
-     * @param delegator the GenericDelegator object which matchs the delegator used by the workflow engine.
+     * @param delegator the Delegator object which matchs the delegator used by the workflow engine.
      * @param dispatcher a LocalDispatcher object to invoke the workflow services.
      */
-    public WorkflowClient(GenericDelegator delegator, LocalDispatcher dispatcher) {
+    public WorkflowClient(Delegator delegator, LocalDispatcher dispatcher) {
         if (delegator == null)
-            throw new IllegalArgumentException("GenericDelegator cannot be null");
+            throw new IllegalArgumentException("Delegator cannot be null");
         if (dispatcher == null)
             throw new IllegalArgumentException("LocalDispatcher cannot be null");
         this.delegator = delegator;
@@ -88,10 +89,9 @@ public class WorkflowClient {
         WfResource resource = WfFactory.getWfResource(delegator, null, null, partyId, roleTypeId);
 
         if (!append) {
-            Iterator i = activity.getIteratorAssignment();
-
+            Iterator<WfAssignment> i = activity.getIteratorAssignment();
             while (i.hasNext()) {
-                WfAssignment a = (WfAssignment) i.next();
+                WfAssignment a = i.next();
                 a.remove();
             }
         }
@@ -146,8 +146,8 @@ public class WorkflowClient {
             throw new WfException("This activity cannot be delegated once it has been started");
 
         if (fromPartyId == null && fromRoleTypeId == null && fromFromDate == null) {
-            Iterator i = activity.getIteratorAssignment();
-            fromAssign = (WfAssignment) i.next();
+            Iterator<WfAssignment> i = activity.getIteratorAssignment();
+            fromAssign = i.next();
             if (i.hasNext()) {
                 throw new WfException("Cannot locate the assignment to delegate from, there is more then one " +
                         "assignment for this activity.");
@@ -250,9 +250,9 @@ public class WorkflowClient {
      * @return GenericResultWaiter for the complete job.
      * @throws WfException
      */
-    public void complete(String workEffortId, String partyId, String roleTypeId, Timestamp fromDate, Map result) throws WfException {
+    public void complete(String workEffortId, String partyId, String roleTypeId, Timestamp fromDate, Map<String, Object> result) throws WfException {
         WfAssignment assign = WfFactory.getWfAssignment(delegator, workEffortId, partyId, roleTypeId, fromDate);
-        if (result != null && result.size() > 0)
+        if (UtilValidate.isNotEmpty(result))
             assign.setResult(result);
         assign.complete();
     }
@@ -303,11 +303,11 @@ public class WorkflowClient {
      * @param append The data to append.
      * @throws WfException
      */
-    public void appendContext(String workEffortId, Map append) throws WfException {
+    public void appendContext(String workEffortId, Map<String, Object> append) throws WfException {
         WfExecutionObject obj = getExecutionObject(workEffortId);
 
         if (obj != null) {
-            Map oCtx = obj.processContext();
+            Map<String, Object> oCtx = obj.processContext();
 
             oCtx.putAll(append);
             obj.setProcessContext(oCtx);
@@ -320,7 +320,7 @@ public class WorkflowClient {
      * @param workEffortId The WorkEffort entity key for the execution object.
      * @throws WfException
      */
-    public Map getContext(String workEffortId) throws WfException {
+    public Map<String, Object> getContext(String workEffortId) throws WfException {
         WfExecutionObject obj = getExecutionObject(workEffortId);
 
         if (obj == null) throw new WfException("Invalid Execution Object (null value)");
@@ -399,11 +399,6 @@ public class WorkflowClient {
             }
         }
         return obj;
-    }
-
-    // Test an activity for running state.
-    private boolean activityRunning(String workEffortId) throws WfException {
-        return activityRunning(WfFactory.getWfActivity(delegator, workEffortId));
     }
 
     // Test an activity for running state.

@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * NotSuspended Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class NotSuspended extends WfException {
 
     public NotSuspended() {}

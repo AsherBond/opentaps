@@ -101,19 +101,14 @@ under the License.
             <widgets>
                 <decorator-screen name="webPosMainDecorator">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.WebPosCart}"/>
-                                </container>
-                            </container>
+                        <screenlet title="${uiLabelMap.WebPosCart}">
                             <container id="SearchProducts">
                                 <platform-specific><html><html-template location="component://webpos/webapp/webpos/search/SearchProducts.ftl"/></html></platform-specific>
                             </container>
                             <container id="CartScreen">
                                 <include-screen name="ShowCart"/>
                             </container>
-                        </container>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -131,7 +126,7 @@ under the License.
                 <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
-
+                <property-to-field resource="order" property="orderPreference.giftEnable" field="giftEnable" default="Y"/>
                 <set field="titleProperty" value="PageTitleShoppingCart"/>
                 <set field="headerItem" value="Shopping Cart"/>
                 <script location="component://webpos/webapp/webpos/WEB-INF/actions/cart/ShowCart.groovy"/>
@@ -157,16 +152,11 @@ under the License.
                 <script location="component://webpos/webapp/webpos/WEB-INF/actions/cart/MicroCart.groovy"/>
             </actions>
             <widgets>
-                <container style="screenlet">
-                    <container style="screenlet-title-bar">
-                        <container style="h3">
-                            <label text="${uiLabelMap.PageTitleMain}"/>
-                        </container>
-                    </container>
+                <screenlet title="${uiLabelMap.PageTitleMain}">
                     <container id="MicroCart">
                         <platform-specific><html><html-template location="component://webpos/webapp/webpos/cart/MicroCart.ftl"/></html></platform-specific>
                     </container>
-                </container>
+                </screenlet>
             </widgets>
         </section>
     </screen>

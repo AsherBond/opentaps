@@ -19,7 +19,6 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.service.group;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,6 @@ import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.ServiceDispatcher;
 import org.ofbiz.service.ServiceUtil;
-
 import org.w3c.dom.Element;
 
 /**
@@ -112,6 +110,9 @@ public class GroupModel {
     public List<GroupServiceModel> getServices() {
         return this.services;
     }
+    public boolean isOptional() {
+        return optional;
+    }
 
     /**
      * Invokes the group of services in order defined
@@ -141,6 +142,7 @@ public class GroupModel {
     /**
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
         str.append(getGroupName());

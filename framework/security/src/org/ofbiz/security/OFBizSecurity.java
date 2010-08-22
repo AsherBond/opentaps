@@ -30,7 +30,8 @@ import javolution.util.FastList;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -40,32 +41,31 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 
 /**
- * <code>OFBizSecurity</code>
- * This class has not been altered from the original source. It now just extends Security and was therefore renamed to
- * OFBizSecurity.
+ * An implementation of the Security interface that uses the OFBiz database
+ * for permission storage.
  */
-public class OFBizSecurity extends org.ofbiz.security.Security {
+public class OFBizSecurity implements Security {
 
     public static final String module = OFBizSecurity.class.getName();
 
-    public static final Map<String, Map<String, String>> simpleRoleEntity = UtilMisc.toMap(
+    protected Delegator delegator = null;
+
+    protected static final Map<String, Map<String, String>> simpleRoleEntity = UtilMisc.toMap(
         "ORDERMGR", UtilMisc.toMap("name", "OrderRole", "pkey", "orderId"),
         "FACILITY", UtilMisc.toMap("name", "FacilityParty", "pkey", "facilityId"),
         "MARKETING", UtilMisc.toMap("name", "MarketingCampaignRole", "pkey", "marketingCampaignId"));
 
-    GenericDelegator delegator = null;
-
     protected OFBizSecurity() {}
 
-    protected OFBizSecurity(GenericDelegator delegator) {
+    protected OFBizSecurity(Delegator delegator) {
         this.delegator = delegator;
     }
 
-    public GenericDelegator getDelegator() {
-        return delegator;
+    public Delegator getDelegator() {
+        return this.delegator;
     }
 
-    public void setDelegator(GenericDelegator delegator) {
+    public void setDelegator(Delegator delegator) {
         this.delegator = delegator;
     }
 
@@ -73,17 +73,13 @@ public class OFBizSecurity extends org.ofbiz.security.Security {
      * @see org.ofbiz.security.Security#findUserLoginSecurityGroupByUserLoginId(java.lang.String)
      */
     public Iterator<GenericValue> findUserLoginSecurityGroupByUserLoginId(String userLoginId) {
-        List<GenericValue> collection = userLoginSecurityGroupByUserLoginId.get(userLoginId);
-
-        if (collection == null) {
-            try {
-                collection = delegator.findByAnd("UserLoginSecurityGroup", UtilMisc.toMap("userLoginId", userLoginId), null);
-                // make an empty collection to speed up the case where a userLogin belongs to no security groups, only with no exception of course
-                if (collection == null) collection = FastList.newInstance();
-                userLoginSecurityGroupByUserLoginId.put(userLoginId, collection);
-            } catch (GenericEntityException e) {
-                Debug.logWarning(e, module);
-            }
+        List<GenericValue> collection;
+        try {
+            collection = delegator.findByAnd("UserLoginSecurityGroup", UtilMisc.toMap("userLoginId", userLoginId), null);
+        } catch (GenericEntityException e) {
+            // make an empty collection to speed up the case where a userLogin belongs to no security groups, only with no exception of course
+            collection = FastList.newInstance();
+            Debug.logWarning(e, module);
         }
         // filter each time after cache retreival, ie cache will contain entire list
         collection = EntityUtil.filterByDate(collection, true);
@@ -96,22 +92,12 @@ public class OFBizSecurity extends org.ofbiz.security.Security {
     public boolean securityGroupPermissionExists(String groupId, String permission) {
         GenericValue securityGroupPermissionValue = delegator.makeValue("SecurityGroupPermission",
                 UtilMisc.toMap("groupId", groupId, "permissionId", permission));
-        Boolean exists = (Boolean) securityGroupPermissionCache.get(securityGroupPermissionValue);
-
-        if (exists == null) {
-            try {
-                if (delegator.findOne(securityGroupPermissionValue.getEntityName(), securityGroupPermissionValue, false) != null) {
-                    exists = Boolean.TRUE;
-                } else {
-                    exists = Boolean.FALSE;
-                }
-            } catch (GenericEntityException e) {
-                exists = Boolean.FALSE;
-                Debug.logWarning(e, module);
-            }
-            securityGroupPermissionCache.put(securityGroupPermissionValue, exists);
+        try {
+            return delegator.findOne(securityGroupPermissionValue.getEntityName(), securityGroupPermissionValue, false) != null;
+        } catch (GenericEntityException e) {
+            Debug.logWarning(e, module);
+            return false;
         }
-        return exists.booleanValue();
     }
 
     /**
@@ -279,10 +265,16 @@ public class OFBizSecurity extends org.ofbiz.security.Security {
 
             // if we pass all tests
             //Debug.logInfo("Found (" + (roleTest == null ? 0 : roleTest.size()) + ") matches :: " + roleTest, module);
-            if (roleTest != null && roleTest.size() > 0) return true;
+            if (UtilValidate.isNotEmpty(roleTest)) return true;
         }
 
         return false;
+    }
+
+    public void clearUserData(GenericValue userLogin) {
+        if (userLogin != null) {
+            delegator.getCache().remove("UserLoginSecurityGroup", EntityCondition.makeCondition("userLoginId", EntityOperator.EQUALS, userLogin.getString("userLoginId")));
+        }
     }
 
 }

@@ -27,6 +27,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 
 /**
@@ -35,6 +36,7 @@ import org.ofbiz.base.util.string.FlexibleStringExpander;
  * list elements. See individual Map operations for more information.
  *
  */
+@SuppressWarnings("serial")
 public class FlexibleServletAccessor<T> implements Serializable {
 
     protected String name;
@@ -48,7 +50,7 @@ public class FlexibleServletAccessor<T> implements Serializable {
     }
 
     public FlexibleServletAccessor(String name, String defaultName) {
-        if (name == null || name.length() == 0) {
+        if (UtilValidate.isEmpty(name)) {
             init(defaultName);
         } else {
             init(name);
@@ -57,7 +59,7 @@ public class FlexibleServletAccessor<T> implements Serializable {
 
     protected void init(String name) {
         this.name = name;
-        if (name == null || name.length() == 0) {
+        if (UtilValidate.isEmpty(name)) {
             empty = true;
             needsExpand = false;
             fma = FlexibleMapAccessor.getInstance(name);
@@ -159,6 +161,7 @@ public class FlexibleServletAccessor<T> implements Serializable {
     /** The equals and hashCode methods are imnplemented just case this object is ever accidently used as a Map key *
      * @return the hashcode
      */
+    @Override
     public int hashCode() {
         return this.name.hashCode();
     }
@@ -167,9 +170,10 @@ public class FlexibleServletAccessor<T> implements Serializable {
      * @param obj
      * @return whether this object is equal to the passed object
      */
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof FlexibleServletAccessor) {
-            FlexibleServletAccessor flexibleServletAccessor = (FlexibleServletAccessor) obj;
+            FlexibleServletAccessor<?> flexibleServletAccessor = (FlexibleServletAccessor<?>) obj;
             if (this.name == null) {
                 return flexibleServletAccessor.name == null;
             }
@@ -186,6 +190,7 @@ public class FlexibleServletAccessor<T> implements Serializable {
     /** To be used for a string representation of the accessor, returns the original name.
      * @return the name of this accessor
      */
+    @Override
     public String toString() {
         return this.name;
     }
@@ -246,7 +251,7 @@ public class FlexibleServletAccessor<T> implements Serializable {
         public T get(ServletRequest request) {
             Object theValue = null;
             if (isListReference) {
-                List lst = (List) request.getAttribute(attributeName);
+                List<T> lst = UtilGenerics.cast(request.getAttribute(attributeName));
                 theValue = lst.get(listIndex);
             } else {
                 theValue = request.getAttribute(attributeName);
@@ -262,7 +267,7 @@ public class FlexibleServletAccessor<T> implements Serializable {
         public T get(HttpSession session) {
             Object theValue = null;
             if (isListReference) {
-                List lst = (List) session.getAttribute(attributeName);
+                List<T> lst = UtilGenerics.cast(session.getAttribute(attributeName));
                 theValue = lst.get(listIndex);
             } else {
                 theValue = session.getAttribute(attributeName);

@@ -63,6 +63,15 @@ ol, ul {
 list-style: none;
 }
 
+ol.numbers {
+    list-style: decimal;
+    padding-left: 20px;
+}
+ul.dots {
+    list-style: circle;
+    padding-left: 20px;
+}
+
 /* ===== Basic Element Styles ===== */
 
 a, a:visited {
@@ -505,7 +514,11 @@ color: #008000;
 .salePrice {
 color: #ff0000;
 }
-
+.divHidden {
+    width:400px;
+    overflow:hidden;
+    white-space:nowrap;
+    }
 /* ===== Product Summary Styles ===== */
 .product-prevnext {
 text-align: right;
@@ -662,6 +675,13 @@ line-height: 2em;
 width: 100%;
 }
 
+.page-title {
+color:#000099;
+margin-bottom:0.5em;
+font-size:1.6em;
+font-weight:bold;
+}
+
 DIV.row {
 background-color: #B4B0AA;
 margin: 0 auto 0 auto;
@@ -720,19 +740,20 @@ height: 1%;
 margin-bottom: 1em;
 }
 
-DIV.screenlet-header {
-background-color: #000099;
-background-image: url(/images/gradient_sub_uns.gif);
-background-repeat: repeat-x;
-height: auto !important;
-height: 1%;
-padding: 0.1em 0.4em 0.3em 0.4em;
-}
-
 DIV.screenlet-body {
 background-color: #FFFFFF;
 height: auto !important;
 height: 1%;
+padding: 0.4em;
+}
+
+DIV.no-padding {
+padding: 0;
+border: none;
+}
+
+.no-padding h2,
+.no-padding .h2 {
 padding: 0.4em;
 }
 
@@ -864,6 +885,7 @@ padding-right: 1.1em;
 text-align: right;
 white-space: nowrap;
 width: 1%;
+vertical-align: middle;
 }
 
 .required, input.required {
@@ -1246,7 +1268,44 @@ width: 25%;
 .login-screenlet .screenlet-title-bar {
 text-align: center;
 }
+/***********************************************
+ajax auto complete
+***********************************************/
+div.autocomplete {
+  position:absolute;
+  width:auto !important;
+/* min-width:154px; */
+  background-color:#f8f8f8;
+  border:1px solid #999999;
+  margin:0;
+  padding:0;
+}
+div.autocomplete ul {
+  list-style-type:none;
+  margin:0;
+  padding:0;
+}
+div.autocomplete ul li.selected {
+ background-color: #ffb;
+}
+div.autocomplete ul li {
+  list-style-type:none;
+  display:block;
+  float: none;
+  margin:0;
+  padding:2px;
+  /*height:32px;*/
+  cursor:pointer;
+}
 
+.indicator img {
+  background: url(/images/ajax-loader.gif) no-repeat 0 0;
+  display: block;
+  margin:3px 10px 0px 24px;
+  width:16px;
+  height:16px;
+  border: none;
+}
 /* ======================================================= */
 /* ===== Basic Navigation (Vertical Menu) Style ========== */
 /* ======================================================= */
@@ -1389,6 +1448,12 @@ color: #ffffff;
 text-decoration: none;
 }
 
+.button-style-2 .disabled {
+background-color: #ffffff;
+border: solid #D4D0C8 0.1em;
+color: #D4D0C8;
+}
+
 /* ===== Button bar decorators ===== */
 
 .tool-bar {
@@ -1461,6 +1526,7 @@ margin-bottom: 0;
 .basic-table tr td {
 /* Style for all cells */
 padding: 0.1em;
+vertical-align: middle;
 }
 
 .basic-table tr .label,
@@ -1866,41 +1932,24 @@ margin: 0;
 /* ================================= */
 /* ===== Visual Embellishments ===== */
 /* ================================= */
-
-.view-calendar {
-background: url(/images/cal.gif) no-repeat;
+.view-calendar a{
+background: url(/images/cal.gif) no-repeat !important;
+display: inline-block;
+/* margin: 3px 10px 0px 4px; */
+vertical-align:top;
+margin-top: 2px;
+width:16px;
+height:16px;
 }
 
-.field-lookup {
-background: url(/images/fieldlookup.gif) no-repeat;
-}
-
-.nav-first {
-/*
-background: url(/images/prev-year.gif) no-repeat left center;
-padding-left: 1.8em;
-*/
-}
-
-.nav-last {
-/*
-background: url(/images/next-year.gif) no-repeat right center;
-padding-right: 1.8em;
-*/
-}
-
-.nav-next {
-/*
-background: url(/images/next.gif) no-repeat right center;
-padding-right: 1.8em;
-*/
-}
-
-.nav-previous {
-/*
-background: url(/images/prev.gif) no-repeat left center;
-padding-left: 1.8em;
-*/
+.field-lookup a{
+background: url(/images/fieldlookup.gif) no-repeat 0 0;
+display: inline-block;
+/* margin: 3px 10px 0px 4px; */
+vertical-align:top;
+margin-top: 3px;
+width:16px;
+height:16px;
 }
 
 /* ================================= */
@@ -1969,6 +2018,7 @@ iframe.ie6_blocker {
   text-decoration: none;
   font-size:14px;
   color: #000 !important;
+  background: none !important;
 }
 
 .calendar_date_select .cds_header a.prev {
@@ -1982,6 +2032,10 @@ iframe.ie6_blocker {
   display:none;
 }
 
+.calendar_date_select .cds_buttons a {
+  background: none !important;
+}
+
 .calendar_date_select .cds_header select.month {
   width:90px;
 }
@@ -1993,6 +2047,8 @@ iframe.ie6_blocker {
 .calendar_date_select .cds_buttons a {
   color: #fff;
   font-size: 9px;
+  background: none;
+  display: inline !important;
 }
 .calendar_date_select td {
   font-size:12px;
@@ -2053,21 +2109,23 @@ padding: 0.1em 0.5em 0.2em 0.5em;
 
 .fieldgroup-title-bar ul .collapsed,
 .fieldgroup-title-bar ul .collapsed:hover {
-background: url(/images/expand.gif) no-repeat center center;
+background: url(/images/expand.gif) no-repeat left center;
 min-height: 1.1em;
 min-width: 1.1em;
 }
 
 .fieldgroup-title-bar ul .expanded,
 .fieldgroup-title-bar ul .expanded:hover {
-background: url(/images/collapse.gif) no-repeat center center;
+background: url(/images/collapse.gif) no-repeat left center;
 min-height: 1.1em;
 min-width: 1.1em;
 }
 
-.fieldgroup-title-bar td.collapse {
-width: 1.1em;
-cursor: default;
+.fieldgroup-title-bar a {
+cursor:pointer;
+text-decoration:none;
+padding-left: 10px;
+color: #000000;
 }
 
 /* == Portlet configuration screenlet == */
@@ -2149,3 +2207,93 @@ font-weight: bold;
 .manage-portal-column-toolbar #column-width {
 float: right;
 }
+
+/***********************************************
+Webtools
+***********************************************/
+.webToolList h3 {
+  margin:0.75em 0 0.09em 0;
+  text-transform:uppercase;
+}
+
+/***********************************************
+Lookups
+***********************************************/
+ .fieldLookup{
+    background: #ffffff;
+    border-right: 2px solid #999;
+    border-left: 2px solid #999;
+    border-bottom: 3px solid #999;
+    position: absolute;
+    padding: 3px 1 1 1;
+    overflow: visible;
+    z-index: 110000;
+    visibility: visible;
+ }
+
+ .fieldLookupHeader{
+    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #999;
+    height: 18px;
+    font-size: 12px;
+    padding: 3px 0;
+    color: #333;
+    background-image: url(header_bg.gif);
+    cursor: move;
+ }
+
+ .fieldLookupHeader span{
+     text-align: right;
+     cursor: pointer;
+ }
+
+ .fieldLookupHeader span div{
+     background-image: url(header_close_button.png);
+     float: right;
+     width: 16px;
+     height: 16px;
+ }
+
+ #fieldLookupContent{
+     background-color: #ffffff;
+     overflow: auto;
+     width:100%;
+     height:95%;
+ }
+
+/* overwrite */
+ #fieldLookupContent ul li a {
+    display: inherit;
+    cursor: pointer;
+    background: none;
+ }
+
+ #fieldLookupContent td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+ }
+
+ #fieldLookupContent td span a {
+    background: url(/images/fieldlookup.gif) no-repeat;
+    display: inline-block;
+ }
+
+ #fieldLookupContent td a {
+    background: none;
+    cursor: pointer;
+    display: inline;
+ }
+/* overwrite*/
+ #findScreenlet{
+     margin-top: 0;
+ }
+
+ .fadedBackground {
+     background: url(faded_background.png);
+     position: absolute;
+     overflow: visible;
+     z-index: 109999;
+     visibility: visible;
+     left: 0px;
+     top: 0px;
+ }

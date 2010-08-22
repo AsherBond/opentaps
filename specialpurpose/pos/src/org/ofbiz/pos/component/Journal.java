@@ -20,13 +20,10 @@
 package org.ofbiz.pos.component;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.io.StringWriter;
 import java.util.Locale;
 
 import javax.swing.ListSelectionModel;
 
-import net.xoetrope.data.XDataSource;
 import net.xoetrope.swing.XScrollPane;
 import net.xoetrope.swing.XTable;
 import net.xoetrope.xui.XProject;
@@ -76,7 +73,7 @@ public class Journal {
         // some settings needed for XUI 3.2rc2b update
         jtable.setRowHeight(30); // Better to catch the line on a touch screen (minimal height I think)
         XStyle style = currentProject.getStyleManager().getStyle("journalBorder");
-        Color borderColor = style.getStyleAsColor(XStyle.COLOR_FORE );
+        Color borderColor = style.getStyleAsColor(XStyle.COLOR_FORE);
         jtable.setGridColor(borderColor); // jtable.setBorderStyle("journalBorder"); above is not working anymore
         style = currentProject.getStyleManager().getStyle("journalData");
         Color backgoundColor = style.getStyleAsColor(XStyle.COLOR_BACK);
@@ -197,12 +194,5 @@ public class Journal {
             newNode.set(value);
         }
         return newNode;
-    }
-
-    private String getModelText(XModel model)
-    {
-        StringWriter sw = new StringWriter();
-        XDataSource.outputModel( sw, model );
-        return "<Datasets>" + sw.toString() + "</Datasets>";
     }
 }

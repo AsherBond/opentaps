@@ -33,7 +33,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.content.content.ContentWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -69,7 +69,7 @@ public class BlogRssServices {
         mainLink = mainLink + "?blogContentId=" + contentId;
 
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         // get the main blog content
         GenericValue content = null;
@@ -97,7 +97,7 @@ public class BlogRssServices {
         return resp;
     }
 
-    public static List generateEntryList(LocalDispatcher dispatcher, GenericDelegator delegator, String contentId, String entryLink, Locale locale, GenericValue userLogin) {
+    public static List generateEntryList(LocalDispatcher dispatcher, Delegator delegator, String contentId, String entryLink, Locale locale, GenericValue userLogin) {
         List entries = FastList.newInstance();
         List exprs = FastList.newInstance();
         exprs.add(EntityCondition.makeCondition("contentIdStart", contentId));
@@ -117,7 +117,8 @@ public class BlogRssServices {
                 GenericValue v = (GenericValue) i.next();
                 String sub = null;
                 try {
-                    sub = ContentWorker.renderSubContentAsText(dispatcher, delegator, v.getString("contentId"), mapKey, FastMap.newInstance(), locale, mimeTypeId, true);
+                    Map<String, Object> dummy = FastMap.newInstance();
+                    sub = ContentWorker.renderSubContentAsText(dispatcher, delegator, v.getString("contentId"), mapKey, dummy, locale, mimeTypeId, true);
                 } catch (GeneralException e) {
                     Debug.logError(e, module);
                 } catch (IOException e) {

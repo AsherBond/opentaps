@@ -31,14 +31,13 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericEntity;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.util.EntityUtil;
 
 /**
@@ -81,7 +80,7 @@ public class FinAccountHelper {
       * @return
       * @throws GenericEntityException
       */
-     public static BigDecimal addFirstEntryAmount(BigDecimal initialValue, List transactions, String fieldName, int decimals, int rounding) throws GenericEntityException {
+     public static BigDecimal addFirstEntryAmount(BigDecimal initialValue, List<GenericValue> transactions, String fieldName, int decimals, int rounding) throws GenericEntityException {
           if ((transactions != null) && (transactions.size() == 1)) {
               GenericValue firstEntry = (GenericValue) transactions.get(0);
               if (firstEntry.get(fieldName) != null) {
@@ -102,21 +101,21 @@ public class FinAccountHelper {
       * @return
       * @throws GenericEntityException
       */
-     public static String getNewFinAccountCode(int codeLength, GenericDelegator delegator) throws GenericEntityException {
+     public static String getNewFinAccountCode(int codeLength, Delegator delegator) throws GenericEntityException {
 
          // keep generating new account codes until a unique one is found
          Random r = new Random();
          boolean foundUniqueNewCode = false;
-         StringBuffer newAccountCode = null;
+         StringBuilder newAccountCode = null;
          long count = 0;
 
          while (!foundUniqueNewCode) {
-             newAccountCode = new StringBuffer(codeLength);
+             newAccountCode = new StringBuilder(codeLength);
              for (int i = 0; i < codeLength; i++) {
                  newAccountCode.append(char_pool[r.nextInt(char_pool.length)]);
              }
 
-             List existingAccountsWithCode = delegator.findByAnd("FinAccount", UtilMisc.toMap("finAccountCode", newAccountCode.toString()));
+             List<GenericValue> existingAccountsWithCode = delegator.findByAnd("FinAccount", UtilMisc.toMap("finAccountCode", newAccountCode.toString()));
              if (existingAccountsWithCode.size() == 0) {
                  foundUniqueNewCode = true;
              }
@@ -137,7 +136,7 @@ public class FinAccountHelper {
       * @return
       * @throws GenericEntityException
       */
-     public static GenericValue getFinAccountFromCode(String finAccountCode, GenericDelegator delegator) throws GenericEntityException {
+     public static GenericValue getFinAccountFromCode(String finAccountCode, Delegator delegator) throws GenericEntityException {
          // regex magic to turn all letters in code to uppercase and then remove all non-alphanumeric letters
          if (finAccountCode == null) {
              return null;
@@ -148,16 +147,15 @@ public class FinAccountHelper {
 
          // now we need to get the encrypted version of the fin account code the user passed in to look up against FinAccount
          // we do this by making a temporary generic entity with same finAccountCode and then doing a match
-         ModelEntity finAccountEntity = delegator.getModelEntity("FinAccount");
-         GenericEntity encryptedFinAccount = GenericEntity.createGenericEntity(finAccountEntity, UtilMisc.toMap("finAccountCode", finAccountCode));
+         GenericValue encryptedFinAccount = delegator.makeValue("FinAccount", UtilMisc.toMap("finAccountCode", finAccountCode));
          delegator.encryptFields(encryptedFinAccount);
          String encryptedFinAccountCode = encryptedFinAccount.getString("finAccountCode");
 
          // now look for the account
-         List accounts = delegator.findByAnd("FinAccount", UtilMisc.toMap("finAccountCode", encryptedFinAccountCode));
+         List<GenericValue> accounts = delegator.findByAnd("FinAccount", UtilMisc.toMap("finAccountCode", encryptedFinAccountCode));
          accounts = EntityUtil.filterByDate(accounts);
 
-         if ((accounts == null) || (accounts.size() == 0)) {
+         if (UtilValidate.isEmpty(accounts)) {
              // OK to display - not a code anyway
              Debug.logWarning("No fin account found for account code ["  + finAccountCode + "]", module);
              return null;
@@ -179,17 +177,14 @@ public class FinAccountHelper {
       * @return
       * @throws GenericEntityException
       */
-     public static BigDecimal getBalance(String finAccountId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
+     public static BigDecimal getBalance(String finAccountId, Timestamp asOfDateTime, Delegator delegator) throws GenericEntityException {
         if (asOfDateTime == null) asOfDateTime = UtilDateTime.nowTimestamp();
 
         BigDecimal incrementTotal = ZERO;  // total amount of transactions which increase balance
         BigDecimal decrementTotal = ZERO;  // decrease balance
 
-        GenericValue finAccount = delegator.findByPrimaryKeyCache("FinAccount", UtilMisc.toMap("finAccountId", finAccountId));
-        String currencyUomId = finAccount.getString("currencyUomId");
-
         // find the sum of all transactions which increase the value
-        EntityConditionList incrementConditions = EntityCondition.makeCondition(UtilMisc.toList(
+        EntityConditionList<EntityCondition> incrementConditions = EntityCondition.makeCondition(UtilMisc.toList(
                 EntityCondition.makeCondition("finAccountId", EntityOperator.EQUALS, finAccountId),
                 EntityCondition.makeCondition("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime),
                 EntityCondition.makeCondition(UtilMisc.toList(
@@ -197,14 +192,13 @@ public class FinAccountHelper {
                         EntityCondition.makeCondition("finAccountTransTypeId", EntityOperator.EQUALS, "ADJUSTMENT")),
                     EntityOperator.OR)),
                 EntityOperator.AND);
-        List transSums = delegator.findList("FinAccountTransSum", incrementConditions, UtilMisc.toSet("amount"), null, null, false);
+        List<GenericValue> transSums = delegator.findList("FinAccountTransSum", incrementConditions, UtilMisc.toSet("amount"), null, null, false);
         incrementTotal = addFirstEntryAmount(incrementTotal, transSums, "amount", (decimals+1), rounding);
 
         // now find sum of all transactions with decrease the value
-        EntityConditionList decrementConditions = EntityCondition.makeCondition(UtilMisc.toList(
+        EntityConditionList<EntityExpr> decrementConditions = EntityCondition.makeCondition(UtilMisc.toList(
                 EntityCondition.makeCondition("finAccountId", EntityOperator.EQUALS, finAccountId),
                 EntityCondition.makeCondition("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime),
-                EntityCondition.makeCondition("currencyUomId", EntityOperator.EQUALS, currencyUomId),
                 EntityCondition.makeCondition("finAccountTransTypeId", EntityOperator.EQUALS, "WITHDRAWAL")),
             EntityOperator.AND);
         transSums = delegator.findList("FinAccountTransSum", decrementConditions, UtilMisc.toSet("amount"), null, null, false);
@@ -222,19 +216,19 @@ public class FinAccountHelper {
       * @return
       * @throws GenericEntityException
       */
-    public static BigDecimal getAvailableBalance(String finAccountId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
+    public static BigDecimal getAvailableBalance(String finAccountId, Timestamp asOfDateTime, Delegator delegator) throws GenericEntityException {
         if (asOfDateTime == null) asOfDateTime = UtilDateTime.nowTimestamp();
 
         BigDecimal netBalance = getBalance(finAccountId, asOfDateTime, delegator);
 
         // find sum of all authorizations which are not expired and which were authorized before as of time
-        EntityConditionList authorizationConditions = EntityCondition.makeCondition(UtilMisc.toList(
+        EntityConditionList<EntityCondition> authorizationConditions = EntityCondition.makeCondition(UtilMisc.toList(
                 EntityCondition.makeCondition("finAccountId", EntityOperator.EQUALS, finAccountId),
                 EntityCondition.makeCondition("authorizationDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime),
                 EntityUtil.getFilterByDateExpr(asOfDateTime)),
             EntityOperator.AND);
 
-        List authSums = delegator.findList("FinAccountAuthSum", authorizationConditions, UtilMisc.toSet("amount"), null, null, false);
+        List<GenericValue> authSums = delegator.findList("FinAccountAuthSum", authorizationConditions, UtilMisc.toSet("amount"), null, null, false);
 
         BigDecimal authorizationsTotal = addFirstEntryAmount(ZERO, authSums, "amount", (decimals+1), rounding);
 
@@ -253,7 +247,7 @@ public class FinAccountHelper {
      * @param pinNumber
      * @return true if the bin is valid
      */
-    public static boolean validatePin(GenericDelegator delegator, String finAccountId, String pinNumber) {
+    public static boolean validatePin(Delegator delegator, String finAccountId, String pinNumber) {
         GenericValue finAccount = null;
         try {
             finAccount = delegator.findByPrimaryKey("FinAccount", UtilMisc.toMap("finAccountId", finAccountId));
@@ -281,7 +275,7 @@ public class FinAccountHelper {
      * @return String generated number
      * @throws GenericEntityException
      */
-    public static String generateRandomFinNumber(GenericDelegator delegator, int length, boolean isId) throws GenericEntityException {
+    public static String generateRandomFinNumber(Delegator delegator, int length, boolean isId) throws GenericEntityException {
         if (length > 19) {
             length = 19;
         }
@@ -312,7 +306,7 @@ public class FinAccountHelper {
         return number;
     }
 
-    private static boolean checkIsNumberInDatabase(GenericDelegator delegator, String number) throws GenericEntityException {
+    private static boolean checkIsNumberInDatabase(Delegator delegator, String number) throws GenericEntityException {
         GenericValue finAccount = delegator.findByPrimaryKey("FinAccount", UtilMisc.toMap("finAccountId", number));
         return finAccount == null;
     }

@@ -22,7 +22,6 @@ package org.ofbiz.minilang.method;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,10 +33,11 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.collections.FlexibleMapAccessor;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.minilang.SimpleMethod;
 import org.ofbiz.security.Security;
+import org.ofbiz.security.authz.Authorization;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 
@@ -57,7 +57,8 @@ public class MethodContext implements Iterable<Map.Entry<String, Object>> {
     protected TimeZone timeZone;
     protected ClassLoader loader;
     protected LocalDispatcher dispatcher;
-    protected GenericDelegator delegator;
+    protected Delegator delegator;
+    protected Authorization authz;
     protected Security security;
     protected GenericValue userLogin;
 
@@ -76,7 +77,8 @@ public class MethodContext implements Iterable<Map.Entry<String, Object>> {
         this.locale = UtilHttp.getLocale(request);
         this.timeZone = UtilHttp.getTimeZone(request);
         this.dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        this.delegator = (GenericDelegator) request.getAttribute("delegator");
+        this.delegator = (Delegator) request.getAttribute("delegator");
+        this.authz = (Authorization) request.getAttribute("authz");
         this.security = (Security) request.getAttribute("security");
         this.userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
 
@@ -97,6 +99,7 @@ public class MethodContext implements Iterable<Map.Entry<String, Object>> {
         this.timeZone = (TimeZone) context.get("timeZone");
         this.dispatcher = ctx.getDispatcher();
         this.delegator = ctx.getDelegator();
+        this.authz = ctx.getAuthorization();
         this.security = ctx.getSecurity();
         this.results = FastMap.newInstance();
         this.userLogin = (GenericValue) context.get("userLogin");
@@ -112,7 +115,7 @@ public class MethodContext implements Iterable<Map.Entry<String, Object>> {
 
     /**
      * This is a very simple constructor which assumes the needed objects (dispatcher,
-     * delegator, security, request, response, etc) are in the context.
+     * delegator, authz, security, request, response, etc) are in the context.
      * Will result in calling method as a service or event, as specified.
      */
     public MethodContext(Map<String, ? extends Object> context, ClassLoader loader, int methodType) {
@@ -122,7 +125,8 @@ public class MethodContext implements Iterable<Map.Entry<String, Object>> {
         this.locale = (Locale) context.get("locale");
         this.timeZone = (TimeZone) context.get("timeZone");
         this.dispatcher = (LocalDispatcher) context.get("dispatcher");
-        this.delegator = (GenericDelegator) context.get("delegator");
+        this.delegator = (Delegator) context.get("delegator");
+        this.authz = (Authorization) context.get("authz");
         this.security = (Security) context.get("security");
         this.userLogin = (GenericValue) context.get("userLogin");
 
@@ -137,7 +141,8 @@ public class MethodContext implements Iterable<Map.Entry<String, Object>> {
             // or something similar
             if (this.request != null) {
                 if (this.dispatcher == null) this.dispatcher = (LocalDispatcher) this.request.getAttribute("dispatcher");
-                if (this.delegator == null) this.delegator = (GenericDelegator) this.request.getAttribute("delegator");
+                if (this.delegator == null) this.delegator = (Delegator) this.request.getAttribute("delegator");
+                if (this.authz == null) this.authz = (Authorization) this.request.getAttribute("authz");
                 if (this.security == null) this.security = (Security) this.request.getAttribute("security");
                 if (this.userLogin == null) this.userLogin = (GenericValue) this.request.getSession().getAttribute("userLogin");
             }
@@ -269,8 +274,12 @@ public class MethodContext implements Iterable<Map.Entry<String, Object>> {
         return this.dispatcher;
     }
 
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return this.delegator;
+    }
+
+    public Authorization getAuthz() {
+        return this.authz;
     }
 
     public Security getSecurity() {

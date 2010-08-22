@@ -39,7 +39,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
     </transaction-factory>
     -->
     <!--
-    	It is common to use UserTransaction for the TransactionManager, but if that doesn't work, try this: <transaction-manager-jndi jndi-server-name="default" jndi-name="java:comp/TransactionManager"/>
+        It is common to use UserTransaction for the TransactionManager, but if that doesn't work, try this: <transaction-manager-jndi jndi-server-name="default" jndi-name="java:comp/TransactionManager"/>
         Common UserTransaction locations:
             java:comp/UserTransaction (most servers: Resin, Orion, OC4J, etc)
             UserTransaction (RexIP)
@@ -53,21 +53,21 @@ access. For a detailed description see the core/docs/entityconfig.html file.
     <delegator name="default" entity-model-reader="main" entity-group-reader="main" entity-eca-reader="main" distributed-cache-clear-enabled="false">
         <group-map group-name="org.ofbiz" datasource-name="localderby"/>
         <group-map group-name="org.ofbiz.olap" datasource-name="localderbyolap"/>
+        <group-map group-name="org.ofbiz.tenant" datasource-name="localderbytenant"/>
         <group-map group-name="org.opentaps.analytics" datasource-name="analytics"/>
         <group-map group-name="org.opentaps.testing" datasource-name="testing"/>
     </delegator>
     <delegator name="default-no-eca" entity-model-reader="main" entity-group-reader="main" entity-eca-reader="main" entity-eca-enabled="false" distributed-cache-clear-enabled="false">
         <group-map group-name="org.ofbiz" datasource-name="localderby"/>
         <group-map group-name="org.ofbiz.olap" datasource-name="localderbyolap"/>
+        <group-map group-name="org.ofbiz.tenant" datasource-name="localderbytenant"/>
     </delegator>
 
     <!-- be sure that your default delegator (or the one you use) uses the same datasource for test. You must run "ant run-install" before running "ant run-tests" -->
     <delegator name="test" entity-model-reader="main" entity-group-reader="main" entity-eca-reader="main">
         <group-map group-name="org.ofbiz" datasource-name="localderby"/>
         <group-map group-name="org.ofbiz.olap" datasource-name="localderbyolap"/>
-    </delegator>
-    <delegator name="other" entity-model-reader="main" entity-group-reader="main" entity-eca-reader="main">
-        <group-map group-name="org.ofbiz" datasource-name="localderby"/>
+        <group-map group-name="org.ofbiz.tenant" datasource-name="localderbytenant"/>
     </delegator>
 
     <!-- need to at least define a name for each component to use -->
@@ -146,7 +146,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password=""
                 isolation-level="ReadUncommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/HsqlDataSource" isolation-level="ReadUncommitted"/> -->
         <!-- <jndi-jdbc jndi-server-name="default" jndi-name="comp/env/jdbc/xa/localhsql" isolation-level="ReadUncommitted"/> --> <!-- Orion Style JNDI name -->
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="localhsqlDataSource"/> --> <!-- Weblogic Style JNDI name -->
@@ -172,7 +173,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/DerbyDataSource" isolation-level="ReadCommitted"/> -->
     </datasource>
     <datasource name="localderbyodbc"
@@ -191,7 +193,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
             jdbc-password="ofbiz"
             isolation-level="ReadCommitted"
             pool-minsize="2"
-            pool-maxsize="250"/>
+            pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/DerbyDataSource" isolation-level="ReadCommitted"/> -->
     </datasource>
     <datasource name="localderbyolap"
@@ -214,7 +217,32 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
+        <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/DerbyDataSource" isolation-level="ReadCommitted"/> -->
+    </datasource>
+    <datasource name="localderbytenant"
+        helper-class="org.ofbiz.entity.datasource.GenericHelperDAO"
+        schema-name="OFBIZ"
+        field-type-name="derby"
+        check-on-start="true"
+        add-missing-on-start="true"
+        use-pk-constraint-names="false"
+        use-indices-unique="false"
+        alias-view-columns="false">
+        <read-data reader-name="seed"/>
+        <read-data reader-name="seed-initial"/>
+        <read-data reader-name="demo"/>
+        <read-data reader-name="ext"/>
+        <inline-jdbc
+            jdbc-driver="org.apache.derby.jdbc.EmbeddedDriver"
+            jdbc-uri="jdbc:derby:ofbiztenant;create=true"
+            jdbc-username="ofbiz"
+            jdbc-password="ofbiz"
+            isolation-level="ReadCommitted"
+            pool-minsize="2"
+            pool-maxsize="250"
+            time-between-eviction-runs-millis="600000"/>
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/DerbyDataSource" isolation-level="ReadCommitted"/> -->
     </datasource>
 
@@ -234,7 +262,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/CloudscapeDataSource" isolation-level="Serializable"/> -->
     </datasource>
 
@@ -256,7 +285,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/DaffodilDataSource" isolation-level="ReadCommitted"/> -->
     </datasource>
 
@@ -277,7 +307,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
     </datasource>
 
     <datasource name="localmysql"
@@ -304,7 +335,10 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/><!-- Please note that at least one person has experienced a problem with this value with MySQL
+                and had to set it to -1 in order to avoid this issue.
+                For more look at http://markmail.org/thread/5sivpykv7xkl66px and http://commons.apache.org/dbcp/configuration.html-->
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/MySqlDataSource" isolation-level="Serializable"/> -->
     </datasource>
     <datasource name="odbcmysql"
@@ -328,9 +362,11 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/MySqlDataSource" isolation-level="Serializable"/> -->
     </datasource>
+
     <datasource name="analytics"
             helper-class="org.ofbiz.entity.datasource.GenericHelperDAO"
             field-type-name="mysql"
@@ -408,7 +444,10 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/><!-- Be warned that at this date (2009-09-20) the max_connections parameters in postgresql.conf
+                is set by default to 100 by the initdb process see http://www.postgresql.org/docs/8.4/static/runtime-config-connection.html#GUC-MAX-CONNECTIONS-->
+
         <!-- <jndi-jdbc jndi-server-name="default" jndi-name="java:comp/env/jdbc/localpostgres" isolation-level="ReadCommitted"/>-->
         <!-- <jndi-jdbc jndi-server-name="default" jndi-name="comp/env/jdbc/xa/localpostgres" isolation-level="ReadCommitted"/> --> <!-- Orion Style JNDI name -->
         <!-- <jndi-jdbc jndi-server-name="localweblogic" jndi-name="PostgresDataSource"/> --> <!-- Weblogic Style JNDI name -->
@@ -441,7 +480,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
     </datasource>
 
     <datasource name="localoracle"
@@ -462,7 +502,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-username="ofbiz"
                 jdbc-password="ofbiz"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
     </datasource>
     <datasource name="localoracledd"
             helper-class="org.ofbiz.entity.datasource.GenericHelperDAO"
@@ -478,7 +519,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-username="ofbiz"
                 jdbc-password="ofbiz"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
     </datasource>
 
     <datasource name="localsybase"
@@ -500,7 +542,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz1"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
     </datasource>
 
     <datasource name="localsapdb"
@@ -522,7 +565,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
         <!-- <jndi-jdbc jndi-server-name="default" jndi-name="comp/env/jdbc/xa/localsapdb" isolation-level="ReadCommitted"/> --> <!-- Orion Style JNDI name -->
         <!-- <jndi-jdbc jndi-server-name="localweblogic" jndi-name="SapDBDataSource"/> --> <!-- Weblogic Style JNDI name -->
         <!-- <jndi-jdbc jndi-server-name="default" jndi-name="jdbc/localsapdb" isolation-level="ReadCommitted"/> --> <!-- JRun4 Style JNDI name -->
@@ -548,7 +592,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="masterkey"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
         <!-- Sample remote URI: jdbc-uri="jdbc:firebirdsql://localhost:3050//opt/interbase/data/ofbiz.gdb" -->
         <!-- <jndi-jdbc jndi-server-name="default" jndi-name="comp/env/jdbc/xa/localfirebird" isolation-level="ReadCommitted"/> --> <!-- Orion Style JNDI name -->
         <!-- <tyrex-dataSource dataSource-name="firebird" isolation-level="ReadCommitted"/> Â -->
@@ -589,7 +634,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
         <!-- <jndi-jdbc jndi-server-name="default" jndi-name="comp/env/jdbc/xa/localmssql" isolation-level="ReadCommitted"/> --> <!-- Orion Style JNDI name -->
     </datasource>
 
@@ -611,7 +657,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/OracleDataSource" isolation-level="Serializable"/> -->
     </datasource>
 
@@ -620,7 +667,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
             field-type-name="advantage"
             check-on-start="true"
             add-missing-on-start="true"
-            check-indices-on-start="true"
+            check-indices-on-start="false"
             use-foreign-keys="false"
             use-foreign-key-indices="true"
             join-style="ansi-no-parenthesis"
@@ -637,6 +684,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 jdbc-password="adssys"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
-                pool-maxsize="250"/>
+                pool-maxsize="250"
+                time-between-eviction-runs-millis="600000"/>
     </datasource>
 </entity-config>

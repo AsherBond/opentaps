@@ -26,7 +26,7 @@ import java.util.Map;
 import javolution.context.ObjectFactory;
 
 import org.ofbiz.base.util.UtilDateTime;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericModelException;
 import org.ofbiz.entity.config.DatasourceInfo;
 import org.ofbiz.entity.model.ModelEntity;
@@ -34,6 +34,7 @@ import org.ofbiz.entity.model.ModelEntity;
 public class EntityDateFilterCondition extends EntityCondition {
 
     protected static final ObjectFactory<EntityDateFilterCondition> entityDateFilterConditionFactory = new ObjectFactory<EntityDateFilterCondition>() {
+        @Override
         protected EntityDateFilterCondition create() {
             return new EntityDateFilterCondition();
         }
@@ -43,11 +44,6 @@ public class EntityDateFilterCondition extends EntityCondition {
     protected String thruDateName = null;
 
     protected EntityDateFilterCondition() {}
-
-    /** @deprecated Use EntityCondition.makeConditionDate() instead */
-    public EntityDateFilterCondition(String fromDateName, String thruDateName) {
-        init(fromDateName, thruDateName);
-    }
 
     public void init(String fromDateName, String thruDateName) {
         this.fromDateName = fromDateName;
@@ -59,44 +55,53 @@ public class EntityDateFilterCondition extends EntityCondition {
         this.thruDateName = null;
     }
 
+    @Override
     public String makeWhereString(ModelEntity modelEntity, List<EntityConditionParam> entityConditionParams, DatasourceInfo datasourceInfo) {
         EntityCondition condition = makeCondition();
         return condition.makeWhereString(modelEntity, entityConditionParams, datasourceInfo);
     }
 
+    @Override
     public void checkCondition(ModelEntity modelEntity) throws GenericModelException {
         EntityCondition condition = makeCondition();
         condition.checkCondition(modelEntity);
     }
 
-    public boolean mapMatches(GenericDelegator delegator, Map<String, ? extends Object> map) {
+    @Override
+    public boolean mapMatches(Delegator delegator, Map<String, ? extends Object> map) {
         EntityCondition condition = makeCondition();
         return condition.mapMatches(delegator, map);
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof EntityDateFilterCondition)) return false;
         EntityDateFilterCondition other = (EntityDateFilterCondition) obj;
         return equals(fromDateName, other.fromDateName) && equals(thruDateName, other.thruDateName);
     }
 
+    @Override
     public int hashCode() {
         return hashCode(fromDateName) ^ hashCode(thruDateName);
     }
 
+    @Override
     public void visit(EntityConditionVisitor visitor) {
         visitor.acceptEntityDateFilterCondition(this);
     }
 
+    @Override
     public void accept(EntityConditionVisitor visitor) {
         visitor.acceptEntityDateFilterCondition(this);
     }
 
+    @Override
     public EntityCondition freeze() {
         return this;
     }
 
-    public void encryptConditionFields(ModelEntity modelEntity, GenericDelegator delegator) {
+    @Override
+    public void encryptConditionFields(ModelEntity modelEntity, Delegator delegator) {
         // nothing to do here...
     }
 
@@ -107,16 +112,16 @@ public class EntityDateFilterCondition extends EntityCondition {
     public static EntityExpr makeCondition(Timestamp moment, String fromDateName, String thruDateName) {
         return EntityCondition.makeCondition(
             EntityCondition.makeCondition(
-                EntityCondition.makeCondition( thruDateName, EntityOperator.EQUALS, null ),
+                EntityCondition.makeCondition(thruDateName, EntityOperator.EQUALS, null),
                 EntityOperator.OR,
-                EntityCondition.makeCondition( thruDateName, EntityOperator.GREATER_THAN, moment )
-            ),
+                EntityCondition.makeCondition(thruDateName, EntityOperator.GREATER_THAN, moment)
+           ),
             EntityOperator.AND,
             EntityCondition.makeCondition(
-                EntityCondition.makeCondition( fromDateName, EntityOperator.EQUALS, null ),
+                EntityCondition.makeCondition(fromDateName, EntityOperator.EQUALS, null),
                 EntityOperator.OR,
-                EntityCondition.makeCondition( fromDateName, EntityOperator.LESS_THAN_EQUAL_TO, moment )
-            )
-       );
+                EntityCondition.makeCondition(fromDateName, EntityOperator.LESS_THAN_EQUAL_TO, moment)
+           )
+      );
     }
 }

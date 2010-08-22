@@ -25,7 +25,15 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.mail.*;
+import javax.mail.FetchProfile;
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.URLName;
 import javax.mail.internet.MimeMessage;
 import javax.mail.event.StoreEvent;
 import javax.mail.event.StoreListener;
@@ -36,7 +44,8 @@ import org.ofbiz.base.container.ContainerException;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.service.GenericDispatcher;
@@ -48,7 +57,7 @@ public class JavaMailContainer implements Container {
     public static final String module = JavaMailContainer.class.getName();
     public static final String INBOX = "INBOX";
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected LocalDispatcher dispatcher = null;
     protected GenericValue userLogin = null;
     protected long timerDelay = 300000;
@@ -86,10 +95,10 @@ public class JavaMailContainer implements Container {
         String delegatorName = ContainerConfig.getPropertyValue(cfg, "delegator-name", "default");
         this.deleteMail = "true".equals(ContainerConfig.getPropertyValue(cfg, "delete-mail", "false"));
 
-        this.delegator = GenericDelegator.getGenericDelegator(delegatorName);
+        this.delegator = DelegatorFactory.getDelegator(delegatorName);
         this.dispatcher = GenericDispatcher.getLocalDispatcher(dispatcherName, delegator);
-        this.timerDelay = (long) ContainerConfig.getPropertyValue(cfg, "poll-delay", 300000);
-        this.maxSize = (long) ContainerConfig.getPropertyValue(cfg, "maxSize", 1000000); // maximum size in bytes
+        this.timerDelay = ContainerConfig.getPropertyValue(cfg, "poll-delay", 300000);
+        this.maxSize = ContainerConfig.getPropertyValue(cfg, "maxSize", 1000000); // maximum size in bytes
 
         // load the userLogin object
         String runAsUser = ContainerConfig.getPropertyValue(cfg, "run-as-user", "system");
@@ -246,6 +255,7 @@ public class JavaMailContainer implements Container {
             this.userLogin = userLogin;
         }
 
+        @Override
         public void run() {
             if (UtilValidate.isNotEmpty(stores)) {
                 for (Map.Entry<Store, Session> entry: stores.entrySet()) {
@@ -306,16 +316,21 @@ public class JavaMailContainer implements Container {
                     long messageSize = message.getSize();
                     if (message instanceof MimeMessage && messageSize >= maxSize) {
                         Debug.logWarning("Message from: " + message.getFrom()[0] + "not received, too big, size:" + messageSize + " cannot be more than " + maxSize + " bytes", module);
+
+                        // set the message as read so it doesn't continue to try to process; but don't delete it
+                        message.setFlag(Flags.Flag.SEEN, true);
                     } else {
                         this.processMessage(message, session);
                         if (Debug.verboseOn()) Debug.logVerbose("Message from " + UtilMisc.toListArray(message.getFrom()) + " with subject [" + message.getSubject() + "]  has been processed." , module);
                         message.setFlag(Flags.Flag.SEEN, true);
                         if (Debug.verboseOn()) Debug.logVerbose("Message [" + message.getSubject() + "] is marked seen", module);
+
+                        // delete the message after processing
+                        if (deleteMail) {
+                            if (Debug.verboseOn()) Debug.logVerbose("Message [" + message.getSubject() + "] is being deleted", module);
+                            message.setFlag(Flags.Flag.DELETED, true);
+                        }
                     }
-                }
-                if (deleteMail) {
-                    if (Debug.verboseOn()) Debug.logVerbose("Message [" + message.getSubject() + "] is being deleted", module);
-                    message.setFlag(Flags.Flag.DELETED, true);
                 }
             }
 

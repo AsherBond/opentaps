@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericModelException;
 import org.ofbiz.entity.config.DatasourceInfo;
@@ -36,7 +36,7 @@ import org.ofbiz.entity.model.ModelEntity;
  * Encapsulates operations between entities and entity fields. This is a immutable class.
  *
  */
-public class EntityJoinOperator extends EntityOperator<Boolean> {
+public class EntityJoinOperator extends EntityOperator<EntityCondition, EntityCondition, Boolean> {
 
     protected boolean shortCircuitValue;
 
@@ -45,14 +45,15 @@ public class EntityJoinOperator extends EntityOperator<Boolean> {
         this.shortCircuitValue = shortCircuitValue;
     }
 
-    public void addSqlValue(StringBuilder sql, ModelEntity modelEntity, List<EntityConditionParam> entityConditionParams, boolean compat, Object lhs, Object rhs, DatasourceInfo datasourceInfo) {
+    @Override
+    public void addSqlValue(StringBuilder sql, ModelEntity modelEntity, List<EntityConditionParam> entityConditionParams, boolean compat, EntityCondition lhs, EntityCondition rhs, DatasourceInfo datasourceInfo) {
         sql.append('(');
-        sql.append(((EntityCondition) lhs).makeWhereString(modelEntity, entityConditionParams, datasourceInfo));
+        sql.append(lhs.makeWhereString(modelEntity, entityConditionParams, datasourceInfo));
         sql.append(' ');
         sql.append(getCode());
         sql.append(' ');
         if (rhs instanceof EntityCondition) {
-            sql.append(((EntityCondition) rhs).makeWhereString(modelEntity, entityConditionParams, datasourceInfo));
+            sql.append(rhs.makeWhereString(modelEntity, entityConditionParams, datasourceInfo));
         } else {
             addValue(sql, null, rhs, entityConditionParams);
         }
@@ -80,7 +81,8 @@ public class EntityJoinOperator extends EntityOperator<Boolean> {
         return ((EntityCondition) item).freeze();
     }
 
-    public EntityCondition freeze(Object lhs, Object rhs) {
+    @Override
+    public EntityCondition freeze(EntityCondition lhs, EntityCondition rhs) {
         return EntityCondition.makeCondition(freeze(lhs), this, freeze(rhs));
     }
 
@@ -100,19 +102,17 @@ public class EntityJoinOperator extends EntityOperator<Boolean> {
         }
     }
 
-    public void visit(EntityConditionVisitor visitor, Object lhs, Object rhs) {
-        ((EntityCondition) lhs).visit(visitor);
+    @Override
+    public void visit(EntityConditionVisitor visitor, EntityCondition lhs, EntityCondition rhs) {
+        lhs.visit(visitor);
         visitor.visit(rhs);
-    }
-
-    public boolean entityMatches(GenericEntity entity, Object lhs, Object rhs) {
-        return entityMatches(entity, (EntityCondition) lhs, (EntityCondition) rhs);
     }
 
     public Boolean eval(GenericEntity entity, EntityCondition lhs, EntityCondition rhs) {
         return entityMatches(entity, lhs, rhs) ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    @Override
     public boolean entityMatches(GenericEntity entity, EntityCondition lhs, EntityCondition rhs) {
         if (lhs.entityMatches(entity) == shortCircuitValue) return shortCircuitValue;
         if (rhs.entityMatches(entity) == shortCircuitValue) return shortCircuitValue;
@@ -123,21 +123,22 @@ public class EntityJoinOperator extends EntityOperator<Boolean> {
         return mapMatches(entity.getDelegator(), entity, conditionList);
     }
 
-    public Boolean eval(GenericDelegator delegator, Map<String, ? extends Object> map, Object lhs, Object rhs) {
+    public Boolean eval(Delegator delegator, Map<String, ? extends Object> map, EntityCondition lhs, EntityCondition rhs) {
         return castBoolean(mapMatches(delegator, map, lhs, rhs));
     }
 
-    public boolean mapMatches(GenericDelegator delegator, Map<String, ? extends Object> map, Object lhs, Object rhs) {
-        if (((EntityCondition) lhs).mapMatches(delegator, map) == shortCircuitValue) return shortCircuitValue;
-        if (((EntityCondition) rhs).mapMatches(delegator, map) == shortCircuitValue) return shortCircuitValue;
+    @Override
+    public boolean mapMatches(Delegator delegator, Map<String, ? extends Object> map, EntityCondition lhs, EntityCondition rhs) {
+        if (lhs.mapMatches(delegator, map) == shortCircuitValue) return shortCircuitValue;
+        if (rhs.mapMatches(delegator, map) == shortCircuitValue) return shortCircuitValue;
         return !shortCircuitValue;
     }
 
-    public Boolean eval(GenericDelegator delegator, Map<String, ? extends Object> map, List<? extends EntityCondition> conditionList) {
+    public Boolean eval(Delegator delegator, Map<String, ? extends Object> map, List<? extends EntityCondition> conditionList) {
         return castBoolean(mapMatches(delegator, map, conditionList));
     }
 
-    public boolean mapMatches(GenericDelegator delegator, Map<String, ? extends Object> map, List<? extends EntityCondition> conditionList) {
+    public boolean mapMatches(Delegator delegator, Map<String, ? extends Object> map, List<? extends EntityCondition> conditionList) {
         if (UtilValidate.isNotEmpty(conditionList)) {
             for (EntityCondition condition: conditionList) {
                 if (condition.mapMatches(delegator, map) == shortCircuitValue) return shortCircuitValue;
@@ -146,10 +147,7 @@ public class EntityJoinOperator extends EntityOperator<Boolean> {
         return !shortCircuitValue;
     }
 
-    public void validateSql(ModelEntity modelEntity, Object lhs, Object rhs) throws GenericModelException {
-        validateSql(modelEntity, (EntityCondition) lhs, (EntityCondition) rhs);
-    }
-
+    @Override
     public void validateSql(ModelEntity modelEntity, EntityCondition lhs, EntityCondition rhs) throws GenericModelException {
         lhs.checkCondition(modelEntity);
         rhs.checkCondition(modelEntity);

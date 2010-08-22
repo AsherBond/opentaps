@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * NotEnabled Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class NotEnabled extends WfException {
 
     public NotEnabled() {}

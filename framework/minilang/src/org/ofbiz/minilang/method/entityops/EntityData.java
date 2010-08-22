@@ -29,7 +29,8 @@ import org.ofbiz.base.location.FlexibleLocation;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.util.EntityDataAssert;
 import org.ofbiz.entity.util.EntitySaxReader;
 import org.ofbiz.minilang.SimpleMethod;
@@ -74,6 +75,7 @@ public class EntityData extends MethodOperation {
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         List<Object> messages = errorListAcsr.get(methodContext);
         if (messages == null) {
@@ -84,9 +86,9 @@ public class EntityData extends MethodOperation {
         String location = this.locationExdr.expandString(methodContext.getEnvMap());
         String delegatorName = this.delegatorNameExdr.expandString(methodContext.getEnvMap());
 
-        GenericDelegator delegator = methodContext.getDelegator();
-        if (delegatorName != null && delegatorName.length() > 0) {
-            delegator = GenericDelegator.getGenericDelegator(delegatorName);
+        Delegator delegator = methodContext.getDelegator();
+        if (UtilValidate.isNotEmpty(delegatorName)) {
+            delegator = DelegatorFactory.getDelegator(delegatorName);
         }
 
         URL dataUrl = null;
@@ -127,7 +129,7 @@ public class EntityData extends MethodOperation {
                 } else {
                     reader = new EntitySaxReader(delegator);
                 }
-                long rowsChanged = reader.parse(dataUrl);
+                reader.parse(dataUrl);
             } catch (Exception e) {
                 String xmlError = "Error loading XML Resource \"" + dataUrl.toExternalForm() + "\"; Error was: " + e.getMessage();
                 messages.add(xmlError);
@@ -137,10 +139,12 @@ public class EntityData extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<entity-data/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

@@ -20,26 +20,24 @@
 package org.ofbiz.webslinger;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
-
-import org.webslinger.lang.ConcurrentCache;
-import org.webslinger.lang.ExecutionPool;
+import org.webslinger.cache.ConcurrentCache;
+import org.webslinger.concurrent.ExecutionPool;
 
 public class StatsUpdater {
     private static final Updater UPDATER = new Updater();
 
-    public static void updateStats(GenericDelegator delegator, String entityName, Map<String, ? extends Object> keyFields, Map<String, ? extends Long> updateCountFields) throws GenericEntityException {
+    public static void updateStats(Delegator delegator, String entityName, Map<String, ? extends Object> keyFields, Map<String, ? extends Long> updateCountFields) throws GenericEntityException {
         GenericPK pk = delegator.makePK(entityName, keyFields);
         Map<String, Long> value = UPDATER.getValue(pk);
         synchronized (value) {
@@ -71,7 +69,7 @@ public class StatsUpdater {
             } catch (GenericEntityException e) {
                 throw e;
             } catch (Exception e) {
-                throw (GenericEntityException) new GenericEntityException(e.getMessage()).initCause(e);
+                throw UtilMisc.initCause(new GenericEntityException(e.getMessage()), e);
             }
         }
 
@@ -113,6 +111,7 @@ public class StatsUpdater {
             super(owner, field, label, HARD);
         }
 
+        @Override
         protected Map<String, Long> createValue(GenericPK pk) throws Exception {
             return new HashMap<String, Long>();
         }

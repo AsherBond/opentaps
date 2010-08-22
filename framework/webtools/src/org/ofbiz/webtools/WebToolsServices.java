@@ -43,8 +43,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import javolution.util.FastList;
@@ -56,14 +54,14 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
-import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilPlist;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilProperties.UtilResourceBundle;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -80,6 +78,7 @@ import org.ofbiz.entity.util.EntityDataLoader;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntitySaxReader;
 import org.ofbiz.entityext.EntityGroupUtil;
+import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
@@ -129,7 +128,7 @@ public class WebToolsServices {
         // #############################
         // The filename to parse is prepared
         // #############################
-        if (fmfilename != null && fmfilename.length() > 0 && filename != null && filename.length() > 0) {
+        if (UtilValidate.isNotEmpty(fmfilename) && UtilValidate.isNotEmpty(filename)) {
             try {
                 url = isUrl?FlexibleLocation.resolveLocation(filename):UtilURL.fromFilename(filename);
                 InputStream is = url.openStream();
@@ -146,7 +145,7 @@ public class WebToolsServices {
         // #############################
         // The text to parse is prepared
         // #############################
-        if (fmfilename != null && fmfilename.length() > 0 && fulltext != null && fulltext.length() > 0) {
+        if (UtilValidate.isNotEmpty(fmfilename) && UtilValidate.isNotEmpty(fulltext)) {
             StringReader sr = new StringReader(fulltext);
             ins = new InputSource(sr);
         }
@@ -246,7 +245,7 @@ public class WebToolsServices {
             filePause = Long.valueOf(0);
         }
 
-        if (path != null && path.length() > 0) {
+        if (UtilValidate.isNotEmpty(path)) {
             long pauseLong = filePause != null ? filePause.longValue() : 0;
             File baseDir = new File(path);
 
@@ -350,7 +349,12 @@ public class WebToolsServices {
         }
 
         String groupNameToUse = overrideGroup != null ? overrideGroup : "org.ofbiz";
-        GenericDelegator delegator = UtilValidate.isNotEmpty(overrideDelegator) ? GenericDelegator.getGenericDelegator(overrideDelegator) : dctx.getDelegator();
+        Delegator delegator = null;
+        if (UtilValidate.isNotEmpty(overrideDelegator)) {
+            delegator = DelegatorFactory.getDelegator(overrideDelegator);
+        } else {
+            delegator = dctx.getDelegator();
+        }
 
         String helperName = delegator.getGroupHelperName(groupNameToUse);
         if (helperName == null) {
@@ -431,7 +435,7 @@ public class WebToolsServices {
     }
 
     public static Map<String, Object> parseEntityXmlFile(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         URL url = (URL) context.get("url");
         String xmltext = (String) context.get("xmltext");
@@ -469,7 +473,7 @@ public class WebToolsServices {
     }
 
     public static Map<String, Object> entityExportAll(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String outpath = (String)context.get("outpath"); // mandatory
         Integer txTimeout = (Integer)context.get("txTimeout");
@@ -479,7 +483,7 @@ public class WebToolsServices {
 
         List<String> results = FastList.newInstance();
 
-        if (outpath != null && outpath.length() > 0) {
+        if (UtilValidate.isNotEmpty(outpath)) {
             File outdir = new File(outpath);
             if (!outdir.exists()) {
                 outdir.mkdir();
@@ -506,6 +510,7 @@ public class WebToolsServices {
                             continue;
                         }
 
+                        boolean beganTx = TransactionUtil.begin();
                         // some databases don't support cursors, or other problems may happen, so if there is an error here log it and move on to get as much as possible
                         try {
                             values = delegator.find(curEntityName, null, null, null, me.getPkFieldNames(), null);
@@ -525,6 +530,10 @@ public class WebToolsServices {
                             do {
                                 value.writeXmlText(writer, "");
                                 numberWritten++;
+                                if (numberWritten % 500 == 0) {
+                                    TransactionUtil.commit(beganTx);
+                                    beganTx = TransactionUtil.begin();
+                                }
                             } while ((value = (GenericValue) values.next()) != null);
                             writer.println("</entity-engine-xml>");
                             writer.close();
@@ -533,6 +542,7 @@ public class WebToolsServices {
                             results.add("["+fileNumber +"] [---] " + curEntityName + " has no records, not writing file");
                         }
                         values.close();
+                        TransactionUtil.commit(beganTx);
                     } catch (Exception ex) {
                         if (values != null) {
                             try {
@@ -608,7 +618,7 @@ public class WebToolsServices {
        </li></ul>
      * */
     public static Map<String, Object> getEntityRefData(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
@@ -642,11 +652,9 @@ public class WebToolsServices {
 
         String search = (String) context.get("search");
         List<Map<String, Object>> packagesList = FastList.newInstance();
-        Iterator piter = packageNames.iterator();
         try {
-            while (piter.hasNext()) {
+            for (String pName : packageNames) {
                 Map<String, Object> packageMap = FastMap.newInstance();
-                String pName = (String) piter.next();
                 TreeSet<String> entities = entitiesByPackage.get(pName);
                 List<Map<String, Object>> entitiesList = FastList.newInstance();
                 for (String entityName: entities) {

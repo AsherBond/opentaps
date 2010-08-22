@@ -21,6 +21,8 @@
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.*;
 import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.party.contact.*;
 
 
@@ -37,9 +39,32 @@ if (returnId) {
 
         context.currentStatus = returnHeader.getRelatedOneCache("StatusItem");
     }
+} else {
+    partyId = parameters.partyId;
+    returnHeaders = delegator.findList("ReturnHeader", EntityCondition.makeCondition("fromPartyId", EntityOperator.EQUALS, partyId), null, null, null, false);
+    returnList = [];
+    returnHeaders.each { returnHeader ->
+        returnMap = [:];
+        returnMap.returnId = returnHeader.returnId;
+        statusItem = returnHeader.getRelatedOne("StatusItem");
+        returnMap.statusId = statusItem.description;
+        returnMap.fromPartyId = returnHeader.fromPartyId;
+        returnMap.toPartyId = returnHeader.toPartyId;
+
+        returnList.add(returnMap);
+    }
+    context.returnList = returnList;
 }
 context.returnHeader = returnHeader;
 context.returnId = returnId;
+
+//fin account info
+finAccounts = null;
+if (partyId) {
+    finAccounts = delegator.findByAnd("FinAccountAndRole", [partyId: partyId, finAccountTypeId: "STORE_CREDIT_ACCT", roleTypeId: "OWNER", statusId: "FNACT_ACTIVE"]);
+    finAccounts = EntityUtil.filterByDate(finAccounts);
+}
+context.finAccounts = finAccounts;
 
 // billing account info
 billingAccountList = null;
@@ -64,7 +89,7 @@ orderHeader = null;
 if (orderId) {
     orderRoles = delegator.findByAnd("OrderRole", [orderId : orderId, roleTypeId : "BILL_TO_CUSTOMER"]);
     orderRole = EntityUtil.getFirst(orderRoles);
-    orderHeader = delegator.findByPrimaryKeyCache("OrderHeader", [orderId : orderId]);
+    orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
 }
 context.orderRole = orderRole;
 context.orderHeader = orderHeader;

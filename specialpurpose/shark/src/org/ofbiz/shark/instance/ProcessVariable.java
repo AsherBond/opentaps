@@ -24,7 +24,7 @@ import org.enhydra.shark.api.internal.instancepersistence.ProcessVariablePersist
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilObject;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.shark.container.SharkContainer;
@@ -40,7 +40,7 @@ public class ProcessVariable extends InstanceEntityObject implements ProcessVari
     protected GenericValue processVariable = null;
     protected boolean newValue = false;
 
-    protected ProcessVariable(EntityPersistentMgr mgr, GenericDelegator delegator, String processVariableId) throws PersistenceException {
+    protected ProcessVariable(EntityPersistentMgr mgr, Delegator delegator, String processVariableId) throws PersistenceException {
         super(mgr, delegator);
         if (this.delegator != null) {
             try {
@@ -58,7 +58,7 @@ public class ProcessVariable extends InstanceEntityObject implements ProcessVari
         this.processVariable = processVariable;
     }
 
-    public ProcessVariable(EntityPersistentMgr mgr, GenericDelegator delegator) {
+    public ProcessVariable(EntityPersistentMgr mgr, Delegator delegator) {
         super(mgr, delegator);
         this.newValue = true;
         this.processVariable = delegator.makeValue(org.ofbiz.shark.SharkConstants.WfProcessVariable, UtilMisc.toMap(org.ofbiz.shark.SharkConstants.processVariableId, delegator.getNextSeqId(org.ofbiz.shark.SharkConstants.WfProcessVariable)));

@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * RequesterRequired Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class RequesterRequired extends WfException {
 
     public RequesterRequired() {}

@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 
 /**
@@ -36,32 +36,32 @@ public interface WfExecutionObject {
      * @throws WfException General workflow exception.
      * @return Current state of this object.
      */
-    public List workflowStateType() throws WfException;
+    public List<String> workflowStateType() throws WfException;
 
     /**
      * @throws WfException General workflow exception.
      * @return
      */
-    public List whileOpenType() throws WfException;
+    public List<String> whileOpenType() throws WfException;
 
     /**
      * @throws WfException General workflow exception.
      * @return Reason for not running.
      */
-    public List whyNotRunningType() throws WfException;
+    public List<String> whyNotRunningType() throws WfException;
 
     /**
      * @throws WfException General workflow exception.
      * @return Termination art of this process ot activity.
      */
-    public List howClosedType() throws WfException;
+    public List<String> howClosedType() throws WfException;
 
     /**
      * Retrieve the list of all valid states.
      * @throws WfException General workflow exception.
      * @return List of valid states.
      */
-    public List validStates() throws WfException;
+    public List<String> validStates() throws WfException;
 
     /**
      * Retrieve the current state of this process or activity.
@@ -125,7 +125,7 @@ public interface WfExecutionObject {
      * @throws WfException General workflow exception.
      * @return Process context.
      */
-    public Map processContext() throws WfException;
+    public Map<String, Object> processContext() throws WfException;
 
     /**
      * Set the process context
@@ -134,7 +134,7 @@ public interface WfExecutionObject {
      * @throws InvalidData The data is invalid.
      * @throws UpdateNotAllowed Update the context is not allowed.
      */
-    public void setProcessContext(Map newValue) throws WfException, InvalidData, UpdateNotAllowed;
+    public void setProcessContext(Map<String, Object> newValue) throws WfException, InvalidData, UpdateNotAllowed;
 
     /**
      * Set the process context (with previously stored data)
@@ -216,7 +216,7 @@ public interface WfExecutionObject {
      * @throws HistoryNotAvailable
      * @return Found history elements that meet the search criteria.
      */
-    public Iterator getIteratorHistory(String query, java.util.Map namesInQuery) throws WfException, HistoryNotAvailable;
+    public Iterator<?> getIteratorHistory(String query, java.util.Map<String, Object> namesInQuery) throws WfException, HistoryNotAvailable;
 
     /**
      * Getter for history sequence.
@@ -225,7 +225,7 @@ public interface WfExecutionObject {
      * @throws HistoryNotAvailable
      * @return List of History objects.
      */
-    public List getSequenceHistory(int maxNumber) throws WfException, HistoryNotAvailable;
+    public List<?> getSequenceHistory(int maxNumber) throws WfException, HistoryNotAvailable;
 
     /**
      * Predicate to check if a 'member' is an element of the history.
@@ -258,10 +258,10 @@ public interface WfExecutionObject {
 
     /**
      * Returns the delegator being used by this workflow
-     * @return GenericDelegator used for this workflow
+     * @return Delegator used for this workflow
      * @throws WfException
      */
-    public GenericDelegator getDelegator() throws WfException;
+    public Delegator getDelegator() throws WfException;
 
 } // interface WfExecutionObjectOperations
 

@@ -30,7 +30,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
 import org.ofbiz.content.content.ContentWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.webapp.ftl.LoopWriter;
@@ -71,7 +71,7 @@ public class InjectNodeTrailCsvTransform implements TemplateTransformModel {
         final Environment env = Environment.getCurrentEnvironment();
         final Map templateCtx = (Map) FreeMarkerWorker.getWrappedObject("context", env);
         //FreeMarkerWorker.convertContext(templateCtx);
-        final GenericDelegator delegator = (GenericDelegator) FreeMarkerWorker.getWrappedObject("delegator", env);
+        final Delegator delegator = (Delegator) FreeMarkerWorker.getWrappedObject("delegator", env);
         final HttpServletRequest request = (HttpServletRequest) FreeMarkerWorker.getWrappedObject("request", env);
         final GenericValue userLogin = (GenericValue) FreeMarkerWorker.getWrappedObject("userLogin", env);
         FreeMarkerWorker.getSiteParameters(request, templateCtx);
@@ -81,14 +81,17 @@ public class InjectNodeTrailCsvTransform implements TemplateTransformModel {
 
             final String passedCsv = (String)templateCtx.get("nodeTrailCsv");
 
+            @Override
             public void write(char cbuf[], int off, int len) {
                 buf.append(cbuf, off, len);
             }
 
+            @Override
             public void flush() throws IOException {
                 out.flush();
             }
 
+            @Override
             public int onStart() throws TemplateModelException, IOException {
                 String csvTrail = null;
 
@@ -97,10 +100,10 @@ public class InjectNodeTrailCsvTransform implements TemplateTransformModel {
                 if (Debug.infoOn()) Debug.logInfo("in InjectNodeTrailCsv(0), trail:"+trail,module);
                 // This will build a nodeTrail if none exists
                 // Maybe only contentId or subContentId are passed in
-                //GenericValue currentValue = getCurrentContent( delegator, trail,  userLogin, templateCtx, nullThruDatesOnly, contentAssocPredicateId);
+                //GenericValue currentValue = getCurrentContent(delegator, trail,  userLogin, templateCtx, nullThruDatesOnly, contentAssocPredicateId);
                 String redo = (String)templateCtx.get("redo");
 
-                if (trail == null || trail.size() == 0 || (redo != null && redo.equalsIgnoreCase("true"))) {
+                if (UtilValidate.isEmpty(trail) || (redo != null && redo.equalsIgnoreCase("true"))) {
                     String thisContentId = null;
                     String subContentId = (String)templateCtx.get("subContentId");
                     if (Debug.infoOn()) Debug.logInfo("in InjectNodeTrailCsv(0), subContentId:"+subContentId,module);
@@ -144,7 +147,7 @@ public class InjectNodeTrailCsvTransform implements TemplateTransformModel {
                                 String firstTrailContentId = (String)nd.get("contentId");
                                 if (UtilValidate.isNotEmpty(firstTrailContentId)
                                     && UtilValidate.isNotEmpty(lastPassedContentId)
-                                    && firstTrailContentId.equals(lastPassedContentId) ) {
+                                    && firstTrailContentId.equals(lastPassedContentId)) {
                                     csvTrail += "," + ContentWorker.nodeTrailToCsv(trail.subList(1, trail.size()));
                                 } else {
                                     csvTrail += "," + ContentWorker.nodeTrailToCsv(trail);
@@ -161,6 +164,7 @@ public class InjectNodeTrailCsvTransform implements TemplateTransformModel {
             }
 
 
+            @Override
             public void close() throws IOException {
                 templateCtx.put("nodeTrailCsv", passedCsv);
                 String wrappedContent = buf.toString();

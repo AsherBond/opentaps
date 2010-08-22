@@ -21,7 +21,6 @@ package org.ofbiz.order.shoppingcart;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,10 +32,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.marketing.tracking.TrackingCodeEvents;
+import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.party.party.PartyWorker;
 import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.store.ProductStoreWorker;
@@ -62,7 +63,7 @@ public class CheckOutEvents {
         //Locale locale = UtilHttp.getLocale(request);
         String errMsg = null;
 
-        if (cart != null && cart.size() > 0) {
+        if (UtilValidate.isNotEmpty(cart)) {
             return "success";
         } else {
             errMsg = UtilProperties.getMessage(resource_error, "checkevents.cart_empty", (cart != null ? cart.getLocale() : Locale.getDefault()));
@@ -84,7 +85,7 @@ public class CheckOutEvents {
 
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         GenericValue userLogin = cart.getUserLogin();
         if (userLogin == null) userLogin = (GenericValue) session.getAttribute("userLogin");
@@ -239,7 +240,7 @@ public class CheckOutEvents {
 
     public static String setCheckOutError(HttpServletRequest request, HttpServletResponse response) {
         String currentPage = request.getParameter("checkoutpage");
-        if (currentPage == null || currentPage.length() == 0) {
+        if (UtilValidate.isEmpty(currentPage)) {
             return "error";
         } else {
             return currentPage;
@@ -273,7 +274,7 @@ public class CheckOutEvents {
     public static String checkPaymentMethods(HttpServletRequest request, HttpServletResponse response) {
         ShoppingCart cart = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         CheckOutHelper checkOutHelper = new CheckOutHelper(dispatcher, delegator, cart);
         Map resp = checkOutHelper.validatePaymentMethods();
         if (ServiceUtil.isError(resp)) {
@@ -300,7 +301,7 @@ public class CheckOutEvents {
                 }
                 String amountStr = request.getParameter("amount_" + paymentMethods[i]);
                 BigDecimal amount = null;
-                if (amountStr != null && amountStr.length() > 0 && !"REMAINING".equals(amountStr)) {
+                if (UtilValidate.isNotEmpty(amountStr) && !"REMAINING".equals(amountStr)) {
                     try {
                         amount = new BigDecimal(amountStr);
                     } catch (NumberFormatException e) {
@@ -322,7 +323,7 @@ public class CheckOutEvents {
     public static String setCheckOutOptions(HttpServletRequest request, HttpServletResponse response) {
         ShoppingCart cart = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         // Set the payment options
         Map selectedPaymentMethods = getSelectedPaymentMethods(request);
@@ -360,7 +361,6 @@ public class CheckOutEvents {
         String internalCode = request.getParameter("internalCode");
         String shipBeforeDate = request.getParameter("shipBeforeDate");
         String shipAfterDate = request.getParameter("shipAfterDate");
-        String cancelBackOrderDate = request.getParameter("cancelBackOrderDate");
 
         List singleUsePayments = new ArrayList();
 
@@ -416,11 +416,15 @@ public class CheckOutEvents {
         HttpSession session = request.getSession();
         ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         CheckOutHelper checkOutHelper = new CheckOutHelper(dispatcher, delegator, cart);
         Map callResult;
 
+        if (UtilValidate.isEmpty(userLogin)) {
+            userLogin = cart.getUserLogin();
+            session.setAttribute("userLogin", userLogin);
+        }
         // remove this whenever creating an order so quick reorder cache will refresh/recalc
         session.removeAttribute("_QUICK_REORDER_PRODUCTS_");
 
@@ -465,7 +469,7 @@ public class CheckOutEvents {
     // Invoke the taxCalc
     private static void calcTax(HttpServletRequest request) throws GeneralException {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
         CheckOutHelper checkOutHelper = new CheckOutHelper(dispatcher, delegator, cart);
 
@@ -473,7 +477,7 @@ public class CheckOutEvents {
         checkOutHelper.calcAndAddTax();
     }
 
-    public static boolean explodeOrderItems(GenericDelegator delegator, ShoppingCart cart) {
+    public static boolean explodeOrderItems(Delegator delegator, ShoppingCart cart) {
         if (cart == null) return false;
         GenericValue productStore = ProductStoreWorker.getProductStore(cart.getProductStoreId(), delegator);
         if (productStore == null || productStore.get("explodeOrderItems") == null) {
@@ -483,7 +487,7 @@ public class CheckOutEvents {
     }
 
     public static String checkShipmentNeeded(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
         GenericValue productStore = null;
         try {
@@ -535,7 +539,7 @@ public class CheckOutEvents {
     private static boolean processPayment(HttpServletRequest request) throws GeneralException {
         HttpSession session = request.getSession();
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         ShoppingCart cart = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         CheckOutHelper checkOutHelper = new CheckOutHelper(dispatcher, delegator, cart);
@@ -570,7 +574,7 @@ public class CheckOutEvents {
     public static String checkOrderBlacklist(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         CheckOutHelper checkOutHelper = new CheckOutHelper(null, delegator, cart);
         String result;
@@ -592,7 +596,7 @@ public class CheckOutEvents {
     public static String failedBlacklistCheck(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         String orderPartyId = cart.getOrderPartyId();
         GenericValue userLogin = PartyWorker.findPartyLatestUserLogin(orderPartyId, delegator);
@@ -624,10 +628,33 @@ public class CheckOutEvents {
         return result;
     }
 
+    public static String checkExternalCheckout(HttpServletRequest request, HttpServletResponse response) {
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
+        GenericValue productStore = ProductStoreWorker.getProductStore(cart.getProductStoreId(), delegator);
+        String paymentMethodTypeId = (String) request.getParameter("paymentMethodTypeId");
+        if ("EXT_PAYPAL".equals(paymentMethodTypeId) || cart.getPaymentMethodTypeIds().contains("EXT_PAYPAL")) {
+            List<GenericValue> payPalProdStorePaySettings = null;
+            try {
+                payPalProdStorePaySettings = delegator.findByAnd("ProductStorePaymentSetting", "productStoreId", productStore.getString("productStoreId"), "paymentMethodTypeId", "EXT_PAYPAL");
+                GenericValue payPalProdStorePaySetting = EntityUtil.getFirst(payPalProdStorePaySettings);
+                if (payPalProdStorePaySetting != null) {
+                    GenericValue gatewayConfig = payPalProdStorePaySetting.getRelatedOne("PaymentGatewayConfig");
+                    if (gatewayConfig != null && "PAYFLOWPRO".equals(gatewayConfig.getString("paymentGatewayConfigTypeId"))) {
+                        return "paypal";
+                    }
+                }
+            } catch (GenericEntityException e) {
+                Debug.logError(e, module);
+            }
+        }
+        return "success";
+    }
+
     public static String checkExternalPayment(HttpServletRequest request, HttpServletResponse response) {
         // warning there can only be ONE payment preference for this to work
         // you cannot accept multiple payment type when using an external gateway
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String result;
 
         String orderId = (String) request.getAttribute("orderId");
@@ -644,7 +671,7 @@ public class CheckOutEvents {
 
     public static String finalizeOrderEntry(HttpServletRequest request, HttpServletResponse response) {
         ShoppingCart cart = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
 
         Map paramMap = UtilHttp.getParameterMap(request);
@@ -661,7 +688,8 @@ public class CheckOutEvents {
         String appendPayment = null;
         String shipBeforeDate = null;
         String shipAfterDate = null;
-        String cancelBackOrderDate = null;
+        String internalOrderNotes = null;
+        String shippingNotes = null;
 
         String mode = request.getParameter("finalizeMode");
         Debug.logInfo("FinalizeMode: " + mode, module);
@@ -776,11 +804,12 @@ public class CheckOutEvents {
                     giftMessage = request.getParameter(shipGroupIndex + "_gift_message");
                     isGift = request.getParameter(shipGroupIndex + "_is_gift");
                     internalCode = request.getParameter("internalCode"); // FIXME
-                    shipBeforeDate = request.getParameter(shipGroupIndex + "_shipBeforeDate");
-                    shipAfterDate = request.getParameter(shipGroupIndex + "_shipAfterDate");
-                    cancelBackOrderDate = request.getParameter("cancelBackOrderDate");
+                    shipBeforeDate = request.getParameter("sgi" + shipGroupIndex + "_shipBeforeDate");
+                    shipAfterDate = request.getParameter("sgi" + shipGroupIndex + "_shipAfterDate");
+                    internalOrderNotes = request.getParameter("internal_order_notes");
+                    shippingNotes = request.getParameter("shippingNotes");
 
-                    callResult = checkOutHelper.finalizeOrderEntryOptions(shipGroupIndex, shippingMethod, shippingInstructions, maySplit, giftMessage, isGift, internalCode, shipBeforeDate, shipAfterDate, cancelBackOrderDate);
+                    callResult = checkOutHelper.finalizeOrderEntryOptions(shipGroupIndex, shippingMethod, shippingInstructions, maySplit, giftMessage, isGift, internalCode, shipBeforeDate, shipAfterDate, internalOrderNotes, shippingNotes);
                     ServiceUtil.addErrors(errorMessages, errorMaps, callResult);
                 }
             }
@@ -951,7 +980,6 @@ public class CheckOutEvents {
         if (cart.getOrderType().equals("PURCHASE_ORDER")) {
             // Force checks for the following
             requireCustomer = true; requireShipping = true; requireOptions = true;
-            requireAdditionalParty = true;
             processOrder = new String[] {"customer", "term", "shipping", "shipGroups", "options", "payment",
                                          "addparty", "paysplit"};
         }
@@ -985,7 +1013,7 @@ public class CheckOutEvents {
             } else if (currProcess.equals("payment")) {
                 List paymentMethodIds = cart.getPaymentMethodIds();
                 List paymentMethodTypeIds = cart.getPaymentMethodTypeIds();
-                if (requirePayment && (paymentMethodIds == null || paymentMethodIds.size() == 0) && (paymentMethodTypeIds == null || paymentMethodTypeIds.size() == 0)) {
+                if (requirePayment && UtilValidate.isEmpty(paymentMethodIds) && UtilValidate.isEmpty(paymentMethodTypeIds)) {
                     return "payment";
                 }
             } else if (currProcess.equals("addparty")) {
@@ -1016,7 +1044,7 @@ public class CheckOutEvents {
 
     public static String finalizeOrderEntryError(HttpServletRequest request, HttpServletResponse response) {
         String finalizePage = request.getParameter("finalizeMode");
-        if (finalizePage == null || finalizePage.length() == 0) {
+        if (UtilValidate.isEmpty(finalizePage)) {
             return "error";
         } else {
             return finalizePage;
@@ -1066,6 +1094,63 @@ public class CheckOutEvents {
             return chargeAmount;
         } else {
             return null;
+        }
+    }
+
+    /** Create a replacement order from an existing order against a lost shipment etc. **/
+    public static String createReplacementOrder(HttpServletRequest request, HttpServletResponse response) {
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        HttpSession session = request.getSession();
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+        ShoppingCart cart = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
+
+        Map context = cart.makeCartMap(dispatcher, false);
+        String originalOrderId = request.getParameter("orderId");
+
+        // create the replacement order adjustment
+        List <GenericValue>orderAdjustments = (List) context.get("orderAdjustments");
+        List <GenericValue>orderItems = (List) context.get("orderItems");
+        OrderReadHelper orderReadHelper = new OrderReadHelper(orderAdjustments, orderItems);
+        BigDecimal grandTotal = orderReadHelper.getOrderGrandTotal();
+        if (grandTotal.compareTo(new BigDecimal(0)) != 0) {
+            GenericValue adjustment = delegator.makeValue("OrderAdjustment");
+            adjustment.set("orderAdjustmentTypeId", "REPLACE_ADJUSTMENT");
+            adjustment.set("amount", grandTotal.negate());
+            adjustment.set("comments", "ReShip Order for Order #" + originalOrderId);
+            adjustment.set("createdDate", UtilDateTime.nowTimestamp());
+            adjustment.set("createdByUserLogin", userLogin.getString("userLoginId"));
+            cart.addAdjustment(adjustment);
+        }
+        // create the order association
+        List<ShoppingCartItem> cartLines = cart.items();
+        for (ShoppingCartItem sci : cartLines) {
+            int index = cart.getItemIndex(sci);
+            try {
+                Map orderItemMap = FastMap.newInstance();
+                orderItemMap.put("orderId", originalOrderId);
+                orderItemMap.put("isPromo", sci.getIsPromo() ? "Y" : "N");
+                orderItemMap.put("productId", sci.getProductId());
+                orderItemMap.put("orderItemTypeId", sci.getItemType());
+                GenericValue orderItem = EntityUtil.getFirst(delegator.findByAnd("OrderItem", orderItemMap));
+                if (UtilValidate.isNotEmpty(orderItem)) {
+                    sci.setAssociatedOrderId(orderItem.getString("orderId"));
+                    sci.setAssociatedOrderItemSeqId(orderItem.getString("orderItemSeqId"));
+                    sci.setOrderItemAssocTypeId("REPLACEMENT");
+                    cart.addItem(index, sci);
+                }
+            } catch (GenericEntityException e) {
+                Debug.logError(e, module);
+            } catch (CartItemModifyException e) {
+                Debug.logError(e.getMessage(), module);
+            }
+        }
+
+        String result = createOrder(request, response);
+        if ("error".equals(result)) {
+            return "error";
+        } else {
+            return "success";
         }
     }
 }

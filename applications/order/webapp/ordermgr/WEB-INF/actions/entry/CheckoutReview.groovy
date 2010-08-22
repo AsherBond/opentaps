@@ -33,6 +33,7 @@ import org.ofbiz.party.party.PartyWorker;
 cart = ShoppingCartEvents.getCartObject(request);
 context.cart = cart;
 context.currencyUomId = cart.getCurrency();
+context.productStore = ProductStoreWorker.getProductStore(request);
 
 // nuke the event messages
 request.removeAttribute("_EVENT_MESSAGE_");
@@ -129,8 +130,7 @@ shippingAmount = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, or
 shippingAmount = shippingAmount.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true));
 context.orderShippingTotal = shippingAmount;
 
-taxAmount = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, true, false);
-taxAmount = taxAmount.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, true, false));
+taxAmount = OrderReadHelper.getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal;
 context.orderTaxTotal = taxAmount;
 context.orderGrandTotal = OrderReadHelper.getOrderGrandTotal(orderItems, orderAdjustments);
 

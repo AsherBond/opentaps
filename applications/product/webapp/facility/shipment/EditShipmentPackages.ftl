@@ -69,7 +69,7 @@ under the License.
                     <select name="shipmentBoxTypeId">
                         <option value="">&nbsp;</option>
                         <#list boxTypes as boxType>
-                            <option value="${boxType.shipmentBoxTypeId}" <#if shipmentPackage.shipmentBoxTypeId?exists && shipmentPackage.shipmentBoxTypeId == boxType.shipmentBoxTypeId>selected</#if>>${boxType.get("description",locale)}</option>
+                            <option value="${boxType.shipmentBoxTypeId}" <#if shipmentPackage.shipmentBoxTypeId?exists && shipmentPackage.shipmentBoxTypeId == boxType.shipmentBoxTypeId>selected="selected"</#if>>${boxType.get("description",locale)}</option>
                         </#list>
                     </select>
                     <span class="label">${uiLabelMap.ProductShipmentInsuredValuePackage}</span>
@@ -104,7 +104,7 @@ under the License.
             </form>
         </#list>
             <tr valign="middle"<#if alt_row> class="alternate-row"</#if>>
-                <form action="<@ofbizUrl>createShipmentPackageContent</@ofbizUrl>" name="createShipmentPackageContentForm${shipmentPackageData_index}">
+                <form name="createShipmentPackageContentForm${shipmentPackageData_index}" method="post" action="<@ofbizUrl>createShipmentPackageContent</@ofbizUrl>">
                 <input type="hidden" name="shipmentId" value="${shipmentId}"/>
                 <input type="hidden" name="shipmentPackageSeqId" value="${shipmentPackage.shipmentPackageSeqId}"/>
                 <td>&nbsp;</td>

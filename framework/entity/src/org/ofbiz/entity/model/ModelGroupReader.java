@@ -20,8 +20,6 @@
 package org.ofbiz.entity.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,6 +35,7 @@ import org.ofbiz.base.config.MainResourceHandler;
 import org.ofbiz.base.config.ResourceHandler;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilTimer;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.cache.UtilCache;
 import org.ofbiz.entity.GenericEntityConfException;
@@ -54,7 +53,7 @@ import org.w3c.dom.Node;
 public class ModelGroupReader implements Serializable {
 
     public static final String module = ModelGroupReader.class.getName();
-    public static UtilCache<String, ModelGroupReader> readers = new UtilCache<String, ModelGroupReader>("entity.ModelGroupReader", 0, 0);
+    public static UtilCache<String, ModelGroupReader> readers = UtilCache.createUtilCache("entity.ModelGroupReader", 0, 0);
 
     private Map<String, String> groupCache = null;
     private Set<String> groupNames = null;
@@ -108,8 +107,7 @@ public class ModelGroupReader implements Serializable {
     }
 
     public Map<String, String> getGroupCache() {
-        if (this.groupCache == null) // don't want to block here
-        {
+        if (this.groupCache == null) { // don't want to block here
             synchronized (ModelGroupReader.class) {
                 // must check if null again as one of the blocked threads can still enter
                 if (this.groupCache == null) {
@@ -172,13 +170,17 @@ public class ModelGroupReader implements Serializable {
      * @param entityName The entityName of the Entity Group definition to use.
      * @return A group name
      */
-    public String getEntityGroupName(String entityName, String delegatorName) {
+    public String getEntityGroupName(String entityName, String delegatorBaseName) {
         Map<String, String> gc = getGroupCache();
 
         if (gc != null) {
             String groupName = gc.get(entityName);
             if (groupName == null) {
-                groupName = EntityConfigUtil.getDelegatorInfo(delegatorName).defaultGroupName;
+                DelegatorInfo delegatorInfo = EntityConfigUtil.getDelegatorInfo(delegatorBaseName);
+                if (delegatorInfo == null) {
+                    throw new RuntimeException("Could not find DelegatorInfo for delegatorBaseName [" + delegatorBaseName + "]");
+                }
+                groupName = delegatorInfo.defaultGroupName;
             }
             return groupName;
         } else {
@@ -189,11 +191,15 @@ public class ModelGroupReader implements Serializable {
     /** Creates a Set with all of the groupNames defined in the specified XML Entity Group Descriptor file.
      * @return A Set of groupNames Strings
      */
-    public Set<String> getGroupNames(String delegatorName) {
+    public Set<String> getGroupNames(String delegatorBaseName) {
+        if (delegatorBaseName.indexOf('#') >= 0) {
+            delegatorBaseName = delegatorBaseName.substring(0, delegatorBaseName.indexOf('#'));
+        }
+
         getGroupCache();
         if (this.groupNames == null) return null;
         Set<String> newSet = FastSet.newInstance();
-        newSet.add(EntityConfigUtil.getDelegatorInfo(delegatorName).defaultGroupName);
+        newSet.add(EntityConfigUtil.getDelegatorInfo(delegatorBaseName).defaultGroupName);
         newSet.addAll(this.groupNames);
         return newSet;
     }
@@ -207,7 +213,7 @@ public class ModelGroupReader implements Serializable {
         Set<String> enames = FastSet.newInstance();
 
         if (groupName == null || groupName.length() <= 0) return enames;
-        if (gc == null || gc.size() == 0) return enames;
+        if (UtilValidate.isEmpty(gc)) return enames;
         for (Map.Entry<String, String> entry: gc.entrySet()) {
             if (groupName.equals(entry.getValue())) enames.add(entry.getKey());
         }

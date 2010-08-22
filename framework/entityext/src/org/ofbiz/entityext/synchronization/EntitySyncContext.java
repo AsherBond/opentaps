@@ -36,7 +36,8 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -80,7 +81,7 @@ public class EntitySyncContext {
     // default to 2 hours, 120m, 7200s
     public static final long defaultMaxRunningNoUpdateMillis = 7200000;
 
-    public GenericDelegator delegator;
+    public Delegator delegator;
     public LocalDispatcher dispatcher;
     public Map<String, ? extends Object> context;
 
@@ -149,7 +150,7 @@ public class EntitySyncContext {
         // what to do with the delegatorName? this is the delegatorName to use in this service...
         String delegatorName = (String) context.get("delegatorName");
         if (UtilValidate.isNotEmpty(delegatorName)) {
-            this.delegator = GenericDelegator.getGenericDelegator(delegatorName);
+            this.delegator = DelegatorFactory.getDelegator(delegatorName);
         }
 
 
@@ -843,7 +844,7 @@ public class EntitySyncContext {
         return entityModelToUseList;
     }
 
-    protected static Timestamp getCurrentRunStartTime(Timestamp lastSuccessfulSynchTime, List<ModelEntity> entityModelToUseList, GenericDelegator delegator) throws GenericEntityException {
+    protected static Timestamp getCurrentRunStartTime(Timestamp lastSuccessfulSynchTime, List<ModelEntity> entityModelToUseList, Delegator delegator) throws GenericEntityException {
         // if currentRunStartTime is null, what to do? I guess iterate through all entities and find earliest tx stamp
         if (lastSuccessfulSynchTime == null) {
             Timestamp currentRunStartTime = null;
@@ -1118,6 +1119,7 @@ public class EntitySyncContext {
         public SyncOtherErrorException(String str, Throwable nested) { super(str, nested); }
         public SyncOtherErrorException(Throwable nested) { super(nested); }
         public SyncOtherErrorException(String str, List<Object> errorMsgList, Map<String, Object> errorMsgMap, Map<String, Object> nestedServiceResult, Throwable nested) { super(str, errorMsgList, errorMsgMap, nestedServiceResult, nested); }
+        @Override
         public void saveSyncErrorInfo(EntitySyncContext esc) {
             if (esc != null) {
                 List<Object> errorList = FastList.newInstance();
@@ -1134,6 +1136,7 @@ public class EntitySyncContext {
         public SyncDataErrorException(String str, Throwable nested) { super(str, nested); }
         public SyncDataErrorException(Throwable nested) { super(nested); }
         public SyncDataErrorException(String str, List<Object> errorMsgList, Map<String, Object> errorMsgMap, Map<String, Object> nestedServiceResult, Throwable nested) { super(str, errorMsgList, errorMsgMap, nestedServiceResult, nested); }
+        @Override
         public void saveSyncErrorInfo(EntitySyncContext esc) {
             if (esc != null) {
                 List<Object> errorList = FastList.newInstance();
@@ -1150,6 +1153,7 @@ public class EntitySyncContext {
         public SyncServiceErrorException(String str, Throwable nested) { super(str, nested); }
         public SyncServiceErrorException(Throwable nested) { super(nested); }
         public SyncServiceErrorException(String str, List<Object> errorMsgList, Map<String, Object> errorMsgMap, Map<String, Object> nestedServiceResult, Throwable nested) { super(str, errorMsgList, errorMsgMap, nestedServiceResult, nested); }
+        @Override
         public void saveSyncErrorInfo(EntitySyncContext esc) {
             if (esc != null) {
                 List<Object> errorList = FastList.newInstance();

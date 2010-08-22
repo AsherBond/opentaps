@@ -36,12 +36,12 @@ import javolution.util.FastSet;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilParse;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
@@ -73,7 +73,7 @@ public class ProductEvents {
      */
     public static String updateAllKeywords(HttpServletRequest request, HttpServletResponse response) {
         //String errMsg = "";
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Security security = (Security) request.getAttribute("security");
         Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
 
@@ -185,7 +185,7 @@ public class ProductEvents {
             Map<String, String> messageMap = UtilMisc.toMap("numProds", Integer.toString(numProds));
             messageMap.put("errProds", Integer.toString(errProds));
             errMsg = UtilProperties.getMessage(resource,"productevents.keyword_creation_complete_for_products_with_errors", messageMap, UtilHttp.getLocale(request));
-            request.setAttribute( "_ERROR_MESSAGE_", errMsg);
+            request.setAttribute("_ERROR_MESSAGE_", errMsg);
             return "error";
         }
     }
@@ -200,7 +200,7 @@ public class ProductEvents {
     public static String updateProductAssoc(HttpServletRequest request, HttpServletResponse response) {
         String errMsg = "";
         List<Object> errMsgList = FastList.newInstance();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Security security = (Security) request.getAttribute("security");
 
         String updateMode = request.getParameter("UPDATE_MODE");
@@ -416,7 +416,7 @@ public class ProductEvents {
     }
 
     public static String updateProductQuickAdminShipping(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         String variantProductId = request.getParameter("productId0");
@@ -434,10 +434,10 @@ public class ProductEvents {
                     product.set("lastModifiedDate", nowTimestamp);
                     product.setString("lastModifiedByUserLogin", userLogin.getString("userLoginId"));
                     try {
-                        product.set("productHeight", UtilParse.parseBigDecimalForEntity(request.getParameter("productHeight")));
-                        product.set("productWidth", UtilParse.parseBigDecimalForEntity(request.getParameter("productWidth")));
-                        product.set("productDepth", UtilParse.parseBigDecimalForEntity(request.getParameter("productDepth")));
-                        product.set("weight", UtilParse.parseBigDecimalForEntity(request.getParameter("weight")));
+                        product.set("productHeight", parseBigDecimalForEntity(request.getParameter("productHeight")));
+                        product.set("productWidth", parseBigDecimalForEntity(request.getParameter("productWidth")));
+                        product.set("productDepth", parseBigDecimalForEntity(request.getParameter("productDepth")));
+                        product.set("weight", parseBigDecimalForEntity(request.getParameter("weight")));
 
                         // default unit settings for shipping parameters
                         product.set("heightUomId", "LEN_in");
@@ -445,10 +445,10 @@ public class ProductEvents {
                         product.set("depthUomId", "LEN_in");
                         product.set("weightUomId", "WT_oz");
 
-                        BigDecimal floz = UtilParse.parseBigDecimalForEntity(request.getParameter("~floz"));
-                        BigDecimal ml = UtilParse.parseBigDecimalForEntity(request.getParameter("~ml"));
-                        BigDecimal ntwt = UtilParse.parseBigDecimalForEntity(request.getParameter("~ntwt"));
-                        BigDecimal grams = UtilParse.parseBigDecimalForEntity(request.getParameter("~grams"));
+                        BigDecimal floz = parseBigDecimalForEntity(request.getParameter("~floz"));
+                        BigDecimal ml = parseBigDecimalForEntity(request.getParameter("~ml"));
+                        BigDecimal ntwt = parseBigDecimalForEntity(request.getParameter("~ntwt"));
+                        BigDecimal grams = parseBigDecimalForEntity(request.getParameter("~grams"));
 
                         List<GenericValue> currentProductFeatureAndAppls = EntityUtil.filterByDate(delegator.findByAnd("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "STANDARD_FEATURE")), true);
                         setOrCreateProdFeature(delegator, productId, currentProductFeatureAndAppls, "VLIQ_ozUS", "AMOUNT", floz);
@@ -471,14 +471,14 @@ public class ProductEvents {
                     do {
                         GenericValue product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
                         try {
-                            product.set("productHeight", UtilParse.parseBigDecimalForEntity(request.getParameter("productHeight" + attribIdx)));
-                            product.set("productWidth", UtilParse.parseBigDecimalForEntity(request.getParameter("productWidth" + attribIdx)));
-                            product.set("productDepth", UtilParse.parseBigDecimalForEntity(request.getParameter("productDepth" + attribIdx)));
-                            product.set("weight", UtilParse.parseBigDecimalForEntity(request.getParameter("weight" + attribIdx)));
-                            BigDecimal floz = UtilParse.parseBigDecimalForEntity(request.getParameter("~floz" + attribIdx));
-                            BigDecimal ml = UtilParse.parseBigDecimalForEntity(request.getParameter("~ml" + attribIdx));
-                            BigDecimal ntwt = UtilParse.parseBigDecimalForEntity(request.getParameter("~ntwt" + attribIdx));
-                            BigDecimal grams = UtilParse.parseBigDecimalForEntity(request.getParameter("~grams" + attribIdx));
+                            product.set("productHeight", parseBigDecimalForEntity(request.getParameter("productHeight" + attribIdx)));
+                            product.set("productWidth", parseBigDecimalForEntity(request.getParameter("productWidth" + attribIdx)));
+                            product.set("productDepth", parseBigDecimalForEntity(request.getParameter("productDepth" + attribIdx)));
+                            product.set("weight", parseBigDecimalForEntity(request.getParameter("weight" + attribIdx)));
+                            BigDecimal floz = parseBigDecimalForEntity(request.getParameter("~floz" + attribIdx));
+                            BigDecimal ml = parseBigDecimalForEntity(request.getParameter("~ml" + attribIdx));
+                            BigDecimal ntwt = parseBigDecimalForEntity(request.getParameter("~ntwt" + attribIdx));
+                            BigDecimal grams = parseBigDecimalForEntity(request.getParameter("~grams" + attribIdx));
 
                             List<GenericValue> currentProductFeatureAndAppls = EntityUtil.filterByDate(delegator.findByAnd("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "STANDARD_FEATURE")), true);
                             setOrCreateProdFeature(delegator, productId, currentProductFeatureAndAppls, "VLIQ_ozUS", "AMOUNT", floz);
@@ -527,7 +527,7 @@ public class ProductEvents {
      * @return
      * @throws GenericEntityException
      */
-    private static void setOrCreateProdFeature(GenericDelegator delegator, String productId, List<GenericValue> currentProductFeatureAndAppls,
+    private static void setOrCreateProdFeature(Delegator delegator, String productId, List<GenericValue> currentProductFeatureAndAppls,
                                           String uomId, String productFeatureTypeId, BigDecimal numberSpecified) throws GenericEntityException {
 
         GenericValue productFeatureType = delegator.findByPrimaryKey("ProductFeatureType", UtilMisc.toMap("productFeatureTypeId", productFeatureTypeId));
@@ -541,7 +541,7 @@ public class ProductEvents {
         // go through each; need to remove? do it now
         boolean foundOneEqual = false;
         for (GenericValue typeUomProductFeatureAndAppl: typeUomProductFeatureAndApplList) {
-            if ((numberSpecified != null) && (numberSpecified.equals(typeUomProductFeatureAndAppl.getBigDecimal("numberSpecified")))) {
+            if ((numberSpecified != null) && (numberSpecified.compareTo(typeUomProductFeatureAndAppl.getBigDecimal("numberSpecified")) == 0)) {
                 foundOneEqual = true;
             } else {
                 // remove the PFA...
@@ -585,7 +585,7 @@ public class ProductEvents {
     }
 
     public static String updateProductQuickAdminSelFeat(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
         //GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         String productId = request.getParameter("productId");
@@ -658,7 +658,7 @@ public class ProductEvents {
 
     protected static void checkUpdateFeatureApplByDescription(String productId, GenericValue product, String description,
             String productFeatureTypeId, GenericValue productFeatureType, String productFeatureApplTypeId,
-            Timestamp nowTimestamp, GenericDelegator delegator, Set<String> descriptionsToRemove, Set<String> descriptionsRemoved) throws GenericEntityException {
+            Timestamp nowTimestamp, Delegator delegator, Set<String> descriptionsToRemove, Set<String> descriptionsRemoved) throws GenericEntityException {
         if (productFeatureType == null) {
             return;
         }
@@ -760,7 +760,7 @@ public class ProductEvents {
     }
 
     public static String removeFeatureApplsByFeatureTypeId(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         //Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
         //GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         String productId = request.getParameter("productId");
@@ -796,7 +796,7 @@ public class ProductEvents {
     }
 
     public static String removeProductFeatureAppl(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         //Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
         //GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         String productId = request.getParameter("productId");
@@ -819,7 +819,7 @@ public class ProductEvents {
     }
 
     public static String addProductToCategories(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String productId = request.getParameter("productId");
         String fromDate = request.getParameter("fromDate");
         if ((fromDate == null) || (fromDate.trim().length() == 0)) {
@@ -849,7 +849,7 @@ public class ProductEvents {
     }
 
     public static String updateProductCategoryMember(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String productId = request.getParameter("productId");
         String productCategoryId = request.getParameter("productCategoryId");
         String thruDate = request.getParameter("thruDate");
@@ -876,7 +876,7 @@ public class ProductEvents {
     }
 
     public static String addProductFeatures(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String productId = request.getParameter("productId");
         String productFeatureApplTypeId = request.getParameter("productFeatureApplTypeId");
         String fromDate = request.getParameter("fromDate");
@@ -954,7 +954,7 @@ public class ProductEvents {
      */
     public static String checkStoreCustomerRole(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         GenericValue productStore = ProductStoreWorker.getProductStore(request);
         if (productStore != null && userLogin != null) {
@@ -967,7 +967,7 @@ public class ProductEvents {
                 } catch (GenericEntityException e) {
                     Debug.logError(e, "Database error finding CUSTOMER ProductStoreRole records, required by the ProductStore with ID [" + productStore.getString("productStoreId") + "]", module);
                 }
-                if (productStoreRoleList == null || productStoreRoleList.size() == 0) {
+                if (UtilValidate.isEmpty(productStoreRoleList)) {
                     // uh-oh, this user isn't associated...
                     String errorMsg = "The " + productStore.getString("storeName") + " [" + productStore.getString("productStoreId") + "] ProductStore requires that customers be associated with it, and the logged in user is NOT associated with it in the CUSTOMER role; userLoginId=[" + userLogin.getString("userLoginId") + "], partyId=[" + userLogin.getString("partyId") + "]";
                     Debug.logWarning(errorMsg, module);
@@ -984,7 +984,7 @@ public class ProductEvents {
     public static String tellAFriend(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String emailType = "PRDS_TELL_FRIEND";
         String defaultScreenLocation = "component://ecommerce/widget/EmailProductScreens.xml#TellFriend";
 
@@ -1042,12 +1042,7 @@ public class ProductEvents {
         return "success";
     }
 
-    /**
-     * Return nulls for empty strings, as the entity engine can deal with nulls. This will provide blanks
-     * in fields where doubles display. Blank meaning null, vs. 0 which means 0
-     * @param doubleString
-     * @return a Double for the parsed value
-     */
+    @Deprecated
     public static Double parseDoubleForEntity(String doubleString) throws NumberFormatException {
         if (doubleString == null) {
             return null;
@@ -1059,4 +1054,121 @@ public class ProductEvents {
         }
         return Double.valueOf(doubleString);
     }
+
+    public static List<GenericValue> getProductCompareList(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Object compareListObj = session.getAttribute("productCompareList");
+        List<GenericValue> compareList = null;
+        if (compareListObj == null) {
+            compareList = FastList.newInstance();
+        } else if (!(compareListObj instanceof List<?>)) {
+            Debug.logWarning("Session attribute productCompareList contains something other than the expected product list, overwriting.", module);
+            compareList = FastList.newInstance();
+        } else {
+            compareList = UtilGenerics.cast(compareListObj);
+        }
+        return compareList;
+    }
+
+    public static String addProductToComparisonList(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        String productId = request.getParameter("productId");
+        GenericValue product = null;
+        if (UtilValidate.isNotEmpty(productId)) {
+            try {
+                product = ProductWorker.findProduct(delegator, productId);
+            } catch (GenericEntityException e) {
+                Debug.logError(e, module);
+            }
+        }
+
+        if (product == null) {
+            String errMsg = UtilProperties.getMessage(resource, "productevents.product_with_id_not_found", UtilMisc.toMap("productId", productId), UtilHttp.getLocale(request));
+            request.setAttribute("_ERROR_MESSAGE_", errMsg);
+            return "error";
+        }
+
+        List<GenericValue> compareList = getProductCompareList(request);
+        boolean alreadyInList = false;
+        for (GenericValue compProduct : compareList) {
+            if (product.getString("productId").equals(compProduct.getString("productId"))) {
+                alreadyInList = true;
+                break;
+            }
+        }
+        if (!alreadyInList) {
+            compareList.add(product);
+        }
+        session.setAttribute("productCompareList", compareList);
+        String productName = ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", request);
+        String eventMsg = UtilProperties.getMessage("ProductUiLabels", "ProductAddToCompareListSuccess", UtilMisc.toMap("name", productName), UtilHttp.getLocale(request));
+        request.setAttribute("_EVENT_MESSAGE_", eventMsg);
+        return "success";
+    }
+
+    public static String removeProductFromComparisonList(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        String productId = request.getParameter("productId");
+        GenericValue product = null;
+        if (UtilValidate.isNotEmpty(productId)) {
+            try {
+                product = ProductWorker.findProduct(delegator, productId);
+            } catch (GenericEntityException e) {
+                productId =  null;
+                Debug.logError(e, module);
+            }
+        }
+
+        if (product == null) {
+            String errMsg = UtilProperties.getMessage(resource, "productevents.product_with_id_not_found", UtilMisc.toMap("productId", productId), UtilHttp.getLocale(request));
+            request.setAttribute("_ERROR_MESSAGE_", errMsg);
+            return "error";
+        }
+
+        List<GenericValue> compareList = getProductCompareList(request);
+        Iterator<GenericValue> it = compareList.iterator();
+        while (it.hasNext()) {
+            GenericValue compProduct = it.next();
+            if (product.getString("productId").equals(compProduct.getString("productId"))) {
+                it.remove();
+                break;
+            }
+        }
+        session.setAttribute("productCompareList", compareList);
+        String productName = ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", request);
+        String eventMsg = UtilProperties.getMessage("ProductUiLabels", "ProductRemoveFromCompareListSuccess", UtilMisc.toMap("name", productName), UtilHttp.getLocale(request));
+        request.setAttribute("_EVENT_MESSAGE_", eventMsg);
+        return "success";
+    }
+
+    public static String clearProductComparisonList(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        session.setAttribute("productCompareList", FastList.newInstance());
+        String eventMsg = UtilProperties.getMessage("ProductUiLabels", "ProductClearCompareListSuccess", UtilHttp.getLocale(request));
+        request.setAttribute("_EVENT_MESSAGE_", eventMsg);
+        return "success";
+    }
+
+    /**
+     * Return nulls for empty strings, as the entity engine can deal with nulls. This will provide blanks
+     * in fields where BigDecimal display. Blank meaning null, vs. 0 which means 0
+     * @param bigDecimalString
+     * @return a BigDecimal for the parsed value
+     */
+    public static BigDecimal parseBigDecimalForEntity(String bigDecimalString) throws NumberFormatException {
+        if (bigDecimalString == null) {
+            return null;
+        }
+        bigDecimalString = bigDecimalString.trim();
+        bigDecimalString = bigDecimalString.replaceAll(",", "");
+        if (bigDecimalString.length() < 1) {
+            return null;
+        }
+        return new BigDecimal(bigDecimalString);
+    }
+
 }

@@ -30,7 +30,8 @@ import org.ofbiz.base.container.Container;
 import org.ofbiz.base.container.ContainerConfig;
 import org.ofbiz.base.container.ContainerException;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.service.GenericDispatcher;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.base.util.UtilProperties;
@@ -61,7 +62,8 @@ public abstract class XuiContainer implements Container {
 
         // get the delegator
         String delegatorName = ContainerConfig.getPropertyValue(cc, "delegator-name", "default");
-        GenericDelegator delegator = GenericDelegator.getGenericDelegator(delegatorName);
+        Delegator delegator = null;
+        delegator = DelegatorFactory.getDelegator(delegatorName);
 
         // get the dispatcher
         String dispatcherName = ContainerConfig.getPropertyValue(cc, "dispatcher-name", "xui-dispatcher");
@@ -130,6 +132,7 @@ public abstract class XuiContainer implements Container {
         return xuiSession;
     }
 
+    @SuppressWarnings("serial")
     class XuiScreen extends XApplet {
         protected String startupProperties = "";
 
@@ -138,15 +141,26 @@ public abstract class XuiContainer implements Container {
             if (args.length > 0) {
                 startupProperties = args[0];
             }
-            String suffix = Locale.getDefault().getLanguage();
+            String languageSuffix = UtilProperties.getPropertyValue("xui.properties", "languageSuffix", "");
+            String suffix = null;
+            if(UtilValidate.isEmpty(languageSuffix)) {
+                suffix = Locale.getDefault().getLanguage();
+            } else {
+                suffix = languageSuffix;
+            }
             if ("en".equals(suffix)) {
                 suffix = "";
             } else {
                 suffix = "_" + suffix;
             }
             String language = UtilProperties.getPropertyValue(startupProperties, "Language");
-            if (language.compareTo("XuiLabels" + suffix ) != 0) {
+            if (language.compareTo("XuiLabels" + suffix) != 0) {
                 UtilProperties.setPropertyValue(startupProperties, "Language", "XuiLabels" + suffix);
+            }
+            if (suffix.equals("_zh")) { // TODO maybe needed for other languages using non Latin alphabet http://en.wikipedia.org/wiki/Alphabet#Types
+                UtilProperties.setPropertyValue(startupProperties, "StyleFile", "posstyles" + suffix + ".xml"); // For the moment only a Chinese StyleFile is provided
+            } else {
+                UtilProperties.setPropertyValue(startupProperties, "StyleFile", "posstyles.xml"); // Languages using Latin alphabet
             }
             frame.setVisible(true);
             frame.getContentPane().add(this);

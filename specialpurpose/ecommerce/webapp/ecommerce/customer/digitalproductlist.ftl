@@ -19,8 +19,8 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.PageTitleDigitalProductList}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">${uiLabelMap.PageTitleDigitalProductList}</div>
     </div>
     <div class="screenlet-body">
        <div>&nbsp;<a href="<@ofbizUrl>digitalproductedit</@ofbizUrl>" class="buttontext">${uiLabelMap.EcommerceDigitalNewProduct}</a></div>
@@ -38,7 +38,7 @@ under the License.
           </tr>
           <#list supplierProductList as supplierProduct>
             <#assign product = supplierProduct.getRelatedOneCache("Product")/>
-            <tr><td colspan="5"><hr/></td></tr>
+            <tr><td colspan="5"><hr /></td></tr>
             <tr>
               <td>
                 <div class="tabletext">${(product.productName)?if_exists}</div>
@@ -61,8 +61,8 @@ under the License.
 </div>
 
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.EcommerceDigitalProductPurchaseHistoryCommission}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">${uiLabelMap.EcommerceDigitalProductPurchaseHistoryCommission}</div>
     </div>
     <div class="screenlet-body">
        <div>&nbsp;<a href="<@ofbizUrl>digitalproductedit</@ofbizUrl>" class="buttontext">${uiLabelMap.EcommerceDigitalNewProduct}</a></div>

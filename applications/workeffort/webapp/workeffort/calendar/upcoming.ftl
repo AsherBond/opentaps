@@ -18,10 +18,6 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
-<div class="screenlet">
-  <div class="screenlet-title-bar">
-    <h3>${uiLabelMap.WorkEffortCalendarUpComingEventsView}</h3>
-  </div>
   <#if days?has_content>
     <table class="basic-table hover-bar" cellspacing="0">
       <tr class="header-row">
@@ -33,13 +29,13 @@ under the License.
       <#list days as day>
         <#assign workEfforts = day.calendarEntries>
         <#if workEfforts?has_content>
-          <tr class="header-row"><th colspan="4"><hr/></th></tr>
+          <tr class="header-row"><th colspan="4"><hr /></th></tr>
           <#assign alt_row = false>
           <#list workEfforts as calendarEntry>
             <#assign workEffort = calendarEntry.workEffort>
             <tr<#if alt_row> class="alternate-row"</#if>>
-              <td>${workEffort.estimatedStartDate}</td>
-              <td>${workEffort.estimatedStartDate}</td>
+              <td><#if workEffort.actualStartDate?exists>${workEffort.actualStartDate}<#else>${workEffort.estimatedStartDate}</#if></td>
+              <td><#if workEffort.actualCompletionDate?exists>${workEffort.actualCompletionDate}<#else>${workEffort.estimatedCompletionDate}</#if></td>
               <td>${workEffort.getRelatedOne("WorkEffortType").get("description",locale)}</td>
               <td class="button-col"><a href="<@ofbizUrl>EditWorkEffort?workEffortId=${workEffort.workEffortId}${addlParam?if_exists}</@ofbizUrl>">${workEffort.workEffortName}</a></td>
             </tr>
@@ -51,4 +47,3 @@ under the License.
   <#else>
     <div class="screenlet-body">${uiLabelMap.WorkEffortNoEventsFound}.</div>
   </#if>
-</div>

@@ -30,6 +30,7 @@ public class NullPosPrinter extends BaseService implements jpos.services.POSPrin
 
     private StringBuffer printerBuffer = new StringBuffer();
 
+    @Override
     public int getDeviceServiceVersion() throws JposException {
         return 1002000;
     }
@@ -481,7 +482,7 @@ public class NullPosPrinter extends BaseService implements jpos.services.POSPrin
 
     private void printALine(String s) {
         printerBuffer = printerBuffer.append(s);
-        if ( s.indexOf(NullPosPrinter.PAPER_CUT) > 0 ) {
+        if (s.indexOf(NullPosPrinter.PAPER_CUT) > 0) {
             Debug.log(printerBuffer.toString(), module);
             printerBuffer = new StringBuffer();
         }

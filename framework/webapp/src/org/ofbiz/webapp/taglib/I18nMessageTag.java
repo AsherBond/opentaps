@@ -71,6 +71,7 @@ public class I18nMessageTag extends BodyTagSupport {
         this.arguments.add(argument);
     }
 
+    @Override
     public int doStartTag() throws JspException {
         try {
             if (this.bundle == null) {
@@ -98,6 +99,7 @@ public class I18nMessageTag extends BodyTagSupport {
         return EVAL_BODY_AGAIN;
     }
 
+    @Override
     public int doEndTag() throws JspException {
         try {
             if (this.value != null && UtilValidate.isNotEmpty(this.arguments)) {

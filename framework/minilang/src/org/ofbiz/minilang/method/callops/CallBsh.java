@@ -59,10 +59,11 @@ public class CallBsh extends MethodOperation {
         resource = element.getAttribute("resource");
         errorListAcsr = new ContextAccessor<List<Object>>(element.getAttribute("error-list-name"), "error_list");
 
-        if (inline != null && inline.length() > 0) {// pre-parse/compile inlined bsh, only accessed here
+        if (UtilValidate.isNotEmpty(inline)) {// pre-parse/compile inlined bsh, only accessed here
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         List<Object> messages = errorListAcsr.get(methodContext);
 
@@ -81,7 +82,7 @@ public class CallBsh extends MethodOperation {
             }
 
             // run external, from resource, first if resource specified
-            if (resource != null && resource.length() > 0) {
+            if (UtilValidate.isNotEmpty(resource)) {
                 String resource = methodContext.expandString(this.resource);
                 InputStream is = methodContext.getLoader().getResourceAsStream(resource);
 
@@ -129,10 +130,12 @@ public class CallBsh extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<call-bsh/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

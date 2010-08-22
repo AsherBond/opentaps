@@ -30,7 +30,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.content.data.DataResourceWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 
@@ -48,7 +48,7 @@ public class DataResourceDocument {
     static char dirSep = System.getProperty("file.separator").charAt(0);
     public static final String module = ContentDocument.class.getName();
 
-    public static Document Document(String id, GenericDelegator delegator, Map context) throws InterruptedException  {
+    public static Document Document(String id, Delegator delegator, Map context) throws InterruptedException  {
 
         Document doc = null;
         GenericValue dataResource = null;
@@ -61,7 +61,7 @@ public class DataResourceDocument {
           // make a new, empty document
           doc = new Document();
 
-          doc.add(new Field("dataResourceId", id, Store.YES, Index.UN_TOKENIZED, TermVector.NO));
+          doc.add(new Field("dataResourceId", id, Store.YES, Index.NOT_ANALYZED, TermVector.NO));
 
           String mimeTypeId = dataResource.getString("mimeTypeId");
         if (UtilValidate.isEmpty(mimeTypeId)) {
@@ -85,7 +85,7 @@ public class DataResourceDocument {
           String text = outWriter.toString();
           Debug.logInfo("in DataResourceDocument, text:" + text, module);
                 if (UtilValidate.isNotEmpty(text))
-              doc.add(new Field("content", text, Store.NO, Index.TOKENIZED, TermVector.NO));
+              doc.add(new Field("content", text, Store.NO, Index.ANALYZED, TermVector.NO));
 
         return doc;
     }

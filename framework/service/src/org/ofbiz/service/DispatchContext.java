@@ -22,11 +22,11 @@ package org.ofbiz.service;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.wsdl.WSDLException;
 
 import javolution.util.FastMap;
@@ -38,11 +38,11 @@ import org.ofbiz.base.config.ResourceHandler;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.cache.UtilCache;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.security.Security;
+import org.ofbiz.security.authz.Authorization;
 import org.ofbiz.service.config.ServiceConfigUtil;
 import org.ofbiz.service.eca.ServiceEcaUtil;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -54,7 +54,7 @@ public class DispatchContext implements Serializable {
     public static final String module = DispatchContext.class.getName();
 
     protected static final String GLOBAL_KEY = "global.services";
-    public static UtilCache<String, Map<String, ModelService>> modelServiceMapByDispatcher = new UtilCache<String, Map<String, ModelService>>("service.ModelServiceMapByDispatcher", 0, 0, false);
+    public static UtilCache<String, Map<String, ModelService>> modelServiceMapByDispatcher = UtilCache.createUtilCache("service.ModelServiceMapByDispatcher", 0, 0, false);
 
     protected transient LocalDispatcher dispatcher;
     protected transient ClassLoader loader;
@@ -240,11 +240,19 @@ public class DispatchContext implements Serializable {
     }
 
     /**
-     * Gets the GenericDelegator associated with this context/dispatcher
-     * @return GenericDelegator associated with this context
+     * Gets the Delegator associated with this context/dispatcher
+     * @return Delegator associated with this context
      */
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return dispatcher.getDelegator();
+    }
+
+    /**
+     * Gets the Authorization object associated with this dispatcher
+     * @return Authorization object associated with this dispatcher
+     */
+    public Authorization getAuthorization() {
+        return dispatcher.getAuthorization();
     }
 
     /**
@@ -269,6 +277,7 @@ public class DispatchContext implements Serializable {
                                 serviceMap.putAll(readerServiceMap);
                             }
                         }
+                        serviceMap = new HashMap<String, ModelService>(serviceMap);
                     }
                     if (serviceMap != null) {
                         modelServiceMapByDispatcher.put(name, serviceMap);

@@ -19,15 +19,18 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.base.config;
 
-import java.net.*;
-import java.io.*;
+import java.net.URL;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * Loads resources from a URL
  *
  */
-public class UrlLoader extends ResourceLoader implements java.io.Serializable {
+@SuppressWarnings("serial")
+public class UrlLoader extends ResourceLoader implements Serializable {
 
+    @Override
     public URL getURL(String location) throws GenericConfigException {
         String fullLocation = fullLocation(location);
 
@@ -45,6 +48,7 @@ public class UrlLoader extends ResourceLoader implements java.io.Serializable {
         return url;
     }
 
+    @Override
     public InputStream loadResource(String location) throws GenericConfigException {
         URL url = getURL(location);
 

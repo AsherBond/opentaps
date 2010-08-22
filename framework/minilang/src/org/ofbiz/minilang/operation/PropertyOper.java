@@ -40,10 +40,11 @@ public class PropertyOper extends MakeInStringOperation {
         property = element.getAttribute("property");
     }
 
-    public String exec(Map inMap, List messages, Locale locale, ClassLoader loader) {
+    @Override
+    public String exec(Map<String, Object> inMap, List<Object> messages, Locale locale, ClassLoader loader) {
         String propStr = UtilProperties.getPropertyValue(UtilURL.fromResource(resource, loader), property);
 
-        if (propStr == null || propStr.length() == 0) {
+        if (UtilValidate.isEmpty(propStr)) {
             Debug.logWarning("[SimpleMapProcessor.PropertyOper.exec] Property " + property + " in resource " + resource + " not found, not appending anything", module);
             return null;
         } else {

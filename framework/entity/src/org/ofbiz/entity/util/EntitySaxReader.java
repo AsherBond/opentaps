@@ -41,8 +41,9 @@ import javolution.xml.sax.XMLReaderImpl;
 import org.ofbiz.base.location.FlexibleLocation;
 import org.ofbiz.base.util.Base64;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.eca.EntityEcaHandler;
@@ -72,8 +73,8 @@ public class EntitySaxReader implements javolution.xml.sax.ContentHandler, Error
     public static final int DEFAULT_TX_TIMEOUT = 7200;
 
     protected org.xml.sax.Locator locator;
-    protected GenericDelegator delegator;
-    protected EntityEcaHandler ecaHandler = null;
+    protected Delegator delegator;
+    protected EntityEcaHandler<?> ecaHandler = null;
     protected GenericValue currentValue = null;
     protected CharSequence currentFieldName = null;
     protected CharSequence currentFieldValue = null;
@@ -100,13 +101,13 @@ public class EntitySaxReader implements javolution.xml.sax.ContentHandler, Error
 
     protected EntitySaxReader() {}
 
-    public EntitySaxReader(GenericDelegator delegator, int transactionTimeout) {
+    public EntitySaxReader(Delegator delegator, int transactionTimeout) {
         // clone the delegator right off so there is no chance of making change to the initial object
         this.delegator = delegator.cloneDelegator();
         this.transactionTimeout = transactionTimeout;
     }
 
-    public EntitySaxReader(GenericDelegator delegator) {
+    public EntitySaxReader(Delegator delegator) {
         this(delegator, DEFAULT_TX_TIMEOUT);
     }
 
@@ -375,7 +376,7 @@ public class EntitySaxReader implements javolution.xml.sax.ContentHandler, Error
 
         if (currentValue != null) {
             if (currentFieldName != null) {
-                if (currentFieldValue != null && currentFieldValue.length() > 0) {
+                if (UtilValidate.isNotEmpty(currentFieldValue)) {
                     if (currentValue.getModelEntity().isField(currentFieldName.toString())) {
                         ModelEntity modelEntity = currentValue.getModelEntity();
                         ModelField modelField = modelEntity.getField(currentFieldName.toString());
@@ -499,7 +500,7 @@ public class EntitySaxReader implements javolution.xml.sax.ContentHandler, Error
                 CharSequence name = attributes.getLocalName(i);
                 CharSequence value = attributes.getValue(i);
 
-                if (name == null || name.length() == 0) {
+                if (UtilValidate.isEmpty(name)) {
                     name = attributes.getQName(i);
                 }
                 newElement.setAttribute(name.toString(), value.toString());
@@ -548,12 +549,12 @@ public class EntitySaxReader implements javolution.xml.sax.ContentHandler, Error
                     CharSequence name = attributes.getLocalName(i);
                     CharSequence value = attributes.getValue(i);
 
-                    if (name == null || name.length() == 0) {
+                    if (UtilValidate.isEmpty(name)) {
                         name = attributes.getQName(i);
                     }
                     try {
                         // treat empty strings as nulls
-                        if (value != null && value.length() > 0) {
+                        if (UtilValidate.isNotEmpty(value)) {
                             if (currentValue.getModelEntity().isField(name.toString())) {
                                 currentValue.setString(name.toString(), value.toString());
                             } else {

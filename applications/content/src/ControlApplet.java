@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.ofbiz.base.util.UtilValidate;
+
 /**
  * Control Applet - Client applet for page pushing and (future) chat
  */
@@ -58,6 +60,7 @@ public class ControlApplet extends Applet implements Runnable {
 
     protected Thread thread = null;
 
+    @Override
     public void init() {
         ctx = this.getAppletContext();
         this.sessionId = this.getParameter("sessionId");
@@ -86,11 +89,11 @@ public class ControlApplet extends Applet implements Runnable {
             boolean visitOkay = false;
             boolean pageOkay = false;
 
-            if (sessionId != null && sessionId.length() > 0)
+            if (UtilValidate.isNotEmpty(sessionId))
                 sessionOkay = true;
-            if (visitId != null && visitId.length() > 0)
+            if (UtilValidate.isNotEmpty(visitId))
                 visitOkay = true;
-            if (currentPage != null && currentPage.length() > 0)
+            if (UtilValidate.isNotEmpty(currentPage))
                 pageOkay = true;
 
             if (sessionOkay && visitOkay && pageOkay) {
@@ -107,6 +110,7 @@ public class ControlApplet extends Applet implements Runnable {
         }
     }
 
+    @Override
     public void destroy() {
         this.stopped = true;
     }
@@ -145,7 +149,7 @@ public class ControlApplet extends Applet implements Runnable {
             }
         }
 
-        if (pullResp != null && pullResp.length() > 0) {
+        if (UtilValidate.isNotEmpty(pullResp)) {
             URL docUrl = null;
             try {
                 docUrl = new URL(pullResp);
@@ -216,7 +220,7 @@ public class ControlApplet extends Applet implements Runnable {
                         valueStr = value.toString();
                     }
 
-                    if (valueStr != null && valueStr.length() > 0) {
+                    if (UtilValidate.isNotEmpty(valueStr)) {
                         if (buf.length() > 0) buf.append('&');
                         try {
                             buf.append(URLEncoder.encode(name, "UTF-8"));

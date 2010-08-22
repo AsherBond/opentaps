@@ -36,7 +36,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
 import org.ofbiz.content.content.ContentWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.webapp.ftl.LoopWriter;
@@ -78,7 +78,7 @@ public class TraverseSubContentTransform implements TemplateTransformModel {
         //FreeMarkerWorker.convertContext(templateCtx);
         final Map savedValues = FreeMarkerWorker.saveValues(templateCtx, saveKeyNames);
         FreeMarkerWorker.overrideWithArgs(templateCtx, args);
-        final GenericDelegator delegator = (GenericDelegator) FreeMarkerWorker.getWrappedObject("delegator", env);
+        final Delegator delegator = (Delegator) FreeMarkerWorker.getWrappedObject("delegator", env);
 /*
         final String editTemplate = getArg(args, "editTemplate", ctx);
         final String wrapTemplateId = getArg(args, "wrapTemplateId", ctx);
@@ -127,28 +127,28 @@ public class TraverseSubContentTransform implements TemplateTransformModel {
         final Map traverseContext = FastMap.newInstance();
         traverseContext.put("delegator", delegator);
         Map whenMap = FastMap.newInstance();
-        whenMap.put("followWhen", (String)templateCtx.get( "followWhen"));
-        whenMap.put("pickWhen", (String)templateCtx.get( "pickWhen"));
-        whenMap.put("returnBeforePickWhen", (String)templateCtx.get( "returnBeforePickWhen"));
-        whenMap.put("returnAfterPickWhen", (String)templateCtx.get( "returnAfterPickWhen"));
+        whenMap.put("followWhen", (String)templateCtx.get("followWhen"));
+        whenMap.put("pickWhen", (String)templateCtx.get("pickWhen"));
+        whenMap.put("returnBeforePickWhen", (String)templateCtx.get("returnBeforePickWhen"));
+        whenMap.put("returnAfterPickWhen", (String)templateCtx.get("returnAfterPickWhen"));
         traverseContext.put("whenMap", whenMap);
-        String fromDateStr = (String)templateCtx.get( "fromDateStr");
-        String thruDateStr = (String)templateCtx.get( "thruDateStr");
+        String fromDateStr = (String)templateCtx.get("fromDateStr");
+        String thruDateStr = (String)templateCtx.get("thruDateStr");
         Timestamp fromDate = null;
-        if (fromDateStr != null && fromDateStr.length() > 0) {
+        if (UtilValidate.isNotEmpty(fromDateStr)) {
             fromDate = UtilDateTime.toTimestamp(fromDateStr);
         }
         traverseContext.put("fromDate", fromDate);
         Timestamp thruDate = null;
-        if (thruDateStr != null && thruDateStr.length() > 0) {
+        if (UtilValidate.isNotEmpty(thruDateStr)) {
             thruDate = UtilDateTime.toTimestamp(thruDateStr);
         }
         traverseContext.put("thruDate", thruDate);
-        String startContentAssocTypeId = (String)templateCtx.get( "contentAssocTypeId");
+        String startContentAssocTypeId = (String)templateCtx.get("contentAssocTypeId");
         if (startContentAssocTypeId != null)
             startContentAssocTypeId = "SUB_CONTENT";
         traverseContext.put("contentAssocTypeId", startContentAssocTypeId);
-        String direction = (String)templateCtx.get( "direction");
+        String direction = (String)templateCtx.get("direction");
         if (UtilValidate.isEmpty(direction))
             direction = "From";
         traverseContext.put("direction", direction);
@@ -156,16 +156,19 @@ public class TraverseSubContentTransform implements TemplateTransformModel {
 
         return new LoopWriter(out) {
 
+            @Override
             public void write(char cbuf[], int off, int len) {
                 //StringBuilder ctxBuf = (StringBuilder) templateContext.get("buf");
                 //ctxBuf.append(cbuf, off, len);
                 buf.append(cbuf, off, len);
             }
 
+            @Override
             public void flush() throws IOException {
                 out.flush();
             }
 
+            @Override
             public int onStart() throws TemplateModelException, IOException {
                 //templateContext.put("buf", new StringBuilder());
                 List nodeTrail = FastList.newInstance();
@@ -202,6 +205,7 @@ public class TraverseSubContentTransform implements TemplateTransformModel {
                 }
             }
 
+            @Override
             public int afterBody() throws TemplateModelException, IOException {
                 //out.write(buf.toString());
                 //buf.setLength(0);
@@ -218,6 +222,7 @@ public class TraverseSubContentTransform implements TemplateTransformModel {
                     return TransformControl.END_EVALUATION;
             }
 
+            @Override
             public void close() throws IOException {
 
                 String wrappedFTL = buf.toString();
@@ -252,7 +257,7 @@ public class TraverseSubContentTransform implements TemplateTransformModel {
                     if (locale == null)
                         locale = Locale.getDefault();
                     try {
-                        ContentWorker.renderContentAsText(dispatcher, delegator, wrapTemplateId, out, templateRoot, locale, mimeTypeId, true);
+                        ContentWorker.renderContentAsText(dispatcher, delegator, wrapTemplateId, out, templateRoot, locale, mimeTypeId, null, null, true);
                     } catch (GeneralException e) {
                         Debug.logError(e, "Error rendering content", module);
                         throw new IOException("Error rendering content" + e.toString());
@@ -284,7 +289,7 @@ public class TraverseSubContentTransform implements TemplateTransformModel {
                 if (UtilValidate.isEmpty(contentAssocTypeId))
                     contentAssocTypeId = "";
                 assocContext.put("contentAssocTypeId", contentAssocTypeId);
-                //assocContext.put("contentTypeId", assocValue.get("contentTypeId") );
+                //assocContext.put("contentTypeId", assocValue.get("contentTypeId"));
                 String assocRelation = null;
                 String thisDirection = (String)templateCtx.get("direction");
                 String thisContentId = (String)templateCtx.get("thisContentId");

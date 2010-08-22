@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
-<#assign externalKeyParam = "&externalLoginKey=" + requestAttributes.externalLoginKey?if_exists>
+<#assign externalKeyParam = "&amp;externalLoginKey=" + requestAttributes.externalLoginKey?if_exists>
 <#if product?has_content>
 <!-- First some general forms and scripts -->
 <form name="removeAssocForm" action="<@ofbizUrl>quickAdminUpdateProductAssoc</@ofbizUrl>">
@@ -70,7 +70,7 @@ function doPublish() {
             </#if>
             <table cellspacing="0" class="basic-table">
                 <tr>
-                    <td><h2>${productId?if_exists}<h2></td>
+                    <td><h2>${productId?if_exists}</h2></td>
                     <td><input type="text" name="productName" size="40" maxlength="40" value="${product.productName?if_exists}"/></td>
                     <td><input type="submit" value="${uiLabelMap.ProductUpdateName}"/></td>
                 </tr>
@@ -105,7 +105,7 @@ function doPublish() {
                 </tr>
             </table>
         </form>
-        <br/>
+        <br />
         <form action="<@ofbizUrl>updateProductQuickAdminSelFeat</@ofbizUrl>" method="post" style="margin: 0;" name="selectableFeature">
         <input type="hidden" name="productId" value="${product.productId?if_exists}"/>
         <input type="hidden" name="productFeatureTypeId" value="${(productFeatureTypeId)?if_exists}"/>
@@ -122,9 +122,10 @@ function doPublish() {
         <#assign rowClass = "2">
         <#list productAssocs as productAssoc>
             <#assign assocProduct = productAssoc.getRelatedOne("AssocProduct")/>
-            <input type="hidden" name="productId${idx}" value="${assocProduct.productId?if_exists}"/>
             <tr valign="middle"<#if rowClass == "1"> class="alternate-row"</#if>>
-                <td nowrap><a class="buttontext" href="<@ofbizUrl>EditProduct?productId=${assocProduct.productId}</@ofbizUrl>">${assocProduct.productId?if_exists}</a></td>
+                <td nowrap="nowrap">
+                <input type="hidden" name="productId${idx}" value="${assocProduct.productId?if_exists}"/>
+                <a class="buttontext" href="<@ofbizUrl>EditProduct?productId=${assocProduct.productId}</@ofbizUrl>">${assocProduct.productId?if_exists}</a></td>
                 <td width="100%"><a class="buttontext" href="<@ofbizUrl>EditProduct?productId=${assocProduct.productId}</@ofbizUrl>">${assocProduct.internalName?if_exists}</a></td>
                 <td colspan="2">
                     <input type="text" name="description${idx}" size="70" maxlength="100" value="${selFeatureDesc[assocProduct.productId]?if_exists}"/>
@@ -132,7 +133,7 @@ function doPublish() {
                 <#assign checked=""/>
                 <#if ((assocProduct.smallImageUrl?if_exists != "") && (assocProduct.smallImageUrl?if_exists == product.smallImageUrl?if_exists) &&
                         (assocProduct.smallImageUrl?if_exists != "") && (assocProduct.smallImageUrl?if_exists == product.smallImageUrl?if_exists)) >
-                    <#assign checked = "checked"/>
+                    <#assign checked = "checked='checked'"/>
                 </#if>
                 <td><input type="radio" ${checked} name="useImages" value="${assocProduct.productId}"/></td>
                 <#assign fromDate = Static["org.ofbiz.base.util.UtilFormatOut"].encodeQueryValue(productAssoc.getTimestamp("fromDate").toString())/>
@@ -183,7 +184,7 @@ function doPublish() {
                 <#assign rowClass = "2">
                 <#list distinguishingFeatures as distinguishingFeature>
                 <tr valign="middle"<#if rowClass == "1"> class="alternate-row"</#if>>
-                    <td><a href="<@ofbizUrl>quickAdminRemoveProductFeature?productId=${productId}&productFeatureId=${distinguishingFeature.productFeatureId}</@ofbizUrl>" class="buttontext">x</a>&nbsp;
+                    <td><a href="<@ofbizUrl>quickAdminRemoveProductFeature?productId=${productId}&amp;productFeatureId=${distinguishingFeature.productFeatureId}</@ofbizUrl>" class="buttontext">x</a>&nbsp;
                     ${distinguishingFeature.productFeatureId} ${productFeatureTypeLookup.get(distinguishingFeature.productFeatureId).get("description",locale)}: ${distinguishingFeature.get("description",locale)}
                     &nbsp;
                     </td>
@@ -253,25 +254,25 @@ function doPublish() {
                 </#if>
             </#list>
                 <tr>
-                    <td colspan=10 align="right"><input name="applyToAll" type="submit" value="${uiLabelMap.ProductApplyToAll}"/>
+                    <td colspan="10" align="right"><input name="applyToAll" type="submit" value="${uiLabelMap.ProductApplyToAll}"/>
                     &nbsp;&nbsp;<input name="updateShipping" type="submit" value="${uiLabelMap.ProductUpdateShipping}"/></td>
                 </tr>
         <#else>
                 <tr>
-                    <td><input type="text" name="productHeight" size="6" maxlength="20" value="${product.productHeight?if_exists}"></td>
-                    <td><input type="text" name="productWidth" size="6" maxlength="20" value="${product.productWidth?if_exists}"></td>
-                    <td><input type="text" name="productDepth" size="6" maxlength="20" value="${product.productDepth?if_exists}"></td>
-                    <td><input type="text" name="weight" size="6" maxlength="20" value="${product.weight?if_exists}"></td>
-                    <td><input type="text" name="~floz" size="6" maxlength="20" value="${floz?if_exists}"></td>
-                    <td><input type="text" name="~ml" size="6" maxlength="20" value="${ml?if_exists}"></td>
-                    <td><input type="text" name="~ntwt" size="6" maxlength="20" value="${ntwt?if_exists}"></td>
-                    <td><input type="text" name="~grams" size="6" maxlength="20" value="${grams?if_exists}"></td>
+                    <td><input type="text" name="productHeight" size="6" maxlength="20" value="${product.productHeight?if_exists}" /></td>
+                    <td><input type="text" name="productWidth" size="6" maxlength="20" value="${product.productWidth?if_exists}" /></td>
+                    <td><input type="text" name="productDepth" size="6" maxlength="20" value="${product.productDepth?if_exists}" /></td>
+                    <td><input type="text" name="weight" size="6" maxlength="20" value="${product.weight?if_exists}" /></td>
+                    <td><input type="text" name="~floz" size="6" maxlength="20" value="${floz?if_exists}" /></td>
+                    <td><input type="text" name="~ml" size="6" maxlength="20" value="${ml?if_exists}" /></td>
+                    <td><input type="text" name="~ntwt" size="6" maxlength="20" value="${ntwt?if_exists}" /></td>
+                    <td><input type="text" name="~grams" size="6" maxlength="20" value="${grams?if_exists}" /></td>
                     <td><a class="buttontext" href="<@ofbizUrl>EditProductFeatures?productId=${product.productId}</@ofbizUrl>">${StringUtil.wrapString(hazmat?if_exists)}</a></td>
                     <td><a class="buttontext" href="<@ofbizUrl>EditProduct?productId=${product.productId}</@ofbizUrl>">${StringUtil.wrapString(salesthru?if_exists)}</a></td>
                     <td><a class="buttontext" href="<@ofbizUrl>EditProductAssoc?productId=${product.productId}</@ofbizUrl>">${StringUtil.wrapString(thrudate?if_exists)}</a></td>
                 </tr>
                 <tr>
-                    <td colspan=10 align="right"><input type="submit" value="${uiLabelMap.ProductUpdateShipping}"></td>
+                    <td colspan="10" align="right"><input type="submit" value="${uiLabelMap.ProductUpdateShipping}" /></td>
                 </tr>
         </#if>
 
@@ -286,10 +287,11 @@ function doPublish() {
     </div>
     <div class="screenlet-body">
         <!--  **************************************************** Standard Features section -->
+        <#if addedFeatureTypeIds?has_content || standardFeatureAppls?has_content>
         <table cellspacing="0" class="basic-table">
         <tr>
         <td>
-            <#if addedFeatureTypeIds.size() &gt; 0>
+            <#if addedFeatureTypeIds?has_content>
             <form method="post" action="<@ofbizUrl>quickAdminApplyFeatureToProduct</@ofbizUrl>" name="addFeatureById">
             <input type="hidden" name="productId" value="${product.productId?if_exists}"/>
             <input type="hidden" name="productFeatureApplTypeId" value="STANDARD_FEATURE"/>
@@ -322,12 +324,13 @@ function doPublish() {
         </td>
         <td width="20">&nbsp;</td>
         <td valign="top">
+            <#if standardFeatureAppls?has_content>
             <table cellspacing="0" class="basic-table">
                 <#assign rowClass = "2">
                 <#list standardFeatureAppls as standardFeatureAppl>
                     <#assign featureId = standardFeatureAppl.productFeatureId/>
                     <tr valign="middle"<#if rowClass == "1"> class="alternate-row"</#if>>
-                        <td colspan="2"><a href='<@ofbizUrl>quickAdminRemoveFeatureFromProduct?productId=${standardFeatureAppl.productId?if_exists}&productFeatureId=${featureId?if_exists}&fromDate=${standardFeatureAppl.getString("fromDate")}</@ofbizUrl>' class="buttontext">x</a>
+                        <td colspan="2"><a href='<@ofbizUrl>quickAdminRemoveFeatureFromProduct?productId=${standardFeatureAppl.productId?if_exists}&amp;productFeatureId=${featureId?if_exists}&amp;fromDate=${standardFeatureAppl.getString("fromDate")}</@ofbizUrl>' class="buttontext">x</a>
                         ${productFeatureTypeLookup.get(featureId).description}: ${standardFeatureLookup.get(featureId).description}
                         </td>
                     </tr>
@@ -339,10 +342,12 @@ function doPublish() {
                     </#if>
                 </#list>
             </table>
+            </#if>
         </td>
         </tr>
         </table>
-        <br/>
+        <br />
+        </#if>
         <form action="<@ofbizUrl>EditProductQuickAdmin</@ofbizUrl>">
         <input type="hidden" name="productFeatureTypeId" value="${(productFeatureTypeId)?if_exists}"/>
         <input type="hidden" name="productId" value="${product.productId?if_exists}"/>
@@ -386,6 +391,7 @@ function doPublish() {
                         </td>
                     </tr>
                 </table>
+            </td>
             <td valign="top">
                 <table cellspacing="0" class="basic-table">
                     <#assign rowClass = "2">
@@ -430,7 +436,7 @@ function doPublish() {
                     <a href="javascript:call_cal(document.publish.fromDate,'${nowTimestampString}');">
                         <img src="<@ofbizContentUrl>/images/cal.gif</@ofbizContentUrl>" width="16" height="16" border="0" alt="Calendar"/>
                     </a>
-                    <input type=button value="${uiLabelMap.ProductPublishAndView}" onClick="doPublish();"/>
+                    <input type="button" value="${uiLabelMap.ProductPublishAndView}" onclick="doPublish();"/>
                 </td>
             </tr>
         </table>

@@ -31,7 +31,7 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -48,7 +48,7 @@ public class InventoryWorker {
      * @param delegator
      * @return
      */
-    public static List<GenericValue> getOutstandingPurchaseOrders(String productId, GenericDelegator delegator) {
+    public static List<GenericValue> getOutstandingPurchaseOrders(String productId, Delegator delegator) {
         try {
             List<EntityCondition> purchaseOrderConditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("orderStatusId", EntityOperator.NOT_EQUAL, "ORDER_COMPLETED"),
                     EntityCondition.makeCondition("orderStatusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
@@ -73,7 +73,7 @@ public class InventoryWorker {
      * @param delegator
      * @return
      */
-    public static BigDecimal getOutstandingPurchasedQuantity(String productId, GenericDelegator delegator) {
+    public static BigDecimal getOutstandingPurchasedQuantity(String productId, Delegator delegator) {
         BigDecimal qty = BigDecimal.ZERO;
         List<GenericValue> purchaseOrders = getOutstandingPurchaseOrders(productId, delegator);
         if (UtilValidate.isEmpty(purchaseOrders)) {
@@ -106,21 +106,21 @@ public class InventoryWorker {
      * @param   delegator   The delegator to use
      * @return  Map of productIds to quantities outstanding.
      */
-    public static Map<String, BigDecimal> getOutstandingProductQuantities(Collection<String> productIds, String orderTypeId, GenericDelegator delegator) {
+    public static Map<String, BigDecimal> getOutstandingProductQuantities(Collection<String> productIds, String orderTypeId, Delegator delegator) {
         Set<String> fieldsToSelect = UtilMisc.toSet("productId", "quantityOpen");
         List<EntityCondition> condList = UtilMisc.<EntityCondition>toList(
                 EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, orderTypeId),
                 EntityCondition.makeCondition("orderStatusId", EntityOperator.NOT_EQUAL, "ORDER_COMPLETED"),
                 EntityCondition.makeCondition("orderStatusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
                 EntityCondition.makeCondition("orderStatusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED")
-                );
+               );
         if (productIds.size() > 0) {
             condList.add(EntityCondition.makeCondition("productId", EntityOperator.IN, productIds));
         }
         condList.add(EntityCondition.makeCondition("orderItemStatusId", EntityOperator.NOT_EQUAL, "ITEM_COMPLETED"));
         condList.add(EntityCondition.makeCondition("orderItemStatusId", EntityOperator.NOT_EQUAL, "ITEM_REJECTED"));
         condList.add(EntityCondition.makeCondition("orderItemStatusId", EntityOperator.NOT_EQUAL, "ITEM_CANCELLED"));
-        EntityConditionList conditions = EntityCondition.makeCondition(condList, EntityOperator.AND);
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(condList, EntityOperator.AND);
 
         Map<String, BigDecimal> results = FastMap.newInstance();
         try {
@@ -135,12 +135,12 @@ public class InventoryWorker {
     }
 
     /** As above, but for sales orders */
-    public static Map<String, BigDecimal> getOutstandingProductQuantitiesForSalesOrders(Collection<String> productIds, GenericDelegator delegator) {
+    public static Map<String, BigDecimal> getOutstandingProductQuantitiesForSalesOrders(Collection<String> productIds, Delegator delegator) {
         return getOutstandingProductQuantities(productIds, "SALES_ORDER", delegator);
     }
 
     /** As above, but for purchase orders */
-    public static Map<String, BigDecimal> getOutstandingProductQuantitiesForPurchaseOrders(Collection<String> productIds, GenericDelegator delegator) {
+    public static Map<String, BigDecimal> getOutstandingProductQuantitiesForPurchaseOrders(Collection<String> productIds, Delegator delegator) {
         return getOutstandingProductQuantities(productIds, "PURCHASE_ORDER", delegator);
     }
 }

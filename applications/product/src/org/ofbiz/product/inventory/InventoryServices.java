@@ -22,7 +22,7 @@ package org.ofbiz.product.inventory;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.sql.Timestamp;
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +35,8 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.common.CommonWorkers;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -60,7 +61,7 @@ public class InventoryServices {
     public static final MathContext generalRounding = new MathContext(10);
 
     public static Map<String, Object> prepareInventoryTransfer(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String inventoryItemId = (String) context.get("inventoryItemId");
         BigDecimal xferQty = (BigDecimal) context.get("xferQty");
         GenericValue inventoryItem = null;
@@ -190,8 +191,9 @@ public class InventoryServices {
     }
 
     public static Map<String, Object> completeInventoryTransfer(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String inventoryTransferId = (String) context.get("inventoryTransferId");
+        Timestamp receiveDate = (Timestamp) context.get("receiveDate");
         GenericValue inventoryTransfer = null;
         GenericValue inventoryItem = null;
         GenericValue destinationFacility = null;
@@ -214,7 +216,11 @@ public class InventoryServices {
 
         // set the fields on the transfer record
         if (inventoryTransfer.get("receiveDate") == null) {
-            inventoryTransfer.set("receiveDate", UtilDateTime.nowTimestamp());
+            if (receiveDate != null) {
+                inventoryTransfer.set("receiveDate", receiveDate);
+            } else {
+                inventoryTransfer.set("receiveDate", UtilDateTime.nowTimestamp());
+            }
         }
 
         if (inventoryType.equals("NON_SERIAL_INV_ITEM")) {
@@ -283,7 +289,7 @@ public class InventoryServices {
     }
 
     public static Map<String, Object> cancelInventoryTransfer(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String inventoryTransferId = (String) context.get("inventoryTransferId");
         GenericValue inventoryTransfer = null;
         GenericValue inventoryItem = null;
@@ -347,7 +353,7 @@ public class InventoryServices {
 
     /** In spite of the generic name this does the very specific task of checking availability of all back-ordered items and sends notices, etc */
     public static Map<String, Object> checkInventoryAvailability(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -673,8 +679,8 @@ public class InventoryServices {
                // Figure out what the QOH and ATP inventory would be with this associated product
                BigDecimal currentQuantityOnHandTotal = (BigDecimal) resultOutput.get("quantityOnHandTotal");
                BigDecimal currentAvailableToPromiseTotal = (BigDecimal) resultOutput.get("availableToPromiseTotal");
-               BigDecimal tmpQuantityOnHandTotal = currentQuantityOnHandTotal.divide(assocQuantity, generalRounding);
-               BigDecimal tmpAvailableToPromiseTotal = currentAvailableToPromiseTotal.divide(assocQuantity, generalRounding);
+               BigDecimal tmpQuantityOnHandTotal = currentQuantityOnHandTotal.divideToIntegralValue(assocQuantity, generalRounding);
+               BigDecimal tmpAvailableToPromiseTotal = currentAvailableToPromiseTotal.divideToIntegralValue(assocQuantity, generalRounding);
 
                // reset the minimum QOH and ATP quantities if those quantities for this product are less
                if (minQuantityOnHandTotal == null || tmpQuantityOnHandTotal.compareTo(minQuantityOnHandTotal) < 0) {
@@ -702,7 +708,7 @@ public class InventoryServices {
 
 
     public static Map<String, Object> getProductInventorySummaryForItems(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         List<GenericValue> orderItems = UtilGenerics.checkList(context.get("orderItems"));
         String facilityId = (String) context.get("facilityId");
@@ -750,8 +756,7 @@ public class InventoryServices {
 
                 // get both the real ATP/QOH available and the quantities available from marketing packages
                 try {
-                    if ("MARKETING_PKG_AUTO".equals(product.getString("productTypeId")) ||
-                            "MARKETING_PKG_PICK".equals(product.getString("productTypeId"))) {
+                    if (CommonWorkers.hasParentType(delegator, "ProductType", "productTypeId", product.getString("productTypeId"), "parentTypeId", "MARKETING_PKG")) {
                         mktgPkgInvResult = dispatcher.runSync("getMktgPackagesAvailable", UtilMisc.toMap("productId", productId, "facilityId", facility.getString("facilityId")));
                     }
                     invResult = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", productId, "facilityId", facility.getString("facilityId")));
@@ -768,7 +773,7 @@ public class InventoryServices {
                     if (fatp != null) atp = atp.add(fatp);
                     if (fqoh != null) qoh = qoh.add(fqoh);
                 }
-                if (("MARKETING_PKG_AUTO".equals(product.getString("productTypeId")) || "MARKETING_PKG_PICK".equals(product.getString("productTypeId"))) && (!ServiceUtil.isError(mktgPkgInvResult))) {
+                if (CommonWorkers.hasParentType(delegator, "ProductType", "productTypeId", product.getString("productTypeId"), "parentTypeId", "MARKETING_PKG") && !ServiceUtil.isError(mktgPkgInvResult)) {
                     BigDecimal fatp = (BigDecimal) mktgPkgInvResult.get("availableToPromiseTotal");
                     BigDecimal fqoh = (BigDecimal) mktgPkgInvResult.get("quantityOnHandTotal");
                     if (fatp != null) mktgPkgAtp = mktgPkgAtp.add(fatp);
@@ -791,7 +796,7 @@ public class InventoryServices {
 
 
     public static Map<String, Object> getProductInventoryAndFacilitySummary(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Timestamp checkTime = (Timestamp)context.get("checkTime");
         String facilityId = (String)context.get("facilityId");
@@ -810,8 +815,7 @@ public class InventoryServices {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        if ("MARKETING_PKG_AUTO".equals(product.getString("productTypeId")) ||
-                "MARKETING_PKG_PICK".equals(product.getString("productTypeId"))) {
+        if (CommonWorkers.hasParentType(delegator, "ProductType", "productTypeId", product.getString("productTypeId"), "parentTypeId", "MARKETING_PKG")) {
             try {
                 resultOutput = dispatcher.runSync("getMktgPackagesAvailable", contextInput);
             } catch (GenericServiceException e) {
@@ -920,7 +924,7 @@ public class InventoryServices {
                                 EntityCondition.makeCondition("statusId", EntityOperator.IN, UtilMisc.toList("ORDER_COMPLETED", "ORDER_APPROVED", "ORDER_HELD")),
                                 EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
                                 EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, checkTime)
-                            ),
+                           ),
                         EntityOperator.AND),
                     null, null, null, null);
             } catch (GenericEntityException e2) {
@@ -957,7 +961,7 @@ public class InventoryServices {
                                 EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
                                 EntityCondition.makeCondition("workEffortTypeId", EntityOperator.EQUALS, "PROD_ORDER_TASK"),
                                 EntityCondition.makeCondition("actualCompletionDate", EntityOperator.GREATER_THAN_EQUAL_TO, checkTime)
-                            ),
+                           ),
                         EntityOperator.AND),
                     null, null, null, null);
             } catch (GenericEntityException e1) {

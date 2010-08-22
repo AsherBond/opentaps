@@ -41,7 +41,9 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralRuntimeException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericDispatcher;
@@ -56,7 +58,7 @@ public class SharkContainer implements Container, Runnable
 {
     public static final String module = SharkContainer.class.getName();
 
-    private static GenericDelegator delegator = null;
+    private static Delegator delegator = null;
     private static LocalDispatcher dispatcher = null;
     private static GenericValue adminUser = null;
     private static String adminPass = null;
@@ -85,35 +87,31 @@ public class SharkContainer implements Container, Runnable
         ContainerConfig.Container.Property iiopPort = cfg.getProperty("iiop-port");
 
         // check the required delegator-name property
-        if (delegatorProp == null || delegatorProp.value == null || delegatorProp.value.length() == 0) {
+        if (delegatorProp == null || UtilValidate.isEmpty(delegatorProp.value)) {
             throw new ContainerException("Invalid delegator-name defined in container configuration");
         }
 
         // check the required dispatcher-name property
-        if (dispatcherProp == null || dispatcherProp.value == null || dispatcherProp.value.length() == 0) {
+        if (dispatcherProp == null || UtilValidate.isEmpty(dispatcherProp.value)) {
             throw new ContainerException("Invalid dispatcher-name defined in container configuration");
         }
 
         // check the required admin-user property
-        if (adminProp == null || adminProp.value == null || adminProp.value.length() == 0) {
+        if (adminProp == null || UtilValidate.isEmpty(adminProp.value)) {
             throw new ContainerException("Invalid admin-user defined in container configuration");
         }
 
-        if (adminPassProp == null || adminPassProp.value == null || adminPassProp.value.length() == 0) {
+        if (adminPassProp == null || UtilValidate.isEmpty(adminPassProp.value)) {
             throw new ContainerException("Invalid admin-pass defined in container configuration");
         }
 
-        if (engineName == null || engineName.value == null || engineName.value.length() == 0) {
+        if (engineName == null || UtilValidate.isEmpty(engineName.value)) {
             throw new ContainerException("Invalid engine-name defined in container configuration");
         }
 
         // get the delegator and dispatcher objects
-        SharkContainer.delegator = GenericDelegator.getGenericDelegator(delegatorProp.value);
-        try {
-            SharkContainer.dispatcher = GenericDispatcher.getLocalDispatcher(dispatcherProp.value, SharkContainer.delegator);
-        } catch (GenericServiceException e) {
-            throw new ContainerException(e);
-        }
+        SharkContainer.delegator = DelegatorFactory.getDelegator(delegatorProp.value);
+        SharkContainer.dispatcher = GenericDispatcher.getLocalDispatcher(dispatcherProp.value, SharkContainer.delegator);
 
         // get the admin user
         try {
@@ -139,10 +137,10 @@ public class SharkContainer implements Container, Runnable
         {
             Debug.logError("OUT :Java home variable is undefined", module);
         } else
-            if (iiopHost != null && iiopHost.value != null && iiopHost.value.length() > 0) {
-                if (iiopPort != null && iiopPort.value != null && iiopPort.value.length() > 0) {
+            if (iiopHost != null && UtilValidate.isNotEmpty(iiopHost.value)) {
+                if (iiopPort != null && UtilValidate.isNotEmpty(iiopPort.value)) {
                        try {
-                            p = Runtime.getRuntime().exec( java_home + "\\" + "bin\\tnameserv"
+                            p = Runtime.getRuntime().exec(java_home + "\\" + "bin\\tnameserv"
                                      + " -ORBInitialPort "
                                      +  iiopPort.value);
                             Thread.sleep(5000);
@@ -163,8 +161,8 @@ public class SharkContainer implements Container, Runnable
         Debug.logInfo("Started Shark workflow service", module);
 
         // create the CORBA server and bind to iiop
-        if (iiopHost != null && iiopHost.value != null && iiopHost.value.length() > 0) {
-            if (iiopPort != null && iiopPort.value != null && iiopPort.value.length() > 0) {
+        if (iiopHost != null && UtilValidate.isNotEmpty(iiopHost.value)) {
+            if (iiopPort != null && UtilValidate.isNotEmpty(iiopPort.value)) {
                 try {
                     corbaServer = new SharkCORBAServer(engineName.value, iiopHost.value, iiopPort.value, shark);
                     orbThread = new Thread(this);
@@ -224,7 +222,7 @@ public class SharkContainer implements Container, Runnable
     }
 
     // static helper methods
-    public static GenericDelegator getDelegator() {
+    public static Delegator getDelegator() {
         return SharkContainer.delegator;
     }
 

@@ -21,7 +21,7 @@ package org.ofbiz.manufacturing.techdata;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -31,7 +31,8 @@ import java.util.Map;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -59,7 +60,7 @@ public class TechDataServices {
      * @return result: a map containing lookupResult (list of RoutingTask <=> workEffortId with currentStatusId = "ROU_ACTIVE" and workEffortTypeId = "ROU_TASK"
      */
     public static Map lookupRoutingTask(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Map result = new HashMap();
 
         String workEffortName = (String) context.get("workEffortName");
@@ -68,9 +69,9 @@ public class TechDataServices {
         List listRoutingTask = null;
         List constraints = new LinkedList();
 
-        if (workEffortName != null && workEffortName.length()>0)
+        if (UtilValidate.isNotEmpty(workEffortName))
             constraints.add(EntityCondition.makeCondition("workEffortName", EntityOperator.GREATER_THAN_EQUAL_TO, workEffortName));
-        if (fixedAssetId != null && fixedAssetId.length()>0 && ! "ANY".equals(fixedAssetId))
+        if (UtilValidate.isNotEmpty(fixedAssetId) && ! "ANY".equals(fixedAssetId))
             constraints.add(EntityCondition.makeCondition("fixedAssetId", EntityOperator.EQUALS, fixedAssetId));
 
         constraints.add(EntityCondition.makeCondition("currentStatusId", EntityOperator.EQUALS, "ROU_ACTIVE"));
@@ -97,7 +98,7 @@ public class TechDataServices {
      * @return result      a map containing sequenceNumNotOk which is equal to "Y" if it's not Ok
      */
     public static Map checkRoutingTaskAssoc(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Map result = new HashMap();
         String sequenceNumNotOk = "N";
 
@@ -123,11 +124,11 @@ public class TechDataServices {
             Iterator  i = listRoutingTaskAssoc.iterator();
             while (i.hasNext()) {
                 GenericValue routingTaskAssoc = (GenericValue) i.next();
-                if ( ! workEffortIdFrom.equals(routingTaskAssoc.getString("workEffortIdFrom")) ||
+                if (! workEffortIdFrom.equals(routingTaskAssoc.getString("workEffortIdFrom")) ||
                 ! workEffortIdTo.equals(routingTaskAssoc.getString("workEffortIdTo")) ||
                 ! workEffortAssocTypeId.equals(routingTaskAssoc.getString("workEffortAssocTypeId")) ||
                 ! sequenceNum.equals(routingTaskAssoc.getLong("sequenceNum"))
-                ) {
+               ) {
                     if (routingTaskAssoc.getTimestamp("thruDate") == null && routingTaskAssoc.getTimestamp("fromDate") == null) sequenceNumNotOk = "Y";
                     else if (routingTaskAssoc.getTimestamp("thruDate") == null) {
                         if (thruDate == null) sequenceNumNotOk = "Y";
@@ -137,14 +138,14 @@ public class TechDataServices {
                         if (fromDate == null) sequenceNumNotOk = "Y";
                         else if (fromDate.before(routingTaskAssoc.getTimestamp("thruDate"))) sequenceNumNotOk = "Y";
                     }
-                    else if ( fromDate == null && thruDate == null) sequenceNumNotOk = "Y";
+                    else if (fromDate == null && thruDate == null) sequenceNumNotOk = "Y";
                     else if (thruDate == null) {
                         if (fromDate.before(routingTaskAssoc.getTimestamp("thruDate"))) sequenceNumNotOk = "Y";
                     }
                     else if (fromDate == null) {
                         if (thruDate.after(routingTaskAssoc.getTimestamp("fromDate"))) sequenceNumNotOk = "Y";
                     }
-                    else if ( routingTaskAssoc.getTimestamp("fromDate").before(thruDate) && fromDate.before(routingTaskAssoc.getTimestamp("thruDate")) ) sequenceNumNotOk = "Y";
+                    else if (routingTaskAssoc.getTimestamp("fromDate").before(thruDate) && fromDate.before(routingTaskAssoc.getTimestamp("thruDate"))) sequenceNumNotOk = "Y";
                 } else if (createProcess) sequenceNumNotOk = "Y";
             }
         }
@@ -187,7 +188,7 @@ public class TechDataServices {
         }
         if (techDataCalendar == null) {
             try {
-                GenericDelegator delegator = routingTask.getDelegator();
+                Delegator delegator = routingTask.getDelegator();
                 techDataCalendar = delegator.findByPrimaryKey("TechDataCalendar",UtilMisc.toMap("calendarId","DEFAULT"));
             } catch (GenericEntityException e) {
                 Debug.logError("Pb reading TechDataCalendar DEFAULT"+e.getMessage(), module);
@@ -208,7 +209,7 @@ public class TechDataServices {
         Double capacity = null;
         Time startTime = null;
         while (capacity == null || capacity.doubleValue()==0) {
-            switch ( dayStart) {
+            switch (dayStart) {
                 case Calendar.MONDAY:
                     capacity =  techDataCalendarWeek.getDouble("mondayCapacity");
                     startTime =  techDataCalendarWeek.getTime("mondayStartTime");
@@ -246,7 +247,7 @@ public class TechDataServices {
         }
         result.put("capacity",capacity);
         result.put("startTime",startTime);
-        result.put("moveDay",new Integer(moveDay));
+        result.put("moveDay",Integer.valueOf(moveDay));
         return result;
     }
     /** Used to to request the remain capacity available for dateFrom in a TechDataCalenda,
@@ -274,7 +275,7 @@ public class TechDataServices {
         Time startTime = (Time) position.get("startTime");
         Double capacity = (Double) position.get("capacity");
         Timestamp startAvailablePeriod = new Timestamp(UtilDateTime.getDayStart(dateFrom).getTime() + startTime.getTime() + cDateTrav.get(Calendar.ZONE_OFFSET) + cDateTrav.get(Calendar.DST_OFFSET));
-        if (dateFrom.before(startAvailablePeriod) ) return 0;
+        if (dateFrom.before(startAvailablePeriod)) return 0;
         Timestamp endAvailablePeriod = new Timestamp(startAvailablePeriod.getTime()+capacity.longValue());
         if (dateFrom.after(endAvailablePeriod)) return 0;
         return  endAvailablePeriod.getTime() - dateFrom.getTime();
@@ -305,7 +306,7 @@ public class TechDataServices {
         int moveDay = ((Integer) position.get("moveDay")).intValue();
         dateTo = (moveDay == 0) ? dateFrom : UtilDateTime.getDayStart(dateFrom,moveDay);
         Timestamp startAvailablePeriod = new Timestamp(UtilDateTime.getDayStart(dateTo).getTime() + startTime.getTime() + cDateTrav.get(Calendar.ZONE_OFFSET) + cDateTrav.get(Calendar.DST_OFFSET));
-        if (dateTo.before(startAvailablePeriod) ) {
+        if (dateTo.before(startAvailablePeriod)) {
             dateTo = startAvailablePeriod;
         }
         else {
@@ -363,7 +364,7 @@ public class TechDataServices {
         Double capacity = null;
         Time startTime = null;
         while (capacity == null || capacity.doubleValue() == 0) {
-            switch ( dayEnd) {
+            switch (dayEnd) {
                 case Calendar.MONDAY:
                     capacity =  techDataCalendarWeek.getDouble("mondayCapacity");
                     startTime =  techDataCalendarWeek.getTime("mondayStartTime");
@@ -400,7 +401,7 @@ public class TechDataServices {
         }
         result.put("capacity",capacity);
         result.put("startTime",startTime);
-        result.put("moveDay",new Integer(moveDay));
+        result.put("moveDay",Integer.valueOf(moveDay));
         return result;
     }
     /** Used to request the remaining capacity available for dateFrom in a TechDataCalenda,
@@ -428,7 +429,7 @@ public class TechDataServices {
         Time startTime = (Time) position.get("startTime");
         Double capacity = (Double) position.get("capacity");
         Timestamp startAvailablePeriod = new Timestamp(UtilDateTime.getDayStart(dateFrom).getTime() + startTime.getTime() + cDateTrav.get(Calendar.ZONE_OFFSET) + cDateTrav.get(Calendar.DST_OFFSET));
-        if (dateFrom.before(startAvailablePeriod) ) return 0;
+        if (dateFrom.before(startAvailablePeriod)) return 0;
         Timestamp endAvailablePeriod = new Timestamp(startAvailablePeriod.getTime()+capacity.longValue());
         if (dateFrom.after(endAvailablePeriod)) return 0;
         return  dateFrom.getTime() - startAvailablePeriod.getTime();
@@ -458,9 +459,9 @@ public class TechDataServices {
         Time startTime = (Time) position.get("startTime");
         int moveDay = ((Integer) position.get("moveDay")).intValue();
         Double capacity = (Double) position.get("capacity");
-        dateTo = (moveDay == 0) ? dateFrom : UtilDateTime.getDayEnd(dateFrom, new Long(moveDay));
+        dateTo = (moveDay == 0) ? dateFrom : UtilDateTime.getDayEnd(dateFrom, Long.valueOf(moveDay));
         Timestamp endAvailablePeriod = new Timestamp(UtilDateTime.getDayStart(dateTo).getTime() + startTime.getTime() + capacity.longValue() + cDateTrav.get(Calendar.ZONE_OFFSET) + cDateTrav.get(Calendar.DST_OFFSET));
-        if (dateTo.after(endAvailablePeriod) ) {
+        if (dateTo.after(endAvailablePeriod)) {
             dateTo = endAvailablePeriod;
         }
         else {

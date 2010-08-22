@@ -26,6 +26,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.entity.transaction.GenericTransactionException;
 import org.ofbiz.entity.transaction.TransactionUtil;
+import org.ofbiz.security.authz.AbstractAuthorization;
 import org.ofbiz.service.config.ServiceConfigUtil;
 
 /**
@@ -270,6 +271,9 @@ public class JobInvoker implements Runnable {
                 // increment the count
                 count++;
                 if (Debug.verboseOn()) Debug.logVerbose("Invoker: " + thread.getName() + " (" + count + ") total.", module);
+
+                // reset thread local security
+                AbstractAuthorization.clearThreadLocal();
             }
             long diff = (new Date().getTime() - this.getTime());
 

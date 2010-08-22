@@ -40,7 +40,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.content.ContentManagementWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
@@ -62,7 +62,7 @@ public class LayoutEvents {
         Locale locale = UtilHttp.getLocale(request);
 
         try {
-            GenericDelegator delegator = (GenericDelegator)request.getAttribute("delegator");
+            Delegator delegator = (Delegator)request.getAttribute("delegator");
             LocalDispatcher dispatcher = (LocalDispatcher)request.getAttribute("dispatcher");
             HttpSession session = request.getSession();
             Map uploadResults = LayoutWorker.uploadImageAndParameters(request, "imageData");
@@ -92,13 +92,13 @@ public class LayoutEvents {
 
             try {
                 SimpleMapProcessor.runSimpleMapProcessor(
-                      "org/ofbiz/content/ContentManagementMapProcessors.xml", "contentIn",
+                      "component://content/script/org/ofbiz/content/ContentManagementMapProcessors.xml", "contentIn",
                       formInput, context, errorMessages, locale);
                 SimpleMapProcessor.runSimpleMapProcessor(
-                      "org/ofbiz/content/ContentManagementMapProcessors.xml", "dataResourceIn",
+                      "component://content/script/org/ofbiz/content/ContentManagementMapProcessors.xml", "dataResourceIn",
                       formInput, context, errorMessages, locale);
                 SimpleMapProcessor.runSimpleMapProcessor(
-                      "org/ofbiz/content/ContentManagementMapProcessors.xml", "contentAssocIn",
+                      "component://content/script/org/ofbiz/content/ContentManagementMapProcessors.xml", "contentAssocIn",
                       formInput, context, errorMessages, locale);
             } catch (MiniLangException e) {
                 request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
@@ -166,7 +166,7 @@ public class LayoutEvents {
         } catch (GenericEntityException e3) {
             request.setAttribute("_ERROR_MESSAGE_", e3.getMessage());
             return "error";
-        } catch ( GenericServiceException e) {
+        } catch (GenericServiceException e) {
             request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
             return "error";
         }
@@ -176,7 +176,7 @@ public class LayoutEvents {
     public static String updateLayoutImage(HttpServletRequest request, HttpServletResponse response) {
         Locale locale = UtilHttp.getLocale(request);
         try {
-            GenericDelegator delegator = (GenericDelegator)request.getAttribute("delegator");
+            Delegator delegator = (Delegator)request.getAttribute("delegator");
             HttpSession session = request.getSession();
             Map uploadResults = LayoutWorker.uploadImageAndParameters(request, "imageData");
             Map context = (Map)uploadResults.get("formInput");
@@ -270,7 +270,7 @@ public class LayoutEvents {
                     GenericValue dataResourceContentView  = (GenericValue)lst.get(0);
                     contentId = (String)dataResourceContentView.get("coContentId");
                 }
-            } catch ( GenericEntityException e) {
+            } catch (GenericEntityException e) {
                 request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
                 return "error";
             }
@@ -301,7 +301,7 @@ public class LayoutEvents {
 
                 //Debug.logVerbose("in replaceSubContent, context2:" + context2, module);
                 Map result2 = dispatcher.runSync("deactivateAssocs", context2);
-            } catch ( GenericServiceException e) {
+            } catch (GenericServiceException e) {
                 request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
                 return "error";
             }
@@ -312,7 +312,7 @@ public class LayoutEvents {
 
     public static String cloneLayout(HttpServletRequest request, HttpServletResponse response) {
 
-        GenericDelegator delegator = (GenericDelegator)request.getAttribute("delegator");
+        Delegator delegator = (Delegator)request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher)request.getAttribute("dispatcher");
         HttpSession session = request.getSession();
         Locale locale = UtilHttp.getLocale(request);
@@ -336,7 +336,7 @@ public class LayoutEvents {
         try {
             content = delegator.findByPrimaryKey("Content",
                        UtilMisc.toMap("contentId", contentId));
-        Debug.logVerbose("in cloneLayout, content:" + content, "");
+            Debug.logVerbose("in cloneLayout, content:" + content, "");
             if (content == null) {
                 String errMsg = UtilProperties.getMessage(LayoutEvents.err_resource, "layoutEvents.content_empty", locale);
                 request.setAttribute("_ERROR_MESSAGE_", errMsg);
@@ -393,7 +393,7 @@ public class LayoutEvents {
         try {
             results = dispatcher.runSync("getAssocAndContentAndDataResource", serviceIn);
             entityList = (List)results.get("entityList");
-            if (entityList == null || entityList.size() == 0) {
+            if (UtilValidate.isEmpty(entityList)) {
                 String errMsg = UtilProperties.getMessage(LayoutEvents.err_resource, "layoutEvents.no_subcontent", locale);
                 request.setAttribute("_ERROR_MESSAGE_", errMsg);
             }
@@ -415,7 +415,7 @@ public class LayoutEvents {
             }
             try {
                 SimpleMapProcessor.runSimpleMapProcessor(
-                      "org/ofbiz/content/ContentManagementMapProcessors.xml", "contentAssocIn",
+                      "component://content/script/org/ofbiz/content/ContentManagementMapProcessors.xml", "contentAssocIn",
                       view, serviceIn, errorMessages, locale);
             } catch (IllegalArgumentException e) {
                 request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
@@ -478,13 +478,13 @@ public class LayoutEvents {
             context.put("rootDir", rootDir);
             try {
                 SimpleMapProcessor.runSimpleMapProcessor(
-                      "org/ofbiz/content/ContentManagementMapProcessors.xml", "contentIn",
+                      "component://content/script/org/ofbiz/content/ContentManagementMapProcessors.xml", "contentIn",
                       paramMap, context, errorMessages, loc);
                 SimpleMapProcessor.runSimpleMapProcessor(
-                      "org/ofbiz/content/ContentManagementMapProcessors.xml", "dataResourceIn",
+                      "component://content/script/org/ofbiz/content/ContentManagementMapProcessors.xml", "dataResourceIn",
                       paramMap, context, errorMessages, loc);
                 SimpleMapProcessor.runSimpleMapProcessor(
-                      "org/ofbiz/content/ContentManagementMapProcessors.xml", "contentAssocIn",
+                      "component://content/script/org/ofbiz/content/ContentManagementMapProcessors.xml", "contentAssocIn",
                       paramMap, context, errorMessages, loc);
             } catch (MiniLangException e) {
                 request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
@@ -520,10 +520,11 @@ public class LayoutEvents {
             context2.put("fromDate", result.get("fromDate"));
             context2.put("contentIdTo", contentIdTo);
             context2.put("mapKey", mapKey);
+            context2.put("userLogin", userLogin);
 
             //Debug.logVerbose("in replaceSubContent, context2:" + context2, module);
             Map result2 = dispatcher.runSync("deactivateAssocs", context2);
-        } catch ( GenericServiceException e) {
+        } catch (GenericServiceException e) {
             request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
             return "error";
         }
@@ -551,13 +552,13 @@ public class LayoutEvents {
             context.put("rootDir", rootDir);
             try {
                 SimpleMapProcessor.runSimpleMapProcessor(
-                      "org/ofbiz/content/ContentManagementMapProcessors.xml", "contentIn",
+                      "component://content/script/org/ofbiz/content/ContentManagementMapProcessors.xml", "contentIn",
                       paramMap, context, errorMessages, loc);
                 SimpleMapProcessor.runSimpleMapProcessor(
-                      "org/ofbiz/content/ContentManagementMapProcessors.xml", "dataResourceIn",
+                      "component://content/script/org/ofbiz/content/ContentManagementMapProcessors.xml", "dataResourceIn",
                       paramMap, context, errorMessages, loc);
                 SimpleMapProcessor.runSimpleMapProcessor(
-                      "org/ofbiz/content/ContentManagementMapProcessors.xml", "contentAssocIn",
+                      "component://content/script/org/ofbiz/content/ContentManagementMapProcessors.xml", "contentAssocIn",
                       paramMap, context, errorMessages, loc);
             } catch (MiniLangException e) {
                 request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
@@ -595,7 +596,7 @@ public class LayoutEvents {
             //Debug.logVerbose("in replaceSubContent, context2:" + context2, module);
             Map result2 = dispatcher.runSync("deactivateAssocs", context2);
             */
-        } catch ( GenericServiceException e) {
+        } catch (GenericServiceException e) {
             request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
             return "error";
         }
@@ -603,12 +604,12 @@ public class LayoutEvents {
     }
 
     public static String copyToClip(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator)request.getAttribute("delegator");
+        Delegator delegator = (Delegator)request.getAttribute("delegator");
         Map paramMap = UtilHttp.getParameterMap(request);
         String entityName = (String)paramMap.get("entityName");
         Locale locale = UtilHttp.getLocale(request);
 
-        if (UtilValidate.isEmpty(entityName) ) {
+        if (UtilValidate.isEmpty(entityName)) {
             String errMsg = UtilProperties.getMessage(LayoutEvents.err_resource, "layoutEvents.entityname_empty", locale);
             request.setAttribute("_ERROR_MESSAGE_", errMsg);
             return "error";

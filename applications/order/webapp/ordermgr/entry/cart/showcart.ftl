@@ -18,21 +18,88 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
+<script language="JavaScript" type="text/javascript">
+    function showQohAtp() {
+        document.qohAtpForm.productId.value = document.quickaddform.add_product_id.value;
+        document.qohAtpForm.submit();
+    }
+    function quicklookupGiftCertificate() {
+        window.location='AddGiftCertificate';
+    }
+</script>
+<#if shoppingCart.getOrderType() == "PURCHASE_ORDER">
+  <#assign target="productAvailabalityByFacility">
+<#else>
+  <#assign target="getProductInventoryAvailable">
+</#if>
 <div class="screenlet">
     <div class="screenlet-body">
+      <#if shoppingCart.getOrderType() == "SALES_ORDER">
+        <div>
+          <#if quantityOnHandTotal?exists && availableToPromiseTotal?exists && (productId)?exists>
+            <ul>
+              <li>
+                <label>${uiLabelMap.ProductQuantityOnHand}</label>: ${quantityOnHandTotal}
+              </li>
+              <li>
+                <label>${uiLabelMap.ProductAvailableToPromise}</label>: ${availableToPromiseTotal}
+              </li>
+            </ul>
+          </#if>
+        </div>
+      <#else>
+        <#if parameters.availabalityList?has_content>
+          <table>
+            <tr>
+              <td>${uiLabelMap.Facility}</td>
+              <td>${uiLabelMap.ProductQuantityOnHand}</td>
+              <td>${uiLabelMap.ProductAvailableToPromise}</td>
+            </tr>
+            <#list parameters.availabalityList as availabality>
+               <tr>
+                 <td>${availabality.facilityId}</td>
+                 <td>${availabality.quantityOnHandTotal}</td>
+                 <td>${availabality.availableToPromiseTotal}</td>
+               </tr>
+            </#list>
+          </table>
+        </#if>
+      </#if>
       <table border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td>
+            <form name="qohAtpForm" method="post" action="<@ofbizUrl>${target}</@ofbizUrl>">
+              <fieldset>
+                <input type="hidden" name="facilityId" value="${facilityId?if_exists}"/>
+                <input type="hidden" name="productId"/>
+                <input type="hidden" id="ownerPartyId" name="ownerPartyId" value="${shoppingCart.getBillToCustomerPartyId()?if_exists}" />
+              </fieldset>
+            </form>
             <form method="post" action="<@ofbizUrl>additem</@ofbizUrl>" name="quickaddform" style="margin: 0;">
               <table border="0">
                 <tr>
                   <td align="right"><div>${uiLabelMap.ProductProductId} :</div></td>
-                  <td><input type="text" size="25" name="add_product_id" value=""/>
+                  <td><input type="text" size="25" name="add_product_id" value="${productId?if_exists}"/>
                     <span class='tabletext'>
                       <a href="javascript:quicklookup(document.quickaddform.add_product_id)" class="buttontext">${uiLabelMap.OrderQuickLookup}</a>
                       <a href="javascript:call_fieldlookup2(document.quickaddform.add_product_id,'<@ofbizUrl><#if orderType=="PURCHASE_ORDER">LookupSupplierProduct?partyId=${partyId?if_exists}<#else>LookupProduct</#if></@ofbizUrl>');">
                         <img src="<@ofbizContentUrl>/images/fieldlookup.gif</@ofbizContentUrl>" width="15" height="14" border="0" alt="${uiLabelMap.CommonClickHereForFieldLookup}"/>
                       </a>
+                      <#-- FIXME Problem here: the input field is shared -->
+                      <#--if orderType=="PURCHASE_ORDER">                        
+                        <#if partyId?has_content>                                               
+                          <#assign fieldFormName="LookupSupplierProduct?partyId=${partyId}">
+                        <#else>
+                          <#assign fieldFormName="LookupSupplierProduct">
+                        </#if>
+                      <#else>
+                        <#assign fieldFormName="LookupProduct">
+                      </#if>
+                      <@htmlTemplate.lookupField formName="quickaddform" name="add_product_id" id="add_product_id" fieldFormName="${fieldFormName}"/-->
+                      <a href="javascript:quicklookupGiftCertificate()" class="buttontext">${uiLabelMap.OrderAddGiftCertificate}</a>
+                      <#if "PURCHASE_ORDER" == shoppingCart.getOrderType()>
+                        <a href="javascript:showQohAtp()" class="buttontext">${uiLabelMap.ProductAtpQoh}</a>
+                      </#if>
                     </span>
                   </td>
                 </tr>
@@ -88,8 +155,8 @@ under the License.
                   <td align="right"><div>${uiLabelMap.CommonComment} :</div></td>
                   <td>
                     <div>
-                      <input type="text" size="25" name="itemComment" value="${defaultComment?if_exists}">
-                      <input type="checkbox" name="useAsDefaultComment" value="true" <#if useAsDefaultComment?exists>checked</#if>>
+                      <input type="text" size="25" name="itemComment" value="${defaultComment?if_exists}" />
+                      <input type="checkbox" name="useAsDefaultComment" value="true" <#if useAsDefaultComment?exists>checked="checked"</#if> />
                       ${uiLabelMap.OrderUseDefaultComment}
                     </div>
                   </td>
@@ -103,14 +170,14 @@ under the License.
           </td>
         </tr>
         <#if shoppingCart.getOrderType() == "PURCHASE_ORDER">
-        <tr><td><hr/></td></tr>
+        <tr><td><hr /></td></tr>
         <tr>
           <td>
             <form method="post" action="<@ofbizUrl>additem</@ofbizUrl>" name="bulkworkaddform" style="margin: 0;">
                 <div>
                     ${uiLabelMap.OrderOrderItemType}:&nbsp;<select name="add_item_type"><option value="BULK_ORDER_ITEM">${uiLabelMap.ProductBulkItem}</option><option value="WORK_ORDER_ITEM">${uiLabelMap.ProductWorkItem}</option></select>
-                    <br>${uiLabelMap.ProductProductCategory}:&nbsp;<input type="text" name="add_category_id" size="20" maxlength="20" value="${requestParameters.add_category_id?if_exists}"/>
-                    <a href="javascript:call_fieldlookup2(document.bulkworkaddform.add_category_id,'LookupProductCategory');"><img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/></a>
+                    <br/>${uiLabelMap.ProductProductCategory}:&nbsp;
+                    <@htmlTemplate.lookupField formName="bulkworkaddform" value="${requestParameters.add_category_id?if_exists}" name="add_category_id" id="add_category_id" fieldFormName="LookupProductCategory"/>
                 </div>
                 <div>
                     ${uiLabelMap.CommonDescription}:&nbsp;<input type="text" size="25" name="add_item_description" value=""/>

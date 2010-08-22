@@ -59,6 +59,7 @@ public final class OFBizCasAuthenticationHandler extends AbstractOFBizAuthentica
     }
 
 
+    @Override
     public String login(HttpServletRequest request, HttpServletResponse response, Element rootElement) throws Exception {
 
         String ticket = request.getParameter(PARAM_TICKET);
@@ -141,6 +142,7 @@ public final class OFBizCasAuthenticationHandler extends AbstractOFBizAuthentica
         return randomString(5, 15);
     }
 
+    @Override
     public String logout(HttpServletRequest request, HttpServletResponse response, Element rootElement) {
         String casUrl = UtilXml.childElementValue(rootElement, "CasUrl", "https://localhost:8443/cas");
         String logoutUri = UtilXml.childElementValue(rootElement, "CasLogoutUri", "/logout");
@@ -153,6 +155,7 @@ public final class OFBizCasAuthenticationHandler extends AbstractOFBizAuthentica
     }
 
 
+    @Override
     public SearchResult getLdapSearchResult(String username, String password,
             Element rootElement, boolean bindRequired) throws NamingException {
         String className = UtilXml.childElementValue(rootElement, "CasLdapHandler", "org.ofbiz.ldap.openldap.OFBizLdapAuthenticationHandler");
@@ -178,6 +181,7 @@ public final class OFBizCasAuthenticationHandler extends AbstractOFBizAuthentica
      * @param rootElement Element root element of ldap config file
      * @return true if the user has logged out from ldap; otherwise, false.
      */
+    @Override
     public boolean hasLdapLoggedOut(HttpServletRequest request, HttpServletResponse response, Element rootElement) {
         String casTGC = UtilXml.childElementValue(rootElement, "CasTGTCookieName", "CASTGC");
         String casUrl = UtilXml.childElementValue(rootElement, "CasUrl", "https://localhost:8443/cas");

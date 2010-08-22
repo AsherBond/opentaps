@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+
 <#assign idkey = Static["org.ofbiz.common.Captcha"].ID_KEY>
 
 <input  type="hidden" value="${idkey?if_exists}" name="captchaCode"/>

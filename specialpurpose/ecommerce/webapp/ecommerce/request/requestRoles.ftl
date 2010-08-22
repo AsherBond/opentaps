@@ -17,8 +17,8 @@ specific language governing permissions and limitations
 under the License.
 -->
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">&nbsp;${uiLabelMap.OrderRequestRoles}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">${uiLabelMap.OrderRequestRoles}</div>
     </div>
     <div class="screenlet-body">
         <table cellspacing="0" class="basic-table">
@@ -36,7 +36,7 @@ under the License.
                   </td>
               </tr>
               <#if requestParties.size() != row>
-                <tr><td colspan="3"><hr/></td></tr>
+                <tr><td colspan="3"><hr /></td></tr>
               </#if>
               <#assign row = row + 1>
           </#list>

@@ -29,7 +29,7 @@ under the License.
           <#if "RETURN_RECEIVED" == returnHeader.getString("statusId")>
             <h3>${uiLabelMap.ProductReturnCompletelyReceived}</h3>
           </#if>
-          <br/>
+          <br />
           <table cellspacing="0" class="basic-table">
             <tr class="header-row">
               <td>${uiLabelMap.ProductReceipt}</td>
@@ -52,16 +52,16 @@ under the License.
               </tr>
             </#list>
           </table>
-          <br/>
+          <br />
         </#if>
 
         <#-- Multi-Item Return Receiving -->
         <#if returnHeader?has_content>
           <form method="post" action="<@ofbizUrl>receiveReturnedProduct</@ofbizUrl>" name='selectAllForm'>
             <#-- general request fields -->
-            <input type="hidden" name="facilityId" value="${requestParameters.facilityId?if_exists}">
-            <input type="hidden" name="returnId" value="${requestParameters.returnId?if_exists}">
-            <input type="hidden" name="_useRowSubmit" value="Y">
+            <input type="hidden" name="facilityId" value="${requestParameters.facilityId?if_exists}" />
+            <input type="hidden" name="returnId" value="${requestParameters.returnId?if_exists}" />
+            <input type="hidden" name="_useRowSubmit" value="Y" />
             <#assign now = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp().toString()>
             <#assign rowCount = 0>
             <table cellspacing="0" class="basic-table">
@@ -79,7 +79,7 @@ under the License.
                   </td>
                   <td align="right">
                     ${uiLabelMap.ProductSelectAll}&nbsp;
-                    <input type="checkbox" name="selectAll" value="Y" onclick="javascript:toggleAll(this, 'selectAllForm');">
+                    <input type="checkbox" name="selectAll" value="Y" onclick="javascript:toggleAll(this, 'selectAllForm');" />
                   </td>
                 </tr>
 
@@ -88,17 +88,17 @@ under the License.
                   <#assign orderItem = returnItem.getRelatedOne("OrderItem")?if_exists>
                   <#if (orderItem?has_content && 0 < defaultQuantity)>
                   <#assign orderItemType = (orderItem.getRelatedOne("OrderItemType"))?if_exists>
-                  <input type="hidden" name="returnId_o_${rowCount}" value="${returnItem.returnId}">
-                  <input type="hidden" name="returnItemSeqId_o_${rowCount}" value="${returnItem.returnItemSeqId}">
-                  <input type="hidden" name="shipmentId_o_${rowCount}" value="${parameters.shipmentId?if_exists}">
-                  <input type="hidden" name="facilityId_o_${rowCount}" value="${requestParameters.facilityId?if_exists}">
-                  <input type="hidden" name="datetimeReceived_o_${rowCount}" value="${now}">
-                  <input type="hidden" name="quantityRejected_o_${rowCount}" value="0">
-                  <input type="hidden" name="comments_o_${rowCount}" value="Returned Item RA# ${returnItem.returnId}">
+                  <input type="hidden" name="returnId_o_${rowCount}" value="${returnItem.returnId}" />
+                  <input type="hidden" name="returnItemSeqId_o_${rowCount}" value="${returnItem.returnItemSeqId}" />
+                  <input type="hidden" name="shipmentId_o_${rowCount}" value="${parameters.shipmentId?if_exists}" />
+                  <input type="hidden" name="facilityId_o_${rowCount}" value="${requestParameters.facilityId?if_exists}" />
+                  <input type="hidden" name="datetimeReceived_o_${rowCount}" value="${now}" />
+                  <input type="hidden" name="quantityRejected_o_${rowCount}" value="0" />
+                  <input type="hidden" name="comments_o_${rowCount}" value="Returned Item RA# ${returnItem.returnId}" />
 
                   <#assign unitCost = Static["org.ofbiz.order.order.OrderReturnServices"].getReturnItemInitialCost(delegator, returnItem.returnId, returnItem.returnItemSeqId)/>
                   <tr>
-                    <td colspan="2"><hr></td>
+                    <td colspan="2"><hr/></td>
                   </tr>
                   <tr>
                     <td>
@@ -109,7 +109,7 @@ under the License.
                             <#assign product = orderItem.getRelatedOne("Product")>
                             <#assign productId = product.productId>
                             <#assign serializedInv = product.getRelatedByAnd("InventoryItem", Static["org.ofbiz.base.util.UtilMisc"].toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM"))>
-                            <input type="hidden" name="productId_o_${rowCount}" value="${product.productId}">
+                            <input type="hidden" name="productId_o_${rowCount}" value="${product.productId}" />
                             <td width="45%">
                               <div>
                                 ${returnItem.returnItemSeqId}:&nbsp;<a href="/catalog/control/EditProduct?productId=${product.productId}${externalKeyParam?if_exists}" target="catalog" class="buttontext">${product.productId}&nbsp;-&nbsp;${product.internalName?if_exists}</a> : ${product.description?if_exists}
@@ -120,7 +120,7 @@ under the License.
                             <td width="45%">
                               <div>
                                 ${returnItem.returnItemSeqId}:&nbsp;<b>${orderItemType.get("description",locale)}</b> : ${orderItem.itemDescription?if_exists}&nbsp;&nbsp;
-                                <input type="text" size="12" name="productId_o_${rowCount}">
+                                <input type="text" size="12" name="productId_o_${rowCount}" />
                                 <a href="/catalog/control/EditProduct?externalLoginKey=${externalLoginKey}" target="catalog" class="buttontext">${uiLabelMap.ProductCreateProduct}</a>
                               </div>
                             </td>
@@ -150,27 +150,24 @@ under the License.
                                 <option value="">${uiLabelMap.ProductNoLocation}</option>
                               </select>
                             <#else>
-                              <input type="text" name="locationSeqId_o_${rowCount}" size="12"/>
                               <span>
-                                  <a href="javascript:call_fieldlookup2(document.selectAllForm.locationSeqId_o_${rowCount},'LookupFacilityLocation<#if parameters.facilityId?exists>?facilityId=${facilityId}</#if>');">
-                                      <img src="<@ofbizContentUrl>/images/fieldlookup.gif</@ofbizContentUrl>" width="15" height="14" border="0" alt="${uiLabelMap.CommonClickHereForFieldLookup}"/>
-                                  </a>
+                                <@htmlTemplate.lookupField formName="selectAllForm" name="locationSeqId_o_${rowCount}" id="locationSeqId_o_${rowCount}" fieldFormName="LookupFacilityLocation<#if parameters.facilityId?exists>?facilityId=${facilityId}</#if>"/>
                               </span>
                             </#if>
                           </td>
 
-                          <td align="right" nowrap class="label">${uiLabelMap.ProductQtyReceived}</td>
+                          <td align="right" nowrap="nowrap" class="label">${uiLabelMap.ProductQtyReceived}</td>
                           <td align="right">
-                            <input type="text" name="quantityAccepted_o_${rowCount}" size="6" value="${returnItem.returnQuantity?string.number}">
+                            <input type="text" name="quantityAccepted_o_${rowCount}" size="6" value="${defaultQuantity?string.number}" />
                           </td>
                         </tr>
                         <tr>
                            <td width='10%'>
-                              <select name="inventoryItemTypeId_o_${rowCount}" size="1">
+                              <select name="inventoryItemTypeId_o_${rowCount}" size="1" id="inventoryItemTypeId_o_${rowCount}" onchange="javascript:setInventoryItemStatus(this,${rowCount});">
                                  <#list inventoryItemTypes as nextInventoryItemType>
                                     <option value='${nextInventoryItemType.inventoryItemTypeId}'
                                  <#if (facility.defaultInventoryItemTypeId?has_content) && (nextInventoryItemType.inventoryItemTypeId == facility.defaultInventoryItemTypeId)>
-                                    SELECTED
+                                    selected="selected"
                                   </#if>
                                  >${nextInventoryItemType.get("description",locale)?default(nextInventoryItemType.inventoryItemTypeId)}</option>
                                  </#list>
@@ -178,10 +175,10 @@ under the License.
                           </td>
                           <td width="35%">
                             <span class="label">${uiLabelMap.ProductInitialInventoryItemStatus}:</span>&nbsp;&nbsp;
-                            <select name="statusId_o_${rowCount}" size='1'>
+                            <select name="statusId_o_${rowCount}" size='1' id = "statusId_o_${rowCount}">
                               <option value="INV_RETURNED">${uiLabelMap.ProductReturned}</option>
                               <option value="INV_AVAILABLE">${uiLabelMap.ProductAvailable}</option>
-                              <option value="INV_DEFECTIVE" <#if returnItem.returnReasonId?default("") == "RTN_DEFECTIVE_ITEM">Selected</#if>>${uiLabelMap.ProductDefective}</option>
+                              <option value="INV_NS_DEFECTIVE" <#if returnItem.returnReasonId?default("") == "RTN_DEFECTIVE_ITEM">Selected</#if>>${uiLabelMap.ProductDefective}</option>
                             </select>
                           </td>
                           <#if serializedInv?has_content>
@@ -196,15 +193,15 @@ under the License.
                           <#else>
                             <td colspan="2">&nbsp;</td>
                           </#if>
-                          <td align="right" nowrap class="label">${uiLabelMap.ProductPerUnitPrice}</td>
+                          <td align="right" nowrap="nowrap" class="label">${uiLabelMap.ProductPerUnitPrice}</td>
                           <td align="right">
-                            <input type='text' name='unitCost_o_${rowCount}' size='6' value='${unitCost?default(0)?string("##0.00")}'>
+                            <input type='text' name='unitCost_o_${rowCount}' size='6' value='${unitCost?default(0)?string("##0.00")}' />
                           </td>
                         </tr>
                       </table>
                     </td>
                     <td align="right">
-                      <input type="checkbox" name="_rowSubmit_o_${rowCount}" value="Y" onclick="javascript:checkToggle(this, 'selectAllForm');">
+                      <input type="checkbox" name="_rowSubmit_o_${rowCount}" value="Y" onclick="javascript:checkToggle(this, 'selectAllForm');" />
                     </td>
                   </tr>
                   <#assign rowCount = rowCount + 1>
@@ -212,7 +209,7 @@ under the License.
                 </#list>
                 <tr>
                   <td colspan="2">
-                    <hr>
+                    <hr/>
                   </td>
                 </tr>
                 <#if rowCount == 0>
@@ -233,22 +230,22 @@ under the License.
                 </#if>
               </#if>
             </table>
-            <input type="hidden" name="_rowCount" value="${rowCount}">
+            <input type="hidden" name="_rowCount" value="${rowCount}" />
           </form>
           <script language="JavaScript" type="text/javascript">selectAll('selectAllForm');</script>
 
           <#-- Initial Screen -->
         <#else>
           <form name="selectAllForm" method="post" action="<@ofbizUrl>ReceiveReturn</@ofbizUrl>">
-            <input type="hidden" name="facilityId" value="${requestParameters.facilityId?if_exists}">
-            <input type="hidden" name="initialSelected" value="Y">
+            <input type="hidden" name="facilityId" value="${requestParameters.facilityId?if_exists}" />
+            <input type="hidden" name="initialSelected" value="Y" />
             <table cellspacing="0" class="basic-table">
               <tr><td colspan="4"><h3>${uiLabelMap.ProductReceiveReturn}</h3></td></tr>
               <tr>
                 <td width="15%" align='right' class="label">${uiLabelMap.ProductReturnNumber}</td>
                 <td>&nbsp;</td>
                 <td width="90%">
-                  <input type="text" name="returnId" size="20" maxlength="20" value="${requestParameters.returnId?if_exists}">
+                  <input type="text" name="returnId" size="20" maxlength="20" value="${requestParameters.returnId?if_exists}" />
                 </td>
                 <td>&nbsp;</td>
               </tr>
@@ -263,3 +260,9 @@ under the License.
         </#if>
     </div>
 </div>
+<script language="JavaScript" type="text/javascript">
+    function setInventoryItemStatus(selection,index) {
+        var statusId = "statusId_o_" + index;
+        new Ajax.Updater($(statusId), 'UpdatedInventoryItemStatus',{parameters: {inventoryItemType:selection.value,inventoryItemStatus:$(statusId).value}});
+    }
+</script>

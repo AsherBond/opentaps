@@ -76,6 +76,7 @@ public class Region extends Content {
         return sections;
     }
 
+    @Override
     public void render(PageContext pageContext) throws JspException {
         if (Debug.verboseOn()) Debug.logVerbose("Rendering " + this.toString(), module);
 
@@ -99,6 +100,7 @@ public class Region extends Content {
         }
     }
 
+    @Override
     public void render(HttpServletRequest request, HttpServletResponse response) throws java.io.IOException, ServletException {
         if (Debug.verboseOn()) Debug.logVerbose("Rendering " + this.toString(), module);
 
@@ -115,6 +117,7 @@ public class Region extends Content {
         rd.include(request, response);
     }
 
+    @Override
     public String toString() {
         String s = "Region: " + content + ", type=" + type;
 

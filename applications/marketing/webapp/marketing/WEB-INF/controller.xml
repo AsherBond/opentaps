@@ -22,8 +22,9 @@ under the License.
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
+    <include location="component://commonext/webapp/WEB-INF/controller.xml"/>
     <description>Marketing Manager Module Site Configuration File</description>
-    <owner>Copyright 2001-2008 The Apache Software Foundation</owner>
+    <owner>Copyright 2001-2009 The Apache Software Foundation</owner>
 
     <!-- Events to run on every request before security (chains exempt) -->
     <!--
@@ -312,7 +313,9 @@ under the License.
     <request-map uri="updateContactListParty">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateContactListParty"/>
+
         <response name="success" type="view" value="EditContactListParty"/>
+
         <response name="error" type="view" value="EditContactListParty"/>
     </request-map>
     <request-map uri="removeContactListParty">
@@ -320,6 +323,10 @@ under the License.
         <event type="service" invoke="deleteContactListParty"/>
         <response name="success" type="view" value="ListContactListParties"/>
         <response name="error" type="view" value="ListContactListParties"/>
+    </request-map>
+    <request-map uri="contactListOptOut" track-serverhit="false" track-visit="false">
+        <security https="true" auth="false"/>
+        <response name="success" type="view" value="ContactListOptOut"/>
     </request-map>
 
     <request-map uri="ListContactListCommEvents"><security https="true" auth="true"/><response name="success" type="view" value="ListContactListCommEvents"/></request-map>
@@ -347,6 +354,16 @@ under the License.
         <response name="success" type="view" value="ListContactListCommEvents"/>
         <response name="error" type="view" value="ListContactListCommEvents"/>
     </request-map>
+    <request-map uri="expireContactListParty">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateContactListParty"/>
+        <response name="success" type="request-redirect" value="ListContactListParties">
+            <redirect-parameter name="contactListId"/>
+            <redirect-parameter name="hideExpired"/>
+        </response>
+        <response name="error" type="view" value="ListContactListParties"/>
+    </request-map>
+
 
     <!-- Lookup request mappings -->
     <request-map uri="LookupSegmentGroup"><security https="true" auth="true"/><response name="success" type="view" value="LookupSegmentGroup"/></request-map>
@@ -368,6 +385,15 @@ under the License.
     <request-map uri="MarketingCampaignReport">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="MarketingCampaignReport"/>
+    </request-map>
+
+    <request-map uri="EmailStatusReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EmailStatusReport"/>
+    </request-map>
+    <request-map uri="PartyStatusReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="PartyStatusReport"/>
     </request-map>
 
     <!-- end of request mappings -->
@@ -408,6 +434,7 @@ under the License.
     <view-map name="ListContactListParty" type="screen" page="component://marketing/widget/ContactListScreens.xml#ListContactListParties"/>
     <view-map name="EditContactListParty" type="screen" page="component://marketing/widget/ContactListScreens.xml#EditContactListParty"/>
     <view-map name="FindContactListParties" type="screen" page="component://marketing/widget/ContactListScreens.xml#FindContactListParties"/>
+    <view-map name="ContactListOptOut" type="screen" page="component://marketing/widget/ContactListScreens.xml#OptOutResponse"/>
 
     <view-map name="ListContactListCommEvents" type="screen" page="component://marketing/widget/ContactListScreens.xml#ListContactListCommEvents"/>
     <view-map name="EditContactListCommEvent" type="screen" page="component://marketing/widget/ContactListScreens.xml#EditContactListCommEvent"/>
@@ -427,5 +454,7 @@ under the License.
 
     <view-map name="TrackingCodeReport" type="screen" page="component://marketing/widget/MarketingReportScreens.xml#TrackingCodeReport"/>
     <view-map name="MarketingCampaignReport" type="screen" page="component://marketing/widget/MarketingReportScreens.xml#MarketingCampaignReport"/>
-    <!-- end of view mappings -->
+    <view-map name="EmailStatusReport" type="screen" page="component://marketing/widget/MarketingReportScreens.xml#EmailStatusReport"/>
+    <view-map name="PartyStatusReport" type="screen" page="component://marketing/widget/MarketingReportScreens.xml#PartyStatusReport"/>
+<!-- end of view mappings -->
 </site-conf>

@@ -1,5 +1,4 @@
 /*
-/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -30,6 +29,8 @@ import org.ofbiz.entity.util.*;
 import org.ofbiz.entity.condition.*;
 import java.sql.Timestamp;
 
+uiLabelMap = UtilProperties.getResourceBundleMap("ProjectMgrUiLabels", locale);
+
 partyId = parameters.partyId;
 if (!partyId) {
     partyId = parameters.userLogin.partyId;
@@ -42,12 +43,18 @@ if (timesheetId) {
     timesheet = delegator.findByPrimaryKey("Timesheet", ["timesheetId" : timesheetId]);
     partyId = timesheet.partyId; // use the party from this timesheet
 } else {
-    start = UtilDateTime.getWeekStart(UtilDateTime.nowTimestamp());
-    timesheets = delegator.findByAnd("Timesheet", ["partyId" : partyId, "fromDate" : start]);
-    if (timesheets) {
-        timesheet = timesheets[0];
-    } else {
-    	result = dispatcher.runSync("createProjectTimesheet", ["userLogin" : parameters.userLogin, "partyId" : partyId]);
+    // make sure because of timezone changes, not a duplicate timesheet is created
+    midweek = UtilDateTime.addDaysToTimestamp(UtilDateTime.getWeekStart(UtilDateTime.nowTimestamp()),3);
+    entryExprs = EntityCondition.makeCondition([
+        EntityCondition.makeCondition("fromDate", EntityComparisonOperator.LESS_THAN, midweek),
+        EntityCondition.makeCondition("thruDate", EntityComparisonOperator.GREATER_THAN, midweek),
+        EntityCondition.makeCondition("partyId", EntityComparisonOperator.EQUALS, partyId)
+        ], EntityOperator.AND);
+    entryIterator = delegator.find("Timesheet", entryExprs, null, null, null, null);
+    timesheet = entryIterator.next();
+    entryIterator.close();
+    if (timesheet == null) {
+        result = dispatcher.runSync("createProjectTimesheet", ["userLogin" : parameters.userLogin, "partyId" : partyId]);
         if (result && result.timesheetId) {
             timesheet = delegator.findByPrimaryKey("Timesheet", ["timesheetId" : result.timesheetId]);
         }
@@ -113,6 +120,7 @@ void retrieveWorkEffortData() {
                 entry.phaseName = result.phaseName;
                 entry.projectId = result.projectId;
                 entry.projectName = result.projectName;
+                entry.taskWbsId = result.taskWbsId;
 
         }
         entry.total = taskTotal;
@@ -175,7 +183,7 @@ if (timeEntry) {
     entry.d4 = day4Total;
     entry.d5 = day5Total;
     entry.d6 = day6Total;
-    entry.phaseName = "Totals";
+    entry.phaseName = uiLabelMap.ProjectMgrTotals;
     entry.workEffortId = "Totals";
     entry.total = day0Total + day1Total + day2Total + day3Total + day4Total + day5Total + day6Total;
     entries.add(entry);

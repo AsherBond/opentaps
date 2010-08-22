@@ -30,21 +30,21 @@ under the License.
 </#if>
 <h1>${uiLabelMap.PartyFindParties}</h1>
 <#if (parameters.firstName?has_content || parameters.lastName?has_content)>
-    <#assign createUrl = "editperson?create_new=Y&lastName=${parameters.lastName?if_exists}&firstName=${parameters.firstName?if_exists}"/>
+    <#assign createUrl = "editperson?create_new=Y&amp;lastName=${parameters.lastName?if_exists}&amp;firstName=${parameters.firstName?if_exists}"/>
 <#elseif (parameters.groupName?has_content)>
-    <#assign createUrl = "editpartygroup?create_new=Y&groupName=${parameters.groupName?if_exists}"/>
+    <#assign createUrl = "editpartygroup?create_new=Y&amp;groupName=${parameters.groupName?if_exists}"/>
 <#else>
     <#assign createUrl = "createnew"/>
 </#if>
-<div class="button-bar"><a href="<@ofbizUrl>${createUrl}</@ofbizUrl>" class="smallSubmit">${uiLabelMap.CommonCreateNew}</a></div>
+<div class="button-bar"><a href="<@ofbizUrl>${createUrl}</@ofbizUrl>" class="buttontext create">${uiLabelMap.CommonCreateNew}</a></div>
 <div class="screenlet">
   <div class="screenlet-title-bar">
     <#if partyList?has_content>
       <ul>
         <#if hideFields == "Y">
-          <li class="collapsed"><a href="<@ofbizUrl>findparty?hideFields=N${paramList}</@ofbizUrl>" title="${uiLabelMap.CommonShowLookupFields}">&nbsp</a></li>
+          <li class="collapsed"><a href="<@ofbizUrl>findparty?hideFields=N${paramList}</@ofbizUrl>" title="${uiLabelMap.CommonShowLookupFields}">&nbsp;</a></li>
         <#else>
-          <li class="expanded"><a href="<@ofbizUrl>findparty?hideFields=Y${paramList}</@ofbizUrl>" title="${uiLabelMap.CommonHideFields}">&nbsp</a></li>
+          <li class="expanded"><a href="<@ofbizUrl>findparty?hideFields=Y${paramList}</@ofbizUrl>" title="${uiLabelMap.CommonHideFields}">&nbsp;</a></li>
         </#if>
         <#if (partyListSize > 0)>
           <#if (partyListSize > highIndex)>
@@ -63,8 +63,8 @@ under the License.
       <br class="clear"/>
     </#if>
   </div>
-
-    <div id="findPartyParameters" class="screenlet-body" <#if hideFields != "N"> style="display:none" </#if> >
+  <div class="screenlet-body">
+    <div id="findPartyParameters" <#if hideFields != "N"> style="display:none" </#if> >
       <h2>${uiLabelMap.CommonSearchOptions}</h2>
       <#-- NOTE: this form is setup to allow a search by partial partyId or userLoginId; to change it to go directly to
           the viewprofile page when these are entered add the follow attribute to the form element:
@@ -147,7 +147,7 @@ under the License.
             <td><input type="text" name="softIdentifier" value="${parameters.softIdentifier?if_exists}"/></td>
           </tr>
           <#if extInfo == "P">
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
             <tr>
               <td class="label">${uiLabelMap.CommonAddress1}</td>
               <td><input type="text" name="address1" value="${parameters.address1?if_exists}"/></td>
@@ -179,7 +179,7 @@ under the License.
             </tr>
           </#if>
           <#if extInfo == "T">
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
             <tr>
               <td class="label">${uiLabelMap.PartyCountryCode}</td>
               <td><input type="text" name="countryCode" value="${parameters.countryCode?if_exists}"/></td>
@@ -194,7 +194,7 @@ under the License.
             </tr>
           </#if>
           <#if extInfo == "O">
-            <tr><td colspan="3"><hr/></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
             <tr>
               <td class="label">${uiLabelMap.PartyContactInformation}</td>
               <td><input type="text" name="infoString" value="${parameters.infoString?if_exists}"/></td>
@@ -203,7 +203,7 @@ under the License.
           <tr>
             <td>&nbsp;</td>
             <td>
-              <input type="submit" value="${uiLabelMap.PartyLookupParty}" onClick="javascript:document.lookupparty.submit();"/>
+              <input type="submit" value="${uiLabelMap.CommonFind}" onclick="javascript:document.lookupparty.submit();"/>
             </td>
           </tr>
         </table>
@@ -213,12 +213,11 @@ under the License.
       document.lookupparty.partyId.focus();
     </script>
 
-
   <#if partyList?exists>
     <#if hideFields != "Y">
-      <hr/>
+      <hr />
     </#if>
-    <div id="findPartyResults" class="screenlet-body">
+    <div id="findPartyResults">
       <h2>${uiLabelMap.CommonSearchResults}</h2>
     </div>
     <#if partyList?has_content>
@@ -245,7 +244,9 @@ under the License.
           <#if softIdentifier?default("") != "">
             <td>${uiLabelMap.ProductSoftIdentifier}</td>
           </#if>
+          <td>${uiLabelMap.PartyRelatedCompany}</td>
           <td>${uiLabelMap.PartyType}</td>
+          <td>${uiLabelMap.PartyMainRole}</td>
           <td>&nbsp;</td>
         </tr>
         <#assign alt_row = false>
@@ -303,16 +304,37 @@ under the License.
             <#if softIdentifier?default("") != "">
               <td>${partyRow.softIdentifier?if_exists}</td>
             </#if>
-            <td><#if partyType.description?exists>${partyType.get("description", locale)}<#else>???</#if></td>
+            <#if partyType?exists>
+              <td>
+                  <#if partyType.partyTypeId?has_content && partyType.partyTypeId=="PERSON">
+                       <#assign partyRelateCom = delegator.findByAnd("PartyRelationship", {"partyIdTo", partyRow.partyId,"roleTypeIdFrom","ACCOUNT","roleTypeIdTo","CONTACT"})>
+                       <#if partyRelateCom?has_content>
+                          <#list partyRelateCom as partyRelationship>
+                              <#if partyRelationship.partyIdFrom?has_content>
+                                  <#assign companyName=Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, partyRelationship.partyIdFrom, true)>
+                                  ${companyName?if_exists}
+                              </#if>
+                          </#list>
+                       </#if>
+                  </#if>
+              </td>
+              <td><#if partyType.description?exists>${partyType.get("description", locale)}<#else>???</#if></td>
+           <#else>
+            <td></td><td></td>
+           </#if>
+            <td>
+              <#assign mainRole = dispatcher.runSync("getPartyMainRole", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", partyRow.partyId, "userLogin", userLogin))/>
+              ${mainRole.description?if_exists}
+            </td>
             <td class="button-col align-float">
               <a href="<@ofbizUrl>viewprofile?partyId=${partyRow.partyId}</@ofbizUrl>">${uiLabelMap.CommonDetails}</a>
               <#if security.hasRolePermission("ORDERMGR", "_VIEW", "", "", session)>
                   <form name= "searchorders_o_${rowCount}" method= "post" action= "/ordermgr/control/searchorders">
-                    <input type= "hidden" name= "lookupFlag" value= "Y">
-                    <input type= "hidden" name= "hideFields" value= "Y">
-                    <input type= "hidden" name= "partyId" value= "${partyRow.partyId}">
-                    <input type= "hidden" name= "viewIndex" value= "1">
-                    <input type= "hidden" name= "viewSize" value= "20">
+                    <input type= "hidden" name= "lookupFlag" value= "Y" />
+                    <input type= "hidden" name= "hideFields" value= "Y" />
+                    <input type= "hidden" name= "partyId" value= "${partyRow.partyId}" />
+                    <input type= "hidden" name= "viewIndex" value= "1" />
+                    <input type= "hidden" name= "viewSize" value= "20" />
                     <a href="javascript:document.searchorders_o_${rowCount}.submit()">${uiLabelMap.OrderOrders}</a>
                 </form>
                 <a href="/ordermgr/control/FindQuote?partyId=${partyRow.partyId + externalKeyParam}">${uiLabelMap.OrderOrderQuotes}</a>
@@ -329,7 +351,7 @@ under the License.
         </#list>
       </table>
     <#else>
-      <div id="findPartyResults" class="screenlet-body">
+      <div id="findPartyResults_2">
         <h3>${uiLabelMap.PartyNoPartiesFound}</h3>
       </div>
     </#if>
@@ -338,3 +360,4 @@ under the License.
     </#if>
   </div>
 </#if>
+</div>

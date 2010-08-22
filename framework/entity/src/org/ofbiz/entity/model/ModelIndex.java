@@ -19,10 +19,16 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.entity.model;
 
-import java.util.*;
-import org.w3c.dom.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Iterator;
 
-import org.ofbiz.base.util.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.UtilXml;
 
 /**
  * Generic Entity - Relation model class
@@ -87,17 +93,6 @@ public class ModelIndex extends ModelChild {
 
     public void setUnique(boolean unique) {
         this.unique = unique;
-    }
-
-    /** @deprecated
-      * the main entity of this relation */
-    public ModelEntity getMainEntity() {
-        return getModelEntity();
-    }
-
-    /** @deprecated */
-    public void setMainEntity(ModelEntity mainEntity) {
-        setModelEntity(mainEntity);
     }
 
     public Iterator<String> getIndexFieldsIterator() {

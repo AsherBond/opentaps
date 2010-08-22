@@ -33,5 +33,6 @@ public class WfActivityNoImplementation extends WfActivityAbstractImplementation
     /**
      * @see org.ofbiz.workflow.impl.WfActivityAbstractImplementation#run()
      */
+    @Override
     public void run() {}
 }

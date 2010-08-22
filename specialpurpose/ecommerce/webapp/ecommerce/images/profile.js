@@ -26,6 +26,7 @@ Event.observe(window, 'load', function() {
         validateNewUser = new Validation('newUserForm', {immediate: true, onSubmit: false});
         addValidations();
         Event.observe($('emailAddress'), 'change', setUserNameFromEmail);
+        useShippingAddressAsBillingToggle();
         Event.observe('useShippingAddressForBilling', 'click', useShippingAddressAsBillingToggle);
         Event.observe($('submitNewUserForm'), 'click', submitValidNewUser);
         // Get associate states for Shipping Information
@@ -128,8 +129,8 @@ function validatePhoneNumber(errorDivId, focusedTextId, textToCheck1, textToChec
 }
 
 function submitValidNewUser() {
-	validatePhoneNumber('shipToPhoneRequired', 'shipToContactNumber', 'shipToCountryCode', 'shipToAreaCode');
-	validatePhoneNumber('billToPhoneRequired', 'billToContactNumber', 'billToCountryCode', 'billToAreaCode');
+    validatePhoneNumber('shipToPhoneRequired', 'shipToContactNumber', 'shipToCountryCode', 'shipToAreaCode');
+    validatePhoneNumber('billToPhoneRequired', 'billToContactNumber', 'billToCountryCode', 'billToAreaCode');
     if (validateNewUser.validate()) {
         $('newUserForm').submit();
     }
@@ -172,7 +173,7 @@ function useShippingAddressAsBillingToggle() {
         copyShipToBillAddress();
         hideErrorMessage();
     } else {
-    	validBillingAddress();
+        validBillingAddress();
         stopObservingShipToBillAddress();
         $('billToAddress1').disabled = false ;
         $('billToAddress2').disabled = false ;

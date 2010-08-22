@@ -19,8 +19,8 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 <#if showPromoText?exists && showPromoText>
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">&nbsp;${uiLabelMap.OrderSpecialOffers}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">${uiLabelMap.OrderSpecialOffers}</div>
     </div>
     <div class="screenlet-body">
         <table cellspacing="0" cellpadding="1" border="0">
@@ -32,10 +32,10 @@ under the License.
               </td>
             </tr>
             <#if productPromo_has_next>
-              <tr><td><hr/></td></tr>
+              <tr><td><hr /></td></tr>
             </#if>
           </#list>
-          <tr><td><hr/></td></tr>
+          <tr><td><hr /></td></tr>
           <tr>
             <td>
               <div><a href="<@ofbizUrl>showAllPromotions</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderViewAllPromotions}</a></div>

@@ -32,6 +32,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  */
 public class IteratorHasNextTag extends BodyTagSupport {
 
+    @Override
     public int doStartTag() throws JspTagException {
         IteratorTag iteratorTag =
             (IteratorTag) findAncestorWithClass(this, IteratorTag.class);
@@ -39,7 +40,7 @@ public class IteratorHasNextTag extends BodyTagSupport {
         if (iteratorTag == null)
             throw new JspTagException("IterateNextTag not inside IteratorTag.");
 
-        Iterator iterator = iteratorTag.getIterator();
+        Iterator<?> iterator = iteratorTag.getIterator();
 
         if (iterator == null || !iterator.hasNext())
             return SKIP_BODY;
@@ -47,10 +48,12 @@ public class IteratorHasNextTag extends BodyTagSupport {
         return EVAL_BODY_AGAIN;
     }
 
+    @Override
     public int doAfterBody() {
         return SKIP_BODY;
     }
 
+    @Override
     public int doEndTag() {
         try {
             BodyContent body = getBodyContent();

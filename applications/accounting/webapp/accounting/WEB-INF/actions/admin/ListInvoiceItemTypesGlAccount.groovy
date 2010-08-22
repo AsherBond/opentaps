@@ -30,8 +30,8 @@ invItemTypePrefix = context.invItemTypePrefix ?: "INV";
 invItemTypePrefix += "_%";
 
 organizationPartyId = parameters.organizationPartyId;
-
-invoiceItemTypes = delegator.findList("InvoiceItemType", EntityCondition.makeCondition("invoiceItemTypeId", EntityOperator.LIKE, invItemTypePrefix), null, null, null, false);
+exprBldr = new EntityConditionBuilder();
+invoiceItemTypes = delegator.findList("InvoiceItemType", exprBldr.LIKE(invoiceItemTypeId: invItemTypePrefix), null, null, null, false);
 allTypes = [];
 invoiceItemTypes.each { invoiceItemType ->
     activeGlDescription = "";

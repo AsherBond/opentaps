@@ -19,8 +19,8 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <div id="serialized-inventory-summary" class="screenlet">
-    <div class="screenlet-header">
-        <span class="boxhead">${uiLabelMap.ProductSerializedInventorySummary}</span>
+    <div class="screenlet-title-bar">
+        <span class="h3">${uiLabelMap.ProductSerializedInventorySummary}</span>
     </div>
     <div class="screenlet-body">
         <table width="100%" cellspacing="0" cellpadding="2">

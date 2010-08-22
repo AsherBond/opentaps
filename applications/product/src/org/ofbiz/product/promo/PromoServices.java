@@ -19,30 +19,33 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.product.promo;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
+
 import javolution.util.FastList;
 import javolution.util.FastMap;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityListIterator;
-import org.ofbiz.service.*;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ModelService;
+import org.ofbiz.service.ServiceUtil;
 
 /**
  * Promotions Services
@@ -52,7 +55,7 @@ public class PromoServices {
     public final static String module = PromoServices.class.getName();
 
     public static Map<String, Object> createProductPromoCodeSet(DispatchContext dctx, Map<String, ? extends Object> context) {
-        //GenericDelegator delegator = dctx.getDelegator();
+        //Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Long quantity = (Long) context.get("quantity");
         //Long useLimitPerCode = (Long) context.get("useLimitPerCode");
@@ -80,7 +83,7 @@ public class PromoServices {
     }
 
     public static Map<String, Object> purgeOldStoreAutoPromos(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String productStoreId = (String) context.get("productStoreId");
         Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
 
@@ -120,8 +123,8 @@ public class PromoServices {
             return ServiceUtil.returnError("Uploaded file not valid or corrupted");
         }
 
-        String encoding = System.getProperty("file.encoding"); 
-        String file = Charset.forName(encoding).decode(fileBytes).toString();         
+        String encoding = System.getProperty("file.encoding");
+        String file = Charset.forName(encoding).decode(fileBytes).toString();
         // get the createProductPromoCode Model
         ModelService promoModel;
         try {

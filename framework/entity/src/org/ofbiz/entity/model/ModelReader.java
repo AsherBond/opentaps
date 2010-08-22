@@ -21,6 +21,7 @@ package org.ofbiz.entity.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -54,10 +55,11 @@ import org.w3c.dom.Node;
  * Generic Entity - Entity Definition Reader
  *
  */
+@SuppressWarnings("serial")
 public class ModelReader implements Serializable {
 
     public static final String module = ModelReader.class.getName();
-    public static UtilCache<String, ModelReader> readers = new UtilCache<String, ModelReader>("entity.ModelReader", 0, 0);
+    public static UtilCache<String, ModelReader> readers = UtilCache.createUtilCache("entity.ModelReader", 0, 0);
 
     protected Map<String, ModelEntity> entityCache = null;
 
@@ -200,7 +202,7 @@ public class ModelReader implements Serializable {
                     numRelations = 0;
                     numAutoRelations = 0;
 
-                    entityCache = FastMap.newInstance();
+                    entityCache = new HashMap<String, ModelEntity>();
                     List<ModelViewEntity> tempViewEntityList = FastList.newInstance();
                     List<Element> tempExtendEntityElementList = FastList.newInstance();
 
@@ -224,7 +226,6 @@ public class ModelReader implements Serializable {
                         Element docElement = document.getDocumentElement();
 
                         if (docElement == null) {
-                            entityCache = null;
                             return null;
                         }
                         docElement.normalize();
@@ -360,10 +361,10 @@ public class ModelReader implements Serializable {
                                                     orderedMessages.add(message);
                                                 }
                                             } else {
-                                                String message = "Existing relationship with the same name, but different specs found from what would be auto-created for Entity [" + relatedEnt.getEntityName() + "] ant relationship to entity [" +
+                                                String message = "Existing relationship with the same name, but different specs found from what would be auto-created for Entity [" + relatedEnt.getEntityName() + "] and relationship to entity [" +
                                                         curModelEntity.getEntityName() + "] title [" + targetTitle + "]; would auto-create: type [" +
                                                         newRel.getType() + "] and fields [" + newRel.keyMapString(",", "") + "]";
-                                                //Debug.logInfo(message, module);
+                                                Debug.logVerbose(message, module);
                                             }
                                         }
                                     } else {
@@ -540,7 +541,7 @@ public class ModelReader implements Serializable {
         if (entityName == null) {
             return null;
         }
-        Set allEntities = this.getEntityNames();
+        Set<String> allEntities = this.getEntityNames();
         while (!allEntities.contains(entityName) && entityName.length() > 0) {
             entityName = entityName.substring(1);
         }

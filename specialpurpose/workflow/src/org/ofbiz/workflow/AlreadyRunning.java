@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * AlreadyRunning Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class AlreadyRunning extends WfException {
 
     public AlreadyRunning() {}

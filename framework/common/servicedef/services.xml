@@ -51,9 +51,9 @@ under the License.
     <service name="createNote" engine="java"
             location="org.ofbiz.common.CommonServices" invoke="createNote">
         <description>Create a new note record</description>
-        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="INOUT" optional="true"/>
         <attribute name="noteName" type="String" mode="IN" optional="true"/>
-        <attribute name="note" type="String" mode="IN"/>
+        <attribute name="note" type="String" mode="IN" allow-html="safe"/>
         <attribute name="noteId" type="String" mode="OUT"/>
     </service>
 
@@ -208,6 +208,7 @@ under the License.
         <attribute name="entityName" type="String" mode="IN" optional="false"/>
         <attribute name="fieldList" type="java.util.List" mode="IN" optional="true"/>
         <attribute name="orderByList" type="java.util.List" mode="IN" optional="true"/>
+        <attribute name="maxRows" mode="IN" type="Integer" optional="true"/>
         <attribute name="entityConditionList" type="org.ofbiz.entity.condition.EntityConditionList" mode="IN" optional="true"/>
         <attribute name="noConditionFind" type="String" mode="IN" optional="true"><!-- find with no condition (empty entityConditionList) only done when this is Y --></attribute>
         <attribute name="distinct" type="String" mode="IN" optional="true"><!-- distinct find only done when this is Y --></attribute>
@@ -225,6 +226,8 @@ under the License.
         <attribute name="distinct" type="String" mode="IN" optional="true"><!-- distinct find only done when this is Y --></attribute>
         <attribute name="filterByDate" type="String" mode="IN" optional="true"/>
         <attribute name="filterByDateValue" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="viewIndex" type="Integer" mode="IN" optional="true"/>
+        <attribute name="viewSize" type="Integer" mode="IN" optional="true"/>
         <attribute name="listIt" type="org.ofbiz.entity.util.EntityListIterator" mode="OUT" optional="true"/>
         <attribute name="queryString" type="String" mode="OUT" optional="true"/>
         <attribute name="queryStringMap" type="java.util.Map" mode="OUT" optional="true"/>
@@ -294,6 +297,7 @@ under the License.
         <attribute name="asOfDate" mode="IN" type="Timestamp" optional="true"/>
         <attribute name="originalValue" mode="IN" type="BigDecimal" optional="false"/>
         <attribute name="conversionParameters" mode="IN" type="Map" optional="true"/>
+        <attribute name="purposeEnumId" mode="IN" type="String" optional="true"/>
         <attribute name="convertedValue" mode="OUT" type="BigDecimal" optional="true"/>
     </service>
     <service name="convertUomCustom" default-entity-name="UomConversion" engine="simple"
@@ -348,6 +352,7 @@ under the License.
         <attribute name="currentPasswordVerify" type="String" mode="IN" optional="false"/>
         <attribute name="passwordHint" type="String" mode="IN" optional="true"/>
         <attribute name="requirePasswordChange" type="String" mode="IN" optional="true"/>
+        <attribute name="externalAuthId" type="String" mode="IN" optional="true"/>
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
     </service>
     <service name="updateUserLoginId" engine="java" location="org.ofbiz.common.login.LoginServices" invoke="updateUserLoginId" auth="true">
@@ -372,6 +377,7 @@ under the License.
         <attribute name="enabled" type="String" mode="IN" optional="false"/>
         <attribute name="disabledDateTime" type="java.sql.Timestamp" mode="IN" optional="true"/>
         <attribute name="successiveFailedLogins" type="Long" mode="IN" optional="true"/>
+        <attribute name="externalAuthId" type="String" mode="IN" optional="true"/>
         <attribute name="userLdapDn" type="String" mode="IN" optional="true"/>
     </service>
 
@@ -405,7 +411,11 @@ under the License.
 
     <service name="getUserPreference" engine="java"
             location="org.ofbiz.common.preferences.PreferenceServices" invoke="getUserPreference">
-        <description>Gets a single user preference.</description>
+        <description>
+            Gets a single user preference.
+            If not found for the specific userLogin, find it for the _NA_ userlogin.
+            If the value is DEFAULT, find the value in general.properties file.
+        </description>
         <attribute name="userPrefTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="userPrefLoginId" type="String" mode="IN" optional="true"/>
         <attribute name="userPrefGroupTypeId" type="String" mode="IN" optional="true"/>
@@ -461,7 +471,7 @@ under the License.
             Map of Lists, where the resourceTypeEnumId is the key and the value
             is a List of resourceValue Strings for that resourceTypeEnumId.
         </description>
-        <attribute name="visualThemeId" type="String" mode="IN" optional="false"/>
+        <attribute name="visualThemeId" type="String" mode="IN" optional="true"/>
         <attribute name="themeResources" type="Map" mode="IN" optional="true"/>
         <attribute name="themeResources" type="Map" mode="OUT" optional="false"/>
     </service>
@@ -626,6 +636,21 @@ under the License.
         <auto-attributes include="pk" mode="IN" optional="false"/>
     </service>
 
+    <!-- update Sequence No for Drag and Drop -->
+    <service name="updatePortletSeqDragDrop" engine="simple" auth="true"
+        location="component://common/script/org/ofbiz/common/PortalPageServices.xml" invoke="updatePortletSeqDragDrop">
+        <attribute name="o_portalPageId" mode="IN" type="String" ></attribute>
+        <attribute name="o_portalPortletId" mode="IN" type="String"></attribute>
+        <attribute name="o_portletSeqId" mode="IN" type="String"></attribute>
+
+        <attribute name="d_portalPageId" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="d_portalPortletId" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="d_portletSeqId" mode="IN" type="String" optional="true"></attribute>
+
+        <attribute name="destinationColumn" mode="IN" optional="true" type="String"/>
+        <attribute name="mode" type="String" mode="IN"/>
+    </service>
+
     <!-- PortletAttribute services -->
     <service name="createPortletAttribute" default-entity-name="PortletAttribute" engine="entity-auto" invoke="create" auth="true">
         <description>Create a new Portlet Attribute</description>
@@ -635,9 +660,35 @@ under the License.
     <service name="getPortletAttributes" engine="simple" auth="true"
         location="component://common/script/org/ofbiz/common/PortalPageServices.xml" invoke="getPortletAttributes">
         <description>Get all attributes of a Portlet</description>
-        <attribute name="portalPageId" type="String" mode="IN" optional="false"/>
+        <attribute name="portalPageId" type="String" mode="IN" optional="true"/>
+        <attribute name="ownerUserLoginId" type="String" mode="IN" optional="true"/>
         <attribute name="portalPortletId" type="String" mode="IN" optional="false"/>
-        <attribute name="portletSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="portletSeqId" type="String" mode="IN" optional="true"/>
         <attribute name="attributeMap" type="Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- GeoPoint services -->
+    <service name="createGeoPoint" default-entity-name="GeoPoint" engine="entity-auto" invoke="create" auth="true">
+        <description>Create a GeoPoint</description>
+        <permission-service service-name="commonGenericPermission" main-action="CREATE"/>
+        <auto-attributes include="pk" mode="OUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="dataSourceId" optional="false"/>
+        <override name="latitude" optional="false"/>
+        <override name="longitude" optional="false"/>
+    </service>
+    <service name="updateGeoPoint" default-entity-name="GeoPoint" engine="entity-auto" invoke="update" auth="true">
+        <description>Update a GeoPoint</description>
+        <permission-service service-name="commonGenericPermission" main-action="UPDATE"/>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="dataSourceId" optional="false"/>
+        <override name="latitude" optional="false"/>
+        <override name="longitude" optional="false"/>
+    </service>
+    <service name="deleteGeoPoint" default-entity-name="GeoPoint" engine="entity-auto" invoke="delete" auth="true">
+        <description>Delete a GeoPoint</description>
+        <permission-service service-name="commonGenericPermission" main-action="DELETE"/>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
     </service>
 </services>

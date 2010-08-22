@@ -27,7 +27,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
@@ -171,7 +171,7 @@ public class OrderChangeHelper {
 
         // now set the status for digital items
         if (digitalItemStatus != null && !digitalItemStatus.equals(toItemStatus)) {
-            GenericDelegator delegator = dispatcher.getDelegator();
+            Delegator delegator = dispatcher.getDelegator();
             GenericValue orderHeader = null;
             try {
                 orderHeader = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
@@ -270,7 +270,7 @@ public class OrderChangeHelper {
                 GenericValue opp = (GenericValue) oppi.next();
                 if ("PAYMENT_RECEIVED".equals(opp.getString("statusId"))) {
                     List payments = orh.getOrderPayments(opp);
-                    if (payments == null || payments.size() == 0) {
+                    if (UtilValidate.isEmpty(payments)) {
                         // only do this one time; if we have payment already for this pref ignore.
                         Map results = dispatcher.runSync("createPaymentFromPreference",
                                 UtilMisc.<String, Object>toMap("userLogin", userLogin, "orderPaymentPreferenceId", opp.getString("orderPaymentPreferenceId"),
@@ -307,7 +307,7 @@ public class OrderChangeHelper {
     public static boolean releaseInitialOrderHold(LocalDispatcher dispatcher, String orderId) {
         /* NOTE DEJ20080609 commenting out this code because the old OFBiz Workflow Engine is being deprecated and this was only for that
         // get the delegator from the dispatcher
-        GenericDelegator delegator = dispatcher.getDelegator();
+        Delegator delegator = dispatcher.getDelegator();
 
         // find the workEffortId for this order
         List workEfforts = null;
@@ -349,7 +349,7 @@ public class OrderChangeHelper {
     public static boolean abortOrderProcessing(LocalDispatcher dispatcher, String orderId) {
         /* NOTE DEJ20080609 commenting out this code because the old OFBiz Workflow Engine is being deprecated and this was only for that
         Debug.logInfo("Aborting workflow for order " + orderId, module);
-        GenericDelegator delegator = dispatcher.getDelegator();
+        Delegator delegator = dispatcher.getDelegator();
 
         // find the workEffortId for this order
         GenericValue workEffort = null;

@@ -29,8 +29,8 @@ standard order confirmation page and to be re-usable by other screens.
 
 <#if cart?exists>
 <div class="screenlet">
-  <div class="screenlet-header">
-    <div class="boxhead">&nbsp;${uiLabelMap.OrderShippingInformation}</div>
+  <div class="screenlet-title-bar">
+    <div class="h3">${uiLabelMap.OrderShippingInformation}</div>
   </div>
   <div class="screenlet-body">
     <table width="100%">
@@ -57,7 +57,7 @@ standard order confirmation page and to be re-usable by other screens.
       <#if (numberOfItems > 0)>
 
       <#-- spacer goes here -->
-      <tr><td colspan="5"><hr/></td></tr>
+      <tr><td colspan="5"><hr /></td></tr>
 
       <tr>
 
@@ -70,10 +70,10 @@ standard order confirmation page and to be re-usable by other screens.
           </#if>
 
           <#if address?exists>
-            <#if address.toName?has_content><b>${uiLabelMap.CommonTo}:</b>&nbsp;${address.toName}<br/></#if>
-            <#if address.attnName?has_content><b>${uiLabelMap.CommonAttn}:</b>&nbsp;${address.attnName}<br/></#if>
-            <#if address.address1?has_content>${address.address1}<br/></#if>
-            <#if address.address2?has_content>${address.address2}<br/></#if>
+            <#if address.toName?has_content><b>${uiLabelMap.CommonTo}:</b>&nbsp;${address.toName}<br /></#if>
+            <#if address.attnName?has_content><b>${uiLabelMap.CommonAttn}:</b>&nbsp;${address.attnName}<br /></#if>
+            <#if address.address1?has_content>${address.address1}<br /></#if>
+            <#if address.address2?has_content>${address.address2}<br /></#if>
             <#if address.city?has_content>${address.city}</#if>
             <#if address.stateProvinceGeoId?has_content>&nbsp;${address.stateProvinceGeoId}</#if>
             <#if address.postalCode?has_content>, ${address.postalCode?if_exists}</#if>

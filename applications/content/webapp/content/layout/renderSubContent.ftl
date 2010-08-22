@@ -18,7 +18,7 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
-<hr/>
+<hr />
 <#if parameters.contentId?exists>
     <#assign id=parameters.contentId/>
     <@editRenderSubContent contentId="TEMPLATE_MASTER" mapKey="" editTemplate="true" subContentId=id?if_exists>

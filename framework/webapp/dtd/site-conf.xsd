@@ -246,8 +246,21 @@ under the License.
                 <xs:restriction base="xs:token">
                     <xs:enumeration value="none"/>
                     <xs:enumeration value="view"/>
-                    <xs:enumeration value="view-last"><xs:annotation><xs:documentation>Will use the view from the last request unless there is a saved from some previous request (using the save-last-view attribute).</xs:documentation></xs:annotation></xs:enumeration>
-                    <xs:enumeration value="view-home"><xs:annotation><xs:documentation>Will use the view from the last saved 'home' position (using the save-home-view attribute).</xs:documentation></xs:annotation></xs:enumeration>
+                    <xs:enumeration value="view-last">
+                        <xs:annotation>
+                            <xs:documentation>Will use the view from the last request unless there
+                                is a saved from some previous request (using the save-last-view
+                                attribute).  Use the value attribute to specify a default view
+                                in case no previous view can be retrieved.</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="view-last-noparam"/>
+                    <xs:enumeration value="view-home">
+                        <xs:annotation>
+                            <xs:documentation>Will use the view from the last saved 'home' position
+                                (using the save-home-view attribute).</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
                     <xs:enumeration value="request"/>
                     <xs:enumeration value="request-redirect"/>
                     <xs:enumeration value="request-redirect-noparam"/>
@@ -260,7 +273,10 @@ under the License.
         <xs:attribute name="allowed-params" type="xs:string"/>
         <xs:attribute name="allowed-attributes" type="xs:string"/>
         <xs:attribute name="save-last-view" default="false">
-            <xs:annotation><xs:documentation>Saves the last (previous) request's view for future use, generally with the view-last type of response.</xs:documentation></xs:annotation>
+            <xs:annotation>
+                <xs:documentation>Saves the last (previous) request's view for future use, generally
+                    with the view-last type of response.</xs:documentation>
+            </xs:annotation>
             <xs:simpleType>
                 <xs:restriction base="xs:token">
                     <xs:enumeration value="true"/>
@@ -269,7 +285,10 @@ under the License.
             </xs:simpleType>
         </xs:attribute>
         <xs:attribute name="save-current-view" default="false">
-            <xs:annotation><xs:documentation>Saves the current request's view for future use, generally with the view-last type of response.</xs:documentation></xs:annotation>
+            <xs:annotation>
+                <xs:documentation>Saves the current request's view for future use, generally with
+                    the view-last type of response.</xs:documentation>
+            </xs:annotation>
             <xs:simpleType>
                 <xs:restriction base="xs:token">
                     <xs:enumeration value="true"/>
@@ -278,7 +297,10 @@ under the License.
             </xs:simpleType>
         </xs:attribute>
         <xs:attribute name="save-home-view" default="false">
-            <xs:annotation><xs:documentation>Saves the current request's view for future use, generally with the view-home type of response.</xs:documentation></xs:annotation>
+            <xs:annotation>
+                <xs:documentation>Saves the current request's view for future use, generally with
+                    the view-home type of response.</xs:documentation>
+            </xs:annotation>
             <xs:simpleType>
                 <xs:restriction base="xs:token">
                     <xs:enumeration value="true"/>
@@ -288,7 +310,11 @@ under the License.
         </xs:attribute>
     </xs:attributeGroup>
     <xs:element name="redirect-parameter">
-        <xs:annotation><xs:documentation>Adds a parameter with the given name to the redirect. Finds value in a request attribute if exists, or a request parameter if no attribute is found.</xs:documentation></xs:annotation>
+        <xs:annotation>
+            <xs:documentation>Adds a parameter with the given name to the redirect. Finds value in a
+                request attribute if exists, or a request parameter if no attribute is
+                found.</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
             <xs:attributeGroup ref="attlist.redirect-parameter"/>
         </xs:complexType>
@@ -296,7 +322,10 @@ under the License.
     <xs:attributeGroup name="attlist.redirect-parameter">
         <xs:attribute type="xs:string" name="name" use="required"/>
         <xs:attribute type="xs:string" name="from" use="optional">
-            <xs:annotation><xs:documentation>If specified used instead of the value of name for the key to find a request attribute or parameter.</xs:documentation></xs:annotation>
+            <xs:annotation>
+                <xs:documentation>If specified used instead of the value of name for the key to find
+                    a request attribute or parameter.</xs:documentation>
+            </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
     <xs:element name="view-map">
@@ -314,5 +343,16 @@ under the License.
         <xs:attribute type="xs:string" name="info"/>
         <xs:attribute type="xs:string" name="content-type"/>
         <xs:attribute type="xs:string" name="encoding"/>
+        <xs:attribute name="no-cache" default="false">
+            <xs:annotation>
+                <xs:documentation>Send no-cache headers if set to true.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="true"/>
+                    <xs:enumeration value="false"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
     </xs:attributeGroup>
 </xs:schema>

@@ -19,7 +19,6 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.testtools;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javolution.util.FastList;
@@ -63,7 +62,6 @@ public class JunitSuiteWrapper {
             } catch (GenericConfigException e) {
                 String errMsg = "Error reading XML document from ResourceHandler for loader [" + testSuiteResource.getLoaderName() + "] and location [" + testSuiteResource.getLocation() + "]";
                 Debug.logError(e, errMsg, module);
-                throw new IllegalArgumentException(errMsg);
             }
         }
     }

@@ -103,7 +103,7 @@ public abstract class ModelTreeAction {
     }
     */
 
-    public static void runSubActions(List<ModelTreeAction> actions, Map<String, Object> context) {
+    public static void runSubActions(List<? extends ModelTreeAction> actions, Map<String, Object> context) {
         for (ModelTreeAction action: actions) {
             if (Debug.verboseOn()) Debug.logVerbose("Running tree action " + action.getClass().getName(), module);
             action.runAction(context);
@@ -129,6 +129,7 @@ public abstract class ModelTreeAction {
             }
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             String globalStr = this.globalExdr.expandString(context);
             // default to false
@@ -185,6 +186,7 @@ public abstract class ModelTreeAction {
             this.location = scriptElement.getAttribute("location");
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             if (location.endsWith(".bsh")) {
                 try {
@@ -232,7 +234,7 @@ public abstract class ModelTreeAction {
             initService(serviceElement);
         }
 
-        public void initService( Element serviceElement ) {
+        public void initService(Element serviceElement) {
 
             this.serviceNameExdr = FlexibleStringExpander.getInstance(serviceElement.getAttribute("service-name"));
             this.resultMapNameAcsr = FlexibleMapAccessor.getInstance(serviceElement.getAttribute("result-map"));
@@ -248,6 +250,7 @@ public abstract class ModelTreeAction {
             this.fieldMap = EntityFinderUtil.makeFieldMap(serviceElement);
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             String serviceNameExpanded = this.serviceNameExdr.expandString(context);
             if (UtilValidate.isEmpty(serviceNameExpanded)) {
@@ -298,7 +301,8 @@ public abstract class ModelTreeAction {
                         List<? extends Map<String, ? extends Object>> lst = UtilGenerics.checkList(result.get(resultMapListName));
                         if (lst != null) {
                             if (lst instanceof ListIterator) {
-                                this.modelSubNode.setListIterator((ListIterator) lst);
+                                ListIterator<? extends Map<String, ? extends Object>> listIt = UtilGenerics.cast(lst);
+                                this.modelSubNode.setListIterator(listIt);
                             } else {
                                 this.modelSubNode.setListIterator(lst.listIterator());
                             }
@@ -336,6 +340,7 @@ public abstract class ModelTreeAction {
             finder = new PrimaryKeyFinder(entityOneElement);
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             try {
                 finder.runFind(context, this.modelTree.getDelegator());
@@ -359,11 +364,12 @@ public abstract class ModelTreeAction {
 
             this.listName = UtilFormatOut.checkEmpty(entityAndElement.getAttribute("list"), entityAndElement.getAttribute("list-name"));
             if (UtilValidate.isEmpty(this.listName)) this.listName = "_LIST_ITERATOR_";
-            entityAndElement.setAttribute( "list-name", this.listName);
+            entityAndElement.setAttribute("list-name", this.listName);
 
             finder = new ByAndFinder(entityAndElement);
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             try {
                 context.put(this.listName, null);
@@ -398,11 +404,12 @@ public abstract class ModelTreeAction {
 
             this.listName = UtilFormatOut.checkEmpty(entityConditionElement.getAttribute("list"), entityConditionElement.getAttribute("list-name"));
             if (UtilValidate.isEmpty(this.listName)) this.listName = "_LIST_ITERATOR_";
-            entityConditionElement.setAttribute( "list-name", this.listName);
+            entityConditionElement.setAttribute("list-name", this.listName);
 
             finder = new ByConditionFinder(entityConditionElement);
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             try {
                 context.put(this.listName, null);

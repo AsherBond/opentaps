@@ -17,4 +17,4 @@
   under the License.
   -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
-<img src="/content/control/stream?contentId=${contentId}"/>
+<img src="/content/control/stream?contentId=${contentId}" alt=""/>

@@ -47,7 +47,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilObject;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.webapp.event.EventFactory;
@@ -99,18 +99,19 @@ public class RequestHandler {
 
     public void doRequest(HttpServletRequest request, HttpServletResponse response, String requestUri) throws RequestHandlerException {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         doRequest(request, response, requestUri, userLogin, delegator);
     }
 
     public void doRequest(HttpServletRequest request, HttpServletResponse response, String chain,
-            GenericValue userLogin, GenericDelegator delegator) throws RequestHandlerException {
+            GenericValue userLogin, Delegator delegator) throws RequestHandlerException {
 
         HttpSession session = request.getSession();
 
         // get the controllerConfig once for this method so we don't have to get it over and over inside the method
         ConfigXMLReader.ControllerConfig controllerConfig = this.getControllerConfig();
+        Map<String, ConfigXMLReader.RequestMap> requestMapMap = controllerConfig.getRequestMapMap();
 
         // workaround if we are in the root webapp
         String cname = UtilHttp.getApplicationName(request);
@@ -130,13 +131,14 @@ public class RequestHandler {
         String requestMissingErrorMessage = "Unknown request [" + defaultRequestUri + "]; this request does not exist or cannot be called directly.";
         ConfigXMLReader.RequestMap requestMap = null;
         if (defaultRequestUri != null) {
-            requestMap = controllerConfig.requestMapMap.get(defaultRequestUri);
+            requestMap = requestMapMap.get(defaultRequestUri);
         }
         // check for default request
         if (requestMap == null) {
-        	if (controllerConfig.defaultRequest != null) { // required! to avoid a null pointer exception and generate a requesthandler exception if default request not found.
-        		requestMap = controllerConfig.requestMapMap.get(controllerConfig.defaultRequest);
-        	}
+            String defaultRequest = controllerConfig.getDefaultRequest();
+            if (defaultRequest != null) { // required! to avoid a null pointer exception and generate a requesthandler exception if default request not found.
+                requestMap = requestMapMap.get(defaultRequest);
+            }
         }
         // still not found so stop
         if (requestMap == null) {
@@ -149,7 +151,7 @@ public class RequestHandler {
         // Check for chained request.
         if (chain != null) {
             String chainRequestUri = RequestHandler.getRequestUri(chain);
-            requestMap = controllerConfig.requestMapMap.get(chainRequestUri);
+            requestMap = requestMapMap.get(chainRequestUri);
             if (requestMap == null) {
                 throw new RequestHandlerException("Unknown chained request [" + chainRequestUri + "]; this request does not exist");
             }
@@ -157,6 +159,11 @@ public class RequestHandler {
                 overrideViewUri = (String) request.getAttribute("_POST_CHAIN_VIEW_");
             } else {
                 overrideViewUri = RequestHandler.getOverrideViewUri(chain);
+            }
+            if (overrideViewUri != null) {
+                // put this in a request attribute early in case an event needs to access it
+                // not using _POST_CHAIN_VIEW_ because it shouldn't be set unless the event execution is successful
+                request.setAttribute("_CURRENT_CHAIN_VIEW_", overrideViewUri);
             }
             if (Debug.infoOn()) Debug.logInfo("[RequestHandler]: Chain in place: requestUri=" + chainRequestUri + " overrideViewUri=" + overrideViewUri + " sessionId=" + UtilHttp.getSessionId(request), module);
         } else {
@@ -168,18 +175,18 @@ public class RequestHandler {
             // Check to make sure we are allowed to access this request directly. (Also checks if this request is defined.)
             // If the request cannot be called, or is not defined, check and see if there is a default-request we can process
             if (!requestMap.securityDirectRequest) {
-                String defaultRequest = controllerConfig.defaultRequest;
-                if (defaultRequest == null || !controllerConfig.requestMapMap.get(defaultRequest).securityDirectRequest) {
+                String defaultRequest = controllerConfig.getDefaultRequest();
+                if (defaultRequest == null || !requestMapMap.get(defaultRequest).securityDirectRequest) {
                     // use the same message as if it was missing for security reasons, ie so can't tell if it is missing or direct request is not allowed
                     throw new RequestHandlerException(requestMissingErrorMessage);
                 } else {
-                    requestMap = controllerConfig.requestMapMap.get(defaultRequest);
+                    requestMap = requestMapMap.get(defaultRequest);
                 }
             }
-
+            boolean forceHttpSession = "true".equals(context.getInitParameter("forceHttpSession"));
             // Check if we SHOULD be secure and are not.
             if (!request.isSecure() && requestMap.securityHttps) {
-                // If the requet method was POST then return an error to avoid problems with XSRF where the request may have come from another machine/program and had the same session ID but was not encrypted as it should have been (we used to let it pass to not lose data since it was too late to protect that data anyway)
+                // If the request method was POST then return an error to avoid problems with XSRF where the request may have come from another machine/program and had the same session ID but was not encrypted as it should have been (we used to let it pass to not lose data since it was too late to protect that data anyway)
                 if (request.getMethod().equalsIgnoreCase("POST")) {
                     // we can't redirect with the body parameters, and for better security from XSRF, just return an error message
                     Locale locale = UtilHttp.getLocale(request);
@@ -218,6 +225,19 @@ public class RequestHandler {
                         callRedirect(newUrl, response, request);
                     }
                 }
+            // if this is a new session and forceHttpSession is true and the request is secure but does not
+            // need to be then we need the session cookie to be created via an http response (rather than https)
+            // so we'll redirect to an unsecure request
+            } else if (forceHttpSession && request.isSecure() && session.isNew() && !requestMap.securityHttps) {
+                StringBuilder urlBuf = new StringBuilder();
+                urlBuf.append(request.getPathInfo());
+                if (request.getQueryString() != null) {
+                    urlBuf.append("?").append(request.getQueryString());
+                }
+                String newUrl = RequestHandler.makeUrl(request, response, urlBuf.toString(), true, false, false);
+                if (newUrl.toUpperCase().startsWith("HTTP")) {
+                    callRedirect(newUrl, response, request);
+                }
             }
 
             // Check for HTTPS client (x.509) security
@@ -255,29 +275,26 @@ public class RequestHandler {
             }
 
             // If its the first visit run the first visit events.
-            if (this.trackVisit(request) && session.getAttribute("visit") == null) {
+            if (this.trackVisit(request) && session.getAttribute("_FIRST_VISIT_EVENTS_") == null) {
                 if (Debug.infoOn())
                     Debug.logInfo("This is the first request in this visit." + " sessionId=" + UtilHttp.getSessionId(request), module);
-                // This isn't an event because it is required to run. We do not want to make it optional.
-                GenericValue visit = VisitHandler.getVisit(session);
-                if (visit != null) {
-                    for (ConfigXMLReader.Event event: controllerConfig.firstVisitEventList.values()) {
-                        try {
-                            String returnString = this.runEvent(request, response, event, null, "firstvisit");
-                            if (returnString != null && !returnString.equalsIgnoreCase("success")) {
-                                throw new EventHandlerException("First-Visit event did not return 'success'.");
-                            } else if (returnString == null) {
-                                interruptRequest = true;
-                            }
-                        } catch (EventHandlerException e) {
-                            Debug.logError(e, module);
+                session.setAttribute("_FIRST_VISIT_EVENTS_", "complete");
+                for (ConfigXMLReader.Event event: controllerConfig.getFirstVisitEventList().values()) {
+                    try {
+                        String returnString = this.runEvent(request, response, event, null, "firstvisit");
+                        if (returnString != null && !returnString.equalsIgnoreCase("success")) {
+                            throw new EventHandlerException("First-Visit event did not return 'success'.");
+                        } else if (returnString == null) {
+                            interruptRequest = true;
                         }
+                    } catch (EventHandlerException e) {
+                        Debug.logError(e, module);
                     }
                 }
             }
 
             // Invoke the pre-processor (but NOT in a chain)
-            for (ConfigXMLReader.Event event: controllerConfig.preprocessorEventList.values()) {
+            for (ConfigXMLReader.Event event: controllerConfig.getPreprocessorEventList().values()) {
                 try {
                     String returnString = this.runEvent(request, response, event, null, "preprocessor");
                     if (returnString != null && !returnString.equalsIgnoreCase("success")) {
@@ -291,8 +308,9 @@ public class RequestHandler {
                             eventReturn = "protect";
                             // check to see if there is an "protect" response, if so it's ok else show the default_error_response_view
                             if (!requestMap.requestResponseMap.containsKey("protect")) {
-                                if (controllerConfig.protectView != null) {
-                                    overrideViewUri = controllerConfig.protectView;
+                                String protectView = controllerConfig.getProtectView();
+                                if (protectView != null) {
+                                    overrideViewUri = protectView;
                                 } else {
                                     overrideViewUri = UtilProperties.getPropertyValue("security.properties", "default.error.response.view");
                                 }
@@ -323,7 +341,7 @@ public class RequestHandler {
             // Invoke the security handler
             // catch exceptions and throw RequestHandlerException if failed.
             if (Debug.verboseOn()) Debug.logVerbose("[RequestHandler]: AuthRequired. Running security check. sessionId=" + UtilHttp.getSessionId(request), module);
-            ConfigXMLReader.Event checkLoginEvent = controllerConfig.requestMapMap.get("checkLogin").event;
+            ConfigXMLReader.Event checkLoginEvent = requestMapMap.get("checkLogin").event;
             String checkLoginReturnString = null;
 
             try {
@@ -334,7 +352,7 @@ public class RequestHandler {
             if (!"success".equalsIgnoreCase(checkLoginReturnString)) {
                 // previous URL already saved by event, so just do as the return says...
                 eventReturn = checkLoginReturnString;
-                requestMap = controllerConfig.requestMapMap.get("checkLogin");
+                requestMap = requestMapMap.get("checkLogin");
             }
         }
 
@@ -365,7 +383,7 @@ public class RequestHandler {
                     // save the server hit for the request event
                     if (this.trackStats(request)) {
                         ServerHitBin.countEvent(cname + "." + requestMap.event.invoke, request, eventStartTime,
-                                System.currentTimeMillis() - eventStartTime, userLogin, delegator);
+                                System.currentTimeMillis() - eventStartTime, userLogin);
                     }
 
                     // set the default event return
@@ -486,15 +504,19 @@ public class RequestHandler {
 
         // if the request has the save-last-view attribute set, save it now before the view can be rendered or other chain done so that the _LAST* session attributes will represent the previous request
         if (nextRequestResponse.saveLastView) {
-        	// Debug.log("======save last view: " + session.getAttribute("_LAST_VIEW_NAME_"));
-            session.setAttribute("_SAVED_VIEW_NAME_", session.getAttribute("_LAST_VIEW_NAME_"));
-            session.setAttribute("_SAVED_VIEW_PARAMS_", session.getAttribute("_LAST_VIEW_PARAMS_"));
+            // Debug.log("======save last view: " + session.getAttribute("_LAST_VIEW_NAME_"));
+            String lastViewName = (String) session.getAttribute("_LAST_VIEW_NAME_");
+            // Do not save the view if the last view is the same as the current view and saveCurrentView is false
+            if (!(!nextRequestResponse.saveCurrentView && "view".equals(nextRequestResponse.type) && nextRequestResponse.value.equals(lastViewName))) {
+                session.setAttribute("_SAVED_VIEW_NAME_", session.getAttribute("_LAST_VIEW_NAME_"));
+                session.setAttribute("_SAVED_VIEW_PARAMS_", session.getAttribute("_LAST_VIEW_PARAMS_"));
+            }
         }
         String saveName = null;
         if (nextRequestResponse.saveCurrentView) { saveName = "SAVED"; }
         if (nextRequestResponse.saveHomeView) { saveName = "HOME"; }
 
-        if (nextRequestResponse != null && "request".equals(nextRequestResponse.type)) {
+        if ("request".equals(nextRequestResponse.type)) {
             // chained request
             Debug.logInfo("[RequestHandler.doRequest]: Response is a chained request." + " sessionId=" + UtilHttp.getSessionId(request), module);
             doRequest(request, response, nextRequestResponse.value, userLogin, delegator);
@@ -502,7 +524,7 @@ public class RequestHandler {
             // ======== handle views ========
 
             // first invoke the post-processor events.
-            for (ConfigXMLReader.Event event: controllerConfig.postprocessorEventList.values()) {
+            for (ConfigXMLReader.Event event: controllerConfig.getPostprocessorEventList().values()) {
                 try {
                     String returnString = this.runEvent(request, response, event, requestMap, "postprocessor");
                     if (returnString != null && !returnString.equalsIgnoreCase("success")) {
@@ -546,25 +568,44 @@ public class RequestHandler {
                 Map<String, Object> urlParams = null;
                 if (session.getAttribute("_SAVED_VIEW_NAME_") != null) {
                     viewName = (String) session.getAttribute("_SAVED_VIEW_NAME_");
-                    urlParams = (Map<String, Object>) UtilGenerics.<String, Object>checkMap(session.getAttribute("_SAVED_VIEW_PARAMS_"));
+                    urlParams = UtilGenerics.<String, Object>checkMap(session.getAttribute("_SAVED_VIEW_PARAMS_"));
                 } else if (session.getAttribute("_HOME_VIEW_NAME_") != null) {
                     viewName = (String) session.getAttribute("_HOME_VIEW_NAME_");
-                    urlParams = (Map<String, Object>) UtilGenerics.<String, Object>checkMap(session.getAttribute("_HOME_VIEW_PARAMS_"));
+                    urlParams = UtilGenerics.<String, Object>checkMap(session.getAttribute("_HOME_VIEW_PARAMS_"));
                 } else if (session.getAttribute("_LAST_VIEW_NAME_") != null) {
                     viewName = (String) session.getAttribute("_LAST_VIEW_NAME_");
-                    urlParams = (Map<String, Object>) UtilGenerics.<String, Object>checkMap(session.getAttribute("_LAST_VIEW_PARAMS_"));
+                    urlParams = UtilGenerics.<String, Object>checkMap(session.getAttribute("_LAST_VIEW_PARAMS_"));
+                } else if (UtilValidate.isNotEmpty(nextRequestResponse.value)) {
+                    viewName = nextRequestResponse.value;
                 }
                 if (urlParams != null) {
                     for (Map.Entry<String, Object> urlParamEntry: urlParams.entrySet()) {
                         String key = urlParamEntry.getKey();
                         // Don't overwrite messages coming from the current event
                         if (!("_EVENT_MESSAGE_".equals(key) || "_ERROR_MESSAGE_".equals(key)
-                                || "_EVENT_MESSAGE_LIST_".equals(key) || "_ERROR_MESSAGE_LIST".equals(key))) {
+                                || "_EVENT_MESSAGE_LIST_".equals(key) || "_ERROR_MESSAGE_LIST_".equals(key))) {
                             request.setAttribute(key, urlParamEntry.getValue());
                         }
                     }
                 }
                 renderView(viewName, requestMap.securityExternalView, request, response, null);
+            } else if ("view-last-noparam".equals(nextRequestResponse.type)) {
+                 if (Debug.verboseOn()) Debug.logVerbose("[RequestHandler.doRequest]: Response is a view." + " sessionId=" + UtilHttp.getSessionId(request), module);
+
+                 // check for an override view, only used if "success" = eventReturn
+                 String viewName = (UtilValidate.isNotEmpty(overrideViewUri) && (eventReturn == null || "success".equals(eventReturn))) ? overrideViewUri : nextRequestResponse.value;
+
+                 // as a further override, look for the _SAVED and then _HOME and then _LAST session attributes
+                 if (session.getAttribute("_SAVED_VIEW_NAME_") != null) {
+                     viewName = (String) session.getAttribute("_SAVED_VIEW_NAME_");
+                 } else if (session.getAttribute("_HOME_VIEW_NAME_") != null) {
+                     viewName = (String) session.getAttribute("_HOME_VIEW_NAME_");
+                 } else if (session.getAttribute("_LAST_VIEW_NAME_") != null) {
+                     viewName = (String) session.getAttribute("_LAST_VIEW_NAME_");
+                 } else if (UtilValidate.isNotEmpty(nextRequestResponse.value)) {
+                     viewName = nextRequestResponse.value;
+                 }
+                 renderView(viewName, requestMap.securityExternalView, request, response, null);
             } else if ("view-home".equals(nextRequestResponse.type)) {
                 if (Debug.verboseOn()) Debug.logVerbose("[RequestHandler.doRequest]: Response is a view." + " sessionId=" + UtilHttp.getSessionId(request), module);
 
@@ -575,7 +616,7 @@ public class RequestHandler {
                 Map<String, Object> urlParams = null;
                 if (session.getAttribute("_HOME_VIEW_NAME_") != null) {
                     viewName = (String) session.getAttribute("_HOME_VIEW_NAME_");
-                    urlParams = (Map<String, Object>) UtilGenerics.<String, Object>checkMap(session.getAttribute("_HOME_VIEW_PARAMS_"));
+                    urlParams = UtilGenerics.<String, Object>checkMap(session.getAttribute("_HOME_VIEW_PARAMS_"));
                 }
                 if (urlParams != null) {
                     for (Map.Entry<String, Object> urlParamEntry: urlParams.entrySet()) {
@@ -601,7 +642,7 @@ public class RequestHandler {
 
     /** Returns the default error page for this request. */
     public String getDefaultErrorPage(HttpServletRequest request) {
-        String errorpage = getControllerConfig().errorpage;
+        String errorpage = getControllerConfig().getErrorpage();
         if (UtilValidate.isNotEmpty(errorpage)) return errorpage;
         return "/error/error.jsp";
     }
@@ -688,7 +729,6 @@ public class RequestHandler {
     }
     private void renderView(String view, boolean allowExtView, HttpServletRequest req, HttpServletResponse resp, String saveName) throws RequestHandlerException {
         GenericValue userLogin = (GenericValue) req.getSession().getAttribute("userLogin");
-        GenericDelegator delegator = (GenericDelegator) req.getAttribute("delegator");
         // workaraound if we are in the root webapp
         String cname = UtilHttp.getApplicationName(req);
         String oldView = view;
@@ -722,21 +762,21 @@ public class RequestHandler {
         req.getSession().setAttribute("_LAST_VIEW_PARAMS_", paramMap);
 
         if ("SAVED".equals(saveName)) {
-        	//Debug.log("======save current view: " + view);
-        	req.getSession().setAttribute("_SAVED_VIEW_NAME_", view);
-        	req.getSession().setAttribute("_SAVED_VIEW_PARAMS_", paramMap);
+            //Debug.log("======save current view: " + view);
+            req.getSession().setAttribute("_SAVED_VIEW_NAME_", view);
+            req.getSession().setAttribute("_SAVED_VIEW_PARAMS_", paramMap);
         }
 
         if ("HOME".equals(saveName)) {
-        	//Debug.log("======save home view: " + view);
-        	req.getSession().setAttribute("_HOME_VIEW_NAME_", view);
-        	req.getSession().setAttribute("_HOME_VIEW_PARAMS_", paramMap);
-        	// clear other saved views
-        	req.getSession().removeAttribute("_SAVED_VIEW_NAME_");
-        	req.getSession().removeAttribute("_SAVED_VIEW_PARAMS_");
+            //Debug.log("======save home view: " + view);
+            req.getSession().setAttribute("_HOME_VIEW_NAME_", view);
+            req.getSession().setAttribute("_HOME_VIEW_PARAMS_", paramMap);
+            // clear other saved views
+            req.getSession().removeAttribute("_SAVED_VIEW_NAME_");
+            req.getSession().removeAttribute("_SAVED_VIEW_PARAMS_");
         }
 
-        ConfigXMLReader.ViewMap viewMap = (view == null ? null : getControllerConfig().viewMapMap.get(view));
+        ConfigXMLReader.ViewMap viewMap = (view == null ? null : getControllerConfig().getViewMapMap().get(view));
         if (viewMap == null) {
             throw new RequestHandlerException("No definition found for view with name [" + view + "]");
         }
@@ -757,7 +797,7 @@ public class RequestHandler {
 
         long viewStartTime = System.currentTimeMillis();
 
-        // setup chararcter encoding and content type
+        // setup character encoding and content type
         String charset = UtilFormatOut.checkEmpty(getServletContext().getInitParameter("charset"), req.getCharacterEncoding(), "UTF-8");
 
         String viewCharset = viewMap.encoding;
@@ -791,6 +831,12 @@ public class RequestHandler {
 
         if (Debug.verboseOn()) Debug.logVerbose("The ContentType for the " + view + " view is: " + contentType, module);
 
+        boolean viewNoCache = viewMap.noCache;
+        if (viewNoCache) {
+           UtilHttp.setResponseBrowserProxyNoCache(resp);
+           if (Debug.verboseOn()) Debug.logVerbose("Sending no-cache headers for view [" + nextPage + "]", module);
+        }
+
         try {
             if (Debug.verboseOn()) Debug.logVerbose("Rendering view [" + nextPage + "] of type [" + viewMap.type + "]", module);
             ViewHandler vh = viewFactory.getViewHandler(viewMap.type);
@@ -812,7 +858,7 @@ public class RequestHandler {
 
         if (this.trackStats(req) && vname != null) {
             ServerHitBin.countView(cname + "." + vname, req, viewStartTime,
-                System.currentTimeMillis() - viewStartTime, userLogin, delegator);
+                System.currentTimeMillis() - viewStartTime, userLogin);
         }
     }
 
@@ -902,7 +948,7 @@ public class RequestHandler {
     }
 
     public String makeLink(HttpServletRequest request, HttpServletResponse response, String url, boolean fullPath, boolean secure, boolean encode) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String webSiteId = WebSiteWorker.getWebSiteId(request);
 
         String httpsPort = null;
@@ -951,7 +997,7 @@ public class RequestHandler {
         String requestUri = RequestHandler.getRequestUri(url);
         ConfigXMLReader.RequestMap requestMap = null;
         if (requestUri != null) {
-            requestMap = getControllerConfig().requestMapMap.get(requestUri);
+            requestMap = getControllerConfig().getRequestMapMap().get(requestUri);
         }
 
         StringBuilder newURL = new StringBuilder();
@@ -1056,7 +1102,7 @@ public class RequestHandler {
     }
 
     public void runAfterLoginEvents(HttpServletRequest request, HttpServletResponse response) {
-        for (ConfigXMLReader.Event event: getControllerConfig().afterLoginEventList.values()) {
+        for (ConfigXMLReader.Event event: getControllerConfig().getAfterLoginEventList().values()) {
             try {
                 String returnString = this.runEvent(request, response, event, null, "after-login");
                 if (returnString != null && !returnString.equalsIgnoreCase("success")) {
@@ -1069,7 +1115,7 @@ public class RequestHandler {
     }
 
     public void runBeforeLogoutEvents(HttpServletRequest request, HttpServletResponse response) {
-        for (ConfigXMLReader.Event event: getControllerConfig().beforeLogoutEventList.values()) {
+        for (ConfigXMLReader.Event event: getControllerConfig().getBeforeLogoutEventList().values()) {
             try {
                 String returnString = this.runEvent(request, response, event, null, "before-logout");
                 if (returnString != null && !returnString.equalsIgnoreCase("success")) {
@@ -1087,7 +1133,7 @@ public class RequestHandler {
             if (uriString == null) {
                 uriString="";
             }
-            ConfigXMLReader.RequestMap requestMap = getControllerConfig().requestMapMap.get(uriString);
+            ConfigXMLReader.RequestMap requestMap = getControllerConfig().getRequestMapMap().get(uriString);
             if (requestMap == null) return false;
             return requestMap.trackServerHit;
         } else {
@@ -1101,7 +1147,7 @@ public class RequestHandler {
             if (uriString == null) {
                 uriString="";
             }
-            ConfigXMLReader.RequestMap requestMap = getControllerConfig().requestMapMap.get(uriString);
+            ConfigXMLReader.RequestMap requestMap = getControllerConfig().getRequestMapMap().get(uriString);
             if (requestMap == null) return false;
             return requestMap.trackVisit;
         } else {

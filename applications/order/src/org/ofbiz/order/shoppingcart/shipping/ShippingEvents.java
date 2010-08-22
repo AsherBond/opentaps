@@ -32,7 +32,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilProperties;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.ofbiz.order.shoppingcart.product.ProductPromoWorker;
 
 /**
  * ShippingEvents - Events used for processing shipping fees
@@ -64,7 +65,7 @@ public class ShippingEvents {
     public static String getShipEstimate(HttpServletRequest request, HttpServletResponse response) {
         ShoppingCart cart = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         int shipGroups = cart.getShipGroupSize();
         for (int i = 0; i < shipGroups; i++) {
@@ -85,14 +86,15 @@ public class ShippingEvents {
             cart.setItemShipGroupEstimate(shippingTotal, i);
         }
 
+        ProductPromoWorker.doPromotions(cart, dispatcher);
         // all done
         return "success";
     }
 
-    public static Map getShipGroupEstimate(LocalDispatcher dispatcher, GenericDelegator delegator, ShoppingCart cart, int groupNo) {
+    public static Map<String, Object> getShipGroupEstimate(LocalDispatcher dispatcher, Delegator delegator, ShoppingCart cart, int groupNo) {
         // check for shippable items
         if (!cart.shippingApplies()) {
-            Map responseResult = ServiceUtil.returnSuccess();
+            Map<String, Object> responseResult = ServiceUtil.returnSuccess();
             responseResult.put("shippingTotal", BigDecimal.ZERO);
             return responseResult;
         }
@@ -106,7 +108,7 @@ public class ShippingEvents {
                 cart.getShippableWeight(groupNo), cart.getShippableQuantity(groupNo), cart.getShippableTotal(groupNo), cart.getPartyId(), productStoreShipMethId);
     }
 
-    public static Map getShipEstimate(LocalDispatcher dispatcher, GenericDelegator delegator, OrderReadHelper orh, String shipGroupSeqId) {
+    public static Map getShipEstimate(LocalDispatcher dispatcher, Delegator delegator, OrderReadHelper orh, String shipGroupSeqId) {
         // check for shippable items
         if (!orh.shippingApplies()) {
             Map responseResult = ServiceUtil.returnSuccess();
@@ -137,7 +139,7 @@ public class ShippingEvents {
     }
 
     // version with no support for using the supplier's address as the origin
-    public static Map getShipGroupEstimate(LocalDispatcher dispatcher, GenericDelegator delegator, String orderTypeId,
+    public static Map getShipGroupEstimate(LocalDispatcher dispatcher, Delegator delegator, String orderTypeId,
             String shipmentMethodTypeId, String carrierPartyId, String carrierRoleTypeId, String shippingContactMechId,
             String productStoreId, List itemInfo, BigDecimal shippableWeight, BigDecimal shippableQuantity,
             BigDecimal shippableTotal, String partyId, String productStoreShipMethId) {
@@ -146,7 +148,7 @@ public class ShippingEvents {
                 shippableWeight, shippableQuantity, shippableTotal, partyId,productStoreShipMethId);
     }
 
-    public static Map getShipGroupEstimate(LocalDispatcher dispatcher, GenericDelegator delegator, String orderTypeId,
+    public static Map getShipGroupEstimate(LocalDispatcher dispatcher, Delegator delegator, String orderTypeId,
             String shipmentMethodTypeId, String carrierPartyId, String carrierRoleTypeId, String shippingContactMechId,
             String productStoreId, String supplierPartyId, List itemInfo, BigDecimal shippableWeight, BigDecimal shippableQuantity,
             BigDecimal shippableTotal, String partyId, String productStoreShipMethId) {
@@ -228,7 +230,10 @@ public class ShippingEvents {
 
         // call the external shipping service
         try {
-            BigDecimal externalAmt = getExternalShipEstimate(dispatcher, storeShipMethod, serviceFields);
+            BigDecimal externalAmt = null;
+            if (UtilValidate.isNotEmpty(shippingContactMechId)) {
+                externalAmt = getExternalShipEstimate(dispatcher, storeShipMethod, serviceFields);
+            }
             if (externalAmt != null) {
                 shippingTotal = shippingTotal.add(externalAmt);
             }
@@ -292,7 +297,7 @@ public class ShippingEvents {
                 serviceName = null;
             }
         }
-        if (( serviceName != null)) {
+        if ((serviceName != null)) {
             String configProps = storeShipMeth.getString("configProps");
             if (UtilValidate.isNotEmpty(serviceName)) {
                 // prepare the external service context
@@ -327,14 +332,14 @@ public class ShippingEvents {
     /**
      * Attempts to get the supplier's shipping origin address and failing that, the general location.
      */
-    public static GenericValue getShippingOriginContactMech(GenericDelegator delegator, String supplierPartyId) throws GeneralException {
+    public static GenericValue getShippingOriginContactMech(Delegator delegator, String supplierPartyId) throws GeneralException {
         List<EntityCondition> conditions = UtilMisc.toList(
                 EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, supplierPartyId),
                 EntityCondition.makeCondition("contactMechTypeId", EntityOperator.EQUALS, "POSTAL_ADDRESS"),
                 EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.IN, UtilMisc.toList("SHIP_ORIG_LOCATION", "GENERAL_LOCATION")),
                 EntityUtil.getFilterByDateExpr("contactFromDate", "contactThruDate"),
                 EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate")
-        );
+       );
         EntityConditionList<EntityCondition> ecl = EntityCondition.makeCondition(conditions, EntityOperator.AND);
 
         List<GenericValue> addresses = delegator.findList("PartyContactWithPurpose", ecl, null, UtilMisc.toList("contactMechPurposeTypeId DESC"), null, false);

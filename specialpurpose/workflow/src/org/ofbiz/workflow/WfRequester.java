@@ -41,7 +41,7 @@ public interface WfRequester {
      * @throws WfException
      * @return Iterator of workflow processes.
      */
-    public Iterator getIteratorPerformer() throws WfException;
+    public Iterator<WfProcess> getIteratorPerformer() throws WfException;
 
     /**
      * A list of processes
@@ -49,7 +49,7 @@ public interface WfRequester {
      * @throws WfException
      * @return List of WfProcess objects.
      */
-    public List getSequencePerformer(int maxNumber) throws WfException;
+    public List<WfProcess> getSequencePerformer(int maxNumber) throws WfException;
 
     /**
      * Checks if a WfProcess is associated with this requester object
@@ -66,7 +66,7 @@ public interface WfRequester {
      *@param requester associated with the service
      *@throws WfException
      */
-    public void registerProcess(WfProcess process, Map context, GenericRequester requester) throws WfException;
+    public void registerProcess(WfProcess process, Map<String, Object> context, GenericRequester requester) throws WfException;
 
     /**
      * Receives notice of event status changes

@@ -25,37 +25,46 @@ under the License.
     <form name="FindDataResource" target="findDataResource" type="single"
         header-row-style="header-row" default-table-style="basic-table">
         <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
-        <field name="dataResourceId"><text-find default-option="contains" ignore-case="true"/></field>
-        <field name="dataResourceName"><text-find default-option="contains" ignore-case="true"/></field>
+        <field name="dataResourceId"><text-find ignore-case="true"/></field>
+        <field name="dataResourceName"><text-find ignore-case="true"/></field>
         <field name="dataResourceTypeId">
             <drop-down allow-empty="true">
-                <entity-options description="${description}" entity-name="DataResourceType" key-field-name="dataResourceTypeId"/>
+                <entity-options description="${description}" entity-name="DataResourceType" key-field-name="dataResourceTypeId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
             </drop-down>
         </field>
         <field name="mimeTypeId" position="2">
             <drop-down allow-empty="true">
-                <entity-options description="${description}" entity-name="MimeType" key-field-name="mimeTypeId"/>
+                <entity-options description="${description}" entity-name="MimeType" key-field-name="mimeTypeId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
             </drop-down>
         </field>
         <field name="statusId">
             <drop-down allow-empty="true">
                 <entity-options description="${description}" entity-name="StatusItem">
                     <entity-constraint name="statusTypeId" operator="equals" value="CONTENT_STATUS"/>
+                    <entity-order-by field-name="description"/>
                 </entity-options>
             </drop-down>
         </field>
         <field name="localeString" position="2">
             <drop-down allow-empty="true">
-                <entity-options entity-name="CountryCode" description="${countryName} [${countryCode}]" key-field-name="countryCode"/>
+                <entity-options entity-name="CountryCode" description="${countryName} [${countryCode}]" key-field-name="countryCode">
+                    <entity-order-by field-name="countryName"/>
+                </entity-options>
             </drop-down>
         </field>
         <field name="createdByUserLogin" position="1"><lookup target-form-name="LookupPerson"/></field>
         <field name="dataCategoryId" position="2">
             <drop-down allow-empty="true">
-                <entity-options description="${categoryName}" entity-name="DataCategory"/>
+                <entity-options description="${categoryName}" entity-name="DataCategory">
+                    <entity-order-by field-name="categoryName"/>
+                </entity-options>
             </drop-down>
          </field>
-        <field name="searchButton" widget-style="smallSubmit"><submit button-type="button"/></field>
+        <field name="searchButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
 
     <form name="ListDataResource" target="" title="" list-name="listIt" type="list" paginate-target="findDataResource"
@@ -65,6 +74,8 @@ under the License.
             <field-map field-name="inputFields" from-field="parameters"/>
             <field-map field-name="entityName" value="DataResource"/>
             <field-map field-name="orderBy" value="dataResourceId"/>
+            <field-map field-name="viewIndex" from-field="viewIndex"/>
+            <field-map field-name="viewSize" from-field="viewSize"/>
           </service>
         </actions>
         <field name="dataResourceId"><hidden/></field>
@@ -88,7 +99,7 @@ under the License.
         header-row-style="header-row" default-table-style="basic-table">
         <auto-fields-entity entity-name="DataResource" default-field-type="find"/>
         <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
-        <field name="submitButton" title="${uiLabelMap.CommonLookup}" widget-style="smallSubmit"><submit button-type="button"/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
         <sort-order>
             <field-group>
                 <sort-field name="dataResourceId"/>
@@ -123,6 +134,8 @@ under the License.
                 <field-map field-name="inputFields" from-field="parameters"/>
                 <field-map field-name="entityName" value="DataResource"/>
                 <field-map field-name="orderBy" value="dataResourceId"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
         <field name="dataResourceId">
@@ -340,6 +353,8 @@ under the License.
             <service service-name="performFind" result-map-list="listIt">
                 <field-map field-name="inputFields" from-field="parameters"/>
                 <field-map field-name="entityName" from-field="entityName" value="DataResourceAttribute"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
         <auto-fields-service service-name="updateDataResourceAttribute" default-field-type="display"/>
@@ -372,6 +387,8 @@ under the License.
             <service service-name="performFind" result-map-list="listIt">
                 <field-map field-name="inputFields" from-field="parameters"/>
                 <field-map field-name="entityName" from-field="entityName" value="DataResourceRole"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
         <auto-fields-service service-name="updateDataResourceRole" default-field-type="display"/>
@@ -401,6 +418,8 @@ under the License.
             <service service-name="performFind" result-map-list="listIt">
                 <field-map field-name="inputFields" from-field="parameters"/>
                 <field-map field-name="entityName" from-field="entityName" value="ProductFeatureDataResource"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
         <auto-fields-entity entity-name="ProductFeatureDataResource" default-field-type="display"/>
@@ -428,7 +447,7 @@ under the License.
                 </entity-options>
             </drop-down>
         </field>
-        <field name="submitButton" title="${uiLabelMap.CommonLookup}" widget-style="smallSubmit"><submit button-type="button"/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
     <form name="listLookupProductFeature" list-name="entityList" title="" type="list" paginate-target="LookupProductFeature"
         odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
@@ -476,7 +495,7 @@ under the License.
         <alt-target use-when="electronicText==null" target="addHtmlText"/>
         <auto-fields-entity entity-name="ElectronicText"/>
         <field name="dataResourceId" title="${uiLabelMap.CommonEmptyHeader}" widget-style="buttontext"><display/></field>
-        <field name="textData" id-name="textData"><textarea cols="120" rows="20" visual-editor-enable="true"/></field>
+        <field name="textData" id-name="textData" encode-output="false"><textarea cols="120" rows="20" visual-editor-enable="true"/></field>
         <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
 </forms>

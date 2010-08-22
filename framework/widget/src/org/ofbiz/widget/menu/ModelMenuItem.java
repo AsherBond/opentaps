@@ -23,18 +23,28 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import javolution.util.FastList;
+import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilFormatOut;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.entityext.permission.EntityPermissionChecker;
 import org.ofbiz.widget.WidgetWorker;
 import org.w3c.dom.Element;
@@ -120,7 +130,7 @@ public class ModelMenuItem {
 
         String positionStr = fieldElement.getAttribute("position");
         try {
-            if (positionStr != null && positionStr.length() > 0) {
+            if (UtilValidate.isNotEmpty(positionStr)) {
                 position = Integer.valueOf(positionStr);
             }
         } catch (Exception e) {
@@ -128,7 +138,7 @@ public class ModelMenuItem {
                     positionStr + "], using the default of the menu renderer", module);
         }
 
-        this.setAssociatedContentId( fieldElement.getAttribute("associated-content-id"));
+        this.setAssociatedContentId(fieldElement.getAttribute("associated-content-id"));
         this.cellWidth = fieldElement.getAttribute("cell-width");
 
         dataMap.put("name", this.name);
@@ -201,6 +211,9 @@ public class ModelMenuItem {
         }
     }
 
+    public List<ModelMenuItem> getMenuItemList() {
+        return menuItemList;
+    }
 
     public void setHideIfSelected(String val) {
         if (UtilValidate.isNotEmpty(val))
@@ -247,18 +260,53 @@ public class ModelMenuItem {
 
     }
 
-    public void renderMenuItemString(Appendable writer, Map<String, Object> context, MenuStringRenderer menuStringRenderer) throws IOException {
-
-          boolean passed = true;
+    public boolean shouldBeRendered(Map<String, Object> context) {
+        boolean passed = true;
         if (this.condition != null) {
             if (!this.condition.eval(context)) {
                 passed = false;
             }
         }
+        return passed;
+    }
+
+    public void renderMenuItemString(Appendable writer, Map<String, Object> context, MenuStringRenderer menuStringRenderer) throws IOException {
+
+        boolean passed = true;
+        if (this.condition != null) {
+            if (!this.condition.eval(context)) {
+                passed = false;
+            }
+        }
+        Locale locale = (Locale) context.get("locale");
            //Debug.logInfo("in ModelMenu, name:" + this.getName(), module);
         if (passed) {
             ModelMenuAction.runSubActions(this.actions, context);
-            menuStringRenderer.renderMenuItem(writer, context, this);
+            String parentPortalPageId = this.getParentPortalPageId(context);
+            if (UtilValidate.isNotEmpty(parentPortalPageId)) {
+                List<GenericValue> portalPages = this.getPortalPages(context);
+                for (GenericValue portalPage : portalPages) {
+                    if (UtilValidate.isNotEmpty(portalPage.getString("portalPageName"))) {
+                        ModelMenuItem localItem = new ModelMenuItem(this.getModelMenu());
+                        localItem.name =  portalPage.getString("portalPageId");
+                        localItem.setTitle((String) portalPage.get("portalPageName", locale));
+                        localItem.link = new Link(this);
+                        List<WidgetWorker.Parameter> linkParams = localItem.link.getParameterList();
+                        linkParams.add(new WidgetWorker.Parameter("portalPageId", portalPage.getString("portalPageId"), false));
+                        linkParams.add(new WidgetWorker.Parameter("parentPortalPageId", parentPortalPageId, false));
+                        if (link != null) {
+                            localItem.link.setTarget(link.targetExdr.getOriginal());
+                            linkParams.addAll(link.parameterList);
+                        } else {
+                            localItem.link.setTarget("showPortalPage");
+                        }
+                        localItem.link.setText((String)portalPage.get("portalPageName", locale));
+                        menuStringRenderer.renderMenuItem(writer, context, localItem);
+                    }
+                }
+            } else {
+                menuStringRenderer.renderMenuItem(writer, context, this);
+            }
         }
     }
 
@@ -355,6 +403,51 @@ public class ModelMenuItem {
         return this.parentPortalPageId.expandString(context);
     }
 
+    public List<GenericValue> getPortalPages(Map<String, Object> context) {
+        List<GenericValue> portalPages = null;
+        String parentPortalPageId = this.getParentPortalPageId(context);
+        if (UtilValidate.isNotEmpty(parentPortalPageId)) {
+            Delegator delegator = modelMenu.getDelegator();
+            try {
+                // first get public pages
+                EntityCondition cond =
+                    EntityCondition.makeCondition(UtilMisc.toList(
+                        EntityCondition.makeCondition("ownerUserLoginId", EntityOperator.EQUALS, "_NA_"),
+                        EntityCondition.makeCondition(UtilMisc.toList(
+                                EntityCondition.makeCondition("portalPageId", EntityOperator.EQUALS, parentPortalPageId),
+                                EntityCondition.makeCondition("parentPortalPageId", EntityOperator.EQUALS, parentPortalPageId)),
+                                EntityOperator.OR)),
+                        EntityOperator.AND);
+                portalPages = delegator.findList("PortalPage", cond, null, null, null, false);
+                if (UtilValidate.isNotEmpty(context.get("userLogin"))) { // check if a user is logged in
+                    String userLoginId = ((GenericValue)context.get("userLogin")).getString("userLoginId");
+                    // replace with private pages
+                    for (GenericValue portalPage : portalPages) {
+                        cond = EntityCondition.makeCondition(UtilMisc.toList(
+                                EntityCondition.makeCondition("ownerUserLoginId", EntityOperator.EQUALS, userLoginId),
+                                EntityCondition.makeCondition("originalPortalPageId", EntityOperator.EQUALS, portalPage.getString("portalPageId"))),
+                                EntityOperator.AND);
+                        List <GenericValue> privatePortalPages = delegator.findList("PortalPage", cond, null, null, null, false);
+                        if (UtilValidate.isNotEmpty(privatePortalPages)) {
+                            portalPages.remove(portalPage);
+                            portalPages.add(privatePortalPages.get(0));
+                        }
+                    }
+                    // add any other created private pages
+                    cond = EntityCondition.makeCondition(UtilMisc.toList(
+                            EntityCondition.makeCondition("ownerUserLoginId", EntityOperator.EQUALS, userLoginId),
+                            EntityCondition.makeCondition("originalPortalPageId", EntityOperator.EQUALS, null),
+                            EntityCondition.makeCondition("parentPortalPageId", EntityOperator.EQUALS, parentPortalPageId)),
+                            EntityOperator.AND);
+                    portalPages.addAll(delegator.findList("PortalPage", cond, null, null, null, false));
+                }
+                portalPages = EntityUtil.orderBy(portalPages, UtilMisc.toList("sequenceNum"));
+            } catch (GenericEntityException e) {
+                Debug.logError("Could not retrieve portalpages in the menu:" + e.getMessage(), module);
+            }
+        }
+        return portalPages;
+    }
     public String getWidgetStyle() {
         if (UtilValidate.isNotEmpty(this.widgetStyle)) {
             return this.widgetStyle;
@@ -470,7 +563,7 @@ public class ModelMenuItem {
     }
 
     public String getCellWidth() {
-        if (UtilValidate.isNotEmpty(this.cellWidth )) {
+        if (UtilValidate.isNotEmpty(this.cellWidth)) {
             return this.cellWidth ;
         } else {
             return this.modelMenu.getDefaultCellWidth ();
@@ -531,6 +624,8 @@ public class ModelMenuItem {
         protected boolean encode = false;
         protected String linkType;
         protected List<WidgetWorker.Parameter> parameterList = FastList.newInstance();
+        protected boolean requestConfirmation = false;
+        protected FlexibleStringExpander confirmationMsgExdr;
 
         public Link(Element linkElement, ModelMenuItem parentMenuItem) {
             this.linkMenuItem = parentMenuItem;
@@ -555,6 +650,8 @@ public class ModelMenuItem {
             for (Element parameterElement: parameterElementList) {
                 this.parameterList.add(new WidgetWorker.Parameter(parameterElement));
             }
+            setRequestConfirmation("true".equals(linkElement.getAttribute("request-confirmation")));
+            setConfirmationMsg(linkElement.getAttribute("confirmation-message"));
         }
 
         public Link(ModelMenuItem parentMenuItem) {
@@ -570,6 +667,7 @@ public class ModelMenuItem {
             setSecure("");
             setEncode("");
             setName("");
+            setConfirmationMsg("");
         }
 
         public void renderLinkString(Appendable writer, Map<String, Object> context, MenuStringRenderer menuStringRenderer) throws IOException {
@@ -648,6 +746,43 @@ public class ModelMenuItem {
         public List<WidgetWorker.Parameter> getParameterList() {
             return this.parameterList;
         }
+        public Map<String, String> getParameterMap(Map<String, Object> context) {
+            Map<String, String> fullParameterMap = FastMap.newInstance();
+
+            /* leaving this here... may want to add it at some point like the hyperlink element:
+            Map<String, String> addlParamMap = this.parametersMapAcsr.get(context);
+            if (addlParamMap != null) {
+                fullParameterMap.putAll(addlParamMap);
+            }
+            */
+
+            for (WidgetWorker.Parameter parameter: this.parameterList) {
+                fullParameterMap.put(parameter.getName(), parameter.getValue(context));
+            }
+
+            return fullParameterMap;
+        }
+
+        public String getConfirmation(Map<String, Object> context) {
+            String message = getConfirmationMsg(context);
+            if (UtilValidate.isNotEmpty(message)) {
+                return message;
+            }
+            else if (getRequestConfirmation()) {
+                String defaultMessage = UtilProperties.getPropertyValue("general", "default.confirmation.message", "${uiLabelMap.CommonConfirm}");
+                setConfirmationMsg(defaultMessage);
+                return getConfirmationMsg(context);
+            }
+            return "";
+        }
+
+        public boolean getRequestConfirmation() {
+            return this.requestConfirmation;
+        }
+
+        public String getConfirmationMsg(Map<String, Object> context) {
+            return this.confirmationMsgExdr.expandString(context);
+        }
 
         public void setText(String val) {
             String textAttr = UtilFormatOut.checkNull(val);
@@ -709,6 +844,14 @@ public class ModelMenuItem {
 
         public void setImage(Image img) {
             this.image = img;
+        }
+
+        public void setRequestConfirmation(boolean val) {
+            this.requestConfirmation = val;
+        }
+
+        public void setConfirmationMsg(String val) {
+            this.confirmationMsgExdr = FlexibleStringExpander.getInstance(val);
         }
 
         public ModelMenuItem getLinkMenuItem() {
