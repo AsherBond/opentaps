@@ -25,6 +25,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -156,7 +157,7 @@ public class WarehouseSecurity extends OpentapsSecurity {
      * @return List of GenericValue facilities
      */
     public List<GenericValue> getUserFacilities(GenericValue userLogin) {
-        Delegator delegator = Delegator.getDelegator("default");
+        Delegator delegator = DelegatorFactory.getDelegator("default");
         List<GenericValue> facilities = new ArrayList<GenericValue>();
         try {
             if (getSecurity().hasPermission("WRHS_ADMIN", getUserLogin())) {

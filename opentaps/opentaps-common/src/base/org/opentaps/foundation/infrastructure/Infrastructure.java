@@ -35,6 +35,7 @@ import org.hibernate.persister.entity.EntityPersister;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.config.DatasourceInfo;
@@ -119,7 +120,7 @@ public class Infrastructure {
         if (sessionFactory == null) {
             Debug.logVerbose("building hibernate SessionFactory ...", MODULE);
             AnnotationConfiguration annotationConfiguration = new AnnotationConfiguration();
-            Delegator delegator = Delegator.getDelegator(delegatorName);
+            Delegator delegator = DelegatorFactory.getDelegator(delegatorName);
             //for support eccas, construct persist event listener arrays
             PersistEventListener[] persistEventListeners = {new EcaPersistEventListener(delegator)};
             //for support eccas, construct load event listener arrays

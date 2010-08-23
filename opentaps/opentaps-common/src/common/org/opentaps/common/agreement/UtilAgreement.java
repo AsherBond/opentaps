@@ -23,6 +23,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -51,7 +52,7 @@ public final class UtilAgreement {
      */
     public static List<String> getValidFields(String termTypeId) {
         Debug.logWarning("Deprecated method UtilAgreement.getValidFields(termTypeId) called: You should be using getValidFields(termTypeId, delegator)", MODULE);
-        return getValidFields(termTypeId, Delegator.getDelegator("default"));
+        return getValidFields(termTypeId, DelegatorFactory.getDelegator("default"));
     }
 
     /**

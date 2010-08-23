@@ -25,6 +25,7 @@ import javax.sql.DataSource;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 
 public class JNDIContextListener implements ServletContextListener {
 
@@ -35,7 +36,7 @@ public class JNDIContextListener implements ServletContextListener {
 
         try {
 
-            Delegator delegator =  Delegator.getDelegator("default");
+            Delegator delegator =  DelegatorFactory.getDelegator("default");
             InitialContext ctx = new InitialContext();
 
             String dataSourceName = delegator.getGroupHelperName("org.ofbiz");
