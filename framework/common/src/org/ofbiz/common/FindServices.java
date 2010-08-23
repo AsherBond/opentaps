@@ -218,7 +218,7 @@ public class FindServices {
      * @param context
      * @return
      */
-    public static List<EntityCondition> createConditionList(Map<String, ? extends Object> parameters, List<ModelField> fieldList, Map<String, Object> queryStringMap, Delegator delegator, Map<String, ?> context) {
+    public static List<EntityCondition> createConditionList(Map<String, ? extends Object> parameters, List<ModelField> fieldList, Map<String, Object> queryStringMap, Delegator delegator, Map<String, ?> context, List<String> dateTimeFields, TimeZone timeZone, Locale locale) {
         Set<String> processed = FastSet.newInstance();
         Set<String> keys = FastSet.newInstance();
         Map<String, ModelField> fieldMap = FastMap.newInstance();
@@ -272,6 +272,31 @@ public class FindServices {
             }
             if (fieldValue == null) {
                 fieldValue = parameters.get(fieldName);
+            }
+            //check if this value of date-time type
+            if (dateTimeFields.contains(fieldName)) {
+                // this value is date/time in localized format and should be
+                // converted to timestamp representation. Just have in mind that 
+                // can be only date w/o time portion.
+                DateFormat df = null;
+                Date dateObj = null;
+                try {
+                    // assume full date/time format
+                    df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                    dateObj = df.parse((String) fieldValue);
+                } catch (ParseException e) {
+                    try {
+                        // parse error. try date only format.
+                        df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateFormat(locale), timeZone, locale);
+                        dateObj = df.parse((String) fieldValue);
+                    } catch (ParseException e1) {
+                        Debug.logError(e1, module);
+                    }
+                }
+                if (dateObj != null) {
+                    Timestamp timeStamp = new Timestamp(dateObj.getTime());
+                    fieldValue = timeStamp.toString();
+                }
             }
             if (ObjectType.isEmpty(fieldValue)) {
                 continue;
@@ -358,7 +383,7 @@ public class FindServices {
      * @param normalizedFields     list of field the user have populated
      * @return a arrayList usable to create an entityCondition
      */
-    public static List<EntityCondition> createCondition(ModelEntity modelEntity, Map<String, Map<String, Map<String, Object>>> normalizedFields, Map<String, Object> queryStringMap, Map<String, List<Object[]>> origValueMap, Delegator delegator, Map<String, ?> context,  List<String> dateTimeFields, TimeZone timeZone, Locale locale) {
+    public static List<EntityCondition> createCondition(ModelEntity modelEntity, Map<String, Map<String, Map<String, Object>>> normalizedFields, Map<String, Object> queryStringMap, Map<String, List<Object[]>> origValueMap, Delegator delegator, Map<String, ?> context, List<String> dateTimeFields, TimeZone timeZone, Locale locale) {
         Map<String, Map<String, Object>> subMap = null;
         Map<String, Object> subMap2 = null;
         EntityComparisonOperator<?, ?> fieldOp = null;
@@ -602,7 +627,6 @@ public class FindServices {
         Map<String, Object> queryStringMap = FastMap.newInstance();
         Delegator delegator = dctx.getDelegator();
         ModelEntity modelEntity = delegator.getModelEntity(entityName);
-        List<EntityCondition> tmpList = createConditionList(inputFields, modelEntity.getFieldsUnmodifiable(), queryStringMap, delegator, context);
 
         // createCondition method has to convert localized dates to timestamp string. That's why
         // we collect list of fields that have type "date-time"
@@ -615,7 +639,7 @@ public class FindServices {
                 dateTimeFields.add(field.getName());
         }
 
-        ArrayList<EntityCondition> tmpList = createCondition(modelEntity, normalizedFields, queryStringMap, origValueMap, delegator, context, dateTimeFields, timeZone, locale);
+        List<EntityCondition> tmpList = createConditionList(inputFields, modelEntity.getFieldsUnmodifiable(), queryStringMap, delegator, context, dateTimeFields, timeZone, locale);
 
         /* the filter by date condition should only be added when there are other conditions or when
          * the user has specified a noConditionFind.  Otherwise, specifying filterByDate will become
