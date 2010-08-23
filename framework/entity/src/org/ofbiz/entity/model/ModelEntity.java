@@ -1234,7 +1234,7 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
             String fieldName = modelField.getName();
             Object oldValue = inContext.get(fieldName);
             if (oldValue != null) {
-                inContext.put(fieldName, this.convertFieldValue(modelField, oldValue, modelFieldTypeReader, inContext));
+                inContext.put(fieldName, this.convertFieldValue(modelField, oldValue, modelFieldTypeReader, inContext, null));
             }
         }
     }
