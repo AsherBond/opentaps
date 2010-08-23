@@ -154,7 +154,7 @@ public class PartyMergeService extends DomainService implements PartyMergeServic
                                     newRecord.set(modelField.getName(), partyIdTo);
 
                                     // Create the new record if a record with the same primary key doesn't already exist
-                                    if (delegator.findByPrimaryKey(newRecord.getPrimaryKey()) == null) {
+                                    if (delegator.findOne(newRecord.getPrimaryKey().getEntityName(), newRecord.getPrimaryKey(), false) == null) {
                                         newRecord.create();
                                     }
 
