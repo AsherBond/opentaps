@@ -1,19 +1,19 @@
 package org.opentaps.tests.service;
 
-import org.opentaps.tests.OpentapsTestCase;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
+
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilDateTime;
-
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.sql.Timestamp;
-import java.math.BigDecimal;
+import org.opentaps.tests.OpentapsTestCase;
 
 /*
 * Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
@@ -54,11 +54,11 @@ public class POJOServiceTests extends OpentapsTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         // delegator is reset to null by super.tearDown() so we have to get it again
-        removeTestingRecords(Delegator.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
+        removeTestingRecords(DelegatorFactory.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
     }
 
     private void removeTestingRecords(Delegator delegator) throws GenericEntityException {
-        delegator.removeByCondition("ServiceTestRecord", new EntityExpr("key1", EntityOperator.EQUALS, "TEST"));
+        delegator.removeByCondition("ServiceTestRecord", EntityCondition.makeCondition("key1", EntityOperator.EQUALS, "TEST"));
     }
 
     public void testErrorDueToMissingUserLogin() {
