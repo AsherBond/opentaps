@@ -48,6 +48,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -156,7 +157,7 @@ public class OpentapsTestCase extends TestCase {
 
     @Override
     public void setUp() throws Exception {
-        delegator = Delegator.getDelegator(DELEGATOR_NAME);
+        delegator = DelegatorFactory.getDelegator(DELEGATOR_NAME);
         dispatcher = GenericDispatcher.getLocalDispatcher(DELEGATOR_NAME, delegator);
         admin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "admin"));
         domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));

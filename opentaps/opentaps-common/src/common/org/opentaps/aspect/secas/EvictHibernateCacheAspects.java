@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
@@ -165,7 +166,7 @@ public class EvictHibernateCacheAspects {
      * @return a <code>Delegator</code> value
      */
     public Delegator getDefaultDelegator() {
-        Delegator delegator = Delegator.getDelegator(DELEGATOR_NAME);
+        Delegator delegator = DelegatorFactory.getDelegator(DELEGATOR_NAME);
         return delegator;
     }
 }

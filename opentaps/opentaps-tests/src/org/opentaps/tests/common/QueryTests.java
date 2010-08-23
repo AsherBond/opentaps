@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -59,7 +60,7 @@ public class QueryTests extends OpentapsTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         // delegator is reset to null by super.tearDown() so we have to get it again
-        removeTestingRecords(Delegator.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
+        removeTestingRecords(DelegatorFactory.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
     }
 
     private String makeTestId(int i) {

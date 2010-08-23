@@ -25,6 +25,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -75,7 +76,7 @@ public class EntityTests extends OpentapsTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         // delegator is reset to null by super.tearDown() so we have to get it again
-        removeTestData(Delegator.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
+        removeTestData(DelegatorFactory.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
     }
 
     private void createTestData(Delegator delegator) throws GenericEntityException {
