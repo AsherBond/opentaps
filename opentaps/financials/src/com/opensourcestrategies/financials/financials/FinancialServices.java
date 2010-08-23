@@ -363,7 +363,7 @@ public final class FinancialServices {
             // but don't change the actual as of date because it may cause inconsistencies with other reports 
             // does not appear to be an issue for balance sheet, income statement, because if it is missed you just re-calculate that time period again
             // but this report actually adds both, so if you miss a closed time period, it could cause double-counting
-            findLastClosedDate.setInFindDate(UtilDateTime.adjustTimestamp(asOfDate, java.util.Calendar.SECOND, new Integer(1)));
+            findLastClosedDate.setInFindDate(new java.sql.Date(UtilDateTime.adjustTimestamp(asOfDate, java.util.Calendar.SECOND, new Integer(1)).getTime()));
 
             findLastClosedDate.setUser(user);
             findLastClosedDate.runSyncNoNewTransaction(infrastructure);
