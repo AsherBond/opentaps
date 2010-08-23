@@ -18,9 +18,21 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
-<#macro renderSectionBegin></#macro>
-<#macro renderSectionEnd>
+<#macro renderScreenBegin>
+<?xml version="1.0" encoding="UTF-8"?>
+<export>
 </#macro>
+
+<#macro renderScreenEnd>
+</export>
+</#macro>
+
+<#macro renderSectionBegin boundaryComment>
+</#macro>
+
+<#macro renderSectionEnd boundaryComment>
+</#macro>
+
 <#macro renderContainerBegin id style autoUpdateLink autoUpdateInterval>
 </#macro>
 <#macro renderContainerEnd></#macro>
