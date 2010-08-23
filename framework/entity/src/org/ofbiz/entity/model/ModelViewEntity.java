@@ -1268,7 +1268,7 @@ public class ModelViewEntity extends ModelEntity {
             if (!((operator.equals(EntityOperator.IN) || operator.equals(EntityOperator.BETWEEN))
                     && value instanceof Collection)) {
                 // now to a type conversion for the target fieldName
-                value = this.viewEntityCondition.modelViewEntity.convertFieldValue(this.viewEntityCondition.modelViewEntity.getField(fieldName), value, modelFieldTypeReader, FastMap.<String, Object>newInstance(), null);
+                value = this.viewEntityCondition.modelViewEntity.convertFieldValue(this.viewEntityCondition.modelViewEntity.getField(fieldName), value, modelFieldTypeReader, FastMap.<String, Object>newInstance());
             }
 
             if (Debug.verboseOn()) Debug.logVerbose("Got value for fieldName [" + fieldName + "]: " + value, module);

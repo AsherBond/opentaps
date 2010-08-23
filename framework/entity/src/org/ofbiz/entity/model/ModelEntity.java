@@ -1234,7 +1234,7 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
             String fieldName = modelField.getName();
             Object oldValue = inContext.get(fieldName);
             if (oldValue != null) {
-                inContext.put(fieldName, this.convertFieldValue(modelField, oldValue, modelFieldTypeReader, inContext, null));
+                inContext.put(fieldName, this.convertFieldValue(modelField, oldValue, modelFieldTypeReader, inContext));
             }
         }
     }
@@ -1267,6 +1267,14 @@ public class ModelEntity extends ModelInfo implements Comparable<ModelEntity>, S
             Debug.logError(e, errMsg, module);
             throw new IllegalArgumentException(errMsg);
         }
+    }
+
+    // Wrapper methods
+    public Object convertFieldValue(ModelField modelField, Object value, Delegator delegator, Map<String, ? extends Object> context) {
+        return this.convertFieldValue(modelField, value, delegator, context, null);
+    }
+    public Object convertFieldValue(ModelField modelField, Object value, ModelFieldTypeReader modelFieldTypeReader, Map<String, ? extends Object> context) {
+        return this.convertFieldValue(modelField, value, modelFieldTypeReader, context, null);
     }
 
     /** Convert a field value from one Java data type to another. This is the preferred method -
