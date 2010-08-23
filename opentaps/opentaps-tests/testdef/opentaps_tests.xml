@@ -77,7 +77,4 @@
     <!-- asterisk integration tests -->
     <test-case case-name="opentaps-asterisk-tests"><junit-test-suite class-name="org.opentaps.asterisk.tests.AsteriskTests"/></test-case>
     
-    <!-- activities tests -->
-    <test-case case-name="opentaps-activities-tests"><junit-test-suite class-name="com.opensourcestrategies.activities.tests.ActivitiesTests"/></test-case>
-    
 </test-suite>
