@@ -208,7 +208,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append("\" title=\"");
         sr.append(title);
         sr.append("\" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
     public void renderFrameContainerBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
         String containerId = container.getId(context);
@@ -238,13 +238,13 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append("\" title=\"");
         sr.append(title);
         sr.append("\" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderFrameContainerEnd(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
         StringWriter sr = new StringWriter();
         sr.append("<@renderFrameContainerEnd/>");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderLabel(Appendable writer, Map<String, Object> context, ModelScreenWidget.Label label) throws IOException {
