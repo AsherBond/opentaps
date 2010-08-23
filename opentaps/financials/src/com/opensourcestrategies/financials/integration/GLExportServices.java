@@ -109,7 +109,7 @@ public final class GLExportServices {
                                                "externalAccountParties", externalAccountParties);
                 Debug.logInfo("acctgTransId = " + acctgTrans.getString("acctgTransId") + " with " + acctgTransEntries.size() + " entries", MODULE);
                 StringWriter outWriter = new StringWriter();
-                ContentWorker.renderContentAsText(dispatcher, delegator, templateName, outWriter, inContext, locale, "text/plain", false);
+                ContentWorker.renderContentAsText(dispatcher, delegator, templateName, outWriter, inContext, locale, "text/plain", /*partId*/ null, /*roleTypeId*/ null, false);
                 Debug.logInfo("output: " + outWriter.toString(), MODULE);
 
                 // now add it to all the other transactions so far
