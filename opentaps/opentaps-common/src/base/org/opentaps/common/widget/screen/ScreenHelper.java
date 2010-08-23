@@ -101,7 +101,7 @@ public class ScreenHelper {
         //  ${screens.render(...)} is captured
         Writer writer = new StringWriter();
         ScreenRenderer screens = new ScreenRenderer(writer, MapStack.<String>create(screenContext), new HtmlScreenRenderer());
-        ScreenRenderer.populateBasicContext(MapStack.<String>create(screenContext), screens, screenParameters, delegator, dispatcher, security, (Locale) screenContext.get("locale"), (GenericValue) screenContext.get("userLogin"));
+        ScreenRenderer.populateBasicContext(MapStack.<String>create(screenContext), screens, screenParameters, delegator, dispatcher, dispatcher.getAuthorization(), security, (Locale) screenContext.get("locale"), (GenericValue) screenContext.get("userLogin"));
 
         // Get the screen and render it
         ScreenStringRenderer renderer = screens.getScreenStringRenderer();
