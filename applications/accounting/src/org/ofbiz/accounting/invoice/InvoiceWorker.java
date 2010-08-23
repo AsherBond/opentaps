@@ -183,9 +183,7 @@ public class InvoiceWorker {
             Debug.logError(e, "Trouble getting InvoiceAdustment list", module);
         }
         if (UtilValidate.isNotEmpty(invoiceAdjustments)) {
-            Iterator<GenericValue> invoiceAdjsIter = invoiceAdjustments.iterator();
-            while (invoiceAdjsIter.hasNext()) {
-                GenericValue invoiceAdj = invoiceAdjsIter.next();
+            for (GenericValue invoiceAdj : invoiceAdjustments) {
                 BigDecimal amount = invoiceAdj.getBigDecimal("amount");
                 if (amount == null) {
                     amount = ZERO;
