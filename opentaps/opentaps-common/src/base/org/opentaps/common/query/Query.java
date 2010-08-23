@@ -335,7 +335,7 @@ public class Query {
             throw new QueryException("Cannot cast [" + entityName + "] to a ModelEntity");
         }
         return new EntityListIterator(resultSet, delegator.getModelEntity(entityName),
-                modelEntity.getFieldsCopy(), ModelFieldTypeReader.getModelFieldTypeReader(getHelperName(delegator, entityName)));
+                modelEntity.getFieldsUnmodifiable(), ModelFieldTypeReader.getModelFieldTypeReader(getHelperName(delegator, entityName)));
 
     }
 
