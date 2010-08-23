@@ -76,13 +76,13 @@ public class FormletFactory {
     public static final String module = FormletFactory.class.getName();
 
     // each application has a separate Freemarker configuration (clearing this cache reloads libraries)
-    protected static UtilCache configurationCache = new UtilCache("opentaps.ftl.configuration", 0, 0);
+    protected static UtilCache configurationCache = UtilCache.createUtilCache("opentaps.ftl.configuration", 0, 0);
 
     // each application has a FormletCache, we need to hold references to them here
     protected static Map applicationFormletCache = FastMap.newInstance();
 
     // store the library files as strings in this cache (clearing this cache reloads the libraries)
-    protected static UtilCache applicationLibraryCache = new UtilCache("opentaps.ftl.library", 0, 0);
+    protected static UtilCache applicationLibraryCache = UtilCache.createUtilCache("opentaps.ftl.library", 0, 0);
 
     // freemarker configuration and loader for the formlet placeholder
     protected static Configuration formletPlaceholderConfig = null;
@@ -119,7 +119,11 @@ public class FormletFactory {
         protected UtilCache formletCache;
 
         public FormletCache(String applicationName) {
-            formletCache = new UtilCache("opentaps.formlet." + applicationName, 0, 0);
+            String cacheName = "opentaps.formlet." + applicationName;
+            formletCache = UtilCache.findCache(cacheName);
+            if (formletCache == null) {
+                formletCache = UtilCache.createUtilCache("opentaps.formlet." + applicationName, 0, 0);
+            }
         }
 
         public Object get(Object key) {
