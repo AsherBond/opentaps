@@ -102,7 +102,7 @@ public final class HibernateUtil {
      * @return a <code>GenericValue</code> value
      */
     public static GenericValue entityToGenericValue(Entity entity, Delegator delegator) throws GenericEntityException {
-        GenericValue value = GenericValue.create(delegator.getModelReader().getModelEntity(getEntityClassName(entity)), entity.toMap());
+        GenericValue value = GenericValue.create(delegator, delegator.getModelReader().getModelEntity(getEntityClassName(entity)), entity.toMap());
         return value;
     }
 

@@ -278,7 +278,7 @@ public class Repository implements RepositoryInterface  {
             }
 
             ModelEntity model = repo.getInfrastructure().getDelegator().getModelReader().getModelEntity(entity.getBaseEntityName());
-            return GenericValue.create(model, entity.toMap());
+            return GenericValue.create(repo.getInfrastructure().getDelegator(), model, entity.toMap());
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);
         }
@@ -294,7 +294,7 @@ public class Repository implements RepositoryInterface  {
     public static GenericValue genericValueFromEntity(Delegator delegator, EntityInterface entity) throws RepositoryException {
         try {
             ModelEntity model = delegator.getModelReader().getModelEntity(entity.getBaseEntityName());
-            return GenericValue.create(model, entity.toMap());
+            return GenericValue.create(delegator, model, entity.toMap());
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);
         }
