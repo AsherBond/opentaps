@@ -128,7 +128,11 @@ public abstract class EntityLookupAndSuggestService extends EntityLookupService 
     protected <T extends EntityInterface> List<T> findSuggestMatchesAnyOf(Class<T> entity, String query, List<String> fields, EntityCondition additionalFilter) {
         Debug.logInfo("findSuggestMatchesAnyOf: entity=" + entity.getName() + ", query=" + query + ", fields=" + fields, "");
         if (query == null || fields.isEmpty()) {
-            return findAll(entity);
+            if (additionalFilter == null) {
+                return findAll(entity);
+            } else {
+                return findList(entity, additionalFilter);
+            }
         }
 
         List<EntityCondition> suggestConds = new ArrayList<EntityCondition>();
