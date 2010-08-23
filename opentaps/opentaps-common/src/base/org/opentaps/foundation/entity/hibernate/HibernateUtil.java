@@ -36,7 +36,7 @@ import org.hibernate.Transaction;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.EntityCryptoException;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -97,11 +97,11 @@ public final class HibernateUtil {
      * Generates a GenericValue from Entity.
      *
      * @param entity a <code>Entity</code> object
-     * @param delegator a <code>GenericDelegator</code> object
+     * @param delegator a <code>Delegator</code> object
      * @throws GenericEntityException if an error occurs
      * @return a <code>GenericValue</code> value
      */
-    public static GenericValue entityToGenericValue(Entity entity, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue entityToGenericValue(Entity entity, Delegator delegator) throws GenericEntityException {
         GenericValue value = GenericValue.create(delegator.getModelReader().getModelEntity(getEntityClassName(entity)), entity.toMap());
         return value;
     }
@@ -246,10 +246,10 @@ public final class HibernateUtil {
      * Get encrypt parameters by QueryString.
      *
      * @param queryString a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List<String></code> value
      */
-    public static List<String> getEncryptParametersByQueryString(String queryString, GenericDelegator delegator) {
+    public static List<String> getEncryptParametersByQueryString(String queryString, Delegator delegator) {
         List<String> encryptFields = new ArrayList<String>();
         try {
             Entity entity =  getEntityInstanceByQueryString(queryString);
@@ -280,10 +280,10 @@ public final class HibernateUtil {
      * Get encrypt field by QueryString.
      *
      * @param className a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List<String></code> value
      */
-    public static List<String> getEncryptFieldsByClassName(String className, GenericDelegator delegator) {
+    public static List<String> getEncryptFieldsByClassName(String className, Delegator delegator) {
         List<String> encryptFields = new ArrayList<String>();
         try {
             Entity entity =  getEntityInstanceByClassName(className);

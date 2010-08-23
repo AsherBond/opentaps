@@ -47,7 +47,7 @@ import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -126,7 +126,7 @@ public class OpentapsSecurity {
 
         try {
             // now we'll need to do some searching so we should get a delegator from user login
-            GenericDelegator delegator = userLogin.getDelegator();
+            Delegator delegator = userLogin.getDelegator();
 
             // validate that partyIdFor is in our system in a proper role
             /* XXX refactoring:  this won't work generally, so perhaps use an extra input parameter to pass in the list of roles to check for?

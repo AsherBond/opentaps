@@ -1,7 +1,7 @@
 package org.opentaps.tests.service;
 
 import org.opentaps.tests.OpentapsTestCase;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityExpr;
@@ -54,10 +54,10 @@ public class POJOServiceTests extends OpentapsTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         // delegator is reset to null by super.tearDown() so we have to get it again
-        removeTestingRecords(GenericDelegator.getGenericDelegator(OpentapsTestCase.DELEGATOR_NAME));
+        removeTestingRecords(Delegator.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
     }
 
-    private void removeTestingRecords(GenericDelegator delegator) throws GenericEntityException {
+    private void removeTestingRecords(Delegator delegator) throws GenericEntityException {
         delegator.removeByCondition("ServiceTestRecord", new EntityExpr("key1", EntityOperator.EQUALS, "TEST"));
     }
 

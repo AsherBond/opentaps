@@ -46,7 +46,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.manufacturing.bom.BOMTree;
 import org.ofbiz.manufacturing.mrp.MrpServices;
@@ -101,7 +101,7 @@ public class OpentapsProposedOrder extends ProposedOrder {
         }
 
         LocalDispatcher dispatcher = ctx.getDispatcher();
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Map parameters = UtilMisc.toMap("userLogin", userLogin);
 
         // if product is built get the requirement start date from the BOM

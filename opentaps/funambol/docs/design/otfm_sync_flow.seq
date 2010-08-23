@@ -21,7 +21,7 @@ DSS
   {
     ContactSyncHandler.addItem -> partyId
     {
-      GenericDelegator.findXXX;
+      Delegator.findXXX;
     }
   }
   EntitySyncSource.removeSyncItem;

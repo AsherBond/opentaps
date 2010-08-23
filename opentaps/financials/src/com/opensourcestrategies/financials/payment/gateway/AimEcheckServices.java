@@ -20,7 +20,7 @@ import javolution.util.FastMap;
 import org.ofbiz.accounting.thirdparty.authorizedotnet.AuthorizeResponse;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
@@ -63,7 +63,7 @@ public class AimEcheckServices {
      * configured and will not work until the issues are resolved.
      */
     public static Map authorizeAndCaptureEft(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String resource = getResource(context);
         Double amount = (Double) context.get("processAmount");
         GenericValue eftAccount = (GenericValue) context.get("eftAccount");
@@ -280,7 +280,7 @@ public class AimEcheckServices {
     /**
      * Creates request fields for a customer, such as email and postal addresses.
      */
-    private static Map buildCustomerRequest(GenericDelegator delegator, Map context) throws GenericEntityException {
+    private static Map buildCustomerRequest(Delegator delegator, Map context) throws GenericEntityException {
         Map request = FastMap.newInstance();
         GenericValue customer = (GenericValue) context.get("billToParty");
         GenericValue address = (GenericValue) context.get("billingAddress");

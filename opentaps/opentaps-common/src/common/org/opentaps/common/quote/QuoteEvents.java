@@ -31,7 +31,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.contact.ContactHelper;
@@ -57,7 +57,7 @@ public final class QuoteEvents {
 
     /**
      * Prepare jasper parameters for running quote report.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param userLogin a <code>GenericValue</code> value
      * @param locale a <code>Locale</code> value
@@ -65,7 +65,7 @@ public final class QuoteEvents {
      * @return the event response <code>String</code>
      * @exception GeneralException if an error occurs
      */
-    public static Map<String, Object> prepareQuoteReportParameters(GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, Locale locale, String quoteId) throws GeneralException {
+    public static Map<String, Object> prepareQuoteReportParameters(Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, Locale locale, String quoteId) throws GeneralException {
         Map<String, Object> parameters = FastMap.newInstance();
 
         String organizationPartyId = null;
@@ -209,7 +209,7 @@ public final class QuoteEvents {
      * @return the event response <code>String</code>
      */
     public static String prepareQuoteReport(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         Locale locale = UtilHttp.getLocale(request);

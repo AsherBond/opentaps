@@ -30,7 +30,7 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityConfException;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -48,7 +48,7 @@ import org.ofbiz.entity.util.EntityListIterator;
 public class Query {
 
     // the delegator and entity helpers are only used to cast results to GenericValues
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected Connection connection = null;
     private PreparedStatement preparedStatement = null;
     protected ResultSet resultSet = null;
@@ -72,10 +72,10 @@ public class Query {
     }
 
     /**
-     * Sets the <code>GenericDelegator</code>.
-     * @param delegator a <code>GenericDelegator</code> value
+     * Sets the <code>Delegator</code>.
+     * @param delegator a <code>Delegator</code> value
      */
-    public void setDelegator(GenericDelegator delegator) {
+    public void setDelegator(Delegator delegator) {
         this.delegator = delegator;
     }
 
@@ -258,12 +258,12 @@ public class Query {
 
     /**
      * For an entity name, ie "StatusItem", returns its entitygroup.xml name, "org.ofbiz".
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param entityName the entity name, ie "StatusItem"
      * @return the entitygroup.xml name for the given entity name, ie "org.ofbiz"
      * @throws GenericEntityConfException if an error occurs
      */
-    public static String getHelperName(GenericDelegator delegator, String entityName) throws GenericEntityConfException {
+    public static String getHelperName(Delegator delegator, String entityName) throws GenericEntityConfException {
         // wow, is this a round trip or what?
         ModelGroupReader mgr = ModelGroupReader.getModelGroupReader(delegator.getDelegatorName());
         String groupName = mgr.getEntityGroupName(entityName, delegator.getDelegatorName());
@@ -272,12 +272,12 @@ public class Query {
 
     /**
      * Returns a <code>List</code> of <code>ModelField</code> from the given fieldNames (ie, "statusId") and the given entityName (ie, "StatusItem").
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param entityName the entity name, ie "StatusItem"
      * @param fieldNames a <code>List</code> of field name
      * @return the <code>List</code> of <code>ModelField</code> for the given entity name and list of field names
      */
-    public static List<ModelField> getModelFieldsFromNames(GenericDelegator delegator, String entityName, List<String> fieldNames) {
+    public static List<ModelField> getModelFieldsFromNames(Delegator delegator, String entityName, List<String> fieldNames) {
         ModelEntity modelEntity = delegator.getModelEntity(entityName);
         List<ModelField> modelFields = FastList.newInstance();
         for (Object fieldName : fieldNames) {

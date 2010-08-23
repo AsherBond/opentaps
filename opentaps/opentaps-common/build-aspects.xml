@@ -94,7 +94,7 @@
     <target name="detect-dependencies">
       <condition property="processRequired">
         <and>
-          <available classname="org.ofbiz.entity.GenericDelegator" classpathref="local.class.path"/>
+          <available classname="org.ofbiz.entity.Delegator" classpathref="local.class.path"/>
           <available classname="org.ofbiz.common.CommonServices" classpathref="local.class.path"/>
           <available classname="org.ofbiz.order.order.OrderServices" classpathref="local.class.path"/>
         </and>

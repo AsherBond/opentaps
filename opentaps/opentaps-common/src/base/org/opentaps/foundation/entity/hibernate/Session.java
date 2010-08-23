@@ -39,7 +39,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.jdbc.Work;
 import org.hibernate.stat.SessionStatistics;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.transaction.GenericTransactionException;
@@ -64,7 +64,7 @@ public class Session implements org.hibernate.Session {
     public final static int FETCH_SIZE = 100;
 
     private org.hibernate.Session hibernateSession;
-    private GenericDelegator delegator;
+    private Delegator delegator;
     // encrypt control
     private EntityCrypto crypto;
 
@@ -73,9 +73,9 @@ public class Session implements org.hibernate.Session {
      * Session constructor.
      *
      * @param hibernateSession a <code>org.hibernate.Session</code> object.
-     * @param delegator a <code>GenericDelegator</code> object.
+     * @param delegator a <code>Delegator</code> object.
      */
-    public Session(org.hibernate.Session hibernateSession, GenericDelegator delegator) {
+    public Session(org.hibernate.Session hibernateSession, Delegator delegator) {
         this.hibernateSession = hibernateSession;
         this.delegator = delegator;
         this.crypto = new EntityCrypto(delegator);

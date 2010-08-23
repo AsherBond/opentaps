@@ -55,7 +55,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -114,7 +114,7 @@ public final class FinancialReports {
      * @throws GenericEntityException if error occur
      */
     public static Map<String, Object> prepareFinancialReportParameters(HttpServletRequest request) throws GenericEntityException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
@@ -183,7 +183,7 @@ public final class FinancialReports {
      * @throws GenericEntityException if error occur
      */
     public static Map<String, Object> prepareComparativeFlowReportParameters(HttpServletRequest request) throws GenericEntityException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
@@ -247,7 +247,7 @@ public final class FinancialReports {
      * @throws GenericEntityException if error occur
      */
     public static Map<String, Object> prepareComparativeStateReportParameters(HttpServletRequest request) throws GenericEntityException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
@@ -302,7 +302,7 @@ public final class FinancialReports {
     @SuppressWarnings("unchecked")
     public static String prepareIncomeStatementReport(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
         Map<String, String> groupMarkers = UtilMisc.<String, String>toMap(
@@ -434,7 +434,7 @@ public final class FinancialReports {
     @SuppressWarnings("unchecked")
     public static String prepareComparativeIncomeStatementReport(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
@@ -530,7 +530,7 @@ public final class FinancialReports {
     @SuppressWarnings("unchecked")
     public static String prepareTrialBalanceReport(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
@@ -613,7 +613,7 @@ public final class FinancialReports {
     @SuppressWarnings("unchecked")
     public static String prepareBalanceSheetReport(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
         String reportType = UtilCommon.getParameter(request, "type");
@@ -732,7 +732,7 @@ public final class FinancialReports {
     @SuppressWarnings("unchecked")
     public static String prepareComparativeBalanceReport(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
         String reportType = UtilCommon.getParameter(request, "type");
@@ -874,7 +874,7 @@ public final class FinancialReports {
     @SuppressWarnings("unchecked")
     public static String prepareCashFlowStatementReport(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
@@ -983,7 +983,7 @@ public final class FinancialReports {
     @SuppressWarnings("unchecked")
     public static String prepareComparativeCashFlowStatementReport(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
@@ -1145,7 +1145,7 @@ public final class FinancialReports {
      * @return the event response, either "pdf" or "xls" string to select report type, or "error".
      */
     public static String prepareReceivablesAgingReport(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
 
@@ -1223,7 +1223,7 @@ public final class FinancialReports {
      * @return the event response, either "pdf" or "xls" string to select report type, or "error".
      */
     public static String preparePayablesAgingReport(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
 
@@ -1323,7 +1323,7 @@ public final class FinancialReports {
      */
     @SuppressWarnings("unchecked")
     private static String prepareAverageDSOReport(String invoiceTypeId, HttpServletRequest request) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         Locale locale = UtilCommon.getLocale(request);
@@ -1525,7 +1525,7 @@ public final class FinancialReports {
      * @return the event response, either "pdf" or "xls" string to select report type, or "error".
      */
     public static String prepareCreditCardReport(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         Locale locale = UtilCommon.getLocale(request);
@@ -1667,7 +1667,7 @@ public final class FinancialReports {
      * @return the event response, either "pdf" or "xls" string to select report type, or "error".
      */
     public static String preparePaymentReceiptsDetailReport(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         Locale locale = UtilCommon.getLocale(request);
@@ -1819,7 +1819,7 @@ public final class FinancialReports {
      * @return the event response, either "pdf" or "xls" string to select report type, or "error".
      */
     public static String prepareTransactionSummaryReport(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         Locale locale = UtilCommon.getLocale(request);
         Map<String, Object> jrParameters = FastMap.<String, Object>newInstance();
@@ -2049,7 +2049,7 @@ public final class FinancialReports {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> loadTaxInvoiceItemFact(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Map<String, Object> results = ServiceUtil.returnSuccess();
         Locale locale = (Locale) context.get("locale");
         if (locale == null) {
@@ -2290,7 +2290,7 @@ public final class FinancialReports {
      *
      * @param invoiceId sales invoice id
      * @param invoiceItemSeqId sales invoice item id
-     * @param delegator <code>GenericDelegator</code> instance
+     * @param delegator <code>Delegator</code> instance
      * @return
      * Each record is <code>Map</code> with following members:<br>
      * <b>taxAuthPartyId</b> : tax authority party<br>
@@ -2299,7 +2299,7 @@ public final class FinancialReports {
      * <b>taxable</b> : taxable amount of specified invoice item
      * @throws GenericEntityException
      */
-    private static List<Map<String, Object>> getTaxDueAmount(String invoiceId, String invoiceItemSeqId, GenericDelegator delegator) throws GenericEntityException {
+    private static List<Map<String, Object>> getTaxDueAmount(String invoiceId, String invoiceItemSeqId, Delegator delegator) throws GenericEntityException {
         List<Map<String, Object>> taxes = FastList.newInstance();
 
         // find sales tax invoice items which have given invoice item as parent
@@ -2422,11 +2422,11 @@ public final class FinancialReports {
      *
      * @param invoiceId sales invoice id
      * @param invoiceItemSeqId sales invoice item id
-     * @param delegator <code>GenericDelegator</code> instance.
+     * @param delegator <code>Delegator</code> instance.
      * @return refund amount for given sales invoice item.
      * @throws GenericEntityException
      */
-    private static BigDecimal getTotalRefundAmount(String invoiceId, String invoiceItemSeqId, GenericDelegator delegator) throws GenericEntityException {
+    private static BigDecimal getTotalRefundAmount(String invoiceId, String invoiceItemSeqId, Delegator delegator) throws GenericEntityException {
         BigDecimal totalRefunds = BigDecimal.ZERO;
         long totalRefundsIiNum = 0;
 
@@ -2472,11 +2472,11 @@ public final class FinancialReports {
      *
      * @param invoiceId sales invoice id
      * @param invoiceItemSeqId sales invoice item id
-     * @param delegator <code>GenericDelegator</code> instance
+     * @param delegator <code>Delegator</code> instance
      * @return sales invoice item adjustments.
      * @throws GenericEntityException
      */
-    private static BigDecimal getTotalPromoAmount(String invoiceId, String invoiceItemSeqId, GenericDelegator delegator) throws GenericEntityException {
+    private static BigDecimal getTotalPromoAmount(String invoiceId, String invoiceItemSeqId, Delegator delegator) throws GenericEntityException {
         BigDecimal totalPromotions = BigDecimal.ZERO;
 
         // find promotion/discount invoice items which have given invoice item as a parent
@@ -2504,12 +2504,12 @@ public final class FinancialReports {
      *
      * @param invoiceId invoice identifier
      * @param invoiceItemSeqId invoice item sequence number
-     * @param delegator <code>GenericDelegator</code> instance
+     * @param delegator <code>Delegator</code> instance
      * @return
      *   Store dimension key.
      * @throws GenericEntityException
      */
-    private static Long lookupStoreDim(String invoiceId, String invoiceItemSeqId, GenericDelegator delegator) throws GenericEntityException {
+    private static Long lookupStoreDim(String invoiceId, String invoiceItemSeqId, Delegator delegator) throws GenericEntityException {
         // store dim has a special record with key 0 with meaning "no product store"
         Long notfound = 0L;
         if (invoiceId == null && invoiceItemSeqId == null) {
@@ -2568,7 +2568,7 @@ public final class FinancialReports {
      * @param session Hibernate session
      * @throws GenericEntityException
      */
-    public static void loadInvoiceAdjustments(Session session, GenericDelegator delegator) throws GenericEntityException {
+    public static void loadInvoiceAdjustments(Session session, Delegator delegator) throws GenericEntityException {
 
         Transaction tx = session.beginTransaction();
 
@@ -2655,7 +2655,7 @@ public final class FinancialReports {
      */
     public static Map<String, Object> loadSalesTaxData(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
         if (locale == null) {

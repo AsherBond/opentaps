@@ -69,7 +69,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
@@ -134,7 +134,7 @@ public class PojoGeneratorContainer implements Container {
 
     private Properties entitySearchProperties;
     private String delegatorNameToUse;
-    private GenericDelegator delegator;
+    private Delegator delegator;
 
 
     /**
@@ -179,7 +179,7 @@ public class PojoGeneratorContainer implements Container {
         }
 
         // get the delegator
-        delegator = GenericDelegator.getGenericDelegator(delegatorNameToUse);
+        delegator = Delegator.getDelegator(delegatorNameToUse);
         if (delegator == null) {
             throw new ContainerException("Invalid delegator name: " + delegatorNameToUse);
         }

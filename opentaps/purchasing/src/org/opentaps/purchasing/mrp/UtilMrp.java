@@ -39,7 +39,7 @@
 package org.opentaps.purchasing.mrp;
 
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -62,11 +62,11 @@ public final class UtilMrp {
     /**
      * Returns List of productStoreIds from productStoreGroupId for Mrp purposes.
      * @param productStoreGroupId the product store group ID
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the list of productStoreIds from the given productStoreGroupId
      * @throws GenericEntityException if an error occurs
      */
-    public static List<String> getMrpProductStoreIdsFromGroup(String productStoreGroupId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<String> getMrpProductStoreIdsFromGroup(String productStoreGroupId, Delegator delegator) throws GenericEntityException {
         List<String> productStoreIds = null;
         if (UtilValidate.isNotEmpty(productStoreGroupId)) {
             EntityCondition productStoreGroupCondition = EntityCondition.makeCondition(EntityOperator.OR, EntityCondition.makeCondition("productStoreGroupId", EntityOperator.EQUALS, productStoreGroupId));
@@ -82,7 +82,7 @@ public final class UtilMrp {
         return productStoreIds;
     }
 
-    public static List<String> getProductIdsFromSupplier(String supplierPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<String> getProductIdsFromSupplier(String supplierPartyId, Delegator delegator) throws GenericEntityException {
         List<String> productIds = null;
         if (UtilValidate.isNotEmpty(supplierPartyId)) {
             EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,

@@ -41,7 +41,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -87,11 +87,11 @@ public class AccountsHelper {
      * @param partyId filter transaction entry by this partyId, optional
      * @param roleTypeId currently not used because it seems to cause problems when there is a receivable from a supplier or such.
      * @param asOfDate filter transaction entry by transaction date less than or equal to this date
-     * @param delegator a <code>GenericDelegator</code>
+     * @param delegator a <code>Delegator</code>
      * @return the list of <code>AcctgTransEntryPartySum</code> <code>GenericValue</code> found
      * @throws GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getAcctgTransPartySums(String organizationPartyId, List<String> glAccountTypeIds, String glFiscalTypeId, String debitCreditFlag, String partyId, String roleTypeId, Timestamp asOfDate, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getAcctgTransPartySums(String organizationPartyId, List<String> glAccountTypeIds, String glFiscalTypeId, String debitCreditFlag, String partyId, String roleTypeId, Timestamp asOfDate, Delegator delegator) throws GenericEntityException {
 
         List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                 EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
@@ -131,11 +131,11 @@ public class AccountsHelper {
      * @param partyId filter transaction entry by this partyId, optional
      * @param roleTypeId currently not used because it seems to cause problems when there is a receivable from a supplier or such.
      * @param asOfDate filter transaction entry by transaction date less than or equal to this date
-     * @param delegator a <code>GenericDelegator</code>
+     * @param delegator a <code>Delegator</code>
      * @return the list of <code>AcctgTransEntryPartySum</code> <code>GenericValue</code> found
      * @throws GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getAcctgTransPartySums(String organizationPartyId, String glAccountTypeId, String glFiscalTypeId, String debitCreditFlag, String partyId, String roleTypeId, Timestamp asOfDate, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getAcctgTransPartySums(String organizationPartyId, String glAccountTypeId, String glFiscalTypeId, String debitCreditFlag, String partyId, String roleTypeId, Timestamp asOfDate, Delegator delegator) throws GenericEntityException {
         return getAcctgTransPartySums(organizationPartyId, UtilMisc.toList(glAccountTypeId), glFiscalTypeId, debitCreditFlag,
                 partyId, roleTypeId, asOfDate, delegator);
     }
@@ -152,12 +152,12 @@ public class AccountsHelper {
      * @param   roleTypeId
      * @param   glFiscalTypeId
      * @param   asOfDateTime    Timestamp to sum up to. TODO: investigate the boundary conditions
-     * @param   delegator       a <code>GenericDelegator</code> instance
+     * @param   delegator       a <code>Delegator</code> instance
      * @return a <code>Map</code> of partyId -> balance amount
      * @throws  GenericEntityException if an error occurs
      */
     public static Map<String, BigDecimal> getBalancesHelper(List<String> glAccountTypeIds, String organizationPartyId, String partyId, String roleTypeId, String glFiscalTypeId,
-            Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
+            Timestamp asOfDateTime, Delegator delegator) throws GenericEntityException {
 
         // Set up convenience boolean for testing receivables/payables TODO this is not robust, can break in future
         boolean isReceivable = (glAccountTypeIds.contains("ACCOUNTS_RECEIVABLE") ? true : false);
@@ -213,22 +213,22 @@ public class AccountsHelper {
     }
 
     /** Gets ACCOUNTS_RECEIVABLE balances for all customers in an organizatoin up to the asOfDateTime. Returns a Map of partyId keys to BigDecimal balance values */
-    public static Map<String, BigDecimal> getBalancesForAllCustomers(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, BigDecimal> getBalancesForAllCustomers(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, Delegator delegator) throws GenericEntityException {
         return getBalancesHelper(CUSTOMER_RECEIVABLE_ACCTS, organizationPartyId, null, "BILL_TO_CUSTOMER", glFiscalTypeId, asOfDateTime, delegator);
     }
 
     /** Gets ACCOUNTS_PAYABLE balances for all vendors in an organizatoin up to the asOfDateTime. Returns a Map of partyId keys to BigDecimal balance values */
-    public static Map<String, BigDecimal> getBalancesForAllVendors(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, BigDecimal> getBalancesForAllVendors(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, Delegator delegator) throws GenericEntityException {
         return getBalancesHelper(VENDOR_PAYABLE_ACCTS, organizationPartyId, null, "BILL_FROM_VENDOR", glFiscalTypeId, asOfDateTime, delegator);
     }
 
     /** Gets COMMISSIONS_PAYABLE balances for all sales rep in an organizatoin up to the asOfDateTime. Returns a Map of partyId keys to BigDecimal balance values */
-    public static Map<String, BigDecimal> getBalancesForAllCommissions(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, BigDecimal> getBalancesForAllCommissions(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, Delegator delegator) throws GenericEntityException {
         return getBalancesHelper(COMMISSION_PAYABLE_ACCTS, organizationPartyId, null, "SALES_REP", glFiscalTypeId, asOfDateTime, delegator);
     }
 
     /** Gets ACCOUNTS_RECEIVABLE balance for a given customer in an organizatoin up to the asOfDateTime. Returns the balance as a BigDecimal.  If there is no balance information, returns ZERO. */
-    public static BigDecimal getBalanceForCustomerPartyId(String customerPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator)
+    public static BigDecimal getBalanceForCustomerPartyId(String customerPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, Delegator delegator)
         throws GenericEntityException {
         Map<String, BigDecimal> balances = getBalancesHelper(CUSTOMER_RECEIVABLE_ACCTS, organizationPartyId, customerPartyId, "BILL_TO_CUSTOMER", glFiscalTypeId, asOfDateTime, delegator);
         BigDecimal balance = balances.get(customerPartyId);
@@ -236,7 +236,7 @@ public class AccountsHelper {
     }
 
     /** Gets ACCOUNTS_PAYABLE balance for a given vendor in an organizatoin up to the asOfDateTime. Returns the balance as a BigDecimal.  If there is no balance information, returns ZERO. */
-    public static BigDecimal getBalanceForVendorPartyId(String vendorPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator)
+    public static BigDecimal getBalanceForVendorPartyId(String vendorPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, Delegator delegator)
         throws GenericEntityException {
         Map<String, BigDecimal> balances = getBalancesHelper(VENDOR_PAYABLE_ACCTS, organizationPartyId, vendorPartyId, "BILL_FROM_VENDOR", glFiscalTypeId, asOfDateTime, delegator);
         BigDecimal balance = balances.get(vendorPartyId);
@@ -244,7 +244,7 @@ public class AccountsHelper {
     }
 
     /** Gets COMMISSIONS_PAYABLE balance for a given sales rep in an organizatoin up to the asOfDateTime. Returns the balance as a BigDecimal. If there is no balance information, returns ZERO. */
-    public static BigDecimal getBalanceForCommissionPartyId(String commissionPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator)
+    public static BigDecimal getBalanceForCommissionPartyId(String commissionPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, Delegator delegator)
         throws GenericEntityException {
         Map<String, BigDecimal> balances = getBalancesHelper(COMMISSION_PAYABLE_ACCTS, organizationPartyId, commissionPartyId, "SALES_REP", glFiscalTypeId, asOfDateTime, delegator);
         BigDecimal balance = balances.get(commissionPartyId);
@@ -255,12 +255,12 @@ public class AccountsHelper {
      * Gets unpaid invoice balances for customer (SALES_INVOICE)
      * See getUnpaidInvoicesHelper for parameter information
      */
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomers(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomers(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, Delegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomers(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomers(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, Delegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, null, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
@@ -269,17 +269,17 @@ public class AccountsHelper {
      * Gets unpaid invoice balances for single customer (SALES_INVOICE)
      * See getUnpaidInvoicesHelper for parameter information
      */
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, Delegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, Delegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
 
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, Delegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale, useAgingDate);
     }
@@ -288,12 +288,12 @@ public class AccountsHelper {
      * Gets unpaid invoice balances for vendor (PURCHASE_INVOICE)
      * See getUnpaidInvoicesHelper for parameter information
      */
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendors(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendors(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, Delegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendors(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendors(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, Delegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, null, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
@@ -302,12 +302,12 @@ public class AccountsHelper {
      * Gets unpaid invoice balances for single vendor (PURCHASE_INVOICE)
      * See getUnpaidInvoicesHelper for parameter information
      */
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendor(String organizationPartyId, String partyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendor(String organizationPartyId, String partyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, Delegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, partyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendor(String organizationPartyId, String partyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForVendor(String organizationPartyId, String partyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, Delegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, partyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
@@ -316,28 +316,28 @@ public class AccountsHelper {
      * Gets unpaid invoice balances for commission (COMMISSION_INVOICE)
      * See getUnpaidInvoicesHelper for parameter information
      */
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCommissions(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCommissions(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, Delegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, "COMMISSION_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCommissions(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForCommissions(String organizationPartyId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, List<String> invoiceStatusIds, Delegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, null, "COMMISSION_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
 
     public static Map<Integer, List<Invoice>> getUnpaidInvoicesHelper(String organizationPartyId, String invoiceTypeId, List<Integer> daysOutstandingPoints,
-            Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
+            Timestamp asOfDateTime, Delegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, null, invoiceTypeId, daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
     public static Map<Integer, List<Invoice>> getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List<Integer> daysOutstandingPoints,
-            Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
+            Timestamp asOfDateTime, Delegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, invoiceTypeId, daysOutstandingPoints, asOfDateTime, null, delegator, timeZone, locale, false);
     }
 
     public static Map<Integer, List<Invoice>> getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List<Integer> daysOutstandingPoints,
-            Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate) throws GenericEntityException, RepositoryException {
+            Timestamp asOfDateTime, Delegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate) throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, invoiceTypeId, daysOutstandingPoints, asOfDateTime, null, delegator, timeZone, locale, useAgingDate);
     }
 
@@ -362,7 +362,7 @@ public class AccountsHelper {
      * @throws GenericEntityException
      */
     public static Map<Integer, List<Invoice>> getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List<Integer> daysOutstandingPoints,
-            Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate) throws GenericEntityException, RepositoryException {
+            Timestamp asOfDateTime, List<String> invoiceStatusIds, Delegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate) throws GenericEntityException, RepositoryException {
 
         // make sure the as of date is at the end of the day, this normalization prevents issues such as invoices that were just created missing from a report
         asOfDateTime = UtilDateTime.getDayEnd(asOfDateTime);
@@ -412,7 +412,7 @@ public class AccountsHelper {
     }
 
     public static Map<Integer, List<Invoice>> getUnpaidInvoicesHelper(String organizationPartyId, String payeePartyId, String invoiceTypeId, List<Integer> daysOutstandingPoints,
-        Timestamp asOfDateTime, List<String> invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
+        Timestamp asOfDateTime, List<String> invoiceStatusIds, Delegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, invoiceTypeId, daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale, false);
     }
 
@@ -427,7 +427,7 @@ public class AccountsHelper {
      *
      * Right now it's done by looking up only the receipts, as that's what we need.
      */
-    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForPartyClassificationGroup(String organizationPartyId, String partyClassificationGroupId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, boolean useAgingDate) throws GenericEntityException, RepositoryException {
+    public static Map<Integer, List<Invoice>> getUnpaidInvoicesForPartyClassificationGroup(String organizationPartyId, String partyClassificationGroupId, List<Integer> daysOutstandingPoints, Timestamp asOfDateTime, Delegator delegator, boolean useAgingDate) throws GenericEntityException, RepositoryException {
         EntityCondition mainConditions = EntityCondition.makeCondition(EntityOperator.AND,
                     EntityCondition.makeCondition("partyClassificationGroupId", EntityOperator.EQUALS, partyClassificationGroupId),
                     EntityUtil.getFilterByDateExpr());
@@ -442,7 +442,7 @@ public class AccountsHelper {
         return groupInvoicesByDateBucket(invoices, asOfDateTime, daysOutstandingPoints, delegator, useAgingDate);
     }
 
-    private static Map<Integer, List<Invoice>> groupInvoicesByDateBucket(List<GenericValue> invoiceList, Timestamp asOfDateTime, List<Integer> daysOutstandingPoints, GenericDelegator delegator, boolean useAgingDate) throws GenericEntityException, RepositoryException {
+    private static Map<Integer, List<Invoice>> groupInvoicesByDateBucket(List<GenericValue> invoiceList, Timestamp asOfDateTime, List<Integer> daysOutstandingPoints, Delegator delegator, boolean useAgingDate) throws GenericEntityException, RepositoryException {
 
         // create a temporary bridge to our refactoring
         InvoiceRepository repository = new InvoiceRepository(delegator);
@@ -501,7 +501,7 @@ public class AccountsHelper {
      * @return
      * @throws GenericEntityException
      */
-    public static Map<Invoice, Map<String, BigDecimal>> calculateFinanceCharges(GenericDelegator delegator, String organizationPartyId, String invoiceToPartyId, String partyClassificationGroupId, BigDecimal interestRate, int gracePeriod, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
+    public static Map<Invoice, Map<String, BigDecimal>> calculateFinanceCharges(Delegator delegator, String organizationPartyId, String invoiceToPartyId, String partyClassificationGroupId, BigDecimal interestRate, int gracePeriod, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
         return calculateFinanceCharges(delegator, organizationPartyId, invoiceToPartyId, partyClassificationGroupId, interestRate, UtilDateTime.nowTimestamp(), gracePeriod, timeZone, locale);
 
     }
@@ -511,7 +511,7 @@ public class AccountsHelper {
      *  limited by invoiceToPartyId and/or party classification of the invoiceToParty. Returns a map in the same order returned by the AccountsHelper.getUnpaidInvoicesFor* methods
      *  where the keys are invoices and the values are maps of data (days outstanding, interest charged, etc.)
      */
-    public static Map<Invoice, Map<String, BigDecimal>> calculateFinanceCharges(GenericDelegator delegator, String organizationPartyId, String invoiceToPartyId, String partyClassificationGroupId, BigDecimal interestRate, Timestamp asOfDateTime, int gracePeriod, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
+    public static Map<Invoice, Map<String, BigDecimal>> calculateFinanceCharges(Delegator delegator, String organizationPartyId, String invoiceToPartyId, String partyClassificationGroupId, BigDecimal interestRate, Timestamp asOfDateTime, int gracePeriod, TimeZone timeZone, Locale locale) throws GenericEntityException, RepositoryException {
 
         BigDecimal dailyInterestRate = interestRate.movePointLeft(2).setScale(100, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal("365.25"), BigDecimal.ROUND_HALF_UP);
 
@@ -564,7 +564,7 @@ public class AccountsHelper {
      * @throws GenericEntityException
      * @throws org.ofbiz.service.GenericServiceException
      */
-    public static boolean amountExceedsAvailableCreditAgreement(GenericDelegator delegator, LocalDispatcher dispatcher, String partyIdTo, String partyIdFrom, BigDecimal amountToCheck, String currencyUomId) throws GenericEntityException, GenericServiceException {
+    public static boolean amountExceedsAvailableCreditAgreement(Delegator delegator, LocalDispatcher dispatcher, String partyIdTo, String partyIdFrom, BigDecimal amountToCheck, String currencyUomId) throws GenericEntityException, GenericServiceException {
 
         amountToCheck = amountToCheck.setScale(decimals, rounding);
 
@@ -612,7 +612,7 @@ public class AccountsHelper {
      * @return Reverse-order list of GenericValues representing parents of the glAccountId - E.G. [517000, 510000, 500000] for 517100
      * @throws GenericEntityException
      */
-    public static List<GenericValue> getAccountParents(GenericDelegator delegator, String glAccountId) throws GenericEntityException {
+    public static List<GenericValue> getAccountParents(Delegator delegator, String glAccountId) throws GenericEntityException {
         HashMap<String, GenericValue> parents = getAccountParentsRec(delegator, glAccountId, null);
         parents.remove(glAccountId);
         List<GenericValue> parentList = EntityUtil.orderBy(parents.values(), UtilMisc.toList("glAccountId"));
@@ -620,7 +620,7 @@ public class AccountsHelper {
         return parentList;
     }
 
-    private static HashMap<String, GenericValue> getAccountParentsRec(GenericDelegator delegator, String glAccountId, HashMap<String, GenericValue> parents) throws GenericEntityException {
+    private static HashMap<String, GenericValue> getAccountParentsRec(Delegator delegator, String glAccountId, HashMap<String, GenericValue> parents) throws GenericEntityException {
         if (parents == null) parents = new HashMap<String, GenericValue>();
         if (glAccountId == null) {
             return parents;
@@ -664,7 +664,7 @@ public class AccountsHelper {
     @SuppressWarnings("unchecked")
     public static List<Map<String, Object>> customerStatement(DomainsLoader dl, String organizationPartyId, Set<String> partyIds, Timestamp asOfDate, int statementPeriod, boolean useAgingDate, Map partyData, Locale locale, TimeZone timeZone) throws RepositoryException, GenericEntityException, EntityNotFoundException {
 
-        GenericDelegator delegator = dl.getInfrastructure().getDelegator();
+        Delegator delegator = dl.getInfrastructure().getDelegator();
 
         // we will be getting more data from these repositories
         DomainsDirectory domains = dl.loadDomainsDirectory();

@@ -66,7 +66,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -92,7 +92,7 @@ public class ConstantsGeneratorContainer implements Container {
     private Properties configProperties;
 
     private String delegatorNameToUse;
-    private GenericDelegator delegator;
+    private Delegator delegator;
 
     /** Entries in <code>configProperties</code> with this value indicates the entities to query. */
     private static final String GENERATE_VALUE = "generate";
@@ -133,7 +133,7 @@ public class ConstantsGeneratorContainer implements Container {
         }
 
         // get the delegator
-        delegator = GenericDelegator.getGenericDelegator(delegatorNameToUse);
+        delegator = Delegator.getDelegator(delegatorNameToUse);
         if (delegator == null) {
             throw new ContainerException("Invalid delegator name: " + delegatorNameToUse);
         }
@@ -410,7 +410,7 @@ public class ConstantsGeneratorContainer implements Container {
             return EntityCondition.makeCondition(conds);
         }
 
-        public List<Map<String, String>> getDbValues(GenericDelegator delegator) throws ConstantException {
+        public List<Map<String, String>> getDbValues(Delegator delegator) throws ConstantException {
             // this should have been set
             if (UtilValidate.isEmpty(getConstantField())) {
                 throw new ConstantException("No constantField defined in the configuration for key [" + key + "]");

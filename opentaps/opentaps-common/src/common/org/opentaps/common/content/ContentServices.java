@@ -27,7 +27,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.content.data.DataResourceWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -49,7 +49,7 @@ public final class ContentServices {
     private static final String MODULE = ContentServices.class.getName();
 
     public static Map uploadFile(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -132,7 +132,7 @@ public final class ContentServices {
      * @return the <code>Map</code> value.
      */
     private static Map updateFile(GenericValue dataResource, DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String contentName = (String) context.get("contentName");
         String fileName = (String) context.get("_uploadedFile_fileName");
@@ -196,7 +196,7 @@ public final class ContentServices {
     }
 
     public static Map uploadUrl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String url = (String) context.get("url");
@@ -226,7 +226,7 @@ public final class ContentServices {
     }
 
     // Creates a basic data resource to fill out by the respective consumer services
-    private static GenericValue initializeDataResource(GenericDelegator delegator, GenericValue userLogin) throws GenericEntityException {
+    private static GenericValue initializeDataResource(Delegator delegator, GenericValue userLogin) throws GenericEntityException {
         Map<String, Object> input = FastMap.newInstance();
         input.put("dataResourceId", delegator.getNextSeqId("DataResource"));
         input.put("statusId", "CTNT_PUBLISHED");
@@ -235,7 +235,7 @@ public final class ContentServices {
         return delegator.makeValue("DataResource", input);
     }
 
-    private static Map createContentFromDataResource(GenericDelegator delegator, GenericValue dataResource, Map context) throws GenericEntityException {
+    private static Map createContentFromDataResource(Delegator delegator, GenericValue dataResource, Map context) throws GenericEntityException {
         String contentTypeId = null;
         if ("LOCAL_FILE".equals(dataResource.get("dataResourceTypeId"))) {
             contentTypeId = "FILE";
@@ -271,12 +271,12 @@ public final class ContentServices {
 
     /**
      * update content which relate the dataResource.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dataResource a <code>GenericValue</code> value
      * @param context a <code>Map</code> value
      * @return the <code>Map</code> value.
      */
-    private static Map updateContentFromDataResource(GenericDelegator delegator, GenericValue dataResource, Map context) throws GenericEntityException {
+    private static Map updateContentFromDataResource(Delegator delegator, GenericValue dataResource, Map context) throws GenericEntityException {
         List<GenericValue> contents = delegator.findByAnd("Content", EntityCondition.makeCondition("dataResourceId", dataResource.get("dataResourceId")));
         if (contents.size() > 0) {
             // exit same file already.

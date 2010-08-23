@@ -26,7 +26,7 @@ import java.util.Map;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -67,7 +67,7 @@ public final class ProductImportServices {
     @SuppressWarnings("unchecked")
     public static Map importProducts(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String goodIdentificationTypeId1 = (String) context.get("goodIdentificationTypeId1");
         String goodIdentificationTypeId2 = (String) context.get("goodIdentificationTypeId2");
@@ -176,7 +176,7 @@ public final class ProductImportServices {
      */
     @SuppressWarnings("unchecked")
     public static Map importProductInventory(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -238,7 +238,7 @@ public final class ProductImportServices {
      */
     @SuppressWarnings("unchecked")
     private static int importInventoryToFacility(String facilityId, String inventoryGlAccountId, String offsettingGlAccountId, GenericValue userLogin, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
-        GenericDelegator delegator = dispatcher.getDelegator();
+        Delegator delegator = dispatcher.getDelegator();
 
         GenericValue facility = delegator.findByPrimaryKeyCache("Facility", UtilMisc.toMap("facilityId", facilityId));
 
@@ -354,13 +354,13 @@ public final class ProductImportServices {
      * @param now a <code>Timestamp</code> value
      * @param goodIdentificationTypeId1 a <code>String</code> value
      * @param goodIdentificationTypeId2 a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> value
      * @exception GenericEntityException if an error occurs
      * @exception Exception if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static List<GenericValue> decodeProduct(GenericValue data, Timestamp now, String goodIdentificationTypeId1, String goodIdentificationTypeId2, GenericDelegator delegator) throws GenericEntityException, Exception {
+    private static List<GenericValue> decodeProduct(GenericValue data, Timestamp now, String goodIdentificationTypeId1, String goodIdentificationTypeId2, Delegator delegator) throws GenericEntityException, Exception {
 
         Map input;
         List toStore = FastList.newInstance();
@@ -521,13 +521,13 @@ public final class ProductImportServices {
      * @param acctgTransId a <code>String</code> value
      * @param currencyUomId a <code>String</code> value
      * @param now a <code>Timestamp</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> value
      * @exception GenericEntityException if an error occurs
      * @exception Exception if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static List<GenericValue> decodeInventory(GenericValue productInventory, String organizationPartyId, String facilityId, String inventoryGlAccountId, String offsettingGlAccountId, String acctgTransId, String currencyUomId, Timestamp now, GenericDelegator delegator) throws GenericEntityException, Exception {
+    private static List<GenericValue> decodeInventory(GenericValue productInventory, String organizationPartyId, String facilityId, String inventoryGlAccountId, String offsettingGlAccountId, String acctgTransId, String currencyUomId, Timestamp now, Delegator delegator) throws GenericEntityException, Exception {
         Map input;
         List toStore = FastList.newInstance();
         Debug.logInfo("Now processing  data [" + productInventory.get("productId") + "]", MODULE);
@@ -648,10 +648,10 @@ public final class ProductImportServices {
      * Helper method to store import product error to DataImportProduct entities.
      * @param dataImportProduct a <code>GenericValue</code> value
      * @param message a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @exception GenericEntityException if an error occurs
      */
-    private static void storeImportProductError(GenericValue dataImportProduct, String message, GenericDelegator delegator) throws GenericEntityException {
+    private static void storeImportProductError(GenericValue dataImportProduct, String message, Delegator delegator) throws GenericEntityException {
         // store the exception and mark as failed
         dataImportProduct.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_FAILED);
         dataImportProduct.set("processedTimestamp", UtilDateTime.nowTimestamp());
@@ -663,10 +663,10 @@ public final class ProductImportServices {
      * Helper method to store import product error to DataImportInventory entities.
      * @param dataImportInventory a <code>GenericValue</code> value
      * @param message a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @exception GenericEntityException if an error occurs
      */
-    private static void storeImportInventoryError(GenericValue dataImportInventory, String message, GenericDelegator delegator) throws GenericEntityException {
+    private static void storeImportInventoryError(GenericValue dataImportInventory, String message, Delegator delegator) throws GenericEntityException {
         // store the exception and mark as failed
         dataImportInventory.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_FAILED);
         dataImportInventory.set("processedTimestamp", UtilDateTime.nowTimestamp());

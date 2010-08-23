@@ -24,7 +24,7 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -81,7 +81,7 @@ public class AgreementInvoiceFactory {
      * @param group Whether to group the invoice items by productId and invoiceItemTypeId.  The parentInvoiceId and parentInvoiceItemTypeId will be discarded.
      */
     public static Map<String, Object> createInvoiceFromAgreement(DispatchContext dctx, Map<String, ?> context, GenericValue agreement, Collection<GenericValue> invoices, String invoiceTypeId, String agentRoleTypeId, String currencyUomId, boolean isDisbursement, boolean group) throws GeneralException {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
@@ -188,7 +188,7 @@ public class AgreementInvoiceFactory {
      * their agreementTermId in a map.
      */
     public static Map<String, Collection<Map<String, Object>>> createInvoiceItemsForAgreement(DispatchContext dctx, Map<String, ?> context, GenericValue agreement, Collection<GenericValue> invoices) throws GeneralException {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Map<String, Collection<Map<String, Object>>> invoiceItems = new FastMap<String, Collection<Map<String, Object>>>();
         Collection<GenericValue> terms = delegator.findByAnd("AgreementAndItemAndTerm", UtilMisc.toMap("agreementId", agreement.get("agreementId")));
         for (GenericValue term : terms) {
@@ -523,7 +523,7 @@ public class AgreementInvoiceFactory {
      * Helper function to get the AgreementInvoiceItemTypes relevant to an agreement and keyed to the invoiceItemTypeIdFrom.
      */
     private static Map<String, GenericValue> getTypesToProcess(GenericValue agreement) throws GenericEntityException {
-        GenericDelegator delegator = agreement.getDelegator();
+        Delegator delegator = agreement.getDelegator();
         List<GenericValue> typesToProcessList = delegator.findByAndCache("AgreementInvoiceItemType", UtilMisc.toMap("agreementTypeId", agreement.get("agreementTypeId")));
         Map<String, GenericValue> typeMap = FastMap.newInstance();
         for (GenericValue type : typesToProcessList) {
@@ -536,7 +536,7 @@ public class AgreementInvoiceFactory {
     }
 
     private static void createInvoiceItemAssoc(GenericValue agreement, String invoiceId, Map<String, Object> item, String invoiceItemSeqId) throws GenericEntityException {
-        GenericDelegator delegator = agreement.getDelegator();
+        Delegator delegator = agreement.getDelegator();
 
         BigDecimal amount = (BigDecimal) item.get("amount");
         amount = amount.multiply((BigDecimal) item.get("quantity"));
@@ -556,7 +556,7 @@ public class AgreementInvoiceFactory {
     // creates agreement term billing records for each invoice that commission was earned on
     private static void createAgreementBilling(GenericValue agreement, String paymentApplicationId, String invoiceId, Map<String, Collection<Map<String, Object>>> invoiceItems, DomainsLoader dl) throws GeneralException {
         InvoiceRepositoryInterface invoiceRepository = dl.loadDomainsDirectory().getBillingDomain().getInvoiceRepository();
-        GenericDelegator delegator = agreement.getDelegator();
+        Delegator delegator = agreement.getDelegator();
 
         // add up the commission earned per parent invoice
         Map<String, BigDecimal> commissionsEarned = new FastMap<String, BigDecimal>();

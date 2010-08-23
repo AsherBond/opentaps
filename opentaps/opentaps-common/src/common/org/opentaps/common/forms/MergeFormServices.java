@@ -22,7 +22,7 @@ import java.util.Map;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
@@ -42,7 +42,7 @@ public final class MergeFormServices {
     /* For MergeForm */
 
     public static Map<String, Object> createMergeForm(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         Boolean privateForm = "Y".equals(context.get("privateForm"));
 
@@ -67,7 +67,7 @@ public final class MergeFormServices {
 
     public static Map<String, Object> updateMergeForm(DispatchContext dctx, Map<String, Object> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         String mergeFormId = (String) context.get("mergeFormId");
         Boolean privateForm = "Y".equals(context.get("privateForm"));
@@ -93,7 +93,7 @@ public final class MergeFormServices {
 
     public static Map<String, Object> deleteMergeForm(DispatchContext dctx, Map<String, Object> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         String mergeFormId = (String) context.get("mergeFormId");
 
@@ -114,7 +114,7 @@ public final class MergeFormServices {
     /* For MergeFormCategory */
 
     public static Map<String, Object> createMergeFormCategory(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -137,7 +137,7 @@ public final class MergeFormServices {
 
     public static Map<String, Object> updateMergeFormCategory(DispatchContext dctx, Map<String, Object> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         String mergeFormCategoryId = (String) context.get("mergeFormCategoryId");
 
@@ -159,7 +159,7 @@ public final class MergeFormServices {
 
     public static Map<String, Object> deleteMergeFormCategory(DispatchContext dctx, Map<String, Object> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         String mergeFormCategoryId = (String) context.get("mergeFormCategoryId");
 

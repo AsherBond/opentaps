@@ -24,7 +24,7 @@ import java.util.Set;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -75,17 +75,17 @@ public class EntityTests extends OpentapsTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         // delegator is reset to null by super.tearDown() so we have to get it again
-        removeTestData(GenericDelegator.getGenericDelegator(OpentapsTestCase.DELEGATOR_NAME));
+        removeTestData(Delegator.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
     }
 
-    private void createTestData(GenericDelegator delegator) throws GenericEntityException {
+    private void createTestData(Delegator delegator) throws GenericEntityException {
         delegator.create("Invoice", UtilMisc.toMap("invoiceId", INVOICE_ID, "invoiceTypeId", INVOICE_TYPE_ID, "invoiceDate", UtilDateTime.nowTimestamp()));
         delegator.create("InvoiceItem", UtilMisc.toMap("invoiceId", INVOICE_ID, "invoiceItemSeqId", "00001", "invoiceItemTypeId", "INV_FPROD_ITEM", "quantity", new BigDecimal("5.0"), "amount", new BigDecimal("10.0")));
         delegator.create("Payment", UtilMisc.toMap("paymentId", PAYMENT_ID, "paymentTypeId", "CUSTOMER_PAYMENT", "statusId", "PMNT_CONFIRMED", "amount", new BigDecimal("10.0"), "effectiveDate", UtilDateTime.nowTimestamp()));
         delegator.create("PaymentApplication", UtilMisc.toMap("paymentApplicationId", PAYMENT_APPLICATION_ID, "paymentId", PAYMENT_ID, "invoiceId", INVOICE_ID, "amountApplied", new BigDecimal("10.0")));
     }
 
-    private void removeTestData(GenericDelegator delegator) throws GenericEntityException {
+    private void removeTestData(Delegator delegator) throws GenericEntityException {
         delegator.removeByCondition("PaymentApplication", EntityCondition.makeCondition("paymentApplicationId", EntityOperator.EQUALS, PAYMENT_APPLICATION_ID));
         delegator.removeByCondition("InvoiceItem", EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, INVOICE_ID));
         delegator.removeByCondition("Invoice", EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, INVOICE_ID));

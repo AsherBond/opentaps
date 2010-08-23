@@ -39,7 +39,7 @@ public class IndexForDelegatorAspects {
     private static String runAsUser = "system";
 
     /**
-     * @Expression execution(* org.ofbiz.entity.GenericDelegator$EntityEcaRuleRunner.evalRules(..)) && args(event, currentOperation, value, isError)
+     * @Expression execution(* org.ofbiz.entity.Delegator$EntityEcaRuleRunner.evalRules(..)) && args(event, currentOperation, value, isError)
      */
     void pointcut(String event, String currentOperation, GenericEntity value, boolean isError) { }
 

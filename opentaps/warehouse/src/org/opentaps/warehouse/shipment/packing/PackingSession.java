@@ -47,7 +47,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -560,7 +560,7 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
     }
 
     @SuppressWarnings("unchecked")
-    public BigDecimal getRawPackageValue(GenericDelegator delegator, int packageSeqId) throws GenericEntityException {
+    public BigDecimal getRawPackageValue(Delegator delegator, int packageSeqId) throws GenericEntityException {
         List<PackingSessionLine> lines = getLinesByPackage(packageSeqId);
         BigDecimal value = OpentapsPackingSessionLine.ZERO;
         for (Iterator<PackingSessionLine> iter = lines.iterator(); iter.hasNext();) {

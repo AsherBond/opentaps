@@ -69,7 +69,7 @@ context.put("financingAccounts", EntityUtil.orderBy(result.get("financingCashFlo
 // Get the base currency for the organization
 context.put("orgCurrencyUomId", UtilCommon.getOrgBaseCurrency(context.get("organizationPartyId"), delegator));
 
-constructGlAccountTree(String id, GenericDelegator delegator, Map context, Map result) {
+constructGlAccountTree(String id, Delegator delegator, Map context, Map result) {
     glAccount = context.get(id + "Accounts");
     glAccountTree = null;
     if (glAccount != null) {

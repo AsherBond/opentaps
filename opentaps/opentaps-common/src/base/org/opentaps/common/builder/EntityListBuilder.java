@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericModelException;
 import org.ofbiz.entity.GenericValue;
@@ -64,7 +64,7 @@ public class EntityListBuilder extends AbstractListBuilder {
     protected List<String> orderBy = null;
     protected EntityFindOptions options = null;
     protected EntityListIterator iterator = null;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected boolean transactionOpen = false;
     protected int size = 0;
 
@@ -183,17 +183,17 @@ public class EntityListBuilder extends AbstractListBuilder {
 
     /**
      * As a convenience, the delegator is set when a call to the pagination macro is made.  This saves us a parameter in the constructors.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      */
-    public void setDelegator(GenericDelegator delegator) {
+    public void setDelegator(Delegator delegator) {
         this.delegator = delegator;
     }
 
     /**
      * Gets the current Delegator instance.
-     * @return a <code>GenericDelegator</code> value
+     * @return a <code>Delegator</code> value
      */
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return delegator;
     }
 

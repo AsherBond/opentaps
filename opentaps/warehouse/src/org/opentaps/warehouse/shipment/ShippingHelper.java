@@ -27,7 +27,7 @@ import java.util.Map;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -45,7 +45,7 @@ import org.opentaps.common.util.UtilCommon;
 public class ShippingHelper {
 
     private static final String MODULE = ShippingServices.class.getName();
-    private GenericDelegator delegator = null;
+    private Delegator delegator = null;
     private String facilityId = null;
     private int ordersTotalSize = -1;
 
@@ -55,7 +55,7 @@ public class ShippingHelper {
      * @param delegator the delegator object to access to the database
      * @param facilityId The id of the warehouse to work on
      */
-    public ShippingHelper(GenericDelegator delegator, String facilityId) {
+    public ShippingHelper(Delegator delegator, String facilityId) {
         this.delegator = delegator;
         this.facilityId = facilityId;
     }

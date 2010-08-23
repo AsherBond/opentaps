@@ -46,7 +46,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -70,7 +70,7 @@ public class BomTree implements BomTreeInterface {
     public static final int IMPLOSION = 3;
 
     private LocalDispatcher dispatcher;
-    private GenericDelegator delegator;
+    private Delegator delegator;
     private GenericValue userLogin;
 
     // same as BOMTree, need to redefine
@@ -97,7 +97,7 @@ public class BomTree implements BomTreeInterface {
      * @exception GenericEntityException If a db problem occurs
      *
      */
-    public BomTree(String productId, String bomTypeId, Date inDate, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
+    public BomTree(String productId, String bomTypeId, Date inDate, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
         this(productId, bomTypeId, inDate, EXPLOSION, delegator, dispatcher, userLogin);
     }
 
@@ -121,7 +121,7 @@ public class BomTree implements BomTreeInterface {
      * @exception GenericEntityException If a db problem occurs.
      *
      */
-    public BomTree(String productId, String bomTypeId, Date inDate, int type, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
+    public BomTree(String productId, String bomTypeId, Date inDate, int type, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
         this(productId, bomTypeId, inDate, type, null, delegator, dispatcher, userLogin);
     }
 
@@ -149,7 +149,7 @@ public class BomTree implements BomTreeInterface {
      * @exception GenericEntityException If a db problem occurs.
      */
     @SuppressWarnings("unchecked")
-    public BomTree(String productId, String bomTypeId, Date inDate, int type, String routingId, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
+    public BomTree(String productId, String bomTypeId, Date inDate, int type, String routingId, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
 
         // If the parameters are not valid, return.
         if (productId == null || bomTypeId == null || delegator == null || dispatcher == null) {
@@ -242,9 +242,9 @@ public class BomTree implements BomTreeInterface {
 
     /**
      * Gets this Tree delegator instance.
-     * @return a <code>GenericDelegator</code> value
+     * @return a <code>Delegator</code> value
      */
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return delegator;
     }
 

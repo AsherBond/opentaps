@@ -12,7 +12,7 @@ public class Transaction  implements org.hibernate.Transaction {
      * Transaction constructor.
      *
      * @param hibernateSession a <code>org.hibernate.Session</code> object.
-     * @param delegator a <code>GenericDelegator</code> object.
+     * @param delegator a <code>Delegator</code> object.
      */
     public Transaction(org.hibernate.Transaction hibernateTransaction) {
         this.hibernateTransaction = hibernateTransaction;

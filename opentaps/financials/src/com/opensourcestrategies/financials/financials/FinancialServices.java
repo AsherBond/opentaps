@@ -39,7 +39,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -119,7 +119,7 @@ public final class FinancialServices {
     @SuppressWarnings("unchecked")
     public static Map getIncomeStatementByDates(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Timestamp fromDate = (Timestamp) context.get("fromDate");
         Timestamp thruDate = (Timestamp) context.get("thruDate");
         String organizationPartyId = (String) context.get("organizationPartyId");
@@ -217,7 +217,7 @@ public final class FinancialServices {
     @SuppressWarnings("unchecked")
     public static Map getBalanceSheetForTimePeriod(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String organizationPartyId = (String) context.get("organizationPartyId");
         String customTimePeriodId = (String) context.get("customTimePeriodId");
         String glFiscalTypeId = (String) context.get("glFiscalTypeId");
@@ -571,7 +571,7 @@ public final class FinancialServices {
     @SuppressWarnings("unchecked")
     public static Map getBalanceSheetForDate(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String organizationPartyId = (String) context.get("organizationPartyId");
         Timestamp asOfDate = (Timestamp) context.get("asOfDate");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -695,7 +695,7 @@ public final class FinancialServices {
      */
     @SuppressWarnings("unchecked")
     public static Map getAcctgTransAndEntriesByType(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Timestamp fromDate = (Timestamp) context.get("fromDate");
         Timestamp thruDate = (Timestamp) context.get("thruDate");
         String organizationPartyId = (String) context.get("organizationPartyId");
@@ -1183,7 +1183,7 @@ public final class FinancialServices {
     @SuppressWarnings("unchecked")
     private static Map reportServiceTimePeriodHelper(DispatchContext dctx, Map context, String serviceName) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String fromTimePeriodId = (String) context.get("fromTimePeriodId");
         String thruTimePeriodId = (String) context.get("thruTimePeriodId");
         String organizationPartyId = (String) context.get("organizationPartyId");
@@ -1501,7 +1501,7 @@ public final class FinancialServices {
     @SuppressWarnings("unchecked")
     public static Map getIncomeStatementByTagByDates(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Timestamp fromDate = (Timestamp) context.get("fromDate");
         Timestamp thruDate = (Timestamp) context.get("thruDate");
         String organizationPartyId = (String) context.get("organizationPartyId");
@@ -1559,11 +1559,11 @@ public final class FinancialServices {
      * @param glAccountSumsGrouped an empty <code>Map</code> instance to initialize
      * @param glAccountGroupSums an empty <code>Map</code> instance to initialize
      * @param sums an empty <code>Map</code> instance to initialize
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static void prepareIncomeStatementMaps(Map<String, String> glAccountTypeTree, Map<String, List<Map>> glAccountSumsGrouped, Map<String, BigDecimal> glAccountGroupSums, Map<String, BigDecimal> sums, GenericDelegator delegator) throws GenericEntityException {
+    private static void prepareIncomeStatementMaps(Map<String, String> glAccountTypeTree, Map<String, List<Map>> glAccountSumsGrouped, Map<String, BigDecimal> glAccountGroupSums, Map<String, BigDecimal> sums, Delegator delegator) throws GenericEntityException {
 
         // Get a flattened glAccountTypeId -> glAccountTypeId tree where the children of the master INCOME_STATEMENT_TYPEs are related directly.
         // The keys are the children glAccountTypeId and the value is the root glAccountTypeId in INCOME_STATEMENT_TYPE
@@ -1612,11 +1612,11 @@ public final class FinancialServices {
      * @param sums a previously initialized <code>Map</code> instance containing grossProfit, operatingIncome, pretaxIncome and netIncome values
      * @param account the <code>GenericValue</code> that is iterated upon
      * @param sum the sum corresponding to the given GL account as given by the <code>getIncomeStatementAccountSumsByDate</code> services
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static void calculateIncomeStatementMaps(Map<String, String> glAccountTypeTree, Map<String, List<Map>> glAccountSumsGrouped, Map<String, BigDecimal> glAccountGroupSums, Map<String, BigDecimal> sums, GenericValue account, BigDecimal sum, GenericDelegator delegator) throws GenericEntityException {
+    private static void calculateIncomeStatementMaps(Map<String, String> glAccountTypeTree, Map<String, List<Map>> glAccountSumsGrouped, Map<String, BigDecimal> glAccountGroupSums, Map<String, BigDecimal> sums, GenericValue account, BigDecimal sum, Delegator delegator) throws GenericEntityException {
         calculateIncomeStatementMaps(glAccountTypeTree, glAccountSumsGrouped, glAccountGroupSums, sums, account, sum, new HashMap<String, String>(), delegator);
     }
 
@@ -1630,11 +1630,11 @@ public final class FinancialServices {
      * @param account the <code>GenericValue</code> that is iterated upon
      * @param sum the sum corresponding to the given GL account as given by the <code>getIncomeStatementAccountSumsByTagByDate</code> services
      * @param tagMap a <code>Map</code> of tag field to tag value which will be added to the GL account info map in the <code>glAccountGroupSumsGrouped</code> resulting <code>Map</code>
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static void calculateIncomeStatementMaps(Map<String, String> glAccountTypeTree, Map<String, List<Map>> glAccountSumsGrouped, Map<String, BigDecimal> glAccountGroupSums, Map<String, BigDecimal> sums, GenericValue account, BigDecimal sum, Map<String, String> tagMap, GenericDelegator delegator) throws GenericEntityException {
+    private static void calculateIncomeStatementMaps(Map<String, String> glAccountTypeTree, Map<String, List<Map>> glAccountSumsGrouped, Map<String, BigDecimal> glAccountGroupSums, Map<String, BigDecimal> sums, GenericValue account, BigDecimal sum, Map<String, String> tagMap, Delegator delegator) throws GenericEntityException {
 
         String glAccountTypeId = account.getString("glAccountTypeId");
         if (UtilValidate.isEmpty(glAccountTypeId))  {
@@ -1707,7 +1707,7 @@ public final class FinancialServices {
     }
 
     @SuppressWarnings("unchecked")
-    private static Map makeIncomeStatementResults(Map glAccountSums, Map<String, List<Map>> glAccountSumsGrouped, Map<String, BigDecimal> glAccountGroupSums, Map<String, BigDecimal> sums, String organizationPartyId, Timestamp fromDate, Timestamp thruDate, GenericDelegator delegator) throws GenericEntityException {
+    private static Map makeIncomeStatementResults(Map glAccountSums, Map<String, List<Map>> glAccountSumsGrouped, Map<String, BigDecimal> glAccountGroupSums, Map<String, BigDecimal> sums, String organizationPartyId, Timestamp fromDate, Timestamp thruDate, Delegator delegator) throws GenericEntityException {
 
         // complete the aggregated sums for operating, pretax and net incomes
         sums.put("operatingIncome", sums.get("operatingIncome").add(sums.get("grossProfit")));

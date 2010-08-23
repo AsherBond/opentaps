@@ -16,7 +16,7 @@
  */
 /* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.opentaps.common.util.UtilCommon;
 
 organizationPartyId = context.get("organizationPartyId");

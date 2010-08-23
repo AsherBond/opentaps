@@ -8,7 +8,7 @@ import javolution.util.FastList;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -24,7 +24,7 @@ public class OrganizationService extends DomainService implements OrganizationSe
 
     protected String organizationPartyId = null;
     protected String templateOrganizationPartyId = null;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     
     /** {@inheritDoc} 
      * @throws ServiceException */

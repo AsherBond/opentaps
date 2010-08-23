@@ -54,7 +54,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -89,11 +89,11 @@ public final class PartyHelper {
      *
      * @param partyId the party id
      * @param possibleRoleTypeIds a List of roleTypeIds
-     * @param delegator a <code>GenericDelegator</code>
+     * @param delegator a <code>Delegator</code>
      * @return the first roleTypeId from possibleRoleTypeIds which is actually found in PartyRole for the given partyId
      * @throws GenericEntityException if an error occurs
      */
-    public static String getFirstValidRoleTypeId(String partyId, List<String> possibleRoleTypeIds, GenericDelegator delegator) throws GenericEntityException {
+    public static String getFirstValidRoleTypeId(String partyId, List<String> possibleRoleTypeIds, Delegator delegator) throws GenericEntityException {
 
         List<GenericValue> partyRoles = delegator.findByAndCache("PartyRole", UtilMisc.toMap("partyId", partyId));
 
@@ -126,13 +126,13 @@ public final class PartyHelper {
      * @param expireExistingRelationships  If set to true, will look for all existing PartyRelationships of partyIdFrom, partyRelationshipTypeId
      * and expire all of them as of the passed in fromDate
      * @param userLogin a <code>GenericValue</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @return <code>false</code> if no relationship was created or <code>true</code> if operation succeeds
      * @throws GenericEntityException if an error occurs
      * @throws GenericServiceException if an error occurs
      */
-    public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom, String partyRelationshipTypeId, String securityGroupId, List<String> validToPartyRoles, Timestamp fromDate, boolean expireExistingRelationships, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
+    public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom, String partyRelationshipTypeId, String securityGroupId, List<String> validToPartyRoles, Timestamp fromDate, boolean expireExistingRelationships, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
 
         // get the first valid roleTypeIdTo from a list of possible roles for the partyIdTo
         // this will be the role we use as roleTypeIdTo in PartyRelationship.
@@ -178,7 +178,7 @@ public final class PartyHelper {
      * @param validToPartyRoles a <code>List</code> value
      * @param expireExistingRelationships a <code>boolean</code> value
      * @param userLogin a <code>GenericValue</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
@@ -187,7 +187,7 @@ public final class PartyHelper {
     @SuppressWarnings("unchecked")
     public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom,
             String partyRelationshipTypeId, String securityGroupId, List validToPartyRoles,
-            boolean expireExistingRelationships, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
+            boolean expireExistingRelationships, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher)
     throws GenericEntityException, GenericServiceException {
         return createNewPartyToRelationship(partyIdTo, partyIdFrom, roleTypeIdFrom,
                 partyRelationshipTypeId, securityGroupId, validToPartyRoles, UtilDateTime.nowTimestamp(),
@@ -228,12 +228,12 @@ public final class PartyHelper {
      * @param   roleTypeIdFrom                  The role of the account/contact/lead (e.g., ACCOUNT, CONTACT, LEAD)
      * @param   securityGroupId                 Optional securityGroupId of the relationship
      * @param   activeDate                      Check only for active relationships as of this timestamp
-     * @param   delegator a <code>GenericDelegator</code> value
+     * @param   delegator a <code>Delegator</code> value
      * @return  First non-expired <code>PartySummaryCRMView</code> or <code>null</code> if none found
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static GenericValue getActivePartyByRole(String partyRelationshipTypeId, String partyIdFrom, String roleTypeIdFrom, String securityGroupId, Timestamp activeDate, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue getActivePartyByRole(String partyRelationshipTypeId, String partyIdFrom, String roleTypeIdFrom, String securityGroupId, Timestamp activeDate, Delegator delegator) throws GenericEntityException {
 
         Map input = UtilMisc.toMap("partyRelationshipTypeId", partyRelationshipTypeId, "partyIdFrom", partyIdFrom, "roleTypeIdFrom", roleTypeIdFrom);
         if (securityGroupId != null) {
@@ -259,11 +259,11 @@ public final class PartyHelper {
      * @param   partyIdFrom                     The partyId of the account/contact/lead
      * @param   roleTypeIdFrom                  The role of the account/contact/lead (e.g., ACCOUNT, CONTACT, LEAD)
      * @param   activeDate                      Check only for active relationships as of this timestamp
-     * @param   delegator a <code>GenericDelegator</code> value
+     * @param   delegator a <code>Delegator</code> value
      * @return  First non-expired <code>PartySummaryCRMView</code> or <code>null</code> if none found
      * @exception GenericEntityException if an error occurs
      */
-    public static GenericValue getActivePartyByRole(String partyRelationshipTypeId, String partyIdFrom, String roleTypeIdFrom, Timestamp activeDate, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue getActivePartyByRole(String partyRelationshipTypeId, String partyIdFrom, String roleTypeIdFrom, Timestamp activeDate, Delegator delegator) throws GenericEntityException {
         return getActivePartyByRole(partyRelationshipTypeId, partyIdFrom, roleTypeIdFrom, null, activeDate, delegator);
     }
 
@@ -278,13 +278,13 @@ public final class PartyHelper {
      * @param newPartyIdFrom new partyIdFrom
      * @param newRoleTypeIdFrom new roleTypeIdFrom
      * @param userLogin a <code>GenericValue</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static void copyToPartyRelationships(String partyIdFrom, String roleTypeIdFrom, String partyRelationshipTypeId, String newPartyIdFrom, String newRoleTypeIdFrom, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
+    public static void copyToPartyRelationships(String partyIdFrom, String roleTypeIdFrom, String partyRelationshipTypeId, String newPartyIdFrom, String newRoleTypeIdFrom, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
 
         // hardcoded activeDate
         Timestamp activeDate = UtilDateTime.nowTimestamp();
@@ -335,25 +335,25 @@ public final class PartyHelper {
      * @param newPartyIdFrom new partyIdFrom
      * @param newRoleTypeIdFrom new roleTypeIdFrom
      * @param userLogin a <code>GenericValue</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
-    public static void copyToPartyRelationships(String partyIdFrom, String roleTypeIdFrom, String newPartyIdFrom, String newRoleTypeIdFrom, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
+    public static void copyToPartyRelationships(String partyIdFrom, String roleTypeIdFrom, String newPartyIdFrom, String newRoleTypeIdFrom, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
         copyToPartyRelationships(partyIdFrom, roleTypeIdFrom, null, newPartyIdFrom, newRoleTypeIdFrom, userLogin, delegator, dispatcher);
     }
 
     /**
      * Returns the names for all partyIds using ofbiz PartyHelper.getPartyName.
      * @param partyIds the party to get the names for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param lastNameFirst set to <code>true</code> to put the last name first
      * @return a <code>List</code> of <code>Map</code> of the names of each party
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List<Map> getPartyNames(List<String> partyIds, GenericDelegator delegator, boolean lastNameFirst) throws GenericEntityException {
+    public static List<Map> getPartyNames(List<String> partyIds, Delegator delegator, boolean lastNameFirst) throws GenericEntityException {
         List<Map> partyNames = new ArrayList<Map>();
         for (String partyId : partyIds) {
             partyNames.add(UtilMisc.toMap(partyId, org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, lastNameFirst)));
@@ -364,12 +364,12 @@ public final class PartyHelper {
     /**
      * Returns names for all partyIds, first name first.
      * @param partyIds the party to get the names for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> of <code>Map</code> of the names of each party
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List<Map> getPartyNames(List<String> partyIds, GenericDelegator delegator) throws GenericEntityException {
+    public static List<Map> getPartyNames(List<String> partyIds, Delegator delegator) throws GenericEntityException {
         return getPartyNames(partyIds, delegator, false);
     }
 
@@ -379,12 +379,12 @@ public final class PartyHelper {
      * @param contactMechTypeId the type of <code>ContachMech</code> to find
      * @param contactMechPurposeTypeId the purpose of <code>ContachMech</code> to find
      * @param additionalConditions other conditions on the <code>ContachMech</code> to find
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of <code>ContachMech</code>
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, List additionalConditions, GenericDelegator delegator) throws GenericEntityException {
+    public static List getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, List additionalConditions, Delegator delegator) throws GenericEntityException {
         Timestamp now = UtilDateTime.nowTimestamp();
         List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                 EntityCondition.makeCondition("partyId", partyId),
@@ -410,12 +410,12 @@ public final class PartyHelper {
      * @param partyId the party to find the <code>ContachMech</code> for
      * @param contactMechTypeId the type of <code>ContachMech</code> to find
      * @param contactMechPurposeTypeId the purpose of <code>ContachMech</code> to find
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of <code>ContachMech</code>
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static List getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
         return getCurrentContactMechsForParty(partyId, contactMechTypeId, contactMechPurposeTypeId, null, delegator);
     }
 
@@ -423,12 +423,12 @@ public final class PartyHelper {
      * Retrieves the email for the purpose and party which is ContactMech.infoString.
      * @param partyId the party to find the email for
      * @param contactMechPurposeTypeId the purpose of the email to find
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of email <code>ContachMech</code>
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List getEmailsForParty(String partyId, String contactMechPurposeTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static List getEmailsForParty(String partyId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
         return EntityUtil.getFieldListFromEntityList(getCurrentContactMechsForParty(partyId, "EMAIL_ADDRESS", contactMechPurposeTypeId, delegator), "infoString", true);
     }
 
@@ -436,12 +436,12 @@ public final class PartyHelper {
      * Returns the first email for the party and the purpose as a String.
      * @param partyId the party to find the email for
      * @param contactMechPurposeTypeId the purpose of the email to find
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the email address <code>String</code>
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static String getEmailForPartyByPurpose(String partyId, String contactMechPurposeTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getEmailForPartyByPurpose(String partyId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
         String emailAddress = null;
 
         List addresses = getEmailsForParty(partyId, contactMechPurposeTypeId, delegator);
@@ -454,11 +454,11 @@ public final class PartyHelper {
     /**
      * Retrieve the oldest current email address with a PRIMARY_EMAIL purposeTypeId for a party.
      * @param partyId the party to find the email for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the email address <code>String</code>
      * @deprecated Use <code>org.opentaps.domain.party.Party.getPrimaryEmail()</code>
      */
-    @Deprecated public static String getPrimaryEmailForParty(String partyId, GenericDelegator delegator) {
+    @Deprecated public static String getPrimaryEmailForParty(String partyId, Delegator delegator) {
         try {
             return getEmailForPartyByPurpose(partyId, "PRIMARY_EMAIL", delegator);
         } catch (GenericEntityException e) {
@@ -470,11 +470,11 @@ public final class PartyHelper {
     /**
      * Provides current party classification groups for a party.
      * @param partyId the party to find the classification for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of <code>PartyClassificationGroup</code> values ordered by description
      */
     @SuppressWarnings("unchecked")
-    public static List getClassificationGroupsForParty(String partyId, GenericDelegator delegator) {
+    public static List getClassificationGroupsForParty(String partyId, Delegator delegator) {
         List groups = new ArrayList();
         try {
             List classifications = delegator.findByAnd("PartyClassification", UtilMisc.toMap("partyId", partyId));
@@ -496,11 +496,11 @@ public final class PartyHelper {
      * Provides a map of distinct combinations of account#/postalCode/countryCode from PartyCarrierAccount, keyed by carrierPartyId.
      *
      * @param partyId the party to find the <code>PartyCarrierAccounts</code> for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a map of distinct combinations of account#/postalCode/countryCode from PartyCarrierAccount, keyed by carrierPartyId
      */
     @SuppressWarnings("unchecked")
-    public static Map getPartyCarrierAccounts(String partyId, GenericDelegator delegator) {
+    public static Map getPartyCarrierAccounts(String partyId, Delegator delegator) {
         Map carrierAccountData = new HashMap();
         if (UtilValidate.isEmpty(partyId)) {
             return carrierAccountData;
@@ -542,10 +542,10 @@ public final class PartyHelper {
      * Checks if the given party id correspond to an internal organization.
      *
      * @param partyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return <code>true</code> if it is an internal organization
      */
-    public static boolean isInternalOrganization(String partyId, GenericDelegator delegator) {
+    public static boolean isInternalOrganization(String partyId, Delegator delegator) {
         GenericValue role = null;
         try {
             role = delegator.findByPrimaryKey("PartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", "INTERNAL_ORGANIZATIO"));
@@ -558,11 +558,11 @@ public final class PartyHelper {
     /**
      * Retrieve the current phone numbers for a party.
      * @param partyId the party to find the phone numbers for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a list of <code>PartyContactWithPurpose</code> records
      */
     @SuppressWarnings("unchecked")
-    public static List<GenericValue> getPhoneNumbersForParty(String partyId, GenericDelegator delegator) {
+    public static List<GenericValue> getPhoneNumbersForParty(String partyId, Delegator delegator) {
         Timestamp now = UtilDateTime.nowTimestamp();
 
         List conditions = UtilMisc.toList(
@@ -587,12 +587,12 @@ public final class PartyHelper {
     /**
      * Get the active partners of the given organization.
      * @param organizationPartyId the organization partyId
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of <code>PartyFromSummaryByRelationship</code> of the organization suppliers
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List<GenericValue> getPartners(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getPartners(String organizationPartyId, Delegator delegator) throws GenericEntityException {
         List conditions = UtilMisc.toList(
                 EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, organizationPartyId),
                 EntityCondition.makeCondition("roleTypeIdTo", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
@@ -617,7 +617,7 @@ public final class PartyHelper {
      */
     public static String createViewPageURL(GenericValue party, List<String> roleIds, String externalLoginKey) throws GenericEntityException {
 
-        GenericDelegator delegator = party.getDelegator();
+        Delegator delegator = party.getDelegator();
         StringBuffer uri = new StringBuffer();
 
         String roleTypeId = getFirstValidRoleTypeId(party.getString("partyId"), roleIds, delegator);
@@ -667,23 +667,23 @@ public final class PartyHelper {
     /**
      * Retrieves the view url with partyId.
      * @param partyId the party id
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the URL to the view page for the given party
      * @throws GenericEntityException if an error occurs
      */
-    public static String createViewPageURL(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static String createViewPageURL(String partyId, Delegator delegator) throws GenericEntityException {
         return createViewPageURL(partyId, delegator, null);
     }
 
     /**
      * Retrieves the view url with partyId.
      * @param partyId the party id
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param externalLoginKey the <code>externalLoginKey</code> string to add in the link
      * @return the URL to the view page for the given party
      * @throws GenericEntityException if an error occurs
      */
-    public static String createViewPageURL(String partyId, GenericDelegator delegator, String externalLoginKey) throws GenericEntityException {
+    public static String createViewPageURL(String partyId, Delegator delegator, String externalLoginKey) throws GenericEntityException {
         GenericValue party = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
         return createViewPageURL(party, CRM_PARTY_ROLES, externalLoginKey);
     }
@@ -694,12 +694,12 @@ public final class PartyHelper {
      * all kinds of parties, including Leads, Accounts, and non-CRM parties.  This method generate a hyperlink to
      * the correct view page, such as viewAccount for Accounts, or partymgr viewprofile for non-CRM parties.
      * @param partyId the party id
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param externalLoginKey the <code>externalLoginKey</code> string to add in the link
      * @return the HTML hyperlink to the view page for the given party
      * @throws GenericEntityException if an error occurs
      */
-    public static String createViewPageLink(String partyId, GenericDelegator delegator, String externalLoginKey) throws GenericEntityException {
+    public static String createViewPageLink(String partyId, Delegator delegator, String externalLoginKey) throws GenericEntityException {
         GenericValue party = delegator.findByPrimaryKeyCache("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
 
         // generate the contents of href=""
@@ -719,10 +719,10 @@ public final class PartyHelper {
      *
      * @param partyId the party id
      * @param property sender or recipient
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return <code>true</code> if the party can send or receive internal messages
      */
-    public static boolean isInternalMessage(String partyId, String property, GenericDelegator delegator) {
+    public static boolean isInternalMessage(String partyId, String property, Delegator delegator) {
         String role = UtilConfig.getPropertyValue("opentaps", "messaging.roles." + property);
         if (UtilValidate.isEmpty(role)) {
             Debug.logError("There are no messaging roles in opentaps.properties. Please correct this error.", MODULE);
@@ -760,10 +760,10 @@ public final class PartyHelper {
      * Checks whether the party can send internal messages.
      *
      * @param partyId the party id
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return <code>true</code> if the party can send internal messages
      */
-    public static boolean isInternalMessageSender(String partyId, GenericDelegator delegator) {
+    public static boolean isInternalMessageSender(String partyId, Delegator delegator) {
         return isInternalMessage(partyId, "sender", delegator);
     }
 
@@ -771,10 +771,10 @@ public final class PartyHelper {
      * Checks whether the party can receive internal messages.
      *
      * @param partyId the party id
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return <code>true</code> if the party can receive internal messages
      */
-    public static boolean isInternalMessageRecipient(String partyId, GenericDelegator delegator) {
+    public static boolean isInternalMessageRecipient(String partyId, Delegator delegator) {
         return isInternalMessage(partyId, "recipient", delegator);
     }
 
@@ -782,10 +782,10 @@ public final class PartyHelper {
      * Gets the list of party who can send or receive internal messages.
      *
      * @param property sender or recipient
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of party id
      */
-    public static List<String> getInternalMessage(String property, GenericDelegator delegator) {
+    public static List<String> getInternalMessage(String property, Delegator delegator) {
         String role = UtilConfig.getPropertyValue("opentaps", "messaging.roles." + property);
         if (UtilValidate.isEmpty(role)) {
             Debug.logError("There are no messaging roles in opentaps.properties. Please correct this error.", MODULE);
@@ -819,32 +819,32 @@ public final class PartyHelper {
 
     /**
      * Gets the list of party who can send internal messages.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of party id
      */
-    public static List<String> getInternalMessageSender(GenericDelegator delegator) {
+    public static List<String> getInternalMessageSender(Delegator delegator) {
         return getInternalMessage("sender", delegator);
     }
 
     /**
      * Gets the list of party who can receive internal messages.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of party id
      */
-    public static List<String> getInternalMessageRecipient(GenericDelegator delegator) {
+    public static List<String> getInternalMessageRecipient(Delegator delegator) {
         return getInternalMessage("recipient", delegator);
     }
 
     /**
      * Finds the active GENERAL_LOCATION, PRIMARY_PHONE, PRIMARY_EMAIL contactMech for a party and update PartySupplementalData.
      *
-     * @param delegator a <code>GenericDelegator</code> instance
+     * @param delegator a <code>Delegator</code> instance
      * @param partyId a <code>String</code> object that represents the From party ID
      * @return a boolean <code>true</code>, if PartySupplementalData was updated, in other case <code>false</code>
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static boolean updatePartySupplementalData(final GenericDelegator delegator, final String partyId) throws GenericEntityException {
+    public static boolean updatePartySupplementalData(final Delegator delegator, final String partyId) throws GenericEntityException {
 
         String[] contactMechPurposeTypeIds = {"GENERAL_LOCATION", "PRIMARY_PHONE", "PRIMARY_EMAIL"};
         String[] fieldToUpdates = {"primaryPostalAddressId", "primaryTelecomNumberId", "primaryEmailId"};
@@ -912,12 +912,12 @@ public final class PartyHelper {
 
     /**
      * As above, but does a lookup on PartySummaryCRMView for an input partyId.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param partyId a <code>String</code> value
      * @return a <code>String</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static String getCrmsfaPartyName(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getCrmsfaPartyName(String partyId, Delegator delegator) throws GenericEntityException {
         GenericValue party = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
         return getCrmsfaPartyName(party);
     }

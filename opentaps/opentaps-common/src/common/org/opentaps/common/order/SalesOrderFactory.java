@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
@@ -55,7 +55,7 @@ public class SalesOrderFactory extends OrderFactory {
 
     /**
      * Constructor for a new Sales Order.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param userLogin the user login <code>GenericValue</code>
      * @param fromParty the vendor party id
@@ -63,7 +63,7 @@ public class SalesOrderFactory extends OrderFactory {
      * @param productStoreId the product store id
      * @throws GenericEntityException if an error occurs
      */
-    public SalesOrderFactory(GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, String fromParty, String toParty, String productStoreId) throws GenericEntityException {
+    public SalesOrderFactory(Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, String fromParty, String toParty, String productStoreId) throws GenericEntityException {
         super(delegator, dispatcher, userLogin, fromParty, toParty, productStoreId);
         this.orderType = "SALES_ORDER";
     }

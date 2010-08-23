@@ -4301,7 +4301,7 @@
                       <fromMultiplicity></fromMultiplicity>
                       <toMultiplicity></toMultiplicity>
                       <source class="net.java.amateras.uml.classdiagram.model.ClassModel">
-                        <name>org.ofbiz.entity.GenericDelegator</name>
+                        <name>org.ofbiz.entity.Delegator</name>
                         <stereoType></stereoType>
                         <isAbstract>false</isAbstract>
                         <constraint>
@@ -4583,8 +4583,8 @@
                           </net.java.amateras.uml.classdiagram.model.AttributeModel>
                           <net.java.amateras.uml.classdiagram.model.OperationModel>
                             <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-1" reference="../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.classdiagram.model.RealizationModel/target/sourceConnections/net.java.amateras.uml.classdiagram.model.GeneralizationModel/target/children/net.java.amateras.uml.classdiagram.model.OperationModel/visibility"/>
-                            <name>getGenericDelegator</name>
-                            <type>GenericDelegator</type>
+                            <name>getDelegator</name>
+                            <type>Delegator</type>
                             <params>
                               <net.java.amateras.uml.classdiagram.model.Argument>
                                 <name>delegatorName</name>
@@ -4609,7 +4609,7 @@
                           </net.java.amateras.uml.classdiagram.model.OperationModel>
                           <net.java.amateras.uml.classdiagram.model.OperationModel>
                             <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-3" reference="../../../../../../../../../sourceConnections/net.java.amateras.uml.classdiagram.model.DependencyModel/target/children/net.java.amateras.uml.classdiagram.model.OperationModel[6]/visibility"/>
-                            <name>GenericDelegator</name>
+                            <name>Delegator</name>
                             <type>void</type>
                             <params/>
                             <isAbstract>false</isAbstract>
@@ -4630,7 +4630,7 @@
                           </net.java.amateras.uml.classdiagram.model.OperationModel>
                           <net.java.amateras.uml.classdiagram.model.OperationModel>
                             <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-3" reference="../../../../../../../../../sourceConnections/net.java.amateras.uml.classdiagram.model.DependencyModel/target/children/net.java.amateras.uml.classdiagram.model.OperationModel[6]/visibility"/>
-                            <name>GenericDelegator</name>
+                            <name>Delegator</name>
                             <type>void</type>
                             <params>
                               <net.java.amateras.uml.classdiagram.model.Argument>
@@ -8511,7 +8511,7 @@
                           <net.java.amateras.uml.classdiagram.model.OperationModel>
                             <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-1" reference="../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.classdiagram.model.RealizationModel/target/sourceConnections/net.java.amateras.uml.classdiagram.model.GeneralizationModel/target/children/net.java.amateras.uml.classdiagram.model.OperationModel/visibility"/>
                             <name>cloneDelegator</name>
-                            <type>GenericDelegator</type>
+                            <type>Delegator</type>
                             <params>
                               <net.java.amateras.uml.classdiagram.model.Argument>
                                 <name>delegatorName</name>
@@ -8537,7 +8537,7 @@
                           <net.java.amateras.uml.classdiagram.model.OperationModel>
                             <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-1" reference="../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.classdiagram.model.RealizationModel/target/sourceConnections/net.java.amateras.uml.classdiagram.model.GeneralizationModel/target/children/net.java.amateras.uml.classdiagram.model.OperationModel/visibility"/>
                             <name>cloneDelegator</name>
-                            <type>GenericDelegator</type>
+                            <type>Delegator</type>
                             <params/>
                             <isAbstract>false</isAbstract>
                             <isStatic>false</isStatic>
@@ -9440,7 +9440,7 @@
                           <net.java.amateras.uml.classdiagram.model.OperationModel>
                             <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-1" reference="../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.classdiagram.model.RealizationModel/target/sourceConnections/net.java.amateras.uml.classdiagram.model.GeneralizationModel/target/children/net.java.amateras.uml.classdiagram.model.OperationModel/visibility"/>
                             <name>getDelegator</name>
-                            <type>GenericDelegator</type>
+                            <type>Delegator</type>
                             <params/>
                             <isAbstract>false</isAbstract>
                             <isStatic>false</isStatic>
@@ -11233,7 +11233,7 @@
         <net.java.amateras.uml.classdiagram.model.AttributeModel>
           <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-3" reference="../../../targetConnections/net.java.amateras.uml.classdiagram.model.AggregationModel/source/sourceConnections/net.java.amateras.uml.classdiagram.model.DependencyModel/target/children/net.java.amateras.uml.classdiagram.model.OperationModel[6]/visibility"/>
           <name>_delegator</name>
-          <type>GenericDelegator</type>
+          <type>Delegator</type>
           <isStatic>true</isStatic>
           <backgroundColor reference="../../../targetConnections/net.java.amateras.uml.classdiagram.model.AggregationModel/source/sourceConnections/net.java.amateras.uml.classdiagram.model.DependencyModel/target/children/net.java.amateras.uml.classdiagram.model.AttributeModel/backgroundColor"/>
           <foregroundColor reference="../../../sourceConnections/net.java.amateras.uml.classdiagram.model.RealizationModel/target/sourceConnections/net.java.amateras.uml.classdiagram.model.GeneralizationModel/target/children/net.java.amateras.uml.classdiagram.model.OperationModel/foregroundColor"/>

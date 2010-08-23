@@ -63,7 +63,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericEntityNotFoundException;
 import org.ofbiz.entity.GenericValue;
@@ -111,7 +111,7 @@ public final class PartyHelper {
      * @return the first roleTypeId from possibleRoleTypeIds which is actually found in PartyRole for the given partyId
      * @throws GenericEntityException
      */
-    public static String getFirstValidRoleTypeId(String partyId, List<String> possibleRoleTypeIds, GenericDelegator delegator) throws GenericEntityException {
+    public static String getFirstValidRoleTypeId(String partyId, List<String> possibleRoleTypeIds, Delegator delegator) throws GenericEntityException {
         return org.opentaps.common.party.PartyHelper.getFirstValidRoleTypeId(partyId, possibleRoleTypeIds, delegator);
 
     }
@@ -119,19 +119,19 @@ public final class PartyHelper {
     /**
      * As above, but pass in the list of internal party roles, such as ACCOUNT, CONTACT, PROSPECT.
      */
-    public static String getFirstValidInternalPartyRoleTypeId(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getFirstValidInternalPartyRoleTypeId(String partyId, Delegator delegator) throws GenericEntityException {
         return getFirstValidRoleTypeId(partyId, CLIENT_PARTY_ROLES, delegator);
     }
 
     /**
      * As above, but pass in the list of team member roles such as ACCOUNT_REP, etc.
      */
-    public static String getFirstValidTeamMemberRoleTypeId(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getFirstValidTeamMemberRoleTypeId(String partyId, Delegator delegator) throws GenericEntityException {
         return getFirstValidRoleTypeId(partyId, TEAM_MEMBER_ROLES, delegator);
     }
 
     /** Find the first valid role of the party, whether it be a team member or client party. */
-    public static String getFirstValidCrmsfaPartyRoleTypeId(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getFirstValidCrmsfaPartyRoleTypeId(String partyId, Delegator delegator) throws GenericEntityException {
         String roleTypeId = getFirstValidRoleTypeId(partyId, TEAM_MEMBER_ROLES, delegator);
         if (roleTypeId == null) {
             roleTypeId = getFirstValidRoleTypeId(partyId, CLIENT_PARTY_ROLES, delegator);
@@ -159,7 +159,7 @@ public final class PartyHelper {
      */
     public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom,
             String partyRelationshipTypeId, String securityGroupId, List<String> validToPartyRoles, Timestamp fromDate,
-            boolean expireExistingRelationships, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
+            boolean expireExistingRelationships, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher)
             throws GenericEntityException, GenericServiceException {
 
         return org.opentaps.common.party.PartyHelper.createNewPartyToRelationship(partyIdTo, partyIdFrom, roleTypeIdFrom, partyRelationshipTypeId, securityGroupId,
@@ -171,7 +171,7 @@ public final class PartyHelper {
      */
     public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom,
             String partyRelationshipTypeId, String securityGroupId, List<String> validToPartyRoles,
-            boolean expireExistingRelationships, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
+            boolean expireExistingRelationships, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher)
             throws GenericEntityException, GenericServiceException {
         return createNewPartyToRelationship(partyIdTo, partyIdFrom, roleTypeIdFrom,
                 partyRelationshipTypeId, securityGroupId, validToPartyRoles, UtilDateTime.nowTimestamp(),
@@ -193,12 +193,12 @@ public final class PartyHelper {
      * @param   roleTypeIdFrom  The role of the account/contact/lead (e.g., ACCOUNT, CONTACT, LEAD)
      * @return  First non-expired PartySummaryCRMView or null if none found
      */
-    public static GenericValue getCurrentResponsibleParty(String partyIdFrom, String roleTypeIdFrom, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue getCurrentResponsibleParty(String partyIdFrom, String roleTypeIdFrom, Delegator delegator) throws GenericEntityException {
         return getActivePartyByRole("RESPONSIBLE_FOR", partyIdFrom, roleTypeIdFrom, UtilDateTime.nowTimestamp(), delegator);
     }
 
     /** Method to get the current lead owner of a lead. */
-    public static GenericValue getCurrentLeadOwner(String leadPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue getCurrentLeadOwner(String leadPartyId, Delegator delegator) throws GenericEntityException {
         return getActivePartyByRole("RESPONSIBLE_FOR", leadPartyId, "PROSPECT", "LEAD_OWNER", UtilDateTime.nowTimestamp(), delegator);
     }
 
@@ -214,14 +214,14 @@ public final class PartyHelper {
      * @return  First non-expired PartySummaryCRMView or null if none found
      */
     public static GenericValue getActivePartyByRole(String partyRelationshipTypeId, String partyIdFrom, String roleTypeIdFrom, String securityGroupId,
-            Timestamp activeDate, GenericDelegator delegator)
+            Timestamp activeDate, Delegator delegator)
             throws GenericEntityException {
         return org.opentaps.common.party.PartyHelper.getActivePartyByRole(partyRelationshipTypeId, partyIdFrom, roleTypeIdFrom, securityGroupId, activeDate, delegator);
     }
 
     /** As above but without security group Id specified */
     public static GenericValue getActivePartyByRole(String partyRelationshipTypeId, String partyIdFrom, String roleTypeIdFrom,
-            Timestamp activeDate, GenericDelegator delegator)
+            Timestamp activeDate, Delegator delegator)
             throws GenericEntityException {
         return getActivePartyByRole(partyRelationshipTypeId, partyIdFrom, roleTypeIdFrom, null, activeDate, delegator);
     }
@@ -238,7 +238,7 @@ public final class PartyHelper {
      * @param   newRoleTypeIdFrom
      */
     public static void copyToPartyRelationships(String partyIdFrom, String roleTypeIdFrom, String partyRelationshipTypeId,
-            String newPartyIdFrom, String newRoleTypeIdFrom, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
+            String newPartyIdFrom, String newRoleTypeIdFrom, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher)
             throws GenericEntityException, GenericServiceException {
 
         org.opentaps.common.party.PartyHelper.copyToPartyRelationships(partyIdFrom, roleTypeIdFrom, partyRelationshipTypeId, newPartyIdFrom, newRoleTypeIdFrom, userLogin, delegator, dispatcher);
@@ -249,7 +249,7 @@ public final class PartyHelper {
      * Same as above, but passes partyRelationshipTypeId = null so that all relationship types are selected.
      */
     public static void copyToPartyRelationships(String partyIdFrom, String roleTypeIdFrom, String newPartyIdFrom, String newRoleTypeIdFrom,
-            GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
+            GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher)
             throws GenericEntityException, GenericServiceException {
 
         copyToPartyRelationships(partyIdFrom, roleTypeIdFrom, null, newPartyIdFrom, newRoleTypeIdFrom, userLogin, delegator, dispatcher);
@@ -294,7 +294,7 @@ public final class PartyHelper {
      * XXX Warning, this method is very brittle. It is essentially emulating the ON DELETE CASCADE functionality
      * of well featured databases, but very poorly. As the datamodel evolves, this method would have to be updated.
      */
-    public static void deleteCrmParty(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static void deleteCrmParty(String partyId, Delegator delegator) throws GenericEntityException {
         // remove related entities from constant list
         for (int i = 0; i < CRM_PARTY_DELETE_CASCADE.length; i++) {
             String entityName = CRM_PARTY_DELETE_CASCADE[i][0];
@@ -345,7 +345,7 @@ public final class PartyHelper {
     /**
      * As above, but does a lookup on PartySummaryCRMView for an input partyId.
      */
-    public static String getCrmsfaPartyName(GenericDelegator delegator, String partyId) throws GenericEntityException {
+    public static String getCrmsfaPartyName(Delegator delegator, String partyId) throws GenericEntityException {
         GenericValue party = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
         return getCrmsfaPartyName(party);
     }
@@ -358,7 +358,7 @@ public final class PartyHelper {
      * @return view page url
      * @deprecated Use <code>org.opentaps.domain.party.Party.createViewPageURL()</code>
      */
-    public static String createViewPageURL(String partyId, GenericDelegator delegator, String externalLoginKey) throws GenericEntityException {
+    public static String createViewPageURL(String partyId, Delegator delegator, String externalLoginKey) throws GenericEntityException {
         GenericValue party = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
 
         return org.opentaps.common.party.PartyHelper.createViewPageURL(party, CLIENT_PARTY_ROLES, externalLoginKey);
@@ -375,7 +375,7 @@ public final class PartyHelper {
      * @return view page url
      * @deprecated Use <code>org.opentaps.domain.party.Party.createViewPageLink()</code>
      */
-    public static String createViewPageLink(String partyId, GenericDelegator delegator, String externalLoginKey) throws GenericEntityException {
+    public static String createViewPageLink(String partyId, Delegator delegator, String externalLoginKey) throws GenericEntityException {
         GenericValue party = delegator.findByPrimaryKeyCache("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
 
         // generate the contents of href=""
@@ -397,7 +397,7 @@ public final class PartyHelper {
      * @return The email address
      * @deprecated Use <code>org.opentaps.domain.party.Party.getPrimaryEmail()</code>
      */
-    @Deprecated public static String getPrimaryEmailForParty(String partyId, GenericDelegator delegator) {
+    @Deprecated public static String getPrimaryEmailForParty(String partyId, Delegator delegator) {
         return org.opentaps.common.party.PartyHelper.getPrimaryEmailForParty(partyId, delegator);
     }
 
@@ -414,7 +414,7 @@ public final class PartyHelper {
      * @param roles         Optional list of CRMSFA roles to limit to.  If roles is null or empty, uses the default CLIENT_PARTY_ROLES.
      * @return EntityListIterator of results or null if the find condition is nothing.
      */
-    public static EntityListIterator findActiveClientParties(GenericDelegator delegator, LocalDispatcher dispatcher, Map<String, ?> parameters, List<String> roles, EntityCondition ec) throws GeneralException {
+    public static EntityListIterator findActiveClientParties(Delegator delegator, LocalDispatcher dispatcher, Map<String, ?> parameters, List<String> roles, EntityCondition ec) throws GeneralException {
         EntityCondition conditions = getActiveClientPartiesCondition(dispatcher, parameters, roles, ec);
         List<String> orderBy = getActiveClientPartiesOrderBy(parameters);
         return delegator.findListIteratorByCondition("PartyFromSummaryByRelationship", conditions, null, FIND_PARTY_FIELDS,
@@ -456,28 +456,28 @@ public final class PartyHelper {
     }
 
     /** As above, but only consider the search parameters with optional conditions. */
-    public static EntityListIterator findActiveClientParties(GenericDelegator delegator, LocalDispatcher dispatcher, Map<String, ?> parameters, EntityCondition ec) throws GeneralException {
+    public static EntityListIterator findActiveClientParties(Delegator delegator, LocalDispatcher dispatcher, Map<String, ?> parameters, EntityCondition ec) throws GeneralException {
         return findActiveClientParties(delegator, dispatcher, parameters, null, ec);
     }
 
     /** Finds all active accounts, contacts, leads and so on of a given partyId */
-    public static EntityListIterator findActiveClientParties(GenericDelegator delegator, LocalDispatcher dispatcher, String partyId) throws GeneralException {
+    public static EntityListIterator findActiveClientParties(Delegator delegator, LocalDispatcher dispatcher, String partyId) throws GeneralException {
         Map<String, Object> parameters = UtilMisc.<String, Object>toMap("partyIdTo", partyId);
         return findActiveClientParties(delegator, dispatcher, parameters, null, null);
     }
 
     /** Finds active Accounts for a party. */
-    public static EntityListIterator findActiveAccounts(GenericDelegator delegator, LocalDispatcher dispatcher, String partyId) throws GeneralException {
+    public static EntityListIterator findActiveAccounts(Delegator delegator, LocalDispatcher dispatcher, String partyId) throws GeneralException {
         return findActiveClientParties(delegator, dispatcher, UtilMisc.toMap("partyIdTo", partyId), UtilMisc.toList("ACCOUNT"), null);
     }
 
     /** Finds active Contacts for a party. */
-    public static EntityListIterator findActiveContacts(GenericDelegator delegator, LocalDispatcher dispatcher, String partyId) throws GeneralException {
+    public static EntityListIterator findActiveContacts(Delegator delegator, LocalDispatcher dispatcher, String partyId) throws GeneralException {
         return findActiveClientParties(delegator, dispatcher, UtilMisc.toMap("partyIdTo", partyId), UtilMisc.toList("CONTACT"), null);
     }
 
     /** Finds active Leads for a party. */
-    public static EntityListIterator findActiveLeads(GenericDelegator delegator, LocalDispatcher dispatcher, String partyId) throws GeneralException {
+    public static EntityListIterator findActiveLeads(Delegator delegator, LocalDispatcher dispatcher, String partyId) throws GeneralException {
         return findActiveClientParties(delegator, dispatcher, UtilMisc.toMap("partyIdTo", partyId), UtilMisc.toList("PROSPECT"), null);
     }
 
@@ -490,7 +490,7 @@ public final class PartyHelper {
         return new EntityListBuilder("PartyFromSummaryByRelationship", conditions, FIND_PARTY_FIELDS, orderBy);
     }
 
-    public static Map<String, Object> assembleCrmsfaFormMergeContext(GenericDelegator delegator, Locale locale, String partyId, String orderId, String shipGroupSeqId, String shipmentId, TimeZone timeZone) {
+    public static Map<String, Object> assembleCrmsfaFormMergeContext(Delegator delegator, Locale locale, String partyId, String orderId, String shipGroupSeqId, String shipmentId, TimeZone timeZone) {
         Map<String, Object> templateContext = assembleCrmsfaGenericFormMergeContext(timeZone, locale);
         templateContext.putAll(assembleCrmsfaPartyFormMergeContext(delegator, partyId));
         templateContext.putAll(assembleCrmsfaOrderFormMergeContext(delegator, orderId));
@@ -498,7 +498,7 @@ public final class PartyHelper {
         return templateContext;
     }
 
-    public static Map<String, Object> assembleCrmsfaShipmentFormMergeContext(GenericDelegator delegator, String orderId, String shipGroupSeqId, String shipmentId, Locale locale) {
+    public static Map<String, Object> assembleCrmsfaShipmentFormMergeContext(Delegator delegator, String orderId, String shipGroupSeqId, String shipmentId, Locale locale) {
         Map<String, Object> templateContext = new HashMap<String, Object>();
 
         try {
@@ -606,7 +606,7 @@ public final class PartyHelper {
         return templateContext;
     }
 
-    public static Map<String, Object> assembleCrmsfaOrderFormMergeContext(GenericDelegator delegator, String orderId) {
+    public static Map<String, Object> assembleCrmsfaOrderFormMergeContext(Delegator delegator, String orderId) {
         Map<String, Object> templateContext = new HashMap<String, Object>();
         if (UtilValidate.isNotEmpty(orderId)) {
             try {
@@ -723,7 +723,7 @@ public final class PartyHelper {
         return templateContext;
     }
 
-    public static Map<String, Object> assembleCrmsfaPartyFormMergeContext(GenericDelegator delegator, String partyId) {
+    public static Map<String, Object> assembleCrmsfaPartyFormMergeContext(Delegator delegator, String partyId) {
         Map<String, Object> templateContext = new HashMap<String, Object>();
         if (UtilValidate.isNotEmpty(partyId)) {
             try {
@@ -771,11 +771,11 @@ public final class PartyHelper {
         return templateContext;
     }
 
-    public static Map<String, String> mergePartyWithForm(GenericDelegator delegator, String mergeFormId, String partyId, String orderId, String shipGroupSeqId, String shipmentId, Locale locale, boolean leaveTags, TimeZone timeZone) throws GenericEntityException {
+    public static Map<String, String> mergePartyWithForm(Delegator delegator, String mergeFormId, String partyId, String orderId, String shipGroupSeqId, String shipmentId, Locale locale, boolean leaveTags, TimeZone timeZone) throws GenericEntityException {
         return mergePartyWithForm(delegator, mergeFormId, partyId, orderId, shipGroupSeqId, shipmentId, locale, leaveTags, timeZone, true);
     }
 
-    public static Map<String, String> mergePartyWithForm(GenericDelegator delegator, String mergeFormId, String partyId, String orderId, String shipGroupSeqId, String shipmentId, Locale locale, boolean leaveTags, TimeZone timeZone, boolean highlightTags) throws GenericEntityException {
+    public static Map<String, String> mergePartyWithForm(Delegator delegator, String mergeFormId, String partyId, String orderId, String shipGroupSeqId, String shipmentId, Locale locale, boolean leaveTags, TimeZone timeZone, boolean highlightTags) throws GenericEntityException {
         Map<String, Object> mergeContext = PartyHelper.assembleCrmsfaFormMergeContext(delegator, locale, partyId, orderId, shipGroupSeqId, shipmentId, timeZone);
         GenericValue mergeForm = delegator.findByPrimaryKey("MergeForm", UtilMisc.toMap("mergeFormId", mergeFormId));
         if (mergeForm == null) return null;
@@ -810,7 +810,7 @@ public final class PartyHelper {
      * @return the timestamp of last deactivation, null if the party is not deactivated
      * @throws GenericEntityNotFoundException
      */
-    public static Timestamp getDeactivationDate(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static Timestamp getDeactivationDate(String partyId, Delegator delegator) throws GenericEntityException {
         // check party current status:
         if (isActive(partyId, delegator)) {
             return null;
@@ -839,7 +839,7 @@ public final class PartyHelper {
      * @return is active
      * @throws GenericEntityNotFoundException
      */
-    public static boolean isActive(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static boolean isActive(String partyId, Delegator delegator) throws GenericEntityException {
         GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyId));
         if (party == null) {
             throw new GenericEntityNotFoundException("No Party found with ID: " + partyId);
@@ -848,7 +848,7 @@ public final class PartyHelper {
     }
 
     /** Checks if the given party with role is unassigned. */
-    public static boolean isUnassigned(GenericDelegator delegator, String partyId, String roleTypeId) throws GenericEntityException {
+    public static boolean isUnassigned(Delegator delegator, String partyId, String roleTypeId) throws GenericEntityException {
         List<GenericValue> activeRelationships = EntityUtil.filterByDate(delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", partyId, "roleTypeIdFrom", roleTypeId,
                 "partyRelationshipTypeId", "ASSIGNED_TO")));
         return activeRelationships.size() == 0;
@@ -856,7 +856,7 @@ public final class PartyHelper {
 
     /** Checks if the given party with role is assigned to the user login. */
     public static boolean isAssignedToUserLogin(String partyId, String roleTypeId, GenericValue userLogin) throws GenericEntityException {
-        GenericDelegator delegator = userLogin.getDelegator();
+        Delegator delegator = userLogin.getDelegator();
         String roleTypeIdTo = getFirstValidTeamMemberRoleTypeId(userLogin.getString("partyId"), delegator);
         if (roleTypeIdTo == null) {
             return false;
@@ -870,13 +870,13 @@ public final class PartyHelper {
     /**
      * Find the active ASSIGNED_TO party relationships with given From and To party IDs, and the role type ID of From party such as 'CONTACT'.
      *
-     * @param delegator a GenericDelegator instance
+     * @param delegator a Delegator instance
      * @param partyIdFrom a String object that represents the From party ID
      * @param roleTypeIdFrom a String object that represents the role type ID of From party
      * @param partyIdTo a String object that represents the To party ID
      * @return a List of GenericValue objects
      */
-    public static List<GenericValue> findActiveAssignedToPartyRelationships(final GenericDelegator delegator, final String partyIdFrom, final String roleTypeIdFrom, final String partyIdTo) throws GenericEntityException {
+    public static List<GenericValue> findActiveAssignedToPartyRelationships(final Delegator delegator, final String partyIdFrom, final String roleTypeIdFrom, final String partyIdTo) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("partyIdFrom", partyIdFrom),
                 EntityCondition.makeCondition("roleTypeIdFrom", roleTypeIdFrom),

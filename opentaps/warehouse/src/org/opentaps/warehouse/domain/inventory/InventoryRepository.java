@@ -29,7 +29,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
@@ -81,7 +81,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
      * Use this for Repositories which will only access the database via the delegator.
      * @param delegator the delegator
      */
-    public InventoryRepository(GenericDelegator delegator) {
+    public InventoryRepository(Delegator delegator) {
         super(delegator);
     }
 

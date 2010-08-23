@@ -20,7 +20,7 @@ package org.opentaps.dataimport;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -66,7 +66,7 @@ public class OrderImportServices {
      */
     @SuppressWarnings("unchecked")
     public static Map importOrders(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -249,11 +249,11 @@ public class OrderImportServices {
      *
      * @param dataImportOrderHeader a <code>GenericValue</code> value
      * @param message               a <code>String</code> value
-     * @param delegator             a <code>GenericDelegator</code> value
+     * @param delegator             a <code>Delegator</code> value
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static void storeImportError(GenericValue dataImportOrderHeader, String message, GenericDelegator delegator) throws GenericEntityException {
+    private static void storeImportError(GenericValue dataImportOrderHeader, String message, Delegator delegator) throws GenericEntityException {
         // OrderItems
         EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
                 EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_NOT_PROC),
@@ -289,14 +289,14 @@ public class OrderImportServices {
      * @param importEmptyOrders   a <code>boolean</code> value
      * @param calculateGrandTotal a <code>boolean</code> value
      * @param reserveInventory    a <code>boolean</code> value
-     * @param delegator           a <code>GenericDelegator</code> value
+     * @param delegator           a <code>Delegator</code> value
      * @param userLogin           a <code>GenericValue</code> value
      * @return a <code>List</code> value
      * @throws GenericEntityException if an error occurs
      * @throws Exception              if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static List decodeOrder(GenericValue externalOrderHeader, String companyPartyId, GenericValue productStore, String prodCatalogId, String purchaseOrderShipToContactMechId, boolean importEmptyOrders, boolean calculateGrandTotal, boolean reserveInventory,GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException, Exception {
+    private static List decodeOrder(GenericValue externalOrderHeader, String companyPartyId, GenericValue productStore, String prodCatalogId, String purchaseOrderShipToContactMechId, boolean importEmptyOrders, boolean calculateGrandTotal, boolean reserveInventory,Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException, Exception {
         List toStore = FastList.newInstance();
         //todo move this at the beginning of the class
         DataImportOrderHeader dataImportOrderHeader = new DataImportOrderHeader();

@@ -22,7 +22,7 @@ import javolution.util.FastSet;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -46,7 +46,7 @@ public final class TeamHelper {
     public static final List<String> TEAM_SECURITY_GROUPS = UtilMisc.toList("SALES_MANAGER", "SALES_REP", "SALES_REP_LIMITED", "CSR");
 
     /** Find all active PartyRelationships that relates a partyId to a team or account. */
-    public static List findActiveAccountOrTeamRelationships(String accountTeamPartyId, String roleTypeIdFrom, String teamMemberPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static List findActiveAccountOrTeamRelationships(String accountTeamPartyId, String roleTypeIdFrom, String teamMemberPartyId, Delegator delegator) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                     EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, roleTypeIdFrom),
                     EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, accountTeamPartyId),
@@ -59,7 +59,7 @@ public final class TeamHelper {
     /**
      * Get all active team members of a given Collection of team partyIds.  Returns a list of PartyToSummaryByRelationship.
      */
-    public static List<GenericValue> getActiveTeamMembers(Collection<String> teamPartyIds, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getActiveTeamMembers(Collection<String> teamPartyIds, Delegator delegator) throws GenericEntityException {
         // this might happen if there are no teams set up yet
         if (UtilValidate.isEmpty(teamPartyIds)) {
             Debug.logWarning("No team partyIds set, so getActiveTeamMembers returns null", MODULE);
@@ -92,12 +92,12 @@ public final class TeamHelper {
     }
 
     /** As above, but for one team. */
-    public static List<GenericValue> getActiveTeamMembers(String teamPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getActiveTeamMembers(String teamPartyId, Delegator delegator) throws GenericEntityException {
         return getActiveTeamMembers(Arrays.asList(teamPartyId), delegator);
     }
 
     /** Get all active team members of all active teams.  Returns a list of PartyToSummaryByRelationship. */
-    public static List<GenericValue> getActiveTeamMembers(GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getActiveTeamMembers(Delegator delegator) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                                            EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "ACCOUNT_TEAM"),
                                            EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PARTY_DISABLED"));
@@ -115,7 +115,7 @@ public final class TeamHelper {
      * Get the team members (as a list of partyId Strings) that the partyId currently shares a team with.  This is accomplished by finding all
      * active team members of teams that the partyId belongs to.  No security is checked here, that is the responsibility of upstream code.
      */
-    public static Collection<String> getTeamMembersForPartyId(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static Collection<String> getTeamMembersForPartyId(String partyId, Delegator delegator) throws GenericEntityException {
         Collection<String> teamPartyIds = getTeamsForPartyId(partyId, delegator);
         if (teamPartyIds.size() == 0) {
             return teamPartyIds;
@@ -135,7 +135,7 @@ public final class TeamHelper {
      *  PartyRelationship  where the partyIdFrom is the team Party, roleTypeIdFrom is ACCOUNT_TEAM, partyIdTo is input, partyRelationshipTypeId
      *  is ASSIGNED_TO, and securityGroupId is either SALES_REP or SALES_MANAGER.
      */
-    public static Collection<String> getTeamsForPartyId(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static Collection<String> getTeamsForPartyId(String partyId, Delegator delegator) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                     EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT_TEAM"),
                     EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId),
@@ -155,7 +155,7 @@ public final class TeamHelper {
      * Gets the active team members in an organization.  A party must be assigned to a team in order for them to be part of this list.
      * TODO there is no actual team -> organization relationship yet.
      */
-    public static List<GenericValue> getTeamMembersForOrganization(GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getTeamMembersForOrganization(Delegator delegator) throws GenericEntityException {
 
         // first let's look up all the ACCOUNT_TEAMs in the system (TODO: this would be constrained to the organizationPartyId via PartyRelationship or such)
         Set<String> accountTeamPartyIds = FastSet.newInstance();

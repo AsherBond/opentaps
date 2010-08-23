@@ -24,7 +24,7 @@ import java.util.Map;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -43,7 +43,7 @@ public class CustomStatusListBuilder extends EntityListBuilder {
      * There's nothing to parametrize for this class other than the delegator,
      * so we can just set static values for the lookup conditions.
      */
-    public CustomStatusListBuilder(GenericDelegator delegator) {
+    public CustomStatusListBuilder(Delegator delegator) {
         this.delegator = delegator;
         this.entityName = "StatusItem";
         this.where = EntityCondition.makeCondition("statusId", EntityOperator.NOT_LIKE, "%CANCELLED%");

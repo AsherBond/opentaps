@@ -30,7 +30,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -70,7 +70,7 @@ public final class COGSServices {
     @SuppressWarnings("unchecked")
     public static Map updateProductAverageCost(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String productId = (String) context.get("productId");
@@ -130,7 +130,7 @@ public final class COGSServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateInvoiceAverageCosts(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -171,7 +171,7 @@ public final class COGSServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateReceiptAverageCost(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -210,7 +210,7 @@ public final class COGSServices {
      */
     @SuppressWarnings("unchecked")
     public static Map addAvgCostAdjToProductionRunCosts(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -275,7 +275,7 @@ public final class COGSServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createProductAverageCost(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String productId = (String) context.get("productId");
         String organizationPartyId = (String) context.get("organizationPartyId");
         Double averageCost = (Double) context.get("averageCost");

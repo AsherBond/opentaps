@@ -21,7 +21,7 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
@@ -46,7 +46,7 @@ public final class FacilityServices {
     private static final String MODULE = FacilityServices.class.getName();
 
     public static Map<String, Object> createFacilityAssoc(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -76,7 +76,7 @@ public final class FacilityServices {
     // TODO: at some point we need to decide a good set of rules for updating entities with fromDate as pk so
     // we don't have to pass in the fromDate.
     public static Map<String, Object> updateFacilityAssoc(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -105,7 +105,7 @@ public final class FacilityServices {
     }
 
     public static Map<String, Object> createBackupWarehouse(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");

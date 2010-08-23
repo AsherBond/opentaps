@@ -47,7 +47,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -120,7 +120,7 @@ public class OpentapsTestCase extends TestCase {
 
     private static final EtmMonitor etmMonitor = EtmManager.getEtmMonitor();
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected LocalDispatcher dispatcher = null;
     protected GenericValue admin;
     protected Organization organization;
@@ -156,7 +156,7 @@ public class OpentapsTestCase extends TestCase {
 
     @Override
     public void setUp() throws Exception {
-        delegator = GenericDelegator.getGenericDelegator(DELEGATOR_NAME);
+        delegator = Delegator.getDelegator(DELEGATOR_NAME);
         dispatcher = GenericDispatcher.getLocalDispatcher(DELEGATOR_NAME, delegator);
         admin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "admin"));
         domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));
@@ -187,9 +187,9 @@ public class OpentapsTestCase extends TestCase {
 
     /**
      * Gets the delegator.
-     * @return a <code>GenericDelegator</code> value
+     * @return a <code>Delegator</code> value
      */
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return delegator;
     }
 

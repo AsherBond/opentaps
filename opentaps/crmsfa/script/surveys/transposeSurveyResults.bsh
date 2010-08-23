@@ -24,13 +24,13 @@
 
 import java.util.*;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.model.*;
 import org.ofbiz.entity.*;
 import org.ofbiz.entity.jdbc.*;
 import org.ofbiz.entity.util.*;
 
-delegator = GenericDelegator.getGenericDelegator("default");
+delegator = Delegator.getDelegator("default");
 
 // CHANGE THIS to be your suvey
 surveyId = "MY-SURVEY";

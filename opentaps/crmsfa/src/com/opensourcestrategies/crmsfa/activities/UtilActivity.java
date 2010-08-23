@@ -46,7 +46,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -83,7 +83,7 @@ public final class UtilActivity {
      * gets all unexpired parties related to the work effort. The result is a list of WorkEffortPartyAssignments containing
      * the partyIds we need.
      */
-    public static List<GenericValue> getActivityParties(GenericDelegator delegator, String workEffortId, List<String> partyRoles) throws GenericEntityException {
+    public static List<GenericValue> getActivityParties(Delegator delegator, String workEffortId, List<String> partyRoles) throws GenericEntityException {
         // add each role type id (ACCOUNT, CONTACT, etc) to an OR condition list
         List<EntityCondition> roleCondList = new ArrayList<EntityCondition>();
         for (String roleTypeId : partyRoles) {
@@ -110,7 +110,7 @@ public final class UtilActivity {
     /**
      * Gets owner party id of activity.
      */
-    public static GenericValue getActivityOwner(String workEffortId, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue getActivityOwner(String workEffortId, Delegator delegator) throws GenericEntityException {
         List<GenericValue> ownerParties = EntityUtil.filterByDate(getActivityParties(delegator, workEffortId, UtilMisc.toList("CAL_OWNER")));
         if (UtilValidate.isEmpty(ownerParties)) {
             Debug.logWarning("No owner parties found for activity [" + workEffortId + "]", MODULE);
@@ -128,7 +128,7 @@ public final class UtilActivity {
      * TODO: make this more intelligent so it doesn't delete if the association has not changed
      *       and then rename this to removeUpdatedAssociationsForWorkEffort
      */
-    public static void removeAllAssociationsForWorkEffort(String workEffortId, GenericDelegator delegator) throws GenericEntityException {
+    public static void removeAllAssociationsForWorkEffort(String workEffortId, Delegator delegator) throws GenericEntityException {
 
         // delete any existing opportunity relationships
         List<GenericValue> oldAssocs = delegator.findByAnd("SalesOpportunityWorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
@@ -168,7 +168,7 @@ public final class UtilActivity {
      * @return  List of events/tasks that the user conflicts with
      */
     public static List<GenericValue> getActivityConflicts(GenericValue userLogin, Timestamp start, Timestamp end, String workEffortId) throws GenericEntityException {
-        GenericDelegator delegator = userLogin.getDelegator();
+        Delegator delegator = userLogin.getDelegator();
         List<EntityCondition> conditions = UtilMisc.toList(
                 EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, userLogin.getString("partyId")),
                 EntityCondition.makeCondition(EntityOperator.OR,

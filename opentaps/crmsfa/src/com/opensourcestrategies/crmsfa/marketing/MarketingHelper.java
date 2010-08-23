@@ -23,7 +23,7 @@ import java.util.Map;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -40,7 +40,7 @@ public final class MarketingHelper {
     private MarketingHelper() { }
 
     /** Counts the number of active, ACCEPTED members in a contact list with the given condition. */
-    public static long countContactListMembers(String contactListId, EntityCondition condition, GenericDelegator delegator) throws GenericEntityException {
+    public static long countContactListMembers(String contactListId, EntityCondition condition, Delegator delegator) throws GenericEntityException {
         List<EntityCondition> conditionList = UtilMisc.toList(
                     EntityCondition.makeCondition("contactListId", EntityOperator.EQUALS, contactListId),
                     EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "CLPT_ACCEPTED"),
@@ -59,24 +59,24 @@ public final class MarketingHelper {
     }
 
     /** Count all active, ACCEPTED members of a contact list. */
-    public static long countContactListMembers(String contactListId, GenericDelegator delegator) throws GenericEntityException {
+    public static long countContactListMembers(String contactListId, Delegator delegator) throws GenericEntityException {
         return countContactListMembers(contactListId, null, delegator);
     }
 
     /** Count all active, ACCEPTED members of a contact list in a given countryGeoId. */
-    public static long countContactListMembersByCountry(String contactListId, String countryGeoId, GenericDelegator delegator) throws GenericEntityException {
+    public static long countContactListMembersByCountry(String contactListId, String countryGeoId, Delegator delegator) throws GenericEntityException {
         EntityCondition condition = EntityCondition.makeCondition("countryGeoId", EntityOperator.EQUALS, countryGeoId);
         return countContactListMembers(contactListId, condition, delegator);
     }
 
     /** Cound all active, ACCEPTED members of a contact list in the configured defaultCountryGeoId */
-    public static long countContactListMembersDomestic(String contactListId, GenericDelegator delegator) throws GenericEntityException {
+    public static long countContactListMembersDomestic(String contactListId, Delegator delegator) throws GenericEntityException {
         String defaultCountryGeoId = UtilConfig.getPropertyValue("crmsfa", "defaultCountryGeoId");
         return countContactListMembersByCountry(contactListId, defaultCountryGeoId, delegator);
     }
 
     /** Builds a map of zip3 -> bmcCode based on values in UspsZipToBmcCode */
-    public static Map<String, String> getZipToBMCCode(GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, String> getZipToBMCCode(Delegator delegator) throws GenericEntityException {
         Map<String, String> results = FastMap.newInstance();
         List<GenericValue> values = delegator.findAllCache("UspsZipToBmcCode");
         for (Iterator<GenericValue> iter = values.iterator(); iter.hasNext();) {

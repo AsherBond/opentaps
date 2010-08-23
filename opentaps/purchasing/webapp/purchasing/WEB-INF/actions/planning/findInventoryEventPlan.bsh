@@ -56,7 +56,7 @@ import org.opentaps.common.util.UtilCommon;
 
 timeZone = UtilCommon.getTimeZone(request);
 
-GenericDelegator delegator = request.getAttribute("delegator");
+Delegator delegator = request.getAttribute("delegator");
 LocalDispatcher dispatcher = request.getAttribute("dispatcher");
 
 organizationPartyId = UtilCommon.getOrganizationPartyId(request);

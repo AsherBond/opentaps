@@ -19,7 +19,7 @@ package org.opentaps.warehouse.shipment.packing;
 
 import org.ofbiz.shipment.packing.PackingSessionLine;
 import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
@@ -70,7 +70,7 @@ public class OpentapsPackingSessionLine extends PackingSessionLine {
      * in the package and the value of a package for purposes of insurance and to help the packer distribute the
      * value evenly across packages.
      */
-    public BigDecimal getRawValue(GenericDelegator delegator) throws GenericEntityException {
+    public BigDecimal getRawValue(Delegator delegator) throws GenericEntityException {
         if (rawValue != null) return rawValue;
 
         GenericValue item = delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", this.orderId, "orderItemSeqId", this.orderItemSeqId));

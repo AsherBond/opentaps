@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javolution.util.FastList;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -46,7 +46,7 @@ public class PayrollEvents {
 
     /** Gets a list of payment (paycheck) options that are associated with a given partyId (employee). */
     public static String getPaymentTypeDataJSON(HttpServletRequest request, HttpServletResponse response) {
-    	GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+    	Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         String partyId = (String) request.getParameter("partyId");

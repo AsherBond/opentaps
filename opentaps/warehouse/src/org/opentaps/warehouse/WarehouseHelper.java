@@ -22,7 +22,7 @@ import java.util.List;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -48,10 +48,10 @@ public final class WarehouseHelper {
      * @param orderId String
      * @param orderItemSeqId String
      * @param shipGroupSeqId String
-     * @param delegator GenericDelegator
+     * @param delegator Delegator
      * @return List
      */
-    public static List<String> getReservationLotIdList(String orderId, String orderItemSeqId, String shipGroupSeqId, GenericDelegator delegator) {
+    public static List<String> getReservationLotIdList(String orderId, String orderItemSeqId, String shipGroupSeqId, Delegator delegator) {
         EntityCondition lotCondition = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
             EntityCondition.makeCondition("orderItemSeqId", EntityOperator.EQUALS, orderItemSeqId),
@@ -80,10 +80,10 @@ public final class WarehouseHelper {
      * @param orderId String
      * @param orderItemSeqId String
      * @param shipGroupSeqId String
-     * @param delegator GenericDelegator
+     * @param delegator Delegator
      * @return String
      */
-    public static String getReservationLotId(String orderId, String orderItemSeqId, String shipGroupSeqId, GenericDelegator delegator) {
+    public static String getReservationLotId(String orderId, String orderItemSeqId, String shipGroupSeqId, Delegator delegator) {
         List<String> lotIdList = getReservationLotIdList(orderId, orderItemSeqId, shipGroupSeqId, delegator);
 
         if (UtilValidate.isNotEmpty(lotIdList)) {
@@ -99,10 +99,10 @@ public final class WarehouseHelper {
      * given parameters.
      * @param shipmentId String
      * @param shipmentItemSeqId String
-     * @param delegator GenericDelegator
+     * @param delegator Delegator
      * @return List
      */
-    public static List<String> getIssuanceLotIdList(String shipmentId, String shipmentItemSeqId, GenericDelegator delegator) {
+    public static List<String> getIssuanceLotIdList(String shipmentId, String shipmentItemSeqId, Delegator delegator) {
         EntityCondition lotCondition = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition("shipmentId", EntityOperator.EQUALS, shipmentId),
             EntityCondition.makeCondition("shipmentItemSeqId", EntityOperator.EQUALS, shipmentItemSeqId),
@@ -129,10 +129,10 @@ public final class WarehouseHelper {
      * given parameters.
      * @param shipmentId String
      * @param shipmentItemSeqId String
-     * @param delegator GenericDelegator
+     * @param delegator Delegator
      * @return String
      */
-    public static String getIssuanceLotId(String shipmentId, String shipmentItemSeqId, GenericDelegator delegator) {
+    public static String getIssuanceLotId(String shipmentId, String shipmentItemSeqId, Delegator delegator) {
         List<String> lotIdList = getIssuanceLotIdList(shipmentId, shipmentItemSeqId, delegator);
 
         if (UtilValidate.isNotEmpty(lotIdList)) {

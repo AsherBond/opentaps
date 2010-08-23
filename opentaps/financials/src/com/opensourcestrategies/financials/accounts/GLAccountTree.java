@@ -20,7 +20,7 @@ package com.opensourcestrategies.financials.accounts;
 import org.ofbiz.accounting.AccountingException;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -59,7 +59,7 @@ public class GLAccountTree {
     /**
      * Creates a new <code>GLAccountTree</code> instance.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param organizationPartyId the organization party ID for which to build the tree
      * @param currencyUomId the currency used to display amounts in the tree
      * @param accounts a list of GL accounts to include in the tree
@@ -67,7 +67,7 @@ public class GLAccountTree {
      * @exception AccountingException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public GLAccountTree(GenericDelegator delegator, String organizationPartyId, String currencyUomId, List<Map<String, Object>> accounts) throws GenericEntityException, AccountingException {
+    public GLAccountTree(Delegator delegator, String organizationPartyId, String currencyUomId, List<Map<String, Object>> accounts) throws GenericEntityException, AccountingException {
         this(organizationPartyId, currencyUomId);
 
         // Make an expanded map of accounts which contains all parents, grandparents, etc. so that we can create
@@ -131,7 +131,7 @@ public class GLAccountTree {
      *  Creates a GLAccountTree from a map of (GenericValue) GL account to (Double) balance such as those returned
      *  from the balance sheet, trial balance, and income statement services.
      *  Note that this method couldn't be a constructor because it must turn the Map into a list before calling another constructor.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param organizationPartyId the organization party ID for which to build the tree
      * @param currencyUomId the currency used to display amounts in the tree
      * @param accountBalances a <code>Map</code> of GLAccount to the account balance as <code>Double</code>.
@@ -140,7 +140,7 @@ public class GLAccountTree {
      * @throws AccountingException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static GLAccountTree getGLAccountTree(GenericDelegator delegator, String organizationPartyId, String currencyUomId, Map<GenericValue, ?> accountBalances) throws GenericEntityException, AccountingException {
+    public static GLAccountTree getGLAccountTree(Delegator delegator, String organizationPartyId, String currencyUomId, Map<GenericValue, ?> accountBalances) throws GenericEntityException, AccountingException {
         List<Map<String, Object>> accountBalancesList = new ArrayList<Map<String, Object>>();
         if (accountBalances != null) {
             for (GenericValue a : accountBalances.keySet()) {
@@ -249,7 +249,7 @@ public class GLAccountTree {
      * used for display purposes only and does not affect the lookup.
      *
      * TODO: this mechanism does a bunch of sequential reads on the database
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param organizationPartyId the organization party ID
      * @param currencyUomId the currency used to display amounts in the tree
      * @return a <code>GLAccountTree</code> value
@@ -257,7 +257,7 @@ public class GLAccountTree {
      * @exception AccountingException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static GLAccountTree getOrganizationTree(GenericDelegator delegator, String organizationPartyId, String currencyUomId) throws GenericEntityException, AccountingException {
+    public static GLAccountTree getOrganizationTree(Delegator delegator, String organizationPartyId, String currencyUomId) throws GenericEntityException, AccountingException {
         GLAccountTree tree = new GLAccountTree(organizationPartyId, currencyUomId);
 
         // start with the root accounts
@@ -279,14 +279,14 @@ public class GLAccountTree {
      * Given a node, fills in the children.  Useful if the children are not already present.  Note that the same
      * tree structure exists across organizations because the model for GL accounts is this way by convention,
      * however a given account might not be configured for an organization.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param node a <code>GLAccountInTree</code> value
      * @param organizationPartyId a <code>String</code> value
      * @exception GenericEntityException if an error occurs
      * @exception AccountingException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static void populateChildren(GenericDelegator delegator, GLAccountInTree node, String organizationPartyId) throws GenericEntityException, AccountingException {
+    public static void populateChildren(Delegator delegator, GLAccountInTree node, String organizationPartyId) throws GenericEntityException, AccountingException {
         List conditions = UtilMisc.toList(
                 EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
                 EntityCondition.makeCondition("parentGlAccountId", EntityOperator.EQUALS, node.glAccountId),

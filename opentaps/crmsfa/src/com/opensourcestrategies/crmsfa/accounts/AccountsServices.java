@@ -51,7 +51,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -89,7 +89,7 @@ public final class AccountsServices {
     public static final String notificationResource = "notification";
 
     public static Map<String, Object> createAccount(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -214,7 +214,7 @@ public final class AccountsServices {
     }
 
     public static Map<String, Object> updateAccount(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -257,7 +257,7 @@ public final class AccountsServices {
 
 
     public static Map<String, Object> deactivateAccount(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -302,7 +302,7 @@ public final class AccountsServices {
     }
 
     public static Map<String, Object> reassignAccountResponsibleParty(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -333,7 +333,7 @@ public final class AccountsServices {
      *  Prepares context for crmsfa.sendCrmNotificationEmails service with email subject, body parameters, and list of parties to email.
      */
     public static Map<String, Object> sendAccountResponsibilityNotificationEmails(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String newPartyId = (String) context.get("newPartyId");
         String accountPartyId = (String) context.get("accountPartyId");
@@ -375,7 +375,7 @@ public final class AccountsServices {
      *  Prepares context for crmsfa.sendCrmNotificationEmails service with email subject, body parameters, and list of parties to email.
      */
     public static Map<String, Object> sendAccountTeamMemberNotificationEmails(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String teamMemberPartyId = (String) context.get("teamMemberPartyId");
         String accountTeamPartyId = (String) context.get("accountTeamPartyId");
@@ -437,7 +437,7 @@ public final class AccountsServices {
      * This method helps avoid semantic mistakes and typos from the repeated use of this code pattern.
      */
     public static boolean createResponsibleAccountRelationshipForParty(String partyId, String accountPartyId,
-            GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
+            GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher)
         throws GenericServiceException, GenericEntityException {
         return PartyHelper.createNewPartyToRelationship(partyId, accountPartyId, "ACCOUNT", "RESPONSIBLE_FOR",
                 "ACCOUNT_OWNER", PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);

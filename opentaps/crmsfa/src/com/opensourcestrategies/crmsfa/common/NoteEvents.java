@@ -29,7 +29,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
@@ -69,7 +69,7 @@ public final class NoteEvents {
      */
     public static String saveNotesJSON(HttpServletRequest request, HttpServletResponse response) {
         Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         Infrastructure infrastructure = new Infrastructure(dispatcher);
         Security security = (Security) request.getAttribute("security");
@@ -131,7 +131,7 @@ public final class NoteEvents {
      */
     public static String deleteNotesJSON(HttpServletRequest request, HttpServletResponse response) {
         Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         Infrastructure infrastructure = new Infrastructure(dispatcher);
         Security security = (Security) request.getAttribute("security");

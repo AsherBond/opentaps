@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -101,11 +101,11 @@ public final class UtilAccountingTags {
      * {index value: configured <code>enumTypeId</code>}.
      * @param organizationPartyId the organization party ID
      * @param accountingTagUsageTypeId the usage type for the tags
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of <code>Map</code> for the given organization
      * @throws RepositoryException if an error occurs
      */
-    public static Map<Integer, String> getAccountingTagTypesForOrganization(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator) throws RepositoryException {
+    public static Map<Integer, String> getAccountingTagTypesForOrganization(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator) throws RepositoryException {
         OrganizationRepository repository = new OrganizationRepository(delegator);
         return repository.getAccountingTagTypes(organizationPartyId, accountingTagUsageTypeId);
     }
@@ -115,11 +115,11 @@ public final class UtilAccountingTags {
      * {<code>index</code>: configuration field index, <code>type</code>: <code>enumTypeId</code>, <code>description</code>: enum type description, <code>tagValues</code>: list of possible <code>Enumeration</code> values}.
      * @param organizationPartyId the organization party ID
      * @param accountingTagUsageTypeId the usage type for the tags
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of <code>Map</code> for the given organization
      * @throws RepositoryException if an error occurs
      */
-    public static List<AccountingTagConfigurationForOrganizationAndUsage> getAccountingTagsForOrganization(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator) throws RepositoryException {
+    public static List<AccountingTagConfigurationForOrganizationAndUsage> getAccountingTagsForOrganization(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator) throws RepositoryException {
         OrganizationRepository repository = new OrganizationRepository(delegator);
         return repository.getAccountingTagConfiguration(organizationPartyId, accountingTagUsageTypeId);
     }
@@ -129,12 +129,12 @@ public final class UtilAccountingTags {
      * {<code>index</code>: configuration field index, <code>type</code>: <code>enumTypeId</code>, <code>description</code>: enum type description, <code>tagValues</code>: list of possible <code>Enumeration</code> values}.
      * @param organizationPartyId the organization party ID
      * @param accountingTagUsageTypeId the usage type for the tags
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param locale the <code>Locale</code>, used for the generic filter labels
      * @return the <code>List</code> of <code>Map</code> for the given organization
      * @throws RepositoryException if an error occurs
      */
-    public static List<AccountingTagConfigurationForOrganizationAndUsage> getAccountingTagFiltersForOrganization(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, Locale locale) throws RepositoryException {
+    public static List<AccountingTagConfigurationForOrganizationAndUsage> getAccountingTagFiltersForOrganization(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator, Locale locale) throws RepositoryException {
 
         List<AccountingTagConfigurationForOrganizationAndUsage> tagTypesAndValues = getAccountingTagsForOrganization(organizationPartyId, accountingTagUsageTypeId, delegator);
         // insert the common filters at the beginning of the value list for each tag configuration
@@ -161,13 +161,13 @@ public final class UtilAccountingTags {
      * Builds a list of <code>EntityExpr</code> from the accounting tag given in the context.
      * @param organizationPartyId the organization party ID
      * @param accountingTagUsageTypeId the usage type for the tags
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param context a context <code>Map</code>
      * @return the list of <code>EntityExpr</code> from the accounting tag given in the context
      * @throws RepositoryException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, Map context) throws RepositoryException {
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator, Map context) throws RepositoryException {
         return buildTagConditions(organizationPartyId, accountingTagUsageTypeId, delegator, context, TAG_PARAM_PREFIX);
     }
 
@@ -175,14 +175,14 @@ public final class UtilAccountingTags {
      * Builds a list of <code>EntityExpr</code> from the accounting tag given in the context.
      * @param organizationPartyId the organization party ID
      * @param accountingTagUsageTypeId the usage type for the tags
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param context a context <code>Map</code>
      * @param prefix the part of parameters before the index which holds the values for the accounting tags in the context
      * @return the list of <code>EntityExpr</code> from the accounting tag given in the context
      * @throws RepositoryException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, Map context, String prefix) throws RepositoryException {
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator, Map context, String prefix) throws RepositoryException {
         return buildTagConditions(organizationPartyId, accountingTagUsageTypeId, delegator, context, prefix, "acctgTagEnumId");
     }
 
@@ -190,7 +190,7 @@ public final class UtilAccountingTags {
      * Builds a list of <code>EntityExpr</code> from the accounting tag given in the context.
      * @param organizationPartyId the organization party ID
      * @param accountingTagUsageTypeId the usage type for the tags
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param context a context <code>Map</code>
      * @param prefix the part of parameters before the index which holds the values for the accounting tags in the context
      * @param entityPrefix the part of the field name before the index which holds the values for the accounting tags in the entity to query
@@ -198,7 +198,7 @@ public final class UtilAccountingTags {
      * @throws RepositoryException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, Map context, String prefix, String entityPrefix) throws RepositoryException {
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator, Map context, String prefix, String entityPrefix) throws RepositoryException {
         Map<Integer, String> tagTypes = getAccountingTagTypesForOrganization(organizationPartyId, accountingTagUsageTypeId, delegator);
         List<EntityCondition> conditions = new ArrayList<EntityCondition>();
 
@@ -230,12 +230,12 @@ public final class UtilAccountingTags {
      * Builds a list of <code>EntityExpr</code> from the accounting tag given in the request.
      * @param organizationPartyId the organization party ID
      * @param accountingTagUsageTypeId the usage type for the tags
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param request a <code>HttpServletRequest</code> value
      * @return the list of <code>EntityExpr</code> from the accounting tag given in the request
      * @throws RepositoryException if an error occurs
      */
-    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, HttpServletRequest request) throws RepositoryException {
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator, HttpServletRequest request) throws RepositoryException {
         return buildTagConditions(organizationPartyId, accountingTagUsageTypeId, delegator, request, TAG_PARAM_PREFIX);
     }
 
@@ -243,13 +243,13 @@ public final class UtilAccountingTags {
      * Builds a list of <code>EntityExpr</code> from the accounting tag given in the request.
      * @param organizationPartyId the organization party ID
      * @param accountingTagUsageTypeId the usage type for the tags
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param request a <code>HttpServletRequest</code> value
      * @param prefix the part of parameters before the index which holds the values for the accounting tags in the request
      * @return the list of <code>EntityExpr</code> from the accounting tag given in the request
      * @throws RepositoryException if an error occurs
      */
-    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, HttpServletRequest request, String prefix) throws RepositoryException {
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator, HttpServletRequest request, String prefix) throws RepositoryException {
         return buildTagConditions(organizationPartyId, accountingTagUsageTypeId, delegator, request, prefix, "acctgTagEnumId");
     }
 
@@ -257,14 +257,14 @@ public final class UtilAccountingTags {
      * Builds a list of <code>EntityExpr</code> from the accounting tag given in the request.
      * @param organizationPartyId the organization party ID
      * @param accountingTagUsageTypeId the usage type for the tags
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param request a <code>HttpServletRequest</code> value
      * @param prefix the part of parameters before the index which holds the values for the accounting tags in the request
      * @param entityPrefix the part of the field name before the index which holds the values for the accounting tags in the entity to query
      * @return the list of <code>EntityExpr</code> from the accounting tag given in the request
      * @throws RepositoryException if an error occurs
      */
-    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, HttpServletRequest request, String prefix, String entityPrefix) throws RepositoryException {
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator, HttpServletRequest request, String prefix, String entityPrefix) throws RepositoryException {
         Map<Integer, String> tagTypes = getAccountingTagTypesForOrganization(organizationPartyId, accountingTagUsageTypeId, delegator);
         List<EntityCondition> conditions = new ArrayList<EntityCondition>();
 
@@ -580,7 +580,7 @@ public final class UtilAccountingTags {
     /**
      * Format tags as string to further usage in reports.
      */
-    public static String formatTagsAsString(HttpServletRequest request, String usageTypeId, GenericDelegator delegator) throws RepositoryException {
+    public static String formatTagsAsString(HttpServletRequest request, String usageTypeId, Delegator delegator) throws RepositoryException {
         Locale locale = UtilHttp.getLocale(request);
         String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
         List<AccountingTagConfigurationForOrganizationAndUsage> tagsData = UtilAccountingTags.getAccountingTagFiltersForOrganization(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, locale);
@@ -636,19 +636,19 @@ public final class UtilAccountingTags {
         }
     }
 
-    public static List<EnumerationType> getAllAccoutingTagEnumerationTypes(GenericDelegator delegator) throws RepositoryException {
+    public static List<EnumerationType> getAllAccoutingTagEnumerationTypes(Delegator delegator) throws RepositoryException {
         OrganizationRepository repository = new OrganizationRepository(delegator);
         return repository.findList(EnumerationType.class, repository.map(EnumerationType.Fields.parentTypeId, "ACCOUNTING_TAG"), Arrays.asList(EnumerationType.Fields.enumTypeId.asc()));
     }
 
-    public static Map<EnumerationType, List<Enumeration>> getAllAccoutingTagEnumerations(GenericDelegator delegator) throws RepositoryException {
+    public static Map<EnumerationType, List<Enumeration>> getAllAccoutingTagEnumerations(Delegator delegator) throws RepositoryException {
         OrganizationRepository repository = new OrganizationRepository(delegator);
         List<EnumerationType> enumerationTypes = getAllAccoutingTagEnumerationTypes(delegator);
         List<Enumeration> enumerations = repository.findList(Enumeration.class, EntityCondition.makeCondition(Enumeration.Fields.enumTypeId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(enumerationTypes, EnumerationType.Fields.enumTypeId)), Arrays.asList(Enumeration.Fields.sequenceId.asc()));
         return Entity.groupByFieldValues(EnumerationType.class, enumerations, Enumeration.Fields.enumTypeId, enumerationTypes, EnumerationType.Fields.enumTypeId);
     }
 
-    public static LinkedHashSet<String> getAllAccoutingTagEnumerationTypeIdsForOrganization(String organizationPartyId, GenericDelegator delegator) throws RepositoryException {
+    public static LinkedHashSet<String> getAllAccoutingTagEnumerationTypeIdsForOrganization(String organizationPartyId, Delegator delegator) throws RepositoryException {
         OrganizationRepository repository = new OrganizationRepository(delegator);
         LinkedHashSet<String> typeIds = new LinkedHashSet<String>();
         List<AcctgTagEnumType> tagTypes = repository.findList(AcctgTagEnumType.class, repository.map(AcctgTagEnumType.Fields.organizationPartyId, organizationPartyId));
@@ -660,7 +660,7 @@ public final class UtilAccountingTags {
         return typeIds;
     }
 
-    public static Map<EnumerationType, List<Enumeration>> getAllAccoutingTagEnumerationsForOrganization(String organizationPartyId, GenericDelegator delegator) throws RepositoryException {
+    public static Map<EnumerationType, List<Enumeration>> getAllAccoutingTagEnumerationsForOrganization(String organizationPartyId, Delegator delegator) throws RepositoryException {
         OrganizationRepository repository = new OrganizationRepository(delegator);
         LinkedHashSet<String> typeIds = getAllAccoutingTagEnumerationTypeIdsForOrganization(organizationPartyId, delegator);
         List<EnumerationType> enumerationTypes = repository.findList(EnumerationType.class, EntityCondition.makeCondition(EnumerationType.Fields.enumTypeId.name(), EntityOperator.IN, typeIds));

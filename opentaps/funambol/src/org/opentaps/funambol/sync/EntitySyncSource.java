@@ -33,7 +33,7 @@ import mz.co.dbl.siga.framework.entity.EntityBeanConverterRegistry;
 import mz.co.dbl.siga.framework.workflow.MapBasedJndiInitialContextFactory;
 
 import org.ofbiz.base.util.GeneralException;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityExpr;
@@ -77,7 +77,7 @@ public class EntitySyncSource extends AbstractSyncSource implements MergeableSyn
     private static FunambolLogger log = null;  //TODO: can this be static?
         
     //access to OFBiz services
-    protected static GenericDelegator _delegator = GenericDelegator.getGenericDelegator("default");
+    protected static Delegator _delegator = Delegator.getDelegator("default");
     protected static LocalDispatcher _dispatcher;
     
     //access to our module's helper objects

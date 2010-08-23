@@ -27,7 +27,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.party.party.PartyHelper;
@@ -100,13 +100,13 @@ public class InvoiceViewForListing extends Entity {
     /**
      * Creates a new <code>InvoiceViewForListing</code> instance from an <code>EntityInterface</code>.
      * @param clone an <code>EntityInterface</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param timeZone a <code>TimeZone</code> value
      * @param locale a <code>Locale</code> value
      * @return a new instance of <code>OrderViewForListing</code> based on the given <code>EntityInterface</code>
      * @throws RepositoryException if an error occurs
      */
-    public static InvoiceViewForListing makeInvoiceView(EntityInterface clone, GenericDelegator delegator, TimeZone timeZone, Locale locale) throws RepositoryException {
+    public static InvoiceViewForListing makeInvoiceView(EntityInterface clone, Delegator delegator, TimeZone timeZone, Locale locale) throws RepositoryException {
         InvoiceViewForListing o = new InvoiceViewForListing();
         if (clone.getBaseRepository() != null) {
             o.initRepository(clone.getBaseRepository());
@@ -119,13 +119,13 @@ public class InvoiceViewForListing extends Entity {
     /**
      * Creates a List of new <code>OrderViewForListing</code> instance from a List of <code>EntityInterface</code>.
      * @param clones a List of <code>EntityInterface</code> values
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param timeZone a <code>TimeZone</code> value
      * @param locale a <code>Locale</code> value
      * @return a List of new instances of <code>OrderViewForListing</code> based on the given <code>EntityInterface</code> values
      * @throws RepositoryException if an error occurs
      */
-    public static List<InvoiceViewForListing> makeInvoiceView(List<? extends EntityInterface> clones, GenericDelegator delegator, TimeZone timeZone, Locale locale) throws RepositoryException {
+    public static List<InvoiceViewForListing> makeInvoiceView(List<? extends EntityInterface> clones, Delegator delegator, TimeZone timeZone, Locale locale) throws RepositoryException {
         List<InvoiceViewForListing> results = new ArrayList<InvoiceViewForListing>();
         for (EntityInterface clone : clones) {
             results.add(InvoiceViewForListing.makeInvoiceView(clone, delegator, timeZone, locale));
@@ -135,12 +135,12 @@ public class InvoiceViewForListing extends Entity {
 
     /**
      * Calculates the extra fields, normal fields should have set first.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param timeZone a <code>TimeZone</code> value
      * @param locale a <code>Locale</code> value
      * @exception RepositoryException if an error occurs
      */
-    public void calculateExtraFields(GenericDelegator delegator, TimeZone timeZone, Locale locale) throws RepositoryException {
+    public void calculateExtraFields(Delegator delegator, TimeZone timeZone, Locale locale) throws RepositoryException {
         if (getInvoiceDate() != null) {
             setInvoiceDateString(UtilDateTime.timeStampToString(getInvoiceDate(), UtilDateTime.getDateTimeFormat(locale), timeZone, locale));
         }

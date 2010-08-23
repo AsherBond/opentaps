@@ -20,7 +20,7 @@ package org.opentaps.warehouse.domain.shipping;
 import java.util.List;
 
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.opentaps.base.entities.CarrierShipmentBoxType;
 import org.opentaps.base.entities.Facility;
 import org.opentaps.base.entities.Party;
@@ -47,7 +47,7 @@ public class ShippingRepository extends Repository implements ShippingRepository
      * Use this for Repositories which will only access the database via the delegator.
      * @param delegator the delegator
      */
-    public ShippingRepository(GenericDelegator delegator) {
+    public ShippingRepository(Delegator delegator) {
         super(delegator);
     }
 

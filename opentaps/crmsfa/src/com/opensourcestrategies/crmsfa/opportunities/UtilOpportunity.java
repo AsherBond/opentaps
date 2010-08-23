@@ -107,22 +107,22 @@ public final class UtilOpportunity {
      * Helper method to get all account party Id's for an opportunity. This is a more serious version of the above
      * for use in critical logic, such as security or in complex methods that should use the whole list from the beginning.
      */
-    public static List<String> getOpportunityAccountPartyIds(GenericDelegator delegator, String salesOpportunityId) throws GenericEntityException {
+    public static List<String> getOpportunityAccountPartyIds(Delegator delegator, String salesOpportunityId) throws GenericEntityException {
         return getOpportunityPartiesByRole(delegator, salesOpportunityId, "ACCOUNT");
     }
 
     /** Helper method to get all lead party Id's for an opportunity. See comments for getOpportunityAccountPartyIds(). */
-    public static List<String> getOpportunityLeadPartyIds(GenericDelegator delegator, String salesOpportunityId) throws GenericEntityException {
+    public static List<String> getOpportunityLeadPartyIds(Delegator delegator, String salesOpportunityId) throws GenericEntityException {
         return getOpportunityPartiesByRole(delegator, salesOpportunityId, "PROSPECT");
     }
 
     /** Helper method to get all contact party Id's for an opportunity.  */
-    public static List<String> getOpportunityContactPartyIds(GenericDelegator delegator, String salesOpportunityId) throws GenericEntityException {
+    public static List<String> getOpportunityContactPartyIds(Delegator delegator, String salesOpportunityId) throws GenericEntityException {
         return getOpportunityPartiesByRole(delegator, salesOpportunityId, "CONTACT");
     }
 
     /** Helper method to get all party Id's of a given role for an opportunity. It's better to use one of the more specific methods above. */
-    public static List<String> getOpportunityPartiesByRole(GenericDelegator delegator, String salesOpportunityId, String roleTypeId) throws GenericEntityException {
+    public static List<String> getOpportunityPartiesByRole(Delegator delegator, String salesOpportunityId, String roleTypeId) throws GenericEntityException {
         List<GenericValue> maps = delegator.findByAnd("SalesOpportunityRole", UtilMisc.toMap("roleTypeId", roleTypeId, "salesOpportunityId", salesOpportunityId));
         List<String> results = new ArrayList<String>();
         for (Iterator<GenericValue> iter = maps.iterator(); iter.hasNext();) {
@@ -136,7 +136,7 @@ public final class UtilOpportunity {
      * Helper method to make a sales opportunity history, which should be done whenever an opp is created, updated or deleted.
      * @return  The created SalesOpportunityHistory
      */
-    public static GenericValue createSalesOpportunityHistory(GenericValue opportunity, GenericDelegator delegator, Map context) throws GenericEntityException {
+    public static GenericValue createSalesOpportunityHistory(GenericValue opportunity, Delegator delegator, Map context) throws GenericEntityException {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String historyId = delegator.getNextSeqId("SalesOpportunityHistory");
         GenericValue history = delegator.makeValue("SalesOpportunityHistory", UtilMisc.toMap("salesOpportunityHistoryId", historyId));
@@ -164,7 +164,7 @@ public final class UtilOpportunity {
      * @throws GenericEntityException
      */
     public static EntityListIterator getOpportunitiesForMyAccounts(String organizationPartyId, String internalPartyId, String customTimePeriodId,
-            EntityCondition additionalConditions, List<String> orderBy, GenericDelegator delegator)
+            EntityCondition additionalConditions, List<String> orderBy, Delegator delegator)
         throws GenericEntityException {
 
         // build condition to get list of PROSPECT or ACCOUNT opportunities that the user is RESPONSIBLE_FOR
@@ -184,7 +184,7 @@ public final class UtilOpportunity {
      * Also includes lead opportunities that the internalPartyId is RESPONSIBLE_FOR.
      */
     public static EntityListIterator getOpportunitiesForMyTeams(String organizationPartyId, String internalPartyId, String customTimePeriodId,
-            EntityCondition additionalConditions, List<String> orderBy, GenericDelegator delegator)  throws GenericEntityException {
+            EntityCondition additionalConditions, List<String> orderBy, Delegator delegator)  throws GenericEntityException {
 
         // strategy: find all the accounts of the internalPartyId, then find all the opportunities of those accounts
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
@@ -221,7 +221,7 @@ public final class UtilOpportunity {
      * is directly responsible for.  Use this method to get all opportunities that the internalPartyId can see.
      */
     public static EntityListIterator getOpportunitiesForInternalParty(String organizationPartyId, String internalPartyId, String customTimePeriodId,
-            EntityCondition additionalConditions, List<String> orderBy, GenericDelegator delegator)
+            EntityCondition additionalConditions, List<String> orderBy, Delegator delegator)
         throws GenericEntityException {
 
         // build condition to get list of ACCOUNT or PROSPECT opportunities for the supplied internal party
@@ -239,7 +239,7 @@ public final class UtilOpportunity {
      * Returns all account and lead opportunities.
      */
     public static EntityListIterator getOpportunities(String organizationPartyId, String customTimePeriodId,
-            EntityCondition additionalConditions, List<String> orderBy, GenericDelegator delegator)
+            EntityCondition additionalConditions, List<String> orderBy, Delegator delegator)
         throws GenericEntityException {
         // build condition to get list of ACCOUNT or PROSPECT opportunities for all the parties
         List<EntityCondition> combinedConditions = UtilMisc.toList(
@@ -253,7 +253,7 @@ public final class UtilOpportunity {
 
 
     private static EntityListIterator getOpportunitiesForPartyHelper(String customTimePeriodId, List<EntityCondition> combinedConditions,
-            EntityCondition additionalConditions, List<String> orderBy, GenericDelegator delegator) throws GenericEntityException {
+            EntityCondition additionalConditions, List<String> orderBy, Delegator delegator) throws GenericEntityException {
         // if a time period is supplied, use it as a condition as well
         if ((customTimePeriodId != null)) {
             GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
@@ -288,7 +288,7 @@ public final class UtilOpportunity {
      * Gets a List of team members for a given opportunity.
      * @return  List of GenericValue PartyToSummaryByRelationship for team members
      */
-    public static List getOpportunityTeamMembers(String salesOpportunityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List getOpportunityTeamMembers(String salesOpportunityId, Delegator delegator) throws GenericEntityException {
         // At this point, it is sufficient to traverse the directly related primary account
         // We'll ignore accounts associated through related contacts for now.
         GenericValue opportunity = delegator.findByPrimaryKey("SalesOpportunity", UtilMisc.toMap("salesOpportunityId", salesOpportunityId));

@@ -1,7 +1,7 @@
 package org.opentaps.purchasing.mrp;
 
 import org.ofbiz.service.GenericDispatcher;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 
 import java.sql.Timestamp;
@@ -25,7 +25,7 @@ import java.sql.Timestamp;
 public abstract class MrpConfiguration {
 
     protected GenericDispatcher dispatcher = null;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected String facilityId = null;
 
     public abstract Timestamp getPlannedEventDate(String productId, Timestamp needByDate, String inventoryEventPlannedTypeId);

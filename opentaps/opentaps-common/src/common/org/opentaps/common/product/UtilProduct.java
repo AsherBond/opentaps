@@ -42,7 +42,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -69,19 +69,19 @@ public final class UtilProduct {
     /**
      * Gets a <code>ProductContentWrapper</code> for the given product.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param productId the product to get the <code>ProductContentWrapper</code> for
      * @param locale a <code>Locale</code> value
      * @return a <code>ProductContentWrapper</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static ProductContentWrapper getProductContentWrapper(GenericDelegator delegator, LocalDispatcher dispatcher, String productId, Locale locale) throws GenericEntityException {
+    public static ProductContentWrapper getProductContentWrapper(Delegator delegator, LocalDispatcher dispatcher, String productId, Locale locale) throws GenericEntityException {
         GenericValue product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
         return new ProductContentWrapper(dispatcher, product,  locale, null);
     }
 
-    public static String getProductContentAsText(GenericDelegator delegator, LocalDispatcher dispatcher, String productId, String productContentTypeId, Locale locale) throws GenericEntityException {
+    public static String getProductContentAsText(Delegator delegator, LocalDispatcher dispatcher, String productId, String productContentTypeId, Locale locale) throws GenericEntityException {
         GenericValue product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
         return ProductContentWrapper.getProductContentAsText(product, productContentTypeId, locale, dispatcher);
     }
@@ -90,13 +90,13 @@ public final class UtilProduct {
      * Gets the list of warnings for the given product.
      * Warnings are defined as <code>ProductFeatureAndAppl</code>.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId the product to get the warnings for
      * @return the <code>List</code> of warnings ordered by sequenceNum
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List<String> getProductWarnings(GenericDelegator delegator, String productId) throws GenericEntityException {
+    public static List<String> getProductWarnings(Delegator delegator, String productId) throws GenericEntityException {
         List<String> warnings = new LinkedList<String>();
         List orderBy = UtilMisc.toList("sequenceNum", "productFeatureApplTypeId", "productFeatureTypeId", "description");
         try {
@@ -117,11 +117,11 @@ public final class UtilProduct {
      * Helper method that returns the SKU of given product.
      *
      * @param productId the product to get the SKU for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the Product SKU, or <code>null</code> if no SKU is set
      * @throws GenericEntityException if an error occurs
      */
-    public static String getProductSKU(String productId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getProductSKU(String productId, Delegator delegator) throws GenericEntityException {
         GenericValue sku = delegator.findByPrimaryKey("GoodIdentification", UtilMisc.toMap("goodIdentificationTypeId", "SKU", "productId", productId));
         if (sku != null) {
             return sku.getString("idValue");
@@ -133,11 +133,11 @@ public final class UtilProduct {
      * Helper method that returns the UPCA of given product.
      *
      * @param productId the product to get the UPCA for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the Product UPCA, or <code>null</code> if no UPCA is set
      * @throws GenericEntityException if an error occurs
      */
-    public static String getProductUPCA(String productId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getProductUPCA(String productId, Delegator delegator) throws GenericEntityException {
         GenericValue upca = delegator.findByPrimaryKey("GoodIdentification", UtilMisc.toMap("goodIdentificationTypeId", "UPCA", "productId", productId));
         if (upca != null) {
             return upca.getString("idValue");
@@ -149,11 +149,11 @@ public final class UtilProduct {
      * Helper method that returns the UPCE of given product.
      *
      * @param productId the product to get the UPCE for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the Product UPCE, or <code>null</code> if no UPCE is set
      * @throws GenericEntityException if an error occurs
      */
-    public static String getProductUPCE(String productId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getProductUPCE(String productId, Delegator delegator) throws GenericEntityException {
         GenericValue upce = delegator.findByPrimaryKey("GoodIdentification", UtilMisc.toMap("goodIdentificationTypeId", "UPCE", "productId", productId));
         if (upce != null) {
             return upce.getString("idValue");
@@ -165,11 +165,11 @@ public final class UtilProduct {
      * Helper method that returns the UPC of given product, which the last entered of UPCA or UPCE.
      *
      * @param productId the product to get the UPC for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the Product UPC, or <code>null</code> if no UPC is set
      * @throws GenericEntityException if an error occurs
      */
-    public static String getProductUPC(String productId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getProductUPC(String productId, Delegator delegator) throws GenericEntityException {
         String upc = null;
         EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
                                     EntityCondition.makeCondition("productId", productId),
@@ -326,7 +326,7 @@ public final class UtilProduct {
      * @exception GeneralException if an error occurs
      */
     public static BigDecimal getConservativeValueForOrg(String productId, String organizationPartyId, LocalDispatcher dispatcher, GenericValue userLogin) throws GeneralException {
-        GenericDelegator delegator = dispatcher.getDelegator();
+        Delegator delegator = dispatcher.getDelegator();
         String currencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
         return getConservativeValue(productId, currencyUomId, dispatcher, userLogin);
     }
@@ -429,11 +429,11 @@ public final class UtilProduct {
     /**
      * Returns List of productStoreIds from productStoreGroupId.
      * @param productStoreGroupId to product store group
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of productStoreIds from the given productStoreGroupId
      * @throws GenericEntityException if an error occurs
      */
-    public static List<String> getProductStoreIdsFromGroup(String productStoreGroupId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<String> getProductStoreIdsFromGroup(String productStoreGroupId, Delegator delegator) throws GenericEntityException {
         List<String> productStoreIds = null;
         if (UtilValidate.isNotEmpty(productStoreGroupId)) {
             List<String> productStoreGroupFieldsToSelect = UtilMisc.toList("productStoreId");
@@ -451,11 +451,11 @@ public final class UtilProduct {
     /**
     * Returns list of productStores from payToPartyId.
     * @param payToPartyId the pay to party
-    * @param delegator a <code>GenericDelegator</code> value
+    * @param delegator a <code>Delegator</code> value
     * @return the <code>List</code> of productStoreIds from the given payToPartyId
     * @throws GenericEntityException if an error occurs
     */
-    public static List<GenericValue> getProductStoresFromPayToPartyId(String payToPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getProductStoresFromPayToPartyId(String payToPartyId, Delegator delegator) throws GenericEntityException {
         List<String> fieldsToSelect = UtilMisc.toList("productStoreId", "storeName");
         List<GenericValue> productStores = delegator.findByCondition("ProductStore",
                                 EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("payToPartyId", payToPartyId)),
@@ -470,11 +470,11 @@ public final class UtilProduct {
      * Returns List of open Requirements for given productId and productStoreId.
      * @param productId the product to get the open requirements for
      * @param productStoreId the product store to get the open requirements for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return List of open Requirement
      * @throws GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getOpenRequirements(String productId, String productStoreId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getOpenRequirements(String productId, String productStoreId, Delegator delegator) throws GenericEntityException {
         GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
         String facilityId = productStore.getString("inventoryFacilityId");
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
@@ -493,12 +493,12 @@ public final class UtilProduct {
      * Returns the Total of open Requirements for given productId and productStoreId.
      * @param productId the product to get the total of open requirements for
      * @param productStoreId the product store to get the total of open requirements for
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return total quantity of all open requirements
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static BigDecimal countOpenRequirements(String productId, String productStoreId, GenericDelegator delegator) throws GenericEntityException {
+    public static BigDecimal countOpenRequirements(String productId, String productStoreId, Delegator delegator) throws GenericEntityException {
         List openRequirements = getOpenRequirements(productId, productStoreId, delegator);
         BigDecimal count = BigDecimal.ZERO;
         for (Iterator iter = openRequirements.iterator(); iter.hasNext();) {

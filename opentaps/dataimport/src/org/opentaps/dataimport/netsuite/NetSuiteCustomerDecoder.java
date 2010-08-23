@@ -25,7 +25,7 @@ import javolution.util.FastList;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -49,7 +49,7 @@ public class NetSuiteCustomerDecoder extends CustomerDecoder {
     /**
      * Same concept as CustomerDecoder(Map context)
      */
-    public NetSuiteCustomerDecoder(Map context, GenericDelegator delegator) throws GeneralException {
+    public NetSuiteCustomerDecoder(Map context, Delegator delegator) throws GeneralException {
         super(context);
         this.defaultTaxAuthGeoId = (String) context.get("defaultTaxAuthGeoId");
 
@@ -70,7 +70,7 @@ public class NetSuiteCustomerDecoder extends CustomerDecoder {
      * detect it.  Two accounts for the same company will be created and it is left to the users to merge the duplicates
      * together.
      */
-    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
+    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, Delegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
         String partyId = getPartyIdFromNetSuiteCustomerId(entry.getString("customerId"));
         boolean isContact = isContact(entry);
@@ -276,7 +276,7 @@ public class NetSuiteCustomerDecoder extends CustomerDecoder {
     }
 
     /** We'll have to overload this and set up the terms according to our NetSuitePaymentTerm entity and the NetSuiteCustomer.creditlimit field. */
-    public List<GenericValue> createSalesAgreementTerms(GenericValue entry, String agreementId, GenericDelegator delegator) throws GenericEntityException {
+    public List<GenericValue> createSalesAgreementTerms(GenericValue entry, String agreementId, Delegator delegator) throws GenericEntityException {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
         int seqId = 1;
         String customerCurrencyUomId = getCurrencyUomId(entry);

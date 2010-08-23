@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -54,7 +54,7 @@ public final class UtilWarehouse {
      * @param   delegator         The delegator object to look up on
      * @return  The list of the transfers elements
      */
-    public static List<GenericValue> findFacilityTransfer(String facilityId, boolean activeOnly, boolean completeRequested, boolean toTransfer, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityTransfer(String facilityId, boolean activeOnly, boolean completeRequested, boolean toTransfer, Delegator delegator) throws GenericEntityException {
 
         if (facilityId == null) {
             return null;
@@ -112,27 +112,27 @@ public final class UtilWarehouse {
      * @param   delegator         The delegator object to look up on
      * @return  The list of the transfers elements
      */
-    public static List<GenericValue> findFacilitytoTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilitytoTransfer(String facilityId, Delegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, false, false, true, delegator);
     }
 
-    public static List<GenericValue> findFacilityfromTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityfromTransfer(String facilityId, Delegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, false, false, false, delegator);
     }
 
-    public static List<GenericValue> findFacilityActiveOnlytoTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityActiveOnlytoTransfer(String facilityId, Delegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, true, false, true, delegator);
     }
 
-    public static List<GenericValue> findFacilityActiveOnlyfromTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityActiveOnlyfromTransfer(String facilityId, Delegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, true, false, false, delegator);
     }
 
-    public static List<GenericValue> findFacilityCompleteReqtoTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityCompleteReqtoTransfer(String facilityId, Delegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, false, true, true, delegator);
     }
 
-    public static List<GenericValue> findFacilityCompleteReqfromTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityCompleteReqfromTransfer(String facilityId, Delegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, false, true, false, delegator);
     }
 
@@ -147,7 +147,7 @@ public final class UtilWarehouse {
 
         Boolean applicationContextSet = (Boolean) session.getAttribute("applicationContextSet");
         if (applicationContextSet == null) {
-            GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+            Delegator delegator = (Delegator) request.getAttribute("delegator");
             try {
                 String facilityId = UtilCommon.getUserLoginViewPreference(request, UtilConfig.SYSTEM_WIDE, UtilConfig.SET_FACILITY_FORM, UtilConfig.OPTION_DEF_FACILITY);
                 if (UtilValidate.isNotEmpty(facilityId)) {

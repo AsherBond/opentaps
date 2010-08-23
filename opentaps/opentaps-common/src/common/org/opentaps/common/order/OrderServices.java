@@ -62,7 +62,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.common.DataModelConstants;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -127,7 +127,7 @@ public final class OrderServices {
      */
     @SuppressWarnings("unchecked")
     public static Map setOrderHeaderPartiesFromRoles(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         String orderId = (String) context.get("orderId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -169,7 +169,7 @@ public final class OrderServices {
      */
     @SuppressWarnings("unchecked")
     public static Map autoApproveThirdPartyOrder(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -227,7 +227,7 @@ public final class OrderServices {
      */
     @SuppressWarnings("unchecked")
     public static Map disburseChangeForOrder(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -296,7 +296,7 @@ public final class OrderServices {
      */
     @SuppressWarnings("unchecked")
     public static Map getOrCreateCashDrawer(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -360,7 +360,7 @@ public final class OrderServices {
      */
     @SuppressWarnings("unchecked")
     public static Map closeCashDrawer(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -419,7 +419,7 @@ public final class OrderServices {
      */
     @SuppressWarnings("unchecked")
     public static Map recordCashDrawerTransaction(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
 
@@ -492,7 +492,7 @@ public final class OrderServices {
      */
     @SuppressWarnings("unchecked")
     public static Map approveAppendedOrderItems(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -535,7 +535,7 @@ public final class OrderServices {
      */
     @SuppressWarnings("unchecked")
     public static Map appendOrderItemBasic(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -721,7 +721,7 @@ public final class OrderServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateApprovedOrderItems(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -942,7 +942,7 @@ public final class OrderServices {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> updateApprovedOrderItemsLegacy(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         String orderId = (String) context.get("orderId");
@@ -1167,7 +1167,7 @@ public final class OrderServices {
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static void storeAdjustmentsForOrderItem(List<List> topLevelAdjustmentsList, int index, String orderId, String orderItemSeqId, String shipGroupSeqId, GenericDelegator delegator) throws GenericEntityException {
+    public static void storeAdjustmentsForOrderItem(List<List> topLevelAdjustmentsList, int index, String orderId, String orderItemSeqId, String shipGroupSeqId, Delegator delegator) throws GenericEntityException {
         if (UtilValidate.isNotEmpty(topLevelAdjustmentsList)) {
             List<GenericValue> adjustments = topLevelAdjustmentsList.get(index);
             for (GenericValue adjustment : adjustments) {
@@ -1191,7 +1191,7 @@ public final class OrderServices {
     @SuppressWarnings("unchecked")
     public static Map appendOrderItem(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -1302,7 +1302,7 @@ public final class OrderServices {
     @SuppressWarnings("unchecked")
     public static Map addItemToApprovedOrder(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         String shipGroupSeqId = (String) context.get("shipGroupSeqId");
@@ -1427,7 +1427,7 @@ public final class OrderServices {
      * @return the service result <code>Map</code>
      */
     public static Map<String, Object> cancelOrderItemBilling(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         String invoiceId = (String) context.get("invoiceId");
@@ -1452,7 +1452,7 @@ public final class OrderServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> updatePostalAddressForProductStoreFacilityByAddress(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String oldContactMechId = (String) context.get("oldContactMechId");
         String contactMechId = (String) context.get("contactMechId");
 
@@ -1483,7 +1483,7 @@ public final class OrderServices {
      *  accounting tags are loaded from the loadCartFromOrder service
      */
     @SuppressWarnings("unchecked")
-    public static OpentapsShoppingCart loadCartForUpdate(LocalDispatcher dispatcher, GenericDelegator delegator, GenericValue userLogin, String orderId) throws GeneralException {
+    public static OpentapsShoppingCart loadCartForUpdate(LocalDispatcher dispatcher, Delegator delegator, GenericValue userLogin, String orderId) throws GeneralException {
         // find ship group associations
         List<GenericValue> shipGroupAssocs = null;
         try {
@@ -1567,7 +1567,7 @@ public final class OrderServices {
      * Added accounting tags support.
      * Return false if the change need to recalculate the adjustments but some are already billed, and forceComplete was not set
      */
-    public static boolean saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId) throws GeneralException {
+    public static boolean saveUpdatedCartToOrder(LocalDispatcher dispatcher, Delegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId) throws GeneralException {
         return saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, null, false, true);
     }
 
@@ -1576,7 +1576,7 @@ public final class OrderServices {
      * (TODO: changeMap unused)
      */
     @SuppressWarnings("unchecked")
-    public static boolean saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId, Map changeMap, boolean forceComplete, boolean recalcAdjustments) throws GeneralException {
+    public static boolean saveUpdatedCartToOrder(LocalDispatcher dispatcher, Delegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId, Map changeMap, boolean forceComplete, boolean recalcAdjustments) throws GeneralException {
 
         // find out early if there are billed adjustment, this would need forceComplete to be set or fail
         boolean hasBilledAdjustments = false;
@@ -1863,7 +1863,7 @@ public final class OrderServices {
     @SuppressWarnings("unchecked")
     public static Map recalcOrderShipping(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String orderId = (String) context.get("orderId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1974,7 +1974,7 @@ public final class OrderServices {
     public static Map updatePurchaseOrderItems(DispatchContext dctx, Map context) {
 
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         String orderId = (String) context.get("orderId");

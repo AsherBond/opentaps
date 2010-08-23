@@ -26,7 +26,7 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.apache.commons.validator.GenericValidator;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -66,7 +66,7 @@ public class CustomerDecoder implements ImportDecoder {
 
     // validates the accounts and ensures the initial responsible party has a CRMSFA role
     public void validate() throws GeneralException {
-        GenericDelegator delegator = userLogin.getDelegator();
+        Delegator delegator = userLogin.getDelegator();
 
         // first validate the existence of the accounts
         GenericValue glAccountOrganization = null;
@@ -90,7 +90,7 @@ public class CustomerDecoder implements ImportDecoder {
         }
     }
 
-    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
+    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, Delegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
         List<GenericValue> toBeStored = FastList.newInstance();
 
         String baseCurrencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
@@ -419,7 +419,7 @@ public class CustomerDecoder implements ImportDecoder {
      * Creates AR balances if a balance exists and the accounts are specified.
      * @return List containing the balance entities or an empty list if no balances are to be created.
      */
-    public List<GenericValue> createBalances(String partyId, BigDecimal balance, Timestamp importTimestamp, String currencyUomId, GenericDelegator delegator) {
+    public List<GenericValue> createBalances(String partyId, BigDecimal balance, Timestamp importTimestamp, String currencyUomId, Delegator delegator) {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
         if (! canCreateBalance(balance)) return toBeStored;
 
@@ -480,7 +480,7 @@ public class CustomerDecoder implements ImportDecoder {
      * Entry point which should be called from decode() method.  To customize the way agreements are generated
      * due to field and data differences, overload canCreateSalesAgreement() and createSalesAgreementTerms().
      */
-    public List<GenericValue> createSalesAgreement(GenericValue entry, String partyId, String partyName, Timestamp importTimestamp, GenericDelegator delegator) throws GenericEntityException {
+    public List<GenericValue> createSalesAgreement(GenericValue entry, String partyId, String partyName, Timestamp importTimestamp, Delegator delegator) throws GenericEntityException {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
         if (! canCreateSalesAgreement(entry)) return toBeStored;
 
@@ -506,7 +506,7 @@ public class CustomerDecoder implements ImportDecoder {
      * In the case of vanilla importCustomers, it will generate a credit limit term if the creditLimit field is positive,
      * and a net payment days term if the netPaymentDays field is positive.
      */
-    public List<GenericValue> createSalesAgreementTerms(GenericValue entry, String agreementId, GenericDelegator delegator) throws GenericEntityException {
+    public List<GenericValue> createSalesAgreementTerms(GenericValue entry, String agreementId, Delegator delegator) throws GenericEntityException {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
 
         BigDecimal creditLimit = entry.getBigDecimal("creditLimit");
@@ -524,7 +524,7 @@ public class CustomerDecoder implements ImportDecoder {
      * Simplifies the creation of a term/item combination.  Specify the agreement type, term type, term value, term days and currency.
      * You might want to use one of the more specific methods such as createAgreementCreditLimitTerm() to minimize errors.
      */
-    public List<GenericValue> createAgreementTerm(String agreementId, String agreementTypeId, String termTypeId, BigDecimal termValue, Long termDays, String currencyUomId, int seqId, GenericDelegator delegator) {
+    public List<GenericValue> createAgreementTerm(String agreementId, String agreementTypeId, String termTypeId, BigDecimal termValue, Long termDays, String currencyUomId, int seqId, Delegator delegator) {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
 
         GenericValue item = delegator.makeValue("AgreementItem");
@@ -550,7 +550,7 @@ public class CustomerDecoder implements ImportDecoder {
      * Helper function to generate a credit limit term.  Only creates term if the credit limit is positive.
      * Used by createSalesAgreementTerms().
      */
-    public List<GenericValue> createAgreementCreditLimitTerm(String agreementId, String customerCurrencyUomId, int seqId, GenericDelegator delegator, BigDecimal creditLimit) {
+    public List<GenericValue> createAgreementCreditLimitTerm(String agreementId, String customerCurrencyUomId, int seqId, Delegator delegator, BigDecimal creditLimit) {
         // get currency for customer record or from opentaps.properties
         // TODO why not just throw an illegal argument exception and have the importer fix the data?
         if (UtilValidate.isEmpty(customerCurrencyUomId)) {
@@ -567,7 +567,7 @@ public class CustomerDecoder implements ImportDecoder {
      * Helper function to generate a net payment days term.  Only creates term if therre are a positive number of days.
      * Used by createSalesAgreementTerms().
      */
-    public List<GenericValue> createAgreementNetPaymentDaysTerm(String agreementId, String customerCurrencyUomId, int seqId, GenericDelegator delegator, Long netPaymentDays) {
+    public List<GenericValue> createAgreementNetPaymentDaysTerm(String agreementId, String customerCurrencyUomId, int seqId, Delegator delegator, Long netPaymentDays) {
         if (netPaymentDays != null && netPaymentDays > 0) {
             return createAgreementTerm(agreementId, "AGREEMENT_PAYMENT", "FIN_PAYMENT_TERM", null, netPaymentDays, customerCurrencyUomId, seqId, delegator);
         }
@@ -582,7 +582,7 @@ public class CustomerDecoder implements ImportDecoder {
      * TODO: This term isn't really used anywhere.
      * TODO: In validating discount rate, throw illegal argument if it's not valid
      */
-    public List<GenericValue> createAgreementDiscountTerm(String agreementId, String customerCurrencyUomId, int seqId, GenericDelegator delegator, BigDecimal discountRate, Long discountDays) {
+    public List<GenericValue> createAgreementDiscountTerm(String agreementId, String customerCurrencyUomId, int seqId, Delegator delegator, BigDecimal discountRate, Long discountDays) {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
         if (discountRate != null && discountRate.signum() > 0) {
             return createAgreementTerm(agreementId, "AGREEMENT_PAYMENT", "FIN_PAYMENT_DISC", discountRate, discountDays, customerCurrencyUomId, seqId, delegator);

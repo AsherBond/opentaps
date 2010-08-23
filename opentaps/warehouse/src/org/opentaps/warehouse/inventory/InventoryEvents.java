@@ -3,7 +3,7 @@ package org.opentaps.warehouse.inventory;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.transaction.TransactionUtil;
@@ -36,7 +36,7 @@ public class InventoryEvents {
      * @return isError
      */
     public static boolean checkInventoryForTransfer(HttpServletRequest request, String statusId, String inventoryTransferId) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         
@@ -162,7 +162,7 @@ public class InventoryEvents {
     }
 
     private static Map<String, Object> hasInventoryForIssuance(HttpServletRequest request, Map<String, Object> issuance) throws GeneralException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         boolean doForceComplete = false;

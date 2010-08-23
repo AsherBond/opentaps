@@ -68,7 +68,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -144,7 +144,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> createPartnerSalesInvoice(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -427,7 +427,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> sendInvoiceEmail(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String invoiceId = (String) context.get("invoiceId");
@@ -659,7 +659,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> updateInvoiceRecurrence(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String invoiceId = (String) context.get("invoiceId");
         String recurrenceRuleId = (String) context.get("recurrenceRuleId");
         String recurrenceInfoId = (String) context.get("recurrenceInfoId");
@@ -736,7 +736,7 @@ public final class InvoiceServices {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> runInvoiceRecurrence(DispatchContext dctx, Map<String, ?> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -841,7 +841,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> cloneInvoice(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String invoiceId = (String) context.get("invoiceId");
@@ -918,7 +918,7 @@ public final class InvoiceServices {
         }
     }
 
-    private static void updateValues(List<GenericValue> values, String fieldName, String newFieldValue, GenericDelegator delegator) throws GenericEntityException {
+    private static void updateValues(List<GenericValue> values, String fieldName, String newFieldValue, Delegator delegator) throws GenericEntityException {
         if (values == null) {
             return;
         }
@@ -937,7 +937,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map convertToBillingAccount(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1054,7 +1054,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createInvoiceTerms(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String invoiceId = (String) context.get("invoiceId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1108,7 +1108,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createInvoiceTerm(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
@@ -1162,7 +1162,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateInvoiceTerm(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
@@ -1221,7 +1221,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map setInvoiceDueDate(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String invoiceId = (String) context.get("invoiceId");
         TimeZone timeZone = UtilCommon.getTimeZone(context);
         Locale locale = UtilCommon.getLocale(context);
@@ -1311,7 +1311,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map invoiceAgreementTerm(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         String invoiceId = (String) context.get("invoiceId");
@@ -1444,7 +1444,7 @@ public final class InvoiceServices {
     @SuppressWarnings("unchecked")
 
     public static Map billToThirdParty(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -1672,7 +1672,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createThirdPartySalesInvoice(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         String partyIdFrom = (String) context.get("partyIdFrom");
@@ -1711,7 +1711,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map processCODReceipt(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1861,7 +1861,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map isInvoiceReady(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1932,7 +1932,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map setInvoiceProcessingStatus(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String invoiceId = (String) context.get("invoiceId");
         String statusId = (String) context.get("statusId");
@@ -1965,7 +1965,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> voidInvoice(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -2023,7 +2023,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createShippingInvoiceContactMech(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -2069,7 +2069,7 @@ public final class InvoiceServices {
     /*
     // TODO: perhaps this belongs in Purchasing application
     public static Map updateSupplierProduct(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -2122,7 +2122,7 @@ public final class InvoiceServices {
      */
 
     public static Map<String, ? extends Object> createCommissionInvoicesOnConfirmedPayment(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -2255,7 +2255,7 @@ public final class InvoiceServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        GenericDelegator delegator = dispatcher.getDelegator();
+        Delegator delegator = dispatcher.getDelegator();
 
         // invoice created by the service
         String invoiceId = null;
@@ -2415,7 +2415,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createInvoiceForOrder(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -3090,7 +3090,7 @@ public final class InvoiceServices {
 
     /* Creates InvoiceTerm entries for a list of terms, which can be BillingAccountTerms, OrderTerms, etc. Required by createInvoiceForOrder */
     @SuppressWarnings("unchecked")
-    private static void createInvoiceTerms(GenericDelegator delegator, LocalDispatcher dispatcher, String invoiceId, List<GenericValue> terms, GenericValue userLogin, Locale locale) {
+    private static void createInvoiceTerms(Delegator delegator, LocalDispatcher dispatcher, String invoiceId, List<GenericValue> terms, GenericValue userLogin, Locale locale) {
         if ((terms != null) && (terms.size() > 0)) {
             for (GenericValue term : terms) {
                 Map createInvoiceTermContext = FastMap.newInstance();
@@ -3121,7 +3121,7 @@ public final class InvoiceServices {
 
     /* Required by createInvoiceForOrder */
     @SuppressWarnings("unchecked")
-    private static BigDecimal calcHeaderAdj(GenericDelegator delegator, GenericValue adj, Map accountingTags, String invoiceTypeId, String invoiceId, String invoiceItemSeqId,
+    private static BigDecimal calcHeaderAdj(Delegator delegator, GenericValue adj, Map accountingTags, String invoiceTypeId, String invoiceId, String invoiceItemSeqId,
             BigDecimal divisor, BigDecimal multiplier, BigDecimal baseAmount, int decimals, int rounding, GenericValue userLogin, LocalDispatcher dispatcher, Locale locale) {
         BigDecimal adjAmount = ZERO;
         if (adj.get("amount") != null) {
@@ -3242,7 +3242,7 @@ public final class InvoiceServices {
     }
 
     /* Required by createInvoiceForOrder */
-    private static String getInvoiceItemType(GenericDelegator delegator, String key1, String key2, String invoiceTypeId, String defaultValue) {
+    private static String getInvoiceItemType(Delegator delegator, String key1, String key2, String invoiceTypeId, String defaultValue) {
         GenericValue itemMap = null;
         try {
             if (UtilValidate.isNotEmpty(key1)) {

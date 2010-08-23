@@ -25,7 +25,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -253,11 +253,11 @@ public final class AmazonUtil {
 
     /**
      * Creates the necessary set of records for a new Amazon product.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId a <code>String</code> value
      * @return a <code>List</code> value
      */
-    public static List<GenericValue> createAmazonProductRecords(GenericDelegator delegator, String productId) {
+    public static List<GenericValue> createAmazonProductRecords(Delegator delegator, String productId) {
         List<GenericValue> records = new ArrayList<GenericValue>();
         records.add(createAmazonProductRecord(delegator, productId));
         records.addAll(createAmazonProductRelatedRecords(delegator, productId));
@@ -266,11 +266,11 @@ public final class AmazonUtil {
 
     /**
      * Creates the AmazonProduct record for a new Amazon product.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId a <code>String</code> value
      * @return a <code>GenericValue</code> value
      */
-    public static GenericValue createAmazonProductRecord(GenericDelegator delegator, String productId) {
+    public static GenericValue createAmazonProductRecord(Delegator delegator, String productId) {
         GenericValue amazonProduct = delegator.makeValue("AmazonProduct", UtilMisc.toMap("productId", productId));
         markAmazonValueAsUpdated(amazonProduct);
         amazonProduct.set("statusId", AmazonConstants.statusProductCreated);
@@ -280,21 +280,21 @@ public final class AmazonUtil {
 
     /**
      * Creates the AmazonProduct* records for a new Amazon product.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId a <code>String</code> value
      * @return a <code>List</code> value
      */
-    public static List<GenericValue> createAmazonProductRelatedRecords(GenericDelegator delegator, String productId) {
+    public static List<GenericValue> createAmazonProductRelatedRecords(Delegator delegator, String productId) {
         return UtilMisc.toList(createAmazonProductPrice(delegator, productId), createAmazonProductInventory(delegator, productId), createAmazonProductImage(delegator, productId));
     }
 
     /**
      * Creates a new AmazonProductImage record.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId a <code>String</code> value
      * @return a <code>GenericValue</code> value
      */
-    public static GenericValue createAmazonProductImage(GenericDelegator delegator, String productId) {
+    public static GenericValue createAmazonProductImage(Delegator delegator, String productId) {
         GenericValue amazonProductImage = delegator.makeValue("AmazonProductImage", UtilMisc.toMap("productId", productId));
         markAmazonValueAsUpdated(amazonProductImage);
         amazonProductImage.set("statusId", AmazonConstants.statusProductCreated);
@@ -303,12 +303,12 @@ public final class AmazonUtil {
 
     /**
      * If the amazonProductImage parameter is not null, flags as updated and stores. Otherwise, creates, flags as updated and stores.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId a <code>String</code> value
      * @param amazonProductImage a <code>GenericValue</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static void createOrUpdateAmazonProductImage(GenericDelegator delegator, String productId, GenericValue amazonProductImage) throws GenericEntityException {
+    public static void createOrUpdateAmazonProductImage(Delegator delegator, String productId, GenericValue amazonProductImage) throws GenericEntityException {
         if (amazonProductImage != null) {
             markAmazonProductImageAsUpdated(amazonProductImage);
             amazonProductImage.store();
@@ -322,11 +322,11 @@ public final class AmazonUtil {
 
     /**
      * Creates a new AmazonProductPrice record.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId a <code>String</code> value
      * @return a <code>GenericValue</code> value
      */
-    public static GenericValue createAmazonProductPrice(GenericDelegator delegator, String productId) {
+    public static GenericValue createAmazonProductPrice(Delegator delegator, String productId) {
         GenericValue amazonProductPrice = delegator.makeValue("AmazonProductPrice", UtilMisc.toMap("productId", productId));
         markAmazonValueAsUpdated(amazonProductPrice);
         amazonProductPrice.set("statusId", AmazonConstants.statusProductCreated);
@@ -336,11 +336,11 @@ public final class AmazonUtil {
 
     /**
      * Creates a new AmazonProductInventory record.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId a <code>String</code> value
      * @return a <code>GenericValue</code> value
      */
-    public static GenericValue createAmazonProductInventory(GenericDelegator delegator, String productId) {
+    public static GenericValue createAmazonProductInventory(Delegator delegator, String productId) {
         GenericValue amazonProductInventory = delegator.makeValue("AmazonProductInventory", UtilMisc.toMap("productId", productId));
         markAmazonValueAsUpdated(amazonProductInventory);
         amazonProductInventory.set("statusId", AmazonConstants.statusProductCreated);
@@ -376,24 +376,24 @@ public final class AmazonUtil {
 
     /**
      * Checks if the given AmazonProduct record is deleted.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId a <code>String</code> value
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static boolean isAmazonProductDeleted(GenericDelegator delegator, String productId) throws GenericEntityException {
+    public static boolean isAmazonProductDeleted(Delegator delegator, String productId) throws GenericEntityException {
         GenericValue amazonProduct = delegator.findByPrimaryKey("AmazonProduct", UtilMisc.toMap("productId", productId));
         return isAmazonProductDeleted(amazonProduct);
     }
 
     /**
      * Returns ItemType for given node. For each node can be only ItemType.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param nodeId a <code>String</code> value
      * @return a <code>String</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static String getValidItemType(GenericDelegator delegator, String nodeId) throws GenericEntityException {
+    public static String getValidItemType(Delegator delegator, String nodeId) throws GenericEntityException {
         List<GenericValue> validItem = delegator.findByAnd("AmazonNodeValidAttribute", UtilMisc.toMap("nodeId", nodeId));
         if (UtilValidate.isEmpty(validItem)) {
             return null;
@@ -404,12 +404,12 @@ public final class AmazonUtil {
     /**
      * Describe <code>findAndSetValidProductElements</code> method here.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId a <code>String</code> value
      * @param nodeId a <code>String</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static void findAndSetValidProductElements(GenericDelegator delegator, String productId, String nodeId) throws GenericEntityException {
+    public static void findAndSetValidProductElements(Delegator delegator, String productId, String nodeId) throws GenericEntityException {
         List<GenericValue> validElements = delegator.findByAnd("AmazonNodeValidAttribute", UtilMisc.toMap("nodeId", nodeId));
         if (UtilValidate.isEmpty(validElements)) {
             return;
@@ -497,11 +497,11 @@ public final class AmazonUtil {
 
     /**
      * Helper method return valid ItemTypes for given browse node.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param nodeId a node ID
      * @return the <code>List</code> of <code>GenericValue</code> valid items for the given node
      */
-    public static List<GenericValue> getValidItemTypesForNode(GenericDelegator delegator, String nodeId) {
+    public static List<GenericValue> getValidItemTypesForNode(Delegator delegator, String nodeId) {
 
         if (UtilValidate.isEmpty(nodeId) || delegator == null) {
             return null;
@@ -529,13 +529,13 @@ public final class AmazonUtil {
      * Method return attributes of some type (UsedFor, OtherItemAttribute, TargetAudience) which can be combined
      * for the ItemType by OR.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param nodeMappingTypeId a node mapping type ID
      * @param nodeId a node ID
      * @param itemTypeId an item type ID
      * @return the <code>List</code> of <code>GenericValue</code> valid attributes for the given node and item type
      */
-    public static List<GenericValue> getValidAttributesForItemType(GenericDelegator delegator, String nodeMappingTypeId, String nodeId, String itemTypeId) {
+    public static List<GenericValue> getValidAttributesForItemType(Delegator delegator, String nodeMappingTypeId, String nodeId, String itemTypeId) {
 
         if (UtilValidate.isEmpty(nodeId) || delegator == null) {
             return null;

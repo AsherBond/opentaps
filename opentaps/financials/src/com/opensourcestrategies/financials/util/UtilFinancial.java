@@ -32,7 +32,7 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -101,54 +101,54 @@ public final class UtilFinancial {
 
     /**
      * Get the <code>EntityExpr</code> for finding GL account classes that are a child of the ASSET GL Account class ID.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return an <code>EntityExpr</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static EntityExpr getAssetExpr(GenericDelegator delegator) throws GenericEntityException {
+    public static EntityExpr getAssetExpr(Delegator delegator) throws GenericEntityException {
         return getGlAccountClassExpr("ASSET", delegator);
     }
 
     /**
      * Get the <code>EntityExpr</code> for finding GL account classes that are a child of the LIABILITY GL Account class ID.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return an <code>EntityExpr</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static EntityExpr getLiabilityExpr(GenericDelegator delegator) throws GenericEntityException {
+    public static EntityExpr getLiabilityExpr(Delegator delegator) throws GenericEntityException {
         return getGlAccountClassExpr("LIABILITY", delegator);
     }
 
     /**
      * Get the <code>EntityExpr</code> for finding GL account classes that are a child of the EQUITY GL Account class ID.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return an <code>EntityExpr</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static EntityExpr getEquityExpr(GenericDelegator delegator) throws GenericEntityException {
+    public static EntityExpr getEquityExpr(Delegator delegator) throws GenericEntityException {
         return getGlAccountClassExpr("EQUITY", delegator);
     }
 
     /**
      * Gets a condition that will constrain paymentTypeId to the set of types which have root parentPaymentTypeId.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param parentPaymentTypeId a <code>String</code> value
      * @return an <code>EntityExpr</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static EntityExpr getPaymentTypeExpr(GenericDelegator delegator, String parentPaymentTypeId) throws GenericEntityException {
+    public static EntityExpr getPaymentTypeExpr(Delegator delegator, String parentPaymentTypeId) throws GenericEntityException {
         return UtilCommon.getEntityChildrenExpr(delegator, "PaymentType", "paymentTypeId", parentPaymentTypeId);
     }
 
 
     /**
      * Determines if the party has an active ledger.  Current just uses the Internal Organization role: if the party has this role, we keep a ledger for it.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param partyId a <code>String</code> value
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static boolean hasActiveLedger(GenericDelegator delegator, String partyId) throws GenericEntityException {
+    public static boolean hasActiveLedger(Delegator delegator, String partyId) throws GenericEntityException {
         return UtilValidate.isNotEmpty(delegator.findByPrimaryKey("PartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", "INTERNAL_ORGANIZATIO")));
 
     }
@@ -156,12 +156,12 @@ public final class UtilFinancial {
     /**
      * Gets a condition that will constrain paymentTypeId to the complement set of types which have root parentPaymentTypeId.
      * (E.g., paymentTypeId NOT related to parentPaymentTypeId)
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param parentPaymentTypeId a <code>String</code> value
      * @return an <code>EntityExpr</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static EntityExpr getPaymentTypeComplementExpr(GenericDelegator delegator, String parentPaymentTypeId) throws GenericEntityException {
+    public static EntityExpr getPaymentTypeComplementExpr(Delegator delegator, String parentPaymentTypeId) throws GenericEntityException {
         return UtilCommon.getEntityChildrenComplementExpr(delegator, "PaymentType", "paymentTypeId", parentPaymentTypeId);
     }
 
@@ -175,11 +175,11 @@ public final class UtilFinancial {
      *     glAccountClassId IN ('DEBIT', 'ASSET', 'DISTRIBUTION', 'EXPENSE', 'INCOME', 'NON_POSTING')
      *
      * @param   rootGlAccountClassId The ancestor class to check that the field glAccountClassId is a member of
-     * @param   delegator a <code>GenericDelegator</code> value
+     * @param   delegator a <code>Delegator</code> value
      * @return  A suitable EntityExpr for checking that the glAccountClassId field is a member of this tree
      * @throws GenericEntityException if an error occurs
      */
-    public static EntityExpr getGlAccountClassExpr(String rootGlAccountClassId, GenericDelegator delegator) throws GenericEntityException {
+    public static EntityExpr getGlAccountClassExpr(String rootGlAccountClassId, Delegator delegator) throws GenericEntityException {
 
         // first get the gl class root value
         GenericValue glAccountClass = delegator.findByPrimaryKeyCache("GlAccountClass", UtilMisc.toMap("glAccountClassId", rootGlAccountClassId));
@@ -227,7 +227,7 @@ public final class UtilFinancial {
 
     /**
      * Determines conversion factor given a source currencyUomId and the organizationPartyId's accounting preference.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param organizationPartyId a <code>String</code> value
      * @param currencyUomId a <code>String</code> value
@@ -235,13 +235,13 @@ public final class UtilFinancial {
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
-    public static BigDecimal determineUomConversionFactor(GenericDelegator delegator, LocalDispatcher dispatcher, String organizationPartyId, String currencyUomId) throws GenericEntityException, GenericServiceException {
+    public static BigDecimal determineUomConversionFactor(Delegator delegator, LocalDispatcher dispatcher, String organizationPartyId, String currencyUomId) throws GenericEntityException, GenericServiceException {
         return determineUomConversionFactor(delegator, dispatcher, organizationPartyId, currencyUomId, UtilDateTime.nowTimestamp());
     }
 
     /**
      * Determines conversion factor given a source currencyUomId, the organizationPartyId's accounting preference and a date.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param organizationPartyId a <code>String</code> value
      * @param currencyUomId a <code>String</code> value
@@ -250,7 +250,7 @@ public final class UtilFinancial {
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
-    public static BigDecimal determineUomConversionFactor(GenericDelegator delegator, LocalDispatcher dispatcher, String organizationPartyId, String currencyUomId, Timestamp asOfDate) throws GenericEntityException, GenericServiceException {
+    public static BigDecimal determineUomConversionFactor(Delegator delegator, LocalDispatcher dispatcher, String organizationPartyId, String currencyUomId, Timestamp asOfDate) throws GenericEntityException, GenericServiceException {
         try {
             // default conversion factor
             BigDecimal conversionFactor = BigDecimal.ONE;
@@ -306,11 +306,11 @@ public final class UtilFinancial {
      * Returns a list of PaymentMethodTypes suitable for simple customer receipts.
      * The goal of this is to purposely exclude payment methods which are automatically created by the system, such as FIN_ACCOUNT, EXT_BILLACT, or ones without meaning,
      * such as COMPANY_ACCOUNT
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> of <code>PaymentMethodType</code> entities
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getSimpleCustomerPaymentMethodTypes(GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getSimpleCustomerPaymentMethodTypes(Delegator delegator) throws GenericEntityException {
         List<String> excludedPaymentMethodTypes = UtilMisc.toList("EXT_BILLACT", "GIFT_CARD", "GIFT_CERTIFICATE", "EXT_WORLDPAY", "FIN_ACCOUNT", "COMPANY_ACCOUNT");
         excludedPaymentMethodTypes.add("EXT_BILL_3RDPTY"); // internal
         excludedPaymentMethodTypes.add("EXT_OFFLINE");     // internal and for orders only, not for payments
@@ -323,11 +323,11 @@ public final class UtilFinancial {
      * See if a party has a role.  TODO: This should be a party util method in our common api.
      * @param partyId a <code>String</code> value
      * @param roleTypeId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static boolean hasPartyRole(String partyId, String roleTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static boolean hasPartyRole(String partyId, String roleTypeId, Delegator delegator) throws GenericEntityException {
         GenericValue role = delegator.findByPrimaryKey("PartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", roleTypeId));
         return (role != null);
     }
@@ -336,11 +336,11 @@ public final class UtilFinancial {
      * Gets the organizationPartyId's bank settlement account's GL account Id.
      * @param organizationPartyId a <code>String</code> value
      * @param glAccountTypeId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>String</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static String getOrgGlAccountId(String organizationPartyId, String glAccountTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getOrgGlAccountId(String organizationPartyId, String glAccountTypeId, Delegator delegator) throws GenericEntityException {
         String glAccountId = null;
 
         GenericValue settlementAccount = delegator.findByPrimaryKey("GlAccountTypeDefault", UtilMisc.toMap("organizationPartyId", organizationPartyId,
@@ -358,12 +358,12 @@ public final class UtilFinancial {
      * map {ACCOUNTS_RECEIVABLES => object} becomes {"120000" => object}.  The values of the keys are preserved.
      * @param organizationPartyId a <code>String</code> value
      * @param accountTypes a <code>Map</code> of account type to something
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>Map</code> value
      * @exception GeneralException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static Map replaceGlAccountTypeWithGlAccountForOrg(String organizationPartyId, Map<String, ?> accountTypes, GenericDelegator delegator) throws GeneralException {
+    public static Map replaceGlAccountTypeWithGlAccountForOrg(String organizationPartyId, Map<String, ?> accountTypes, Delegator delegator) throws GeneralException {
         Map accountMap = FastMap.newInstance();
         for (String glAccountTypeId : accountTypes.keySet()) {
             String glAccountId = getOrgGlAccountId(organizationPartyId, glAccountTypeId, delegator);
@@ -382,11 +382,11 @@ public final class UtilFinancial {
      * For instance, if the organization's ACCOUNTS_RECEIVABLES is glAccountId 120000.
      * @param organizationPartyId a <code>String</code> value
      * @param glAccountTypeId the account type to replace
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the GL account ID
      * @exception GeneralException if an error occurs
      */
-    public static String replaceGlAccountTypeWithGlAccountForOrg(String organizationPartyId, String glAccountTypeId, GenericDelegator delegator) throws GeneralException {
+    public static String replaceGlAccountTypeWithGlAccountForOrg(String organizationPartyId, String glAccountTypeId, Delegator delegator) throws GeneralException {
         String glAccountId = getOrgGlAccountId(organizationPartyId, glAccountTypeId, delegator);
         if (glAccountId == null) {
             throw new GeneralException("No GL Account found in organization [" + organizationPartyId + "] for account type [" + glAccountTypeId + "]");
@@ -398,11 +398,11 @@ public final class UtilFinancial {
     /**
      * Get the organizationPartyId's main payment method based on its bank settlement account.
      * @param organizationPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the paymentMethodId of the first <code>PaymentMethod</code> found, or null if none is found
      * @exception GenericEntityException if an error occurs
      */
-    public static String getBankSettlementPaymentMethodId(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getBankSettlementPaymentMethodId(String organizationPartyId, Delegator delegator) throws GenericEntityException {
         String paymentMethodId = null;
         List<GenericValue> paymentMethods = delegator.findByAnd("PaymentMethod", UtilMisc.toList(
                         EntityCondition.makeCondition("glAccountId", EntityOperator.EQUALS, getOrgGlAccountId(organizationPartyId, "BANK_STLMNT_ACCOUNT", delegator)),
@@ -483,11 +483,11 @@ public final class UtilFinancial {
      * If none is found, then fall back to this method.  This method looks for the BILLING_LOCATION then the GENERAL_LOCATION addresses
      * of the party.
      * @param partyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>GenericValue</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static GenericValue getBillingAddress(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue getBillingAddress(String partyId, Delegator delegator) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
                 EntityCondition.makeCondition("contactMechTypeId", EntityOperator.EQUALS, "POSTAL_ADDRESS"),
@@ -620,13 +620,13 @@ public final class UtilFinancial {
     /**
      * Verify that the trial balance from GlAccountOrganization balances on debit and credit sides.
      * @param organizationPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param decimals an <code>int</code> value
      * @param rounding a <code>RoundingMode</code> value
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static boolean isGlAccountOrganizationInBalance(String organizationPartyId, GenericDelegator delegator, int decimals, RoundingMode rounding) throws GenericEntityException {
+    public static boolean isGlAccountOrganizationInBalance(String organizationPartyId, Delegator delegator, int decimals, RoundingMode rounding) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
                 EntityCondition.makeCondition("postedBalance", EntityOperator.NOT_EQUAL, null));
@@ -661,13 +661,13 @@ public final class UtilFinancial {
      * Verify that the trial balance stored in GlAccountHistory balances on debit and credit sides for a given time period.
      * @param organizationPartyId a <code>String</code> value
      * @param customTimePeriodId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param decimals an <code>int</code> value
      * @param rounding a <code>RoundingMode</code> value
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static boolean isGlAccountHistoryInBalance(String organizationPartyId, String customTimePeriodId, GenericDelegator delegator, int decimals, RoundingMode rounding) throws GenericEntityException {
+    public static boolean isGlAccountHistoryInBalance(String organizationPartyId, String customTimePeriodId, Delegator delegator, int decimals, RoundingMode rounding) throws GenericEntityException {
         GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
         List<GenericValue> glAccountHistories = delegator.findByAnd("GlAccountHistory", UtilMisc.toMap("organizationPartyId", organizationPartyId, "customTimePeriodId", customTimePeriodId));
 
@@ -707,13 +707,13 @@ public final class UtilFinancial {
     /**
      * Verify that all trial balances for GlAccountOrganization and GlAccountHistory of all time periods equal.
      * @param organizationPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param decimals an <code>int</code> value
      * @param rounding a <code>RoundingMode</code> value
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static boolean areAllTrialBalancesEqual(String organizationPartyId, GenericDelegator delegator, int decimals, RoundingMode rounding) throws GenericEntityException {
+    public static boolean areAllTrialBalancesEqual(String organizationPartyId, Delegator delegator, int decimals, RoundingMode rounding) throws GenericEntityException {
         // first check GlAccountOrganization.  If it's not in balance, then return false
         if (!isGlAccountOrganizationInBalance(organizationPartyId, delegator, decimals, rounding)) {
             return false;
@@ -734,11 +734,11 @@ public final class UtilFinancial {
     /**
      * Get the timestamp of the last posted transaction's transactionDate for the organization, or null if there are no such transactions.
      * @param organizationPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>Timestamp</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static Timestamp getTransactionDateForLastPostedTransaction(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static Timestamp getTransactionDateForLastPostedTransaction(String organizationPartyId, Delegator delegator) throws GenericEntityException {
         List<GenericValue> transactions = delegator.findByAnd("AcctgTransAndEntriesPostedTransDate", UtilMisc.toMap("organizationPartyId", organizationPartyId, "isPosted", "Y"));
         if (UtilValidate.isEmpty(transactions)) {
             return null;

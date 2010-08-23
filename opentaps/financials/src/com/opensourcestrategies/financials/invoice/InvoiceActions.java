@@ -36,7 +36,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -92,7 +92,7 @@ public final class InvoiceActions {
         ActionContext ac = new ActionContext(context);
 
         HttpServletRequest request = ac.getRequest();
-        GenericDelegator delegator = ac.getDelegator();
+        Delegator delegator = ac.getDelegator();
         Locale locale = ac.getLocale();
 
         String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
@@ -552,7 +552,7 @@ public final class InvoiceActions {
         EntityListBuilder invoiceListBuilder = new EntityListBuilder(repository, InvoiceAndInvoiceItem.class, EntityCondition.makeCondition(search, EntityOperator.AND), fieldsToSelect, UtilMisc.toList(InvoiceAndInvoiceItem.Fields.invoiceDate.desc()));
         PageBuilder<InvoiceAndInvoiceItem> pageBuilder = new PageBuilder<InvoiceAndInvoiceItem>() {
             public List<Map<String, Object>> build(List<InvoiceAndInvoiceItem> page) throws Exception {
-                GenericDelegator delegator = ac.getDelegator();
+                Delegator delegator = ac.getDelegator();
                 List<Map<String, Object>> newPage = FastList.newInstance();
                 for (InvoiceAndInvoiceItem invoice : page) {
                     Map<String, Object> newRow = FastMap.newInstance();

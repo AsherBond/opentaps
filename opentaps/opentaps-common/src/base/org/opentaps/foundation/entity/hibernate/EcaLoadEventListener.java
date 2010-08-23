@@ -26,7 +26,7 @@ import org.hibernate.event.LoadEvent;
 import org.hibernate.event.LoadEventListener;
 import org.hibernate.event.def.DefaultLoadEventListener;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.model.ModelEntity;
@@ -36,15 +36,15 @@ import org.ofbiz.entity.model.ModelEntity;
  */
 public class EcaLoadEventListener extends DefaultLoadEventListener {
     private static final String MODULE = EcaLoadEventListener.class.getName();
-    private GenericDelegator delegator;
+    private Delegator delegator;
 
     /**
      * EcaLoadEventListener constructor.
      *
      * @param delegator
-     *            <code>GenericDelegator</code> object.
+     *            <code>Delegator</code> object.
      */
-    public EcaLoadEventListener(GenericDelegator delegator) {
+    public EcaLoadEventListener(Delegator delegator) {
         this.delegator = delegator;
     }
 

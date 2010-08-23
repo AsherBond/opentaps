@@ -42,7 +42,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -95,7 +95,7 @@ public final class CrmsfaOrderEvents {
      */
     public static OpentapsShoppingCart crmsfaGetOrInitializeCart(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
 
         // if one already exists, return it
@@ -180,7 +180,7 @@ public final class CrmsfaOrderEvents {
      * @return a <code>String</code> value
      */
     public static String countMatchingProducts(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String searchString = UtilCommon.getParameter(request, "productId");
         EntityCondition condition = getMatchingProductsCondition(searchString);
         try {
@@ -240,7 +240,7 @@ public final class CrmsfaOrderEvents {
      */
     public static String quickCreateOrder(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(true);
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         TimeZone timeZone = UtilCommon.getTimeZone(request);
@@ -339,7 +339,7 @@ public final class CrmsfaOrderEvents {
 
     // This is used for updating or revalidating the order party id
     public static String changeOrderParty(HttpServletRequest request, String partyId, ShoppingCart cart) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         if (partyId == null) {
             partyId = cart.getOrderPartyId();
@@ -416,7 +416,7 @@ public final class CrmsfaOrderEvents {
     @SuppressWarnings("unchecked")
     public static String crmsfaSetShipmentOptionMulti(HttpServletRequest request, HttpServletResponse response) {
         ShoppingCart cart = crmsfaGetOrInitializeCart(request);
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         // transform the multi form data into a set of iteratable maps
         java.util.Collection data = UtilHttp.parseMultiFormData(UtilHttp.getParameterMap(request));
@@ -449,12 +449,12 @@ public final class CrmsfaOrderEvents {
      * Also pass in the index of the shopping cart item to update.
      *
      * @param cart a <code>ShoppingCart</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param index the index of ShoppingCartItem to process
      * @param parameters a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    private static void processSetShipmentOption(ShoppingCart cart, GenericDelegator delegator, int index, Map parameters) {
+    private static void processSetShipmentOption(ShoppingCart cart, Delegator delegator, int index, Map parameters) {
 
         // get the contact mech id, set to null if empty string submitted
         String contactMechId = (String) parameters.get("contactMechId");
@@ -574,7 +574,7 @@ public final class CrmsfaOrderEvents {
     public static String updateOrderHeaderInfo(HttpServletRequest request, HttpServletResponse response) {
         OpentapsShoppingCart cart = crmsfaGetOrInitializeCart(request);
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
 
         // either set the order name if it changed, or erase it if user submits an empty field
@@ -751,7 +751,7 @@ public final class CrmsfaOrderEvents {
     @SuppressWarnings("unchecked")
     private static void postOrderCreation(HttpServletRequest request) throws GenericEntityException, GenericServiceException {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
 
         // the cart should still be around because destroying it is the last part of the controller chain after this event

@@ -29,7 +29,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -48,7 +48,7 @@ public class TestObjectGenerator {
 
     private static final String MODULE = TestObjectGenerator.class.getName();
 
-    private GenericDelegator delegator = null;
+    private Delegator delegator = null;
     private LocalDispatcher dispatcher = null;
     private GenericValue demoSalesManager = null;
     private GenericValue admin = null;
@@ -66,11 +66,11 @@ public class TestObjectGenerator {
     /**
      * Public constructor.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public TestObjectGenerator(GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException {
+    public TestObjectGenerator(Delegator delegator, LocalDispatcher dispatcher) throws GenericEntityException {
         if (delegator == null || dispatcher == null) {
             throw new IllegalArgumentException();
         }

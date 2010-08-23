@@ -49,7 +49,7 @@ import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -77,7 +77,7 @@ public final class ContactsServices {
     private static final String MODULE = ContactsServices.class.getName();
 
     public static Map<String, Object> createContact(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -168,7 +168,7 @@ public final class ContactsServices {
     }
 
     public static Map<String, Object> updateContact(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -214,7 +214,7 @@ public final class ContactsServices {
     }
 
     public static Map<String, Object> assignContactToAccount(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -254,7 +254,7 @@ public final class ContactsServices {
     }
 
     public static Map<String, Object> reassignContactResponsibleParty(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -291,7 +291,7 @@ public final class ContactsServices {
     }
 
     public static Map<String, Object> removeContactFromAccount(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -318,7 +318,7 @@ public final class ContactsServices {
     }
 
     public static Map<String, Object> deactivateContact(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -371,7 +371,7 @@ public final class ContactsServices {
      * This method helps avoid semantic mistakes and typos from the repeated use of this code pattern.
      */
     public static boolean createResponsibleContactRelationshipForParty(String partyId, String contactPartyId,
-            GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
+            GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher)
         throws GenericServiceException, GenericEntityException {
         return PartyHelper.createNewPartyToRelationship(partyId, contactPartyId, "CONTACT", "RESPONSIBLE_FOR",
                 "CONTACT_OWNER", PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);

@@ -17,7 +17,7 @@
 package org.opentaps.tests.entity;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.tests.OpentapsTestCase;
@@ -38,7 +38,7 @@ public class EntityEngineTests extends OpentapsTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         // delegator is reset to null by super.tearDown() so we have to get it again
-        removeTestData(GenericDelegator.getGenericDelegator(OpentapsTestCase.DELEGATOR_NAME));
+        removeTestData(Delegator.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
     }
     /**
      * Tests that after delegator is used to create a value, ofbiz entity engine's find from cache method can retrieve the value
@@ -102,7 +102,7 @@ public class EntityEngineTests extends OpentapsTestCase {
      * Remove all test data from TestEntityModifyHistory,TestEntityItem and TestEntity.
      * @throws Exception if an error occurs
      */
-    private void removeTestData(GenericDelegator delegator) throws GenericEntityException {
+    private void removeTestData(Delegator delegator) throws GenericEntityException {
         delegator.removeAll("TestEntityItem");
         delegator.removeAll("TestEntity");
     }

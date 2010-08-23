@@ -49,7 +49,7 @@ import java.math.BigDecimal;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.util.EntityListIterator;
@@ -88,11 +88,11 @@ public final class UtilForecast {
      * @param internalPartyId a <code>String</code> value
      * @param currencyUomId a <code>String</code> value
      * @param customTimePeriodId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return <code>Map</code> of SalesForecast fields with the computed amounts as <code>BigDecimal</code>
      * @exception GenericEntityException if an error occurs
      */
-    public static Map<String, BigDecimal> computeForecastByOpportunities(BigDecimal quotaAmount, String organizationPartyId, String internalPartyId, String currencyUomId, String customTimePeriodId, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, BigDecimal> computeForecastByOpportunities(BigDecimal quotaAmount, String organizationPartyId, String internalPartyId, String currencyUomId, String customTimePeriodId, Delegator delegator) throws GenericEntityException {
 
         // computation variables
         BigDecimal closedAmount = BigDecimal.ZERO;
@@ -177,11 +177,11 @@ public final class UtilForecast {
      * @param organizationPartyId a <code>String</code> value
      * @param internalPartyId a <code>String</code> value
      * @param currencyUomId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return <code>Map</code> of SalesForecast fields with the computed amounts as <code>BigDecimal</code>
      * @exception GenericEntityException if an error occurs
      */
-    public static Map<String, BigDecimal> computeForecastByChildren(String parentPeriodId, String organizationPartyId, String internalPartyId, String currencyUomId, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, BigDecimal> computeForecastByChildren(String parentPeriodId, String organizationPartyId, String internalPartyId, String currencyUomId, Delegator delegator) throws GenericEntityException {
 
         // computation variables
         BigDecimal quotaAmount = BigDecimal.ZERO;

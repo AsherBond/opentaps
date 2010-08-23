@@ -25,7 +25,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -82,11 +82,11 @@ public final class BillingAccountWorker {
      * net balance minus amount of pending (not canceled, rejected, or received) order payments.
      * When looking at using a billing account for a new order, you should use this method.
      * @param billingAccountId the billing account ID
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the billing account balance
      * @throws GenericEntityException if an error occurs
      */
-    public static BigDecimal getBillingAccountBalance(GenericDelegator delegator, String billingAccountId) throws GenericEntityException {
+    public static BigDecimal getBillingAccountBalance(Delegator delegator, String billingAccountId) throws GenericEntityException {
         GenericValue billingAccount = delegator.findByPrimaryKey("BillingAccount", UtilMisc.toMap("billingAccountId", billingAccountId));
         return getBillingAccountBalance(billingAccount);
     }
@@ -101,7 +101,7 @@ public final class BillingAccountWorker {
      */
     public static BigDecimal getBillingAccountBalance(GenericValue billingAccount) throws GenericEntityException {
 
-        GenericDelegator delegator = billingAccount.getDelegator();
+        Delegator delegator = billingAccount.getDelegator();
         String billingAccountId = billingAccount.getString("billingAccountId");
 
         // first get the net balance of invoices - payments
@@ -154,11 +154,11 @@ public final class BillingAccountWorker {
      * Returns the amount which could be charged to a billing account, which is defined as the accountLimit minus account balance and minus the balance of outstanding orders
      * When trying to figure out how much of a billing account can be used to pay for an outstanding order, use this method.
      * @param billingAccountId the billing account ID
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the available balance
      * @throws GenericEntityException if an error occurs
      */
-    public static BigDecimal getBillingAccountAvailableBalance(GenericDelegator delegator, String billingAccountId) throws GenericEntityException {
+    public static BigDecimal getBillingAccountAvailableBalance(Delegator delegator, String billingAccountId) throws GenericEntityException {
         GenericValue billingAccount = delegator.findByPrimaryKey("BillingAccount", UtilMisc.toMap("billingAccountId", billingAccountId));
         return getBillingAccountAvailableBalance(billingAccount);
     }
@@ -185,12 +185,12 @@ public final class BillingAccountWorker {
      * given billing account.
      *
      * @see com.opensourcestrategies.financials.accounts.BillingAccountWorker#getBillingAccountOriginalBalance(GenericValue)
-     * @param delegator GenericDelegator
+     * @param delegator Delegator
      * @param billingAccountId Billing Account unique identifier.
      * @return Billing account original balance.
      * @throws GenericEntityException if an error occurs
      */
-    public static BigDecimal getBillingAccountOriginalBalance(GenericDelegator delegator, String billingAccountId) throws GenericEntityException {
+    public static BigDecimal getBillingAccountOriginalBalance(Delegator delegator, String billingAccountId) throws GenericEntityException {
         if (delegator == null || UtilValidate.isEmpty(billingAccountId)) {
             throw new IllegalArgumentException("Neither delegator nor billingAccountId can be NULL.");
         }

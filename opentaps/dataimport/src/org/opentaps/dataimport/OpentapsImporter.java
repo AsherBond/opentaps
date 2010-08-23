@@ -19,7 +19,7 @@ package org.opentaps.dataimport;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -59,7 +59,7 @@ public class OpentapsImporter {
 
     protected String entityName = null;
     protected ImportDecoder decoder = null;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected LocalDispatcher dispatcher = null;
     protected EntityCondition conditions = null;
     protected Object[] args;

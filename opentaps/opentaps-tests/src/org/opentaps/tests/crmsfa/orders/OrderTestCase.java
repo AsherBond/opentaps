@@ -35,7 +35,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -1041,10 +1041,10 @@ public class OrderTestCase extends OpentapsTestCase {
      * Convenience method to update autoApproveInvoice of product store.
      * @param productStoreId the product store id
      * @param autoApproveInvoice the new auto approve invoice flag
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @throws GeneralException if an error occurs
      */
-    protected void setProductStoreAutoApproveInvoice(String productStoreId, String autoApproveInvoice, GenericDelegator delegator) throws GeneralException {
+    protected void setProductStoreAutoApproveInvoice(String productStoreId, String autoApproveInvoice, Delegator delegator) throws GeneralException {
         GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
         productStore.set("autoApproveInvoice", autoApproveInvoice);
         productStore.store();
@@ -1054,10 +1054,10 @@ public class OrderTestCase extends OpentapsTestCase {
      * Convenience method to update reserveOrderEnumId of product store.
      * @param productStoreId the product store id
      * @param reserveOrderEnumId the new reserveOrderEnumId
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @throws GeneralException if an error occurs
      */
-    protected void setProductStoreInventoryReservationEnum(String productStoreId, String reserveOrderEnumId, GenericDelegator delegator) throws GeneralException {
+    protected void setProductStoreInventoryReservationEnum(String productStoreId, String reserveOrderEnumId, Delegator delegator) throws GeneralException {
         GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
         productStore.set("reserveOrderEnumId", reserveOrderEnumId);
         productStore.store();
@@ -1067,10 +1067,10 @@ public class OrderTestCase extends OpentapsTestCase {
      * Convenience method to update inventoryReserveOrderEnumId of facility.
      * @param facilityId the facility id
      * @param reserveOrderEnumId the new reserveOrderEnumId
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @throws GeneralException if an error occurs
      */
-    protected void setFacilityInventoryReservationEnum(String facilityId, String reserveOrderEnumId, GenericDelegator delegator) throws GeneralException {
+    protected void setFacilityInventoryReservationEnum(String facilityId, String reserveOrderEnumId, Delegator delegator) throws GeneralException {
         GenericValue facility = delegator.findByPrimaryKey("Facility", UtilMisc.toMap("facilityId", facilityId));
         facility.set("inventoryReserveOrderEnumId", reserveOrderEnumId);
         facility.store();

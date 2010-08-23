@@ -17,7 +17,7 @@
 package org.opentaps.dataimport;
 
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
@@ -57,7 +57,7 @@ public class CommissionRatesDecoder implements ImportDecoder {
     }
 
     // first of the custom arguments is the organizationPartyId
-    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
+    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, Delegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
         List<GenericValue> toBeStored = FastList.newInstance();
 
         // 1.  get DataImportCustomer.primaryPartyId for customerId

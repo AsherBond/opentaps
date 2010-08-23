@@ -42,7 +42,7 @@ import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.StandardGradientPaintTransformer;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -63,7 +63,7 @@ public final class JFreeCrmsfaCharts {
      * Lead pipeline.  Description at http://www.opentaps.org/docs/index.php/CRMSFA_Dashboard
      * Note that this counts all the leads in the system for now.
      */
-    public static String createLeadPipelineChart(GenericDelegator delegator, Locale locale) throws GenericEntityException, IOException {
+    public static String createLeadPipelineChart(Delegator delegator, Locale locale) throws GenericEntityException, IOException {
         Map uiLabelMap = UtilMessage.getUiLabels(locale);
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -121,7 +121,7 @@ public final class JFreeCrmsfaCharts {
      * http://www.opentaps.org/docs/index.php/CRMSFA_Dashboard
      * Note that this counts all the opportunities in the system for now.
      */
-    public static String createOpportunitiesbyStageChart(GenericDelegator delegator, Locale locale) throws GenericEntityException, IOException {
+    public static String createOpportunitiesbyStageChart(Delegator delegator, Locale locale) throws GenericEntityException, IOException {
         Map uiLabelMap = UtilMessage.getUiLabels(locale);
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -188,7 +188,7 @@ public final class JFreeCrmsfaCharts {
      * Open Cases snapshot.  Description at http://www.opentaps.org/docs/index.php/CRMSFA_Dashboard
      * Note that this counts all the cases in the system for now.
      */
-    public static String createOpenCasesChart(GenericDelegator delegator, Locale locale) throws GenericEntityException, IOException {
+    public static String createOpenCasesChart(Delegator delegator, Locale locale) throws GenericEntityException, IOException {
         Map uiLabelMap = UtilMessage.getUiLabels(locale);
 
         // create the dataset
@@ -252,7 +252,7 @@ public final class JFreeCrmsfaCharts {
      * Team Member Activity Snapshot.  Description at http://www.opentaps.org/docs/index.php/CRMSFA_Dashboard
      * Note that this counts all the team members in the system for now.
      */
-    public static String createActivitiesByTeamMemberChart(GenericDelegator delegator, Locale locale) throws GenericEntityException, IOException {
+    public static String createActivitiesByTeamMemberChart(Delegator delegator, Locale locale) throws GenericEntityException, IOException {
         Map uiLabelMap = UtilMessage.getUiLabels(locale);
 
         // create the dataset

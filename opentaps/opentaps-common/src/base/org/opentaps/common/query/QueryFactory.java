@@ -16,7 +16,7 @@
  */
 package org.opentaps.common.query;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.jdbc.ConnectionFactory;
 
@@ -30,7 +30,7 @@ public class QueryFactory {
 
     protected static final String DEFAULT_ENTITY_GROUP_NAME = "org.ofbiz";   // Most entities are defined with this group name
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected String entityGroupName = null;    // the group name in entitygroup.xml
     protected String helperName = null;         // the data source name in entityengine.xml, like localderby, localpostgres, etc.
 
@@ -43,18 +43,18 @@ public class QueryFactory {
 
     /**
      * Creates a new <code>QueryFactory</code> instance for the DEFAULT_ENTITY_GROUP_NAME, org.ofbiz.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      */
-    public QueryFactory(GenericDelegator delegator) {
+    public QueryFactory(Delegator delegator) {
         this(delegator, DEFAULT_ENTITY_GROUP_NAME);
     }
 
     /**
      * Creates a new <code>QueryFactory</code> instance for the given entity group name.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param entityGroupName the entity group name, ie: "org.ofbiz"
      */
-    public QueryFactory(GenericDelegator delegator, String entityGroupName) {
+    public QueryFactory(Delegator delegator, String entityGroupName) {
         this.delegator = delegator;
         this.entityGroupName = entityGroupName;
         this.helperName = delegator.getGroupHelperName(entityGroupName);

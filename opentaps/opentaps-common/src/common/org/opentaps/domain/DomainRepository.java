@@ -16,7 +16,7 @@
  */
 package org.opentaps.domain;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
@@ -42,7 +42,7 @@ public class DomainRepository extends Repository {
      * Use this for Repositories which will only access the database via the delegator.
      * @param delegator the delegator
      */
-    public DomainRepository(GenericDelegator delegator) {
+    public DomainRepository(Delegator delegator) {
         super(delegator);
     }
 

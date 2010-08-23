@@ -45,7 +45,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -70,7 +70,7 @@ public final class OpentapsCheckOutEvents {
      */
     public static String finalizeOrderEntry(HttpServletRequest request, HttpServletResponse response) {
         ShoppingCart cart = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String optionType = request.getParameter("optionType");
         if (cart != null && optionType != null) {
             if (optionType.equals("updateAgreement")) {
@@ -91,7 +91,7 @@ public final class OpentapsCheckOutEvents {
     }
 
     @SuppressWarnings("unchecked")
-    private static void updateAgreement(HttpServletRequest request, GenericDelegator delegator, ShoppingCart cart) {
+    private static void updateAgreement(HttpServletRequest request, Delegator delegator, ShoppingCart cart) {
         // update order agreement option
         String agreementId = request.getParameter("agreementId");
         cart.removeOrderTerms();
@@ -116,7 +116,7 @@ public final class OpentapsCheckOutEvents {
         }
     }
 
-    private static void addTerm(HttpServletRequest request, GenericDelegator delegator, ShoppingCart cart) {
+    private static void addTerm(HttpServletRequest request, Delegator delegator, ShoppingCart cart) {
         String termTypeId = request.getParameter("termTypeId");
         BigDecimal termValue = UtilValidate.isEmpty(request.getParameter("termValue")) ? null : new BigDecimal(request.getParameter("termValue"));
         Long termDays = UtilValidate.isEmpty(request.getParameter("termDays")) ? null : Long.parseLong(request.getParameter("termDays"));
@@ -126,7 +126,7 @@ public final class OpentapsCheckOutEvents {
         }
     }
 
-    private static void updateTerm(HttpServletRequest request, GenericDelegator delegator, ShoppingCart cart) {
+    private static void updateTerm(HttpServletRequest request, Delegator delegator, ShoppingCart cart) {
         String termTypeId = request.getParameter("termTypeId");
         Double termValue = UtilValidate.isEmpty(request.getParameter("termValue")) ? null : Double.parseDouble(request.getParameter("termValue"));
         Long termDays = UtilValidate.isEmpty(request.getParameter("termDays")) ? null : Long.parseLong(request.getParameter("termDays"));
@@ -142,7 +142,7 @@ public final class OpentapsCheckOutEvents {
         }
     }
 
-    private static void removeTerm(HttpServletRequest request, GenericDelegator delegator, ShoppingCart cart) {
+    private static void removeTerm(HttpServletRequest request, Delegator delegator, ShoppingCart cart) {
         String termTypeId = request.getParameter("termTypeId");
         for (int i = 0; i < cart.getOrderTerms().size(); i++) {
             GenericValue orderTerm = (GenericValue) cart.getOrderTerms().get(i);
@@ -154,7 +154,7 @@ public final class OpentapsCheckOutEvents {
     }
 
     @SuppressWarnings("unchecked")
-    private static void shippingOption(HttpServletRequest request, GenericDelegator delegator, ShoppingCart cart) {
+    private static void shippingOption(HttpServletRequest request, Delegator delegator, ShoppingCart cart) {
         String facilityId = request.getParameter("facilityId");
         String contactMechId = request.getParameter("contactMechId");
         String shippingInstructions = request.getParameter("shippingInstructions");

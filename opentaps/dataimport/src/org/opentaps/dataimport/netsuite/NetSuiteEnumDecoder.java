@@ -18,7 +18,7 @@ package org.opentaps.dataimport.netsuite;
 
 import org.opentaps.dataimport.ImportDecoder;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.base.util.UtilMisc;
@@ -40,7 +40,7 @@ class NetSuiteEnumDecoder implements ImportDecoder {
         this.enumTypeId = enumTypeId;
     }
 
-    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
+    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, Delegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
         String description = entry.getString("description").trim();
 

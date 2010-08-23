@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -68,7 +68,7 @@ public final class MarketingCampaignServices {
      * Parametrized service to add a marketing campaign to a party. Pass in the security to check.
      */
     private static Map<String, Object> addMarketingCampaignWithPermission(DispatchContext dctx, Map<String, Object> context, String module, String operation, String roleTypeId) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -113,7 +113,7 @@ public final class MarketingCampaignServices {
      * Parametrized method to remove a marketing campaign from a party. Pass in the security to check.
      */
     private static Map<String, Object> removeMarketingCampaignWithPermission(DispatchContext dctx, Map<String, Object> context, String module, String operation, String roleTypeId) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -144,7 +144,7 @@ public final class MarketingCampaignServices {
     }
 
     public static Map<String, Object> sendMarketingCampaignEmail(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -190,7 +190,7 @@ public final class MarketingCampaignServices {
     }
 
     public static Map<String, Object> addNewCatalogRequestsToContactList(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         String contactListId = (String) context.get("contactListId");
@@ -243,7 +243,7 @@ public final class MarketingCampaignServices {
     }
 
     public static Map<String, Object> sortUSPSBusinessMail(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         String contactListId = (String) context.get("contactListId");
         Timestamp now = UtilDateTime.nowTimestamp();
@@ -427,7 +427,7 @@ public final class MarketingCampaignServices {
      * @return Map, possibly containing a TrackingCode GenericValue
      */
     public static Map<String, Object> retrieveTrackingCodeFromFacetPhoneServer(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -520,7 +520,7 @@ public final class MarketingCampaignServices {
     }
 
     public static Map<String, Object> completeCatalogMailing(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -593,7 +593,7 @@ public final class MarketingCampaignServices {
      * - returns the campaignListId
      */
     public static Map<String, Object> addContactListToMarketingCampaign(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         String contactListId = (String) context.get("contactListId");
@@ -649,7 +649,7 @@ public final class MarketingCampaignServices {
      * - expire the TrackingCodes associated to it
      */
     public static Map<String, Object> removeContactListFromMarketingCampaign(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         Locale locale = UtilCommon.getLocale(context);
@@ -690,7 +690,7 @@ public final class MarketingCampaignServices {
      * - if a marketingCampaignId is given, make the association
      */
     public static Map<String, Object> createContactList(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         Locale locale = UtilCommon.getLocale(context);
@@ -731,7 +731,7 @@ public final class MarketingCampaignServices {
      *  The MarketingCampaignContactList is active from the ContactList created stamp.
      */
     public static Map<String, Object> migrateContactLists(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         Locale locale = UtilCommon.getLocale(context);

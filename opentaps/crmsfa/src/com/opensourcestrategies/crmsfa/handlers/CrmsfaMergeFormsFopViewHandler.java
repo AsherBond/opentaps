@@ -50,7 +50,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.webapp.view.MergeFormsFopViewHandler;
 
@@ -66,7 +66,7 @@ public class CrmsfaMergeFormsFopViewHandler extends MergeFormsFopViewHandler {
     public static String crmsfaResource = "crmsfa";
 
     public Map<String, Object> getFormMergeContext(HttpServletRequest request) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         String targetPartyId = (String) request.getParameter("targetPartyId");

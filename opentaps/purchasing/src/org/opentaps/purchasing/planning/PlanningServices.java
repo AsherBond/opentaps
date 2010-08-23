@@ -24,7 +24,7 @@ import java.util.Map;
 
 import javolution.util.FastList;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -62,7 +62,7 @@ public final class PlanningServices {
      */
     @SuppressWarnings("unchecked")
     public static Map approveAllOpenRequirements(DispatchContext ctx, Map context) throws GenericEntityException {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String organizationPartyId = (String) context.get("organizationPartyId");
@@ -102,7 +102,7 @@ public final class PlanningServices {
      */
     @SuppressWarnings("unchecked")
     public static Map cancelRequirementsApprovedByVendor(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);

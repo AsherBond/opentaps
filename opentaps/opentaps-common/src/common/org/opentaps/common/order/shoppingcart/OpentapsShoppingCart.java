@@ -54,7 +54,7 @@ import javolution.util.FastList;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -82,31 +82,31 @@ public class OpentapsShoppingCart extends ShoppingCart {
 
     /**
      * Creates a new <code>OpentapsShoppingCart</code> instance.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productStoreId the product store of this order
      * @param locale a <code>Locale</code> value
      * @param currencyUom the currency of this order
      */
-    public OpentapsShoppingCart(GenericDelegator delegator, String productStoreId, Locale locale, String currencyUom) {
+    public OpentapsShoppingCart(Delegator delegator, String productStoreId, Locale locale, String currencyUom) {
         super(delegator, productStoreId, locale, currencyUom);
     }
 
     /**
      * Creates a new <code>OpentapsShoppingCart</code> instance.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productStoreId the product store of this order
      * @param webSiteId the web site of this order
      * @param locale a <code>Locale</code> value
      * @param currencyUom the currency of this order
      */
-    public OpentapsShoppingCart(GenericDelegator delegator, String productStoreId, String webSiteId, Locale locale, String currencyUom) {
+    public OpentapsShoppingCart(Delegator delegator, String productStoreId, String webSiteId, Locale locale, String currencyUom) {
         super(delegator, productStoreId, webSiteId, locale, currencyUom);
     }
 
     /**
      * Creates a new <code>OpentapsShoppingCart</code> instance.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productStoreId the product store of this order
      * @param webSiteId the web site of this order
      * @param locale a <code>Locale</code> value
@@ -114,7 +114,7 @@ public class OpentapsShoppingCart extends ShoppingCart {
      * @param billToCustomerPartyId a <code>String</code> value
      * @param billFromVendorPartyId a <code>String</code> value
      */
-    public OpentapsShoppingCart(GenericDelegator delegator, String productStoreId, String webSiteId, Locale locale, String currencyUom, String billToCustomerPartyId, String billFromVendorPartyId) {
+    public OpentapsShoppingCart(Delegator delegator, String productStoreId, String webSiteId, Locale locale, String currencyUom, String billToCustomerPartyId, String billFromVendorPartyId) {
         super(delegator, productStoreId, webSiteId, locale, currencyUom, billToCustomerPartyId, billFromVendorPartyId);
         setAttribute("addpty", "N");
     }
@@ -303,12 +303,12 @@ public class OpentapsShoppingCart extends ShoppingCart {
 
     /**
      * Gets the list of product warnings.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param productId the product to the get the warnings for
      * @return a <code>List</code> of <code>String</code>
      * @exception GenericEntityException if an error occurs
      */
-    public List<String> getProductWarnings(GenericDelegator delegator, String productId) throws GenericEntityException {
+    public List<String> getProductWarnings(Delegator delegator, String productId) throws GenericEntityException {
         List<String> warnings = new LinkedList<String>();
         try {
             warnings = UtilProduct.getProductWarnings(delegator, productId);

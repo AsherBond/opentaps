@@ -33,7 +33,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
@@ -79,7 +79,7 @@ public final class InvoiceEvents {
      */
     @SuppressWarnings("unchecked")
     public static String prepareInvoiceReport(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         Locale locale = UtilHttp.getLocale(request);
@@ -123,7 +123,7 @@ public final class InvoiceEvents {
     /**
      * Prepare jasper parameters for running invoice report.
      * @param dl a <code>DomainsLoader</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param timeZone a <code>TimeZone</code> value
      * @param userLogin a <code>GenericValue</code> value
@@ -138,7 +138,7 @@ public final class InvoiceEvents {
      * @throws EntityNotFoundException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static Map prepareInvoiceReportParameters(DomainsLoader dl, GenericDelegator delegator, LocalDispatcher dispatcher, TimeZone timeZone, GenericValue userLogin, Locale locale, String invoiceId, String organizationPartyId) throws GenericServiceException, GenericEntityException, PartyNotFoundException, RepositoryException, EntityNotFoundException {
+    public static Map prepareInvoiceReportParameters(DomainsLoader dl, Delegator delegator, LocalDispatcher dispatcher, TimeZone timeZone, GenericValue userLogin, Locale locale, String invoiceId, String organizationPartyId) throws GenericServiceException, GenericEntityException, PartyNotFoundException, RepositoryException, EntityNotFoundException {
         Map<String, Object> parameters = FastMap.newInstance();
         //  placeholder for report parameters
         Map<String, Object> jrParameters = FastMap.newInstance();

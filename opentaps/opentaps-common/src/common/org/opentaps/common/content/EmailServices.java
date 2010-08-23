@@ -63,7 +63,7 @@ import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -152,7 +152,7 @@ public final class EmailServices {
     @SuppressWarnings("unchecked")
     public static Map prepareQuoteEmail(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
@@ -212,7 +212,7 @@ public final class EmailServices {
     @SuppressWarnings("unchecked")
     public static Map prepareInvoiceEmail(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         String invoiceId = (String) context.get("invoiceId");
@@ -275,7 +275,7 @@ public final class EmailServices {
     @SuppressWarnings("unchecked")
     public static Map prepareSalesOrderEmail(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         String orderId = (String) context.get("orderId");
@@ -347,7 +347,7 @@ public final class EmailServices {
     @SuppressWarnings("unchecked")
     public static Map preparePurchasingOrderEmail(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         String orderId = (String) context.get("orderId");
@@ -409,14 +409,14 @@ public final class EmailServices {
     /**
      * associate work effort with order.
      * @param dispatcher a <code>LocalDispatcher</code> instance
-     * @param delegator a <code>GenericDelegator</code> instance
+     * @param delegator a <code>Delegator</code> instance
      * @param userLogin a <code>GenericValue</code> instance
      * @param orderId id of the Order
      * @param workEffortId id of the WorkEffort
      * @throws GenericServiceException if an error occurs
      * @throws GenericEntityException if an error occurs
      */
-    private static void associateWorkEffortAndOrder(LocalDispatcher dispatcher, GenericDelegator delegator, GenericValue userLogin, String orderId, String workEffortId) throws GenericEntityException, GenericServiceException {
+    private static void associateWorkEffortAndOrder(LocalDispatcher dispatcher, Delegator delegator, GenericValue userLogin, String orderId, String workEffortId) throws GenericEntityException, GenericServiceException {
         // Associate the work effort any orders
         if (UtilValidate.isNotEmpty(orderId)) {
             GenericValue orderHeaderWorkEffort = delegator.findByPrimaryKey("OrderHeaderWorkEffort", UtilMisc.toMap("orderId", orderId, "workEffortId", workEffortId));
@@ -474,7 +474,7 @@ public final class EmailServices {
     public static Map createPendEmail(DispatchContext dctx, Map context, String jrxml, String reportName, Map<String, Object> jrParameters, JRMapCollectionDataSource jrDataSource, String toPartyId, String sendTo, String subject, String content, boolean withAttachment) throws GenericEntityException, GenericServiceException, JRException, IOException, PartyNotFoundException {
         Map<String, Object> parameters = FastMap.newInstance();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         String toEmail = (sendTo == null || sendTo.equals("")) ? "" : sendTo;
@@ -658,13 +658,13 @@ public final class EmailServices {
      * @param communicationEventId a <code>String</code> value
      * @param roleTypeId a <code>String</code> value
      * @param workEffortId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param userLogin a <code>GenericValue</code> value
      * @throws GenericServiceException if an error occurs
      * @throws GenericEntityException if an error occurs
      */
-    private static void associateCommunicationEventWorkEffortAndParties(List<GenericValue> partyAndContactMechs, String communicationEventId, String roleTypeId, String workEffortId, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin)
+    private static void associateCommunicationEventWorkEffortAndParties(List<GenericValue> partyAndContactMechs, String communicationEventId, String roleTypeId, String workEffortId, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin)
                    throws GenericEntityException, GenericServiceException {
         if (UtilValidate.isNotEmpty(partyAndContactMechs)) {
 
@@ -739,11 +739,11 @@ public final class EmailServices {
     /**
      * Gets owner party id of activity.
      * @param workEffortId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return owner party found for activity
      * @throws GenericEntityException if an error occurs
      */
-    private static GenericValue getActivityOwner(String workEffortId, GenericDelegator delegator) throws GenericEntityException {
+    private static GenericValue getActivityOwner(String workEffortId, Delegator delegator) throws GenericEntityException {
         List<GenericValue> ownerParties = EntityUtil.filterByDate(getActivityParties(delegator, workEffortId, UtilMisc.toList("CAL_OWNER")));
         if (UtilValidate.isEmpty(ownerParties)) {
             Debug.logWarning("No owner parties found for activity [" + workEffortId + "]", MODULE);
@@ -758,13 +758,13 @@ public final class EmailServices {
 
     /**
      * gets all unexpired parties related to the work effort. The result is a list of WorkEffortPartyAssignments containing the partyIds we need.
-     * @param delegator a <code>GenericDelegator</code> instance
+     * @param delegator a <code>Delegator</code> instance
      * @param workEffortId a <code>String</code> value
      * @param partyRoles a <code>List</code> instance
      * @return relate parties for activity
      * @throws GenericEntityException if an error occurs
      */
-    private static List<GenericValue> getActivityParties(GenericDelegator delegator, String workEffortId, List<String> partyRoles) throws GenericEntityException {
+    private static List<GenericValue> getActivityParties(Delegator delegator, String workEffortId, List<String> partyRoles) throws GenericEntityException {
         // add each role type id (ACCOUNT, CONTACT, etc) to an OR condition list
         List<EntityCondition> roleCondList = new ArrayList<EntityCondition>();
         for (Iterator<String> iter = partyRoles.iterator(); iter.hasNext();) {

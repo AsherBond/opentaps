@@ -54,7 +54,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.common.login.LoginServices;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.jdbc.ConnectionFactory;
@@ -146,7 +146,7 @@ public final class CommonEvents {
         }
 
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         GenericValue organization = null;
         try {
@@ -210,7 +210,7 @@ public final class CommonEvents {
             return "success";
         }
 
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Map<String, Object> prefMap = UtilMisc.<String, Object>toMap("application", application, "screenName", screenName, "domId", domId, "userLoginId", userLogin.getString("userLoginId"));
 
         try {
@@ -253,7 +253,7 @@ public final class CommonEvents {
 
         Connection conn = null;
 
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         if (delegator == null) {
             throw new EventHandlerException("The delegator object was null, how did that happen?");
         }
@@ -363,7 +363,7 @@ public final class CommonEvents {
     @SuppressWarnings("unchecked")
     public static String runReport(HttpServletRequest request, HttpServletResponse response) throws EventHandlerException {
 
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         boolean printout = "Y".equals(UtilCommon.getParameter(request, "printout")) ? true : false;
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilCommon.getTimeZone(request);
@@ -450,7 +450,7 @@ public final class CommonEvents {
      * @return a <code>String</code> value
      */
     public static String forgotPassword(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
 
         String sendFrom = UtilProperties.getPropertyValue("notification.properties", "from");

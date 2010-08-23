@@ -62,7 +62,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -97,7 +97,7 @@ public final class ProductServices {
     public static final String errorResource = "OpentapsErrorLabels";
 
     public static Map<String, Object> getProductByComprehensiveSearch(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         String productId = (String) context.get("productId");
@@ -158,7 +158,7 @@ public final class ProductServices {
     }
 
     public static Map<String, Object> removeProduct(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -199,7 +199,7 @@ public final class ProductServices {
 
 
     public static Map<String, Object> removeProductCategory(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -233,7 +233,7 @@ public final class ProductServices {
      * @return
      */
     public static Map<String, Object> checkGoodIdentifierUniqueness(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         String goodIdentificationTypeId = (String) context.get("goodIdentificationTypeId");
@@ -272,7 +272,7 @@ public final class ProductServices {
      * @return Map
      */
     public static Map<String, Object> generateSiteMapFile(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
 
@@ -371,7 +371,7 @@ public final class ProductServices {
      * category elements for XML catalog. For each category call writeCategoryProducts to get products
      * of the category.
      * @param excludeProducts TODO
-     * @param GenericDelegator delegator
+     * @param Delegator delegator
      * @param LocalDispatcher dispatcher
      * @param Locale locale
      * @param String parentCategoryId
@@ -380,7 +380,7 @@ public final class ProductServices {
      *
      * @throws GenericEntityException
      */
-    protected static void writeChildCategories(GenericDelegator delegator, LocalDispatcher dispatcher, Locale locale, String parentCategoryId, Document catalogXMLMap, Element parentElement, boolean excludeProducts) throws GenericEntityException {
+    protected static void writeChildCategories(Delegator delegator, LocalDispatcher dispatcher, Locale locale, String parentCategoryId, Document catalogXMLMap, Element parentElement, boolean excludeProducts) throws GenericEntityException {
 
         // collect IDs for categories which are child of parentCategoryId
         Set<String> childCategoryIds = new LinkedHashSet<String>();
@@ -437,7 +437,7 @@ public final class ProductServices {
     /**
      * Obtains products from productCategoryId and fill out product elements in XML catalog.
      * @param excludeProducts TODO
-     * @param GenericDelegator delegator
+     * @param Delegator delegator
      * @param LocalDispatcher dispatcher
      * @param Locale locale
      * @param String productCategoryId
@@ -447,7 +447,7 @@ public final class ProductServices {
      * @return TODO
      * @throws GenericEntityException
      */
-    protected static int writeCategoryProducts(GenericDelegator delegator, LocalDispatcher dispatcher, Locale locale, String productCategoryId, Document catalogXMLMap, Element parentElement, boolean excludeProducts) throws GenericEntityException {
+    protected static int writeCategoryProducts(Delegator delegator, LocalDispatcher dispatcher, Locale locale, String productCategoryId, Document catalogXMLMap, Element parentElement, boolean excludeProducts) throws GenericEntityException {
 
         int productsCount = 0;
 
@@ -512,7 +512,7 @@ public final class ProductServices {
      * @return Map
      */
     public static Map<String, Object> calculateProductPrice(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Map<String, Object> result = null;
         Timestamp nowTimestamp = UtilDateTime.nowTimestamp();

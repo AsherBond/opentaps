@@ -51,7 +51,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
@@ -77,18 +77,18 @@ public class OpentapsShoppingCartHelper extends ShoppingCartHelper {
     private static final String MODULE = OpentapsShoppingCartHelper.class.getName();
 
     private OpentapsShoppingCart cart;
-    private GenericDelegator delegator;
+    private Delegator delegator;
     private LocalDispatcher dispatcher;
 
     /**
      * Changes will be made to the cart directly, as opposed
      * to a copy of the cart provided.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param cart The cart to manipulate
      */
-    public OpentapsShoppingCartHelper(GenericDelegator delegator, LocalDispatcher dispatcher, ShoppingCart cart) {
+    public OpentapsShoppingCartHelper(Delegator delegator, LocalDispatcher dispatcher, ShoppingCart cart) {
         super(delegator, dispatcher, cart);
         this.delegator = delegator;
         this.dispatcher = dispatcher;

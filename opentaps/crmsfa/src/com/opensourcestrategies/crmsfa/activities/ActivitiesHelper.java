@@ -49,7 +49,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -74,7 +74,7 @@ public final class ActivitiesHelper {
      * @param delegator
      * @return List of partyIds
      */
-    public static List<String> findInternalWorkeffortPartyIds(String workEffortId, GenericDelegator delegator) {
+    public static List<String> findInternalWorkeffortPartyIds(String workEffortId, Delegator delegator) {
         List<String> workEffortRoles = UtilMisc.toList("CAL_OWNER", "CAL_ATTENDEE");
         List<String> internalPartyIds = new ArrayList<String>();
         try {
@@ -121,11 +121,11 @@ public final class ActivitiesHelper {
         return emailSubjectOrderString.replaceAll("\\$\\{orderId\\}", orderId);
     }
 
-    public static List<String> getCustRequestIdsFromCommEvent(GenericValue communicationEvent, GenericDelegator delegator) throws GenericEntityException {
+    public static List<String> getCustRequestIdsFromCommEvent(GenericValue communicationEvent, Delegator delegator) throws GenericEntityException {
         return getCustRequestIdsFromString(communicationEvent.getString("subject"), delegator);
     }
 
-    public static List<String> getCustRequestIdsFromString(String parseString, GenericDelegator delegator) throws GenericEntityException {
+    public static List<String> getCustRequestIdsFromString(String parseString, Delegator delegator) throws GenericEntityException {
         String getEmailSubjectCaseFormatRegExp = getEmailSubjectCaseFormatRegExp();
         Set<String> custRequestIds = new TreeSet<String>();
 
@@ -154,7 +154,7 @@ public final class ActivitiesHelper {
         return validCustRequestIds;
     }
 
-    public static List<String> getOrderIdsFromString(String parseString, GenericDelegator delegator) throws GenericEntityException {
+    public static List<String> getOrderIdsFromString(String parseString, Delegator delegator) throws GenericEntityException {
         Set<String> orderIds = new TreeSet<String>();
         if (UtilValidate.isNotEmpty(parseString)) {
             Pattern pattern = Pattern.compile(getEmailSubjectOrderFormatRegExp());

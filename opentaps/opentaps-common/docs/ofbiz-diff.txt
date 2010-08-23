@@ -75,7 +75,7 @@ r13645 Filter Spring logging to WARN
 framework/base/src/org/ofbiz/base/util/UtilHttp.java
 r13392 Port back change in makeParamValueFromComposite to return the String representing the parsed Timestamp instead of directly the Timestamp
 
-framework/entity/src/org/ofbiz/entity/GenericDelegator.java
+framework/entity/src/org/ofbiz/entity/Delegator.java
 r12909 Removed depracation tags for the findXXX methods. Ofbiz deprecated them to be replaced with findOne, findList but the old methods are used in too many places to be refactored
 completely for now.
 

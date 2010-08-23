@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -35,7 +35,7 @@ import org.ofbiz.entity.model.ModelEntity;
 public class User {
 
     private GenericValue ofbizUserLogin;
-    private GenericDelegator delegator;
+    private Delegator delegator;
     private Set<String> permissions;
 
     /**
@@ -56,9 +56,9 @@ public class User {
     /**
      * Creates a new <code>User</code> instance.
      * @param userLogin a <code>GenericValue</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      */
-    public User(GenericValue userLogin, GenericDelegator delegator) {
+    public User(GenericValue userLogin, Delegator delegator) {
         this();
         setOfbizUserLogin(userLogin);
         setDelegator(delegator);
@@ -75,9 +75,9 @@ public class User {
     /**
      * Sets the delegator.
      * Some methods need a delegator to function properly.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      */
-    public void setDelegator(GenericDelegator delegator) {
+    public void setDelegator(Delegator delegator) {
         this.delegator = delegator;
     }
 

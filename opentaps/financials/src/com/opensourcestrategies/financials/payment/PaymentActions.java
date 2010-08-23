@@ -35,7 +35,7 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -80,7 +80,7 @@ public final class PaymentActions {
         final ActionContext ac = new ActionContext(context);
 
         final HttpServletRequest request = ac.getRequest();
-        final GenericDelegator delegator = ac.getDelegator();
+        final Delegator delegator = ac.getDelegator();
         final Locale locale = ac.getLocale();
         final TimeZone timeZone = ac.getTimeZone();
 
@@ -244,7 +244,7 @@ public final class PaymentActions {
         EntityListBuilder paymentListBuilder = new EntityListBuilder(paymentRepository, PaymentAndPaymentApplication.class, EntityCondition.makeCondition(searchConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList(PaymentAndPaymentApplication.Fields.effectiveDate.desc()));
         PageBuilder<PaymentAndPaymentApplication> pageBuilder = new PageBuilder<PaymentAndPaymentApplication>() {
             public List<Map<String, Object>> build(List<PaymentAndPaymentApplication> page) throws Exception {
-                GenericDelegator delegator = ac.getDelegator();
+                Delegator delegator = ac.getDelegator();
                 List<Map<String, Object>> newPage = FastList.newInstance();
                 for (PaymentAndPaymentApplication payment : page) {
                     Map<String, Object> newRow = FastMap.newInstance();

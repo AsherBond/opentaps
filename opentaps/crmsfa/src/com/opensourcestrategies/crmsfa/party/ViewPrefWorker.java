@@ -24,7 +24,7 @@ import java.util.Map;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 
@@ -71,7 +71,7 @@ public class ViewPrefWorker {
 
     /** Fetch the user login's active view preference as a GenericValue given a preference type.  */
     public static GenericValue getViewPreferenceValue(GenericValue userLogin, String viewPrefTypeId) throws GenericEntityException {
-        GenericDelegator delegator = userLogin.getDelegator();
+        Delegator delegator = userLogin.getDelegator();
         return delegator.findByPrimaryKey("ViewPreference", 
                     UtilMisc.toMap("viewPrefTypeId", viewPrefTypeId, "userLoginId", userLogin.get("userLoginId")));
     }

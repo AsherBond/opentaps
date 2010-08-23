@@ -20,7 +20,7 @@ package org.opentaps.dataimport;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
@@ -40,7 +40,7 @@ public class SupplierImportServices {
     public static String module = SupplierImportServices.class.getName();
 
     public static Map importSuppliers(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -69,7 +69,7 @@ class SupplierDecoder implements ImportDecoder {
         this.organizationPartyId = organizationPartyId;
     }
 
-    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
+    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, Delegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
         List<GenericValue> toBeStored = FastList.newInstance();
 
         String baseCurrencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
