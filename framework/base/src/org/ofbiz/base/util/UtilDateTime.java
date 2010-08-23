@@ -73,14 +73,14 @@ public class UtilDateTime {
      *   "LONG"   : locale long date format
      *   or concrete pattern string 
      */
-    private static final String DATE_FORMAT = "DEFAULT";
+    public static final String DATE_FORMAT = "DEFAULT";
 
     /**
      * JDBC escape format for java.sql.Timestamp conversions.
      * @deprecated DateTime format is combination of both DATE_FORMAT and TIME_FORMAT
      * @see UtilDateTime.getDateTimeFormat
      */
-    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 
     /**
      * Time format pattern for time conversions.
@@ -90,7 +90,7 @@ public class UtilDateTime {
      *   "LONG"   : locale long time format
      *   or concrete pattern string 
      */
-    private static final String TIME_FORMAT = "HH:mm:ss";
+    public static final String TIME_FORMAT = "HH:mm:ss";
 
     public static double getInterval(Date from, Date thru) {
         return thru != null ? thru.getTime() - from.getTime() : 0;
