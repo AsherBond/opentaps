@@ -4871,7 +4871,7 @@ public class ShoppingCart implements Iterable<ShoppingCartItem>, Serializable {
             return values;
         }
 
-        public List makeOrderPaymentInfosHandlingChangeDue(GenericDelegator delegator, double currentCartTotal) {
+        public List makeOrderPaymentInfosHandlingChangeDue(Delegator delegator, double currentCartTotal) {
             GenericValue valueObj = this.getValueObject(delegator);
             List values = new LinkedList();
             if (valueObj != null) {
