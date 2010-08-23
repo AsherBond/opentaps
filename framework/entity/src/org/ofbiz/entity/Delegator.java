@@ -287,6 +287,32 @@ public interface Delegator {
      */
     public EntityListIterator find(String entityName, EntityCondition whereEntityCondition, EntityCondition havingEntityCondition, Set<String> fieldsToSelect, List<String> orderBy, EntityFindOptions findOptions) throws GenericEntityException;
 
+    /* for backward compatibility */
+    public EntityListIterator findListIteratorByCondition(String entityName, EntityCondition whereEntityCondition, EntityCondition havingEntityCondition, Collection<String> fieldsToSelect, List<String> orderBy, EntityFindOptions findOptions) throws GenericEntityException;
+    public EntityListIterator findListIteratorByCondition(String entityName, EntityCondition entityCondition, Collection<String> fieldsToSelect, List<String> orderBy) throws GenericEntityException;
+
+    public List<GenericValue> findByCondition(String entityName, EntityCondition entityCondition, Collection<String> fieldsToSelect, List<String> orderBy) throws GenericEntityException;
+    public List<GenericValue> findByCondition(String entityName, EntityCondition whereEntityCondition, EntityCondition havingEntityCondition, Collection<String> fieldsToSelect, List<String> orderBy, EntityFindOptions findOptions) throws GenericEntityException;
+    public List<GenericValue> findByConditionCache(String entityName, EntityCondition entityCondition, Collection<String> fieldsToSelect, List<String> orderBy) throws GenericEntityException;
+
+    public List<GenericValue> findAll(String entityName) throws GenericEntityException;
+    public List<GenericValue> findAll(String entityName, String... orderBy) throws GenericEntityException;
+    public List<GenericValue> findAll(String entityName, List<String> orderBy) throws GenericEntityException;
+    public List<GenericValue> findAllCache(String entityName) throws GenericEntityException;
+    public List<GenericValue> findAllCache(String entityName, String... orderBy) throws GenericEntityException;
+    public List<GenericValue> findAllCache(String entityName, List<String> orderBy) throws GenericEntityException;
+
+    public List<GenericValue> getRelated(String relationName, GenericValue value) throws GenericEntityException;
+    public List<GenericValue> getRelatedByAnd(String relationName, Map<String, ? extends Object> byAndFields, GenericValue value) throws GenericEntityException;
+    public List<GenericValue> getRelatedOrderBy(String relationName, List<String> orderBy, GenericValue value) throws GenericEntityException;
+
+    public long findCountByAnd(String entityName) throws GenericEntityException;
+    public long findCountByAnd(String entityName, Object... fields) throws GenericEntityException;
+    public long findCountByAnd(String entityName, Map<String, ? extends Object> fields) throws GenericEntityException;
+    public long findCountByCondition(String entityName, EntityCondition whereEntityCondition, EntityCondition havingEntityCondition) throws GenericEntityException;
+    
+    /* end */
+
     /**
      * Finds Generic Entity records by all of the specified fields (ie: combined
      * using AND) NOTE 20080502: 264 references
