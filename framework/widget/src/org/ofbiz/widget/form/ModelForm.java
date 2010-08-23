@@ -1091,7 +1091,7 @@ public class ModelForm extends ModelWidget {
         // render list/tabular type forms
 
         // prepare the items iterator and compute the pagination parameters
-        if (paginate) {
+        if (getPaginate(context)) {
             this.preparePager(context);
         }
 
@@ -1423,7 +1423,7 @@ public class ModelForm extends ModelWidget {
         int highIndex = ((Integer) context.get("highIndex")).intValue();
 
         // we're passed a subset of the list, so use (0, viewSize) range
-        if (paginate && isOverridenListSize()) {
+        if (getPaginate(context) && isOverridenListSize()) {
             lowIndex = 0;
             highIndex = ((Integer) context.get("viewSize")).intValue();
         }
@@ -1436,12 +1436,12 @@ public class ModelForm extends ModelWidget {
             Map<String, Object> previousItem = FastMap.newInstance();
             while ((item = this.safeNext(iter)) != null) {
                 itemIndex++;
-                if (paginate && itemIndex >= highIndex) {
+                if (getPaginate(context) && itemIndex >= highIndex) {
                     break;
                 }
 
                 // TODO: this is a bad design, for EntityListIterators we should skip to the lowIndex and go from there, MUCH more efficient...
-                if (paginate && itemIndex < lowIndex) {
+                if (getPaginate(context) && itemIndex < lowIndex) {
                     continue;
                 }
 
