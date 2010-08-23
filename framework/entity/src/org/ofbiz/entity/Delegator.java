@@ -310,7 +310,7 @@ public interface Delegator {
     public long findCountByAnd(String entityName, Object... fields) throws GenericEntityException;
     public long findCountByAnd(String entityName, Map<String, ? extends Object> fields) throws GenericEntityException;
     public long findCountByCondition(String entityName, EntityCondition whereEntityCondition, EntityCondition havingEntityCondition) throws GenericEntityException;
-    
+    public GenericValue findByPrimaryKey(GenericPK primaryKey) throws GenericEntityException;
     /* end */
 
     /**
