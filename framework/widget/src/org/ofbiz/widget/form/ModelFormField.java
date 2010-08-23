@@ -688,7 +688,7 @@ public class ModelFormField {
      * @param subControlName a <code>String</code> value
      * @return a <code>String</code> value 
      */
-    public String getEntry(Map<String, Object> context , String defaultValue, String subControlName) {
+    public String getEntry(Map<String, ? extends Object> context , String defaultValue, String subControlName) {
         Boolean isError = (Boolean) context.get("isError");
         Boolean useRequestParameters = (Boolean) context.get("useRequestParameters");
 
