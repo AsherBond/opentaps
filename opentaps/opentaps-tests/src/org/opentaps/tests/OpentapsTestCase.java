@@ -337,6 +337,20 @@ public class OpentapsTestCase extends TestCase {
      * @param expected the expected <code>Calendar</code> value  that the actual value should be equal to
      * @param given the actual <code>Calendar</code> value
      */
+    public void assertDatesEqual(String message, com.ibm.icu.util.Calendar expected, com.ibm.icu.util.Calendar given) {
+        expected.set(Calendar.MILLISECOND, 0);
+        given.set(Calendar.MILLISECOND, 0);
+        if (expected.compareTo(given) != 0) {
+            TestCase.fail(message + String.format(" Expected [%1$tc] but was [%2$tc].", expected.getTime(), given.getTime()));
+        }
+    }
+
+    /**
+     * Asserts that two date times are equal.  This method ignore milliseconds as a workaround for DB that do not support milliseconds.
+     * @param message the assert message
+     * @param expected the expected <code>Calendar</code> value  that the actual value should be equal to
+     * @param given the actual <code>Calendar</code> value
+     */
     public void assertDatesEqual(String message, Calendar expected, Calendar given) {
         expected.set(Calendar.MILLISECOND, 0);
         given.set(Calendar.MILLISECOND, 0);
