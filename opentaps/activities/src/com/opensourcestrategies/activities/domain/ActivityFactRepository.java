@@ -19,6 +19,7 @@ package com.opensourcestrategies.activities.domain;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -35,7 +36,7 @@ public class ActivityFactRepository extends Repository implements ActivityFactRe
     private static final String MODULE = ActivityFactRepository.class.getName();
 
     private String targetRoleTypeId = null;
-    private List<String> allowedTargetPartyIds = null;
+    private Set<String> allowedTargetPartyIds = null;
     private long dateDimId = 0;
     private String teamMemberPartyId = null;
     private String targetPartyId = null;
@@ -56,18 +57,18 @@ public class ActivityFactRepository extends Repository implements ActivityFactRe
     }
 
     /** {@inheritDoc} */
-    public void setAllowedTargetPartyIds(List<String> partyIds) {
+    public void setAllowedTargetPartyIds(Set<String> partyIds) {
         allowedTargetPartyIds = partyIds;
     }
 
     /** {@inheritDoc} */
     public void setDateDimensionId(long dateDimId) {
-        this.dateDimId = dateDimId; 
+        this.dateDimId = dateDimId;
     }
 
     /** {@inheritDoc} */
     public void setTeamMemberPartyId(String partyId) {
-        teamMemberPartyId = partyId; 
+        teamMemberPartyId = partyId;
     }
 
     /** {@inheritDoc} */
@@ -108,7 +109,7 @@ public class ActivityFactRepository extends Repository implements ActivityFactRe
         }
 
         prospectActivityFacts = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository().findList(
-                ActivityFact.class, condition, Arrays.asList(ActivityFact.Fields.targetPartyId.name(), 
+                ActivityFact.class, condition, Arrays.asList(ActivityFact.Fields.targetPartyId.name(),
                     ActivityFact.Fields.dateDimId.name()), Arrays.asList(ActivityFact.Fields.targetPartyId.asc(),
                             ActivityFact.Fields.dateDimId.desc()));
 

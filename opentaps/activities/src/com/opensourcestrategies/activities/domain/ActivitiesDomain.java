@@ -26,7 +26,7 @@ import org.opentaps.foundation.repository.RepositoryException;
  */
 
 public class ActivitiesDomain extends Domain implements ActivitiesDomainInterface {
-    
+
     /** {@inheritDoc} */
     public ActivityFactRepositoryInterface getActivityFactRepository() throws RepositoryException {
         return instantiateRepository(ActivityFactRepository.class);

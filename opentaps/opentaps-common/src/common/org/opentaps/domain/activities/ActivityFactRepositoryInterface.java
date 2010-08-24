@@ -18,34 +18,35 @@ package org.opentaps.domain.activities;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.opentaps.base.entities.ActivityFact;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 
 /**
- * Repository for Activities to handle interaction of Activities-related domain with 
+ * Repository for Activities to handle interaction of Activities-related domain with
  * the entity engine (database) and the service engine.
  */
 public interface ActivityFactRepositoryInterface extends RepositoryInterface {
 
     /**
      * Set the target role type identifier
-     * 
+     *
      * @param roleTypeId target role type identifier
      */
     public void setTargetRoleTypeId(String roleTypeId);
 
     /**
      * Set the list of allowed target party identifiers
-     * 
+     *
      * @param partyIds list of allowed target party identifiers
      */
-    public void setAllowedTargetPartyIds(List<String> partyIds);
+    public void setAllowedTargetPartyIds(Set<String> partyIds);
 
     /**
      * Set the date dimension
-     * 
+     *
      * @param dateDimId date dimension
      */
     public void setDateDimensionId(long dateDimId);
@@ -58,21 +59,21 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
 
     /**
      * Set the target party identifier
-     * 
+     *
      * @param partyId target party identifier
      */
     public void setTargetPartyId(String partyId);
 
     /**
      * Set the team member role type identifier
-     * 
+     *
      * @param memberRoleTypeId team member role type identifier
      */
     public void setTeamMemeberRoleTypeId(String memberRoleTypeId);
 
     /**
      * Find the ActivityFact records
-     * 
+     *
      * @return the list of ActivityFact
      * @throws RepositoryException if an error occurs
      */
@@ -80,16 +81,16 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
 
     /**
      * Find the ActivityFact records grouped by team member or by lead
-     * 
+     *
      * @param groupedByField the team member or lead to find
-     * @return the Map grouped ActivityFact records 
+     * @return the Map grouped ActivityFact records
      * @throws RepositoryException if an error occurs
      */
     public Map<String, List<ActivityFact>> findLeadsActivitiesGroupedBy(ActivityFact.Fields groupedByField) throws RepositoryException;
 
     /**
-     * Get the count of the Email Activity 
-     * 
+     * Get the count of the Email Activity
+     *
      * @return a long count
      * @throws RepositoryException
      */
@@ -97,7 +98,7 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
 
     /**
      * Get the count of the Phone Call Activity
-     * 
+     *
      * @return a long count
      * @throws RepositoryException
      */
@@ -105,7 +106,7 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
 
     /**
      * Get the count of the Visit Activity
-     * 
+     *
      * @return a long count
      * @throws RepositoryException
      */
@@ -113,7 +114,7 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
 
     /**
      * Get the count of the Other Activity
-     * 
+     *
      * @return a long count
      * @throws RepositoryException
      */
@@ -121,7 +122,7 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
 
     /**
      * Get the count of the Total Activity
-     * 
+     *
      * @return a long count
      * @throws RepositoryException
      */
