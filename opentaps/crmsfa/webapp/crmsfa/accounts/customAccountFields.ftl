@@ -44,10 +44,10 @@ function removePartyAttribute(/*String*/ partyAttributeIndex) {
                 <@displayCell text="${partyAttribute.attrName}" />
                 <@inputTextCell name="attrValue" default="${partyAttribute.attrValue}" ignoreParameters=true/>
                 <td>
-                <#if hasAccountCustUpdatePermission || userLogin.userLoginId==partyAttribute.createdByUserLoginId>
+                <#if hasAccountCustUpdatePermission || userLogin.userLoginId==partyAttribute.createdByUserLoginId?default("")>
                 <a href="javascript:document.updateCustomField_${partyAttribute_index}.submit();"><img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/save.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonSave}"/></a>
                 </#if>
-                <#if hasAccountCustDeletePermission || userLogin.userLoginId==partyAttribute.createdByUserLoginId>
+                <#if hasAccountCustDeletePermission || userLogin.userLoginId==partyAttribute.createdByUserLoginId?default("")>
                    <a href="javascript:removePartyAttribute(${partyAttribute_index});"><img src="<@ofbizContentUrl>/opentaps_images/buttons/glass_buttons_red_X.png</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonSave}"/></a>
                 </#if>                           
                 </td>            
