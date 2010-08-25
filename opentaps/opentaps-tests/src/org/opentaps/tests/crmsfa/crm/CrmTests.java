@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
@@ -29,6 +30,7 @@ import org.opentaps.base.services.CrmsfaConvertLeadService;
 import org.opentaps.base.services.CrmsfaCreateActivityService;
 import org.opentaps.base.services.CrmsfaCreateLeadService;
 import org.opentaps.base.services.CrmsfaFindActivitiesService;
+import org.opentaps.base.services.CrmsfaLogTaskService;
 import org.opentaps.base.services.OpentapsMergePartiesService;
 import org.opentaps.base.services.SetPartyStatusService;
 import org.opentaps.domain.party.Account;
@@ -188,6 +190,7 @@ public class CrmTests extends OpentapsTestCase {
         createLeadService.setInCompanyName(TEST_LEAD_COMPANY_NAME);
         createLeadService.setInFirstName(TEST_LEAD_02_FIRST_NAME);
         createLeadService.setInLastName(TEST_LEAD_02_LAST_NAME);
+        createLeadService.setInPrimaryEmail("primary@test.org");
 
         runAndAssertServiceSuccess(createLeadService);
 
@@ -219,6 +222,54 @@ public class CrmTests extends OpentapsTestCase {
         List<GenericValue> activityList = findActivitiesService.getOutPendingActivities();
         assertEquals("Event not belongs lead#2", activityList.get(0).getString("workEffortId"), eventId);
 
+        // Create LogEmail from partyIdSecond
+        CrmsfaLogTaskService logTaskService = new CrmsfaLogTaskService();
+        logTaskService.setInUserLogin(this.admin);
+        logTaskService.setInFromPartyId("admin");
+        logTaskService.setInInternalPartyId(partyIdSecond);
+        logTaskService.setInOutbound("N");
+        logTaskService.setInWorkEffortPurposeTypeId("WEPT_TASK_EMAIL");
+        logTaskService.setInWorkEffortName("WorkEffortName subj");
+
+        runAndAssertServiceSuccess(logTaskService);
+
+        String workEffortId = logTaskService.getOutWorkEffortId();
+
+        GenericValue workEffort = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
+        List<GenericValue> communicationEvents = workEffort.getRelated("CommunicationEventWorkEff");
+        String communicationEventId = communicationEvents.get(0).getString("communicationEventId");
+
+        GenericValue communicationEvent = delegator.findByPrimaryKey("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId));
+        //GenericValue communicationEventRole = delegator.findByPrimaryKey("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId));
+        List<GenericValue> communicationEventRole = delegator.findByLike("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "roleTypeId", "ORIGINATOR"));
+
+        // Verify CommunicationEvent partyIdFrom before merge
+        assertEquals("CommunicationEvent partyIdFrom must be " + partyIdSecond, partyIdSecond, communicationEvent.getString("partyIdFrom"));
+
+        // Verify CommunicationEventRole partyId before merge
+        assertEquals("CommunicationEventRole partyId must be " + partyIdSecond, partyIdSecond, communicationEventRole.get(0).getString("partyId"));
+
+        // Create LogEmail to partyIdSecond
+        logTaskService = new CrmsfaLogTaskService();
+        logTaskService.setInUserLogin(this.admin);
+        logTaskService.setInFromPartyId("admin");
+        logTaskService.setInInternalPartyId(partyIdSecond);
+        logTaskService.setInOutbound("Y");
+        logTaskService.setInWorkEffortPurposeTypeId("WEPT_TASK_EMAIL");
+        logTaskService.setInWorkEffortName("WorkEffortName subj");
+
+        runAndAssertServiceSuccess(logTaskService);
+
+        String workEffortToId = logTaskService.getOutWorkEffortId();
+
+        GenericValue workEffortTo = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortToId));
+        List<GenericValue> communicationEventsTo = workEffortTo.getRelated("CommunicationEventWorkEff");
+        String communicationEventToId = communicationEventsTo.get(0).getString("communicationEventId");
+
+        GenericValue communicationEventTo = delegator.findByPrimaryKey("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventToId));
+
+        // Verify CommunicationEvent partyIdTo before merge
+        assertEquals("CommunicationEvent partyIdTo must be " + partyIdSecond, partyIdSecond, communicationEventTo.getString("partyIdTo"));
 
         // Merge  lead#2 to lead#1
         OpentapsMergePartiesService mergeService = new OpentapsMergePartiesService();
@@ -236,6 +287,30 @@ public class CrmTests extends OpentapsTestCase {
         activityList = findActivitiesService.getOutPendingActivities();
 
         assertEquals("Event not belongs lead#1", activityList.get(0).getString("workEffortId"), eventId);
+
+        // Verify CommunicationEven and CommunicationEventRole
+        workEffort = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
+        communicationEvents = workEffort.getRelated("CommunicationEventWorkEff");
+        communicationEventId = communicationEvents.get(0).getString("communicationEventId");
+
+        communicationEvent = delegator.findByPrimaryKey("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId));
+        communicationEventRole = delegator.findByLike("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "roleTypeId", "ORIGINATOR"));
+
+        // Verify CommunicationEvent partyIdFrom after merge
+        assertEquals("Communication Event partyIdFrom after merge must be " + partyIdFirst, partyIdFirst, communicationEvent.getString("partyIdFrom"));
+
+        // Verify CommunicationEventRole partyId after merge
+        assertEquals("CommunicationEventRole partyId after merge must be " + partyIdFirst, partyIdFirst, communicationEventRole.get(0).getString("partyId"));
+
+        // Verify CommunicationEvent partyIdTo after merge
+        workEffortTo = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortToId));
+        communicationEventsTo = workEffortTo.getRelated("CommunicationEventWorkEff");
+        communicationEventToId = communicationEventsTo.get(0).getString("communicationEventId");
+
+        communicationEventTo = delegator.findByPrimaryKey("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventToId));
+
+        // Verify CommunicationEvent partyIdTo after merge
+        assertEquals("Communication Event partyIdTo after merge must be " + partyIdFirst, partyIdFirst, communicationEventTo.getString("partyIdTo"));
 
         // Verify that lead#2 is not present
         Party partyAfterMerge = null;
