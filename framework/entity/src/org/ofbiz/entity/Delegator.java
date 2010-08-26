@@ -306,11 +306,14 @@ public interface Delegator {
     public List<GenericValue> getRelatedByAnd(String relationName, Map<String, ? extends Object> byAndFields, GenericValue value) throws GenericEntityException;
     public List<GenericValue> getRelatedOrderBy(String relationName, List<String> orderBy, GenericValue value) throws GenericEntityException;
 
+    public <T extends EntityCondition> List<GenericValue> findByAnd(String entityName, T... expressions) throws GenericEntityException;
+    public <T extends EntityCondition> List<GenericValue> findByAnd(String entityName, List<T> expressions) throws GenericEntityException;
+    public <T extends EntityCondition> List<GenericValue> findByAnd(String entityName, List<T> expressions, List<String> orderBy) throws GenericEntityException;
+
     public long findCountByAnd(String entityName) throws GenericEntityException;
-    public long findCountByAnd(String entityName, Object... fields) throws GenericEntityException;
     public long findCountByAnd(String entityName, Map<String, ? extends Object> fields) throws GenericEntityException;
     public long findCountByCondition(String entityName, EntityCondition whereEntityCondition, EntityCondition havingEntityCondition) throws GenericEntityException;
-    
+    public GenericValue findByPrimaryKey(GenericPK primaryKey) throws GenericEntityException;
     /* end */
 
     /**
@@ -354,7 +357,11 @@ public interface Delegator {
      *            corresponding values
      * @return List of GenericValue instances that match the query
      */
-    public List<GenericValue> findByAnd(String entityName, Object... fields) throws GenericEntityException;
+    public List<GenericValue> findByAnd(String entityName, String field1, Object value1) throws GenericEntityException;
+    public List<GenericValue> findByAnd(String entityName, String field1, Object value1, String field2, Object value2) throws GenericEntityException;
+    public List<GenericValue> findByAnd(String entityName, String field1, Object value1, String field2, Object value2, String field3, Object value3) throws GenericEntityException;
+    public List<GenericValue> findByAnd(String entityName, String field1, Object value1, String field2, Object value2, String field3, Object value3, String field4, Object value4) throws GenericEntityException;
+    public List<GenericValue> findByAnd(String entityName, String field1, Object value1, String field2, Object value2, String field3, Object value3, String field4, Object value4, String field5, Object value5) throws GenericEntityException;
 
     /**
      * Finds Generic Entity records by all of the specified fields (ie: combined

@@ -44,7 +44,7 @@ for (iter = scopeEnumList.iterator(); iter.hasNext(); ) {
     scopeEnumMap = new HashMap();
     scopeEnumMap.put("enumId", scopeEnum.getString("enumId"));
     scopeEnumMap.put("description", scopeEnum.get("description", "OpentapsEntityLabels", UtilCommon.getLocale(context)));
-    localizedScopeEnum = GenericValue.create(delegator.getModelEntity("Enumeration"), scopeEnumMap);
+    localizedScopeEnum = GenericValue.create(delegator, delegator.getModelEntity("Enumeration"), scopeEnumMap);
     localizedScopeEnumList.add(localizedScopeEnum);
 }
 context.put("localizedScopeEnumList", localizedScopeEnumList);

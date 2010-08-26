@@ -128,7 +128,7 @@ public final class UtilReports {
     }
 
     static {
-        jasperReportsCompiledCache = UtilCache.createUtilCache(
+        jasperReportsCompiledCache = UtilCache.<String, JasperReport>createUtilCache(
                 "webapp.JasperReportsOpentaps",
                 JRProperties.getIntegerProperty("webapp.JasperReportsCompiled.maxSize", 0),
                 0,

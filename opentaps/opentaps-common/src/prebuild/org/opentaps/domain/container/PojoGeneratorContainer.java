@@ -394,30 +394,33 @@ public class PojoGeneratorContainer implements Container {
                         break;
                     }
                     // this is the short type: ie, java.lang.String -> String; java.util.HashMap -> HashMap, etc.
-                    String shortType = p.type;
+                    String type = p.type;
+                    // replace $ with dot in some types that points to inner classes
+                    type = type.replaceAll("\\$", ".");
+                    String shortType = type;
                     int idx = shortType.lastIndexOf(".");
 
                     if (idx > 0) {
                         // need to work around some compilation issues for service that are using a type defined in their own
                         // application, fallback to the generic Object
                         if (shortType.startsWith("org.opentaps.") && !shortType.startsWith("org.opentaps.common")) {
-                            Debug.logWarning("Service [" + serviceName + "] field [" + p.name + "] has type [" + p.type + "] which is not available yet, falling back to 'Object'.", MODULE);
+                            Debug.logWarning("Service [" + serviceName + "] field [" + p.name + "] has type [" + type + "] which is not available yet, falling back to 'Object'.", MODULE);
                             shortType = "Object";
-                            fieldRealTypes.put(p.name, p.type);
+                            fieldRealTypes.put(p.name, type);
                         } else {
                             shortType = shortType.substring(idx + 1);
-                            types.add(p.type);
+                            types.add(type);
                         }
                     } else {
                         // some short types also need to be imported
-                        if (Arrays.asList("List", "Map", "Set", "Date").contains(p.type)) {
-                            types.add("java.util." + p.type);
-                        } else if (Arrays.asList("GenericValue", "GenericEntity", "GenericPK").contains(p.type)) {
-                            types.add("org.ofbiz.entity." + p.type);
-                        } else if (Arrays.asList("Timestamp").contains(p.type)) {
-                            types.add("java.sql." + p.type);
-                        } else if ("BigDecimal".equals(p.type)) {
-                            types.add("java.math." + p.type);
+                        if (Arrays.asList("List", "Map", "Set", "Date").contains(type)) {
+                            types.add("java.util." + type);
+                        } else if (Arrays.asList("GenericValue", "GenericEntity", "GenericPK").contains(type)) {
+                            types.add("org.ofbiz.entity." + type);
+                        } else if (Arrays.asList("Timestamp").contains(type)) {
+                            types.add("java.sql." + type);
+                        } else if ("BigDecimal".equals(type)) {
+                            types.add("java.math." + type);
                         }
                     }
 

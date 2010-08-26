@@ -1817,9 +1817,21 @@ public class GenericDelegator implements Delegator {
      * @return List of GenericValue instances that match the query
      * @deprecated
      */
-     @Deprecated public List<GenericValue> findByAnd(String entityName, Object... fields) throws GenericEntityException {
-        return findByAnd(entityName, UtilMisc.<String, Object>toMap(fields));
-    }
+     @Deprecated public List<GenericValue> findByAnd(String entityName, String field1, Object value1) throws GenericEntityException {
+         return findByAnd(entityName, UtilMisc.<String, Object>toMap(field1, value1));
+     }
+     @Deprecated public List<GenericValue> findByAnd(String entityName, String field1, Object value1, String field2, Object value2) throws GenericEntityException {
+         return findByAnd(entityName, UtilMisc.<String, Object>toMap(field1, value1, field2, value2));
+     }
+     @Deprecated public List<GenericValue> findByAnd(String entityName, String field1, Object value1, String field2, Object value2, String field3, Object value3) throws GenericEntityException {
+         return findByAnd(entityName, UtilMisc.<String, Object>toMap(field1, value1, field2, value2, field3, value3));
+     }
+     @Deprecated public List<GenericValue> findByAnd(String entityName, String field1, Object value1, String field2, Object value2, String field3, Object value3, String field4, Object value4) throws GenericEntityException {
+         return findByAnd(entityName, UtilMisc.<String, Object>toMap(field1, value1, field2, value2, field3, value3, field4, value4));
+     }
+     @Deprecated public List<GenericValue> findByAnd(String entityName, String field1, Object value1, String field2, Object value2, String field3, Object value3, String field4, Object value4, String field5, Object value5) throws GenericEntityException {
+         return findByAnd(entityName, UtilMisc.<String, Object>toMap(field1, value1, field2, value2, field3, value3, field4, value4, field5, value5));
+     }
 
     /** Finds Generic Entity records by all of the specified fields (ie: combined using AND)
      * NOTE 20080502: 264 references
