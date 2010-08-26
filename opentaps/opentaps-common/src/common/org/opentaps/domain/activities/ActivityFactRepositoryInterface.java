@@ -25,7 +25,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 
 /**
- * Repository for Activities to handle interaction of Activities-related domain with
+ * Repository for Activity Fact to handle interaction of Activities-related domain with
  * the entity engine (database) and the service engine.
  */
 public interface ActivityFactRepositoryInterface extends RepositoryInterface {

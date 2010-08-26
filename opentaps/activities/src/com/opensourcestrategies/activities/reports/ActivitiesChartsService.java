@@ -207,17 +207,17 @@ public class ActivitiesChartsService extends DomainService {
     public void createActivitiesByLeadSnapshotChart() throws ServiceException {
         try {
             PartyRepositoryInterface rep = getDomainsDirectory().getPartyDomain().getPartyRepository();
-            ActivityFactRepositoryInterface activityFact = getDomainsDirectory().getActivitiesDomain().getActivityFactRepository();
+            ActivityFactRepositoryInterface activityFactRepo = getDomainsDirectory().getActivitiesDomain().getActivityFactRepository();
 
             // Get date dimension ID according to the cutoff
             Long readingDateDimId = lookupDateDimIdForCutoff();
 
-            activityFact.setDateDimensionId(readingDateDimId);
-            activityFact.setAllowedTargetPartyIds(allowedLeadPartyIds);
-            activityFact.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+            activityFactRepo.setDateDimensionId(readingDateDimId);
+            activityFactRepo.setAllowedTargetPartyIds(allowedLeadPartyIds);
+            activityFactRepo.setTargetRoleTypeId(RoleTypeConstants.LEAD);
 
             // Get the ActivityFacts grouped by Lead
-            Map<String, List<ActivityFact>> facts = activityFact.findLeadsActivitiesGroupedBy(ActivityFact.Fields.targetPartyId);
+            Map<String, List<ActivityFact>> facts = activityFactRepo.findLeadsActivitiesGroupedBy(ActivityFact.Fields.targetPartyId);
 
             createActivitiesSnapshotChartFromGroupedActivities(expandLabel("ActivitiesLeadBreakdown"), facts, readingDateDimId, rep);
         } catch (RepositoryException e) {
@@ -241,17 +241,17 @@ public class ActivitiesChartsService extends DomainService {
     public void createActivitiesBySalesRepSnapshotChart() throws ServiceException {
         try {
             PartyRepositoryInterface rep = getDomainsDirectory().getPartyDomain().getPartyRepository();
-            ActivityFactRepositoryInterface activityFact = getDomainsDirectory().getActivitiesDomain().getActivityFactRepository();
+            ActivityFactRepositoryInterface activityFactRepo = getDomainsDirectory().getActivitiesDomain().getActivityFactRepository();
 
             // Get date dimension ID according to the cutoff
             Long readingDateDimId = lookupDateDimIdForCutoff();
 
-            activityFact.setDateDimensionId(readingDateDimId);
-            activityFact.setAllowedTargetPartyIds(allowedLeadPartyIds);
-            activityFact.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+            activityFactRepo.setDateDimensionId(readingDateDimId);
+            activityFactRepo.setAllowedTargetPartyIds(allowedLeadPartyIds);
+            activityFactRepo.setTargetRoleTypeId(RoleTypeConstants.LEAD);
 
             // Get the ActivityFacts grouped by Sales Representative
-            Map<String, List<ActivityFact>> facts = activityFact.findLeadsActivitiesGroupedBy(ActivityFact.Fields.teamMemberPartyId);
+            Map<String, List<ActivityFact>> facts = activityFactRepo.findLeadsActivitiesGroupedBy(ActivityFact.Fields.teamMemberPartyId);
 
             createActivitiesSnapshotChartFromGroupedActivities(expandLabel("ActivitiesSalesRepBreakdown"), facts, readingDateDimId, rep);
         } catch (RepositoryException e) {
