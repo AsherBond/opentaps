@@ -85,7 +85,7 @@ under the License.
     <ShipmentItem shipmentId="9999" shipmentItemSeqId="00001" productId="GZ-2644" quantity="5"/>
     <ItemIssuance itemIssuanceId="9003" orderId="DEMO10091" orderItemSeqId="00001" shipGroupSeqId="00001" shipmentId="9999" shipmentItemSeqId="00001" issuedDateTime="2009-08-13 17:46:29.603" quantity="5"/>
 
-    <!--Demo Purchase Order data for Accounting-->
+    <!--Demo Purchase Order data for Accounting
     <OrderHeader orderId="Demo1001" orderTypeId="PURCHASE_ORDER" orderName="Demo Purchase Order " salesChannelEnumId="UNKNWN_SALES_CHANNEL" orderDate="2009-08-13 17:45:50.419" priority="2" entryDate="2009-08-13 17:45:50.419" statusId="ORDER_COMPLETED" currencyUom="USD" webSiteId="OrderEntry" remainingSubTotal="48.00" grandTotal="48.00"/>
     <OrderItem orderId="Demo1001" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-2644" prodCatalogId="DemoCatalog" isPromo="N" quantity="2.000000" selectedAmount="0.000000" unitPrice="24.00" unitListPrice="0.00" isModifiedPrice="N" itemDescription="GZ-2644-0 Round Gizmo" statusId="ITEM_COMPLETED" estimatedDeliveryDate="2009-08-13 17:43:53.0"/>
     <OrderItemPriceInfo orderItemPriceInfoId="9001" orderId="Demo1001" orderItemSeqId="00001" description="SupplierProduct [minimumOrderQuantity:0.000000, lastPrice: 24.000]"/>
@@ -131,8 +131,8 @@ under the License.
     <AcctgTrans acctgTransId="9001" acctgTransTypeId="PURCHASE_INVOICE" transactionDate="2009-08-13 18:58:34.65" isPosted="Y" postedDate="2009-08-13 18:58:35.08" glFiscalTypeId="ACTUAL" partyId="DemoSupplier" roleTypeId="BILL_FROM_VENDOR" invoiceId="8008"/>
     <AcctgTransEntry acctgTransId="9001" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" partyId="DemoSupplier" roleTypeId="BILL_FROM_VENDOR" productId="GZ-2644" glAccountId="214000" organizationPartyId="Company" amount="48.00" currencyUomId="USD" origAmount="48.00" origCurrencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
     <AcctgTransEntry acctgTransId="9001" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" partyId="DemoSupplier" roleTypeId="BILL_FROM_VENDOR" glAccountTypeId="ACCOUNTS_PAYABLE" glAccountId="210000" organizationPartyId="Company" amount="48.00" currencyUomId="USD" origAmount="48.00" origCurrencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/>
-
-    <!--Demo Sales Order for Accounting-->
+	-->
+    <!--Demo Sales Order for Accounting
     <OrderHeader orderId="Demo1002" orderTypeId="SALES_ORDER" orderName="Demo Sales Order" salesChannelEnumId="WEB_SALES_CHANNEL" orderDate="2009-08-17 14:23:49.475" priority="2" entryDate="2009-08-17 14:23:49.475" visitId="10000" statusId="ORDER_COMPLETED" createdBy="admin" currencyUom="USD" webSiteId="OrderEntry" productStoreId="9000" remainingSubTotal="107.98" grandTotal="127.09"/>
     <OrderItem orderId="Demo1002" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="WG-1111" prodCatalogId="DemoCatalog" isPromo="N" quantity="2.000000" selectedAmount="0.000000" unitPrice="59.99" unitListPrice="60.00" isModifiedPrice="N" itemDescription="Micro Chrome Widget" correspondingPoId="" statusId="ITEM_COMPLETED"/>
     <OrderItem orderId="Demo1002" orderItemSeqId="00004" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="WG-1111" isPromo="Y" quantity="1.000000" selectedAmount="0.000000" unitPrice="59.99" unitListPrice="60.00" isModifiedPrice="N" itemDescription="Micro Chrome Widget" correspondingPoId="" statusId="ITEM_COMPLETED"/>
@@ -244,5 +244,5 @@ under the License.
     <AcctgTrans acctgTransId="9007" acctgTransTypeId="SALES_INVOICE" transactionDate="2009-09-17 14:57:06.129" isPosted="Y" postedDate="2009-09-17 14:57:06.587" glFiscalTypeId="ACTUAL" invoiceId="8010"/>
     <AcctgTransEntry acctgTransId="9007" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" productId="WG-1111" glAccountId="400000" organizationPartyId="Company" amount="179.97" currencyUomId="USD" origAmount="179.97" origCurrencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/>
     <AcctgTransEntry acctgTransId="9007" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" partyId="DemoCustomer" roleTypeId="BILL_TO_CUSTOMER" glAccountTypeId="ACCOUNTS_RECEIVABLE" glAccountId="120000" organizationPartyId="Company" amount="179.97" currencyUomId="USD" origAmount="179.97" origCurrencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
-
+	-->
 </entity-engine-xml>
