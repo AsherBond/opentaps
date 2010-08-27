@@ -111,7 +111,6 @@
                 <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="ProductUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/return/ReturnHeader.groovy"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/return/ReturnItems.groovy"/>
@@ -145,7 +144,7 @@
                                 </platform-specific>
                                 <!-- order items and totals -->
                                 <platform-specific>
-                                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/returns/returnReportBody.fo.ftl"/></html>
+                                    <html><html-template location="component://order/webapp/ordermgr/return/returnReportBody.fo.ftl"/></html>
                                 </platform-specific>
                                 <!-- return policies and notes are shown in the last page -->
                                 <platform-specific>
