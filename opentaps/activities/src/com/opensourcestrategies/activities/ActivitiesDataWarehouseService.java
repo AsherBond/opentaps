@@ -35,11 +35,11 @@ import org.opentaps.base.entities.WorkEffortPartyAssignment;
 import org.opentaps.base.services.ActivitiesTransformToActivityFactsService;
 import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.domain.DomainService;
+import org.opentaps.domain.activities.Activity;
+import org.opentaps.domain.activities.ActivityRepositoryInterface;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
-import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 import org.ofbiz.base.util.UtilValidate;
@@ -236,7 +236,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
     }
 
     /**
-     * Transform all WorkEffort which are TASK_COMPLETED or EVENT_COMPLETED
+     * Transform all Activities which are TASK_COMPLETED or EVENT_COMPLETED
      * into ActivityFact
      *
      * @throws ServiceException
@@ -245,19 +245,14 @@ public class ActivitiesDataWarehouseService extends DomainService {
         ActivitiesTransformToActivityFactsService activitiesTransform = null;
 
         try {
-            PartyRepositoryInterface repository = getDomainsDirectory().getPartyDomain().getPartyRepository();
+            ActivityRepositoryInterface activityRepository = getDomainsDirectory().getActivitiesDomain().getActivityRepository();
 
-            // Find all WorkEffort which are TASK_COMPLETED or EVENT_COMPLETED
-            EntityCondition workEffortCond = EntityCondition.makeCondition(EntityOperator.OR,
-                                                                           EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.EQUALS, StatusItemConstants.TaskStatus.TASK_COMPLETED),
-                                                                           EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.EQUALS, StatusItemConstants.EventStatus.EVENT_COMPLETED)
-                                                                           );
+            // Find all Activities which are TASK_COMPLETED or EVENT_COMPLETED
+            List<Activity> activityList = activityRepository.getCompletedActivities();
 
-            List<WorkEffort> workEffortList = repository.findList(WorkEffort.class, workEffortCond);
-
-            // Each found WorkEffort transform into ActivityFact entities.
-            for (WorkEffort workEffort : workEffortList) {
-                String workEffortId = workEffort.getWorkEffortId();
+            // Each found activity transform into ActivityFact entities.
+            for(Activity activity : activityList) {
+                String workEffortId = activity.getWorkEffortId();
 
                 activitiesTransform = new ActivitiesTransformToActivityFactsService();
                 activitiesTransform.setInWorkEffortId(workEffortId);
