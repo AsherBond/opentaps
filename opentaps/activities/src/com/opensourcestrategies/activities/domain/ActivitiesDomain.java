@@ -18,6 +18,7 @@ package com.opensourcestrategies.activities.domain;
 
 import org.opentaps.domain.activities.ActivitiesDomainInterface;
 import org.opentaps.domain.activities.ActivityFactRepositoryInterface;
+import org.opentaps.domain.activities.ActivityRepositoryInterface;
 import org.opentaps.foundation.domain.Domain;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -31,4 +32,10 @@ public class ActivitiesDomain extends Domain implements ActivitiesDomainInterfac
     public ActivityFactRepositoryInterface getActivityFactRepository() throws RepositoryException {
         return instantiateRepository(ActivityFactRepository.class);
     }
+
+    /** {@inheritDoc} */
+    public ActivityRepositoryInterface getActivityRepository() throws RepositoryException {
+        return instantiateRepository(ActivityRepository.class);
+    }
+
 }

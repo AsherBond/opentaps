@@ -16,26 +16,31 @@
  */
 package org.opentaps.domain.activities;
 
-import org.opentaps.foundation.domain.DomainInterface;
+import java.util.List;
+
+import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
- * This is the interface of the Activities domain.
+ * Repository for Activities to handle interaction of Activities-related domain with
+ * the entity engine (database) and the service engine.
  */
-public interface ActivitiesDomainInterface extends DomainInterface {
+public interface ActivityRepositoryInterface {
 
     /**
-     * Returns the ActivityFact repository instance.
-     * @return a <code>ActivityFactRepositoryInterface</code> value
-     * @throws RepositoryException if an error occurs
+     * Finds the Activity with the given Id.
+     *
+     * @param activityId Activity identifier
+     * @return an instance of Activity
+     * @throws RepositoryException, EntityNotFoundException
      */
-    public ActivityFactRepositoryInterface getActivityFactRepository() throws RepositoryException;
+    public Activity getActivityById(String activityId) throws RepositoryException, EntityNotFoundException;
 
     /**
-     * Returns the Activity repository instance.
-     * @return a <code>ActivityRepositoryInterface</code> value
-     * @throws RepositoryException if an error occurs
+     * Finds the List of the completed Activities
+     *
+     * @return the list of Activity
+     * @throws RepositoryException
      */
-    public ActivityRepositoryInterface getActivityRepository() throws RepositoryException;
-
+    public List<Activity> getCompletedActivities() throws RepositoryException;
 }
