@@ -271,6 +271,9 @@ public class CrmTests extends OpentapsTestCase {
         // Verify CommunicationEvent partyIdTo before merge
         assertEquals("CommunicationEvent partyIdTo must be " + partyIdSecond, partyIdSecond, communicationEventTo.getString("partyIdTo"));
 
+        // This pause for avoid merge leads error
+        pause("Wait while automatic notification e-mail will be sent", 10000);
+
         // Merge  lead#2 to lead#1
         OpentapsMergePartiesService mergeService = new OpentapsMergePartiesService();
         mergeService.setInUserLogin(this.admin);
