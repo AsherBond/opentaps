@@ -62,13 +62,13 @@
     <!-- for purchase invoice items -->
     <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_PROD_ITEM" glAccountId="140000"/> <!-- Inventory -->
     <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_FPROD_ITEM" glAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_DPROD_ITEM" glAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_FDPROD_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_DPROD_ITEM" glAccountId="500000"/> <!-- COGS -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_FDPROD_ITEM" glAccountId="500000"/>
     <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_PROD_FEATR_ITEM" glAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SPROD_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SPROD_ITEM" glAccountId="700000"/> <!-- Other expenses -->
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_WE_ITEM" glAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_TE_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_WE_ITEM" glAccountId="700000"/> <!-- Other expenses -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_TE_ITEM" glAccountId="700000"/>
     
     <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SHIP_CHARGES" glAccountId="510000"/> <!-- Freight In -->
     <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_SHIP_CHARGES" glAccountId="510000"/> <!-- Freight In -->
