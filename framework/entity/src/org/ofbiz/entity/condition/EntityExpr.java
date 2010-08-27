@@ -58,6 +58,26 @@ public class EntityExpr extends EntityCondition {
     private Object rhs = null;
 
     protected EntityExpr() {}
+    
+    /** @deprecated Use EntityCondition.makeCondition() instead */
+    public EntityExpr(Object lhs, EntityComparisonOperator operator, Object rhs) {
+        this.init(lhs, operator, rhs);
+    }
+
+    /** @deprecated Use EntityCondition.makeCondition() instead */
+    public EntityExpr(String lhs, EntityComparisonOperator operator, Object rhs) {
+        this.init(lhs, operator, rhs);
+    }
+
+    /** @deprecated Use EntityCondition.makeCondition() instead */
+    public EntityExpr(String lhs, boolean leftUpper, EntityComparisonOperator operator, Object rhs, boolean rightUpper) {
+        this.init(leftUpper ? EntityFunction.UPPER_FIELD(lhs) : lhs, operator, rightUpper ? EntityFunction.UPPER(rhs) : rhs);
+    }
+
+    /** @deprecated Use EntityCondition.makeCondition() instead */
+    public EntityExpr(EntityCondition lhs, EntityJoinOperator operator, EntityCondition rhs) {
+        this.init(lhs, operator, rhs);
+    }
 
     public <L,R,LL,RR> void init(L lhs, EntityComparisonOperator<LL,RR> operator, R rhs) {
         if (lhs == null) {
