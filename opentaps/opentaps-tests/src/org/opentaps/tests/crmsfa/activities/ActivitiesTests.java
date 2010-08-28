@@ -1029,4 +1029,75 @@ public class ActivitiesTests extends OpentapsTestCase {
         runAndAssertServiceSuccess("activities.transformAllActivities", callContext);
     }
 
+    /**
+     * Test activity counts during delete
+     *
+     * @throws Exception if an error occurs
+     */
+    public void testActivityCountsDuringDelete() throws Exception {
+        ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
+        ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
+
+        // Get date dimention ID of work effort start date.
+        Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure().getDelegator());
+
+        activityFactRepo.setTargetPartyId(externalPartyId1);
+        activityFactRepo.setTeamMemberPartyId(internalPartyId1);
+        activityFactRepo.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepo.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
+        activityFactRepo.setDateDimensionId(dateDimId);
+
+        activityFactRepo.findActivityFacts();
+
+        // Count activities before add new
+        long emailActivityCountBefore = activityFactRepo.getEmailActivityCount();
+        long phoneCallActivityCountBefore = activityFactRepo.getPhoneCallActivityCount();
+        long visitActivityCountBefore = activityFactRepo.getVisitActivityCount();
+        long otherActivityCountBefore = activityFactRepo.getOtherActivityCount();
+        long totalActivityCountBefore = activityFactRepo.getTotalActivityCount();
+
+        UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
+        GenericValue userLogin = partyRepository.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());
+
+        // Create Log Call
+        CrmsfaLogTaskService logTaskService = new CrmsfaLogTaskService();
+        logTaskService.setInUserLogin(userLogin);
+        logTaskService.setInFromPartyId("internalPartyId1");
+        logTaskService.setInInternalPartyId( externalPartyId1);
+        logTaskService.setInOutbound("N");
+        logTaskService.setInWorkEffortPurposeTypeId("WEPT_TASK_PHONE_CALL");
+        logTaskService.setInWorkEffortName("WorkEffortName_2");
+
+        runAndAssertServiceSuccess(logTaskService);
+
+        String workEffortId = logTaskService.getOutWorkEffortId();
+
+        Debug.logImportant("task workEffortId = " + workEffortId, MODULE);
+
+        activityFactRepo.findActivityFacts();
+
+        // Verify activity counts after add Log Call
+        assertEquals("Email activity count is not good after add.", (Long) activityFactRepo.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good after add.", (Long) activityFactRepo.getPhoneCallActivityCount(), Long.valueOf(1 + phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good after add.", (Long) activityFactRepo.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Other activity count is not good after add.", (Long) activityFactRepo.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good after add.", (Long) activityFactRepo.getTotalActivityCount(), Long.valueOf(1 + totalActivityCountBefore));
+
+        // Delete Activity
+        CrmsfaDeleteActivityEmailService  deleteActivityEmailService = new CrmsfaDeleteActivityEmailService();
+        deleteActivityEmailService.setInUserLogin(userLogin);
+        deleteActivityEmailService.setInWorkEffortId(workEffortId);
+
+        runAndAssertServiceSuccess(deleteActivityEmailService);
+
+        activityFactRepo.findActivityFacts();
+
+        // Verify activity counts after delete Log Call
+        assertEquals("Email activity count is not good after delete.", (Long) activityFactRepo.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good after delete.", (Long) activityFactRepo.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good after delete.", (Long) activityFactRepo.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Other activity count is not good after delete.", (Long) activityFactRepo.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good after delete.", (Long) activityFactRepo.getTotalActivityCount(), Long.valueOf(totalActivityCountBefore));
+    }
+
 }
