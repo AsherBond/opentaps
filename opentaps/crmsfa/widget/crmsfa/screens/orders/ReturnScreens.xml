@@ -115,6 +115,7 @@
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/return/ReturnHeader.groovy"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/return/ReturnItems.groovy"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/returns/returnHeader.bsh"/>
             </actions>
             <widgets>
                 <decorator-screen name="FoReportDecorator" location="component://common/widget/CommonScreens.xml">
