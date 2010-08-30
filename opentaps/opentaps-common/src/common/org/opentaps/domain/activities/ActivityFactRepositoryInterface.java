@@ -92,7 +92,7 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
      * Get the count of the Email Activity
      *
      * @return a long count
-     * @throws RepositoryException
+     * @throws RepositoryException if an error occurs
      */
     public long getEmailActivityCount() throws RepositoryException;
 
@@ -100,7 +100,7 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
      * Get the count of the Phone Call Activity
      *
      * @return a long count
-     * @throws RepositoryException
+     * @throws RepositoryException if an error occurs
      */
     public long getPhoneCallActivityCount() throws RepositoryException;
 
@@ -108,7 +108,7 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
      * Get the count of the Visit Activity
      *
      * @return a long count
-     * @throws RepositoryException
+     * @throws RepositoryException if an error occurs
      */
     public long getVisitActivityCount() throws RepositoryException;
 
@@ -116,7 +116,7 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
      * Get the count of the Other Activity
      *
      * @return a long count
-     * @throws RepositoryException
+     * @throws RepositoryException if an error occurs
      */
     public long getOtherActivityCount() throws RepositoryException;
 
@@ -124,7 +124,7 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
      * Get the count of the Total Activity
      *
      * @return a long count
-     * @throws RepositoryException
+     * @throws RepositoryException if an error occurs
      */
     public long getTotalActivityCount() throws RepositoryException;
 }

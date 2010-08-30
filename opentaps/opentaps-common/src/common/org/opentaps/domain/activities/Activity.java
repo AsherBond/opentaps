@@ -16,6 +16,14 @@
 */
 package org.opentaps.domain.activities;
 
+import java.util.List;
+
+import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.party.Party;
+import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.repository.RepositoryInterface;
+
 /**
  * Domain class for CRMSFA Activity.
  */
@@ -28,4 +36,22 @@ public class Activity extends org.opentaps.base.entities.WorkEffort {
         super();
     }
 
+    /**
+     * 
+     * @return
+     * @throws RepositoryException 
+     * @throws EntityNotFoundException 
+     */
+    public List<Party> getParticipants() throws EntityNotFoundException, RepositoryException {                
+        return  getRepository().getParticipants(this.getWorkEffortId());        
+    }
+    
+    protected ActivityRepositoryInterface getRepository() throws RepositoryException {
+        try {
+            return ActivityRepositoryInterface.class.cast(repository);
+        } catch (ClassCastException e) {
+            repository = (RepositoryInterface) DomainsDirectory.getDomainsDirectory(repository).getActivitiesDomain().getActivityRepository();
+            return ActivityRepositoryInterface.class.cast(repository);
+        }
+    }
 }

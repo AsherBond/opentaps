@@ -16,16 +16,21 @@
  */
 package com.opensourcestrategies.activities.domain;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.WorkEffort;
+import org.opentaps.base.entities.WorkEffortPartyAssignment;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.activities.Activity;
 import org.opentaps.domain.activities.ActivityRepositoryInterface;
+import org.opentaps.domain.party.Party;
+import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
@@ -56,5 +61,41 @@ public class ActivityRepository extends Repository implements ActivityRepository
         List<Activity> activityList = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository().findList(Activity.class, workEffortCond);
 
         return activityList;
+    }
+    
+    /** {@inheritDoc} */    
+    public void createActivityFact(String teamMemberPartyId, String targetPartyId, String teamMemberRoleTypeId, String targetRoleTypeId, Activity activity) throws RepositoryException {
+        
+    }
+    
+    /** {@inheritDoc} */
+    @SuppressWarnings("null")
+    public List<Party> getParticipants(String workEffortId) throws RepositoryException, EntityNotFoundException {
+        List<Party> listParty = null;        
+        DomainsLoader domainLoader = new DomainsLoader(getInfrastructure(), getUser());
+        PartyRepositoryInterface partyRepository = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository();
+
+        // Get WorkEffortPartyAssign and WorkEffort data by workEffortId.
+        WorkEffort workEffort = partyRepository.findOne(WorkEffort.class, partyRepository.map(WorkEffort.Fields.workEffortId, workEffortId));
+
+        // Pass only completed workEfforts to do the transformation.
+        if (Arrays.asList(StatusItemConstants.TaskStatus.TASK_COMPLETED, StatusItemConstants.EventStatus.EVENT_COMPLETED).contains(workEffort.getCurrentStatusId())) {
+        
+            List<WorkEffortPartyAssignment> assignments = partyRepository.findList(WorkEffortPartyAssignment.class, partyRepository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
+
+            if (assignments.size() >= 2) {
+                for (WorkEffortPartyAssignment assignment : assignments) {
+                    listParty.add(partyRepository.getPartyById(assignment.getPartyId()));
+                }
+            }
+            else {
+                Debug.logInfo("WorkEffort [" + workEffort.getWorkEffortId() + "] has only " + assignments.size() + " parties assigned, not generating an activity fact", MODULE);               
+            }                                
+        }
+        else {
+            Debug.logInfo("WorkEffort [" + workEffort.getWorkEffortId() + "] is not completed, not generating an activity fact", MODULE);
+        }
+        
+        return listParty;
     }
 }

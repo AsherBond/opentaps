@@ -45,6 +45,7 @@
         <field name="otherActivityCount" type="numeric"/>
         <field name="targetPartyRoleTypeId" type="id-vlong"/>
         <field name="teamMemberPartyRoleTypeId" type="id-vlong"/>
+        <field name="activityCompletedDatetime" type="date-time"></field>
         <prim-key field="activityFactId"/>
         
         <relation type="one-nofk" rel-entity-name="DateDim">

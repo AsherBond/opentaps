@@ -18,6 +18,7 @@ package org.opentaps.domain.activities;
 
 import java.util.List;
 
+import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -32,7 +33,7 @@ public interface ActivityRepositoryInterface {
      *
      * @param activityId Activity identifier
      * @return an instance of Activity
-     * @throws RepositoryException, EntityNotFoundException
+     * @throws RepositoryException, EntityNotFoundException if an error occurs
      */
     public Activity getActivityById(String activityId) throws RepositoryException, EntityNotFoundException;
 
@@ -40,7 +41,29 @@ public interface ActivityRepositoryInterface {
      * Finds the List of the completed Activities
      *
      * @return the list of Activity
-     * @throws RepositoryException
+     * @throws RepositoryException if an error occurs
      */
     public List<Activity> getCompletedActivities() throws RepositoryException;
+    
+    /**
+     * Create ActivityFact with target party id and member party id 
+     * 
+     * @param teamMemberPartyId the target party identifier
+     * @param targetPartyId the target party identifier
+     * @param teamMemberRoleTypeId the team member role type identifier
+     * @param targetRoleTypeId the target role type identifier
+     * @param activity the current activity
+     * @throws RepositoryException if an error occurs
+     */
+    public void createActivityFact(String teamMemberPartyId, String targetPartyId, String teamMemberRoleTypeId, String targetRoleTypeId, Activity activity) throws RepositoryException;
+    
+    /**
+     * Finds the Participants with the given WorkEffort Id.
+     * 
+     * @param workEffortId WorkEffort identifier
+     * @return the list of Party
+     * @throws RepositoryException if an error occurs
+     * @throws EntityNotFoundException if an error occurs
+     */
+    public List<Party> getParticipants(String workEffortId) throws RepositoryException, EntityNotFoundException;
 }
