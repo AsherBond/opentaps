@@ -111,7 +111,7 @@ under the License.
               <#elseif contactMech.contactMechTypeId == "EMAIL_ADDRESS">
                 <div class="tabletext">
                   <@form name="writeOrderEmailAction" url="writeOrderEmail" orderId=order.orderId sendTo=contactMech.infoString />
-                  <@form name="writeOrderConfirmationEmailAction" url="writeOrderConfirmationEmail" orderId=order.orderId sendTo=contactMech.infoString partyId=order.mainExternalParty.partyId/>
+                  <@form name="writeOrderConfirmationEmailAction" url="writeOrderConfirmationEmail" donePage="orderview" orderId=order.orderId sendTo=contactMech.infoString partyId=order.mainExternalParty.partyId/>
                   <@submitFormLink form="writeOrderEmailAction" text=contactMech.infoString class="linktext"/>
                   <#if order.isSalesOrder() && security.hasEntityPermission("ORDERMGR", "_SEND_CONFIRMATION", session)>
                     <br/>(<@submitFormLink form="writeOrderConfirmationEmailAction" class="linktext" text=uiLabelMap.OrderSendConfirmationEmail />)
