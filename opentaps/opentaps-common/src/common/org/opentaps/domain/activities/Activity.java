@@ -37,15 +37,16 @@ public class Activity extends org.opentaps.base.entities.WorkEffort {
     }
 
     /**
-     * 
-     * @return
-     * @throws RepositoryException 
-     * @throws EntityNotFoundException 
+     * Finds the Participants for this Activity.
+     *
+     * @return the list of Party
+     * @throws RepositoryException if an error occurs
+     * @throws EntityNotFoundException if an error occurs
      */
-    public List<Party> getParticipants() throws EntityNotFoundException, RepositoryException {                
-        return  getRepository().getParticipants(this.getWorkEffortId());        
+    public List<Party> getParticipants() throws EntityNotFoundException, RepositoryException {
+        return  getRepository().getParticipants(this.getWorkEffortId());
     }
-    
+
     protected ActivityRepositoryInterface getRepository() throws RepositoryException {
         try {
             return ActivityRepositoryInterface.class.cast(repository);

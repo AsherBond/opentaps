@@ -44,10 +44,10 @@ public interface ActivityRepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public List<Activity> getCompletedActivities() throws RepositoryException;
-    
+
     /**
-     * Create ActivityFact with target party id and member party id 
-     * 
+     * Create ActivityFact with target party id and member party id
+     *
      * @param teamMemberPartyId the target party identifier
      * @param targetPartyId the target party identifier
      * @param teamMemberRoleTypeId the team member role type identifier
@@ -56,10 +56,10 @@ public interface ActivityRepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public void createActivityFact(String teamMemberPartyId, String targetPartyId, String teamMemberRoleTypeId, String targetRoleTypeId, Activity activity) throws RepositoryException;
-    
+
     /**
      * Finds the Participants with the given WorkEffort Id.
-     * 
+     *
      * @param workEffortId WorkEffort identifier
      * @return the list of Party
      * @throws RepositoryException if an error occurs
