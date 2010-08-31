@@ -246,7 +246,12 @@ public class ActivitiesDataWarehouseService extends DomainService {
 
         try {
             ActivityRepositoryInterface activityRepository = getDomainsDirectory().getActivitiesDomain().getActivityRepository();
-
+            PartyRepositoryInterface patryRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
+            
+            // Remove all ActivityFacts
+            List<ActivityFact> activityFacts = patryRepository.findAll(ActivityFact.class);
+            patryRepository.remove(activityFacts);
+            
             // Find all Activities which are TASK_COMPLETED or EVENT_COMPLETED
             List<Activity> activityList = activityRepository.getCompletedActivities();
 
