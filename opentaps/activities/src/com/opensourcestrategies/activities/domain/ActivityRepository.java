@@ -16,6 +16,7 @@
  */
 package com.opensourcestrategies.activities.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -96,15 +97,15 @@ public class ActivityRepository extends Repository implements ActivityRepository
             String purpose = activity.getWorkEffortPurposeTypeId();
 
             if (purpose == null) {
-                activityFact.setOtherActivityCount(activityFact.getOtherActivityCount() + 1);
+                activityFact.setOtherActivityCount(Long.valueOf(1));
             } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_TASK_EMAIL) == 0) {
-                activityFact.setEmailActivityCount(activityFact.getEmailActivityCount() + 1);
+                activityFact.setEmailActivityCount(Long.valueOf(1));
             } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL) == 0) {
-                activityFact.setPhoneCallActivityCount(activityFact.getPhoneCallActivityCount() + 1);
+                activityFact.setPhoneCallActivityCount(Long.valueOf(1));
             } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_MEETING) == 0) {
-                activityFact.setVisitActivityCount(activityFact.getVisitActivityCount() + 1);
+                activityFact.setVisitActivityCount(Long.valueOf(1));
             } else {
-                activityFact.setOtherActivityCount(activityFact.getOtherActivityCount() + 1);
+                activityFact.setOtherActivityCount(Long.valueOf(1));
             }
 
             partyRepository.createOrUpdate(activityFact);
@@ -134,8 +135,12 @@ public class ActivityRepository extends Repository implements ActivityRepository
             List<WorkEffortPartyAssignment> assignments = partyRepository.findList(WorkEffortPartyAssignment.class, partyRepository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
 
             if (assignments.size() >= 2) {
+                listParty =  new ArrayList<Party>();
                 for (WorkEffortPartyAssignment assignment : assignments) {
-                    listParty.add(partyRepository.getPartyById(assignment.getPartyId()));
+                    Party party = partyRepository.getPartyById(assignment.getPartyId());
+                    // Temporary store WorkEffortPartyAssignment Id into party Description
+                    party.setDescription(assignment.getRoleTypeId());
+                    listParty.add(party);
                 }
             }
             else {
