@@ -116,6 +116,18 @@ public class OpentapsShoppingCartHelper extends ShoppingCartHelper {
             this.cart = new OpentapsShoppingCart(cart);
         }
     }
+ 
+    public OpentapsShoppingCart getCart() {
+        return this.cart;
+    }
+
+    public GenericDelegator getDelegator() {
+        return this.delegator;
+    }
+
+    public LocalDispatcher getDispatcher() {
+        return this.dispatcher;
+    }
 
     /**
      * Updates the items in the shopping cart.

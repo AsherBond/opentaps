@@ -2805,15 +2805,6 @@ public final class InvoiceServices {
                             UtilMessage.createAndLogServiceError(e, "AccountingTroubleCallingCalculateInvoicedAdjustmentTotalService", locale, MODULE);
                         }
 
-                        // If the absolute invoiced amount >= the abs of the adjustment amount, the full amount has already been invoiced,
-                        //  so skip this adjustment
-                        if (null == adj.get("amount")) { // JLR 17/4/7 : fix a bug coming from POS in case of use of a discount (on item(s) or sale, item(s) here) and a cash amount higher than total (hence issuing change)
-                            continue;
-                        }
-                        if (adjAlreadyInvoicedAmount.abs().compareTo(adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding).abs()) > 0) {
-                            continue;
-                        }
-
                         BigDecimal amount = ZERO;
                         if (adj.get("amount") != null) {
                             // pro-rate the amount
@@ -2836,6 +2827,18 @@ public final class InvoiceServices {
                             amount = amount.multiply(billingQuantity);
                             amount = amount.setScale(invoiceTypeDecimals, rounding);
                         }
+
+                        // If the absolute invoiced amount >= the abs of the adjustment amount, the full amount has already been invoiced,
+                        //  so skip this adjustment
+                        if (null == amount) { // JLR 17/4/7 : fix a bug coming from POS in case of use of a discount (on item(s) or sale, item(s) here) and a cash amount higher than total (hence issuing change)
+                            Debug.logWarning("Null amount, skipping this adjustment.", MODULE);
+                            continue;
+                        }
+                        if (adjAlreadyInvoicedAmount.abs().compareTo(amount.setScale(invoiceTypeDecimals, rounding).abs()) > 0) {
+                            Debug.logWarning("Absolute invoiced amount >= the abs of the adjustment amount, the full amount has already been invoiced, skipping this adjustment.", MODULE);
+                            continue;
+                        }
+
                         if (amount.signum() != 0) {
                             Map createInvoiceItemAdjContext = FastMap.newInstance();
                             createInvoiceItemAdjContext.put("invoiceId", invoiceId);
