@@ -70,7 +70,7 @@ public class ActivityRepository extends Repository implements ActivityRepository
     }
 
     /** {@inheritDoc} */
-    public void createActivityFact(String teamMemberPartyId, String targetPartyId, String teamMemberRoleTypeId, String targetRoleTypeId, Activity activity) throws RepositoryException {
+    public void createActivityFact(String teamMemberPartyId, String targetPartyId, String teamMemberRoleTypeId, String targetRoleTypeId, Activity activity, int count) throws RepositoryException {
         ActivityFact activityFact = new ActivityFact();
         try {
 
@@ -91,21 +91,21 @@ public class ActivityRepository extends Repository implements ActivityRepository
             activityFact.setPhoneCallActivityCount(Long.valueOf(0));
             activityFact.setVisitActivityCount(Long.valueOf(0));
             activityFact.setOtherActivityCount(Long.valueOf(0));
-
+            activityFact.set("activityCompletedDatetime", activity.getActualCompletionDate());
 
             // Increase count according to WorkEffort workEffortPurposeTypeId.
             String purpose = activity.getWorkEffortPurposeTypeId();
 
             if (purpose == null) {
-                activityFact.setOtherActivityCount(Long.valueOf(1));
+                activityFact.setOtherActivityCount(Long.valueOf(count));
             } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_TASK_EMAIL) == 0) {
-                activityFact.setEmailActivityCount(Long.valueOf(1));
+                activityFact.setEmailActivityCount(Long.valueOf(count));
             } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL) == 0) {
-                activityFact.setPhoneCallActivityCount(Long.valueOf(1));
+                activityFact.setPhoneCallActivityCount(Long.valueOf(count));
             } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_MEETING) == 0) {
-                activityFact.setVisitActivityCount(Long.valueOf(1));
+                activityFact.setVisitActivityCount(Long.valueOf(count));
             } else {
-                activityFact.setOtherActivityCount(Long.valueOf(1));
+                activityFact.setOtherActivityCount(Long.valueOf(count));
             }
 
             partyRepository.createOrUpdate(activityFact);

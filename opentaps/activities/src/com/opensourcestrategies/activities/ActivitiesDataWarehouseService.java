@@ -40,6 +40,7 @@ import org.ofbiz.base.util.UtilValidate;
 public class ActivitiesDataWarehouseService extends DomainService {
 
     private static final String MODULE = ActivitiesDataWarehouseService.class.getName();
+    private static final int COUNT = 1;
 
     private String workEffortId;
 
@@ -89,7 +90,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
     }
 
     /**
-     * Transformation wich transforms data from WorkEffort, WorkEffortPartyAssign entities to ActivityFact entities.
+     * Transformation witch transforms data from WorkEffort, WorkEffortPartyAssign entities to ActivityFact entities.
      *  It expands the WorkEffortPartyAssign to cover all target parties for all team members.
      *  The counts that is in ActivityFacts is based on the purpose of the WorkEffort.
      * @throws ServiceException if an error occurs
@@ -174,7 +175,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
 
                             // Create ActivityFact
                             // internal party description contains WorkEffortPartyAssignment roleTypeId
-                            activityRepository.createActivityFact(internal.getPartyId(), external.getPartyId(),internal.getDescription(), targetPartyRoleTypeId, activity);
+                            activityRepository.createActivityFact(internal.getPartyId(), external.getPartyId(),internal.getDescription(), targetPartyRoleTypeId, activity, COUNT);
                         }
                     }
 

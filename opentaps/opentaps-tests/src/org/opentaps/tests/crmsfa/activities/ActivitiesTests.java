@@ -589,7 +589,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         activityFactRepoBefore1.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
         activityFactRepoBefore1.setDateDimensionId(dateDimId);
 
-        activityFactRepoBefore1.findActivityFacts();
+        int factsSizeBefore1 = activityFactRepoBefore1.findActivityFacts().size();
 
         activityFactRepoBefore2.setTargetPartyId(externalPartyId2);
         activityFactRepoBefore2.setTeamMemberPartyId(internalPartyId1);
@@ -597,7 +597,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         activityFactRepoBefore2.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
         activityFactRepoBefore2.setDateDimensionId(dateDimId);
 
-        activityFactRepoBefore2.findActivityFacts();
+        int factsSizeBefore2 =  activityFactRepoBefore2.findActivityFacts().size();
 
         activityFactRepoBefore3.setTargetPartyId(externalPartyId1);
         activityFactRepoBefore3.setTeamMemberPartyId(internalPartyId2);
@@ -605,7 +605,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         activityFactRepoBefore3.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_ATTENDEE);
         activityFactRepoBefore3.setDateDimensionId(dateDimId);
 
-        activityFactRepoBefore3.findActivityFacts();
+        int factsSizeBefore3 = activityFactRepoBefore3.findActivityFacts().size();
 
         activityFactRepoBefore4.setTargetPartyId(externalPartyId2);
         activityFactRepoBefore4.setTeamMemberPartyId(internalPartyId2);
@@ -613,7 +613,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         activityFactRepoBefore4.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_ATTENDEE);
         activityFactRepoBefore4.setDateDimensionId(dateDimId);
 
-        activityFactRepoBefore4.findActivityFacts();
+        int factsSizeBefore4 = activityFactRepoBefore4.findActivityFacts().size();
 
         // Execute transformation.
         args = UtilMisc.<String, Object>toMap("workEffortId", workEffortId1);
@@ -630,9 +630,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         long otherActivityCountBefore = activityFactRepoBefore1.getOtherActivityCount();
         long totalActivityCountBefore = activityFactRepoBefore1.getTotalActivityCount();
 
-        int factsSize = activityFactRepoBefore1.findActivityFacts().size();
-
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, factsSize);
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", factsSizeBefore1 + 1, activityFactRepoBefore1.findActivityFacts().size());
 
         assertEquals("Email activity count is not good.", (Long) activityFactRepoBefore1.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
         assertEquals("Phone activity count is not good.", (Long) activityFactRepoBefore1.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
@@ -648,9 +646,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         otherActivityCountBefore = activityFactRepoBefore2.getOtherActivityCount();
         totalActivityCountBefore = activityFactRepoBefore2.getTotalActivityCount();
 
-        factsSize = activityFactRepoBefore2.findActivityFacts().size();
-
-        assertEquals("Record with target party [" + externalPartyId2 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, factsSize);
+        assertEquals("Record with target party [" + externalPartyId2 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", factsSizeBefore2 + 1, activityFactRepoBefore2.findActivityFacts().size());
 
         assertEquals("Email activity count is not good.", (Long) activityFactRepoBefore2.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
         assertEquals("Phone activity count is not good.", (Long) activityFactRepoBefore2.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
@@ -666,9 +662,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         otherActivityCountBefore = activityFactRepoBefore3.getOtherActivityCount();
         totalActivityCountBefore = activityFactRepoBefore3.getTotalActivityCount();
 
-        factsSize = activityFactRepoBefore3.findActivityFacts().size();
-
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId2 + "] not added to ActivityFact entity.", 1, factsSize);
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId2 + "] not added to ActivityFact entity.", factsSizeBefore3 + 1, activityFactRepoBefore3.findActivityFacts().size());
 
         assertEquals("Email activity count is not good.", (Long) activityFactRepoBefore3.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
         assertEquals("Phone activity count is not good.", (Long) activityFactRepoBefore3.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
@@ -684,9 +678,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         otherActivityCountBefore = activityFactRepoBefore4.getOtherActivityCount();
         totalActivityCountBefore = activityFactRepoBefore4.getTotalActivityCount();
 
-        factsSize = activityFactRepoBefore4.findActivityFacts().size();
-
-        assertEquals("Record with target party [" + externalPartyId2 + "], team party [" + internalPartyId2 + "] not added to ActivityFact entity.", 1, factsSize);
+        assertEquals("Record with target party [" + externalPartyId2 + "], team party [" + internalPartyId2 + "] not added to ActivityFact entity.", factsSizeBefore4 + 1, activityFactRepoBefore4.findActivityFacts().size());
 
         assertEquals("Email activity count is not good.", (Long) activityFactRepoBefore4.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
         assertEquals("Phone activity count is not good.", (Long) activityFactRepoBefore4.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
@@ -732,7 +724,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         activityFactRepoBefore5.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
         activityFactRepoBefore5.setDateDimensionId(dateDimId);
 
-        activityFactRepoBefore5.findActivityFacts();
+        int factsSizeBefore5 = activityFactRepoBefore5.findActivityFacts().size();
 
         //Execute transformation.
         args = UtilMisc.<String, Object>toMap("workEffortId", workEffortId2);
@@ -749,9 +741,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         otherActivityCountBefore = activityFactRepoBefore5.getOtherActivityCount();
         totalActivityCountBefore = activityFactRepoBefore5.getTotalActivityCount();
 
-        factsSize = activityFactRepoBefore5.findActivityFacts().size();
-
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, factsSize);
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", factsSizeBefore5 + 1, activityFactRepoBefore5.findActivityFacts().size());
 
         assertEquals("Email activity count is not good.", (Long) activityFactRepoBefore5.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
         assertEquals("Phone activity count is not good.", (Long) activityFactRepoBefore5.getPhoneCallActivityCount(), Long.valueOf(1 + phoneCallActivityCountBefore));
@@ -936,6 +926,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         long visitActivityCountBefore = activityFactRepo.getVisitActivityCount();
         long otherActivityCountBefore = activityFactRepo.getOtherActivityCount();
         long totalActivityCountBefore = activityFactRepo.getTotalActivityCount();
+        int factsSize = activityFactRepo.findActivityFacts().size();
 
         // Call logTask service.
         UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
@@ -953,9 +944,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         Debug.logImportant("task workEffortId = " + workEffortId, MODULE);
 
         // Check if proper records was found.
-        int factsSize = activityFactRepo.findActivityFacts().size();
-
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, factsSize);
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", factsSize + 1, activityFactRepo.findActivityFacts().size());
 
         assertEquals("Email activity count is not good.", (Long) activityFactRepo.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
         assertEquals("Phone activity count is not good.", (Long) activityFactRepo.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
@@ -988,6 +977,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         long visitActivityCountBefore = activityFactRepo.getVisitActivityCount();
         long otherActivityCountBefore = activityFactRepo.getOtherActivityCount();
         long totalActivityCountBefore = activityFactRepo.getTotalActivityCount();
+        int factsSize = activityFactRepo.findActivityFacts().size();
 
         // Call send email service.
         UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
@@ -1006,27 +996,13 @@ public class ActivitiesTests extends OpentapsTestCase {
         Debug.logImportant("send email workEffortId = " + workEffortId, MODULE);
 
         // Check if proper records was found.
-        int factsSize = activityFactRepo.findActivityFacts().size();
-
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, factsSize);
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", factsSize + 1, activityFactRepo.findActivityFacts().size());
 
         assertEquals("Email activity count is not good.", (Long) activityFactRepo.getEmailActivityCount(), Long.valueOf(1 + emailActivityCountBefore));
         assertEquals("Phone activity count is not good.", (Long) activityFactRepo.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
         assertEquals("Visit activity count is not good.", (Long) activityFactRepo.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
         assertEquals("Other activity count is not good.", (Long) activityFactRepo.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
         assertEquals("Total activity count is not good.", (Long) activityFactRepo.getTotalActivityCount(), Long.valueOf(1 + totalActivityCountBefore));
-    }
-
-    /**
-     * Test run service activities.transformAllActivities
-     *
-     * @throws Exception
-     */
-    public void testTransformAllActivities() throws Exception {
-        Map<String, Object> callContext = new HashMap<String, Object>();
-        callContext.put("userLogin", admin);
-
-        runAndAssertServiceSuccess("activities.transformAllActivities", callContext);
     }
 
     /**

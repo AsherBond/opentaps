@@ -89,8 +89,9 @@ public class ActivityFactRepository extends Repository implements ActivityFactRe
                 EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), targetPartyId),
                 EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), teamMemberPartyId),
                 EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), targetRoleTypeId),
-                EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), teamMemberRoleTypeId),
-                EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
+                EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), teamMemberRoleTypeId)
+                //EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId)
+                );
         listActivityFact = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository().findList(ActivityFact.class, condition);
 
         return listActivityFact;
@@ -124,10 +125,9 @@ public class ActivityFactRepository extends Repository implements ActivityFactRe
             findActivityFacts();
         }
 
-        if(listActivityFact.size() > 0) {
-            count = listActivityFact.get(0).getEmailActivityCount();
+        for(ActivityFact activityFact : listActivityFact ) {
+            count += activityFact.getEmailActivityCount();
         }
-
         return count;
     }
 
@@ -139,8 +139,8 @@ public class ActivityFactRepository extends Repository implements ActivityFactRe
             findActivityFacts();
         }
 
-        if(listActivityFact.size() > 0) {
-            count = listActivityFact.get(0).getPhoneCallActivityCount();
+        for(ActivityFact activityFact : listActivityFact ) {
+            count += activityFact.getPhoneCallActivityCount();
         }
 
         return count;
@@ -154,8 +154,8 @@ public class ActivityFactRepository extends Repository implements ActivityFactRe
             findActivityFacts();
         }
 
-        if(listActivityFact.size() > 0) {
-            count = listActivityFact.get(0).getVisitActivityCount();
+        for(ActivityFact activityFact : listActivityFact ) {
+            count += activityFact.getVisitActivityCount();
         }
 
         return count;
@@ -169,8 +169,8 @@ public class ActivityFactRepository extends Repository implements ActivityFactRe
             findActivityFacts();
         }
 
-        if(listActivityFact.size() > 0) {
-            count = listActivityFact.get(0).getOtherActivityCount();
+        for(ActivityFact activityFact : listActivityFact ) {
+            count += activityFact.getOtherActivityCount();
         }
 
         return count;
@@ -184,11 +184,11 @@ public class ActivityFactRepository extends Repository implements ActivityFactRe
             findActivityFacts();
         }
 
-        if(listActivityFact.size() > 0){
-            count += listActivityFact.get(0).getEmailActivityCount()+
-                     listActivityFact.get(0).getPhoneCallActivityCount()+
-                     listActivityFact.get(0).getVisitActivityCount()+
-                     listActivityFact.get(0).getOtherActivityCount();
+        for(ActivityFact activityFact : listActivityFact ) {
+            count += activityFact.getEmailActivityCount()+
+                     activityFact.getPhoneCallActivityCount()+
+                     activityFact.getVisitActivityCount()+
+                     activityFact.getOtherActivityCount();
         }
 
         return count;

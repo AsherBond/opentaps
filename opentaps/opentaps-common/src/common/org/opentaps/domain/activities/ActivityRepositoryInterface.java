@@ -55,7 +55,7 @@ public interface ActivityRepositoryInterface {
      * @param activity the current activity
      * @throws RepositoryException if an error occurs
      */
-    public void createActivityFact(String teamMemberPartyId, String targetPartyId, String teamMemberRoleTypeId, String targetRoleTypeId, Activity activity) throws RepositoryException;
+    public void createActivityFact(String teamMemberPartyId, String targetPartyId, String teamMemberRoleTypeId, String targetRoleTypeId, Activity activity, int count) throws RepositoryException;
 
     /**
      * Finds the Participants with the given WorkEffort Id.
