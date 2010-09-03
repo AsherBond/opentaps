@@ -64,7 +64,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
 <!-- These controller requests are originally from ordermgr.  They are split out here to separate them from the principle CRMSFA requests.  A lot of these are defunct and not used.  -->
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <description>CRMSFA Module Site Configuration File</description>
-    <owner>Open Source Strategies, Inc. (c) 2005-2006 </owner>
+    <owner>opentaps Group LLC</owner>
 
     <!-- ORDERMGR -->
     <request-map uri="orderstats">

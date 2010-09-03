@@ -21,7 +21,7 @@
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
 
     <description>Opentaps Common JSON Controller</description>
-    <owner>Open Source Strategies, Inc. (c) 2006-2009</owner>
+    <owner>opentaps Group LLC</owner>
 
     <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
 

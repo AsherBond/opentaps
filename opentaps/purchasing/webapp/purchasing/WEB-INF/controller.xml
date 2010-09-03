@@ -24,7 +24,7 @@
     <include location="component://purchasing/webapp/purchasing/WEB-INF/legacy-controller.xml"/>
 
     <description>Purchasing Module Site Configuration File</description>
-    <owner>Open Source Strategies, Inc. (c) 2007 </owner>
+    <owner>opentaps Group LLC</owner>
     <errorpage>/error/error.jsp</errorpage>
 
     <!-- event handlers -->

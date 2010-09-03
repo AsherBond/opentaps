@@ -30,7 +30,7 @@
     <include location="component://opentaps-common/webapp/common/WEB-INF/gwt-controller.xml"/>
 
     <description>Opentaps Common JSON Controller</description>
-    <owner>Open Source Strategies, Inc. (c) 2006-2009</owner>
+    <owner>opentaps Group LLC</owner>
 
     <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
     <handler name="json" type="request" class="org.ofbiz.webapp.event.JSONServiceEventHandler"/>

@@ -22,7 +22,7 @@
     <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
 
     <description>Amazon.com Integration Configuration File</description>
-    <owner>Open Source Strategies, Inc. (c) 2005-2007</owner>
+    <owner>opentaps Group LLC</owner>
     <errorpage>/error/error.jsp</errorpage>
 
     <!-- event handlers -->

@@ -41,7 +41,7 @@ under the License.
     <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
 
     <description>Warehouse Module Site Configuration File</description>
-    <owner>Open Source Strategies, Inc. (c) 2007 </owner>
+    <owner>opentaps Group LLC</owner>
     <errorpage>/error/error.jsp</errorpage>
 
     <!-- event handlers -->
