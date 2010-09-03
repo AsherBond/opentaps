@@ -155,6 +155,8 @@ under the License.
                 <@inputSelect name="contactMechId" list=mainPartyEmailAddresses key="contactMechId" displayField="infoString" />
                 <@inputSubmit title=uiLabelMap.CommonAdd />
               </@form>
+            <#else>
+              ${uiLabelMap.CommonNoContactInformationOnFile}
             </#if>
           </@infoRowNested>
         </#if>
