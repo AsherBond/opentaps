@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -21,7 +21,7 @@
 
     <title>NetSuite Data Import Entities</title>
     <description>Defines intermediate entities for importing data from NetSuite into Opentaps</description>
-    <copyright>Copyright (c) 2008 - 2009 Open Source Strategies, Inc.</copyright>
+    <copyright>Copyright (c) opentaps Group LLC</copyright>
     <author>Leon Torres (leon@opensourcestrategies.com)</author>
     <version>1.0</version>
 

@@ -500,7 +500,7 @@ function call_cal_notime(target, datetime) {
     new CalendarDateSelect(target, {year_range:10} );
 }
 /*
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -2008,7 +2008,7 @@ function redirectUrlAndDisableLink(url, link, afterClickText) {
     return false;
 }
 /*
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -2200,7 +2200,7 @@ function submitFormAndReplaceButtonTextWithSingleClick(button, newText) {
 }
 
 /*
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -2285,7 +2285,7 @@ opentaps.expandCollapse = function(/* Object */ target, /* Object */ targetContr
 
 opentaps.addOnLoad(function(){opentaps.addListenerToNode(document.body, 'onclick', opentaps.expansionListener)});
 /*
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published

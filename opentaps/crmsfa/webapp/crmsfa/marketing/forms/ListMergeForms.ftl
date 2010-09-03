@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 -->
-<#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
+<#-- Copyright (c) opentaps Group LLC -->
  
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
