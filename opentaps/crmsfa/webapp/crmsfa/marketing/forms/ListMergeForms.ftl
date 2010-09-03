@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 2006 - 2010  Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
