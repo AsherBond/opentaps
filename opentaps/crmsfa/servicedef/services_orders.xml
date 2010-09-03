@@ -18,7 +18,7 @@
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>CRM SFA Data Source Services</description>
-    <vendor>Open Source Strategies, Inc.</vendor>
+    <vendor>opentaps Group LLC</vendor>
 
     <service name="crmsfa.getOrderPriorityList" engine="java"
             location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="getOrderPriorityList" auth="true">

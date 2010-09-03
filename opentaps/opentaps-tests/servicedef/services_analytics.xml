@@ -18,7 +18,7 @@
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Opentaps Analytics Services for testing</description>
-    <vendor>Open Source Strategies, Inc.</vendor>
+    <vendor>opentaps Group LLC</vendor>
 
     <service name="opentaps.createCustomerDimensionTestData" engine="java" auth="true" use-transaction="true" transaction-timeout="72000"
         location="org.opentaps.tests.analytics.AnalyticsServices" invoke="createCustomerDimensionTestData">

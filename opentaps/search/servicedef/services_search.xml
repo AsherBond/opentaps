@@ -18,7 +18,7 @@
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Services that create index for the delegator operate.</description>
-    <vendor>Open Source Strategies, Inc.</vendor>
+    <vendor>opentaps Group LLC</vendor>
 
     <service name="opentaps.createHibernateSearchIndex" engine="pojo"
         location="org.opentaps.search.IndexingService" invoke="createHibernateSearchIndex" auth="true" transaction-timeout="7200">

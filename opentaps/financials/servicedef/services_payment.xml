@@ -39,7 +39,7 @@ under the License.
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Accounting Services - Invoice</description>
-    <vendor>Open Source Strategies, Inc.</vendor>
+    <vendor>opentaps Group LLC</vendor>
     <version>1.0</version>
     <service name="accountingTagsEntityInterface" engine="interface">
         <description>Interface for the accounting tags in an entity.</description>

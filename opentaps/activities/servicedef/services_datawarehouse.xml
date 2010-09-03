@@ -39,7 +39,7 @@
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Activities Services</description>
-    <vendor>Open Source Strategies, Inc.</vendor>
+    <vendor>opentaps Group LLC</vendor>
     <version>1.0</version>
     
     <service name="activities.transformToActivityFacts" engine="pojo" location="com.opensourcestrategies.activities.ActivitiesDataWarehouseService" invoke="transformToActivityFacts">

@@ -18,7 +18,7 @@
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Services for testing POJO tests</description>
-    <vendor>Open Source Strategies, Inc.</vendor>
+    <vendor>opentaps Group LLC</vendor>
 
     <service name="pojoTest" engine="pojo" auth="true"
             location="org.opentaps.tests.service.POJOTestServices" invoke="pojoTest">

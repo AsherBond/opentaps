@@ -18,7 +18,7 @@
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Opentaps WorkEffort Services</description>
-    <vendor>Open Source Strategies, Inc.</vendor>
+    <vendor>opentaps Group LLC</vendor>
 
     <service name="markWorkEffortAsUpdated" engine="java" 
             location="org.opentaps.common.workeffort.WorkEffortServices" invoke="markWorkEffortAsUpdated">

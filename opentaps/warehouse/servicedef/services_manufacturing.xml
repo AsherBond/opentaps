@@ -39,7 +39,7 @@ under the License.
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Opentaps Warehouse Manufacturing Services</description>
-    <vendor>Open Source Strategies, Inc.</vendor>
+    <vendor>opentaps Group LLC</vendor>
 
     <service name="createInventoryTransferForFacilityProduct" engine="java"
                 location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="createInventoryTransferForFacilityProduct">
