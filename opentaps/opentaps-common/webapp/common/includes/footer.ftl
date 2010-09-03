@@ -19,7 +19,7 @@
 
 <div id="footer">
     <div class="tabletext"><a href="http://www.opentaps.org" class="tabletext">${uiLabelMap.OpentapsProductName}</a> ${uiLabelMap.OpentapsReleaseVersion}.
-      opentaps is a trademark of <a href="http://www.opensourcestrategies.com">Open Source Strategies, Inc.</a></div>
+      opentaps is a trademark of <a href="http://www.opensourcestrategies.com">opentaps Group LLC</a></div>
     <div class="tabletext">This application is free software under the terms of the <a href="http://www.opentaps.org/about-opentaps/licensing">Affero General Public License v3</a> WITH ABSOLUTELY NO WARRANTY.<br />  It is also available under <a href="http://www.opentaps.org/services-support/professional-edition">commercial licenses</a> from Open Source Strategies, Inc.</div>
     <div class="tabletext">(c) 2005-2010 <a href="http://www.opensourcestrategies.com" class="tabletext">Open Source Strategies, Inc. </a></div>
     <div class="tabletext">
