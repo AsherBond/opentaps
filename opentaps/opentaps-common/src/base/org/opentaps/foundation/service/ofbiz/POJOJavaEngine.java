@@ -223,13 +223,18 @@ public class POJOJavaEngine extends GenericAsyncEngine {
                 Method serviceInvokeMethod = serviceClass.getMethod(invokeMethodName);
                 serviceInvokeMethod.invoke(service);
             } catch (Throwable ex) {
-                // handle exceptions only from the service
-                if (ex instanceof ServiceException) {
-                    ((ServiceException) ex).setLocale(locale);  // set the locale from the service context, as the service might not set it
-                    if (((ServiceException) ex).isRequiresRollback()) {
-                        return ServiceUtil.returnFailure(ex.getMessage());
+                if (ex instanceof InvocationTargetException) {
+                    // handle exceptions only from the service
+                    ServiceException se = (ServiceException) ((InvocationTargetException) ex).getTargetException();
+                    if (se != null && se instanceof ServiceException) {
+                        se.setLocale(locale);  // set the locale from the service context, as the service might not set it
+                        if (se.isRequiresRollback()) {
+                            return ServiceUtil.returnFailure(ex.getMessage());
+                        } else {
+                            return ServiceUtil.returnError(ex.getMessage());
+                        }
                     } else {
-                        return ServiceUtil.returnError(ex.getMessage());
+                        throw ex;
                     }
                 } else if (ex instanceof NoSuchMethodException) {
                     return ServiceUtil.returnError("No void method without parameters with name [" + invokeMethodName + "] found in [" + serviceClassName + "]");
