@@ -20,6 +20,7 @@ import java.util.Map;
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 */
+@SuppressWarnings("serial")
 public class ServiceException extends FoundationException {
     public ServiceException() {
         super();
@@ -33,7 +34,7 @@ public class ServiceException extends FoundationException {
         super(exception);
     }
 
-    public ServiceException(String messageLabel, Map messageContext) {
+    public ServiceException(String messageLabel, Map<String, Object> messageContext) {
         super(messageLabel, messageContext);   
     }
 

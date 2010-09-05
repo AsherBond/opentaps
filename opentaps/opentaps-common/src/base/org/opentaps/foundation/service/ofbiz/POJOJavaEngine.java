@@ -35,7 +35,6 @@
  *******************************************************************************/
 
 /* This file is based on StandardJavaEngine.java from Apache OFBiz and has been modified by Open Source Strategies, Inc. */
-
 package org.opentaps.foundation.service.ofbiz;
 
 import java.lang.reflect.InvocationTargetException;
@@ -98,9 +97,8 @@ public class POJOJavaEngine extends GenericAsyncEngine {
      * @exception GenericServiceException if an error occurs
      * @see org.ofbiz.service.engine.GenericEngine#runSyncIgnore(java.lang.String, org.ofbiz.service.ModelService, java.util.Map)
      */
-    @SuppressWarnings("unchecked")
     @Override
-    public void runSyncIgnore(String localName, ModelService modelService, Map context) throws GenericServiceException {
+    public void runSyncIgnore(String localName, ModelService modelService, Map<String, Object> context) throws GenericServiceException {
         runSync(localName, modelService, context);
     }
 
@@ -115,16 +113,16 @@ public class POJOJavaEngine extends GenericAsyncEngine {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public Map runSync(String localName, ModelService modelService, Map context) throws GenericServiceException {
+    public Map<String, Object> runSync(String localName, ModelService modelService, Map<String, Object> context) throws GenericServiceException {
         Object result = serviceInvoker(localName, modelService, context);
 
         if (result == null || !(result instanceof Map)) {
             throw new GenericServiceException("Service did not return expected result");
         }
-        return (Map) result;
+        return (Map<String, Object>) result;
     }
 
-    // this is so that a List of class parameteres as displayed as their class names, rather than as java.lang.Class
+    // this is so that a List of class parameters as displayed as their class names, rather than as java.lang.Class
     @SuppressWarnings("unchecked")
     private List getParameterClasses(Class[] parameterClasses) {
         List classes = new ArrayList();
@@ -136,7 +134,7 @@ public class POJOJavaEngine extends GenericAsyncEngine {
 
     // Invoke the object-oriented (POJO)) java service.
     @SuppressWarnings("unchecked")
-    private Object serviceInvoker(String localName, ModelService modelService, Map context) throws GenericServiceException {
+    private Object serviceInvoker(String localName, ModelService modelService, Map<String, Object> context) throws GenericServiceException {
         DispatchContext dctx = dispatcher.getLocalContext(localName);
 
         if (modelService == null) {
@@ -192,7 +190,7 @@ public class POJOJavaEngine extends GenericAsyncEngine {
             Set<String> contextKeys = context.keySet();
             for (String contextKey : contextKeys) {
                 if (UtilValidate.isNotEmpty(contextKey)) {
-                    // get method name from paramter name: orderId -> setOrderId
+                    // get method name from parameter name: orderId -> setOrderId
                     String setMethodName = FoundationUtils.setterName(contextKey);
                     // get the value of this context parameter
                     Object contextValue = context.get(contextKey);
@@ -245,7 +243,7 @@ public class POJOJavaEngine extends GenericAsyncEngine {
 
             // without any exceptions, we can assume the service was a success, so now we work on getting the output parameters
             // first we construct a standard service return Map
-            Map results = ServiceUtil.returnSuccess();
+            Map<String, Object> results = ServiceUtil.returnSuccess();
             results.put("userLogin", userLogin);
             results.put("locale", locale);
 

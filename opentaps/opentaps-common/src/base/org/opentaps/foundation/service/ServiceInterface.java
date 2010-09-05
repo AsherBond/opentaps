@@ -23,8 +23,6 @@ import java.util.TimeZone;
 
 import org.ofbiz.security.Security;
 import org.opentaps.foundation.infrastructure.DomainContextInterface;
-import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Common interface for all POJO services.
