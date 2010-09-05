@@ -2131,7 +2131,13 @@ public class OrderReturnServices {
                 }
                 BigDecimal returnTotal = returnItem.getBigDecimal("returnPrice").multiply(returnItem.getBigDecimal("returnQuantity"));
                 BigDecimal orderTotal = orderItem.getBigDecimal("quantity").multiply(orderItem.getBigDecimal("unitPrice"));
-                amount = getAdjustmentAmount("RET_SALES_TAX_ADJ".equals(returnAdjustmentTypeId), returnTotal, orderTotal, orderAdjustment.getBigDecimal("amount"));
+                if (orderAdjustment.getBigDecimal("amount") != null) {
+                    amount = getAdjustmentAmount("RET_SALES_TAX_ADJ".equals(returnAdjustmentTypeId), returnTotal, orderTotal, orderAdjustment.getBigDecimal("amount"));
+                } else if (orderAdjustment.getBigDecimal("sourcePercentage") != null) {
+                    amount = returnTotal.multiply(orderAdjustment.getBigDecimal("sourcePercentage")).divide(new BigDecimal(100), 100, rounding);
+                } else {
+                    amount = BigDecimal.ZERO;
+                }
             } else {
                 amount = (BigDecimal) context.get("amount");
             }

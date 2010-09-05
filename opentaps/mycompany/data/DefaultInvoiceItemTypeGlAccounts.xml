@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -62,13 +62,13 @@
     <!-- for purchase invoice items -->
     <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_PROD_ITEM" glAccountId="140000"/> <!-- Inventory -->
     <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_FPROD_ITEM" glAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_DPROD_ITEM" glAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_FDPROD_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_DPROD_ITEM" glAccountId="500000"/> <!-- COGS -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_FDPROD_ITEM" glAccountId="500000"/>
     <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_PROD_FEATR_ITEM" glAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SPROD_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SPROD_ITEM" glAccountId="700000"/> <!-- Other expenses -->
 
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_WE_ITEM" glAccountId="140000"/>
-    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_TE_ITEM" glAccountId="140000"/>
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_WE_ITEM" glAccountId="700000"/> <!-- Other expenses -->
+    <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_TE_ITEM" glAccountId="700000"/>
     
     <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PINV_SHIP_CHARGES" glAccountId="510000"/> <!-- Freight In -->
     <InvoiceItemTypeGlAccount organizationPartyId="Company_Template" invoiceItemTypeId="PITM_SHIP_CHARGES" glAccountId="510000"/> <!-- Freight In -->

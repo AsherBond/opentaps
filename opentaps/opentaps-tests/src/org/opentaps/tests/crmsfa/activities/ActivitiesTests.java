@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -29,12 +29,10 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityCondition;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.constants.WorkEffortPurposeTypeConstants;
 import org.opentaps.base.constants.WorkEffortTypeConstants;
-import org.opentaps.base.entities.ActivityFact;
 import org.opentaps.base.entities.PartyContactMech;
 import org.opentaps.base.entities.UserLogin;
 import org.opentaps.base.entities.WorkEffort;
@@ -45,9 +43,14 @@ import org.opentaps.base.services.CrmsfaDeleteActivityEmailService;
 import org.opentaps.base.services.CrmsfaSaveActivityEmailService;
 import org.opentaps.base.services.CrmsfaLogTaskService;
 import org.opentaps.common.reporting.etl.UtilEtl;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.activities.ActivitiesDomainInterface;
+import org.opentaps.domain.activities.ActivityFactRepositoryInterface;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.domain.party.PartyRepositoryInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.tests.OpentapsTestCase;
 import org.opentaps.tests.crmsfa.crm.CrmTests;
 
@@ -73,13 +76,14 @@ public class ActivitiesTests extends OpentapsTestCase {
     private String externalPartyId2 = "DemoLead2";
     private String testWorkEffortName = "testWorkEffortName";
 
+    private DomainsLoader domainLoader = null;
     private PartyDomainInterface partyDomain = null;
     private PartyRepositoryInterface partyRepository = null;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-
+        domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));
         partyDomain = domainsLoader.getDomainsDirectory().getPartyDomain();
         partyRepository = partyDomain.getPartyRepository();
     }
@@ -87,7 +91,7 @@ public class ActivitiesTests extends OpentapsTestCase {
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
-
+        domainLoader = null;
         partyDomain = null;
         partyRepository = null;
     }
@@ -105,7 +109,7 @@ public class ActivitiesTests extends OpentapsTestCase {
 
         /*
          * DemoSalesRep1 changes owner of activity DemoMeeting1 to DemoSalesManager.
-         * Should be success. Calendar owner about to change owner to superuser. 
+         * Should be success. Calendar owner about to change owner to superuser.
          */
         Map<String, Object> callContext = new HashMap<String, Object>();
         callContext.put("userLogin", DemoSalesRep1);
@@ -116,7 +120,7 @@ public class ActivitiesTests extends OpentapsTestCase {
 
         /*
          * DemoSalesRep1 changes owner of activity DemoMeeting to DemoSalesRep2.
-         * Should be fail. DemoSalesRep1 isn't owner any more and isn't superuser. 
+         * Should be fail. DemoSalesRep1 isn't owner any more and isn't superuser.
          */
         callContext = new HashMap<String, Object>();
         callContext.put("userLogin", DemoSalesRep1);
@@ -127,7 +131,7 @@ public class ActivitiesTests extends OpentapsTestCase {
 
         /*
          * DemoSalesManager changes owner of activity DemoMeeting1 to DemoSalesRep2.
-         * Should be success. DemoSalesManager is owner and superuser. 
+         * Should be success. DemoSalesManager is owner and superuser.
          */
         callContext = new HashMap<String, Object>();
         callContext.put("userLogin", DemoSalesManager);
@@ -151,12 +155,12 @@ public class ActivitiesTests extends OpentapsTestCase {
 
     /**
      * Test deleteActivityEmail service
-     * Create Activity event = Save Activity Email 
-     * 
+     * Create Activity event = Save Activity Email
+     *
      * @throws Exception
      */
     public void testDeleteActivityAfterSaveEmail() throws Exception {
-        // Create lead 
+        // Create lead
         CrmsfaCreateLeadService createLeadService = new CrmsfaCreateLeadService();
         createLeadService.setInUserLogin(this.admin);
         createLeadService.setInCompanyName(TEST_LEAD_COMPANY_NAME);
@@ -170,14 +174,14 @@ public class ActivitiesTests extends OpentapsTestCase {
 
         // Count the number of activities related to the lead
         int activityNumber = countPendingActivities(partyIdLead);
-        
+
         Party party = partyRepository.getPartyById(partyIdLead);
         List<? extends PartyContactMech> contactMeches = party.getPartyContactMeches();
         String contactMechId = contactMeches.iterator().next().getContactMechId();
 
         // Save Activity Email
         CrmsfaSaveActivityEmailService saveActivityEmailService= new CrmsfaSaveActivityEmailService();
-        saveActivityEmailService.setInUserLogin(this.admin);   
+        saveActivityEmailService.setInUserLogin(this.admin);
         saveActivityEmailService.setInContactMechIdFrom(contactMechId);
         saveActivityEmailService.setInToEmail(TEST_EMAIL);
         saveActivityEmailService.setInSubject(TEST_EMAIL_SUBJECT);
@@ -208,11 +212,11 @@ public class ActivitiesTests extends OpentapsTestCase {
     /**
      * Test deleteActivityEmail service with CommunicationEventId
      * Create Activity event = Save Activity Email
-     * 
+     *
      * @throws Exception
      */
     public void testDeleteActivityAfterSaveEmailWithCommunicationEventId() throws Exception {
-        // Create lead 
+        // Create lead
         CrmsfaCreateLeadService createLeadService = new CrmsfaCreateLeadService();
         createLeadService.setInUserLogin(this.admin);
         createLeadService.setInCompanyName(TEST_LEAD_COMPANY_NAME);
@@ -270,11 +274,11 @@ public class ActivitiesTests extends OpentapsTestCase {
     /**
      * Test deleteActivityEmail service
      * Create Activity event = Create Log Call
-     * 
+     *
      * @throws Exception
      */
     public void testDeleteActivityAfterLogCall() throws Exception {
-        // Create lead 
+        // Create lead
         CrmsfaCreateLeadService createLeadService = new CrmsfaCreateLeadService();
         createLeadService.setInUserLogin(this.admin);
         createLeadService.setInCompanyName(TEST_LEAD_COMPANY_NAME);
@@ -294,7 +298,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         logTaskService.setInFromPartyId("admin");
         logTaskService.setInInternalPartyId(partyIdLead);
         logTaskService.setInOutbound("N");
-        logTaskService.setInWorkEffortPurposeTypeId("WEPT_TASK_PHONE_CALL"); 
+        logTaskService.setInWorkEffortPurposeTypeId("WEPT_TASK_PHONE_CALL");
         logTaskService.setInWorkEffortName("WorkEffortName_2");
 
         runAndAssertServiceSuccess(logTaskService);
@@ -320,11 +324,11 @@ public class ActivitiesTests extends OpentapsTestCase {
     /**
      * Test deleteActivityEmail service
      * Create Activity event = Create Log Call
-     * 
+     *
      * @throws Exception
      */
     public void testDeleteActivityAfterLogEmail() throws Exception {
-        // Create lead 
+        // Create lead
         CrmsfaCreateLeadService createLeadService = new CrmsfaCreateLeadService();
         createLeadService.setInUserLogin(this.admin);
         createLeadService.setInCompanyName(TEST_LEAD_COMPANY_NAME);
@@ -344,7 +348,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         logTaskService.setInFromPartyId("admin");
         logTaskService.setInInternalPartyId(partyIdLead);
         logTaskService.setInOutbound("N");
-        logTaskService.setInWorkEffortPurposeTypeId("WEPT_TASK_EMAIL"); 
+        logTaskService.setInWorkEffortPurposeTypeId("WEPT_TASK_EMAIL");
         logTaskService.setInWorkEffortName("WorkEffortName");
 
         runAndAssertServiceSuccess(logTaskService);
@@ -370,11 +374,11 @@ public class ActivitiesTests extends OpentapsTestCase {
     /**
      * Test deleteActivityEmail service
      * Create Activity event = Create Task
-     * 
+     *
      * @throws Exception
      */
     public void testDeleteActivityAfterCreateTask() throws Exception {
-        // Create lead 
+        // Create lead
         CrmsfaCreateLeadService createLeadService = new CrmsfaCreateLeadService();
         createLeadService.setInUserLogin(this.admin);
         createLeadService.setInCompanyName(TEST_LEAD_COMPANY_NAME);
@@ -422,12 +426,12 @@ public class ActivitiesTests extends OpentapsTestCase {
 
     /**
      * Test deleteActivityEmail service
-     * Create Activity event = Create Event 
-     * 
+     * Create Activity event = Create Event
+     *
      * @throws Exception
      */
     public void testDeleteActivityAfterCreateEvent() throws Exception {
-        // Create lead 
+        // Create lead
         CrmsfaCreateLeadService createLeadService = new CrmsfaCreateLeadService();
         createLeadService.setInUserLogin(this.admin);
         createLeadService.setInCompanyName(TEST_LEAD_COMPANY_NAME);
@@ -475,7 +479,7 @@ public class ActivitiesTests extends OpentapsTestCase {
 
     /**
      * Count the number of pending activities related to the lead
-     * 
+     *
      * @param partyIdLead
      * @return Activities number
      */
@@ -498,7 +502,7 @@ public class ActivitiesTests extends OpentapsTestCase {
 
     /**
      * Count the number of completed activities related to the lead
-     * 
+     *
      * @param partyIdLead
      * @return Activities number
      */
@@ -524,6 +528,12 @@ public class ActivitiesTests extends OpentapsTestCase {
      * @exception Exception if an error occurs
      */
     public void testTransformToActivityFacts() throws Exception {
+        ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
+        ActivityFactRepositoryInterface activityFactRepoBefore1 = activitiesDomain.getActivityFactRepository();
+        ActivityFactRepositoryInterface activityFactRepoBefore2 = activitiesDomain.getActivityFactRepository();
+        ActivityFactRepositoryInterface activityFactRepoBefore3 = activitiesDomain.getActivityFactRepository();
+        ActivityFactRepositoryInterface activityFactRepoBefore4 = activitiesDomain.getActivityFactRepository();
+        ActivityFactRepositoryInterface activityFactRepoBefore5 = activitiesDomain.getActivityFactRepository();
 
         // Get date dimention ID of work effort start date.
         Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(testTimestamp2, partyDomain.getInfrastructure().getDelegator());
@@ -573,38 +583,37 @@ public class ActivitiesTests extends OpentapsTestCase {
         runAndAssertServiceSuccess("crmsfa.updateActivityWithoutAssoc", args);
 
         // Look up activity fact's before transformation
+        activityFactRepoBefore1.setTargetPartyId(externalPartyId1);
+        activityFactRepoBefore1.setTeamMemberPartyId(internalPartyId1);
+        activityFactRepoBefore1.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepoBefore1.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
+        activityFactRepoBefore1.setDateDimensionId(dateDimId);
 
-        EntityCondition partiesCond1 = EntityCondition.makeCondition(
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), externalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), internalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), RoleTypeConstants.CAL_OWNER),
-            EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
-        List<ActivityFact> factsBefore1 = partyRepository.findList(ActivityFact.class, partiesCond1);
+        activityFactRepoBefore1.findActivityFacts();
 
-        EntityCondition partiesCond2 = EntityCondition.makeCondition(
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), externalPartyId2),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), internalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), RoleTypeConstants.CAL_OWNER),
-            EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
-        List<ActivityFact> factsBefore2 = partyRepository.findList(ActivityFact.class, partiesCond2);
+        activityFactRepoBefore2.setTargetPartyId(externalPartyId2);
+        activityFactRepoBefore2.setTeamMemberPartyId(internalPartyId1);
+        activityFactRepoBefore2.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepoBefore2.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
+        activityFactRepoBefore2.setDateDimensionId(dateDimId);
 
-        EntityCondition partiesCond3 = EntityCondition.makeCondition(
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), externalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), internalPartyId2),
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), RoleTypeConstants.CAL_ATTENDEE),
-            EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
-        List<ActivityFact> factsBefore3 = partyRepository.findList(ActivityFact.class, partiesCond3);
+        activityFactRepoBefore2.findActivityFacts();
 
-        EntityCondition partiesCond4 = EntityCondition.makeCondition(
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), externalPartyId2),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), internalPartyId2),
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), RoleTypeConstants.CAL_ATTENDEE),
-            EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
-        List<ActivityFact> factsBefore4 = partyRepository.findList(ActivityFact.class, partiesCond4);
+        activityFactRepoBefore3.setTargetPartyId(externalPartyId1);
+        activityFactRepoBefore3.setTeamMemberPartyId(internalPartyId2);
+        activityFactRepoBefore3.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepoBefore3.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_ATTENDEE);
+        activityFactRepoBefore3.setDateDimensionId(dateDimId);
+
+        activityFactRepoBefore3.findActivityFacts();
+
+        activityFactRepoBefore4.setTargetPartyId(externalPartyId2);
+        activityFactRepoBefore4.setTeamMemberPartyId(internalPartyId2);
+        activityFactRepoBefore4.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepoBefore4.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_ATTENDEE);
+        activityFactRepoBefore4.setDateDimensionId(dateDimId);
+
+        activityFactRepoBefore4.findActivityFacts();
 
         // Execute transformation.
         args = UtilMisc.<String, Object>toMap("workEffortId", workEffortId1);
@@ -615,95 +624,75 @@ public class ActivitiesTests extends OpentapsTestCase {
 
         //==================================
 
-        List<ActivityFact> facts1 = partyRepository.findList(ActivityFact.class, partiesCond1);
+        long emailActivityCountBefore = activityFactRepoBefore1.getEmailActivityCount();
+        long phoneCallActivityCountBefore = activityFactRepoBefore1.getPhoneCallActivityCount();
+        long visitActivityCountBefore = activityFactRepoBefore1.getVisitActivityCount();
+        long otherActivityCountBefore = activityFactRepoBefore1.getOtherActivityCount();
+        long totalActivityCountBefore = activityFactRepoBefore1.getTotalActivityCount();
 
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, facts1.size());
+        int factsSize = activityFactRepoBefore1.findActivityFacts().size();
 
-        long emailActivityCountBefore = 0;
-        long phoneCallActivityCountBefore = 0;
-        long visitActivityCountBefore = 0;
-        long otherActivityCountBefore = 0;
-        if (factsBefore1.size() > 0) {
-            emailActivityCountBefore = factsBefore1.get(0).getEmailActivityCount();
-            phoneCallActivityCountBefore = factsBefore1.get(0).getPhoneCallActivityCount();
-            visitActivityCountBefore = factsBefore1.get(0).getVisitActivityCount();
-            otherActivityCountBefore = factsBefore1.get(0).getOtherActivityCount();
-        }
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, factsSize);
 
-        ActivityFact fact1 = facts1.get(0);
-        assertEquals("Email activity count is not good.", fact1.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact1.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact1.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
-        assertEquals("Other activity count is not good.", fact1.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Email activity count is not good.", (Long) activityFactRepoBefore1.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good.", (Long) activityFactRepoBefore1.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", (Long) activityFactRepoBefore1.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
+        assertEquals("Other activity count is not good.", (Long) activityFactRepoBefore1.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good.", (Long) activityFactRepoBefore1.getTotalActivityCount(), Long.valueOf(1 + totalActivityCountBefore));
 
         //==================================
 
-        List<ActivityFact> facts2 = partyRepository.findList(ActivityFact.class, partiesCond2);
+        emailActivityCountBefore = activityFactRepoBefore2.getEmailActivityCount();
+        phoneCallActivityCountBefore = activityFactRepoBefore2.getPhoneCallActivityCount();
+        visitActivityCountBefore = activityFactRepoBefore2.getVisitActivityCount();
+        otherActivityCountBefore = activityFactRepoBefore2.getOtherActivityCount();
+        totalActivityCountBefore = activityFactRepoBefore2.getTotalActivityCount();
 
-        assertEquals("Record with target party [" + externalPartyId2 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, facts2.size());
+        factsSize = activityFactRepoBefore2.findActivityFacts().size();
 
-        emailActivityCountBefore = 0;
-        phoneCallActivityCountBefore = 0;
-        visitActivityCountBefore = 0;
-        otherActivityCountBefore = 0;
-        if (factsBefore2.size() > 0) {
-            emailActivityCountBefore = factsBefore2.get(0).getEmailActivityCount();
-            phoneCallActivityCountBefore = factsBefore2.get(0).getPhoneCallActivityCount();
-            visitActivityCountBefore = factsBefore2.get(0).getVisitActivityCount();
-            otherActivityCountBefore = factsBefore2.get(0).getOtherActivityCount();
-        }
+        assertEquals("Record with target party [" + externalPartyId2 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, factsSize);
 
-        ActivityFact fact2 = facts2.get(0);
-        assertEquals("Email activity count is not good.", fact2.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact2.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact2.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
-        assertEquals("Other activity count is not good.", fact2.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Email activity count is not good.", (Long) activityFactRepoBefore2.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good.", (Long) activityFactRepoBefore2.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", (Long) activityFactRepoBefore2.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
+        assertEquals("Other activity count is not good.", (Long) activityFactRepoBefore2.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good.", (Long) activityFactRepoBefore2.getTotalActivityCount(), Long.valueOf(1 + totalActivityCountBefore));
 
         //==================================
 
-        List<ActivityFact> facts3 = partyRepository.findList(ActivityFact.class, partiesCond3);
+        emailActivityCountBefore = activityFactRepoBefore3.getEmailActivityCount();
+        phoneCallActivityCountBefore = activityFactRepoBefore3.getPhoneCallActivityCount();
+        visitActivityCountBefore = activityFactRepoBefore3.getVisitActivityCount();
+        otherActivityCountBefore = activityFactRepoBefore3.getOtherActivityCount();
+        totalActivityCountBefore = activityFactRepoBefore3.getTotalActivityCount();
 
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId2 + "] not added to ActivityFact entity.", 1, facts3.size());
+        factsSize = activityFactRepoBefore3.findActivityFacts().size();
 
-        emailActivityCountBefore = 0;
-        phoneCallActivityCountBefore = 0;
-        visitActivityCountBefore = 0;
-        otherActivityCountBefore = 0;
-        if (factsBefore3.size() > 0) {
-            emailActivityCountBefore = factsBefore3.get(0).getEmailActivityCount();
-            phoneCallActivityCountBefore = factsBefore3.get(0).getPhoneCallActivityCount();
-            visitActivityCountBefore = factsBefore3.get(0).getVisitActivityCount();
-            otherActivityCountBefore = factsBefore3.get(0).getOtherActivityCount();
-        }
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId2 + "] not added to ActivityFact entity.", 1, factsSize);
 
-        ActivityFact fact3 = facts3.get(0);
-        assertEquals("Email activity count is not good.", fact3.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact3.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact3.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
-        assertEquals("Other activity count is not good.", fact3.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Email activity count is not good.", (Long) activityFactRepoBefore3.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good.", (Long) activityFactRepoBefore3.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", (Long) activityFactRepoBefore3.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
+        assertEquals("Other activity count is not good.", (Long) activityFactRepoBefore3.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good.", (Long) activityFactRepoBefore3.getTotalActivityCount(), Long.valueOf(1 + totalActivityCountBefore));
 
         //==================================
 
-        List<ActivityFact> facts4 = partyRepository.findList(ActivityFact.class, partiesCond4);
+        emailActivityCountBefore = activityFactRepoBefore4.getEmailActivityCount();
+        phoneCallActivityCountBefore = activityFactRepoBefore4.getPhoneCallActivityCount();
+        visitActivityCountBefore = activityFactRepoBefore4.getVisitActivityCount();
+        otherActivityCountBefore = activityFactRepoBefore4.getOtherActivityCount();
+        totalActivityCountBefore = activityFactRepoBefore4.getTotalActivityCount();
 
-        assertEquals("Record with target party [" + externalPartyId2 + "], team party [" + internalPartyId2 + "] not added to ActivityFact entity.", 1, facts4.size());
+        factsSize = activityFactRepoBefore4.findActivityFacts().size();
 
-        emailActivityCountBefore = 0;
-        phoneCallActivityCountBefore = 0;
-        visitActivityCountBefore = 0;
-        otherActivityCountBefore = 0;
-        if (factsBefore4.size() > 0) {
-            emailActivityCountBefore = factsBefore4.get(0).getEmailActivityCount();
-            phoneCallActivityCountBefore = factsBefore4.get(0).getPhoneCallActivityCount();
-            visitActivityCountBefore = factsBefore4.get(0).getVisitActivityCount();
-            otherActivityCountBefore = factsBefore4.get(0).getOtherActivityCount();
-        }
+        assertEquals("Record with target party [" + externalPartyId2 + "], team party [" + internalPartyId2 + "] not added to ActivityFact entity.", 1, factsSize);
 
-        ActivityFact fact4 = facts4.get(0);
-        assertEquals("Email activity count is not good.", fact4.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact4.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact4.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
-        assertEquals("Other activity count is not good.", fact4.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Email activity count is not good.", (Long) activityFactRepoBefore4.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good.", (Long) activityFactRepoBefore4.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", (Long) activityFactRepoBefore4.getVisitActivityCount(), Long.valueOf(1 + visitActivityCountBefore));
+        assertEquals("Other activity count is not good.", (Long) activityFactRepoBefore4.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good.", (Long) activityFactRepoBefore4.getTotalActivityCount(), Long.valueOf(1 + totalActivityCountBefore));
 
         //==================================
 
@@ -737,13 +726,13 @@ public class ActivitiesTests extends OpentapsTestCase {
         runAndAssertServiceSuccess("crmsfa.updateActivityWithoutAssoc", args);
 
         // Look up activity fact's before transformation
-        EntityCondition partiesCond5 = EntityCondition.makeCondition(
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), externalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), internalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), RoleTypeConstants.CAL_OWNER),
-            EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
-        List<ActivityFact> factsBefore5 = partyRepository.findList(ActivityFact.class, partiesCond5);
+        activityFactRepoBefore5.setTargetPartyId(externalPartyId1);
+        activityFactRepoBefore5.setTeamMemberPartyId(internalPartyId1);
+        activityFactRepoBefore5.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepoBefore5.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
+        activityFactRepoBefore5.setDateDimensionId(dateDimId);
+
+        activityFactRepoBefore5.findActivityFacts();
 
         //Execute transformation.
         args = UtilMisc.<String, Object>toMap("workEffortId", workEffortId2);
@@ -754,29 +743,23 @@ public class ActivitiesTests extends OpentapsTestCase {
 
         //==================================
 
-        List<ActivityFact> facts5 = partyRepository.findList(ActivityFact.class, partiesCond5);
+        emailActivityCountBefore = activityFactRepoBefore5.getEmailActivityCount();
+        phoneCallActivityCountBefore = activityFactRepoBefore5.getPhoneCallActivityCount();
+        visitActivityCountBefore = activityFactRepoBefore5.getVisitActivityCount();
+        otherActivityCountBefore = activityFactRepoBefore5.getOtherActivityCount();
+        totalActivityCountBefore = activityFactRepoBefore5.getTotalActivityCount();
 
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, facts5.size());
+        factsSize = activityFactRepoBefore5.findActivityFacts().size();
 
-        emailActivityCountBefore = 0;
-        phoneCallActivityCountBefore = 0;
-        visitActivityCountBefore = 0;
-        otherActivityCountBefore = 0;
-        if (factsBefore5.size() > 0) {
-            emailActivityCountBefore = factsBefore5.get(0).getEmailActivityCount();
-            phoneCallActivityCountBefore = factsBefore5.get(0).getPhoneCallActivityCount();
-            visitActivityCountBefore = factsBefore5.get(0).getVisitActivityCount();
-            otherActivityCountBefore = factsBefore5.get(0).getOtherActivityCount();
-        }
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, factsSize);
 
-        ActivityFact fact5 = facts5.get(0);
-        assertEquals("Email activity count is not good.", fact5.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact5.getPhoneCallActivityCount(), Long.valueOf(1 + phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact5.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
-        assertEquals("Other activity count is not good.", fact5.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Email activity count is not good.", (Long) activityFactRepoBefore5.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good.", (Long) activityFactRepoBefore5.getPhoneCallActivityCount(), Long.valueOf(1 + phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", (Long) activityFactRepoBefore5.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Other activity count is not good.", (Long) activityFactRepoBefore5.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good.", (Long) activityFactRepoBefore5.getTotalActivityCount(), Long.valueOf(1 + totalActivityCountBefore));
 
         //==================================
-
     }
 
     /**
@@ -784,6 +767,8 @@ public class ActivitiesTests extends OpentapsTestCase {
      * @exception Exception if an error occurs
      */
     public void testNotTransformCancelledActivities() throws Exception {
+        ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
+        ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
 
         // Get date dimention ID of work effort start date.
         Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(testTimestamp2, partyDomain.getInfrastructure().getDelegator());
@@ -821,43 +806,35 @@ public class ActivitiesTests extends OpentapsTestCase {
         runAndAssertServiceSuccess("crmsfa.updateActivityWithoutAssoc", args);
 
         // Look up activity fact's before transformation
-        EntityCondition partiesCond = EntityCondition.makeCondition(
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), externalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), internalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), RoleTypeConstants.CAL_OWNER),
-            EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
-        List<ActivityFact> factsBefore = partyRepository.findList(ActivityFact.class, partiesCond);
+        activityFactRepo.setTargetPartyId(externalPartyId1);
+        activityFactRepo.setTeamMemberPartyId(internalPartyId1);
+        activityFactRepo.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepo.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
+        activityFactRepo.setDateDimensionId(dateDimId);
+
+        int sizefactsBefore = activityFactRepo.findActivityFacts().size();
+
+        long emailActivityCountBefore = activityFactRepo.getEmailActivityCount();
+        long phoneCallActivityCountBefore = activityFactRepo.getPhoneCallActivityCount();
+        long visitActivityCountBefore = activityFactRepo.getVisitActivityCount();
+        long otherActivityCountBefore = activityFactRepo.getOtherActivityCount();
+        long totalActivityCountBefore = activityFactRepo.getTotalActivityCount();
+
 
         //Execute transformation.
         args = UtilMisc.<String, Object>toMap("workEffortId", workEffortId);
         runAndAssertServiceSuccess("activities.transformToActivityFacts", args);
 
         // Check if proper records was found.
+        int factsSize = activityFactRepo.findActivityFacts().size();
 
-        //==================================
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] must be not added to ActivityFact entity, " + "because work effor is chancelled.", sizefactsBefore, factsSize);
 
-        List<ActivityFact> facts = partyRepository.findList(ActivityFact.class, partiesCond);
-
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] must be not added to ActivityFact entity, " + "because work effor is chancelled.", factsBefore.size(), facts.size());
-
-        long emailActivityCountBefore = 0;
-        long phoneCallActivityCountBefore = 0;
-        long visitActivityCountBefore = 0;
-        long otherActivityCountBefore = 0;
-        if (factsBefore.size() > 0) {
-            emailActivityCountBefore = factsBefore.get(0).getEmailActivityCount();
-            phoneCallActivityCountBefore = factsBefore.get(0).getPhoneCallActivityCount();
-            visitActivityCountBefore = factsBefore.get(0).getVisitActivityCount();
-            otherActivityCountBefore = factsBefore.get(0).getOtherActivityCount();
-        }
-
-        ActivityFact fact = facts.get(0);
-        assertEquals("Email activity count is not good.", fact.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
-        assertEquals("Other activity count is not good.", fact.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
-
+        assertEquals("Email activity count is not good.", (Long) activityFactRepo.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good.", (Long) activityFactRepo.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", (Long) activityFactRepo.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Other activity count is not good.", (Long) activityFactRepo.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good.", (Long) activityFactRepo.getTotalActivityCount(), Long.valueOf(totalActivityCountBefore));
     }
 
     /**
@@ -865,6 +842,8 @@ public class ActivitiesTests extends OpentapsTestCase {
      * @exception Exception if an error occurs
      */
     public void testNotTransformPendingActivities() throws Exception {
+        ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
+        ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
 
         // Get date dimention ID of work effort start date.
         Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(testTimestamp2, partyDomain.getInfrastructure().getDelegator());
@@ -902,41 +881,34 @@ public class ActivitiesTests extends OpentapsTestCase {
         runAndAssertServiceSuccess("crmsfa.updateActivityWithoutAssoc", args);
 
         // Look up activity fact's before transformation.
-        EntityCondition partiesCond = EntityCondition.makeCondition(
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), externalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), internalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), RoleTypeConstants.CAL_OWNER),
-            EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
-        List<ActivityFact> factsBefore = partyRepository.findList(ActivityFact.class, partiesCond);
+        activityFactRepo.setTargetPartyId(externalPartyId1);
+        activityFactRepo.setTeamMemberPartyId(internalPartyId1);
+        activityFactRepo.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepo.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
+        activityFactRepo.setDateDimensionId(dateDimId);
+
+        int sizefactsBefore = activityFactRepo.findActivityFacts().size();
+
+        long emailActivityCountBefore = activityFactRepo.getEmailActivityCount();
+        long phoneCallActivityCountBefore = activityFactRepo.getPhoneCallActivityCount();
+        long visitActivityCountBefore = activityFactRepo.getVisitActivityCount();
+        long otherActivityCountBefore = activityFactRepo.getOtherActivityCount();
+        long totalActivityCountBefore = activityFactRepo.getTotalActivityCount();
 
         //Execute transformation.
         args = UtilMisc.<String, Object>toMap("workEffortId", workEffortId);
         runAndAssertServiceSuccess("activities.transformToActivityFacts", args);
 
         // Check if proper records was found.
+        int factsSize = activityFactRepo.findActivityFacts().size();
 
-        List<ActivityFact> facts = partyRepository.findList(ActivityFact.class, partiesCond);
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] must be not added to ActivityFact entity, " + "because work effort is pending.", sizefactsBefore, factsSize);
 
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] must be not added to ActivityFact entity, " + "because work effort is pending.", factsBefore.size(), facts.size());
-
-        long emailActivityCountBefore = 0;
-        long phoneCallActivityCountBefore = 0;
-        long visitActivityCountBefore = 0;
-        long otherActivityCountBefore = 0;
-        if (factsBefore.size() > 0) {
-            emailActivityCountBefore = factsBefore.get(0).getEmailActivityCount();
-            phoneCallActivityCountBefore = factsBefore.get(0).getPhoneCallActivityCount();
-            visitActivityCountBefore = factsBefore.get(0).getVisitActivityCount();
-            otherActivityCountBefore = factsBefore.get(0).getOtherActivityCount();
-        }
-
-        ActivityFact fact = facts.get(0);
-        assertEquals("Email activity count is not good.", fact.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
-        assertEquals("Other activity count is not good.", fact.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
-
+        assertEquals("Email activity count is not good.", (Long) activityFactRepo.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good.", (Long) activityFactRepo.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", (Long) activityFactRepo.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Other activity count is not good.", (Long) activityFactRepo.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good.", (Long) activityFactRepo.getTotalActivityCount(), Long.valueOf(totalActivityCountBefore));
     }
 
     /**
@@ -944,21 +916,28 @@ public class ActivitiesTests extends OpentapsTestCase {
      * @exception Exception if an error occurs
      */
     public void testTransformLogTaskActivity() throws Exception {
+        ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
+        ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
 
         // Get date dimention ID of work effort start date.
         Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure().getDelegator());
 
         // Look up activity fact's before transformation.
-        EntityCondition partiesCond = EntityCondition.makeCondition(
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), externalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), internalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), RoleTypeConstants.CAL_OWNER),
-            EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
-        List<ActivityFact> factsBefore = partyRepository.findList(ActivityFact.class, partiesCond);
+        activityFactRepo.setTargetPartyId(externalPartyId1);
+        activityFactRepo.setTeamMemberPartyId(internalPartyId1);
+        activityFactRepo.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepo.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
+        activityFactRepo.setDateDimensionId(dateDimId);
+
+        activityFactRepo.findActivityFacts();
+
+        long emailActivityCountBefore = activityFactRepo.getEmailActivityCount();
+        long phoneCallActivityCountBefore = activityFactRepo.getPhoneCallActivityCount();
+        long visitActivityCountBefore = activityFactRepo.getVisitActivityCount();
+        long otherActivityCountBefore = activityFactRepo.getOtherActivityCount();
+        long totalActivityCountBefore = activityFactRepo.getTotalActivityCount();
 
         // Call logTask service.
-
         UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
         GenericValue userLogin = partyRepository.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());
 
@@ -967,31 +946,22 @@ public class ActivitiesTests extends OpentapsTestCase {
                 "fromPartyId", internalPartyId1 ,
                 "outbound", "N" ,
                 "workEffortName", testWorkEffortName);
-        runAndAssertServiceSuccess("crmsfa.logTask", args);
+
+        Map<String, Object> results = runAndAssertServiceSuccess("crmsfa.logTask", args);
+
+        String workEffortId = (String) results.get("workEffortId");
+        Debug.logImportant("task workEffortId = " + workEffortId, MODULE);
 
         // Check if proper records was found.
+        int factsSize = activityFactRepo.findActivityFacts().size();
 
-        List<ActivityFact> facts = partyRepository.findList(ActivityFact.class, partiesCond);
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, factsSize);
 
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, facts.size());
-
-        long emailActivityCountBefore = 0;
-        long phoneCallActivityCountBefore = 0;
-        long visitActivityCountBefore = 0;
-        long otherActivityCountBefore = 0;
-        if (factsBefore.size() > 0) {
-            emailActivityCountBefore = factsBefore.get(0).getEmailActivityCount();
-            phoneCallActivityCountBefore = factsBefore.get(0).getPhoneCallActivityCount();
-            visitActivityCountBefore = factsBefore.get(0).getVisitActivityCount();
-            otherActivityCountBefore = factsBefore.get(0).getOtherActivityCount();
-        }
-
-        ActivityFact fact = facts.get(0);
-        assertEquals("Email activity count is not good.", fact.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
-        assertEquals("Other activity count is not good.", fact.getOtherActivityCount(), Long.valueOf(1 + otherActivityCountBefore));
-
+        assertEquals("Email activity count is not good.", (Long) activityFactRepo.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good.", (Long) activityFactRepo.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", (Long) activityFactRepo.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Other activity count is not good.", (Long) activityFactRepo.getOtherActivityCount(), Long.valueOf(1 + otherActivityCountBefore));
+        assertEquals("Total activity count is not good.", (Long) activityFactRepo.getTotalActivityCount(), Long.valueOf(1 + totalActivityCountBefore));
     }
 
     /**
@@ -999,21 +969,27 @@ public class ActivitiesTests extends OpentapsTestCase {
      * @exception Exception if an error occurs
      */
     public void testTransformSendEmailActivity() throws Exception {
+        ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
+        ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
 
         // Get date dimention ID of work effort start date.
         Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure().getDelegator());
 
-        // Look up activity fact's before transformation.
-        EntityCondition partiesCond = EntityCondition.makeCondition(
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), externalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyId.name(), internalPartyId1),
-            EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD),
-            EntityCondition.makeCondition(ActivityFact.Fields.teamMemberPartyRoleTypeId.name(), RoleTypeConstants.CAL_OWNER),
-            EntityCondition.makeCondition(ActivityFact.Fields.dateDimId.name(), dateDimId));
-        List<ActivityFact> factsBefore = partyRepository.findList(ActivityFact.class, partiesCond);
+        activityFactRepo.setTargetPartyId(externalPartyId1);
+        activityFactRepo.setTeamMemberPartyId(internalPartyId1);
+        activityFactRepo.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepo.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
+        activityFactRepo.setDateDimensionId(dateDimId);
+
+        activityFactRepo.findActivityFacts();
+
+        long emailActivityCountBefore = activityFactRepo.getEmailActivityCount();
+        long phoneCallActivityCountBefore = activityFactRepo.getPhoneCallActivityCount();
+        long visitActivityCountBefore = activityFactRepo.getVisitActivityCount();
+        long otherActivityCountBefore = activityFactRepo.getOtherActivityCount();
+        long totalActivityCountBefore = activityFactRepo.getTotalActivityCount();
 
         // Call send email service.
-
         UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
         GenericValue userLogin = partyRepository.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());
 
@@ -1030,27 +1006,15 @@ public class ActivitiesTests extends OpentapsTestCase {
         Debug.logImportant("send email workEffortId = " + workEffortId, MODULE);
 
         // Check if proper records was found.
+        int factsSize = activityFactRepo.findActivityFacts().size();
 
-        List<ActivityFact> facts = partyRepository.findList(ActivityFact.class, partiesCond);
+        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, factsSize);
 
-        assertEquals("Record with target party [" + externalPartyId1 + "], team party [" + internalPartyId1 + "] not added to ActivityFact entity.", 1, facts.size());
-
-        long emailActivityCountBefore = 0;
-        long phoneCallActivityCountBefore = 0;
-        long visitActivityCountBefore = 0;
-        long otherActivityCountBefore = 0;
-        if (factsBefore.size() > 0) {
-            emailActivityCountBefore = factsBefore.get(0).getEmailActivityCount();
-            phoneCallActivityCountBefore = factsBefore.get(0).getPhoneCallActivityCount();
-            visitActivityCountBefore = factsBefore.get(0).getVisitActivityCount();
-            otherActivityCountBefore = factsBefore.get(0).getOtherActivityCount();
-        }
-
-        ActivityFact fact = facts.get(0);
-        assertEquals("Email activity count is not good.", fact.getEmailActivityCount(), Long.valueOf(1 + emailActivityCountBefore));
-        assertEquals("Phone activity count is not good.", fact.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
-        assertEquals("Visit activity count is not good.", fact.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
-        assertEquals("Other activity count is not good.", fact.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Email activity count is not good.", (Long) activityFactRepo.getEmailActivityCount(), Long.valueOf(1 + emailActivityCountBefore));
+        assertEquals("Phone activity count is not good.", (Long) activityFactRepo.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good.", (Long) activityFactRepo.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Other activity count is not good.", (Long) activityFactRepo.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good.", (Long) activityFactRepo.getTotalActivityCount(), Long.valueOf(1 + totalActivityCountBefore));
     }
 
     /**
@@ -1063,6 +1027,77 @@ public class ActivitiesTests extends OpentapsTestCase {
         callContext.put("userLogin", admin);
 
         runAndAssertServiceSuccess("activities.transformAllActivities", callContext);
+    }
+
+    /**
+     * Test activity counts during delete
+     *
+     * @throws Exception if an error occurs
+     */
+    public void testActivityCountsDuringDelete() throws Exception {
+        ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
+        ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
+
+        // Get date dimention ID of work effort start date.
+        Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure().getDelegator());
+
+        activityFactRepo.setTargetPartyId(externalPartyId1);
+        activityFactRepo.setTeamMemberPartyId(internalPartyId1);
+        activityFactRepo.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+        activityFactRepo.setTeamMemeberRoleTypeId(RoleTypeConstants.CAL_OWNER);
+        activityFactRepo.setDateDimensionId(dateDimId);
+
+        activityFactRepo.findActivityFacts();
+
+        // Count activities before add new
+        long emailActivityCountBefore = activityFactRepo.getEmailActivityCount();
+        long phoneCallActivityCountBefore = activityFactRepo.getPhoneCallActivityCount();
+        long visitActivityCountBefore = activityFactRepo.getVisitActivityCount();
+        long otherActivityCountBefore = activityFactRepo.getOtherActivityCount();
+        long totalActivityCountBefore = activityFactRepo.getTotalActivityCount();
+
+        UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
+        GenericValue userLogin = partyRepository.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());
+
+        // Create Log Call
+        CrmsfaLogTaskService logTaskService = new CrmsfaLogTaskService();
+        logTaskService.setInUserLogin(userLogin);
+        logTaskService.setInFromPartyId("internalPartyId1");
+        logTaskService.setInInternalPartyId( externalPartyId1);
+        logTaskService.setInOutbound("N");
+        logTaskService.setInWorkEffortPurposeTypeId("WEPT_TASK_PHONE_CALL");
+        logTaskService.setInWorkEffortName("WorkEffortName_2");
+
+        runAndAssertServiceSuccess(logTaskService);
+
+        String workEffortId = logTaskService.getOutWorkEffortId();
+
+        Debug.logImportant("task workEffortId = " + workEffortId, MODULE);
+
+        activityFactRepo.findActivityFacts();
+
+        // Verify activity counts after add Log Call
+        assertEquals("Email activity count is not good after add.", (Long) activityFactRepo.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good after add.", (Long) activityFactRepo.getPhoneCallActivityCount(), Long.valueOf(1 + phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good after add.", (Long) activityFactRepo.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Other activity count is not good after add.", (Long) activityFactRepo.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good after add.", (Long) activityFactRepo.getTotalActivityCount(), Long.valueOf(1 + totalActivityCountBefore));
+
+        // Delete Activity
+        CrmsfaDeleteActivityEmailService  deleteActivityEmailService = new CrmsfaDeleteActivityEmailService();
+        deleteActivityEmailService.setInUserLogin(userLogin);
+        deleteActivityEmailService.setInWorkEffortId(workEffortId);
+
+        runAndAssertServiceSuccess(deleteActivityEmailService);
+
+        activityFactRepo.findActivityFacts();
+
+        // Verify activity counts after delete Log Call
+        assertEquals("Email activity count is not good after delete.", (Long) activityFactRepo.getEmailActivityCount(), Long.valueOf(emailActivityCountBefore));
+        assertEquals("Phone activity count is not good after delete.", (Long) activityFactRepo.getPhoneCallActivityCount(), Long.valueOf(phoneCallActivityCountBefore));
+        assertEquals("Visit activity count is not good after delete.", (Long) activityFactRepo.getVisitActivityCount(), Long.valueOf(visitActivityCountBefore));
+        assertEquals("Other activity count is not good after delete.", (Long) activityFactRepo.getOtherActivityCount(), Long.valueOf(otherActivityCountBefore));
+        assertEquals("Total activity count is not good after delete.", (Long) activityFactRepo.getTotalActivityCount(), Long.valueOf(totalActivityCountBefore));
     }
 
 }

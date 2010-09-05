@@ -48,6 +48,10 @@ Framework changes
 
 This list the changes made in the framework directory, from the 09.04 ofbiz release.
 
+framework/entity/src/org/ofbiz/entity/condition/EntityDateFilterCondition.java
+framework/entity/src/org/ofbiz/entity/util/EntityUtil.java
+748252a Added API to handle java.sql.Date so that they are not converted to Timestamp as some entities would then throw a warning
+
 framework/base/src/org/ofbiz/base/util/UtilFormatOut.java
 r12890 Added a formatCurrency method which does not require the maximumFractionDigits argument. It uses the default value for the locale. Added for backward compatibility.
 

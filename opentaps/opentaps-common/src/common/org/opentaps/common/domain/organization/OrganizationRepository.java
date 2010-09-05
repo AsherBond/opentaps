@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -121,7 +121,7 @@ public class OrganizationRepository extends PartyRepository implements Organizat
         EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
                   EntityCondition.makeCondition(CustomTimePeriod.Fields.organizationPartyId.name(), organizationPartyId),
                   EntityCondition.makeCondition(CustomTimePeriod.Fields.periodTypeId.name(), EntityOperator.IN, fiscalPeriodTypes),
-                  EntityUtil.getFilterByDateExpr(UtilDate.timestampToSqlDate(asOfDate)),
+                  EntityUtil.getFilterByDateExpr(UtilDate.timestampToSqlDate(asOfDate), CustomTimePeriod.Fields.fromDate.name(), CustomTimePeriod.Fields.thruDate.name()),
                   EntityCondition.makeCondition(EntityOperator.OR,
                            EntityCondition.makeCondition(CustomTimePeriod.Fields.isClosed.name(), null),
                            EntityCondition.makeCondition(CustomTimePeriod.Fields.isClosed.name(), "N")));

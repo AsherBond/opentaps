@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 - 2010 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.opentaps.domain.activities.ActivitiesDomainInterface;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.crmsfa.teams.CrmTeamDomainInterface;
 import org.opentaps.domain.dataimport.DataImportDomainInterface;
@@ -299,5 +300,13 @@ public class DomainsDirectory implements DomainContextInterface {
 
     public void setSecurityDomain(SecurityDomainInterface securityDomain) {
         addDomain(SECURITY_DOMAIN, securityDomain);
+    }
+
+    public ActivitiesDomainInterface getActivitiesDomain() {
+        return (ActivitiesDomainInterface) getDomain(ACTIVITIES_DOMAIN);
+    }
+    
+    public void setActivitiesDomain(ActivitiesDomainInterface activitiesDomain) {
+        addDomain(ACTIVITIES_DOMAIN, activitiesDomain);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 - 2011 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -45,6 +45,7 @@ import org.opentaps.base.entities.ActivityFact;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.domain.DomainService;
+import org.opentaps.domain.activities.ActivityFactRepositoryInterface;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.infrastructure.Infrastructure;
@@ -206,12 +207,18 @@ public class ActivitiesChartsService extends DomainService {
     public void createActivitiesByLeadSnapshotChart() throws ServiceException {
         try {
             PartyRepositoryInterface rep = getDomainsDirectory().getPartyDomain().getPartyRepository();
+            ActivityFactRepositoryInterface activityFactRepo = getDomainsDirectory().getActivitiesDomain().getActivityFactRepository();
 
             // Get date dimension ID according to the cutoff
             Long readingDateDimId = lookupDateDimIdForCutoff();
 
+            activityFactRepo.setDateDimensionId(readingDateDimId);
+            activityFactRepo.setAllowedTargetPartyIds(allowedLeadPartyIds);
+            activityFactRepo.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+
             // Get the ActivityFacts grouped by Lead
-            Map<String, List<ActivityFact>> facts = findLeadsActivitiesGroupedBy(ActivityFact.Fields.targetPartyId, rep);
+            Map<String, List<ActivityFact>> facts = activityFactRepo.findLeadsActivitiesGroupedBy(ActivityFact.Fields.targetPartyId);
+
             createActivitiesSnapshotChartFromGroupedActivities(expandLabel("ActivitiesLeadBreakdown"), facts, readingDateDimId, rep);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
@@ -234,12 +241,18 @@ public class ActivitiesChartsService extends DomainService {
     public void createActivitiesBySalesRepSnapshotChart() throws ServiceException {
         try {
             PartyRepositoryInterface rep = getDomainsDirectory().getPartyDomain().getPartyRepository();
+            ActivityFactRepositoryInterface activityFactRepo = getDomainsDirectory().getActivitiesDomain().getActivityFactRepository();
 
             // Get date dimension ID according to the cutoff
             Long readingDateDimId = lookupDateDimIdForCutoff();
 
+            activityFactRepo.setDateDimensionId(readingDateDimId);
+            activityFactRepo.setAllowedTargetPartyIds(allowedLeadPartyIds);
+            activityFactRepo.setTargetRoleTypeId(RoleTypeConstants.LEAD);
+
             // Get the ActivityFacts grouped by Sales Representative
-            Map<String, List<ActivityFact>> facts = findLeadsActivitiesGroupedBy(ActivityFact.Fields.teamMemberPartyId, rep);
+            Map<String, List<ActivityFact>> facts = activityFactRepo.findLeadsActivitiesGroupedBy(ActivityFact.Fields.teamMemberPartyId);
+
             createActivitiesSnapshotChartFromGroupedActivities(expandLabel("ActivitiesSalesRepBreakdown"), facts, readingDateDimId, rep);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
@@ -351,17 +364,5 @@ public class ActivitiesChartsService extends DomainService {
         }
 
         return Entity.getDistinctFieldValues(String.class, repository.findList(PartyRole.class, condition, Arrays.asList(PartyRole.Fields.partyId.name()), Arrays.asList(PartyRole.Fields.partyId.asc())), PartyRole.Fields.partyId);
-    }
-
-    private Map<String, List<ActivityFact>> findLeadsActivitiesGroupedBy(ActivityFact.Fields groupedByField, PartyRepositoryInterface repository) throws RepositoryException {
-        // Get the ActivityFact records grouped by team member or by lead
-        EntityCondition condition = EntityCondition.makeCondition(ActivityFact.Fields.targetPartyRoleTypeId.name(), RoleTypeConstants.LEAD);
-        if (allowedLeadPartyIds != null) {
-            condition = EntityCondition.makeCondition(condition, EntityCondition.makeCondition(ActivityFact.Fields.targetPartyId.name(), EntityOperator.IN, allowedLeadPartyIds));
-        }
-        // order by dateDimId desc, so we can skip older activities when doing the breakdown
-        List<ActivityFact> prospectActivityFacts = repository.findList(ActivityFact.class, condition, Arrays.asList(ActivityFact.Fields.targetPartyId.name(), ActivityFact.Fields.dateDimId.name()), Arrays.asList(ActivityFact.Fields.targetPartyId.asc(), ActivityFact.Fields.dateDimId.desc()));
-        Debug.logInfo("findLeadsActivitiesGroupedBy, found ActivityFact [" + prospectActivityFacts + "]", MODULE);
-        return Entity.groupByFieldValues(String.class, prospectActivityFacts, groupedByField);
     }
 }

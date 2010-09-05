@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -21,7 +21,7 @@
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
 
     <description>Opentaps Common JSON Controller</description>
-    <owner>Open Source Strategies, Inc. (c) 2006-2009</owner>
+    <owner>opentaps Group LLC</owner>
 
     <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
 
