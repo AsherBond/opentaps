@@ -34,7 +34,7 @@ public class ServiceException extends FoundationException {
         super(exception);
     }
 
-    public ServiceException(String messageLabel, Map<String, Object> messageContext) {
+    public ServiceException(String messageLabel, Map<String, ?> messageContext) {
         super(messageLabel, messageContext);   
     }
 
