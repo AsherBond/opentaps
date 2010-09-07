@@ -1992,7 +1992,7 @@ public final class ActivitiesServices {
         if (!"TASK_CANCELLED".equals(currentStatusId)) {
             return ServiceUtil.returnSuccess();
         }
-        
+
         // Check if userLogin can update this work effort
         if (!CrmsfaSecurity.hasActivityPermission(security, "_UPDATE", userLogin, workEffortId)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
@@ -2052,8 +2052,17 @@ public final class ActivitiesServices {
             if (UtilValidate.isEmpty(workEffort)) {
                 return ServiceUtil.returnError("No activity found with work effort ID [" + workEffortId + "]");
             }
-            
+
             if (communicationEventId != null) {
+                // Remove any existing associations to CommunicationEventOrder
+                List<String> eventOrderIds = EntityUtil.getFieldListFromEntityList(delegator.findByAnd("CommunicationEventOrder", UtilMisc.toMap("communicationEventId", communicationEventId)), "orderId", true);
+                for (String orderIdToRemove : eventOrderIds) {
+                    Map<String, Object> deleteOHWEResult = dispatcher.runSync("removeCommunicationEventOrder", UtilMisc.toMap("communicationEventId", communicationEventId, "orderId", orderIdToRemove, "userLogin", userLogin));
+                    if (ServiceUtil.isError(deleteOHWEResult)) {
+                        return deleteOHWEResult;
+                    }
+                }
+
                 // delete just this particular communicationEventId
                 results = deleteActivityCommEventAndDataResource(workEffortId, communicationEventId, delContentDataResource, userLogin, dispatcher);
             } else {
@@ -2061,8 +2070,18 @@ public final class ActivitiesServices {
                 for (GenericValue communicationEvent: communicationEvents) {
                     results = deleteActivityCommEventAndDataResource(workEffortId, communicationEvent.getString("communicationEventId"), delContentDataResource, userLogin, dispatcher);
                 }
-                
+
             }
+
+            // Remove any existing associations to OrderHeaderWorkEffort
+            List<String> orderIds = EntityUtil.getFieldListFromEntityList(delegator.findByAnd("OrderHeaderWorkEffort", UtilMisc.toMap("workEffortId", workEffortId)), "orderId", true);
+            for (String orderIdToRemove : orderIds) {
+                Map<String, Object> deleteOHWEResult = dispatcher.runSync("deleteOrderHeaderWorkEffort", UtilMisc.toMap("workEffortId", workEffortId, "orderId", orderIdToRemove, "userLogin", userLogin));
+                if (ServiceUtil.isError(deleteOHWEResult)) {
+                    return deleteOHWEResult;
+                }
+            }
+
             // Call the deleteWorkEffort service
             Map<String, Object> deleteWorkEffortResult = dispatcher.runSync("deleteWorkEffort", UtilMisc.toMap("workEffortId", workEffortId, "userLogin", userLogin));
             if (ServiceUtil.isError(deleteWorkEffortResult)) {
@@ -2089,10 +2108,10 @@ public final class ActivitiesServices {
         if (ServiceUtil.isError(deleteCommunicationEventResult)) {
             return deleteCommunicationEventResult;
         }
-        
+
         return ServiceUtil.returnSuccess();
     }
-    
+
     /**
      * Search all CommunicationEvent matching the given email address and associate them to the
      *  given partyId and contachMechId.
