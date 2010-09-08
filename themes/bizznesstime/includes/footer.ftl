@@ -32,7 +32,7 @@ under the License.
       </p>
       <p>
         <a href="http://www.opentaps.org">${uiLabelMap.OpentapsProductName}</a> ${uiLabelMap.OpentapsReleaseVersion}.<br />
-        Opentaps is a trademark of <a href="http://www.opensourcestrategies.com">opentaps Group LLC</a>
+        Opentaps is a trademark of <a href="http://www.opentaps.org">opentaps Group LLC</a>
       </p>
     </div>
 </div>
