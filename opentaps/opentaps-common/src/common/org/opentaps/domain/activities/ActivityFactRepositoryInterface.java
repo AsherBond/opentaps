@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.opentaps.base.entities.ActivityFact;
+import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 
@@ -139,4 +140,14 @@ public interface ActivityFactRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public long getTotalActivityCount() throws RepositoryException;
+
+    /**
+     * Transform data from Activity and list of Participants to ActivityFact entities.
+     *
+     * @param activity the current activity
+     * @param participants list of Participants
+     * @param count activity counter
+     * @throws RepositoryException if an error occurs
+     */
+    public void transformToActivityFacts(Activity activity, List<Party> participants, int count) throws RepositoryException;
 }

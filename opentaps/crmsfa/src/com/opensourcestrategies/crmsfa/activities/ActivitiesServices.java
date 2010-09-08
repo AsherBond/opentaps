@@ -87,8 +87,6 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.service.mail.MimeMessageWrapper;
-import org.opentaps.base.constants.RoleTypeConstants;
-import org.opentaps.base.entities.UserLogin;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
@@ -100,7 +98,6 @@ import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyDomainInterface;
-import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
@@ -2047,8 +2044,6 @@ public final class ActivitiesServices {
         Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
-
-
         // by default delete the attachments
         String delContentDataResource = ("false".equalsIgnoreCase(delContentDataResourceStr) || "N".equalsIgnoreCase(delContentDataResourceStr)) ? "false" : "true";
 
@@ -2063,8 +2058,6 @@ public final class ActivitiesServices {
             DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
             ActivityRepositoryInterface activityRepository = domainLoader.getDomainsDirectory().getActivitiesDomain().getActivityRepository();
             ActivityFactRepositoryInterface activityFactRepository = domainLoader.getDomainsDirectory().getActivitiesDomain().getActivityFactRepository();
-
-            PartyRepositoryInterface partyRepository = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository();
 
             // Get Activity
             Activity activity = activityRepository.getActivityById(workEffortId);
@@ -2109,7 +2102,8 @@ public final class ActivitiesServices {
                 return deleteWorkEffortResult;
             }
 
-            createNegativeActivityFact(activity, parties, new User(userLogin), partyRepository,  activityFactRepository);
+            // Transform to ActivityFact with negative counter equals -1
+            activityFactRepository.transformToActivityFacts(activity, parties, COUNT);
 
         } catch (GenericServiceException ex) {
             return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
@@ -2123,94 +2117,6 @@ public final class ActivitiesServices {
 
         results.put("donePage", donePage);
         return results;
-    }
-
-
-    private static void createNegativeActivityFact(Activity activity, List<Party> parties, User user, PartyRepositoryInterface repository,  ActivityFactRepositoryInterface activityFactRepository) throws RepositoryException, EntityNotFoundException {
-
-        List<Party> externalParty = new ArrayList<Party>();
-        List<Party> internalParty = new ArrayList<Party>();
-
-        if(parties != null) {
-            for(Party party : parties) {
-                // Note: a party can be both internal and external
-                //   in case of multi-tenant setup there is a case
-                //   where A B X Y are involved in a WorkEffort; A and B being supposed to be
-                //   internal (as in two sales rep) but B would be considered external if
-                //   he is a contact somewhere else.
-                //   All parties could be both have the contact role and be an internal user.
-                boolean isInternal = false; // is the party a user of the system
-                boolean isExternal = false; // is the party a CRM party
-
-                // always consider the current user as internal
-                if (party.getPartyId().equals(user.getOfbizUserLogin().getString(UserLogin.Fields.partyId.name()))) {
-                    isInternal = true;
-                } else {
-                    // if the party as a userLogin it is internal
-                    if (UtilValidate.isNotEmpty(repository.findList(UserLogin.class, repository.map(UserLogin.Fields.partyId, party.getPartyId())))) {
-                        isInternal = true;
-                    }
-                }
-
-                if (party.isAccount()) {
-                    isExternal = true;
-                } else if (party.isContact()) {
-                    isExternal = true;
-                } else if (party.isLead()) {
-                    isExternal = true;
-                } else if (party.isPartner()) {
-                    isExternal = true;
-                }
-
-                Debug.logInfo("External = " + isExternal + " / Internal = " + isInternal + " for Activity [" + activity.getWorkEffortId() + "] with party [" + party.getPartyId() + "]", MODULE);
-
-                if (isExternal) {
-                    externalParty.add(party);
-                }
-                if (isInternal) {
-                    internalParty.add(party);
-                }
-            }
-
-            if (externalParty.size() > 0 && internalParty.size() > 0) {
-
-                for (Party external : externalParty) {
-
-                    // Find out what type is external party: is it lead, is it account, ...
-
-                    String targetPartyRoleTypeId = null;
-                    Party assignedParty = repository.getPartyById(external.getPartyId());
-                    if (assignedParty.isAccount()) {
-                        targetPartyRoleTypeId = RoleTypeConstants.ACCOUNT;
-                    } else if (assignedParty.isContact()) {
-                        targetPartyRoleTypeId = RoleTypeConstants.CONTACT;
-                    } else if (assignedParty.isLead()) {
-                        targetPartyRoleTypeId = RoleTypeConstants.LEAD;
-                    } else if (assignedParty.isPartner()) {
-                        targetPartyRoleTypeId = RoleTypeConstants.PARTNER;
-                    }
-
-                    for (Party internal : internalParty) {
-
-                        // skip if it is the same party as the external one
-                        if (external.getPartyId().equals(internal.getPartyId())) {
-                            continue;
-                        }
-
-                        // Create ActivityFact
-                        // internal party description contains WorkEffortPartyAssignment roleTypeId
-                        activityFactRepository.createActivityFact(internal.getPartyId(), external.getPartyId(),internal.getDescription(), targetPartyRoleTypeId, activity, COUNT);
-                    }
-                }
-
-            } else {
-                Debug.logError("Missing internal or external assignments for Activity [" + activity.getWorkEffortId() + "] (found: " + internalParty.size() + " internal and " + externalParty.size() + " external)", MODULE);
-            }
-
-        } else {
-            Debug.logInfo("Activity [" + activity.getWorkEffortId() + "] not has participants ", MODULE);
-        }
-
     }
 
     private static Map deleteActivityCommEventAndDataResource(String workEffortId, String communicationEventId, String delContentDataResource, GenericValue userLogin, LocalDispatcher dispatcher) throws GenericServiceException {

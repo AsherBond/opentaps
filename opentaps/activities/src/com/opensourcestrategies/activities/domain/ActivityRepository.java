@@ -21,17 +21,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.StatusItemConstants;
-import org.opentaps.base.constants.WorkEffortPurposeTypeConstants;
-import org.opentaps.base.entities.ActivityFact;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.base.entities.WorkEffortPartyAssignment;
-import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.activities.Activity;
 import org.opentaps.domain.activities.ActivityRepositoryInterface;
@@ -83,14 +78,14 @@ public class ActivityRepository extends Repository implements ActivityRepository
         if (Arrays.asList(StatusItemConstants.TaskStatus.TASK_COMPLETED, StatusItemConstants.EventStatus.EVENT_COMPLETED).contains(workEffort.getCurrentStatusId())) {
 
             List<WorkEffortPartyAssignment> assignments = partyRepository.findList(WorkEffortPartyAssignment.class, partyRepository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
-            
+
             listParty =  new ArrayList<Party>();
             for (WorkEffortPartyAssignment assignment : assignments) {
                 Party party = partyRepository.getPartyById(assignment.getPartyId());
                 // Temporary store WorkEffortPartyAssignment Id into party Description
                 party.setDescription(assignment.getRoleTypeId());
                 listParty.add(party);
-            }            
+            }
         }
         else {
             Debug.logInfo("WorkEffort [" + workEffort.getWorkEffortId() + "] is not completed, not generating an activity fact", MODULE);
