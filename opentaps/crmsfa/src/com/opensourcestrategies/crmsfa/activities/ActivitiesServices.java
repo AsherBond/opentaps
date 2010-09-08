@@ -94,6 +94,7 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.activities.Activity;
+import org.opentaps.domain.activities.ActivityFactRepositoryInterface;
 import org.opentaps.domain.activities.ActivityRepositoryInterface;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
@@ -2061,6 +2062,7 @@ public final class ActivitiesServices {
 
             DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
             ActivityRepositoryInterface activityRepository = domainLoader.getDomainsDirectory().getActivitiesDomain().getActivityRepository();
+            ActivityFactRepositoryInterface activityFactRepository = domainLoader.getDomainsDirectory().getActivitiesDomain().getActivityFactRepository();
 
             PartyRepositoryInterface partyRepository = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository();
 
@@ -2107,7 +2109,7 @@ public final class ActivitiesServices {
                 return deleteWorkEffortResult;
             }
 
-            createNegativeActivityFact(activity, parties, new User(userLogin), partyRepository,  activityRepository);
+            createNegativeActivityFact(activity, parties, new User(userLogin), partyRepository,  activityFactRepository);
 
         } catch (GenericServiceException ex) {
             return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
@@ -2124,7 +2126,7 @@ public final class ActivitiesServices {
     }
 
 
-    private static void createNegativeActivityFact(Activity activity, List<Party> parties, User user, PartyRepositoryInterface repository,  ActivityRepositoryInterface activityRepository) throws RepositoryException, EntityNotFoundException {
+    private static void createNegativeActivityFact(Activity activity, List<Party> parties, User user, PartyRepositoryInterface repository,  ActivityFactRepositoryInterface activityFactRepository) throws RepositoryException, EntityNotFoundException {
 
         List<Party> externalParty = new ArrayList<Party>();
         List<Party> internalParty = new ArrayList<Party>();
@@ -2197,7 +2199,7 @@ public final class ActivitiesServices {
 
                         // Create ActivityFact
                         // internal party description contains WorkEffortPartyAssignment roleTypeId
-                        activityRepository.createActivityFact(internal.getPartyId(), external.getPartyId(),internal.getDescription(), targetPartyRoleTypeId, activity, COUNT);
+                        activityFactRepository.createActivityFact(internal.getPartyId(), external.getPartyId(),internal.getDescription(), targetPartyRoleTypeId, activity, COUNT);
                     }
                 }
 

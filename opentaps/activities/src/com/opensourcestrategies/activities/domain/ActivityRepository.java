@@ -70,56 +70,6 @@ public class ActivityRepository extends Repository implements ActivityRepository
     }
 
     /** {@inheritDoc} */
-    public void createActivityFact(String teamMemberPartyId, String targetPartyId, String teamMemberRoleTypeId, String targetRoleTypeId, Activity activity, int count) throws RepositoryException {
-        ActivityFact activityFact = new ActivityFact();
-        try {
-
-            DomainsLoader domainLoader = new DomainsLoader(getInfrastructure(), getUser());
-            PartyRepositoryInterface partyRepository = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository();
-
-            Long dateDimId = null;
-            dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyRepository.getInfrastructure().getDelegator());
-
-            activityFact.setActivityFactId(partyRepository.getNextSeqId(activityFact));
-            activityFact.setTargetPartyId(targetPartyId);
-            activityFact.setTeamMemberPartyId(teamMemberPartyId);
-            activityFact.setDateDimId(dateDimId);
-            activityFact.setTargetPartyRoleTypeId(targetRoleTypeId);
-            activityFact.setTeamMemberPartyRoleTypeId(teamMemberRoleTypeId);
-
-            activityFact.setEmailActivityCount(Long.valueOf(0));
-            activityFact.setPhoneCallActivityCount(Long.valueOf(0));
-            activityFact.setVisitActivityCount(Long.valueOf(0));
-            activityFact.setOtherActivityCount(Long.valueOf(0));
-            activityFact.set("activityCompletedDatetime", activity.getActualCompletionDate());
-
-            // Increase count according to WorkEffort workEffortPurposeTypeId.
-            String purpose = activity.getWorkEffortPurposeTypeId();
-
-            if (purpose == null) {
-                activityFact.setOtherActivityCount(Long.valueOf(count));
-            } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_TASK_EMAIL) == 0) {
-                activityFact.setEmailActivityCount(Long.valueOf(count));
-            } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL) == 0) {
-                activityFact.setPhoneCallActivityCount(Long.valueOf(count));
-            } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_MEETING) == 0) {
-                activityFact.setVisitActivityCount(Long.valueOf(count));
-            } else {
-                activityFact.setOtherActivityCount(Long.valueOf(count));
-            }
-
-            partyRepository.createOrUpdate(activityFact);
-
-            Debug.logInfo("ActivityFact entity record [" + activityFact.getActivityFactId() + "] created/updated.", MODULE);
-
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-            throw new RepositoryException(e);
-        }
-
-    }
-
-    /** {@inheritDoc} */
     @SuppressWarnings("null")
     public List<Party> getParticipants(String workEffortId) throws RepositoryException, EntityNotFoundException {
         List<Party> listParty = null;
@@ -133,19 +83,14 @@ public class ActivityRepository extends Repository implements ActivityRepository
         if (Arrays.asList(StatusItemConstants.TaskStatus.TASK_COMPLETED, StatusItemConstants.EventStatus.EVENT_COMPLETED).contains(workEffort.getCurrentStatusId())) {
 
             List<WorkEffortPartyAssignment> assignments = partyRepository.findList(WorkEffortPartyAssignment.class, partyRepository.map(WorkEffortPartyAssignment.Fields.workEffortId, workEffortId));
-
-            if (assignments.size() >= 2) {
-                listParty =  new ArrayList<Party>();
-                for (WorkEffortPartyAssignment assignment : assignments) {
-                    Party party = partyRepository.getPartyById(assignment.getPartyId());
-                    // Temporary store WorkEffortPartyAssignment Id into party Description
-                    party.setDescription(assignment.getRoleTypeId());
-                    listParty.add(party);
-                }
-            }
-            else {
-                Debug.logInfo("WorkEffort [" + workEffort.getWorkEffortId() + "] has only " + assignments.size() + " parties assigned, not generating an activity fact", MODULE);
-            }
+            
+            listParty =  new ArrayList<Party>();
+            for (WorkEffortPartyAssignment assignment : assignments) {
+                Party party = partyRepository.getPartyById(assignment.getPartyId());
+                // Temporary store WorkEffortPartyAssignment Id into party Description
+                party.setDescription(assignment.getRoleTypeId());
+                listParty.add(party);
+            }            
         }
         else {
             Debug.logInfo("WorkEffort [" + workEffort.getWorkEffortId() + "] is not completed, not generating an activity fact", MODULE);

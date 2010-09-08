@@ -46,18 +46,6 @@ public interface ActivityRepositoryInterface {
     public List<Activity> getCompletedActivities() throws RepositoryException;
 
     /**
-     * Create ActivityFact with target party id and member party id
-     *
-     * @param teamMemberPartyId the target party identifier
-     * @param targetPartyId the target party identifier
-     * @param teamMemberRoleTypeId the team member role type identifier
-     * @param targetRoleTypeId the target role type identifier
-     * @param activity the current activity
-     * @throws RepositoryException if an error occurs
-     */
-    public void createActivityFact(String teamMemberPartyId, String targetPartyId, String teamMemberRoleTypeId, String targetRoleTypeId, Activity activity, int count) throws RepositoryException;
-
-    /**
      * Finds the Participants with the given WorkEffort Id.
      *
      * @param workEffortId WorkEffort identifier

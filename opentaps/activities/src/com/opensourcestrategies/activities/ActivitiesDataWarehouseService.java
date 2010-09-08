@@ -26,6 +26,7 @@ import org.opentaps.base.entities.UserLogin;
 import org.opentaps.base.services.ActivitiesTransformToActivityFactsService;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.activities.Activity;
+import org.opentaps.domain.activities.ActivityFactRepositoryInterface;
 import org.opentaps.domain.activities.ActivityRepositoryInterface;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
@@ -99,7 +100,8 @@ public class ActivitiesDataWarehouseService extends DomainService {
         try {
             PartyRepositoryInterface repository = getDomainsDirectory().getPartyDomain().getPartyRepository();
             ActivityRepositoryInterface activityRepository = getDomainsDirectory().getActivitiesDomain().getActivityRepository();
-
+            ActivityFactRepositoryInterface activityFactRepository = getDomainsDirectory().getActivitiesDomain().getActivityFactRepository();
+            
             // Get Activity
             Activity activity = activityRepository.getActivityById(workEffortId);
 
@@ -175,7 +177,7 @@ public class ActivitiesDataWarehouseService extends DomainService {
 
                             // Create ActivityFact
                             // internal party description contains WorkEffortPartyAssignment roleTypeId
-                            activityRepository.createActivityFact(internal.getPartyId(), external.getPartyId(),internal.getDescription(), targetPartyRoleTypeId, activity, COUNT);
+                            activityFactRepository.createActivityFact(internal.getPartyId(), external.getPartyId(),internal.getDescription(), targetPartyRoleTypeId, activity, COUNT);
                         }
                     }
 

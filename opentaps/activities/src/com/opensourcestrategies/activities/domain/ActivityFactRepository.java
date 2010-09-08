@@ -21,11 +21,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.constants.WorkEffortPurposeTypeConstants;
 import org.opentaps.base.entities.ActivityFact;
+import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.activities.Activity;
 import org.opentaps.domain.activities.ActivityFactRepositoryInterface;
+import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
@@ -115,6 +122,56 @@ public class ActivityFactRepository extends Repository implements ActivityFactRe
                             ActivityFact.Fields.dateDimId.desc()));
 
         return Entity.groupByFieldValues(String.class, prospectActivityFacts, groupedByField);
+    }
+
+    /** {@inheritDoc} */
+    public void createActivityFact(String teamMemberPartyId, String targetPartyId, String teamMemberRoleTypeId, String targetRoleTypeId, Activity activity, int count) throws RepositoryException {
+        ActivityFact activityFact = new ActivityFact();
+        try {
+
+            DomainsLoader domainLoader = new DomainsLoader(getInfrastructure(), getUser());
+            PartyRepositoryInterface partyRepository = domainLoader.getDomainsDirectory().getPartyDomain().getPartyRepository();
+
+            Long dateDimId = null;
+            dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyRepository.getInfrastructure().getDelegator());
+
+            activityFact.setActivityFactId(this.getNextSeqId(activityFact));
+            activityFact.setTargetPartyId(targetPartyId);
+            activityFact.setTeamMemberPartyId(teamMemberPartyId);
+            activityFact.setDateDimId(dateDimId);
+            activityFact.setTargetPartyRoleTypeId(targetRoleTypeId);
+            activityFact.setTeamMemberPartyRoleTypeId(teamMemberRoleTypeId);
+
+            activityFact.setEmailActivityCount(Long.valueOf(0));
+            activityFact.setPhoneCallActivityCount(Long.valueOf(0));
+            activityFact.setVisitActivityCount(Long.valueOf(0));
+            activityFact.setOtherActivityCount(Long.valueOf(0));            
+            activityFact.setActivityCompletedDatetime(activity.getActualCompletionDate());
+            
+            // Increase count according to WorkEffort workEffortPurposeTypeId.
+            String purpose = activity.getWorkEffortPurposeTypeId();
+
+            if (purpose == null) {
+                activityFact.setOtherActivityCount(Long.valueOf(count));
+            } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_TASK_EMAIL) == 0) {
+                activityFact.setEmailActivityCount(Long.valueOf(count));
+            } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_TASK_PHONE_CALL) == 0) {
+                activityFact.setPhoneCallActivityCount(Long.valueOf(count));
+            } else if (purpose.compareTo(WorkEffortPurposeTypeConstants.WEPT_MEETING) == 0) {
+                activityFact.setVisitActivityCount(Long.valueOf(count));
+            } else {
+                activityFact.setOtherActivityCount(Long.valueOf(count));
+            }
+
+            partyRepository.createOrUpdate(activityFact);
+
+            Debug.logInfo("ActivityFact entity record [" + activityFact.getActivityFactId() + "] created/updated.", MODULE);
+
+        } catch (GenericEntityException e) {
+            Debug.logError(e, MODULE);
+            throw new RepositoryException(e);
+        }
+
     }
 
     /** {@inheritDoc} */
