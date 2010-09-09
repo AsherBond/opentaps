@@ -61,7 +61,7 @@ public class POJOTestServices extends Service {
     }
 
     public void setErrorTrigger(Boolean b) {
-        failTrigger = b;
+        errorTrigger = b;
     }
 
     public void setFollowupTrigger(Boolean b) {

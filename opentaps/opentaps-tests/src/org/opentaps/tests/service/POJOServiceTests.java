@@ -78,7 +78,7 @@ public class POJOServiceTests extends OpentapsTestCase {
     }
 
     public void testFailureOnTrigger() {
-        Map params = UtilMisc.toMap("key1Value", key1Value, "key2Values", key2Values, "failureTrigger", new Boolean(true), "userLogin", user);
+        Map params = UtilMisc.toMap("key1Value", key1Value, "key2Values", key2Values, "failTrigger", new Boolean(true), "userLogin", user);
         runAndAssertServiceFailure("pojoTest", params);
     }
 
