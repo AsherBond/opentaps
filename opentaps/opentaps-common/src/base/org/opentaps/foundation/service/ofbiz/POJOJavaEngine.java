@@ -227,9 +227,9 @@ public class POJOJavaEngine extends GenericAsyncEngine {
                     if (se != null && se instanceof ServiceException) {
                         ((ServiceException) se).setLocale(locale);  // set the locale from the service context, as the service might not set it
                         if (((ServiceException) se).isRequiresRollback()) {
-                            return ServiceUtil.returnFailure(ex.getMessage());
+                            return ServiceUtil.returnError(se.getMessage());
                         } else {
-                            return ServiceUtil.returnError(ex.getMessage());
+                            return ServiceUtil.returnFailure(se.getMessage());
                         }
                     } else {
                         throw ex;
