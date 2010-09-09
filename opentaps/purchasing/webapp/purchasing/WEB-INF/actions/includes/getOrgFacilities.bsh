@@ -18,5 +18,5 @@
 import org.opentaps.common.util.UtilCommon;
 
 // this script gets a List of facilities where the current organization party is either the owner or a REC_INV_FOR party
-context.put("facilities", UtilCommon.getOrganizationReceivingFacilities(UtilCommon.getOrganizationPartyId(request)), delegator));
+context.put("facilities", UtilCommon.getOrganizationReceivingFacilities(UtilCommon.getOrganizationPartyId(request), delegator));
 
