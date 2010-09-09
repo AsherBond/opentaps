@@ -82,7 +82,7 @@
     <!-- end of request mappings -->
 
     <!-- View Mappings -->
-    <view-map name="requirePasswordChange" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#requirePasswordChange"/>
+    <view-map name="requirePasswordChange" type="screen" page="component://homeapps/widget/screens/HomeWebAppsMain.xml#requirePasswordChange"/>
     <view-map name="error" page="/error/error.jsp"/>
     <view-map name="main" type="screen" page="component://homeapps/widget/screens/HomeWebAppsMain.xml#main"/>
    
