@@ -38,7 +38,7 @@ public class EvictHibernateCacheAspects {
     private static String DELEGATOR_NAME = "default";
 
     /**
-     * @Expression execution(* org.ofbiz.entity.Delegator.clearAllCaches(..)) && args(distribute)
+     * @Expression execution(* org.ofbiz.entity.Delegator+.clearAllCaches(..)) && args(distribute)
      */
     void pointcut1(boolean distribute) { }
 
@@ -52,7 +52,7 @@ public class EvictHibernateCacheAspects {
     }
 
     /**
-     * @Expression execution(* org.ofbiz.entity.Delegator.clearCacheLine(..)) && args(entityName)
+     * @Expression execution(* org.ofbiz.entity.Delegator+.clearCacheLine(..)) && args(entityName)
      */
     void pointcut2(String entityName) { }
 
@@ -67,7 +67,7 @@ public class EvictHibernateCacheAspects {
 
 
     /**
-     * @Expression execution(* org.ofbiz.entity.Delegator.clearCacheLine(String, Map)) && args(entityName, fields)
+     * @Expression execution(* org.ofbiz.entity.Delegator+.clearCacheLine(String, Map)) && args(entityName, fields)
      */
     void pointcut3(String entityName, Map fields) { }
 
@@ -81,7 +81,7 @@ public class EvictHibernateCacheAspects {
     }
 
     /**
-     * @Expression execution(* org.ofbiz.entity.Delegator.clearCacheLineFlexible(org.ofbiz.entity.GenericEntity, boolean)) && args(dummyPK, distribute)
+     * @Expression execution(* org.ofbiz.entity.Delegator+.clearCacheLineFlexible(org.ofbiz.entity.GenericEntity, boolean)) && args(dummyPK, distribute)
      */
     void pointcut4(GenericEntity dummyPK, boolean distribute) { }
 
@@ -97,7 +97,7 @@ public class EvictHibernateCacheAspects {
     }
 
     /**
-     * @Expression execution(* org.ofbiz.entity.Delegator.clearCacheLineByCondition(String, org.ofbiz.entity.condition.EntityCondition, boolean)) && args(entityName, condition, distribute)
+     * @Expression execution(* org.ofbiz.entity.Delegator+.clearCacheLineByCondition(String, org.ofbiz.entity.condition.EntityCondition, boolean)) && args(entityName, condition, distribute)
      */
     void pointcut5(String entityName, EntityCondition condition, boolean distribute) { }
 
@@ -112,7 +112,7 @@ public class EvictHibernateCacheAspects {
     }
 
     /**
-     * @Expression execution(* org.ofbiz.entity.Delegator.clearCacheLine(org.ofbiz.entity.GenericPK, boolean)) && args(primaryKey, distribute)
+     * @Expression execution(* org.ofbiz.entity.Delegator+.clearCacheLine(org.ofbiz.entity.GenericPK, boolean)) && args(primaryKey, distribute)
      */
     void pointcut6(GenericPK primaryKey, boolean distribute) { }
 
@@ -126,7 +126,7 @@ public class EvictHibernateCacheAspects {
     }
 
     /**
-     * @Expression execution(* org.ofbiz.entity.Delegator.clearCacheLine(org.ofbiz.entity.GenericValue, boolean)) && args(value, distribute)
+     * @Expression execution(* org.ofbiz.entity.Delegator+.clearCacheLine(org.ofbiz.entity.GenericValue, boolean)) && args(value, distribute)
      */
     void pointcut7(GenericValue value, boolean distribute) { }
 
