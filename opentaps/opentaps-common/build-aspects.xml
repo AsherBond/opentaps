@@ -53,6 +53,7 @@
             <fileset dir="${ofbiz.dir}/framework/webapp/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/common/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/widget/build/lib" includes="*.jar"/>
+        	<fileset dir="${ofbiz.dir}/framework/sql/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/accounting/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/order/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/content/build/lib" includes="*.jar"/>
@@ -95,6 +96,7 @@
       <condition property="processRequired">
         <and>
           <available classname="org.ofbiz.entity.Delegator" classpathref="local.class.path"/>
+          <available classname="org.ofbiz.entity.eca.EntityEcaHandler" classpathref="local.class.path"/>
           <available classname="org.ofbiz.common.CommonServices" classpathref="local.class.path"/>
           <available classname="org.ofbiz.order.order.OrderServices" classpathref="local.class.path"/>
         </and>
@@ -119,6 +121,19 @@
         <!-- below is the jars to post-process -->
         <arg value="${ofbiz.dir}/framework/entity/build/lib/ofbiz-entity.jar"/>
       </java>
+	  <java classname="org.codehaus.aspectwerkz.compiler.AspectWerkzC" fork="true">
+	  	<jvmarg value="-Daspectwerkz.definition.file=${aopConfig}"/>
+		<jvmarg value="-Daspectwerkz.transform.filter=no"/>
+		<!-- <jvmarg value="-Daspectwerkz.transform.verbose=true"/> -->
+		<!-- <jvmarg value="-Daspectwerkz.transform.details=true"/> -->
+		<arg value="-verify"/>
+		<classpath refid="local.class.path" />
+		<classpath>
+			<pathelement path="${build.dir}/classes/common"/>
+		</classpath>
+		<!-- below is the jars to post-process -->
+		<arg value="${ofbiz.dir}/framework/entityext/build/lib/ofbiz-entityext.jar"/>
+	  </java>
       <java classname="org.codehaus.aspectwerkz.compiler.AspectWerkzC" fork="true">
         <jvmarg value="-Daspectwerkz.definition.file=${aopConfig}"/>
         <jvmarg value="-Daspectwerkz.transform.filter=no"/>
@@ -150,6 +165,7 @@
       <mkdir dir="${build.dir}/classes/META-INF" />
       <copy file="${aopConfig}" tofile="${build.dir}/classes/META-INF/aop.xml" overwrite="true"/>
       <jar jarfile="${ofbiz.dir}/framework/entity/build/lib/ofbiz-entity.jar" update="true" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
+      <jar jarfile="${ofbiz.dir}/framework/entity/build/lib/ofbiz-entityext.jar" update="true" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
       <jar jarfile="${ofbiz.dir}/framework/common/build/lib/ofbiz-common.jar" update="true" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
       <jar jarfile="${ofbiz.dir}/applications/order/build/lib/ofbiz-order.jar" update="true" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
       <echo message="[build] =========== Done Building Aspect (Weave) =============="/>

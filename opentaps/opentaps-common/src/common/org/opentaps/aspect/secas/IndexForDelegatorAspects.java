@@ -39,14 +39,14 @@ public class IndexForDelegatorAspects {
     private static String runAsUser = "system";
 
     /**
-     * @Expression execution(* org.ofbiz.entity.Delegator$EntityEcaRuleRunner.evalRules(..)) && args(event, currentOperation, value, isError)
+     * @Expression execution(* org.ofbiz.entity.eca.EntityEcaHandler+.evalRules(..)) && args(currentOperation, eventMap, event, value, isError)
      */
-    void pointcut(String event, String currentOperation, GenericEntity value, boolean isError) { }
+    void pointcut(String currentOperation, Map eventMap, String event, GenericEntity value, boolean isError) { }
 
     /**
-     * @After pointcut(event, currentOperation, value, isError)
-    */
-    public void createIndexForEca(String event, String currentOperation, GenericEntity value, boolean isError) {
+     * @After pointcut(currentOperation, eventMap, event, value, isError)
+     */
+    public void createIndexForEca(String currentOperation, Map eventMap, String event, GenericEntity value, boolean isError) {
         if (entitySearchProperties == null) {
             // if entitySearchProperties not initial, then initial.
             entitySearchProperties = UtilProperties.getProperties("entitysearch.properties");
