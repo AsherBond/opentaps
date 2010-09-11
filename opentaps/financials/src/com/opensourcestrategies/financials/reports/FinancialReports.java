@@ -1192,6 +1192,7 @@ public final class FinancialReports {
                     reportLine.put("invoiceDate", invoice.getInvoiceDate());
                     reportLine.put("invoiceId", invoice.getInvoiceId());
                     reportLine.put("invoiceTotal", invoice.getInvoiceTotal());
+                    reportLine.put("openAmount", invoice.getOpenAmount());
                     reportLine.put("partyId", invoice.getPartyId());
                     reportLine.put("partyName", PartyHelper.getPartyName(delegator, invoice.getPartyId(), false));
                     plainList.add(reportLine);

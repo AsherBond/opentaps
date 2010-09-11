@@ -21,7 +21,8 @@
   <#list invoicesWithBalances as invoice>
   <#-- each invoice is an org.opentaps.domain.billing.invoice.Invoice object -->
       <#assign isPastDue = invoice.isPastDue()>
-      <#assign invoiceTotal = invoice.getOpenAmount() >
+      <#assign openAmount = invoice.getOpenAmount() >
+      <#assign invoiceTotal = invoice.getInvoiceTotal() >
   <tr>
      <td class="tabletext" width="30%">${getLocalizedDate(invoice.invoiceDate, "DATE")}</td>
      <td class="tabletext" width="50%">
@@ -35,14 +36,15 @@
      (<a href="<@ofbizUrl>writeInvoiceEmail?invoiceId=${invoice.invoiceId}</@ofbizUrl>" class="buttontext">Email</a>
      <a href="<@ofbizUrl>invoice.pdf?invoiceId=${invoice.invoiceId}&amp;reportId=FININVOICE&amp;reportType=application/pdf</@ofbizUrl>" class="buttontext">PDF</a>)
      </td>
-     <td class="tabletext" align="right" width="10%"><#if isPastDue><font color="red"></#if><@ofbizCurrency amount=invoiceTotal isoCode=orgCurrencyUomId/><#if isPastDue></font></#if></td>
+     <td class="tabletext" align="right" width="10%"><@ofbizCurrency amount=invoiceTotal isoCode=orgCurrencyUomId/></td>
+     <td class="tabletext" align="right" width="10%"><#if isPastDue><font color="red"></#if><@ofbizCurrency amount=openAmount isoCode=orgCurrencyUomId/><#if isPastDue></font></#if></td>
 
-     <#assign subTotal = subTotal + invoiceTotal>
-     <#assign grandTotal = grandTotal + invoiceTotal>
+     <#assign subTotal = subTotal + openAmount>
+     <#assign grandTotal = grandTotal + openAmount>
   </tr>
   </#list>
   <tr>
-     <td colspan="3">&nbsp;</td>
+     <td colspan="4">&nbsp;</td>
      <td class="tabletext" width="10%" align="right"><@ofbizCurrency amount=subTotal isoCode=orgCurrencyUomId/></td>
   </tr>
 </#macro>
@@ -57,7 +59,12 @@ ${getLocalizedDate(asOfDate, "DATE")}</td>
      </td>
   </tr>
   <tr><td>&nbsp;</td></tr>  
-        
+  <tr>
+  <td>&nbsp;</td>
+  <td class="tableheadtext">${uiLabelMap.AccountingInvoice}</td>
+  <td class="tableheadtext">${uiLabelMap.AccountingInvoiceTotal}</td>
+  <td class="tableheadtext">${uiLabelMap.OpentapsOpenAmount}</td>
+  </tr>        
 <#assign lastDSOBreakPoint = 0>            
 <#assign grandTotal = 0>
 <#list daysOutstandingBreakPoints as daysOutstandingBreakPoint>
