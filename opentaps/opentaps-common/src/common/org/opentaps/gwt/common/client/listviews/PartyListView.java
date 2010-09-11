@@ -172,6 +172,7 @@ public abstract class PartyListView extends EntityListView {
         setColumnHidden(PartyLookupConfiguration.OUT_ADDRESS_2, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_POSTAL_CODE, true);
         setColumnHidden(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT, true);
+        setColumnHidden(PartyLookupConfiguration.INOUT_ADDRESS, true);
 
     }
 

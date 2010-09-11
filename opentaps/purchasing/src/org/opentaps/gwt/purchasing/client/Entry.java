@@ -39,6 +39,8 @@ public class Entry extends BaseEntry {
     private static final String FIND_SUPPLIERS_ID = "findSuppliers";
     private static final String SUPPLIER_ORDERS = "supplierOpenOrdersSubsection";
 
+    private static final int PARTIES_PAGE_SIZE = 20;
+
     private FindOrdersForm findOrdersForm;
     private FindOrdersForm openOrdersForm;
     private FindSuppliersForm findSuppliersForm;
@@ -98,6 +100,8 @@ public class Entry extends BaseEntry {
 
     private void loadFindSuppliers() {
         findSuppliersForm = new FindSuppliersForm();
+        findSuppliersForm.getListView().setPageSize(PARTIES_PAGE_SIZE);
+        findSuppliersForm.getListView().applyFilters();
         RootPanel.get(FIND_SUPPLIERS_ID).add(findSuppliersForm.getMainPanel());
     }
 
