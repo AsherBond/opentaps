@@ -487,9 +487,6 @@ under the License.
             </drop-down>
         </field>
         <field name="_rowSubmit" title="${uiLabelMap.CommonSelect}"><check/></field>
-        <field name="submitButton" title="${uiLabelMap.ProductScheduleTheseRouteSegments}" widget-style="smallSubmit">
-            <submit/>
-        </field>
     </form>
 
     <!-- multi-form to print confirmed shipping labels and to mark shipment route segments as accepted

@@ -407,6 +407,9 @@ under the License.
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <include-form name="SchedulingList" location="component://product/webapp/facility/facility/FacilityForms.xml"/>
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/buttonSchedulingList.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
