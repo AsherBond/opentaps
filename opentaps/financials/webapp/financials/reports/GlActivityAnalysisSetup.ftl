@@ -16,7 +16,7 @@
  *  
 -->
 
-<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <@frameSection title=uiLabelMap.FinancialsGlActivitySetupTitle>
     <form method="post" name="GlActivityAnalysisSetupForm" action="<@ofbizUrl>GlActivityAnalysisPrepareData</@ofbizUrl>">
@@ -29,11 +29,7 @@
             <@inputAutoCompleteGlAccountRow name="glAccountId" title="${uiLabelMap.AccountingGlAccount}" />
 
             <#-- List possible tags -->
-            <#list tagTypes as tag>
-              <@inputSelectRow name="tag${tag.index}" title="${tag.description}" list=tag.activeTagValues key="enumId" required=true default="" ; tagValue>
-                ${tagValue.description}
-              </@inputSelectRow>
-            </#list>
+            <@accountingTagsInputRow tagTypes=tagTypes/>
 
             <@inputSelectRow name="glFiscalTypeId" title="${uiLabelMap.FinancialsGlFiscalType}" list=glFiscalTypes?default([]) key="glFiscalTypeId" ; glFiscalType>
                 ${glFiscalType.get("description", locale)}

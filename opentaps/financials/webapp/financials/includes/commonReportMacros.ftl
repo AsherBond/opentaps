@@ -249,11 +249,29 @@ To use these macros in your page, first put this at the top:
   </div>
 </#macro>
 
-<#macro accountingTagsInputs tagTypes>
+<#macro accountingTagsInputRow tagTypes activeOnly=true>
+  <#list tagTypes as tag>
+    <#if activeOnly>
+      <#assign tagValues = tag.activeTagValues/>
+    <#else/>
+      <#assign tagValues = tag.tagValues/>
+    </#if>
+    <@inputSelectRow name="tag${tag.index}" title="${tag.description}" list=tagValues key="enumId" required=true default="" ; tagValue>
+      ${tagValue.description}
+    </@inputSelectRow>
+  </#list>
+</#macro>
+
+<#macro accountingTagsInputs tagTypes activeOnly=true>
   <#list tagTypes as tag>
     <div style="margin-left: 30px; margin-top: 5px;">
       <span class="tableheadtext">${tag.description}</span>
-      <@inputSelect name="tag${tag.index}" list=tag.activeTagValues key="enumId" required=true ; tagValue>
+      <#if activeOnly>
+        <#assign tagValues = tag.activeTagValues/>
+      <#else/>
+        <#assign tagValues = tag.tagValues/>
+      </#if>
+      <@inputSelect name="tag${tag.index}" list=tagValues key="enumId" required=true ; tagValue>
         ${tagValue.description}
       </@inputSelect>
     </div>

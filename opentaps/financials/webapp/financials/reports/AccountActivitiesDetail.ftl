@@ -15,7 +15,7 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <#macro displayAccountActivityDetail accountActivityDetail index=-1>
 </#macro>
@@ -62,14 +62,7 @@
           <@inputSelectHashCell name="debitCreditFlag" required=false hash=creditDebitHash />
         </tr>
         <#-- List possible tags -->
-        <#list tagTypes as tag>
-          <tr>
-            <@displayTitleCell title=tag.description />
-            <@inputSelectCell name="tag${tag.index}" list=tag.activeTagValues key="enumId" required=true default="" ; tagValue>
-              ${tagValue.description}
-            </@inputSelectCell>
-          </tr>
-        </#list>
+        <@accountingTagsInputRow tagTypes=tagTypes/>
         <@inputHidden          name="performFind" value="Y" />
         <@inputSubmitRow       title=uiLabelMap.CommonFind />
       </table>
