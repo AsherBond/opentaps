@@ -16,7 +16,6 @@
 -->
 
 <@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
-<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <#assign now = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>
 <#assign defaultFromDate = Static["org.ofbiz.base.util.UtilDateTime"].getDayStart(now, timeZone, locale)>
