@@ -24,9 +24,13 @@
 <#-- display each GL account and the appropriate button next to it -->
 <#macro displayAccount account>
 <tr>
- <td class="tabletext" width="350" nowrap>
+ <td class="tabletext" width="350" nowrap="nowrap">
   <#if parameters.hasFinancialsTransactionPermission><a href="<@ofbizUrl>AccountActivitiesDetail?glAccountId=${account.glAccountId}&organizationPartyId=${parameters.organizationPartyId}</@ofbizUrl>"></#if>
-  ${account.accountName}
+  <#if account.accountName?has_content>
+    ${account.accountName}
+  <#else/>
+    ${account.glAccountTypeId!} - ${account.glAccountClassId!} (${account.glAccountId})
+  </#if>
   <#if parameters.hasFinancialsTransactionPermission></a></#if>
 </td>
   <td align="right" class="tabletext"><@ofbizCurrency amount=account.postedBalance?default(0.0) isoCode=orgCurrencyUomId /></td>
