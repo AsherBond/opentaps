@@ -30,6 +30,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
+import org.ofbiz.product.catalog.CatalogWorker;
 import org.opentaps.common.order.OrderEvents;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
 import org.opentaps.base.entities.SupplierProduct;
@@ -52,10 +53,17 @@ public class OrderItemsLookupService extends EntityLookupService {
     private static final String MODULE = OrderItemsLookupService.class.getName();
 
     private OpentapsShoppingCart cart;
+    
+    private String productCatalogId;
 
     protected OrderItemsLookupService(InputProviderInterface provider, OpentapsShoppingCart cart) throws RepositoryException {
         super(provider, OrderItemsCartLookupConfiguration.LIST_OUT_FIELDS);
         this.cart = cart;
+    }
+
+    protected OrderItemsLookupService(InputProviderInterface provider, OpentapsShoppingCart cart, String productCatalogId) throws RepositoryException {
+        this(provider, cart);
+        this.productCatalogId = productCatalogId;
     }
 
     /**
@@ -85,7 +93,8 @@ public class OrderItemsLookupService extends EntityLookupService {
         InputProviderInterface provider = new HttpInputProvider(request);
         OpentapsShoppingCart cart = OrderEvents.getCart(request);
         JsonResponse json = new JsonResponse(response);
-        OrderItemsLookupService service = new OrderItemsLookupService(provider, cart);
+        String productCatalogId = CatalogWorker.getCurrentCatalogId(request);
+        OrderItemsLookupService service = new OrderItemsLookupService(provider, cart, productCatalogId);
         service.findProductInfoForCart();
         return json.makeLookupResponse(OrderItemsCartLookupConfiguration.INOUT_PRODUCT, service, request.getSession(true).getServletContext());
     }
@@ -192,7 +201,7 @@ public class OrderItemsLookupService extends EntityLookupService {
                 if (quantityStr != null) {
                     quantity = new BigDecimal(quantityStr);
                 }
-                item.setUnitPrice(repository.getUnitPrice(product, quantity, cart.getCurrency(), cart.getOrderPartyId()).toString());
+                item.setUnitPrice(repository.getUnitPrice(product, quantity, cart.getCurrency(), cart.getOrderPartyId(), productCatalogId).toString());
                 item.setDescription(product.getProductName());
             }
 

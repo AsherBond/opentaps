@@ -66,6 +66,18 @@ public interface ProductRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public BigDecimal getUnitPrice(Product product, BigDecimal quantity, String currencyUomId, String partyId) throws RepositoryException;
+    
+    /**
+     * Finds the <code>Product</code> unit price.
+     * @param product the <code>Product</code> for which the cost is calculated
+     * @param quantity the quantity to get the unit price for
+     * @param currencyUomId the currency for which the cost is calculated
+     * @param partyId the party for which to get the price
+     * @param productCatalogId the product catalog for which to get the price
+     * @return the unit price for the given currency
+     * @throws RepositoryException if an error occurs
+     */
+    public BigDecimal getUnitPrice(Product product, BigDecimal quantity, String currencyUomId, String partyId, String productCatalogId) throws RepositoryException;    
 
     /**
      * Finds the variants of a Product.  Returns empty list if none found.

@@ -70,6 +70,12 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
 
     /** {@inheritDoc} */
     public BigDecimal getUnitPrice(Product product, BigDecimal quantity, String currencyUomId, String partyId) throws RepositoryException {
+        return getUnitPrice(product, quantity, currencyUomId, partyId, null);
+    }
+
+
+    /** {@inheritDoc} */
+    public BigDecimal getUnitPrice(Product product, BigDecimal quantity, String currencyUomId, String partyId, String productCatalogId) throws RepositoryException {
 
         try {
             CalculateProductPriceService service = new CalculateProductPriceService();
@@ -77,6 +83,8 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
             service.setInPartyId(partyId);
             service.setInQuantity(quantity);
             service.setInCurrencyUomId(currencyUomId);
+            service.setInCheckIncludeVat("Y");
+            service.setInProdCatalogId(productCatalogId);
             service.runSyncNoNewTransaction(getInfrastructure());
             if (service.isError()) {
                 throw new RepositoryException(service.getErrorMessage());
