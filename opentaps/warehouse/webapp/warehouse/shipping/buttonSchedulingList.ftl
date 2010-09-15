@@ -22,6 +22,12 @@
 
 <script type="text/javascript">
     function markAsShipped() {
+        var i = 0;
+        while(document.SchedulingList['carrierServiceStatusId_o_' + i]) {
+           document.SchedulingList['carrierServiceStatusId_o_' + i].value = "SHRSCS_SHIPPED";
+           i++;
+        }
+
         document.SchedulingList.action = "<@ofbizUrl>BatchUpdateShipmentRouteSegments?facilityId=</@ofbizUrl>";
         document.SchedulingList.submit();
     }
