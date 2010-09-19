@@ -22,7 +22,7 @@ under the License.
 <entity-engine-xml>
     
     <!-- incoming customer request examples -->
-    <Party partyId="DemoCustomer"/>
+    <Party partyId="DemoCustomer" partyTypeId="PERSON"/>
     <Party partyId="DemoCustAgent"/>
     <Party partyId="DemoCustomer2"/>
     <ProductStore productStoreId="9000"/>
