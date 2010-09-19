@@ -159,6 +159,7 @@
         <alias-all entity-alias="PCG">
             <exclude field="description"/>
         </alias-all>
+        <alias entity-alias="P" name="partyId" field="partyId"/>
         <alias entity-alias="PR" name="relationshipStatusId" field="statusId"/>
         <alias entity-alias="PC" name="classificationFromDate" field="fromDate"/>
         <alias entity-alias="PC" name="classificationThruDate" field="thruDate"/>
