@@ -261,7 +261,7 @@ public class OrderReturnServices {
                 uiLabelMap.addBottomResourceBundle("OrderUiLabels");
                 uiLabelMap.addBottomResourceBundle("CommonUiLabels");
 
-                Map bodyParameters = UtilMisc.toMap("returnHeader", returnHeader, "returnItems", returnItems, "uiLabelMap", uiLabelMap, "locale", locale);
+                Map bodyParameters = UtilMisc.toMap("returnHeader", returnHeader, "returnItems", returnItems, "uiLabelMap", uiLabelMap, "locale", locale, "userLogin", userLogin);
                 sendMap.put("bodyParameters", bodyParameters);
 
                 sendMap.put("subject", productStoreEmail.getString("subject"));
@@ -270,6 +270,7 @@ public class OrderReturnServices {
                 sendMap.put("sendCc", productStoreEmail.get("ccAddress"));
                 sendMap.put("sendBcc", productStoreEmail.get("bccAddress"));
                 sendMap.put("sendTo", emailAddress);
+                sendMap.put("partyId", returnHeader.getString("fromPartyId"));
 
                 sendMap.put("userLogin", userLogin);
 

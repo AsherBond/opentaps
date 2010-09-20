@@ -18,7 +18,7 @@ under the License.
 */
 /* This file has been modified by Open Source Strategies, Inc. */
 
-Event.observe(window, 'load', function() {
+document.observe('dom:loaded', function() {
     Event.observe($('returnHeaderTypeId'), 'change', function() {
         changeStatusCorrespondingToHeaderType();
     });

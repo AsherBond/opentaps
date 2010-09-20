@@ -18,13 +18,13 @@ under the License.
 */
 /* This file has been modified by Open Source Strategies, Inc. */
 
-Event.observe(window, 'load', isValidElement);
+document.observe('dom:loaded', isValidElement);
 
 function isValidElement(element){
     var validator = new Validation('quickAnonProcessCustomer',  {immediate : true});
  }
 
-Event.observe(window, 'load', function() {
+document.observe('dom:loaded', function() {
     Event.observe('useShippingPostalAddressForBilling', 'click', changeText2);
 });
 function changeText2(){

@@ -68,8 +68,7 @@ under the License.
           <#list weightUomList as uom>
             <option value='${uom.uomId}'
                <#if (facility.defaultWeightUomId?has_content) && (uom.uomId == facility.defaultWeightUomId)>
-
-
+               selected="selected"
                </#if>
              >${uom.get("description",locale)?default(uom.uomId)}</option>
           </#list>
@@ -90,7 +89,6 @@ under the License.
       </select>
     </td>
   </tr>
-
   <tr>
     <td class="label">${uiLabelMap.ProductName}</td>
     <td><input type="text" name="facilityName" value="${facility.facilityName?if_exists}" size="30" maxlength="60" /></td>
@@ -122,7 +120,6 @@ under the License.
     <td class="label">${uiLabelMap.ProductDefaultDaysToShip}</td>
     <td><input type="text" name="defaultDaysToShip" value="${facility.defaultDaysToShip?if_exists}" size="10" maxlength="20" /></td>
   </tr>
-
   <tr>
     <td>&nbsp;</td>
     <#if facilityId?has_content>

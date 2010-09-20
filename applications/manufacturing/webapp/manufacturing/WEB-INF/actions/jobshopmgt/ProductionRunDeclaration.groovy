@@ -81,6 +81,7 @@ if (productionRunId) {
         productProduced = productionRun.getProductProduced();
         if (productProduced != null) {
             productionRunData.productId = productProduced.productId;
+            productionRunData.product = productProduced;
             if (maxQuantity > 0 && !"WIP".equals(productProduced.productTypeId)) {
                 productionRunData.quantity = maxQuantity;
                 context.canProduce = "Y";
