@@ -1,5 +1,5 @@
 <#--
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -65,6 +65,7 @@ under the License.
 
         <#-- List the contact mech associated to the order that are not phone numbers (they are displayed in a special section) -->
         <#if !orderContactMechs?exists><#assign orderContactMechs = order.orderContactMeches /></#if> <#-- we now order the contact mechs by type, fallback to the previous method for compatibility -->
+        <#assign hasOrderEmail = false/>
         <#list orderContactMechs as orderContactMech>
           <#assign contactMech = orderContactMech.contactMech/>
           <#-- Telecom numbers will be shown in separate loop -->
@@ -109,9 +110,10 @@ under the License.
                 </#if>
                 
               <#elseif contactMech.contactMechTypeId == "EMAIL_ADDRESS">
+                <#assign hasOrderEmail = true/>
                 <div class="tabletext">
                   <@form name="writeOrderEmailAction" url="writeOrderEmail" orderId=order.orderId sendTo=contactMech.infoString />
-                  <@form name="writeOrderConfirmationEmailAction" url="writeOrderConfirmationEmail" orderId=order.orderId sendTo=contactMech.infoString partyId=order.mainExternalParty.partyId/>
+                  <@form name="writeOrderConfirmationEmailAction" url="writeOrderConfirmationEmail" donePage="orderview" orderId=order.orderId sendTo=contactMech.infoString partyId=order.mainExternalParty.partyId/>
                   <@submitFormLink form="writeOrderEmailAction" text=contactMech.infoString class="linktext"/>
                   <#if order.isSalesOrder() && security.hasEntityPermission("ORDERMGR", "_SEND_CONFIRMATION", session)>
                     <br/>(<@submitFormLink form="writeOrderConfirmationEmailAction" class="linktext" text=uiLabelMap.OrderSendConfirmationEmail />)
@@ -144,6 +146,20 @@ under the License.
             </@infoRowNested>
           </#if>
         </#list>
+
+        <#if !hasOrderEmail>
+          <@infoSepBar/>
+          <@infoRowNested title=uiLabelMap.CommonEmail>
+            <#if mainPartyEmailAddresses?has_content>
+              <@form name="updateOrderEmailContact" url="createOrderContactMech" orderId=order.orderId contactMechPurposeTypeId="ORDER_EMAIL" contactMechTypeId="EMAIL_ADDRESS">
+                <@inputSelect name="contactMechId" list=mainPartyEmailAddresses key="contactMechId" displayField="infoString" />
+                <@inputSubmit title=uiLabelMap.CommonAdd />
+              </@form>
+            <#else>
+              ${uiLabelMap.CommonNoContactInformationOnFile}
+            </#if>
+          </@infoRowNested>
+        </#if>
       </table>
       <#-- Telecom numbers are shown always in the end of list and hidden by default. -->
       <#if order.getOrderAndMainExternalPartyPhoneNumbers()?has_content>

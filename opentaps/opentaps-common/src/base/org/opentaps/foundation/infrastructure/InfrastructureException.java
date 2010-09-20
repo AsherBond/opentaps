@@ -3,7 +3,7 @@ package org.opentaps.foundation.infrastructure;
 import org.opentaps.foundation.exception.FoundationException;
 
 /*
-* Copyright (c) 2008 - 2009 Open Source Strategies, Inc.
+* Copyright (c) opentaps Group LLC
 *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -18,6 +18,7 @@ import org.opentaps.foundation.exception.FoundationException;
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 */
+@SuppressWarnings("serial")
 public class InfrastructureException extends FoundationException {
     public InfrastructureException() {
         super();

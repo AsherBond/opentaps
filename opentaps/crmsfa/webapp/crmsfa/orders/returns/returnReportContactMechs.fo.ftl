@@ -38,9 +38,9 @@ under the License.
             <fo:table border-style="solid" border-width="0.2pt" height="1in">
               <fo:table-column column-width="3.50in"/>
               <fo:table-body>
-                <fo:table-row><fo:table-cell border-style="solid" border-width="0.2pt" padding="1mm"><fo:block font-weight="bold">${uiLabelMap.OrderReturnFromAddress}</fo:block></fo:table-cell></fo:table-row>
+                <fo:table-row><fo:table-cell border-style="solid" border-width="0.2pt" padding="1mm"><fo:block font-weight="bold" font-size="10pt">${uiLabelMap.CrmReturnFrom}</fo:block></fo:table-cell></fo:table-row>
                 <fo:table-row><fo:table-cell padding="1mm">
-                  <fo:block white-space-collapse="false">
+                  <fo:block white-space-collapse="false" >
                     <#if fromPartyNameResult.fullName?has_content>
                       ${fromPartyNameResult.fullName}
                     <#else>
@@ -66,7 +66,7 @@ under the License.
             <fo:table border-style="solid" border-width="0.2pt" height="1in">
               <fo:table-column column-width="2.75in"/>
               <fo:table-body>
-                <fo:table-row><fo:table-cell padding="1mm" border-style="solid" border-width="0.2pt"><fo:block font-weight="bold">${uiLabelMap.OrderReturnToAddress}</fo:block></fo:table-cell></fo:table-row>
+                <fo:table-row><fo:table-cell padding="1mm" border-style="solid" border-width="0.2pt"><fo:block font-weight="bold" font-size="10pt">${uiLabelMap.CrmReturnTo}</fo:block></fo:table-cell></fo:table-row>
                 <fo:table-row><fo:table-cell padding="1mm">
                   <fo:block white-space-collapse="flase">
                     <#if toPartyNameResult.fullName?has_content>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -76,8 +76,5 @@
     
     <!-- asterisk integration tests -->
     <test-case case-name="opentaps-asterisk-tests"><junit-test-suite class-name="org.opentaps.asterisk.tests.AsteriskTests"/></test-case>
-    
-    <!-- activities tests -->
-    <test-case case-name="opentaps-activities-tests"><junit-test-suite class-name="com.opensourcestrategies.activities.tests.ActivitiesTests"/></test-case>
     
 </test-suite>

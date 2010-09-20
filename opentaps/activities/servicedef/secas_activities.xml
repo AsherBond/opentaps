@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (c) 2010 - 2011 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -25,9 +25,5 @@
     <eca service="crmsfa.sendActivityEmail" event="commit">
         <action service="activities.transformToActivityFacts" mode="sync"/>
     </eca>
-    
-    <eca service="crmsfa.deleteActivityEmail" event="commit">
-        <action service="activities.transformAllActivities" mode="sync"/>
-    </eca>
-    
+        
 </service-eca>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -66,6 +66,37 @@ public class ProductLookupService extends EntityLookupAndSuggestService {
                 );
 
         return findSuggestMatchesAnyOf(ProductAndGoodIdentification.class, ProductLookupConfiguration.LIST_LOOKUP_FIELDS, activeCondition);
+    }
+
+    /**
+     * AJAX event to suggest Product.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String suggestProductForCart(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        ProductLookupService service = new ProductLookupService(provider);
+        service.suggestProductForCart();
+        return json.makeSuggestResponse(ProductLookupConfiguration.OUT_PRODUCT_ID, service);
+    }
+    
+    /**
+     * Suggests a list of <code>Product</code>.
+     * @return the list of <code>Product</code>, or <code>null</code> if an error occurred
+     */
+    public List<ProductAndGoodIdentification> suggestProductForCart() {
+
+        EntityCondition activeCondition = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition(ProductAndGoodIdentification.Fields.isActive.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(ProductAndGoodIdentification.Fields.isActive.name(), EntityOperator.EQUALS, "Y")
+                );
+        EntityCondition filterOutVirtualCondition = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition(ProductAndGoodIdentification.Fields.isVirtual.name(), EntityOperator.NOT_EQUAL, "Y"),
+                activeCondition);
+        return findSuggestMatchesAnyOf(ProductAndGoodIdentification.class, ProductLookupConfiguration.LIST_LOOKUP_FIELDS, filterOutVirtualCondition);
     }
 
     @Override

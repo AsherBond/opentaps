@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -1192,6 +1192,7 @@ public final class FinancialReports {
                     reportLine.put("invoiceDate", invoice.getInvoiceDate());
                     reportLine.put("invoiceId", invoice.getInvoiceId());
                     reportLine.put("invoiceTotal", invoice.getInvoiceTotal());
+                    reportLine.put("openAmount", invoice.getOpenAmount());
                     reportLine.put("partyId", invoice.getPartyId());
                     reportLine.put("partyName", PartyHelper.getPartyName(delegator, invoice.getPartyId(), false));
                     plainList.add(reportLine);

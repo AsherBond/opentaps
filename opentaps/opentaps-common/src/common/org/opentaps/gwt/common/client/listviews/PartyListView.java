@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -172,6 +172,7 @@ public abstract class PartyListView extends EntityListView {
         setColumnHidden(PartyLookupConfiguration.OUT_ADDRESS_2, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_POSTAL_CODE, true);
         setColumnHidden(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT, true);
+        setColumnHidden(PartyLookupConfiguration.INOUT_ADDRESS, true);
 
     }
 

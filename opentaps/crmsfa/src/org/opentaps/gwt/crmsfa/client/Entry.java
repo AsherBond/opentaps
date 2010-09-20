@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.gwtext.client.util.Format;
 import com.gwtext.client.widgets.Panel;
+
 import org.opentaps.gwt.common.client.BaseEntry;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindAccountsForm;
@@ -164,6 +165,8 @@ public class Entry extends BaseEntry {
     private static final String FIND_CASES_ID = "findCases";
 
     private static final String CRMSFA_SEARCH_ID = "gwtSearch";
+
+    private static final int PARTIES_PAGE_SIZE = 20;
 
     /**
      * This is the entry point method.
@@ -435,6 +438,8 @@ public class Entry extends BaseEntry {
 
     private void loadFindLeads() {
         findLeadsForm = new FindLeadsForm();
+        findLeadsForm.getListView().setPageSize(PARTIES_PAGE_SIZE);
+        findLeadsForm.getListView().applyFilters();
         RootPanel.get(FIND_LEADS_ID).add(findLeadsForm.getMainPanel());
     }
 
@@ -454,8 +459,10 @@ public class Entry extends BaseEntry {
     private void loadMyLeads() {
         myLeadsForm = new FindLeadsForm();
         myLeadsForm.hideFilters();
+        myLeadsForm.getListView().setPageSize(PARTIES_PAGE_SIZE);
         myLeadsForm.getListView().filterMyOrTeamParties(PartyLookupConfiguration.MY_VALUES);
         myLeadsForm.getListView().applyFilters();
+
         RootPanel.get(MY_LEADS_ID).add(myLeadsForm.getMainPanel());
     }
 
@@ -476,6 +483,8 @@ public class Entry extends BaseEntry {
 
     private void loadFindContacts() {
         findContactsForm = new FindContactsForm();
+        findContactsForm.getListView().setPageSize(PARTIES_PAGE_SIZE);
+        findContactsForm.getListView().applyFilters();
         RootPanel.get(FIND_CONTACTS_ID).add(findContactsForm.getMainPanel());
     }
 
@@ -490,6 +499,7 @@ public class Entry extends BaseEntry {
     private void loadMyContacts() {
         myContactsForm = new FindContactsForm(false);
         myContactsForm.hideFilters();
+        myContactsForm.getListView().setPageSize(PARTIES_PAGE_SIZE);
         myContactsForm.getListView().filterMyOrTeamParties(PartyLookupConfiguration.TEAM_VALUES);
         myContactsForm.getListView().applyFilters();
         RootPanel.get(MY_CONTACTS_ID).add(myContactsForm.getMainPanel());
@@ -890,6 +900,8 @@ public class Entry extends BaseEntry {
 
     private void loadFindAccounts() {
         findAccountsForm = new FindAccountsForm();
+        findAccountsForm.getListView().setPageSize(PARTIES_PAGE_SIZE);
+        findAccountsForm.getListView().applyFilters();
         RootPanel.get(FIND_ACCOUNTS_ID).add(findAccountsForm.getMainPanel());
     }
 
@@ -909,6 +921,7 @@ public class Entry extends BaseEntry {
     private void loadMyAccounts() {
         myAccountsForm = new FindAccountsForm();
         myAccountsForm.hideFilters();
+        myAccountsForm.getListView().setPageSize(PARTIES_PAGE_SIZE);
         myAccountsForm.getListView().filterMyOrTeamParties(getViewPref());
         myAccountsForm.getListView().applyFilters();
         RootPanel.get(MY_ACCOUNTS_ID).add(myAccountsForm.getMainPanel());
@@ -989,6 +1002,8 @@ public class Entry extends BaseEntry {
 
     private void loadFindPartners() {
         findPartnersForm = new FindPartnersForm();
+        findPartnersForm.getListView().setPageSize(PARTIES_PAGE_SIZE);
+        findPartnersForm.getListView().applyFilters();
         RootPanel.get(FIND_PARTNERS_ID).add(findPartnersForm.getMainPanel());
     }
 

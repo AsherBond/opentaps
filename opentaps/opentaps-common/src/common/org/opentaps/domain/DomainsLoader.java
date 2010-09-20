@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 - 2010 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.foundation.domain.DomainInterface;
@@ -58,7 +59,7 @@ public class DomainsLoader implements DomainContextInterface {
      */
     private static Map<String, DomainsDirectory> DOMAINS_DIRECTORIES = FastMap.newInstance();
     private static Set<String> REGISTERED_LOADERS = new HashSet<String>();
-
+ 
     private Infrastructure infrastructure = null;
     private User user = null;
 
@@ -222,7 +223,6 @@ public class DomainsLoader implements DomainContextInterface {
         DOMAINS_DIRECTORIES.put(domainsDirectoryFile, myDomainsDirectory);
     }
 
-
     /**
      * Registers the domains configured in the specified domainsDirectoryFile.
      * Extending DomainsLoaders should invoke this method on instantiation. This
@@ -259,6 +259,24 @@ public class DomainsLoader implements DomainContextInterface {
 
         // Register the calling class so that it may not re-register
         REGISTERED_LOADERS.add(domainLoaderName);
+    }
+
+    public static void registerDomainDirectory(String domainsDirectoryFile) {
+        if (UtilValidate.isEmpty(domainsDirectoryFile)) {
+            throw new IllegalArgumentException();
+        }
+
+        Resource resource = new ClassPathResource(domainsDirectoryFile);
+        XmlBeanFactory bean = new XmlBeanFactory(resource);
+        String[] domainsToRegister = bean.getBeanNamesForType(DomainInterface.class);
+        DomainsDirectory directory = DOMAINS_DIRECTORIES.get(DOMAINS_DIRECTORY_FILE);
+        if (directory == null) {
+            initializeDomainsDirectory(DOMAINS_DIRECTORY_FILE);
+            directory = DOMAINS_DIRECTORIES.get(DOMAINS_DIRECTORY_FILE);
+        }
+        for (String domainToRegister : domainsToRegister) {
+            directory.addDomain(domainToRegister, (DomainInterface) bean.getBean(domainToRegister));
+        }
     }
 
     /**

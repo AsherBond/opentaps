@@ -114,6 +114,10 @@ public class EntityUtil {
         return EntityDateFilterCondition.makeCondition(moment, fromDateName, thruDateName);
     }
 
+    public static EntityCondition getFilterByDateExpr(java.sql.Date moment, String fromDateName, String thruDateName) {
+        return EntityDateFilterCondition.makeCondition(moment, fromDateName, thruDateName);
+    }
+
     /**
      *returns the values that are currently active.
      *

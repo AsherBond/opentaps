@@ -11,7 +11,7 @@
 <TABLE WIDTH="740" ALIGN="CENTER" CELLSPACING="2" CELLPADDING="0">
 <TR>
 <TD width="100%" colspan="4">
-<a href="http://www.opensourcestrategies.com">
+<a href="http://www.opentaps.org">
   <IMG SRC="http://www.opensourcestrategies.com/images/osslogo.jpg" height="75" width="202" border="0"></br>
 </a>
 </TD>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (C) 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -21,34 +21,6 @@
 <screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
-
-    <screen name="main-decorator">
-        <section>
-            <actions>
-                <property-map resource="opentaps" map-name="configProperties" global="true"/>
-                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/main-decorator.bsh"/>
-            </actions>
-            <widgets>
-                <platform-specific>
-                    <html>
-                        <html-template location="component://opentaps-common/webapp/common/includes/main-decorator.ftl"/>
-                    </html>
-                </platform-specific>
-            </widgets>
-        </section>
-    </screen>
-
-
-    <screen name="main-section-decorator">
-        <section>
-            <actions>
-            </actions>
-            <widgets>
-                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
-            </widgets>
-        </section>
-    </screen>
-
     <screen name="main">
         <section>
             <actions>
@@ -60,27 +32,49 @@
                 <java location="org.opentaps.common.event.LoginScreenActions" invoke="getLatestNews"/>
             </actions>
             <widgets>
-                        <platform-specific>
-                            <html>
-                                <html-template location="component://homeapps/webapp/homeapps/includes/header.ftl"/>
-                            </html>
-                        </platform-specific>
+              <platform-specific>
+                <html>
+                  <html-template location="component://homeapps/webapp/homeapps/includes/header.ftl"/>
+                </html>
+              </platform-specific>
 
-                        <platform-specific>
-                            <html>
-                               <html-template location="component://homeapps/webapp/homeapps/main.ftl"/>
-                            </html>
-                        </platform-specific>
-                
-                        <platform-specific>
-                            <html>
-                               <html-template location="component://homeapps/webapp/homeapps/includes/footer.ftl"/>
-                            </html>
-                        </platform-specific>
+              <section>
+                <condition><if-compare field="requirePasswordChange" operator="equals" value="true" type="Boolean"/></condition>
+                <widgets>
+                  <platform-specific>
+                    <html>
+                      <html-template location="component://opentaps-common/webapp/common/includes/changePassword.ftl"/>
+                    </html>
+                  </platform-specific>
+                </widgets>
+                <fail-widgets>
+                  <platform-specific>
+                    <html>
+                      <html-template location="component://homeapps/webapp/homeapps/main.ftl"/>
+                    </html>
+                  </platform-specific>
+                </fail-widgets>
+              </section>
+              
+              <platform-specific>
+                <html>
+                  <html-template location="component://homeapps/webapp/homeapps/includes/footer.ftl"/>
+                </html>
+              </platform-specific>
             </widgets>
         </section>
     </screen>
 
-
+    <screen name="requirePasswordChange">
+        <section>
+            <actions>
+                <set field="requirePasswordChange" value="true" global="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main">
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
 
 </screens>

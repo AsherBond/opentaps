@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -19,7 +19,7 @@
 <!-- This is for use with the opentaps pagination framework -->
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <description>Opentaps Pagination Controller</description>
-    <owner>Open Source Strategies, Inc. (c) 2006-2007 </owner>
+    <owner>opentaps Group LLC</owner>
 
     <!-- event handlers -->
     <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>

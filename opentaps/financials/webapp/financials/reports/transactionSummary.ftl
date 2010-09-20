@@ -1,5 +1,5 @@
 <#--
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -15,7 +15,6 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 <@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <#assign now = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>

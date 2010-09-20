@@ -103,7 +103,7 @@ under the License.
         <a href="http://docs.ofbiz.org/x/JAM" target="_blank"><b>Complete Listing on Wiki</b></a>
         <a href="http://www.hotwaxmedia.com/?atc=OFB" target="_blank"><b>Hotwax Media</b></a>
         <a href="http://www.antwebsystems.com" target="_blank"><b>Ant Websystems</b></a>
-        <a href="http://www.opensourcestrategies.com/ofbiz/" target="_blank"><b>Open Source Strategies, Inc.</b></a>
+        <a href="http://www.opensourcestrategies.com/ofbiz/" target="_blank"><b>opentaps Group LLC</b></a>
         <a href="http://www.go-integral.com" target="_blank"><b>Integral Business Solutions</b></a>
 
         <a href="http://www.brainfood.com" target="_blank"><b>Brainfood</b></a>

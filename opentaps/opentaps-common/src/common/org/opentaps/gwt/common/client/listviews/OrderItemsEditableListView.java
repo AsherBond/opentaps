@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -22,14 +22,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.gwtext.client.core.SortDir;
-import com.gwtext.client.data.Converter;
-import com.gwtext.client.data.Record;
-import com.gwtext.client.data.Store;
-import com.gwtext.client.data.StringFieldDef;
-import com.gwtext.client.widgets.form.Field;
-import com.gwtext.client.widgets.grid.CellMetadata;
-import com.gwtext.client.widgets.grid.Renderer;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.CreateOrUpdateEntityForm;
 import org.opentaps.gwt.common.client.form.field.ModifierOrNumberField;
@@ -38,8 +30,16 @@ import org.opentaps.gwt.common.client.form.field.TextField;
 import org.opentaps.gwt.common.client.lookup.configuration.AccountingTagLookupConfiguration;
 import org.opentaps.gwt.common.client.lookup.configuration.OrderItemsCartLookupConfiguration;
 import org.opentaps.gwt.common.client.suggest.AccountingTagConfigurationStore;
-import org.opentaps.gwt.common.client.suggest.ProductAutocomplete;
+import org.opentaps.gwt.common.client.suggest.ProductForCartAutocomplete;
 import org.opentaps.gwt.common.client.suggest.ProductInfoForCartStore;
+
+import com.gwtext.client.core.SortDir;
+import com.gwtext.client.data.Record;
+import com.gwtext.client.data.Store;
+import com.gwtext.client.data.StringFieldDef;
+import com.gwtext.client.widgets.form.Field;
+import com.gwtext.client.widgets.grid.CellMetadata;
+import com.gwtext.client.widgets.grid.Renderer;
 
 /**
  * List of Order Items.
@@ -67,7 +67,7 @@ public class OrderItemsEditableListView extends EntityEditableListView {
         }
     }
 
-    private final ProductAutocomplete productEditor;
+    private final ProductForCartAutocomplete productEditor;
     private final TextField descriptionEditor;
     private final NumberField quantityEditor;
     private final ModifierOrNumberField priceEditor;
@@ -100,7 +100,7 @@ public class OrderItemsEditableListView extends EntityEditableListView {
         this.organizationPartyId = organizationPartyId;
 
         descriptionEditor = new TextField(UtilUi.MSG.commonDescription(), OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION, INPUT_LENGTH);
-        productEditor = new ProductAutocomplete(UtilUi.MSG.productProduct(), OrderItemsCartLookupConfiguration.INOUT_PRODUCT, INPUT_LENGTH);
+        productEditor = new ProductForCartAutocomplete(UtilUi.MSG.productProduct(), OrderItemsCartLookupConfiguration.INOUT_PRODUCT, INPUT_LENGTH);
         quantityEditor = new NumberField(UtilUi.MSG.commonQuantity(), OrderItemsCartLookupConfiguration.INOUT_QUANTITY, INPUT_LENGTH);
         priceEditor = new ModifierOrNumberField(UtilUi.MSG.commonUnitPrice(), OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE, INPUT_LENGTH);
 
@@ -154,7 +154,7 @@ public class OrderItemsEditableListView extends EntityEditableListView {
         getColumn().setFixed(true);
 
         // product column
-        makeEditableColumn(UtilUi.MSG.productProduct(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_PRODUCT), new ProductAutocomplete(productEditor), "{1}:{0}");
+        makeEditableColumn(UtilUi.MSG.productProduct(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_PRODUCT), new ProductForCartAutocomplete(productEditor), "{1}:{0}");
         // description column
         makeEditableColumn(UtilUi.MSG.commonDescription(), new StringFieldDef(OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION), new TextField(descriptionEditor)).setWidth(200);
         // quantity column

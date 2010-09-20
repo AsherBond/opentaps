@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -16,6 +16,7 @@
  */
 package org.opentaps.warehouse.domain.inventory;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,7 +124,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
     public List<InventoryItem> getInventoryItemsWithNegativeATP(String facilityId, String productId) throws RepositoryException {
         EntityCondition conditions1 = EntityCondition.makeCondition(EntityOperator.OR,
                 EntityCondition.makeCondition("availableToPromiseTotal", EntityOperator.EQUALS, null),
-                EntityCondition.makeCondition("availableToPromiseTotal", EntityOperator.LESS_THAN, 0));
+                EntityCondition.makeCondition("availableToPromiseTotal", EntityOperator.LESS_THAN, BigDecimal.ZERO));
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 conditions1,
                 EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),

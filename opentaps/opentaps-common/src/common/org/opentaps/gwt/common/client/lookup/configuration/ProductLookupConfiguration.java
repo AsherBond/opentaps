@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -30,6 +30,8 @@ public abstract class ProductLookupConfiguration {
     private ProductLookupConfiguration() { }
 
     public static final String URL_SUGGEST = "gwtSuggestProduct";
+    // filter out virtual products in result
+    public static final String URL_SUGGEST_FOR_CART = "gwtSuggestProductForCart";
 
     public static final String OUT_PRODUCT_ID = "productId";
     public static final String OUT_IDENTIFIER = "idValue";

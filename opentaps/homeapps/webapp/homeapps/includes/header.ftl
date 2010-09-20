@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -25,6 +25,7 @@
   For now we are getting CSS from the opentaps_css directory inside opentaps-common.
  -->
 
+<link rel="stylesheet" href="/opentaps_css/opentaps-packed.css" type="text/css"/>
 <link href="/opentaps_css/integratingweb/opentaps.css" rel="stylesheet" type="text/css" />
 <link rel="shortcut icon" href="<@ofbizContentUrl>/opentaps_images/favicon.ico</@ofbizContentUrl>">
 

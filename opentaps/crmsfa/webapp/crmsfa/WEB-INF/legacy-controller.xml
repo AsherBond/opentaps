@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -64,7 +64,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
 <!-- These controller requests are originally from ordermgr.  They are split out here to separate them from the principle CRMSFA requests.  A lot of these are defunct and not used.  -->
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <description>CRMSFA Module Site Configuration File</description>
-    <owner>Open Source Strategies, Inc. (c) 2005-2006 </owner>
+    <owner>opentaps Group LLC</owner>
 
     <!-- ORDERMGR -->
     <request-map uri="orderstats">
@@ -532,6 +532,13 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createPartyForOrder">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="custsetting"/>
+    </request-map>
+
+    <request-map uri="createOrderContactMech">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createOrderContactMech"/>
+        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-attributes="orderId" allowed-params="orderId"/>
+        <response name="error" type="view" value="orderview"/>
     </request-map>
 
     <request-map uri="updateOrderContactMech">

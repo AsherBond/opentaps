@@ -33,6 +33,10 @@ under the License.
         <div class="tabletext">${uiLabelMap.CommonPoweredBy} <a href="http://ofbiz.apache.org" class="tabletext">Apache OFBiz</a></div>
         
       </div>
+      <div class="tabletext">
+        <a href="http://www.opentaps.org">${uiLabelMap.OpentapsProductName}</a> ${uiLabelMap.OpentapsReleaseVersion}.<br />
+        Opentaps is a trademark of <a href="http://www.opentaps.org">opentaps Group LLC</a>
+      </div>
       <br />
       <div class="tabletext"><a href="<@ofbizUrl>policies</@ofbizUrl>">${uiLabelMap.EcommerceSeeStorePoliciesHere}</a></div>
   </div>

@@ -26,7 +26,7 @@ under the License.
   </p>
   <p align="center">
     <a href="http://www.opentaps.org">${uiLabelMap.OpentapsProductName}</a> ${uiLabelMap.OpentapsReleaseVersion}.<br />
-    Opentaps is a trademark of <a href="http://www.opensourcestrategies.com">Open Source Strategies, Inc.</a>
+    Opentaps is a trademark of <a href="http://www.opentaps.org">opentaps Group LLC</a>
   </p>
   <#if layoutSettings.VT_FTR_JAVASCRIPT?has_content>
     <#list layoutSettings.VT_FTR_JAVASCRIPT as javaScript>

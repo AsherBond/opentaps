@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -18,5 +18,5 @@
 import org.opentaps.common.util.UtilCommon;
 
 // this script gets a List of facilities where the current organization party is either the owner or a REC_INV_FOR party
-context.put("facilities", UtilCommon.getOrganizationReceivingFacilities(UtilCommon.getOrganizationPartyId(request)), delegator));
+context.put("facilities", UtilCommon.getOrganizationReceivingFacilities(UtilCommon.getOrganizationPartyId(request), delegator));
 

@@ -1,5 +1,5 @@
 <#--
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -16,7 +16,7 @@
  *
 -->
 
-<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <@frameSection title=uiLabelMap.FinancialsBalanceStatement>
     <form method="post" name="BalanceReportSetupForm" action="<@ofbizUrl>BalanceReportPrepareData</@ofbizUrl>">
@@ -27,11 +27,7 @@
             <@inputDateTimeRow name="thruDate" form="BalanceReportSetupForm" title="${uiLabelMap.CommonThruDate}" default=today?if_exists/>
             <@inputCurrencySelectRow name="currencyUomId" title=uiLabelMap.CommonCurrency defaultCurrencyUomId=parameters.orgCurrencyUomId />
             <@inputIndicatorRow name="includeBudgetIncome" title=uiLabelMap.FinancialsIncludeIncomeInBudget default="N" />
-            <#list tagTypes as tag>
-              <@inputSelectRow title=tag.description name="tag${tag.index}" list=tag.activeTagValues key="enumId" required=true ; tagValue>
-                ${tagValue.description}
-              </@inputSelectRow>
-            </#list>
+            <@accountingTagsInputRow tagTypes=tagTypes/>
             <tr><td colspan="2">&nbsp;</td></tr>
             <@inputSelectRow name="reportType" title="${uiLabelMap.OpentapsReportFormat}" list=reportTypes?default([]) key="mimeTypeId" ; mimeType>
                 ${mimeType.get("description", locale)}

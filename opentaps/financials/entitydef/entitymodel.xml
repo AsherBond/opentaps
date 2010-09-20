@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -44,7 +44,7 @@ under the License.
   <!-- ========================================================= -->
     <title>Entity of an Open Source Strategies Financials component</title>
     <description>None</description>
-    <copyright>Copyright (c) 2006 - 2007 Open Source Strategies, Inc.</copyright>
+    <copyright>Copyright (c) opentaps Group LLC</copyright>
     <author>None</author>
     <version>1.0</version>
 

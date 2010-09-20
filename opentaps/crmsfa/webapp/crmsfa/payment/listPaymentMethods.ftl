@@ -53,7 +53,7 @@ under the License.
                      </td>
                      <td>
                      <#if hasPaymentUpdatePermission>
-                         <a href="<@ofbizUrl>${editTaxAuthPartyInfo}?partyId=${parameters.partyId}&taxAuthGeoId=${partyTaxAuthInfo.taxAuthGeoId}&taxAuthPartyId=${partyTaxAuthInfo.taxAuthPartyId}&fromDate=${partyTaxAuthInfo.fromDate}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
+                         <a href="<@ofbizUrl>${editTaxAuthPartyInfo}?partyId=${parameters.partyId}&taxAuthGeoId=${partyTaxAuthInfo.taxAuthGeoId}&taxAuthPartyId=${partyTaxAuthInfo.taxAuthPartyId}&fromDate=${partyTaxAuthInfo.fromDate}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonEdit}</a>
                      </#if> 
                      </td>                                        
                   </tr>
@@ -90,7 +90,7 @@ under the License.
                   </td>
                   <td>
                     <#if security.hasEntityPermission("PAY_INFO", "_UPDATE", session)>
-                      <a href="<@ofbizUrl>${editCreditCardPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
+                      <a href="<@ofbizUrl>${editCreditCardPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonEdit}</a>
                     </#if>
                   <#-- </td> -->
                 <#elseif "GIFT_CARD" == paymentMethod.paymentMethodTypeId>
@@ -126,7 +126,7 @@ under the License.
                   </td>
                   <td>
                     <#if security.hasEntityPermission("PAY_INFO", "_UPDATE", session)>
-                      <a href="<@ofbizUrl>${editGiftCardPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
+                      <a href="<@ofbizUrl>${editGiftCardPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonEdit}</a>
                     </#if>
                   <#-- </td> -->
                 <#elseif "EFT_ACCOUNT" == paymentMethod.paymentMethodTypeId>
@@ -142,7 +142,7 @@ under the License.
                   </td>
                   <td>
                     <#if security.hasEntityPermission("PAY_INFO", "_UPDATE", session)>
-                      <a href="<@ofbizUrl>${editEftAccountPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
+                      <a href="<@ofbizUrl>${editEftAccountPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonEdit}</a>
                     </#if>
                   <#-- </td> -->
                 <#elseif "COMPANY_CHECK" == paymentMethod.paymentMethodTypeId>
@@ -192,7 +192,7 @@ under the License.
                 </td>
                 <td>
                   <@form name="updatePartyCarrierAccountHiddenForm" url="updatePartyCarrierAccount" partyId="${parameters.partyId}" carrierPartyId="${partyCarrierAccount.carrierPartyId}" fromDate="${partyCarrierAccount.fromDate}" thruDate="${now}" donePage="${parameters.thisRequestUri}" />
-                  <a href="<@ofbizUrl>${editShippingAccount}?partyId=${parameters.partyId}&carrierPartyId=${partyCarrierAccount.carrierPartyId}&fromDate=${partyCarrierAccount.fromDate}&donePage=${parameters.thisRequestUri}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
+                  <a href="<@ofbizUrl>${editShippingAccount}?partyId=${parameters.partyId}&carrierPartyId=${partyCarrierAccount.carrierPartyId}&fromDate=${partyCarrierAccount.fromDate}&donePage=${parameters.thisRequestUri}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonEdit}</a>
                   <@submitFormLink form="updatePartyCarrierAccountHiddenForm" text="${uiLabelMap.CommonExpire}" />
                 </td>
               </tr>

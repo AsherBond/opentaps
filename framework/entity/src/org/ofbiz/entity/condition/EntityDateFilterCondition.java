@@ -109,6 +109,22 @@ public class EntityDateFilterCondition extends EntityCondition {
         return makeCondition(UtilDateTime.nowTimestamp(), fromDateName, thruDateName);
     }
 
+    public static EntityExpr makeCondition(java.sql.Date moment, String fromDateName, String thruDateName) {
+        return EntityCondition.makeCondition(
+            EntityCondition.makeCondition(
+                EntityCondition.makeCondition( thruDateName, EntityOperator.EQUALS, null ),
+                EntityOperator.OR,
+                EntityCondition.makeCondition( thruDateName, EntityOperator.GREATER_THAN, moment )
+            ),
+            EntityOperator.AND,
+            EntityCondition.makeCondition(
+                EntityCondition.makeCondition( fromDateName, EntityOperator.EQUALS, null ),
+                EntityOperator.OR,
+                EntityCondition.makeCondition( fromDateName, EntityOperator.LESS_THAN_EQUAL_TO, moment )
+            )
+       );
+    }
+
     public static EntityExpr makeCondition(Timestamp moment, String fromDateName, String thruDateName) {
         return EntityCondition.makeCondition(
             EntityCondition.makeCondition(

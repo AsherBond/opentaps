@@ -24,14 +24,14 @@ under the License.
 <#escape x as x?xml>
           <fo:table><fo:table-column column-width="0.3in"/><fo:table-body><fo:table-row><fo:table-cell>
             <fo:table font-size="10pt">
-            <fo:table-column column-width="1in"/>
-            <fo:table-column column-width="1in"/>
-            <fo:table-column column-width="1in"/>
+            <fo:table-column column-width="1.2in"/>
+            <fo:table-column column-width="1.2in"/>
+            <fo:table-column column-width="1.2in"/>
             <fo:table-body>
 
             <fo:table-row>
               <fo:table-cell number-columns-spanned="3">
-                <fo:block space-after="2mm" font-size="14pt" font-weight="bold" text-align="right">${uiLabelMap.OrderReturnSummary}</fo:block>
+                <fo:block space-after="2mm" font-size="12pt" font-weight="bold" text-align="right">${uiLabelMap.OrderReturnSummary}</fo:block>
               </fo:table-cell>
             </fo:table-row>
 
@@ -49,7 +49,7 @@ under the License.
                                   
             <fo:table-row>
               <fo:table-cell text-align="center" border-style="solid" border-width="0.2pt">
-                <fo:block padding="1mm"><@displayDateFO date=entryDate/></fo:block>
+                <fo:block padding="1mm"><@displayDateFO date=returnHeader.entryDate/></fo:block>
               </fo:table-cell>
               <fo:table-cell text-align="center" border-style="solid" border-width="0.2pt">
                 <fo:block padding="1mm">${returnId}</fo:block>

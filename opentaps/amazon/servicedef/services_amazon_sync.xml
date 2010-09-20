@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -18,7 +18,7 @@
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
     <description>Services that synchronize the Opentaps and Amazon models, including ECA and batch services.</description>
-    <vendor>Open Source Strategies, Inc.</vendor>
+    <vendor>opentaps Group LLC</vendor>
     
     <service name="opentaps.amazon.batchUpdateAmazonProducts" engine="java" location="org.opentaps.amazon.sync.AmazonSyncServices" invoke="batchUpdateAmazonProducts" transaction-timeout="7200">
         <description>

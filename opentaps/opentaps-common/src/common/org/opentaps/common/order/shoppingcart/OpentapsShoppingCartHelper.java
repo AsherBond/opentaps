@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -115,6 +115,18 @@ public class OpentapsShoppingCartHelper extends ShoppingCartHelper {
         } else {
             this.cart = new OpentapsShoppingCart(cart);
         }
+    }
+ 
+    public OpentapsShoppingCart getCart() {
+        return this.cart;
+    }
+
+    public GenericDelegator getDelegator() {
+        return this.delegator;
+    }
+
+    public LocalDispatcher getDispatcher() {
+        return this.dispatcher;
     }
 
     /**

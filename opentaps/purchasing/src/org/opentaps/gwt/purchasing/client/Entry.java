@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) opentaps Group LLC
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -38,6 +38,8 @@ public class Entry extends BaseEntry {
     private static final String FIND_ORDERS_ID = "findOrders";
     private static final String FIND_SUPPLIERS_ID = "findSuppliers";
     private static final String SUPPLIER_ORDERS = "supplierOpenOrdersSubsection";
+
+    private static final int PARTIES_PAGE_SIZE = 20;
 
     private FindOrdersForm findOrdersForm;
     private FindOrdersForm openOrdersForm;
@@ -98,6 +100,8 @@ public class Entry extends BaseEntry {
 
     private void loadFindSuppliers() {
         findSuppliersForm = new FindSuppliersForm();
+        findSuppliersForm.getListView().setPageSize(PARTIES_PAGE_SIZE);
+        findSuppliersForm.getListView().applyFilters();
         RootPanel.get(FIND_SUPPLIERS_ID).add(findSuppliersForm.getMainPanel());
     }
 
