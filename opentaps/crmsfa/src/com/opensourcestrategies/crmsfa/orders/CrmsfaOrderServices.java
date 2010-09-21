@@ -1229,7 +1229,7 @@ public final class CrmsfaOrderServices {
                 GenericValue newInventoryItemDetail = delegator.makeValue("InventoryItemDetail", UtilMisc.toMap("orderId", orderId, "inventoryItemId", reservation.get("inventoryItemId")));
                 newInventoryItemDetail.put("inventoryItemDetailSeqId", inventoryItemDetailSeqId);
                 newInventoryItemDetail.put("availableToPromiseDiff", diffQty);
-                newInventoryItemDetail.put("quantityOnHandDiff", 0.0);
+                newInventoryItemDetail.put("quantityOnHandDiff", new BigDecimal("0.0"));
                 newInventoryItemDetail.put("shipGroupSeqId", reservation.get("shipGroupSeqId"));
                 valuesToStore.add(newInventoryItemDetail);
                 // the second removed that ATP  to a IDD associated to the new ship group

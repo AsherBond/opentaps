@@ -257,7 +257,7 @@ public final class InventoryServices {
             // Create a new InventoryItemValueHistory record
             GenericValue newInventoryItemValue = delegator.makeValue("InventoryItemValueHistory", UtilMisc.toMap("inventoryItemValueHistId", delegator.getNextSeqId("InventoryItemValueHistory"), "inventoryItemId", inventoryItemId, "setByUserLogin", userLogin.getString("userLoginId")));
             newInventoryItemValue.set("dateTime", UtilDateTime.nowTimestamp());
-            newInventoryItemValue.set("unitCost", newUnitCost.doubleValue());
+            newInventoryItemValue.set("unitCost", new BigDecimal(newUnitCost.doubleValue()));
             newInventoryItemValue.create();
 
         } catch (GeneralException e) {

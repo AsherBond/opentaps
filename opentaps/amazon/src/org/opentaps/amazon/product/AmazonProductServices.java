@@ -129,7 +129,7 @@ public final class AmazonProductServices {
             product.set("outOfStockWebsiteMessage", outOfStockWebsiteMessage);
             product.set("registeredParameter", registeredParameter);
             product.set("ackStatusId", AmazonConstants.statusProductNotAcked);
-            product.set("postFailures", 0);
+            product.set("postFailures", new Long(0));
             product.set("postTimestamp", null);
             product.set("postErrorMessage", null);
             product.set("acknowledgeTimestamp", null);
