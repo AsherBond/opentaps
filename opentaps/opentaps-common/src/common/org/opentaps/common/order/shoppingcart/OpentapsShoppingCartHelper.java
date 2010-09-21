@@ -121,7 +121,7 @@ public class OpentapsShoppingCartHelper extends ShoppingCartHelper {
         return this.cart;
     }
 
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return this.delegator;
     }
 

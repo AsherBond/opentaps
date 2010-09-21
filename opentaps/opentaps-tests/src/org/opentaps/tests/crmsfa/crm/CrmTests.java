@@ -241,7 +241,7 @@ public class CrmTests extends OpentapsTestCase {
 
         GenericValue communicationEvent = delegator.findByPrimaryKey("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId));
         //GenericValue communicationEventRole = delegator.findByPrimaryKey("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId));
-        List<GenericValue> communicationEventRole = delegator.findByLike("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "roleTypeId", "ORIGINATOR"));
+        List<GenericValue> communicationEventRole = delegator.findByAnd("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "roleTypeId", "ORIGINATOR"));
 
         // Verify CommunicationEvent partyIdFrom before merge
         assertEquals("CommunicationEvent partyIdFrom must be " + partyIdSecond, partyIdSecond, communicationEvent.getString("partyIdFrom"));
@@ -297,7 +297,7 @@ public class CrmTests extends OpentapsTestCase {
         communicationEventId = communicationEvents.get(0).getString("communicationEventId");
 
         communicationEvent = delegator.findByPrimaryKey("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId));
-        communicationEventRole = delegator.findByLike("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "roleTypeId", "ORIGINATOR"));
+        communicationEventRole = delegator.findByAnd("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "roleTypeId", "ORIGINATOR"));
 
         // Verify CommunicationEvent partyIdFrom after merge
         assertEquals("Communication Event partyIdFrom after merge must be " + partyIdFirst, partyIdFirst, communicationEvent.getString("partyIdFrom"));
