@@ -882,7 +882,7 @@ under the License.
         </description>
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="subject" type="String" mode="IN" optional="false"/>
-        <attribute name="sendFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="sendFrom" type="String" mode="IN" optional="false" allow-html="any"/>
         <attribute name="sendTo" type="String" mode="IN" optional="false"/>
         <attribute name="contentType" type="String" mode="IN" optional="true"/>
         <attribute name="statusId" type="String" mode="IN" optional="true"/>
