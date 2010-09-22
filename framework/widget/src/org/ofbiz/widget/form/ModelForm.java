@@ -1739,7 +1739,8 @@ public class ModelForm extends ModelWidget {
                 case ModelFormField.FieldInfo.DISPLAY :
                 case ModelFormField.FieldInfo.DISPLAY_ENTITY :
                 case ModelFormField.FieldInfo.HYPERLINK :
-                    formStringRenderer.renderHiddenField(writer, context, modelFormField, modelFormField.getEntry(context));
+                    // do not attempt to localize the value in the hidden field as it could be used to pass parameters
+                    formStringRenderer.renderHiddenField(writer, context, modelFormField, modelFormField.getEntry(context, false));
                     break;
             }
         }
