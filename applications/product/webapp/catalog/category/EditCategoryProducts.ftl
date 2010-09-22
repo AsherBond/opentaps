@@ -42,29 +42,37 @@ under the License.
         </#if>
     </div>
     <div class="screenlet-body">
-        <table cellspacing="0" class="basic-table">
-          <tr class="header-row">
-            <td>${uiLabelMap.ProductProductNameId}</td>
-            <td>${uiLabelMap.CommonFromDateTime}</td>
-            <td align="center">${uiLabelMap.ProductThruDateTimeSequenceQuantity} ${uiLabelMap.CommonComments}</td>
-            <td>&nbsp;</td>
-          </tr>
-          <#if (listSize > 0)>
-            <tr><td>
-              <#assign rowClass = "2">
-              <#assign rowCount = 0>
-              <#list productCategoryMembers as productCategoryMember>
-                <#assign suffix = "_o_" + productCategoryMember_index>
-                <#assign product = productCategoryMember.getRelatedOne("Product")>
-                <#assign hasntStarted = false>
-                <#if productCategoryMember.fromDate?exists && nowTimestamp.before(productCategoryMember.getTimestamp("fromDate"))><#assign hasntStarted = true></#if>
-                <#assign hasExpired = false>
-                <#if productCategoryMember.thruDate?exists && nowTimestamp.after(productCategoryMember.getTimestamp("thruDate"))><#assign hasExpired = true></#if>
-                <form method="post" action="<@ofbizUrl>updateCategoryProductMember</@ofbizUrl>" name="updateCategoryProductForm">
-                  <input type="hidden" name="VIEW_SIZE" value="${viewSize}"/>
-                  <input type="hidden" name="VIEW_INDEX" value="${viewIndex}"/>
-                  <input type="hidden" name="activeOnly" value="${activeOnly.toString()}">
-                  <input type="hidden" name="productCategoryId" value="${productCategoryId?if_exists}">
+        <#if (listSize == 0)>
+           <table cellspacing="0" class="basic-table">
+              <tr class="header-row">
+                 <td>${uiLabelMap.ProductProductNameId}</td>
+                 <td>${uiLabelMap.CommonFromDateTime}</td>
+                 <td align="center">${uiLabelMap.ProductThruDateTimeSequenceQuantity} ${uiLabelMap.CommonComments}</td>
+                 <td>&nbsp;</td>
+              </tr>
+           </table>
+        <#else>
+           <form method="post" action="<@ofbizUrl>updateCategoryProductMember</@ofbizUrl>" name="updateCategoryProductForm">
+              <input type="hidden" name="VIEW_SIZE" value="${viewSize}"/>
+              <input type="hidden" name="VIEW_INDEX" value="${viewIndex}"/>
+              <input type="hidden" name="activeOnly" value="${activeOnly.toString()}" />
+              <input type="hidden" name="productCategoryId" value="${productCategoryId?if_exists}" />
+              <table cellspacing="0" class="basic-table">
+                <tr class="header-row">
+                  <td>${uiLabelMap.ProductProductNameId}</td>
+                  <td>${uiLabelMap.CommonFromDateTime}</td>
+                  <td align="center">${uiLabelMap.ProductThruDateTimeSequenceQuantity} ${uiLabelMap.CommonComments}</td>
+                  <td>&nbsp;</td>
+                </tr>
+                <#assign rowClass = "2">
+                <#assign rowCount = 0>
+                <#list productCategoryMembers as productCategoryMember>
+                  <#assign suffix = "_o_" + productCategoryMember_index>
+                  <#assign product = productCategoryMember.getRelatedOne("Product")>
+                  <#assign hasntStarted = false>
+                  <#if productCategoryMember.fromDate?exists && nowTimestamp.before(productCategoryMember.getTimestamp("fromDate"))><#assign hasntStarted = true></#if>
+                  <#assign hasExpired = false>
+                  <#if productCategoryMember.thruDate?exists && nowTimestamp.after(productCategoryMember.getTimestamp("thruDate"))><#assign hasExpired = true></#if>
                   <tr valign="middle"<#if rowClass == "1"> class="alternate-row"</#if>>
                     <td>
                       <#if (product.smallImageUrl)?exists>
