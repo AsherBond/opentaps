@@ -278,7 +278,7 @@ public final class COGSServices {
         Delegator delegator = dctx.getDelegator();
         String productId = (String) context.get("productId");
         String organizationPartyId = (String) context.get("organizationPartyId");
-        Double averageCost = (Double) context.get("averageCost");
+        BigDecimal averageCost = (BigDecimal) context.get("averageCost");
         try {
             EntityCondition conditionList = EntityCondition.makeCondition(EntityOperator.AND,
                             EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
