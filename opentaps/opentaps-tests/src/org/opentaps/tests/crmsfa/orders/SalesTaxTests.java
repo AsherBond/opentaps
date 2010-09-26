@@ -717,6 +717,8 @@ public class SalesTaxTests extends OrderTestCase {
         User = demoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, demoAccount1, productStoreId, "EXT_OFFLINE", "DemoAddress1");
 
+        pause("MySQL timestamp workaround pause", 1000);
+
         // we have to update order to get all adjustments recalculated
         OrderRepositoryInterface repository = getOrderRepository(admin);
         Order order = repository.getOrderById(salesOrder.getOrderId());
@@ -736,8 +738,12 @@ public class SalesTaxTests extends OrderTestCase {
         callCtxt.put("overridePriceMap", new HashMap<String, Object>());
         runAndAssertServiceSuccess("opentaps.updateOrderItems", callCtxt);
 
+        pause("MySQL timestamp workaround pause", 1000);
+
         // ... and approve order because an free product item was added during previous step
         salesOrder.approveOrder();
+
+        pause("MySQL timestamp workaround pause", 1000);
 
         /*
          * 2. Use testShipOrder to ship sales order
