@@ -179,7 +179,8 @@ public class ConfigXMLReader {
             Element firstvisitElement = UtilXml.firstChildElement(rootElement, "firstvisit");
             if (firstvisitElement != null) {
                 for (Element eventElement: UtilXml.childElementList(firstvisitElement, "event")) {
-                    this.firstVisitEventList.put(eventElement.getAttribute("name"), new Event(eventElement));
+                    String name = autoSetNameforEvent(eventElement, "firstvisit", firstVisitEventList);
+                    this.firstVisitEventList.put(name, new Event(eventElement));
                 }
             }
 
@@ -187,7 +188,8 @@ public class ConfigXMLReader {
             Element preprocessorElement = UtilXml.firstChildElement(rootElement, "preprocessor");
             if (preprocessorElement != null) {
                 for (Element eventElement: UtilXml.childElementList(preprocessorElement, "event")) {
-                    this.preprocessorEventList.put(eventElement.getAttribute("name"), new Event(eventElement));
+                    String name = autoSetNameforEvent(eventElement, "preprocessor", preprocessorEventList);
+                    this.preprocessorEventList.put(name, new Event(eventElement));
                 }
             }
 
@@ -195,7 +197,8 @@ public class ConfigXMLReader {
             Element postprocessorElement = UtilXml.firstChildElement(rootElement, "postprocessor");
             if (postprocessorElement != null) {
                 for (Element eventElement: UtilXml.childElementList(postprocessorElement, "event")) {
-                    this.postprocessorEventList.put(eventElement.getAttribute("name"), new Event(eventElement));
+                    String name = autoSetNameforEvent(eventElement, "postprocessor", postprocessorEventList);
+                    this.postprocessorEventList.put(name, new Event(eventElement));
                 }
             }
 
@@ -203,7 +206,8 @@ public class ConfigXMLReader {
             Element afterLoginElement = UtilXml.firstChildElement(rootElement, "after-login");
             if (afterLoginElement != null) {
                 for (Element eventElement: UtilXml.childElementList(afterLoginElement, "event")) {
-                    this.afterLoginEventList.put(eventElement.getAttribute("name"), new Event(eventElement));
+                    String name = autoSetNameforEvent(eventElement, "after-login", afterLoginEventList);
+                    this.afterLoginEventList.put(name, new Event(eventElement));
                 }
             }
 
@@ -211,9 +215,21 @@ public class ConfigXMLReader {
             Element beforeLogoutElement = UtilXml.firstChildElement(rootElement, "before-logout");
             if (beforeLogoutElement != null) {
                 for (Element eventElement: UtilXml.childElementList(beforeLogoutElement, "event")) {
-                    this.beforeLogoutEventList.put(eventElement.getAttribute("name"), new Event(eventElement));
+                    String name = autoSetNameforEvent(eventElement, "before-logout", beforeLogoutEventList);
+                    this.beforeLogoutEventList.put(name, new Event(eventElement));
                 }
             }
+        }
+
+        // Opentaps customization, for backward compatibility, auto-set names to event that do no specify them
+        // else the new behavior causes only the last event of a processor to be active (as they would all share the null name)
+        private String autoSetNameforEvent(Element eventElement, String processorName, Map<String, Event> processorMap) {
+            String name = eventElement.getAttribute("name");
+            if (UtilValidate.isEmpty(name)) {
+                name = eventElement.getAttribute("path") + "::" + eventElement.getAttribute("invoke") + "::" + processorMap.size();
+                Debug.logWarning("Unnamed " + processorName + " event, auto set name [" + name + "]", module);
+            }
+            return name;
         }
 
         public void loadHandlerMap(Element rootElement) {
