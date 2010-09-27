@@ -50,6 +50,9 @@ Framework changes
 
 This list the changes made in the framework directory, from the 09.04 ofbiz release.
 
+framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
+0288e86 Fix unnamed processor events silently overriding each others (for backward compatibility)
+
 framework/entity/src/org/ofbiz/entity/condition/EntityDateFilterCondition.java
 framework/entity/src/org/ofbiz/entity/util/EntityUtil.java
 748252a Added API to handle java.sql.Date so that they are not converted to Timestamp as some entities would then throw a warning
