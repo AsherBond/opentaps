@@ -125,9 +125,9 @@ under the License.
         <action service="updateIssuanceShipmentAndPoOnReceiveInventory" mode="sync"/>
     </eca>
 
-    <!-- Set the average cost of product -->
+    <!-- Set the average cost of product
     <eca service="receiveInventoryProduct" event="commit">
         <action service="updateProductAverageCostOnReceiveInventory" mode="sync"/>
     </eca>
-
+ 	-->
 </service-eca>
