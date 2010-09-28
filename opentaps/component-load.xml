@@ -51,6 +51,7 @@ under the License.
     <load-component component-location="dal"/>
     <load-component component-location="magento-integration"/>
     -->
+    <!-- 
     <load-component component-location="mycompany"/>
-
+ 	-->
 </component-loader>
