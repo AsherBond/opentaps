@@ -278,7 +278,7 @@ public final class COGSServices {
         Delegator delegator = dctx.getDelegator();
         String productId = (String) context.get("productId");
         String organizationPartyId = (String) context.get("organizationPartyId");
-        BigDecimal averageCost = (BigDecimal) context.get("averageCost");
+        Double averageCost = (Double) context.get("averageCost");
         try {
             EntityCondition conditionList = EntityCondition.makeCondition(EntityOperator.AND,
                             EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
@@ -294,7 +294,7 @@ public final class COGSServices {
                     UtilMisc.toMap("productAverageCostId", getNextProductAverageCostId,
                             "organizationPartyId", organizationPartyId,
                             "productId", productId,
-                            "averageCost", averageCost,
+                            "averageCost", new BigDecimal(averageCost),
                             "fromDate", UtilDateTime.nowTimestamp()
                             ));
             delegator.store(newProductAverageCost);
