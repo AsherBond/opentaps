@@ -381,6 +381,15 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
     }
 
     /**
+     * Sets the shipping address of this invoice.
+     * @param address the <code>PostalAddress</code> to set as shipping address
+     * @throws RepositoryException if an error occurs
+     */
+    public void setShippingAddress(PostalAddress address) throws RepositoryException {
+        getRepository().setShippingAddress(this, address);
+    }
+
+    /**
      * Sets the billing address of this invoice.
      * @param address the <code>PostalAddress</code> to set as billing address
      * @throws RepositoryException if an error occurs
