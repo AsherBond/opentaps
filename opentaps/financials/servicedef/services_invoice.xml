@@ -70,6 +70,7 @@
         <description>Updates an invoice and its related billing/payment addresses.</description>
         <auto-attributes mode="INOUT" include="pk" optional="false"/>
         <auto-attributes mode="IN" include="nonpk" optional="true"/>
+        <attribute name="shippingContactMechId" type="String" mode="IN" optional="true"/>
         <attribute name="contactMechId" type="String" mode="IN" optional="true"/>
     </service>
 

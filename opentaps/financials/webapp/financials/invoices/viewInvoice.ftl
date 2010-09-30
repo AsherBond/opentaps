@@ -137,6 +137,9 @@ function notifyInvoiceItemsCount(n) {
         <@inputSelectRow name="contactMechId" title=uiLabelMap.AccountingBillingAddress list=addresses default=invoiceContactMechId required=false ; address>
           ${address.address1?default("")}, ${address.city?default("")}, ${address.stateProvinceGeoId?default("")} ${address.postalCode?default("")}
         </@inputSelectRow>
+        <@inputSelectRow name="shippingContactMechId" key="contactMechId" title=uiLabelMap.OrderShippingAddress list=shippingAddresses default=(invoice.shippingAddress.contactMechId)! required=false ; address>
+          ${address.address1?default("")}, ${address.city?default("")}, ${address.stateProvinceGeoId?default("")} ${address.postalCode?default("")}
+        </@inputSelectRow>
         <@inputTextRow name="referenceNumber" title=uiLabelMap.FinancialsReferenceNumber size=60 default=invoice.referenceNumber />
         <@displayRow title="${uiLabelMap.OpentapsOrders}" text=ordersList?if_exists />
         <@inputTextRow name="description" title=uiLabelMap.CommonDescription size=60 default=invoice.description />
@@ -145,9 +148,6 @@ function notifyInvoiceItemsCount(n) {
       </form>
       <!-- allow limited updated when the invoice is marked as ready -->
     <#elseif limitedEditOnly>
-      <#if invoiceAddress?has_content>
-        <#assign displayAddress = invoiceAddress.address1?default("") +", "+ invoiceAddress.city?default("") +", "+ invoiceAddress.stateProvinceGeoId?default("") +" "+ invoiceAddress.postalCode?default("")/>
-      </#if>
       <form method="post" action="<@ofbizUrl>updateInvoice</@ofbizUrl>" name="updateInvoice">
         <@inputHidden name="invoiceId" value="${invoice.invoiceId}"/>
         <@inputHidden name="statusId" value="${invoice.statusId}"/> <#-- this is becaues the updateInvoice requires status -->
@@ -165,6 +165,9 @@ function notifyInvoiceItemsCount(n) {
         <@inputSelectRow name="contactMechId" title=uiLabelMap.AccountingBillingAddress list=addresses default=invoiceContactMechId required=false ; address>
           ${address.address1?default("")}, ${address.city?default("")}, ${address.stateProvinceGeoId?default("")} ${address.postalCode?default("")}
         </@inputSelectRow>
+        <@inputSelectRow name="shippingContactMechId" key="contactMechId" title=uiLabelMap.OrderShippingAddress list=shippingAddresses default=(invoice.shippingAddress.contactMechId)! required=false ; address>
+          ${address.address1?default("")}, ${address.city?default("")}, ${address.stateProvinceGeoId?default("")} ${address.postalCode?default("")}
+        </@inputSelectRow>
         <@inputTextRow name="referenceNumber" title=uiLabelMap.FinancialsReferenceNumber size=60 default=invoice.referenceNumber />
         <@displayRow title="${uiLabelMap.OpentapsOrders}" text=ordersList?if_exists />
         <@inputTextRow name="description" title=uiLabelMap.CommonDescription size=60 default=invoice.description />
@@ -175,6 +178,9 @@ function notifyInvoiceItemsCount(n) {
       <#if invoiceAddress?has_content>
         <#assign displayAddress = invoiceAddress.address1?default("") +", "+ invoiceAddress.city?default("") +", "+ invoiceAddress.stateProvinceGeoId?default("") +" "+ invoiceAddress.postalCode?default("")/>
       </#if>
+      <#if invoice.shippingAddress?has_content>
+        <#assign displayShippingAddress = invoice.shippingAddress.address1?default("") +", "+ invoice.shippingAddress.city?default("") +", "+ invoice.shippingAddress.stateProvinceGeoId?default("") +" "+ invoice.shippingAddress.postalCode?default("")/>
+      </#if>
       <@displayRow title=uiLabelMap.CommonStatus text=invoice.getStatusItem().get("description", locale) />
       <@displayRow title=uiLabelMap.FinancialsProcessingStatus text=invoice.getProcessingStatusItem()?default({}).description?default("") />
       <#if invoice.isAdjustable() || invoice.isAdjustable()>
@@ -184,6 +190,7 @@ function notifyInvoiceItemsCount(n) {
       <@displayDateRow title=uiLabelMap.AccountingDueDate date=invoice.dueDate />
       <@displayDateRow title=uiLabelMap.AccountingPaidDate date=invoice.paidDate />
       <@displayRow title=uiLabelMap.AccountingBillingAddress text=displayAddress?if_exists />
+      <@displayRow title=uiLabelMap.OrderShippingAddress text=displayShippingAddress?if_exists />
       <@displayRow title=uiLabelMap.FinancialsReferenceNumber text=invoice.referenceNumber />
       <@displayRow title=uiLabelMap.OpentapsOrders text=ordersList?if_exists />
       <@displayRow title=uiLabelMap.CommonDescription text=invoice.description />

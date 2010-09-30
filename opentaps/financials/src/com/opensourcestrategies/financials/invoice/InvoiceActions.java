@@ -282,6 +282,27 @@ public final class InvoiceActions {
                                                                                          EntityOperator.IN,
                                                                                          contactMechIds)));
 
+            // party's shipping locations
+            conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                   EntityCondition.makeCondition(PartyContactWithPurpose.Fields.contactMechPurposeTypeId.name(),
+                                                                 EntityOperator.EQUALS,
+                                                                 ContactMechPurposeTypeConstants.SHIPPING_LOCATION),
+                                   EntityCondition.makeCondition(PartyContactWithPurpose.Fields.partyId.name(), EntityOperator.EQUALS, invoice.getTransactionPartyId()),
+                                   EntityUtil.getFilterByDateExpr(PartyContactWithPurpose.Fields.contactFromDate.name(), PartyContactWithPurpose.Fields.contactThruDate.name()),
+                                   EntityUtil.getFilterByDateExpr(PartyContactWithPurpose.Fields.purposeFromDate.name(), PartyContactWithPurpose.Fields.purposeThruDate.name()));
+            purposes = invoiceRepository.findList(PartyContactWithPurpose.class, conditions);
+            contactMechIds = Entity.getDistinctFieldValues(String.class, purposes, PartyContactWithPurpose.Fields.contactMechId);
+
+            // make sure the current shipping address is also listed (it may have been changed / expired for the account)
+            if (UtilValidate.isNotEmpty(invoice.getShippingAddress())) {
+                contactMechIds.add(invoice.getShippingAddress().getContactMechId());
+            }
+
+            ac.put("shippingAddresses", invoiceRepository.findList(PostalAddress.class,
+                                                           EntityCondition.makeCondition(PostalAddress.Fields.contactMechId.name(),
+                                                                                         EntityOperator.IN,
+                                                                                         contactMechIds)));
+
             // available tax authorities
             List<TaxAuthorityAndDetail> taxAuthorities = invoiceRepository.findAllCache(TaxAuthorityAndDetail.class, UtilMisc.toList(TaxAuthorityAndDetail.Fields.abbreviation.name(), TaxAuthorityAndDetail.Fields.groupName.name()));
             ac.put("taxAuthorities", taxAuthorities);

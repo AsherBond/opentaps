@@ -162,6 +162,15 @@ public interface InvoiceRepositoryInterface extends RepositoryInterface {
     public PostalAddress getBillingAddress(Invoice invoice) throws RepositoryException;
 
     /**
+     * Sets the shipping address of the invoice to the given <code>PostalAddress</code>.
+     *
+     * @param invoice an <code>Invoice</code>
+     * @param shippingAddress a <code>PostalAddress</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public void setShippingAddress(Invoice invoice, PostalAddress shippingAddress) throws RepositoryException;
+
+    /**
      * Sets the billing address of the invoice to the given <code>PostalAddress</code>.
      *
      * @param invoice an <code>Invoice</code>
