@@ -725,43 +725,57 @@ under the License.
     <request-map uri="createShipmentRouteSegment">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createShipmentRouteSegment"/>
-        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments">
+            <redirect-parameter name="shipmentId"/>
+        </response>
         <response name="error" type="view" value="EditShipmentRouteSegments"/>
     </request-map>
     <request-map uri="updateShipmentRouteSegment">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="updateShipmentRouteSegment"/>
-        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments">
+            <redirect-parameter name="shipmentId"/>
+        </response>
         <response name="error" type="view" value="EditShipmentRouteSegments"/>
     </request-map>
     <request-map uri="deleteShipmentRouteSegment">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="deleteShipmentRouteSegment"/>
-        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments">
+            <redirect-parameter name="shipmentId"/>
+        </response>
         <response name="error" type="view" value="EditShipmentRouteSegments"/>
     </request-map>
     <request-map uri="duplicateShipmentRouteSegment">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="duplicateShipmentRouteSegment"/>
-        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments">
+          <redirect-parameter name="shipmentId"/>
+        </response>
         <response name="error" type="view" value="EditShipmentRouteSegments"/>
     </request-map>
     <request-map uri="createRouteSegmentShipmentPackage">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createShipmentPackageRouteSeg"/>
-        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments">
+            <redirect-parameter name="shipmentId"/>
+        </response>
         <response name="error" type="view" value="EditShipmentRouteSegments"/>
     </request-map>
     <request-map uri="updateRouteSegmentShipmentPackage">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="updateShipmentPackageRouteSeg"/>
-        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments">
+            <redirect-parameter name="shipmentId"/>
+        </response>
         <response name="error" type="view" value="EditShipmentRouteSegments"/>
     </request-map>
     <request-map uri="deleteRouteSegmentShipmentPackage">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="deleteShipmentPackageRouteSeg"/>
-        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments">
+            <redirect-parameter name="shipmentId"/>
+        </response>
         <response name="error" type="view" value="EditShipmentRouteSegments"/>
     </request-map>
 
@@ -769,19 +783,25 @@ under the License.
     <request-map uri="upsShipmentConfirm">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="upsShipmentConfirm"/>
-        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments">
+            <redirect-parameter name="shipmentId"/>
+        </response>
         <response name="error" type="view" value="EditShipmentRouteSegments"/>
     </request-map>
     <request-map uri="upsShipmentAccept">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="upsShipmentAccept"/>
-        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments">
+            <redirect-parameter name="shipmentId"/>
+        </response>
         <response name="error" type="view" value="EditShipmentRouteSegments"/>
     </request-map>
     <request-map uri="upsVoidShipment">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="upsVoidShipment"/>
-        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments">
+            <redirect-parameter name="shipmentId"/>
+        </response>
         <response name="error" type="view" value="EditShipmentRouteSegments"/>
     </request-map>
     <request-map uri="upsTrackShipment">
