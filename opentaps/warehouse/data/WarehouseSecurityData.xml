@@ -70,6 +70,7 @@
     <SecurityGroup groupId="WRHS_ADMIN" description="Warehouse Adminstrator can perform any action in any Warehouse, including creating new warehouses or assigning users to warehouses"/>
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="WRHS_ADMIN"/>
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="FACILITY_ADMIN"/>
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ORDERMGR_CREATE"/>
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ORDERMGR_UPDATE"/>
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="MANUFACTURING_ADMIN"/>
 
