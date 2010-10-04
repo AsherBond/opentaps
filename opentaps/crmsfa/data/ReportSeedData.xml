@@ -24,4 +24,8 @@
     <ReportGroupMember reportGroupId="CRMSFA_FORM" reportId="SALESORDER" sequenceNum="1"/>
     <ReportGroupMember reportGroupId="CRMSFA_FORM" reportId="SALESQUOTE" sequenceNum="2"/>
 
+    <ReportRegistry reportId="TRACKINGCODEORDER" shortName="Tracking Code Orders Report" description="" reportLocation="component://crmsfa/webapp/crmsfa/reports/repository/TrackingCodeOrders.jrxml"/>
+    <ReportGroup reportGroupId="CRMSFA_MARKETING" showInSelect="Y" description="Marketing Reports" application="crmsfa" sequenceNum="3"/>
+    <ReportGroupMember reportGroupId="CRMSFA_MARKETING" reportId="TRACKINGCODEORDER" sequenceNum="1"/>
+
 </entity-engine-xml>
