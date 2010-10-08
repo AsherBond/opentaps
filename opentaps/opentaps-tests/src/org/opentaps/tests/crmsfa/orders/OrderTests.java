@@ -2997,7 +2997,7 @@ public class OrderTests extends OrderTestCase {
 
         shipmentIds = testShipOrder.getOutShipmentIds();
         assertEquals("Check 1 shipment was created", 1, shipmentIds.size());
-        shipment1 = EntityUtil.getFirst(delegator.findByAnd("Shipment", UtilMisc.toMap("primaryOrderId", order.getOrderId(), "primaryShipGroupSeqId", "00001")));
+        shipment1 = EntityUtil.getFirst(delegator.findByAnd("Shipment", UtilMisc.toMap("primaryOrderId", order.getOrderId(), "primaryShipGroupSeqId", "00001", "shipmentId", shipmentIds.get(0))));
         orderShipment1s = delegator.findByAnd("OrderShipment", UtilMisc.toMap("shipmentId", shipment1.getString("shipmentId")));
         orderShipments1It = orderShipment1s.iterator();
         while (orderShipments1It.hasNext()) {
