@@ -83,7 +83,7 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
         try {
             SalesOrderLookupRepositoryInterface salesOrderLookupRepository = getDomainsDirectory().getOrderDomain().getSalesOrderLookupRepository();
 
-            String organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
+            String organizationPartyId = UtilProperties.getPropertyValue("opentaps.properties", "organizationPartyId");
 
             String userLoginId = null;
             if (getProvider().getUser().getOfbizUserLogin() != null) {
