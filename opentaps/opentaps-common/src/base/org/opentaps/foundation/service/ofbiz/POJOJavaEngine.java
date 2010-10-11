@@ -206,7 +206,7 @@ public class POJOJavaEngine extends GenericAsyncEngine {
                     Class[] setMethodParams = {ObjectType.loadInfoClass(modelParam.type, cl)};
                     Method setMethod = null;
                     try {
-                         setMethod = serviceClass.getDeclaredMethod(setMethodName, setMethodParams);
+                         setMethod = serviceClass.getMethod(setMethodName, setMethodParams);
                     } catch (NoSuchMethodException ex) {
                         throw new GenericServiceException("No method [" + setMethodName + "] with parameter [" + getParameterClasses(setMethodParams) + "] found for context key [" + contextKey + "] in service [" + localName + "]", ex);
                     }
@@ -256,7 +256,7 @@ public class POJOJavaEngine extends GenericAsyncEngine {
                 // ie, invoiceId becomes getInvoiceId()
                 String getMethodName = FoundationUtils.getterName(outParam);
                 try {
-                    Method getMethod = serviceClass.getDeclaredMethod(getMethodName);
+                    Method getMethod = serviceClass.getMethod(getMethodName);
                     results.put(outParam, getMethod.invoke(service));
                 } catch (NoSuchMethodException ex) {
                     throw new GenericServiceException("No method [" + getMethodName + "] without parameters found for in [" + serviceClassName + "]", ex);
