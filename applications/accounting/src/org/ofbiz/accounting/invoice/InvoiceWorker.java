@@ -164,6 +164,7 @@ public class InvoiceWorker {
         List<GenericValue> invoiceAdjustments = null;
         invoiceTaxTotal = InvoiceWorker.getInvoiceTaxTotal(invoice);
         try {
+        	invoiceItems = invoice.getRelated("InvoiceItem");
             invoiceItems = EntityUtil.filterByAnd(
                     invoiceItems, UtilMisc.toList(
                             EntityCondition.makeCondition("invoiceItemTypeId", EntityOperator.NOT_IN, getTaxableInvoiceItemTypeIds(invoice.getDelegator()))
