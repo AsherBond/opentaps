@@ -65,6 +65,7 @@ public abstract class SalesOrderLookupConfiguration {
     public static final String OUT_CUSTOMER_NAME = "partyName";
     public static final String OUT_SHIP_BY_DATE_STRING = "shipByDateString";
     public static final String OUT_STATUS_DESCRIPTION = "statusDescription";
+    public static final String OUT_TRACKING_CODE_ID = "trackingCodeId";
 
     public static final List<String> LIST_OUT_FIELDS = Arrays.asList(
             INOUT_ORDER_ID,
@@ -79,7 +80,8 @@ public abstract class SalesOrderLookupConfiguration {
             OUT_ORDER_DATE_STRING,
             OUT_CUSTOMER_NAME,
             OUT_SHIP_BY_DATE_STRING,
-            OUT_STATUS_DESCRIPTION
+            OUT_STATUS_DESCRIPTION,
+            OUT_TRACKING_CODE_ID
     );
     public static final List<String> LIST_QUERY_FIELDS = Arrays.asList(
             INOUT_ORDER_ID,
@@ -89,7 +91,8 @@ public abstract class SalesOrderLookupConfiguration {
             INOUT_CORRESPONDING_PO_ID,
             INOUT_ORDER_DATE,
             OUT_GRAND_TOTAL,
-            OUT_CURRENCY_UOM
+            OUT_CURRENCY_UOM,
+            OUT_TRACKING_CODE_ID
     );
 
 }
