@@ -246,11 +246,12 @@ public final class ReturnServices {
                     }
                     BigDecimal unitCost = (BigDecimal) serviceResult.get("initialItemCost");
 
-                    long serializedInvItems = delegator.findCountByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "facilityId", destinationFacility.get("facilityId"), "inventoryItemTypeId", "SERIALIZED_INV_ITEM"));
-                    boolean nonSerialized = serializedInvItems == 0 && "NON_SERIAL_INV_ITEM".equals(destinationFacility.getString("defaultInventoryItemTypeId"));
+//                    long serializedInvItems = delegator.findCountByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "facilityId", destinationFacility.get("facilityId"), "inventoryItemTypeId", "SERIALIZED_INV_ITEM"));
+//                    boolean nonSerialized = serializedInvItems == 0 && "NON_SERIAL_INV_ITEM".equals(destinationFacility.getString("defaultInventoryItemTypeId"));
 
                     Map<String, Object> receiveContext = UtilMisc.<String, Object>toMap("userLogin", userLogin, "productId", productId, "returnId", returnId, "returnItemSeqId", returnItem.get("returnItemSeqId"));
-                    receiveContext.put("inventoryItemTypeId", nonSerialized ? "NON_SERIAL_INV_ITEM" : "SERIALIZED_INV_ITEM");
+//                    receiveContext.put("inventoryItemTypeId", nonSerialized ? "NON_SERIAL_INV_ITEM" : "SERIALIZED_INV_ITEM");
+                    receiveContext.put("inventoryItemTypeId", "SERIALIZED_INV_ITEM");
                     receiveContext.put("statusId", UtilValidate.isEmpty(returnItem.getString("expectedItemStatus")) ? "INV_RETURNED" : UtilValidate.isEmpty(returnItem.getString("expectedItemStatus")));
                     receiveContext.put("facilityId", destinationFacility.get("facilityId"));
                     receiveContext.put("shipmentId", shipmentId);
@@ -259,15 +260,15 @@ public final class ReturnServices {
                     receiveContext.put("comments", "Returned Item RA# " + returnId);
                     receiveContext.put("unitCost", unitCost);
 
-                    if (nonSerialized) {
-
-                        // Receive once for the full quantity
-                        receiveContext.put("quantityAccepted", returnItem.getBigDecimal("returnQuantity"));
-                        serviceResult = dispatcher.runSync("receiveInventoryProduct", receiveContext);
-                        if (ServiceUtil.isError(serviceResult)) {
-                            return serviceResult;
-                        }
-                    } else {
+//                    if (nonSerialized) {
+//
+//                        // Receive once for the full quantity
+//                        receiveContext.put("quantityAccepted", returnItem.getBigDecimal("returnQuantity"));
+//                        serviceResult = dispatcher.runSync("receiveInventoryProduct", receiveContext);
+//                        if (ServiceUtil.isError(serviceResult)) {
+//                            return serviceResult;
+//                        }
+//                    } else {
 
                         // Receive with quantity 1 until the full quantity is received
                         receiveContext.put("quantityAccepted", BigDecimal.ONE);
@@ -278,7 +279,7 @@ public final class ReturnServices {
                             }
                         }
                     }
-                }
+//                }
             }
 
             returnHeader.refresh();
