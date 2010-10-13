@@ -18,6 +18,7 @@
 package com.opensourcestrategies.financials.financials;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -605,7 +606,7 @@ public final class FinancialServices {
                 }
             } else {
                 // find the last closed time period
-                tmpResult = dispatcher.runSync("findLastClosedDate", UtilMisc.toMap("organizationPartyId", organizationPartyId, "findDate", asOfDate, "userLogin", userLogin));
+                tmpResult = dispatcher.runSync("findLastClosedDate", UtilMisc.toMap("organizationPartyId", organizationPartyId, "findDate", new Date(asOfDate.getTime()), "userLogin", userLogin));
                 if ((tmpResult == null) || (tmpResult.get("lastClosedDate") == null)) {
                     return ServiceUtil.returnError("Cannot get a closed time period before " + asOfDate);
                 } else {
