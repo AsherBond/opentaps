@@ -381,20 +381,17 @@ public final class CrmsfaOrderServices {
             );
             List<GenericValue> orderItems = delegator.findByConditionCache("OrderItem", EntityCondition.makeCondition(cond, EntityOperator.AND), UtilMisc.toList("productId"), null);
             List<String> productIds = EntityUtil.getFieldListFromEntityList(orderItems, "productId", true);
-            cond = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("productId", EntityOperator.IN, productIds));
-            EntityListIterator allReservations = delegator.findListIteratorByCondition("OrderItemShipGrpInvResAndItem", EntityCondition.makeCondition(cond, EntityOperator.AND), null, null);
-            List<GenericValue> orderResvs = new ArrayList<GenericValue>();
-            GenericValue res;
-            while ((res = allReservations.next()) != null) {
+            cond = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("productId", EntityOperator.IN, productIds),
+                                                    EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId));
+            List<GenericValue> allReservations = delegator.findByCondition("OrderItemShipGrpInvResAndItem", EntityCondition.makeCondition(cond, EntityOperator.AND), null, null);
 
-                // Add the reservation to the list of reservations for the order, if the orderId matches
+            // Cancel every reservation against any product present in the order
+            for (GenericValue res : allReservations) {
+
                 String resOrderId = res.getString("orderId");
-                if (orderId.equals(resOrderId)) {
-                    orderResvs.add(res);
-                }
 
-                // Cancel every reservation against any product present in the order
                 Map<String, Object> cancelReservationContext = UtilMisc.toMap("orderId", resOrderId, "orderItemSeqId", res.get("orderItemSeqId"), "inventoryItemId", res.get("inventoryItemId"), "shipGroupSeqId", res.get("shipGroupSeqId"), "userLogin", userLogin);
+                Debug.logInfo("CANCEL reservation of product [" + res.get("productId") + "] for order [" + res.get("orderId") + "] on inventory [" + res.get("inventoryItemId") + "]", MODULE);
                 if (runSync) {
                     Map<String, Object> cancelReservationResult = dispatcher.runSync("cancelOrderItemShipGrpInvRes", cancelReservationContext);
                     cancelReservationResult.put("orderId", orderId);
@@ -405,35 +402,31 @@ public final class CrmsfaOrderServices {
                     dispatcher.runAsync("cancelOrderItemShipGrpInvRes", cancelReservationContext);
                 }
 
-                // Only rereserve if the reservation is for another order - we'll rereserve the order reservations last
-                if (!orderId.equals(resOrderId)) {
-                    Map<String, Object> reserveContext = UtilMisc.toMap("orderId", resOrderId, "orderItemSeqId", res.get("orderItemSeqId"), "quantity", res.get("quantity"), "shipGroupSeqId", res.get("shipGroupSeqId"), "userLogin", userLogin);
-                    reserveContext.put("reserveOrderEnumId", res.get("reserveOrderEnumId"));
-                    reserveContext.put("requireInventory", "N");
-                    reserveContext.put("reservedDatetime", UtilDateTime.nowTimestamp());
-                    reserveContext.put("productId", res.get("productId"));
-                    if (runSync) {
-                        Map<String, Object> reserveResult = dispatcher.runSync("reserveProductInventory", reserveContext);
-                        reserveResult.put("orderId", orderId);
-                        if (ServiceUtil.isError(reserveResult)) {
-                            return reserveResult;
-                        }
-                    } else {
-                        dispatcher.runAsync("reserveProductInventory", reserveContext);
+                // re balance the inventory items
+                Map<String, Object> balanceInventoryItemsContext = UtilMisc.toMap("inventoryItemId", res.get("inventoryItemId"), "userLogin", userLogin);
+                Debug.logInfo("Balance inventory for product [" + res.get("productId") + "] on inventory [" + res.get("inventoryItemId") + "]", MODULE);
+                if (runSync) {
+                    Map<String, Object> balanceInventoryItemsResult = dispatcher.runSync("balanceInventoryItems", balanceInventoryItemsContext);
+                    balanceInventoryItemsResult.put("orderId", orderId);
+                    if (ServiceUtil.isError(balanceInventoryItemsResult)) {
+                        return balanceInventoryItemsResult;
                     }
+                } else {
+                    dispatcher.runAsync("cancelOrderItemShipGrpInvRes", cancelReservationContext);
                 }
             }
-            allReservations.close();
 
-            // Rereserve the order reservations last
-            for (GenericValue orderRes : orderResvs) {
-                Map<String, Object> reserveContext = UtilMisc.toMap("orderId", orderRes.get("orderId"), "orderItemSeqId", orderRes.get("orderItemSeqId"), "quantity", orderRes.get("quantity"), "shipGroupSeqId", orderRes.get("shipGroupSeqId"), "userLogin", userLogin);
-                reserveContext.put("reserveOrderEnumId", orderRes.get("reserveOrderEnumId"));
+            // Rereserve the order reservations
+            for (GenericValue res : allReservations) {
+                Debug.logInfo("RE reservation of product [" + res.get("productId") + "] for changed order [" + res.get("orderId") + "]", MODULE);
+                Map<String, Object> reserveContext = UtilMisc.toMap("orderId", res.get("orderId"), "orderItemSeqId", res.get("orderItemSeqId"), "quantity", res.get("quantity"), "shipGroupSeqId", res.get("shipGroupSeqId"), "userLogin", userLogin);
+                reserveContext.put("reserveOrderEnumId", res.get("reserveOrderEnumId"));
                 reserveContext.put("requireInventory", "N");
                 reserveContext.put("reservedDatetime", UtilDateTime.nowTimestamp());
-                reserveContext.put("productId", orderRes.get("productId"));
+                reserveContext.put("productId", res.get("productId"));
                 if (runSync) {
                     Map<String, Object> reserveResult = dispatcher.runSync("reserveProductInventory", reserveContext);
+                    reserveResult.put("orderId", orderId);
                     if (ServiceUtil.isError(reserveResult)) {
                         return reserveResult;
                     }
