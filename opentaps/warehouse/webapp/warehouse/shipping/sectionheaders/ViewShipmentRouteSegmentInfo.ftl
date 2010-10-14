@@ -18,5 +18,23 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <@sectionHeader title=uiLabelMap.ProductRouteSegments>
-      <div class="subMenuBar"><a href="<@ofbizUrl>EditShipmentRouteSegments?shipmentId=${parameters.shipmentId}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.CommonEdit}</a></div>
+      <div class="subMenuBar">
+        <select name="viewLabelId" id="viewLabelId" onChange="opentaps.changeLocation(null, 'viewLabelId');">
+            <option value="">View Label ... </option>
+
+            <#if shipmentRouteSegmentDatas?has_content> 
+            <#list shipmentRouteSegmentDatas as shipmentRouteSegmentData>
+                <#assign shipmentRouteSegment = shipmentRouteSegmentData.shipmentRouteSegment>
+                <#assign shipmentPackageRouteSegs = shipmentRouteSegmentData.shipmentPackageRouteSegs?if_exists>
+                <#list shipmentPackageRouteSegs as shipmentPackageRouteSeg>
+                    <#if shipmentPackageRouteSeg.trackingCode?has_content>
+                        <option value="<@ofbizUrl>viewShipmentPackageRouteSegLabelImage?shipmentId=${parameters.shipmentId}&shipmentRouteSegmentId=${shipmentRouteSegment.shipmentRouteSegmentId}&shipmentPackageSeqId=${shipmentPackageRouteSeg.shipmentPackageSeqId}</@ofbizUrl>">View Label ${shipmentRouteSegment.shipmentRouteSegmentId}</option>
+                    </#if>
+                </#list>
+            </#list>
+            </#if>
+        </select>
+
+        <a href="<@ofbizUrl>EditShipmentRouteSegments?shipmentId=${parameters.shipmentId}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.CommonEdit}</a>
+      </div>
 </@sectionHeader>
