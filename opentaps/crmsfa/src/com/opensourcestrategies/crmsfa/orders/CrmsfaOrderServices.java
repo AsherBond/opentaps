@@ -412,7 +412,7 @@ public final class CrmsfaOrderServices {
                         return balanceInventoryItemsResult;
                     }
                 } else {
-                    dispatcher.runAsync("cancelOrderItemShipGrpInvRes", cancelReservationContext);
+                    dispatcher.runAsync("balanceInventoryItems", balanceInventoryItemsContext);
                 }
             }
 
