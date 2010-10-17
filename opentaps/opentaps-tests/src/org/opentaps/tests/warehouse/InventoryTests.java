@@ -1397,7 +1397,7 @@ public class InventoryTests extends FinancialsTestCase {
         assertEquals("Unexpected standardCost for product MAT_B_COST", matBProduct.getStandardCost("USD"), expectedMatBStdCost);
 
         final BigDecimal expectedProdCostStdCost = new BigDecimal("194.0");
-        final Product prodCostProduct = productRepository.getProductById("PROD_COST");
+        final Product prodCostProduct = productRepository.getProductById("PROD_MANUF");
         assertEquals("Unexpected standardCost for product PROD_COST", prodCostProduct.getStandardCost("USD"), expectedProdCostStdCost);
 
         // 2. Receive 3 items of MAT_B_COST with a unit cost of 95$
