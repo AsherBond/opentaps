@@ -7,7 +7,7 @@ import org.ofbiz.entity.GenericValue;
 import java.sql.Timestamp;
 
 /*
-* Copyright (c) opentaps Group LLC
+* Copyright (c) Open Source Strategies, Inc.
 * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published

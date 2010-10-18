@@ -1,5 +1,5 @@
 <#--
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<#-- Copyright (c) opentaps Group LLC -->
+<#-- Copyright (c) Open Source Strategies, Inc. -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 

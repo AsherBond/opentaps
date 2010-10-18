@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -18,7 +18,7 @@
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Opentaps Common Shipping Services</description>
-    <vendor>opentaps Group LLC</vendor>
+    <vendor>Open Source Strategies, Inc.</vendor>
 
     <service name="setShipmentRouteSegmentFromShipGroup" engine="java" 
             location="org.opentaps.common.shipment.ShippingServices" invoke="setShipmentRouteSegmentFromShipGroup">

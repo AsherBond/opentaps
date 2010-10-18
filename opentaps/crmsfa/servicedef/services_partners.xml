@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -18,7 +18,7 @@
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>CRM SFA Partner Services</description>
-    <vendor>opentaps Group LLC</vendor>
+    <vendor>Open Source Strategies, Inc.</vendor>
     <version>1.0</version>
 
     <!-- note that our services are prefixed with "crmsfa." to easily distinguish them from other services; perhaps a namespace system would be useful here -->
