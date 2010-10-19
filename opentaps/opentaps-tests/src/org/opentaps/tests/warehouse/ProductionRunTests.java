@@ -80,7 +80,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Timestamp start = UtilDateTime.nowTimestamp();
 
         // note the initial inventory quantities
-        Map origProdCostInventory = inventoryAsserts.getInventory("PROD_COST");
+        Map origProdCostInventory = inventoryAsserts.getInventory("PROD_MANUF");
         Map origMatACostInventory = inventoryAsserts.getInventory("MAT_A_COST");
         Map origMatBCostInventory = inventoryAsserts.getInventory("MAT_B_COST");
         assertAllInventoryValuesEqual(inventoryAsserts);
@@ -89,7 +89,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Map initInvValues = FastMap.newInstance();
         initInvValues.put("MAT_A_COST", inventoryAsserts.getInventoryValueForProduct("MAT_A_COST", start));
         initInvValues.put("MAT_B_COST", inventoryAsserts.getInventoryValueForProduct("MAT_B_COST", start));
-        initInvValues.put("PROD_COST", inventoryAsserts.getInventoryValueForProduct("PROD_COST", start));
+        initInvValues.put("PROD_MANUF", inventoryAsserts.getInventoryValueForProduct("PROD_MANUF", start));
 
         // note the initial balances
         Map initialBalances = financialAsserts.getFinancialBalances(start);
@@ -121,7 +121,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         assertTransactionEquivalence(transactions, UtilMisc.toList("MFGTEST-1", "MFGTEST-2", "MFGTEST-3"));
 
         // make sure the inventory quantity changes are correct_
-        inventoryAsserts.assertInventoryChange("PROD_COST", new BigDecimal("2.0"), origProdCostInventory);
+        inventoryAsserts.assertInventoryChange("PROD_MANUF", new BigDecimal("2.0"), origProdCostInventory);
         inventoryAsserts.assertInventoryChange("MAT_A_COST", new BigDecimal("-4.0"), origMatACostInventory);
         inventoryAsserts.assertInventoryChange("MAT_B_COST", new BigDecimal("-6.0"), origMatBCostInventory);
 
@@ -137,8 +137,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Map finalInvValues = FastMap.newInstance();
         finalInvValues.put("MAT_A_COST", inventoryAsserts.getInventoryValueForProduct("MAT_A_COST", UtilDateTime.nowTimestamp()));
         finalInvValues.put("MAT_B_COST", inventoryAsserts.getInventoryValueForProduct("MAT_B_COST", UtilDateTime.nowTimestamp()));
-        finalInvValues.put("PROD_COST", inventoryAsserts.getInventoryValueForProduct("PROD_COST", UtilDateTime.nowTimestamp()));
-        Map expectedInvValues = UtilMisc.toMap("MAT_A_COST", "-36", "MAT_B_COST", "-42", "PROD_COST", "328");
+        finalInvValues.put("PROD_MANUF", inventoryAsserts.getInventoryValueForProduct("PROD_MANUF", UtilDateTime.nowTimestamp()));
+        Map expectedInvValues = UtilMisc.toMap("MAT_A_COST", "-36", "MAT_B_COST", "-42", "PROD_MANUF", "328");
         assertMapDifferenceCorrect(initInvValues, finalInvValues, expectedInvValues);
 
         // verify that the difference in balances work out
@@ -164,11 +164,11 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Timestamp start = UtilDateTime.nowTimestamp();
 
         // note the initial inventory quantity and values
-        Map originalProdCostInventory = inventoryAsserts.getInventory("PROD_COST");
+        Map originalProdCostInventory = inventoryAsserts.getInventory("PROD_MANUF");
         Map initInvValues = FastMap.newInstance();
         initInvValues.put("MAT_A_COST", inventoryAsserts.getInventoryValueForProduct("MAT_A_COST", start));
         initInvValues.put("MAT_B_COST", inventoryAsserts.getInventoryValueForProduct("MAT_B_COST", start));
-        initInvValues.put("PROD_COST", inventoryAsserts.getInventoryValueForProduct("PROD_COST", start));
+        initInvValues.put("PROD_MANUF", inventoryAsserts.getInventoryValueForProduct("PROD_MANUF", start));
         assertAllInventoryValuesEqual(inventoryAsserts);
 
         // note the initial balances
@@ -234,7 +234,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         assertTransactionEquivalence(transactions, UtilMisc.toList("MFGTEST-1", "MFGTEST-2", "MFGTEST-3"));
 
         // make sure the PROD_COST inventory went up by 2
-        inventoryAsserts.assertInventoryChange("PROD_COST", new BigDecimal("2.0"), originalProdCostInventory);
+        inventoryAsserts.assertInventoryChange("PROD_MANUF", new BigDecimal("2.0"), originalProdCostInventory);
 
         // make sure the ledger and inventory item costs are the same for all products involved
         assertAllInventoryValuesEqual(inventoryAsserts);
@@ -248,8 +248,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Map finalInvValues = FastMap.newInstance();
         finalInvValues.put("MAT_A_COST", inventoryAsserts.getInventoryValueForProduct("MAT_A_COST", UtilDateTime.nowTimestamp()));
         finalInvValues.put("MAT_B_COST", inventoryAsserts.getInventoryValueForProduct("MAT_B_COST", UtilDateTime.nowTimestamp()));
-        finalInvValues.put("PROD_COST", inventoryAsserts.getInventoryValueForProduct("PROD_COST", UtilDateTime.nowTimestamp()));
-        Map expectedInvValues = UtilMisc.toMap("MAT_A_COST", "-36", "MAT_B_COST", "-42", "PROD_COST", "328");
+        finalInvValues.put("PROD_MANUF", inventoryAsserts.getInventoryValueForProduct("PROD_MANUF", UtilDateTime.nowTimestamp()));
+        Map expectedInvValues = UtilMisc.toMap("MAT_A_COST", "-36", "MAT_B_COST", "-42", "PROD_MANUF", "328");
         assertMapDifferenceCorrect(initInvValues, finalInvValues, expectedInvValues);
 
         // verify that the difference in balances work out
@@ -275,14 +275,14 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Timestamp start = UtilDateTime.nowTimestamp();
 
         // note the initial inventory quantities
-        Map origProdCostInventory = inventoryAsserts.getInventory("PROD_COST");
+        Map origProdCostInventory = inventoryAsserts.getInventory("PROD_MANUF");
         Map origMatACostInventory = inventoryAsserts.getInventory("MAT_A_COST");
         Map origMatBCostInventory = inventoryAsserts.getInventory("MAT_B_COST");
         assertAllInventoryValuesEqual(inventoryAsserts);
 
         // note the initial inventory values
         Map initInvValues = FastMap.newInstance();
-        initInvValues.put("PROD_COST", inventoryAsserts.getInventoryValueForProduct("PROD_COST", start));
+        initInvValues.put("PROD_MANUF", inventoryAsserts.getInventoryValueForProduct("PROD_MANUF", start));
         initInvValues.put("MAT_A_COST", inventoryAsserts.getInventoryValueForProduct("MAT_A_COST", start));
         initInvValues.put("MAT_B_COST", inventoryAsserts.getInventoryValueForProduct("MAT_B_COST", start));
 
@@ -299,7 +299,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // issue 2 of the PROD_COST
         Map input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("workEffortId", taskId);
-        input.put("productId", "PROD_COST");
+        input.put("productId", "PROD_MANUF");
         input.put("quantity", new BigDecimal("2.0"));
         runAndAssertServiceSuccess("issueProductionRunTaskComponent", input);
 
@@ -308,7 +308,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         assertAllInventoryValuesEqual(inventoryAsserts);
 
         // make sure WEGS is completed
-        List wegsList = delegator.findByAnd("WorkEffortGoodStandard", UtilMisc.toMap("workEffortId", taskId, "productId", "PROD_COST", "workEffortGoodStdTypeId", "PRUNT_PROD_NEEDED"));
+        List wegsList = delegator.findByAnd("WorkEffortGoodStandard", UtilMisc.toMap("workEffortId", taskId, "productId", "PROD_MANUF", "workEffortGoodStdTypeId", "PRUNT_PROD_NEEDED"));
         assertTrue("WEGS for material requirement of 2 PROD_COST exists.", wegsList.size() == 1);
         GenericValue wegs = EntityUtil.getFirst(wegsList);
         assertEquals("Material Issuance failed:  PROD_COST WorkEffortGoodStandard was not marked completed.", wegs.getString("statusId"), "WEGS_COMPLETED");
@@ -348,7 +348,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         assertAllInventoryValuesEqual(inventoryAsserts);
 
         // ensure the inventory quantity changes are correct
-        inventoryAsserts.assertInventoryChange("PROD_COST", new BigDecimal("-2.0"), origProdCostInventory);
+        inventoryAsserts.assertInventoryChange("PROD_MANUF", new BigDecimal("-2.0"), origProdCostInventory);
         inventoryAsserts.assertInventoryChange("MAT_A_COST", new BigDecimal("4.0"), origMatACostInventory);
         inventoryAsserts.assertInventoryChange("MAT_B_COST", new BigDecimal("6.0"), origMatBCostInventory);
 
@@ -364,10 +364,10 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
         // verify the expected cost change
         Map finalInvValues = FastMap.newInstance();
-        finalInvValues.put("PROD_COST", inventoryAsserts.getInventoryValueForProduct("PROD_COST", UtilDateTime.nowTimestamp()));
+        finalInvValues.put("PROD_MANUF", inventoryAsserts.getInventoryValueForProduct("PROD_MANUF", UtilDateTime.nowTimestamp()));
         finalInvValues.put("MAT_A_COST", inventoryAsserts.getInventoryValueForProduct("MAT_A_COST", UtilDateTime.nowTimestamp()));
         finalInvValues.put("MAT_B_COST", inventoryAsserts.getInventoryValueForProduct("MAT_B_COST", UtilDateTime.nowTimestamp()));
-        Map expectedInvValues = UtilMisc.toMap("MAT_A_COST", "36", "MAT_B_COST", "42", "PROD_COST", "-328");
+        Map expectedInvValues = UtilMisc.toMap("MAT_A_COST", "36", "MAT_B_COST", "42", "PROD_MANUF", "-328");
         assertMapDifferenceCorrect(initInvValues, finalInvValues, expectedInvValues);
 
         // verify that the difference in balances work out
@@ -418,7 +418,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // produce the products, which should trigger a posting
         input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("workEffortId", productionRunId);
-        input.put("productId", "PROD_COST");
+        input.put("productId", "PROD_MANUF");
         runAndAssertServiceSuccess("opentaps.productionRunProduce", input);
         assertAllInventoryValuesEqual(inventoryAsserts);
 
@@ -452,7 +452,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         receiveMaterial("MAT_B_COST", 1, matBUnitCost);
 
         // note the initial inventory quantities
-        Map origProdCostInventory = inventoryAsserts.getInventory("PROD_COST");
+        Map origProdCostInventory = inventoryAsserts.getInventory("PROD_MANUF");
         Map origMatACostInventory = inventoryAsserts.getInventory("MAT_A_COST");
         Map origMatBCostInventory = inventoryAsserts.getInventory("MAT_B_COST");
 
@@ -487,7 +487,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // produce the products, which should trigger a posting
         input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("workEffortId", productionRunId);
-        input.put("productId", "PROD_COST");
+        input.put("productId", "PROD_MANUF");
         Map results = runAndAssertServiceSuccess("opentaps.productionRunProduce", input);
         assertAllInventoryValuesEqual(inventoryAsserts);
 
@@ -501,7 +501,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         assertTransactionEquivalence(transactions, UtilMisc.toList("MFGTEST-20", "MFGTEST-21", "MFGTEST-22", "MFGTEST-23", "MFGTEST-24", "MFGTEST-25"));
 
         // verify that inventory changes include additional issuances
-        inventoryAsserts.assertInventoryChange("PROD_COST", new BigDecimal("1.0"), origProdCostInventory);
+        inventoryAsserts.assertInventoryChange("PROD_MANUF", new BigDecimal("1.0"), origProdCostInventory);
         inventoryAsserts.assertInventoryChange("MAT_A_COST", new BigDecimal("-3.0"), origMatACostInventory);
         inventoryAsserts.assertInventoryChange("MAT_B_COST", new BigDecimal("-4.0"), origMatBCostInventory);
 
@@ -984,7 +984,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // create the production run and confirm it
         String name = "Production run to test average cost adjustment to production run costs.";
         input = UtilMisc.toMap("userLogin", demowarehouse1);
-        input.put("productId", "PROD_COST");
+        input.put("productId", "PROD_MANUF");
         input.put("quantity", new BigDecimal("2.0"));
         input.put("startDate", UtilDateTime.nowTimestamp());
         input.put("facilityId", facilityId);
@@ -999,7 +999,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         runAndAssertServiceSuccess("changeProductionRunStatus", input);
 
         // note the initial inventory quantities
-        Map origProdCostInventory = inventoryAsserts.getInventory("PROD_COST");
+        Map origProdCostInventory = inventoryAsserts.getInventory("PROD_MANUF");
         Map origMatACostInventory = inventoryAsserts.getInventory("MAT_A_COST");
         Map origMatBCostInventory = inventoryAsserts.getInventory("MAT_B_COST");
         assertAllInventoryValuesEqual(inventoryAsserts);
@@ -1013,7 +1013,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Map initInvValues = FastMap.newInstance();
         initInvValues.put("MAT_A_COST", inventoryAsserts.getInventoryValueForProduct("MAT_A_COST", start));
         initInvValues.put("MAT_B_COST", inventoryAsserts.getInventoryValueForProduct("MAT_B_COST", start));
-        initInvValues.put("PROD_COST", inventoryAsserts.getInventoryValueForProduct("PROD_COST", start));
+        initInvValues.put("PROD_MANUF", inventoryAsserts.getInventoryValueForProduct("PROD_MANUF", start));
 
         // note the initial balances
         Map initialBalances = financialAsserts.getFinancialBalances(start);
@@ -1043,7 +1043,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // create and assign inventory for the products, which should trigger a posting
         input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("workEffortId", productionRunId);
-        input.put("productId", "PROD_COST");
+        input.put("productId", "PROD_MANUF");
         results = runAndAssertServiceSuccess("opentaps.productionRunProduce", input);
 
         pause("ran production");
@@ -1051,7 +1051,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         List<String> inventoryItemIds = (List) results.get("inventoryItemIds");
 
         // make sure the inventory quantity changes are correct_
-        inventoryAsserts.assertInventoryChange("PROD_COST", new BigDecimal("2.0"), origProdCostInventory);
+        inventoryAsserts.assertInventoryChange("PROD_MANUF", new BigDecimal("2.0"), origProdCostInventory);
         inventoryAsserts.assertInventoryChange("MAT_A_COST", new BigDecimal("-4.0"), origMatACostInventory);
         inventoryAsserts.assertInventoryChange("MAT_B_COST", new BigDecimal("-6.0"), origMatBCostInventory);
 
@@ -1067,10 +1067,10 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Map finalInvValues = FastMap.newInstance();
         finalInvValues.put("MAT_A_COST", inventoryAsserts.getInventoryValueForProduct("MAT_A_COST", UtilDateTime.nowTimestamp()));
         finalInvValues.put("MAT_B_COST", inventoryAsserts.getInventoryValueForProduct("MAT_B_COST", UtilDateTime.nowTimestamp()));
-        finalInvValues.put("PROD_COST", inventoryAsserts.getInventoryValueForProduct("PROD_COST", UtilDateTime.nowTimestamp()));
+        finalInvValues.put("PROD_MANUF", inventoryAsserts.getInventoryValueForProduct("PROD_MANUF", UtilDateTime.nowTimestamp()));
 
         Map expectedInvValues = null;
-        expectedInvValues = UtilMisc.toMap("MAT_A_COST", "-36", "MAT_B_COST", "-42", "PROD_COST", "328");
+        expectedInvValues = UtilMisc.toMap("MAT_A_COST", "-36", "MAT_B_COST", "-42", "PROD_MANUF", "328");
         assertMapDifferenceCorrect(initInvValues, finalInvValues, expectedInvValues);
 
         // verify that the difference in balances work out
