@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -366,7 +366,7 @@ public final class InvoiceServices {
     }
 
     /**
-     * Updates an invoice and its related billing address.
+     * Updates an invoice and its related billing/shipping address.
      *
      * @param dctx a <code>DispatchContext</code> value
      * @param context the service parameters <code>Map</code>
@@ -383,6 +383,7 @@ public final class InvoiceServices {
         }
 
         String contactMechId = (String) context.get("contactMechId");
+        String shippingContactMechId = (String) context.get("shippingContactMechId");
         String invoiceId = (String) context.get("invoiceId");
         try {
             ModelService service = dctx.getModelService("updateInvoice");
@@ -397,6 +398,7 @@ public final class InvoiceServices {
             InvoiceRepositoryInterface repository = domains.getBillingDomain().getInvoiceRepository();
             Invoice invoice = repository.getInvoiceById(invoiceId);
             PostalAddress billingAddress = repository.findOne(PostalAddress.class, repository.map(PostalAddress.Fields.contactMechId, contactMechId));
+            PostalAddress shippingAddress = repository.findOne(PostalAddress.class, repository.map(PostalAddress.Fields.contactMechId, shippingContactMechId));
 
             if (billingAddress != null) {
                 // remove existing billing addresses, and set the new one
@@ -409,6 +411,8 @@ public final class InvoiceServices {
                     invoice.setBillingAddress(billingAddress);
                 }
             }
+
+            invoice.setShippingAddress(shippingAddress);
 
             results = ServiceUtil.returnSuccess();
             results.put("invoiceId", invoiceId);

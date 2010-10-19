@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -64,7 +64,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
 <!-- These controller requests are originally from ordermgr.  They are split out here to separate them from the principle CRMSFA requests.  A lot of these are defunct and not used.  -->
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <description>CRMSFA Module Site Configuration File</description>
-    <owner>opentaps Group LLC</owner>
+    <owner>Open Source Strategies, Inc.</owner>
 
     <!-- ORDERMGR -->
     <request-map uri="orderstats">

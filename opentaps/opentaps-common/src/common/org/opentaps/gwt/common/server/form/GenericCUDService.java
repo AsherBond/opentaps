@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -17,8 +17,14 @@
 
 package org.opentaps.gwt.common.server.form;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+
+import javolution.util.FastList;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilHttp;
@@ -145,6 +151,11 @@ public abstract class GenericCUDService extends GenericService {
     @SuppressWarnings("unchecked")
     protected Map<String, Object> callServiceBatch() throws GenericServiceException {
         Collection<Map<String, Object>> data = UtilHttp.parseMultiFormData(getProvider().getParameterMap());
+        // sort the collection by row field
+        List<Map<String, Object>> records = new FastList<Map<String, Object>>();
+        records.addAll(data);
+        Collections.sort(records, new RowOrderComparator(true));
+        
         int counter = 0;
         isBatchAction = true;
         // wrap all in a transaction
@@ -154,7 +165,7 @@ public abstract class GenericCUDService extends GenericService {
             Debug.logError(e, MODULE);
             throw new GenericServiceException(e);
         }
-        for (Map<String, Object> options : data) {
+        for (Map<String, Object> options : records) {
             // copy this record parameters to the provider
             Debug.logInfo("Batch posting data [" + options + "]", MODULE);
             getProvider().setParameterMap(options);
@@ -222,5 +233,34 @@ public abstract class GenericCUDService extends GenericService {
      * @see #callService
      */
     protected abstract Map<String, Object> callDeleteService() throws GenericServiceException;
+    
+    static class RowOrderComparator implements Comparator, Serializable {
+        private boolean ascending = false;
+
+        RowOrderComparator(boolean ascending) {
+            this.ascending = ascending;
+        }
+
+        public int compare(java.lang.Object obj, java.lang.Object obj1) {
+        	Map<String, Object> options1 = (Map<String, Object>) obj;
+        	Map<String, Object> options2 = (Map<String, Object>) obj1;
+        	Integer row1 = UtilValidate.isEmpty(options1.get("row")) ? new Integer(0) : (Integer) options1.get("row");
+        	Integer row2 = UtilValidate.isEmpty(options2.get("row")) ? new Integer(0) : (Integer) options2.get("row");
+            int compareValue = row1.compareTo(row2);
+            if (this.ascending) {
+                return compareValue;
+            } else {
+                return -compareValue;
+            }
+        }
+
+        public boolean equals(java.lang.Object obj) {
+            if (obj instanceof RowOrderComparator) {
+                return this.ascending == ((RowOrderComparator) obj).ascending;
+            } else {
+                return false;
+            }
+        }
+    }    
 
 }

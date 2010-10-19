@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -160,6 +160,15 @@ public interface InvoiceRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public PostalAddress getBillingAddress(Invoice invoice) throws RepositoryException;
+
+    /**
+     * Sets the shipping address of the invoice to the given <code>PostalAddress</code>.
+     *
+     * @param invoice an <code>Invoice</code>
+     * @param shippingAddress a <code>PostalAddress</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public void setShippingAddress(Invoice invoice, PostalAddress shippingAddress) throws RepositoryException;
 
     /**
      * Sets the billing address of the invoice to the given <code>PostalAddress</code>.

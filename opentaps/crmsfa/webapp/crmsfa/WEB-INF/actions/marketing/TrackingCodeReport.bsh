@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -47,10 +47,11 @@ import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.marketing.report.ReportHelper;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
 
 trackingCodeIdStr = request.getParameter("trackingCodeId");
-fromDateStr = request.getParameter("fromDate");
-thruDateStr = request.getParameter("thruDate");
+fromDateStr = request.getParameter("fromDate_c_date");
+thruDateStr = request.getParameter("thruDate_c_date");
 
 // query for both number of visits and number of orders
 
@@ -58,16 +59,18 @@ visitConditionList = new LinkedList();
 orderConditionList = new LinkedList();
 
 if ((fromDateStr != null) && !(fromDateStr.equals(""))) {
-    visitConditionList.add(new EntityExpr("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDateStr));
-    orderConditionList.add(new EntityExpr("orderDate",EntityOperator.GREATER_THAN_EQUAL_TO,fromDateStr));
+    fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateStr, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+    visitConditionList.add(new EntityExpr("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+    orderConditionList.add(new EntityExpr("orderDate",EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
 }
 if ((thruDateStr != null) && !(thruDateStr.equals(""))) {
-     visitConditionList.add(new EntityExpr("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,thruDateStr));
-     orderConditionList.add(new EntityExpr("orderDate",EntityOperator.LESS_THAN_EQUAL_TO,thruDateStr));
+    thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateStr, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+    visitConditionList.add(new EntityExpr("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,thruDate));
+    orderConditionList.add(new EntityExpr("orderDate",EntityOperator.LESS_THAN_EQUAL_TO,thruDate));
 }
 if ((trackingCodeIdStr != null) && !(trackingCodeIdStr.equals(""))) {
-     visitConditionList.add(new EntityExpr("trackingCodeId", EntityOperator.EQUALS, trackingCodeIdStr));
-     orderConditionList.add(new EntityExpr("trackingCodeId", EntityOperator.EQUALS, trackingCodeIdStr));
+    visitConditionList.add(new EntityExpr("trackingCodeId", EntityOperator.EQUALS, trackingCodeIdStr));
+    orderConditionList.add(new EntityExpr("trackingCodeId", EntityOperator.EQUALS, trackingCodeIdStr));
 }
 
 visitConditions = new EntityConditionList(visitConditionList, EntityOperator.AND);

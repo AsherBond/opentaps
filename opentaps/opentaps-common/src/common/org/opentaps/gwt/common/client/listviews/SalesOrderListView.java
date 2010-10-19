@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -82,6 +82,10 @@ public class SalesOrderListView extends EntityListView {
 
         ColumnConfig columnAmount = makeCurrencyColumn(UtilUi.MSG.orderAmount(), new StringFieldDef(SalesOrderLookupConfiguration.OUT_CURRENCY_UOM), new StringFieldDef(SalesOrderLookupConfiguration.OUT_GRAND_TOTAL));
         columnAmount.setWidth(100);
+
+        ColumnConfig columnTrackingCodeId = makeColumn(UtilUi.MSG.orderTrackingCode(), new StringFieldDef(SalesOrderLookupConfiguration.OUT_TRACKING_CODE_ID));
+        columnTrackingCodeId.setWidth(100);
+        columnTrackingCodeId.setHidden(true);
 
         configure(entityFindUrl, SalesOrderLookupConfiguration.INOUT_ORDER_DATE, SortDir.DESC);
     }
@@ -199,7 +203,7 @@ public class SalesOrderListView extends EntityListView {
     public void filterIncludeInactiveOrders(boolean findAll) {
         setFilter(SalesOrderLookupConfiguration.IN_FIND_ALL, findAll ? "Y" : "N");
     }
-    
+
     /**
      * Filters the records of the list by address of the party matching the given sub string.
      * @param address a <code>String</code> value
@@ -239,7 +243,7 @@ public class SalesOrderListView extends EntityListView {
     public void filterByShippingPostalCode(String postalCode) {
         setFilter(SalesOrderLookupConfiguration.IN_SHIPPING_POSTAL_CODE, postalCode);
     }
-    
+
     /**
      * Filters the records of the list by the to name of the party matching the given sub string.
      * @param toName a <code>String</code> value

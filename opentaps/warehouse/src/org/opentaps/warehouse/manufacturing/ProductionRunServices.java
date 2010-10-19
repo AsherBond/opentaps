@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -433,6 +433,7 @@ public final class ProductionRunServices {
             // get the production run template for this product.  If a routingId was passed in, then that's it, otherwise we use the first one found, similar to the ofbiz service
             GenericValue productionRunTempl = null;
             String routingId = (String) context.get("routingId");
+            String templateId = "DEFAULT_ROUTING";   // default in case no routing is found
             if (UtilValidate.isNotEmpty(routingId)) {
                 productionRunTempl = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", routingId));
             } else {
@@ -444,10 +445,10 @@ public final class ProductionRunServices {
                 productionRunTempl = EntityUtil.getFirst(delegator.findByAnd("WorkEffortGoodStandard", conditions));
             }
             if (productionRunTempl == null) {
-                return ServiceUtil.returnError(UtilMessage.expandLabel("WarehouseError_CannotFindProductionRunTemplate", locale, UtilMisc.toMap("productId", productId)));
+                Debug.logWarning(UtilMessage.expandLabel("WarehouseError_CannotFindProductionRunTemplate", locale, UtilMisc.toMap("productId", productId, "defaultRoutingId", templateId)), MODULE);
+            } else {
+                templateId = productionRunTempl.getString("workEffortId");
             }
-            String templateId = productionRunTempl.getString("workEffortId");
-
             // get the routing components of the template
             List<GenericValue> routingComponents = delegator.findByAnd("WorkEffortAssoc", UtilMisc.toMap("workEffortIdFrom", templateId, "workEffortAssocTypeId", "ROUTING_COMPONENT"));
             List routingComponentIds = EntityUtil.getFieldListFromEntityList(routingComponents, "workEffortIdTo", true);

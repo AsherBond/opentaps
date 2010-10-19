@@ -33,6 +33,7 @@ framework/base/src/org/ofbiz/base/util/UtilHttp.java
 framework/base/src/org/ofbiz/base/util/UtilValidate.java
 framework/base/src/org/ofbiz/base/util/string/UelFunctions.java
 framework/minilang/src/org/ofbiz/minilang/method/envops/SetCalendar.java
+framework/widget/src/org/ofbiz/widget/form/ModelForm.java
 framework/widget/src/org/ofbiz/widget/form/ModelFormField.java
 framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
 framework/common/config/CommonUiLabels.xml
@@ -40,12 +41,16 @@ framework/common/src/org/ofbiz/common/FindServices.java
 applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
 applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCartEvents.java
 In revisions:
-r13768, r13769, r13784, r13786, r13798, r13812-r13818, r13822, r13824, r13833, r13834
+r13768, r13769, r13784, r13786, r13798, r13812-r13818, r13822, r13824, r13833,
+r13834, 4d0b94a1fdf644d8bdbb4c114a05d9bdb48627bc
 
 Framework changes
 -----------------
 
 This list the changes made in the framework directory, from the 09.04 ofbiz release.
+
+framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
+0288e86 Fix unnamed processor events silently overriding each others (for backward compatibility)
 
 framework/entity/src/org/ofbiz/entity/condition/EntityDateFilterCondition.java
 framework/entity/src/org/ofbiz/entity/util/EntityUtil.java

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -378,6 +378,15 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
      */
     public PostalAddress getBillingAddress() throws RepositoryException {
         return getRepository().getBillingAddress(this);
+    }
+
+    /**
+     * Sets the shipping address of this invoice.
+     * @param address the <code>PostalAddress</code> to set as shipping address
+     * @throws RepositoryException if an error occurs
+     */
+    public void setShippingAddress(PostalAddress address) throws RepositoryException {
+        getRepository().setShippingAddress(this, address);
     }
 
     /**

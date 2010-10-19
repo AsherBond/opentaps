@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -59,7 +59,8 @@ public class OrderViewForListing extends Entity {
         orderNameId("orderNameId"),
         partyName("partyName"),
         shipByDateString("shipByDateString"),
-        orderDateString("orderDateString");
+        orderDateString("orderDateString"),
+        trackingCodeId("trackingCodeId");
         private final String fieldName;
         private Fields(String name) { fieldName = name; }
         /** {@inheritDoc} */
@@ -84,6 +85,7 @@ public class OrderViewForListing extends Entity {
     private String shipByDateString;
     private String partyName;
     private String orderNameId;
+    private String trackingCodeId;
 
     /**
      * Default constructor.
@@ -290,6 +292,13 @@ public class OrderViewForListing extends Entity {
     public BigDecimal getGrandTotal() {
         return this.grandTotal;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getTrackingCodeId() {
+        return this.trackingCodeId;
+    }
 
     /**
      * Auto generated value accessor.
@@ -361,6 +370,13 @@ public class OrderViewForListing extends Entity {
     public void setGrandTotal(BigDecimal v) {
         this.grandTotal = v;
     }
+    /**
+     * Auto generated value accessor.
+     * @param v <code>String</code>
+     */
+    public void setTrackingCodeId(String v) {
+        this.trackingCodeId = v;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -380,6 +396,7 @@ public class OrderViewForListing extends Entity {
         mapValue.put("partyName", getPartyName());
         mapValue.put("shipByDateString", getShipByDateString());
         mapValue.put("orderDateString", getOrderDateString());
+        mapValue.put("trackingCodeId", getTrackingCodeId());
         return mapValue;
     }
 
@@ -400,5 +417,6 @@ public class OrderViewForListing extends Entity {
         setPartyName((String) mapValue.get("partyName"));
         setShipByDateString((String) mapValue.get("shipByDateString"));
         setOrderDateString((String) mapValue.get("orderDateString"));
+        setTrackingCodeId((String) mapValue.get("trackingCodeId"));
     }
 }

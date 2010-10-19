@@ -732,6 +732,7 @@
   <mapping class="org.opentaps.base.entities.ContrivedExamplesWithRequiredFeaturesReport"/>
   <mapping class="org.opentaps.base.entities.ContactMechType"/>
   <mapping class="org.opentaps.base.entities.WebPage"/>
+  <mapping class="org.opentaps.base.entities.AcctgTransEntryProdSums"/>
   <mapping class="org.opentaps.base.entities.PaymentAndTypePartyNameView"/>
   <mapping class="org.opentaps.base.entities.WorkEffortGoodStandard"/>
   <mapping class="org.opentaps.base.entities.WorkEffortShoppingListView"/>

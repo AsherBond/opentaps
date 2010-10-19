@@ -665,15 +665,18 @@ public class ModelFormField {
      * is true) then the value will be retreived from the parameters Map in
      * the context.
      *
-     * @param context
-     * @param encoder
-     * @return
+     * @param context a <code>Map</code> value
+     * @return a <code>String</code> value
      */
     public String getEntry(Map<String, ? extends Object> context) {
-        return this.getEntry(context, "");
+        return this.getEntry(context, true);
     }
 
-    public String getEntry(Map<String, ? extends Object> context , String defaultValue) {
+    public String getEntry(Map<String, ? extends Object> context, boolean localize) {
+        return this.getEntry(context, "", null, localize);
+    }
+
+    public String getEntry(Map<String, ? extends Object> context, String defaultValue) {
         return this.getEntry(context, defaultValue, null);
     }
 
@@ -686,9 +689,25 @@ public class ModelFormField {
      * @param context a <code>Map</code> value
      * @param defaultValue a <code>String</code> value
      * @param subControlName a <code>String</code> value
-     * @return a <code>String</code> value 
+     * @return a <code>String</code> value
      */
     public String getEntry(Map<String, ? extends Object> context , String defaultValue, String subControlName) {
+        return getEntry(context, defaultValue, subControlName, true);
+    }
+
+    /**
+     * Gets the entry from the context that corresponds to this field; if this
+     * form is being rendered in an error condition (ie isError in the context
+     * is true) then the value will be retrieved from the parameters Map in
+     * the context.
+     *
+     * @param context a <code>Map</code> value
+     * @param defaultValue a <code>String</code> value
+     * @param subControlName a <code>String</code> value
+     * @param localize a <code>boolean</code> value
+     * @return a <code>String</code> value
+     */
+    public String getEntry(Map<String, ? extends Object> context , String defaultValue, String subControlName, boolean localize) {
         Boolean isError = (Boolean) context.get("isError");
         Boolean useRequestParameters = (Boolean) context.get("useRequestParameters");
 
@@ -765,23 +784,43 @@ public class ModelFormField {
                     nf.setMaximumFractionDigits(10);
                     return nf.format(retVal);
                 } else if (retVal instanceof java.sql.Date) {
-                    DateFormat df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
+                    DateFormat df;
+                    if (localize) {
+                      df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
+                    } else {
+                      df = UtilDateTime.toDateFormat("yyyy-MM-dd", timeZone, null);
+                    }
                     return df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.sql.Time) {
-                    DateFormat df = UtilDateTime.toTimeFormat(UtilDateTime.getTimeFormat(locale), timeZone, null);
-                    returnValue = df.format((java.util.Date) retVal);
+                    DateFormat df;
+                    if (localize) {
+                      df = UtilDateTime.toTimeFormat(UtilDateTime.getTimeFormat(locale), timeZone, null);
+                    } else {
+                      df = UtilDateTime.toDateFormat("HH:mm:ss.SSS", timeZone, null);
+                    }
+                    return df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.sql.Timestamp) {
-                    DateFormat df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, null);
+                    DateFormat df;
+                    if (localize) {
+                      df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, null);
+                    } else {
+                      df = UtilDateTime.toDateFormat("yyyy-MM-dd HH:mm:ss.SSS", timeZone, null);
+                    }
                     return df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.util.Date) {
-                    DateFormat df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
+                    DateFormat df;
+                    if (localize) {
+                      df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
+                    } else {
+                      df = UtilDateTime.toDateFormat("yyyy-MM-dd", timeZone, null);
+                    }
                     return df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.lang.String) {
 
                     returnValue = retVal.toString();
 
                     //under some conditions we have string in timestamp format here and should convert it to system acceptable format format.
-                    if (UtilValidate.isTimestamp((String) retVal)) {
+                    if (localize && UtilValidate.isTimestamp((String) retVal)) {
                         Timestamp ts = null;
                         try {
                             ts = UtilDateTime.stringToTimeStamp((String) retVal, "yyyy-MM-dd HH:mm:ss.S", timeZone, locale);
@@ -801,17 +840,21 @@ public class ModelFormField {
                     returnValue = retVal.toString();
                 }
             } else {
-                // defaultValue at this point may have type String and timestamp format. It's good chance
-                // convert this string to localized representation.
-                String localizedDefaultValue = null;
-                if (UtilValidate.isNotEmpty(defaultValue)) {
-                    if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")) {
-                        localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
-                    } else if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-                        localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue + " 00:00:00.0"), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                if (localize) {
+                    // defaultValue at this point may have type String and timestamp format. It's good chance
+                    // convert this string to localized representation.
+                    String localizedDefaultValue = null;
+                    if (UtilValidate.isNotEmpty(defaultValue)) {
+                        if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")) {
+                            localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                        } else if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                            localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue + " 00:00:00.0"), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                        }
                     }
+                    returnValue = UtilValidate.isEmpty(localizedDefaultValue) ? defaultValue : localizedDefaultValue;
+                } else {
+                    returnValue = defaultValue;
                 }
-                returnValue = UtilValidate.isEmpty(localizedDefaultValue) ? defaultValue : localizedDefaultValue;
             }
         }
 
@@ -3466,7 +3509,8 @@ public class ModelFormField {
                 }
                 return valueEnc;
             } else {
-                return modelFormField.getEntry(context);
+                // do not attempt to localize the value in the hidden field as it could be used to pass parameters
+                return modelFormField.getEntry(context, false);
             }
         }
 

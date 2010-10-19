@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -27,7 +27,6 @@ import java.util.Set;
 import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 
-import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
@@ -69,6 +68,8 @@ import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.domain.party.Party;
+import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.exception.FoundationException;
@@ -130,6 +131,7 @@ public final class InvoiceActions {
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
         BillingDomainInterface billingDomain = dd.getBillingDomain();
         InvoiceRepositoryInterface invoiceRepository = billingDomain.getInvoiceRepository();
+        PartyRepositoryInterface partyRepository = dd.getPartyDomain().getPartyRepository();
         OrganizationRepositoryInterface organizationRepository = dd.getOrganizationDomain().getOrganizationRepository();
 
         Invoice invoice = null;
@@ -209,6 +211,7 @@ public final class InvoiceActions {
             ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.RETURN_INVOICES_TAG, delegator));
         }
 
+        Party transactionParty = partyRepository.getPartyById(invoice.getTransactionPartyId());
         ac.put("billingPartyId", invoice.getTransactionPartyId());
 
         // the billing address, which can be either the payment or billing location
@@ -278,6 +281,19 @@ public final class InvoiceActions {
             }
 
             ac.put("addresses", invoiceRepository.findList(PostalAddress.class,
+                                                           EntityCondition.makeCondition(PostalAddress.Fields.contactMechId.name(),
+                                                                                         EntityOperator.IN,
+                                                                                         contactMechIds)));
+
+            // party's shipping locations
+            contactMechIds = Entity.getDistinctFieldValues(String.class, transactionParty.getShippingAddresses(), PostalAddress.Fields.contactMechId);
+
+            // make sure the current shipping address is also listed (it may have been changed / expired for the account)
+            if (UtilValidate.isNotEmpty(invoice.getShippingAddress())) {
+                contactMechIds.add(invoice.getShippingAddress().getContactMechId());
+            }
+
+            ac.put("shippingAddresses", invoiceRepository.findList(PostalAddress.class,
                                                            EntityCondition.makeCondition(PostalAddress.Fields.contactMechId.name(),
                                                                                          EntityOperator.IN,
                                                                                          contactMechIds)));

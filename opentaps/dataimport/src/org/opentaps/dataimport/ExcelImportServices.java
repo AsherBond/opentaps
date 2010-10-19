@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -143,7 +143,7 @@ public final class ExcelImportServices extends DomainService {
      * @return a <code>String</code> value
      */
     public String readStringCell(HSSFRow row, int index) {
-        HSSFCell cell = row.getCell((short) index);
+        HSSFCell cell = row.getCell(index);
         if (cell == null) {
             return null;
         }
@@ -175,7 +175,7 @@ public final class ExcelImportServices extends DomainService {
      * @return a <code>Long</code> value
      */
     public Long readLongCell(HSSFRow row, int index) {
-        HSSFCell cell = row.getCell((short) index);
+        HSSFCell cell = row.getCell(index);
         if (cell == null) {
             return null;
         }
@@ -194,7 +194,7 @@ public final class ExcelImportServices extends DomainService {
      * @return a <code>BigDecimal</code> value
      */
     public BigDecimal readBigDecimalCell(HSSFRow row, int index) {
-        HSSFCell cell = row.getCell((short) index);
+        HSSFCell cell = row.getCell(index);
         if (cell == null) {
             return null;
         }

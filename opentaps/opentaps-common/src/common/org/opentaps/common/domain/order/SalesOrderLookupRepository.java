@@ -1,5 +1,5 @@
 /*
- * Copyright (c) opentaps Group LLC
+ * Copyright (c) Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -44,6 +44,7 @@ import org.opentaps.base.entities.OrderHeader;
 import org.opentaps.base.entities.OrderItem;
 import org.opentaps.base.entities.OrderRole;
 import org.opentaps.base.entities.PostalAddress;
+import org.opentaps.base.entities.TrackingCodeOrder;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.order.OrderViewForListing;
 import org.opentaps.domain.order.SalesOrderLookupRepositoryInterface;
@@ -187,31 +188,31 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
             if (UtilValidate.isNotEmpty(purchaseOrderId)) {
                 criteria.add(Restrictions.ilike("oi." + OrderItem.Fields.correspondingPoId.name(), purchaseOrderId, MatchMode.START));
             }
-            
+
             // filter by the given productId string, from the OrderItem entity
             if (UtilValidate.isNotEmpty(productId)) {
                 criteria.add(Restrictions.ilike("oi." + OrderItem.Fields.productId.name(), productId, MatchMode.START));
             }
-            
+
             // filter by the given shippingAddress string, from the OrderItemShipGroup entity
             criteria.createAlias("orderItemShipGroups", "oisg");
         	Criteria address = criteria.createCriteria("oisg.postalAddress");
             if (UtilValidate.isNotEmpty(shippingAddress)) {
             	address.add(Restrictions.ilike(PostalAddress.Fields.address1.name(), shippingAddress, MatchMode.ANYWHERE));
             }
-            
+
             if (UtilValidate.isNotEmpty(shippingCountry)) {
             	address.add(Restrictions.ilike(PostalAddress.Fields.countryGeoId.name(), shippingCountry, MatchMode.EXACT));
             }
-            
+
             if (UtilValidate.isNotEmpty(shippingStateProvince)) {
             	address.add(Restrictions.ilike(PostalAddress.Fields.stateProvinceGeoId.name(), shippingStateProvince, MatchMode.EXACT));
             }
-            
+
             if (UtilValidate.isNotEmpty(shippingCity)) {
             	address.add(Restrictions.ilike(PostalAddress.Fields.city.name(), shippingCity, MatchMode.START));
             }
-            
+
             if (UtilValidate.isNotEmpty(shippingPostalCode)) {
             	address.add(Restrictions.ilike(PostalAddress.Fields.postalCode.name(), shippingPostalCode, MatchMode.START));
             }
@@ -240,6 +241,8 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
                                 Restrictions.ilike("iii." + InventoryItem.Fields.serialNumber.name(), serialNumber, MatchMode.START)));
             }
 
+            criteria.createCriteria("trackingCodeOrders", "tco" ,Criteria.LEFT_JOIN);
+
             // specify the fields to return
             criteria.setProjection(Projections.projectionList()
                                    .add(Projections.distinct(Projections.property(OrderHeader.Fields.orderId.name())))
@@ -249,7 +252,9 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
                                    .add(Projections.property(OrderHeader.Fields.orderDate.name()))
                                    .add(Projections.property(OrderHeader.Fields.currencyUom.name()))
                                    .add(Projections.property("or.id." + OrderRole.Fields.partyId.name()))
-                                   .add(Projections.property("oi." + OrderItem.Fields.correspondingPoId.name())));
+                                   .add(Projections.property("oi." + OrderItem.Fields.correspondingPoId.name()))
+                                   .add(Projections.property("tco." + TrackingCodeOrder.Fields.trackingCodeId.name()))
+                                   );
             Debug.logInfo("criteria.toString() : " + criteria.toString(), MODULE);
             // set the order by
             if (orderBy == null) {
@@ -265,6 +270,7 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
             subs.put("orderNameId", "orderId");
             subs.put("statusDescription", "statusId");
             subs.put("correspondingPoId", "oi.correspondingPoId");
+            subs.put("trackingCodeId", "tco.trackingCodeId");
             HibernateUtil.setCriteriaOrder(criteria, orderBy, subs);
 
             ScrollableResults results = null;
@@ -293,6 +299,7 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
                     r.setCurrencyUom((String) o[i++]);
                     r.setPartyId((String) o[i++]);
                     r.setCorrespondingPoId((String) o[i++]);
+                    r.setTrackingCodeId((String) o[i++]);
                     r.calculateExtraFields(getDelegator(), timeZone, locale);
                     results2.add(r);
                     n++;
@@ -375,7 +382,7 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
     public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-    
+
     /** {@inheritDoc} */
     public void setProductId(String productId) {
         this.productId = productId;
@@ -410,7 +417,7 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
-    
+
     /** {@inheritDoc} */
     public void setShippingAddress(String address) {
     	this.shippingAddress = address;
@@ -435,7 +442,7 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
     public void setShippingPostalCode(String postalCode) {
     	this.shippingPostalCode = postalCode;
     }
-    
+
     /** {@inheritDoc} */
     public void setShippingToName(String toName) {
     	this.shippingToName = toName;
