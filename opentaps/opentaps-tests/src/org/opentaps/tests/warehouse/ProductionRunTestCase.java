@@ -78,7 +78,7 @@ public class ProductionRunTestCase extends FinancialsTestCase {
      * @param inventoryAsserts an <code>InventoryAsserts</code> value
      */
     protected void assertAllInventoryValuesEqual(InventoryAsserts inventoryAsserts) {
-        inventoryAsserts.assertInventoryValuesEqual("PROD_COST");
+        inventoryAsserts.assertInventoryValuesEqual("PROD_MANUF");
         inventoryAsserts.assertInventoryValuesEqual("MAT_A_COST");
         inventoryAsserts.assertInventoryValuesEqual("MAT_B_COST");
     }
@@ -167,10 +167,10 @@ public class ProductionRunTestCase extends FinancialsTestCase {
 
         // receive quantity PROD_COST into the warehouse TODO why is it 2 * quantity?
         final double prodCostUnitCost = 164.0;
-        receiveMaterial("PROD_COST", 2 * quantity, prodCostUnitCost);
+        receiveMaterial("PROD_MANUF", 2 * quantity, prodCostUnitCost);
 
         // create the disassembly and confirm it
-        return createDisassembly(name, quantity, "PROD_COST");
+        return createDisassembly(name, quantity, "PROD_MANUF");
     }
 
     /**
@@ -381,7 +381,7 @@ public class ProductionRunTestCase extends FinancialsTestCase {
         receiveMaterial("MAT_A_COST", matARequiredQty * quantity, matAUnitCost);
         receiveMaterial("MAT_B_COST", matBRequiredQty * quantity, matBUnitCost);
 
-        return createProductionRunAndConfirm(name, quantity, "PROD_COST");
+        return createProductionRunAndConfirm(name, quantity, "PROD_MANUF");
     }
 
     /**
