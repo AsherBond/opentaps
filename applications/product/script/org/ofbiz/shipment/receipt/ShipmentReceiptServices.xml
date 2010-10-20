@@ -98,8 +98,10 @@ under the License.
         <check-errors/>
 
         <!-- Status for Non serialized and Serialized inventory are different, lets make sure correct status is stored in database -->
+        <!-- 
         <if-compare field="parameters.inventoryItemTypeId" operator="equals" value="NON_SERIAL_INV_ITEM">
-            <if-compare field="parameters.statusId" operator="equals" value="INV_DEFECTIVE"><!-- This status may come from the Receive Return Screen -->
+            <if-compare field="parameters.statusId" operator="equals" value="INV_DEFECTIVE"> --><!-- This status may come from the Receive Return Screen -->
+            <!-- 
                 <set field="parameters.statusId" value="INV_NS_DEFECTIVE"/>
             <else>
                 <if-compare field="parameters.statusId" operator="equals" value="INV_ON_HOLD">
@@ -107,7 +109,9 @@ under the License.
                 </if-compare>
             </else>
             </if-compare>
+             -->
             <!-- Any other status should be just set to null, if it is not a valid status for Non Serialized inventory -->
+            <!-- 
             <if>
                 <condition>
                     <and>
@@ -120,7 +124,7 @@ under the License.
                 </then>
             </if>
         </if-compare>
-
+ 		-->
         <loop count="${loops}" field="currentLoop">
             <log level="info" message="receiveInventoryProduct Looping and creating inventory info - ${currentLoop}"/>
 
