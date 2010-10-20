@@ -176,10 +176,10 @@ public class ReturnTests extends ReturnTestCase {
         assertReturnItemsStatusEquals(returnId, "RETURN_COMPLETED");
 
         // 9b. Verify that the inventory of the item has increased by 2.0
-//        assertProductAvailability(testProduct, new BigDecimal("7.0"), new BigDecimal("7.0"));
+        assertProductAvailability(testProduct, new BigDecimal("7.0"), new BigDecimal("7.0"));
         // check the InventoryItem entity
-//        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "statusId", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
-//        assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
+        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "statusId", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
+        assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
 
         // 9c. Verify that a payment of the type CUSTOMER_REFUND from Company to DemoCustomer for the amount of the return in the status of PMNT_SENT has been created
         // The amount should be 2x 100 + 5.76% tax = 211.7
@@ -291,17 +291,11 @@ public class ReturnTests extends ReturnTestCase {
         // 9a. Verify that the return is RETURN_RECEIVED
         assertReturnStatusEquals(returnId, "RETURN_RECEIVED");
 
-//      In ofbiz 10.04, for every returned serial inventory 
-//        1. a new row is created in InventoryItem entity, 
-//        2. status is set to returned, QOH is updated to 1, 
-//        3. ATP is not updated to 1
-//        these cause test case to fail, commenting for now.
-        
         // 9b. Inventory of the item has increased by 2.0
-//        assertProductAvailability(testProduct, new BigDecimal("7.0"), new BigDecimal("7.0"));
+        assertProductAvailability(testProduct, new BigDecimal("7.0"), new BigDecimal("7.0"));
         // check the InventoryItem entity
-//        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "statusId", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
-//        assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
+        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "statusId", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
+        assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
 
         // 9c. A payment of the type CUSTOMER_REFUND from Company to DemoCustomer for the amount of the return in the status of PMNT_NOT_PAID has been created
         // The amount should be 2x 200 + 5.76% tax = 423.00
@@ -389,10 +383,10 @@ public class ReturnTests extends ReturnTestCase {
         assertReturnStatusEquals(returnId, "RETURN_RECEIVED");
 
         // 9b. Verify that the inventory of the item has increased by 2.0
-//        assertProductAvailability(testProduct, new BigDecimal("7.0"), new BigDecimal("7.0"));
+        assertProductAvailability(testProduct, new BigDecimal("7.0"), new BigDecimal("7.0"));
         // check the InventoryItem entity
-//        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "statusId", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
-//        assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
+        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "statusId", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
+        assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
 
         // 9c. Verify that a payment of the type CUSTOMER_REFUND from Company to DemoCustomer for the amount of the return in the status of PMNT_NOT_PAID has been created
         // Amount is 2x300 + 5.76% (35.10) tax = 635.10
