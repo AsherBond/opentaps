@@ -38,10 +38,10 @@
 
 
 <entity-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entity-eca.xsd">
-
+	<!-- simple method createPartyEmailAddress creates an email address only if for the same party a similar one does not exist.
     <eca entity="PartyContactMechPurpose" operation="create" event="return">
         <condition field-name="contactMechPurposeTypeId" operator="equals" value="RECEIVE_EMAIL_OWNER"/>
         <action service="opentaps.checkReceiveEmailOwnerUniqueness" mode="sync"/>
     </eca>
-
+ 	-->
 </entity-eca>
