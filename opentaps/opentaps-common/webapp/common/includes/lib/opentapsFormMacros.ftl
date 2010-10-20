@@ -427,12 +427,12 @@ For more information, please see documentation/opentapsFormMacros.html
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputSelectCell name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false colspan="" tooltip="">
+<#macro inputSelectCell name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false class="inputBox" colspan="" tooltip="">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
   <td<#if colspan?has_content> colspan="${colspan}"</#if>>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="${class}" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
     <#if !required><option value="">${defaultOptionText}</option></#if>
     <#list list as option>
       <#if option.get(listKey) == defaultValue || listKey == defaultValue><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
@@ -446,14 +446,14 @@ For more information, please see documentation/opentapsFormMacros.html
   </td>
 </#macro>
 
-<#macro inputSelectRow title name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" titleClass="tableheadtext" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false colspan="" tooltip="">
+<#macro inputSelectRow title name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" titleClass="tableheadtext" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false class="inputBox" colspan="" tooltip="">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
   <tr>
   <td class="titleCell"><span class="${titleClass}">${title}</span></td>
   <td<#if colspan?has_content> colspan="${colspan}"</#if>>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="${class}" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
     <#if !required><option value="">${defaultOptionText}</option></#if>
     <#list list as option>
       <#if option.get(listKey) == defaultValue || listKey == defaultValue><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
