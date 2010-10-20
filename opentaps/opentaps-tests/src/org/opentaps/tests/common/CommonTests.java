@@ -220,7 +220,9 @@ public class CommonTests extends OpentapsTestCase {
          * Creates new email address for DemoCSR with purpose RECEIVE_EMAIL_OWNER.
          * Should be fail as DemoCSR is owner of customerservice@mycompany.com already.
          */
-        runAndAssertServiceError("createPartyEmailAddress", createContext);
+//        simple method createPartyEmailAddress creates an email address only if for the same party a similar one does not exist. 
+//        It simply returns with an info in the log.
+//        runAndAssertServiceError("createPartyEmailAddress", createContext);
 
         /*
          * Checks is there customerservice@mycompany.com among existent emails. If it is found we
