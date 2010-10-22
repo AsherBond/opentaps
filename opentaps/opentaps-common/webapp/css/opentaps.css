@@ -3681,7 +3681,7 @@ div.postalAddressValidationError {
     padding: 5px 5px 5px 20px !important;
     margin-top: 5px;
     margin-bottom: 15px;
-    width: 250px;
+    width: 280px;
     color: #333333;
     overflow: auto;
 }
@@ -3695,7 +3695,7 @@ div.postalAddressValidationError div.data {
 }
 div.postalAddressValidationError div.links {
     float: right;
-    width: 25px;
+    width: 35px;
     margin-bottom: 1.5em;
 }
 div.postalAddressValidationError div.links img {
