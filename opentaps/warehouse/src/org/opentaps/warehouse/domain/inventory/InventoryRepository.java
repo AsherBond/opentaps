@@ -643,7 +643,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
         EntityCondition cond = EntityCondition.makeCondition(
                                     EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItem.getInventoryItemId()),
                                     EntityCondition.makeCondition("unitCost", EntityOperator.NOT_EQUAL, null),
-                                    EntityCondition.makeCondition("dateTime", EntityOperator.LESS_THAN_EQUAL_TO, inventoryItem.getTimestamp("lastUpdatedStamp")));
+                                    EntityCondition.makeCondition("dateTime", EntityOperator.LESS_THAN, inventoryItem.getTimestamp("lastUpdatedStamp")));
         List<InventoryItemValueHistory> inventoryItemValueHistories = findList(InventoryItemValueHistory.class, cond, orderBy);
         if (UtilValidate.isNotEmpty(inventoryItemValueHistories)) {
             return inventoryItemValueHistories.get(0);
