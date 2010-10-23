@@ -2393,7 +2393,8 @@ public final class LedgerServices {
 
             // If there's no record of the previous unit cost, throw an error
             if (UtilValidate.isEmpty(oldUnitCost)) {
-                return UtilMessage.createAndLogServiceError("FinancialsServiceWarning_InventoryItemValueAdj_NoPreviousUnitCost", context, locale, MODULE);
+            	UtilMessage.logServiceWarning("FinancialsServiceWarning_InventoryItemValueAdj_NoPreviousUnitCost", context, locale, MODULE);
+            	return result;
             }
 
             // Return if the unitCost hasn't changed
