@@ -869,10 +869,10 @@ public class FinancialAsserts extends OpentapsTestCase {
         }
 
         // verify summaries
-        assertEquals("TaxInvoiceItemFact entity contains wrong gross sales amount for invoice " + invoiceId, tempGrossSales, BigDecimal.valueOf(grossSales));
-        assertEquals("TaxInvoiceItemFact entity contains wrong discounts for invoice " + invoiceId, tempDiscounts, BigDecimal.valueOf(discounts));
-        assertEquals("TaxInvoiceItemFact entity contains wrong refunds for invoice " + invoiceId, tempRefunds, BigDecimal.valueOf(refunds));
-        assertEquals("TaxInvoiceItemFact entity contains wrong net amounts for invoice " + invoiceId, tempNetAmount, BigDecimal.valueOf(netAmount));
+        assertEquals("SalesInvoiceItemFact entity contains wrong gross sales amount for invoice " + invoiceId, tempGrossSales, BigDecimal.valueOf(grossSales));
+        assertEquals("SalesInvoiceItemFact entity contains wrong discounts for invoice " + invoiceId, tempDiscounts, BigDecimal.valueOf(discounts));
+        assertEquals("SalesInvoiceItemFact entity contains wrong refunds for invoice " + invoiceId, tempRefunds, BigDecimal.valueOf(refunds));
+        assertEquals("SalesInvoiceItemFact entity contains wrong net amounts for invoice " + invoiceId, tempNetAmount, BigDecimal.valueOf(netAmount));
     }
 
 }
