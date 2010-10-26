@@ -75,7 +75,7 @@ public class OrderTestCase extends OpentapsTestCase {
     @Override
     public void tearDown() throws Exception {
         // recreate the promo 9020 which we removed in setUp
-        delegator.create("ProductStorePromoAppl", UtilMisc.<String, Object>toMap("productStoreId", "9000", "productPromoId", "9020", "sequenceNum", new Integer(1), "fromDate", UtilDate.toTimestamp("2001-05-13 12:00:00.0", TimeZone.getDefault(), Locale.getDefault())));
+        delegator.create("ProductStorePromoAppl", UtilMisc.<String, Object>toMap("productStoreId", "9000", "productPromoId", "9020", "sequenceNum", Long.valueOf(1L), "fromDate", UtilDate.toTimestamp("2001-05-13 12:00:00.0", TimeZone.getDefault(), Locale.getDefault())));
         super.tearDown();
     }
 
