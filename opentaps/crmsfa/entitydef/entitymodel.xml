@@ -1072,6 +1072,7 @@
         <alias-all entity-alias="CR">
           <exclude field="reason"/>
         </alias-all>
+        <alias entity-alias="CR" name="custRequestId"/>
         <alias entity-alias="SI" name="status" field="description"/>
         <!-- this field value will replaced in CaseLookupService, I just want a field to contain the updated value -->
         <alias entity-alias="SI" name="updated" field="statusCode"/>
@@ -1110,6 +1111,7 @@
         <member-entity entity-alias="SOS" entity-name="SalesOpportunityStage"/>
         
         <alias-all entity-alias="SO"/>
+        <alias entity-alias="SO" name="salesOpportunityId"/>
         <alias entity-alias="SOS" name="opportunityStage" field="description"/>
         <alias entity-alias="PR" name="partyIdFrom"/>
 		<!-- this fields value will replaced in OpportunityLookupService, I just want a field to contain the partyFromLink value -->
