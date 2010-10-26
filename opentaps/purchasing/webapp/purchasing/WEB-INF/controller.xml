@@ -143,8 +143,12 @@
         <response name="viewSupplier" type="request-redirect" value="viewSupplier">
           <redirect-parameter name="partyId"/>
         </response>
+        <response name="orderview" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
         <!-- mostly for error redirects -->
         <response name="myProfileEditContactMech" type="request" value="myProfileEditContactMech"/>
+        <response name="editPurchaseOrderContactMech" type="request" value="editPurchaseOrderContactMech"/>
         <!-- default -->
         <response name="error" type="view" value="myHomeMain"/>
         <response name="" type="request" value="myHomeMain"/>
@@ -621,6 +625,10 @@
         <response name="success" type="request-redirect" value="editProductDeliveryDate"/>
         <response name="error" type="view" value="editProductDeliveryDate"/>
     </request-map>
+    <request-map uri="editPurchaseOrderContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editPurchaseOrderContactMech"/>
+    </request-map>
 
     <!-- Opentaps versions of create order requests. -->
     <request-map uri="createOrderMainScreen">
@@ -1014,6 +1022,7 @@
     <view-map name="createnewnote" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#OrderNewNote"/>
     <view-map name="invoiceSupplies" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#invoiceSupplies"/>
     <view-map name="editProductDeliveryDate" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#editProductDeliveryDate"/>
+    <view-map name="editPurchaseOrderContactMech" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#editPurchaseOrderContactMech"/>
 
     <!-- Supplier Screens -->
     <view-map name="findSuppliers" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#findSuppliers"/>

@@ -184,8 +184,7 @@ under the License.
                 <#list facilityContactMechList as facilityContactMech>
                   <#if facilityContactMech.postalAddress?exists>
                     <#assign address = facilityContactMech.postalAddress>
-                    <#assign contactMech = facilityContactMech.contactMech>
-                    <option value="${contactMech.contactMechId}"  <#if contactMech.contactMechId==shippingContactMechId?default("_NA_")> selected="selected"</#if>>
+                    <option value="${address.contactMechId}"  <#if address.contactMechId==shippingContactMechId?default("_NA_")> selected="selected"</#if>>
                       <#if facility?has_content>${facility.facilityName?if_exists}<#else>${address.toName?if_exists}</#if> ${uiLabelMap.CommonAt} ${address.address1} - ${address.city?if_exists} ${address.countryGeoId?if_exists}
                     </option>
                   </#if>
@@ -194,6 +193,7 @@ under the License.
             </#list>
             <option value="_NA_" <#if shippingContactMechId?if_exists=="_NA_"> selected="selected"</#if>>${uiLabelMap.PurchNoShippingAddress}</option>
           </select>
+          <a class="buttontext" href="<@ofbizUrl>editPurchaseOrderContactMech?preContactMechTypeId=POSTAL_ADDRESS&contactMechPurposeTypeId=SHIPPING_LOCATION&DONE_PAGE=orderview%3ForderId%3D${order.orderId}&orderId=${order.orderId}&oldContactMechId=${shippingContactMechId?if_exists}&shipGroupSeqId=${((order.shipGroups?first).shipGroupSeqId)?if_exists}</@ofbizUrl>">${uiLabelMap.CommonNew}</a>
         </td>
       </tr>
       <tr>
