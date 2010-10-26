@@ -108,9 +108,10 @@ under the License.
         <call-simple-method method-name="findCreateIssueShipmentItem"/>
         <!--
             TODO: if we want to record the role of the facility operation we have to re-implement this using ShipmentReceiptRole
+        -->
         <call-simple-method method-name="findCreateItemIssuance"/>
         <call-simple-method method-name="associateIssueRoles"/>
-        -->
+        
     </simple-method>
 
     <simple-method method-name="issueOrderItemShipGrpInvResToShipment" short-description="Issue OrderItemShipGrpInvRes to Shipment">
