@@ -185,7 +185,7 @@ public final class LedgerServices {
                 transactionPartyRoleTypeId = "BILL_TO_CUSTOMER";
                 defaultDebitCreditFlag = "D";
                 offsettingDebitCreditFlag = "C";
-                defaultGlAccountTypeId = "SALES_RETURN";
+                defaultGlAccountTypeId = "SALES_RETURNS";
             } else if ("COMMISSION_INVOICE".equals(invoiceTypeId)) {
                 acctgTransTypeId = "INVOICE_COMM_ATX";
                 offsettingGlAccountTypeId = "COMMISSIONS_PAYABLE";
@@ -2999,7 +2999,7 @@ public final class LedgerServices {
             // figure out the profit and loss since the last closed time period
             BigDecimal netIncome = BigDecimal.ZERO;
             Map tmpResult = dispatcher.runSync("getActualNetIncomeSinceLastClosing", UtilMisc.toMap("organizationPartyId", organizationPartyId, "periodTypeId", periodTypeId,
-                        "thruDate", UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")), "userLogin", userLogin));
+                        "thruDate", UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")), "userLogin", userLogin), -1, false);
             if (tmpResult.get("netIncome") != null) {
                 netIncome = ((BigDecimal) tmpResult.get("netIncome"));
             } else {
@@ -3036,7 +3036,7 @@ public final class LedgerServices {
             // it will start from the a quarter in the year and add it to the year's balance, effecitvely double counting.
             String lastClosedTimePeriodId = null;
             tmpResult = dispatcher.runSync("findLastClosedDate", UtilMisc.toMap("organizationPartyId", organizationPartyId,
-                      "periodTypeId", timePeriod.getString("periodTypeId"), "userLogin", userLogin));
+                      "periodTypeId", timePeriod.getString("periodTypeId"), "userLogin", userLogin), -1, false);
             if (tmpResult.get("lastClosedTimePeriod") != null) {
                  lastClosedTimePeriodId = ((GenericValue) tmpResult.get("lastClosedTimePeriod")).getString("customTimePeriodId");
             }
