@@ -306,7 +306,7 @@ public class BOMTree {
 
     /** It visits the in-memory tree that represents a bill of materials
      * and it collects all the productId it contains.
-     * @return ArrayList containing all the tree's productId.
+     * @return ArrayLsit conatining all the tree's productId.
      */
     public ArrayList getAllProductsId() {
         ArrayList nodeArr = new ArrayList();
@@ -326,7 +326,7 @@ public class BOMTree {
      * @param delegator The delegator used.
      * @throws GenericEntityException If a db problem occurs.
      */
-    public String createManufacturingOrders(String facilityId, Date date, String workEffortName, String description, String routingId, String orderId, String orderItemSeqId, String shipGroupSeqId, String shipmentId, GenericValue userLogin)  throws GenericEntityException {
+    public String createManufacturingOrders(String facilityId, Date date, String workEffortName, String description, String routingId, String orderId, String orderItemSeqId, String shipmentId, GenericValue userLogin)  throws GenericEntityException {
         String workEffortId = null;
         if (root != null) {
             if (UtilValidate.isEmpty(facilityId)) {
@@ -346,7 +346,7 @@ public class BOMTree {
                     facilityId = shipment.getString("originFacilityId");
                 }
             }
-            Map tmpMap = root.createManufacturingOrder(facilityId, date, workEffortName, description, routingId, orderId, orderItemSeqId, shipGroupSeqId, shipmentId, true, true);
+            Map tmpMap = root.createManufacturingOrder(facilityId, date, workEffortName, description, routingId, orderId, orderItemSeqId, shipmentId, true, true);
             workEffortId = (String)tmpMap.get("productionRunId");
         }
         return workEffortId;

@@ -210,7 +210,7 @@ public class BOMNode {
 
             // A negative scrap factor is a salvage factor
             BigDecimal bdHundred = new BigDecimal("100");
-            if (percScrapFactor.compareTo(bdHundred.negate()) > 0 && percScrapFactor.compareTo(bdHundred) < 0) {
+            if (percScrapFactor.compareTo(bdHundred.negate()) > 0 && percScrapFactor.compareTo(bdHundred.negate()) < 0) {
                 percScrapFactor = BigDecimal.ONE.add(percScrapFactor.movePointLeft(2));
             } else {
                 Debug.logWarning("A scrap factor of [" + percScrapFactor + "] was ignored", module);
@@ -238,7 +238,7 @@ public class BOMNode {
             }
             productPartRules = EntityUtil.filterByDate(productPartRules, inDate);
             newNode = substituteNode(oneChildNode, productFeatures, productPartRules);
-            if (newNode.equals(oneChildNode)) {
+            if (newNode == oneChildNode) {
                 // If no substitution has been done (no valid rule applied),
                 // we try to search for a generic link-rule
                 List genericLinkRules = delegator.findByAnd("ProductManufacturingRule",
@@ -250,8 +250,9 @@ public class BOMNode {
                                                         "productIdIn", node.get("productIdTo"))));
                 }
                 genericLinkRules = EntityUtil.filterByDate(genericLinkRules, inDate);
+                newNode = null;
                 newNode = substituteNode(oneChildNode, productFeatures, genericLinkRules);
-                if (newNode.equals(oneChildNode)) {
+                if (newNode == oneChildNode) {
                     // If no substitution has been done (no valid rule applied),
                     // we try to search for a generic node-rule
                     List genericNodeRules = delegator.findByAnd("ProductManufacturingRule",
@@ -260,7 +261,7 @@ public class BOMNode {
                     genericNodeRules = EntityUtil.filterByDate(genericNodeRules, inDate);
                     newNode = null;
                     newNode = substituteNode(oneChildNode, productFeatures, genericNodeRules);
-                    if (newNode.equals(oneChildNode)) {
+                    if (newNode == oneChildNode) {
                         // If no substitution has been done (no valid rule applied),
                         // we try to set the default (first) node-substitution
                         if (UtilValidate.isNotEmpty(genericNodeRules)) {
@@ -269,7 +270,7 @@ public class BOMNode {
                         }
                         // -----------------------------------------------------------
                         // We try to apply directly the selected features
-                        if (newNode.equals(oneChildNode)) {
+                        if (newNode == oneChildNode) {
                             Map selectedFeatures = new HashMap();
                             if (productFeatures != null) {
                                 GenericValue feature = null;
@@ -384,7 +385,7 @@ public class BOMNode {
         }
         sb.append(product.get("productId"));
         sb.append(" - ");
-        sb.append(quantity);
+        sb.append("" + quantity);
         GenericValue oneChild = null;
         BOMNode oneChildNode = null;
         depth++;
@@ -466,7 +467,7 @@ public class BOMNode {
         this.depth = depth;
         this.quantity = quantity.multiply(quantityMultiplier).multiply(scrapFactor);
         // First of all we visit the current node.
-        if (this.getProduct().getString("defaultShipmentBoxTypeId") != null) {
+        if (this.getProduct().getString("shipmentBoxTypeId") != null) {
             arr.add(this);
         } else {
             GenericValue oneChild = null;
@@ -505,7 +506,7 @@ public class BOMNode {
         }
     }
 
-    public Map createManufacturingOrder(String facilityId, Date date, String workEffortName, String description, String routingId, String orderId, String orderItemSeqId, String shipGroupSeqId, String shipmentId, boolean useSubstitute, boolean ignoreSupplierProducts) throws GenericEntityException {
+    public Map createManufacturingOrder(String facilityId, Date date, String workEffortName, String description, String routingId, String orderId, String orderItemSeqId, String shipmentId, boolean useSubstitute, boolean ignoreSupplierProducts) throws GenericEntityException {
         String productionRunId = null;
         Timestamp endDate = null;
         if (isManufactured(ignoreSupplierProducts)) {
@@ -515,7 +516,7 @@ public class BOMNode {
             for (int i = 0; i < childrenNodes.size(); i++) {
                 oneChildNode = (BOMNode)childrenNodes.get(i);
                 if (oneChildNode != null) {
-                    Map tmpResult = oneChildNode.createManufacturingOrder(facilityId, date, null, null, null, null, null, shipGroupSeqId, shipmentId, false, false);
+                    Map tmpResult = oneChildNode.createManufacturingOrder(facilityId, date, null, null, null, null, null, shipmentId, false, false);
                     String childProductionRunId = (String)tmpResult.get("productionRunId");
                     Timestamp childEndDate = (Timestamp)tmpResult.get("endDate");
                     if (maxEndDate == null) {
@@ -574,7 +575,7 @@ public class BOMNode {
             try {
                 if (productionRunId != null) {
                     if (orderId != null && orderItemSeqId != null) {
-                        delegator.create("WorkOrderItemFulfillment", UtilMisc.toMap("workEffortId", productionRunId, "orderId", orderId, "orderItemSeqId", orderItemSeqId, "shipGroupSeqId", shipGroupSeqId));
+                        delegator.create("WorkOrderItemFulfillment", UtilMisc.toMap("workEffortId", productionRunId, "orderId", orderId, "orderItemSeqId", orderItemSeqId));
                     }
                     for (int i = 0; i < childProductionRuns.size(); i++) {
                         delegator.create("WorkEffortAssoc", UtilMisc.toMap("workEffortIdFrom", (String)childProductionRuns.get(i), "workEffortIdTo", productionRunId, "workEffortAssocTypeId", "WORK_EFF_PRECEDENCY", "fromDate", startDate));
@@ -775,9 +776,7 @@ public class BOMNode {
      *
      */
     public void setQuantityMultiplier(BigDecimal quantityMultiplier) {
-        if (quantityMultiplier != null) {
-            this.quantityMultiplier = quantityMultiplier;
-        }
+        this.quantityMultiplier = quantityMultiplier;
     }
 
     /** Getter for property ruleApplied.
@@ -809,9 +808,7 @@ public class BOMNode {
      *
      */
     public void setScrapFactor(BigDecimal scrapFactor) {
-        if (scrapFactor != null) {
-            this.scrapFactor = scrapFactor;
-        }
+        this.scrapFactor = scrapFactor;
     }
 
     /** Getter for property childrenNodes.
