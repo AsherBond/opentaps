@@ -67,12 +67,16 @@ under the License.
     <WorkEffortGoodStandard workEffortId="ROUTING_COST" productId="PROD_MANUF" workEffortGoodStdTypeId="ROU_PROD_TEMPLATE" statusId="WEGS_CREATED" fromDate="2005-12-31 00:01:00.0"/>
     <!-- Cost information for the task -->
     <!-- This is the cost derived from fixed assets' usage; variableCost is per minute (perMilliSeconds=60000) -->
+    <CostComponentCalc costComponentCalcId="EXAMPLE_COST" description="Example costs information" currencyUomId="USD" fixedCost="50" variableCost="10" perMilliSecond="60000"/>
+    <WorkEffortCostCalc workEffortId="TASK_COST" costComponentTypeId="ROUTE_COST" costComponentCalcId="EXAMPLE_COST" fromDate="2005-12-31 00:01:00.0"/>
+    <!-- 
     <CostComponentCalc costComponentCalcId="TASK_COST_CALC" description="Indirect cost (power supply)" currencyUomId="USD" fixedCost="1" variableCost="2" perMilliSecond="60000"/>
     <WorkEffortCostCalc workEffortId="TASK_COST" costComponentTypeId="OTHER_COST" costComponentCalcId="TASK_COST_CALC" fromDate="2005-12-31 00:01:00.0"/>
-
-    <!-- General Cost for the finished product -->
+ 	-->
+    <!-- General Cost for the finished product 
     <CostComponentCalc costComponentCalcId="GEN_COST_CALC" description="Overhead cost (5 percent of total cost) for general costs" currencyUomId="USD" fixedCost="0.05" costCustomMethodId="PROD_PERC_FORMULA"/>
     <ProductCostComponentCalc productId="PROD_MANUF" costComponentTypeId="GEN_COST" costComponentCalcId="GEN_COST_CALC" fromDate="2005-12-31 00:01:00.0"/>
+    -->
     <!-- 
     <InventoryItem facilityId="WebStoreWarehouse" locationSeqId="TLTLTLUL01" datetimeReceived="2008-08-01 08:00:00.000"
         inventoryItemId="9029" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="MAT_A_COST" ownerPartyId="Company" currencyUomId="USD" unitCost="9.0"/>
