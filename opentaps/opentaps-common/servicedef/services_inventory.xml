@@ -61,7 +61,7 @@
     </service>
 
     <service name="receiveInventoryProduct" engine="simple" transaction-timeout="600"
-            location="component://product/script/org/ofbiz/shipment/receipt/ShipmentReceiptServices.xml" invoke="receiveInventoryProduct" auth="true">
+            location="component://opentaps-common/script/component://product/script/org/ofbiz/shipment/receipt/ShipmentReceiptServices.xml" invoke="receiveInventoryProduct" auth="true">
         <description>Receive Inventory In Warehouse</description>
         <auto-attributes entity-name="InventoryItem" include="nonpk" mode="IN" optional="true">
             <exclude field-name="availableToPromiseTotal"/>

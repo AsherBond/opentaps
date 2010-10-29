@@ -24,7 +24,7 @@
         
     <!-- these services are for GlAccountTypeDefault -->
     <service name="createGlAccountTypeDefault" engine="simple" default-entity-name="GlAccountTypeDefault"
-            location="com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="createGlAccountTypeDefault">        
+            location="component://financials/script/com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="createGlAccountTypeDefault">        
         <description>Create an GlAccountTypeDefault</description>
         <required-permissions join-type="AND">
             <check-permission permission="FINANCIALS" action="_CONFIG"/>
@@ -33,7 +33,7 @@
     </service>
     
     <service name="updateGlAccountTypeDefault" engine="simple" default-entity-name="GlAccountTypeDefault"
-            location="com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="updateGlAccountTypeDefault">        
+            location="component://financials/script/com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="updateGlAccountTypeDefault">        
         <description>Update an existing GlAccountTypeDefault</description>
         <required-permissions join-type="AND">
             <check-permission permission="FINANCIALS" action="_CONFIG"/>
@@ -42,7 +42,7 @@
     </service>
     
     <service name="financials.updatePaymentMethod" engine="simple" default-entity-name="PaymentMethod"
-            location="com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="updatePaymentMethod">        
+            location="component://financials/script/com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="updatePaymentMethod">        
         <description>Update an existing Payment Method's</description>
         <required-permissions join-type="AND">
             <check-permission permission="FINANCIALS" action="_CONFIG"/>
@@ -86,7 +86,7 @@
 	</service>
 
     <service name="financials.createPaymentMethod" engine="simple" default-entity-name="PaymentMethod"
-            location="com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="createPaymentMethod">        
+            location="component://financials/script/com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="createPaymentMethod">        
         <description>Create new PaymentMethod</description>
         <required-permissions join-type="AND">
             <check-permission permission="FINANCIALS" action="_CONFIG"/>
