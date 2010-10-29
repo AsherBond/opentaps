@@ -415,6 +415,12 @@ applications/party/servicedef/services.xml
 applications/party/servicedef/services.xml
 4c6e7278092b42771f3735026b1b2c2b8f660c10 Fix : allow html
 
+applications/manufacturing/src/org/ofbiz/manufacturing/bom/BOMNode.java
+applications/manufacturing/src/org/ofbiz/manufacturing/bom/BOMTree.java
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRunServices.java
+a8867332388586e986789ea2ef7dadea051c89c8 
+New production run services have been changed causing production run tests cases to fail, files reverted to opentaps 1.4 version.
+
 Other API Changes
 -----------------
 
