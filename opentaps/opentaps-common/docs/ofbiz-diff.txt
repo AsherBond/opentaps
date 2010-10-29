@@ -40,9 +40,10 @@ framework/common/config/CommonUiLabels.xml
 framework/common/src/org/ofbiz/common/FindServices.java
 applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
 applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCartEvents.java
+framework/base/src/org/ofbiz/base/conversion/DateTimeConverters.java
 In revisions:
 r13768, r13769, r13784, r13786, r13798, r13812-r13818, r13822, r13824, r13833,
-r13834, 4d0b94a1fdf644d8bdbb4c114a05d9bdb48627bc
+r13834, 4d0b94a1fdf644d8bdbb4c114a05d9bdb48627bc, 5394c0be0b4623e88035ae2c3bbd5789cdae0a90
 
 Framework changes
 -----------------
@@ -141,6 +142,7 @@ framework/widget/src/org/ofbiz/widget/html/HtmlScreenRenderer.java
 framework/widget/src/org/ofbiz/widget/screen/ScreenWidgetViewHandler.java
 r13276 Save the current content type in the context, and skip inserting an HTML DocType if the content type is not html. This is used for example for javascript files.
 r13298 Fixed, reverted previous change in RequestHandler.java
+6c236eec9f0928214ddda65985966934222ab0a7
 
 framework/widget/src/org/ofbiz/widget/screen/ScreenXmlViewHandler.java
 r14305 Adding content type to the view handler
@@ -212,6 +214,7 @@ r15076 Fix timestamp parsing for single digit hour
 
 framework/service/src/org/ofbiz/service/ModelService.java
 r15196 Fix service model so that semaphore attributes are used
+*** VB Present
 
 framework/common/src/org/ofbiz/common/FindServices.java
 framework/entity/src/org/ofbiz/entity/finder/ByAndFinder.java
