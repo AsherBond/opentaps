@@ -223,6 +223,10 @@ framework/entity/src/org/ofbiz/entity/finder/PrimaryKeyFinder.java
 framework/entity/src/org/ofbiz/entity/model/ModelEntity.java
 r15394 Fix localized date conversion error in entity engine for <entity-one ... auto-field-map="true/>.
 
+framework/entity/src/org/ofbiz/entity/condition/EntityConditionList.java
+framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
+1058cb83555da17ac2d08b1c22d521a516dee293 Fix type : added deprecated methods for backwards compatibility.
+
 Applications changes
 --------------------
 
@@ -391,6 +395,25 @@ party type PERSON prevents seca crmsfa.autoAssignParty from assigning it to role
 
 applications/accounting/data/DemoFinAccountData.xml
 340233e59569462532730ea586ef851ba7e18813 Fixed : partyId changed as this causing payment tests to fail.
+
+applications/product/script/org/ofbiz/shipment/issuance/IssuanceServices.xml
+applications/product/servicedef/services_shipment.xml
+cbff7f8f9838b64e76be4e4c698f137c6071551e Fixed : Uncommented as these were causing purchase order test case to fail. As part of new impl in ofbiz r895250, these were commented/ removed.
+
+applications/product/script/org/ofbiz/shipment/receipt/ShipmentReceiptServices.xml
+fdb29a934e2a289046c2429d09bf28e5120e7327 From ofbiz 10.04, status for Non serial inventory items cannot be set to INV_RETURNED (for returned inventory). With this behavior lot of test cases fail, commenting we can avoid changes to opentaps test cases & services.
+
+applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceWorker.java
+e70d3da545082bdb577b73a9d6e71c9ddfd2760e Fixed : invoice items was missing & filters were being applied on empty list.
+
+applications/product/servicedef/secas.xml
+2c6122f4d1e30112cae836c56a74451905dac93b Fix : introduced in 10.04 commented as it causes testNonSerInventoryItemBalancing() to fail
+
+applications/party/servicedef/services.xml
+9f6b7503f24df11d846060cad37c9054532c9455 Fix : allow html
+
+applications/party/servicedef/services.xml
+4c6e7278092b42771f3735026b1b2c2b8f660c10 Fix : allow html
 
 Other API Changes
 -----------------
