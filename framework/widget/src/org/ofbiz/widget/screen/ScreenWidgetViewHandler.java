@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilJ2eeCompat;
@@ -98,8 +99,8 @@ public class ScreenWidgetViewHandler extends AbstractViewHandler {
             screens.getContext().put("formStringRenderer", new HtmlFormRenderer(request, response));
             screens.getContext().put("treeStringRenderer", new HtmlTreeRenderer());
             screens.getContext().put("simpleEncoder", StringUtil.htmlEncoder);
-            htmlScreenRenderer.renderScreenBegin(writer, screens.getContext());
             screens.getContext().put("_CONTENT_TYPE_", contentType);
+            htmlScreenRenderer.renderScreenBegin(writer, screens.getContext());
             screens.render(page);
             htmlScreenRenderer.renderScreenEnd(writer, screens.getContext());
             writer.flush();
