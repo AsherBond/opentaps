@@ -30,6 +30,7 @@ import java.util.TimeZone;
 import javolution.util.FastList;
 import javolution.util.FastSet;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.TimeDuration;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
@@ -291,7 +292,7 @@ public class DateTimeConverters implements ConverterLoader {
         public String convert(java.sql.Date obj, Locale locale, TimeZone timeZone, String formatString) throws ConversionException {
             DateFormat df = null;
             if (UtilValidate.isEmpty(formatString)) {
-                df = UtilDateTime.toDateFormat(UtilDateTime.DATE_FORMAT, timeZone, locale);
+                df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, locale);
             } else {
                 df = UtilDateTime.toDateFormat(formatString, timeZone, locale);
             }
@@ -349,7 +350,7 @@ public class DateTimeConverters implements ConverterLoader {
         public String convert(java.sql.Time obj, Locale locale, TimeZone timeZone, String formatString) throws ConversionException {
             DateFormat df = null;
             if (UtilValidate.isEmpty(formatString)) {
-                df = UtilDateTime.toTimeFormat(UtilDateTime.TIME_FORMAT, timeZone, locale);
+                df = UtilDateTime.toTimeFormat(UtilDateTime.getTimeFormat(locale), timeZone, locale);
             } else {
                 df = UtilDateTime.toTimeFormat(formatString, timeZone, locale);
             }
@@ -396,18 +397,25 @@ public class DateTimeConverters implements ConverterLoader {
         }
 
         public java.util.Date convert(String obj, Locale locale, TimeZone timeZone, String formatString) throws ConversionException {
-            String trimStr = obj.trim();
-            if (trimStr.length() == 0) {
+        	DateFormat df = null;
+            String str = obj.trim();
+            if (str.length() == 0) {
                 return null;
             }
-            DateFormat df = null;
-            if (UtilValidate.isEmpty(formatString)) {
-                df = UtilDateTime.toDateTimeFormat(UtilDateTime.DATE_TIME_FORMAT, timeZone, locale);
-            } else {
-                df = UtilDateTime.toDateTimeFormat(formatString, timeZone, locale);
+
+            // check str in old format yyyy-MM-dd
+            if (str.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+            	formatString = "yyyy-MM-dd";
             }
-            try {
-                return df.parse(trimStr);
+
+            String dateFormat = UtilValidate.isEmpty(formatString) ? UtilDateTime.getDateFormat(locale) : formatString;
+            if (!UtilValidate.isDateTime(str, dateFormat, locale, timeZone)) {
+                throw new ConversionException("Invalid format. Could not convert " + str + " to Date");
+            }
+            df = UtilDateTime.toDateFormat(dateFormat, timeZone, locale);
+           try {
+        	   Date fieldDate = df.parse(str);
+               return new java.sql.Date(fieldDate.getTime());
             } catch (ParseException e) {
                 throw new ConversionException(e);
             }
@@ -449,18 +457,25 @@ public class DateTimeConverters implements ConverterLoader {
         }
 
         public java.sql.Date convert(String obj, Locale locale, TimeZone timeZone, String formatString) throws ConversionException {
-            String trimStr = obj.trim();
-            if (trimStr.length() == 0) {
+        	DateFormat df = null;
+            String str = obj.trim();
+            if (str.length() == 0) {
                 return null;
             }
-            DateFormat df = null;
-            if (UtilValidate.isEmpty(formatString)) {
-                df = UtilDateTime.toDateFormat(UtilDateTime.DATE_FORMAT, timeZone, locale);
-            } else {
-                df = UtilDateTime.toDateFormat(formatString, timeZone, locale);
+
+            // check str in old format yyyy-MM-dd
+            if (str.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+            	formatString = "yyyy-MM-dd";
             }
-            try {
-                return new java.sql.Date(df.parse(trimStr).getTime());
+
+            String dateFormat = UtilValidate.isEmpty(formatString) ? UtilDateTime.getDateFormat(locale) : formatString;
+            if (!UtilValidate.isDateTime(str, dateFormat, locale, timeZone)) {
+                throw new ConversionException("Invalid format. Could not convert " + str + " to Date");
+            }
+            df = UtilDateTime.toDateFormat(dateFormat, timeZone, locale);
+           try {
+        	   Date fieldDate = df.parse(str);
+               return new java.sql.Date(fieldDate.getTime());
             } catch (ParseException e) {
                 throw new ConversionException(e);
             }
@@ -479,7 +494,7 @@ public class DateTimeConverters implements ConverterLoader {
             }
             DateFormat df = null;
             if (UtilValidate.isEmpty(formatString)) {
-                df = UtilDateTime.toTimeFormat(UtilDateTime.TIME_FORMAT, timeZone, locale);
+                df = UtilDateTime.toTimeFormat(UtilDateTime.getTimeFormat(locale), timeZone, locale);
             } else {
                 df = UtilDateTime.toTimeFormat(formatString, timeZone, locale);
             }
@@ -502,15 +517,13 @@ public class DateTimeConverters implements ConverterLoader {
                 return null;
             }
             DateFormat df = null;
-            if (UtilValidate.isEmpty(formatString)) {
-                // These hacks are a bad idea, but they are included
-                // for backward compatibility.
-                if (str.length() > 0 && !str.contains(":")) {
-                    str = str + " 00:00:00.00";
-                }
+            
+            /* check if str in timestamp format */
+            if (str.matches("^\\d{4}-\\d{2}-\\d{2} \\d{1,2}:\\d{2}:\\d{1,2}$") || str.matches("^\\d{4}-\\d{2}-\\d{2} \\d{1,2}:\\d{2}:\\d{1,2}.\\d+$")) {
+            	formatString = "yyyy-MM-dd HH:mm:ss.S";
                 // hack to mimic Timestamp.valueOf() method
                 if (str.length() > 0 && !str.contains(".")) {
-                    str = str + ".0";
+                    str += ".0";
                 } else {
                     // DateFormat has a funny way of parsing milliseconds:
                     // 00:00:00.2 parses to 00:00:00.002
@@ -520,11 +533,31 @@ public class DateTimeConverters implements ConverterLoader {
                         str = str + "000".substring(timeSplit[1].length());
                     }
                 }
-                df = UtilDateTime.toDateTimeFormat(UtilDateTime.DATE_TIME_FORMAT, timeZone, locale);
-            } else {
-                df = UtilDateTime.toDateTimeFormat(formatString, timeZone, locale);
+            } else if (str.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+            	formatString = "yyyy-MM-dd HH:mm:ss.S";
+                str += " 00:00:00.0";
             }
             try {
+                if (UtilValidate.isEmpty(formatString)) {
+                    try {
+                        String dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+                        if (!UtilValidate.isDateTime(str, dateTimeFormat, locale, timeZone)) {
+                            throw new ParseException("Invalid format. Could not convert " + str + " to Timestamp", 0);
+                        }
+                        df = UtilDateTime.toDateTimeFormat(dateTimeFormat, timeZone, null);
+                    } catch (ParseException e) {
+                        String dateFormat = UtilDateTime.getDateFormat(locale);
+                        if (!UtilValidate.isDateTime(str, dateFormat, locale, timeZone)) {
+                        	throw new ConversionException("Invalid format. Could not convert " + str + " to Timestamp");
+                        }
+                        df = UtilDateTime.toDateTimeFormat(dateFormat, timeZone, locale);
+                    }
+                } else {
+                    if (!UtilValidate.isDateTime(str, formatString, locale, timeZone)) {
+                    	throw new ConversionException("Invalid format. Could not convert " + str + " to Timestamp");
+                    }
+                    df = UtilDateTime.toDateTimeFormat(formatString, timeZone, null);
+                }
                 return new java.sql.Timestamp(df.parse(str).getTime());
             } catch (ParseException e) {
                 throw new ConversionException(e);

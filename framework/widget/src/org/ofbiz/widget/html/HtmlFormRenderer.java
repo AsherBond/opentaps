@@ -932,7 +932,7 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
                 String noCurrentSelectedKey = dropDownField.getNoCurrentSelectedKey(context);
                 writer.append("<option");
                 // if current value should be selected in the list, select it
-                if (UtilValidate.isNotEmpty(currentValue) && currentValue.equals(optionValue.getKey()) && "selected".equals(dropDownField.getCurrent())) {
+                if (UtilValidate.isNotEmpty(currentValue) && currentValue.equals(encode(optionValue.getKey(), modelFormField, context)) && "selected".equals(dropDownField.getCurrent())) {
                     writer.append(" selected=\"selected\"");
                 } else if (UtilValidate.isEmpty(currentValue) && noCurrentSelectedKey != null && noCurrentSelectedKey.equals(optionValue.getKey())) {
                     writer.append(" selected=\"selected\"");
@@ -1076,7 +1076,7 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
 
             // if current value should be selected in the list, select it
             String noCurrentSelectedKey = radioField.getNoCurrentSelectedKey(context);
-            if (UtilValidate.isNotEmpty(currentValue) && currentValue.equals(optionValue.getKey())) {
+            if (UtilValidate.isNotEmpty(currentValue) && currentValue.equals(encode(optionValue.getKey(), modelFormField, context))) {
                 writer.append(" checked=\"checked\"");
             } else if (UtilValidate.isEmpty(currentValue) && noCurrentSelectedKey != null && noCurrentSelectedKey.equals(optionValue.getKey())) {
                 writer.append(" checked=\"checked\"");

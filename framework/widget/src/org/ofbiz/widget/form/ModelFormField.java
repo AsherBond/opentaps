@@ -784,36 +784,16 @@ public class ModelFormField {
                     nf.setMaximumFractionDigits(10);
                     return nf.format(retVal);
                 } else if (retVal instanceof java.sql.Date) {
-                    DateFormat df;
-                    if (localize) {
-                      df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
-                    } else {
-                      df = UtilDateTime.toDateFormat("yyyy-MM-dd", timeZone, null);
-                    }
+                    DateFormat df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
                     return df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.sql.Time) {
-                    DateFormat df;
-                    if (localize) {
-                      df = UtilDateTime.toTimeFormat(UtilDateTime.getTimeFormat(locale), timeZone, null);
-                    } else {
-                      df = UtilDateTime.toDateFormat("HH:mm:ss.SSS", timeZone, null);
-                    }
+                    DateFormat df = UtilDateTime.toTimeFormat(UtilDateTime.getTimeFormat(locale), timeZone, null);
                     return df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.sql.Timestamp) {
-                    DateFormat df;
-                    if (localize) {
-                      df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, null);
-                    } else {
-                      df = UtilDateTime.toDateFormat("yyyy-MM-dd HH:mm:ss.SSS", timeZone, null);
-                    }
+                    DateFormat df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, null);
                     return df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.util.Date) {
-                    DateFormat df;
-                    if (localize) {
-                      df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
-                    } else {
-                      df = UtilDateTime.toDateFormat("yyyy-MM-dd", timeZone, null);
-                    }
+                    DateFormat df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
                     return df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.lang.String) {
 
@@ -840,21 +820,17 @@ public class ModelFormField {
                     returnValue = retVal.toString();
                 }
             } else {
-                if (localize) {
-                    // defaultValue at this point may have type String and timestamp format. It's good chance
-                    // convert this string to localized representation.
-                    String localizedDefaultValue = null;
-                    if (UtilValidate.isNotEmpty(defaultValue)) {
-                        if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")) {
-                            localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
-                        } else if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-                            localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue + " 00:00:00.0"), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
-                        }
+                // defaultValue at this point may have type String and timestamp format. It's good chance
+                // convert this string to localized representation.
+                String localizedDefaultValue = null;
+                if (UtilValidate.isNotEmpty(defaultValue)) {
+                    if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")) {
+                        localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                    } else if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                        localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue + " 00:00:00.0"), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
                     }
-                    returnValue = UtilValidate.isEmpty(localizedDefaultValue) ? defaultValue : localizedDefaultValue;
-                } else {
-                    returnValue = defaultValue;
                 }
+                returnValue = UtilValidate.isEmpty(localizedDefaultValue) ? defaultValue : localizedDefaultValue;
             }
         }
 
@@ -3148,7 +3124,6 @@ public class ModelFormField {
             if (this.defaultValue != null && !this.defaultValue.isEmpty()) {
                 return this.getDefaultValue(context);
             }
-
             if ("date".equals(this.type)) {
                 return (new java.sql.Date(System.currentTimeMillis())).toString();
             } else if ("time".equals(this.type)) {
