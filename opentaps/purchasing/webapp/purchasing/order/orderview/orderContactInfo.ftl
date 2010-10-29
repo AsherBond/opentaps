@@ -162,6 +162,22 @@ under the License.
   </div>
 </div>
 
+<script type="text/javascript">
+  /*<![CDATA[*/
+
+    function editCurrentAddress(/*String*/ shipGroupSeqId, /*String*/ oldContactMechId) {
+      var url = "<@ofbizUrl>editPurchaseOrderContactMech?partyId=${order.mainExternalParty.partyId}&preContactMechTypeId=POSTAL_ADDRESS&contactMechPurposeTypeId=SHIPPING_LOCATION&DONE_PAGE=orderview%3ForderId%3D${order.orderId}&orderId=${order.orderId}</@ofbizUrl>";
+      // get selected contact mech
+      var contactMechIdInput = document.getElementById('newOrderContactMechId');
+      var contactMechId = contactMechIdInput.options[contactMechIdInput.selectedIndex].value;
+      if ("" == contactMechId || "_NA_" == contactMechId) return;
+      url += "&contactMechId=" + contactMechId + "&shipGroupSeqId=" + shipGroupSeqId + "&oldContactMechId=" + oldContactMechId;
+      location.href = url;
+    }
+
+  /*]]>*/
+</script>
+
 <div class="screenlet">
   <div class="screenlet-header">
       <div class="boxhead">&nbsp;${uiLabelMap.PurchShippingInformation}</div>
@@ -176,7 +192,7 @@ under the License.
         </td>
         <td width="5">&nbsp;</td>
         <td width="80%">
-          <select name="newOrderContactMechId" class="selectBox">
+          <select name="newOrderContactMechId" id="newOrderContactMechId" class="selectBox">
             <#list facilityMaps as facilityMap>
               <#assign facility = facilityMap.facility?if_exists>
               <#assign facilityContactMechList = facilityMap.facilityContactMechList>
@@ -193,7 +209,9 @@ under the License.
             </#list>
             <option value="_NA_" <#if shippingContactMechId?if_exists=="_NA_"> selected="selected"</#if>>${uiLabelMap.PurchNoShippingAddress}</option>
           </select>
-          <a class="buttontext" href="<@ofbizUrl>editPurchaseOrderContactMech?preContactMechTypeId=POSTAL_ADDRESS&contactMechPurposeTypeId=SHIPPING_LOCATION&DONE_PAGE=orderview%3ForderId%3D${order.orderId}&orderId=${order.orderId}&oldContactMechId=${shippingContactMechId?if_exists}&shipGroupSeqId=${((order.shipGroups?first).shipGroupSeqId)?if_exists}</@ofbizUrl>">${uiLabelMap.CommonNew}</a>
+          <#assign shipGroupSeqId = ((order.shipGroups?first).shipGroupSeqId)?if_exists />
+          <a id="editContactMechButton" class="buttontext" href="#" onClick="editCurrentAddress('${shipGroupSeqId!}', '${shippingContactMechId!}');">${uiLabelMap.CommonEdit}</a>
+          <a class="buttontext" href="<@ofbizUrl>editPurchaseOrderContactMech?preContactMechTypeId=POSTAL_ADDRESS&contactMechPurposeTypeId=SHIPPING_LOCATION&DONE_PAGE=orderview%3ForderId%3D${order.orderId}&orderId=${order.orderId}&oldContactMechId=${shippingContactMechId?if_exists}&shipGroupSeqId=${shipGroupSeqId!}</@ofbizUrl>">${uiLabelMap.CommonNew}</a>
         </td>
       </tr>
       <tr>
