@@ -245,6 +245,9 @@ r13145 The following AcctgTransType were removed from Ofbiz as they already exis
  * OTHER_INTERNAL_ACCTG -> OTHER_INTERNAL
  * SALES_ACCTG_TRANS    -> SALES
 
+applications/accounting/data/DemoAcctgTransactionData.xml 
+f55541c9b988b9f235fa31cf7b9d021f3a10b7be
+
 applications/accounting/widget/GlSetupForms.xml
 r13565, hide PartyAcctgPreference.errorGlJournalId field
 
@@ -377,6 +380,18 @@ applications/party/webapp/partymgr/party/editeftaccount.ftl
 applications/party/webapp/partymgr/party/profileblocks/PaymentMethods.ftl
 r15359 Modified a few italian labels with a better translation, added 2 null checks to prevent verbose FTL exceptions.
 
+applications/accounting/ofbiz-component.xml
+c2bc53033729e40849efcf2a1b84e8a45a130ff7 Commenting DemoGlSetupData.xml, DemoAcctgTransactionData.xml, DemoPaymentsInvoices.xml certain sections of DemoOrderTestData.xml as they interfere with Opentaps financials and demo data load process.
+
+applications/order/data/OrderDemoData.xml
+cda8033d081dd6bc52528354c12759f5f0faafff
+new seed data in 10.04 - this is the reason for democustomer not showing up in crmsfa search result.
+one of the assigned role types is bill to customer,
+party type PERSON prevents seca crmsfa.autoAssignParty from assigning it to role type account.
+
+applications/accounting/data/DemoFinAccountData.xml
+340233e59569462532730ea586ef851ba7e18813 Fixed : partyId changed as this causing payment tests to fail.
+
 Other API Changes
 -----------------
 
@@ -400,6 +415,20 @@ If the ship group may split, the calculated date is the earliest of the estimate
 Else it is the latest of those values.
 TODO: see when this value get set and with which value, else we can use it to cache the result of this method or just ignore it and leave it to null.
 
+Specialpurpose changes
+----------------------
 
+specialpurpose/ecommerce/data/DemoOrderTestData.xml
+c2bc53033729e40849efcf2a1b84e8a45a130ff7 Commenting DemoGlSetupData.xml, DemoAcctgTransactionData.xml, DemoPaymentsInvoices.xml certain sections of DemoOrderTestData.xml as they interfere with Opentaps financials and demo data load process.
 
+specialpurpose/ecommerce/data/DemoStandardCosting.xml
+4b098d7ad87948b279924c74c6c242387c970f64 Fixed : new demo data having no entry in accounts - causes prod run tests to fail.
 
+specialpurpose/ecommerce/data/DemoStandardCosting.xml
+b373e455f55e0be0d271831ce484bb03bbeee2bc Comments & addition necessary for production run tests to pass.
+
+specialpurpose/ecommerce/data/DemoStandardCosting.xml
+1c520f9f8aae6faa42295c298fbda88ac58e7193 new demo data having no entry in accounts - causes prod run tests to fail.
+
+specialpurpose/ecommerce/data/DemoProduct.xml
+b3f9b748b1eda977fc171af2ab297c60ac995428 Commented as causes marketing package tests to fail
