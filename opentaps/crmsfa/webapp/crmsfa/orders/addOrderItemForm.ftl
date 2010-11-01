@@ -36,7 +36,7 @@
     <table class="fourColumnForm">
       <tr>
         <@displayTitleCell title=uiLabelMap.ProductProductId titleClass="requiredField"/>
-        <@inputAutoCompleteProductCell name="productId" errorField="productId" tabIndex="1" />
+        <@inputAutoCompleteProductCell name="productId" url="getAutoCompleteProductNoVirtual" errorField="productId" tabIndex="1" />
         <td rowspan="4" valign="top">
           <table>
             <#if tagTypes?has_content>

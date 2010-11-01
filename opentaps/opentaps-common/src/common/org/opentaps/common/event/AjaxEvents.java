@@ -29,17 +29,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import javolution.util.FastList;
+import javolution.util.FastMap;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
@@ -52,24 +51,16 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.Product;
+import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.common.agreement.UtilAgreement;
 import org.opentaps.common.party.PartyHelper;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilConfig;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.base.entities.GoodIdentification;
-import org.opentaps.base.entities.OrderItemShipGrpInvRes;
-import org.opentaps.base.entities.Product;
-import org.opentaps.base.entities.ProductFacilityLocation;
-import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
-import org.opentaps.foundation.entity.hibernate.Query;
-import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.exception.FoundationException;
-import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
-import org.opentaps.foundation.repository.RepositoryException;
 
 /**
  * Utility class for making Ajax JSON responses.
@@ -90,7 +81,6 @@ public final class AjaxEvents {
         return doJSONResponse(response, JSONArray.fromObject(collection).toString());
     }
 
-    @SuppressWarnings("unchecked")
     public static String doJSONResponse(HttpServletResponse response, Map map) {
         return doJSONResponse(response, JSONObject.fromObject(map));
     }
@@ -141,7 +131,6 @@ public final class AjaxEvents {
 
     /** Return agreement term list specific for given term type.
      * @throws GenericEntityException */
-    @SuppressWarnings("unchecked")
     public static String getAgreementTermValidFieldsJSON(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request.getSession());
@@ -217,7 +206,6 @@ public final class AjaxEvents {
         return org.opentaps.common.event.AjaxEvents.doJSONResponse(response, PartyHelper.getPartyCarrierAccounts(partyId, delegator));
     }
 
-    @SuppressWarnings("unchecked")
     public static String getNewInternalMessagesJSON(HttpServletRequest request, HttpServletResponse response) throws GenericServiceException {
 
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
@@ -263,7 +251,6 @@ public final class AjaxEvents {
     /**
      * Finds and returns list of agreements to given supplier.
      */
-    @SuppressWarnings("unchecked")
     public static String findSupplierAgreementsJSON(HttpServletRequest request, HttpServletResponse response) {
 
         Locale locale = UtilHttp.getLocale(request);
@@ -312,10 +299,16 @@ public final class AjaxEvents {
         String partyId = UtilCommon.getParameter(request, "partyId");
         String currencyUomId = UtilCommon.getParameter(request, "currencyUomId");
         String quantity = UtilCommon.getParameter(request, "quantity");
+
         DomainsLoader domainLoader = new DomainsLoader(request);
         PurchasingRepositoryInterface purchasingRepository = domainLoader.loadDomainsDirectory().getPurchasingDomain().getPurchasingRepository();
+
+        Map<String, Object> results = FastMap.<String, Object>newInstance();
         SupplierProduct supplierProduct = purchasingRepository.getSupplierProduct(partyId, productId, new BigDecimal(quantity), currencyUomId);
-        return doJSONResponse(response, UtilMisc.toMap("existSupplierProduct", (supplierProduct != null)));
+        results.put("existSupplierProduct", supplierProduct != null);
+        results.put("isVirtual", UtilValidate.isNotEmpty(purchasingRepository.findList(Product.class, purchasingRepository.map(Product.Fields.productId, productId, Product.Fields.isVirtual, "Y"))));
+
+        return doJSONResponse(response, results);
     }
 
 
