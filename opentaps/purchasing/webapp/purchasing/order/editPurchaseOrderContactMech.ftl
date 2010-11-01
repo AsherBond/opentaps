@@ -61,13 +61,13 @@
 </#if>
 
 <#if mechMap.contactMechTypeId?has_content>
-  <#if !contactMech?has_content> <#-- creating a new ContactMech -->
-    <#if createContactMechLabel?exists>
-      <@sectionHeader title=createContactMechLabel />
-    <#else>
-      <@sectionHeader title=uiLabelMap.PartyCreateNewContact />
-    </#if>
-    <form method="post" action="<@ofbizUrl>${mechMap.requestName}</@ofbizUrl>" name="editcontactmechform">
+  <#if createContactMechLabel?exists>
+    <@sectionHeader title=createContactMechLabel />
+  <#else>
+    <@sectionHeader title=uiLabelMap.PartyCreateNewContact />
+  </#if>
+  <#-- always creating a new ContactMech -->
+    <form method="post" action="<@ofbizUrl>createPostalAddressAndPurpose</@ofbizUrl>" name="editcontactmechform">
       <div class="form" >
         <table class="twoColumnForm" style="border:0">
           <#if mechMap.purposeTypes?has_content && !cmNewPurposeTypeId?has_content && !contactMechPurposeTypeId?has_content && !contactMechPurposeType?exists>
@@ -94,88 +94,6 @@
           <#if preContactMechTypeId?exists><@inputHidden name="preContactMechTypeId" value=preContactMechTypeId /></#if>
           <#if contactMechPurposeTypeId?exists><@inputHidden name="contactMechPurposeTypeId" value=contactMechPurposeTypeId /></#if>
           <#if paymentMethodId?has_content><@inputHidden name="paymentMethodId" value=paymentMethodId /></#if>
-  <#else> <#-- editing an existing ContactMech -->
-    <#assign updateOrderContactMech = (orderId?exists || forCart?exists) && !mechMap.partyContactMech?has_content />
-    <#if editContactMechLabel?exists>
-      <@sectionHeader title=editContactMechLabel />
-    <#else>
-      <@sectionHeader title=uiLabelMap.PartyEditContactInformation />
-    </#if>
-    <form method="post" action="<@ofbizUrl>createPartyContactMechPurpose</@ofbizUrl>" name="newpurposeform">
-      <@inputHidden name="donePage" value=donePage />
-      <@inputHidden name="DONE_PAGE" value=donePageFull />
-      <@inputHidden name="errorPage" value=errorPage?if_exists />
-      <@inputHidden name="useValues" value="true" />
-      <@inputHidden name="contactMechId" value=contactMechId?if_exists />
-      <@inputHidden name="contactMechPurposeTypeId" value="" />
-    </form>
-    <#if mechMap.purposeTypes?has_content && !updateOrderContactMech>
-      <#if mechMap.partyContactMechPurposes?has_content>
-        <#list mechMap.partyContactMechPurposes as partyContactMechPurpose>
-          <@form name="deletePartyContactMechPurposeForm_${partyContactMechPurpose_index}" url="deletePartyContactMechPurpose" contactMechId="${contactMechId}" contactMechPurposeTypeId="${partyContactMechPurpose.contactMechPurposeTypeId}" fromDate="${partyContactMechPurpose.fromDate.toString()}" DONE_PAGE="${donePage}" useValues="true"/>
-        </#list>
-      </#if>
-    </#if>
-    <form method="post" action="<@ofbizUrl>${mechMap.requestName}</@ofbizUrl>" name="editcontactmechform">
-      <@inputHidden name="contactMechId" value=contactMechId />
-      <@inputHidden name="contactMechTypeId" value=mechMap.contactMechTypeId />
-      <@inputHidden name="donePage" value=donePage />
-      <@inputHidden name="DONE_PAGE" value=donePageFull />
-      <@inputHidden name="errorPage" value=errorPage?if_exists />
-      <#if orderId?exists>
-        <@inputHidden name="orderId" value=orderId />
-        <@inputHidden name="shipGroupSeqId" value="${shipGroupSeqId?if_exists}" />
-        <@inputHidden name="oldContactMechId" value="${oldContactMechId?if_exists}" />
-        <@inputHidden name="contactMechPurposeTypeId" value="SHIPPING_LOCATION" />
-      </#if>
-      <#if updateOrderContactMech>
-        <@inputHidden name="onlyForOrder" value="Y" />
-        <tr>
-          <@displayTitleCell title=uiLabelMap.CommonPurpose />
-          <td><@display text=uiLabelMap.OpentapsOnlyThisOrder /></td>
-        </tr>
-      </#if>
-    <div class="form" >
-      <table class="twoColumnForm" style="border:0">
-        <#if mechMap.purposeTypes?has_content && !updateOrderContactMech>
-          <tr>
-            <@displayTitleCell title=uiLabelMap.PartyContactPurposes />
-            <td>
-              <table border="0" cellspacing="1">
-                <#if mechMap.partyContactMechPurposes?has_content>
-                  <#list mechMap.partyContactMechPurposes as partyContactMechPurpose>
-                    <#assign contactMechPurposeType = partyContactMechPurpose.getRelatedOneCache("ContactMechPurposeType")/>
-                    <tr>
-                      <td>
-                        <div class="tabletext">&nbsp;
-                          <#if contactMechPurposeType?has_content>
-                            <b>${contactMechPurposeType.get("description",locale)}</b>
-                          <#else>
-                            <b>${uiLabelMap.PartyPurposeTypeNotFound}: "${partyContactMechPurpose.contactMechPurposeTypeId}"</b>
-                          </#if>
-                          (${uiLabelMap.CommonSince}:<@displayDate date=partyContactMechPurpose.fromDate format="DATE_TIME"/>)
-                          <#if partyContactMechPurpose.thruDate?has_content>(${uiLabelMap.CommonExpire}: ${getLocalizedDate(partyContactMechPurpose.thruDate)}</#if>
-                        &nbsp;</div>
-                      </td>
-                      <td>
-                        <div>
-                          <@submitFormLink form="deletePartyContactMechPurposeForm_${partyContactMechPurpose_index}" text="${uiLabelMap.CommonDelete}" class="buttontext"/>
-                        </div>
-                      </td>
-                    </tr>
-                  </#list>
-                </#if>
-
-                <tr>
-                  <@inputSelectCell name="newpurposeform__contactMechPurposeTypeId" required=false list=mechMap.purposeTypes key="contactMechPurposeTypeId" displayField="description" />
-                  <td><div><a href="javascript:document.newpurposeform.contactMechPurposeTypeId.value = document.editcontactmechform.newpurposeform__contactMechPurposeTypeId.value ;document.newpurposeform.submit()" class="buttontext">&nbsp;${uiLabelMap.PartyAddPurpose}&nbsp;</a></div></td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </#if>
-  </#if>
-
     <#if "POSTAL_ADDRESS" = mechMap.contactMechTypeId?if_exists>
       <tr>
         <@displayTitleCell title=uiLabelMap.PartyToName />
@@ -255,18 +173,11 @@
         <@inputTextCell name="infoString" default="${(contactMech.infoString)?if_exists}" />
       </tr>
     </#if>
-    <tr>
-      <@displayTitleCell title=uiLabelMap.PartyContactAllowSolicitation />
-      <@inputIndicatorCell name="allowSolicitation" default=mechMap?if_exists.partyContactMech?if_exists.allowSolicitation?if_exists required=false />
-    </tr>
   </table>
 
   <div style="margin-left: 24%;">
-    <#-- If we're creating a new address and there is an order or cart, then offer option to create one use address -->
-    <#if !contactMech?has_content> <#-- creating a new ContactMech -->
-       <#if (orderId?exists || forCart?exists) && !disableOrderOnly?exists >
-         <@inputHidden name="onlyForOrder" value="Y" />
-       </#if>
+    <#if (orderId?exists || forCart?exists) && !disableOrderOnly?exists >
+      <@inputHidden name="onlyForOrder" value="Y" />
     </#if>
     <a href="javascript:document.editcontactmechform.submit()" class="buttontext">${uiLabelMap.CommonSave}</a>
     <a href="<@ofbizUrl>${donePageFull}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a>

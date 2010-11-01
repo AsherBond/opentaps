@@ -179,7 +179,7 @@ public class SalesTaxTests extends OrderTestCase {
     /**
      * Verify summary gross sales, discounts, refunds and net amount values in SalesInvoiceItemFact entity
      * for an order.
-     * 
+     *
      * @param orderId a <code>String</code> value
      * @param grossSales a <code>double</code> value
      * @param discounts a <code>double</code> value
@@ -193,7 +193,9 @@ public class SalesTaxTests extends OrderTestCase {
 
         // find invoice id from order id and verify values
         List<GenericValue> orderItemBillings = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId));
-        String invoiceId = EntityUtil.getFirst(orderItemBillings).getString("invoiceId");
+        GenericValue billing = EntityUtil.getFirst(orderItemBillings);
+        assertNotNull("No OrderItemBilling found for orderId [" + orderId + "]", billing);
+        String invoiceId = billing.getString("invoiceId");
         fa.assertSalesFact(invoiceId, grossSales, discounts, refunds, netAmount);
     }
 
@@ -748,8 +750,7 @@ public class SalesTaxTests extends OrderTestCase {
         /*
          * 2. Use testShipOrder to ship sales order
          */
-        Map<String, Object> input =
-            UtilMisc.toMap("userLogin", admin, "facilityId", facilityId, "orderId", salesOrder.getOrderId());
+        Map<String, Object> input = UtilMisc.toMap("userLogin", admin, "facilityId", facilityId, "orderId", salesOrder.getOrderId());
         runAndAssertServiceSuccess("testShipOrder", input);
 
         /*
