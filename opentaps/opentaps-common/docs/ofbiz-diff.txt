@@ -395,7 +395,7 @@ one of the assigned role types is bill to customer,
 party type PERSON prevents seca crmsfa.autoAssignParty from assigning it to role type account.
 
 applications/accounting/data/DemoFinAccountData.xml
-340233e59569462532730ea586ef851ba7e18813 Fixed : partyId changed as this causing payment tests to fail.
+753d780ad0e76e62c4b33ccdf2e79e25390a8e31 Fixed : glaccountId changed, as this causing payment tests to fail.
 
 applications/product/script/org/ofbiz/shipment/issuance/IssuanceServices.xml
 applications/product/servicedef/services_shipment.xml
