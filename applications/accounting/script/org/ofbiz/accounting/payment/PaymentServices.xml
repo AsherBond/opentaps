@@ -190,7 +190,7 @@ under the License.
                         <set field="notYetApplied" value="${bsh:org.ofbiz.accounting.payment.PaymentWorker.getPaymentNotApplied(payment)}"/>
                         <if-compare field="notYetApplied" operator="greater" value="0.00" type="BigDecimal">
                             <add-error><fail-property resource="AccountingUiLabels" property="AccountingPSNotConfirmedNotFullyApplied"/></add-error>
-                            <log level="error" message="Cannot change from ${payment.statusId} to ${parameters.statusId}, payment not fully applied: ${notYetapplied}"/>
+                            <log level="error" message="Cannot change from ${payment.statusId} to ${parameters.statusId}, payment not fully applied: ${notYetApplied}"/>
                             <check-errors/>
                         </if-compare>
                     </if-compare>
