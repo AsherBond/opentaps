@@ -62,9 +62,6 @@ facilityId = UtilCommon.getParameter(context, "facilityId");
 fixedAssetId = UtilCommon.getParameter(context, "fixedAssetId");
 
 eventsParam = "";
-if (facilityId != null) {
-    eventsParam = "facilityId=" + facilityId;
-}
 if (fixedAssetId != null) {
     eventsParam = "fixedAssetId=" + fixedAssetId;
 }
@@ -92,6 +89,10 @@ serviceCtx.put("filterOutCanceledEvents", Boolean.TRUE);
 serviceCtx.put("periodType", new Integer(Calendar.DATE));
 serviceCtx.put("locale", locale);
 serviceCtx.put("timeZone", timeZone);
+if (facilityId != null) {
+    eventsParam = "facilityId=" + facilityId;
+    serviceCtx.put("calendarType", "CAL_MANUFACTURING");
+}
 
 Map result = dispatcher.runSync("getWorkEffortEventsByPeriod",serviceCtx);
 
