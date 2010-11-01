@@ -173,10 +173,6 @@
         <@inputTextCell name="infoString" default="${(contactMech.infoString)?if_exists}" />
       </tr>
     </#if>
-    <tr>
-      <@displayTitleCell title=uiLabelMap.PartyContactAllowSolicitation />
-      <@inputIndicatorCell name="allowSolicitation" default=mechMap?if_exists.partyContactMech?if_exists.allowSolicitation?if_exists required=false />
-    </tr>
   </table>
 
   <div style="margin-left: 24%;">
