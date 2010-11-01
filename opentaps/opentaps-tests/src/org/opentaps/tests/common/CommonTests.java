@@ -241,7 +241,7 @@ public class CommonTests extends OpentapsTestCase {
 
         for (GenericValue email : emails) {
             if ("customerservice@mycompany.com".equalsIgnoreCase(email.getString("infoString"))) {
-                GenericValue emailPurpose = delegator.findByPrimaryKey("PartyContactMechPurpose", UtilMisc.toMap("partyId", email.getString("partyId"), "contactMechId", email.getString("contactMechId"), "contactMechPurposeTypeId", email.getString("contactMechPurposeTypeId"), "fromDate", email.get("purposeFromDate")));
+            	GenericValue emailPurpose = delegator.findByPrimaryKey("PartyContactMech", UtilMisc.toMap("partyId", email.getString("partyId"), "contactMechId", email.getString("contactMechId"), "fromDate", email.get("purposeFromDate")));
                 if (emailPurpose != null) {
                     emailPurpose.set("thruDate", UtilDateTime.nowTimestamp());
                     emailPurpose.store();
