@@ -142,6 +142,12 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
+    <request-map uri="getAutoCompleteProductNoVirtual">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompleteProductNoVirtual"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
     <request-map uri="getAutoCompleteAccountPartyIds">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompleteAccountPartyIds"/>

@@ -33,7 +33,7 @@
   <table class="fourColumnForm">
     <tr>
       <@displayTitleCell title=uiLabelMap.ProductProductId titleClass="requiredField"/>
-      <@inputAutoCompleteProductCell name="productId" errorField="productId" />
+      <@inputAutoCompleteProductCell name="productId" errorField="productId" url="getAutoCompleteProductNoVirtual"/>
       <td rowspan="4" valign="top">
         <table>
           <#if tagTypes?has_content>
@@ -48,9 +48,9 @@
   <tr>
     <td>&nbsp;</td>
     <td>
-  <input type="button" value="${uiLabelMap.OrderAddToOrder}" class="smallSubmit" onclick="javascript:opentaps.checkSupplierProduct(this, document.getElementById('productId').value, '${shoppingCart.partyId?if_exists}', '${shoppingCart.getCurrency()?if_exists}', document.getElementById('quantity').value, '${uiLabelMap.PurchOrderConfirmNotExistSupplierProduct}')" />
+  <input type="button" value="${uiLabelMap.OrderAddToOrder}" class="smallSubmit" onclick="javascript:opentaps.checkSupplierProduct(this, document.getElementById('productId').value, '${shoppingCart.partyId?if_exists}', '${shoppingCart.getCurrency()?if_exists}', document.getElementById('quantity').value, '${uiLabelMap.PurchOrderConfirmNotExistSupplierProduct}', true)" />
   </td>
-  </tr>    
+  </tr>
   </table>
 
 </form>

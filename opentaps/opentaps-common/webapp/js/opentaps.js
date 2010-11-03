@@ -111,10 +111,10 @@ opentaps.shrinkAndFade = function(/* Node */ node) {
     var open = 'true' == node.getAttribute('open');
     if (open) {
         opentaps.hide(node, 200);
-        dojo.fx.wipeOut({ node: node, duration:300 }).play();
+        return dojo.fx.wipeOut({ node: node, duration:300 }).play();
     } else {
         opentaps.show(node, 300);
-        dojo.fx.wipeIn({ node: node, duration:300 }).play();
+        return dojo.fx.wipeIn({ node: node, duration:300 }).play();
     }
 }
 
@@ -968,21 +968,25 @@ opentaps.checkUploadFileResponse = function(form, confirmMessage, data) {
 
 
 //Functions to check supplierProduct if existing in the server
-opentaps.checkSupplierProduct = function(button, productId, partyId, currencyUomId, quantity, confirmMessage) {
+opentaps.checkSupplierProduct = function(button, productId, partyId, currencyUomId, quantity, confirmMessage, disallowVirtual) {
     var requestData = {'productId' : productId, 'partyId' : partyId, 'currencyUomId' : currencyUomId, 'quantity' : quantity};
-    opentaps.sendRequest('checkExistSupplierProductJSON', requestData, function(data) {opentaps.checkSupplierProductResponse(button, confirmMessage, data)});
+    opentaps.sendRequest('checkExistSupplierProductJSON', requestData, function(data) {opentaps.checkSupplierProductResponse(button, confirmMessage, disallowVirtual, data)});
 }
 
 //Functions show not exist supplierProduct dialog, if not exit then show the warn dialog
-opentaps.checkSupplierProductResponse = function(button, confirmMessage, data) {
+opentaps.checkSupplierProductResponse = function(button, confirmMessage, disallowVirtual, data) {
     var submitForm = true;
-    if (!data.existSupplierProduct) {
-    	submitForm = confirm(confirmMessage);
+    if (data.isVirtual && disallowVirtual) {
+        alert("Product is virtual and can not be added to the order.");
+        return;
     }
-	if (submitForm) {
-		button.disabled = true;
-		button.form.submit();
-	}
+    if (!data.existSupplierProduct) {
+        submitForm = confirm(confirmMessage);
+    }
+    if (submitForm) {
+        button.disabled = true;
+        button.form.submit();
+    }
 }
 
 opentaps.hideDiv = function(divId) {

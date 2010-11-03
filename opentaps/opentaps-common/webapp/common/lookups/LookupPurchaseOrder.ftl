@@ -20,7 +20,7 @@
 <table>
   <@inputTextRow name="orderId" title=uiLabelMap.OrderOrderId default=parameters.orderId?if_exists />
   <@inputTextRow name="orderName" title=uiLabelMap.OrderOrderName default=parameters.orderName?if_exists />
-  <@inputTextRow name="supplierPartyId" title=uiLabelMap.ProductSupplier default=parameters.supplierPartyId?if_exists />
+  <@inputAutoCompleteSupplierRow name="supplierPartyId" title=uiLabelMap.ProductSupplier default=parameters.supplierPartyId?if_exists />
   <@inputSelectRow name="statusId" list=statusItems title=uiLabelMap.CommonStatus displayField="description" default=parameters.statusId?if_exists required=false />
   <@inputHidden name="performFind" value="Y" />
   <@inputSubmitRow title=uiLabelMap.CommonFind />

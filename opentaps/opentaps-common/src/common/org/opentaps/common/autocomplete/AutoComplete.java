@@ -16,15 +16,31 @@
  */
 package org.opentaps.common.autocomplete;
 
+import static org.opentaps.common.autocomplete.UtilAutoComplete.AC_ACCOUNT_FIELDS;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.AC_ACCOUNT_ORDER_BY;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.AC_DEFAULT_RESULTS_SIZE;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.AC_FIND_OPTIONS;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.AC_PARTY_NAME_FIELDS;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.AC_PRODUCT_FIELDS;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.AC_PRODUCT_ORDER_BY;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.AP_PARTY_ORDER_BY;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.ac_accountRoleCondition;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.ac_activePartyCondition;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.ac_clientRoleCondition;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.ac_crmPartyRoleCondition;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.makeSelectionJSONResponse;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import javolution.util.FastList;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.Delegator;
@@ -38,7 +54,6 @@ import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.party.PartyReader;
 import org.opentaps.common.util.UtilCommon;
-import static org.opentaps.common.autocomplete.UtilAutoComplete.*;
 
 /**
  * Catch all location for static auto complete methods.
@@ -306,8 +321,62 @@ public final class AutoComplete {
         }
         keyword = keyword.trim();
 
-        List<GenericValue> products = new FastList<GenericValue>();
-        if (keyword.length() > 0) try {
+        List<GenericValue> products = null;
+
+        try {
+           
+            products = getProductSelection(keyword, false, delegator);
+
+        } catch (GenericEntityException e) {
+            Debug.logError(e, MODULE);
+            return "error";
+        }
+
+        // write the JSON data to the response stream
+        return makeSelectionJSONResponse(response, products, "productId", new ProductSelectionBuilder(), UtilCommon.getLocale(request));
+    }
+
+    /**
+     * Retrieves the auto complete Product IDs with a given keyword excluding virtual.
+     * It will match the keyword against either the Product ID or any good ID.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
+     */
+    public static String getAutoCompleteProductNoVirtual(HttpServletRequest request, HttpServletResponse response) {
+        GenericValue userLogin = UtilCommon.getUserLogin(request);
+        if (userLogin == null) {
+            Debug.logError("Failed to retrieve the login user from the session.", MODULE);
+            return "error";
+        }
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+        String keyword = UtilCommon.getUTF8Parameter(request, "keyword");
+        if (keyword == null) {
+            Debug.log("Ignored the empty keyword string.", MODULE);
+            return "success";
+        }
+        keyword = keyword.trim();
+
+        List<GenericValue> products = null;
+
+        try {
+
+            products = getProductSelection(keyword, true, delegator);
+
+        } catch (GenericEntityException e) {
+            Debug.logError(e, MODULE);
+            return "error";
+        }
+
+        // write the JSON data to the response stream
+        return makeSelectionJSONResponse(response, products, "productId", new ProductSelectionBuilder(), UtilCommon.getLocale(request));
+    }
+
+    private static List<GenericValue> getProductSelection(String keyword, boolean disallowVirtual, Delegator delegator) throws GenericEntityException {
+        List<GenericValue> products = FastList.<GenericValue>newInstance();
+
+        if (keyword.length() > 0) {
             keyword = keyword.toUpperCase();
 
             // make the condition
@@ -322,9 +391,21 @@ public final class AutoComplete {
                     EntityCondition.makeCondition("isActive", EntityOperator.EQUALS, "Y")
                 );
 
-            EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
-                    activeCondition,
-                    keywordCondition);
+            EntityCondition condition = null;
+
+            if (disallowVirtual) {
+                EntityCondition notVirtualCondition =
+                    EntityCondition.makeCondition("isVirtual", EntityOperator.NOT_EQUAL, "Y");
+
+                condition = EntityCondition.makeCondition(EntityOperator.AND,
+                        activeCondition,
+                        notVirtualCondition,
+                        keywordCondition);
+            } else {
+                condition = EntityCondition.makeCondition(EntityOperator.AND,
+                        activeCondition,
+                        keywordCondition);
+            }
 
             // get result as a list iterator (transaction block is to work around a bug in entity engine)
             TransactionUtil.begin();
@@ -336,13 +417,9 @@ public final class AutoComplete {
             // clean up
             iterator.close();
             TransactionUtil.commit();
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-            return "error";
         }
 
-        // write the JSON data to the response stream
-        return makeSelectionJSONResponse(response, products, "productId", new ProductSelectionBuilder(), UtilCommon.getLocale(request));
+        return products;
     }
 
     public static class PartySelectionBuilder implements SelectionBuilder {

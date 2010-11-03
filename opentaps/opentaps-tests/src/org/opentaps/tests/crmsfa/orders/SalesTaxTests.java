@@ -23,15 +23,17 @@ import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
+import org.opentaps.base.entities.InventoryItem;
+import org.opentaps.base.services.CreatePhysicalInventoryAndVarianceService;
 import org.opentaps.common.domain.order.OrderSpecification;
 import org.opentaps.common.order.SalesOrderFactory;
+import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
@@ -179,7 +181,7 @@ public class SalesTaxTests extends OrderTestCase {
     /**
      * Verify summary gross sales, discounts, refunds and net amount values in SalesInvoiceItemFact entity
      * for an order.
-     * 
+     *
      * @param orderId a <code>String</code> value
      * @param grossSales a <code>double</code> value
      * @param discounts a <code>double</code> value
@@ -193,7 +195,9 @@ public class SalesTaxTests extends OrderTestCase {
 
         // find invoice id from order id and verify values
         List<GenericValue> orderItemBillings = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId));
-        String invoiceId = EntityUtil.getFirst(orderItemBillings).getString("invoiceId");
+        GenericValue billing = EntityUtil.getFirst(orderItemBillings);
+        assertNotNull("No OrderItemBilling found for orderId [" + orderId + "]", billing);
+        String invoiceId = billing.getString("invoiceId");
         fa.assertSalesFact(invoiceId, grossSales, discounts, refunds, netAmount);
     }
 
@@ -709,6 +713,49 @@ public class SalesTaxTests extends OrderTestCase {
      * @throws Exception if an error occurs
      */
     public void testSalesTaxAndPromo() throws Exception {
+
+        OrderRepositoryInterface repository = getOrderRepository(admin);
+
+        // force a split inventory situation, make sure there is no inventory item with an atp > 6
+        BigDecimal totalAtp = BigDecimal.ZERO;
+        BigDecimal refAtp = new BigDecimal("6");
+        for (InventoryItem ii : repository.findList(InventoryItem.class, repository.map(InventoryItem.Fields.productId, Product3.getString("productId")))) {
+            BigDecimal atp = ii.getAvailableToPromiseTotal();
+            if (atp == null) {
+                continue;
+            }
+            if (atp.compareTo(refAtp) > 0) {
+                // create a variance
+                BigDecimal var = refAtp.subtract(atp);
+                CreatePhysicalInventoryAndVarianceService varSer = new CreatePhysicalInventoryAndVarianceService();
+                varSer.setInUserLogin(admin);
+                varSer.setInInventoryItemId(ii.getInventoryItemId());
+                varSer.setInQuantityOnHandVar(var);
+                varSer.setInAvailableToPromiseVar(var);
+                varSer.setInVarianceReasonId("VAR_DAMAGED");
+                varSer.setInComments("test");
+                runAndAssertServiceSuccess(varSer);
+                totalAtp = totalAtp.add(refAtp);
+            } else {
+                totalAtp = totalAtp.add(atp);
+            }
+        }
+        // make sure we have at least refAtp
+        if (totalAtp.compareTo(refAtp) < 0) {
+            // receive some inventory
+            receiveInventoryProduct(Product3, refAtp, "NON_SERIAL_INV_ITEM", new BigDecimal("15.0"), facilityId, admin);
+            totalAtp = totalAtp.add(refAtp);
+        }
+        // now make sure we have at least 10
+        if (totalAtp.compareTo(new BigDecimal("10")) < 0) {
+            // receive the missing inventory
+            receiveInventoryProduct(Product3, new BigDecimal("10").subtract(totalAtp), "NON_SERIAL_INV_ITEM", new BigDecimal("14.0"), facilityId, admin);
+            totalAtp = totalAtp.add(refAtp);
+        }
+
+        Debug.logInfo("Having " + totalAtp.toPlainString() + " x WG-1111", MODULE);
+        pause("MySQL timestamp workaround pause", 1000);
+
         /*
          * 1. Create a sales order for productStoreId=9000, partyId=DemoAccount1, address=DemoAddress1 and 10 WG-1111
          */
@@ -720,7 +767,6 @@ public class SalesTaxTests extends OrderTestCase {
         pause("MySQL timestamp workaround pause", 1000);
 
         // we have to update order to get all adjustments recalculated
-        OrderRepositoryInterface repository = getOrderRepository(admin);
         Order order = repository.getOrderById(salesOrder.getOrderId());
 
         OrderItem orderItem = null;
@@ -748,9 +794,22 @@ public class SalesTaxTests extends OrderTestCase {
         /*
          * 2. Use testShipOrder to ship sales order
          */
-        Map<String, Object> input =
-            UtilMisc.toMap("userLogin", admin, "facilityId", facilityId, "orderId", salesOrder.getOrderId());
+        Map<String, Object> input = UtilMisc.toMap("userLogin", admin, "facilityId", facilityId, "orderId", salesOrder.getOrderId());
         runAndAssertServiceSuccess("testShipOrder", input);
+
+        // reload the order
+        order = repository.getOrderById(salesOrder.getOrderId());
+
+        // check the order taxes
+        checkSalesTax(order.getOrderId(), "_NA_", 1, new BigDecimal("3.599"));
+        checkSalesTax(order.getOrderId(), "CA_BOE", 1, new BigDecimal("22.496"));
+
+        // check the invoice total matches the order total
+        List<Invoice> invoices = order.getInvoices();
+        assertEquals("Should have exactly one invoice for the order [" + order.getOrderId() + "]", 1, invoices.size());
+        Invoice invoice = invoices.get(0);
+        Debug.logInfo("Order [" + order.getOrderId() + "] total = " + order.getTotal(), MODULE);
+        assertEquals("Invoice [" + invoice.getInvoiceId() + "] total and order [" + order.getOrderId() + "] total did not match", order.getTotal(), invoice.getInvoiceTotal());
 
         /*
          * 3. Perform ETL transformations for sales tax report

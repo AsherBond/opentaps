@@ -184,5 +184,26 @@
             </widgets>
         </section>
     </screen>
+
+    <screen name="editPurchaseOrderContactMech">
+        <section>
+            <actions>
+                <set field="donePage" value="orderview"/>
+                <set field="orderId"  value="${parameters.orderId}"/>
+                <set field="shipGroupSeqId" value="${parameters.shipGroupSeqId}"/>
+                <set field="oldContactMechId" value="${parameters.oldContactMechId}"/>
+                <set field="errorPage" value="editPurchaseOrderContactMech"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/editPurchaseOrderContactMech.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                      <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/order/editPurchaseOrderContactMech.ftl"/></html></platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
     
 </screens>

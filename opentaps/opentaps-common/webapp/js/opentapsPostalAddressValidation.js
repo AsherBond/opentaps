@@ -131,7 +131,8 @@ opentaps.postalAddress.handleValidationResponse = function(/* Element */ errorCo
         opentaps.replaceChildren(errorContainer, dataContainer);
         errorContainer.appendChild(linkDiv);
     }
-    
+    // reset the height style attribute before expanding
+    errorContainer.style.height = 'auto';
     opentaps.expandCollapse(errorContainer, null, true);
 
     return true;

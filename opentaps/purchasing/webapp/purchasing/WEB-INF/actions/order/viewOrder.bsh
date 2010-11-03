@@ -107,14 +107,35 @@ if (UtilValidate.isNotEmpty(cmvm)) {
 
 context{"hasPhoneNumbers"} = hasPhoneNumbers;
 
+// find the shipping contact mech id set on this order if any
+shippingContactMech = null;
+for (cm : order.getOrderContactMeches()) {
+    if ("POSTAL_ADDRESS".equals(cm.getContactMech().getContactMechTypeId()) && "SHIPPING_LOCATION".equals(cm.getContactMechPurposeTypeId())) {
+        shippingContactMech = cm.getContactMech();
+        break;
+    }
+}
+shippingContactMechFound = false;
+
 //find list of shipping addresses
 facilityMaps = FastList.newInstance();
 facilities = UtilCommon.getOrganizationReceivingFacilities(order.getBillToCustomerPartyId(), delegator);
 if (UtilValidate.isNotEmpty(facilities)) {
     for (facility : facilities) {
+        facilityContactMechValueMaps = ContactMechWorker.getFacilityContactMechValueMaps(delegator, facility.get("facilityId"), false, null);
+        // look if this includes the current shipping contact mech
+        if (!shippingContactMechFound && shippingContactMech != null) {
+            for (fcm : facilityContactMechValueMaps) {
+                if (shippingContactMech.getContactMechId().equals(fcm.get("contactMechId"))) {
+                    shippingContactMechFound = true;
+                    break;
+                }
+            }
+        }
+
         facilityMaps.add(UtilMisc.toMap(
            "facility", facility,
-           "facilityContactMechList", ContactMechWorker.getFacilityContactMechValueMaps(delegator, facility.get("facilityId"), false, null)
+           "facilityContactMechList", facilityContactMechValueMaps
         ));
     }
 }
@@ -131,6 +152,15 @@ if (UtilValidate.isNotEmpty(billFromPartyId)) {
         }
         facilityContactMechValueMaps = new LinkedList();
         facilityContactMechValueMaps.add(facilityContactMechValueMap);
+        // look if this includes the current shipping contact mech
+        if (!shippingContactMechFound && shippingContactMech != null) {
+            for (fcm : facilityContactMechValueMaps) {
+                if (shippingContactMech.getContactMechId().equals(fcm.get("contactMechId"))) {
+                    shippingContactMechFound = true;
+                }
+            }
+        }
+
         // add it to choices map
         facilityMaps.add(UtilMisc.toMap(
                                         "facility", null,
@@ -138,4 +168,13 @@ if (UtilValidate.isNotEmpty(billFromPartyId)) {
                                         ));
     }
 }
+
+// add the current ship group postal address in case we set a custom address for this order
+if (!shippingContactMechFound && shippingContactMech != null) {
+    facilityMaps.add(UtilMisc.toMap(
+                                    "facility", null,
+                                    "facilityContactMechList", UtilMisc.toList(shippingContactMech)
+                                    ));
+}
+
 context{"facilityMaps"} = facilityMaps;

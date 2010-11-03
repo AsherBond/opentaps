@@ -2800,20 +2800,26 @@ public final class InvoiceServices {
                     while (itemAdjIter.hasNext()) {
                         GenericValue adj = (GenericValue) itemAdjIter.next();
 
+                        Debug.logInfo("For OrderAdjustment [" + adj.get("orderAdjustmentId") + "] of type " + adj.get("orderAdjustmentTypeId"), MODULE);
                         // Check against OrderAdjustmentBilling to see how much of this adjustment has already been invoiced
                         BigDecimal adjAlreadyInvoicedAmount = null;
                         try {
                             Map checkResult = dispatcher.runSync("calculateInvoicedAdjustmentTotal", UtilMisc.toMap("orderAdjustment", adj));
                             adjAlreadyInvoicedAmount = (BigDecimal) checkResult.get("invoicedTotal");
+                            Debug.logInfo("amount already invoiced for this adjustment is : " + adjAlreadyInvoicedAmount, MODULE);
                         } catch (GenericServiceException e) {
                             UtilMessage.createAndLogServiceError(e, "AccountingTroubleCallingCalculateInvoicedAdjustmentTotalService", locale, MODULE);
                         }
 
+                        // to determine if the full adjustment was already invoiced
+                        BigDecimal adjFullAmount = ZERO;
                         BigDecimal amount = ZERO;
                         if (adj.get("amount") != null) {
+                            amount = adj.getBigDecimal("amount");
+                            adjFullAmount = amount;
                             // pro-rate the amount
                             // set decimals = 100 means we don't round this intermediate value, which is very important
-                            amount = adj.getBigDecimal("amount").divide(originalOrderItem.getBigDecimal("quantity"), 100, rounding);
+                            amount = amount.divide(originalOrderItem.getBigDecimal("quantity"), 100, rounding);
                             amount = amount.multiply(billingQuantity);
                             // Tax needs to be rounded differently from other order adjustments
                             if (adj.getString("orderAdjustmentTypeId").equals("SALES_TAX")) {
@@ -2821,25 +2827,28 @@ public final class InvoiceServices {
                             } else {
                                 amount = amount.setScale(invoiceTypeDecimals, rounding);
                             }
+                            Debug.logInfo("the adjustment amount was originally : " + adj.get("amount") + " and for this item is pro-rated to : " + amount, MODULE);
                         } else if (adj.get("sourcePercentage") != null) {
                             // pro-rate the amount
                             // set decimals = 100 means we don't round this intermediate value, which is very important
                             BigDecimal percent = adj.getBigDecimal("sourcePercentage");
                             percent = percent.divide(new BigDecimal(100), 100, rounding);
                             amount = billingAmount.multiply(percent);
-                            amount = amount.divide(originalOrderItem.getBigDecimal("quantity"), 100, rounding);
+                            adjFullAmount = amount.multiply(originalOrderItem.getBigDecimal("quantity"));
                             amount = amount.multiply(billingQuantity);
                             amount = amount.setScale(invoiceTypeDecimals, rounding);
+                            Debug.logInfo("the adjustment amount was originally null, percentage is : " + adj.get("sourcePercentage") + " and for this item is pro-rated to : " + amount, MODULE);
                         }
 
-                        // If the absolute invoiced amount >= the abs of the adjustment amount, the full amount has already been invoiced,
-                        //  so skip this adjustment
-                        if (null == amount) { // JLR 17/4/7 : fix a bug coming from POS in case of use of a discount (on item(s) or sale, item(s) here) and a cash amount higher than total (hence issuing change)
+                        // JLR 17/4/7 : fix a bug coming from POS in case of use of a discount (on item(s) or sale, item(s) here) and a cash amount higher than total (hence issuing change)
+                        if (null == amount) {
                             Debug.logWarning("Null amount, skipping this adjustment.", MODULE);
                             continue;
                         }
-                        if (adjAlreadyInvoicedAmount.abs().compareTo(amount.setScale(invoiceTypeDecimals, rounding).abs()) > 0) {
-                            Debug.logWarning("Absolute invoiced amount >= the abs of the adjustment amount, the full amount has already been invoiced, skipping this adjustment.", MODULE);
+                        // If the absolute invoiced amount >= the abs of the adjustment full amount, the full amount has already been invoiced,
+                        //  so skip this adjustment
+                        if (adjAlreadyInvoicedAmount.abs().compareTo(adjFullAmount.setScale(invoiceTypeDecimals, rounding).abs()) > 0) {
+                            Debug.logWarning("Absolute invoiced amount : " + adjAlreadyInvoicedAmount.abs() + " >= the absolute full amount of the adjustment : " + adjFullAmount.setScale(invoiceTypeDecimals, rounding).abs() + ", the full amount has already been invoiced, skipping this adjustment [" + adj.get("orderAdjustmentId") + "].", MODULE);
                             continue;
                         }
 
