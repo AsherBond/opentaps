@@ -79,6 +79,7 @@ import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
 import org.ofbiz.party.party.PartyHelper;
+import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.config.ProductConfigWrapper;
 import org.ofbiz.product.store.ProductStoreSurveyWrapper;
 import org.ofbiz.product.store.ProductStoreWorker;
@@ -342,7 +343,8 @@ public final class OrderEvents {
 
         // add the item to the cart using the simplest method
         try {
-            addItemToOrder(cart, productId, null, quantity, null, null, null, shipBeforeDate, null, null, attributes, null, null, itemType, null, null, request);
+            String productCatalogId = CatalogWorker.getCurrentCatalogId(request);
+            addItemToOrder(cart, productId, null, quantity, null, null, null, shipBeforeDate, null, null, attributes, productCatalogId, null, itemType, null, null, request);
         } catch (GeneralException e) {
             Debug.logError(e, "Failed to add product [" + productId + "] to cart: " + e.getMessage(), MODULE);
             UtilMessage.addError(request, "OpentapsError_CannotAddItem", UtilMisc.toMap("message", e.getMessage()));
