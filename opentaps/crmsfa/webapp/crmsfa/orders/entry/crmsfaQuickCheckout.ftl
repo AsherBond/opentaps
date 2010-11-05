@@ -459,8 +459,7 @@
           </#if>
           <div class="shipGroupHeader" id="shipGroupHeader_${shipGroupSeqId}">
           <#assign shipGroupNumber = shipGroupSeqId + 1/>
-          <#assign shipGroupLabel = uiLabelMap.CrmOrderShipGroupNumber?interpret/>
-          <@shipGroupLabel/>
+          <@expandLabel label="CrmOrderShipGroupNumber" params={"shipGroupNumber", shipGroupNumber} />
           <span id="shipGroupSupplierTitle_${shipGroupSeqId}"><#if supplierPartyName?has_content>(${uiLabelMap.CrmDropShippedFrom}&nbsp;${supplierPartyName})</#if></span>
           </div>
         </#if>
