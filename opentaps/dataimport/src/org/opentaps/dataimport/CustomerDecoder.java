@@ -294,12 +294,12 @@ public class CustomerDecoder implements ImportDecoder {
         if (!UtilValidate.isEmpty(entry.getString("note"))) {
             // make the party note
             if (personPartyId != null) {
-                GenericValue noteData = delegator.makeValue("NoteData", UtilMisc.toMap("noteId", delegator.getNextSeqId("Note"), "noteInfo", entry.getString("note"), "noteParty", initialResponsiblePartyId, "noteDateTime", importTimestamp));
+                GenericValue noteData = delegator.makeValue("NoteData", UtilMisc.toMap("noteId", delegator.getNextSeqId("NoteData"), "noteInfo", entry.getString("note"), "noteParty", initialResponsiblePartyId, "noteDateTime", importTimestamp));
                 toBeStored.add(noteData);
                 toBeStored.add(delegator.makeValue("PartyNote", UtilMisc.toMap("noteId", noteData.get("noteId"), "partyId", personPartyId)));
             }
             if (companyPartyId != null) {
-                GenericValue noteData = delegator.makeValue("NoteData", UtilMisc.toMap("noteId", delegator.getNextSeqId("Note"), "noteInfo", entry.getString("note"), "noteParty", initialResponsiblePartyId, "noteDateTime", importTimestamp));
+                GenericValue noteData = delegator.makeValue("NoteData", UtilMisc.toMap("noteId", delegator.getNextSeqId("NoteData"), "noteInfo", entry.getString("note"), "noteParty", initialResponsiblePartyId, "noteDateTime", importTimestamp));
                 toBeStored.add(noteData);
                 toBeStored.add(delegator.makeValue("PartyNote", UtilMisc.toMap("noteId", noteData.get("noteId"), "partyId", companyPartyId)));
             }

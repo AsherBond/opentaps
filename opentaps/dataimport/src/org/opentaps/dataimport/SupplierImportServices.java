@@ -173,7 +173,7 @@ class SupplierDecoder implements ImportDecoder {
 
         if (!UtilValidate.isEmpty(entry.getString("note"))) {
             // make the party note
-            GenericValue noteData = delegator.makeValue("NoteData", UtilMisc.toMap("noteId", delegator.getNextSeqId("Note"), "noteInfo", entry.getString("note"), "noteDateTime", importTimestamp));
+            GenericValue noteData = delegator.makeValue("NoteData", UtilMisc.toMap("noteId", delegator.getNextSeqId("NoteData"), "noteInfo", entry.getString("note"), "noteDateTime", importTimestamp));
             toBeStored.add(noteData);
             toBeStored.add(delegator.makeValue("PartyNote", UtilMisc.toMap("noteId", noteData.get("noteId"), "partyId", partyId)));
         }
