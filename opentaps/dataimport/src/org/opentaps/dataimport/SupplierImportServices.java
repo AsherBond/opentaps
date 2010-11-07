@@ -39,10 +39,7 @@ public class SupplierImportServices {
 
     public static String module = SupplierImportServices.class.getName();
 
-    public static Map importSuppliers(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
+    public static Map<String, Object> importSuppliers(DispatchContext dctx, Map<String, ?> context) {
 
         String organizationPartyId = (String) context.get("organizationPartyId");
         int imported = 0;
@@ -54,7 +51,7 @@ public class SupplierImportServices {
         } catch (GenericEntityException e) {
             return UtilMessage.createAndLogServiceError(e, module);
         }
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         result.put("importedRecords", imported);
         return result;
     }
@@ -92,7 +89,6 @@ class SupplierDecoder implements ImportDecoder {
         /** Import contact mechs.  Note that each contact mech will be associated with the company and person. */
         /*******************************************************************************************************/
 
-        String billingContactMechId = null;  // for later use with things that need billing address
         if (!UtilValidate.isEmpty(entry.getString("address1"))) {
             // associate this as the GENERAL_LOCATION and BILLING_LOCATION
             GenericValue contactMech = delegator.makeValue("ContactMech", UtilMisc.toMap("contactMechId", delegator.getNextSeqId("ContactMech"), "contactMechTypeId", "POSTAL_ADDRESS"));
@@ -103,7 +99,6 @@ class SupplierDecoder implements ImportDecoder {
             toBeStored.add(UtilImport.makeContactMechPurpose("GENERAL_LOCATION", mainPostalAddress, partyId, importTimestamp, delegator));
             toBeStored.add(UtilImport.makeContactMechPurpose("BILLING_LOCATION", mainPostalAddress, partyId, importTimestamp, delegator));
             toBeStored.add(delegator.makeValue("PartyContactMech", UtilMisc.toMap("contactMechId", contactMech.get("contactMechId"), "partyId", partyId, "fromDate", importTimestamp)));
-            billingContactMechId = contactMech.getString("contactMechId");
         }
 
         if (!UtilValidate.isEmpty(entry.getString("primaryPhoneNumber"))) {
@@ -206,7 +201,7 @@ class SupplierDecoder implements ImportDecoder {
 
         entry.put("primaryPartyId", partyId);
         toBeStored.add(entry);
-        
+
         return toBeStored;
     }
 }
