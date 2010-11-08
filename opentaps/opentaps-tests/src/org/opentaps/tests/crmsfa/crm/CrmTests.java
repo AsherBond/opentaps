@@ -16,7 +16,6 @@
  */
 package org.opentaps.tests.crmsfa.crm;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -158,11 +157,14 @@ public class CrmTests extends OpentapsTestCase {
         // Verify that account has two contacts
         assertEquals("Account contacts not equals 2", setContact.size(), 2);
 
-        Iterator<Contact> contactIterator = setContact.iterator();
-
-        // Verify contacts name
-        assertEquals("Does not match the name of the first contact", contactIterator.next().getName(), TEST_LEAD_01_FIRST_NAME + " " + TEST_LEAD_01_LAST_NAME);
-        assertEquals("Does not match the name of the second contact", contactIterator.next().getName(), TEST_LEAD_02_FIRST_NAME + " " + TEST_LEAD_02_LAST_NAME);
+        // Verify contacts name, note: there is no guarantee of the order
+        for (Contact c : setContact) {
+            if (partyIdFirst.equals(c.getPartyId())) {
+                assertEquals("Does not match the name of the first contact",  c.getName(), TEST_LEAD_01_FIRST_NAME + " " + TEST_LEAD_01_LAST_NAME);
+            } else {
+                assertEquals("Does not match the name of the second contact", c.getName(), TEST_LEAD_02_FIRST_NAME + " " + TEST_LEAD_02_LAST_NAME);
+            }
+        }
 
     }
 
