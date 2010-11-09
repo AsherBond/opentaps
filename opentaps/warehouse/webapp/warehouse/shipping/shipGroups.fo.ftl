@@ -124,7 +124,7 @@ under the License.
         <fo:table-cell><fo:block>${shipGroup.shipAfterDate?default("N/A")}</fo:block></fo:table-cell>
       </fo:table-row>
       </#if>
-      <#if shipGroup.shipBeforeDate?has_content>
+      <#if shipGroup.shipByDate?has_content>
       <fo:table-row>
         <fo:table-cell><fo:block font-weight="bold">${uiLabelMap.OpentapsShipBefore}</fo:block></fo:table-cell>
         <fo:table-cell><fo:block>${shipGroup.shipByDate?default("N/A")}</fo:block></fo:table-cell>
