@@ -76,7 +76,6 @@ class SupplierDecoder implements ImportDecoder {
         /***********************/
         /** Import Party data **/
         /***********************/
-
         // create the company with the roles
         String partyId = entry.getString("supplierId");     // use same partyId as the Supplier's supplierId
         toBeStored.addAll(UtilImport.makePartyWithRoles(partyId, "PARTY_GROUP", UtilMisc.toList("SUPPLIER"), delegator));
@@ -85,6 +84,8 @@ class SupplierDecoder implements ImportDecoder {
         String primaryPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(company);
         Debug.logInfo("Creating PartyGroup ["+partyId+"] for Supplier ["+entry.get("supplierId")+"].", module);
 
+        GenericValue partySupplementalData = delegator.makeValue("PartySupplementalData", UtilMisc.toMap("partyId", partyId, "companyName", primaryPartyName));
+
         /*******************************************************************************************************/
         /** Import contact mechs.  Note that each contact mech will be associated with the company and person. */
         /*******************************************************************************************************/
@@ -92,24 +93,28 @@ class SupplierDecoder implements ImportDecoder {
         if (!UtilValidate.isEmpty(entry.getString("address1"))) {
             // associate this as the GENERAL_LOCATION and BILLING_LOCATION
             GenericValue contactMech = delegator.makeValue("ContactMech", UtilMisc.toMap("contactMechId", delegator.getNextSeqId("ContactMech"), "contactMechTypeId", "POSTAL_ADDRESS"));
+            String postalAddressContactMechId = contactMech.getString("contactMechId");
             GenericValue mainPostalAddress = UtilImport.makePostalAddress(contactMech, entry.getString("supplierName"), "", "", entry.getString("attnName"), entry.getString("address1"), entry.getString("address2"), entry.getString("city"), entry.getString("stateProvinceGeoId"), entry.getString("postalCode"), entry.getString("postalCodeExt"), entry.getString("countryGeoId"), delegator);
             toBeStored.add(contactMech);
             toBeStored.add(mainPostalAddress);
 
             toBeStored.add(UtilImport.makeContactMechPurpose("GENERAL_LOCATION", mainPostalAddress, partyId, importTimestamp, delegator));
             toBeStored.add(UtilImport.makeContactMechPurpose("BILLING_LOCATION", mainPostalAddress, partyId, importTimestamp, delegator));
-            toBeStored.add(delegator.makeValue("PartyContactMech", UtilMisc.toMap("contactMechId", contactMech.get("contactMechId"), "partyId", partyId, "fromDate", importTimestamp)));
+            toBeStored.add(delegator.makeValue("PartyContactMech", UtilMisc.toMap("contactMechId", postalAddressContactMechId, "partyId", partyId, "fromDate", importTimestamp)));
+            partySupplementalData.set("primaryPostalAddressId", postalAddressContactMechId);
         }
 
         if (!UtilValidate.isEmpty(entry.getString("primaryPhoneNumber"))) {
             // associate this as PRIMARY_PHONE
             GenericValue contactMech = delegator.makeValue("ContactMech", UtilMisc.toMap("contactMechId", delegator.getNextSeqId("ContactMech"), "contactMechTypeId", "TELECOM_NUMBER"));
+            String telecomContactMechId = contactMech.getString("contactMechId");
             GenericValue primaryNumber = UtilImport.makeTelecomNumber(contactMech, entry.getString("primaryPhoneCountryCode"), entry.getString("primaryPhoneAreaCode"), entry.getString("primaryPhoneNumber"), delegator);
             toBeStored.add(contactMech);
             toBeStored.add(primaryNumber);
 
             toBeStored.add(UtilImport.makeContactMechPurpose("PRIMARY_PHONE", primaryNumber, partyId, importTimestamp, delegator));
-            toBeStored.add(delegator.makeValue("PartyContactMech", UtilMisc.toMap("contactMechId", contactMech.get("contactMechId"), "partyId", partyId, "fromDate", importTimestamp, "extension", entry.getString("primaryPhoneExtension"))));
+            toBeStored.add(delegator.makeValue("PartyContactMech", UtilMisc.toMap("contactMechId", telecomContactMechId, "partyId", partyId, "fromDate", importTimestamp, "extension", entry.getString("primaryPhoneExtension"))));
+            partySupplementalData.set("primaryTelecomNumberId", telecomContactMechId);
         }
 
         if (!UtilValidate.isEmpty(entry.getString("secondaryPhoneNumber"))) {
@@ -147,10 +152,12 @@ class SupplierDecoder implements ImportDecoder {
         if (!UtilValidate.isEmpty(entry.getString("emailAddress"))) {
             // make the email address
             GenericValue emailContactMech = delegator.makeValue("ContactMech", UtilMisc.toMap("contactMechId", delegator.getNextSeqId("ContactMech"), "contactMechTypeId", "EMAIL_ADDRESS", "infoString", entry.getString("emailAddress")));
+            String emailContactMechId = emailContactMech.getString("contactMechId");
             toBeStored.add(emailContactMech);
 
-            toBeStored.add(delegator.makeValue("PartyContactMech", UtilMisc.toMap("contactMechId", emailContactMech.get("contactMechId"), "partyId", partyId, "fromDate", importTimestamp)));
+            toBeStored.add(delegator.makeValue("PartyContactMech", UtilMisc.toMap("contactMechId", emailContactMechId, "partyId", partyId, "fromDate", importTimestamp)));
             toBeStored.add(UtilImport.makeContactMechPurpose("PRIMARY_EMAIL", emailContactMech, partyId, importTimestamp, delegator));
+            partySupplementalData.set("primaryEmailId", emailContactMechId);
         }
 
         if (!UtilValidate.isEmpty(entry.getString("webAddress"))) {
@@ -161,6 +168,8 @@ class SupplierDecoder implements ImportDecoder {
             toBeStored.add(delegator.makeValue("PartyContactMech", UtilMisc.toMap("contactMechId", webContactMech.get("contactMechId"), "partyId", partyId, "fromDate", importTimestamp)));
             toBeStored.add(UtilImport.makeContactMechPurpose("PRIMARY_WEB_URL", webContactMech, partyId, importTimestamp, delegator));
         }
+
+        toBeStored.add(partySupplementalData);
 
         /*****************************/
         /** Import Party notes. **/
