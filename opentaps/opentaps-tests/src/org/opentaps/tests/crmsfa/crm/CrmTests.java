@@ -158,14 +158,19 @@ public class CrmTests extends OpentapsTestCase {
         assertEquals("Account contacts not equals 2", setContact.size(), 2);
 
         // Verify contacts name, note: there is no guarantee of the order
+        boolean foundFirst = false;
+        boolean foundSecond = false;
         for (Contact c : setContact) {
-            if (partyIdFirst.equals(c.getPartyId())) {
-                assertEquals("Does not match the name of the first contact",  c.getName(), TEST_LEAD_01_FIRST_NAME + " " + TEST_LEAD_01_LAST_NAME);
+            if ((TEST_LEAD_01_FIRST_NAME + " " + TEST_LEAD_01_LAST_NAME).equals(c.getName())) {
+                foundFirst = true;
+            } else if ((TEST_LEAD_02_FIRST_NAME + " " + TEST_LEAD_02_LAST_NAME).equals(c.getName())) {
+                foundSecond = true;
             } else {
-                assertEquals("Does not match the name of the second contact", c.getName(), TEST_LEAD_02_FIRST_NAME + " " + TEST_LEAD_02_LAST_NAME);
+                fail("Does not match the name of the first or second contact : " + c.getName());
             }
         }
-
+        assertTrue("Did not match the name of the first contact", foundFirst);
+        assertTrue("Did not match the name of the second contact", foundSecond);
     }
 
     /**
