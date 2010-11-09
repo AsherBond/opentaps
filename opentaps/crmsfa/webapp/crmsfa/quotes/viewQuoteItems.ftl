@@ -19,7 +19,7 @@
    Function prepares parameters and sends request for removeQuoteItemOption.
 */
 function removeQuoteItemOption(/*String*/ quoteId, /*String*/ quoteItemSeqId, /*String*/ quoteItemOptionSeqId) {
-	document.processingQuoteItemOptionForm.action = "removeQuoteItemOption";
+    document.processingQuoteItemOptionForm.action = "removeQuoteItemOption";
     document.processingQuoteItemOptionForm.quoteId.value = quoteId;
     document.processingQuoteItemOptionForm.quoteItemSeqId.value = quoteItemSeqId;
     document.processingQuoteItemOptionForm.quoteItemOptionSeqId.value = quoteItemOptionSeqId;
@@ -30,7 +30,7 @@ function removeQuoteItemOption(/*String*/ quoteId, /*String*/ quoteItemSeqId, /*
    Function prepares parameters and sends request for setQuoteItemOption.
 */
 function setQuoteItemOption(/*String*/ quoteId, /*String*/ quoteItemSeqId, /*String*/ quoteItemOptionSeqId) {
-	document.processingQuoteItemOptionForm.action = "setQuoteItemOption";
+    document.processingQuoteItemOptionForm.action = "setQuoteItemOption";
     document.processingQuoteItemOptionForm.quoteId.value = quoteId;
     document.processingQuoteItemOptionForm.quoteItemSeqId.value = quoteItemSeqId;
     document.processingQuoteItemOptionForm.quoteItemOptionSeqId.value = quoteItemOptionSeqId;
@@ -41,7 +41,7 @@ function setQuoteItemOption(/*String*/ quoteId, /*String*/ quoteItemSeqId, /*Str
    Function prepares parameters and sends request for unsetQuoteItemOption.
 */
 function unsetQuoteItemOption(/*String*/ quoteId, /*String*/ quoteItemSeqId) {
-	document.processingQuoteItemOptionForm.action = "unsetQuoteItemOption";
+    document.processingQuoteItemOptionForm.action = "unsetQuoteItemOption";
     document.processingQuoteItemOptionForm.quoteId.value = quoteId;
     document.processingQuoteItemOptionForm.quoteItemSeqId.value = quoteItemSeqId;
     document.processingQuoteItemOptionForm.quoteItemOptionSeqId.value = "";
@@ -52,7 +52,7 @@ function unsetQuoteItemOption(/*String*/ quoteId, /*String*/ quoteItemSeqId) {
    Function prepares parameters and sends request for removeQuoteItem.
 */
 function removeQuoteItem(/*String*/ quoteId, /*String*/ quoteItemSeqId) {
-	document.processingQuoteItemOptionForm.action = "removeQuoteItem";
+    document.processingQuoteItemOptionForm.action = "removeQuoteItem";
     document.processingQuoteItemOptionForm.quoteId.value = quoteId;
     document.processingQuoteItemOptionForm.quoteItemSeqId.value = quoteItemSeqId;
     document.processingQuoteItemOptionForm.quoteItemOptionSeqId.value = "";
@@ -63,7 +63,10 @@ function removeQuoteItem(/*String*/ quoteId, /*String*/ quoteItemSeqId) {
 
 <#if quote?exists>
 
-<@frameSection title=uiLabelMap.OrderOrderQuoteItems>
+  <!-- add for  setQuoteItemOption/removeQuoteItemOption/unsetQuoteItemOption/removeQuoteItem -->
+  <@form name="processingQuoteItemOptionForm" url="" quoteId="" quoteItemSeqId="" quoteItemOptionSeqId="" />
+
+  <@frameSection title=uiLabelMap.OrderOrderQuoteItems>
     <table width="100%" border="0" cellpadding="0">
       <tr align="left" valign="bottom">
         <td width="10%" align="left"><span class="tableheadtext"><b>${uiLabelMap.ProductItem}</b></span></td>
@@ -90,8 +93,6 @@ function removeQuoteItem(/*String*/ quoteId, /*String*/ quoteItemSeqId) {
         <#assign totalQuoteAmount = totalQuoteAmount + totalQuoteItemAmount/>
 
         <tr><td colspan="6"><hr class="sepbar"/></td></tr>
-		<!-- add for  setQuoteItemOption/removeQuoteItemOption/unsetQuoteItemOption/removeQuoteItem -->
-        <@form name="processingQuoteItemOptionForm" url="" quoteId="" quoteItemSeqId="" quoteItemOptionSeqId="" />
 
         <#if canEditQuote>
         <tr>
