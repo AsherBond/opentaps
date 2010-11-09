@@ -182,6 +182,11 @@ if (selEmails) {
 }
 
 // website
+websiteUrls = EntityUtil.filterByDate(delegator.findByAnd("PartyContactMechPurpose", [partyId : partyId, contactMechPurposeTypeId : "PRIMARY_WEB_URL"]));
+if (websiteUrls) {
+    websiteUrl = EntityUtil.getFirst(websiteUrls);
+    context.website = delegator.findOne("ContactMech", [contactMechId : websiteUrl.contactMechId], false);
+} else { //get web address from party contact mech
 contacts = delegator.findByAnd("PartyContactMech", [partyId : partyId]);
 selContacts = EntityUtil.filterByDate(contacts, nowTimestamp, "fromDate", "thruDate", true);
 if (selContacts) {
@@ -193,6 +198,7 @@ if (selContacts) {
             break;
         }
     }
+}
 }
 
 //Bank account
