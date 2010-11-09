@@ -92,22 +92,34 @@
         <#-- print each overlapping entry in cells from left to right -->
         <#list period.calendarEntries as calEntry>
           <#if calEntry.startOfPeriod>
-            <td class="schedulerentry" rowspan="${calEntry.periodSpan}" colspan="1" width="${entryWidth?string("#")}%" valign="top">
-              <#if (calEntry.workEffort.estimatedStartDate.compareTo(start) lte 0 && calEntry.workEffort.estimatedCompletionDate.compareTo(next) gte 0)>
-                ${uiLabelMap.CommonAllDay}
-              <#elseif calEntry.workEffort.estimatedStartDate.before(start)>
-                ${uiLabelMap.CommonUntil}${calEntry.workEffort.estimatedCompletionDate?time?string.short}
-              <#elseif calEntry.workEffort.estimatedCompletionDate.after(next)>
-                ${uiLabelMap.CommonFrom} ${calEntry.workEffort.estimatedStartDate?time?string.short}
-              <#else>
-                ${calEntry.workEffort.estimatedStartDate?time?string.short}-${calEntry.workEffort.estimatedCompletionDate?time?string.short}
+            <#assign eventStart = calEntry.workEffort.estimatedStartDate!/>
+            <#if calEntry.workEffort.actualStartDate?has_content>
+              <#assign eventStart = calEntry.workEffort.actualStartDate!/>
+            </#if>
+            <#if eventStart?has_content>
+              <#assign eventEnd = calEntry.workEffort.estimatedCompletionDate!/>
+              <#if calEntry.workEffort.actualCompletionDate?has_content>
+                <#assign eventEnd = calEntry.workEffort.actualCompletionDate!/>
               </#if>
-              <br/>
-              <a href="<@ofbizUrl>viewActivity?workEffortId=${calEntry.workEffort.workEffortId}</@ofbizUrl>" class="event">
-                ${calEntry.workEffort.workEffortName?default("Undefined")}
-              </a>
-              &nbsp;
-            </td>
+              <#if eventEnd?has_content>
+                <td class="schedulerentry" rowspan="${calEntry.periodSpan}" colspan="1" width="${entryWidth?string("#")}%" valign="top">
+                  <#if (eventStart.compareTo(start) lte 0 && eventEnd.compareTo(next) gte 0)>
+                    ${uiLabelMap.CommonAllDay}
+                  <#elseif eventStart.before(start)>
+                    ${uiLabelMap.CommonUntil}${eventEnd?time?string.short}
+                  <#elseif eventEnd.after(next)>
+                    ${uiLabelMap.CommonFrom} ${eventStart?time?string.short}
+                  <#else>
+                    ${eventStart?time?string.short}-${eventEnd?time?string.short}
+                  </#if>
+                  <br/>
+                  <a href="<@ofbizUrl>viewActivity?workEffortId=${calEntry.workEffort.workEffortId}</@ofbizUrl>" class="event">
+                    ${calEntry.workEffort.workEffortName?default("Undefined")}
+                  </a>
+                  &nbsp;
+                </td>
+              </#if>
+            </#if>
           </#if>
         </#list>
 
