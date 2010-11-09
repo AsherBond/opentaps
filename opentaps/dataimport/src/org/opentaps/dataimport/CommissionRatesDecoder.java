@@ -64,7 +64,7 @@ public class CommissionRatesDecoder implements ImportDecoder {
         GenericValue dataImportCustomer = entry.getRelatedOne("DataImportCustomer");
 
         // 2.  call ensurePartyRole service to create COMMISSION_AGENT role for DICCR.primaryPartyId
-        Map input = UtilMisc.toMap("partyId", dataImportCustomer.getString("primaryPartyId"));
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("partyId", dataImportCustomer.getString("primaryPartyId"));
         input.put("roleTypeId", "COMMISSION_AGENT");
         Map<String, Object> output = dispatcher.runSync("ensurePartyRole", input);
         if (ServiceUtil.isError(output)) {
@@ -118,7 +118,7 @@ public class CommissionRatesDecoder implements ImportDecoder {
         agreementItem.put("agreementText", "Applies to all listed customers");
         toBeStored.add(agreementItem);
 
-        input = UtilMisc.toMap("customerId", entry.getString("customerId"));
+        input = UtilMisc.<String, Object>toMap("customerId", entry.getString("customerId"));
         List<GenericValue> dataImportCommissionCustomers = delegator.findByAnd("DataImportCommissionCustomers", input);
 
         // 7.  for each DataImportCommissionCustomers (DICCC) where customerId=DICCR.customerId

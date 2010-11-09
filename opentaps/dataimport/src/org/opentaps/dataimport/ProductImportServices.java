@@ -64,9 +64,7 @@ public final class ProductImportServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map importProducts(DispatchContext dctx, Map context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
+    public static Map<String, Object> importProducts(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         String goodIdentificationTypeId1 = (String) context.get("goodIdentificationTypeId1");
@@ -112,8 +110,8 @@ public final class ProductImportServices {
 
                 try {
                     // use the helper method to decode the product into a List of GenericValues
-                    //todo this will nevev be null
-                    List toStore = decodeProduct(product, now, goodIdentificationTypeId1, goodIdentificationTypeId2, delegator);
+                    // todo this will never be null
+                    List<GenericValue> toStore = decodeProduct(product, now, goodIdentificationTypeId1, goodIdentificationTypeId2, delegator);
                     if (toStore == null) {
                         Debug.logWarning("Faild to import product[" + product.get("productId") + "] because data was bad.  Check preceding warnings for reason.", MODULE);
                     }
@@ -155,7 +153,7 @@ public final class ProductImportServices {
             return ServiceUtil.returnError(message);
         }
 
-        Map results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("productsImported", new Integer(imported));
         return results;
     }
@@ -174,8 +172,7 @@ public final class ProductImportServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map importProductInventory(DispatchContext dctx, Map context) {
+    public static Map<String, Object> importProductInventory(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -220,7 +217,7 @@ public final class ProductImportServices {
             return ServiceUtil.returnError(errMsg);
         }
 
-        Map results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("importedRecords", new Integer(totalImported));
         return results;
     }

@@ -130,7 +130,7 @@ public class OpentapsImporter {
     /**
      * Configure the importer using parameters maxToImport, maxConsecutiveFailures.  Thier values should be Numbers.
      */
-    public void configure(Map context) {
+    public void configure(Map<String, ?> context) {
         Object maxToImport = context.get("maxToImport");
         Object maxConsecutiveFailures = context.get("maxConsecutiveFailures");
         if (maxToImport != null && maxToImport instanceof Number) {

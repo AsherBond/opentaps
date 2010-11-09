@@ -17,15 +17,13 @@
 
 package org.opentaps.dataimport;
 
-import org.ofbiz.base.util.*;
+import java.util.Map;
+
+import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilMessage;
-
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Import customers via intermediate DataImportCustomer entity.
@@ -39,7 +37,7 @@ public class CustomerImportServices {
 
     public static String module = CustomerImportServices.class.getName();
 
-    public static Map importCustomers(DispatchContext dctx, Map context) {
+    public static Map<String, Object> importCustomers(DispatchContext dctx, Map<String, ?> context) {
         int imported = 0;
         try {
             OpentapsImporter customerImporter = new OpentapsImporter("DataImportCustomer", dctx, new CustomerDecoder(context));
@@ -47,12 +45,12 @@ public class CustomerImportServices {
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, module);
         }
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         result.put("customersImported", imported);
         return result;
     }
 
-    public static Map importCustomersCommissions(DispatchContext dctx, Map context) {
+    public static Map<String, Object> importCustomersCommissions(DispatchContext dctx, Map<String, ?> context) {
         String organizationPartyId = (String) context.get("organizationPartyId");
         int imported = 0;
 
@@ -62,7 +60,7 @@ public class CustomerImportServices {
         } catch (GenericEntityException e) {
             return UtilMessage.createAndLogServiceError(e, module);
         }
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         result.put("importedRecords", imported);
         return result;
     }

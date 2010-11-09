@@ -53,7 +53,7 @@ public class CustomerDecoder implements ImportDecoder {
      * validate for the existence of GL accounts and CRMSFA roles.
      * If there is a problem, a GeneralException is thrown.
      */
-    public CustomerDecoder(Map context) throws GeneralException {
+    public CustomerDecoder(Map<String, ?> context) throws GeneralException {
         this.initialResponsiblePartyId = (String) context.get("initialResponsiblePartyId");
         this.initialResponsibleRoleTypeId = (String) context.get("initialResponsibleRoleTypeId");
         this.organizationPartyId = (String) context.get("organizationPartyId");
@@ -384,7 +384,7 @@ public class CustomerDecoder implements ImportDecoder {
                 if (expireDate == null) {
                     Debug.logWarning("Failed to decode creditCardExpDate ["+entry.getString("creditCardExpDate")+"] into form MM/YYYY for customer ["+entry.get("customerId")+"].", MODULE);
                 } else {
-                    Map input = UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "cardNumber", cardNumber, "cardType", cardType, "expireDate", expireDate);
+                    Map<String, Object> input = UtilMisc.<String, Object>toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "cardNumber", cardNumber, "cardType", cardType, "expireDate", expireDate);
                     input.put("firstNameOnCard", entry.get("firstName"));
                     input.put("lastNameOnCard", entry.get("lastName"));
                     input.put("companyNameOnCard", entry.get("companyName"));
