@@ -92,7 +92,17 @@ under the License.
     <fo:table-column column-width="proportional-column-width(2)"/>
     <fo:table-body>
       <fo:table-row>
-        <fo:table-cell number-rows-spanned="4">
+        <#assign rowsToSpan = 2/>
+        <#if shipGroup.shipAfterDate?has_content>
+          <#assign rowsToSpan = rowsToSpan + 1/>
+        </#if>
+        <#if shipGroup.shipByDate?has_content>
+          <#assign rowsToSpan = rowsToSpan + 1/>
+        </#if>
+        <#if shipGroup.shippingInstructions?has_content>
+          <#assign rowsToSpan = rowsToSpan + 1/>
+        </#if>
+        <fo:table-cell number-rows-spanned="${rowsToSpan}">
         <#if data.address?exists>
           <#assign address = data.address>
           <fo:block>${uiLabelMap.CommonTo}: ${address.toName?if_exists}</fo:block>
