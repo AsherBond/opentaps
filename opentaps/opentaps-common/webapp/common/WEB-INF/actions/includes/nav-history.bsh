@@ -71,7 +71,7 @@ if (UtilConfig.getPropertyBoolean(application, "opentaps.history.show", true)) {
                 break;
             }
             newItem = FastMap.newInstance();
-            newItem{"uri"} = item.get("uri");
+            newItem{"uri"} = UtilCommon.getCorrectUrlFromEncodeUrl(item.get("uri"));
             newItem{"text"} = item.get("contextInfo");
             historyList.add(newItem);
             index++;
