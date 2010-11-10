@@ -95,7 +95,7 @@ public final class FinancialServices {
  
 
     /** Account classes to search when generating the income statement. */
-    public static final List<String> INCOME_STATEMENT_CLASSES = Arrays.asList("REVENUE", "EXPENSE", "INCOME");
+    public static final List<String> INCOME_STATEMENT_CLASSES = Arrays.asList("CONTRA_REVENUE", "REVENUE", "EXPENSE", "INCOME");
 
     /** A type to group all accounts without glAccountTypeId for income statement. */
     public static final String UNCLASSIFIED_TYPE = "UNCLASSIFIED";
