@@ -40,15 +40,15 @@
     
     <GlAccount glAccountId="200000" glAccountTypeId="LIABILITY"/>
     <GlAccount glAccountId="300000" glAccountTypeId="EQUITY"/>
-    <GlAccount glAccountId="400000" glAccountTypeId="REVENUE"/>
-    <GlAccount glAccountId="401000" glAccountTypeId="REVENUE"/>
-    <GlAccount glAccountId="409000" glAccountTypeId="REVENUE"/>
-    <GlAccount glAccountId="410000" glAccountTypeId="REVENUE"/>
-    <GlAccount glAccountId="420000" glAccountTypeId="REVENUE"/>
-    <GlAccount glAccountId="421000" glAccountTypeId="REVENUE"/>
-    <GlAccount glAccountId="422000" glAccountTypeId="REVENUE"/>
-    <GlAccount glAccountId="423000" glAccountTypeId="REVENUE"/>
-    <GlAccount glAccountId="424000" glAccountTypeId="REVENUE"/>
+    <GlAccount glAccountId="400000" glAccountTypeId="REVENUE" glAccountClassId="REVENUE"/>
+    <GlAccount glAccountId="401000" glAccountTypeId="REVENUE" glAccountClassId="REVENUE"/>
+    <GlAccount glAccountId="409000" glAccountTypeId="REVENUE" glAccountClassId="REVENUE"/>
+    <GlAccount glAccountId="410000" glAccountTypeId="REVENUE" glAccountClassId="REVENUE"/>
+    <GlAccount glAccountId="420000" glAccountTypeId="REVENUE" glAccountClassId="REVENUE"/>
+    <GlAccount glAccountId="421000" glAccountTypeId="REVENUE" glAccountClassId="REVENUE"/>
+    <GlAccount glAccountId="422000" glAccountTypeId="REVENUE" glAccountClassId="REVENUE"/>
+    <GlAccount glAccountId="423000" glAccountTypeId="REVENUE" glAccountClassId="REVENUE"/>
+    <GlAccount glAccountId="424000" glAccountTypeId="REVENUE" glAccountClassId="REVENUE"/>
 
     <GlAccount glAccountId="500000" glAccountTypeId="COGS"/>
     <GlAccount glAccountId="501000" glAccountTypeId="COGS"/>
