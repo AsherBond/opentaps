@@ -753,17 +753,17 @@ public class ActivitiesTests extends OpentapsTestCase {
     }
 
     /**
-     * Testing transformation of cancelled activities.
+     * Testing transformation of canceled activities.
      * @exception Exception if an error occurs
      */
     public void testNotTransformCancelledActivities() throws Exception {
         ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
         ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
 
-        // Get date dimention ID of work effort start date.
+        // Get date dimension ID of work effort start date.
         Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(testTimestamp2, partyDomain.getInfrastructure().getDelegator());
 
-        // Add the second work effor data to tranform from.
+        // Add the second work effort data to transform from.
 
         UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
         GenericValue userLogin = partyRepository.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());
@@ -835,10 +835,10 @@ public class ActivitiesTests extends OpentapsTestCase {
         ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
         ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
 
-        // Get date dimention ID of work effort start date.
+        // Get date dimension ID of work effort start date.
         Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(testTimestamp2, partyDomain.getInfrastructure().getDelegator());
 
-        // Add the second work effor data to tranform from.
+        // Add the second work effort data to transform from.
 
         UserLogin user = partyRepository.findOne(UserLogin.class, partyRepository.map(UserLogin.Fields.userLoginId, internalPartyId1));
         GenericValue userLogin = partyRepository.getInfrastructure().getDelegator().makeValue(UserLogin.class.getSimpleName(), user.toMap());
@@ -902,14 +902,14 @@ public class ActivitiesTests extends OpentapsTestCase {
     }
 
     /**
-     * Testing transformation after loging task.
+     * Testing transformation after logging task.
      * @exception Exception if an error occurs
      */
     public void testTransformLogTaskActivity() throws Exception {
         ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
         ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
 
-        // Get date dimention ID of work effort start date.
+        // Get date dimension ID of work effort start date.
         Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure().getDelegator());
 
         // Look up activity fact's before transformation.
@@ -961,7 +961,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
         ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
 
-        // Get date dimention ID of work effort start date.
+        // Get date dimension ID of work effort start date.
         Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure().getDelegator());
 
         activityFactRepo.setTargetPartyId(externalPartyId1);
@@ -1014,7 +1014,7 @@ public class ActivitiesTests extends OpentapsTestCase {
         ActivitiesDomainInterface activitiesDomain = domainLoader.getDomainsDirectory().getActivitiesDomain();
         ActivityFactRepositoryInterface activityFactRepo = activitiesDomain.getActivityFactRepository();
 
-        // Get date dimention ID of work effort start date.
+        // Get date dimension ID of work effort start date.
         Long dateDimId = UtilEtl.lookupDateDimensionForTimestamp(UtilDateTime.nowTimestamp(), partyDomain.getInfrastructure().getDelegator());
 
         activityFactRepo.setTargetPartyId(externalPartyId1);
