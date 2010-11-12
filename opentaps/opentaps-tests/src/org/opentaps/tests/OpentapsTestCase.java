@@ -631,7 +631,7 @@ public class OpentapsTestCase extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public <T extends ServiceWrapper> void runAndAssertServiceError(T service) {
-        Map results = runAndAssertServiceError(service.name(), service.inputMap());
+        Map<String, Object> results = runAndAssertServiceError(service.name(), service.inputMap());
         if (results != null) {
             service.putAllOutput(results);
         }
@@ -645,10 +645,9 @@ public class OpentapsTestCase extends TestCase {
      * @param input the service input <code>Map</code>
      * @return the <code>Map</code> returned by the service
      */
-    @SuppressWarnings("unchecked")
-    public Map runAndAssertServiceError(String serviceName, Map input) {
+    public Map<String, Object> runAndAssertServiceError(String serviceName, Map<String, ?> input) {
         Debug.logInfo("runAndAssertServiceError: [" + serviceName + "] with input: " + input, MODULE);
-        Map results = null;
+        Map<String, Object> results = null;
         try {
             Debug.set(Debug.ERROR, false);
             results = dispatcher.runSync(serviceName, input);
@@ -681,19 +680,18 @@ public class OpentapsTestCase extends TestCase {
      * @param serviceName name of the service to call
      * @param input the service input <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public void runAndAssertServiceFailure(String serviceName, Map input) {
+    public void runAndAssertServiceFailure(String serviceName, Map<String, ?> input) {
         Debug.logInfo("runAndAssertServiceError: [" + serviceName + "] with input: " + input, MODULE);
-        Map results = null;
+        Map<String, Object> results = null;
         try {
             Debug.set(Debug.ERROR, false);
             results = dispatcher.runSync(serviceName, input);
             Debug.set(Debug.ERROR, true);
             if (!ServiceUtil.isFailure(results)) {
-                TestCase.fail("Expected service [" + serviceName + "] to return error, but service returned: " + results + "\n\tService input: " + input);
+                TestCase.fail("Expected service [" + serviceName + "] to return failure, but service returned: " + results + "\n\tService input: " + input);
             }
         } catch (GenericServiceException e) {
-            Debug.logInfo("Service " + serviceName + " returned an error, as expected. Results: " + results + "\n\tService input: " + input, MODULE);
+            Debug.logInfo("Service " + serviceName + " returned a failure, as expected. Results: " + results + "\n\tService input: " + input, MODULE);
         }
         Debug.set(Debug.ERROR, true);
     }
