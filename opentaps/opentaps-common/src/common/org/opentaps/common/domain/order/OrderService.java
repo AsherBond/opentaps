@@ -35,10 +35,10 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
-import org.opentaps.domain.DomainService;
 import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.base.constants.OrderAdjustmentTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.OrderAdjustmentBilling;
 import org.opentaps.base.entities.OrderItemShipGroupAssoc;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.services.CalcTaxService;
@@ -46,6 +46,7 @@ import org.opentaps.base.services.CancelOrderItemNoActionsService;
 import org.opentaps.base.services.CreateOrderAdjustmentService;
 import org.opentaps.base.services.CreateOrderNoteService;
 import org.opentaps.base.services.LoadCartFromOrderService;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderAdjustment;
 import org.opentaps.domain.order.OrderDomainInterface;
@@ -445,6 +446,8 @@ public class OrderService extends DomainService implements OrderServiceInterface
             // get the current order tax adjustments total
             BigDecimal totalExistingOrderTax = order.getTaxAmount();
             BigDecimal totalNewOrderTax = BigDecimal.ZERO;
+            BigDecimal removedTaxAmount = BigDecimal.ZERO;
+            BigDecimal createdTaxAmount = BigDecimal.ZERO;
 
             // may be needed for face-to-face orders
             PostalAddress originAddress = Repository.getFirst(order.getOriginAddresses());
@@ -461,9 +464,15 @@ public class OrderService extends DomainService implements OrderServiceInterface
 
                 for (int i = 0; i < validItems.size(); i++) {
                     OrderItem item = validItems.get(i);
+                    // only calculate the taxes for the non shipped items
+                    BigDecimal shippedQty = item.getShippedQuantity(shipGroup);
+                    BigDecimal orderedQty = item.getOrderedQuantity(shipGroup);
+                    BigDecimal qty = orderedQty.subtract(shippedQty);
+                    // pro rate the amount and shipping amount to the quantity actually in the ship group
+                    // note: the qty cannot be 0 here as getValidItems filter those
                     products.add(i, Repository.genericValueFromEntity(item.getProduct()));
-                    amounts.add(i, item.getSubTotal());
-                    shippingAmounts.add(i, item.getShippingAmount());
+                    amounts.add(i, item.getSubTotal().multiply(qty).divide(item.getOrderedQuantity(), 99, BigDecimal.ROUND_HALF_EVEN));
+                    shippingAmounts.add(i, item.getShippingAmount().multiply(qty).divide(item.getOrderedQuantity(), 99, BigDecimal.ROUND_HALF_EVEN));
                     itemPrices.add(i, item.getUnitPrice());
                     itemIds.add(i, item.getOrderItemSeqId());
                 }
@@ -497,11 +506,12 @@ public class OrderService extends DomainService implements OrderServiceInterface
 
                 List<GenericValue> orderAdjustments = service.getOutOrderAdjustments();
                 List<List<GenericValue>> itemAdjustments = service.getOutItemAdjustments();
+
                 // get the global tax adjustments
                 if (orderAdjustments != null) {
                     for (GenericValue adj : orderAdjustments) {
                         if (adj != null && adj.get("amount") != null) {
-                            Debug.logInfo("Got new global tax adjustment: amount = " + adj.getBigDecimal("amount"), MODULE);
+                            Debug.logInfo("Got new global tax adjustment: amount = " + adj.getBigDecimal("amount") + " for geo " + adj.get("taxAuthGeoId"), MODULE);
                             totalNewOrderTax = specification.taxCalculationRounding(totalNewOrderTax.add(adj.getBigDecimal("amount")));
                         }
                     }
@@ -518,55 +528,67 @@ public class OrderService extends DomainService implements OrderServiceInterface
                         if (adjs == null) {
                             continue;
                         }
+
+                        OrderItem item = validItems.get(i);
                         BigDecimal itemNewTaxAmount = BigDecimal.ZERO;
-                        BigDecimal itemCompensatedTaxAmount = BigDecimal.ZERO;
+
+                        // get the existing tax adjustments for the same item then remove any non billed adjustment amounts
+                        // since we only calculated the taxes for the non shipped items those are the one that will be left to recreate
+                        List<OrderAdjustment> existingTaxes = repository.findList(OrderAdjustment.class, repository.map(
+                                   OrderAdjustment.Fields.orderId, item.getOrderId(),
+                                   OrderAdjustment.Fields.orderItemSeqId, item.getOrderItemSeqId(),
+                                   OrderAdjustment.Fields.shipGroupSeqId, shipGroup.getShipGroupSeqId(),
+                                   OrderAdjustment.Fields.orderAdjustmentTypeId, OrderAdjustmentTypeConstants.SALES_TAX));
+                        BigDecimal existingItemTaxAmount = Entity.sumFieldValues(existingTaxes, OrderAdjustment.Fields.amount);
+                        for (OrderAdjustment adj : existingTaxes) {
+                            // if this adjustment was not billed, just remove it
+                            List<? extends OrderAdjustmentBilling> billedTaxes = adj.getOrderAdjustmentBillings();
+                            if (UtilValidate.isEmpty(billedTaxes)) {
+                                removedTaxAmount = removedTaxAmount.add(adj.getAmount());
+                                repository.remove(adj);
+                            } else {
+                                // else trim the adjustment amount to the billed amount
+                                BigDecimal billedTaxAmount = Entity.sumFieldValues(billedTaxes, OrderAdjustmentBilling.Fields.amount);
+                                removedTaxAmount = removedTaxAmount.add(adj.getAmount()).subtract(billedTaxAmount);
+                                itemNewTaxAmount = itemNewTaxAmount.add(billedTaxAmount);
+                                adj.setAmount(billedTaxAmount);
+                                repository.createOrUpdate(adj);
+                            }
+                        }
+
+                        // now create the new taxes adjustments
                         for (GenericValue adj : adjs) {
                             if (adj == null || adj.get("amount") == null) {
                                 continue;
                             }
-                            Debug.logInfo("Got recalculated tax for order [" + orderId + "] item [" + itemIds.get(i) + "] ship group [" + shipGroup.getShipGroupSeqId() + "], was given product [" + products.get(i) + "], amount [" + amounts.get(i) + "], item price [" + itemPrices.get(i) + "], shipping amount [" + shippingAmounts.get(i) + "]  ===> tax amount = " + adj.getBigDecimal("amount"), MODULE);
+                            Debug.logInfo("Got recalculated tax for order [" + orderId + "] item [" + itemIds.get(i) + "] ship group [" + shipGroup.getShipGroupSeqId() + "], was given product [" + products.get(i) + "], amount [" + amounts.get(i) + "], item price [" + itemPrices.get(i) + "], shipping amount [" + shippingAmounts.get(i) + "]  ===> tax amount = " + adj.getBigDecimal("amount") + " for geo " + adj.get("taxAuthGeoId"), MODULE);
                             OrderAdjustment orderAdjustment = Repository.loadFromGeneric(OrderAdjustment.class, adj, repository);
                             orderAdjustment.setOrderId(orderId);
                             orderAdjustment.setOrderItemSeqId(itemIds.get(i));
                             orderAdjustment.setShipGroupSeqId(shipGroup.getShipGroupSeqId());
                             orderAdjustment.setOrderAdjustmentId(orderAdjustment.getNextSeqId());
-                            // account this amount in the new tax total
-                            itemNewTaxAmount = specification.taxCalculationRounding(itemNewTaxAmount.add(orderAdjustment.getAmount()));
-                            // get the current adjustments for this item with the same tax authority
-                            List<OrderAdjustment> existingAdjs = repository.findList(OrderAdjustment.class, repository.map(
-                                   OrderAdjustment.Fields.orderId, orderAdjustment.getOrderId(),
-                                   OrderAdjustment.Fields.orderItemSeqId, orderAdjustment.getOrderItemSeqId(),
-                                   OrderAdjustment.Fields.shipGroupSeqId, orderAdjustment.getShipGroupSeqId(),
-                                   OrderAdjustment.Fields.orderAdjustmentTypeId, OrderAdjustmentTypeConstants.SALES_TAX,
-                                   OrderAdjustment.Fields.taxAuthGeoId, orderAdjustment.getTaxAuthGeoId(),
-                                   OrderAdjustment.Fields.taxAuthPartyId, orderAdjustment.getTaxAuthPartyId()));
-                            BigDecimal existingItemTax = Entity.sumFieldValues(existingAdjs, OrderAdjustment.Fields.amount);
-                            Debug.logInfo("Found " + existingAdjs.size() + " sales tax adjustments for order [" + orderId + "] item [" + itemIds.get(i) + "] ship group [" + shipGroup.getShipGroupSeqId() + "] and tax auth [" + orderAdjustment.getTaxAuthGeoId() + "/" + orderAdjustment.getTaxAuthPartyId() + "] with total amount = " + existingItemTax, MODULE);
-                            // compare the current tax amount with the new tax amount
-                            BigDecimal diff = orderAdjustment.getAmount().subtract(existingItemTax);
                             // add the new tax adjustment
-                            if (diff.signum() != 0) {
-                                Debug.logInfo("Creating offsetting tax adjustment for order [" + orderId + "] item [" + itemIds.get(i) + "] ship group [" + shipGroup.getShipGroupSeqId() + "] and tax auth [" + orderAdjustment.getTaxAuthGeoId() + " " + orderAdjustment.getTaxAuthPartyId() + "], tax amount was = " + existingItemTax + " and new tax amount = " + orderAdjustment.getAmount() + ", compensating with diff = " + diff, MODULE);
-                                orderAdjustment.setDescription("Existing tax was = " + existingItemTax + ", new tax amount = " + orderAdjustment.getAmount() + " (Tax adjustment due to order change)");
-                                orderAdjustment.setAmount(diff);
-                                repository.createOrUpdate(orderAdjustment);
-                                // account this diff amount in the new tax total, since the diff amount does not need to be compensated
-                                itemCompensatedTaxAmount = itemCompensatedTaxAmount.add(diff);
-                            }
+                            Debug.logInfo("Creating new tax adjustment for order [" + orderId + "] item [" + itemIds.get(i) + "] ship group [" + shipGroup.getShipGroupSeqId() + "] and tax auth [" + orderAdjustment.getTaxAuthGeoId() + " " + orderAdjustment.getTaxAuthPartyId() + "], new tax amount = " + orderAdjustment.getAmount(), MODULE);
+                            repository.createOrUpdate(orderAdjustment);
+                            // account to the new total
+                            createdTaxAmount = createdTaxAmount.add(orderAdjustment.getAmount());
+                            itemNewTaxAmount = itemNewTaxAmount.add(orderAdjustment.getAmount());
                         }
 
                         // round the item adjustments
                         // this reflects the rounding that is being done when getting the order taxes
                         // each item tax component is rounded according to taxCalculationRounding, then the tax total by taxFinalRounding
-                        Debug.logInfo("Item for order [" + orderId + "] item [" + itemIds.get(i) + "] ship group [" + shipGroup.getShipGroupSeqId() + "], new tax total = " + itemNewTaxAmount + ", compensate amount = " + itemCompensatedTaxAmount + ", diff = " + itemNewTaxAmount.subtract(itemCompensatedTaxAmount) , MODULE);
-                        totalNewOrderTax = specification.taxFinalRounding(totalNewOrderTax.add(itemNewTaxAmount).subtract(itemCompensatedTaxAmount));
+                        Debug.logInfo("Item for order [" + orderId + "] item [" + itemIds.get(i) + "] ship group [" + shipGroup.getShipGroupSeqId() + "], existing tax total was = " + existingItemTaxAmount + ", new tax total = " + itemNewTaxAmount, MODULE);
+                        totalNewOrderTax = specification.taxFinalRounding(totalNewOrderTax.add(itemNewTaxAmount));
+                        createdTaxAmount = specification.taxFinalRounding(createdTaxAmount);
+                        removedTaxAmount = specification.taxFinalRounding(removedTaxAmount);
                     }
                 }
             }
 
             // create the offset for the global order tax adjustments
-            // not that those 2 totals are already rounded with taxFinalRounding
-            BigDecimal orderTaxDifference = totalNewOrderTax.subtract(totalExistingOrderTax);
+            // not that those totals are already rounded with taxFinalRounding
+            BigDecimal orderTaxDifference = totalNewOrderTax.subtract(createdTaxAmount).subtract(totalExistingOrderTax.subtract(removedTaxAmount));
             Debug.logInfo("totalNewOrderTax = " + totalNewOrderTax + ", totalExistingOrderTax = " + totalExistingOrderTax + " ==> orderTaxDifference = " + orderTaxDifference , MODULE);
             if (orderTaxDifference.signum() != 0) {
                 CreateOrderAdjustmentService service = new CreateOrderAdjustmentService();
