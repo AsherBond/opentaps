@@ -78,6 +78,9 @@
         <attribute name="duplicatingPartyId" type="String" mode="IN" optional="true"/> <!-- if created from the duplciate lead form -->
         <attribute name="dataSourceId" type="String" mode="IN" optional="true"/> <!-- initial data source -->
         <attribute name="marketingCampaignId" type="String" mode="IN" optional="true"/> <!-- initial marketing campaign -->
+        <attribute name="notifyOwner" mode="IN" type="String" optional="true" default-value="Y">
+            <description>Service sends notification message to responsible party unless forbidden.</description>
+        </attribute>
     </service>
 
     <service name="crmsfa.updateLead" engine="java" location="com.opensourcestrategies.crmsfa.leads.LeadsServices" invoke="updateLead">
