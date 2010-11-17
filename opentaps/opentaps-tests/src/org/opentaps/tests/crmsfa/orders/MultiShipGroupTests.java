@@ -26,13 +26,15 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import org.opentaps.domain.order.Order;
+import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 
 /**
@@ -107,12 +109,10 @@ public class MultiShipGroupTests extends OrderTestCase {
 
         // create two payments (90/10 split) for full value of order
 
-        // note when we split the order we may change the order total because of the way taxes are rounded
-        // for example:
-        // when we create a order for DemoAddress1, the original order grandTotal is 10 * 15.99 + 4.997 + 4.997 (taxes) = 169.894, rounded to 169.89
-        // but after the split, we have two invoices with a total of 84.947 each, which are rounded to 84.95, for a grand total of 169.90 for the order
-        // therefore we add 0.01 the payments here
-        BigDecimal total = orderFactory.getGrandTotal().add(new BigDecimal("0.01"));
+        // Get the order total (note that after the split the taxes may have changed)
+        OrderRepositoryInterface repository = getOrderRepository(admin);
+        Order order = repository.getOrderById(orderId);
+        BigDecimal total = order.getGrandTotal();
         total = total.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         BigDecimal firstPayment = total.multiply(new BigDecimal("0.9")).setScale(2, BigDecimal.ROUND_HALF_UP);
