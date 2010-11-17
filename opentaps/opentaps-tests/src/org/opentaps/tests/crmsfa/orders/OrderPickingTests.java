@@ -239,6 +239,8 @@ public class OrderPickingTests  extends OrderTestCase {
         // create 2 test products
         GenericValue productA = createTestProduct("Test Product A for testPartialOrderPicking()", demowarehouse1);
         GenericValue productB = createTestProduct("Test Product B for testPartialOrderPicking()", demowarehouse1);
+        assignDefaultPrice(productA, new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productB, new BigDecimal("1.0"), admin);
         final String productAId = productA.getString("productId");
         final String productBId = productB.getString("productId");
         // create a customer from template of DemoCustomer
@@ -428,6 +430,8 @@ public class OrderPickingTests  extends OrderTestCase {
         // create 2 test products
         GenericValue productA = createTestProduct("Test Product A for testMultiFacilityOrder()", demowarehouse1);
         GenericValue productB = createTestProduct("Test Product B for testMultiFacilityOrder()", demowarehouse1);
+        assignDefaultPrice(productA, new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productB, new BigDecimal("1.0"), admin);
         // create a customer from template of DemoCustomer
         String customerPartyId = createPartyFromTemplate(demoCustomer.getString("partyId"), "Customer for testMultiFacilityOrder");
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));

@@ -2579,6 +2579,9 @@ public class OrderTests extends OrderTestCase {
         GenericValue productA = createTestProduct("Test Product A for testReReserveInventoryOnSplitOrder", demowarehouse1);
         GenericValue productB = createTestProduct("Test Product B for testReReserveInventoryOnSplitOrder", demowarehouse1);
         GenericValue productC = createTestProduct("Test Product C for testReReserveInventoryOnSplitOrder", demowarehouse1);
+        assignDefaultPrice(productA, new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productB, new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productC, new BigDecimal("1.0"), admin);
         // create a customer from template of DemoCustomer
         String customerPartyId = createPartyFromTemplate(DemoCustomer.getString("partyId"), "Customer for testMultiFacilityOrder");
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
@@ -2705,6 +2708,9 @@ public class OrderTests extends OrderTestCase {
         GenericValue productA = createTestProduct("Test Product A for testMultiFacilityMultiShipGroupOrder", demowarehouse1);
         GenericValue productB = createTestProduct("Test Product B for testMultiFacilityMultiShipGroupOrder", demowarehouse1);
         GenericValue productC = createTestProduct("Test Product C for testMultiFacilityMultiShipGroupOrder", demowarehouse1);
+        assignDefaultPrice(productA, new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productB, new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productC, new BigDecimal("1.0"), admin);
         // create a customer from template of DemoCustomer
         String customerPartyId = createPartyFromTemplate(DemoCustomer.getString("partyId"), "Customer for testMultiFacilityOrder");
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
