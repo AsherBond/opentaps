@@ -2558,5 +2558,25 @@ under the License.
             <key-map field-name="parentConfigTypeId" rel-field-name="configTypeId"></key-map>
         </relation>
     </entity>
+
+    <extend-entity entity-name="OrderAdjustment">
+        <field name="appliesToQuantity" type="fixed-point">
+          <description>
+            If set this changes how the pro rating is performed, by default an item adjustment applies to the whole
+            quantity.
+            eg: if the item has quantity = 5 and appliesToQuantity is set to 2, the amount of the adjustment is to 
+            be distributed among 2 items. Typically this is used to distribute different tax adjustments on a same
+            OrderItem line when the tax has to change after a few items already has been billed.
+          </description>
+        </field>
+        <field name="neverProrate" type="indicator">
+          <description>
+            When set to Y this forces the invoice service not to prorate the amount.
+            Typically for not prorating the sales taxes global adjustments that were
+            created to offset tax differences after an order change; because those
+            offsets need to be billed in full.
+          </description>
+        </field>
+    </extend-entity>
     
 </entitymodel>

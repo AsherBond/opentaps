@@ -68,6 +68,8 @@ public class OrderService extends DomainService implements OrderServiceInterface
     protected String orderId;
     protected String noteText;
     protected String newOrderContactMechId;
+    // parameter passed by the seca when changing a ship group
+    protected String contactMechId;
 
     /** {@inheritDoc} */
     public void setOrderId(String orderId) {
@@ -452,8 +454,19 @@ public class OrderService extends DomainService implements OrderServiceInterface
             // may be needed for face-to-face orders
             PostalAddress originAddress = Repository.getFirst(order.getOriginAddresses());
 
+            Boolean keepBilledTaxes = false;
+            if (UtilValidate.isNotEmpty(contactMechId)) {
+                Debug.logInfo("Found contactMechId [" + contactMechId + "], we are changing a ship group address so keep the already billed taxes", MODULE);
+                keepBilledTaxes = true;
+            }
+
             // for each ship groups, as they may have different shipping
             for (OrderItemShipGroup shipGroup : order.getOrderItemShipGroups()) {
+
+                // sum the total amounts of items we are going to tax, we then use this to pro rate the global promo / shipping tax
+                // for this ship group
+                BigDecimal shipGroupSubTotal = BigDecimal.ZERO;
+
                 // recalculate taxes for the order
                 List<OrderItem> validItems = order.getValidItems(shipGroup);
                 List<String> itemIds = new ArrayList<String>(validItems.size());
@@ -467,14 +480,21 @@ public class OrderService extends DomainService implements OrderServiceInterface
                     // only calculate the taxes for the non shipped items
                     BigDecimal shippedQty = item.getShippedQuantity(shipGroup);
                     BigDecimal orderedQty = item.getOrderedQuantity(shipGroup);
-                    BigDecimal qty = orderedQty.subtract(shippedQty);
+                    BigDecimal qty = orderedQty;
+                    if (keepBilledTaxes) {
+                        qty = qty.subtract(shippedQty);
+                    }
                     // pro rate the amount and shipping amount to the quantity actually in the ship group
                     // note: the qty cannot be 0 here as getValidItems filter those
                     products.add(i, Repository.genericValueFromEntity(item.getProduct()));
-                    amounts.add(i, item.getSubTotal().multiply(qty).divide(item.getOrderedQuantity(), 99, BigDecimal.ROUND_HALF_EVEN));
-                    shippingAmounts.add(i, item.getShippingAmount().multiply(qty).divide(item.getOrderedQuantity(), 99, BigDecimal.ROUND_HALF_EVEN));
+                    BigDecimal pr = qty.divide(item.getOrderedQuantity(), 99, BigDecimal.ROUND_HALF_EVEN);
+                    amounts.add(i, item.getSubTotal().multiply(pr));
+                    shippingAmounts.add(i, item.getShippingAmount().multiply(pr));
                     itemPrices.add(i, item.getUnitPrice());
                     itemIds.add(i, item.getOrderItemSeqId());
+                    Debug.logInfo("Item [" + item.getOrderItemSeqId() + "] calculating tax with : qty = " + qty + " (total ordered = " + item.getOrderedQuantity() + ", in ship group = " + orderedQty + ", of which shipped = " + shippedQty + ", Price = " + item.getUnitPrice() + " ==> amount to tax = " + amounts.get(i), MODULE);
+                    // note: use orderedQty instead of qty as we want total value for this ship group in order to compare it to the order subtotal
+                    shipGroupSubTotal = shipGroupSubTotal.add(item.getSubTotal().multiply(orderedQty).divide(item.getOrderedQuantity(), 99, BigDecimal.ROUND_HALF_EVEN));
                 }
 
                 // determine the shipping address
@@ -496,12 +516,16 @@ public class OrderService extends DomainService implements OrderServiceInterface
                 service.setInItemAmountList(amounts);
                 service.setInItemShippingList(shippingAmounts);
                 service.setInItemPriceList(itemPrices);
-                service.setInOrderShippingAmount(order.getShippingAmount());
                 service.setInBillToPartyId(order.getBillToPartyId());
                 service.setInShippingAddress(Repository.genericValueFromEntity(shippingAddress));
                 // for tax authorities that have taxPromotions="Y", sends the sum promotions and this deduct the tax at the global level
                 // note: this only includes the order level adjustments
-                service.setInOrderPromotionsAmount(order.getOtherAdjustmentsAmount());
+                // note: we should pro rate the shipping and promotion amounts so the taxes are properly distributed among ship groups
+                //  and make sure that multi ship group orders do not tax those multiple times
+                BigDecimal orderPromotionsAmount = order.getOtherAdjustmentsAmount();
+                BigDecimal orderShippingAmount = order.getShippingAmount();
+                service.setInOrderPromotionsAmount(orderPromotionsAmount);
+                service.setInOrderShippingAmount(orderShippingAmount);
                 runSync(service);
 
                 List<GenericValue> orderAdjustments = service.getOutOrderAdjustments();
@@ -530,6 +554,8 @@ public class OrderService extends DomainService implements OrderServiceInterface
                         }
 
                         OrderItem item = validItems.get(i);
+                        BigDecimal shippedQty = item.getShippedQuantity(shipGroup);
+                        BigDecimal orderedQty = item.getOrderedQuantity(shipGroup);
                         BigDecimal itemNewTaxAmount = BigDecimal.ZERO;
 
                         // get the existing tax adjustments for the same item then remove any non billed adjustment amounts
@@ -542,17 +568,32 @@ public class OrderService extends DomainService implements OrderServiceInterface
                         BigDecimal existingItemTaxAmount = Entity.sumFieldValues(existingTaxes, OrderAdjustment.Fields.amount);
                         for (OrderAdjustment adj : existingTaxes) {
                             // if this adjustment was not billed, just remove it
+                            removedTaxAmount = removedTaxAmount.add(adj.getAmount());
                             List<? extends OrderAdjustmentBilling> billedTaxes = adj.getOrderAdjustmentBillings();
                             if (UtilValidate.isEmpty(billedTaxes)) {
-                                removedTaxAmount = removedTaxAmount.add(adj.getAmount());
+                                Debug.logInfo("Item [" + item.getOrderItemSeqId() + "] removing tax adj = " + adj.getAmount() + " for auth [" + adj.getTaxAuthGeoId() + " " + adj.getTaxAuthPartyId() + "]", MODULE);
                                 repository.remove(adj);
                             } else {
                                 // else trim the adjustment amount to the billed amount
                                 BigDecimal billedTaxAmount = Entity.sumFieldValues(billedTaxes, OrderAdjustmentBilling.Fields.amount);
-                                removedTaxAmount = removedTaxAmount.add(adj.getAmount()).subtract(billedTaxAmount);
-                                itemNewTaxAmount = itemNewTaxAmount.add(billedTaxAmount);
+                                Debug.logInfo("Item [" + item.getOrderItemSeqId() + "] trimming tax adj = " + adj.getAmount() + " to billed amount = " + billedTaxAmount + " for auth [" + adj.getTaxAuthGeoId() + " " + adj.getTaxAuthPartyId() + "]", MODULE);
                                 adj.setAmount(billedTaxAmount);
-                                repository.createOrUpdate(adj);
+                                // mark this adjustment that it applied to the already shipped quantity so that it does not get pro rated in future Invoices
+                                BigDecimal applyToQty = shippedQty;
+                                adj.setAppliesToQuantity(applyToQty);
+                                // if we do not keep the billed taxes, cancel the existing item tax
+                                if (!keepBilledTaxes) {
+                                    repository.createOrUpdate(adj);
+                                    // mark the offsetting adjustment to apply to the non shipped items so they are properly pro rated in future Invoices
+                                    adj.setAppliesToQuantity(orderedQty.subtract(shippedQty));
+                                    adj.setOrderAdjustmentId(adj.getNextSeqId());
+                                    adj.setAmount(billedTaxAmount.negate());
+                                    repository.createOrUpdate(adj);
+                                } else {
+                                    repository.createOrUpdate(adj);
+                                    removedTaxAmount = removedTaxAmount.subtract(billedTaxAmount);
+                                    itemNewTaxAmount = itemNewTaxAmount.add(billedTaxAmount);
+                                }
                             }
                         }
 
@@ -567,6 +608,8 @@ public class OrderService extends DomainService implements OrderServiceInterface
                             orderAdjustment.setOrderItemSeqId(itemIds.get(i));
                             orderAdjustment.setShipGroupSeqId(shipGroup.getShipGroupSeqId());
                             orderAdjustment.setOrderAdjustmentId(orderAdjustment.getNextSeqId());
+                            // mark the offsetting adjustment to apply to the non shipped items so they are properly pro rated in future Invoices
+                            orderAdjustment.setAppliesToQuantity(orderedQty.subtract(shippedQty));
                             // add the new tax adjustment
                             Debug.logInfo("Creating new tax adjustment for order [" + orderId + "] item [" + itemIds.get(i) + "] ship group [" + shipGroup.getShipGroupSeqId() + "] and tax auth [" + orderAdjustment.getTaxAuthGeoId() + " " + orderAdjustment.getTaxAuthPartyId() + "], new tax amount = " + orderAdjustment.getAmount(), MODULE);
                             repository.createOrUpdate(orderAdjustment);
@@ -589,12 +632,16 @@ public class OrderService extends DomainService implements OrderServiceInterface
             // create the offset for the global order tax adjustments
             // not that those totals are already rounded with taxFinalRounding
             BigDecimal orderTaxDifference = totalNewOrderTax.subtract(createdTaxAmount).subtract(totalExistingOrderTax.subtract(removedTaxAmount));
-            Debug.logInfo("totalNewOrderTax = " + totalNewOrderTax + ", totalExistingOrderTax = " + totalExistingOrderTax + " ==> orderTaxDifference = " + orderTaxDifference , MODULE);
+            Debug.logInfo("totalNewOrderTax = " + totalNewOrderTax + " created = " + createdTaxAmount + ", removed = " + removedTaxAmount + ", totalExistingOrderTax = " + totalExistingOrderTax + " ==> orderTaxDifference = " + orderTaxDifference , MODULE);
             if (orderTaxDifference.signum() != 0) {
                 CreateOrderAdjustmentService service = new CreateOrderAdjustmentService();
                 service.setInOrderId(orderId);
                 service.setInOrderItemSeqId("_NA_");
                 service.setInShipGroupSeqId("_NA_");
+                // because this tax did not exist when the order was first created
+                // if any part of the order was billed already prorating must not be used
+                // when billing this adjustment
+                service.setInNeverProrate("Y");
                 service.setInOrderAdjustmentTypeId(OrderAdjustmentTypeConstants.SALES_TAX);
                 service.setInDescription("Existing tax was = " + totalExistingOrderTax + ", new tax amount = " + totalNewOrderTax + " (Tax adjustment due to order change)");
                 service.setInAmount(orderTaxDifference);
@@ -654,6 +701,11 @@ public class OrderService extends DomainService implements OrderServiceInterface
         } catch (Exception e) {
             throw new ServiceException(e);
         }
+    }
+
+    /** {@inheritDoc} */
+    public void setContactMechId(String contactMechId) {
+        this.contactMechId = contactMechId;
     }
 
     /** {@inheritDoc} */

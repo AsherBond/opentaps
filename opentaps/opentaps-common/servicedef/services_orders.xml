@@ -284,6 +284,7 @@ under the License.
             location="org.opentaps.common.domain.order.OrderService" invoke="recalcOrderTax">
         <description>Adjust the order tax amount</description>
         <attribute name="orderId" type="String" mode="IN"/>
+        <attribute name="contactMechId" type="String" mode="IN" optional="true"/>
     </service>
 
     <service name="recalcShippingTotal" engine="java"
