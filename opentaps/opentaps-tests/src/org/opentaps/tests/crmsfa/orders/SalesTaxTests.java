@@ -30,13 +30,17 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.opentaps.base.entities.InventoryItem;
+import org.opentaps.base.services.CreatePartyPostalAddressService;
 import org.opentaps.base.services.CreatePhysicalInventoryAndVarianceService;
+import org.opentaps.base.services.TestShipOrderManualService;
+import org.opentaps.base.services.UpdateOrderItemShipGroupService;
 import org.opentaps.common.domain.order.OrderSpecification;
 import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
+import org.opentaps.foundation.entity.Entity;
 import org.opentaps.tests.financials.FinancialAsserts;
 
 /**
@@ -829,6 +833,356 @@ public class SalesTaxTests extends OrderTestCase {
         assertSalesFact(salesOrder.getOrderId(), 659.89, -335.94, 0.0, 323.95);
         assertSalesTaxFact(salesOrder.getOrderId(), "_NA_", "_NA_", 659.89, -335.94, 0.0, 323.95, 599.90, 3.60);
         assertSalesTaxFact(salesOrder.getOrderId(), "CA_BOE", "CA", 659.89, -335.94, 0.0, 323.95, 599.90, 22.50);
+
+    }
+
+    /**
+     * Verify that sales tax is correctly recalculated after changing the shipping address on an existing order.
+     * @throws Exception if an error occurs
+     */
+    public void testSalesTaxAfterAddressChange() throws Exception {
+        // Copy user ca1
+        String customerPartyId = createPartyFromTemplate(ca1.getString("partyId"), "Copy of ca1 for testSalesTaxAfterAddressChange");
+        GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
+
+        // get the postal addresses in CA
+        GenericValue customerAddressCA = EntityUtil.getOnly(delegator.findByAnd("PartyAndPostalAddress", UtilMisc.toMap("partyId", customerPartyId, "postalCode", "90049")));
+
+        // create a postal address in NY
+        CreatePartyPostalAddressService createPartyPostalAddress = new CreatePartyPostalAddressService();
+        createPartyPostalAddress.setInUserLogin(admin);
+        createPartyPostalAddress.setInPartyId(customerPartyId);
+        createPartyPostalAddress.setInToName("Shipping Address");
+        createPartyPostalAddress.setInAddress1("Test Street");
+        createPartyPostalAddress.setInCity("New York");
+        createPartyPostalAddress.setInPostalCode("10001");
+        createPartyPostalAddress.setInCountryGeoId("USA");
+        createPartyPostalAddress.setInStateProvinceGeoId("NY");
+        createPartyPostalAddress.setInContactMechPurposeTypeId("SHIPPING_LOCATION");
+        runAndAssertServiceSuccess(createPartyPostalAddress);
+
+        String customerAddressNYId = createPartyPostalAddress.getOutContactMechId();
+        String customerAddressCAId = customerAddressCA.getString("contactMechId");
+
+        // Create a test products
+        GenericValue testProduct1 = createTestProduct("testSalesTaxAfterAddressChange Product 1", admin);
+        String productId1 = testProduct1.getString("productId");
+        assignDefaultPrice(testProduct1, new BigDecimal("10.0"), admin);
+
+        // create an order of 5 product1
+        Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
+        orderItems.put(testProduct1, new BigDecimal("5.0"));
+        User = demoCSR;
+        SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, customer, productStoreId, "EXT_OFFLINE", customerAddressCAId);
+        String orderId = salesOrder.getOrderId();
+        Debug.logInfo("testSalesTaxAfterAddressChange created order [" + orderId + "]", MODULE);
+        OrderRepositoryInterface repository = getOrderRepository(admin);
+        Order order = repository.getOrderById(salesOrder.getOrderId());
+
+        // find the order item
+        OrderItem orderItem1 = null;
+        for (OrderItem item : order.getOrderItems()) {
+            if (productId1.equals(item.getProductId())) {
+                orderItem1 = item;
+            }
+        }
+        assertNotNull("Did not find order item 1 in order [" + orderId + "]", orderItem1);
+
+        // update order with same values, this is a hack to have all the promotions, taxes, shipping charges calculated
+        Map<String, Object> callCtxt = new HashMap<String, Object>();
+        callCtxt.put("userLogin", User);
+        callCtxt.put("orderId", orderId);
+        callCtxt.put("itemQtyMap", UtilMisc.toMap(orderItem1.getOrderItemSeqId() + ":00001", "5.0"));
+        callCtxt.put("itemPriceMap", UtilMisc.toMap(orderItem1.getOrderItemSeqId(), "10.00"));
+        callCtxt.put("overridePriceMap", new HashMap<String, Object>());
+        runAndAssertServiceSuccess("opentaps.updateOrderItems", callCtxt);
+
+        // verify the details
+        // Note: _NA_ taxes only applies to items with unit price > 25.00, so it does not apply here
+        Debug.logInfo("testSalesTaxAfterAddressChange: step 1 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", MODULE);
+        // Order items sub total should be:
+        //  5 x product1 = 50.0
+        //  = 50.00
+        assertEquals("Order [" + orderId + "] item 1 sub total incorrect.", orderItem1.getSubTotal(), new BigDecimal("50.00"));
+        assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("50.00"));
+        // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
+        //  20 % of 50.00 = 10.00
+        assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("10.00"));
+        // 10% off promotion: 50.00 x 0.1 = 5.00
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-5.00"));
+        // Tax amount should be:
+        //      1 + 6.25 % of 50.00  = 0.500 + 3.125 = 3.625 ~ 3.63
+        //  1 % of 10.00 = 0.10 (note: only the CA-LA CA_BOE tax authority taxes shipping)
+        //  1 % of -5.00 promotion = -0.05 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 3.675 ~ 3.56
+        assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("3.63"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("3.68"));
+
+        // other item adjustments
+        assertEquals("Order [" + orderId + "] item 1 other adjustments incorrect.", orderItem1.getOtherAdjustmentsAmount(), new BigDecimal("0.00"));
+
+        // Change the shipping address to the NY one
+        UpdateOrderItemShipGroupService ser = new UpdateOrderItemShipGroupService();
+        ser.setInUserLogin(admin);
+        ser.setInOrderId(orderId);
+        ser.setInShipGroupSeqId("00001");
+        ser.setInCarrierPartyId("_NA_");
+        ser.setInShipmentMethodTypeId("STANDARD");
+        ser.setInContactMechId(customerAddressNYId);
+        ser.setInContactMechPurposeTypeId("SHIPPING_LOCATION");
+        runAndAssertServiceSuccess(ser);
+
+        // reload entities
+        order = repository.getOrderById(salesOrder.getOrderId());
+        orderItem1 = order.getOrderItem(orderItem1.getOrderItemSeqId());
+
+        // verify the details
+        // Note: _NA_ taxes only applies to items with unit price > 25.00, so it does not apply here
+        Debug.logInfo("testSalesTaxAfterAddressChange: step 2 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", MODULE);
+        // Order items sub total should be:
+        //  5 x product1 = 50.0
+        //  = 50.00
+        assertEquals("Order [" + orderId + "] item 1 sub total incorrect.", orderItem1.getSubTotal(), new BigDecimal("50.00"));
+        assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("50.00"));
+        // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
+        //  20 % of 50.00 = 10.00
+        assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("10.00"));
+        // 10% off promotion: 50.00 x 0.1 = 5.00
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-5.00"));
+        // Tax amount should be: (Note NY does not tax shipping or promotions)
+        //      4.25 % of 50.00  = 2.125 ~ 2.13
+        assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("2.13"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("2.13"));
+
+        // now ship 3 items
+        Map<String, Map<String, BigDecimal>> itemsToPack = FastMap.newInstance();
+        itemsToPack.put("00001", UtilMisc.toMap(orderItem1.getOrderItemSeqId(), new BigDecimal("3.0")));
+        TestShipOrderManualService ship = new TestShipOrderManualService();
+        ship.setInUserLogin(admin);
+        ship.setInOrderId(order.getOrderId());
+        ship.setInFacilityId(facilityId);
+        ship.setInItems(itemsToPack);
+        runAndAssertServiceSuccess(ship);
+
+        // Change the shipping address back to the CA one
+        ser = new UpdateOrderItemShipGroupService();
+        ser.setInUserLogin(admin);
+        ser.setInOrderId(orderId);
+        ser.setInShipGroupSeqId("00001");
+        ser.setInCarrierPartyId("_NA_");
+        ser.setInShipmentMethodTypeId("STANDARD");
+        ser.setInContactMechId(customerAddressCAId);
+        ser.setInContactMechPurposeTypeId("SHIPPING_LOCATION");
+        runAndAssertServiceSuccess(ser);
+
+        // reload entities
+        order = repository.getOrderById(salesOrder.getOrderId());
+        orderItem1 = order.getOrderItem(orderItem1.getOrderItemSeqId());
+
+        // verify the details
+        // Note: _NA_ taxes only applies to items with unit price > 25.00, so it does not apply here
+        Debug.logInfo("testSalesTaxAfterAddressChange: step 3 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", MODULE);
+        // Order items sub total should be:
+        //  5 x product1 = 50.0
+        //  = 50.00
+        assertEquals("Order [" + orderId + "] item 1 sub total incorrect.", orderItem1.getSubTotal(), new BigDecimal("50.00"));
+        assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("50.00"));
+        // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
+        //  20 % of 50.00 = 10.00
+        assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("10.00"));
+        // 10% off promotion: 50.00 x 0.1 = 5.00
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-5.00"));
+        // Tax amount should be:
+        //      4.25 % of 30.00  = 1.275 ~ 1.28
+        //  1 + 6.25 % of 20.00  = 1.45
+        // = 2.725 ~ 2.73
+        // Note global shipping / promo taxes are NOT pro rated
+        //  1 % of 10.00 = 0.10 (note: only the CA-LA CA_BOE tax authority taxes shipping)
+        //  1 % of -5.00 promotion = -0.05 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 2.775 ~ 2.78
+        assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("2.73"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("2.78"));
+
+        // complete the order
+        itemsToPack = FastMap.newInstance();
+        itemsToPack.put("00001", UtilMisc.toMap(orderItem1.getOrderItemSeqId(), new BigDecimal("2.0")));
+        ship = new TestShipOrderManualService();
+        ship.setInUserLogin(admin);
+        ship.setInOrderId(order.getOrderId());
+        ship.setInFacilityId(facilityId);
+        ship.setInItems(itemsToPack);
+        runAndAssertServiceSuccess(ship);
+
+        // check there are 2 invoices
+        List<Invoice> invoices = order.getInvoices();
+        assertEquals("Should have been 2 invoices for order [" + order.getOrderId() + "]", invoices.size(), 2);
+        // check the invoices total match the order total
+        BigDecimal invoiceTotal = BigDecimal.ZERO;
+        for (Invoice i : invoices) {
+            invoiceTotal = invoiceTotal.add(i.getInvoiceTotal());
+        }
+        assertEquals("Invoices [" + Entity.getDistinctFieldValues(String.class, invoices, Invoice.Fields.invoiceId) + "] total and order [" + order.getOrderId() + "] total did not match", order.getTotal(), invoiceTotal);
+
+        // check the order is now completed
+        assertOrderCompleted(order.getOrderId());
+    }
+
+
+    /**
+     * Verify that sales tax is correctly recalculated after changing the shipping address on an existing order.
+     * Same as above but ship to the CA address first (which taxes shipping and promotions)
+     * @throws Exception if an error occurs
+     */
+    public void testSalesTaxAfterAddressChange2() throws Exception {
+        // Copy user ca1
+        String customerPartyId = createPartyFromTemplate(ca1.getString("partyId"), "Copy of ca1 for testSalesTaxAfterAddressChange");
+        GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
+
+        // get the postal addresses in CA
+        GenericValue customerAddressCA = EntityUtil.getOnly(delegator.findByAnd("PartyAndPostalAddress", UtilMisc.toMap("partyId", customerPartyId, "postalCode", "90049")));
+
+        // create a postal address in NY
+        CreatePartyPostalAddressService createPartyPostalAddress = new CreatePartyPostalAddressService();
+        createPartyPostalAddress.setInUserLogin(admin);
+        createPartyPostalAddress.setInPartyId(customerPartyId);
+        createPartyPostalAddress.setInToName("Shipping Address");
+        createPartyPostalAddress.setInAddress1("Test Street");
+        createPartyPostalAddress.setInCity("New York");
+        createPartyPostalAddress.setInPostalCode("10001");
+        createPartyPostalAddress.setInCountryGeoId("USA");
+        createPartyPostalAddress.setInStateProvinceGeoId("NY");
+        createPartyPostalAddress.setInContactMechPurposeTypeId("SHIPPING_LOCATION");
+        runAndAssertServiceSuccess(createPartyPostalAddress);
+
+        String customerAddressNYId = createPartyPostalAddress.getOutContactMechId();
+        String customerAddressCAId = customerAddressCA.getString("contactMechId");
+
+        // Create a test products
+        GenericValue testProduct1 = createTestProduct("testSalesTaxAfterAddressChange Product 1", admin);
+        String productId1 = testProduct1.getString("productId");
+        assignDefaultPrice(testProduct1, new BigDecimal("10.0"), admin);
+
+        // create an order of 5 product1
+        Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
+        orderItems.put(testProduct1, new BigDecimal("5.0"));
+        User = demoCSR;
+        SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, customer, productStoreId, "EXT_OFFLINE", customerAddressCAId);
+        String orderId = salesOrder.getOrderId();
+        Debug.logInfo("testSalesTaxAfterAddressChange created order [" + orderId + "]", MODULE);
+        OrderRepositoryInterface repository = getOrderRepository(admin);
+        Order order = repository.getOrderById(salesOrder.getOrderId());
+
+        // find the order item
+        OrderItem orderItem1 = null;
+        for (OrderItem item : order.getOrderItems()) {
+            if (productId1.equals(item.getProductId())) {
+                orderItem1 = item;
+            }
+        }
+        assertNotNull("Did not find order item 1 in order [" + orderId + "]", orderItem1);
+
+        // update order with same values, this is a hack to have all the promotions, taxes, shipping charges calculated
+        Map<String, Object> callCtxt = new HashMap<String, Object>();
+        callCtxt.put("userLogin", User);
+        callCtxt.put("orderId", orderId);
+        callCtxt.put("itemQtyMap", UtilMisc.toMap(orderItem1.getOrderItemSeqId() + ":00001", "5.0"));
+        callCtxt.put("itemPriceMap", UtilMisc.toMap(orderItem1.getOrderItemSeqId(), "10.00"));
+        callCtxt.put("overridePriceMap", new HashMap<String, Object>());
+        runAndAssertServiceSuccess("opentaps.updateOrderItems", callCtxt);
+
+        // verify the details
+        // Note: _NA_ taxes only applies to items with unit price > 25.00, so it does not apply here
+        Debug.logInfo("testSalesTaxAfterAddressChange: step 1 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", MODULE);
+        // Order items sub total should be:
+        //  5 x product1 = 50.0
+        //  = 50.00
+        assertEquals("Order [" + orderId + "] item 1 sub total incorrect.", orderItem1.getSubTotal(), new BigDecimal("50.00"));
+        assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("50.00"));
+        // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
+        //  20 % of 50.00 = 10.00
+        assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("10.00"));
+        // 10% off promotion: 50.00 x 0.1 = 5.00
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-5.00"));
+        // Tax amount should be:
+        //      1 + 6.25 % of 50.00  = 0.500 + 3.125 = 3.625 ~ 3.63
+        //  1 % of 10.00 = 0.10 (note: only the CA-LA CA_BOE tax authority taxes shipping)
+        //  1 % of -5.00 promotion = -0.05 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 3.675 ~ 3.56
+        assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("3.63"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("3.68"));
+
+        // other item adjustments
+        assertEquals("Order [" + orderId + "] item 1 other adjustments incorrect.", orderItem1.getOtherAdjustmentsAmount(), new BigDecimal("0.00"));
+
+        // now ship 3 items
+        Map<String, Map<String, BigDecimal>> itemsToPack = FastMap.newInstance();
+        itemsToPack.put("00001", UtilMisc.toMap(orderItem1.getOrderItemSeqId(), new BigDecimal("3.0")));
+        TestShipOrderManualService ship = new TestShipOrderManualService();
+        ship.setInUserLogin(admin);
+        ship.setInOrderId(order.getOrderId());
+        ship.setInFacilityId(facilityId);
+        ship.setInItems(itemsToPack);
+        runAndAssertServiceSuccess(ship);
+
+        // Change the shipping address to the NY one
+        UpdateOrderItemShipGroupService ser = new UpdateOrderItemShipGroupService();
+        ser.setInUserLogin(admin);
+        ser.setInOrderId(orderId);
+        ser.setInShipGroupSeqId("00001");
+        ser.setInCarrierPartyId("_NA_");
+        ser.setInShipmentMethodTypeId("STANDARD");
+        ser.setInContactMechId(customerAddressNYId);
+        ser.setInContactMechPurposeTypeId("SHIPPING_LOCATION");
+        runAndAssertServiceSuccess(ser);
+
+        // reload entities
+        order = repository.getOrderById(salesOrder.getOrderId());
+        orderItem1 = order.getOrderItem(orderItem1.getOrderItemSeqId());
+
+        // verify the details
+        // Note: _NA_ taxes only applies to items with unit price > 25.00, so it does not apply here
+        Debug.logInfo("testSalesTaxAfterAddressChange: step 3 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", MODULE);
+        // Order items sub total should be:
+        //  5 x product1 = 50.0
+        //  = 50.00
+        assertEquals("Order [" + orderId + "] item 1 sub total incorrect.", orderItem1.getSubTotal(), new BigDecimal("50.00"));
+        assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("50.00"));
+        // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
+        //  20 % of 50.00 = 10.00
+        assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("10.00"));
+        // 10% off promotion: 50.00 x 0.1 = 5.00
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-5.00"));
+        // Tax amount should be:
+        //      4.25 % of 20.00  = 0.85
+        //  1 + 6.25 % of 30.00  = 2.175 ~ 2.18
+        // = 3.025 ~ 3.03
+        // Note global shipping / promo taxes are NOT pro rated, so they will be removed here
+        // = 3.03
+        assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("3.03"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("3.03"));
+
+        // complete the order
+        itemsToPack = FastMap.newInstance();
+        itemsToPack.put("00001", UtilMisc.toMap(orderItem1.getOrderItemSeqId(), new BigDecimal("2.0")));
+        ship = new TestShipOrderManualService();
+        ship.setInUserLogin(admin);
+        ship.setInOrderId(order.getOrderId());
+        ship.setInFacilityId(facilityId);
+        ship.setInItems(itemsToPack);
+        runAndAssertServiceSuccess(ship);
+
+        // check there are 2 invoices
+        List<Invoice> invoices = order.getInvoices();
+        assertEquals("Should have been 2 invoices for order [" + order.getOrderId() + "]", invoices.size(), 2);
+        // check the invoices total match the order total
+        BigDecimal invoiceTotal = BigDecimal.ZERO;
+        for (Invoice i : invoices) {
+            invoiceTotal = invoiceTotal.add(i.getInvoiceTotal());
+        }
+        assertEquals("Invoices [" + Entity.getDistinctFieldValues(String.class, invoices, Invoice.Fields.invoiceId) + "] total and order [" + order.getOrderId() + "] total did not match", order.getTotal(), invoiceTotal);
+
+        // check the order is now completed
+        assertOrderCompleted(order.getOrderId());
 
     }
 
