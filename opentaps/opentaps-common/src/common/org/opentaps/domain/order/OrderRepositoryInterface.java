@@ -58,22 +58,21 @@ public interface OrderRepositoryInterface extends RepositoryInterface {
 
     /**
      * Find orders which have the specified external ID, which is usually an order Id from an external integration system.
-     * @param externalId
-     * @return
-     * @throws RepositoryException
-     * @throws EntityNotFoundException
+     * @param externalId the external order id
+     * @return a list of <code>Order</code>
+     * @throws RepositoryException if an error occurs
      */
     public List<Order> getOrdersByExternalId(String externalId) throws RepositoryException;
-    
+
     /**
      * Finds and returns one Order matching the externalId.  If more than one is found, it will return an EntityNotFoundException.
-     * @param externalId
-     * @return
-     * @throws RepositoryException
-     * @throws EntityNotFoundException
+     * @param externalId the external order id
+     * @return an <code>Order</code>
+     * @throws RepositoryException if an error occurs
+     * @throws EntityNotFoundException if no or more than one <code>Order</code> is found matching the given external id
      */
     public Order getOrderByExternalId(String externalId) throws RepositoryException, EntityNotFoundException;
-    
+
     /**
      * Finds all the <code>OrderAdjustmentType</code> ordered by description.
      * @return the list of <code>OrderAdjustmentType</code>
@@ -106,7 +105,7 @@ public interface OrderRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      * @throws EntityNotFoundException no <code>OrderItem</code> is found for the given sequence id in the given order
      */
-    public OrderItem getOrderItem(Order order, String orderItemSeqId) throws RepositoryException, EntityNotFoundException;
+    public OrderItem getOrderItem(Order order, String orderItemSeqId) throws RepositoryException, EntityNotFoundException;;
 
     /**
      * Finds the list of <code>OrderItemAssoc</code> linked to the given <code>OrderItem</code>.
@@ -429,10 +428,10 @@ public interface OrderRepositoryInterface extends RepositoryInterface {
 
     /**
      * Finds the OrderItemShipGrpInvRes by product id/facility id.  Returns empty list if none found.
-     * @param product id
-     * @param facility id
+     * @param productId a product id
+     * @param facilityId a facility id
      * @return OrderItemShipGrpInvRes list
-     * @throws RepositoryException
+     * @throws RepositoryException if an error occurs
      */
     public List<OrderItemShipGrpInvRes> getBackOrderedInventoryReservations(String productId, String facilityId) throws RepositoryException;
 
@@ -441,7 +440,7 @@ public interface OrderRepositoryInterface extends RepositoryInterface {
      * @param orderId an order identifier
      * @param contactMechId a contact mech id that should be postal address or null
      * @param purposeTypeId contact mech purpose type
-     * @throws RepositoryException
+     * @throws RepositoryException if an error occurs
      */
     public void updateOrderAddress(String orderId, String contactMechId, String purposeTypeId) throws RepositoryException;
 
