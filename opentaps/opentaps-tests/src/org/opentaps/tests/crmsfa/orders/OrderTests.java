@@ -3157,9 +3157,19 @@ public class OrderTests extends OrderTestCase {
         InvoiceItem invoiceItemFirst = null;
         InvoiceItem invoiceItemA = null;
         InvoiceItem invoiceItemB = null;
+        boolean firstInvoiceItemIsLikeA = true;
         for (InvoiceItem invoiceItem : invoice.getInvoiceItems()) {
             if (invoiceItemFirst == null) {
                 invoiceItemFirst = invoiceItem;
+                // determine how it was tagged
+                if (orderItemTagsA.get("acctgTagEnumId1").equals(invoiceItem.getAcctgTagEnumId1())) {
+                    firstInvoiceItemIsLikeA = true;
+                } else if (orderItemTagsB.get("acctgTagEnumId1").equals(invoiceItem.getAcctgTagEnumId1())) {
+                    firstInvoiceItemIsLikeA = false;
+                } else {
+                    // not tagged like either A or B ?
+                    fail("Unexpected accounting tags on the first invoice item of invoice [], expected either [" + orderItemTagsA.get("acctgTagEnumId1") + "] or [" + orderItemTagsB.get("acctgTagEnumId1") + "] but found [" + invoiceItem.getAcctgTagEnumId1() + "]");
+                }
             }
 
             // invoice item related to an order item are tagged according
@@ -3204,7 +3214,11 @@ public class OrderTests extends OrderTestCase {
                                                                 EntityCondition.makeCondition("productId", null),
                                                                 EntityCondition.makeCondition("debitCreditFlag", "C"))
                                                                               , null, null);
-        transInvoiceItemAs.addAll(transInvoiceItemOthers);
+        if (firstInvoiceItemIsLikeA) {
+            transInvoiceItemAs.addAll(transInvoiceItemOthers);
+        } else {
+            transInvoiceItemBs.addAll(transInvoiceItemOthers);
+        }
 
         BigDecimal totalA = BigDecimal.ZERO;
         for (GenericValue entry : transInvoiceItemAs) {
