@@ -35,6 +35,7 @@ import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;
+import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 
 /**
@@ -80,7 +81,7 @@ public class MultiShipGroupTests extends OrderTestCase {
         // create an order with offline payment
         Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
         GenericValue testProduct = createTestProduct("testTwoShipGroupLifeCycle test product", demowarehouse1);
-        assignDefaultPrice(testProduct, new BigDecimal("15.99"), admin);
+        assignDefaultPrice(testProduct, new BigDecimal("5.00"), admin);
         orderItems.put(testProduct, new BigDecimal("10.0"));
         User = DemoSalesManager;
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, DemoAccount1, productStoreId);
@@ -148,13 +149,13 @@ public class MultiShipGroupTests extends OrderTestCase {
         Debug.logInfo("testTwoShipGroupLifeCycle created payments [" + paymentId1 + "] and [" + paymentId2 + "]", MODULE);
 
         // receive the product to ensure enough available
-        receiveInventoryProduct(testProduct, new BigDecimal("10.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("12.55"), demowarehouse1);
+        receiveInventoryProduct(testProduct, new BigDecimal("10.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("3.55"), demowarehouse1);
 
         // ship the whole thing, which has the same effect as packing each ship group separately
         Map results = runAndAssertServiceSuccess("testShipOrder", UtilMisc.toMap("orderId", orderId, "facilityId", facilityId, "userLogin", demowarehouse1));
         List<String> shipmentIds = (List<String>) results.get("shipmentIds");
         assertNotNull(shipmentIds);
-        assertTrue(shipmentIds.size() == 2);
+        assertEquals("Order [" + order.getOrderId() + "] should have been packed in 2 shipments", 2, shipmentIds.size());
 
         // find the shipments with matching primary order and ship group
         GenericValue shipment1 = EntityUtil.getFirst(delegator.findByAnd("Shipment", UtilMisc.toMap("primaryOrderId", orderId, "primaryShipGroupSeqId", "00001")));
@@ -202,6 +203,17 @@ public class MultiShipGroupTests extends OrderTestCase {
 
         // the order should be completed
         assertOrderCompleted(orderId);
+
+        // verify that the invoices total match the order total
+        List<Invoice> invoices = order.getInvoices();
+        assertEquals("Should have exactly 2 invoices for the order [" + order.getOrderId() + "]", 2, invoices.size());
+        BigDecimal invoiceTotal = BigDecimal.ZERO;
+        for (Invoice i : invoices) {
+            invoiceTotal = invoiceTotal.add(i.getInvoiceTotal());
+        }
+        Debug.logInfo("Order [" + order.getOrderId() + "] total = " + order.getTotal(), MODULE);
+        assertEquals("Invoices [" + Entity.getDistinctFieldValues(String.class, invoices, Invoice.Fields.invoiceId) + "] total and order [" + order.getOrderId() + "] total did not match", order.getTotal(), invoiceTotal);
+
     }
 
 }
