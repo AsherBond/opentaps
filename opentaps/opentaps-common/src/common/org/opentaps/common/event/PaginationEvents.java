@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,9 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntity;
+import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.common.builder.ListBuilder;
 import org.opentaps.common.builder.ListBuilderException;
 import org.opentaps.common.pagination.PaginationState;
@@ -270,6 +274,7 @@ public final class PaginationEvents {
     }
 
     private static String exportPaginatedListToExcel(final String strPaginatorName, final String strOpentapsApplicationName, HttpServletRequest request, HttpServletResponse response) {
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Paginator paginator = PaginatorFactory.getPaginator(request.getSession(), strPaginatorName, strOpentapsApplicationName);
         if (paginator == null) {
             Debug.logError("Failed to retrieve the paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", MODULE);
@@ -295,13 +300,25 @@ public final class PaginationEvents {
             Debug.logWarning("Empty data list is returned in the paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", MODULE);
             return "error";
         }
+        
+        String entityName = null;
+        if (UtilValidate.isNotEmpty(dataList)) {
+            Object entity = dataList.get(0);
+            if (entity instanceof GenericEntity) {
+                entityName = ((GenericEntity) entity).getEntityName();
+            }
+        }
 
         // find the type of the List and convert to a List of Map
         List<Map<String, Object>> mapDataList = FastList.newInstance();
         if (UtilValidate.isNotEmpty(dataList)) {
             for (Object o : dataList) {
-                // GenericValue implements Map<String, Object>
-                if (o instanceof Map) {
+                if (o instanceof GenericEntity) {
+                    // change GenericEntity object to normal Map
+                    Map newMap = new FastMap();
+                    newMap.putAll((GenericEntity) o);
+                    mapDataList.add(newMap);
+                } else if (o instanceof Map) {
                     mapDataList.add((Map<String, Object>) o);
                 } else if (o instanceof EntityInterface) {
                     mapDataList.add(((EntityInterface) o).toMap());
@@ -329,6 +346,28 @@ public final class PaginationEvents {
             }
         }
 
+        if (UtilValidate.isNotEmpty(entityName) && "AcctgTransAndEntries".equals(entityName)) {
+            for (Map<String, Object> mapData : mapDataList) {
+                String partyId = (String) mapData.get("partyId");
+                String partyName = partyId == null ?  null : PartyHelper.getPartyName(delegator, partyId, true);
+                mapData.put("partyName", partyName);
+                String debitCreditFlag = (String) mapData.get("debitCreditFlag");
+                BigDecimal amount = (BigDecimal) mapData.get("amount");
+                BigDecimal debitAmount = "D".equals(debitCreditFlag) ?  amount : null;
+                BigDecimal creditAmount = "C".equals(debitCreditFlag) ?  amount : null;
+                mapData.put("debitAmount", debitAmount);
+                mapData.put("creditAmount", creditAmount);
+            }
+            // Add a Party Name column
+            keys.add("partyName");
+            // add debitAmount/creditAmount columns, remove debitCreditFlag/amount columns
+            keys.add("debitAmount");
+            keys.add("creditAmount");
+            keys.remove("amount");
+            keys.remove("debitCreditFlag");
+        }
+        
+        
         if (keys.isEmpty()) {
             Debug.logError("Empty field name list is returned in the data list of paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", MODULE);
             return "error";
