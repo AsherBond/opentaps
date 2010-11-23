@@ -92,6 +92,7 @@
       <@headerCell title=uiLabelMap.ProductItem                    orderBy="inventoryItemId" />
       <@headerCell title=uiLabelMap.WorkEffortWorkEffort           orderBy="workEffortId" />
       <@headerCell title=uiLabelMap.PartyParty                     orderBy="partyId" />
+      <@headerCell title=uiLabelMap.PartyName                      orderBy="partyId" />
       <@headerCell title=uiLabelMap.ProductProduct                 orderBy="productId" />
       <@headerCell title=uiLabelMap.CommonDebit                    orderBy="debitCreditFlag DESC,amount" orderByReverse="debitCreditFlag DESC,amount DESC" />
       <@headerCell title=uiLabelMap.CommonCredit                   orderBy="debitCreditFlag ASC,amount" orderByReverse="debitCreditFlag ASC,amount DESC" />
@@ -112,6 +113,7 @@
       	<@displayLinkCell href="AccountActivitiesDetail?shipmentId=${row.shipmentId?if_exists}&amp;isPosted=" text=row.shipmentId?if_exists />
       	<@displayLinkCell href="AccountActivitiesDetail?inventoryItemId=${row.inventoryItemId?if_exists}&amp;isPosted=" text=row.inventoryItemId?if_exists />
       	<@displayLinkCell href="AccountActivitiesDetail?workEffortId=${row.workEffortId?if_exists}&amp;isPosted=" text=row.workEffortId?if_exists />
+        <@displayLinkCell href="AccountActivitiesDetail?partyId=${row.partyId?if_exists}&amp;isPosted="     text=row.partyId?if_exists />
         <#assign partyName = ""/>
         <#if row.partyId?exists >
           <#if row.lastName?exists >
@@ -124,7 +126,7 @@
             <#assign partyName = row.groupName/>
           </#if>
         </#if>      	
-      	<@displayLinkCell href="AccountActivitiesDetail?partyId=${row.partyId?if_exists}&amp;isPosted="     text=partyName?if_exists />
+      	<@displayCell text=partyName />
       	<@displayLinkCell href="AccountActivitiesDetail?productId=${row.productId?if_exists}&amp;isPosted=" text=row.productId?if_exists />
         <#if row.debitCreditFlag = "D" >
           <@displayCurrencyCell amount=row.amount currencyUomId=row.currencyUomId />
