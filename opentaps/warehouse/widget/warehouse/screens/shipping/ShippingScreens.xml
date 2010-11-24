@@ -396,7 +396,9 @@ under the License.
                         <condition-expr field-name="statusId" operator="equals" value="SHIPMENT_PACKED"/>
                         <condition-expr field-name="carrierServiceStatusId" operator="equals" value="SHRSCS_NOT_STARTED"/>
                     </condition-list>
-                    <order-by field-name="shipmentId DESC"/>
+                    <order-by field-name="primaryOrderId"/>
+                    <order-by field-name="shipmentId"/>
+                    <order-by field-name="shipmentRouteSegmentId"/>
                 </entity-condition>
                 <entity-one entity-name="Facility" value-field="facility"/>
                 <entity-one entity-name="Uom" value-field="defaultWeightUom" use-cache="true" auto-field-map="false">
