@@ -49,6 +49,7 @@
         <section>
             <actions>
                 <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
             </actions>
             <widgets>
                 <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/common/crmNotificationEmailTemplate.ftl"/></html></platform-specific>
