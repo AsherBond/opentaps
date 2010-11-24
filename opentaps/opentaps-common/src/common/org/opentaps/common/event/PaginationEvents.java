@@ -360,6 +360,10 @@ public final class PaginationEvents {
             }
             // Add a Party Name column
             keys.add("partyName");
+            // remove first name/last name/group name columns in export excel
+            keys.remove("firstName");
+            keys.remove("lastName");
+            keys.remove("groupName");
             // add debitAmount/creditAmount columns, remove debitCreditFlag/amount columns
             keys.add("debitAmount");
             keys.add("creditAmount");
