@@ -408,7 +408,7 @@ under the License.
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <include-form name="SchedulingList" location="component://product/webapp/facility/facility/FacilityForms.xml"/>
+                        <include-form name="SchedulingList" location="component://warehouse/widget/warehouse/forms/shipping/ShippingForms.xml"/>
                         <platform-specific>
                             <html><html-template location="component://warehouse/webapp/warehouse/shipping/buttonSchedulingList.ftl"/></html>
                         </platform-specific>
