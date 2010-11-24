@@ -5,18 +5,17 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     DI.`ORDER_ID`,
-     DI.`PRODUCT_ID`,
-     DI.`QUANTITY`,
-     DI.`PRICE`,
-     STATUS_ITEM.`DESCRIPTION` AS 'STATUS_DESCRIPTION',
-     DI.`IMPORT_ERROR`
+     DI.ORDER_ID,
+     DI.PRODUCT_ID,
+     DI.QUANTITY,
+     DI.PRICE,
+     STATUS_ITEM.DESCRIPTION AS STATUS_DESCRIPTION,
+     DI.IMPORT_ERROR
 FROM
-     `DATA_IMPORT_ORDER_ITEM` DI
-     LEFT JOIN
-     `STATUS_ITEM` STATUS_ITEM
+     DATA_IMPORT_ORDER_ITEM DI
+     LEFT JOIN STATUS_ITEM STATUS_ITEM
 ON
-     DI.`IMPORT_STATUS_ID` = STATUS_ITEM.`STATUS_ID`]]>
+     DI.IMPORT_STATUS_ID = STATUS_ITEM.STATUS_ID]]>
 	</queryString>
 	<field name="ORDER_ID" class="java.lang.String"/>
 	<field name="PRODUCT_ID" class="java.lang.String"/>

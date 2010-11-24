@@ -288,6 +288,8 @@ under the License.
       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
       <member-entity entity-alias="GLA" entity-name="GlAccount"/>
       <member-entity entity-alias="GLAC" entity-name="GlAccountClass"/>
+      <member-entity entity-alias="PER" entity-name="Person"/>
+      <member-entity entity-alias="PTYGRP" entity-name="PartyGroup"/>      
       <alias entity-alias="ATR" name="isPosted"/>
       <alias entity-alias="ATR" name="glFiscalTypeId"/>
       <alias entity-alias="ATR" name="acctgTransTypeId"/>
@@ -326,6 +328,9 @@ under the License.
       <alias entity-alias="ATE" name="acctgTagEnumId8" />
       <alias entity-alias="ATE" name="acctgTagEnumId9" />
       <alias entity-alias="ATE" name="acctgTagEnumId10" />
+      <alias entity-alias="PER" name="firstName"/>
+      <alias entity-alias="PER" name="lastName"/> 
+      <alias entity-alias="PTYGRP" name="groupName"/>      
       <view-link entity-alias="ATR" rel-entity-alias="ATE">
         <key-map field-name="acctgTransId"/>
       </view-link>
@@ -338,6 +343,12 @@ under the License.
       <view-link entity-alias="GLA" rel-entity-alias="GLAC">
         <key-map field-name="glAccountClassId"/>
       </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="PER" rel-optional="true">
+        <key-map field-name="partyId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="PTYGRP" rel-optional="true">
+        <key-map field-name="partyId"/>
+      </view-link>      
       <relation type="one" fk-name="ATAE_GLACT" rel-entity-name="GlAccount">
         <key-map field-name="glAccountId"/>
       </relation>

@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) Open Source Strategies, Inc.
  *
@@ -64,8 +63,7 @@ public class OrderImportServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map importOrders(DispatchContext dctx, Map context) {
+    public static Map<String, Object> importOrders(DispatchContext dctx, Map<String, ?> context) {
         Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -109,7 +107,7 @@ public class OrderImportServices {
             }
 
             // Ensure the party role for the company
-            List billFromRoles = companyParty.getRelatedByAnd("PartyRole", UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
+            List<GenericValue> billFromRoles = companyParty.getRelatedByAnd("PartyRole", UtilMisc.toMap("roleTypeId", "BILL_FROM_VENDOR"));
             if (billFromRoles.size() == 0) {
                 delegator.create("PartyRole", UtilMisc.toMap("partyId", companyPartyId, "roleTypeId", "BILL_FROM_VENDOR"));
             }
@@ -201,10 +199,10 @@ public class OrderImportServices {
                             continue;
                         }
 
-                        //we hav the payment
+                        //we have the payment
                         String paymentId = currentEntity.getString("paymentId");
                         Debug.logInfo("Changing payment status for [" + paymentId + "]", MODULE);
-                        Map results = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
+                        Map<String, Object> results = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
                         if (ServiceUtil.isError(results)) {
                             Debug.logWarning("changePaymentStatus returned error " + ServiceUtil.getErrorMessage(results), MODULE);
                             TransactionUtil.rollback();
@@ -239,7 +237,7 @@ public class OrderImportServices {
             return ServiceUtil.returnError(errMsg);
         }
 
-        Map results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("ordersImported", new Integer(imported));
         return results;
     }
@@ -252,14 +250,13 @@ public class OrderImportServices {
      * @param delegator             a <code>Delegator</code> value
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private static void storeImportError(GenericValue dataImportOrderHeader, String message, Delegator delegator) throws GenericEntityException {
         // OrderItems
         EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
                 EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_NOT_PROC),
                 EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_FAILED),
                 EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
-        List orderItemConditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, dataImportOrderHeader.getString("orderId")), statusCond);
+        List<EntityCondition> orderItemConditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, dataImportOrderHeader.getString("orderId")), statusCond);
         List<GenericValue> dataImportOrderItems = delegator.findByCondition("DataImportOrderItem", EntityCondition.makeCondition(orderItemConditions, EntityOperator.AND), null, null);
         for (GenericValue dataImportOrderItem : dataImportOrderItems) {
             // store the exception and mark as failed
@@ -295,9 +292,8 @@ public class OrderImportServices {
      * @throws GenericEntityException if an error occurs
      * @throws Exception              if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    private static List decodeOrder(GenericValue externalOrderHeader, String companyPartyId, GenericValue productStore, String prodCatalogId, String purchaseOrderShipToContactMechId, boolean importEmptyOrders, boolean calculateGrandTotal, boolean reserveInventory,Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException, Exception {
-        List toStore = FastList.newInstance();
+    private static List<GenericValue> decodeOrder(GenericValue externalOrderHeader, String companyPartyId, GenericValue productStore, String prodCatalogId, String purchaseOrderShipToContactMechId, boolean importEmptyOrders, boolean calculateGrandTotal, boolean reserveInventory,Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException, Exception {
+        List<GenericValue> toStore = FastList.<GenericValue>newInstance();
         //todo move this at the beginning of the class
         DataImportOrderHeader dataImportOrderHeader = new DataImportOrderHeader();
         dataImportOrderHeader.fromMap(externalOrderHeader);
@@ -327,7 +323,7 @@ public class OrderImportServices {
 
         // OrderHeader
 
-        Map orderHeaderInput = FastMap.newInstance();
+        Map<String, Object> orderHeaderInput = FastMap.<String, Object>newInstance();
         orderHeaderInput.put("orderId", orderId);
         orderHeaderInput.put("orderTypeId", orderTypeId);
         orderHeaderInput.put("orderName", orderId);
@@ -352,11 +348,11 @@ public class OrderImportServices {
         orderHeaderInput.put("billFromPartyId", isPurchaseOrder ? supplierPartyId : companyPartyId);
         orderHeaderInput.put("billToPartyId", isPurchaseOrder ? companyPartyId : customerPartyId);
 
-        List orderAdjustments = new ArrayList();
+        List<GenericValue> orderAdjustments = new ArrayList<GenericValue>();
 
         // todo:Make orderAdjustments from adjustmentsTotal and taxTotal
         // Record an OrderStatus
-        Map orderStatusInput = UtilMisc.toMap("orderStatusId", delegator.getNextSeqId("OrderStatus"), "orderId", orderId, "statusId", orderStatusId, "statusDatetime", orderDate, "statusUserLogin", userLogin.getString("userLoginId"));
+        Map<String, Object> orderStatusInput = UtilMisc.<String, Object>toMap("orderStatusId", delegator.getNextSeqId("OrderStatus"), "orderId", orderId, "statusId", orderStatusId, "statusDatetime", orderDate, "statusUserLogin", userLogin.getString("userLoginId"));
 
         // purchase orders must be assigned to a ship group
         GenericValue oisg = null;
@@ -375,8 +371,8 @@ public class OrderImportServices {
         }
 
         // create a ship group for the sales order
-        List postalAddressEntities = FastList.newInstance();
-        List orderContactMechs = FastList.newInstance();
+        List<GenericValue> postalAddressEntities = FastList.<GenericValue>newInstance();
+        List<GenericValue> orderContactMechs = FastList.<GenericValue>newInstance();
         if (UtilValidate.isNotEmpty(dataImportOrderHeader.getShippingFirstName()) && UtilValidate.isNotEmpty(dataImportOrderHeader.getShippingLastName())) {
             // get requested shipping method
             String productStoreShipMethId = externalOrderHeader.getString("productStoreShipMethId");
@@ -431,7 +427,6 @@ public class OrderImportServices {
                 postalAddress.setPostalCode(dataImportOrderHeader.getShippingPostcode());
 
                 List<GenericValue> provinceIds = delegator.findByCondition("Geo", EntityCondition.makeCondition("geoName", dataImportOrderHeader.getShippingRegion()), null, null);
-                String provinceId = null;
                 if (UtilValidate.isNotEmpty(provinceIds)) {
                     GenericValue value = EntityUtil.getFirst(provinceIds);
                     postalAddress.setStateProvinceGeoId(value.getString("geoId"));
@@ -518,7 +513,6 @@ public class OrderImportServices {
                 postalAddress.setPostalCode(dataImportOrderHeader.getBillingPostcode());
 
                 List<GenericValue> provinceIds = delegator.findByCondition("Geo", EntityCondition.makeCondition("geoName", dataImportOrderHeader.getBillingRegion()), null, null);
-                String provinceId = null;
                 if (UtilValidate.isNotEmpty(provinceIds)) {
                     GenericValue value = EntityUtil.getFirst(provinceIds);
                     postalAddress.setStateProvinceGeoId(value.getString("geoId"));
@@ -600,11 +594,11 @@ public class OrderImportServices {
                 EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_FAILED),
                 EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
 
-        List orderItemConditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId), statusCond);
+        List<EntityCondition> orderItemConditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId), statusCond);
 
         //todo the following part will be moved into a payment module and decoupled form the order import
         List<GenericValue> externalOrderPayments = delegator.findByCondition("DataImportOrderPayment", EntityCondition.makeCondition(orderItemConditions, EntityOperator.AND), null, null);
-        List orderPayments = new LinkedList();
+        List<GenericValue> orderPayments = new LinkedList<GenericValue>();
         if (UtilValidate.isNotEmpty(externalOrderPayments)) {
             //we process the payments; we should have only one payment for order
             for (GenericValue externalOrderPayment : externalOrderPayments) {
@@ -667,7 +661,7 @@ public class OrderImportServices {
         }
 
 
-        List externalOrderItems = delegator.findByCondition("DataImportOrderItem", EntityCondition.makeCondition(orderItemConditions, EntityOperator.AND), null, null); //getExternalOrderItems(externalOrderHeader.getString("orderId"), delegator);
+        List<GenericValue> externalOrderItems = delegator.findByCondition("DataImportOrderItem", EntityCondition.makeCondition(orderItemConditions, EntityOperator.AND), null, null); //getExternalOrderItems(externalOrderHeader.getString("orderId"), delegator);
 
         // If orders without orderItems should not be imported, return now without doing anything
         if (UtilValidate.isEmpty(externalOrderItems) && !importEmptyOrders) {
@@ -677,15 +671,15 @@ public class OrderImportServices {
         // item status depends on order status
         String itemStatus = "ORDER_COMPLETED".equals(orderStatusId) ? "ITEM_COMPLETED" : "ITEM_APPROVED";
 
-        List orderItems = new ArrayList();
-        List oisgAssocs = new ArrayList();
+        List<GenericValue> orderItems = new ArrayList<GenericValue>();
+        List<GenericValue> oisgAssocs = new ArrayList<GenericValue>();
         for (int count = 0; count < externalOrderItems.size(); count++) {
             GenericValue externalOrderItem = (GenericValue) externalOrderItems.get(count);
 
             String orderItemSeqId = UtilFormatOut.formatPaddedNumber(count + 1, 5);
             BigDecimal quantity = UtilValidate.isEmpty(externalOrderItem.get("quantity")) ? new BigDecimal(0) : externalOrderItem.getBigDecimal("quantity");
 
-            Map orderItemInput = FastMap.newInstance();
+            Map<String, Object> orderItemInput = FastMap.<String, Object>newInstance();
             orderItemInput.put("orderId", orderId);
             orderItemInput.put("orderItemSeqId", orderItemSeqId);
             orderItemInput.put("orderItemTypeId", "PRODUCT_ORDER_ITEM");
@@ -750,7 +744,7 @@ public class OrderImportServices {
             // purchase orders must assign all their order items to the oisg
             if ((isPurchaseOrder && oisg != null) || (isSalesOrder && reserveInventory && oisg != null)) {
                 Debug.logInfo("Begin to create OrderItemShipGroupAssoc", MODULE);
-                Map oisgAssocInput = FastMap.newInstance();
+                Map<String, Object> oisgAssocInput = FastMap.<String, Object>newInstance();
                 oisgAssocInput.put("orderId", orderId);
                 oisgAssocInput.put("orderItemSeqId", orderItemSeqId);
                 oisgAssocInput.put("shipGroupSeqId", defaultShipGroupSeqId);
@@ -804,7 +798,7 @@ public class OrderImportServices {
         // OrderRoles
 
         // create the bill to party order role
-        List roles = FastList.newInstance();
+        List<GenericValue> roles = FastList.<GenericValue>newInstance();
         if (isSalesOrder && UtilValidate.isNotEmpty(customerPartyId)) {
 
             // Make sure the customer party exists
@@ -846,7 +840,7 @@ public class OrderImportServices {
         }
 
         // Order Notes
-        List notes = FastList.newInstance();
+        List<GenericValue> notes = FastList.<GenericValue>newInstance();
         String comments = externalOrderHeader.getString("comments");
         if (UtilValidate.isNotEmpty(comments)) {
             String noteId = delegator.getNextSeqId("NoteData");
@@ -881,19 +875,18 @@ public class OrderImportServices {
         return toStore;
     }
 
-    @SuppressWarnings("unchecked")
-    private static BigDecimal getOrderGrandTotal(List orderAdjustments, List orderItems) {
+    private static BigDecimal getOrderGrandTotal(List<GenericValue> orderAdjustments, List<GenericValue> orderItems) {
         BigDecimal grandTotal = ZERO;
 
-        Iterator oajit = orderAdjustments.iterator();
+        Iterator<GenericValue> oajit = orderAdjustments.iterator();
         while (oajit.hasNext()) {
-            GenericValue orderAdjustment = (GenericValue) oajit.next();
+            GenericValue orderAdjustment = oajit.next();
             grandTotal = grandTotal.add(orderAdjustment.getBigDecimal("amount").setScale(decimals, rounding));
         }
 
-        Iterator oiit = orderItems.iterator();
+        Iterator<GenericValue> oiit = orderItems.iterator();
         while (oiit.hasNext()) {
-            GenericValue orderItem = (GenericValue) oiit.next();
+            GenericValue orderItem = oiit.next();
             BigDecimal quantity = orderItem.getBigDecimal("quantity").setScale(decimals, rounding);
             BigDecimal price = orderItem.getBigDecimal("unitPrice").setScale(decimals, rounding);
 

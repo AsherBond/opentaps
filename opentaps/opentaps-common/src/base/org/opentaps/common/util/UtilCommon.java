@@ -47,6 +47,9 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -98,6 +101,8 @@ import org.opentaps.foundation.entity.EntityInterface;
 public abstract class UtilCommon {
 
     private static final String MODULE = UtilCommon.class.getName();
+    public static String SESSION_ID_PARTTER = ";jsessionid=[^\\.]*\\.jvm1";
+    public static String PARAMETER_SEPARATE_CHAR_PARTTER = "[\\?\\&]";
 
     // Utility class should not be instantiated.
     private UtilCommon() { }
@@ -1886,5 +1891,41 @@ public abstract class UtilCommon {
      */
     public static String emailAndPersonalName(String email, String partyId, Delegator delegator) {
         return String.format("%1$s <%2$s>", org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false), email);
+    }
+    /*
+     * It's for fixing URL in view history so that after browser restart special characters such as & are not changed into &#63;
+     * and re-arrange parameters in the url 
+     */
+    public static String getCorrectUrlFromEncodeUrl (String url) {
+        String prevPath = url.substring(0, url.lastIndexOf("/") + 1);
+        String contextUrl = url.substring(url.lastIndexOf("/") + 1);
+        // if we cannot found ? in url, that meaning it was a wrong url 
+        if (contextUrl.indexOf("&") >= 0 && contextUrl.indexOf("?") < 0) {
+            Pattern p = Pattern.compile(SESSION_ID_PARTTER); 
+            Matcher m = p.matcher(contextUrl);
+            String sessionId = null;
+            if (m.find()) {
+                sessionId = m.group();
+                contextUrl = contextUrl.replace(sessionId, "");
+            }
+            // replace session id parttern
+            contextUrl = contextUrl.replace("&#63;", "&");
+            contextUrl = contextUrl.replace("&#61;", "=");
+            String[] parameters = contextUrl.split(PARAMETER_SEPARATE_CHAR_PARTTER);
+            contextUrl = parameters[0];
+            if (sessionId != null){
+                contextUrl += sessionId;
+            }
+            if (parameters.length > 1) {
+                contextUrl += "?" + parameters[1];
+            }
+            for (int i=2; i < parameters.length; i++) {
+                contextUrl += "&" + parameters[i];
+            }
+            return prevPath + contextUrl;
+        } else {
+            return url;
+        }
+        
     }
 }

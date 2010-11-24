@@ -182,7 +182,9 @@ public final class LeadsServices {
             }
 
             // Send email re: responsible party to all involved parties
-            dispatcher.runSync("crmsfa.sendLeadNotificationEmails", UtilMisc.toMap("newPartyId", userLogin.getString("partyId"), "leadPartyId", leadPartyId, "userLogin", userLogin));
+            if ("Y".equals(context.get("notifyOwner"))) {
+                dispatcher.runSync("crmsfa.sendLeadNotificationEmails", UtilMisc.toMap("newPartyId", userLogin.getString("partyId"), "leadPartyId", leadPartyId, "userLogin", userLogin));
+            }
 
         } catch (GenericServiceException e) {
             return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateLeadFail", locale, MODULE);

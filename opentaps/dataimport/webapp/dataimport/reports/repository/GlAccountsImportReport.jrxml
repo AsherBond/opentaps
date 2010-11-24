@@ -5,20 +5,19 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     DI.`GL_ACCOUNT_ID` ,
-     DI.`ACCOUNT_NAME` ,
-     STATUS_ITEM.`DESCRIPTION` AS 'STATUS_DESCRIPTION',
-     DI.`IMPORT_ERROR`
+     DI.GL_ACCOUNT_ID ,
+     DI.ACCOUNT_NAME ,
+     STATUS_ITEM.DESCRIPTION AS STATUS_DESCRIPTION,
+     DI.IMPORT_ERROR
 FROM
-     `DATA_IMPORT_GL_ACCOUNT` DI
-     LEFT JOIN
-     `STATUS_ITEM` STATUS_ITEM
+     DATA_IMPORT_GL_ACCOUNT DI
+     LEFT JOIN STATUS_ITEM STATUS_ITEM
 ON
-     DI.`IMPORT_STATUS_ID` = STATUS_ITEM.`STATUS_ID`]]>
+     DI.IMPORT_STATUS_ID = STATUS_ITEM.STATUS_ID]]>
 	</queryString>
 	<field name="GL_ACCOUNT_ID" class="java.lang.String"/>
 	<field name="ACCOUNT_NAME" class="java.lang.String"/>
-        <field name="STATUS_DESCRIPTION" class="java.lang.String"/>
+	<field name="STATUS_DESCRIPTION" class="java.lang.String"/>
 	<field name="IMPORT_ERROR" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>

@@ -2584,11 +2584,11 @@ public class OrderReturnServices {
         Debug.logInfo("serviceName:" + serviceName, module);
         try {
             Map inMap = filterServiceContext(dctx, serviceName, context);
-            if ("createReturnItem".equals(serviceName)) {
+            /*if ("createReturnItem".equals(serviceName)) {
                 // we don't want to automatically include the adjustments
                 // when the return item is created because they are selectable by the user
                 inMap.put("includeAdjustments", "N");
-            }
+                }*/
             return dispatcher.runSync(serviceName, inMap);
         } catch (org.ofbiz.service.GenericServiceException e) {
             Debug.logError(e, module);
