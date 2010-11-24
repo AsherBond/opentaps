@@ -92,6 +92,7 @@
       <@headerCell title=uiLabelMap.ProductItem                    orderBy="inventoryItemId" />
       <@headerCell title=uiLabelMap.WorkEffortWorkEffort           orderBy="workEffortId" />
       <@headerCell title=uiLabelMap.PartyParty                     orderBy="partyId" />
+      <@headerCell title=uiLabelMap.PartyName                      orderBy="partyId" />
       <@headerCell title=uiLabelMap.ProductProduct                 orderBy="productId" />
       <@headerCell title=uiLabelMap.CommonDebit                    orderBy="debitCreditFlag DESC,amount" orderByReverse="debitCreditFlag DESC,amount DESC" />
       <@headerCell title=uiLabelMap.CommonCredit                   orderBy="debitCreditFlag ASC,amount" orderByReverse="debitCreditFlag ASC,amount DESC" />
@@ -112,7 +113,20 @@
       	<@displayLinkCell href="AccountActivitiesDetail?shipmentId=${row.shipmentId?if_exists}&amp;isPosted=" text=row.shipmentId?if_exists />
       	<@displayLinkCell href="AccountActivitiesDetail?inventoryItemId=${row.inventoryItemId?if_exists}&amp;isPosted=" text=row.inventoryItemId?if_exists />
       	<@displayLinkCell href="AccountActivitiesDetail?workEffortId=${row.workEffortId?if_exists}&amp;isPosted=" text=row.workEffortId?if_exists />
-      	<@displayLinkCell href="AccountActivitiesDetail?partyId=${row.partyId?if_exists}&amp;isPosted="     text=row.partyId?if_exists />
+        <@displayLinkCell href="AccountActivitiesDetail?partyId=${row.partyId?if_exists}&amp;isPosted="     text=row.partyId?if_exists />
+        <#assign partyName = ""/>
+        <#if row.partyId?exists >
+          <#if row.lastName?exists >
+            <#assign partyName = partyName + row.lastName/>
+          </#if> 
+          <#if row.firstName?exists >
+            <#assign partyName = partyName + ", " + row.firstName/>
+          </#if> 
+          <#if row.groupName?exists >
+            <#assign partyName = row.groupName/>
+          </#if>
+        </#if>      	
+      	<@displayCell text=partyName />
       	<@displayLinkCell href="AccountActivitiesDetail?productId=${row.productId?if_exists}&amp;isPosted=" text=row.productId?if_exists />
         <#if row.debitCreditFlag = "D" >
           <@displayCurrencyCell amount=row.amount currencyUomId=row.currencyUomId />
@@ -145,7 +159,7 @@
       <#if transDescription?has_content>      
       <tr class="${tableRowClass(row_index)}">
         <td align="center" colspan="4">&nbsp;</td>
-        <td colspan="10">
+        <td colspan="11">
         <i>${transDescription}</i>
         </td>
       </tr>

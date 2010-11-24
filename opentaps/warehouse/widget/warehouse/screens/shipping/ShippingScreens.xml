@@ -396,7 +396,9 @@ under the License.
                         <condition-expr field-name="statusId" operator="equals" value="SHIPMENT_PACKED"/>
                         <condition-expr field-name="carrierServiceStatusId" operator="equals" value="SHRSCS_NOT_STARTED"/>
                     </condition-list>
-                    <order-by field-name="shipmentId DESC"/>
+                    <order-by field-name="primaryOrderId"/>
+                    <order-by field-name="shipmentId"/>
+                    <order-by field-name="shipmentRouteSegmentId"/>
                 </entity-condition>
                 <entity-one entity-name="Facility" value-field="facility"/>
                 <entity-one entity-name="Uom" value-field="defaultWeightUom" use-cache="true" auto-field-map="false">
@@ -406,7 +408,7 @@ under the License.
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <include-form name="SchedulingList" location="component://product/webapp/facility/facility/FacilityForms.xml"/>
+                        <include-form name="SchedulingList" location="component://warehouse/widget/warehouse/forms/shipping/ShippingForms.xml"/>
                         <platform-specific>
                             <html><html-template location="component://warehouse/webapp/warehouse/shipping/buttonSchedulingList.ftl"/></html>
                         </platform-specific>
