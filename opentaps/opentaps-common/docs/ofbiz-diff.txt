@@ -50,6 +50,9 @@ Framework changes
 
 This list the changes made in the framework directory, from the 09.04 ofbiz release.
 
+framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
+0a48af8 Make RequestHandler.makeLink to also handle encoded ? so the jsessionid is inserted at the right place
+
 framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
 0288e86 Fix unnamed processor events silently overriding each others (for backward compatibility)
 
