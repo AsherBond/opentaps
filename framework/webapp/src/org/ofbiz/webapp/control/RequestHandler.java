@@ -1070,6 +1070,10 @@ public class RequestHandler {
                     String sessionId = ";jsessionid=" + request.getSession().getId();
                     // this should be inserted just after the "?" for the parameters, if there is one, or at the end of the string
                     int questionIndex = newURL.indexOf("?");
+                    // note: sometimes the url is already encoded, ? becomes &#63;
+                    if (questionIndex == -1) {
+                        questionIndex = newURL.indexOf("&#63;");
+                    }
                     if (questionIndex == -1) {
                         newURL.append(sessionId);
                     } else {

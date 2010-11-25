@@ -21,12 +21,13 @@ import java.util.List;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.repository.RepositoryInterface;
 
 /**
  * Repository for Activities to handle interaction of Activities-related domain with
  * the entity engine (database) and the service engine.
  */
-public interface ActivityRepositoryInterface {
+public interface ActivityRepositoryInterface extends RepositoryInterface {
 
     /**
      * Finds the Activity with the given Id.
