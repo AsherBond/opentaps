@@ -382,6 +382,9 @@ r15359 Modified a few italian labels with a better translation, added 2 null che
 applications/order/src/org/ofbiz/order/order/OrderReturnServices.java
 fix createReturnItemOrAdjustment to not skip adjustments when calling createReturnItem, since contrary to the comment they are not selectable by the user in the UI
 
+applications/order/script/org/ofbiz/order/quote/QuoteServices.xml
+d2c8c0182906683965bc69e5d9386dff3a8227a9 Use modified product description in quote item.
+
 Other API Changes
 -----------------
 
