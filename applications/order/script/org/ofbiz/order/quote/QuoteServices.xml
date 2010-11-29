@@ -748,6 +748,7 @@ under the License.
                     <call-object-method obj-field="item" method-name="getReservStart" ret-field="createQuoteItemInMap.reservStart"/>
                     <call-object-method obj-field="item" method-name="getReservLength" ret-field="createQuoteItemInMap.reservLength"/>
                     <call-object-method obj-field="item" method-name="getReservPersons" ret-field="createQuoteItemInMap.reservPersons"/>
+                    <call-object-method obj-field="item" method-name="getName" ret-field="createQuoteItemInMap.description"/>
 
                     <call-service service-name="createQuoteItem" in-map-name="createQuoteItemInMap">
                         <result-to-field result-name="quoteItemSeqId" field="quoteItemSeqId"/>
