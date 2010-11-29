@@ -133,4 +133,23 @@
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
     </service>
+
+        <service name="createSettlementAcctgTrans" default-entity-name="AcctgTransEntry" engine="java"
+            location="com.opensourcestrategies.financials.transactions.TransactionServices" invoke="createSettlementAcctgTrans" auth="true">
+        <description>
+            Automatically create and Post a AcctgTrans record.
+            The settleFrom parameter have a pattern like UD:121000 or CC:Visa
+            where two first letters indicates Undeposited receipts or Credit Card
+            and other is number of the account or type of the Credit Card
+        </description>
+        <required-permissions join-type="OR">
+            <check-permission permission="ACCOUNTING" action="_ATX_UPDATE"/>
+        </required-permissions>
+        <attribute name="transactionDate" mode="IN" type="String" optional="false"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="settleFrom" mode="IN" type="String" optional="false"/>        
+        <attribute name="settleTo" mode="IN" type="String" optional="false"/>        
+        <attribute name="amount" mode="IN" type="Double" optional="false"/>
+        <attribute name="paymentOrRefund" mode="IN" type="String" optional="false"/>
+    </service>
 </services>

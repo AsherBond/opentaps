@@ -1357,6 +1357,17 @@
         <response name="error" type="view" value="viewAcctgTrans"/>
     </request-map>
 
+    <request-map uri="createSettlementAcctgTrans">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createSettlementAcctgTrans"/>
+        <response name="success" type="request-redirect" value="settlePaymentsOptions" >
+            <redirect-parameter name="paymentOrRefund"/>
+            <redirect-parameter name="settleFrom"/>
+            <redirect-parameter name="settleTo"/>
+        </response>
+        <response name="error" type="request" value="settlePaymentsOptions" />
+    </request-map>
+
     <request-map uri="exchangeRates">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="exchangeRates"/>
