@@ -643,7 +643,7 @@ public class OrderService extends DomainService implements OrderServiceInterface
                 // when billing this adjustment
                 service.setInNeverProrate("Y");
                 service.setInOrderAdjustmentTypeId(OrderAdjustmentTypeConstants.SALES_TAX);
-                service.setInDescription("Existing tax was = " + totalExistingOrderTax + ", new tax amount = " + totalNewOrderTax + " (Tax adjustment due to order change)");
+                service.setInDescription("Sales Tax adjustment due to order change");
                 service.setInAmount(orderTaxDifference);
                 runSync(service);
             }
