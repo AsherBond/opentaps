@@ -330,6 +330,7 @@ r13222 Small fix for reserveInventory not to try to reserve cancelled quantity
 
 applications/order/src/org/ofbiz/order/order/OrderReturnServices.java
 r13243 Re added the code block that creates filler payments from the remaining amount
+3bb40a7ddf When prorating the adjustment amount for returns, multiply first to avoid rounding errors (JIRA-4038)
 
 applications/order/src/org/ofbiz/order/shoppingcart/CheckOutEvents.java
 r13310 Revert Ofbiz change, only Purchase Order should require Terms. Avoid the terms screen to appear in the sales order checkout process.
