@@ -31,18 +31,20 @@
        order to speed up the compilation.
        Available values for the user-agent are "ie6,gecko,gecko1_8,safari,opera"
        but note that you can only set one of them if you do not want to use them all.
-       -->
+
   <set-property name="user.agent" value="gecko1_8"/>
+       -->
+  <set-property name="user.agent" value="ie6,gecko,gecko1_8,safari,opera"/>
+  <!-- you can comment out unused locales to speed up gwt compilation -->
   <extend-property name="locale" values="en"/>
   <extend-property name="locale" values="zh"/>
-  <!-- you can comment out unused locales to speed up gwt compilation 
   <extend-property name="locale" values="bg"/>
   <extend-property name="locale" values="fr"/>
   <extend-property name="locale" values="ru"/>
   <extend-property name="locale" values="pt"/>
   <extend-property name="locale" values="es"/>
   <extend-property name="locale" values="nl"/>
-  <extend-property name="locale" values="it"/>-->
+  <extend-property name="locale" values="it"/>
   <inherits name='org.opentaps.base.constants'/>
   <script src="adapter/ext/ext-base.js" />
   <script src="ext-all.js" />

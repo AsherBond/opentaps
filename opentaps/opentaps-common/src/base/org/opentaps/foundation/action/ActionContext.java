@@ -278,7 +278,28 @@ public class ActionContext implements DomainContextInterface {
     public BigDecimal getBigDecimal(String key) {
         return (BigDecimal) get(key);
     }
-    
+
+    /**
+     * Gets a value from context as a <code>Boolean</code> if it is instance of
+     * <code>Boolean</code> or a string convertible to boolean.
+     * @param key a <code>String</code> value
+     * @return a <code>Boolean</code> value
+     */
+    public Boolean getBoolean(String key) {
+        Object value = get(key);
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        } else if (value instanceof String) {
+            return Boolean.valueOf((String) value);
+        }
+
+        throw new IllegalArgumentException(String.format("There is %1$s parameter in the context but it can not be considered a boolean value.", key));
+    }
+
     /**
      * Gets a composite parameter from the request using <code>UtilHttp.makeParamValueFromComposite</code>.
      * @param parameterName a <code>String</code> value

@@ -2698,7 +2698,7 @@ public class OrderReturnServices {
         originalTotal = originalTotal.setScale(decimals, rounding);
         BigDecimal newAmount = null;
         if (ZERO.compareTo(originalTotal) != 0) {
-            newAmount = returnTotal.divide(originalTotal, decimals, rounding).multiply(amount).setScale(decimals, rounding);
+            newAmount = returnTotal.multiply(amount).divide(originalTotal, decimals, rounding);
         } else {
             newAmount = ZERO;
         }
