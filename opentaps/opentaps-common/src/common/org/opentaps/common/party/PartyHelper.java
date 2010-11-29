@@ -701,6 +701,10 @@ public final class PartyHelper {
      */
     public static String createViewPageLink(String partyId, GenericDelegator delegator, String externalLoginKey) throws GenericEntityException {
         GenericValue party = delegator.findByPrimaryKeyCache("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
+        if (party == null) {
+            Debug.logError("Cannot create link for Null party", MODULE);
+            return "";
+        }
 
         // generate the contents of href=""
         String uri = createViewPageURL(party, CRM_PARTY_ROLES, externalLoginKey);

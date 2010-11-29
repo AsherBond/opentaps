@@ -377,6 +377,10 @@ public final class PartyHelper {
      */
     public static String createViewPageLink(String partyId, GenericDelegator delegator, String externalLoginKey) throws GenericEntityException {
         GenericValue party = delegator.findByPrimaryKeyCache("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
+        if (party == null) {
+            Debug.logError("No PartySummaryCRMView found for partyId [" + partyId + "], cannot create link", MODULE);
+            return "";
+        }
 
         // generate the contents of href=""
         String uri = org.opentaps.common.party.PartyHelper.createViewPageURL(party, CLIENT_PARTY_ROLES, externalLoginKey);
