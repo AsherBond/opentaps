@@ -299,6 +299,7 @@ under the License.
       <!-- packed items display -->
       <#assign packedLines = packingSession.getLines()?if_exists>
       <#if packedLines?has_content>
+        <@form name="clearPackLine" url="ClearPackLine" facilityId=facilityId! orderId="" orderItemSeqId="" shipGroupSeqId="" inventoryItemId="" packageSeqId="" productId="" />
         <hr class="sepbar"/>
         <div class="head2" style="margin-bottom: 8px; padding-left: 8px;">${uiLabelMap.WarehouseItemsAlreadyPacked}</div>
         <table border='0' width="100%" cellpadding='2' cellspacing='6'>
@@ -332,7 +333,7 @@ under the License.
               </td>
               <td align="right"><div class="tabletext">${line.getQuantity()}</td>
               <td align="right"><div class="tabletext"><@ofbizCurrency amount=line.getRawValue(delegator) isoCode=orderHeader.currencyUom /></td>
-              <td align="right"><a href="<@ofbizUrl>ClearPackLine?facilityId=${facilityId}&orderId=${line.getOrderId()}&orderItemSeqId=${line.getOrderItemSeqId()}&shipGroupSeqId=${line.getShipGroupSeqId()}&inventoryItemId=${line.getInventoryItemId()}&packageSeqId=${line.getPackageSeq()}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonClear}</a></td>
+              <td align="right"><@submitFormLink form="clearPackLine" text=uiLabelMap.CommonClear orderId=line.getOrderId() orderItemSeqId=line.getOrderItemSeqId() shipGroupSeqId=line.getShipGroupSeqId() inventoryItemId=line.getInventoryItemId() packageSeqId=line.getPackageSeq() productId=line.getProductId() /></td>
             </tr>
           </#list>
           <#if packedLines.size() != 0>
