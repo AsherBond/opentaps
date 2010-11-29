@@ -15,58 +15,120 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  *  
 -->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#macro listGlAccounts name glAccounts defaultGlAccountId>
+<script type="text/javascript">
+  function submitPreview(form) {    
+    form.cardType.value = form.settleFrom.value.substring(3);
+    form.settlementGlAccountId.value = form.settleTo.value;
+    form.undepositedReceiptGlAccountId.value = form.settleFrom.value.substring(3);
+    if(form.settleFrom.value.substring(0,3) == "UD:") {
+      form.action="<@ofbizUrl>settleUndepositedPayments</@ofbizUrl>"
+    } else {
+      form.action="<@ofbizUrl>settleCreditCardPayments</@ofbizUrl>"
+    } 
+    form.submit();
+  }
+
+  function submitSettle(form) {
+    form.submit();
+  }
+
+  function changeListFrom(form) {
+    var displayUD = "inline";
+
+    if(form.paymentOrRefund.value == "REFUND") {
+      displayUD = "none";
+    }
+    for (var i=0; i < form.settleFrom.length; i++) {    
+       if(form.settleFrom[i].value.substring(0,3) == "UD:") {
+         form.settleFrom[i].style.display = displayUD;
+         if(displayUD == "none") {
+           form.settleFrom[i+1].selected = true;
+         } else {
+           form.settleFrom[0].selected = true;  
+         }         
+       }      
+    }
+  }
+</script>
+
+<#macro listGlAccounts name glAccounts defaultGlAccountCode>
 <select name="${name}" class="inputBox">
 <#list glAccounts as glAccount>
-  <option value="${glAccount.glAccountId}" <#if glAccount.glAccountId == defaultGlAccountId>selected="true"</#if>>${glAccount.accountCode} ${glAccount.accountName}</option>
+  <option value="${glAccount.glAccountId}" <#if glAccount.accountCode == defaultGlAccountCode> selected="selected"</#if>>${glAccount.accountCode} ${glAccount.accountName}</option>
 </#list>
 </select>
 </#macro>
 
-
 <#if security.hasEntityPermission("FINANCIALS", "_TX_VIEW", userLogin)>
-<ul class="bulletList">
-<li class="tabletext"><form method="post" action="<@ofbizUrl>settleUndepositedPayments</@ofbizUrl>">
-<input type="hidden" name="paymentOrRefund" value="PAYMENT"/>
-${uiLabelMap.FinancialsSettlePaymentsFrom} 
-<@listGlAccounts name="undepositedReceiptGlAccountId" glAccounts=undepositedReceiptsAccounts defaultGlAccountId=defaultUndepositedReceiptsAccount.glAccountId/>
-${uiLabelMap.CommonTo}
-<@listGlAccounts name="settlementGlAccountId" glAccounts=settlementAccounts defaultGlAccountId=defaultSettlementAccount.glAccountId/>
 
-<input type="submit" name="settleButton" value="${uiLabelMap.FinancialsSettle}" class="smallSubmit"/>
+<form method="POST" name="createSettlePayments" action="<@ofbizUrl>createSettlementAcctgTrans</@ofbizUrl>"> 
+  <input type="hidden" name="submitType" value=""/>
+  <input type="hidden" name="cardType" value="" />
+  <input type="hidden" name="settlementGlAccountId" value="" />
+  <input type="hidden" name="undepositedReceiptGlAccountId" value="" />
+  <div class="form" style="border:0">
+    <table class="twoColumnForm" style="border:0">
+      <tr>
+        <@displayTitleCell title=uiLabelMap.FinancialsSettlementType />
+        <td>
+        <select name="paymentOrRefund" id="paymentOrRefund" class="inputBox" default="REFUND" onChange="javascript:changeListFrom(this.form)" >
+          <option value="PAYMENT" <#if requestParameters.paymentOrRefund?if_exists == "PAYMENT"> selected="selected" </#if> >Payment </option>
+          <option value="REFUND" <#if requestParameters.paymentOrRefund?if_exists == "REFUND"> selected="selected" </#if> >Refund  </option>
+        </select>
+        </td>
+      </tr>
+
+      <tr>
+        <@displayTitleCell title=uiLabelMap.FinancialsSettlePaymentMethod />
+        <td>
+        <select name="settleFrom" class="inputBox">
+          <#if undepositedReceiptsAccounts?has_content>
+            <#list undepositedReceiptsAccounts as glAccount>
+              <#if requestParameters.paymentOrRefund?if_exists == "REFUND">
+                <option style="display:none" value="UD:${glAccount.glAccountId}" <#if requestParameters.settleFrom.substring(3)?if_exists == glAccount.glAccountId > selected="selected" </#if> >${glAccount.accountName}</option>
+              <#else>
+                <option style="display:inline" value="UD:${glAccount.glAccountId}" <#if requestParameters.settleFrom.substring(3)?if_exists == glAccount.glAccountId > selected="selected" </#if> >${glAccount.accountName}</option>
+              </#if>
+            </#list>
+          </#if>
+          <#list creditCardTypes as creditCardType>
+            <option value="CC:${creditCardType.cardType}" <#if (requestParameters.settleFrom.substring(3)?if_exists == creditCardType.cardType) > selected="selected" </#if> >${creditCardType.cardType}</option>
+          </#list>
+        </select>
+        </td>
+      </tr>
+
+      <tr>
+        <@displayTitleCell title=uiLabelMap.FinancialsSettlementAccount />
+        <td>
+        <@listGlAccounts name="settleTo" glAccounts=settlementAccounts defaultGlAccountCode=requestParameters.settleTo?if_exists />
+        </td>
+      </tr>
+
+      <tr>
+        <@displayTitleCell title=uiLabelMap.FinancialsTransactionDate />
+        <@inputDateTimeCell name="transactionDate" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
+      </tr>
+
+      <tr>
+        <@displayTitleCell title=uiLabelMap.CommonAmount titleClass="requiredField" />
+        <@inputTextCell size="10" name="amount" default=""/>
+      </tr>
+
+      <tr><td colspan="2">&nbsp;</td></tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>
+              <input name="previewButton" type="button" class="smallSubmit" value="${uiLabelMap.FinancialsSettlePreview}" onClick="javascript:submitPreview(this.form)"/>
+              &nbsp;
+              <input name="settleButton" type="button" class="smallSubmit" value="${uiLabelMap.FinancialsSettle}" onClick="javascript:submitSettle(this.form)"/>
+            </td>
+          </tr>
+    </table>
+
+  </div>
 </form>
 
-
-<li class="tabletext"><form method="post" action="<@ofbizUrl>settleCreditCardPayments</@ofbizUrl>"> 
-<input type="hidden" name="paymentOrRefund" value="PAYMENT"/>
-${uiLabelMap.FinancialsSettlePaymentsFrom} 
-<select name="cardType" class="inputBox">
-<#list creditCardTypes as creditCardType>
-    <option value="${creditCardType.cardType}">${creditCardType.cardType}</option>
-</#list>
-</select>
-${uiLabelMap.CommonTo}
-<@listGlAccounts name="settlementGlAccountId" glAccounts=settlementAccounts defaultGlAccountId=defaultSettlementAccount.glAccountId/>
-
-<input type="submit" name="settleButton" value="${uiLabelMap.FinancialsSettle}" class="smallSubmit"/>
-</form>
-<li class="tabletext"><form method="post" action="<@ofbizUrl>settleCreditCardPayments</@ofbizUrl>"> 
-<input type="hidden" name="paymentOrRefund" value="REFUND"/>
-${uiLabelMap.FinancialsSettleRefundsFrom} 
-<select name="cardType" class="inputBox">
-<#list creditCardTypes as creditCardType>
-    <option value="${creditCardType.cardType}">${creditCardType.cardType}</option>
-</#list>
-</select>
-
-${uiLabelMap.CommonTo}
-<@listGlAccounts name="settlementGlAccountId" glAccounts=settlementAccounts defaultGlAccountId=defaultSettlementAccount.glAccountId/>
-
-<input type="submit" name="settleButton" value="${uiLabelMap.FinancialsSettle}" class="smallSubmit"/>
-</form>
-
-</li>
-</ul>
 </#if>
-
