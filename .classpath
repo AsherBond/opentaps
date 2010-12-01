@@ -220,5 +220,6 @@
 	<classpathentry kind="lib" path="opentaps/funambol/lib/modules/funambol-pim-framework-8.0.0.jar"/>
 	<classpathentry kind="lib" path="opentaps/funambol/lib/modules/funambol-pim-parsers-8.0.0.jar"/>
 	<classpathentry kind="lib" path="opentaps/amazon/lib/opentapsAmazon_Axis-1.0.jar"/>
+	<classpathentry kind="lib" path="framework/base/lib/memcached-2.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
