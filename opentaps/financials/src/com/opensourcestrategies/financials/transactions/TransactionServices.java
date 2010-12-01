@@ -17,6 +17,7 @@
 
 package com.opensourcestrategies.financials.transactions;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +43,8 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.PartyAcctgPreference;
+import org.opentaps.base.services.CreateQuickAcctgTransService;
+import org.opentaps.base.services.PostAcctgTransService;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
@@ -433,6 +436,91 @@ public final class TransactionServices {
             ledgerRepository.update(entry);
             return ServiceUtil.returnSuccess();
         } catch (GeneralException e) {
+            return UtilMessage.createAndLogServiceError(e, MODULE);
+        }
+    }
+
+    /**
+     * Automatically create and Post <code>AcctgTrans</code> record.
+     * The settleFrom parameter have a pattern like UD:121000 or CC:Visa
+     * where two first letters indicates Undeposited receipts or Credit Card
+     * and other is number of the account or type of the Credit Card
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
+    @SuppressWarnings("unchecked")
+    public static Map createSettlementAcctgTrans(DispatchContext dctx, Map context) {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Delegator delegator = dctx.getDelegator();
+        String organizationPartyId = (String) context.get("organizationPartyId");
+        String debitGlAccountId = null;
+        String creditGlAccountId = null;
+        String cardTransactionsGlAccountId = null;
+        String from[] = ((String) context.get("settleFrom")).split(":");
+
+        if(from[0].equalsIgnoreCase("CC")) {
+            // CreditCard
+            try {
+                GenericValue cardTransactionsGlAccount = delegator.findByPrimaryKey("CreditCardTypeGlAccount", UtilMisc.toMap("cardType", from[1], "organizationPartyId", organizationPartyId));
+                if (cardTransactionsGlAccount != null) {
+                    cardTransactionsGlAccountId = cardTransactionsGlAccount.getString("glAccountId");
+                } else {
+                    Debug.logWarning("No GL account configured for card type " +  from[1] + " when trying to settle card", "");
+                }
+            } catch (GenericEntityException e) {
+                return UtilMessage.createAndLogServiceError(e, MODULE);
+            }
+        } else {
+            // Undeposited receipts
+            cardTransactionsGlAccountId =  from[1];
+        }
+
+        if ("REFUND".equalsIgnoreCase((String) context.get("paymentOrRefund")) && from[0].equalsIgnoreCase("UD")) {
+            return ServiceUtil.returnError("Refund only available for credit cards");
+        }
+
+        try {
+
+            if ("REFUND".equalsIgnoreCase((String) context.get("paymentOrRefund"))) {
+                debitGlAccountId = cardTransactionsGlAccountId;
+                creditGlAccountId = (String) context.get("settleTo");
+            } else {
+                debitGlAccountId = (String) context.get("settleTo");
+                creditGlAccountId = cardTransactionsGlAccountId;
+            }
+
+            Map createAcctgTransCtx = dctx.getModelService("createAcctgTrans").makeValid(context, ModelService.IN_PARAM);
+
+            String glFiscalTypeId = (String) context.get("glFiscalTypeId");
+            if (UtilValidate.isEmpty(glFiscalTypeId)) {
+                glFiscalTypeId = "ACTUAL";
+            }
+
+            CreateQuickAcctgTransService acctgTransService = new CreateQuickAcctgTransService();
+            acctgTransService.setInAcctgTransTypeId("BANK_SETTLEMENT");
+
+            acctgTransService.setInOrganizationPartyId((String) context.get("organizationPartyId"));
+            acctgTransService.setInDebitGlAccountId(debitGlAccountId);
+            acctgTransService.setInCreditGlAccountId(creditGlAccountId);
+            acctgTransService.setInAmount((Double) context.get("amount"));
+            acctgTransService.setInUserLogin(userLogin);
+            acctgTransService.setInGlFiscalTypeId(glFiscalTypeId);
+
+            acctgTransService.setInTransactionDate((Timestamp) createAcctgTransCtx.get("transactionDate"));
+
+            acctgTransService.runSync(new Infrastructure(dispatcher));
+
+            String acctgTransId = acctgTransService.getOutAcctgTransId();
+
+            PostAcctgTransService postAcctgTransService = new PostAcctgTransService();
+            postAcctgTransService.setInUserLogin(userLogin);
+            postAcctgTransService.setInAcctgTransId(acctgTransId);
+            postAcctgTransService.runSync(new Infrastructure(dispatcher));
+
+            return ServiceUtil.returnSuccess("Settle Payments completed successfully");
+        } catch (Exception e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
     }

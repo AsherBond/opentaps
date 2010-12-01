@@ -152,7 +152,7 @@ public class SalesTaxTests extends OrderTestCase {
         for (GenericValue returnAdjustment : returnAdjustments) {
             GenericValue returnItem = delegator.findByPrimaryKey("ReturnItem", UtilMisc.toMap("returnId", returnId, "returnItemSeqId", returnAdjustment.getString("returnItemSeqId")));
 
-            BigDecimal amount = returnItem.getBigDecimal("returnPrice").multiply(returnItem.getBigDecimal("returnQuantity")).multiply(percentage).divide(new BigDecimal("100"), DECIMALS, ROUNDING);
+            BigDecimal amount = returnItem.getBigDecimal("returnPrice").multiply(returnItem.getBigDecimal("returnQuantity")).multiply(percentage).divide(new BigDecimal("100"), 3, ROUNDING);
             assertEquals("The tax calculate for return " + returnId + " and return item " + returnItem.getString("returnItemSeqId") + " is wrong.", returnAdjustment.getBigDecimal("amount"), amount);
         }
     }
