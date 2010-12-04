@@ -99,10 +99,18 @@ under the License.
 <@frameSection title="${uiLabelMap.OrderOrder} #${order.orderId} ${externalOrder?if_exists} ${uiLabelMap.CommonInformation}" extra=extraOptions>
     <table width="100%" border="0" cellpadding="1" cellspacing="0">
       <#-- order name -->
-      <#if order.orderName?has_content>
-        <@infoRow title=uiLabelMap.OrderOrderName content=order.orderName /> 
-        <@infoSepBar/> 
+      <#if order.isOpen()>
+        <@form name="updateOrdrNameHiddenForm" url="updateOrderHeader" orderId=order.orderId>
+          <@infoRowNested title=uiLabelMap.OrderOrderName >
+            <@inputText name="orderName" default=order.orderName />
+            <@inputSubmit title=uiLabelMap.CommonUpdate />
+          </@infoRowNested>
+        </@form>
+      <#else>
+        <@infoRow title=uiLabelMap.OrderOrderName content=order.orderName?default("") /> 
       </#if>
+      <@infoSepBar/>
+      <#-- order date --> 
       <@infoRow title=uiLabelMap.OrderDateOrdered content=order.orderDate />
       <@infoSepBar/>
       <#-- order status history -->

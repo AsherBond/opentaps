@@ -2524,6 +2524,14 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <response name="success" type="request" value="createOrderMainScreen"/>
         <response name="error" type="request" value="createOrderMainScreen"/>
     </request-map>
+    <request-map uri="updateOrderHeader">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateOrderHeader"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>
+        <response name="error" type="view" value="orderview"/>
+    </request-map>
     <request-map uri="updateOrderHeaderInfoAndRecalculatePrices">
         <security https="true" auth="true"/>
         <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="updateOrderHeaderInfo"/>
