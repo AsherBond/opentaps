@@ -29,6 +29,13 @@
     <tr>
         <@displayCell text=uiLabelMap.CrmCompanyName class="tableheadtext" blockClass="titleCell" />
         <@inputTextCell name="groupName"/>
+    </tr>
+    <tr>
+        <@displayCell text=uiLabelMap.PartyFirstName class="tableheadtext" blockClass="titleCell" />
+        <@inputTextCell name="firstName"/>
+        <@displayCell text=uiLabelMap.PartyLastName class="tableheadtext" blockClass="titleCell" />
+        <@inputTextCell name="lastName"/>
+    <tr>
         <@displayCell text=uiLabelMap.PartyPhoneNumber class="tableheadtext" blockClass="titleCell" />
         <td>
             <@inputText name="primaryPhoneCountryCode" size=6 default=configProperties.defaultCountryCode/>
@@ -39,12 +46,9 @@
         </td>
     </tr>
     <tr>
-        <@displayCell text=uiLabelMap.PartyFirstName class="tableheadtext" blockClass="titleCell" />
-        <@inputTextCell name="firstName"/>
         <@displayCell text=uiLabelMap.PartyEmailAddress class="tableheadtext" blockClass="titleCell" />
         <@inputTextCell name="primaryEmail" size=30/>
     </tr>
-    <@inputTextRow name="lastName" title=uiLabelMap.PartyLastName />
   </table>
 </div>
 

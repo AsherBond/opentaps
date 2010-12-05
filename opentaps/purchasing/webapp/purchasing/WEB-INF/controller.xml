@@ -696,6 +696,15 @@
         <response name="error" type="view" value="orderview"/>
     </request-map>
 
+    <request-map uri="updateOrderHeader">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateOrderHeader"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>
+        <response name="error" type="view" value="orderview"/>
+    </request-map>
+
     <!-- ===================== -->
     <!-- Supplier Tab Mappings -->
     <!-- ===================== -->

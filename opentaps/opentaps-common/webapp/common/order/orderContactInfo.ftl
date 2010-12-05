@@ -66,6 +66,7 @@ under the License.
         <#-- List the contact mech associated to the order that are not phone numbers (they are displayed in a special section) -->
         <#if !orderContactMechs?exists><#assign orderContactMechs = order.orderContactMeches /></#if> <#-- we now order the contact mechs by type, fallback to the previous method for compatibility -->
         <#assign hasOrderEmail = false/>
+        <#assign hasBillingAddress = false/>
         <#list orderContactMechs as orderContactMech>
           <#assign contactMech = orderContactMech.contactMech/>
           <#-- Telecom numbers will be shown in separate loop -->
@@ -87,6 +88,7 @@ under the License.
                     </div>
                   </#if>
                   <#if orderContactMech.contactMechPurposeTypeId == "BILLING_LOCATION">
+                    <#assign hasBillingAddress = true />
                     <#if mainPartyBillingAddresses?has_content>
                       <#assign altBillingAddresses = mainPartyBillingAddresses.clone() />
                       <#assign dummy = altBillingAddresses.add(contactMech.postalAddress) />
@@ -146,6 +148,21 @@ under the License.
             </@infoRowNested>
           </#if>
         </#list>
+
+        <#if !hasBillingAddress && mainPartyBillingAddresses?has_content>
+          <@infoSepBar/>
+          <@infoRowNested title=uiLabelMap.OrderBillingAddress>
+            <#assign altBillingAddresses = mainPartyBillingAddresses.clone() />
+            <@form name="createOrderBillingContact" url="createOrderContactMech" orderId=order.orderId contactMechPurposeTypeId="BILLING_LOCATION" contactMechTypeId="POSTAL_ADDRESS" oldContactMechId="" >
+              <@inputSelect name="contactMechId" list=altBillingAddresses key="contactMechId" required=false ; address>
+                ${address.address1!}
+                <#if address.city?has_content> - ${address.city!}</#if>
+                <#if address.stateProvinceGeoId?has_content> - ${address.stateProvinceGeoId!} </#if>
+              </@inputSelect>
+              <@inputSubmit title=uiLabelMap.CommonUpdate />
+            </@form>
+          </@infoRowNested>
+        </#if>
 
         <#if !hasOrderEmail>
           <@infoSepBar/>
