@@ -66,7 +66,7 @@ public interface PaymentSpecificationInterface {
     public Boolean isVoided(Payment payment);
 
     /**
-     * Checks if the given <code>PaymentMethod</code> is a billing account payment.
+     * Checks if the given <code>Payment</code> is a billing account payment.
      * @param payment an <code>Payment</code> value
      * @return a <code>Boolean</code> value
      */
@@ -116,49 +116,49 @@ public interface PaymentSpecificationInterface {
 
     /**
      * Checks if the given <code>PaymentMethod</code> is a billing account payment.
-     * @param payment an <code>Payment</code> value
+     * @param payment an <code>PaymentMethod</code> value
      * @return a <code>Boolean</code> value
      */
     public Boolean isBillingAccountPayment(PaymentMethod payment);
 
     /**
-     * Checks if the given <code>Payment</code> is a cash on delivery payment.
-     * @param payment an <code>Payment</code> value
+     * Checks if the given <code>PaymentMethod</code> is a cash on delivery payment.
+     * @param payment an <code>PaymentMethod</code> value
      * @return a <code>Boolean</code> value
      */
     public Boolean isCashOnDeliveryPayment(PaymentMethod payment);
 
     /**
-     * Checks if the given <code>Payment</code> is a credit card payment.
-     * @param payment an <code>Payment</code> value
+     * Checks if the given <code>PaymentMethod</code> is a credit card payment.
+     * @param payment an <code>PaymentMethod</code> value
      * @return a <code>Boolean</code> value
      */
     public Boolean isCreditCardPayment(PaymentMethod payment);
 
     /**
-     * Checks if the given <code>Payment</code> is a gift card payment.
-     * @param payment an <code>Payment</code> value
+     * Checks if the given <code>PaymentMethod</code> is a gift card payment.
+     * @param payment an <code>PaymentMethod</code> value
      * @return a <code>Boolean</code> value
      */
     public Boolean isGiftCardPayment(PaymentMethod payment);
 
     /**
-     * Checks if the given <code>Payment</code> is an electronic transfer payment.
-     * @param payment an <code>Payment</code> value
+     * Checks if the given <code>PaymentMethod</code> is an electronic transfer payment.
+     * @param payment an <code>PaymentMethod</code> value
      * @return a <code>Boolean</code> value
      */
     public Boolean isElectronicFundTransferPayment(PaymentMethod payment);
 
     /**
-     * Checks if the given <code>Payment</code> is a paypal payment.
-     * @param payment an <code>Payment</code> value
+     * Checks if the given <code>PaymentMethod</code> is a paypal payment.
+     * @param payment an <code>PaymentMethod</code> value
      * @return a <code>Boolean</code> value
      */
     public Boolean isPayPalPayment(PaymentMethod payment);
 
     /**
-     * Checks if the given <code>Payment</code> is an offline payment.
-     * @param payment an <code>Payment</code> value
+     * Checks if the given <code>PaymentMethod</code> is an offline payment.
+     * @param payment an <code>PaymentMethod</code> value
      * @return a <code>Boolean</code> value
      */
     public Boolean isOfflinePayment(PaymentMethod payment);

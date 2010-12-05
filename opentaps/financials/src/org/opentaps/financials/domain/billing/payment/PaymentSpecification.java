@@ -217,37 +217,37 @@ public class PaymentSpecification implements PaymentSpecificationInterface {
     }
 
     /** {@inheritDoc} */
-    public Boolean isBillingAccountPayment(PaymentMethod payment) {
-        return PaymentMethodTypeEnum.BILLING_ACCOUNT.equals(payment.getPaymentMethodTypeId());
+    public Boolean isBillingAccountPayment(PaymentMethod paymentMethod) {
+        return PaymentMethodTypeEnum.BILLING_ACCOUNT.equals(paymentMethod.getPaymentMethodTypeId());
     }
 
     /** {@inheritDoc} */
-    public Boolean isCashOnDeliveryPayment(PaymentMethod payment) {
-        return PaymentMethodTypeEnum.CASH_ON_DELIVERY.equals(payment.getPaymentMethodTypeId());
+    public Boolean isCashOnDeliveryPayment(PaymentMethod paymentMethod) {
+        return PaymentMethodTypeEnum.CASH_ON_DELIVERY.equals(paymentMethod.getPaymentMethodTypeId());
     }
 
     /** {@inheritDoc} */
-    public Boolean isCreditCardPayment(PaymentMethod payment) {
-        return PaymentMethodTypeEnum.CREDIT_CARD.equals(payment.getPaymentMethodTypeId());
+    public Boolean isCreditCardPayment(PaymentMethod paymentMethod) {
+        return PaymentMethodTypeEnum.CREDIT_CARD.equals(paymentMethod.getPaymentMethodTypeId());
     }
 
     /** {@inheritDoc} */
-    public Boolean isGiftCardPayment(PaymentMethod payment) {
-        return PaymentMethodTypeEnum.GIFT_CARD.equals(payment.getPaymentMethodTypeId());
+    public Boolean isGiftCardPayment(PaymentMethod paymentMethod) {
+        return PaymentMethodTypeEnum.GIFT_CARD.equals(paymentMethod.getPaymentMethodTypeId());
     }
 
     /** {@inheritDoc} */
-    public Boolean isElectronicFundTransferPayment(PaymentMethod payment) {
-        return PaymentMethodTypeEnum.ELECTRONIC_FUND_TRANSFER.equals(payment.getPaymentMethodTypeId());
+    public Boolean isElectronicFundTransferPayment(PaymentMethod paymentMethod) {
+        return PaymentMethodTypeEnum.ELECTRONIC_FUND_TRANSFER.equals(paymentMethod.getPaymentMethodTypeId());
     }
 
     /** {@inheritDoc} */
-    public Boolean isPayPalPayment(PaymentMethod payment) {
-        return PaymentMethodTypeEnum.PAYPAL.equals(payment.getPaymentMethodTypeId());
+    public Boolean isPayPalPayment(PaymentMethod paymentMethod) {
+        return PaymentMethodTypeEnum.PAYPAL.equals(paymentMethod.getPaymentMethodTypeId());
     }
 
     /** {@inheritDoc} */
-    public Boolean isOfflinePayment(PaymentMethod payment) {
-        return PaymentMethodTypeEnum.OFFLINE.equals(payment.getPaymentMethodTypeId());
+    public Boolean isOfflinePayment(PaymentMethod paymentMethod) {
+        return PaymentMethodTypeEnum.OFFLINE.equals(paymentMethod.getPaymentMethodTypeId());
     }
 }
