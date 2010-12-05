@@ -75,4 +75,11 @@ public interface OrderServiceInterface extends ServiceInterface {
      */
     public void updateOrderBillingAddress() throws ServiceException;
 
+    /**
+     * Guesses and sets the order billing address, to avoid order created without a billing address.
+     * First checks the order payment methods billing addresses (eg: credit card), else defaults to
+     *  customer first billing address found.
+     * @throws ServiceException if an error occurs
+     */
+    public void autoSetOrderBillingAddress() throws ServiceException;
 }

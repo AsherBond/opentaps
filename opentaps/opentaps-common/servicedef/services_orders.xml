@@ -349,5 +349,12 @@ under the License.
             location="org.opentaps.domain.crmsfa.returns.ReturnService" invoke="updateInvoiceItemsAccountingTagsForReturn" transaction-timeout="600">
         <description>Copies all the accounting tags from the return order items to the invoice items.</description>
         <attribute name="invoiceId" type="String" mode="IN"/>
-    </service>    
+    </service>   
+ 
+    <service name="autoSetOrderBillingAddress" engine="pojo" auth="true"
+        invoke="autoSetOrderBillingAddress" location="org.opentaps.common.domain.order.OrderService">
+        <description>Set a billing address on the order if there is none, first look at the order payment methods billing addresses else defaults on the first customer billing address</description>
+        <attribute name="orderId" mode="IN" type="String" />
+    </service>
+ 
 </services>

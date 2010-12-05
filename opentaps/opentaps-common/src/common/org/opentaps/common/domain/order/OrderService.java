@@ -36,6 +36,7 @@ import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.opentaps.domain.DomainService;
+import org.opentaps.domain.billing.payment.PaymentMethod;
 import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.base.constants.OrderAdjustmentTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
@@ -51,6 +52,7 @@ import org.opentaps.domain.order.OrderAdjustment;
 import org.opentaps.domain.order.OrderDomainInterface;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderItemShipGroup;
+import org.opentaps.domain.order.OrderPaymentPreference;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.order.OrderServiceInterface;
 import org.opentaps.domain.order.OrderSpecificationInterface;
@@ -678,6 +680,56 @@ public class OrderService extends DomainService implements OrderServiceInterface
             repository.updateOrderAddress(orderId, newOrderContactMechId, ContactMechPurposeTypeConstants.BILLING_LOCATION);
 
         } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
+
+    }
+ 
+    /** {@inheritDoc} */
+    public void autoSetOrderBillingAddress() throws ServiceException {
+
+        try {
+
+            OrderRepositoryInterface repository = getDomainsDirectory().getOrderDomain().getOrderRepository();
+
+            // get the order
+            Order order = repository.getOrderById(orderId);
+
+            // if the order has a billing address we have nothing to do
+            if (UtilValidate.isNotEmpty(order.getBillingAddresses())) {
+                return;
+            }
+
+            PostalAddress defaultBillingAddress = null;
+
+            // check for any payment method set for this order that have a billing address
+            for (OrderPaymentPreference pref : order.getOrderPaymentPreferences()) {
+                PaymentMethod pm = pref.getPaymentMethod();
+                if (pm == null) {
+                    continue;
+                }
+                // not all payment methods have a billing address
+                defaultBillingAddress = pm.getPostalAddress();
+                // stop at the first found address (usually there would be only one payment method anyway)
+                if (defaultBillingAddress != null) {
+                    break;
+                }
+            }
+
+            // else get a default billing address from the customer
+            if (defaultBillingAddress == null) {
+                defaultBillingAddress = order.getPlacingCustomer().getBillingAddress();
+            }
+
+            // no address found, nothing to do
+            if (defaultBillingAddress == null) {
+                return;
+            }
+
+            // if we found an address set it to the order
+            repository.updateOrderAddress(orderId, defaultBillingAddress.getContactMechId(), ContactMechPurposeTypeConstants.BILLING_LOCATION);
+
+        } catch (GeneralException e) {
             throw new ServiceException(e);
         }
 

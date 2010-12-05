@@ -18,6 +18,9 @@
 
 <service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
 
+    <eca service="storeOrder" event="return">
+        <action service="autoSetOrderBillingAddress" mode="sync"/>
+    </eca>
     <eca service="storeOrder" event="commit">
         <condition field-name="orderTypeId" operator="equals" value="SALES_ORDER"/>
         <condition field-name="statusId" operator="equals" value="ORDER_CREATED"/>
