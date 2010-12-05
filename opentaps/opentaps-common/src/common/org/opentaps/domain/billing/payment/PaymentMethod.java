@@ -16,6 +16,7 @@
  */
 package org.opentaps.domain.billing.payment;
 
+import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -26,6 +27,7 @@ public class PaymentMethod extends org.opentaps.base.entities.PaymentMethod {
 
     private CreditCard creditCard;
     private GiftCard giftCard;
+    private PostalAddress postalAddress;
 
     /**
      * Default constructor.
@@ -95,6 +97,24 @@ public class PaymentMethod extends org.opentaps.base.entities.PaymentMethod {
      */
     public Boolean isPayPal() throws RepositoryException {
         return getPaymentSpecification().isPayPalPayment(this);
+    }
+ 
+    /**
+     * Gets the postal address related to this payment method.
+     * Note that only Electronic Fund Transfers and Credit Cards can have a postal address.
+     * @return a <code>PostalAddress</code> value
+     * @exception RepositoryException if an error occurs
+     */
+    public PostalAddress getPostalAddress() throws RepositoryException {
+        // only EFT and credit card have postal addresses
+        if (postalAddress == null) {
+            if (isCreditCard() && getCreditCard() != null) {
+                postalAddress = getCreditCard().getPostalAddress();
+            } else if (isElectronicFundTransfer() && getEftAccount() != null) {
+                postalAddress = getEftAccount().getPostalAddress();
+            }
+        }
+        return postalAddress;
     }
 
     /**
