@@ -59,7 +59,9 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.service.ServiceException;
 
-/** {@inheritDoc} */
+/**
+ * Order related services.
+ */
 public class OrderService extends DomainService implements OrderServiceInterface {
 
     private static final String MODULE = OrderService.class.getName();

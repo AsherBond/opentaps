@@ -33,7 +33,7 @@ public interface OrderServiceInterface extends ServiceInterface {
     /**
      * Sets a new contact mech id that should be used as new shipping location.<br>
      * updateOrderShippingAddress and updateOrderBillingAddress input attribute.
-     * @param newOrderContactMechId new contact mech identifier, should be a postal address
+     * @param newShippingContactMechId new contact mech identifier, should be a postal address
      */
     public void setNewOrderContactMechId(String newShippingContactMechId);
 
@@ -65,13 +65,13 @@ public interface OrderServiceInterface extends ServiceInterface {
 
     /**
      * Service changes order shipping address.
-     * @throws ServiceException
+     * @throws ServiceException if an error occurs
      */
     public void updateOrderShippingAddress() throws ServiceException;
 
     /**
      * Service changes order billing address.
-     * @throws ServiceException
+     * @throws ServiceException if an error occurs
      */
     public void updateOrderBillingAddress() throws ServiceException;
 
