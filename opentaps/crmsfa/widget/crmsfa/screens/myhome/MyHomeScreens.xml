@@ -102,11 +102,12 @@
 
 			            <!-- pending emails -->
                         <container style="subSectionBlock">
-		            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/pendingEmails.ftl"/></html></platform-specific>
-		        </container>
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/pendingEmails.ftl"/></html></platform-specific>
+                        </container>
+
                         <container style="subSectionBlock">
-		            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/pendingOutboundEmails.ftl"/></html></platform-specific>
-		        </container>
+		                    <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/pendingOutboundEmails.ftl"/></html></platform-specific>
+                        </container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

@@ -143,6 +143,11 @@
   </#list>
 
 </table>
+<<<<<<< HEAD
 <#else>
   <p>${uiLabelMap.CrmErrorCalendarFail}</p>
+=======
+<#else>               
+  <p>${uiLabelMap.OpentapsError_Internal}</p>
+>>>>>>> eb7c19b... Replace missing labels with common error message
 </#if>

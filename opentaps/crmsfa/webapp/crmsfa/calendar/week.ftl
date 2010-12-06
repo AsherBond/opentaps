@@ -105,5 +105,5 @@
         </#list>  				
     </table>
 <#else>               
-   <p>${uiLabelMap.CommonFailedCalendarEntries}!</p>
+   <p>${uiLabelMap.OpentapsError_Internal}!</p>
 </#if>
