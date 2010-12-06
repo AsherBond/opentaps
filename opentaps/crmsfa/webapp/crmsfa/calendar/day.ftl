@@ -132,5 +132,5 @@
 
 </table>
 <#else>               
-  <p>${uiLabelMap.CrmErrorCalendarFail}</p>
+  <p>${uiLabelMap.OpentapsError_Internal}</p>
 </#if>
