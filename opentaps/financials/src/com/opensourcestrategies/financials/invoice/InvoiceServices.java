@@ -2600,11 +2600,14 @@ public final class InvoiceServices {
 
                 // set the bill-to contact mech as the contact mech of the billing account
                 if (UtilValidate.isNotEmpty(billingAccount.getString("contactMechId"))) {
-                    Map createBillToContactMechContext = UtilMisc.toMap("invoiceId", invoiceId, "contactMechId", billingAccount.getString("contactMechId"),
+                    // check that it is not already set
+                    if (delegator.findByPrimaryKey("InvoiceContactMech", UtilMisc.toMap("invoiceId", invoiceId, "contactMechId", billingAccount.getString("contactMechId"), "contactMechPurposeTypeId", "BILLING_LOCATION")) == null) {
+                        Map createBillToContactMechContext = UtilMisc.toMap("invoiceId", invoiceId, "contactMechId", billingAccount.getString("contactMechId"),
                                                                        "contactMechPurposeTypeId", "BILLING_LOCATION", "userLogin", userLogin);
-                    Map createBillToContactMechResult = dispatcher.runSync("createInvoiceContactMech", createBillToContactMechContext);
-                    if (ServiceUtil.isError(createBillToContactMechResult)) {
-                        return UtilMessage.createAndLogServiceError(createBillToContactMechResult, "AccountingErrorCreatingInvoiceContactMechFromOrder", locale, MODULE);
+                        Map createBillToContactMechResult = dispatcher.runSync("createInvoiceContactMech", createBillToContactMechContext);
+                        if (ServiceUtil.isError(createBillToContactMechResult)) {
+                            return UtilMessage.createAndLogServiceError(createBillToContactMechResult, "AccountingErrorCreatingInvoiceContactMechFromOrder", locale, MODULE);
+                        }
                     }
                 }
             } else {
@@ -2613,11 +2616,14 @@ public final class InvoiceServices {
                     Iterator bli = billingLocations.iterator();
                     while (bli.hasNext()) {
                         GenericValue ocm = (GenericValue) bli.next();
-                        Map createBillToContactMechContext = UtilMisc.toMap("invoiceId", invoiceId, "contactMechId", ocm.getString("contactMechId"),
+                        // check that it is not already set
+                        if (delegator.findByPrimaryKey("InvoiceContactMech", UtilMisc.toMap("invoiceId", invoiceId, "contactMechId", ocm.getString("contactMechId"), "contactMechPurposeTypeId", "BILLING_LOCATION")) == null) {
+                            Map createBillToContactMechContext = UtilMisc.toMap("invoiceId", invoiceId, "contactMechId", ocm.getString("contactMechId"),
                                                                            "contactMechPurposeTypeId", "BILLING_LOCATION", "userLogin", userLogin);
-                        Map createBillToContactMechResult = dispatcher.runSync("createInvoiceContactMech", createBillToContactMechContext);
-                        if (ServiceUtil.isError(createBillToContactMechResult)) {
-                            return UtilMessage.createAndLogServiceError(createBillToContactMechResult, "AccountingErrorCreatingInvoiceContactMechFromOrder", locale, MODULE);
+                            Map createBillToContactMechResult = dispatcher.runSync("createInvoiceContactMech", createBillToContactMechContext);
+                            if (ServiceUtil.isError(createBillToContactMechResult)) {
+                                return UtilMessage.createAndLogServiceError(createBillToContactMechResult, "AccountingErrorCreatingInvoiceContactMechFromOrder", locale, MODULE);
+                            }
                         }
                     }
                 } else {
