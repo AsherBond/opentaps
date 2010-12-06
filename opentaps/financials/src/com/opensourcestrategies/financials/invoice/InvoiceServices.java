@@ -2834,7 +2834,8 @@ public final class InvoiceServices {
                         BigDecimal originalOrderItemQty = originalOrderItem.getOrderedQuantity();
                         String shipGroupSeqId = adj.getString("shipGroupSeqId");
                         OrderItemShipGroup shipGroup = null;
-                        if (UtilValidate.isNotEmpty(shipGroupSeqId)) {
+                        // some adjustment have _NA_ as the shipGroupSeqId
+                        if (UtilValidate.isNotEmpty(shipGroupSeqId) && !"_NA_".equals(shipGroupSeqId)) {
                             shipGroup = order.getOrderItemShipGroup(shipGroupSeqId);
                             originalOrderItemQty = originalOrderItem.getOrderedQuantity(shipGroup);
                         }
