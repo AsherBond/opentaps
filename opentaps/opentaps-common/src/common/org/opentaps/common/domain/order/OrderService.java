@@ -717,7 +717,7 @@ public class OrderService extends DomainService implements OrderServiceInterface
             }
 
             // else get a default billing address from the customer
-            if (defaultBillingAddress == null) {
+            if (defaultBillingAddress == null && order.getPlacingCustomer() != null) {
                 defaultBillingAddress = order.getPlacingCustomer().getBillingAddress();
             }
 
