@@ -119,9 +119,7 @@ under the License.
     </target>
 
     <target name="clean-tempfiles">
-        <delete verbose="on">
-            <fileset dir="../runtime" includes="tempfiles/**/*"/>
-        </delete>
+        <delete verbose="on" dir="../runtime/tempfiles"/>
     </target>
 
     <target name="tests">
