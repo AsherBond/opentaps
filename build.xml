@@ -144,10 +144,9 @@ under the License.
                 <include name="*/build.xml"/>
             </fileset>
         </subant>
-        <subant target="clean"  failonerror="${specialpurpose.present}" 
-          description="Use failonerror=false in case the specialpurpose directory is not there">
-             <filelist dir="." files="specialpurpose/build.xml"/>
-         </subant>
+        <subant target="clean">
+            <filelist dir="." files="opentaps/build.xml"/>
+        </subant>
 
         <subant target="clean"  failonerror="${specialpurpose.present}" description="Use failonerror=false in case the specialpurpose directory is not there">
             <filelist dir="." files="specialpurpose/build.xml"/>

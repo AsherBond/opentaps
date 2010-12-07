@@ -13,6 +13,7 @@
         <include name="**/build.xml"/>
       </fileset>
     </subant>
+    <echo message="[clean] ========== Done Cleaning opentaps modules =========="/>
   </target>
 
   <target name="build" depends="">
