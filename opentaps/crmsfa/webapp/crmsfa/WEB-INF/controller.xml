@@ -2618,9 +2618,16 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="processorder">
         <security https="true" auth="true"/>
         <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="crmsfaCreateOrder"/>
-        <response name="sales_order" type="request" value="checkBlackList"/>
-        <response name="work_order" type="request" value="checkBlackList"/>
+        <response name="sales_order" type="request" value="autoSetOrderBillingAddress"/>
+        <response name="work_order" type="request" value="autoSetOrderBillingAddress"/>
         <response name="purchase_order" type="request" value="clearpocart"/>
+        <response name="error" type="view" value="confirm"/>
+    </request-map>
+    <request-map uri="autoSetOrderBillingAddress">
+        <security direct-request="false"/>
+        <event type="service" invoke="autoSetOrderBillingAddress"/>
+        <response name="success" type="request" value="checkBlackList"/>
+        <response name="failed" type="view" value="confirm"/>
         <response name="error" type="view" value="confirm"/>
     </request-map>
     <request-map uri="shipGroups.pdf">
