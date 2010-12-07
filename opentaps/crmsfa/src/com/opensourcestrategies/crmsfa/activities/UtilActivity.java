@@ -50,15 +50,22 @@ import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityJoinOperator;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.WorkEffort;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import javolution.util.FastList;
 
 /**
  * Activity utility methods.
@@ -239,4 +246,34 @@ public final class UtilActivity {
 
         return securityScopeMainCond;
     }
+
+    public static List<EntityCondition> getDefaultCalendarExprList(Collection<String> partyIds) {
+
+        List<EntityCondition> entityExprList = new ArrayList<EntityCondition>();
+
+        entityExprList.addAll(UtilMisc.<EntityCondition>toList(
+                EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.NOT_EQUAL, StatusItemConstants.TaskStatus.TASK_CANCELLED),
+                EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.NOT_EQUAL, StatusItemConstants.TaskStatus.TASK_COMPLETED),
+                EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.NOT_EQUAL, StatusItemConstants.EventStatus.EVENT_CANCELLED),
+                EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.NOT_EQUAL, StatusItemConstants.CalendarStatus.CAL_CANCELLED),
+                EntityCondition.makeCondition(WorkEffort.Fields.currentStatusId.name(), EntityOperator.NOT_EQUAL, StatusItemConstants.ProductionRun.PRUN_CANCELLED))
+        );
+
+        // public events are always included to the "personal calendar"
+        List<EntityCondition> publicEvents = UtilMisc.<EntityCondition>toList(
+                EntityCondition.makeCondition("scopeEnumId", EntityOperator.EQUALS, "WES_PUBLIC"),
+                EntityCondition.makeCondition("parentTypeId", EntityOperator.EQUALS, "EVENT")
+        );
+
+        if (UtilValidate.isNotEmpty(partyIds)) {
+            entityExprList.add(
+                    EntityCondition.makeCondition(UtilMisc.toList(
+                            EntityCondition.makeCondition("partyId", EntityOperator.IN, partyIds),
+                            EntityCondition.makeCondition(publicEvents, EntityJoinOperator.AND)
+                    ), EntityJoinOperator.OR));
+        }
+
+        return entityExprList;
+    }
+
 }
