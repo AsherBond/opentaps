@@ -787,6 +787,7 @@ public class OrderService extends DomainService implements OrderServiceInterface
                 defaultBillingAddress = pm.getPostalAddress();
                 // stop at the first found address (usually there would be only one payment method anyway)
                 if (defaultBillingAddress != null) {
+                    Debug.logInfo("Found billing address [" + defaultBillingAddress.getContactMechId() + "] from payment method [" + pm.getPaymentMethodTypeId() + ":" + pm.getPaymentMethodId() + "] for Order [" + orderId + "].", MODULE);
                     break;
                 }
             }
@@ -794,10 +795,14 @@ public class OrderService extends DomainService implements OrderServiceInterface
             // else get a default billing address from the customer
             if (defaultBillingAddress == null && order.getPlacingCustomer() != null) {
                 defaultBillingAddress = order.getPlacingCustomer().getBillingAddress();
+                if (defaultBillingAddress != null) {
+                    Debug.logInfo("Found default billing address [" + defaultBillingAddress.getContactMechId() + "] for customer [" + order.getPlacingCustomer().getPartyId() + "] for Order [" + orderId + "].", MODULE);
+                }
             }
 
             // no address found, nothing to do
             if (defaultBillingAddress == null) {
+                Debug.logInfo("No billing address found in either the payment methods or the customer for Order [" + orderId + "].", MODULE);
                 return;
             }
 
