@@ -265,7 +265,7 @@
     <classpathentry kind="lib" path="opentaps/opentaps-common/lib/hibernate/hibernate-search-3.1.1.GA.jar"/>
     <classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwt-log-3.0.0.jar"/>
     <classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwt-math-2.1.jar"/>
-    <classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwt-user-2.0.0.jar"/>
+    <classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwt-user-2.1.0.jar"/>
     <classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwtext.jar"/>
     <classpathentry kind="lib" path="opentaps/opentaps-common/lib/gwtextux.jar"/>
     <classpathentry kind="lib" path="opentaps/opentaps-common/lib/jfreechart-1.0.6.jar"/>
