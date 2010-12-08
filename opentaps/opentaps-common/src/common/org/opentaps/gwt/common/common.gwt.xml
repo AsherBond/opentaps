@@ -19,7 +19,6 @@
   <!-- we copied the GWT standard them in this module for CSS customization -->
   <stylesheet src="standard.css"/>
   <inherits name="com.gwtext.GwtExt"/>
-  <inherits name="com.googlecode.gwt.math.Math"/>
   <inherits name="com.google.gwt.i18n.I18N"/>
   <inherits name="com.google.gwt.json.JSON"/>
   <!-- Allow GWT logging, integrated with firebug -->
