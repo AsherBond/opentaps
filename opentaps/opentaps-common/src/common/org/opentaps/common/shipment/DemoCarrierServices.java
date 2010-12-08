@@ -26,7 +26,6 @@ import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
-import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 
 /**
@@ -50,14 +49,14 @@ public class DemoCarrierServices {
      * of demonstration, we will charge 1 USD per pound shipped via ground and 2 USD for express.  If no weight
      * is specified, we assume 1 pound.
      */
-    public static Map demoCarrierShipmentEstimate(DispatchContext dctx, Map context) {
+    public static Map<String, Object> demoCarrierShipmentEstimate(DispatchContext dctx, Map<String, ?> context) {
         String shipmentMethodTypeId = (String) context.get("shipmentMethodTypeId");
         BigDecimal shippableWeight = (BigDecimal) context.get("shippableWeight");
 
         BigDecimal weight = shippableWeight == null ? BigDecimal.ONE : shippableWeight;
         BigDecimal estimate = "GROUND".equals(shipmentMethodTypeId) ? weight : weight.multiply(new BigDecimal("2"));
 
-        Map results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("shippingEstimateAmount", estimate);
         return results;
     }
@@ -70,9 +69,9 @@ public class DemoCarrierServices {
      * Generally the responses include a label image which can be printed.  Here, a mock
      * label is generated for purposes of testing the label printing services in warehouse. 
      */
-    public static Map demoCarrierConfirmShipment(DispatchContext dctx, Map context) {
+
+    public static Map<String, Object> demoCarrierConfirmShipment(DispatchContext dctx, Map<String, ?> context) {
         Delegator delegator = dctx.getDelegator();
-        LocalDispatcher dispatcher = dctx.getDispatcher();
         String shipmentId = (String) context.get("shipmentId");
         String shipmentRouteSegmentId = (String) context.get("shipmentRouteSegmentId");
 
