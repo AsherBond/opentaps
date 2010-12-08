@@ -40,9 +40,14 @@
 package org.opentaps.warehouse.shipment;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javolution.util.FastMap;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
@@ -57,8 +62,8 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-import org.opentaps.warehouse.shipment.packing.PackingSession;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.warehouse.shipment.packing.PackingSession;
 
 /**
  * Services for Warehouse application Shipping section.
@@ -87,7 +92,7 @@ public final class ShippingServices {
      * @param context Map
      * @return Map
      */
-    public static Map quickScheduleShipmentRouteSegmentSynch(DispatchContext dctx, Map context) {
+    public static Map<String, Object> quickScheduleShipmentRouteSegmentSynch(DispatchContext dctx, Map<String, ?> context) {
         return quickScheduleShipmentRouteSegment(dctx, context, true);
     }
 
@@ -103,12 +108,12 @@ public final class ShippingServices {
      * @param dctx DispatchContext
      * @param context Map
      */
-    public static Map quickScheduleShipmentRouteSegmentAsynch(DispatchContext dctx, Map context) {
+    public static Map<String, Object> quickScheduleShipmentRouteSegmentAsynch(DispatchContext dctx, Map<String, ?> context) {
         return quickScheduleShipmentRouteSegment(dctx, context, false);
     }
 
-    // TODO: ideally this can use a FacililtyShipmentSetting where the confirm services can be set up for a facility and carrierPartyId
-    private static Map<String, Object> quickScheduleShipmentRouteSegment(DispatchContext dctx, Map<String, Object> context, boolean runSynchronously) {
+    public static Map<String, Object> quickScheduleShipmentRouteSegment(DispatchContext dctx, Map<String, ?> context, boolean runSynchronously) {
+        // TODO: ideally this can use a FacililtyShipmentSetting where the confirm services can be set up for a facility and carrierPartyId
         Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -475,7 +480,6 @@ public final class ShippingServices {
 
     public static Map<String, Object> calcPackSessionAdditionalShippingCharge(DispatchContext dctx, Map<String, Object> context) {
         PackingSession session = (PackingSession) context.get("packingSession");
-        Map packageWeights = (Map) context.get("packageWeights");
         String weightUomId = (String) context.get("weightUomId");
         String shippingContactMechId = (String) context.get("shippingContactMechId");
         String shipmentMethodTypeId = (String) context.get("shipmentMethodTypeId");
