@@ -21,10 +21,22 @@
   <inherits name="com.gwtext.GwtExt"/>
   <inherits name="com.google.gwt.i18n.I18N"/>
   <inherits name="com.google.gwt.json.JSON"/>
-  <!-- Allow GWT logging, integrated with firebug -->
-  <inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
-  <!-- You may comment this line to have logging inside a div (if you don't have firebug) -->
-  <set-property name="log_DivLogger" value="DISABLED" />
+
+  <!-- Allow GWT logging -->
+  <inherits name="com.google.gwt.logging.Logging"/>
+  <set-property name="gwt.logging.enabled" value="TRUE"/>
+   <set-property name="gwt.logging.logLevel" value="FINE"/>
+  <!-- Configures the various handlers -->
+  <set-property name="gwt.logging.consoleHandler" value="ENABLED" />
+  <set-property name="gwt.logging.firebugHandler" value="ENABLED" />
+  <!-- Enable if you need logging but do not have firebug or a JS console (chrom safari firebug lite) -->
+  <set-property name="gwt.logging.popupHandler" value="DISABLED" />
+  <!-- Should not be enabled -->
+  <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
+  <!-- Only useful for GWT dev mode which we do not use -->
+  <set-property name="gwt.logging.systemHandler" value="DISABLED" />
+  <set-property name="gwt.logging.developmentModeHandler" value="DISABLED" />
+
   <!-- The GWT compiler generate one JS code for each combination of user-agent and locale, 
        so for development purpose, you can only define the combination you wish to test in 
        order to speed up the compilation.
