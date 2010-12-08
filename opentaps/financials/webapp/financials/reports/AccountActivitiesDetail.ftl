@@ -93,6 +93,7 @@
       <@headerCell title=uiLabelMap.WorkEffortWorkEffort           orderBy="workEffortId" />
       <@headerCell title=uiLabelMap.PartyParty                     orderBy="partyId" />
       <@headerCell title=uiLabelMap.PartyName                      orderBy="partyId" />
+      <@headerCell title=uiLabelMap.OpentapsRequires1099           orderBy="requires1099" />
       <@headerCell title=uiLabelMap.ProductProduct                 orderBy="productId" />
       <@headerCell title=uiLabelMap.CommonDebit                    orderBy="debitCreditFlag DESC,amount" orderByReverse="debitCreditFlag DESC,amount DESC" />
       <@headerCell title=uiLabelMap.CommonCredit                   orderBy="debitCreditFlag ASC,amount" orderByReverse="debitCreditFlag ASC,amount DESC" />
@@ -127,6 +128,7 @@
           </#if>
         </#if>      	
       	<@displayCell text=partyName />
+        <@displayCell text=row.requires1099! />
       	<@displayLinkCell href="AccountActivitiesDetail?productId=${row.productId?if_exists}&amp;isPosted=" text=row.productId?if_exists />
         <#if row.debitCreditFlag = "D" >
           <@displayCurrencyCell amount=row.amount currencyUomId=row.currencyUomId />
@@ -159,7 +161,7 @@
       <#if transDescription?has_content>      
       <tr class="${tableRowClass(row_index)}">
         <td align="center" colspan="4">&nbsp;</td>
-        <td colspan="11">
+        <td colspan="12">
         <i>${transDescription}</i>
         </td>
       </tr>

@@ -771,6 +771,7 @@ public class OrderService extends DomainService implements OrderServiceInterface
 
             // if the order has a billing address we have nothing to do
             if (UtilValidate.isNotEmpty(order.getBillingAddresses())) {
+                Debug.logInfo("Order [" + orderId + "] already has a billing address, nothing else to do.", MODULE);
                 return;
             }
 

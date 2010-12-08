@@ -108,13 +108,15 @@
      PERSON_ATE.LAST_NAME as AteLastName,
      PARTY_GROUP_AT.GROUP_NAME as AtGroupName,
      PARTY_GROUP_ATE.GROUP_NAME as AteGroupName,
-     ORDER_HEADER.ORDER_TYPE_ID as OrderTypeId
+     ORDER_HEADER.ORDER_TYPE_ID as OrderTypeId,
+     ORDER_ITEM.COMMENTS as OrderItemComments
 FROM
      GL_ACCOUNT GL_ACCOUNT RIGHT OUTER JOIN GL_ACCOUNT_TRANS_ENTRY_FACT GL_ACCOUNT_TRANS_ENTRY_FACT ON GL_ACCOUNT.GL_ACCOUNT_ID = GL_ACCOUNT_TRANS_ENTRY_FACT.GL_ACCOUNT_ID
      LEFT OUTER JOIN GL_ACCOUNT_TYPE GL_ACCOUNT_TYPE ON GL_ACCOUNT.GL_ACCOUNT_TYPE_ID = GL_ACCOUNT_TYPE.GL_ACCOUNT_TYPE_ID
      LEFT OUTER JOIN ACCTG_TRANS_ENTRY ACCTG_TRANS_ENTRY ON GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TRANS_ID = ACCTG_TRANS_ENTRY.ACCTG_TRANS_ID
      AND ACCTG_TRANS_ENTRY.ACCTG_TRANS_ENTRY_SEQ_ID = GL_ACCOUNT_TRANS_ENTRY_FACT.ACCTG_TRANS_ENTRY_SEQ_ID
      LEFT OUTER JOIN ORDER_HEADER ORDER_HEADER ON GL_ACCOUNT_TRANS_ENTRY_FACT.ORDER_ID = ORDER_HEADER.ORDER_ID
+     LEFT OUTER JOIN ORDER_ITEM ORDER_ITEM ON GL_ACCOUNT_TRANS_ENTRY_FACT.ORDER_ID = ORDER_ITEM.ORDER_ID AND  GL_ACCOUNT_TRANS_ENTRY_FACT.ORDER_ITEM_SEQ_ID = ORDER_ITEM.ORDER_ITEM_SEQ_ID
      LEFT OUTER JOIN ACCTG_TRANS ACCTG_TRANS ON ACCTG_TRANS_ENTRY.ACCTG_TRANS_ID = ACCTG_TRANS.ACCTG_TRANS_ID
      LEFT OUTER JOIN INVOICE INVOICE ON INVOICE.INVOICE_ID=ACCTG_TRANS.INVOICE_ID
      LEFT OUTER JOIN PAYMENT PAYMENT ON PAYMENT.PAYMENT_ID=ACCTG_TRANS.PAYMENT_ID
@@ -168,6 +170,7 @@ WHERE
 	<field name="AtGroupName" class="java.lang.String"/>
 	<field name="AteGroupName" class="java.lang.String"/>
 	<field name="OrderTypeId" class="java.lang.String"/>
+	<field name="OrderItemComments" class="java.lang.String"/>
 
 	<sortField name="AccountCode" />
 	<sortField name="AcctgTransId" />
@@ -473,7 +476,7 @@ WHERE
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="16"  isSplitAllowed="true" >
+			<band height="32"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="482"
@@ -565,6 +568,20 @@ WHERE
      ($F{AteFirstName} == null ? 
       ($F{AteGroupName} == null ? "" : $F{AteGroupName}) :
        $F{AteFirstName} + " " + $F{AteLastName}) + " (" +  $F{AcctgTransEntryPartyId} + ")")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="19"
+						y="16"
+						width="463"
+						height="16"
+						key="textField-1"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Oblique" size="9" isItalic="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{OrderItemComments}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

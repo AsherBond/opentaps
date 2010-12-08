@@ -330,7 +330,8 @@ under the License.
       <alias entity-alias="ATE" name="acctgTagEnumId10" />
       <alias entity-alias="PER" name="firstName"/>
       <alias entity-alias="PER" name="lastName"/> 
-      <alias entity-alias="PTYGRP" name="groupName"/>      
+      <alias entity-alias="PTYGRP" name="groupName"/>
+      <alias entity-alias="PTYGRP" name="requires1099"/>      
       <view-link entity-alias="ATR" rel-entity-alias="ATE">
         <key-map field-name="acctgTransId"/>
       </view-link>

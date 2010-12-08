@@ -358,8 +358,8 @@ public final class PaginationEvents {
                 mapData.put("debitAmount", debitAmount);
                 mapData.put("creditAmount", creditAmount);
             }
-            // Add a Party Name column
-            keys.add("partyName");
+            // Add a Party Name column after requires1099 column
+            keys.add(keys.indexOf("requires1099"), "partyName");
             // remove first name/last name/group name columns in export excel
             keys.remove("firstName");
             keys.remove("lastName");
