@@ -33,20 +33,25 @@ is ${ofbiz.home}/framework/webapp/lib/ -->
           <fo:region-body/>  <#-- main body -->
         </fo:simple-page-master>
   </fo:layout-master-set>
-  
+
   <fo:page-sequence master-reference="main-page">
        <fo:flow flow-name="xsl-region-body">
        <#list segments as segment>
          <#if segment.carrierPartyId == "DHL">
          <fo:block break-before="page" padding-top="1.5cm" margin-left="1.5cm">
            <fo:external-graphic src="<@ofbizUrl>viewShipmentLabel?shipmentId=${segment.shipmentId}&amp;shipmentRouteSegmentId=${segment.shipmentRouteSegmentId}&amp;shipmentPackageSeqId=${segment.shipmentPackageSeqId}</@ofbizUrl>"
-                content-type="content-type:image/gif" content-width="196mm" content-height="112mm"></fo:external-graphic>
+                content-type="content-type:${imageContentType}" content-width="196mm" content-height="112mm"></fo:external-graphic>
          </fo:block>
          <#elseif segment.carrierPartyId == "UPS">
          <fo:block break-before="page" padding-top="1.5cm" margin-left="1.5cm">
            <#-- image is scaled up 25% to fit a particular printer label -->
            <fo:external-graphic src="<@ofbizUrl>viewShipmentLabel?shipmentId=${segment.shipmentId}&amp;shipmentRouteSegmentId=${segment.shipmentRouteSegmentId}&amp;shipmentPackageSeqId=${segment.shipmentPackageSeqId}</@ofbizUrl>"
-                content-type="content-type:image/gif" content-width="196mm" content-height="112mm"></fo:external-graphic>
+                content-type="content-type:${imageContentType}" content-width="196mm" content-height="112mm"></fo:external-graphic>
+         </fo:block>
+         <#else>
+         <fo:block break-before="page" padding-top="1.5cm" margin-left="1.5cm">
+           <fo:external-graphic src="<@ofbizUrl>viewShipmentLabel?shipmentId=${segment.shipmentId}&amp;shipmentRouteSegmentId=${segment.shipmentRouteSegmentId}&amp;shipmentPackageSeqId=${segment.shipmentPackageSeqId}</@ofbizUrl>"
+                content-type="content-type:${imageContentType}" content-width="196mm" content-height="112mm"></fo:external-graphic>
          </fo:block>
          </#if>
       </#list>

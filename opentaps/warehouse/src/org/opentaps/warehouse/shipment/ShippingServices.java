@@ -63,6 +63,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
 import org.opentaps.warehouse.shipment.packing.PackingSession;
 
 /**
@@ -79,7 +80,8 @@ public final class ShippingServices {
     public static final String warehouseResource = "warehouse";
     public static final String errorResource = "OpentapsErrorLabels";
     public static final String resource = "WarehouseUiLabels";
-
+    private static final String SHIPMENT_PROPS = "shipment.properties";
+    
     /**
      * Schedules the shipment with a carrier such that the label is generated and the
      * pickup confirmed.  Once this service is completed, the shipment is ready
@@ -304,9 +306,29 @@ public final class ShippingServices {
             // Prefix for the label image URLs in the screen
             String urlPrefix = UtilProperties.getPropertyValue(warehouseResource, "warehouse.shipping.labels.printing.labelImage.urlPrefix");
 
+            // determine label content type
+            String labelContentType = "image/gif";
+            String carrierPartyId = shipmentRouteSegment.getString("carrierPartyId");
+            if ("DHL".equals(carrierPartyId)) {
+                labelContentType = "image/png"; //default for DHL
+                // get preference (PNG or GIF)
+                String labelImagePreference = UtilProperties.getPropertyValue(SHIPMENT_PROPS, "shipment.dhl.label.image.format");
+                if (UtilValidate.isNotEmpty(labelImagePreference)) {
+                    if ("GIF".equals(labelImagePreference)) {
+                        labelContentType = "image/gif";
+                    }
+                }
+            } else if ("FEDEX".equals(carrierPartyId)) {
+                labelContentType = "image/png";
+                String labelImageType = UtilProperties.getPropertyValue(SHIPMENT_PROPS, "shipment.fedex.labelImageType");
+                if ("PDF".equals(labelImageType)) {
+                    return UtilMessage.createAndLogServiceError("Carrier's label in PDF is not supported.", MODULE);
+                }
+            }
+
             // Call the sendPrintFromScreen service on the BatchPrintShippingLabels screen, which will print the aggregated package labels
             // Service is called synchronously so that the service will fail if the labels fail to print
-            Map<String, Object> sendPrintFromScreenContext = UtilMisc.toMap("screenLocation", batchPrintScreenLocation, "screenContext", UtilMisc.toMap("parameters", parameters, "urlPrefix", urlPrefix), "printerName", printerName, "locale", locale, "userLogin", userLogin);
+            Map<String, Object> sendPrintFromScreenContext = UtilMisc.toMap("screenLocation", batchPrintScreenLocation, "screenContext", UtilMisc.toMap("parameters", parameters, "urlPrefix", urlPrefix, "imageContentType", labelContentType), "printerName", printerName, "locale", locale, "userLogin", userLogin);
             Map<String, Object> sendPrintFromScreenResult = dispatcher.runSync("sendPrintFromScreen", sendPrintFromScreenContext);
             if (ServiceUtil.isError(sendPrintFromScreenResult)) {
                 return sendPrintFromScreenResult;
