@@ -472,3 +472,6 @@ specialpurpose/ecommerce/data/DemoStandardCosting.xml
 
 specialpurpose/ecommerce/data/DemoProduct.xml
 b3f9b748b1eda977fc171af2ab297c60ac995428 Commented as causes marketing package tests to fail
+
+applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCartEvents.java
+04eb4ea53f1ce4ff9d31df61a1a1e2033ce9f8b5 Allow modify the cart which load from quote, and fix an NPE about estimate shipping cost
