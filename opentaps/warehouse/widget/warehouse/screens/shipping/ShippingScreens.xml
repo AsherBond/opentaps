@@ -189,7 +189,7 @@ under the License.
                             <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/EditShipmentItems.ftl"/></html>
                         </platform-specific>
                         <platform-specific>
-                            <html><html-template location="component://product/webapp/facility/shipment/EditShipmentItems.ftl"/></html>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/EditShipmentItems.ftl"/></html>
                         </platform-specific>
                     </decorator-section>
                 </decorator-screen>
