@@ -1311,8 +1311,8 @@ public class ShoppingCartEvents {
 
         // Set the cart's default checkout options for a quick checkout
         cart.setDefaultCheckoutOptions(dispatcher);
-        // Make the cart read-only
-        cart.setReadOnlyCart(true);
+        // Make the cart read-only, disable it by sparksun 09/12/2010
+        // cart.setReadOnlyCart(true);
 
         session.setAttribute("shoppingCart", cart);
         session.setAttribute("productStoreId", cart.getProductStoreId());
