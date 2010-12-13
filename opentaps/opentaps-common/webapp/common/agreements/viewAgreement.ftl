@@ -316,7 +316,7 @@ function onItemTypeChanged() {
                 </#if>
                 <td>
                     <#if partyNameTo?has_content>
-                      <@displayPartyLinkCell partyId=agreementHeader.partyIdTo/>
+                      <@displayPartyLink partyId=agreementHeader.partyIdTo/>
                     <#elseif agreementHeader.toPartyClassGroupId?has_content>
                         <#if partyClsGroup?has_content>
                             <@display text=partyClsGroup.get("description", locale)/>
