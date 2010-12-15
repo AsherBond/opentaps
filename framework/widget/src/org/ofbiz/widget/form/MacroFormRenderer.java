@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.WeakHashMap;
 import java.util.Map.Entry;
 
@@ -41,6 +42,7 @@ import javolution.util.FastList;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilHttp;
@@ -504,6 +506,19 @@ public class MacroFormRenderer implements FormStringRenderer {
         }
         String localizedInputTitle = "", localizedIconTitle = "";
 
+        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        if (timeZone == null) {
+            timeZone = TimeZone.getDefault();
+        }
+        Locale locale = (Locale) context.get("locale");
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+
+        String dateFormat = UtilDateTime.getDateFormat(locale);
+        String dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+        String timeFormat = UtilDateTime.getTimeFormat(locale);
+
         // whether the date field is short form, yyyy-mm-dd
         boolean shortDateInput = ("date".equals(dateTimeField.getType()) || "time-dropdown".equals(dateTimeField.getInputMethod()) ? true : false);
 
@@ -520,25 +535,24 @@ public class MacroFormRenderer implements FormStringRenderer {
         if (shortDateInput) {
             size = maxlength = 10;
             if (uiLabelMap != null) {
-                localizedInputTitle = uiLabelMap.get("CommonFormatDate");
+                localizedInputTitle =
+                    UtilProperties.getMessage("CommonUiLabels", "CommonFormatLocalizedDateTime", UtilMisc.toMap("localizedFormat", dateFormat), locale);
             }
         } else if ("time".equals(dateTimeField.getType())) {
             size = maxlength = 8;
             if (uiLabelMap != null) {
-                localizedInputTitle = uiLabelMap.get("CommonFormatTime");
+                localizedInputTitle =
+                    UtilProperties.getMessage("CommonUiLabels", "CommonFormatLocalizedDateTime", UtilMisc.toMap("localizedFormat", timeFormat), locale);
             }
         } else {
             if (uiLabelMap != null) {
-                localizedInputTitle = uiLabelMap.get("CommonFormatDateTime");
+                localizedInputTitle =
+                    UtilProperties.getMessage("CommonUiLabels", "CommonFormatLocalizedDateTime", UtilMisc.toMap("localizedFormat", dateTimeFormat), locale);
             }
         }
 
         String value = modelFormField.getEntry(context, dateTimeField.getDefaultValue(context));
-        if (UtilValidate.isNotEmpty(value)) {
-            if (value.length() > maxlength) {
-                value = value.substring(0, maxlength);
-            }
-        }
+
         String id = modelFormField.getCurrentContainerId(context);
         String formName = modelFormField.getModelForm().getCurrentFormName(context);
         String timeDropdown = dateTimeField.getInputMethod();
