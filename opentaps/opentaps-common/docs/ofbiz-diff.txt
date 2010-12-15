@@ -36,6 +36,7 @@ framework/minilang/src/org/ofbiz/minilang/method/envops/SetCalendar.java
 framework/widget/src/org/ofbiz/widget/form/ModelForm.java
 framework/widget/src/org/ofbiz/widget/form/ModelFormField.java
 framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
+framework/widget/src/org/ofbiz/widget/form/MacroFormRenderer.java
 framework/common/config/CommonUiLabels.xml
 framework/common/src/org/ofbiz/common/FindServices.java
 applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
@@ -44,6 +45,7 @@ framework/base/src/org/ofbiz/base/conversion/DateTimeConverters.java
 In revisions:
 r13768, r13769, r13784, r13786, r13798, r13812-r13818, r13822, r13824, r13833,
 r13834, 4d0b94a1fdf644d8bdbb4c114a05d9bdb48627bc, 5394c0be0b4623e88035ae2c3bbd5789cdae0a90
+371eaa40ed7f1e223432858fb3902ab7f3a9a1fa
 
 Framework changes
 -----------------
