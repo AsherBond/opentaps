@@ -35,6 +35,6 @@ if ("MY_VALUES".equals(myPref)) {
 shortcuts.add(UtilMisc.toMap("uri", "createOpportunityForm", "uiLabel", "CrmCreateOpportunity"));
 shortcuts.add(UtilMisc.toMap("uri", "findOpportunities", "uiLabel", "CrmFindOpportunities"));
 if (security.hasEntityPermission("CRMSFA_QUOTE", "_CREATE", session)) {
-    shortcuts.add(UtilMisc.toMap("uri", "createQuote", "uiLabel", "PartyCreateNewQuote"));
+    shortcuts.add(UtilMisc.toMap("uri", "EditQuote", "uiLabel", "PartyCreateNewQuote"));
 }
 context.put("shortcuts", shortcuts);
