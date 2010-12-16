@@ -18,25 +18,6 @@
  import org.opentaps.common.util.UtilMessage;
  import org.opentaps.common.util.UtilCommon;
  
- shipmentId = context.get("shipmentId");
- toPerson = context.get("toPerson");
- toGroup = context.get("toPartyGroup");
- fromPerson = context.get("fromPerson");
- fromPartyGroup = context.get("fromPartyGroup");
- 
- fromParty = null;
- if (fromPartyGroup != null) {
-     fromParty = fromPartyGroup.get("groupName");
- } else if (fromPerson != null) {
-     fromParty = fromPerson.get("firstName") + " " + fromPerson.get("lastName");
- };
- 
- toParty = null;
- if (toPartyGroup != null) {
-     toParty = toPartyGroup.get("groupName");
- } else if (toPerson != null) {
-     toParty = toPerson.get("firstName") + " " + toPerson.get("lastName");
- };
-
- context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("WarehouseNavHistoryShipment", locale, UtilMisc.toMap("shipmentId", shipmentId, "fromParty", fromParty, "toParty", toParty)));
+ context{"history"} =
+     UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("WarehouseNavHistoryShipment", locale, UtilMisc.toMap("shipmentId", context.get("shipmentId"))));
  

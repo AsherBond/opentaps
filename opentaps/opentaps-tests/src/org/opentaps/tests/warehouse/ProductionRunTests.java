@@ -1026,9 +1026,10 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // issue inventory required for the first (and only) task, so we can complete the run
         input = UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId);
         runAndAssertServiceSuccess("issueProductionRunTask", input);
-        assertAllInventoryValuesEqual(inventoryAsserts);
 
         pause("issued production run task");
+
+        assertAllInventoryValuesEqual(inventoryAsserts);
 
         // complete the task, which should trigger production run completed
         input = UtilMisc.toMap("userLogin", demowarehouse1);

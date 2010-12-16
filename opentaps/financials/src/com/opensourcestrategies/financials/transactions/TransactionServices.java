@@ -519,7 +519,10 @@ public final class TransactionServices {
             postAcctgTransService.setInAcctgTransId(acctgTransId);
             postAcctgTransService.runSync(new Infrastructure(dispatcher));
 
-            return ServiceUtil.returnSuccess("Settle Payments completed successfully");
+            Map results = ServiceUtil.returnSuccess("Settle Payments completed successfully");
+            results.put("transactionDatePrev", context.get("transactionDate"));
+            return results;
+
         } catch (Exception e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }

@@ -151,5 +151,6 @@
         <attribute name="settleTo" mode="IN" type="String" optional="false"/>        
         <attribute name="amount" mode="IN" type="Double" optional="false"/>
         <attribute name="paymentOrRefund" mode="IN" type="String" optional="false"/>
+        <attribute name="transactionDatePrev" type="String" mode="OUT" optional="false"/>
     </service>
 </services>

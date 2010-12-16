@@ -41,7 +41,7 @@ under the License.
       <tr>
         <td width="20%" align="right"><span class="tableheadtext">${uiLabelMap.ProductPrimaryOrderId}</span></td>
         <td><span class="tabletext">&nbsp;</span></td>
-        <td width="80%" align="left"><span class="tabletext"><#if shipment.primaryOrderId?exists><a href="/ordermgr/control/orderview?orderId=${shipment.primaryOrderId}" class="buttontext">${shipment.primaryOrderId}</a></#if></span></td>
+        <td width="80%" align="left"><span class="tabletext"><#if shipment.primaryOrderId?exists><@displayLink href="/crmsfa/control/orderview?orderId=${shipment.primaryOrderId}" text="${shipment.primaryOrderId}" target="_blank"/></#if></span></td>
       </tr>
       <tr>
         <td width="20%" align="right"><span class="tableheadtext">${uiLabelMap.ProductPrimaryShipGroupSeqId}</span></td>

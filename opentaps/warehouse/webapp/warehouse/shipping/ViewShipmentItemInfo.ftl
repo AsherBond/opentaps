@@ -59,14 +59,14 @@ under the License.
         <#assign product = shipmentItemData.product?if_exists>
         <tr>
             <td><div class="tabletext">${shipmentItem.shipmentItemSeqId}</div></td>
-            <td colspan="4"><div class="tabletext">${(product.internalName)?if_exists} [<a href="/catalog/control/EditProduct?productId=${shipmentItem.productId?if_exists}" class="buttontext">${shipmentItem.productId?if_exists}</a>]</div></td>
+            <td colspan="4"><div class="tabletext">${(product.internalName)?if_exists} [<@displayLink href="/catalog/control/EditProduct?productId=${shipmentItem.productId?if_exists}" text="${shipmentItem.productId?if_exists}" target="_blank"/>]</div></td>
             <td><div class="tabletext">${shipmentItem.quantity?default("&nbsp;")}</div></td>
             <td colspan="2"><div class="tabletext">${shipmentItem.shipmentContentDescription?default("&nbsp;")}</div></td>
         </tr>
         <#list orderShipments as orderShipment>
             <tr>
                 <td><div class="tabletext">&nbsp;</div></td>
-                <td><div class="tabletext">${uiLabelMap.ProductOrderItem} :<a href="/ordermgr/control/orderview?orderId=${orderShipment.orderId?if_exists}&externalLoginKey=${requestAttributes.externalLoginKey}" class="buttontext">${orderShipment.orderId?if_exists}</a>:${orderShipment.orderItemSeqId?if_exists}</div></td>
+                <td><div class="tabletext">${uiLabelMap.ProductOrderItem} :<@displayLink href="/crmsfa/control/orderview?orderId=${orderShipment.orderId?if_exists}" text="${orderShipment.orderId?if_exists}" target="_blank" />:${orderShipment.orderItemSeqId?if_exists}</div></td>
                 <td><div class="tabletext">&nbsp;</div></td>
                 <td><div class="tabletext">&nbsp;</div></td>
                 <td><div class="tabletext">&nbsp;</div></td>
@@ -78,9 +78,9 @@ under the License.
         <#list itemIssuances as itemIssuance>
             <tr>
                 <td><div class="tabletext">&nbsp;</div></td>
-                <td><div class="tabletext">${uiLabelMap.ProductOrderItem} :<a href="/ordermgr/control/orderview?orderId=${itemIssuance.orderId?if_exists}&externalLoginKey=${requestAttributes.externalLoginKey}" class="buttontext">${itemIssuance.orderId?if_exists}</a>:${itemIssuance.orderItemSeqId?if_exists}</div></td>
-                <td><div class="tabletext">${uiLabelMap.ProductInventory} :<a href="<@ofbizUrl>EditInventoryItem?inventoryItemId=${itemIssuance.inventoryItemId?if_exists}</@ofbizUrl>" class="buttontext">${itemIssuance.inventoryItemId?if_exists}</a></div></td>
-                <td><div class="tabletext"><#if itemIssuance.lotId?exists><a href="<@ofbizUrl>lotDetails?lotId=${itemIssuance.lotId?if_exists}</@ofbizUrl>" class="buttontext">${itemIssuance.lotId?if_exists}</a><#else>&nbsp;</#if></div></td>
+                <td><div class="tabletext">${uiLabelMap.ProductOrderItem} :<@displayLink href="/crmsfa/control/orderview?orderId=${itemIssuance.orderId?if_exists}" text="${itemIssuance.orderId?if_exists}" target="_blank" />:${itemIssuance.orderItemSeqId?if_exists}</div></td>
+                <td><div class="tabletext">${uiLabelMap.ProductInventory} :<@displayLink href="EditInventoryItem?inventoryItemId=${itemIssuance.inventoryItemId?if_exists}" text="${itemIssuance.inventoryItemId?if_exists}" target="_blank" /></div></td>
+                <td><div class="tabletext"><#if itemIssuance.lotId?exists><@displaylink href="lotDetails?lotId=${itemIssuance.lotId?if_exists}" text="${itemIssuance.lotId?if_exists}" /><#else>&nbsp;</#if></div></td>
                 <td><div class="tabletext"><#if itemIssuance.serialNumber?exists>${itemIssuance.serialNumber?if_exists}<#else>&nbsp;</#if></div></td>
                 <td><div class="tabletext">${itemIssuance.quantity?if_exists}</div></td>
                 <td><div class="tabletext">${getLocalizedDate(itemIssuance.issuedDateTime)}</div></td>

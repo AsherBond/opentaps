@@ -69,7 +69,6 @@ public class DemoCarrierServices {
      * Generally the responses include a label image which can be printed.  Here, a mock
      * label is generated for purposes of testing the label printing services in warehouse. 
      */
-
     public static Map<String, Object> demoCarrierConfirmShipment(DispatchContext dctx, Map<String, ?> context) {
         Delegator delegator = dctx.getDelegator();
         String shipmentId = (String) context.get("shipmentId");

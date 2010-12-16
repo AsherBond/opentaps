@@ -1364,6 +1364,7 @@
             <redirect-parameter name="paymentOrRefund"/>
             <redirect-parameter name="settleFrom"/>
             <redirect-parameter name="settleTo"/>
+            <redirect-parameter name="transactionDatePrev"/>
         </response>
         <response name="error" type="request" value="settlePaymentsOptions" />
     </request-map>

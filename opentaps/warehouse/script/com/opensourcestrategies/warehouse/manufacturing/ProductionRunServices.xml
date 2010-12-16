@@ -71,7 +71,7 @@ under the License.
         </if-not-empty>
     </simple-method>  
     <simple-method method-name="issueProductionRunTaskComponent" short-description="Issues the Inventory for a Production Run Task Component" login-required="false">
- 		<log level="fatal" message="I'm running the opentaps issueProductionRunTaskComponent"/>
+        <log level="fatal" message="I'm running the opentaps issueProductionRunTaskComponent"/>
         <if-empty field="parameters.workEffortGoodStandard">
             <set from-field="parameters.productId" field="productId"/>
             <set from-field="parameters.quantity" field="estimatedQuantity" default-value="0.0" type="BigDecimal"/>
@@ -97,16 +97,20 @@ under the License.
             
             <!-- before we do the find, put together the orderBy list based on which reserveOrderEnumId is specified -->
             <if-compare value="INVRO_FIFO_EXP" operator="equals" field="parameters.reserveOrderEnumId">
-                <set value="+expireDate" field="orderByString"/>
+                <set value="+expireDate" field="orderByList[]"/>
+                <set value="+inventoryItemId" field="orderByList[]"/>
             <else>
                 <if-compare value="INVRO_LIFO_EXP" operator="equals" field="parameters.reserveOrderEnumId">
-                    <set value="-expireDate" field="orderByString"/>
+                    <set value="-expireDate" field="orderByList[]"/>
+                    <set value="-inventoryItemId" field="orderByList[]"/>
                 <else>
                     <if-compare value="INVRO_LIFO_REC" operator="equals" field="parameters.reserveOrderEnumId">
-                        <set value="-datetimeReceived" field="orderByString"/>
+                        <set value="-datetimeReceived" field="orderByList[]"/>
+                        <set value="-inventoryItemId" field="orderByList[]"/>
                     <else>
                         <!-- the default reserveOrderEnumId is INVRO_FIFO_REC, ie FIFO based on date received -->
-                        <set value="+datetimeReceived" field="orderByString"/>
+                        <set value="+datetimeReceived" field="orderByList[]"/>
+                        <set value="+inventoryItemId" field="orderByList[]"/>
                         <set value="INVRO_FIFO_REC" field="parameters.reserveOrderEnumId"/>
                     </else>
                     </if-compare>
@@ -114,7 +118,6 @@ under the License.
                 </if-compare>
             </else>
             </if-compare>
-            <field-to-list field="orderByString" list="orderByList"/>
             <set from-field="productId" field="lookupFieldMap.productId"/>
             <set from-field="workEffort.facilityId" field="lookupFieldMap.facilityId"/>
             <find-by-and entity-name="InventoryItem" map="lookupFieldMap" list="inventoryItemList" order-by-list="orderByList"/>

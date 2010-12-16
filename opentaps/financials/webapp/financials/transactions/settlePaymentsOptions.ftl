@@ -87,14 +87,14 @@
           <#if undepositedReceiptsAccounts?has_content>
             <#list undepositedReceiptsAccounts as glAccount>
               <#if requestParameters.paymentOrRefund?if_exists == "REFUND">
-                <option style="display:none" value="UD:${glAccount.glAccountId}" <#if requestParameters.settleFrom.substring(3)?if_exists == glAccount.glAccountId > selected="selected" </#if> >${glAccount.accountName}</option>
+                <option style="display:none" value="UD:${glAccount.glAccountId}" <#if requestParameters.settleFrom?exists && requestParameters.settleFrom.substring(3) == glAccount.glAccountId > selected="selected" </#if> >${glAccount.accountName}</option>
               <#else>
-                <option style="display:inline" value="UD:${glAccount.glAccountId}" <#if requestParameters.settleFrom.substring(3)?if_exists == glAccount.glAccountId > selected="selected" </#if> >${glAccount.accountName}</option>
+                <option style="display:inline" value="UD:${glAccount.glAccountId}" <#if requestParameters.settleFrom?exists && requestParameters.settleFrom.substring(3) == glAccount.glAccountId > selected="selected" </#if> >${glAccount.accountName}</option>
               </#if>
             </#list>
           </#if>
           <#list creditCardTypes as creditCardType>
-            <option value="CC:${creditCardType.cardType}" <#if (requestParameters.settleFrom.substring(3)?if_exists == creditCardType.cardType) > selected="selected" </#if> >${creditCardType.cardType}</option>
+            <option value="CC:${creditCardType.cardType}" <#if requestParameters.settleFrom?exists && requestParameters.settleFrom.substring(3) == creditCardType.cardType > selected="selected" </#if> >${creditCardType.cardType}</option>
           </#list>
         </select>
         </td>
@@ -109,7 +109,11 @@
 
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsTransactionDate />
-        <@inputDateTimeCell name="transactionDate" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
+        <#if requestParameters.transactionDatePrev?exists >
+            <@inputDateTimeCell name="transactionDate" default=Static["org.ofbiz.base.util.UtilDateTime"].toTimestamp(requestParameters.transactionDatePrev) />    
+        <#else>
+            <@inputDateTimeCell name="transactionDate" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
+        </#if>
       </tr>
 
       <tr>
@@ -121,9 +125,9 @@
           <tr>
             <td>&nbsp;</td>
             <td>
-              <input name="previewButton" type="button" class="smallSubmit" value="${uiLabelMap.FinancialsSettlePreview}" onClick="javascript:submitPreview(this.form)"/>
+              <input name="settleButton" type="submit" class="smallSubmit" value="${uiLabelMap.FinancialsSettle}" onClick="javascript:submitSettle(this.form)"/>              
               &nbsp;
-              <input name="settleButton" type="button" class="smallSubmit" value="${uiLabelMap.FinancialsSettle}" onClick="javascript:submitSettle(this.form)"/>
+              <input name="previewButton" type="button" class="smallSubmit" value="${uiLabelMap.FinancialsSettlePreview}" onClick="javascript:submitPreview(this.form)"/>
             </td>
           </tr>
     </table>

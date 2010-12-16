@@ -44,7 +44,7 @@ ul.navHistory a:hover {
           <#list historyList as historyItem>
             <#assign tooltip = StringUtil.wrapString(historyItem.text)/>
             <#if (tooltip?length > historyItemChars)><#assign text = tooltip?substring(0, historyItemChars)+"${uiLabelMap.OpentapsNavHistoryTruncMark}"/><#else><#assign text = tooltip/></#if>
-            <li><a href="<@ofbizUrl>${historyItem.get("uri")}</@ofbizUrl>" title="${tooltip}">${text}</a></li>
+            <li><a href="<@ofbizUrl>${historyItem.get("uri")}</@ofbizUrl>" title="${tooltip?html}">${text}</a></li>
           </#list>
         </ul>
       </td>
