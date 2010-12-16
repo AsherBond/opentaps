@@ -28,7 +28,7 @@
 <div class="subSectionBlock">
     <div class="form">
         <#assign targetAction = createAgreementAction?default("processCreateAgreement")/>
-        <form method="post" action="<@ofbizUrl>${targetAction}</@ofbizUrl>" class="basic-form" onSubmit="javascript:submitFormDisableSubmits(this)" name="createAgreementForm">
+        <form method="post" action="<@ofbizUrl>${targetAction}</@ofbizUrl>"  onSubmit="javascript:submitFormDisableSubmits(this)" name="createAgreementForm">
         <#if agreementTypeId?has_content><@inputHidden name="agreementTypeId" value=agreementTypeId/></#if>
         <#if partyIdTo?has_content><@inputHidden name="partyIdTo" value=partyIdTo/></#if>
         <#if partyIdFrom?has_content><@inputHidden name="partyIdFrom" value=partyIdFrom/></#if>
