@@ -29,12 +29,14 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.base.constants.EncumbranceDetailTypeConstants;
+import org.opentaps.base.constants.GlAccountTypeConstants;
 import org.opentaps.base.constants.InvoiceTypeConstants;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.EncumbranceDetail;
 import org.opentaps.base.entities.EncumbranceSnapshot;
 import org.opentaps.base.entities.InvoiceItemType;
 import org.opentaps.base.entities.InvoiceItemTypeGlAccount;
+import org.opentaps.base.entities.ProductGlAccount;
 import org.opentaps.common.domain.order.OrderSpecification;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
@@ -123,22 +125,36 @@ public class EncumbranceServices extends DomainService implements EncumbranceSer
                     encumbrance.setAcctgTagEnumId9(item.getAcctgTagEnumId9());
                     encumbrance.setAcctgTagEnumId10(item.getAcctgTagEnumId10());
 
-                    // find corresponding GL account by means of establishing relation between
-                    // order item type and invoice item type and its gl account for organization.
                     String glAccountId = null;
-                    InvoiceItemType invoiceItemType = invoiceRepository.getInvoiceItemType(item, InvoiceTypeConstants.PURCHASE_INVOICE);
-                    List<? extends InvoiceItemTypeGlAccount> invItemTypeGlAccts = invoiceItemType.getInvoiceItemTypeGlAccounts();
-                    if (UtilValidate.isNotEmpty(invItemTypeGlAccts)) {
-                        for (InvoiceItemTypeGlAccount acct : invItemTypeGlAccts) {
-                            if (organizationPartyId.equals(acct.getOrganizationPartyId())) {
-                                glAccountId = acct.getGlAccountId();
-                                break;
+                    // try to find corresponding GL account id checking product configuration first
+                    ProductGlAccount productGlAccount =
+                        invoiceRepository.findOne(ProductGlAccount.class, invoiceRepository.map(
+                                ProductGlAccount.Fields.productId, item.getProductId(),
+                                ProductGlAccount.Fields.organizationPartyId, organizationPartyId,
+                                ProductGlAccount.Fields.glAccountTypeId, GlAccountTypeConstants.Expense.EXPENSE
+                        ));
+                    if (productGlAccount != null) {
+                        glAccountId = productGlAccount.getGlAccountId();
+                    }
+
+                    // or find corresponding GL account by means of establishing relation between
+                    // order item type and invoice item type and its gl account for organization.
+                    InvoiceItemType invoiceItemType = null;
+                    if (glAccountId == null) {
+                        invoiceItemType = invoiceRepository.getInvoiceItemType(item, InvoiceTypeConstants.PURCHASE_INVOICE);
+                        List<? extends InvoiceItemTypeGlAccount> invItemTypeGlAccts = invoiceItemType.getInvoiceItemTypeGlAccounts();
+                        if (UtilValidate.isNotEmpty(invItemTypeGlAccts)) {
+                            for (InvoiceItemTypeGlAccount acct : invItemTypeGlAccts) {
+                                if (organizationPartyId.equals(acct.getOrganizationPartyId())) {
+                                    glAccountId = acct.getGlAccountId();
+                                    break;
+                                }
                             }
                         }
                     }
 
                     // default if not found
-                    if (glAccountId == null) {
+                    if (glAccountId == null && invoiceItemType != null) {
                         glAccountId = invoiceItemType.getDefaultGlAccountId();
                     }
                     encumbrance.setGlAccountId(glAccountId);
