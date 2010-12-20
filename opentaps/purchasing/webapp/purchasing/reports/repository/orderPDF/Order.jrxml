@@ -4,12 +4,12 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="80"/>
+	<property name="ireport.y" value="42"/>
 	<import value="org.opentaps.domain.order.Order"/>
-	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="net.sf.jasperreports.engine.*"/>
-	<import value="org.opentaps.base.entities.*"/>
+	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="java.util.*"/>
+	<import value="org.opentaps.base.entities.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="organizationLogoImageUrl" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="organizationCompanyName" class="java.lang.String" isForPrompting="false"/>
@@ -48,7 +48,7 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="337" splitType="Stretch">
+		<band height="298" splitType="Stretch">
 			<image isLazy="true" onErrorType="Blank">
 				<reportElement key="companyLogo" x="0" y="0" width="241" height="40">
 					<printWhenExpression><![CDATA[new Boolean($P{organizationLogoImageUrl} != null)]]></printWhenExpression>
@@ -77,7 +77,7 @@
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OrderContactMeches.jrxml")]]></subreportExpression>
 			</subreport>
 			<subreport isUsingCache="true">
-				<reportElement key="subreport-11" x="1" y="273" width="541" height="42" isRemoveLineWhenBlank="true">
+				<reportElement key="subreport-11" x="1" y="237" width="541" height="42" isRemoveLineWhenBlank="true">
 					<printWhenExpression><![CDATA[Boolean.valueOf($P{orderTermList} != null)]]></printWhenExpression>
 				</reportElement>
 				<subreportParameter name="REPORT_LOCALE">
@@ -90,21 +90,6 @@
 					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/OrderTerms.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-12" x="1" y="230" width="541" height="42" isRemoveLineWhenBlank="true">
-					<printWhenExpression><![CDATA[Boolean.valueOf($P{shipGroupList} != null)]]></printWhenExpression>
-				</reportElement>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{shipGroupList}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://purchasing/webapp/purchasing/reports/repository/orderPDF/ShipGroups.jrxml")]]></subreportExpression>
 			</subreport>
 			<subreport isUsingCache="true">
 				<reportElement key="subreport-13" positionType="FixRelativeToBottom" x="285" y="0" width="257" height="114"/>
@@ -173,7 +158,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsPurchasedFrom} + ":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-49" x="0" y="320" width="76" height="13"/>
+				<reportElement key="textField-49" x="0" y="282" width="76" height="13"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -186,7 +171,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsOrderName} + ":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMM d, yyyy" isBlankWhenNull="true">
-				<reportElement key="textField-50" x="76" y="320" width="433" height="13"/>
+				<reportElement key="textField-50" x="76" y="282" width="433" height="13"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
