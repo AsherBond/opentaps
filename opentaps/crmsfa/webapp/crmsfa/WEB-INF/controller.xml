@@ -641,7 +641,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     </request-map>
     <request-map uri="deletePaymentMethod">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="deletePaymentMethod"/>
+        <event type="simple" path="component://accounting/script/org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="deletePaymentMethod"/>
         <response name="success" type="request" value="donePageRequestHelper"/>
         <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
@@ -2717,14 +2717,14 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     </request-map>
     <request-map uri="createCreditCard">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="createCreditCard"/>
+        <event type="simple" path="component://accounting/script/org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="createCreditCard"/>
         <response name="success" type="request" value="donePageRequestHelper"/>
         <response name="address" type="request" value="donePageRequestHelper"/>
         <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
     <request-map uri="updateCreditCard">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="updateCreditCard"/>
+        <event type="simple" path="component://accounting/script/org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="updateCreditCard"/>
         <response name="success" type="request" value="donePageRequestHelper"/>
         <response name="address" type="request" value="donePageRequestHelper"/>
         <response name="error" type="request" value="donePageRequestHelper"/>
@@ -2735,13 +2735,13 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     </request-map>
     <request-map uri="createEftAccount">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="createEftAccount"/>
+        <event type="simple" path="component://accounting/script/org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="createEftAccount"/>
         <response name="success" type="request" value="donePageRequestHelper"/>
         <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
     <request-map uri="updateEftAccount">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="updateEftAccount"/>
+        <event type="simple" path="component://accounting/script/org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="updateEftAccount"/>
         <response name="success" type="request" value="donePageRequestHelper"/>
         <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
