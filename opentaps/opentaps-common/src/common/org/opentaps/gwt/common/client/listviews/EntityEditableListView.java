@@ -1113,7 +1113,14 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
                         // pass the column info, since the user can hide and reorder columns, the excel spreadsheet will match the list view configuration
                         ColumnModel m = getColumnModel();
                         for (int i = 0; i < m.getColumnCount(); i++) {
-                            url += "&_" + m.getDataIndex(i) + "_idx=" + i;
+                            // call to getDataIndex may rise error for column w/o underlying
+                            // data field, e.g. column that renders a button.
+                            try {
+                                url += "&_" + m.getDataIndex(i) + "_idx=" + i;
+                            } catch (Exception ex) {
+                                UtilUi.logWarning("Column with index "+ Integer.valueOf(i).toString() + " was skipped due to an exception.",MODULE, "exportToExcelButton.onClick");
+                                continue;
+                            }
                         }
                         UtilUi.logInfo("url : " + url, MODULE, "exportToExcelButton.onClick");
                         UtilUi.redirect(url);
