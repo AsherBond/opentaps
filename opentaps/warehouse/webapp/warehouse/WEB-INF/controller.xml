@@ -1276,12 +1276,12 @@ under the License.
     </request-map>
     <request-map uri="addProductionRunRoutingTask">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/manufacturing/jobshopmgt/ProductionRunSimpleEvents.xml" invoke="addProductionRunRoutingTask"/>
+        <event type="simple" path="component://manufacturing/script/org/ofbiz/manufacturing/jobshopmgt/ProductionRunSimpleEvents.xml" invoke="addProductionRunRoutingTask"/>
         <response name="success" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="updateProductionRunRoutingTask">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/manufacturing/jobshopmgt/ProductionRunSimpleEvents.xml" invoke="editProductionRunRoutingTask"/>
+        <event type="simple" path="component://manufacturing/script/org/ofbiz/manufacturing/jobshopmgt/ProductionRunSimpleEvents.xml" invoke="editProductionRunRoutingTask"/>
         <response name="success" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="deleteProductionRunRoutingTask">
