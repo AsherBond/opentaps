@@ -313,7 +313,7 @@ function notifyInvoiceItemsCount(n) {
                 <@inputHiddenRowSubmit submit=false index=item_index/>
                 <@displayLinkCell href="updateInvoiceItemForm?invoiceId=${item.invoiceId}&invoiceItemSeqId=${item.invoiceItemSeqId}" text=item.invoiceItemSeqId />
                 <@displayCell text=item.getInvoiceItemType().get("description", locale) />
-                <@inputLookupCell name="productId" default=item.productId! lookup="LookupProduct" form="updateInvoiceItemMulti" size="10" index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
+                <@inputAutoCompleteProductCell name="productId" index=item_index default=item.productId />
                 <@inputAutoCompleteGlAccountCell name="overrideGlAccountId" index=item_index default=item.overrideGlAccountId/>
                 <@inputTextCell name="description" default=item.description! size=60 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
                 <@inputTextCell name="quantity" default=item.quantity! size=4 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
