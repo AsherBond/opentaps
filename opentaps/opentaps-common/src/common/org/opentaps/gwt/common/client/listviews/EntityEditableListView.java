@@ -302,7 +302,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
 
                 // check permissions before edit
                 @Override public boolean doBeforeEdit(GridPanel grid, Record record, String field, Object value, int rowIndex, int colIndex) {
-                    if (isEditableCell(rowIndex, colIndex)) {
+                    if (isEditableCell(rowIndex, colIndex, field, value)) {
                         // If the cell is editable, then check if the cell is if associated with an Autocompleter
                         if (columnToAutocompleter.containsKey(field)) {
                             // if it is, then  bind the auto completer to this cell,  so that if it needs to set the record value
@@ -1834,6 +1834,20 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
 
         // check row (record) permission
         return Permissions.canUpdate(store.getAt(rowIndex));
+    }
+
+    /**
+     * Checks if a cell at given coordinates is editable. Also this method can be overridden
+     * to analyze cell field name and its value. Sometimes we may need to allow/disallow editing
+     * based on the existing cell value. By default just calls <code>isEditableCell(int, int)</code>.
+     * @param rowIndex an <code>int</code> value
+     * @param colIndex an <code>int</code> value
+     * @param field a field name
+     * @param value this is current value in the cell
+     * @return a <code>boolean</code> value
+     */
+    public boolean isEditableCell(int rowIndex, int colIndex, String field, Object value) {
+        return isEditableCell(rowIndex, colIndex);
     }
 
     /**
