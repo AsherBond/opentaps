@@ -135,7 +135,7 @@ if (UtilValidate.isNotEmpty(organizationPartyId)) {
     context{"organizationPartyId"} = organizationPartyId;
 }
 
-// put accountig tags
+// put accounting tags
 String acctgTagUsage = UtilCommon.getParameter(request, "acctgTagUsage");
 if (UtilValidate.isNotEmpty(acctgTagUsage)) {
     context.put("tagTypes", UtilAccountingTags.getAccountingTagFiltersForOrganization(organizationPartyId, acctgTagUsage, delegator, locale));
@@ -144,6 +144,6 @@ if (UtilValidate.isNotEmpty(acctgTagUsage)) {
 facilities = UtilCommon.getOrganizationReceivingFacilities(organizationPartyId, delegator);
 context{"facilities"} = facilities;
 
-// This stuff suports organizationPartyId preconfigured field in setup report screen.
+// This stuff supports organizationPartyId preconfigured field in setup report screen.
 options = UtilCommon.DISTINCT_READ_OPTIONS;
 orderBy = UtilMisc.toList("groupName");

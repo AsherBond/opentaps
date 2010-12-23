@@ -1507,7 +1507,7 @@ For more information, please see documentation/opentapsFormMacros.html
   </#list>
 </#macro>
 
-<#macro accountingTagsSelect tag prefix="tag" suffix="" entity="" tabIndex="" index=-1>
+<#macro accountingTagsSelect tag prefix="tag" suffix="" entity="" tabIndex="" index=-1 showDisabled=false>
   <#if entity?has_content>
     <#assign default=entity.get("acctgTagEnumId${tag.index}")! />
   <#else>
@@ -1515,7 +1515,12 @@ For more information, please see documentation/opentapsFormMacros.html
       <#assign default=tag.defaultValue />
     </#if>
   </#if>
-  <@inputSelect name="${prefix}${tag.index}${suffix}" errorField="${prefix}${tag.index}${suffix}" list=tag.activeTagValues key="enumId" required=false default=default tabIndex=ti index=index ; tagValue>
+  <#if showDisabled>
+    <#assign tagValues = tag.tagValues />
+  <#else>
+    <#assign tagValues = tag.activeTagValues />
+  </#if>
+  <@inputSelect name="${prefix}${tag.index}${suffix}" errorField="${prefix}${tag.index}${suffix}" list=tagValues key="enumId" required=false default=default tabIndex=ti index=index ; tagValue>
     ${tagValue.description}
   </@inputSelect>
 </#macro>
