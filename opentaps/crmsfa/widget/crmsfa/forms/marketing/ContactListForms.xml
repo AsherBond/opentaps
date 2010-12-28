@@ -222,7 +222,7 @@
             header-link="${listSortTarget}?contactListId=${parameters.contactListId}&amp;contactListPartyOrderBy=name&amp;${findParams}#ListContactListParties" 
             header-link-style="orderByHeaderLink">
             <hyperlink description="${groovy:org.opentaps.common.party.PartyHelper.getCrmsfaPartyName(partyId, delegator);}"
-                       target="${groovy:org.opentaps.common.party.PartyHelper.createViewPageURL(partyId, delegator, externalLoginKey);}"/>
+                       target="${groovy:org.opentaps.common.party.PartyHelper.createViewPageURL(partyId, delegator, externalLoginKey);}" target-type="plain"/>
         </field>
         <!-- for adding member -->
         <field name="statusId" use-when="isRemoveForm!=true"><hidden value="CLPT_ACCEPTED"/></field>
