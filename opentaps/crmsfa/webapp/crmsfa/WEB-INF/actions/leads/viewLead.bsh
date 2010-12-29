@@ -55,7 +55,11 @@ if (partySummary == null) {
 context.put("partySummary", partySummary);
 
 // put to history
-context{"history"} = UtilCommon.makeHistoryEntry(partySummary.get("firstName") + " " + partySummary.get("lastName") + " (" + partySummary.get("companyName") + ")", "viewLead", UtilMisc.toList("partyId"));
+historyDescr = partySummary.get("firstName") + " " + partySummary.get("lastName");
+if (UtilValidate.isNotEmpty(partySummary.get("companyName"))) {
+    historyDescr += (" (" + partySummary.get("companyName") + ")");
+}
+context{"history"} = UtilCommon.makeHistoryEntry(historyDescr, "viewLead", UtilMisc.toList("partyId"));
 
 //if the lead has already been converted, then just put this in there and nothing
 if (partySummary.get("statusId") != null && partySummary.getString("statusId").equals("PTYLEAD_CONVERTED")) {
