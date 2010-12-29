@@ -184,9 +184,8 @@ public final class PartyHelper {
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom,
-            String partyRelationshipTypeId, String securityGroupId, List validToPartyRoles,
+            String partyRelationshipTypeId, String securityGroupId, List<String> validToPartyRoles,
             boolean expireExistingRelationships, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher)
     throws GenericEntityException, GenericServiceException {
         return createNewPartyToRelationship(partyIdTo, partyIdFrom, roleTypeIdFrom,
@@ -232,15 +231,14 @@ public final class PartyHelper {
      * @return  First non-expired <code>PartySummaryCRMView</code> or <code>null</code> if none found
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static GenericValue getActivePartyByRole(String partyRelationshipTypeId, String partyIdFrom, String roleTypeIdFrom, String securityGroupId, Timestamp activeDate, Delegator delegator) throws GenericEntityException {
 
-        Map input = UtilMisc.toMap("partyRelationshipTypeId", partyRelationshipTypeId, "partyIdFrom", partyIdFrom, "roleTypeIdFrom", roleTypeIdFrom);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("partyRelationshipTypeId", partyRelationshipTypeId, "partyIdFrom", partyIdFrom, "roleTypeIdFrom", roleTypeIdFrom);
         if (securityGroupId != null) {
             input.put("securityGroupId", securityGroupId);
         }
-        List relationships = delegator.findByAnd("PartyRelationship", input);
-        List activeRelationships = EntityUtil.filterByDate(relationships, activeDate);
+        List<GenericValue> relationships = delegator.findByAnd("PartyRelationship", input);
+        List<GenericValue> activeRelationships = EntityUtil.filterByDate(relationships, activeDate);
 
         // if none are found, log a message about this and return null
         if (activeRelationships.size() == 0) {
@@ -283,24 +281,21 @@ public final class PartyHelper {
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static void copyToPartyRelationships(String partyIdFrom, String roleTypeIdFrom, String partyRelationshipTypeId, String newPartyIdFrom, String newRoleTypeIdFrom, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
 
         // hardcoded activeDate
         Timestamp activeDate = UtilDateTime.nowTimestamp();
 
         // first get the unexpired relationships for the From party
-        Map input = UtilMisc.toMap("partyIdFrom", partyIdFrom, "roleTypeIdFrom", roleTypeIdFrom);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("partyIdFrom", partyIdFrom, "roleTypeIdFrom", roleTypeIdFrom);
         if (partyRelationshipTypeId != null) {
             input.put("partyRelationshipTypeId", partyRelationshipTypeId);
         }
-        List relationships = delegator.findByAnd("PartyRelationship", input);
-        List activeRelationships = EntityUtil.filterByDate(relationships, activeDate);
+        List<GenericValue> relationships = delegator.findByAnd("PartyRelationship", input);
+        List<GenericValue> activeRelationships = EntityUtil.filterByDate(relationships, activeDate);
 
-        for (Iterator iter = activeRelationships.iterator(); iter.hasNext();) {
-            GenericValue relationship = (GenericValue) iter.next();
-
-            input = UtilMisc.toMap("partyIdTo", relationship.getString("partyIdTo"), "roleTypeIdTo", relationship.getString("roleTypeIdTo"));
+        for (GenericValue relationship : activeRelationships) {
+            input = UtilMisc.<String, Object>toMap("partyIdTo", relationship.getString("partyIdTo"), "roleTypeIdTo", relationship.getString("roleTypeIdTo"));
             input.put("partyIdFrom", newPartyIdFrom);
             input.put("roleTypeIdFrom", newRoleTypeIdFrom);
             input.put("fromDate", activeDate);
@@ -318,7 +313,7 @@ public final class PartyHelper {
             input.put("priorityTypeId", relationship.getString("priorityTypeId"));
             input.put("comments", relationship.getString("comments"));
             input.put("userLogin", userLogin);
-            Map serviceResult = dispatcher.runSync("createPartyRelationship", input);
+            Map<String, Object> serviceResult = dispatcher.runSync("createPartyRelationship", input);
             if (ServiceUtil.isError(serviceResult)) {
                 throw new GenericServiceException(ServiceUtil.getErrorMessage(serviceResult));
             }
@@ -352,9 +347,8 @@ public final class PartyHelper {
      * @return a <code>List</code> of <code>Map</code> of the names of each party
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static List<Map> getPartyNames(List<String> partyIds, Delegator delegator, boolean lastNameFirst) throws GenericEntityException {
-        List<Map> partyNames = new ArrayList<Map>();
+    public static List<Map<String, String>> getPartyNames(List<String> partyIds, Delegator delegator, boolean lastNameFirst) throws GenericEntityException {
+        List<Map<String, String>> partyNames = new ArrayList<Map<String, String>>();
         for (String partyId : partyIds) {
             partyNames.add(UtilMisc.toMap(partyId, org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, lastNameFirst)));
         }
@@ -368,8 +362,7 @@ public final class PartyHelper {
      * @return a <code>List</code> of <code>Map</code> of the names of each party
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static List<Map> getPartyNames(List<String> partyIds, Delegator delegator) throws GenericEntityException {
+    public static List<Map<String, String>> getPartyNames(List<String> partyIds, Delegator delegator) throws GenericEntityException {
         return getPartyNames(partyIds, delegator, false);
     }
 
@@ -383,8 +376,7 @@ public final class PartyHelper {
      * @return the <code>List</code> of <code>ContachMech</code>
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static List getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, List additionalConditions, Delegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, List<EntityCondition> additionalConditions, Delegator delegator) throws GenericEntityException {
         Timestamp now = UtilDateTime.nowTimestamp();
         List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                 EntityCondition.makeCondition("partyId", partyId),
@@ -398,7 +390,7 @@ public final class PartyHelper {
         }
 
         // TODO: Put the filter by dates in the conditions list
-        List contactMechs = delegator.findByCondition("PartyContactWithPurpose", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, UtilMisc.toList("-purposeFromDate"));
+        List<GenericValue> contactMechs = delegator.findByCondition("PartyContactWithPurpose", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, UtilMisc.toList("-purposeFromDate"));
         contactMechs = EntityUtil.filterByDate(contactMechs, now, "contactFromDate", "contactThruDate", true);
         contactMechs = EntityUtil.filterByDate(contactMechs, now, "purposeFromDate", "purposeThruDate", true);
 
@@ -414,8 +406,7 @@ public final class PartyHelper {
      * @return the <code>List</code> of <code>ContachMech</code>
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static List getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
         return getCurrentContactMechsForParty(partyId, contactMechTypeId, contactMechPurposeTypeId, null, delegator);
     }
 
@@ -427,9 +418,8 @@ public final class PartyHelper {
      * @return the <code>List</code> of email <code>ContachMech</code>
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static List getEmailsForParty(String partyId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
-        return EntityUtil.getFieldListFromEntityList(getCurrentContactMechsForParty(partyId, "EMAIL_ADDRESS", contactMechPurposeTypeId, delegator), "infoString", true);
+    public static List<String> getEmailsForParty(String partyId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
+        return EntityUtil.<String>getFieldListFromEntityList(getCurrentContactMechsForParty(partyId, "EMAIL_ADDRESS", contactMechPurposeTypeId, delegator), "infoString", true);
     }
 
     /**
@@ -440,11 +430,10 @@ public final class PartyHelper {
      * @return the email address <code>String</code>
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static String getEmailForPartyByPurpose(String partyId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
         String emailAddress = null;
 
-        List addresses = getEmailsForParty(partyId, contactMechPurposeTypeId, delegator);
+        List<String> addresses = getEmailsForParty(partyId, contactMechPurposeTypeId, delegator);
         if (UtilValidate.isNotEmpty(addresses)) {
             emailAddress = (String) addresses.get(0);
         }
@@ -473,15 +462,14 @@ public final class PartyHelper {
      * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of <code>PartyClassificationGroup</code> values ordered by description
      */
-    @SuppressWarnings("unchecked")
-    public static List getClassificationGroupsForParty(String partyId, Delegator delegator) {
-        List groups = new ArrayList();
+    public static List<GenericValue> getClassificationGroupsForParty(String partyId, Delegator delegator) {
+        List<GenericValue> groups = new ArrayList<GenericValue>();
         try {
-            List classifications = delegator.findByAnd("PartyClassification", UtilMisc.toMap("partyId", partyId));
+            List<GenericValue> classifications = delegator.findByAnd("PartyClassification", UtilMisc.toMap("partyId", partyId));
             classifications = EntityUtil.filterByDate(classifications);
-            List partyClassificationGroupIds = EntityUtil.getFieldListFromEntityList(classifications, "partyClassificationGroupId", true);
+            List<GenericValue> partyClassificationGroupIds = EntityUtil.getFieldListFromEntityList(classifications, "partyClassificationGroupId", true);
             if (UtilValidate.isNotEmpty(partyClassificationGroupIds)) {
-                List partyClassificationGroups = delegator.findByCondition("PartyClassificationGroup", EntityCondition.makeCondition("partyClassificationGroupId", EntityOperator.IN, partyClassificationGroupIds), null, UtilMisc.toList("description"));
+                List<GenericValue> partyClassificationGroups = delegator.findByCondition("PartyClassificationGroup", EntityCondition.makeCondition("partyClassificationGroupId", EntityOperator.IN, partyClassificationGroupIds), null, UtilMisc.toList("description"));
                 if (UtilValidate.isNotEmpty(partyClassificationGroups)) {
                     groups.addAll(partyClassificationGroups);
                 }
@@ -500,12 +488,12 @@ public final class PartyHelper {
      * @return a map of distinct combinations of account#/postalCode/countryCode from PartyCarrierAccount, keyed by carrierPartyId
      */
     @SuppressWarnings("unchecked")
-    public static Map getPartyCarrierAccounts(String partyId, Delegator delegator) {
-        Map carrierAccountData = new HashMap();
+    public static Map<String, Object> getPartyCarrierAccounts(String partyId, Delegator delegator) {
+        Map<String, Object> carrierAccountData = new HashMap<String, Object>();
         if (UtilValidate.isEmpty(partyId)) {
             return carrierAccountData;
         }
-        List cond = UtilMisc.toList(EntityCondition.makeCondition("partyId", partyId), EntityUtil.getFilterByDateExpr());
+        List<EntityCondition> cond = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("partyId", partyId), EntityUtil.getFilterByDateExpr());
         List<GenericValue> partyCarrierAccounts = null;
         try {
             partyCarrierAccounts = delegator.findByCondition("PartyCarrierAccount", EntityCondition.makeCondition(cond, EntityOperator.AND), null, UtilMisc.toList("accountNumber"));
@@ -514,15 +502,15 @@ public final class PartyHelper {
             partyCarrierAccounts = new ArrayList<GenericValue>();
         }
 
-        Iterator pcat = partyCarrierAccounts.iterator();
+        Iterator<GenericValue> pcat = partyCarrierAccounts.iterator();
         while (pcat.hasNext()) {
-            GenericValue partyCarrierAccount = (GenericValue) pcat.next();
+            GenericValue partyCarrierAccount = pcat.next();
 
             String carrierPartyId = partyCarrierAccount.getString("carrierPartyId");
             String carrierName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, carrierPartyId, false);
-            List carrierInfo = (List) carrierAccountData.get(carrierPartyId);
+            List<Map<String, Object>> carrierInfo = (List<Map<String, Object>>) carrierAccountData.get(carrierPartyId);
             if (carrierInfo == null) {
-                carrierInfo = new ArrayList();
+                carrierInfo = new ArrayList<Map<String, Object>>();
             }
             carrierAccountData.put(carrierPartyId, carrierInfo);
 
@@ -561,16 +549,15 @@ public final class PartyHelper {
      * @param delegator a <code>Delegator</code> value
      * @return a list of <code>PartyContactWithPurpose</code> records
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getPhoneNumbersForParty(String partyId, Delegator delegator) {
         Timestamp now = UtilDateTime.nowTimestamp();
 
-        List conditions = UtilMisc.toList(
+        List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                 EntityCondition.makeCondition("partyId", partyId),
                 EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.LIKE, "%PHONE%"),
                 EntityCondition.makeCondition("contactMechTypeId", "TELECOM_NUMBER"));
 
-        List phoneNumbers = new ArrayList<GenericValue>();
+        List<GenericValue> phoneNumbers = new ArrayList<GenericValue>();
         try {
             List<GenericValue> partyContacts = delegator.findByCondition("PartyContactWithPurpose", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, UtilMisc.toList("-purposeFromDate"));
             partyContacts = EntityUtil.filterByDate(partyContacts, now, "contactFromDate", "contactThruDate", true);
@@ -591,9 +578,8 @@ public final class PartyHelper {
      * @return the <code>List</code> of <code>PartyFromSummaryByRelationship</code> of the organization suppliers
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getPartners(String organizationPartyId, Delegator delegator) throws GenericEntityException {
-        List conditions = UtilMisc.toList(
+        List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                 EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, organizationPartyId),
                 EntityCondition.makeCondition("roleTypeIdTo", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
                 EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PARTNER"),
@@ -847,25 +833,24 @@ public final class PartyHelper {
      * @return a boolean <code>true</code>, if PartySupplementalData was updated, in other case <code>false</code>
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static boolean updatePartySupplementalData(final Delegator delegator, final String partyId) throws GenericEntityException {
 
         String[] contactMechPurposeTypeIds = {"GENERAL_LOCATION", "PRIMARY_PHONE", "PRIMARY_EMAIL"};
         String[] fieldToUpdates = {"primaryPostalAddressId", "primaryTelecomNumberId", "primaryEmailId"};
         boolean result = false;
 
-        Map input = UtilMisc.toMap("partyId", partyId);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("partyId", partyId);
         GenericValue partySupplementalData = delegator.findByPrimaryKey("PartySupplementalData", input);
 
         if (partySupplementalData == null) {
             // create a new partySupplementalData
-            input = UtilMisc.toMap("partyId", partyId);
+            input = UtilMisc.<String, Object>toMap("partyId", partyId);
             partySupplementalData = delegator.makeValue("PartySupplementalData", input);
             partySupplementalData.create();
         }
 
         for (int i = 0; i < contactMechPurposeTypeIds.length; i++) {
-            List whereConditions = UtilMisc.toList(EntityCondition.makeCondition("partyId", partyId));
+            List<EntityCondition> whereConditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("partyId", partyId));
             whereConditions.add(EntityCondition.makeCondition("contactMechPurposeTypeId", contactMechPurposeTypeIds[i]));
             whereConditions.add(EntityUtil.getFilterByDateExpr("contactFromDate", "contactThruDate"));
             whereConditions.add(EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate"));
