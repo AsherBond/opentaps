@@ -81,7 +81,7 @@ public final class CasesServices {
         String accountPartyId = (String) context.get("accountPartyId");
         String contactPartyId = (String) context.get("contactPartyId");
         if (accountPartyId == null && contactPartyId == null) {
-            return UtilMessage.createAndLogServiceError("CrmErrorCreateCaseFailNoAcctCont", "CrmErrorCreateCaseFail", locale, MODULE);
+            return UtilMessage.createAndLogServiceError("CrmErrorCreateCaseFail", "CrmErrorCreateCaseFailNoAcctCont", locale, MODULE);
         }
         try {
             // create the cust request
