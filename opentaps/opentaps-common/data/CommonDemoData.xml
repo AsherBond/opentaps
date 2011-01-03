@@ -36,7 +36,6 @@
 
     <!-- Without a name on account, these eft accounts will cause bugs.  See http://www.opentaps.org/forum/opentaps-general-discussions/general-discussions-english/cannot-update-company-info -->
     <EftAccount paymentMethodId="ABN_CHECKING" nameOnAccount="Demo Name on Account"/>
-    <EftAccount paymentMethodId="COCHECKING" nameOnAccount="Demo Name on Account"/>
     <EftAccount paymentMethodId="SC_CHECKING" nameOnAccount="Demo Name on Account"/>
 
     <!-- For opentaps applications statusId must be filled. This items modifies Ofbiz demo data. -->
