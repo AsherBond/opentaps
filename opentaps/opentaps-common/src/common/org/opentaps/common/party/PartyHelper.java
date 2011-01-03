@@ -376,7 +376,7 @@ public final class PartyHelper {
      * @return the <code>List</code> of <code>ContachMech</code>
      * @throws GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, List<EntityCondition> additionalConditions, Delegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, List<? extends EntityCondition> additionalConditions, Delegator delegator) throws GenericEntityException {
         Timestamp now = UtilDateTime.nowTimestamp();
         List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                 EntityCondition.makeCondition("partyId", partyId),
