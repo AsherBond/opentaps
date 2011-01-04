@@ -191,7 +191,7 @@ public class OrderItemsLookupService extends EntityLookupService {
 
                 if (UtilValidate.isNotEmpty(supplierProductName)) {
                     description += supplierProductName;
-                } else {
+                } else if (UtilValidate.isNotEmpty(product.getProductName())) {
                     description += product.getProductName();
                 }
                 item.setDescription(description);
