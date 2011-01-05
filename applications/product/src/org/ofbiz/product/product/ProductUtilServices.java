@@ -110,6 +110,7 @@ public class ProductUtilServices {
                 passocList = EntityUtil.filterByDate(passocList);
                 if (passocList.size() == 0) {
                     product.set("salesDiscontinuationDate", nowTimestamp);
+                    delegator.store(product);
 
                     numSoFar++;
                     if (numSoFar % 500 == 0) {

@@ -316,8 +316,6 @@ public class ProductSearch {
                     }
                     entityConditionList.add(EntityCondition.makeCondition(keywordOrList, EntityOperator.OR));
 
-                    productIdGroupBy = true;
-
                     if (doingBothAndOr) {
                         relevancyComplexAlias.addComplexAliasMember(new ComplexAliasField(entityAlias, "relevancyWeight", null, "sum"));
                     } else {
@@ -1951,6 +1949,8 @@ public class ProductSearch {
                 // we have to check this in order to be sure that there is a totalRelevancy to sort by...
                 productSearchContext.orderByList.add("-totalRelevancy");
                 productSearchContext.fieldsToSelect.add("totalRelevancy");
+                if (productSearchContext.keywordFixedOrSetAndList.size() > 0)
+                    productSearchContext.productIdGroupBy = true;
             }
         }
 

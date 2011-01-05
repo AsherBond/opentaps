@@ -223,6 +223,7 @@ public class RequestHandler {
                     if (newUrl.toUpperCase().startsWith("HTTPS")) {
                         // if we are supposed to be secure, redirect secure.
                         callRedirect(newUrl, response, request);
+                        return;
                     }
                 }
             // if this is a new session and forceHttpSession is true and the request is secure but does not
@@ -237,6 +238,7 @@ public class RequestHandler {
                 String newUrl = RequestHandler.makeUrl(request, response, urlBuf.toString(), true, false, false);
                 if (newUrl.toUpperCase().startsWith("HTTP")) {
                     callRedirect(newUrl, response, request);
+                    return;
                 }
             }
 
@@ -758,7 +760,11 @@ public class RequestHandler {
         // add in the attributes as well so everything needed for the rendering context will be in place if/when we get back to this view
         paramMap.putAll(UtilHttp.getAttributeMap(req));
         UtilMisc.makeMapSerializable(paramMap);
-        req.getSession().setAttribute("_LAST_VIEW_NAME_", view);
+        if (paramMap.containsKey("_LAST_VIEW_NAME_")) { // Used by lookups to keep the real view (request)
+            req.getSession().setAttribute("_LAST_VIEW_NAME_", paramMap.get("_LAST_VIEW_NAME_"));
+        } else {
+            req.getSession().setAttribute("_LAST_VIEW_NAME_", view);
+        }
         req.getSession().setAttribute("_LAST_VIEW_PARAMS_", paramMap);
 
         if ("SAVED".equals(saveName)) {

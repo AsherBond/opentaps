@@ -35,6 +35,7 @@ import javolution.util.FastMap;
 import javolution.util.FastSet;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilHttp;
@@ -242,7 +243,7 @@ public class ProductEvents {
 
         if (UtilValidate.isNotEmpty(fromDateStr)) {
             try {
-                fromDate = Timestamp.valueOf(fromDateStr);
+                fromDate = (Timestamp) ObjectType.simpleTypeConvert(fromDateStr, "Timestamp", null, UtilHttp.getTimeZone(request), UtilHttp.getLocale(request), false);
             } catch (Exception e) {
                 errMsgList.add("From Date not formatted correctly.");
             }
@@ -309,7 +310,7 @@ public class ProductEvents {
 
         if (UtilValidate.isNotEmpty(thruDateStr)) {
             try {
-                thruDate = Timestamp.valueOf(thruDateStr);
+                thruDate = (Timestamp) ObjectType.simpleTypeConvert(thruDateStr, "Timestamp", null, UtilHttp.getTimeZone(request), UtilHttp.getLocale(request), false);
             } catch (Exception e) {
                 errMsgList.add(UtilProperties.getMessage(resource,"productevents.thru_date_not_formatted_correctly", UtilHttp.getLocale(request)));
             }

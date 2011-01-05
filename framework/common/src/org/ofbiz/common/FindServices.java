@@ -298,7 +298,7 @@ public class FindServices {
                     fieldValue = timeStamp.toString();
                 }
             }
-            if (ObjectType.isEmpty(fieldValue)) {
+            if (ObjectType.isEmpty(fieldValue) && !"empty".equals(operation)) {
                 continue;
             }
             result.add(createSingleCondition(modelField, operation, fieldValue, ignoreCase, delegator, context));
@@ -402,7 +402,9 @@ public class FindServices {
             }
             subMap2 = subMap.get("fld0");
             fieldValue = subMap2.get("value");
-            if (fieldValue == null) {
+            opString = (String) subMap2.get("op");
+            // null fieldValue is OK if operator is "empty"
+            if (fieldValue == null && !"empty".equals(opString)) {
                 continue;
             }
             //check if this value of date-time type
@@ -430,7 +432,6 @@ public class FindServices {
                     fieldValue = timeStamp.toString();
                 }
             }
-            opString = (String) subMap2.get("op");
             ignoreCase = "Y".equals(subMap2.get("ic"));
             cond = createSingleCondition(modelField, opString, fieldValue, ignoreCase, delegator, context); 
             tmpList.add(cond);
@@ -440,7 +441,8 @@ public class FindServices {
             }
 
             fieldValue = subMap2.get("value");
-            if (fieldValue == null) {
+            opString = (String) subMap2.get("op");
+            if (fieldValue == null && !"empty".equals(opString)) {
                 continue;
             }
 
@@ -469,7 +471,6 @@ public class FindServices {
                     fieldValue = timeStamp.toString();
                 }
             }
-            opString = (String) subMap2.get("op");
             ignoreCase = "Y".equals(subMap2.get("ic"));
             cond = createSingleCondition(modelField, opString, fieldValue, ignoreCase, delegator, context); 
             tmpList.add(cond);

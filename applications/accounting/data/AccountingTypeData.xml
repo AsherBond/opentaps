@@ -206,6 +206,8 @@ under the License.
         DEBIT
             |___> NON_POSTING
             |
+            |___> CONTRA_REVENUE
+            |
             |___> ASSET
             |         |_________> LONGTERM_ASSET
             |         |
