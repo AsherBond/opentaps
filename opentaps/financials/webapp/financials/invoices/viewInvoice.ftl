@@ -312,8 +312,12 @@ function notifyInvoiceItemsCount(n) {
                 <@inputHidden name="invoiceItemSeqId" value="${item.invoiceItemSeqId}" index=item_index/>
                 <@inputHiddenRowSubmit submit=false index=item_index/>
                 <@displayLinkCell href="updateInvoiceItemForm?invoiceId=${item.invoiceId}&invoiceItemSeqId=${item.invoiceItemSeqId}" text=item.invoiceItemSeqId />
-                <@displayCell text=item.getInvoiceItemType().get("description", locale) />
-                <@inputAutoCompleteProductCell name="productId" index=item_index default=item.productId />
+                <#if item.getInvoiceItemType()?has_content>
+                    <@displayCell text=item.getInvoiceItemType().get("description", locale) />
+                <#else>
+                    <@inputSelectCell name="invoiceItemTypeId" list=invoiceItemTypes displayField="description" required=false/> 
+                </#if> 
+                <@inputLookupCell name="productId" default=item.productId! lookup="LookupProduct" form="updateInvoiceItemMulti" size="10" index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
                 <@inputAutoCompleteGlAccountCell name="overrideGlAccountId" index=item_index default=item.overrideGlAccountId/>
                 <@inputTextCell name="description" default=item.description! size=60 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
                 <@inputTextCell name="quantity" default=item.quantity! size=4 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
@@ -323,7 +327,11 @@ function notifyInvoiceItemsCount(n) {
                 <td><@submitFormLinkConfirm form="removeInvoiceItemAction" text=uiLabelMap.CommonRemove invoiceItemSeqId=item.invoiceItemSeqId/></td>
               <#else>
                 <@displayCell text=displayItemSeqId blockClass="tabletextright" />
-                <@displayCell text=item.getInvoiceItemType().get("description", locale) style="white-space: nowrap" />
+                <#if item.getInvoiceItemType()?has_content>
+                    <@displayCell text=item.getInvoiceItemType().get("description", locale) style="white-space: nowrap" />
+                <#else>
+                    <td>&nbsp;</td>
+                </#if> 
                 <@displayCell text=item.productId />
                 <@displayCell text=item.overrideGlAccountId />
                 <@displayCell text=item.description blockStyle="width: 40%" />
