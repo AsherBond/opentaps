@@ -87,19 +87,6 @@ under the License.
         }
 
         // function passing selected value to calling window
-        function set_value(value) {
-                if (!obj_caller) return;
-                window.close();
-                obj_caller.target.value = value;
-                if (obj_caller.targetHidden == null) return;
-                obj_caller.targetHidden.value = value;
-                obj_caller.target.focus();
-                if (obj_caller.onLookupReturn) {
-                    obj_caller.onLookupReturn();
-                }
-        }
-
-        // function passing selected value to calling window
         function set_multivalues(value) {
             obj_caller.target.value = value;
             var thisForm = obj_caller.target.form;

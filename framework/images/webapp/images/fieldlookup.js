@@ -890,9 +890,7 @@ function set_value (value) {
     if(GLOBAL_LOOKUP_REF.getReference(ACTIVATED_LOOKUP)){
         obj_caller.target = $(GLOBAL_LOOKUP_REF.getReference(ACTIVATED_LOOKUP).parentTarget);
     }
-    else{
-        obj_caller.target = obj_caller.targetW;
-    }
+
     var target = obj_caller.target;
 
     write_value(value, target);
