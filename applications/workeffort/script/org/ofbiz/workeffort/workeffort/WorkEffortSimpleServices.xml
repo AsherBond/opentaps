@@ -74,22 +74,24 @@ under the License.
         <!-- attach to a customer request if passed and copy attached docs -->
         <if-not-empty field="parameters.custRequestId">
             <!-- check status of customer request if valid -->
+            <!-- Opentaps: Skip check on the Case status to allow creating events/tasks  whatever the status is
             <entity-one entity-name="CustRequest" value-field="lookedUpValue"/>
             <set field="goodStatusId" value="CRQ_ACCEPTED"/>
             <if-compare-field operator="not-equals" field="lookedUpValue.statusId" to-field="goodStatusId" >
                 <set field="entity" value="Customer request"/>
                 <add-error><fail-property resource="CommonUiLabels" property="CommonErrorStatusNotValid"/></add-error>
                 <check-errors/>
-            </if-compare-field>
+            </if-compare-field> -->
             <!-- create customer request / work effort relation -->
             <make-value value-field="custRequestWorkEffort" entity-name="CustRequestWorkEffort"/>
             <set field="custRequestWorkEffort.workEffortId" from-field="newEntity.workEffortId"/>
             <set field="custRequestWorkEffort.custRequestId" from-field="parameters.custRequestId"/>
             <create-value value-field="custRequestWorkEffort"/>
             <!-- update status of customer request -->
+            <!-- Opentaps: do not auto set the status to Reviewed when a task/event is created for a case
             <set field="updCustReq.custRequestId" from-field="parameters.custRequestId"/>
             <set field="updCustReq.statusId" value="CRQ_REVIEWED"/>
-            <call-service service-name="setCustRequestStatus" in-map-name="updCustReq"/>
+            <call-service service-name="setCustRequestStatus" in-map-name="updCustReq"/> -->
             <entity-and list="custRequestContents" entity-name="CustRequestContent">
                 <field-map field-name="custRequestId" from-field="parameters.custRequestId"/>
             </entity-and>
