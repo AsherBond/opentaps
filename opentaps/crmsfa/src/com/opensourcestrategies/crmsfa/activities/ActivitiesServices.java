@@ -1720,7 +1720,7 @@ public final class ActivitiesServices {
             }
         }
 
-        // associate the opportunity with the work effort
+        // associate the opportunity with the work effort if it is not associated yet
         if (salesOpportunityId != null) {
             input = UtilMisc.<String, Object>toMap("salesOpportunityId", salesOpportunityId, "workEffortId", workEffortId);
             GenericValue map = delegator.findByPrimaryKey("SalesOpportunityWorkEffort", input);
@@ -1731,12 +1731,14 @@ public final class ActivitiesServices {
             }
         }
 
-        // associate the case with the work effort
+        // associate the case with the work effort if it is not associated yet
         if (custRequestId != null) {
-            serviceResults = dispatcher.runSync("createWorkEffortRequest",
+            if (UtilValidate.isEmpty(delegator.findByPrimaryKeyCache("CustRequestWorkEffort", UtilMisc.toMap("workEffortId", workEffortId, "custRequestId", custRequestId)))) {
+                serviceResults = dispatcher.runSync("createWorkEffortRequest",
                     UtilMisc.toMap("workEffortId", workEffortId, "custRequestId", custRequestId, "userLogin", userLogin));
-            if (ServiceUtil.isError(serviceResults)) {
-                return UtilMessage.createAndLogServiceError(serviceResults, errorLabel, locale, MODULE);
+                if (ServiceUtil.isError(serviceResults)) {
+                    return UtilMessage.createAndLogServiceError(serviceResults, errorLabel, locale, MODULE);
+                }
             }
         }
 
