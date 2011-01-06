@@ -253,7 +253,6 @@
     <classpathentry kind="src" path="opentaps/crmsfa/src"/>
     <classpathentry kind="src" path="opentaps/dataimport/src"/>
     <classpathentry kind="src" path="opentaps/financials/src"/>
-    <classpathentry kind="src" path="opentaps/funambol/src"/>
     <classpathentry kind="src" path="opentaps/opentaps-tests/src"/>
     <classpathentry kind="src" path="opentaps/purchasing/src"/>
     <classpathentry kind="src" path="opentaps/search/src"/>
@@ -285,16 +284,6 @@
     <classpathentry kind="lib" path="framework/base/lib/etl/kettle-core-3.2.0.jar"/>
     <classpathentry kind="lib" path="framework/base/lib/etl/kettle-db-3.2.0.jar"/>
     <classpathentry kind="lib" path="framework/base/lib/etl/kettle-engine-3.2.0.jar"/>
-    <classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-foundation-core-8.0.0.jar"/>
-    <classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-framework-8.0.1.jar"/>
-    <classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-server-8.0.0.jar"/>
-    <classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-server-framework-8.0.0.jar"/>
-    <classpathentry kind="lib" path="opentaps/funambol/lib/ext/siga-fwk-bsd.jar"/>
-    <classpathentry kind="lib" path="opentaps/funambol/lib/ext/xpp3-1.1.2a-fun.jar"/>
-    <classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-admin-libs.jar"/>
-    <classpathentry kind="lib" path="opentaps/funambol/lib/core/funambol-admin.jar"/>
-    <classpathentry kind="lib" path="opentaps/funambol/lib/modules/funambol-pim-framework-8.0.0.jar"/>
-    <classpathentry kind="lib" path="opentaps/funambol/lib/modules/funambol-pim-parsers-8.0.0.jar"/>
     <classpathentry kind="lib" path="opentaps/amazon/lib/opentapsAmazon_Axis-1.0.jar"/>
     <classpathentry kind="lib" path="framework/base/lib/memcached-2.5.jar"/>
     <classpathentry kind="output" path="bin"/>
