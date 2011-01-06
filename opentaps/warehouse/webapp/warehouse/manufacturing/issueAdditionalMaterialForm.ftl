@@ -22,7 +22,7 @@
 <table class="twoColumnForm">
     <@inputHidden name="productionRunId" value=parameters.productionRunId />
     <@inputSelectRow name="workEffortId" title=uiLabelMap.WorkEffortTask list=tasks key="workEffortId" displayField="workEffortName" titleClass="requiredField" />
-    <@inputLookupRow name="productId" title=uiLabelMap.ProductProduct lookup="LookupProduct" form="issueAdditionalMaterial" titleClass="requiredField" />
+    <@inputAutoCompleteProductRow name="productId" title=uiLabelMap.ProductProduct form="issueAdditionalMaterial" titleClass="requiredField" />
     <@inputTextRow name="quantity" title=uiLabelMap.CommonQuantity size=6 titleClass="requiredField" />
     <@inputSelectRow name="reasonEnumId" title=uiLabelMap.OrderReason list=reasons key="enumId" displayField="description" required=false />
     <@inputTextareaRow name="description" title=uiLabelMap.CommonDescription />
