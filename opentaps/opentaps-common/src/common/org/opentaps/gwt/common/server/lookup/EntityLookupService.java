@@ -422,14 +422,15 @@ public abstract class EntityLookupService {
      * @exception FoundationException if an error occurs
      */
     public <T extends EntityInterface> List<T> paginateResults(EntityListIterator<T> iterator) throws FoundationException {
-        results = new ArrayList<T>();
         if (ignorePager()) {
             setResults(iterator.getCompleteList());
-            setResultTotalCount(results.size());
+            setResultTotalCount(getResults().size());
         } else {
             // note +1 because the iterator starts at 1
             setResults(iterator.getPartialList(pager.getPageStart() + 1, pager.getPageSize()));
-            setResultTotalCount(iterator.getResultsSizeAfterPartialList());
+            // do not use getResultsSizeAfterPartialList, instead go to last and take the index
+            iterator.last();
+            setResultTotalCount(iterator.currentIndex());
         }
         iterator.close();
         return getResults();
@@ -530,6 +531,7 @@ public abstract class EntityLookupService {
                 boolean p = noPager;
                 noPager = true;
                 setResults(getRepository().findList(entityName, conditions, getFields(), getOrderBy()));
+                setResultTotalCount(getResults().size());
                 noPager = p;
             }
             return getResults();
@@ -576,6 +578,7 @@ public abstract class EntityLookupService {
                 boolean p = noPager;
                 noPager = true;
                 setResults(getRepository().findList(entityName, condition, getFields(), getOrderBy()));
+                setResultTotalCount(getResults().size());
                 noPager = p;
             }
             return getResults();
