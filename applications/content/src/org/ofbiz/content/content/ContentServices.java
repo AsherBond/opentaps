@@ -40,7 +40,7 @@ import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -140,8 +140,8 @@ public class ContentServices {
             try {
                 Map thisResults = dispatcher.runSync("traverseContent", traversMap);
             String errorMsg = ServiceUtil.getErrorMessage(thisResults);
-            if (UtilValidate.isNotEmpty(errorMsg) ) {
-                Debug.logError( "Problem in traverseContent. " + errorMsg, module);
+            if (UtilValidate.isNotEmpty(errorMsg)) {
+                Debug.logError("Problem in traverseContent. " + errorMsg, module);
                 return ServiceUtil.returnError(errorMsg);
             }
             Map nodeMap = (Map)thisResults.get("nodeMap");
@@ -168,7 +168,7 @@ public class ContentServices {
      * This is a generic service for traversing a Content tree, typical of a blog response tree. It calls the ContentWorker.traverse method.
      */
     public static Map<String, Object> traverseContent(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Map results = FastMap.newInstance();
 
         String contentId = (String) context.get("contentId");
@@ -194,12 +194,12 @@ public class ContentServices {
         String fromDateStr = (String) context.get("fromDateStr");
         String thruDateStr = (String) context.get("thruDateStr");
         Timestamp fromDate = null;
-        if (fromDateStr != null && fromDateStr.length() > 0) {
+        if (UtilValidate.isNotEmpty(fromDateStr)) {
             fromDate = UtilDateTime.toTimestamp(fromDateStr);
         }
 
         Timestamp thruDate = null;
-        if (thruDateStr != null && thruDateStr.length() > 0) {
+        if (UtilValidate.isNotEmpty(thruDateStr)) {
             thruDate = UtilDateTime.toTimestamp(thruDateStr);
         }
 
@@ -258,7 +258,7 @@ public class ContentServices {
 
         Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
         Map result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String contentId = (String) context.get("contentId");
         //String contentTypeId = (String) context.get("contentTypeId");
@@ -353,7 +353,7 @@ public class ContentServices {
         context.put("targetOperationList", targetOperationList);
         context.put("contentPurposeList", contentPurposeList);
 
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Map result = FastMap.newInstance();
 
@@ -519,7 +519,7 @@ public class ContentServices {
      */
     public static Map<String, Object> updateContentMethod(DispatchContext dctx, Map<String, ? extends Object> rcontext) {
         Map<String, Object> context = UtilMisc.makeMapWritable(rcontext);
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Map result = FastMap.newInstance();
 
@@ -550,7 +550,7 @@ public class ContentServices {
             Timestamp lastModifiedDate = UtilDateTime.nowTimestamp();
 
             // update status first to see if allowed
-            if (UtilValidate.isNotEmpty((String) context.get("statusId"))) {
+            if (UtilValidate.isNotEmpty(context.get("statusId"))) {
                 Map statusInMap = UtilMisc.toMap("contentId", context.get("contentId"), "statusId", context.get("statusId"),"userLogin", userLogin);
                 try {
                    dispatcher.runSync("setContentStatus", statusInMap);
@@ -600,7 +600,7 @@ public class ContentServices {
      */
     public static Map<String, Object> updateContentAssocMethod(DispatchContext dctx, Map<String, ? extends Object> rcontext) {
         Map<String, Object> context = UtilMisc.makeMapWritable(rcontext);
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Map result = FastMap.newInstance();
 
@@ -713,7 +713,7 @@ public class ContentServices {
      */
     public static Map<String, Object> deactivateContentAssocMethod(DispatchContext dctx, Map<String, ? extends Object> rcontext) {
         Map<String, Object> context = UtilMisc.makeMapWritable(rcontext);
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Map result = FastMap.newInstance();
 
@@ -790,7 +790,7 @@ public class ContentServices {
      * Deactivates any active ContentAssoc (except the current one) that is associated with the passed in template/layout contentId and mapKey.
      */
     public static Map<String, Object> deactivateAssocs(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String contentIdTo = (String) context.get("contentIdTo");
         String mapKey = (String) context.get("mapKey");
         String contentAssocTypeId = (String) context.get("contentAssocTypeId");
@@ -856,7 +856,7 @@ public class ContentServices {
      */
     public static Map<String, Object> renderSubContentAsText(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map results = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         Map templateContext = (Map) context.get("templateContext");
@@ -918,7 +918,7 @@ public class ContentServices {
     public static Map<String, Object> renderContentAsText(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map results = FastMap.newInstance();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Writer out = (Writer) context.get("outWriter");
 
         Map templateContext = (Map) context.get("templateContext");
@@ -947,7 +947,7 @@ public class ContentServices {
         }
 
         try {
-            ContentWorker.renderContentAsText(dispatcher, delegator, contentId, outWriter, templateContext, locale, mimeTypeId, true);
+            ContentWorker.renderContentAsText(dispatcher, delegator, contentId, outWriter, templateContext, locale, mimeTypeId, null, null, true);
             if (out != null) out.write(outWriter.toString());
             results.put("textData", outWriter.toString());
         } catch (GeneralException e) {
@@ -962,7 +962,7 @@ public class ContentServices {
 
     public static Map<String, Object> linkContentToPubPt(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map results = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         String contentId = (String) context.get("contentId");
@@ -997,8 +997,8 @@ public class ContentServices {
                 if (!isPublished) {
                     //Map thisResults = dispatcher.runSync("deactivateAssocs", mapIn);
                     //String errorMsg = ServiceUtil.getErrorMessage(thisResults);
-                    //if (UtilValidate.isNotEmpty(errorMsg) ) {
-                    //Debug.logError( "Problem running deactivateAssocs. " + errorMsg, "ContentServices");
+                    //if (UtilValidate.isNotEmpty(errorMsg)) {
+                    //Debug.logError("Problem running deactivateAssocs. " + errorMsg, "ContentServices");
                     //return ServiceUtil.returnError(errorMsg);
                     //}
                     content.put("privilegeEnumId", privilegeEnumId);
@@ -1114,8 +1114,8 @@ public class ContentServices {
                 Map.Entry entry = (Map.Entry)iter.next();
                 String key = (String)entry.getKey();
                 Object value = entry.getValue();
-                if (value instanceof String ) {
-                    if (UtilValidate.isNotEmpty((String)value)) {
+                if (value instanceof String) {
+                    if (UtilValidate.isNotEmpty(value)) {
                         mapFiltered.put(key, value);
                     }
                 } else if (value != null) {
@@ -1123,7 +1123,7 @@ public class ContentServices {
                 }
             }
             String outputString = UtilHttp.urlEncodeArgs(mapFiltered);
-            result.put("outputString", outputString );
+            result.put("outputString", outputString);
         }
         return result;
     }

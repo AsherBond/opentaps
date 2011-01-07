@@ -419,36 +419,31 @@ under the License.
                 <section>
                     <condition><not><if-empty field="ownedFinAccountList"/></not></condition>
                     <widgets>
-                        <container id="fin-account-list" style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.EcommerceMyAccount}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <iterate-section entry="ownedFinAccount" list="ownedFinAccountList">
-                                    <section>
-                                        <actions>
-                                            <entity-condition entity-name="FinAccountTrans" list="ownedFinAccountTransList">
-                                                <condition-expr field-name="finAccountId" from-field="ownedFinAccount.finAccountId"/>
-                                                <order-by field-name="transactionDate"/>
-                                            </entity-condition>
-                                            <entity-condition entity-name="FinAccountAuth" list="ownedFinAccountAuthList" filter-by-date="true">
-                                                <condition-expr field-name="finAccountId" from-field="ownedFinAccount.finAccountId"/>
-                                                <order-by field-name="authorizationDate"/>
-                                            </entity-condition>
-                                            <entity-one entity-name="StatusItem" value-field="finAccountStatusItem">
-                                                <field-map field-name="statusId" from-field="ownedFinAccount.statusId"/>
-                                            </entity-one>
-                                            <entity-one entity-name="Uom" value-field="accountCurrencyUom" auto-field-map="false" use-cache="true">
-                                                <field-map field-name="uomId" from-field="ownedFinAccount.currencyUomId"/>
-                                            </entity-one>
-                                        </actions>
-                                        <widgets>
-                                            <platform-specific><html><html-template location="component://ecommerce/webapp/ecommerce/customer/FinAccountDetail.ftl"/></html></platform-specific>
-                                        </widgets>
-                                    </section>
-                                </iterate-section>
-                            </container>
-                        </container>
+                        <screenlet id="fin-account-list" title="${uiLabelMap.EcommerceMyAccount}">
+                            <iterate-section entry="ownedFinAccount" list="ownedFinAccountList">
+                                <section>
+                                    <actions>
+                                        <entity-condition entity-name="FinAccountTrans" list="ownedFinAccountTransList">
+                                            <condition-expr field-name="finAccountId" from-field="ownedFinAccount.finAccountId"/>
+                                            <order-by field-name="transactionDate"/>
+                                        </entity-condition>
+                                        <entity-condition entity-name="FinAccountAuth" list="ownedFinAccountAuthList" filter-by-date="true">
+                                            <condition-expr field-name="finAccountId" from-field="ownedFinAccount.finAccountId"/>
+                                            <order-by field-name="authorizationDate"/>
+                                        </entity-condition>
+                                        <entity-one entity-name="StatusItem" value-field="finAccountStatusItem">
+                                            <field-map field-name="statusId" from-field="ownedFinAccount.statusId"/>
+                                        </entity-one>
+                                        <entity-one entity-name="Uom" value-field="accountCurrencyUom" auto-field-map="false" use-cache="true">
+                                            <field-map field-name="uomId" from-field="ownedFinAccount.currencyUomId"/>
+                                        </entity-one>
+                                    </actions>
+                                    <widgets>
+                                        <platform-specific><html><html-template location="component://ecommerce/webapp/ecommerce/customer/FinAccountDetail.ftl"/></html></platform-specific>
+                                    </widgets>
+                                </section>
+                            </iterate-section>
+                        </screenlet>
                     </widgets>
                 </section>
             </widgets>
@@ -528,7 +523,7 @@ under the License.
                 <property-map resource="SecurityextUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="titleProperty" value="PageTitleNewCustomer"/>
                 <set field="layoutSettings.javaScripts[]" value="/ecommerce/images/profile.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/ecommerce/images/geoAutoCompleter.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/ordermgr/images/js/geoAutoCompleter.js" global="true"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -593,7 +588,7 @@ under the License.
 
                 <set field="layoutSettings.javaScripts[+0]" value="/images/prototypejs/controls.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/ecommerce/images/profile.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/ecommerce/images/geoAutoCompleter.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/ordermgr/images/js/geoAutoCompleter.js" global="true"/>
                 <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditShippingAddress.groovy"/>
                 <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditBillingAddress.groovy"/>
                 <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/ViewProfile.groovy"/>
@@ -608,4 +603,25 @@ under the License.
         </section>
     </screen>
 
+    <screen name="AnonContactus">
+        <section>
+            <actions>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="rightbarScreenName" value="rightbar"/>
+                <set field="MainColumnStyle" value="rightonly"/>
+
+                <set field="titleProperty" value="PageTitleLogin"/>
+                <set field="pageHeader" value="${uiLabelMap.CommonContactUs}"/>
+                <set field="headerItem" value="contactus"/>
+                <set field="submitRequest" value="contactsubmit"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <platform-specific><html><html-template location="component://ecommerce/webapp/ecommerce/customer/AnonContactus.ftl"/></html></platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
 </screens>

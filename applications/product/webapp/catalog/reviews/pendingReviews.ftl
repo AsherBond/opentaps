@@ -31,14 +31,14 @@ under the License.
         <#if !pendingReviews?has_content>
             <h3>${uiLabelMap.ProductReviewsNoPendingApproval}</h3>
         <#else>
-            <form method='POST' action='<@ofbizUrl>updateProductReview</@ofbizUrl>' name="selectAllForm">
-                <input type="hidden" name="_useRowSubmit" value="Y">
-                <input type="hidden" name="_checkGlobalScope" value="Y">
-                <input type="hidden" name="statusId" value="">
+            <form method='post' action='<@ofbizUrl>updateProductReview</@ofbizUrl>' name="selectAllForm">
+                <input type="hidden" name="_useRowSubmit" value="Y" />
+                <input type="hidden" name="_checkGlobalScope" value="Y" />
+                <input type="hidden" name="statusId" value="" />
                 <div align="right">
-                    <input type="button" value="${uiLabelMap.CommonUpdate}" onClick="javascript:changeReviewStatus('PRR_PENDING')">
-                    <input type="button" value="${uiLabelMap.ProductPendingReviewUpdateAndApprove}" onClick="javascript:changeReviewStatus('PRR_APPROVED')">
-                    <input type="button" value="${uiLabelMap.CommonDelete}" onClick="javascript:changeReviewStatus('PRR_DELETED')">
+                    <input type="button" value="${uiLabelMap.CommonUpdate}" onclick="javascript:changeReviewStatus('PRR_PENDING')" />
+                    <input type="button" value="${uiLabelMap.ProductPendingReviewUpdateAndApprove}" onclick="javascript:changeReviewStatus('PRR_APPROVED')" />
+                    <input type="button" value="${uiLabelMap.CommonDelete}" onclick="javascript:changeReviewStatus('PRR_DELETED')" />
                 </div>
                 <table cellspacing="0" class="basic-table">
                   <tr class="header-row">
@@ -51,29 +51,35 @@ under the License.
                     <td><b>${uiLabelMap.ProductReviews}</b></td>
                     <td align="right">
                         <span class="label">${uiLabelMap.CommonAll}</span>
-                        <input type="checkbox" name="selectAll" value="${uiLabelMap.CommonY}" onclick="javascript:toggleAll(this, 'selectAllForm');highlightAllRows(this, 'review_tableRow_', 'selectAllForm');">
+                        <input type="checkbox" name="selectAll" value="${uiLabelMap.CommonY}" onclick="javascript:toggleAll(this, 'selectAllForm');highlightAllRows(this, 'review_tableRow_', 'selectAllForm');" />
                     </td>
                   </tr>
                 <#assign rowCount = 0>
                 <#assign rowClass = "2">
                 <#list pendingReviews as review>
+                <#if review.userLoginId?has_content>
                 <#assign postedUserLogin = review.getRelatedOne("UserLogin")>
                 <#assign party = postedUserLogin.getRelatedOne("Party")>
                 <#assign partyTypeId = party.get("partyTypeId")>
                 <#if partyTypeId == "PERSON">
-                	<#assign postedPerson = postedUserLogin.getRelatedOne("Person")>
+                    <#assign postedPerson = postedUserLogin.getRelatedOne("Person")>
                 <#else>
-                	<#assign postedPerson = postedUserLogin.getRelatedOne("PartyGroup")>
+                    <#assign postedPerson = postedUserLogin.getRelatedOne("PartyGroup")>
+                </#if>
                 </#if>
                   <tr id="review_tableRow_${rowCount}" valign="middle"<#if rowClass == "1"> class="alternate-row"</#if>>
                       <td>
-                          <input type="hidden" name="productReviewId_o_${rowCount}" value="${review.productReviewId}">
+                          <input type="hidden" name="productReviewId_o_${rowCount}" value="${review.productReviewId}" />
                           ${review.postedDateTime?if_exists}
                       </td>
-                      <#if postedPerson.firstName?has_content && postedPerson.lastName?has_content>
-                      	<td>${postedPerson.firstName} ${postedPerson.lastName}</td>
+                      <#if postedPerson?has_content>
+                        <#if postedPerson.firstName?has_content && postedPerson.lastName?has_content>
+                            ${postedPerson.firstName} ${postedPerson.lastName}
+                        <#else>
+                            ${postedPerson.groupName}
+                        </#if>
                       <#else>
-                      	<td>${postedPerson.groupName}</td>
+                          <td></td>
                       </#if>
                       <td>
                           <select name='postedAnonymous_o_${rowCount}'>
@@ -83,16 +89,16 @@ under the License.
                               <option value="Y">${uiLabelMap.CommonY}</option>
                           </select>
                       </td>
-                      <td>${review.getRelatedOne("Product").internalName}<br/><a class="buttontext" href="<@ofbizUrl>EditProduct?productId=${review.productId}</@ofbizUrl>">${review.productId}</a></td>
+                      <td>${review.getRelatedOne("Product").internalName?if_exists}<br /><a class="buttontext" href="<@ofbizUrl>EditProduct?productId=${review.productId}</@ofbizUrl>">${review.productId}</a></td>
                       <td>
-                          <input type="text" size='3' name="productRating_o_${rowCount}" value="${review.productRating?if_exists?string}">
+                          <input type="text" size='3' name="productRating_o_${rowCount}" value="${review.productRating?if_exists?string}" />
                       </td>
                       <td>${review.getRelatedOne("StatusItem").get("description", locale)}</td>
                       <td>
                          <textarea name="productReview_o_${rowCount}" rows="5" cols="30" wrap="hard">${review.productReview?if_exists}</textarea>
                       </td>
                       <td align="right">
-                        <input type="checkbox" name="_rowSubmit_o_${rowCount}" value="Y" onclick="javascript:checkToggle(this, 'selectAllForm');highlightRow(this,'review_tableRow_${rowCount}');">
+                        <input type="checkbox" name="_rowSubmit_o_${rowCount}" value="Y" onclick="javascript:checkToggle(this, 'selectAllForm');highlightRow(this,'review_tableRow_${rowCount}');" />
                       </td>
                   </tr>
                 <#assign rowCount = rowCount + 1>
@@ -103,7 +109,7 @@ under the License.
                     <#assign rowClass = "2">
                 </#if>
                 </#list>
-                <input type="hidden" name="_rowCount" value="${rowCount}">
+                <input type="hidden" name="_rowCount" value="${rowCount}" />
                 </table>
             </form>
         </#if>

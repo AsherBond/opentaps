@@ -61,7 +61,8 @@
         </description>
         <attribute name="orderId" type="String" mode="IN" optional="false"/>
         <attribute name="billItems" type="List" mode="IN" optional="false"/>
-        <attribute name="invoiceId" type="String" mode="OUT" optional="true"/>
+        <attribute name="eventDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="invoiceId" type="String" mode="INOUT" optional="true"/>
         <attribute name="invoiceTypeId" type="String" mode="OUT" optional="true"/>
     </service>
 
@@ -108,7 +109,7 @@
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
     </service>
     <service name="deleteInvoiceTerm" engine="simple" default-entity-name="InvoiceTerm" 
-            location="com/opensourcestrategies/financials/invoices/InvoiceServices.xml" invoke="deleteInvoiceTerm" auth="true">
+            location="component://financials/script/com/opensourcestrategies/financials/invoices/InvoiceServices.xml" invoke="deleteInvoiceTerm" auth="true">
         <description>Delete an InvoiceTerm</description>
         <auto-attributes include="pk" mode="IN" optional="true"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
@@ -347,7 +348,7 @@
 
     <!-- redefines the ofbiz service to also allow update invoice when status is INVOICE_READY -->
     <service name="updateInvoice" engine="simple" default-entity-name="Invoice"
-        location="com/opensourcestrategies/financials/invoices/InvoiceServices.xml" invoke="updateInvoice">
+        location="component://financials/script/com/opensourcestrategies/financials/invoices/InvoiceServices.xml" invoke="updateInvoice">
         <description>Update an existing Invoice</description>
         <auto-attributes mode="IN" include="pk" optional="false"/>
         <auto-attributes mode="IN" include="nonpk" optional="true"/>

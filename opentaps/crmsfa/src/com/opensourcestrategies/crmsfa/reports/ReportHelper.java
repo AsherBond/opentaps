@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.opensourcestrategies.crmsfa.cases.UtilCase;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -40,11 +40,11 @@ public final class ReportHelper {
 
     /**
      * Find all the current LEAD statuses except those defined in the DASHBOARD_IGNORED_LEAD_STATUSES list.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return all the current LEAD statuses except those defined in the DASHBOARD_IGNORED_LEAD_STATUSES list
      * @throws GenericEntityException if an error occurs
      */
-    public static List<GenericValue> findLeadStatusesForDashboardReporting(GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findLeadStatusesForDashboardReporting(Delegator delegator) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                                            EntityCondition.makeCondition("statusTypeId", EntityOperator.EQUALS, "PARTY_LEAD_STATUS"),
                                            EntityCondition.makeCondition("statusId", EntityOperator.NOT_IN, DASHBOARD_IGNORED_LEAD_STATUSES));
@@ -54,22 +54,22 @@ public final class ReportHelper {
 
     /**
      * Find all the sales opportunity stages except those defined in the DASHBOARD_IGNORED_SALES_OPPORTUNITY_STAGES list.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return all the sales opportunity stages except those defined in the DASHBOARD_IGNORED_SALES_OPPORTUNITY_STAGES list
      * @throws GenericEntityException if an error occurs
      */
-    public static List<GenericValue> findSalesOpportunityStagesForDashboardReporting(GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findSalesOpportunityStagesForDashboardReporting(Delegator delegator) throws GenericEntityException {
         EntityCondition condition = EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_IN, DASHBOARD_IGNORED_SALES_OPPORTUNITY_STAGES);
         return delegator.findByConditionCache("SalesOpportunityStage", condition, UtilMisc.toList("opportunityStageId", "description"), UtilMisc.toList("sequenceNum"));
     }
 
     /**
      * Find all the case statuses except those defined in the DASHBOARD_IGNORED_CASES_STAGES list.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return all the case statuses except those defined in the DASHBOARD_IGNORED_CASES_STAGES list
      * @throws GenericEntityException if an error occurs
      */
-    public static List<GenericValue> findCasesStagesForDashboardReporting(GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findCasesStagesForDashboardReporting(Delegator delegator) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("statusTypeId", EntityOperator.EQUALS, "CUSTREQ_STTS"),
                 EntityCondition.makeCondition("statusId", EntityOperator.NOT_IN, DASHBOARD_IGNORED_CASES_STAGES));

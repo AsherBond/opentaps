@@ -28,7 +28,7 @@ import javolution.util.FastSet;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -93,7 +93,7 @@ public class PartyRepository extends DomainRepository implements PartyRepository
      * Use this for Repositories which will only access the database via the delegator.
      * @param delegator the delegator
      */
-    public PartyRepository(GenericDelegator delegator) {
+    public PartyRepository(Delegator delegator) {
         super(delegator);
     }
 

@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.sql.XAConnection;
 import javax.transaction.HeuristicMixedException;
@@ -52,6 +53,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericEntityException;
 
 /**
  * <p>Transaction Utility to help with some common transaction tasks
@@ -72,6 +74,54 @@ public class TransactionUtil implements Status {
     private static ThreadLocal<List<RollbackOnlyCause>> setRollbackOnlyCauseSave = new ThreadLocal<List<RollbackOnlyCause>>();
     private static ThreadLocal<Timestamp> transactionStartStamp = new ThreadLocal<Timestamp>();
     private static ThreadLocal<Timestamp> transactionLastNowStamp = new ThreadLocal<Timestamp>();
+
+    public static <V> V doNewTransaction(String ifErrorMessage, Callable<V> callable) throws GenericEntityException {
+        return doNewTransaction(ifErrorMessage, true, callable);
+    }
+
+    public static <V> V doNewTransaction(String ifErrorMessage, boolean printException, Callable<V> callable) throws GenericEntityException {
+        Transaction tx = TransactionUtil.suspend();
+        try {
+            return doTransaction(ifErrorMessage, printException, callable);
+        } finally {
+            TransactionUtil.resume(tx);
+        }
+    }
+
+    public static <V> V doTransaction(String ifErrorMessage, Callable<V> callable) throws GenericEntityException {
+        return doTransaction(ifErrorMessage, true, callable);
+    }
+
+    public static <V> V doTransaction(String ifErrorMessage, boolean printException, Callable<V> callable) throws GenericEntityException {
+        boolean tx = TransactionUtil.begin();
+        Throwable transactionAbortCause = null;
+        try {
+            try {
+                return callable.call();
+            } catch (Throwable t) {
+                while (t.getCause() != null) {
+                    t = t.getCause();
+                }
+                throw t;
+            }
+        } catch (Error e) {
+            transactionAbortCause = e;
+            throw e;
+        } catch (RuntimeException e) {
+            transactionAbortCause = e;
+            throw e;
+        } catch (Throwable t) {
+            transactionAbortCause = t;
+            throw new GenericEntityException(t);
+        } finally {
+            if (transactionAbortCause == null) {
+                TransactionUtil.commit(tx);
+            } else {
+                if (printException) transactionAbortCause.printStackTrace();
+                TransactionUtil.rollback(tx, ifErrorMessage, transactionAbortCause);
+            }
+        }
+    }
 
     /** Begins a transaction in the current thread IF transactions are available; only
      * tries if the current transaction status is ACTIVE, if not active it returns false.
@@ -252,19 +302,13 @@ public class TransactionUtil implements Status {
         }
     }
 
-    /** @deprecated */
-    public static void rollback(boolean beganTransaction) throws GenericTransactionException {
-        Debug.logWarning("WARNING: called rollback without debug/error info; it is recommended to always pass this to make otherwise tricky bugs much easier to track down.", module);
-        rollback(beganTransaction, null, null);
-    }
-
     /** Rolls back transaction in the current thread IF transactions are available
      *  AND if beganTransaction is true; if beganTransaction is not true,
      *  setRollbackOnly is called to insure that the transaction will be rolled back
      */
     public static void rollback(boolean beganTransaction, String causeMessage, Throwable causeThrowable) throws GenericTransactionException {
         if (beganTransaction) {
-            TransactionUtil.rollback();
+            TransactionUtil.rollback(causeThrowable);
         } else {
             TransactionUtil.setRollbackOnly(causeMessage, causeThrowable);
         }
@@ -272,6 +316,11 @@ public class TransactionUtil implements Status {
 
     /** Rolls back transaction in the current thread IF transactions are available */
     public static void rollback() throws GenericTransactionException {
+        rollback(null);
+    }
+
+    /** Rolls back transaction in the current thread IF transactions are available */
+    public static void rollback(Throwable causeThrowable) throws GenericTransactionException {
         UserTransaction ut = TransactionFactory.getUserTransaction();
 
         if (ut != null) {
@@ -281,7 +330,7 @@ public class TransactionUtil implements Status {
 
                 if (status != STATUS_NO_TRANSACTION) {
                     //if (Debug.infoOn()) Thread.dumpStack();
-                    if (Debug.infoOn()) {
+                    if (causeThrowable == null && Debug.infoOn()) {
                         Exception newE = new Exception("Stack Trace");
                         Debug.logError(newE, "[TransactionUtil.rollback]", module);
                     }
@@ -342,7 +391,7 @@ public class TransactionUtil implements Status {
 
     public static Transaction suspend() throws GenericTransactionException {
         try {
-            if (TransactionUtil.getStatus() != TransactionUtil.STATUS_NO_TRANSACTION) {
+            if (TransactionUtil.getStatus() != STATUS_NO_TRANSACTION) {
                 TransactionManager txMgr = TransactionFactory.getTransactionManager();
                 if (txMgr != null) {
                     pushTransactionBeginStackSave(clearTransactionBeginStack());
@@ -366,7 +415,7 @@ public class TransactionUtil implements Status {
         if (parentTx == null) return;
         try {
             TransactionManager txMgr = TransactionFactory.getTransactionManager();
-            if (txMgr != null ) {
+            if (txMgr != null) {
                 setTransactionBeginStack(popTransactionBeginStackSave());
                 setSetRollbackOnlyCause(popSetRollbackOnlyCauseSave());
                 txMgr.resume(parentTx);
@@ -625,7 +674,7 @@ public class TransactionUtil implements Status {
         }
 
         for (Map.Entry<Long, Exception> attbsMapEntry : allThreadsTransactionBeginStack.entrySet()) {
-            Long curThreadId = (Long) attbsMapEntry.getKey();
+            Long curThreadId = attbsMapEntry.getKey();
             Exception transactionBeginStack = attbsMapEntry.getValue();
             List<Exception> txBeginStackList = allThreadsTransactionBeginStackSave.get(curThreadId);
 
@@ -758,6 +807,7 @@ public class TransactionUtil implements Status {
      * Maintain the suspended transactions together with their timestamps
      */
     private static ThreadLocal<Map<Transaction, Timestamp>> suspendedTxStartStamps = new ThreadLocal<Map<Transaction, Timestamp>>() {
+        @Override
         public Map<Transaction, Timestamp> initialValue() {
             return UtilGenerics.checkMap(new ListOrderedMap());
         }

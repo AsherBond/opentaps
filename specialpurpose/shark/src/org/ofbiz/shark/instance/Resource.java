@@ -19,7 +19,7 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.shark.instance;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.base.util.UtilMisc;
@@ -39,7 +39,7 @@ public class Resource extends InstanceEntityObject implements ResourcePersistenc
     protected GenericValue resource = null;
     protected boolean newValue = false;
 
-    protected Resource(EntityPersistentMgr mgr, GenericDelegator delegator, String name) throws PersistenceException {
+    protected Resource(EntityPersistentMgr mgr, Delegator delegator, String name) throws PersistenceException {
         super(mgr, delegator);
         if (this.delegator != null) {
             try {
@@ -57,7 +57,7 @@ public class Resource extends InstanceEntityObject implements ResourcePersistenc
         this.resource = resource;
     }
 
-    public Resource(EntityPersistentMgr mgr, GenericDelegator delegator) {
+    public Resource(EntityPersistentMgr mgr, Delegator delegator) {
         super(mgr, delegator);
         this.newValue = true;
         this.resource = delegator.makeValue(org.ofbiz.shark.SharkConstants.WfResource);

@@ -24,7 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericModelException;
 import org.ofbiz.entity.config.DatasourceInfo;
 import org.ofbiz.entity.model.ModelEntity;
@@ -64,7 +65,7 @@ public abstract class EntityConditionListBase<T extends EntityCondition> extends
         this.operator = null;
     }
 
-    public EntityOperator getOperator() {
+    public EntityJoinOperator getOperator() {
         return this.operator;
     }
 
@@ -80,10 +81,12 @@ public abstract class EntityConditionListBase<T extends EntityCondition> extends
         return this.conditionList.iterator();
     }
 
+    @Override
     public void visit(EntityConditionVisitor visitor) {
         visitor.acceptEntityJoinOperator(operator, conditionList);
     }
 
+    @Override
     public String makeWhereString(ModelEntity modelEntity, List<EntityConditionParam> entityConditionParams, DatasourceInfo datasourceInfo) {
         // if (Debug.verboseOn()) Debug.logVerbose("makeWhereString for entity " + modelEntity.getEntityName(), module);
         StringBuilder sql = new StringBuilder();
@@ -91,28 +94,33 @@ public abstract class EntityConditionListBase<T extends EntityCondition> extends
         return sql.toString();
     }
 
+    @Override
     public void checkCondition(ModelEntity modelEntity) throws GenericModelException {
         // if (Debug.verboseOn()) Debug.logVerbose("checkCondition for entity " + modelEntity.getEntityName(), module);
         operator.validateSql(modelEntity, conditionList);
     }
 
-    public boolean mapMatches(GenericDelegator delegator, Map<String, ? extends Object> map) {
+    @Override
+    public boolean mapMatches(Delegator delegator, Map<String, ? extends Object> map) {
         return operator.mapMatches(delegator, map, conditionList);
     }
 
+    @Override
     public EntityCondition freeze() {
         return operator.freeze(conditionList);
     }
 
-    public void encryptConditionFields(ModelEntity modelEntity, GenericDelegator delegator) {
+    @Override
+    public void encryptConditionFields(ModelEntity modelEntity, Delegator delegator) {
         for (T cond: this.conditionList) {
             cond.encryptConditionFields(modelEntity, delegator);
         }
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof EntityConditionListBase)) return false;
-        EntityConditionListBase other = (EntityConditionListBase) obj;
+        EntityConditionListBase<?> other = UtilGenerics.cast(obj);
 
         boolean isEqual = conditionList.equals(other.conditionList) && operator.equals(other.operator);
         //if (!isEqual) {
@@ -123,6 +131,7 @@ public abstract class EntityConditionListBase<T extends EntityCondition> extends
         return isEqual;
     }
 
+    @Override
     public int hashCode() {
         return conditionList.hashCode() + operator.hashCode();
     }

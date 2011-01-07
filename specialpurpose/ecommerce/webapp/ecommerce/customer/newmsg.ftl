@@ -19,19 +19,22 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <div class="screenlet">
-    <div class="screenlet-header">
+    <div class="screenlet-title-bar">
         <div class="boxlink">
             <#if showMessageLinks?default("false")?upper_case == "TRUE">
                 <a href="<@ofbizUrl>messagelist</@ofbizUrl>" class="submenutextright">${uiLabelMap.EcommerceViewList}</a>
             </#if>
         </div>
-        <div class="boxhead">&nbsp;${pageHeader}</div>
+        <div class="h3">${pageHeader}</div>
     </div>
     <div class="screenlet-body">
       <form name="contactus" method="post" action="<@ofbizUrl>${submitRequest}</@ofbizUrl>" style="margin: 0;">
         <input type="hidden" name="partyIdFrom" value="${userLogin.partyId}"/>
         <input type="hidden" name="contactMechTypeId" value="WEB_ADDRESS"/>
         <input type="hidden" name="communicationEventTypeId" value="WEB_SITE_COMMUNICATI"/>
+        <#if productStore?has_content>
+          <input type="hidden" name="partyIdTo" value="${productStore.payToPartyId?if_exists}"/>
+        </#if>
         <input type="hidden" name="note" value="${Static["org.ofbiz.base.util.UtilHttp"].getFullRequestUrl(request).toString()}"/>
         <#if message?has_content>
           <input type="hidden" name="parentCommEventId" value="${communicationEvent.communicationEventId}"/>

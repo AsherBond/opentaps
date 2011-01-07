@@ -250,7 +250,7 @@ under the License.
     </service>
 
     <service name="issueProductionRunTask" engine="simple"
-                location="com/opensourcestrategies/warehouse/manufacturing/ProductionRunServices.xml" invoke="issueProductionRunTask" auth="false">
+                location="component://warehouse/script/com/opensourcestrategies/warehouse/manufacturing/ProductionRunServices.xml" invoke="issueProductionRunTask" auth="false">
         <description>
             Issues the Inventory for a Production Run Task.
             Note that this skips the normal inventory reservation process.
@@ -262,7 +262,7 @@ under the License.
         <attribute name="failIfItemsAreNotOnHand" type="String" mode="IN" optional="true"/>
     </service>
     <service name="issueProductionRunTaskComponent" engine="simple"
-                location="com/opensourcestrategies/warehouse/manufacturing/ProductionRunServices.xml" invoke="issueProductionRunTaskComponent" auth="false">
+                location="component://warehouse/script/com/opensourcestrategies/warehouse/manufacturing/ProductionRunServices.xml" invoke="issueProductionRunTaskComponent" auth="false">
         <description>
             Issues the Inventory for a Production Run Task Component. For more info see the issueProductionRunTask service.
         </description>

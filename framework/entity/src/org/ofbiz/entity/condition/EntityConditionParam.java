@@ -49,6 +49,7 @@ public class EntityConditionParam implements Serializable {
         return fieldValue;
     }
 
+    @Override
     public String toString() {
         return modelField.getColName() + "=" + fieldValue.toString();
     }

@@ -19,34 +19,19 @@ under the License.
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.bi.util;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-
-import javolution.util.FastList;
 import javolution.util.FastMap;
 
-import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.GeneralException;
-import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.util.EntityUtil;
-
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
-import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 
 public class DimensionServices {
@@ -55,9 +40,7 @@ public class DimensionServices {
 
     public static Map<String, Object> getDimensionIdFromNaturalKey(DispatchContext ctx, Map<String, ? extends Object> context) {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        GenericDelegator delegator = ctx.getDelegator();
-        LocalDispatcher dispatcher = ctx.getDispatcher();
-
+        Delegator delegator = ctx.getDelegator();
         String dimensionEntityName = (String) context.get("dimensionEntityName");
         Map<String, ? extends Object> naturalKeyFields = UtilGenerics.cast(context.get("naturalKeyFields"));
         GenericValue lastDimensionValue = null;
@@ -74,9 +57,7 @@ public class DimensionServices {
     }
 
     public static Map<String, Object> storeGenericDimension(DispatchContext ctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = ctx.getDelegator();
-        LocalDispatcher dispatcher = ctx.getDispatcher();
-
+        Delegator delegator = ctx.getDelegator();
         GenericValue dimensionValue = (GenericValue) context.get("dimensionValue");
         List<String> naturalKeyFields = UtilGenerics.checkList(context.get("naturalKeyFields"), String.class);
         String updateMode = (String) context.get("updateMode");

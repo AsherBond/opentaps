@@ -25,6 +25,7 @@ import org.opentaps.base.entities.OrderAdjustmentBilling;
 import org.opentaps.base.entities.OrderItemAssoc;
 import org.opentaps.base.entities.OrderItemBilling;
 import org.opentaps.base.entities.OrderItemPriceInfo;
+import org.opentaps.base.entities.OrderItemShipGroupAssoc;
 import org.opentaps.base.entities.OrderItemType;
 import org.opentaps.base.entities.OrderRequirementCommitment;
 import org.opentaps.base.entities.OrderStatus;
@@ -344,6 +345,29 @@ public class OrderItem extends org.opentaps.base.entities.OrderItem {
     }
 
     /**
+     * Gets the actual quantity ordered for this order item in the given ship group.
+     * This quantity is (item quantity - cancelled quantity).
+     * @param shipGroup the ship group
+     * @return the actual quantity ordered
+     * @throws RepositoryException if an error occurs
+     */
+    public BigDecimal getOrderedQuantity(OrderItemShipGroup shipGroup) throws RepositoryException {
+        BigDecimal qty = BigDecimal.ZERO;
+        if (!isCancelled()) {
+            for (OrderItemShipGroupAssoc assoc : shipGroup.getOrderItemShipGroupAssocs()) {
+                if (getOrderItemSeqId().equals(assoc.getOrderItemSeqId())) {
+                    qty = qty.add(assoc.getQuantity());
+                    BigDecimal canceled = assoc.getCancelQuantity();
+                    if (canceled != null) {
+                        qty = qty.subtract(canceled);
+                    }
+                }
+            }
+        }
+        return qty;
+    }
+
+    /**
      * Gets the number of reserved items.
      * @return the number of reserved items
      * @throws RepositoryException if an error occurs
@@ -424,6 +448,25 @@ public class OrderItem extends org.opentaps.base.entities.OrderItem {
         }
         shippedQuantity = result;
         return result;
+    }
+
+    /**
+     * Gets the number of shipped items in the given ship group.
+     * @param shipGroup the ship group
+     * @return  the number of shipped items
+     * @throws RepositoryException if an error occurs
+     */
+    public BigDecimal getShippedQuantity(OrderItemShipGroup shipGroup) throws RepositoryException {
+        BigDecimal qty = BigDecimal.ZERO;
+        for (ItemIssuance issue : getItemIssuances()) {
+            if (shipGroup.getShipGroupSeqId().equals(issue.getShipGroupSeqId())) {
+                BigDecimal issueQty = issue.getQuantity();
+                if (issueQty != null) {
+                    qty = qty.add(issueQty);
+                }
+            }
+        }
+        return qty;
     }
 
     /**

@@ -23,6 +23,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.entity.GenericValue;
@@ -30,6 +31,7 @@ import org.ofbiz.minilang.SimpleMethod;
 import org.ofbiz.minilang.method.MethodContext;
 import org.ofbiz.minilang.method.MethodOperation;
 import org.ofbiz.security.Security;
+import org.ofbiz.security.authz.Authorization;
 import org.w3c.dom.Element;
 
 /**
@@ -67,6 +69,7 @@ public class IfHasPermission extends MethodOperation {
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         // if conditions fails, always return true; if a sub-op returns false
         // return false and stop, otherwise return true
@@ -81,15 +84,16 @@ public class IfHasPermission extends MethodOperation {
             String permission = methodContext.expandString(permissionExdr);
             String action = methodContext.expandString(actionExdr);
 
+            Authorization authz = methodContext.getAuthz();
             Security security = methodContext.getSecurity();
-            if (action != null && action.length() > 0) {
+            if (UtilValidate.isNotEmpty(action)) {
                 // run hasEntityPermission
                 if (security.hasEntityPermission(permission, action, userLogin)) {
                     runSubOps = true;
                 }
             } else {
                 // run hasPermission
-                if (security.hasPermission(permission, userLogin)) {
+                if (authz.hasPermission(userLogin.getString("userLoginId"), permission, methodContext.getEnvMap())) {
                     runSubOps = true;
                 }
             }
@@ -113,9 +117,11 @@ public class IfHasPermission extends MethodOperation {
         return allSubOps;
     }
 
+    @Override
     public String rawString() {
         return "<if-has-permission permission=\"" + this.permissionExdr + "\" action=\"" + this.actionExdr + "\"/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

@@ -19,10 +19,8 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.webslinger;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -30,11 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.UtilHttp;
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.jdbc.SqlJdbcUtil;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
 import org.ofbiz.entity.model.ModelFieldType;
@@ -54,8 +49,8 @@ public class EntityHttpUtil {
     }
 
     public static GenericValue makeValidValue(String entityName, boolean includePks, HttpServletRequest request) throws GeneralException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
-        GenericValue value = delegator.makeValue(entityName, (Map) null);
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        GenericValue value = delegator.makeValue(entityName);
         ModelEntity model = value.getModelEntity();
         Iterator<ModelField> it = includePks ? model.getFieldsIterator() : model.getNopksIterator();
         Locale locale = UtilHttp.getLocale(request);

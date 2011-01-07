@@ -27,6 +27,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilJ2eeCompat;
+import org.ofbiz.base.util.UtilValidate;
 
 /**
  * FormatTag - JSP Tag to format numbers and dates.
@@ -54,6 +55,7 @@ public class FormatTag extends BodyTagSupport {
         this.defaultStr = defaultStr;
     }
 
+    @Override
     public int doAfterBody() throws JspException {
         NumberFormat nf = null;
         DateFormat df = null;
@@ -61,7 +63,7 @@ public class FormatTag extends BodyTagSupport {
         String value = body.getString();
         body.clearBody();
 
-        if (value == null || value.length() == 0)
+        if (UtilValidate.isEmpty(value))
             return SKIP_BODY;
 
         if (type.charAt(0) == 'C' || type.charAt(0) == 'c')

@@ -20,7 +20,8 @@ package org.opentaps.tests.crmsfa;
 
 import org.ofbiz.base.util.UtilMisc;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
@@ -51,7 +52,7 @@ public class SecurityTests extends TestCase {
 
     public static final String module = SecurityTests.class.getName();
     public static final String DELEGATOR = "test";
-    private GenericDelegator delegator = null;
+    private Delegator delegator = null;
     private Security security = null;
 
     public SecurityTests (String name) {
@@ -59,7 +60,7 @@ public class SecurityTests extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        this.delegator = GenericDelegator.getGenericDelegator(DELEGATOR);
+        this.delegator = DelegatorFactory.getDelegator(DELEGATOR);
         this.security = SecurityFactory.getInstance(delegator);
     }
 

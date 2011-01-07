@@ -26,7 +26,7 @@ under the License.
     <!-- ========================================================= -->
     <title>Entity of an Open For Business Project Component</title>
     <description>None</description>
-    <copyright>Copyright 2001-2008 The Apache Software Foundation</copyright>
+    <copyright>Copyright 2001-2009 The Apache Software Foundation</copyright>
     <author>None</author>
     <version>1.0</version>
 
@@ -454,6 +454,7 @@ under the License.
         <field name="finAccountTransTypeId" type="id-ne"></field>
         <field name="finAccountId" type="id"></field>
         <field name="partyId" type="id"></field>
+        <field name="glReconciliationId" type="id"></field>
         <field name="transactionDate" type="date-time"></field>
         <field name="entryDate" type="date-time"></field>
         <field name="amount" type="currency-amount"></field>
@@ -463,6 +464,7 @@ under the License.
         <field name="performedByPartyId" type="id"></field>
         <field name="reasonEnumId" type="id"></field>
         <field name="comments" type="comment"></field>
+        <field name="statusId" type="id"></field>
         <prim-key field="finAccountTransId"/>
         <relation type="one" fk-name="FINACCT_TX_TYPE" rel-entity-name="FinAccountTransType">
             <key-map field-name="finAccountTransTypeId"/>
@@ -488,6 +490,12 @@ under the License.
         </relation>
         <relation type="one" fk-name="FIN_ACT_REAS_ENUM" title="Reason" rel-entity-name="Enumeration">
             <key-map field-name="reasonEnumId" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" fk-name="FIN_ACT_TX_STI" rel-entity-name="StatusItem">
+            <key-map field-name="statusId"/>
+        </relation>
+        <relation type="one" fk-name="FIN_ACT_TX_GLREC" rel-entity-name="GlReconciliation">
+            <key-map field-name="glReconciliationId"/>
         </relation>
     </entity>
     <entity entity-name="FinAccountTransAttribute" package-name="org.ofbiz.accounting.finaccount" title="Financial Account Transaction Attribute Entity">
@@ -606,14 +614,6 @@ under the License.
     <!-- org.ofbiz.accounting.fixedasset -->
     <!-- ========================================================= -->
 
-    <entity entity-name="DepreciationMethod"
-            package-name="org.ofbiz.accounting.fixedasset"
-            title="Depreciation Method Entity">
-      <field name="depreciationMethodId" type="id-ne"></field>
-      <field name="description" type="description"></field>
-      <field name="formula" type="long-varchar"></field>
-      <prim-key field="depreciationMethodId"/>
-    </entity>
     <entity entity-name="FixedAsset" package-name="org.ofbiz.accounting.fixedasset" title="Fixed Asset Entity">
         <field name="fixedAssetId" type="id-ne"></field>
         <field name="fixedAssetTypeId" type="id"></field>
@@ -897,6 +897,46 @@ under the License.
       <field name="description" type="description"></field>
       <prim-key field="fixedAssetProductTypeId"/>
     </entity>
+    <entity entity-name="FixedAssetTypeGlAccount"
+            package-name="org.ofbiz.accounting.fixedasset"
+            title="Gl Account Mapping For Fixed Asset Or Fixed Asset Types">
+      <field name="fixedAssetTypeId" type="id-ne"><description>The fixed asset type for the mappings. This field can be set to _NA_ in order to define a mapping for all types or for a specific asset (specified by the id in the fixedAssetId field).</description></field>
+      <field name="fixedAssetId" type="id-ne"><description>The fixed asset id for the mappings. This field can be set to _NA_ in order to define a mapping for all assets of a given type (specified by the id in the fixedAssetTypeId field).</description></field>
+      <field name="organizationPartyId" type="id-ne"></field>
+      <field name="assetGlAccountId" type="id"><description>The (debit) account for the initial asset value (purchase cost)</description></field>
+      <field name="accDepGlAccountId" type="id"><description>The (credit) account for the accumulated depreciation</description></field>
+      <field name="depGlAccountId" type="id"><description>The (debit) account for the depreciation expense (matches the accDepGlAccountId)</description></field>
+      <field name="profitGlAccountId" type="id"><description>The (credit) account for the eventual profit derived from the sale of the asset</description></field>
+      <field name="lossGlAccountId" type="id"><description>The (debit) account for the eventual loss derived from the sale of the asset</description></field>
+      <prim-key field="fixedAssetTypeId"/>
+      <prim-key field="fixedAssetId"/>
+      <prim-key field="organizationPartyId"/>
+      <relation type="one-nofk" rel-entity-name="FixedAssetType">
+        <key-map field-name="fixedAssetTypeId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="FixedAsset">
+        <key-map field-name="fixedAssetId"/>
+      </relation>
+      <relation type="one" fk-name="FATGL_OP" rel-entity-name="Party">
+        <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+      </relation>
+      <relation type="one" fk-name="FATGL_AGL" title="Asset" rel-entity-name="GlAccount">
+        <key-map field-name="assetGlAccountId" rel-field-name="glAccountId"/>
+      </relation>
+      <relation type="one" fk-name="FATGL_ACCDGL" title="AccumulatedDepreciation" rel-entity-name="GlAccount">
+        <key-map field-name="accDepGlAccountId" rel-field-name="glAccountId"/>
+      </relation>
+      <relation type="one" fk-name="FATGL_DGL" title="Depreciation" rel-entity-name="GlAccount">
+        <key-map field-name="depGlAccountId" rel-field-name="glAccountId"/>
+      </relation>
+      <relation type="one" fk-name="FATGL_PGL" title="Profit" rel-entity-name="GlAccount">
+        <key-map field-name="profitGlAccountId" rel-field-name="glAccountId"/>
+      </relation>
+      <relation type="one" fk-name="FATGL_LGL" title="Loss" rel-entity-name="GlAccount">
+        <key-map field-name="lossGlAccountId" rel-field-name="glAccountId"/>
+      </relation>
+    </entity>
+
     <entity entity-name="FixedAssetRegistration" package-name="org.ofbiz.accounting.fixedasset" title="Fixed Asset Registration Entity">
         <field name="fixedAssetId" type="id-ne"></field>
         <field name="fromDate" type="date-time"></field>
@@ -1264,6 +1304,59 @@ under the License.
             <key-map field-name="salesOpportunityId"/>
       </relation>
     </entity>
+
+    <entity entity-name="InvoiceItemAssoc"
+            package-name="org.ofbiz.accounting.invoice"
+            title="Invoice Item Association Entity">
+      <field name="invoiceIdFrom" type="id-ne"></field>
+      <field name="invoiceItemSeqIdFrom" type="id-ne"></field>
+      <field name="invoiceIdTo" type="id-ne"></field>
+      <field name="invoiceItemSeqIdTo" type="id-ne"></field>
+      <field name="invoiceItemAssocTypeId" type="id-ne"></field>
+      <field name="fromDate" type="date-time"></field>
+      <field name="thruDate" type="date-time"></field>
+      <field name="partyIdFrom" type="id"></field>
+      <field name="partyIdTo" type="id"></field>
+      <field name="quantity" type="fixed-point"></field>
+      <field name="amount" type="currency-amount"></field>
+      <prim-key field="invoiceIdFrom"/>
+      <prim-key field="invoiceItemSeqIdFrom"/>
+      <prim-key field="invoiceIdTo"/>
+      <prim-key field="invoiceItemSeqIdTo"/>
+      <prim-key field="invoiceItemAssocTypeId"/>
+      <prim-key field="fromDate"/>
+      <relation type="one" fk-name="INITMASCTYP_IIASC" rel-entity-name="InvoiceItemAssocType">
+        <key-map field-name="invoiceItemAssocTypeId"/>
+      </relation>
+      <relation type="one" fk-name="INITMASC_FIITM" title="From" rel-entity-name="InvoiceItem">
+        <key-map field-name="invoiceIdFrom" rel-field-name="invoiceId"/>
+        <key-map field-name="invoiceItemSeqIdFrom" rel-field-name="invoiceItemSeqId"/>
+      </relation>
+      <relation type="one" fk-name="INITMASC_TIITM" title="To" rel-entity-name="InvoiceItem">
+        <key-map field-name="invoiceIdTo" rel-field-name="invoiceId"/>
+        <key-map field-name="invoiceItemSeqIdTo" rel-field-name="invoiceItemSeqId"/>
+      </relation>
+      <relation type="one-nofk" title="From" rel-entity-name="Party">
+        <key-map field-name="partyIdFrom" rel-field-name="partyId"/>
+      </relation>
+      <relation type="one-nofk" title="To" rel-entity-name="Party">
+        <key-map field-name="partyIdTo" rel-field-name="partyId"/>
+      </relation>
+    </entity>
+
+    <entity entity-name="InvoiceItemAssocType"
+            package-name="org.ofbiz.accounting.invoice"
+            title="Invoice Item Assoc Type Entity">
+      <field name="invoiceItemAssocTypeId" type="id-ne"></field>
+      <field name="parentTypeId" type="id-ne"></field>
+      <field name="hasTable" type="indicator"></field>
+      <field name="description" type="description"></field>
+      <prim-key field="invoiceItemAssocTypeId"/>
+      <relation type="one" fk-name="INITMASCTYP_PRNT" title="Parent" rel-entity-name="InvoiceItemAssocType">
+        <key-map field-name="parentTypeId" rel-field-name="invoiceItemAssocTypeId"/>
+      </relation>
+    </entity>
+
     <entity entity-name="InvoiceItemAttribute"
             package-name="org.ofbiz.accounting.invoice"
             title="Invoice Item Attribute Entity">
@@ -1482,15 +1575,16 @@ under the License.
     <member-entity entity-alias="INV" entity-name="Invoice"/>
     <member-entity entity-alias="IVT" entity-name="InvoiceType"/>
     <alias-all entity-alias="INV"/>
-    <alias-all entity-alias="IVT">
-      <exclude field="invoiceTypeId"/>
-      <exclude field="description"/>
-    </alias-all>
+    <alias name="parentTypeId" entity-alias="IVT"></alias>
+    <alias name="invoiceTypeDesc" entity-alias="IVT" field="description"></alias>
     <view-link entity-alias="INV" rel-entity-alias="IVT">
       <key-map field-name="invoiceTypeId"/>
     </view-link>
     <relation type="many" rel-entity-name="InvoiceItem">
       <key-map field-name="invoiceId"/>
+    </relation>
+    <relation type="one-nofk" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
     </relation>
     <relation type="many" rel-entity-name="PaymentApplication">
       <key-map field-name="invoiceId"/>
@@ -1500,7 +1594,36 @@ under the License.
     </relation>
   </view-entity>
 
+    <view-entity entity-name="InvoiceAndRole" package-name="org.ofbiz.accounting.invoice">
+        <member-entity entity-alias="INV" entity-name="Invoice"/>
+        <member-entity entity-alias="INR" entity-name="InvoiceRole"/>
+        <alias-all entity-alias="INV"/>
+        <alias name="invoiceRolePartyId" entity-alias="INR" field="partyId"/>
+        <alias name="invoiceRoleTypeId" entity-alias="INR" field="roleTypeId"/>
+        <view-link entity-alias="INV" rel-entity-alias="INR" rel-optional="true">
+            <key-map field-name="invoiceId"/>
+        </view-link>
+    </view-entity>
 
+    <view-entity entity-name="InvoiceItemAndAssocProduct" package-name="org.ofbiz.accounting.invoice">
+        <member-entity entity-alias="INTM" entity-name="InvoiceItem"/>
+        <member-entity entity-alias="IIA" entity-name="InvoiceItemAssoc"/>
+        <member-entity entity-alias="PROD" entity-name="Product"/>
+        <alias-all entity-alias="IIA">
+            <exclude field="amount"/>
+        </alias-all>
+        <alias name="termAmount" field="amount" entity-alias="IIA"/>
+        <alias name="productId" entity-alias="PROD"/>
+        <alias name="productName" entity-alias="PROD"/>
+        <alias name="amount" entity-alias="INTM"/>
+        <view-link entity-alias="INTM" rel-entity-alias="IIA" rel-optional="false">
+            <key-map field-name="invoiceId" rel-field-name="invoiceIdFrom"/>
+            <key-map field-name="invoiceItemSeqId" rel-field-name="invoiceItemSeqIdFrom"/>
+        </view-link>
+        <view-link entity-alias="INTM" rel-entity-alias="PROD" rel-optional="false">
+            <key-map field-name="productId"/>
+        </view-link>
+    </view-entity>
   <!-- ========================================================= -->
   <!-- org.ofbiz.accounting.ledger -->
   <!-- ========================================================= -->
@@ -1620,6 +1743,7 @@ under the License.
       <field name="theirPartyId" type="id"></field>
       <field name="productId" type="id"></field>
       <field name="theirProductId" type="id"></field>
+      <field name="inventoryItemId" type="id"></field>
       <field name="glAccountTypeId" type="id"></field>
       <field name="glAccountId" type="id-ne"></field>
       <field name="organizationPartyId" type="id-ne"></field>
@@ -1647,6 +1771,9 @@ under the License.
       </relation>
       <relation type="one" fk-name="ACCTTXENT_ACTX" rel-entity-name="AcctgTrans">
         <key-map field-name="acctgTransId"/>
+      </relation>
+      <relation type="one" fk-name="ACCTTXENT_INVITEM" rel-entity-name="InventoryItem">
+        <key-map field-name="inventoryItemId"/>
       </relation>
       <relation type="one" fk-name="ACCTTXENT_PARTY" rel-entity-name="Party">
         <key-map field-name="partyId"/>
@@ -1698,6 +1825,7 @@ under the License.
       <alias entity-alias="ATR" name="receiptId"/>
       <alias entity-alias="ATR" name="inventoryItemId"/>
       <alias entity-alias="ATR" name="workEffortId"/>
+      <alias entity-alias="ATR" name="fixedAssetId"/>
       <alias entity-alias="ATR" name="physicalInventoryId"/>
       <alias entity-alias="ATE" name="acctgTransId"/>
       <alias entity-alias="ATE" name="acctgTransEntrySeqId"/>
@@ -1706,6 +1834,8 @@ under the License.
       <alias entity-alias="ATE" name="debitCreditFlag"/>
       <alias entity-alias="ATE" name="amount"/>
       <alias entity-alias="ATE" name="currencyUomId"/>
+      <alias entity-alias="ATE" name="origAmount"/>
+      <alias entity-alias="ATE" name="origCurrencyUomId"/>
       <alias entity-alias="ATE" name="organizationPartyId"/>
       <alias entity-alias="GLA" name="glAccountTypeId"/>
       <alias entity-alias="GLA" name="accountCode"/>
@@ -1720,10 +1850,10 @@ under the License.
       <view-link entity-alias="ATR" rel-entity-alias="ATT">
         <key-map field-name="acctgTransTypeId"/>
       </view-link>
-      <view-link entity-alias="ATE" rel-entity-alias="GLA">
+      <view-link entity-alias="ATE" rel-entity-alias="GLA" rel-optional="true">
         <key-map field-name="glAccountId"/>
       </view-link>
-      <view-link entity-alias="GLA" rel-entity-alias="GLAC">
+      <view-link entity-alias="GLA" rel-entity-alias="GLAC" rel-optional="true">
         <key-map field-name="glAccountClassId"/>
       </view-link>
       <relation type="one" fk-name="ATAE_GLACT" rel-entity-name="GlAccount">
@@ -1746,26 +1876,29 @@ under the License.
       </relation>
     </view-entity>
     -->
-    <view-entity entity-name="AcctgTransEntryProdSums"
+    <view-entity entity-name="AcctgTransEntrySums"
             package-name="org.ofbiz.accounting.ledger"
-            title="Sum of AcctgTransEntry entity amounts, grouped by glAccountId, productId, debitCreditFlag">
+            title="Sum of AcctgTransEntry entity amounts grouped by glAccountId, debitCreditFlag">
       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
       <member-entity entity-alias="ACT" entity-name="AcctgTrans"/>
       <member-entity entity-alias="GLA" entity-name="GlAccount"/>
-      <alias entity-alias="ATE" name="organizationPartyId" group-by="true"/>
-      <alias entity-alias="ATE" name="productId" group-by="true"/>
+      <alias entity-alias="ATE" name="glAccountId" group-by="true"/>
+      <alias entity-alias="GLA" name="glAccountTypeId" group-by="true"/>
+      <alias entity-alias="GLA" name="glAccountClassId" group-by="true"/>
+      <alias entity-alias="GLA" name="accountName" group-by="true"/>
+      <alias entity-alias="GLA" name="accountCode" group-by="true"/>
+      <alias entity-alias="ACT" name="glFiscalTypeId" group-by="true"/>
+      <alias entity-alias="ACT" name="acctgTransTypeId" group-by="false"/>
       <alias entity-alias="ATE" name="debitCreditFlag" group-by="true"/>
       <alias entity-alias="ATE" name="amount" function="sum"/>
-      <alias entity-alias="ATE" name="glAccountId" group-by="false"/>
-      <alias entity-alias="GLA" name="glAccountTypeId" group-by="true"/> <!-- so we can select by type of account -->
-      <alias entity-alias="ACT" name="isPosted" group-by="false"/> <!-- so we can select by posted status -->
-      <alias entity-alias="ACT" name="glFiscalTypeId" group-by="true"/>
+      <alias entity-alias="ATE" name="organizationPartyId" group-by="false"/>
+      <alias entity-alias="ACT" name="isPosted" group-by="false"/>
       <alias entity-alias="ACT" name="transactionDate" group-by="false"/> <!-- so we can select the sum by date -->
-      <view-link entity-alias="ATE" rel-entity-alias="GLA">
-        <key-map field-name="glAccountId"/>
-      </view-link>
       <view-link entity-alias="ATE" rel-entity-alias="ACT">
         <key-map field-name="acctgTransId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="GLA">
+        <key-map field-name="glAccountId"/>
       </view-link>
     </view-entity>
     <entity entity-name="AcctgTransEntryType"
@@ -1812,8 +1945,8 @@ under the License.
     </entity>
     <entity entity-name="GlAccount"
             package-name="org.ofbiz.accounting.ledger"
-            default-resource-name="ChartOfAccountsEntityLabels"
             title="General Ledger Account Entity">
+      <!-- default-resource-name="ChartOfAccountsEntityLabels"   <= this does not exist yet and his blocking LookupGlAccount   -->
       <field name="glAccountId" type="id-ne"></field>
       <field name="glAccountTypeId" type="id"></field>
       <field name="glAccountClassId" type="id"></field>
@@ -1824,6 +1957,7 @@ under the License.
       <field name="accountName" type="name"></field>
       <field name="description" type="description"></field>
       <field name="productId" type="id"></field>
+      <field name="externalId" type="id"><description>id of the account in an external system where the accounts are imported/exported</description></field>
       <field name="postedBalance" type="currency-amount"></field>
       <prim-key field="glAccountId"/>
       <relation type="one" fk-name="GLACCT_TYPE" rel-entity-name="GlAccountType">
@@ -1938,6 +2072,28 @@ under the License.
         <key-map field-name="glAccountClassId"/>
       </relation>
       <relation type="one" fk-name="GLAAH_GLAH" rel-entity-name="GlAccountHistory">
+        <key-map field-name="glAccountId"/>
+        <key-map field-name="organizationPartyId"/>
+        <key-map field-name="customTimePeriodId"/>
+      </relation>
+    </view-entity>
+    <view-entity entity-name="GlAccountAndHistoryTotals"
+            package-name="org.ofbiz.accounting.ledger"
+            title="View of GL Account and its History totals">
+      <member-entity entity-alias="GLA" entity-name="GlAccount"/>
+      <member-entity entity-alias="GLAH" entity-name="GlAccountHistory"/>
+      <alias-all entity-alias="GLA" group-by="true"/>
+      <alias-all entity-alias="GLAH" group-by="true"/>
+      <alias entity-alias="GLAH" name="totalPostedDebits" field="postedDebits" function="sum"/>
+      <alias entity-alias="GLAH" name="totalPostedCredits" field="postedCredits" function="sum"/>
+      <alias entity-alias="GLAH" name="totalEndingBalance" field="endingBalance" function="sum"/>
+      <view-link entity-alias="GLA" rel-entity-alias="GLAH">
+        <key-map field-name="glAccountId"/>
+      </view-link>
+      <relation type="one" fk-name="GLAAHT_GLACT" rel-entity-name="GlAccount">
+        <key-map field-name="glAccountId"/>
+      </relation>
+      <relation type="one" fk-name="GLAAHT_GLAH" rel-entity-name="GlAccountHistory">
         <key-map field-name="glAccountId"/>
         <key-map field-name="organizationPartyId"/>
         <key-map field-name="customTimePeriodId"/>
@@ -2094,8 +2250,10 @@ under the License.
       <field name="createdByUserLogin" type="id-vlong"></field>
       <field name="lastModifiedByUserLogin" type="id-vlong"></field>
       <field name="glAccountId" type="id-ne"></field>
+      <field name="statusId" type="id-ne"></field>
       <field name="organizationPartyId" type="id-ne"></field>
       <field name="reconciledBalance" type="currency-amount"></field>
+      <field name="openingBalance" type="currency-amount"></field>
       <field name="reconciledDate" type="date-time"></field>
       <prim-key field="glReconciliationId"/>
       <relation type="one" fk-name="GLREC_GLACCT" rel-entity-name="GlAccount">
@@ -2103,6 +2261,9 @@ under the License.
       </relation>
       <relation type="one" fk-name="GLREC_GLPARTY" rel-entity-name="Party">
         <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+      </relation>
+      <relation type="one" fk-name="GLREC_STI" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
       </relation>
     </entity>
     <entity entity-name="GlReconciliationEntry"
@@ -2640,6 +2801,48 @@ under the License.
         <key-map field-name="overrideGlAccountId" rel-field-name="glAccountId"/>
       </relation>
     </entity>
+    <view-entity entity-name="PaymentAndTypePartyNameView"
+      package-name="org.ofbiz.accounting.payment"
+      title="Payment PaymentType PaymentMethodType StatusItem and Party Name View Entity">
+      <member-entity entity-alias="PY" entity-name="Payment"/>
+      <member-entity entity-alias="FPNV" entity-name="PartyNameView"/>
+      <member-entity entity-alias="TPNV" entity-name="PartyNameView"/>
+      <member-entity entity-alias="TY" entity-name="PaymentType"/>
+      <member-entity entity-alias="PMT" entity-name="PaymentMethodType"/>
+      <member-entity entity-alias="SI" entity-name="StatusItem"/>
+      <alias-all entity-alias="PY"/>
+      <alias name="partyFromFirstName" entity-alias="FPNV" field="firstName"/>
+      <alias name="partyFromLastName" entity-alias="FPNV" field="lastName"/>
+      <alias name="partyFromGroupName" entity-alias="FPNV" field="groupName"/>
+      <alias name="partyToFirstName" entity-alias="TPNV" field="firstName"/>
+      <alias name="partyToLastName" entity-alias="TPNV" field="lastName"/>
+      <alias name="partyToGroupName" entity-alias="TPNV" field="groupName"/>
+      <alias name="paymentTypeDesc" entity-alias="TY" field="description"/>
+      <alias name="parentPaymentTypeId" entity-alias="TY" field="parentTypeId"/>
+      <alias name="statusDesc" entity-alias="SI" field="description"/>
+      <alias name="paymentMethodTypeDesc" entity-alias="PMT" field="description"/>
+      <view-link entity-alias="PY" rel-entity-alias="FPNV">
+        <key-map field-name="partyIdFrom" rel-field-name="partyId"/>
+      </view-link>
+      <view-link entity-alias="PY" rel-entity-alias="TPNV">
+        <key-map field-name="partyIdTo" rel-field-name="partyId"/>
+      </view-link>
+      <view-link entity-alias="PY" rel-entity-alias="TY">
+        <key-map field-name="paymentTypeId"/>
+      </view-link>
+      <view-link entity-alias="PY" rel-entity-alias="PMT">
+        <key-map field-name="paymentMethodTypeId"/>
+      </view-link>
+      <view-link entity-alias="PY" rel-entity-alias="SI">
+        <key-map field-name="statusId"/>
+      </view-link>
+      <relation type="one-nofk" rel-entity-name="PaymentType">
+        <key-map field-name="paymentTypeId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PaymentMethodType">
+        <key-map field-name="paymentMethodTypeId"/>
+      </relation>
+    </view-entity>
     <view-entity entity-name="PaymentAndType"
       package-name="org.ofbiz.accounting.payment"
       never-cache="true"
@@ -2659,6 +2862,18 @@ under the License.
       <relation type="many" fk-name="PAYTYPE_TOPAY" title="to" rel-entity-name="PaymentApplication">
         <key-map field-name="paymentId" rel-field-name="toPaymentId"/>
       </relation>
+    </view-entity>
+    <view-entity entity-name="PaymentAndTypeAndCreditCard"
+            package-name="org.ofbiz.accounting.payment"
+            never-cache="true"
+            title="Payment, Payment type and CreadiCard View Entity">
+        <member-entity entity-alias="PAT" entity-name="PaymentAndType"/>
+        <member-entity entity-alias="CC" entity-name="CreditCard"/>
+        <alias-all entity-alias="PAT"/>
+        <alias-all entity-alias="CC"/>
+        <view-link entity-alias="PAT" rel-entity-alias="CC" rel-optional="true">
+            <key-map field-name="paymentMethodId" rel-field-name="paymentMethodId"/>
+        </view-link>
     </view-entity>
     <!-- Redefined in Opentaps
     <view-entity entity-name="PaymentAndApplication"
@@ -2776,6 +2991,7 @@ under the License.
       <field name="paymentMethodTypeId" type="id"></field>
       <field name="partyId" type="id-ne"></field>
       <field name="glAccountId" type="id-ne"></field>
+      <field name="finAccountId" type="id-ne"></field>
       <field name="description" type="description"></field>
       <field name="fromDate" type="date-time"></field>
       <field name="thruDate" type="date-time"></field>
@@ -2788,6 +3004,9 @@ under the License.
       </relation>
       <relation type="one" fk-name="PAYMETH_GLACCT" rel-entity-name="GlAccount">
         <key-map field-name="glAccountId"/>
+      </relation>
+      <relation type="one" fk-name="PAYMETH_FINACCT" rel-entity-name="FinAccount">
+        <key-map field-name="finAccountId"/>
       </relation>
     </entity>
   <view-entity entity-name="PaymentMethodAndCreditCard"
@@ -2802,6 +3021,7 @@ under the License.
     <alias entity-alias="PM" name="glAccountId"/>
     <alias entity-alias="PM" name="fromDate"/>
     <alias entity-alias="PM" name="thruDate"/>
+    <alias entity-alias="PM" name="description"/>
     <alias entity-alias="CC" name="cardType"/>
     <alias entity-alias="CC" name="cardNumber"/>
     <alias entity-alias="CC" name="expireDate"/>
@@ -2973,8 +3193,8 @@ under the License.
       </relation>
     </entity>
     <entity entity-name="PaymentGatewayConfigType"
-        package-name="org.ofbiz.accounting.payment"
-        title="Payment Gateway Configuration Type">
+            package-name="org.ofbiz.accounting.payment"
+            title="Payment Gateway Config Type">
       <field name="paymentGatewayConfigTypeId" type="id-ne"></field>
       <field name="parentTypeId" type="id"></field>
       <field name="hasTable" type="indicator"></field>
@@ -2988,8 +3208,8 @@ under the License.
       </relation>
     </entity>
     <entity entity-name="PaymentGatewayConfig"
-        package-name="org.ofbiz.accounting.payment"
-        title="Payment Gateway Configuration">
+            package-name="org.ofbiz.accounting.payment"
+            title="Payment Gateway Config">
       <field name="paymentGatewayConfigId" type="id-ne"></field>
       <field name="paymentGatewayConfigTypeId" type="id-ne"></field>
       <field name="description" type="description"></field>
@@ -2998,9 +3218,80 @@ under the License.
         <key-map field-name="paymentGatewayConfigTypeId" rel-field-name="paymentGatewayConfigTypeId"/>
       </relation>
     </entity>
+    <entity entity-name="PaymentGatewaySagePay"
+            package-name="org.ofbiz.accounting.payment"
+            title="SagePay Payment Gateway Configuration">
+      <field name="paymentGatewayConfigId" type="id-ne"></field>
+      <field name="vendor" type="short-varchar"><description>Vendor name</description></field>
+      <field name="productionHost" type="short-varchar"><description>Production Host</description></field>
+      <field name="testingHost" type="short-varchar"><description>Testing Host</description></field>
+      <field name="sagePayMode" type="short-varchar"><description>Mode (PRODUCTION/TEST)</description></field>
+      <field name="protocolVersion" type="very-short"><description>Protocol Version</description></field>
+      <field name="authenticationTransType" type="short-varchar"><description>Authentication type (PAYMENT/AUTHENTICATE/DEFERRED)</description></field>
+      <field name="authenticationUrl" type="long-varchar"><description>Authentication Url</description></field>
+      <field name="authoriseTransType" type="short-varchar"><description>Authorise type (AUTHORISE/RELEASE)</description></field>
+      <field name="authoriseUrl" type="long-varchar"><description>Authorise url</description></field>
+      <field name="releaseTransType" type="short-varchar"><description>Release type (CANCEL/ABORT)</description></field>
+      <field name="releaseUrl" type="long-varchar"><description>Release Url</description></field>
+      <field name="voidUrl" type="long-varchar"><description>Void Url</description></field>
+      <field name="refundUrl" type="long-varchar"><description>Refund Url</description></field>
+      <prim-key field="paymentGatewayConfigId"/>
+      <relation type="one" fk-name="PGSP_PGC" rel-entity-name="PaymentGatewayConfig">
+        <key-map field-name="paymentGatewayConfigId"/>
+      </relation>
+    </entity>
+    <entity entity-name="PaymentGatewayAuthorizeNet"
+            package-name="org.ofbiz.accounting.payment"
+            title="Authorize Dot Net Payment Gateway Configuration">
+      <field name="paymentGatewayConfigId" type="id-ne"></field>
+      <field name="transactionUrl" type="value"><description>Transaction URL</description></field>
+      <field name="certificateAlias" type="value"><description>Certificate Alias</description></field>
+      <field name="apiVersion" type="short-varchar"><description>Target Authorize Dot Net API version</description></field>
+      <field name="delimitedData" type="short-varchar"><description>Delimited data (TRUE|FALSE)</description></field>
+      <field name="delimiterChar" type="short-varchar"><description>Delimited Character - the delimiter to use in the response</description></field>
+      <field name="method" type="short-varchar"><description>Method - CC for credit card processing</description></field>
+      <field name="emailCustomer" type="short-varchar"><description>Email Customer? - if should send an email to the customer for each transaction (TRUE|FALSE)</description></field>
+      <field name="emailMerchant" type="short-varchar"><description>Email Merchant? - if should send email to the merchant for each transaction (TRUE|FALSE)</description></field>
+      <field name="testMode" type="short-varchar"><description>Test Mode - forces the url property to the test url and adds more logging info to the logs (TRUE|FALSE)</description></field>
+      <field name="relayResponse" type="short-varchar"><description>Relay Response? - if should relay the reposnse to a different server (TRUE|FALSE)</description></field>
+      <field name="tranKey" type="value" encrypt="true"><description>Transaction Key</description></field>
+      <field name="userId" type="value"><description>Username - your authorize.net userid</description></field>
+      <field name="pwd" type="value" encrypt="true"><description>Password - your authorize.net password</description></field>
+      <field name="transDescription" type="value"><description>Default Transaction Description</description></field>
+      <prim-key field="paymentGatewayConfigId"/>
+      <relation type="one" fk-name="PGAN_PGC" rel-entity-name="PaymentGatewayConfig">
+        <key-map field-name="paymentGatewayConfigId"/>
+      </relation>
+    </entity>
+    <entity entity-name="PaymentGatewayCyberSource"
+            package-name="org.ofbiz.accounting.payment"
+            title="CyberSource Payment Gateway Configuration">
+      <field name="paymentGatewayConfigId" type="id-ne"></field>
+      <field name="merchantId" type="value"><description>You merchant ID</description></field>
+      <field name="apiVersion" type="short-varchar"><description>Target CyberSource API version</description></field>
+      <field name="production" type="short-varchar"><description>Enable production "mode" (true|false)</description></field>
+      <field name="keysDir" type="value"><description>Directory of the keys from CyberSource (Generate using online tools)</description></field>
+      <field name="keysFile" type="value"><description>Name of the keystore (if different then "merchantID".p12)</description></field>
+      <field name="logEnabled" type="short-varchar"><description>Log transaction information (true|false)</description></field>
+      <field name="logDir" type="value"><description>Log directory</description></field>
+      <field name="logFile" type="value"><description>Log file name</description></field>
+      <field name="logSize" type="numeric"><description>Max log size (megabytes)</description></field>
+      <field name="merchantDescr" type="value"><description>Merchant Description - Shown on credit card statement</description></field>
+      <field name="merchantContact" type="value"><description>Merchant Description Contact Information - Shown on credit card statement</description></field>
+      <field name="autoBill" type="short-varchar"><description>Auto-Bill In Authorization (true|false)</description></field>
+      <field name="enableDav" type="indicator"><description>Use DAV In Authorization -- May not be supported any longer</description></field>
+      <field name="fraudScore" type="indicator"><description>Use Fraud Scoring In Authorization -- May not be supported any longer</description></field>
+      <field name="ignoreAvs" type="short-varchar"><description>Ignore AVS results (true|false)</description></field>
+      <field name="disableBillAvs" type="indicator"><description>Disable AVS for Capture -- May not be supported any longer</description></field>
+      <field name="avsDeclineCodes" type="value"><description>AVS Decline Codes -- May not be supported any longer</description></field>
+      <prim-key field="paymentGatewayConfigId"/>
+      <relation type="one" fk-name="PGCS_PGC" rel-entity-name="PaymentGatewayConfig">
+        <key-map field-name="paymentGatewayConfigId"/>
+      </relation>
+    </entity>
     <entity entity-name="PaymentGatewayPayflowPro"
-        package-name="org.ofbiz.accounting.payment"
-        title="Payflow Pro Payment Gateway Configuration">
+            package-name="org.ofbiz.accounting.payment"
+            title="Payflow Pro Payment Gateway Config">
       <field name="paymentGatewayConfigId" type="id-ne"></field>
       <field name="certsPath" type="value"><description>Path the the VeriSign Certificate</description></field>
       <field name="hostAddress" type="value"><description>Address of the payment processor</description></field>
@@ -3009,10 +3300,10 @@ under the License.
       <field name="proxyAddress" type="value"><description>Proxy Address</description></field>
       <field name="proxyPort" type="numeric"><description>Proxy Port</description></field>
       <field name="proxyLogon" type="value"><description>Proxy Logon</description></field>
-      <field name="proxyPassword" type="value"><description>Proxy Password</description></field>
+      <field name="proxyPassword" type="value" encrypt="true"><description>Proxy Password</description></field>
       <field name="vendor" type="short-varchar"><description>Vendor of account information</description></field>
       <field name="userId" type="short-varchar"><description>PayFlow UserID of account information</description></field>
-      <field name="pwd" type="short-varchar"><description>PayFlow Password of account information</description></field>
+      <field name="pwd" type="value" encrypt="true"><description>PayFlow Password of account information</description></field>
       <field name="partner" type="short-varchar"><description>PayFlow Partner of account information</description></field>
       <field name="checkAvs" type="indicator"><description>Use Address Verification</description></field>
       <field name="checkCvv2" type="indicator"><description>Require CVV2 Verification</description></field>
@@ -3022,16 +3313,23 @@ under the License.
       <field name="loggingLevel" type="numeric"><description>Logging level</description></field>
       <field name="maxLogFileSize" type="numeric"><description>Max log file size</description></field>
       <field name="stackTraceOn" type="indicator"><description>Stack trace on/off</description></field>
+      <field name="redirectUrl" type="value"><description>Express Checkout Redirect URL</description></field>
+      <field name="returnUrl" type="value"><description>Express Checkout Return URL</description></field>
+      <field name="cancelReturnUrl" type="value"><description>Express Checkout Return On Cancel URL</description></field>
       <prim-key field="paymentGatewayConfigId"/>
       <relation type="one" fk-name="PGPF_PGC" rel-entity-name="PaymentGatewayConfig">
         <key-map field-name="paymentGatewayConfigId"/>
       </relation>
     </entity>
     <entity entity-name="PaymentGatewayPayPal"
-        package-name="org.ofbiz.accounting.payment"
-        title="PayPal Payment Gateway Configuration">
+            package-name="org.ofbiz.accounting.payment"
+            title="PayPal Payment Gateway Config">
         <field name="paymentGatewayConfigId" type="id-ne"></field>
         <field name="businessEmail" type="value"><description>Business e-mail</description></field>
+        <field name="apiUserName" type="short-varchar"><description>PayPal API UserName</description></field>
+        <field name="apiPassword" type="short-varchar"><description>PayPal API Password</description></field>
+        <field name="apiSignature" type="short-varchar"><description>PayPal API Signature</description></field>
+        <field name="apiEnvironment" type="short-varchar"><description>PayPal API Environment (valid values are: live, sandbox or beta-sandbox)</description></field>
         <field name="notifyUrl" type="value"><description>Notify URL</description></field>
         <field name="returnUrl" type="value"><description>Return URL</description></field>
         <field name="cancelReturnUrl" type="value"><description>Return On Cancel URL</description></field>
@@ -3039,20 +3337,22 @@ under the License.
         <field name="confirmTemplate" type="value"><description>Thank-You / Confirm Order Template (rendered via Freemarker)</description></field>
         <field name="redirectUrl" type="value"><description>PayPal Redirect URL (Sandbox/Production)</description></field>
         <field name="confirmUrl" type="value"><description>PayPal Confirm URL Sandbox/Production (JSSE must be configured to use SSL)</description></field>
+        <field name="shippingCallbackUrl" type="url"><description>Specific to Express Checkout which performs callbacks to our server to retrieve shipping estimates</description></field>
+        <field name="requireConfirmedShipping" type="indicator"><description>Indicates that you require that the customer’s shipping address on file with PayPal be a confirmed address.</description></field>
         <prim-key field="paymentGatewayConfigId"/>
         <relation type="one" fk-name="PGPP_PGC" rel-entity-name="PaymentGatewayConfig">
             <key-map field-name="paymentGatewayConfigId"/>
         </relation>
     </entity>
     <entity entity-name="PaymentGatewayClearCommerce"
-        package-name="org.ofbiz.accounting.payment"
-        title="Clear Commerce Payment Gateway Configuration">
+            package-name="org.ofbiz.accounting.payment"
+            title="Clear Commerce Payment Gateway Config">
       <field name="paymentGatewayConfigId" type="id-ne"></field>
       <field name="sourceId" type="short-varchar"><description>Useful for tagging transactions</description></field>
       <field name="groupId" type="short-varchar"><description>Useful for grouping transactions</description></field>
       <field name="clientId" type="short-varchar"><description>Client Id of account information</description></field>
       <field name="username" type="short-varchar"><description>User name of account informatio</description></field>
-      <field name="pwd" type="short-varchar"><description>Password of account informatio</description></field>
+      <field name="pwd" type="value" encrypt="true"><description>Password of account informatio</description></field>
       <field name="userAlias" type="short-varchar"><description>Alias of account informatio</description></field>
       <field name="effectiveAlias" type="short-varchar"><description>Effective Alias of account information</description></field>
       <field name="processMode" type="indicator"><description>Process mode (Y: approve / N: decline / R: random / P: production)</description></field>
@@ -3063,6 +3363,49 @@ under the License.
         <key-map field-name="paymentGatewayConfigId"/>
       </relation>
     </entity>
+    <entity entity-name="PaymentGatewayWorldPay"
+            package-name="org.ofbiz.accounting.payment"
+            title="RBS WorldPay Payment Gateway Config">
+      <field name="paymentGatewayConfigId" type="id-ne"></field>
+      <field name="redirectUrl" type="value"><description>Redirect URL</description></field>
+      <field name="instId" type="value" encrypt="true"><description>Worldpay instance Id</description></field>
+      <field name="authMode" type="indicator"><description>Authorization Mode (A: Full-Auth / E: Pre-Auth)</description></field>
+      <field name="fixContact" type="indicator"><description>Will displace contact info on WorldPay in non-editable format</description></field>
+      <field name="hideContact" type="indicator"><description>Will hide the contact info completely</description></field>
+      <field name="hideCurrency" type="indicator"><description>This causes the currency drop down to be no hidden, so fixing the currency that the shopper must value purchase in</description></field>
+      <field name="langId" type="short-varchar"><description>The shopper's language choice, as a 2-character ISO 639 code, with optional regionalisation using 2-character country code separated by hyphen</description></field>
+      <field name="noLanguageMenu" type="indicator"><description>This suppresses the display of the language menu if noLanguageMenu no you have a choice of languages enabled for your value installation</description></field>
+      <field name="withDelivery" type="indicator"><description>Displays input fields for delivery address and withDelivery no mandate that they be filled in</description></field>
+      <field name="testMode" type="numeric"><description>Test Mode (100: approve / 101: cancelled / 0: Live Mode (no test)</description></field>
+      <prim-key field="paymentGatewayConfigId"/>
+      <relation type="one" fk-name="PGWP_PGC" rel-entity-name="PaymentGatewayConfig">
+        <key-map field-name="paymentGatewayConfigId"/>
+      </relation>
+    </entity>
+    <entity entity-name="PaymentGatewayOrbital"
+            package-name="org.ofbiz.accounting.payment"
+            title="Orbital Payment Gateway Config">
+      <field name="paymentGatewayConfigId" type="id-ne"></field>
+      <field name="username" type="short-varchar"><description>Orbital Username of account information</description></field>
+      <field name="connectionPassword" type="value" encrypt="true"><description>Orbital Password of account information</description></field>
+      <field name="merchantId" type="value"><description>You merchant ID</description></field>
+      <field name="engineClass" type="value"><description>Class for the Orbital Gateway - Default should be used - HttpsEngine</description></field>
+      <field name="hostName" type="value"><description>Address of the payment processor</description></field>
+      <field name="port" type="numeric"><description>Port of the payment processor</description></field>
+      <field name="hostNameFailover" type="value"><description>Failover Address of the payment processor</description></field>
+      <field name="portFailover" type="numeric"><description>Failover Port of the payment processor</description></field>
+      <field name="connectionTimeoutSeconds" type="numeric"><description>Timeout</description></field>
+      <field name="readTimeoutSeconds" type="numeric"><description>Read Timeout</description></field>
+      <field name="authorizationURI" type="value"><description>Authorization URI</description></field>
+      <field name="sdkVersion" type="short-varchar"><description>Target Orbital Gateway API version</description></field>
+      <field name="sslSocketFactory" type="short-varchar"><description>SSL Socket Factory (default|strict)</description></field>
+      <field name="responseType" type="short-varchar"><description>Response Type (gateway|host)</description></field>
+      <prim-key field="paymentGatewayConfigId"/>
+      <relation type="one" fk-name="PGORB_PGC" rel-entity-name="PaymentGatewayConfig">
+        <key-map field-name="paymentGatewayConfigId"/>
+      </relation>
+    </entity>
+
     <entity entity-name="PaymentGatewayRespMsg"
             package-name="org.ofbiz.accounting.payment"
             title="Payment Gateway Response Message">
@@ -3119,6 +3462,76 @@ under the License.
         <key-map field-name="paymentMethodId"/>
       </relation>
     </entity>
+
+    <entity entity-name="PaymentGroup"
+            package-name="org.ofbiz.accounting.payment"
+            title="Payment Group Entity">
+      <description>Payment Group</description>
+      <field name="paymentGroupId" type="id-ne"></field>
+      <field name="paymentGroupTypeId" type="id-ne"></field>
+      <field name="paymentGroupName" type="name"></field>
+      <prim-key field="paymentGroupId"/>
+      <relation type="one" fk-name="PAYMNTGP_PGTYPE" rel-entity-name="PaymentGroupType">
+          <key-map field-name="paymentGroupTypeId"/>
+      </relation>
+    </entity>
+    <entity entity-name="PaymentGroupType"
+            package-name="org.ofbiz.accounting.payment"
+            title="Payment Group Type Entity">
+      <description>Payment Group Type</description>
+      <field name="paymentGroupTypeId" type="id-ne"></field>
+      <field name="parentTypeId" type="id-ne"></field>
+      <field name="hasTable" type="indicator"></field>
+      <field name="description" type="description"></field>
+      <prim-key field="paymentGroupTypeId"/>
+      <relation type="one" fk-name="PAYMNTGP_TYP_PAR" title="Parent" rel-entity-name="PaymentGroupType">
+        <key-map field-name="parentTypeId" rel-field-name="paymentGroupTypeId"/>
+      </relation>
+    </entity>
+    <entity entity-name="PaymentGroupMember"
+            package-name="org.ofbiz.accounting.payment"
+            title="Payment Group Member Entity">
+      <description>Payment Group Member</description>
+      <field name="paymentGroupId" type="id-ne"></field>
+      <field name="paymentId" type="id-ne"></field>
+      <field name="fromDate" type="date-time"></field>
+      <field name="thruDate" type="date-time"></field>
+      <field name="sequenceNum" type="numeric"></field>
+      <prim-key field="paymentGroupId"/>
+      <prim-key field="paymentId"/>
+      <prim-key field="fromDate"/>
+      <relation type="one" fk-name="PAYGRPMMBR_PG" rel-entity-name="PaymentGroup">
+          <key-map field-name="paymentGroupId"/>
+      </relation>
+      <relation type="one" fk-name="PAYGRPMMBR_PAYMNT" rel-entity-name="Payment">
+          <key-map field-name="paymentId"/>
+      </relation>
+    </entity>
+
+    <entity entity-name="PayPalPaymentMethod"
+            package-name="org.ofbiz.accounting.payment">
+      <description>PayPal Payment Method Details</description>
+      <field name="paymentMethodId" type="id-ne"></field>
+      <field name="payerId" type="id"></field>
+      <field name="expressCheckoutToken" type="short-varchar"></field>
+      <field name="payerStatus" type="short-varchar"></field>
+      <field name="avsAddr" type="indicator"></field>
+      <field name="avsZip" type="indicator"></field>
+      <field name="correlationId" type="id"></field>
+      <field name="contactMechId" type="id-ne"></field>
+      <field name="transactionId" type="short-varchar"></field>
+      <prim-key field="paymentMethodId"/>
+      <relation type="one" fk-name="PAYPAL_PMNTMETH" rel-entity-name="PaymentMethod">
+        <key-map field-name="paymentMethodId"/>
+      </relation>
+      <relation type="one" fk-name="PAYPAL_CMECH" rel-entity-name="ContactMech">
+        <key-map field-name="contactMechId"/>
+      </relation>
+      <relation type="one" fk-name="PAYPAL_PADDR" rel-entity-name="PostalAddress">
+        <key-map field-name="contactMechId"/>
+      </relation>
+    </entity>
+
     <entity entity-name="ValueLinkKey"
             package-name="org.ofbiz.accounting.payment"
             title="Value Link Key Store">
@@ -3134,7 +3547,6 @@ under the License.
       <field name="lastModifiedByUserLogin" type="id-vlong"></field>
       <prim-key field="merchantId"/>
     </entity>
-
     <!-- ========================================================= -->
     <!-- org.ofbiz.accounting.tax -->
     <!-- ========================================================= -->
@@ -3530,4 +3942,74 @@ under the License.
     </relation>
   </entity>
 
+  <entity entity-name="GlAccountCategory"
+          package-name="org.ofbiz.accounting.ledger"
+          title="General Ledger Account Category Entity">
+      <field name="glAccountCategoryId" type="id-ne"></field>
+      <field name="glAccountCategoryTypeId" type="id-ne"></field>
+      <field name="description" type="description"></field>
+      <prim-key field="glAccountCategoryId"/>
+      <relation type="one" fk-name="GLACT_CAT_TP" rel-entity-name="GlAccountCategoryType">
+        <key-map field-name="glAccountCategoryTypeId"/>
+      </relation>
+  </entity>
+
+  <entity entity-name="GlAccountCategoryMember"
+            package-name="org.ofbiz.accounting.ledger"
+            title="General Ledger Account Category Member Entity">
+      <field name="glAccountId" type="id-ne"></field>
+      <field name="glAccountCategoryId" type="id-ne"></field>
+      <field name="fromDate" type="date-time"></field>
+      <field name="thruDate" type="date-time"></field>
+      <field name="amountPercentage" type="fixed-point"></field>
+      <prim-key field="glAccountId"/>
+      <prim-key field="glAccountCategoryId"/>
+      <prim-key field="fromDate"/>
+      <relation type="one" fk-name="GLACT_CATMBR_AC" rel-entity-name="GlAccount">
+        <key-map field-name="glAccountId"/>
+      </relation>
+      <relation type="one" fk-name="GLACT_CATMBR_CAT" rel-entity-name="GlAccountCategory">
+        <key-map field-name="glAccountCategoryId"/>
+      </relation>
+  </entity>
+
+  <entity entity-name="GlAccountCategoryType"
+            package-name="org.ofbiz.accounting.ledger"
+            title="General Ledger Account Category Type Entity">
+      <field name="glAccountCategoryTypeId" type="id-ne"></field>
+      <field name="description" type="description"></field>
+      <prim-key field="glAccountCategoryTypeId"/>
+  </entity>
+
+  <view-entity entity-name="PmtGrpMembrPaymentAndFinAcctTrans" package-name="org.ofbiz.accounting.finaccount" title="Payment Group Member, Payment and FinAccountTrans view entity">
+      <member-entity entity-alias="PGM" entity-name="PaymentGroupMember"/>
+      <member-entity entity-alias="PY" entity-name="Payment"/>
+      <member-entity entity-alias="FAT" entity-name="FinAccountTrans"/>
+      <alias-all entity-alias="PGM"/>
+      <alias-all entity-alias="PY"/>
+      <alias name="finAccountId" entity-alias="FAT"/>
+      <alias name="partyId" entity-alias="FAT"/>
+      <alias name="finAccountTransStatusId" entity-alias="FAT" field="statusId"/>
+      <alias name="finAccountTransAmount" entity-alias="FAT" field="amount"/>
+      <alias name="glReconciliationId" entity-alias="FAT"/>
+      <view-link entity-alias="PGM" rel-entity-alias="PY">
+        <key-map field-name="paymentId"/>
+      </view-link>
+      <view-link entity-alias="PY" rel-entity-alias="FAT">
+        <key-map field-name="finAccountTransId"/>
+      </view-link>
+    </view-entity>
+    <view-entity entity-name="PaymentMethodAndFinAccount" package-name="org.ofbiz.accounting.finaccount" title="PaymentMethod and FinAccount view entity">
+        <member-entity entity-alias="PM" entity-name="PaymentMethod"/>
+        <member-entity entity-alias="FA" entity-name="FinAccount"/>
+        <alias-all entity-alias="FA"/>
+        <alias-all entity-alias="PM">
+            <exclude field="finAccountId"/>
+            <exclude field="fromDate"/>
+            <exclude field="thruDate"/>
+        </alias-all>
+        <view-link rel-entity-alias="PM" entity-alias="FA">
+            <key-map field-name="finAccountId"/>
+        </view-link>
+    </view-entity>
 </entitymodel>

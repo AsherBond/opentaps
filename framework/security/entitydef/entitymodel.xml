@@ -26,7 +26,7 @@ under the License.
   <!-- ========================================================= -->
     <title>Entity of an Open For Business Project Component</title>
     <description>None</description>
-    <copyright>Copyright 2001-2008 The Apache Software Foundation</copyright>
+    <copyright>Copyright 2001-2009 The Apache Software Foundation</copyright>
     <author>None</author>
     <version>1.0</version>
 
@@ -76,6 +76,9 @@ under the License.
       <field name="lastTimeZone" type="id-long"></field>
       <field name="disabledDateTime" type="date-time"></field>
       <field name="successiveFailedLogins" type="numeric"></field>
+      <field name="externalAuthId" type="id-vlong-ne">
+          <description>For use with external authentication; the userLdapDn should be replaced with this</description>
+      </field>
       <field name="userLdapDn" type="id-vlong-ne">
           <description>The user's LDAP Distinguished Name - used for LDAP authentication</description>
       </field>
@@ -157,7 +160,20 @@ under the License.
             title="Security Component - Security Permission Entity">
       <field name="permissionId" type="id-long-ne"></field>
       <field name="description" type="description"></field>
+      <field name="dynamicAccess" type="value"></field>
       <prim-key field="permissionId"/>
+    </entity>
+    <entity entity-name="SecurityPermissionAutoGrant"
+            package-name="org.ofbiz.security.securitygroup"
+            default-resource-name="SecurityEntityLabels"
+            title="Security Component - Security Permission Auto Grant Entity">
+      <field name="permissionId" type="id-long-ne"></field>
+      <field name="grantPermission" type="id-vlong-ne"></field>
+      <prim-key field="permissionId"/>
+      <prim-key field="grantPermission"/>
+      <relation type="one" fk-name="SEC_PERM_AUTO_GRNT" rel-entity-name="SecurityPermission">
+        <key-map field-name="permissionId"/>
+      </relation>
     </entity>
     <view-entity entity-name="UserLoginAndSecurityGroup"
           package-name="org.ofbiz.security.securitygroup"

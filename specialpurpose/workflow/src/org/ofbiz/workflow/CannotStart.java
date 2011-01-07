@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * CannotStart Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class CannotStart extends WfException {
 
     public CannotStart() {}

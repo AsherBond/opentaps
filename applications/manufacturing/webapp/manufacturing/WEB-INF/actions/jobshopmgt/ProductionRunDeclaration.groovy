@@ -81,6 +81,7 @@ if (productionRunId) {
         productProduced = productionRun.getProductProduced();
         if (productProduced != null) {
             productionRunData.productId = productProduced.productId;
+            productionRunData.product = productProduced;
             if (maxQuantity > 0 && !"WIP".equals(productProduced.productTypeId)) {
                 productionRunData.quantity = maxQuantity;
                 context.canProduce = "Y";
@@ -167,7 +168,8 @@ if (productionRunId) {
                   !issueTaskId &&
                   !completeTaskId &&
                   ("PRUN_CREATED".equals(task.currentStatusId) ||
-                   "PRUN_SCHEDULED".equals(task.currentStatusId))) {
+                   "PRUN_SCHEDULED".equals(task.currentStatusId) ||
+                   "PRUN_DOC_PRINTED".equals(task.currentStatusId))) {
                 startTaskId = task.workEffortId;
             }
         }
@@ -226,6 +228,9 @@ if (productionRunId) {
                 }
             }
         }
+        // Content
+        productionRunContents = EntityUtil.filterByDate(delegator.findByAnd("WorkEffortContentAndInfo", [workEffortId : productionRunId], ["-fromDate"]));
+        context.productionRunContents = productionRunContents;
         context.productionRunComponentsData = productionRunComponentsData;
         context.productionRunComponentsDataReadyForIssuance = productionRunComponentsDataReadyForIssuance;
         context.productionRunComponentsAlreadyIssued = productionRunComponentsAlreadyIssued;

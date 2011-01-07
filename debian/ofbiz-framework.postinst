@@ -21,6 +21,7 @@ set -e
 : "$0" "$@"
 JAVA_HOME=""
 JAVA_HOMES="/usr/lib/jvm/java-6-openjdk"
+OFBIZ_HOME="/usr/share/ofbiz"
 for possible in $JAVA_HOMES; do
 	if [ -e "$possible/bin/java" ]; then
 		JAVA_HOME="$possible"
@@ -34,21 +35,17 @@ if ! [ "$JAVA_HOME" ]; then
 fi
 JAVA="$JAVA_HOME/bin/java"
 
-encrypt_password() {
-	(
-		cd /usr/share/ofbiz
-		"$JAVA" -classpath framework/base/build/lib/ofbiz-base.jar:framework/common/build/lib/ofbiz-common.jar:framework/base/config:framework/entity/build/lib/ofbiz-entity.jar:framework/base/lib/javolution.jar:framework/base/lib/commons/commons-collections.jar:framework/base/lib/jdbm.jar:framework/base/lib/log4j.jar:framework/security/config:support EncryptPassword "$1"
-	)
-}
 munge_conffile() {
 	tmp="$1"
 	source="$2"
 	case "$source" in
 		(framework/entity/config/entityengine.xml)
 			. /etc/dbconfig-common/ofbiz.conf
+			get pg_fieldtype ofbiz/fieldtype/postgres
 			xalan \
-				-xsl "/usr/share/ofbiz/support/entityengine.xslt" \
-				-in "/usr/share/ofbiz/ucf/$source" \
+				-xsl "$OFBIZ_HOME/support/entityengine.xslt" \
+				-in "$OFBIZ_HOME/ucf/$source" \
+				-param pgfieldtype "'$pg_fieldtype'" \
 				-param dbtype "'$dbc_dbtype'" \
 				-param dbuser "'$dbc_dbuser'" \
 				-param dbpass "'$dbc_dbpass'" \
@@ -63,75 +60,14 @@ munge_conffile() {
 	esac
 }
 configure_ofbiz() {
-	extra=""
-	: ofbiz_readers "$ofbiz_readers"
-	: ofbiz_import_readers "$ofbiz_import_readers"
-	: ofbiz_override_data "$ofbiz_override_data"
-	if [ "$ofbiz_readers" ]; then
-		if [ "$ofbiz_import_readers" ]; then
-			extra="$extra -readers=\"$ofbiz_readers\""
-		fi
-		if [ "$ofbiz_override_data" ]; then
-			trap 'rm -f "$tempfile1" "$tempfile2"' EXIT
-			tempdir="$(mktemp -d)"
-			chown ofbiz:ofbiz "$tempdir"
-			trap 'rm -rf "$tempdir"' EXIT
-			files=""
-			{
-				IFS="," set -- $ofbiz_readers
-				while [ $# -gt 0 ]; do
-					if true; then
-						xalan -q \
-						-param reader "'$1'" \
-						-param password "'$ofbiz_password_encrypted'" \
-						-param ofbizhome "'/usr/share/ofbiz'" \
-						-xsl "/usr/share/ofbiz/support/override-data.xslt" \
-						-in "/usr/share/ofbiz/framework/base/config/component-load.xml" \
-						-out "$tempdir/reader-$1.xml"
-					chown ofbiz:ofbiz "$tempdir/reader-$1.xml"
-					fi
-					if [ "$files" ]; then
-						files="$files,$tempdir/reader-$1.xml"
-					else
-						files="$tempdir/reader-$1.xml"
-					fi
-					shift
-				done
-			}
-			trap '' EXIT
-			if [ "$files" ]; then
-				extra="$extra -file=\"$files\""
-			fi
-		fi
-		eval /etc/init.d/ofbiz install $extra
-	fi
-	#rm -f "$tempfile1" "$tempfile2"
-}
-fix_readers() {
-	IFS=", " set -- "$@"
-	while [ $# -gt 0 ]; do
-		echo -n "$1"
-		shift
-		if [ $# -gt 0 ]; then
-			echo ','
+	extra="-readers=seed"
+	for file in "/var/lib/ofbiz/import/"*.xml; do
+		if [ -e "$file" ]; then
+			extra="$extra -file=\"$file\""
 		fi
 	done
-}
-get_random_chars() {
-	(
-		LANG=C
-		LC_ALL=C
-		length="$1"
-		chars=""
-		while :; do
-			needed_length=$((${length} - ${#chars}))
-			chars="$chars$(dd if=/dev/urandom count="${needed_length}" bs=1 | sed -n -e 's/[^[:alnum:]]//g;p;q')"
-			if [ "${#chars}" -ge "$length" ]; then
-				break
-			fi
-		done
-		echo $chars
-	)
+	eval /etc/init.d/ofbiz install $extra
+	rm -rf "/var/lib/ofbiz/import"
 }
 get() {
 	var_name="$1"
@@ -150,64 +86,44 @@ get() {
 		exit 1
 	fi
 }
-start_ofbiz() {
+ofbiz_init_invoke() {
 	if [ -x "/etc/init.d/ofbiz" ]; then
 		if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
-			invoke-rc.d ofbiz start || exit $?
+			invoke-rc.d ofbiz $1 || exit $?
 		else
-			/etc/init.d/ofbiz start || exit $?
-		fi
-	fi
-}
-stop_ofbiz() {
-	if [ -x "/etc/init.d/ofbiz" ]; then
-		if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
-			invoke-rc.d ofbiz stop || exit $?
-		else
-			/etc/init.d/ofbiz stop || exit $?
+			/etc/init.d/ofbiz $1 || exit $?
 		fi
 	fi
 }
 
 . /usr/share/debconf/confmodule
 . /usr/share/dbconfig-common/dpkg/postinst
-dbc_generate_include=sh:/etc/ofbiz/debconf.cfg
+dbc_generate_include=sh:/etc/ofbiz/dbc-debconf.cfg
 [ "$1" != "triggered" ] && dbc_go ofbiz "$@"
-if [ -e /etc/ofbiz/debconf.cfg ]; then
-	ofbiz_admin_key=""
-	. /etc/ofbiz/debconf.cfg
-else
-	ofbiz_admin_key="$(get_random_chars 32)"
-	ofbiz_readers=""
-	ofbiz_admin_port=""
+if [ -e /etc/ofbiz/dbc-debconf.cfg ]; then
+	. /etc/ofbiz/dbc-debconf.cfg
 fi
-
+if [ -r "/etc/ofbiz/debconf.cfg" ]; then
+	eval `sed -n 's/^ofbiz\.admin\.\(port\|key\)=\(.*\)/ofbiz_admin_\1=\2;/p' "/etc/ofbiz/debconf.cfg" `
+fi
 if [ "$1" = "triggered" ]; then
+	run_seed=""
+	for trigger in $2; do
+		case "$trigger" in
+			(ofbiz-install)
+				run_seed=1
+				;;
+		esac
+	done
+	if [ "z" != "z$run_seed" ]; then
+		ofbiz_init_invoke stop
+		configure_ofbiz
+		dpkg-trigger --no-await ofbiz-start
+	fi
 	for trigger in $2; do
 		case "$trigger" in
 			(ofbiz-start)
-				start_ofbiz
-				;;
-			(ofbiz-install|ofbiz-upgrade)
-				ofbiz_reseed=""
-				if [ "$trigger" = "ofbiz-install" ]; then
-					ofbiz_reseed=1
-					ofbiz_import_readers=1
-				fi
-				get ofbiz_readers ofbiz/readers ofbiz_import_readers ofbiz_reseed
-				if [ "z" = "z$ofbiz_readers" ]; then
-					ofbiz_readers="seed"
-				else
-					ofbiz_readers="seed,$ofbiz_readers"
-				fi
-				ofbiz_readers="$(fix_readers "$ofbiz_readers")"
-				get ofbiz_admin_port ofbiz/admin-port
-				stop_ofbiz
-				if [ "z" != "z$ofbiz_reseed" ]; then
-					echo "Need to modify ofbiz data." 1>&2
-					configure_ofbiz
-				fi
-				dpkg-trigger --no-await ofbiz-start
+				ofbiz_init_invoke start
 				;;
 		esac
 	done
@@ -215,17 +131,31 @@ if [ "$1" = "triggered" ]; then
 	exit 0
 fi
 
-ofbiz_reseed=""
 case "$1" in
 	(configure|reconfigure)
-		if [ "$2" ]; then
-			dpkg-trigger --no-await ofbiz-upgrade
-		else
-			dpkg-trigger --no-await ofbiz-install
+		ofbiz_init_invoke stop
+		dpkg-trigger --no-await ofbiz-install
+		if [ -z "$2" ]; then
+			db_input medium ofbiz/admin-user || true
+			get ofbiz_admin_user ofbiz/admin-user
+			if [ "z" = "z$ofbiz_admin_user" ]; then
+				ofbiz_admin_user="admin"
+			fi
+			mkdir -p "/var/lib/ofbiz/import/"
+			out="/var/lib/ofbiz/import/ofbiz-framework.xml"
+			sed "s/@userLoginId@/$ofbiz_admin_user/g" < "$OFBIZ_HOME/framework/resources/templates/AdminUserLoginData.xml" > "$out.new"
+			mv "$out.new" "$out"
 			if ! getent passwd ofbiz 2>/dev/null >/dev/null; then
 				adduser --quiet --group --no-create-home --system --shell /bin/sh --home /var/lib/ofbiz ofbiz
 			fi
-			dpkg-statoverride --update --add ofbiz ofbiz 755 /var/lib/ofbiz
+			if [ -r "/etc/ofbiz/debconf.cfg" ]; then
+				chown root:ofbiz "/etc/ofbiz/debconf.cfg"
+			fi
+			for dir in "/var/lib/ofbiz" "/var/lib/ofbiz/runtime/uploads"; do
+				if ! dpkg-statoverride --list "$dir" > /dev/null; then
+					dpkg-statoverride --update --add ofbiz ofbiz 755 "$dir"
+				fi
+			done
 		fi
 	;;
 esac

@@ -42,7 +42,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -65,11 +65,11 @@ public final class MrpInventoryEventServices {
      * @param eventName a <code>String</code> value
      * @param isLate a <code>boolean</code> value
      * @param mrpInventoryEventDetailInput a <code>Map</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static void createOrUpdateMrpInventoryEvent(Map mrpInventoryEventKeyMap, BigDecimal newQuantity, BigDecimal netQoh, String eventName, boolean isLate, Map mrpInventoryEventDetailInput, GenericDelegator delegator) throws GenericEntityException {
+    public static void createOrUpdateMrpInventoryEvent(Map mrpInventoryEventKeyMap, BigDecimal newQuantity, BigDecimal netQoh, String eventName, boolean isLate, Map mrpInventoryEventDetailInput, Delegator delegator) throws GenericEntityException {
         GenericValue mrpInventoryEvent = null;
         mrpInventoryEvent = delegator.findByPrimaryKey("MrpInventoryEvent", mrpInventoryEventKeyMap);
         if (mrpInventoryEvent == null) {
@@ -110,11 +110,11 @@ public final class MrpInventoryEventServices {
      * @param mrpInventoryEventKeyMap a <code>Map</code> value
      * @param mrpInventoryEventDetailInput a <code>Map</code> value
      * @param newQuantity a <code>BigDecimal</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static void createMrpInventoryEventDetail(Map mrpInventoryEventKeyMap, Map mrpInventoryEventDetailInput, BigDecimal newQuantity, GenericDelegator delegator) throws GenericEntityException {
+    public static void createMrpInventoryEventDetail(Map mrpInventoryEventKeyMap, Map mrpInventoryEventDetailInput, BigDecimal newQuantity, Delegator delegator) throws GenericEntityException {
         String mrpInventoryEventTypeId = (String) mrpInventoryEventKeyMap.get("inventoryEventPlanTypeId");
         if ("SALES_ORDER_SHIP".equals(mrpInventoryEventTypeId) && UtilValidate.isNotEmpty(mrpInventoryEventDetailInput)) {
             mrpInventoryEventKeyMap.putAll(mrpInventoryEventDetailInput);

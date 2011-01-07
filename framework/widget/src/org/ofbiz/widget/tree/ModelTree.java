@@ -21,6 +21,7 @@ package org.ofbiz.widget.tree;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -37,6 +38,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
@@ -47,7 +49,7 @@ import org.ofbiz.widget.screen.ModelScreen;
 import org.ofbiz.widget.screen.ScreenFactory;
 import org.ofbiz.widget.screen.ScreenStringRenderer;
 import org.ofbiz.widget.screen.ScreenRenderException;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -72,7 +74,7 @@ public class ModelTree extends ModelWidget {
     protected FlexibleStringExpander defaultWrapStyleExdr;
     protected List<ModelNode> nodeList = FastList.newInstance();
     protected Map<String, ModelNode> nodeMap = FastMap.newInstance();
-    protected GenericDelegator delegator;
+    protected Delegator delegator;
     protected LocalDispatcher dispatcher;
     protected FlexibleStringExpander expandCollapseRequestExdr;
     protected FlexibleStringExpander trailNameExdr;
@@ -88,7 +90,7 @@ public class ModelTree extends ModelWidget {
     /** XML Constructor */
     public ModelTree() {}
 
-    public ModelTree(Element treeElement, GenericDelegator delegator, LocalDispatcher dispatcher) {
+    public ModelTree(Element treeElement, Delegator delegator, LocalDispatcher dispatcher) {
         super(treeElement);
         this.rootNodeName = treeElement.getAttribute("root-node-name");
         this.defaultRenderStyle = UtilFormatOut.checkEmpty(treeElement.getAttribute("default-render-style"), "simple");
@@ -117,10 +119,7 @@ public class ModelTree extends ModelWidget {
             postTrailOpenDepth = 999;
         }
 
-        List nodeElements = UtilXml.childElementList(treeElement, "node");
-        Iterator nodeElementIter = nodeElements.iterator();
-        while (nodeElementIter.hasNext()) {
-            Element nodeElementEntry = (Element) nodeElementIter.next();
+        for (Element nodeElementEntry: UtilXml.childElementList(treeElement, "node")) {
             ModelNode node = new ModelNode(nodeElementEntry, this);
             String nodeName = node.getName();
             nodeList.add(node);
@@ -181,6 +180,23 @@ public class ModelTree extends ModelWidget {
             else
                 expColReq = s1;
         }
+
+        //append also the request parameters
+        Map<String, Object> paramMap = UtilGenerics.checkMap(context.get("requestParameters"));
+        if (UtilValidate.isNotEmpty(paramMap)) {
+            Map<String, Object> requestParameters = new HashMap<String, Object>(paramMap);
+            requestParameters.remove(this.getTrailName(context));
+            if (UtilValidate.isNotEmpty(requestParameters)) {
+                String queryString = UtilHttp.urlEncodeArgs(requestParameters, false);
+                if (expColReq.indexOf("?") < 0) {
+                    expColReq += "?";
+                } else {
+                    expColReq += "&amp;";
+                }
+                expColReq += queryString;
+            }
+        }
+
         return expColReq;
     }
 
@@ -188,6 +204,7 @@ public class ModelTree extends ModelWidget {
         return this.trailNameExdr.expandString(context);
     }
 
+    @Override
     public String getBoundaryCommentName() {
         return treeLocation + "#" + name;
     }
@@ -212,7 +229,7 @@ public class ModelTree extends ModelWidget {
      *   use the same tree definitions for many types of tree UIs
      */
     public void renderTreeString(StringBuffer buf, Map<String, Object> context, TreeStringRenderer treeStringRenderer) throws GeneralException {
-        Map<String, Object> parameters = (Map<String, Object>) context.get("parameters");
+        Map<String, Object> parameters = UtilGenerics.checkMap(context.get("parameters"));
         setWidgetBoundaryComments(context);
 
         ModelNode node = (ModelNode)nodeMap.get(rootNodeName);
@@ -225,7 +242,7 @@ public class ModelTree extends ModelWidget {
         List<String> trail = null;
         if (UtilValidate.isNotEmpty(treeString)) {
             trail = StringUtil.split(treeString, "|");
-            if (trail == null || trail.size() == 0)
+            if (UtilValidate.isEmpty(trail))
                 throw new RuntimeException("Tree 'trail' value is empty.");
 
             context.put("rootEntityId", trail.get(0));
@@ -250,7 +267,7 @@ public class ModelTree extends ModelWidget {
         return this.dispatcher;
     }
 
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return this.delegator;
     }
 
@@ -341,10 +358,7 @@ public class ModelTree extends ModelWidget {
                 this.condition = new ModelTreeCondition(modelTree, conditionElement);
             }
 
-            List subNodeElements = UtilXml.childElementList(nodeElement, "sub-node");
-            Iterator subNodeElementIter = subNodeElements.iterator();
-            while (subNodeElementIter.hasNext()) {
-                Element subNodeElementEntry = (Element) subNodeElementIter.next();
+            for (Element subNodeElementEntry: UtilXml.childElementList(nodeElement, "sub-node")) {
                 ModelSubNode subNode = new ModelSubNode(subNodeElementEntry, this);
                 subNodeList.add(subNode);
             }
@@ -370,8 +384,7 @@ public class ModelTree extends ModelWidget {
                 String pkName = getPkName();
                 String id = null;
                 if (UtilValidate.isNotEmpty(this.entryName)) {
-                    Map map = (Map)context.get(this.entryName);
-                    id = (String)map.get(pkName);
+                    id = UtilGenerics.<Map<String, String>>cast(context.get(this.entryName)).get(pkName);
                 } else {
                     id = (String) context.get(pkName);
                 }
@@ -402,10 +415,8 @@ public class ModelTree extends ModelWidget {
                     //if (Debug.infoOn()) Debug.logInfo(" processChildren:" + processChildren, module);
                     if (processChildren.booleanValue()) {
                         getChildren(context);
-                        Iterator nodeIter = this.subNodeValues.iterator();
                         int newDepth = depth + 1;
-                        while (nodeIter.hasNext()) {
-                            Object[] arr = (Object[]) nodeIter.next();
+                        for (Object[] arr: this.subNodeValues) {
                             ModelNode node = (ModelNode) arr[0];
                             Map<String, Object> val = UtilGenerics.checkMap(arr[1]);
                             //GenericPK pk = val.getPrimaryKey();
@@ -422,9 +433,9 @@ public class ModelTree extends ModelWidget {
                                 newContext.putAll(val);
                             }
                             String targetEntityId = null;
-                            List targetNodeTrail = UtilGenerics.checkList(context.get("targetNodeTrail"));
+                            List<String> targetNodeTrail = UtilGenerics.checkList(context.get("targetNodeTrail"));
                             if (newDepth < targetNodeTrail.size()) {
-                                targetEntityId = (String) targetNodeTrail.get(newDepth);
+                                targetEntityId = targetNodeTrail.get(newDepth);
                             }
                             if ((targetEntityId != null && targetEntityId.equals(thisEntityId)) || this.showPeers(newDepth, context)) {
                                 node.renderNodeString(writer, newContext, treeStringRenderer, newDepth);
@@ -464,7 +475,7 @@ public class ModelTree extends ModelWidget {
             String countFieldName = "childBranchCount";
             Object obj = null;
             if (UtilValidate.isNotEmpty(this.entryName)) {
-                Map map = (Map) context.get(this.entryName);
+                Map<String, Object> map = UtilGenerics.cast(context.get(this.entryName));
                 if (map instanceof GenericValue) {
                     ModelEntity modelEntity = ((GenericValue) map).getModelEntity();
                     if (modelEntity.isField(countFieldName)) {
@@ -478,7 +489,7 @@ public class ModelTree extends ModelWidget {
                 nodeCount = (Long) obj;
             }
             String entName = this.getEntityName();
-            GenericDelegator delegator = modelTree.getDelegator();
+            Delegator delegator = modelTree.getDelegator();
             ModelEntity modelEntity = delegator.getModelEntity(entName);
             ModelField modelField = null;
             if (modelEntity.isField(countFieldName)) {
@@ -505,8 +516,7 @@ public class ModelTree extends ModelWidget {
                 String pkName = this.getPkName();
                 String id = null;
                 if (UtilValidate.isNotEmpty(this.entryName)) {
-                    Map map = (Map) context.get(this.entryName);
-                    id = (String) map.get(pkName);
+                    id = UtilGenerics.<Map<String,String>>cast(context.get(this.entryName)).get(pkName);
                 } else {
                     id = (String) context.get(pkName);
                 }
@@ -548,8 +558,8 @@ public class ModelTree extends ModelWidget {
                  Iterator<? extends Map<String, ? extends Object>> dataIter =  subNode.getListIterator();
                  if (dataIter instanceof EntityListIterator) {
                      EntityListIterator eli = (EntityListIterator) dataIter;
-                     Map val = null;
-                     while ((val = (Map) eli.next()) != null) {
+                     Map<String, Object> val = null;
+                     while ((val = eli.next()) != null) {
                          Object [] arr = {node, val};
                          this.subNodeValues.add(arr);
                      }
@@ -561,7 +571,7 @@ public class ModelTree extends ModelWidget {
                      }
                  } else if (dataIter != null) {
                      while (dataIter.hasNext()) {
-                         Map val = (Map) dataIter.next();
+                         Map<String, ? extends Object> val = dataIter.next();
                          Object [] arr = {node, val};
                          this.subNodeValues.add(arr);
                      }
@@ -609,7 +619,7 @@ public class ModelTree extends ModelWidget {
 
         public boolean showPeers(int currentDepth, Map<String, Object> context) {
             int trailSize = 0;
-            List trail = UtilGenerics.checkList(context.get("targetNodeTrail"));
+            List<?> trail = UtilGenerics.checkList(context.get("targetNodeTrail"));
             int openDepth = modelTree.getOpenDepth();
             int postTrailOpenDepth = modelTree.getPostTrailOpenDepth();
             if (trail != null) trailSize = trail.size();
@@ -921,8 +931,21 @@ public class ModelTree extends ModelWidget {
                 return this.linkType;
             }
 
-            public List<WidgetWorker.Parameter> getParameterList() {
-                return this.parameterList;
+            public Map<String, String> getParameterMap(Map<String, Object> context) {
+                Map<String, String> fullParameterMap = FastMap.newInstance();
+
+                /* leaving this here... may want to add it at some point like the hyperlink element:
+                Map<String, String> addlParamMap = this.parametersMapAcsr.get(context);
+                if (addlParamMap != null) {
+                    fullParameterMap.putAll(addlParamMap);
+                }
+                */
+
+                for (WidgetWorker.Parameter parameter: this.parameterList) {
+                    fullParameterMap.put(parameter.getName(), parameter.getValue(context));
+                }
+
+                return fullParameterMap;
             }
 
             public void setText(String val) {

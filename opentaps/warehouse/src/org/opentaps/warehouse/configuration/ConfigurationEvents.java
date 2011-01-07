@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.common.util.UtilCommon;
@@ -48,7 +48,7 @@ public final class ConfigurationEvents {
      */
     public static String setFacility(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         String facilityId = request.getParameter("facilityId");
         if (UtilValidate.isEmpty(facilityId)) {

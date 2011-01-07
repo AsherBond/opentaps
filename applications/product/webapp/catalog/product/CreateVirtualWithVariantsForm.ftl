@@ -17,14 +17,14 @@ specific language governing permissions and limitations
 under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
+<form action="<@ofbizUrl>quickCreateVirtualWithVariants</@ofbizUrl>" method="post" name="quickCreateVirtualWithVariants">
 <table cellspacing="0" class="basic-table">
-    <form action="<@ofbizUrl>quickCreateVirtualWithVariants</@ofbizUrl>" method="post" name="quickCreateVirtualWithVariants">
     <tr class="header-row">
         <td><b>${uiLabelMap.ProductQuickCreateVirtualFromVariants}</b></td>
     </tr>
     <tr>
         <td>
-            <br/>
+            <br />
             <span class="label">${uiLabelMap.ProductVariantProductIds}:</span>
             <textarea name="variantProductIdsBag" rows="6" cols="20"></textarea>
             <span class="label">Hazmat:</span>
@@ -37,5 +37,5 @@ under the License.
             <input type="submit" value="${uiLabelMap.ProductCreateVirtualProduct}"/>
         </td>
     </tr>
-    </form>
 </table>
+</form>

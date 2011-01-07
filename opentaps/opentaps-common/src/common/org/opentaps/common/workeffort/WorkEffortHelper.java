@@ -22,7 +22,7 @@ import java.util.Map;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 
@@ -35,21 +35,21 @@ public class WorkEffortHelper {
      * of the last view.  When an update happens, the entries in WorkEffortViewHistory table are cleared.
      * Thus, if no last view exists, an update has occured.  
      */
-    public static boolean isUpdatedSinceLastView(GenericDelegator delegator, String workEffortId, String userLoginId) throws GenericEntityException {
+    public static boolean isUpdatedSinceLastView(Delegator delegator, String workEffortId, String userLoginId) throws GenericEntityException {
         GenericValue history = delegator.findByPrimaryKey("WorkEffortViewHistory", UtilMisc.toMap("workEffortId", workEffortId, "userLoginId", userLoginId));
         return (history == null ? true : false);
     }
 
     /** As above, but argument is a work effort value or any entity that has workEffortId. */
     public static boolean isUpdatedSinceLastView(GenericValue workEffort, String userLoginId) throws GenericEntityException {
-        GenericDelegator delegator = workEffort.getDelegator();
+        Delegator delegator = workEffort.getDelegator();
         return isUpdatedSinceLastView(delegator, workEffort.getString("workEffortId"), userLoginId);
     }
 
     /**
      * Mark the work effort as updated for all users.  This is mainly used by the service of the same name.
      */
-    public static void markAsUpdated(GenericDelegator delegator, String workEffortId) throws GenericEntityException {
+    public static void markAsUpdated(Delegator delegator, String workEffortId) throws GenericEntityException {
         delegator.removeByAnd("WorkEffortViewHistory", UtilMisc.toMap("workEffortId", workEffortId));
     }
 
@@ -58,7 +58,7 @@ public class WorkEffortHelper {
      */
     public static void markAsViewed(GenericValue workEffort, String userLoginId) throws GenericEntityException {
         try {
-            GenericDelegator delegator = workEffort.getDelegator();
+            Delegator delegator = workEffort.getDelegator();
             Map input = UtilMisc.toMap("workEffortId", workEffort.get("workEffortId"), "userLoginId", userLoginId);
             GenericValue history = delegator.findByPrimaryKey("WorkEffortViewHistory", input);
             if (history != null) {

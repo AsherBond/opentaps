@@ -30,7 +30,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -68,11 +68,11 @@ public final class UtilCOGS {
      * @param productId a <code>String</code> value
      * @param organizationPartyId a <code>String</code> value
      * @param userLogin a <code>GenericValue</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @return a <code>BigDecimal</code> value
      */
-    public static BigDecimal getProductAverageCost(String productId, String organizationPartyId, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher) {
+    public static BigDecimal getProductAverageCost(String productId, String organizationPartyId, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher) {
         BigDecimal cost = null;
 
         try {
@@ -126,11 +126,11 @@ public final class UtilCOGS {
      * @param productId               The product to get the value of
      * @param organizationPartyId     Organization of the transactions, which is required.
      * @param transactionDate         An optional timestamp. If specified, the sum will be taken up to this date, inclusive.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return  BigDecimal value of the product
      * @exception GenericEntityException if an error occurs
      */
-    public static BigDecimal getInventoryValueForProduct(String productId, String organizationPartyId, Timestamp transactionDate, GenericDelegator delegator) throws GenericEntityException {
+    public static BigDecimal getInventoryValueForProduct(String productId, String organizationPartyId, Timestamp transactionDate, Delegator delegator) throws GenericEntityException {
         Map<String, BigDecimal> results = getNetInventoryValueHelper(productId, null, organizationPartyId, transactionDate, delegator);
         return results.get(productId);
     }
@@ -142,11 +142,11 @@ public final class UtilCOGS {
      *
      * @param organizationPartyId     Organization of the transactions, always specify this.
      * @param transactionDate         Specify this to sum over all transactions before the transactionDate or set to null to sum over all dates
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return  Map of productIds keyed to their net (debit - credit) amounts
      * @exception GenericEntityException if an error occurs
      */
-    public static Map<String, BigDecimal> getInventoryValueForAllProducts(String organizationPartyId, Timestamp transactionDate, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, BigDecimal> getInventoryValueForAllProducts(String organizationPartyId, Timestamp transactionDate, Delegator delegator) throws GenericEntityException {
         return getNetInventoryValueHelper(null, null, organizationPartyId, transactionDate, delegator);
     }
 
@@ -158,11 +158,11 @@ public final class UtilCOGS {
      * @param condition               EntityCondition to constrain the results using AcctgTransEntryProdSums
      * @param organizationPartyId     Organization of the transactions, always specify this.
      * @param transactionDate         Specify this to sum over all transactions before the transactionDate or set to null to sum over all dates
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return  Map of productIds keyed to their net (debit - credit) amounts
      * @exception GenericEntityException if an error occurs
      */
-    public static Map<String, BigDecimal> getInventoryValueForProductsByCondition(EntityCondition condition, String organizationPartyId, Timestamp transactionDate, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, BigDecimal> getInventoryValueForProductsByCondition(EntityCondition condition, String organizationPartyId, Timestamp transactionDate, Delegator delegator) throws GenericEntityException {
         return getNetInventoryValueHelper(null, condition, organizationPartyId, transactionDate, delegator);
     }
 
@@ -174,11 +174,11 @@ public final class UtilCOGS {
      * @param condition               EntityCondition to constrain the results using AcctgTransEntryProdSums
      * @param organizationPartyId     Organization of the transactions, always specify this.
      * @param transactionDate         Specify this to sum over all transactions before the transactionDate or set to null to sum over all dates
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return  Map of productIds keyed to their net (debit - credit) amounts
      * @exception GenericEntityException if an error occurs
      */
-    private static Map<String, BigDecimal> getNetInventoryValueHelper(String productId, EntityCondition condition, String organizationPartyId, Timestamp transactionDate, GenericDelegator delegator) throws GenericEntityException {
+    private static Map<String, BigDecimal> getNetInventoryValueHelper(String productId, EntityCondition condition, String organizationPartyId, Timestamp transactionDate, Delegator delegator) throws GenericEntityException {
         return getNetInventoryValueHelper(productId, condition, organizationPartyId, "ACTUAL", transactionDate, delegator);
     }
 
@@ -190,11 +190,11 @@ public final class UtilCOGS {
      * @param organizationPartyId     Organization of the transactions, always specify this.
      * @param glFiscalTypeId          Fiscal type -- ACTUAL, BUDGET, FORECAST
      * @param transactionDate         Specify this to sum over all transactions before the transactionDate or set to null to sum over all dates
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return  Map of productIds keyed to their net (debit - credit) amounts
      * @exception GenericEntityException if an error occurs
      */
-    private static Map<String, BigDecimal> getNetInventoryValueHelper(String productId, EntityCondition condition, String organizationPartyId, String glFiscalTypeId, Timestamp transactionDate, GenericDelegator delegator) throws GenericEntityException {
+    private static Map<String, BigDecimal> getNetInventoryValueHelper(String productId, EntityCondition condition, String organizationPartyId, String glFiscalTypeId, Timestamp transactionDate, Delegator delegator) throws GenericEntityException {
         return getNetInventoryValueHelper(productId,
                     EntityCondition.makeCondition(EntityOperator.OR,
                       EntityCondition.makeCondition("glAccountTypeId", EntityOperator.EQUALS, "INVENTORY_ACCOUNT"),
@@ -205,7 +205,7 @@ public final class UtilCOGS {
                     condition, organizationPartyId, glFiscalTypeId, transactionDate, delegator);
     }
 
-    private static Map<String, BigDecimal> getNetInventoryValueHelper(String productId, EntityCondition glAccountTypeIds, EntityCondition condition, String organizationPartyId, String glFiscalTypeId, Timestamp transactionDate, GenericDelegator delegator) throws GenericEntityException {
+    private static Map<String, BigDecimal> getNetInventoryValueHelper(String productId, EntityCondition glAccountTypeIds, EntityCondition condition, String organizationPartyId, String glFiscalTypeId, Timestamp transactionDate, Delegator delegator) throws GenericEntityException {
 
         if (organizationPartyId == null) {
             throw new GenericEntityException("No organizationPartyId specified for getting product inventory value(s).");
@@ -300,13 +300,13 @@ public final class UtilCOGS {
      * Method to get total inventory quantity on hand in all facilities for a given product and organizataiton.
      * @param productId a <code>String</code> value
      * @param organizationPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @return a <code>BigDecimal</code> value
      * @exception GenericServiceException if an error occurs
      * @exception GenericEntityException if an error occurs
      */
-    public static BigDecimal getInventoryQuantityForProduct(String productId, String organizationPartyId, GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericServiceException, GenericEntityException {
+    public static BigDecimal getInventoryQuantityForProduct(String productId, String organizationPartyId, Delegator delegator, LocalDispatcher dispatcher) throws GenericServiceException, GenericEntityException {
         BigDecimal quantity = ZERO;
 
         // the strategy is to loop through the organization facilities and get the product inventory for each facility
@@ -342,13 +342,13 @@ public final class UtilCOGS {
      *
      * @param productId a <code>String</code> value
      * @param organizationPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @return a <code>BigDecimal</code> value
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
-    public static BigDecimal getInventoryValueFromItems(String productId, String organizationPartyId, GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
+    public static BigDecimal getInventoryValueFromItems(String productId, String organizationPartyId, Delegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
         // get the non-serialized items first
         List<GenericValue> items = delegator.findByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "ownerPartyId", organizationPartyId, "inventoryItemTypeId", "NON_SERIAL_INV_ITEM"));
         // now add all the serialized items: these are the states which are consistent with a QOH = 1.0
@@ -379,13 +379,13 @@ public final class UtilCOGS {
      * This **should** equal to the value of inventory on the GL.
      * @param productId a <code>String</code> value
      * @param organizationPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @return a <code>BigDecimal</code> value
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
-    public static BigDecimal getNetInventoryValueFromItems(String productId, String organizationPartyId, GenericDelegator delegator, LocalDispatcher dispatcher)
+    public static BigDecimal getNetInventoryValueFromItems(String productId, String organizationPartyId, Delegator delegator, LocalDispatcher dispatcher)
             throws GenericEntityException, GenericServiceException {
         // get the net value of inventory items
         BigDecimal valueOfItems = getInventoryValueFromItems(productId, organizationPartyId, delegator, dispatcher);

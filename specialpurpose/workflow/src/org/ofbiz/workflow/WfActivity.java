@@ -40,7 +40,7 @@ public interface WfActivity extends WfExecutionObject {
      * @throws WfException General workflow exception.
      * @return Assignment Iterator.
      */
-    public Iterator getIteratorAssignment() throws WfException;
+    public Iterator<WfAssignment> getIteratorAssignment() throws WfException;
 
     /**
      * Retrieve all assignments of this activity.
@@ -48,7 +48,7 @@ public interface WfActivity extends WfExecutionObject {
      * @throws WfException General workflow exception.
      * @return  List of WfAssignment objects.
      */
-    public List getSequenceAssignment(int maxNumber) throws WfException;
+    public List<WfAssignment> getSequenceAssignment(int maxNumber) throws WfException;
 
     /**
      * Check if a specific assignment is a member of this activity.
@@ -71,7 +71,7 @@ public interface WfActivity extends WfExecutionObject {
      * @throws ResultNotAvailable No result is available.
      * @return Map of results from this activity
      */
-    public Map result() throws WfException, ResultNotAvailable;
+    public Map<String, Object> result() throws WfException, ResultNotAvailable;
 
     /**
      * Assign Result for this activity.
@@ -79,7 +79,7 @@ public interface WfActivity extends WfExecutionObject {
      * @throws WfException General workflow exception.
      * @throws InvalidData Data is invalid
      */
-    public void setResult(Map result) throws WfException, InvalidData;
+    public void setResult(Map<String, Object> result) throws WfException, InvalidData;
 
     /**
      * Complete this activity.

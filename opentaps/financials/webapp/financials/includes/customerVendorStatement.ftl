@@ -26,7 +26,7 @@
       <td>
       <table style="">
 	  <tr>
-	    <td class="tableheadtext" align="center" colspan="4">${uiLabelMap.FinancialsStatementFor} ${Static['org.ofbiz.party.party.PartyHelper'].getPartyName(delegator, partyId, false)} (${partyId?default("N/A")}) (<a href="<@ofbizUrl>customerVendorStatement.pdf?partyId=${partyId?if_exists}&fromDate=${getLocalizedDate(fromDate)}&thruDate=${getLocalizedDate(thruDate)}&glFiscalTypeId=${requestParameters.glFiscalTypeId?if_exists}&reportType=${reportType}</@ofbizUrl>"class="linktext">PDF</a>)
+	    <td class="tableheadtext" align="center" colspan="4">${uiLabelMap.FinancialsStatementFor} ${Static['org.ofbiz.party.party.PartyHelper'].getPartyName(delegator, partyId, false)} (${partyId?default("N/A")}) (<a href="<@ofbizUrl>customerVendorStatement.pdf?partyId=${partyId?if_exists}&amp;fromDate=${getLocalizedDate(fromDate)}&amp;thruDate=${getLocalizedDate(thruDate)}&amp;glFiscalTypeId=${requestParameters.glFiscalTypeId?if_exists}&amp;reportType=${reportType}</@ofbizUrl>"class="linktext">PDF</a>)
 	    </td>
 	  </tr>
 	

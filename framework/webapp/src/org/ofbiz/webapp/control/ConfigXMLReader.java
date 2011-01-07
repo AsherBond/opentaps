@@ -42,6 +42,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.cache.UtilCache;
+import org.ofbiz.base.util.collections.MapContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -53,12 +54,12 @@ public class ConfigXMLReader {
     public static final String module = ConfigXMLReader.class.getName();
     public static final String controllerXmlFileName = "/WEB-INF/controller.xml";
 
-    public static UtilCache<URL, ControllerConfig> controllerCache = new UtilCache<URL, ControllerConfig>("webapp.ControllerConfig");
-    public static UtilCache<String, List<ControllerConfig>> controllerSearchResultsCache = new UtilCache<String, List<ControllerConfig>>("webapp.ControllerSearchResults");
+    public static UtilCache<URL, ControllerConfig> controllerCache = UtilCache.createUtilCache("webapp.ControllerConfig");
+    public static UtilCache<String, List<ControllerConfig>> controllerSearchResultsCache = UtilCache.createUtilCache("webapp.ControllerSearchResults");
 
     public static URL getControllerConfigURL(ServletContext context) {
         try {
-            return context.getResource(controllerXmlFileName);
+            return new File(context.getRealPath(controllerXmlFileName)).toURI().toURL();
         } catch (MalformedURLException e) {
             Debug.logError(e, "Error Finding XML Config File: " + controllerXmlFileName, module);
             return null;
@@ -83,23 +84,24 @@ public class ConfigXMLReader {
     public static class ControllerConfig {
         public URL url;
 
-        public String errorpage;
-        public String protectView;
-        public String owner;
-        public String securityClass;
-        public String defaultRequest;
+        private String errorpage;
+        private String protectView;
+        private String owner;
+        private String securityClass;
+        private String defaultRequest;
 
-        public Map<String, Event> firstVisitEventList = FastMap.newInstance();
-        public Map<String, Event> preprocessorEventList = FastMap.newInstance();
-        public Map<String, Event> postprocessorEventList = FastMap.newInstance();
-        public Map<String, Event> afterLoginEventList = FastMap.newInstance();
-        public Map<String, Event> beforeLogoutEventList = FastMap.newInstance();
+        private List<URL> includes = FastList.newInstance();
+        private Map<String, Event> firstVisitEventList = FastMap.newInstance();
+        private Map<String, Event> preprocessorEventList = FastMap.newInstance();
+        private Map<String, Event> postprocessorEventList = FastMap.newInstance();
+        private Map<String, Event> afterLoginEventList = FastMap.newInstance();
+        private Map<String, Event> beforeLogoutEventList = FastMap.newInstance();
 
-        public Map<String, String> eventHandlerMap = FastMap.newInstance();
-        public Map<String, String> viewHandlerMap = FastMap.newInstance();
+        private Map<String, String> eventHandlerMap = FastMap.newInstance();
+        private Map<String, String> viewHandlerMap = FastMap.newInstance();
 
-        public Map<String, RequestMap> requestMapMap = FastMap.newInstance();
-        public Map<String, ViewMap> viewMapMap = FastMap.newInstance();
+        private Map<String, RequestMap> requestMapMap = FastMap.newInstance();
+        private Map<String, ViewMap> viewMapMap = FastMap.newInstance();
 
         public ControllerConfig(URL url) {
             this.url = url;
@@ -122,26 +124,164 @@ public class ConfigXMLReader {
             }
         }
 
-        protected void absorbControllerConfig(ControllerConfig controllerConfig) {
-            // copy/add all data except the url
+        public String getErrorpage() {
+            if (errorpage != null) {
+                return errorpage;
+            }
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                String errorpage = controllerConfig.getErrorpage();
+                if (errorpage != null) {
+                    return errorpage;
+                }
+            }
+            return null;
+        }
 
-            this.errorpage = controllerConfig.errorpage;
-            this.protectView = controllerConfig.protectView;
-            this.owner = controllerConfig.owner;
-            this.securityClass = controllerConfig.securityClass;
-            this.defaultRequest = controllerConfig.defaultRequest;
+        public String getProtectView() {
+            if (protectView != null) {
+                return protectView;
+            }
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                String protectView = controllerConfig.getProtectView();
+                if (protectView != null) {
+                    return protectView;
+                }
+            }
+            return null;
+        }
 
-            this.firstVisitEventList.putAll(controllerConfig.firstVisitEventList);
-            this.preprocessorEventList.putAll(controllerConfig.preprocessorEventList);
-            this.postprocessorEventList.putAll(controllerConfig.postprocessorEventList);
-            this.afterLoginEventList.putAll(controllerConfig.afterLoginEventList);
-            this.beforeLogoutEventList.putAll(controllerConfig.beforeLogoutEventList);
+        public String getOwner() {
+            if (owner != null) {
+                return owner;
+            }
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                String owner = controllerConfig.getOwner();
+                if (owner != null) {
+                    return owner;
+                }
+            }
+            return null;
+        }
 
-            this.eventHandlerMap.putAll(controllerConfig.eventHandlerMap);
-            this.viewHandlerMap.putAll(controllerConfig.viewHandlerMap);
+        public String getSecurityClass() {
+            if (securityClass != null) {
+                return securityClass;
+            }
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                String securityClass = controllerConfig.getSecurityClass();
+                if (securityClass != null) {
+                    return securityClass;
+                }
+            }
+            return null;
+        }
 
-            this.requestMapMap.putAll(controllerConfig.requestMapMap);
-            this.viewMapMap.putAll(controllerConfig.viewMapMap);
+        public String getDefaultRequest() {
+            if (defaultRequest != null) {
+                return defaultRequest;
+            }
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                String defaultRequest = controllerConfig.getDefaultRequest();
+                if (defaultRequest != null) {
+                    return defaultRequest;
+                }
+            }
+            return null;
+        }
+
+        public Map<String, Event> getFirstVisitEventList() {
+            MapContext<String, Event> result = MapContext.getMapContext();
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                result.push(controllerConfig.getFirstVisitEventList());
+            }
+            result.push(firstVisitEventList);
+            return result;
+        }
+
+        public Map<String, Event> getPreprocessorEventList() {
+            MapContext<String, Event> result = MapContext.getMapContext();
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                result.push(controllerConfig.getPreprocessorEventList());
+            }
+            result.push(preprocessorEventList);
+            return result;
+        }
+
+        public Map<String, Event> getPostprocessorEventList() {
+            MapContext<String, Event> result = MapContext.getMapContext();
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                result.push(controllerConfig.getPostprocessorEventList());
+            }
+            result.push(postprocessorEventList);
+            return result;
+        }
+
+        public Map<String, Event> getAfterLoginEventList() {
+            MapContext<String, Event> result = MapContext.getMapContext();
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                result.push(controllerConfig.getAfterLoginEventList());
+            }
+            result.push(afterLoginEventList);
+            return result;
+        }
+
+        public Map<String, Event> getBeforeLogoutEventList() {
+            MapContext<String, Event> result = MapContext.getMapContext();
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                result.push(controllerConfig.getBeforeLogoutEventList());
+            }
+            result.push(beforeLogoutEventList);
+            return result;
+        }
+
+        public Map<String, String> getEventHandlerMap() {
+            MapContext<String, String> result = MapContext.getMapContext();
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                result.push(controllerConfig.getEventHandlerMap());
+            }
+            result.push(eventHandlerMap);
+            return result;
+        }
+
+        public Map<String, String> getViewHandlerMap() {
+            MapContext<String, String> result = MapContext.getMapContext();
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                result.push(controllerConfig.getViewHandlerMap());
+            }
+            result.push(viewHandlerMap);
+            return result;
+        }
+
+        public Map<String, RequestMap> getRequestMapMap() {
+            MapContext<String, RequestMap> result = MapContext.getMapContext();
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                result.push(controllerConfig.getRequestMapMap());
+            }
+            result.push(requestMapMap);
+            return result;
+        }
+
+        public Map<String, ViewMap> getViewMapMap() {
+            MapContext<String, ViewMap> result = MapContext.getMapContext();
+            for (URL includeLocation: includes) {
+                ControllerConfig controllerConfig = getControllerConfig(includeLocation);
+                result.push(controllerConfig.getViewMapMap());
+            }
+            result.push(viewMapMap);
+            return result;
         }
 
         protected void loadIncludes(Element rootElement) {
@@ -149,8 +289,9 @@ public class ConfigXMLReader {
                 String includeLocation = includeElement.getAttribute("location");
                 if (UtilValidate.isNotEmpty(includeLocation)) {
                     try {
-                        ControllerConfig controllerConfig = getControllerConfig(FlexibleLocation.resolveLocation(includeLocation));
-                        this.absorbControllerConfig(controllerConfig);
+                        URL urlLocation = FlexibleLocation.resolveLocation(includeLocation);
+                        includes.add(urlLocation);
+                        ControllerConfig controllerConfig = getControllerConfig(urlLocation);
                     } catch (MalformedURLException mue) {
                         Debug.logError(mue, "Error processing include at [" + includeLocation + "]:" + mue.toString(), module);
                     }
@@ -179,8 +320,11 @@ public class ConfigXMLReader {
             Element firstvisitElement = UtilXml.firstChildElement(rootElement, "firstvisit");
             if (firstvisitElement != null) {
                 for (Element eventElement: UtilXml.childElementList(firstvisitElement, "event")) {
-                    String name = autoSetNameforEvent(eventElement, "firstvisit", firstVisitEventList);
-                    this.firstVisitEventList.put(name, new Event(eventElement));
+                    String eventName = eventElement.getAttribute("name");
+                    if (UtilValidate.isEmpty(eventName)) {
+                        eventName = eventElement.getAttribute("type") + "::" + eventElement.getAttribute("path") + "::" + eventElement.getAttribute("invoke");
+                    }
+                    this.firstVisitEventList.put(eventName, new Event(eventElement));
                 }
             }
 
@@ -188,8 +332,11 @@ public class ConfigXMLReader {
             Element preprocessorElement = UtilXml.firstChildElement(rootElement, "preprocessor");
             if (preprocessorElement != null) {
                 for (Element eventElement: UtilXml.childElementList(preprocessorElement, "event")) {
-                    String name = autoSetNameforEvent(eventElement, "preprocessor", preprocessorEventList);
-                    this.preprocessorEventList.put(name, new Event(eventElement));
+                    String eventName = eventElement.getAttribute("name");
+                    if (UtilValidate.isEmpty(eventName)) {
+                        eventName = eventElement.getAttribute("type") + "::" + eventElement.getAttribute("path") + "::" + eventElement.getAttribute("invoke");
+                    }
+                    this.preprocessorEventList.put(eventName, new Event(eventElement));
                 }
             }
 
@@ -197,8 +344,11 @@ public class ConfigXMLReader {
             Element postprocessorElement = UtilXml.firstChildElement(rootElement, "postprocessor");
             if (postprocessorElement != null) {
                 for (Element eventElement: UtilXml.childElementList(postprocessorElement, "event")) {
-                    String name = autoSetNameforEvent(eventElement, "postprocessor", postprocessorEventList);
-                    this.postprocessorEventList.put(name, new Event(eventElement));
+                    String eventName = eventElement.getAttribute("name");
+                    if (UtilValidate.isEmpty(eventName)) {
+                        eventName = eventElement.getAttribute("type") + "::" + eventElement.getAttribute("path") + "::" + eventElement.getAttribute("invoke");
+                    }
+                    this.postprocessorEventList.put(eventName, new Event(eventElement));
                 }
             }
 
@@ -206,8 +356,11 @@ public class ConfigXMLReader {
             Element afterLoginElement = UtilXml.firstChildElement(rootElement, "after-login");
             if (afterLoginElement != null) {
                 for (Element eventElement: UtilXml.childElementList(afterLoginElement, "event")) {
-                    String name = autoSetNameforEvent(eventElement, "after-login", afterLoginEventList);
-                    this.afterLoginEventList.put(name, new Event(eventElement));
+                    String eventName = eventElement.getAttribute("name");
+                    if (UtilValidate.isEmpty(eventName)) {
+                        eventName = eventElement.getAttribute("type") + "::" + eventElement.getAttribute("path") + "::" + eventElement.getAttribute("invoke");
+                    }
+                    this.afterLoginEventList.put(eventName, new Event(eventElement));
                 }
             }
 
@@ -215,21 +368,13 @@ public class ConfigXMLReader {
             Element beforeLogoutElement = UtilXml.firstChildElement(rootElement, "before-logout");
             if (beforeLogoutElement != null) {
                 for (Element eventElement: UtilXml.childElementList(beforeLogoutElement, "event")) {
-                    String name = autoSetNameforEvent(eventElement, "before-logout", beforeLogoutEventList);
-                    this.beforeLogoutEventList.put(name, new Event(eventElement));
+                    String eventName = eventElement.getAttribute("name");
+                    if (UtilValidate.isEmpty(eventName)) {
+                        eventName = eventElement.getAttribute("type") + "::" + eventElement.getAttribute("path") + "::" + eventElement.getAttribute("invoke");
+                    }
+                    this.beforeLogoutEventList.put(eventName, new Event(eventElement));
                 }
             }
-        }
-
-        // Opentaps customization, for backward compatibility, auto-set names to event that do no specify them
-        // else the new behavior causes only the last event of a processor to be active (as they would all share the null name)
-        private String autoSetNameforEvent(Element eventElement, String processorName, Map<String, Event> processorMap) {
-            String name = eventElement.getAttribute("name");
-            if (UtilValidate.isEmpty(name)) {
-                name = eventElement.getAttribute("path") + "::" + eventElement.getAttribute("invoke") + "::" + processorMap.size();
-                Debug.logWarning("Unnamed " + processorName + " event, auto set name [" + name + "]", module);
-            }
-            return name;
         }
 
         public void loadHandlerMap(Element rootElement) {
@@ -297,7 +442,7 @@ public class ConfigXMLReader {
                 for (File controllerFile: controllerFiles) {
                     URL controllerUrl = null;
                     try {
-                        controllerUrl = controllerFile.toURL();
+                        controllerUrl = controllerFile.toURI().toURL();
                     } catch (MalformedURLException mue) {
                         throw new GeneralException(mue);
                     }
@@ -512,6 +657,7 @@ public class ConfigXMLReader {
         public String contentType;
         public String encoding;
         public String description;
+        public boolean noCache = false;
 
         public ViewMap(Element viewMapElement) {
             this.name = viewMapElement.getAttribute("name");
@@ -519,6 +665,7 @@ public class ConfigXMLReader {
             this.type = viewMapElement.getAttribute("type");
             this.info = viewMapElement.getAttribute("info");
             this.contentType = viewMapElement.getAttribute("content-type");
+            this.noCache = "true".equals(viewMapElement.getAttribute("no-cache"));
             this.encoding = viewMapElement.getAttribute("encoding");
             this.description = UtilXml.childElementValue(viewMapElement, "description");
             if (UtilValidate.isEmpty(this.page)) {

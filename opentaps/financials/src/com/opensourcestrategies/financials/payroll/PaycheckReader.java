@@ -29,7 +29,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 
@@ -47,7 +47,7 @@ public class PaycheckReader {
     public static String SALARY_EXPENSE_GL_ACCOUNT_TYPE = "SALARY_EXPENSES";
 
     protected GenericValue paycheck = null;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected Map paycheckItemsByClass = new HashMap();
     protected Map glAccountsByItemType = new HashMap();
     protected String employeePartyId = null;
@@ -102,7 +102,7 @@ public class PaycheckReader {
         }
     }
 
-    public PaycheckReader(String paymentId, GenericDelegator delegator) throws GenericEntityException {
+    public PaycheckReader(String paymentId, Delegator delegator) throws GenericEntityException {
         this(delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", paymentId)));
     }
 

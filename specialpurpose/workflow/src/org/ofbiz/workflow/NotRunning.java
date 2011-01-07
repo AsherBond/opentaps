@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * NotRunning Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class NotRunning extends WfException {
 
     public NotRunning() {}

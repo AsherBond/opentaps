@@ -49,7 +49,19 @@ under the License.
                 <set field="applicationTitle" value="${uiLabelMap.ExampleApplication}" global="true"/>
             </actions>
             <widgets>
-                <include-screen name="GlobalDecorator" location="component://common/widget/CommonScreens.xml"/>
+                <decorator-screen name="GlobalDecorator" location="component://common/widget/CommonScreens.xml">
+                    <decorator-section name="pre-body">
+                        <decorator-section-include name="pre-body"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <container id="column-container">
+                            <container id="content-main-section">
+                                <decorator-section-include name="body"/>
+                            </container>
+                            <container style="clear"></container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>
@@ -62,7 +74,7 @@ under the License.
             screen and decorator. -->
         <section>
             <actions>
-                <set field="headerItem" value="Example"/>
+                <set field="headerItem" value="ExampleMenuItem"/>
                 <set field="exampleId" from-field="parameters.exampleId"/>
                 <entity-one entity-name="Example" value-field="example"/>
             </actions>
@@ -95,7 +107,7 @@ under the License.
                                     <widgets>
                                         <container style="h1"><label>${uiLabelMap[titleProperty]} ${uiLabelMap.CommonFor} ${example.exampleName} [${exampleId}]</label></container>
                                         <container style="button-bar">
-                                            <link target="EditExample" text="${uiLabelMap.ExampleNewExample}" style="buttontext"/>
+                                            <link target="EditExample" text="${uiLabelMap.ExampleNewExample}" style="buttontext create"/>
                                             <link target="ExampleReportHtml" text="${uiLabelMap.CommonPrinterFriendly}" style="buttontext">
                                                 <parameter param-name="exampleId"/>
                                             </link>
@@ -180,12 +192,75 @@ under the License.
         </section>
     </screen>
 
+    <screen name="CommonExampleGeoLocationDecorator">
+        <section>
+            <actions>
+                <set field="headerItem" value="ExampleGeoLocation"/>
+                <set field="geoChart.dataSourceId" value="GEOPT_GOOGLE"/>
+                <set field="geoChart.width" value="600px"/>
+                <set field="geoChart.height" value="500px"/>
+                <set field="geoChart.points" from-field="geoPoints"/>
+                <set field="geoChart.center" from-field="geoCenter"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="pre-body">
+                        <include-menu name="ExampleGeoLocation" location="component://example/widget/example/ExampleMenus.xml"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <container style="clear" />
+                        <include-screen name="geoChart" location="component://common/widget/CommonScreens.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="CommonBirtDecorator">
+        <section>
+            <actions>
+                <set field="headerItem" value="Birt"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="pre-body">
+                        <section>
+                            <!-- do check for WEBTOOLS, _VIEW permission -->
+                            <condition>
+                                <if-has-permission permission="ENTITY_MAINT"/>
+                            </condition>
+                            <widgets>
+                                <include-menu name="BirtTabBar" location="component://example/widget/example/ExampleMenus.xml"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <container style="clear" />
+                        <section>
+                            <!-- do check for WEBTOOLS, _VIEW permission -->
+                            <condition>
+                                <if-has-permission permission="ENTITY_MAINT"/>
+                            </condition>
+                            <widgets>
+                                <decorator-section-include name="body"/>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h3">${uiLabelMap.WebtoolsPermissionError}</label>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
     <screen name="main">
         <!-- This is the screen for the Main page in the Example component. A common pattern
             in OFBiz is to have each component include a Main page as a starting point for
             the user. -->
         <section>
             <actions>
+                <set field="tabButtonItem" value="main"/>
                 <set field="parameters.portalPageId" value="EXAMPLE"/>
                 <entity-one entity-name="PortalPage" value-field="portalPage"/>
                 <get-related value-field="portalPage" relation-name="PortalPageColumn" list="portalPageColumns"/>

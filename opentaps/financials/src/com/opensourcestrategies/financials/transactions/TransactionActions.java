@@ -29,7 +29,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.party.party.PartyHelper;
@@ -150,7 +150,7 @@ public class TransactionActions {
             EntityListBuilder acctgTransListBuilder = new EntityListBuilder(ledgerRepository, AcctgTransAndOrg.class, EntityCondition.makeCondition(searchConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList(AcctgTransAndOrg.Fields.transactionDate.desc()));
             PageBuilder<AcctgTransAndOrg> pageBuilder = new PageBuilder<AcctgTransAndOrg>() {
                 public List<Map<String, Object>> build(List<AcctgTransAndOrg> page) throws Exception {
-                    GenericDelegator delegator = ac.getDelegator();
+                    Delegator delegator = ac.getDelegator();
                     List<Map<String, Object>> newPage = FastList.newInstance();
                     for (AcctgTransAndOrg acctgTrans : page) {
                         Map<String, Object> newRow = FastMap.newInstance();

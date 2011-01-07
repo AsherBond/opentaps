@@ -27,8 +27,11 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilObject;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -50,14 +53,14 @@ public class WebPosSession {
     private String productStoreId = null;
     private String facilityId = null;
     private String currencyUomId = null;
-    private transient GenericDelegator delegator = null;
+    private transient Delegator delegator = null;
     private String delegatorName = null;
     private LocalDispatcher dispatcher = null;
     private Boolean mgrLoggedIn = null;
     private WebPosTransaction webPosTransaction = null;
     private ShoppingCart cart = null;
 
-    public WebPosSession(String id, Map<String, Object> attributes, GenericValue userLogin, Locale locale, String productStoreId, String facilityId, String currencyUomId, GenericDelegator delegator, LocalDispatcher dispatcher, ShoppingCart cart) {
+    public WebPosSession(String id, Map<String, Object> attributes, GenericValue userLogin, Locale locale, String productStoreId, String facilityId, String currencyUomId, Delegator delegator, LocalDispatcher dispatcher, ShoppingCart cart) {
         this.id = id;
         this.attributes = attributes;
         this.userLogin = userLogin;
@@ -144,9 +147,9 @@ public class WebPosSession {
         this.currencyUomId = currencyUomId;
     }
 
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         if (UtilValidate.isEmpty(delegator)) {
-            delegator = GenericDelegator.getGenericDelegator(delegatorName);
+            delegator = DelegatorFactory.getDelegator(delegatorName);
         }
         return delegator;
     }
@@ -231,7 +234,7 @@ public class WebPosSession {
 
     public boolean isManagerLoggedIn() {
         if (UtilValidate.isEmpty(mgrLoggedIn)) {
-            mgrLoggedIn = new Boolean(hasRole(getUserLogin(), "MANAGER"));
+            mgrLoggedIn = hasRole(getUserLogin(), "MANAGER");
         }
         return mgrLoggedIn.booleanValue();
     }

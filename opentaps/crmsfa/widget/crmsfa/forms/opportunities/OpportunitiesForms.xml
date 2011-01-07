@@ -76,7 +76,7 @@
         <!-- it has to be this way, because form-widget can't hide a column when no use-when condition causes it to show -->
         <field name="partyIdFrom" use-when="sectionName.equals(&quot;opportunities&quot;)" title="${uiLabelMap.CrmOpportunityFor}" widget-area-style="fieldWidth300">
             <hyperlink description="${groovy:org.opentaps.common.party.PartyHelper.getCrmsfaPartyName(partyIdFrom, delegator);}"
-                       target="${groovy:org.opentaps.common.party.PartyHelper.createViewPageURL(partyIdFrom, delegator, externalLoginKey);}"/>
+                       target="${groovy:org.opentaps.common.party.PartyHelper.createViewPageURL(partyIdFrom, delegator, externalLoginKey);}" target-type="plain"/>
         </field>
     </form>   
 

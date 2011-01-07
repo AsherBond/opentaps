@@ -33,7 +33,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
@@ -76,7 +76,7 @@ public class AjaxEvents {
 
     /** Get the list of warnings of a product. */
     public static String getProductWarningsDataJSON(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         List warnings = new LinkedList();
         String productId = (String) request.getParameter("productId");
@@ -90,7 +90,7 @@ public class AjaxEvents {
     }
 
     public static String assignCategoryToMergeFormJSON(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String mergeFormId = (String) request.getParameter("mergeFormId");
         String mergeFormCategoryId = (String) request.getParameter("mergeFormCategoryId");
 
@@ -127,7 +127,7 @@ public class AjaxEvents {
     }
 
     public static String removeCategoryFromMergeFormJSON(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String mergeFormId = (String) request.getParameter("mergeFormId");
         String mergeFormCategoryId = (String) request.getParameter("mergeFormCategoryId");
 
@@ -175,7 +175,7 @@ public class AjaxEvents {
      * @exception GenericEntityException if an error occurs
      */
     public static String getMergedFormForEmailJSON(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         String mergeFormId = request.getParameter("mergeFormId");
@@ -403,7 +403,7 @@ public class AjaxEvents {
 
     private static String checkPartyWithRole(HttpServletRequest request, String roleTypeId) throws GenericEntityException {
 
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String partyId =  (String) UtilCommon.getParameter(request, "partyId");
         String createdParty = (String) UtilCommon.getParameter(request, "created");
 

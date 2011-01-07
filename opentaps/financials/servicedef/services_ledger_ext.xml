@@ -303,7 +303,7 @@ under the License.
     </service>   
 
     <service name="createAcctgTransAndEntries" engine="simple"
-        location="com/opensourcestrategies/financials/ledger/GeneralLedgerServices.xml" invoke="createAcctgTransAndEntries" default-entity-name="AcctgTrans">
+        location="component://financials/script/com/opensourcestrategies/financials/ledger/GeneralLedgerServices.xml" invoke="createAcctgTransAndEntries" default-entity-name="AcctgTrans">
         <description>
             Takes a list of AcctgTransEntry entries, verifies that the list of entries are valid (GL account and organizationParty exist),
             and then creates an AcctgTrans entry and stores all the AcctgTransEntries with the acctgTransId.  Note that this does not actually
@@ -323,7 +323,7 @@ under the License.
 
     <!-- these services were copied from accounting/script/org/ofbiz/accounting/ledger/AcctgTransServices.xml and General LedgerServices.xml of opentaps 1.0 trunk so that GL account reconciliation continues to work -->    
     <service name="updateAcctgTransEntry" default-entity-name="AcctgTransEntry" engine="simple"
-            location="com/opensourcestrategies/financials/ledger/AcctgTransServices.xml" invoke="updateAcctgTransEntry" auth="true">
+            location="component://financials/script/com/opensourcestrategies/financials/ledger/AcctgTransServices.xml" invoke="updateAcctgTransEntry" auth="true">
         <description>Update an Entry to a AcctgTrans record</description>
         <required-permissions join-type="OR">
             <check-permission permission="ACCOUNTING" action="_ATX_UPDATE"/>
@@ -332,7 +332,7 @@ under the License.
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
     </service>   
     <service name="createGlReconciliationEntry" default-entity-name="GlReconciliationEntry" engine="simple"
-        location="com/opensourcestrategies/financials/ledger/AcctgTransServices.xml" invoke="createGlReconciliationEntry" auth="true">
+        location="component://financials/script/com/opensourcestrategies/financials/ledger/AcctgTransServices.xml" invoke="createGlReconciliationEntry" auth="true">
         <description>Add an Entry to a GlReconciliation</description>
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="false"/>

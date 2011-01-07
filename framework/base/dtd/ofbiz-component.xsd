@@ -192,6 +192,14 @@ under the License.
         <xs:attribute type="xs:string" name="base-permission">
             <xs:annotation><xs:documentation>A user must have ALL of the permissions in the list to access the application</xs:documentation></xs:annotation>
         </xs:attribute>
+        <xs:attribute name="privileged" default="false">
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="true"/>
+                    <xs:enumeration value="false"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
         <xs:attribute name="app-bar-display" default="true">
             <xs:simpleType>
                 <xs:restriction base="xs:token">
@@ -245,6 +253,6 @@ under the License.
         <service-resource type="group" loader="maincomponent" location="service/groups_test.xml"/>
         <service-resource type="eca" loader="maincomponent" location="service/secas_test.xml"/>
 
-    	<webapp name="webtools" title="WebTools" server="default" location="webtools" mount-point="/webtools"/>
+        <webapp name="webtools" title="WebTools" server="default" location="webtools" mount-point="/webtools"/>
     </ofbiz-component>
 -->

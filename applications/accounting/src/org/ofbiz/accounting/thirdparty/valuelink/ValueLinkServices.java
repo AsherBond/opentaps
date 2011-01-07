@@ -36,7 +36,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -58,7 +58,7 @@ public class ValueLinkServices {
 
     // generate/display new public/private/kek keys
     public static Map createKeys(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Properties props = getProperties(context);
         ValueLinkApi vl = ValueLinkApi.getInstance(delegator, props);
         vl.reload();
@@ -78,7 +78,7 @@ public class ValueLinkServices {
 
     // test the KEK encryption
     public static Map testKekEncryption(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         //GenericValue userLogin = (GenericValue) context.get("userLogin");
         Properties props = getProperties(context);
 
@@ -105,18 +105,18 @@ public class ValueLinkServices {
         }
 
         // setup the output
-        StringBuffer buf = new StringBuffer();
-        buf.append("======== Begin Test String (" + testString.length() + ") ========\n");
-        buf.append(testString + "\n");
+        StringBuilder buf = new StringBuilder();
+        buf.append("======== Begin Test String (").append(testString.length()).append(") ========\n");
+        buf.append(testString).append("\n");
         buf.append("======== End Test String ========\n\n");
 
-        buf.append("======== Begin Test Bytes (" + testBytes.length + ") ========\n");
-        buf.append(StringUtil.toHexString(testBytes) + "\n");
+        buf.append("======== Begin Test Bytes (").append(testBytes.length).append(") ========\n");
+        buf.append(StringUtil.toHexString(testBytes)).append("\n");
         buf.append("======== End Test Bytes ========\n\n");
 
-        buf.append("======== Begin Test Bytes " + desc + " (" + testEncryption.length + ") ========\n");
-        buf.append(StringUtil.toHexString(testEncryption) + "\n");
-        buf.append("======== End Test Bytes " + desc + " ========\n\n");
+        buf.append("======== Begin Test Bytes ").append(desc).append(" (").append(testEncryption.length).append(") ========\n");
+        buf.append(StringUtil.toHexString(testEncryption)).append("\n");
+        buf.append("======== End Test Bytes ").append(desc).append(" ========\n\n");
 
         String output = buf.toString();
         Debug.log(":: KEK Test Output ::\n\n" + output, module);
@@ -128,7 +128,7 @@ public class ValueLinkServices {
 
     // change working key service
     public static Map assignWorkingKey(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Properties props = getProperties(context);
 
@@ -141,7 +141,7 @@ public class ValueLinkServices {
 
         // see if we passed in the DES hex string
         String desHexString = (String) context.get("desHexString");
-        if (desHexString == null || desHexString.length() == 0) {
+        if (UtilValidate.isEmpty(desHexString)) {
             mwk = vl.generateMwk();
         } else {
             mwk = vl.generateMwk(StringUtil.fromHexString(desHexString));
@@ -154,7 +154,7 @@ public class ValueLinkServices {
         Map request = vl.getInitialRequestMap(context);
         request.put("Interface", "Encrypt");
         request.put("EncryptKey", mwkHex);
-        request.put("EncryptID", new Long(vl.getWorkingKeyIndex().longValue() + 1));
+        request.put("EncryptID", Long.valueOf(vl.getWorkingKeyIndex().longValue() + 1));
 
         // send the request
         Map response = null;
@@ -193,7 +193,7 @@ public class ValueLinkServices {
     }
 
     public static Map activate(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Properties props = getProperties(context);
         String vlPromoCode = (String) context.get("vlPromoCode");
         String cardNumber = (String) context.get("cardNumber");
@@ -210,26 +210,26 @@ public class ValueLinkServices {
         ValueLinkApi vl = ValueLinkApi.getInstance(delegator, props);
         Map request = vl.getInitialRequestMap(context);
         request.put("Interface", iFace != null ? iFace : "Activate");
-        if (vlPromoCode != null && vlPromoCode.length() > 0) {
+        if (UtilValidate.isNotEmpty(vlPromoCode)) {
             request.put("PromoCode", vlPromoCode);
         }
         request.put("Amount", vl.getAmount(amount));
         request.put("LocalCurr", vl.getCurrency(currency));
 
-        if (cardNumber != null && cardNumber.length() > 0) {
+        if (UtilValidate.isNotEmpty(cardNumber)) {
             request.put("CardNo", cardNumber);
         }
-        if (pin != null && pin.length() > 0) {
+        if (UtilValidate.isNotEmpty(pin)) {
             request.put("PIN", vl.encryptPin(pin));
         }
 
         // user defined field #1
-        if (orderId != null && orderId.length() > 0) {
+        if (UtilValidate.isNotEmpty(orderId)) {
             request.put("User1", orderId);
         }
 
         // user defined field #2
-        if (partyId != null && partyId.length() > 0) {
+        if (UtilValidate.isNotEmpty(partyId)) {
             request.put("User2", partyId);
         }
 
@@ -270,7 +270,7 @@ public class ValueLinkServices {
     }
 
     public static Map linkPhysicalCard(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Properties props = getProperties(context);
         String virtualCard = (String) context.get("virtualCard");
         String virtualPin = (String) context.get("virtualPin");
@@ -288,7 +288,7 @@ public class ValueLinkServices {
         request.put("PPIN", vl.encryptPin(physicalPin));
 
         // user defined field #2
-        if (partyId != null && partyId.length() > 0) {
+        if (UtilValidate.isNotEmpty(partyId)) {
             request.put("User2", partyId);
         }
 
@@ -324,7 +324,7 @@ public class ValueLinkServices {
     }
 
     public static Map disablePin(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Properties props = getProperties(context);
         String cardNumber = (String) context.get("cardNumber");
         String pin = (String) context.get("pin");
@@ -341,12 +341,12 @@ public class ValueLinkServices {
         request.put("Amount", vl.getAmount(amount));
 
         // user defined field #1
-        if (orderId != null && orderId.length() > 0) {
+        if (UtilValidate.isNotEmpty(orderId)) {
             request.put("User1", orderId);
         }
 
         // user defined field #2
-        if (partyId != null && partyId.length() > 0) {
+        if (UtilValidate.isNotEmpty(partyId)) {
             request.put("User2", partyId);
         }
 
@@ -380,7 +380,7 @@ public class ValueLinkServices {
     }
 
     public static Map redeem(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Properties props = getProperties(context);
         String cardNumber = (String) context.get("cardNumber");
         String pin = (String) context.get("pin");
@@ -402,12 +402,12 @@ public class ValueLinkServices {
         request.put("LocalCurr", vl.getCurrency(currency));
 
         // user defined field #1
-        if (orderId != null && orderId.length() > 0) {
+        if (UtilValidate.isNotEmpty(orderId)) {
             request.put("User1", orderId);
         }
 
         // user defined field #2
-        if (partyId != null && partyId.length() > 0) {
+        if (UtilValidate.isNotEmpty(partyId)) {
             request.put("User2", partyId);
         }
 
@@ -447,7 +447,7 @@ public class ValueLinkServices {
     }
 
     public static Map reload(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Properties props = getProperties(context);
         String cardNumber = (String) context.get("cardNumber");
         String pin = (String) context.get("pin");
@@ -469,12 +469,12 @@ public class ValueLinkServices {
         request.put("LocalCurr", vl.getCurrency(currency));
 
         // user defined field #1
-        if (orderId != null && orderId.length() > 0) {
+        if (UtilValidate.isNotEmpty(orderId)) {
             request.put("User1", orderId);
         }
 
         // user defined field #2
-        if (partyId != null && partyId.length() > 0) {
+        if (UtilValidate.isNotEmpty(partyId)) {
             request.put("User2", partyId);
         }
 
@@ -513,7 +513,7 @@ public class ValueLinkServices {
     }
 
     public static Map balanceInquire(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Properties props = getProperties(context);
         String cardNumber = (String) context.get("cardNumber");
         String pin = (String) context.get("pin");
@@ -530,12 +530,12 @@ public class ValueLinkServices {
         request.put("LocalCurr", vl.getCurrency(currency));
 
         // user defined field #1
-        if (orderId != null && orderId.length() > 0) {
+        if (UtilValidate.isNotEmpty(orderId)) {
             request.put("User1", orderId);
         }
 
         // user defined field #2
-        if (partyId != null && partyId.length() > 0) {
+        if (UtilValidate.isNotEmpty(partyId)) {
             request.put("User2", partyId);
         }
 
@@ -569,7 +569,7 @@ public class ValueLinkServices {
     }
 
     public static Map transactionHistory(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Properties props = getProperties(context);
         String cardNumber = (String) context.get("cardNumber");
         String pin = (String) context.get("pin");
@@ -584,12 +584,12 @@ public class ValueLinkServices {
         request.put("PIN", vl.encryptPin(pin));
 
         // user defined field #1
-        if (orderId != null && orderId.length() > 0) {
+        if (UtilValidate.isNotEmpty(orderId)) {
             request.put("User1", orderId);
         }
 
         // user defined field #2
-        if (partyId != null && partyId.length() > 0) {
+        if (UtilValidate.isNotEmpty(partyId)) {
             request.put("User2", partyId);
         }
 
@@ -624,7 +624,7 @@ public class ValueLinkServices {
     }
 
     public static Map refund(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Properties props = getProperties(context);
         String cardNumber = (String) context.get("cardNumber");
         String pin = (String) context.get("pin");
@@ -646,12 +646,12 @@ public class ValueLinkServices {
         request.put("LocalCurr", vl.getCurrency(currency));
 
         // user defined field #1
-        if (orderId != null && orderId.length() > 0) {
+        if (UtilValidate.isNotEmpty(orderId)) {
             request.put("User1", orderId);
         }
 
         // user defined field #2
-        if (partyId != null && partyId.length() > 0) {
+        if (UtilValidate.isNotEmpty(partyId)) {
             request.put("User2", partyId);
         }
 
@@ -976,7 +976,7 @@ public class ValueLinkServices {
     public static Map giftCardPurchase(DispatchContext dctx, Map context) {
         // this service should always be called via FULFILLMENT_EXTASYNC
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue orderItem = (GenericValue) context.get("orderItem");
         Locale locale = (Locale) context.get("locale");
@@ -1063,7 +1063,7 @@ public class ValueLinkServices {
 
         // get the VL promo code
         String promoCode = typeFeature.getString("idCode");
-        if (promoCode == null || promoCode.length() == 0) {
+        if (UtilValidate.isEmpty(promoCode)) {
             return ServiceUtil.returnError("Invalid promo code set on idCode field of feature type TYPE");
         }
 
@@ -1253,7 +1253,7 @@ public class ValueLinkServices {
     public static Map giftCardReload(DispatchContext dctx, Map context) {
         // this service should always be called via FULFILLMENT_EXTSYNC
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue orderItem = (GenericValue) context.get("orderItem");
         Locale locale = (Locale) context.get("locale");

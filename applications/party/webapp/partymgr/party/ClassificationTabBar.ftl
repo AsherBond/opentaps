@@ -29,7 +29,7 @@ under the License.
       </ul>
       <br class="clear"/>
     </div>
-    <br/>
+    <br />
   </#if>
 <#else>
   <h2>${uiLabelMap.PartyMgrViewPermissionError}</h2>

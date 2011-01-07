@@ -18,7 +18,7 @@ package org.opentaps.dataimport.netsuite;
 
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
@@ -37,7 +37,7 @@ public class NetSuiteImportServices {
     public static String module = NetSuiteImportServices.class.getName();
 
     public static Map importItems(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         int imported = 0;
         String parentCategoryId = (String) context.get("parentCategoryId");
         try {

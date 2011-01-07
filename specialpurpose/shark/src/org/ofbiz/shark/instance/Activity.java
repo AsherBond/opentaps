@@ -19,7 +19,7 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.shark.instance;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.base.util.UtilMisc;
@@ -39,7 +39,7 @@ public class Activity extends InstanceEntityObject implements ActivityPersistenc
     protected GenericValue activity = null;
     protected boolean newValue = false;
 
-    protected Activity(EntityPersistentMgr mgr, GenericDelegator delegator, String activityId) throws PersistenceException {
+    protected Activity(EntityPersistentMgr mgr, Delegator delegator, String activityId) throws PersistenceException {
         super(mgr, delegator);
         this.delegator = delegator;
         if (this.delegator != null) {
@@ -58,7 +58,7 @@ public class Activity extends InstanceEntityObject implements ActivityPersistenc
         this.activity = activity;
     }
 
-    public Activity(EntityPersistentMgr mgr, GenericDelegator delegator) {
+    public Activity(EntityPersistentMgr mgr, Delegator delegator) {
         super(mgr, delegator);
         this.newValue = true;
         this.activity = delegator.makeValue(org.ofbiz.shark.SharkConstants.WfActivity);

@@ -34,7 +34,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericModelException;
 import org.ofbiz.entity.config.DatasourceInfo;
 import org.ofbiz.entity.model.ModelEntity;
@@ -43,7 +43,7 @@ import org.ofbiz.entity.model.ModelField;
 /**
  * Encapsulates operations between entities and entity fields. This is a immutable class.
  */
-public class EntityComparisonOperator extends EntityOperator<Boolean> {
+public abstract class EntityComparisonOperator<L, R> extends EntityOperator<L, R, Boolean> {
 
     public static final String module = EntityComparisonOperator.class.getName();
 
@@ -69,7 +69,8 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         return null;
     }
 
-    public void validateSql(ModelEntity entity, Object lhs, Object rhs) throws GenericModelException {
+    @Override
+    public void validateSql(ModelEntity entity, L lhs, R rhs) throws GenericModelException {
         if (lhs instanceof EntityConditionValue) {
             EntityConditionValue ecv = (EntityConditionValue) lhs;
             ecv.validateSql(entity);
@@ -80,12 +81,14 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         }
     }
 
-    public void visit(EntityConditionVisitor visitor, Object lhs, Object rhs) {
+    @Override
+    public void visit(EntityConditionVisitor visitor, L lhs, R rhs) {
         visitor.accept(lhs);
         visitor.accept(rhs);
     }
 
-    public void addSqlValue(StringBuilder sql, ModelEntity entity, List<EntityConditionParam> entityConditionParams, boolean compat, Object lhs, Object rhs, DatasourceInfo datasourceInfo) {
+    @Override
+    public void addSqlValue(StringBuilder sql, ModelEntity entity, List<EntityConditionParam> entityConditionParams, boolean compat, L lhs, R rhs, DatasourceInfo datasourceInfo) {
         //Debug.logInfo("EntityComparisonOperator.addSqlValue field=" + lhs + ", value=" + rhs + ", value type=" + (rhs == null ? "null object" : rhs.getClass().getName()), module);
 
         // if this is an IN operator and the rhs Object isEmpty, add "1=0" instead of the normal SQL.  Note that "FALSE" does not work with all databases.
@@ -114,12 +117,12 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         makeRHSWhereString(entity, entityConditionParams, sql, field, rhs, datasourceInfo);
     }
 
-    protected void makeRHSWhereString(ModelEntity entity, List<EntityConditionParam> entityConditionParams, StringBuilder sql, ModelField field, Object rhs, DatasourceInfo datasourceInfo) {
+    protected void makeRHSWhereString(ModelEntity entity, List<EntityConditionParam> entityConditionParams, StringBuilder sql, ModelField field, R rhs, DatasourceInfo datasourceInfo) {
         sql.append(' ').append(getCode()).append(' ');
         makeRHSWhereStringValue(entity, entityConditionParams, sql, field, rhs, datasourceInfo);
     }
 
-    protected void makeRHSWhereStringValue(ModelEntity entity, List<EntityConditionParam> entityConditionParams, StringBuilder sql, ModelField field, Object rhs, DatasourceInfo datasourceInfo) {
+    protected void makeRHSWhereStringValue(ModelEntity entity, List<EntityConditionParam> entityConditionParams, StringBuilder sql, ModelField field, R rhs, DatasourceInfo datasourceInfo) {
         if (rhs instanceof EntityConditionValue) {
             EntityConditionValue ecv = (EntityConditionValue) rhs;
             ecv.addSqlValue(sql, entity, entityConditionParams, false, datasourceInfo);
@@ -128,16 +131,14 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         }
     }
 
-    public boolean compare(Comparable lhs, Object rhs) {
-        throw new UnsupportedOperationException(codeString);
-    }
+    public abstract boolean compare(L lhs, R rhs);
 
-    public Boolean eval(GenericDelegator delegator, Map<String, ? extends Object> map, Object lhs, Object rhs) {
+    public Boolean eval(Delegator delegator, Map<String, ? extends Object> map, L lhs, R rhs) {
         return Boolean.valueOf(mapMatches(delegator, map, lhs, rhs));
     }
 
-    @SuppressWarnings("unchecked")
-    public boolean mapMatches(GenericDelegator delegator, Map<String, ? extends Object> map, Object lhs, Object rhs) {
+    @Override
+     public boolean mapMatches(Delegator delegator, Map<String, ? extends Object> map, L lhs, R rhs) {
         Object leftValue;
         if (lhs instanceof EntityConditionValue) {
             EntityConditionValue ecv = (EntityConditionValue) lhs;
@@ -156,10 +157,11 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         }
 
         if (leftValue == WILDCARD || rightValue == WILDCARD) return true;
-        return compare((Comparable) leftValue, rightValue);
+        return compare(UtilGenerics.<L>cast(leftValue), UtilGenerics.<R>cast(rightValue));
     }
 
-    public EntityCondition freeze(Object lhs, Object rhs) {
+    @Override
+    public EntityCondition freeze(L lhs, R rhs) {
         return EntityCondition.makeCondition(freeze(lhs), this, freeze(rhs));
     }
 
@@ -176,7 +178,7 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         super(id, code);
     }
 
-    public static final boolean compareEqual(Comparable lhs, Object rhs) {
+    public static final <T> boolean compareEqual(Comparable<T> lhs, T rhs) {
         if (lhs == null) {
             if (rhs != null) {
                 return false;
@@ -187,7 +189,7 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         return true;
     }
 
-    public static final boolean compareNotEqual(Comparable lhs, Object rhs) {
+    public static final <T> boolean compareNotEqual(Comparable<T> lhs, T rhs) {
         if (lhs == null) {
             if (rhs == null) {
                 return false;
@@ -198,7 +200,7 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         return true;
     }
 
-    public static final boolean compareGreaterThan(Comparable lhs, Object rhs) {
+    public static final <T> boolean compareGreaterThan(Comparable<T> lhs, T rhs) {
         if (lhs == null) {
             if (rhs != null) {
                 return false;
@@ -209,7 +211,7 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         return true;
     }
 
-    public static final boolean compareGreaterThanEqualTo(Comparable lhs, Object rhs) {
+    public static final <T> boolean compareGreaterThanEqualTo(Comparable<T> lhs, T rhs) {
         if (lhs == null) {
             if (rhs != null) {
                 return false;
@@ -220,7 +222,7 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         return true;
     }
 
-    public static final boolean compareLessThan(Comparable lhs, Object rhs) {
+    public static final <T> boolean compareLessThan(Comparable<T> lhs, T rhs) {
         if (lhs == null) {
             if (rhs != null) {
                 return false;
@@ -231,7 +233,7 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         return true;
     }
 
-    public static final boolean compareLessThanEqualTo(Comparable lhs, Object rhs) {
+    public static final <T> boolean compareLessThanEqualTo(Comparable<T> lhs, T rhs) {
         if (lhs == null) {
             if (rhs != null) {
                 return false;
@@ -242,7 +244,7 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         return true;
     }
 
-    public static final boolean compareIn(Object lhs, Object rhs) {
+    public static final <L,R> boolean compareIn(L lhs, R rhs) {
         if (lhs == null) {
             if (rhs != null) {
                 return false;
@@ -250,7 +252,7 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
                 return true;
             }
         } else if (rhs instanceof Collection) {
-            if (((Collection) rhs).contains(lhs)) {
+            if (((Collection<?>) rhs).contains(lhs)) {
                 return true;
             } else {
                 return false;
@@ -262,7 +264,7 @@ public class EntityComparisonOperator extends EntityOperator<Boolean> {
         }
     }
 
-    public static final boolean compareLike(Object lhs, Object rhs) {
+    public static final <L,R> boolean compareLike(L lhs, R rhs) {
         if (lhs == null) {
             if (rhs != null) {
                 return false;

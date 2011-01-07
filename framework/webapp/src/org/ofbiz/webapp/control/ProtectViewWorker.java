@@ -33,10 +33,9 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.service.ServiceUtil;
 
 /**
  * Common Workers
@@ -61,7 +60,7 @@ public class ProtectViewWorker {
         HttpSession session = request.getSession();
         String viewNameId = RequestHandler.getRequestUri(request.getPathInfo());
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String  returnValue = "success";
 
         if (userLogin != null) {
@@ -92,7 +91,7 @@ public class ProtectViewWorker {
                     Long curMaxHits = (Long) hitsByViewAccessed.get(viewNameUserLoginId);
                     if (UtilValidate.isEmpty(curMaxHits)) {
                         hitsByViewAccessed.put(viewNameUserLoginId, one);
-                        Long maxHitsDuration = (Long) protectedView.get("maxHitsDuration") * 1000; 
+                        Long maxHitsDuration = (Long) protectedView.get("maxHitsDuration") * 1000;
                         durationByViewAccessed.put(viewNameUserLoginId, now + maxHitsDuration);
                     } else {
                         Long maxDuration = (Long) durationByViewAccessed.get(viewNameUserLoginId);

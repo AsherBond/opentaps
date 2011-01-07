@@ -38,9 +38,11 @@ import org.ofbiz.base.config.GenericConfigException;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.JNDIContextFactory;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.config.DatasourceInfo;
 import org.ofbiz.entity.config.EntityConfigUtil;
+import org.ofbiz.entity.datasource.GenericHelperInfo;
 import org.ofbiz.entity.jdbc.ConnectionFactory;
 import org.w3c.dom.Element;
 
@@ -67,7 +69,7 @@ public class JNDIFactory implements TransactionFactoryInterface {
                         String jndiName = EntityConfigUtil.getTxFactoryTxMgrJndiName();
                         String jndiServerName = EntityConfigUtil.getTxFactoryTxMgrJndiServerName();
 
-                        if (jndiName != null && jndiName.length() > 0) {
+                        if (UtilValidate.isNotEmpty(jndiName)) {
                             // if (Debug.verboseOn()) Debug.logVerbose("[JNDIFactory.getTransactionManager] Trying JNDI name " + jndiName, module);
 
                             try {
@@ -103,7 +105,7 @@ public class JNDIFactory implements TransactionFactoryInterface {
                         String jndiName = EntityConfigUtil.getTxFactoryUserTxJndiName();
                         String jndiServerName = EntityConfigUtil.getTxFactoryUserTxJndiServerName();
 
-                        if (jndiName != null && jndiName.length() > 0) {
+                        if (UtilValidate.isNotEmpty(jndiName)) {
                             // if (Debug.verboseOn()) Debug.logVerbose("[JNDIFactory.getTransactionManager] Trying JNDI name " + jndiName, module);
 
                             try {
@@ -134,22 +136,22 @@ public class JNDIFactory implements TransactionFactoryInterface {
         return "jndi";
     }
 
-    public Connection getConnection(String helperName) throws SQLException, GenericEntityException {
-        DatasourceInfo datasourceInfo = EntityConfigUtil.getDatasourceInfo(helperName);
+    public Connection getConnection(GenericHelperInfo helperInfo) throws SQLException, GenericEntityException {
+        DatasourceInfo datasourceInfo = EntityConfigUtil.getDatasourceInfo(helperInfo.getHelperBaseName());
 
         if (datasourceInfo.jndiJdbcElement != null) {
             Element jndiJdbcElement = datasourceInfo.jndiJdbcElement;
             String jndiName = jndiJdbcElement.getAttribute("jndi-name");
             String jndiServerName = jndiJdbcElement.getAttribute("jndi-server-name");
             Connection con = getJndiConnection(jndiName, jndiServerName);
-            if (con != null) return TransactionFactory.getCursorConnection(helperName, con);
+            if (con != null) return TransactionFactory.getCursorConnection(helperInfo, con);
         } else {
            // Debug.logError("JNDI loaded is the configured transaction manager but no jndi-jdbc element was specified in the " + helperName + " datasource. Please check your configuration.", module);
         }
 
         if (datasourceInfo.inlineJdbcElement != null) {
-            Connection otherCon = ConnectionFactory.getManagedConnection(helperName, datasourceInfo.inlineJdbcElement);
-            return TransactionFactory.getCursorConnection(helperName, otherCon);
+            Connection otherCon = ConnectionFactory.getManagedConnection(helperInfo, datasourceInfo.inlineJdbcElement);
+            return TransactionFactory.getCursorConnection(helperInfo, otherCon);
         } else {
             //no real need to print an error here
             return null;
@@ -214,7 +216,7 @@ public class JNDIFactory implements TransactionFactoryInterface {
                     /* NOTE: This code causes problems because settting the transaction isolation level after a transaction has started is a no-no
                      * The question is: how should we do this?
                      String isolationLevel = jndiJdbcElement.getAttribute("isolation-level");
-                     if (con != null && isolationLevel != null && isolationLevel.length() > 0) {
+                     if (UtilValidate.isNotEmpty(isolationLevel)) {
                      if ("Serializable".equals(isolationLevel)) {
                      con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
                      } else if ("RepeatableRead".equals(isolationLevel)) {

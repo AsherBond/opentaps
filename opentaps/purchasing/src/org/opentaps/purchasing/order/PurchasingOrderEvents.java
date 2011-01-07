@@ -56,7 +56,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -138,7 +138,7 @@ public final class PurchasingOrderEvents {
      */
     public static OpentapsShoppingCart purchasingGetOrInitializeCart(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         // if one already exists, return it
         OpentapsShoppingCart cart = getCartObject(request);
@@ -211,7 +211,7 @@ public final class PurchasingOrderEvents {
      * @return a <code>String</code> value
      */
     public static String countMatchingProducts(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         ShoppingCart cart = purchasingGetOrInitializeCart(request);
         String searchString = UtilCommon.getParameter(request, "productId");
         EntityCondition where =  EntityCondition.makeCondition(EntityOperator.AND,
@@ -282,7 +282,7 @@ public final class PurchasingOrderEvents {
     @SuppressWarnings("unchecked")
     private static void postOrderCreation(HttpServletRequest request) throws GenericEntityException, GenericServiceException {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
 
@@ -351,7 +351,7 @@ public final class PurchasingOrderEvents {
 
         // this should get a new cart with the correct supplierPartyId from the multi form
         OpentapsShoppingCart cart = purchasingGetOrInitializeCart(request);
-        GenericDelegator delegator = cart.getDelegator();
+        Delegator delegator = cart.getDelegator();
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         EntityListIterator eli = null;
 
@@ -501,7 +501,7 @@ public final class PurchasingOrderEvents {
 
         // this should get a new cart with the correct supplierPartyId from the multi form
         OpentapsShoppingCart cart = purchasingGetOrInitializeCart(request);
-        GenericDelegator delegator = cart.getDelegator();
+        Delegator delegator = cart.getDelegator();
 
         // get the list of selected requirements to use for the order
         Set<String> requirements = new HashSet<String>();
@@ -612,7 +612,7 @@ public final class PurchasingOrderEvents {
     @SuppressWarnings("unchecked")
     public static String addToCartBulkRequirements(HttpServletRequest request, HttpServletResponse response) {
         ShoppingCart cart = getCartObject(request);
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         OpentapsShoppingCartHelper cartHelper = new OpentapsShoppingCartHelper(delegator, dispatcher, cart);
         String controlDirective;
@@ -636,12 +636,12 @@ public final class PurchasingOrderEvents {
      * Updates each of the cart items with the orderItemType according to the requirement type.
      *
      * @param cart a <code>ShoppingCart</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static boolean updateCartWithRequirement(ShoppingCart cart, GenericDelegator delegator) throws GenericEntityException {
+    public static boolean updateCartWithRequirement(ShoppingCart cart, Delegator delegator) throws GenericEntityException {
         // update each item to the correct orderItemType for the requirement type
         for (Iterator<ShoppingCartItem> iter = cart.iterator(); iter.hasNext();) {
             ShoppingCartItem item = iter.next();

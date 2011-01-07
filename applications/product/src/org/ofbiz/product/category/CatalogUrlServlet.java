@@ -35,7 +35,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 
 /**
@@ -58,6 +58,7 @@ public class CatalogUrlServlet extends HttpServlet {
     /**
      * @see javax.servlet.Servlet#init(javax.servlet.ServletConfig)
      */
+    @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
     }
@@ -65,6 +66,7 @@ public class CatalogUrlServlet extends HttpServlet {
     /**
      * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
@@ -72,8 +74,9 @@ public class CatalogUrlServlet extends HttpServlet {
     /**
      * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        GenericDelegator delegator = (GenericDelegator) getServletContext().getAttribute("delegator");
+        Delegator delegator = (Delegator) getServletContext().getAttribute("delegator");
 
         String pathInfo = request.getPathInfo();
         List<String> pathElements = StringUtil.split(pathInfo, "/");
@@ -123,13 +126,21 @@ public class CatalogUrlServlet extends HttpServlet {
             CategoryWorker.setTrail(request, trail);
             categoryId = pathElements.get(pathElements.size() - 1);
         }
-
         if (categoryId != null) {
             request.setAttribute("productCategoryId", categoryId);
         }
-        // setup the data and forward the request
+
+        String rootCategoryId = null;
+        if (pathElements.size() >= 1) {
+            rootCategoryId = pathElements.get(0);
+        }
+        if (rootCategoryId != null) {
+            request.setAttribute("rootCategoryId", rootCategoryId);
+        }
+
         if (productId != null) {
             request.setAttribute("product_id", productId);
+            request.setAttribute("productId", productId);
         }
 
         RequestDispatcher rd = request.getRequestDispatcher("/" + CONTROL_MOUNT_POINT + "/" + (productId != null ? PRODUCT_REQUEST : CATEGORY_REQUEST));
@@ -139,6 +150,7 @@ public class CatalogUrlServlet extends HttpServlet {
     /**
      * @see javax.servlet.Servlet#destroy()
      */
+    @Override
     public void destroy() {
         super.destroy();
     }

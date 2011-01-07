@@ -21,8 +21,10 @@ package org.ofbiz.entity.model;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,10 +33,18 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.UtilFormatOut;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilTimer;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
-import org.ofbiz.entity.GenericEntity;
+import org.ofbiz.entity.condition.EntityComparisonOperator;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityConditionValue;
+import org.ofbiz.entity.condition.EntityFieldValue;
+import org.ofbiz.entity.condition.EntityFunction;
+import org.ofbiz.entity.condition.EntityJoinOperator;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.jdbc.SqlJdbcUtil;
 import org.w3c.dom.Element;
@@ -43,6 +53,7 @@ import org.w3c.dom.NodeList;
 /**
  * This class extends ModelEntity and provides additional information appropriate to view entities
  */
+@SuppressWarnings("serial")
 public class ModelViewEntity extends ModelEntity {
     public static final String module = ModelViewEntity.class.getName();
 
@@ -65,7 +76,7 @@ public class ModelViewEntity extends ModelEntity {
     protected List<ModelMemberEntity> allModelMemberEntities = FastList.newInstance();
 
     /** Contains member-entity ModelEntities: key is alias, value is ModelEntity; populated with fields */
-    protected Map<String, ModelEntity> memberModelEntities = null;
+    protected Map<String, String> memberModelEntities = null;
 
     /** List of alias-alls which act as a shortcut for easily pulling over member entity fields */
     protected List<ModelAliasAll> aliasAlls = FastList.newInstance();
@@ -79,7 +90,12 @@ public class ModelViewEntity extends ModelEntity {
     /** A List of the Field objects for the View Entity, one for each GROUP BY field */
     protected List<ModelField> groupBys = FastList.newInstance();
 
+    /** List of field names to group by */
+    protected List<String> groupByFields = FastList.newInstance();
+
     protected Map<String, Map<String, ModelConversion>> conversions = FastMap.newInstance();
+
+    protected ViewEntityCondition viewEntityCondition = null;
 
     public ModelViewEntity(ModelReader reader, Element entityElement, UtilTimer utilTimer, ModelInfo def) {
         super(reader, entityElement, def);
@@ -113,18 +129,24 @@ public class ModelViewEntity extends ModelEntity {
         }
 
         for (Element viewLinkElement: UtilXml.childElementList(entityElement, "view-link")) {
-            ModelViewLink viewLink = new ModelViewLink(viewLinkElement);
+            ModelViewLink viewLink = new ModelViewLink(this, viewLinkElement);
             this.addViewLink(viewLink);
         }
 
         if (utilTimer != null) utilTimer.timerString("  createModelEntity: before relations");
         this.populateRelated(reader, entityElement);
 
+        Element entityConditionElement = UtilXml.firstChildElement(entityElement, "entity-condition");
+        if (entityConditionElement != null) {
+            this.viewEntityCondition = new ViewEntityCondition(this, null, entityConditionElement);
+        }
+
         // before finishing, make sure the table name is null, this should help bring up errors early...
         this.tableName = null;
     }
 
     public ModelViewEntity(DynamicViewEntity dynamicViewEntity, ModelReader modelReader) {
+        super(modelReader);
         this.entityName = dynamicViewEntity.getEntityName();
         this.packageName = dynamicViewEntity.getPackageName();
         this.title = dynamicViewEntity.getTitle();
@@ -149,6 +171,8 @@ public class ModelViewEntity extends ModelEntity {
         // relations
         dynamicViewEntity.addAllRelationsToList(this.relations);
 
+        dynamicViewEntity.addAllGroupByFieldsToList(this.groupByFields);
+
         // finalize stuff
         // note that this doesn't result in a call to populateReverseLinks because a DynamicViewEntity should never be cached anyway, and will blow up when attempting to make the reverse links to the DynamicViewEntity
         this.populateFieldsBasic(modelReader);
@@ -171,7 +195,8 @@ public class ModelViewEntity extends ModelEntity {
             this.memberModelEntities = FastMap.newInstance();
             populateFields(this.getModelReader());
         }
-        return this.memberModelEntities.get(alias);
+        String entityName = this.memberModelEntities.get(alias);
+        return entityName != null ? this.getModelReader().getModelEntityNoCheck(entityName) : null;
     }
 
     public void addMemberModelMemberEntity(ModelMemberEntity modelMemberEntity) {
@@ -187,6 +212,7 @@ public class ModelViewEntity extends ModelEntity {
     }
 
     /** The col-name of the Field, the alias of the field if this is on a view-entity */
+    @Override
     public String getColNameOrAlias(String fieldName) {
         ModelField modelField = this.getField(fieldName);
         String fieldString = modelField.getColName();
@@ -268,10 +294,46 @@ public class ModelViewEntity extends ModelEntity {
         this.viewLinks.add(viewLink);
     }
 
+    public void populateViewEntityConditionInformation(ModelFieldTypeReader modelFieldTypeReader, List<EntityCondition> whereConditions, List<EntityCondition> havingConditions, List<String> orderByList, List<String> entityAliasStack) {
+        if (entityAliasStack == null) {
+            entityAliasStack = FastList.newInstance();
+        }
+
+        if (this.viewEntityCondition != null) {
+            EntityCondition whereCondition = this.viewEntityCondition.getWhereCondition(modelFieldTypeReader, entityAliasStack);
+            if (whereCondition != null) {
+                whereConditions.add(whereCondition);
+            }
+
+            EntityCondition havingCondition = this.viewEntityCondition.getHavingCondition(modelFieldTypeReader, entityAliasStack);
+            if (havingCondition != null) {
+                havingConditions.add(havingCondition);
+            }
+
+            // add the current one first so it overrides the lower level ones
+            List<String> currentOrderByList = this.viewEntityCondition.getOrderByList();
+            if (currentOrderByList != null) {
+                orderByList.addAll(currentOrderByList);
+            }
+        }
+
+        for (Map.Entry<String, String> memberEntityEntry: this.memberModelEntities.entrySet()) {
+            ModelEntity modelEntity = this.getModelReader().getModelEntityNoCheck(memberEntityEntry.getValue());
+            if (modelEntity instanceof ModelViewEntity) {
+                ModelViewEntity memberViewEntity = (ModelViewEntity) modelEntity;
+                entityAliasStack.add(memberEntityEntry.getKey());
+                memberViewEntity.populateViewEntityConditionInformation(modelFieldTypeReader, whereConditions, havingConditions, orderByList, entityAliasStack);
+                entityAliasStack.remove(entityAliasStack.size() - 1);
+            }
+        }
+    }
+
+    @Override
     public String colNameString(String separator, String afterLast, boolean alias, ModelField... flds) {
         return colNameString(Arrays.asList(flds), separator, afterLast, alias);
     }
 
+    @Override
     public String colNameString(List<ModelField> flds, String separator, String afterLast, boolean alias) {
         StringBuilder returnString = new StringBuilder();
 
@@ -348,7 +410,7 @@ public class ModelViewEntity extends ModelEntity {
             if (aliasedEntity == null) {
                 continue;
             }
-            memberModelEntities.put(entry.getKey(), aliasedEntity);
+            memberModelEntities.put(entry.getKey(), aliasedEntityName);
             Iterator<ModelField> aliasedFieldIterator = aliasedEntity.getFieldsIterator();
             while (aliasedFieldIterator.hasNext()) {
                 ModelField aliasedModelField = aliasedFieldIterator.next();
@@ -374,7 +436,7 @@ public class ModelViewEntity extends ModelEntity {
             field.description = alias.description;
 
             // if this is a groupBy field, add it to the groupBys list
-            if (alias.groupBy) {
+            if (alias.groupBy || groupByFields.contains(alias.name)) {
                 this.groupBys.add(field);
             }
 
@@ -518,7 +580,7 @@ public class ModelViewEntity extends ModelEntity {
         int ptr = 0;
         ModelConversion[] currentConversions = new ModelConversion[conversions.size()];
         for (int j = 0, k; j < currentIndex.length; j++) {
-            for (int l = 0; l < maxIndex[ j ]; l++ ) {
+            for (int l = 0; l < maxIndex[ j ]; l++) {
                 while (true) {
                     for (i = 0, k = 0; i < currentIndex.length; i++) {
                         if (i == j && currentIndex[i] == l) continue;
@@ -537,12 +599,12 @@ public class ModelViewEntity extends ModelEntity {
         Debug.logVerbose(this + ":" + conversions, module);
     }
 
-    public List<Map<String, Object>> convert(String fromEntityName, Map<String, Object> data) {
+    public List<Map<String, Object>> convert(String fromEntityName, Map<String, ? extends Object> data) {
         Map<String, ModelConversion> conversions = this.conversions.get(fromEntityName);
         if (conversions == null) return null;
         List<Map<String, Object>> values = FastList.newInstance();
         for (ModelConversion conversion: conversions.values()) {
-            values.add(conversion.convert(data));
+            conversion.convert(values, data);
         }
         return values;
     }
@@ -646,6 +708,7 @@ public class ModelViewEntity extends ModelEntity {
         }
     }
 
+    @Override
     public String toString() {
         return "ModelViewEntity[" + getEntityName() + "]";
     }
@@ -668,7 +731,7 @@ public class ModelViewEntity extends ModelEntity {
         }
     }
 
-    public static class ModelAliasAll implements Serializable {
+    public static class ModelAliasAll implements Serializable, Iterable<String> {
         protected String entityAlias = "";
         protected String prefix = "";
         protected Set<String> fieldsToExclude = null;
@@ -721,6 +784,10 @@ public class ModelViewEntity extends ModelEntity {
             } else {
                 return this.fieldsToExclude.contains(fieldName);
             }
+        }
+
+        public Iterator<String> iterator() {
+            return fieldsToExclude.iterator();
         }
     }
 
@@ -861,6 +928,10 @@ public class ModelViewEntity extends ModelEntity {
             this.complexAliasMembers.add(complexAliasMember);
         }
 
+        public void addAllComplexAliasMembers(List<ComplexAliasMember> complexAliasMembers) {
+            this.complexAliasMembers.addAll(complexAliasMembers);
+        }
+
         public void makeAliasColName(StringBuilder colNameBuffer, StringBuilder fieldTypeBuffer, ModelViewEntity modelViewEntity, ModelReader modelReader) {
             if (complexAliasMembers.size() == 0) {
                 return;
@@ -935,15 +1006,16 @@ public class ModelViewEntity extends ModelEntity {
         }
     }
 
-    public static class ModelViewLink implements Serializable {
+    public static class ModelViewLink implements Serializable, Iterable<ModelKeyMap> {
         protected String entityAlias = "";
         protected String relEntityAlias = "";
         protected boolean relOptional = false;
         protected List<ModelKeyMap> keyMaps = FastList.newInstance();
+        protected ViewEntityCondition viewEntityCondition = null;
 
         protected ModelViewLink() {}
 
-        public ModelViewLink(Element viewLinkElement) {
+        public ModelViewLink(ModelViewEntity modelViewEntity, Element viewLinkElement) {
             this.entityAlias = UtilXml.checkEmpty(viewLinkElement.getAttribute("entity-alias")).intern();
             this.relEntityAlias = UtilXml.checkEmpty(viewLinkElement.getAttribute("rel-entity-alias")).intern();
             // if anything but true will be false; ie defaults to false
@@ -955,6 +1027,11 @@ public class ModelViewEntity extends ModelEntity {
                 ModelKeyMap keyMap = new ModelKeyMap(keyMapElement);
 
                 if (keyMap != null) keyMaps.add(keyMap);
+            }
+
+            Element entityConditionElement = UtilXml.firstChildElement(viewLinkElement, "entity-condition");
+            if (entityConditionElement != null) {
+                this.viewEntityCondition = new ViewEntityCondition(modelViewEntity, this, entityConditionElement);
             }
         }
 
@@ -995,6 +1072,10 @@ public class ModelViewEntity extends ModelEntity {
             return this.keyMaps.iterator();
         }
 
+        public Iterator<ModelKeyMap> iterator() {
+            return this.keyMaps.iterator();
+        }
+
         public List<ModelKeyMap> getKeyMapsCopy() {
             List<ModelKeyMap> newList = FastList.newInstance();
             newList.addAll(this.keyMaps);
@@ -1018,10 +1099,12 @@ public class ModelViewEntity extends ModelEntity {
             }
         }
 
+        @Override
         public int hashCode() {
             return fromModelEntity.hashCode();
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof ModelConversion)) return false;
             ModelConversion other = (ModelConversion) obj;
@@ -1033,20 +1116,21 @@ public class ModelViewEntity extends ModelEntity {
             fieldMap.put(fromFieldName, toFieldName);
         }
 
+        @Override
         public String toString() {
             //return fromModelEntity.getEntityName() + ":" + fieldMap + ":" + wildcards;
             return aliasName + "(" + fromModelEntity.getEntityName() + ")";
         }
 
-        public Map<String, Object> convert(Map<String, Object> values) {
-            Map<String, Object> newValues = FastMap.newInstance();
+        public void convert(List<Map<String, Object>> values, Map<String, ? extends Object> value) {
+            Map<String, Object> newValue = FastMap.newInstance();
             for (Map.Entry<String, String> entry: fieldMap.entrySet()) {
-                newValues.put(entry.getValue(), values.get(entry.getKey()));
+                newValue.put(entry.getValue(), value.get(entry.getKey()));
             }
             for (String key: wildcards) {
-                newValues.put(key, EntityOperator.WILDCARD);
+                newValue.put(key, EntityOperator.WILDCARD);
             }
-            return newValues;
+            values.add(newValue);
         }
 
         public void addAllAliasConversions(String fieldName, String... aliases) {
@@ -1059,6 +1143,213 @@ public class ModelViewEntity extends ModelEntity {
                     addConversion(fieldName, alias);
                 }
             }
+        }
+    }
+
+    public static class ViewEntityCondition {
+        protected ModelViewEntity modelViewEntity;
+        protected ModelViewLink modelViewLink;
+        protected boolean filterByDate;
+        protected boolean distinct;
+        protected List<String> orderByList;
+        protected ViewCondition whereCondition;
+        protected ViewCondition havingCondition;
+
+        public ViewEntityCondition(ModelViewEntity modelViewEntity, ModelViewLink modelViewLink, Element element) {
+            this.modelViewEntity = modelViewEntity;
+            this.modelViewLink = modelViewLink;
+            this.filterByDate = "true".equals(element.getAttribute("filter-by-date"));
+            this.distinct = "true".equals(element.getAttribute("distinct"));
+            // process order-by
+            List<? extends Element> orderByElementList = UtilXml.childElementList(element, "order-by");
+            if (orderByElementList.size() > 0) {
+                orderByList = FastList.newInstance();
+                for (Element orderByElement: orderByElementList) {
+                    orderByList.add(orderByElement.getAttribute("field-name"));
+                }
+            }
+
+            Element conditionExprElement = UtilXml.firstChildElement(element, "condition-expr");
+            Element conditionListElement = UtilXml.firstChildElement(element, "condition-list");
+            if (conditionExprElement != null) {
+                this.whereCondition = new ViewConditionExpr(this, conditionExprElement);
+            } else if (conditionListElement != null) {
+                this.whereCondition = new ViewConditionList(this, conditionListElement);
+            }
+
+            Element havingConditionListElement = UtilXml.firstChildElement(element, "having-condition-list");
+            if (havingConditionListElement != null) {
+                this.havingCondition = new ViewConditionList(this, havingConditionListElement);
+            }
+        }
+
+        public List<String> getOrderByList() {
+            return this.orderByList;
+        }
+
+        public EntityCondition getWhereCondition(ModelFieldTypeReader modelFieldTypeReader, List<String> entityAliasStack) {
+            if (this.whereCondition != null) {
+                return this.whereCondition.createCondition(modelFieldTypeReader, entityAliasStack);
+            } else {
+                return null;
+            }
+        }
+
+        public EntityCondition getHavingCondition(ModelFieldTypeReader modelFieldTypeReader, List<String> entityAliasStack) {
+            if (this.havingCondition != null) {
+                return this.havingCondition.createCondition(modelFieldTypeReader, entityAliasStack);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    public static interface ViewCondition extends Serializable {
+        public EntityCondition createCondition(ModelFieldTypeReader modelFieldTypeReader, List<String> entityAliasStack);
+    }
+
+    public static class ViewConditionExpr implements ViewCondition {
+        protected ViewEntityCondition viewEntityCondition;
+        protected String entityAlias;
+        protected String fieldName;
+        protected String operator;
+        protected String relEntityAlias;
+        protected String relFieldName;
+        protected Object value;
+        protected boolean ignoreCase;
+
+        public ViewConditionExpr(ViewEntityCondition viewEntityCondition, Element conditionExprElement) {
+            this.viewEntityCondition = viewEntityCondition;
+            this.entityAlias = conditionExprElement.getAttribute("entity-alias");
+            this.fieldName = conditionExprElement.getAttribute("field-name");
+
+            this.operator = UtilFormatOut.checkEmpty(conditionExprElement.getAttribute("operator"), "equals");
+            this.relEntityAlias = conditionExprElement.getAttribute("rel-entity-alias");
+            this.relFieldName = conditionExprElement.getAttribute("rel-field-name");
+            this.value = conditionExprElement.getAttribute("value");
+            this.ignoreCase = "true".equals(conditionExprElement.getAttribute("ignore-case"));
+
+            // if we are in a view-link, default to the entity-alias and rel-entity-alias there
+            if (this.viewEntityCondition.modelViewLink != null) {
+                if (UtilValidate.isEmpty(this.entityAlias)) {
+                    this.entityAlias = this.viewEntityCondition.modelViewLink.getEntityAlias();
+                }
+                if (UtilValidate.isEmpty(this.relEntityAlias)) {
+                    this.relEntityAlias = this.viewEntityCondition.modelViewLink.getRelEntityAlias();
+                }
+            }
+        }
+
+        public EntityCondition createCondition(ModelFieldTypeReader modelFieldTypeReader, List<String> entityAliasStack) {
+            EntityOperator<?,?,?> operator = EntityOperator.lookup(this.operator);
+            if (operator == null) {
+                throw new IllegalArgumentException("Could not find an entity operator for the name: " + this.operator);
+            }
+
+            // If IN or BETWEEN operator, see if value is a literal list and split it
+            if ((operator.equals(EntityOperator.IN) || operator.equals(EntityOperator.BETWEEN))
+                    && value instanceof String) {
+                String delim = null;
+                if (((String)value).indexOf("|") >= 0) {
+                    delim = "|";
+                } else if (((String)value).indexOf(",") >= 0) {
+                    delim = ",";
+                }
+                if (UtilValidate.isNotEmpty(delim)) {
+                    value = StringUtil.split((String) value, delim);
+                }
+            }
+
+            if (this.viewEntityCondition.modelViewEntity.getField(fieldName) == null) {
+                throw new IllegalArgumentException("Error in Entity Find: could not find field [" + fieldName + "] in entity with name [" + this.viewEntityCondition.modelViewEntity.getEntityName() + "]");
+            }
+
+            // don't convert the field to the desired type if this is an IN or BETWEEN operator and we have a Collection
+            if (!((operator.equals(EntityOperator.IN) || operator.equals(EntityOperator.BETWEEN))
+                    && value instanceof Collection)) {
+                // now to a type conversion for the target fieldName
+                value = this.viewEntityCondition.modelViewEntity.convertFieldValue(this.viewEntityCondition.modelViewEntity.getField(fieldName), value, modelFieldTypeReader, FastMap.<String, Object>newInstance());
+            }
+
+            if (Debug.verboseOn()) Debug.logVerbose("Got value for fieldName [" + fieldName + "]: " + value, module);
+
+            EntityConditionValue lhs = EntityFieldValue.makeFieldValue(this.fieldName, this.entityAlias, entityAliasStack, this.viewEntityCondition.modelViewEntity);
+            Object rhs = null;
+            if (value != null) {
+                rhs = value;
+            } else {
+                rhs = EntityFieldValue.makeFieldValue(this.relFieldName, this.relEntityAlias, entityAliasStack, this.viewEntityCondition.modelViewEntity);
+            }
+
+            if (operator.equals(EntityOperator.NOT_EQUAL) && value != null) {
+                // since some databases don't consider nulls in != comparisons, explicitly include them
+                // this makes more sense logically, but if anyone ever needs it to not behave this way we should add an "or-null" attribute that is true by default
+                if (ignoreCase) {
+                    return EntityCondition.makeCondition(
+                            EntityCondition.makeCondition(EntityFunction.UPPER(lhs), UtilGenerics.<EntityComparisonOperator<?,?>>cast(operator), EntityFunction.UPPER(rhs)),
+                            EntityOperator.OR,
+                            EntityCondition.makeCondition(lhs, EntityOperator.EQUALS, null));
+                } else {
+                    return EntityCondition.makeCondition(
+                            EntityCondition.makeCondition(lhs, UtilGenerics.<EntityComparisonOperator<?,?>>cast(operator), rhs),
+                            EntityOperator.OR,
+                            EntityCondition.makeCondition(lhs, EntityOperator.EQUALS, null));
+                }
+            } else {
+                if (ignoreCase) {
+                    // use the stuff to upper case both sides
+                    return EntityCondition.makeCondition(EntityFunction.UPPER(lhs), UtilGenerics.<EntityComparisonOperator<?,?>>cast(operator), EntityFunction.UPPER(rhs));
+                } else {
+                    return EntityCondition.makeCondition(lhs, UtilGenerics.<EntityComparisonOperator<?,?>>cast(operator), rhs);
+                }
+            }
+        }
+    }
+
+    public static class ViewConditionList implements ViewCondition {
+        protected ViewEntityCondition viewEntityCondition;
+        List<ViewCondition> conditionList = new LinkedList<ViewCondition>();
+        String combine;
+
+        public ViewConditionList(ViewEntityCondition viewEntityCondition, Element conditionListElement) {
+            this.viewEntityCondition = viewEntityCondition;
+            this.combine = conditionListElement.getAttribute("combine");
+
+            List<? extends Element> subElements = UtilXml.childElementList(conditionListElement);
+            for (Element subElement: subElements) {
+                if ("condition-expr".equals(subElement.getNodeName())) {
+                    conditionList.add(new ViewConditionExpr(this.viewEntityCondition, subElement));
+                } else if ("condition-list".equals(subElement.getNodeName())) {
+                    conditionList.add(new ViewConditionList(this.viewEntityCondition, subElement));
+                } else {
+                    throw new IllegalArgumentException("Invalid element with name [" + subElement.getNodeName() + "] found under a condition-list element.");
+                }
+            }
+        }
+
+        public EntityCondition createCondition(ModelFieldTypeReader modelFieldTypeReader, List<String> entityAliasStack) {
+            if (this.conditionList.size() == 0) {
+                return null;
+            }
+            if (this.conditionList.size() == 1) {
+                ViewCondition condition = this.conditionList.get(0);
+                return condition.createCondition(modelFieldTypeReader, entityAliasStack);
+            }
+
+            List<EntityCondition> entityConditionList = FastList.<EntityCondition>newInstance();
+            for (ViewCondition curCondition: conditionList) {
+                EntityCondition econd = curCondition.createCondition(modelFieldTypeReader, entityAliasStack);
+                if (econd != null) {
+                    entityConditionList.add(econd);
+                }
+            }
+
+            EntityOperator<?,?,?> operator = EntityOperator.lookup(this.combine);
+            if (operator == null) {
+                throw new IllegalArgumentException("Could not find an entity operator for the name: " + operator);
+            }
+
+            return EntityCondition.makeCondition(entityConditionList, UtilGenerics.<EntityJoinOperator>cast(operator));
         }
     }
 }

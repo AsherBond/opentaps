@@ -69,24 +69,27 @@ under the License.
         <set field="groupByNoOfOrderItems" from-field="parameters.groupByNoOfOrderItems"/>
         <set field="groupByWarehouseArea" from-field="parameters.groupByWarehouseArea"/>
         <now-timestamp field="nowTimestamp"/>
-
-        <if-empty field="parameters.orderHeaderList">
-            <log level="info" message="No order header list found in parameters; finding orders to pick."/>
-
-            <entity-condition entity-name="OrderHeader" list="orderHeaderList">
-                <condition-list combine="and">
-                    <condition-expr field-name="orderTypeId" value="SALES_ORDER"/>
-                    <condition-expr field-name="statusId" value="ORDER_APPROVED"/>
-                    <condition-expr field-name="isRushOrder" from-field="parameters.isRushOrder" ignore-if-empty="true"/>
-                </condition-list>
-                <order-by field-name="+orderDate"/><!-- oldest first -->
-            </entity-condition>
+        <if-not-empty field="parameters.orderId">
+            <entity-one entity-name="OrderHeader" value-field="orderHeader"/>
+            <field-to-list field="orderHeader" list="orderHeaderList"/>
         <else>
-            <set from-field="parameters.orderHeaderList" field="orderHeaderList"/>
-            <log level="info" message="Found orderHeaderList in parameters; using: ${orderHeaderList}"/>
+            <if-empty field="parameters.orderHeaderList">
+                <log level="info" message="No order header list found in parameters; finding orders to pick."/>
+                <entity-condition entity-name="OrderHeader" list="orderHeaderList">
+                    <condition-list combine="and">
+                        <condition-expr field-name="orderTypeId" value="SALES_ORDER"/>
+                        <condition-expr field-name="statusId" value="ORDER_APPROVED"/>
+                        <condition-expr field-name="isRushOrder" from-field="parameters.isRushOrder" ignore-if-empty="true"/>
+                    </condition-list>
+                    <order-by field-name="+orderDate"/><!-- oldest first -->
+                </entity-condition>
+            <else>
+                <set from-field="parameters.orderHeaderList" field="orderHeaderList"/>
+                <log level="info" message="Found orderHeaderList in parameters; using: ${orderHeaderList}"/>
+            </else>
+            </if-empty>
         </else>
-        </if-empty>
-
+        </if-not-empty>
         <set field="maxNumberOfOrders" type="Long" from-field="parameters.maxNumberOfOrders" set-if-empty="true"/>
         <set field="numberSoFar" type="Long" value="0"/>
         <iterate entry="orderHeader" list="orderHeaderList">
@@ -100,44 +103,51 @@ under the License.
             <entity-count entity-name="OrderItem" count-field="orderItemCount">
                 <condition-expr field-name="orderId" from-field="orderHeader.orderId"/>
             </entity-count>
-            <!-- get list of order items for each order -->
-            <entity-and entity-name="OrderItem" list="orderItems">
-                <field-map field-name="orderId" from-field="orderHeader.orderId"/>
-            </entity-and>
 
-            <iterate list="orderItems" entry="orderItem">
-                <!-- get information about location for each order item -->
-                <entity-and entity-name="OrderItemAndFacilityLocationView" list="OrderItemAndFacilityLocationList">
-                    <field-map field-name="orderId" from-field="orderHeader.orderId"/>
-                    <field-map field-name="locationTypeEnumId" value="FLT_PICKLOC"/>
-                    <field-map field-name="orderItemSeqId" from-field="orderItem.orderItemSeqId"/>
-                    <order-by field-name="orderItemSeqId"/>
-                </entity-and>
+            <entity-condition entity-name="OrderHeaderAndItemFacilityLocation" list="OrderHeaderAndItemFacilityLocationList" distinct="true">
+                <condition-list combine="and">
+                    <condition-expr field-name="orderId" from-field="orderHeader.orderId"/>
+                    <condition-list combine="or">
+                        <condition-expr field-name="locationTypeEnumId" operator="equals" value="FLT_PICKLOC"/>
+                        <condition-expr field-name="locationTypeEnumId" operator="equals" from-field="nullField"/>
+                    </condition-list>
+                </condition-list>
+                <select-field field-name="shipmentMethodTypeId"/>
+                <select-field field-name="areaId"/>
+                <use-iterator/>
+            </entity-condition>
+            <set field="groupName"/>
+            <set field="groupName1"/> <!-- Group by Shipping Method -->
+            <set field="groupName2"/> <!-- Group by Warehouse Area -->
+            <set field="groupName3"/> <!-- Group by Number of Order Items -->
 
-                <iterate entry="OrderItemAndFacilityLocation" list="OrderItemAndFacilityLocationList">
-                    <!-- set groupName for order according to user selected options and available informations  -->
-                    <set field="groupName1" value=""/>
-                    <set field="groupName2" value=""/>
-                    <set field="groupName3" value=""/>
-                    <if>
-                        <condition>
-                            <or>
-                                <if-compare field="groupByShippingMethod" operator="equals" value="Y"/>
-                                <and>
-                                    <if-empty field="groupByShippingMethod"/>
-                                    <if-empty field="groupByWarehouseArea"/>
-                                    <if-empty field="groupByNoOfOrderItems"/>
-                                </and>
-                            </or>
-                        </condition>
-                        <then>
-                            <set field="groupName1" from-field="OrderItemAndFacilityLocation.shipmentMethodTypeId"/>
-                        </then>
-                    </if>
+            <!-- If user does not select any grouping method, then skip the grouping part. This is the default behavior of the picking screen -->
+            <if>
+                <condition>
+                    <and>
+                        <if-empty field="groupByShippingMethod"/>
+                        <if-empty field="groupByWarehouseArea"/>
+                        <if-empty field="groupByNoOfOrderItems"/>
+                    </and>
+                </condition>
+                <then>
+                    <set field="groupName" from-field="orderHeader.orderId"/>
+                </then>
+            <else>
+                <iterate list="OrderHeaderAndItemFacilityLocationList" entry="orderHeaderAndItemFacilityLocation">
+                <!-- set groupName for order according to the options selected by the user -->
+
+                    <if-compare field="groupByShippingMethod" operator="equals" value="Y">
+                        <set field="groupName1" from-field="orderHeaderAndItemFacilityLocation.shipmentMethodTypeId"/>
+                    </if-compare>
 
                     <if-compare field="groupByWarehouseArea" operator="equals" value="Y">
-                        <set field="groupName2" from-field="OrderItemAndFacilityLocation.areaId"/>
-                        <set field="locationGroupName" from-field="OrderItemAndFacilityLocation.areaId"/>
+                        <!-- If warehouse area is not setup, then just mark the group name as not-applicable (N/A)
+                             This way if the user has selected group by warehouse area alone or with other options then system can still group the orders with a dummy group i.e. N/A
+                             and user will still be able to see the group details by clicking on the group name which was not possible if warehouse area is not setup.
+                        -->
+                        <set field="groupName2" from-field="orderHeaderAndItemFacilityLocation.areaId" default-value="N/A"/>
+                        <set field="locationGroupName" from-field="orderHeaderAndItemFacilityLocation.areaId"/>
                     </if-compare>
 
                     <if>
@@ -151,9 +161,7 @@ under the License.
                             <property-to-field property="FacilityNumberOfItemsLessThanThree" field="noOfOrderItems" resource="ProductUiLabels"/>
                             <set field="groupName3" value="Items_Less_Than_3"/>
                         </then>
-                    </if>
-
-                    <if>
+                    <else-if>
                         <condition>
                             <and>
                                 <if-compare field="groupByNoOfOrderItems" operator="equals" value="Y"/>
@@ -164,14 +172,16 @@ under the License.
                             <property-to-field property="FacilityNumberOfItemsThreeOrMore" field="noOfOrderItems" resource="ProductUiLabels"/>
                             <set field="groupName3" value="Items_Three_Or_More"/>
                         </then>
+                    </else-if>
                     </if>
+
                     <set field="groupName" value="${groupName1}${groupName2}${groupName3}"/>
 
-                    <!-- adds location of item in location list uniquely -->
                     <if>
                         <condition>
                             <and>
                                 <if-compare field="groupByWarehouseArea" operator="equals" value="Y"/>
+                                <not><if-empty field="locationGroupName"></if-empty></not>
                                 <not><if-compare-field field="locations" operator="contains" to-field="locationGroupName"/></not>
                             </and>
                         </condition>
@@ -180,20 +190,23 @@ under the License.
                         </then>
                     </if>
                 </iterate>
-            </iterate>
-            <!-- count no. of locations in location list -->
-            <set field="locationCount" value="0"/>
-            <if-not-empty field="locations">
-                <set field="locationCount" value="${util:size(locations)}" type="Long"/>
-            </if-not-empty>
+                <!-- count no. of locations in location list -->
+                <set field="locationCount" value="0"/>
+                <if-not-empty field="locations">
+                    <set field="locationCount" value="${util:size(locations)}" type="Long"/>
+                </if-not-empty>
 
-            <!-- set groupName when order items are from different locations -->
-            <if-compare field="locationCount" operator="greater" value="1" type="Long">
-                <set field="groupName" value="MULTI_LOCATIONS"/>
-                <property-to-field property="FacilityMultipleLocations" field="groupName2" resource="ProductUiLabels"/>
-            </if-compare>
-            <clear-field field="locations"/>
-            <clear-field field="locationCount"/>
+                <!-- If order items are picked from different locations of a facility, then create a new group called multiple locations. This order will now belong to this new group -->
+                <if-compare field="locationCount" operator="greater" value="1" type="Long">
+                    <set field="groupName2" value="MULTI_LOCATIONS"/>
+                    <!-- update the composite group name with new location group name -->
+                    <set field="groupName" value="${groupName1}${groupName2}${groupName3}"/>
+                    <property-to-field property="FacilityMultipleLocations" field="groupName2" resource="ProductUiLabels"/>
+                </if-compare>
+                <clear-field field="locations"/>
+                <clear-field field="locationCount"/>
+            </else>
+            </if>
 
             <iterate entry="orderItemShipGroup" list="orderItemShipGroupList">
                 <!-- get the order items and the order item inventory res entries -->
@@ -673,7 +686,56 @@ under the License.
         </if-not-empty>
     </simple-method>
 
-    <!-- Picklist -->
+    <!-- print pick sheet -->
+    <simple-method method-name="printPickSheets" short-description="Print pick sheets for orders">
+        <if-empty field="parameters.maxNumberOfOrdersToPrint">
+            <add-error error-list-name="error_list">
+                <fail-property property="ProductNumberOfOrdersMustNotBeEmptyToPrintPickSheet" resource="ProductErrorUiLabels"/>
+            </add-error>
+        <else>
+            <if-compare field="parameters.maxNumberOfOrdersToPrint" operator="less-equals" value="0" type="Long">
+                <add-error error-list-name="error_list">
+                    <fail-property property="ProductNumberOfOrdersMustBeGreaterThenZeroToPrintPickSheet" resource="ProductErrorUiLabels"/>
+                </add-error>
+            </if-compare>
+        </else>
+        </if-empty>
+        <check-errors/>
+
+        <now-timestamp field="nowTimestamp"/>
+        <set-service-fields service-name="findOrdersToPickMove" map="parameters" to-map="findOrdersToPickMoveMap"/>
+        <call-service service-name="findOrdersToPickMove" in-map-name="findOrdersToPickMoveMap">
+            <result-to-field result-name="pickMoveInfoList"/>
+        </call-service>
+
+        <if-not-empty field="parameters.printGroupName">
+            <set field="printGroupName" from-field="parameters.printGroupName"/>
+            <iterate list="pickMoveInfoList" entry="pickMoveInfo">
+                <set field="groupName" from-field="pickMoveInfo.groupName"/>
+                <if-compare-field field="groupName" operator="equals" to-field="printGroupName">
+                    <list-to-list list="pickMoveInfo.orderReadyToPickInfoList" to-list="toPrintList"/>
+                </if-compare-field>
+            </iterate>
+        <else>
+            <iterate list="pickMoveInfoList" entry="pickMoveInfo">
+                <list-to-list list="pickMoveInfo.orderReadyToPickInfoList" to-list="toPrintList"/>
+            </iterate>
+        </else>
+        </if-not-empty>
+        <set field="counter" value="0" type="Long"/>
+        <iterate list="toPrintList" entry="toPrint">
+            <if-compare-field field="counter" operator="less" to-field="parameters.maxNumberOfOrdersToPrint" type="Long">
+                <set field="orderHeaderMap.orderId" from-field="toPrint.orderHeader.orderId"/>
+                <set field="orderHeaderMap.pickSheetPrintedDate" from-field="nowTimestamp"/>
+                <call-service service-name="updateOrderHeader" in-map-name="orderHeaderMap"/>
+                <set field="counter" value="${counter + 1}" type="Long"/>
+                <clear-field field="orderHeaderMap"/>
+            </if-compare-field>
+        </iterate>
+        <field-to-result field="pickMoveInfoList"/>
+    </simple-method>
+
+       <!-- Picklist -->
     <simple-method method-name="createPicklist" short-description="Create Picklist">
         <check-permission permission="FACILITY" action="_CREATE">
             <fail-message message="Security Error: to run createPicklist you must have the FACILITY_CREATE or FACILITY_ADMIN permission"/>

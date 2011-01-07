@@ -155,7 +155,7 @@ public class PaymentEvents {
                     input.clearInput();
                     pos.showDialog("dialog/error/invalidcardnumber");
                 }
-            } else if (msrInfo == null && (securityCodeInfo == null) ) {
+            } else if (msrInfo == null && (securityCodeInfo == null)) {
                 // test expiration date
                 if (UtilValidate.isNotEmpty(input.value()) && (input.value().length() == 4)) {
                     // ask for Security Code, put in SECURITYCODE
@@ -169,7 +169,7 @@ public class PaymentEvents {
                     input.clearInput();
                     pos.showDialog("dialog/error/invalidexpirationdate");
                 }
-            } else if (msrInfo == null && (postalCodeInfo == null) ) {
+            } else if (msrInfo == null && (postalCodeInfo == null)) {
                 // test security code - allow blank for illegible cards
                 if (UtilValidate.isEmpty(input.value()) ||
                         (UtilValidate.isNotEmpty(input.value()) && (input.value().length() <= 4))) {
@@ -351,17 +351,18 @@ public class PaymentEvents {
     }
 
     public static synchronized void processSale(PosScreen pos) {
-        pos.setWaitCursor();
         PosTransaction trans = PosTransaction.getCurrentTx(pos.getSession());
-        PosScreen.currentScreen.getOutput().print(UtilProperties.getMessage(PosTransaction.resource,"PosProcessing",Locale.getDefault()));
-
+        Locale defaultLocale = Locale.getDefault();
         if (trans.isEmpty()) {
             PosScreen newPos = pos.showPage("pospanel");
             newPos.showDialog("dialog/error/noitems");
         } else if (trans.getTotalDue().compareTo(BigDecimal.ZERO) > 0) {
-            pos.showDialog("dialog/error/notenoughfunds");
+            pos.showDialog("dialog/error/exception", UtilProperties.getMessage("Xuilabels", "NOT_ENOUGH_FUNDS", defaultLocale));
+            trans.clearPayment("CASH");
         } else {
             // manual locks (not secured; will be unlocked on clear)
+            pos.setWaitCursor();
+            PosScreen.currentScreen.getOutput().print(UtilProperties.getMessage(PosTransaction.resource, "PosProcessing", defaultLocale));
             pos.getInput().setLock(true);
             pos.getButtons().setLock(true);
             pos.refresh(false);

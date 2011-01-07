@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
@@ -48,7 +48,7 @@ public class PurchasingOrderServices {
      * @return Map with the result of the service, the output parameters
      */
     public static Map<String, Object> updateOrderItemEstimatedDeliveryDate(DispatchContext ctx, Map<String, ?> context) throws GenericEntityException {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         // Service parameters

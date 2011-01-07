@@ -53,21 +53,23 @@ public class StoreValue extends MethodOperation {
         doCacheClearStr = element.getAttribute("do-cache-clear");
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         boolean doCacheClear = !"false".equals(methodContext.expandString(doCacheClearStr));
 
-        GenericValue value = valueAcsr.get(methodContext);
+        GenericValue value = null;
+        try {
+            value = valueAcsr.get(methodContext);
+        } catch (ClassCastException e) {
+            String errMsg = "In store-value the value specified by valueAcsr [" + valueAcsr + "] was not an instance of GenericValue, not storing";
+            Debug.logError(errMsg, module);
+            methodContext.setErrorReturn(errMsg, simpleMethod);
+            return false;
+        }
         if (value == null) {
             String errMsg = "In store-value a value was not found with the specified valueAcsr: " + valueAcsr + ", not storing";
-
             Debug.logWarning(errMsg, module);
-            if (methodContext.getMethodType() == MethodContext.EVENT) {
-                methodContext.putEnv(simpleMethod.getEventErrorMessageName(), errMsg);
-                methodContext.putEnv(simpleMethod.getEventResponseCodeName(), simpleMethod.getDefaultErrorCode());
-            } else if (methodContext.getMethodType() == MethodContext.SERVICE) {
-                methodContext.putEnv(simpleMethod.getServiceErrorMessageName(), errMsg);
-                methodContext.putEnv(simpleMethod.getServiceResponseMessageName(), simpleMethod.getDefaultErrorCode());
-            }
+            methodContext.setErrorReturn(errMsg, simpleMethod);
             return false;
         }
 
@@ -76,23 +78,18 @@ public class StoreValue extends MethodOperation {
         } catch (GenericEntityException e) {
             Debug.logError(e, module);
             String errMsg = "ERROR: Could not complete the " + simpleMethod.getShortDescription() + " process [problem storing the " + valueAcsr + " value: " + e.getMessage() + "]";
-
-            if (methodContext.getMethodType() == MethodContext.EVENT) {
-                methodContext.putEnv(simpleMethod.getEventErrorMessageName(), errMsg);
-                methodContext.putEnv(simpleMethod.getEventResponseCodeName(), simpleMethod.getDefaultErrorCode());
-            } else if (methodContext.getMethodType() == MethodContext.SERVICE) {
-                methodContext.putEnv(simpleMethod.getServiceErrorMessageName(), errMsg);
-                methodContext.putEnv(simpleMethod.getServiceResponseMessageName(), simpleMethod.getDefaultErrorCode());
-            }
+            methodContext.setErrorReturn(errMsg, simpleMethod);
             return false;
         }
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<store-value/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

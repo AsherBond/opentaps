@@ -96,6 +96,9 @@ under the License.
           <li><a href="<@ofbizUrl>viewdatafile</@ofbizUrl>">${uiLabelMap.WebtoolsWorkWithDataFiles}</a></li>
         </#if>
         <li><h3>${uiLabelMap.WebtoolsMiscSetupTools}</h3></li>
+        <#if security.hasPermission("PORTALPAGE_MAINT", session)>
+          <li><a href="<@ofbizUrl>FindPortalPage</@ofbizUrl>">${uiLabelMap.WebtoolsAdminPortalPage}</a></li>
+        </#if>
         <#if security.hasPermission("ENUM_STATUS_MAINT", session)>
           <#--
           <li><a href="<@ofbizUrl>EditEnumerationTypes</@ofbizUrl>">Edit Enumerations</a></li>
@@ -110,8 +113,9 @@ under the License.
         </#if>
         <li><h3>${uiLabelMap.WebtoolsCertsX509}</h3></li>
         <li><a href="<@ofbizUrl>myCertificates</@ofbizUrl>">${uiLabelMap.WebtoolsMyCertificates}</a></li>
+        <li><h3>Selenium</h3></li>
+        <li><a href="<@ofbizUrl>selenium</@ofbizUrl>">Selenium</a></li>
       </ul>
     </#if>
   </div>
 </div>
-<!-- end main.ftl -->

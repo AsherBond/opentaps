@@ -43,7 +43,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.LocalDispatcher;
@@ -55,9 +55,9 @@ public interface BomTreeInterface {
 
     /**
      * Gets this Tree delegator instance.
-     * @return a <code>GenericDelegator</code> value
+     * @return a <code>Delegator</code> value
      */
-    public GenericDelegator getDelegator();
+    public Delegator getDelegator();
 
     /**
      * Gets this Tree dispatcher instance.

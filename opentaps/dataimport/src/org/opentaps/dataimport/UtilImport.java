@@ -3,7 +3,7 @@ package org.opentaps.dataimport;
 import javolution.util.FastList;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 
@@ -26,7 +26,7 @@ public class UtilImport {
      * For each role in the given list of roles, checks if it is already defined.  Otherwise, creates a new PartyRole
      * value for it (but does not store it yet).  The resulting values can be stored at once in storeAll().
      */
-    public static List<GenericValue> ensurePartyRoles(String partyId, List<String> roleTypeIds, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> ensurePartyRoles(String partyId, List<String> roleTypeIds, Delegator delegator) throws GenericEntityException {
         List<GenericValue> roles = FastList.newInstance();
         Map input = UtilMisc.toMap("partyId", partyId);
         for (String roleTypeId : roleTypeIds) {
@@ -41,7 +41,7 @@ public class UtilImport {
 
     // makes a Map of format PostalAddress
     @SuppressWarnings("unchecked")
-    public static GenericValue makePostalAddress(GenericValue contactMech, String companyName, String firstName, String lastName, String attnName, String address1, String address2, String city, String stateGeoCode, String postalCode, String postalCodeExt, String countryGeoCode, GenericDelegator delegator) {
+    public static GenericValue makePostalAddress(GenericValue contactMech, String companyName, String firstName, String lastName, String attnName, String address1, String address2, String city, String stateGeoCode, String postalCode, String postalCodeExt, String countryGeoCode, Delegator delegator) {
         Map<String, Object> postalAddress = FastMap.newInstance();
 
         // full name of the person built from first and last name
@@ -73,7 +73,7 @@ public class UtilImport {
 
     // make a TelecomNumber
     @SuppressWarnings("unchecked")
-    public static GenericValue makeTelecomNumber(GenericValue contactMech, String countryCode, String areaCode, String contactNumber, GenericDelegator delegator) {
+    public static GenericValue makeTelecomNumber(GenericValue contactMech, String countryCode, String areaCode, String contactNumber, Delegator delegator) {
         Map<String, Object> telecomNumber = FastMap.newInstance();
         telecomNumber.put("contactMechId", contactMech.get("contactMechId"));
         telecomNumber.put("countryCode", countryCode);
@@ -83,7 +83,7 @@ public class UtilImport {
     }
 
     @SuppressWarnings("unchecked")
-    public static GenericValue makeContactMechPurpose(String contactMechPurposeTypeId, GenericValue contactMech, String partyId, Timestamp now, GenericDelegator delegator) {
+    public static GenericValue makeContactMechPurpose(String contactMechPurposeTypeId, GenericValue contactMech, String partyId, Timestamp now, Delegator delegator) {
         Map<String, Object> partyContactMechPurpose = FastMap.newInstance();
         partyContactMechPurpose.put("partyId", partyId);
         partyContactMechPurpose.put("fromDate", now);
@@ -93,7 +93,7 @@ public class UtilImport {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<GenericValue> makePartyWithRoles(String partyId, String partyTypeId, List<String> roleTypeIds, GenericDelegator delegator) {
+    public static List<GenericValue> makePartyWithRoles(String partyId, String partyTypeId, List<String> roleTypeIds, Delegator delegator) {
         List<GenericValue> partyValues = FastList.newInstance();
         partyValues.add(delegator.makeValue("Party", UtilMisc.toMap("partyId", partyId, "partyTypeId", partyTypeId)));
         for (Iterator<String> rti = roleTypeIds.iterator(); rti.hasNext(); ) {
@@ -104,7 +104,7 @@ public class UtilImport {
     }
 
     @SuppressWarnings("unchecked")
-    public static GenericValue makePartySupplementalData(GenericValue partySupplementalData, String partyId, String fieldToUpdate, GenericValue contactMech, GenericDelegator delegator) {
+    public static GenericValue makePartySupplementalData(GenericValue partySupplementalData, String partyId, String fieldToUpdate, GenericValue contactMech, Delegator delegator) {
 
         if (partySupplementalData == null) {
             // create a new partySupplementalData

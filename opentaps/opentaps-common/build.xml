@@ -245,8 +245,11 @@
     <!-- Compilation of GWT files                                           -->
     <!-- ================================================================== -->
 
-    <!-- Set the compiler style option, valid choices are OBF (obfuscated), PRETTY or DETAILED. PRETTY/DETAILED should be used for debugging purposes. -->
-    <property name="gwt.compiler.style" value="OBF"/>
+    <!-- Set the compiler style option, valid choices are OBF (obfuscated), PRETTY or DETAILED. PRETTY/DETAILED should be used for debugging purposes.
+         NOTE: OBF causes conflicts when there are multiple GWT modules on the same page as it would initialize static methods with different
+         obfuscated names in each module (eg: $wnd.Ext.Component.prototype.initComponent)
+    -->
+    <property name="gwt.compiler.style" value="PRETTY"/>
     <!-- We can compile modules in parallel, only works for applications that have more than one module defined -->
     <!-- IMPORTANT: GWT compilation is very demanding, keep this at false, or max 2/3 threads on high end machines with a lot of memory -->
     <property name="gwt.compiler.parallel" value="false"/>

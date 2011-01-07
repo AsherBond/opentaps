@@ -29,7 +29,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -451,11 +451,11 @@ public final class UtilEtl {
      * Gets the dateDim ID for a given timestamp.
      *
      * @param timestamp a <code>Timestamp</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>Long</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static Long lookupDateDimensionForTimestamp(Timestamp timestamp, GenericDelegator delegator) throws GenericEntityException {
+    public static Long lookupDateDimensionForTimestamp(Timestamp timestamp, Delegator delegator) throws GenericEntityException {
 
         String dayOfMonth = DAY_OF_MONTH_FMT.format(timestamp);
         String monthOfYear = MONTH_OF_YEAR_FMT.format(timestamp);
@@ -483,13 +483,13 @@ public final class UtilEtl {
      *
      * @param entityName Entity name
      * @param surrogateKeyName Name of dimension key field
-     * @param lookupConditions Conditions to use together with <code>GenericDelegator</code> methods
-     * @param delegator <code>GenericDelegator</code> instance
+     * @param lookupConditions Conditions to use together with <code>Delegator</code> methods
+     * @param delegator <code>Delegator</code> instance
      * @return
      *   surrogate key value - if only record found under the conditions<br>
      *   0 - in all other cases
      */
-    public static Long lookupDimension(String entityName, String surrogateKeyName, EntityCondition lookupConditions, GenericDelegator delegator) {
+    public static Long lookupDimension(String entityName, String surrogateKeyName, EntityCondition lookupConditions, Delegator delegator) {
         if (UtilValidate.isEmpty(entityName) || lookupConditions == null) {
             throw new IllegalArgumentException();
         }
@@ -513,12 +513,12 @@ public final class UtilEtl {
      * This method is valid for one occasion only, every time it run date dimension is cleared
      * and filled with the same data.
      *
-     * @param delegator An instance of <tt>GenericDelegator</tt>
+     * @param delegator An instance of <tt>Delegator</tt>
      * @param timeZone Context timezone
      * @param locale Context locale
      * @throws GenericEntityException if an error occurs
      */
-    public static void setupDateDimension(GenericDelegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException {
+    public static void setupDateDimension(Delegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException {
         // time range covered by date dimension
         final int years = 100;
 

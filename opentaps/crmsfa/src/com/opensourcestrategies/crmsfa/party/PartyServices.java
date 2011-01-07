@@ -31,7 +31,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -73,7 +73,7 @@ public final class PartyServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> findCrmPartiesForMerge(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         try {
@@ -323,7 +323,7 @@ public final class PartyServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> autoMergeParties(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -414,7 +414,7 @@ public final class PartyServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> updatePartyPassword(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -468,7 +468,7 @@ public final class PartyServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> autoAssignParty(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -563,7 +563,7 @@ public final class PartyServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> convertOfbizParties(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -649,7 +649,7 @@ public final class PartyServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> assignParty(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -709,7 +709,7 @@ public final class PartyServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> unassignParty(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -746,7 +746,7 @@ public final class PartyServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> createPartyTaxAuthInfo(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -795,7 +795,7 @@ public final class PartyServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> updatePartyTaxAuthInfo(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");

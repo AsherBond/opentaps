@@ -48,8 +48,8 @@ import org.ofbiz.base.container.Container;
 import org.ofbiz.base.container.ContainerException;
 import org.ofbiz.base.start.Classpath;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
 import org.w3c.dom.Document;
@@ -78,7 +78,7 @@ public class GenerateContainer implements Container {
      */
     public void init(String[] args, String configFile) {
         ofbizHome = System.getProperty("ofbiz.home");
-        configFile = configFile;
+        this.configFile = configFile;
         this.args = args;
         isGeronimo = args[0].toLowerCase().contains("geronimo") || args[0].toLowerCase().contains("wasce");
         if (isGeronimo) {
@@ -157,7 +157,7 @@ public class GenerateContainer implements Container {
             for(int inst = 0; inst <= instancesNumber; inst++) {
                 instanceNumber = (inst == 0 ? "" : inst).toString();
                 GenerateGeronimoDeployment geronimoDeployment = new GenerateGeronimoDeployment();
-                List classpathJars = geronimoDeployment.generate(args[0], geronimoHostHome, instanceNumber);
+                List<String> classpathJars = geronimoDeployment.generate(args[0], geronimoHostHome, instanceNumber);
                 if (classpathJars == null) {
                     throw new ContainerException("Error in Geronimo deployment, please check the log");
                 }
@@ -392,7 +392,7 @@ public class GenerateContainer implements Container {
 
     private Map<String, Object> buildDataMap() throws ContainerException {
         Map<String, Object> dataMap = FastMap.newInstance();
-        List c[] = getClasspath();
+        List<?> c[] = getClasspath();
         dataMap.put("targetDirectory", getTargetDirectory());
         dataMap.put("pathSeparatorChar", File.pathSeparatorChar);
         dataMap.put("classpath", System.getProperty("java.class.path"));
@@ -404,7 +404,7 @@ public class GenerateContainer implements Container {
         return dataMap;
     }
 
-    private List[] getClasspath() {
+    private List<?>[] getClasspath() {
         Classpath classPath = new Classpath(System.getProperty("java.class.path"));
         List<File> elements = classPath.getElements();
         List<String> jar = FastList.newInstance();
@@ -421,8 +421,7 @@ public class GenerateContainer implements Container {
                 }
             }
         }
-
-        List[] lists = { jar, dir };
+        List<?>[] lists = { jar, dir };
         return lists;
     }
 
@@ -460,6 +459,14 @@ public class GenerateContainer implements Container {
             reader = new InputStreamReader(new FileInputStream(templateFile));
         } catch (FileNotFoundException e) {
             throw new ContainerException(e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    throw new ContainerException(e);
+                }
+            }
         }
 
         // create the target file/directory
@@ -469,21 +476,24 @@ public class GenerateContainer implements Container {
         Writer writer = null;
         try {
             writer = new FileWriter(targetDirectory + templateFile.getName());
+            try {
+                FreeMarkerWorker.renderTemplate(UtilURL.fromFilename(templateFile.getAbsolutePath()).toExternalForm(), dataMap, writer);
+            } catch (Exception e) {
+                throw new ContainerException(e);
+            }
         } catch (IOException e) {
             throw new ContainerException(e);
-        }
-        try {
-            FreeMarkerWorker.renderTemplate(UtilURL.fromFilename(templateFile.getAbsolutePath()).toExternalForm(), dataMap, writer);
-        } catch (Exception e) {
-            throw new ContainerException(e);
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.flush();
+                    writer.close();
+                }
+            } catch (IOException e) {
+                throw new ContainerException(e);
+            }
         }
 
-        try {
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            throw new ContainerException(e);
-        }
     }
 
     // This method writes a DOM document to a file

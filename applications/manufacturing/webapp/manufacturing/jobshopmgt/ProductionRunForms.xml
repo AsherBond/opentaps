@@ -36,6 +36,12 @@ under the License.
         <field name="routingId" title="${uiLabelMap.ManufacturingRoutingId}"><lookup target-form-name="LookupRouting" size="16"/></field>
         <field name="workEffortName" title="${uiLabelMap.ManufacturingProductionRunName}"><text size="30"/></field>
         <field name="description" title="${uiLabelMap.CommonDescription}"><text size="50"/></field>
+        <field name="createDependentProductionRuns">
+            <drop-down allow-empty="false">
+                <option key="N" description="${uiLabelMap.CommonNo}"/>
+                <option key="Y" description="${uiLabelMap.CommonYes}"/>
+            </drop-down>
+        </field>
         <field name="submitButton" title="${uiLabelMap.CommonSubmit}">
             <submit button-type="button"/>
         </field>
@@ -61,7 +67,7 @@ under the License.
                 </entity-options>
              </drop-down>
         </field>
-        <field name="submitButton" title="${uiLabelMap.CommonLookup}"><submit button-type="button"/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}"><submit button-type="button"/></field>
     </form>
 
     <form name="listFindProductionRun" list-name="listIt" title="" type="list" paginate-target="/FindProductionRun"
@@ -70,6 +76,9 @@ under the License.
             <service service-name="performFind" result-map="result" result-map-list="listIt">
                 <field-map field-name="inputFields" from-field="requestParameters"/>
                 <field-map field-name="entityName" value="WorkEffortAndGoods"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
+                <field-map field-name="orderBy" value="estimatedStartDate"/>
             </service>
         </actions>
         <field name="workEffortId" title="${uiLabelMap.CommonEmptyHeader}" widget-style="buttontext">
@@ -132,23 +141,35 @@ under the License.
     </form>
     <form name="ListProductionRunInventoryItems" type="list" title="" list-name="inventoryItems"
         odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+        <row-actions>
+            <entity-one entity-name="InventoryItem" value-field="inventoryItem"/>
+            <entity-condition entity-name="InventoryItemDetail" list="inventoryItemDetails">
+                <condition-expr field-name="inventoryItemId" operator="equals" from-field="inventoryItemId"/>
+                <order-by field-name="inventoryItemDetailSeqId"/>
+            </entity-condition>
+            <set field="quantityOnHandDiff" from-field="inventoryItemDetails[0].quantityOnHandDiff"/>
+        </row-actions>
         <field name="inventoryItemId" widget-style="buttontext">
             <hyperlink target="/facility/control/EditInventoryItem"  description="${inventoryItemId}" also-hidden="false" target-type="inter-app">
                 <parameter param-name="inventoryItemId"/>
             </hyperlink>
         </field>
-        <field name="lotId" entry-name="inventoryItemId"><display-entity entity-name="InventoryItem" key-field-name="inventoryItemId" description="${lotId} "/></field>
-        <field name="creationDate" entry-name="inventoryItemId"><display-entity entity-name="InventoryItem" key-field-name="inventoryItemId" description="${datetimeReceived}"/></field>
+        <field name="lotId" map-name="inventoryItem"><display/></field>
+        <field name="statusId" map-name="inventoryItem"><display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/></field>
+        <field name="unitCost" map-name="inventoryItem"><display/></field>
+        <field name="quantity" entry-name="quantityOnHandDiff"><display/></field>
+        <field name="datetimeReceived" map-name="inventoryItem"><display/></field>
     </form>
 
      <form name="ViewListProductionRunRoutingTasks" type="list" title="" list-name="productionRunRoutingTasks"
          odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
          <row-actions>
-             <set field="estimatedTotalMilliSeconds" value="${bsh:estimatedMilliSeconds * quantity}"  type="BigDecimal"/>
+             <set field="estimatedTotalMilliSeconds" value="${groovy:estimatedMilliSeconds * quantity}"  type="BigDecimal"/>
          </row-actions>
         <field name="priority" title="${uiLabelMap.CommonSequenceNum}"><display/></field>
         <field name="workEffortId"  title="${uiLabelMap.ManufacturingTaskName}"><display description="${workEffortName} [${workEffortId}]"/></field>
         <field name="fixedAssetId"  title="${uiLabelMap.ManufacturingMachine}"><display/></field>
+        <field name="reservPersons"><display/></field>
         <field name="estimatedStartDate"  title="${uiLabelMap.ManufacturingStartDate}"><display/></field>
         <field name="estimatedCompletionDate" title="${uiLabelMap.ManufacturingEstimatedCompletionDate}"><display/></field>
         <field name="estimatedSetupMillis" title="${uiLabelMap.ManufacturingTaskEstimatedSetupMillis}" ><display/></field>
@@ -158,11 +179,12 @@ under the License.
     <form name="ListProductionRunRoutingTasks" type="list" target="ProductionRunTasks" title="" list-name="productionRunRoutingTasks"
         odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
         <row-actions>
-            <set field="estimatedTotalMilliSeconds" value="${bsh:estimatedMilliSeconds * quantity}" type="BigDecimal"/>
+            <set field="estimatedTotalMilliSeconds" value="${groovy:estimatedMilliSeconds * quantity}" type="BigDecimal"/>
         </row-actions>
         <field name="priority" title="${uiLabelMap.CommonSequenceNum}"><display/></field>
         <field name="workEffortId"  title="${uiLabelMap.ManufacturingTaskName}"><display description="${workEffortName} [${workEffortId}]"/></field>
         <field name="fixedAssetId"  title="${uiLabelMap.ManufacturingMachine}"><display/></field>
+        <field name="reservPersons"><display/></field>
         <field name="estimatedStartDate"  title="${uiLabelMap.ManufacturingStartDate}"><display/></field>
         <field name="estimatedCompletionDate" title="${uiLabelMap.ManufacturingEstimatedCompletionDate}"><display/></field>
         <field name="estimatedSetupMillis" title="${uiLabelMap.ManufacturingTaskEstimatedSetupMillis}" ><display/></field>
@@ -220,6 +242,7 @@ under the License.
         <field name="description">
             <text/>
         </field>
+        <field name="reservPersons"><text/></field>
         <field name="estimatedStartDate" title="${uiLabelMap.ManufacturingStartDate}">
             <date-time/>
         </field>
@@ -240,6 +263,9 @@ under the License.
     <!-- Production Run Declaration -->
     <form name="ShowProductionRun" type="single" target="productionRunProduce" title="" default-map-name="productionRunData"
         header-row-style="header-row" default-table-style="basic-table">
+        <actions>
+            <set field="useRequestParameters" value="false" type="Boolean"/>
+        </actions>
         <field name="workEffortId"><hidden/></field>
         <field name="productId" title="${uiLabelMap.ProductProductName}">
             <display-entity entity-name="Product" description="${internalName} [${productId}]"/>
@@ -334,6 +360,7 @@ under the License.
             <display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/>
         </field>
         <field name="fixedAssetId"  title="${uiLabelMap.ManufacturingMachine}"><display/></field>
+        <field name="reservPersons"><display/></field>
         <field name="estimatedCompletionDate" title="${uiLabelMap.ManufacturingEstimatedCompletionDate}"><display/></field>
         <field name="actualSetupMillis" title="${uiLabelMap.ManufacturingTaskActualSetupMillis}" ><display/></field>
         <field name="actualMilliSeconds" title="${uiLabelMap.ManufacturingTaskActualMilliSeconds}" ><display/></field>
@@ -507,12 +534,12 @@ under the License.
         header-row-style="header-row" default-table-style="basic-table">
         <field name="productionRunId"><hidden/></field>
         <field name="workEffortId"><hidden/></field>
-        <field name="productId" title="${uiLabelMap.ProductProductId}" use-when="${bsh:delivProducts.size()>0}">
+        <field name="productId" title="${uiLabelMap.ProductProductId}" use-when="${groovy:delivProducts.size()>0}">
             <drop-down allow-empty="false">
                 <list-options list-name="delivProducts" key-name="productId" description="${productId}"/>
             </drop-down>
         </field>
-        <field name="productId" title="${uiLabelMap.ProductProductId}" use-when="${bsh:delivProducts.size()==0}"><lookup target-form-name="LookupProduct"/></field>
+        <field name="productId" title="${uiLabelMap.ProductProductId}" use-when="${groovy:delivProducts.size()==0}"><lookup target-form-name="LookupProduct"/></field>
         <field name="quantity" title="${uiLabelMap.ManufacturingAddQuantityProduced}">
             <text/>
         </field>
@@ -527,6 +554,85 @@ under the License.
                 <parameter param-name="inventoryItemId"/>
             </hyperlink>
         </field>
+    </form>
+    <form name="FindDelivProductContent" type="single" target="ProductionRunContent">
+        <field name="productionRunId"><hidden/></field>
+        <field name="productId" entry-name="delivProductId"><hidden/></field>
+        <field name="contentLocale">
+            <text default-value="${locale}"/>
+        </field>
+        <field name="partyId">
+            <lookup target-form-name="LookupCustomerName"/>
+        </field>
+        <field name="roleTypeId">
+            <hidden value="CONTENT_USER"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}">
+            <submit button-type="button"/>
+        </field>
+    </form>
+    <form name="ListProductionRunContent" type="list" title="" list-name="productionRunContents">
+        <actions>
+            <entity-and entity-name="WorkEffortContentAndInfo" list="productionRunContents">
+                <field-map field-name="workEffortId" from-field="productionRunId"/>
+            </entity-and>
+        </actions>
+        <field name="workEffortId"><hidden/></field>
+        <field name="contentId"><display/></field>
+        <field name="drDataResourceId"><display/></field>
+        <field name="workEffortContentTypeId"><display-entity entity-name="WorkEffortContentType" description="${description}"/></field>
+        <field name="contentTypeId"><display-entity entity-name="ContentType" description="${description}"/></field>
+        <field name="contentName"><display/></field>
+        <field name="description"><display/></field>
+        <field name="localeString"><display/></field>
+        <field name="description"><display/></field>
+        <field name="drMimeTypeId"><display/></field>
+        <field name="drObjectInfo" title="${uiLabelMap.CommonContent}">
+            <display description="default ${drObjectInfo}"/>
+        </field>
+        <field name="drObjectInfo" title="${uiLabelMap.CommonContent}" use-when="${groovy: drDataResourceTypeId != null &amp;&amp; (drDataResourceTypeId.contains(&quot;FILE&quot;) || drDataResourceTypeId.equals(&quot;IMAGE_OBJECT&quot;))}">
+            <hyperlink target="/content/control/ViewBinaryDataResource" target-type="content" target-window="productionRunContentWindow" description="${drObjectInfo}">
+                <parameter param-name="dataResourceId" from-field="drDataResourceId"/>
+            </hyperlink>
+        </field>
+        <field name="drObjectInfo" title="${uiLabelMap.CommonContent}" entry-name="drDataResourceId" encode-output="true" use-when="${groovy: drDataResourceTypeId != null &amp;&amp; drDataResourceTypeId.equals(&quot;ELECTRONIC_TEXT&quot;)}">
+            <display-entity entity-name="ElectronicText" key-field-name="dataResourceId" description="${textData}"></display-entity>
+        </field>
+        <field name="deleteLink" title="${uiLabelMap.CommonEmptyHeader}" widget-style="smallSubmit">
+            <hyperlink description="${uiLabelMap.CommonDelete}" also-hidden="false" target="deleteProductionRunContent">
+                <parameter param-name="workEffortId"/>
+                <parameter param-name="workEffortContentTypeId"/>
+                <parameter param-name="contentId"/>
+                <parameter param-name="fromDate"/>
+                <parameter param-name="productionRunId" from-field="productionRunId"/>
+            </hyperlink>
+        </field>
+    </form>
+    <form name="ListDelivProductContent" type="multi" use-row-submit="true" target="createProductionRunContents?productionRunId=${productionRunId}" title="" list-name="delivProductContentsForLocaleAndUser">
+        <field name="productionRunId"><hidden/></field>
+        <field name="workEffortId" entry-name="productionRunId"><hidden/></field>
+        <field name="contentId"><display/></field>
+        <field name="drDataResourceId"><display/></field>
+        <field name="contentTypeId"><display-entity entity-name="ContentType" description="${description}"/></field>
+        <field name="contentName"><display/></field>
+        <field name="description"><display/></field>
+        <field name="localeString"><display/></field>
+        <field name="description"><display/></field>
+        <field name="drMimeTypeId"><display/></field>
+        <field name="drObjectInfo" title="${uiLabelMap.CommonContent}">
+            <display description="default ${drObjectInfo}"/>
+        </field>
+        <field name="drObjectInfo" title="${uiLabelMap.CommonContent}" use-when="${groovy: drDataResourceTypeId != null &amp;&amp; (drDataResourceTypeId.contains(&quot;FILE&quot;) || drDataResourceTypeId.equals(&quot;IMAGE_OBJECT&quot;))}">
+            <hyperlink target="/content/control/ViewBinaryDataResource" target-type="content" target-window="productionRunContentWindow" description="${drObjectInfo}">
+                <parameter param-name="dataResourceId" from-field="drDataResourceId"/>
+            </hyperlink>
+        </field>
+        <field name="drObjectInfo" title="${uiLabelMap.CommonContent}" entry-name="drDataResourceId" encode-output="true" use-when="${groovy: drDataResourceTypeId != null &amp;&amp; drDataResourceTypeId.equals(&quot;ELECTRONIC_TEXT&quot;)}">
+            <display-entity entity-name="ElectronicText" key-field-name="dataResourceId" description="${textData}"></display-entity>
+        </field>
+        <field name="workEffortContentTypeId"><drop-down><entity-options description="${description}" entity-name="WorkEffortContentType"></entity-options></drop-down></field>
+        <field name="_rowSubmit" title="${uiLabelMap.CommonSelected}"><check/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}"><submit/></field>
     </form>
     <form name="ProductionRunTaskFixedAssets" type="list" target="updateWorkEffortFixedAssetAssign" paginate-target="" title="" list-name="records"
         odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
@@ -657,7 +763,11 @@ under the License.
     <!-- List for Shipment Plan -->
     <form name="listShipmentPlan" type="list" target="" title="" list-name="shipmentPlan"
         odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
-        <field name="orderId" title="${uiLabelMap.ProductOrderId}"><display/></field>
+        <field name="orderId" widget-style="buttontext">
+            <hyperlink target="/ordermgr/control/orderview" target-type="inter-app" description="${orderId}">
+                <parameter param-name="orderId" from-field="orderId"/>
+            </hyperlink>
+        </field>
         <field name="orderItemSeqId" title="${uiLabelMap.ProductOrderItem}"><display/></field>
         <field name="productId" title="${uiLabelMap.ProductProductId}"><display/></field>
         <!-- quantity planned in this shipment -->
@@ -672,16 +782,27 @@ under the License.
         <field name="totPlannedQuantity"><display/></field>
         <!-- total issued quantity -->
         <field name="totIssuedQuantity"><display/></field>
-        <field name="productionRuns"><display/></field>
+        <field name="productionRunId" widget-style="buttontext">
+            <hyperlink target="ShowProductionRun" description="${productionRunId}" also-hidden="false">
+                <parameter param-name="productionRunId" from-field="productionRunId"/>
+            </hyperlink>
+        </field>
+        <field name="productionRunStatusId"><display-entity entity-name="StatusItem" key-field-name="statusId"/></field>
+        <field name="productionRunEstimatedCompletionDate"><display/></field>
+        <field name="productionRunQuantityProduced"><display/></field>
     </form>
 
     <form name="listShipmentPlans" type="list" target="" title="" list-name="shipmentPlans"
-        odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
-        <field name="shipmentId"><display/></field>
+        odd-row-style="alternate-row" default-table-style="basic-table hover-bar" header-row-style="header-row-2">
+        <field name="shipmentId" widget-style="buttontext" sort-field="true">
+            <hyperlink target="/facility/control/ViewShipment" target-type="inter-app" description="${shipmentId}">
+                <parameter param-name="shipmentId" from-field="shipmentId"/>
+            </hyperlink>
+        </field>
         <field name="statusId">
             <display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/>
         </field>
-        <field name="estimatedShipDate"><display/></field>
+        <field name="estimatedShipDate" sort-field="true"><display/></field>
         <field name="viewShipmentPlanLink" title="${uiLabelMap.CommonEmptyHeader}" widget-style="buttontext">
             <hyperlink target="WorkWithShipmentPlans" description="${uiLabelMap.CommonView}" also-hidden="false">
                 <parameter param-name="shipmentId"/>
@@ -808,7 +929,7 @@ under the License.
     <form name="ProductionRunTaskActualComponents" type="list" target="updateProductionRunComponent" paginate-target="ProductionRunActualComponents" title="" list-name="records"
         odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
         <row-actions>
-            <set field="quantityOnHandDiff" value="${bsh:-1*quantityOnHandDiff}" type="BigDecimal"/>
+            <set field="quantityOnHandDiff" value="${groovy:-1*quantityOnHandDiff}" type="BigDecimal"/>
         </row-actions>
         <field name="inventoryItemId" widget-style="buttontext">
             <hyperlink target="/facility/control/EditInventoryItem" description="${inventoryItemId}" also-hidden="false" target-type="inter-app">
@@ -821,6 +942,9 @@ under the License.
         <field name="workEffortId"><hidden/></field>
         <field name="productionRunId"><hidden/></field>
         <field name="quantityOnHandDiff" title="${uiLabelMap.CommonQuantity}"><display/></field>
+        <field name="unitCost" entry-name="inventoryItemId">
+            <display-entity entity-name="InventoryItem" key-field-name="inventoryItemId" description="${unitCost}"/>
+        </field>
         <field name="reasonEnumId">
             <display-entity entity-name="Enumeration" key-field-name="enumId" description="${description}"/>
         </field>

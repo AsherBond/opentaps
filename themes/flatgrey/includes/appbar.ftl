@@ -32,7 +32,7 @@ under the License.
         <#assign selected = false>
         <#assign permissions = display.getBasePermission()>
         <#list permissions as perm>
-          <#if perm != "NONE" && !security.hasEntityPermission(perm, "_VIEW", session)>
+          <#if (perm != "NONE" && !security.hasEntityPermission(perm, "_VIEW", session) && !authz.hasPermission(session, perm, requestParameters))>
             <#-- User must have ALL permissions in the base-permission list -->
             <#assign permission = false>
           </#if>
@@ -45,7 +45,11 @@ under the License.
           <#if thisApp != "/">
             <#assign thisURL = thisURL + "/control/main">
           </#if>
-          <li<#if selected> class="selected"</#if>><a href="${thisURL}${externalKeyParam}" <#if uiLabelMap?exists> title="${uiLabelMap[display.description]}">${uiLabelMap[display.title]}<#else> title="${display.description}">${display.title}</#if></a></li>
+          <#if layoutSettings.suppressTab?exists && display.name == layoutSettings.suppressTab>
+            <!-- do not display this component-->
+            <#else>
+            <li<#if selected> class="selected"</#if>><a href="${thisURL}${externalKeyParam}" <#if uiLabelMap?exists> title="${uiLabelMap[display.description]}">${uiLabelMap[display.title]}<#else> title="${display.description}">${display.title}</#if></a></li>
+          </#if>
         </#if>
       </#list>
     </ul>

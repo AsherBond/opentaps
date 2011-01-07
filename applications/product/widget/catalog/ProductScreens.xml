@@ -35,20 +35,10 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProduct}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="EditProduct" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProduct}">
+                            <include-form name="EditProduct" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+
                         <section>
                             <condition>
                                 <and>
@@ -57,16 +47,9 @@ under the License.
                                 </and>
                             </condition>
                             <widgets>
-                                <container style="screenlet">
-                                    <container style="screenlet-title-bar">
-                                        <container style="h3">
-                                            <label text="${uiLabelMap.ProductDuplicateProduct}"/>
-                                        </container>
-                                    </container>
-                                    <container style="screenlet-body">
-                                        <include-form name="EditProductDup" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </container>
-                                </container>
+                                <screenlet title="${uiLabelMap.ProductDuplicateProduct}">
+                                    <include-form name="EditProductDup" location="component://product/widget/catalog/ProductForms.xml"/>
+                                </screenlet>
                             </widgets>
                         </section>
                         <section>
@@ -82,16 +65,9 @@ under the License.
                                         <if-compare field="product.isVirtual" operator="equals" type="String" value="Y"/>
                                     </condition>
                                     <widgets>
-                                        <container style="screenlet">
-                                            <container style="screenlet-title-bar">
-                                                <container style="h3">
-                                                    <label text="${uiLabelMap.ProductUpdateProductVariants}"/>
-                                                </container>
-                                            </container>
-                                            <container style="screenlet-body">
-                                                <include-form name="UpdateProductVariants" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                            </container>
-                                        </container>
+                                        <screenlet title="${uiLabelMap.ProductUpdateProductVariants}">
+                                            <include-form name="UpdateProductVariants" location="component://product/widget/catalog/ProductForms.xml"/>
+                                        </screenlet>
                                     </widgets>
                                 </section>
                             </widgets>
@@ -125,34 +101,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductPrices}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="UpdateProductPrice" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductPrices}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductPrice" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductPrices}">
+                            <include-form name="UpdateProductPrice" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductPrices}">
+                            <include-form name="AddProductPrice" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -189,48 +143,20 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductPurchases}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListSupplierProductAgreements" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
+                        <container>
+                            <link target="/accounting/control/EditAgreement" url-mode="inter-app" text="${uiLabelMap.PageTitleEditAgreement}" style="buttontext">
+                                <parameter param-name="productId"/>
+                            </link>
                         </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductSales}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListSalesAgreements" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductCommissions}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListProductAgreements" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.ProductPurchases}">
+                            <include-form name="ListSupplierProductAgreements" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductSales}">
+                            <include-form name="ListSalesAgreements" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductCommissions}">
+                            <include-form name="ListProductAgreements" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -255,34 +181,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator"  location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductCategories}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="UpdateProductCategoryMemeber" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductCategories}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductCategoryMember" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductCategories}">
+                            <include-form name="UpdateProductCategoryMemeber" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductCategories}">
+                            <include-form name="AddProductCategoryMember" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -308,34 +212,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator"  location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductConfigs}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="UpdateProductConfig" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductConfigs}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductConfig" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductConfigs}">
+                            <include-form name="UpdateProductConfig" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductConfigs}">
+                            <include-form name="AddProductConfig" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -357,39 +239,17 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductAssetUsage}"/>
-                                </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductAssetUsage}">
+                            <include-form name="EditProductAssetUsage" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductAssetUsage}">
+                            <container>
+                                <link target="newFixedAssetProduct" text="${uiLabelMap.PageTitleCreateProductAssetUsage}" style="buttontext">
+                                    <parameter param-name="productId"/>
+                                </link>
                             </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="EditProductAssetUsage" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductAssetUsage}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <container>
-                                    <link target="newFixedAssetProduct" text="${uiLabelMap.PageTitleCreateProductAssetUsage}" style="buttontext">
-                                        <parameter param-name="productId"/>
-                                    </link>
-                                </container>
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListProductFixedAssets" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                            <include-form name="ListProductFixedAssets" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -409,25 +269,14 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductAssetUsage}"/>
-                                </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductAssetUsage}">
+                            <container>
+                                <link target="newFixedAssetProduct" text="${uiLabelMap.AccountingFixedAssetNew}" style="buttontext">
+                                    <parameter param-name="productId"/>
+                                </link>
                             </container>
-                            <container style="screenlet-body">
-                                <container>
-                                    <link target="newFixedAssetProduct" text="${uiLabelMap.AccountingFixedAssetNew}" style="buttontext">
-                                        <parameter param-name="productId"/>
-                                    </link>
-                                </container>
-                                <section>
-                                    <widgets>
-                                        <include-form name="showFixedAssetProduct" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                            <include-form name="showFixedAssetProduct" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -446,20 +295,9 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator"  location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductAssetUsage}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="addFixedAssetProduct" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductAssetUsage}">
+                            <include-form name="addFixedAssetProduct" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -494,50 +332,17 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator"  location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <!--<include-form name="UpdateProductPrice" location="component://product/webapp/catalog/product/ProductForms.xml"/>-->
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductRoutings}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListProductRoutings" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <!--<include-form name="UpdateProductPrice" location="component://product/widget/catalog/ProductForms.xml"/>-->
+                        <screenlet title="${uiLabelMap.ProductRoutings}">
+                            <include-form name="ListProductRoutings" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                         <container><label style="h2">${uiLabelMap.ProductLowLevelCode}: ${product.billOfMaterialLevel}</label></container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductComponents}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListProductComponents" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductParent}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListProductParents" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.ProductComponents}">
+                            <include-form name="ListProductComponents" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductParent}">
+                            <include-form name="ListProductParents" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -565,52 +370,50 @@ under the License.
                     <field-map field-name="productId"/>
                     <order-by field-name="-fromDate"/>
                 </entity-and>
+                <entity-and entity-name="ProductCostComponentCalc" list="productCostComponentCalcs">
+                    <field-map field-name="productId"/>
+                    <order-by field-name="sequenceNum"/>
+                </entity-and>
             </actions>
             <widgets>
                 <decorator-screen name="CommonProductDecorator"  location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductCosts}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListCostComponents" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductAddCostComponent}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="EditCostComponent" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductAutoCreateCosts}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="CalculateProductCosts" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.FilterProductCosts}">
+                            <include-form name="FilterCostComponents" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <section>
+                            <condition>
+                                <and>
+                                    <not><if-empty field="parameters.costUomId"/></not>
+                                    <not><if-empty field="parameters.costComponentTypePrefix"/></not>
+                                </and>
+                            </condition>
+                            <actions>
+                                <service service-name="getProductCost" result-map="totalCostMap">
+                                    <field-map field-name="productId"/>
+                                    <field-map field-name="currencyUomId" from-field="parameters.costUomId"/>
+                                    <field-map field-name="costComponentTypePrefix" from-field="parameters.costComponentTypePrefix"/>
+                                </service>
+                            </actions>
+                            <widgets>
+                                <label style="h2">${uiLabelMap.CommonTotal}: ${totalCostMap.productCost}</label>
+                            </widgets>
+                        </section>
+                        <screenlet title="${uiLabelMap.ProductCosts}">
+                            <include-form name="ListCostComponents" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductAddCostComponent}">
+                            <include-form name="EditCostComponent" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductCostComponentCalcs}">
+                            <include-form name="ListProductCostComponentCalcs" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.AddProductCostComponentCalc}">
+                            <include-form name="AddProductCostComponentCalc" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductAutoCreateCosts}">
+                            <include-form name="CalculateProductCosts" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -632,22 +435,11 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator"  location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductQuickAdmin}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <platform-specific>
-                                            <html><html-template location="component://product/webapp/catalog/product/QuickAddVariants.ftl"/></html>
-                                        </platform-specific>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductQuickAdmin}">
+                            <platform-specific>
+                                <html><html-template location="component://product/webapp/catalog/product/QuickAddVariants.ftl"/></html>
+                            </platform-specific>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -702,34 +494,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator"  location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductFacilities}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="UpdateProductFacilities" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductAddFacility}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductFacility" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductFacilities}">
+                            <include-form name="UpdateProductFacilities" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductAddFacility}">
+                            <include-form name="AddProductFacility" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -757,34 +527,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductFacilityLocations}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="UpdateProductFacilityLocations" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.CommonAdd} ${uiLabelMap.ProductFacilityLocation}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductFacilityLocation" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductFacilityLocations}">
+                            <include-form name="UpdateProductFacilityLocations" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.CommonAdd} ${uiLabelMap.ProductFacilityLocation}">
+                            <include-form name="AddProductFacilityLocation" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -813,34 +561,12 @@ under the License.
                                 <parameter param-name="productId"/>
                             </link>
                         </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductAddProductKeyword}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductKeyword" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductKeywords}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="UpdateProductKeyword" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.ProductAddProductKeyword}">
+                            <include-form name="AddProductKeyword" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductKeywords}">
+                            <include-form name="UpdateProductKeyword" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -874,20 +600,9 @@ under the License.
                                 <platform-specific>
                                     <html><html-template location="component://product/webapp/catalog/product/ProductInventorySummary.ftl"/></html>
                                 </platform-specific>
-                                <container style="screenlet">
-                                    <container style="screenlet-title-bar">
-                                        <container style="h3">
-                                            <label text="${uiLabelMap.ProductOutstandingPurchaseOrders}"/>
-                                        </container>
-                                    </container>
-                                    <container style="screenlet-body">
-                                        <section>
-                                            <widgets>
-                                                <include-form name="OutstandingPurchaseOrders" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                            </widgets>
-                                        </section>
-                                    </container>
-                                </container>
+                                <screenlet title="${uiLabelMap.ProductOutstandingPurchaseOrders}">
+                                    <include-form name="OutstandingPurchaseOrders" location="component://product/widget/catalog/ProductForms.xml"/>
+                                </screenlet>
                                 <platform-specific>
                                     <html><html-template location="component://product/webapp/catalog/product/EditProductInventoryItems.ftl"/></html>
                                 </platform-specific>
@@ -919,34 +634,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductGoodIdentifications}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="UpdateProductGoodIdentifications" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleCreateProductGoodIdentifications}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductGoodIdentification" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductGoodIdentifications}">
+                            <include-form name="UpdateProductGoodIdentifications" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleCreateProductGoodIdentifications}">
+                            <include-form name="AddProductGoodIdentification" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -976,46 +669,32 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductGlAccounts}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <condition>
-                                        <and>
-                                            <not><if-empty field="productId"/></not>
-                                            <not><if-empty field="product"/></not>
-                                        </and>
-                                    </condition>
-                                    <widgets>
-                                        <include-form name="ListProductGlAccounts" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductAddGlAccount}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <condition>
-                                        <and>
-                                            <not><if-empty field="productId"/></not>
-                                            <not><if-empty field="product"/></not>
-                                        </and>
-                                    </condition>
-                                    <widgets>
-                                        <include-form name="AddProductGlAccount" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductGlAccounts}">
+                            <section>
+                                <condition>
+                                    <and>
+                                        <not><if-empty field="productId"/></not>
+                                        <not><if-empty field="product"/></not>
+                                    </and>
+                                </condition>
+                                <widgets>
+                                    <include-form name="ListProductGlAccounts" location="component://product/widget/catalog/ProductForms.xml"/>
+                                </widgets>
+                            </section>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductAddGlAccount}">
+                            <section>
+                                <condition>
+                                    <and>
+                                        <not><if-empty field="productId"/></not>
+                                        <not><if-empty field="product"/></not>
+                                    </and>
+                                </condition>
+                                <widgets>
+                                    <include-form name="AddProductGlAccount" location="component://product/widget/catalog/ProductForms.xml"/>
+                                </widgets>
+                            </section>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1042,34 +721,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductPaymentMethodType}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="UpdateProductPaymentMethodType" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductPaymentMethodType}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductPaymentMethodType" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductPaymentMethodType}">
+                            <include-form name="UpdateProductPaymentMethodType" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductPaymentMethodType}">
+                            <include-form name="AddProductPaymentMethodType" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1102,54 +759,18 @@ under the License.
                                 </widgets>
                             </section>
                         </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductListFeatureInteractions}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="ListFeatureInteractions" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductAddFeatureInteraction}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="AddFeatureInteraction" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductFeatureAttributes}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductFeatureApplAttr" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleListProductFeatureApplAttrs}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListProductFeatureApplAttrs" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.ProductListFeatureInteractions}">
+                            <include-form name="ListFeatureInteractions" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductAddFeatureInteraction}">
+                            <include-form name="AddFeatureInteraction" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductFeatureAttributes}">
+                            <include-form name="AddProductFeatureApplAttr" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleListProductFeatureApplAttrs}">
+                            <include-form name="ListProductFeatureApplAttrs" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1166,8 +787,6 @@ under the License.
                 <property-to-field field="defaultCurrencyUomId" resource="general" property="currency.uom.id.default" default="USD"/>
 
                 <set field="productId" from-field="parameters.productId"/>
-                <set field="minimumOrderQuantity" from-field="parameters.minimumOrderQuantity" type="BigDecimal"/>
-
                 <set field="orderBy" from-field="parameters.orderBy" default-value="partyId"/>
                 <entity-one entity-name="Product" value-field="product"/>
                 <entity-and entity-name="SupplierProduct" list="productSuppliers">
@@ -1179,20 +798,9 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditSupplierProduct}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListSupplierProducts" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditSupplierProduct}">
+                            <include-form name="ListSupplierProducts" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                         <section>
                             <condition><not><if-empty field="supplierProduct"/></not></condition>
                             <widgets>
@@ -1201,20 +809,9 @@ under the License.
                                  </link>
                             </widgets>
                         </section>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductSupplier}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddSupplierProduct" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductSupplier}">
+                            <include-form name="AddSupplierProduct" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1229,69 +826,31 @@ under the License.
 
                 <set field="productId" from-field="parameters.productId"/>
                 <entity-one entity-name="Product" value-field="product"/>
+                <set field="layoutSettings.javaScripts[]" value="/ecommerce/images/productAdditionalView.js" global="true"/>
                 <script location="component://product/webapp/catalog/WEB-INF/actions/product/EditProductContent.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductContent}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListProductContentInfos" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductCreateNewProductContent}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="PrepareAddProductContentAssoc" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductAddContentProduct}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductContentAssoc" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductOverrideSimpleFields}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <platform-specific>
-                                            <html><html-template location="component://product/webapp/catalog/product/EditProductContent.ftl"/></html>
-                                        </platform-specific>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductContent}">
+                            <include-form name="ListProductContentInfos" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductCreateNewProductContent}">
+                            <include-form name="PrepareAddProductContentAssoc" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductAddContentProduct}">
+                            <include-form name="AddProductContentAssoc" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductOverrideSimpleFields}">
+                            <platform-specific>
+                                <html><html-template location="component://product/webapp/catalog/product/EditProductContent.ftl"/></html>
+                            </platform-specific>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductAddAdditionalImages}">
+                            <platform-specific>
+                                <html><html-template location="component://product/webapp/catalog/product/AddAdditionalImages.ftl"/></html>
+                            </platform-specific>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1312,48 +871,15 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductContent}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="${contentFormName}" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleListAssociatedContentInfos}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListAssociatedContentInfos" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleCreateSimpleTextContentForAlternateLocale}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="CreateSimpleTextContentForAlternateLocale" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductContent}">
+                            <include-form name="${contentFormName}" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleListAssociatedContentInfos}">
+                            <include-form name="ListAssociatedContentInfos" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleCreateSimpleTextContentForAlternateLocale}">
+                            <include-form name="CreateSimpleTextContentForAlternateLocale" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1377,34 +903,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductAttributes}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="UpdateProductAttribute" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductAddProductAttributeNameValueType}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddProductAttribute" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductAttributes}">
+                            <include-form name="UpdateProductAttribute" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductAddProductAttributeNameValueType}">
+                            <include-form name="AddProductAttribute" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1460,8 +964,8 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <include-form name="ListProductAssocs" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                        <include-form name="ListProductAssocsTo" location="component://product/webapp/catalog/product/ProductForms.xml"/>
+                        <include-form name="ListProductAssocs" location="component://product/widget/catalog/ProductForms.xml"/>
+                        <include-form name="ListProductAssocsTo" location="component://product/widget/catalog/ProductForms.xml"/>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1496,10 +1000,6 @@ under the License.
     </screen>
     <screen name="CreateVirtualWithVariantsForm">
         <section>
-            <actions>
-                <set field="leftbarScreenName" value="leftbar"/>
-                <set field="leftbarScreenLocation" value="component://product/widget/catalog/CommonScreens.xml"/>
-            </actions>
             <widgets>
                 <decorator-screen name="CommonProductDecorator"  location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
@@ -1517,22 +1017,11 @@ under the License.
                 </entity-condition>
             </actions>
             <widgets>
-                <container style="screenlet">
-                    <container style="screenlet-title-bar">
-                        <container style="h3">
-                            <label text="${uiLabelMap.PageTitleCreateVirtualWithVariants}"/>
-                        </container>
-                    </container>
-                    <container style="screenlet-body">
-                        <section>
-                            <widgets>
-                                <platform-specific>
-                                    <html><html-template location="component://product/webapp/catalog/product/CreateVirtualWithVariantsForm.ftl"/></html>
-                                </platform-specific>
-                            </widgets>
-                        </section>
-                    </container>
-                </container>
+                <screenlet title="${uiLabelMap.PageTitleCreateVirtualWithVariants}">
+                    <platform-specific>
+                        <html><html-template location="component://product/webapp/catalog/product/CreateVirtualWithVariantsForm.ftl"/></html>
+                    </platform-specific>
+                </screenlet>
             </widgets>
         </section>
     </screen>
@@ -1547,30 +1036,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductMaintenance}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="ListProductMaints" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductMaintenance}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="AddProductMaint" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductMaintenance}">
+                            <include-form name="ListProductMaints" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductMaintenance}">
+                            <include-form name="AddProductMaint" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1587,26 +1058,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductMeters}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="ListProductMeters" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductMeters}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="AddProductMeter" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductMeters}">
+                            <include-form name="ListProductMeters" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductMeters}">
+                            <include-form name="AddProductMeter" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1623,26 +1080,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductGeos}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="ListProductGeos" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductGeos}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="AddProductGeo" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductGeos}">
+                            <include-form name="ListProductGeos" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductGeos}">
+                            <include-form name="AddProductGeo" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1660,26 +1103,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductSubscriptionResources}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="ListProductSubscriptionResources" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductSubscriptionResources}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="AddProductSubscriptionResource" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductSubscriptionResources}">
+                            <include-form name="ListProductSubscriptionResources" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductSubscriptionResources}">
+                            <include-form name="AddProductSubscriptionResource" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1697,26 +1126,12 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleEditProductWorkEffort}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="ListProductWorkEfforts" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.PageTitleAddProductWorkEffort}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="AddProductWorkEffort" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductWorkEffort}">
+                            <include-form name="ListProductWorkEfforts" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleAddProductWorkEffort}">
+                            <include-form name="AddProductWorkEffort" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1765,16 +1180,11 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <label text="${uiLabelMap.PageTitleEditProductParties}" style="h3"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific>
-                                    <html><html-template location="component://product/webapp/catalog/product/EditProductParties.ftl"/></html>
-                                </platform-specific>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditProductParties}">
+                            <platform-specific>
+                                <html><html-template location="component://product/webapp/catalog/product/EditProductParties.ftl"/></html>
+                            </platform-specific>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -1796,22 +1206,105 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <label text="${uiLabelMap.PageTitleEditVendorProduct}" style="h3"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="ListVendorProducts" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <label text="${uiLabelMap.PageTitleAddVendorProduct}" style="h3"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="EditVendorProduct" location="component://product/webapp/catalog/product/ProductForms.xml"/>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleEditVendorProduct}">
+                            <include-form name="ListVendorProducts" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.PageTitleAddVendorProduct}">
+                            <include-form name="EditVendorProduct" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="BestSellingProducts">
+        <section>
+            <actions>
+                <set field="filterDate" type="Timestamp" from-field="nowTimestamp"/>
+                <script location="component://product/webapp/catalog/WEB-INF/actions/product/BestProducts.groovy"/>
+            </actions>
+            <widgets>
+                <screenlet title="${uiLabelMap.ProductBestSellingProductsOf} ${now}">
+                    <section>
+                        <condition>
+                            <not>
+                                <if-empty field="bestSellingProducts"/>
+                            </not>
+                        </condition>
+                        <widgets>
+                            <include-form name="ListBestProduct" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </widgets>
+                        <fail-widgets>
+                            <label style="h3" text="${uiLabelMap.ProductNoProductFound}"></label>
+                        </fail-widgets>
+                    </section>
+                </screenlet>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ViewProductOrder">
+        <section>
+            <actions>
+                <set field="titleProperty" value="PageTitleViewProductOrders"/>
+                <set field="labelTitleProperty" value="OrderOrders"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/FindOrders.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html><html-template location="component://product/webapp/catalog/product/ViewProductOrders.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="EditProductCommunicationEvents">
+        <section>
+            <actions>
+                <set field="titleProperty" value="PageTitleCommEvents"/>
+                <set field="tabButtonItem" value="EditProductCommunicationEvents"/>
+                <set field="labelTitleProperty" value="PageTitleCommEvents"/>
+                <set field="productId" from-field="parameters.productId"/>
+                <entity-one entity-name="Product" value-field="product"/>
+                <entity-and entity-name="CommunicationEventAndProduct" list="communicationEvents">
+                    <field-map field-name="productId"/>
+                </entity-and>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <link style="buttontext" target="AddCommEventForProduct" text="${uiLabelMap.CommonNew}">
+                            <parameter param-name="productId"/>
+                        </link>
+                        <screenlet title="${uiLabelMap.PageTitleCommEvents}">
+                            <include-form name="ListCommEvents" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="EditCommunicationEvent">
+        <section>
+            <actions>
+                <set field="titleProperty" value="PageTitleCommEvents"/>
+                <set field="tabButtonItem" value="EditProductCommunicationEvents"/>
+                <set field="labelTitleProperty" value="ProductAddCommunicationEvent"/>
+                <set field="productId" from-field="parameters.productId"/>
+                <set field="communicationEventId" from-field="parameters.communicationEventId"/>
+                <entity-one entity-name="Product" value-field="product"/>
+                <entity-one entity-name="CommunicationEvent" value-field="communicationEvent"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonProductDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <screenlet title="${uiLabelMap.ProductAddCommunicationEvent}">
+                            <include-form name="EditCommEvent" location="component://product/widget/catalog/ProductForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

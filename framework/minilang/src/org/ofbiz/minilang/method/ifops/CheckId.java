@@ -73,6 +73,7 @@ public class CheckId extends MethodOperation {
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         boolean isValid = true;
 
@@ -120,7 +121,7 @@ public class CheckId extends MethodOperation {
             //String propMsg = UtilProperties.getPropertyValue(UtilURL.fromResource(propertyResource, loader), message);
             String propMsg = UtilProperties.getMessage(propertyResource, message, methodContext.getEnvMap(), methodContext.getLocale());
 
-            if (propMsg == null || propMsg.length() == 0) {
+            if (UtilValidate.isEmpty(propMsg)) {
                 messages.add(defaultMessage + errorDetails);
             } else {
                 messages.add(methodContext.expandString(propMsg) + errorDetails);
@@ -130,10 +131,12 @@ public class CheckId extends MethodOperation {
         }
     }
 
+    @Override
     public String rawString() {
         // TODO: add all attributes and other info
         return "<check-id field-name=\"" + this.fieldAcsr + "\" map-name=\"" + this.mapAcsr + "\"/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

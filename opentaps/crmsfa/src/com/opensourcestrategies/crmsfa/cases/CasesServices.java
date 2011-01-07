@@ -47,7 +47,8 @@ import java.util.Map;
 
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
@@ -56,8 +57,13 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.services.CreateCustRequestRoleService;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.service.ServiceException;
 
 /**
  * Cases services. The service documentation is in services_cases.xml.
@@ -81,7 +87,7 @@ public final class CasesServices {
         String accountPartyId = (String) context.get("accountPartyId");
         String contactPartyId = (String) context.get("contactPartyId");
         if (accountPartyId == null && contactPartyId == null) {
-            return UtilMessage.createAndLogServiceError("CrmErrorCreateCaseFailNoAcctCont", "CrmErrorCreateCaseFail", locale, MODULE);
+            return UtilMessage.createAndLogServiceError("CrmErrorCreateCaseFail", "CrmErrorCreateCaseFailNoAcctCont", locale, MODULE);
         }
         try {
             // create the cust request
@@ -127,6 +133,21 @@ public final class CasesServices {
                 }
             }
 
+            /*
+             * If the logged in partyId that is creating the request is not equal to the fromPartyId
+             * then we associate it to the request as the request taker.
+             * This is not done if they are the same e.g. a logged in customer that is creating a request for its
+             * own sake.
+             */
+            String userPartyId = userLogin.getString("partyId");
+            if (UtilValidate.isNotEmpty(userPartyId) && !userPartyId.equals(caseParams.get("fromPartyId"))) {
+                CreateCustRequestRoleService createCustReqRoleSrvc = new CreateCustRequestRoleService(new User(userLogin));
+                createCustReqRoleSrvc.setInCustRequestId(custRequestId);
+                createCustReqRoleSrvc.setInPartyId(userPartyId);
+                createCustReqRoleSrvc.setInRoleTypeId(RoleTypeConstants.REQ_TAKER);
+                createCustReqRoleSrvc.runSync(new Infrastructure(dispatcher));
+            }
+
             // create the note if a note is supplied
             String note = (String) context.get("note");
             if (note != null) {
@@ -169,11 +190,15 @@ public final class CasesServices {
             return result;
         } catch (GenericServiceException e) {
             return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateCaseFail", locale, MODULE);
+        } catch (ServiceException e) {
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateCaseFail", locale, MODULE);
+        } catch (IllegalArgumentException e) {
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateCaseFail", locale, MODULE);
         }
     }
 
     public static Map<String, Object> updateCase(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");

@@ -20,7 +20,7 @@ under the License.
 <!-- This file has been modified by Open Source Strategies, Inc. -->
 <menus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-menu.xsd">
 
-    <menu name="ContentAppBar" title="${uiLabelMap.ContentContentManagerApplication}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+    <menu name="ContentAppBar" title="${uiLabelMap.ContentContentManager}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
         <menu-item name="websites" title="${uiLabelMap.ContentWebSites}"><link target="FindWebSite"/></menu-item>
         <menu-item name="survey" title="${uiLabelMap.ContentSurvey}"><link target="FindSurvey"/></menu-item>
         <menu-item name="Forum" title="${uiLabelMap.ContentForum}"><link target="findForumGroups"/></menu-item>
@@ -185,10 +185,10 @@ under the License.
         </menu-item>
     </menu>
 
-    <menu name="blogSub" menu-container-style="button-bar button-style-2" default-menu-item-name="content" default-permission-operation="HAS_AUTHOR_ROLE|CONTENT_ADMIN"
+    <menu name="blogSub" menu-container-style="button-bar" default-menu-item-name="content" default-permission-operation="HAS_AUTHOR_ROLE|CONTENT_ADMIN"
         default-permission-entity-action="_ADMIN" default-associated-content-id="${userLogin.userLoginId}" selected-menuitem-context-field-name="currentMenuItemName"
         title="" type="simple">
-        <menu-item name="NewBlog" title="${uiLabelMap.ContentCreateNewBlog}">
+        <menu-item name="NewBlog" title="${uiLabelMap.ContentCreateNewBlog}" widget-style="buttontext create">
             <link target="editBlog"/>
         </menu-item>
         <menu-item name="NewBlogArticle" title="${uiLabelMap.ContentCreateNewBlogArticle}">
@@ -242,6 +242,14 @@ under the License.
         </menu-item>
         <menu-item name="navigateContent" title="${uiLabelMap.ContentNavigate}">
             <link target="navigateContent"/>
+        </menu-item>
+    </menu>
+    <menu name="lookupMenu" menu-container-style="button-bar tab-bar" default-selected-style="selected" type="simple" selected-menuitem-context-field-name="tabButtonItem">
+        <menu-item name="close" title="${uiLabelMap.CommonClose}">
+            <link target="javascript:window.close();" url-mode="plain"/>
+        </menu-item>
+        <menu-item name="index" title="${uiLabelMap.CommonExtIndex}">
+            <link target="showHelp?helpTopic=navigateHelp"/>
         </menu-item>
     </menu>
 </menus>

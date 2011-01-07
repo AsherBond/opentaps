@@ -28,7 +28,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.UtilAccountingTags;
@@ -88,7 +88,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
      * @param delegator the delegator
      * @deprecated don't use this, always use domain loader, refactor all code using it
      */
-    public InvoiceRepository(GenericDelegator delegator) {
+    public InvoiceRepository(Delegator delegator) {
         super(delegator);
     }
 

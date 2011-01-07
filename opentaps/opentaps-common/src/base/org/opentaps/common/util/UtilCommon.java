@@ -78,7 +78,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.content.data.DataResourceWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -164,11 +164,11 @@ public abstract class UtilCommon {
 
     /**
      * Returns the "system" userLogin generic value.
-     * @param delegator a <code>GenericDelegator</code>
+     * @param delegator a <code>Delegator</code>
      * @return the <code>GenericValue</code> representing the "system" UserLogin entity.
      * @throws GenericEntityException if an error occurs
      */
-    public static GenericValue getSystemUserLogin(GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue getSystemUserLogin(Delegator delegator) throws GenericEntityException {
         return delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "system"));
     }
 
@@ -346,32 +346,32 @@ public abstract class UtilCommon {
 
     /**
      * Gets a list of countries.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> of countries Geo <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getCountries(GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getCountries(Delegator delegator) throws GenericEntityException {
         return delegator.findByAndCache("Geo", UtilMisc.toMap("geoTypeId", "COUNTRY"), UtilMisc.toList("geoName"));
     }
 
     /**
      * Gets a list of states in the given country.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param countryGeoId the country for which to return the list of states
      * @return a <code>List</code> of states Geo <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getStates(GenericDelegator delegator, String countryGeoId) throws GenericEntityException {
+    public static List<GenericValue> getStates(Delegator delegator, String countryGeoId) throws GenericEntityException {
         return delegator.findByAndCache("GeoAssocAndGeoTo", UtilMisc.toMap("geoIdFrom", countryGeoId, "geoAssocTypeId", "REGIONS"), UtilMisc.toList("geoName"));
     }
 
     /**
      * Gets a list of currencies.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> of currencies <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getCurrencies(GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getCurrencies(Delegator delegator) throws GenericEntityException {
         return delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "CURRENCY_MEASURE"), UtilMisc.toList("abbreviation"));
     }
 
@@ -402,11 +402,11 @@ public abstract class UtilCommon {
     /**
      * Gets the given organization corresponding PartyAcctgPreference.
      * @param organizationPartyId the organization identifier
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the PartyAcctgPreference <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    public static GenericValue getOrgAcctgPref(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue getOrgAcctgPref(String organizationPartyId, Delegator delegator) throws GenericEntityException {
         GenericValue orgAcctgPref = delegator.findByPrimaryKeyCache("PartyAcctgPreference", UtilMisc.toMap("partyId", organizationPartyId));
         return orgAcctgPref;
     }
@@ -416,10 +416,10 @@ public abstract class UtilCommon {
      * Please define specific get methods and not use this method -- that's why I made it private (Si)
      * @param organizationPartyId the organization identifier
      * @param fieldId name of the field to return from the organization PartyAcctgPreference
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the PartyAcctgPreference field string value or <code>null</code> if there is any problem
      */
-    private static String getOrgAcctgPrefField(String organizationPartyId, String fieldId, GenericDelegator delegator) {
+    private static String getOrgAcctgPrefField(String organizationPartyId, String fieldId, Delegator delegator) {
         try {
             GenericValue acctgPref = getOrgAcctgPref(organizationPartyId, delegator);
             if (UtilValidate.isNotEmpty(acctgPref)) {
@@ -437,32 +437,32 @@ public abstract class UtilCommon {
     /**
      * Gets the PartyAcctgPreference.cogsMethodId for the given organization corresponding.
      * @param organizationPartyId the organization identifier
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the PartyAcctgPreference.cogsMethodId or <code>null</code> if there is any problem
      */
-    public static String getOrgCOGSMethodId(String organizationPartyId, GenericDelegator delegator) {
+    public static String getOrgCOGSMethodId(String organizationPartyId, Delegator delegator) {
         return getOrgAcctgPrefField(organizationPartyId, "cogsMethodId", delegator);
     }
 
     /**
      * Gets the PartyAcctgPreference.baseCurrencyUomId for the given organization corresponding.
      * @param organizationPartyId the organization identifier
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the PartyAcctgPreference.cogsMethodId or <code>null</code> if there is any problem
      */
-    public static String getOrgBaseCurrency(String organizationPartyId, GenericDelegator delegator) {
+    public static String getOrgBaseCurrency(String organizationPartyId, Delegator delegator) {
         return getOrgAcctgPrefField(organizationPartyId, "baseCurrencyUomId", delegator);
     }
 
     /**
      * Gets the <code>List</code> of currently active contactMechIds for the given facility.
      * @param facilityId the facility identifier
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of currently active contactMechIds for the given facility
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List<String> getFacilityContactMechIds(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<String> getFacilityContactMechIds(String facilityId, Delegator delegator) throws GenericEntityException {
         List<GenericValue> facilityContactMechs = delegator.findByAnd("FacilityContactMech", EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("facilityId", facilityId),
                 EntityUtil.getFilterByDateExpr()));
@@ -471,12 +471,12 @@ public abstract class UtilCommon {
 
     /**
      * Gets the current postal address of for the given facility.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param facilityId the facility identifier
      * @return the current postal address of for the given facility, <code>null</code> if none is found
      * @throws GenericEntityException if an error occurs
      */
-    public static GenericValue getFacilityPostalAddress(GenericDelegator delegator, String facilityId) throws GenericEntityException {
+    public static GenericValue getFacilityPostalAddress(Delegator delegator, String facilityId) throws GenericEntityException {
         List<GenericValue> facilityMechPurps = delegator.findByAndCache("FacilityContactMechPurpose", UtilMisc.toMap("facilityId", facilityId, "contactMechPurposeTypeId", "SHIP_ORIG_LOCATION"));
         facilityMechPurps = EntityUtil.filterByDate(facilityMechPurps);
         if (UtilValidate.isNotEmpty(facilityMechPurps)) {
@@ -488,11 +488,11 @@ public abstract class UtilCommon {
     /**
      * Gets the <code>List</code> of facilityId of the facilities which can get inventory for the given organization.
      * @param organizationPartyId the organization identifier
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of facilityId of the facilities which can get inventory for the given organization
      * @throws GenericEntityException if an error occurs
      */
-    public static List<String> getOrgReceivingFacilityIds(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<String> getOrgReceivingFacilityIds(String organizationPartyId, Delegator delegator) throws GenericEntityException {
         return EntityUtil.getFieldListFromEntityList(getOrganizationReceivingFacilities(organizationPartyId, delegator), "facilityId", true);
     }
 
@@ -500,11 +500,11 @@ public abstract class UtilCommon {
      * Gets the <code>List</code> of facilities (warehouses) for which inventory is received on behalf of the given organization.
      * This could be either Facility owned by the organization or where the organization has a role of RECV_INV_FOR.
      * @param organizationPartyId the organization identifier
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of receiving facilities
      * @throws GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getOrganizationReceivingFacilities(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getOrganizationReceivingFacilities(String organizationPartyId, Delegator delegator) throws GenericEntityException {
         if (UtilValidate.isEmpty(organizationPartyId)) {
             return null;
         }
@@ -523,11 +523,11 @@ public abstract class UtilCommon {
     /**
      * Retrieves information required for companyHeader.fo.ftl for the given organization.
      * @param organizationPartyId the organization identifier
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>Map</code> containing organization information
      * @exception GenericEntityException if an error occurs
      */
-    public static Map<String, Object> getOrganizationHeaderInfo(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, Object> getOrganizationHeaderInfo(String organizationPartyId, Delegator delegator) throws GenericEntityException {
         Map<String, Object> results = FastMap.newInstance();
 
         // the logo image URL
@@ -567,22 +567,22 @@ public abstract class UtilCommon {
     /**
      * Checks if there are any valid status changes from the given statusId.
      * @param statusId the original status
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>boolean</code> if any valid status changes from the given statusId is found
      * @exception GenericEntityException if an error occurs
      */
-    public static boolean hasValidChange(String statusId, GenericDelegator delegator) throws GenericEntityException {
+    public static boolean hasValidChange(String statusId, Delegator delegator) throws GenericEntityException {
         return delegator.findCountByAnd("StatusValidChange", UtilMisc.toMap("statusId", statusId)) > 0 ? true : false;
     }
 
     /**
      * Fetches a <code>List</code> of <code>StatusValidChange</code> that are a valid change from the given status.
      * @param statusId the current status ID
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of status <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getValidChanges(String statusId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getValidChanges(String statusId, Delegator delegator) throws GenericEntityException {
         return delegator.findByAndCache("StatusValidChange", UtilMisc.toMap("statusId", statusId));
     }
 
@@ -590,22 +590,22 @@ public abstract class UtilCommon {
      * Checks if there is a <code>StatusValidChange</code> for the given status and status to.
      * @param statusId the current status ID
      * @param statusIdTo the new status ID
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return <code>true</code> if the change is valid
      * @exception GenericEntityException if an error occurs
      */
-    public static boolean isValidChange(String statusId, String statusIdTo, GenericDelegator delegator) throws GenericEntityException {
+    public static boolean isValidChange(String statusId, String statusIdTo, Delegator delegator) throws GenericEntityException {
         return delegator.findCountByAnd("StatusValidChange", UtilMisc.toMap("statusId", statusId, "statusIdTo", statusIdTo)) > 0 ? true : false;
     }
 
     /**
      * Fetches a <code>List</code> of <code>StatusItem</code> by status type from the cache.
      * @param statusTypeId the type of status to fetch
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of status <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getStatuses(String statusTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getStatuses(String statusTypeId, Delegator delegator) throws GenericEntityException {
         return delegator.findByAndCache("StatusItem", UtilMisc.toMap("statusTypeId", statusTypeId), UtilMisc.toList("sequenceId"));
     }
 
@@ -713,12 +713,12 @@ public abstract class UtilCommon {
     /**
      * Gets the <code>List</code> of children for the given parent.  The entity must have a Parent/Child relationship.
      * This function relies on the cache and is intended for data that rarely changes, such as type entities.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param parent the parent <code>GenericValue</code>
      * @return the <code>List</code> of children <code>GenericValue</code> for the given parent
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getEntityChildren(GenericDelegator delegator, GenericValue parent) throws GenericEntityException {
+    public static List<GenericValue> getEntityChildren(Delegator delegator, GenericValue parent) throws GenericEntityException {
         List<GenericValue> combined = FastList.newInstance();
         if (parent == null) {
             return combined;
@@ -736,14 +736,14 @@ public abstract class UtilCommon {
      * Given a parent entity, returns an entity expression that constrains to the members of the parent's family.
      * This function relies on the cache and is intended for data that rarely changes, such as type entities.
      * It also assumes that the entity has one primary key, whose field name must be specified by pkFieldName.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param entityName the entity name
      * @param pkFieldName the field name of the primary key
      * @param parentId the value of the primary key for the parent (root) entity
      * @return an <code>EntityExpr</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static EntityExpr getEntityChildrenExpr(GenericDelegator delegator, String entityName, String pkFieldName, String parentId) throws GenericEntityException {
+    public static EntityExpr getEntityChildrenExpr(Delegator delegator, String entityName, String pkFieldName, String parentId) throws GenericEntityException {
         return getEntityChildrenExpr(delegator, entityName, pkFieldName, parentId, false);
     }
 
@@ -751,21 +751,21 @@ public abstract class UtilCommon {
      * Given a parent entity, returns an entity expression that constrains to the members NOT in the parent's family.
      * This function relies on the cache and is intended for data that rarely changes, such as type entities.
      * It also assumes that the entity has one primary key, whose field name must be specified by pkFieldName.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param entityName the entity name
      * @param pkFieldName the field name of the primary key
      * @param parentId the value of the primary key for the parent (root) entity
      * @return an <code>EntityExpr</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static EntityExpr getEntityChildrenComplementExpr(GenericDelegator delegator, String entityName, String pkFieldName, String parentId) throws GenericEntityException {
+    public static EntityExpr getEntityChildrenComplementExpr(Delegator delegator, String entityName, String pkFieldName, String parentId) throws GenericEntityException {
         return getEntityChildrenExpr(delegator, entityName, pkFieldName, parentId, true);
     }
 
     /**
      * Builds an <code>EntityExpr</code> for getting parent / child related entities.
      * See above.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param entityName the entity name
      * @param pkFieldName the field name of the primary key
      * @param parentId the value of the primary key for the parent (root) entity
@@ -773,7 +773,7 @@ public abstract class UtilCommon {
      * @return an <code>EntityExpr</code> value
      * @exception GenericEntityException if an error occurs
      */
-    private static EntityExpr getEntityChildrenExpr(GenericDelegator delegator, String entityName, String pkFieldName, String parentId, boolean isComplement) throws GenericEntityException {
+    private static EntityExpr getEntityChildrenExpr(Delegator delegator, String entityName, String pkFieldName, String parentId, boolean isComplement) throws GenericEntityException {
 
         // first get the root value and if it doesn't exist, return a condition that always evaluates to true
         GenericValue parent = delegator.findByPrimaryKeyCache(entityName, UtilMisc.toMap(pkFieldName, parentId));
@@ -1207,14 +1207,14 @@ public abstract class UtilCommon {
     /**
      * Gets the Url context help resource from the opentaps.helpUrlPattern
      * and the ContextHelpResource entity if it exits. Return null if not.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param appName the application name (eg: crmsfa, financials ...)
      * @param screenName the name of the screen
      * @param screenState the state of the screen, optional
      * @return an <code>URL</code> value
      */
     @SuppressWarnings("unchecked")
-    public static URL getUrlContextHelpResource(GenericDelegator delegator, String appName, String screenName, String screenState) {
+    public static URL getUrlContextHelpResource(Delegator delegator, String appName, String screenName, String screenState) {
         List helps = null;
         URL helpUrl = null;
 
@@ -1361,7 +1361,7 @@ public abstract class UtilCommon {
         context.putAll(results);
         if (UtilValidate.isEmpty(context.get("userLogin"))) {
             if (system) {
-                GenericDelegator delegator = dctx.getDelegator();
+                Delegator delegator = dctx.getDelegator();
                 GenericValue systemUser = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "system"));
                 context.put("userLogin", systemUser);
             } else {
@@ -1380,11 +1380,11 @@ public abstract class UtilCommon {
     /**
      * Fetches a <code>List</code> of Enumerations by enumTypeId from the cache.
      * @param enumTypeId the type of enumeration to fetch
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>List</code> of enumeration <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getEnumerations(String enumTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getEnumerations(String enumTypeId, Delegator delegator) throws GenericEntityException {
         return delegator.findByAndCache("Enumeration", UtilMisc.toMap("enumTypeId", enumTypeId), UtilMisc.toList("sequenceId"));
     }
 
@@ -1392,11 +1392,11 @@ public abstract class UtilCommon {
      * Fetches a localized Enumeration description from the cache.
      * @param enumId the Enumeration identifier
      * @param locale the <code>Locale</code> to use for translating the description
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the localized Enumeration description, or empty an <code>String</code> if the enumeration was not found
      * @exception GenericEntityException if an error occurs
      */
-    public static String getEnumerationDescription(String enumId, Locale locale, GenericDelegator delegator) throws GenericEntityException {
+    public static String getEnumerationDescription(String enumId, Locale locale, Delegator delegator) throws GenericEntityException {
         GenericValue e = delegator.findByPrimaryKeyCache("Enumeration", UtilMisc.toMap("enumId", enumId));
         if (e == null) {
             Debug.logWarning("Cannot find Enumeration with ID [" + enumId + "]", MODULE);
@@ -1409,11 +1409,11 @@ public abstract class UtilCommon {
      * Fetches a localized Geo name from the cache.
      * @param geoId the Geo identifier
      * @param locale the <code>Locale</code> to use for translating the description
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the localized Geo name, or empty an <code>String</code> if the enumeration was not found
      * @exception GenericEntityException if an error occurs
      */
-    public static String getGeoName(String geoId, Locale locale, GenericDelegator delegator) throws GenericEntityException {
+    public static String getGeoName(String geoId, Locale locale, Delegator delegator) throws GenericEntityException {
         GenericValue e = delegator.findByPrimaryKeyCache("Geo", UtilMisc.toMap("geoId", geoId));
         if (e == null) {
             Debug.logWarning("Cannot find Geo with ID [" + geoId + "]", MODULE);
@@ -1426,11 +1426,11 @@ public abstract class UtilCommon {
      * Fetches a Geo code from the cache.
      * @param geoId the Geo identifier
      * @param locale the <code>Locale</code>, unused at the moment
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the Geo code, or empty an <code>String</code> if the enumeration was not found
      * @exception GenericEntityException if an error occurs
      */
-    public static String getGeoCode(String geoId, Locale locale, GenericDelegator delegator) throws GenericEntityException {
+    public static String getGeoCode(String geoId, Locale locale, Delegator delegator) throws GenericEntityException {
         GenericValue e = delegator.findByPrimaryKeyCache("Geo", UtilMisc.toMap("geoId", geoId));
         if (e == null) {
             Debug.logWarning("Cannot find Geo with ID [" + geoId + "]", MODULE);
@@ -1491,7 +1491,7 @@ public abstract class UtilCommon {
      */
     public static String getUserLoginViewPreference(HttpServletRequest request, String applicationName, String screenName, String option) throws GenericEntityException {
         GenericValue userLogin = getUserLogin(request);
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         GenericValue pref = delegator.findByPrimaryKeyCache("UserLoginViewPreference", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "applicationName", applicationName, "screenName", screenName, "preferenceName", option));
         if (pref == null) {
             return null;
@@ -1510,7 +1510,7 @@ public abstract class UtilCommon {
      */
     public static void setUserLoginViewPreference(HttpServletRequest request, String applicationName, String screenName, String option, String value) throws GenericEntityException {
         GenericValue userLogin = getUserLogin(request);
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         GenericValue pref = delegator.findByPrimaryKey("UserLoginViewPreference", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "applicationName", applicationName, "screenName", screenName, "preferenceName", option));
         if (pref == null) {
             pref = delegator.makeValue("UserLoginViewPreference", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "applicationName", applicationName, "screenName", screenName, "preferenceName", option));
@@ -1546,11 +1546,11 @@ public abstract class UtilCommon {
      * @param userLogin the current user
      * @param applicationName the current application name (eg: crmsfa, financials, ...)
      * @param screenName the screen name, which is from the URI
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> of <code>KeyboardShortcut</code> entities that should be activated
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getKeyboardShortcuts(GenericValue userLogin, String applicationName, String screenName, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getKeyboardShortcuts(GenericValue userLogin, String applicationName, String screenName, Delegator delegator) throws GenericEntityException {
         String userLoginId = null;
         if (userLogin == null) {
             return new ArrayList<GenericValue>();
@@ -1586,11 +1586,11 @@ public abstract class UtilCommon {
      * Get the shortcuts available for Login page.
      * @param applicationName the current application name (eg: crmsfa, financials, ...)
      * @param screenName the screen name, which is from the URI
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> of <code>KeyboardShortcut</code> entities that should be activated
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getKeyboardShortcutsForLoginPage(String applicationName, String screenName, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getKeyboardShortcutsForLoginPage(String applicationName, String screenName, Delegator delegator) throws GenericEntityException {
 
         List<GenericValue> shortcuts = delegator.findByAnd("KeyboardShortcutAndHandler", UtilMisc.toList(
                 EntityCondition.makeCondition("userLoginId", EntityOperator.EQUALS, null),
@@ -1641,7 +1641,7 @@ public abstract class UtilCommon {
 
     /**
      * Gets a <code>ByteWrapper</code> object for the given parameters.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dataResourceId a <code>String</code> value
      * @param https a <code>String</code> value
      * @param webSiteId a <code>String</code> value
@@ -1652,7 +1652,7 @@ public abstract class UtilCommon {
      * @exception GeneralException if an error occurs
      * @deprecated for upgrade ofbiz to new version only, refactor the code later, ofbiz no longer uses ByteWrapper, instead use byte[] directly.
      */
-    public static ByteWrapper getContentAsByteWrapper(GenericDelegator delegator, String dataResourceId, String https, String webSiteId, Locale locale, String rootDir) throws IOException, GeneralException {
+    public static ByteWrapper getContentAsByteWrapper(Delegator delegator, String dataResourceId, String https, String webSiteId, Locale locale, String rootDir) throws IOException, GeneralException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataResourceWorker.streamDataResource(baos, delegator, dataResourceId, https, webSiteId, locale, rootDir);
         ByteWrapper byteWrapper = new ByteWrapper(baos.toByteArray());
@@ -1790,7 +1790,7 @@ public abstract class UtilCommon {
         return fieldName.startsWith("cust_");
     }
 
-    public static Map<String, Object> getCustomFieldsFromServiceMap(ModelEntity model, Map<String, Object> customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
+    public static Map<String, Object> getCustomFieldsFromServiceMap(ModelEntity model, Map<String, Object> customFieldsMap, String parameterNameSuffix, Delegator delegator) {
         Map<String, Object> out = new HashMap<String, Object>();
         if (customFieldsMap != null) {
             for (String n : model.getAllFieldNames()) {
@@ -1808,7 +1808,7 @@ public abstract class UtilCommon {
         return out;
     }
 
-    public static void setCustomFieldsFromServiceMap(GenericValue entity, Map<String, Object> customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
+    public static void setCustomFieldsFromServiceMap(GenericValue entity, Map<String, Object> customFieldsMap, String parameterNameSuffix, Delegator delegator) {
         ModelEntity model = entity.getModelEntity();
         if (customFieldsMap != null) {
             for (String n : model.getAllFieldNames()) {
@@ -1825,7 +1825,7 @@ public abstract class UtilCommon {
         }
     }
 
-    public static void setCustomFieldsFromServiceMap(EntityInterface entity, Map<String, Object> customFieldsMap, String parameterNameSuffix, GenericDelegator delegator) {
+    public static void setCustomFieldsFromServiceMap(EntityInterface entity, Map<String, Object> customFieldsMap, String parameterNameSuffix, Delegator delegator) {
         ModelEntity model = delegator.getModelEntity(entity.getBaseEntityName());
         if (customFieldsMap != null) {
             for (String n : model.getAllFieldNames()) {
@@ -1846,11 +1846,11 @@ public abstract class UtilCommon {
      * Returns full email address containing a domain address and personal name for
      * the specified contact mech identifier.
      * @param contactMechId A contact mechanism identifier.
-     * @param delegator An instance of the <code>GenericDelegator</code>.
+     * @param delegator An instance of the <code>Delegator</code>.
      * @return
      * @throws GenericEntityException
      */
-    public static String emailAndPersonalName(String contactMechId, GenericDelegator delegator) throws GenericEntityException {
+    public static String emailAndPersonalName(String contactMechId, Delegator delegator) throws GenericEntityException {
         if (UtilValidate.isEmail(contactMechId)) {
             throw new IllegalArgumentException();
         }
@@ -1886,10 +1886,10 @@ public abstract class UtilCommon {
      * the specified contact address and party identifier.
      * @param email An email address in format user@host 
      * @param partyId A party identifier
-     * @param delegator An instance of the <code>GenericDelegator</code>.
+     * @param delegator An instance of the <code>Delegator</code>.
      * @return
      */
-    public static String emailAndPersonalName(String email, String partyId, GenericDelegator delegator) {
+    public static String emailAndPersonalName(String email, String partyId, Delegator delegator) {
         return String.format("%1$s <%2$s>", org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false), email);
     }
     /*

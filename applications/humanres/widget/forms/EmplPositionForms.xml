@@ -28,6 +28,8 @@ under the License.
                 <field-map field-name="inputFields" from-field="parameters"/>
                 <field-map field-name="entityName" value="EmplPosition"/>
                 <field-map field-name="orderBy" value="emplPositionId"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
         <auto-fields-entity entity-name="EmplPosition" default-field-type="display"/>
@@ -297,7 +299,7 @@ under the License.
                 <option key="N" description="${uiLabelMap.CommonNo}"/>
             </drop-down>
         </field>
-        <field name="searchButton" widget-style="smallSubmit"><submit button-type="button"/></field>
+        <field name="searchButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
     <form name="EmplPositionInfo" type="single" default-map-name="emplPosition" paginate-target="FindEmplPositions"
         header-row-style="header-row" default-table-style="basic-table">

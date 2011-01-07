@@ -19,8 +19,10 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.base.util;
 
-import java.util.Calendar;
+import java.sql.Timestamp;
+import com.ibm.icu.util.Calendar;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -57,7 +59,7 @@ import org.apache.commons.validator.routines.CalendarValidator;
  * <br/> ==============================================================================
  * <br/> NOTE: This code was adapted from the Netscape JavaScript form validation code,
  * <br/> usually found in "FormChek.js". Credit card verification functions Originally
- * <br< included as Starter Application 1.0.0 in LivePayment.
+ * <br/> included as Starter Application 1.0.0 in LivePayment.
  * <br/> ==============================================================================
  */
 public class UtilValidate {
@@ -200,8 +202,18 @@ public class UtilValidate {
     }
 
     /** Check whether collection c is empty. */
-    public static boolean isEmpty(Collection c) {
+    public static <E> boolean isEmpty(Collection<E> c) {
         return ((c == null) || (c.size() == 0));
+    }
+
+    /** Check whether map m is empty. */
+    public static <K,E> boolean isEmpty(Map<K,E> m) {
+        return ((m == null) || (m.size() == 0));
+    }
+
+    /** Check whether charsequence c is empty. */
+    public static <E> boolean isEmpty(CharSequence c) {
+        return ((c == null) || (c.length() == 0));
     }
 
     /** Check whether string s is NOT empty. */
@@ -210,8 +222,13 @@ public class UtilValidate {
     }
 
     /** Check whether collection c is NOT empty. */
-    public static boolean isNotEmpty(Collection c) {
+    public static <E> boolean isNotEmpty(Collection<E> c) {
         return ((c != null) && (c.size() > 0));
+    }
+
+    /** Check whether charsequence c is NOT empty. */
+    public static <E> boolean isNotEmpty(CharSequence c) {
+        return ((c != null) && (c.length() > 0));
     }
 
     public static boolean isString(Object obj) {
@@ -357,7 +374,7 @@ public class UtilValidate {
         // if (isSignedInteger.arguments.length > 1) secondArg = isSignedInteger.arguments[1];
 
         // skip leading + or -
-        // if ((s.charAt(0) == "-") ||(s.charAt(0) == "+") ) startPos = 1;
+        // if ((s.charAt(0) == "-") ||(s.charAt(0) == "+")) startPos = 1;
         // return(isInteger(s.substring(startPos, s.length), secondArg))
     }
 
@@ -390,7 +407,7 @@ public class UtilValidate {
         }
 
         // return(isSignedInteger(s, secondArg)
-        // &&((isEmpty(s) && secondArg)  ||(parseInt(s) > 0) ) );
+        // &&((isEmpty(s) && secondArg)  ||(parseInt(s) > 0)));
     }
 
     /** Returns true if string s is an integer >= 0. */
@@ -407,7 +424,7 @@ public class UtilValidate {
         }
 
         // return(isSignedInteger(s, secondArg)
-        // &&((isEmpty(s) && secondArg)  ||(parseInt(s) >= 0) ) );
+        // &&((isEmpty(s) && secondArg)  ||(parseInt(s) >= 0)));
     }
 
     /** Returns true if string s is an integer < 0. */
@@ -424,7 +441,7 @@ public class UtilValidate {
         }
 
         // return(isSignedInteger(s, secondArg)
-        // &&((isEmpty(s) && secondArg)  ||(parseInt(s) < 0) ) );
+        // &&((isEmpty(s) && secondArg)  ||(parseInt(s) < 0)));
     }
 
     /** Returns true if string s is an integer <= 0. */
@@ -441,7 +458,7 @@ public class UtilValidate {
         }
 
         // return(isSignedInteger(s, secondArg)
-        // &&((isEmpty(s) && secondArg)  ||(parseInt(s) <= 0) ) );
+        // &&((isEmpty(s) && secondArg)  ||(parseInt(s) <= 0)));
     }
 
     /** True if string s is an unsigned floating point(real) number.
@@ -548,7 +565,7 @@ public class UtilValidate {
         // int startPos = 0;
         // if (isSignedFloat.arguments.length > 1) secondArg = isSignedFloat.arguments[1];
         // skip leading + or -
-        // if ((s.charAt(0) == "-") ||(s.charAt(0) == "+") ) startPos = 1;
+        // if ((s.charAt(0) == "-") ||(s.charAt(0) == "+")) startPos = 1;
         // return(isFloat(s.substring(startPos, s.length), secondArg))
     }
 
@@ -898,6 +915,23 @@ public class UtilValidate {
         }
     }
 
+    public static boolean isDateBeforeNow(Timestamp  date) {
+        Timestamp now = UtilDateTime.nowTimestamp();
+        if (date != null) {
+            return date.before(now);
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isDateAfterNow(Timestamp  date) {
+        Timestamp now = UtilDateTime.nowTimestamp();
+        if (date != null) {
+            return date.after(now);
+        } else {
+            return false;
+        }
+    }
     /** isTime returns true if string arguments hour, minute, and second form a valid time. */
     public static boolean isTime(String hour, String minute, String second) {
         // catch invalid years(not 2- or 4-digit) and invalid months and days.
@@ -1284,19 +1318,32 @@ public class UtilValidate {
     }
 
     public static char calcUpcChecksum(String upc) {
-        if (upc != null && upc.length() == 12) {
-            upc = upc.substring(0, 11);
+        return calcChecksum(upc, 12);
+    }
+
+    public static boolean isValidEan(String ean) {
+        if (ean == null || ean.length() != 13) {
+            throw new IllegalArgumentException("Invalid EAN length; must be 13 characters");
         }
-        if (upc == null || upc.length() != 11) {
-            throw new IllegalArgumentException("Illegal size of UPC; must be 11 characters");
+        char csum = ean.charAt(13);
+        char calcSum = calcChecksum(ean, 13);
+        return csum == calcSum;
+    }
+
+    public static char calcChecksum(String value, int length) {
+        if (value != null && value.length() == length + 1) {
+            value = value.substring(0, length);
+        }
+        if (value == null || value.length() != length) {
+            throw new IllegalArgumentException("Illegal size of value; must be either" + length + " or " + (length + 1) + " characters");
         }
         int oddsum = 0;
         int evensum = 0;
-        for (int i = upc.length() - 1; i >= 0; i--) {
-            if ((upc.length() - i) % 2 == 0) {
-                evensum += Character.digit(upc.charAt(i), 10);
+        for (int i = value.length() - 1; i >= 0; i--) {
+            if ((value.length() - i) % 2 == 0) {
+                evensum += Character.digit(value.charAt(i), 10);
             } else {
-                oddsum += Character.digit(upc.charAt(i), 10);
+                oddsum += Character.digit(value.charAt(i), 10);
             }
         }
         int check = 10 - ((evensum + 3 * oddsum) % 10);

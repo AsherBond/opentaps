@@ -66,6 +66,7 @@ public class ObjectTag extends TagSupport {
         return type.getName();
     }
 
+    @Override
     public int doStartTag() throws JspTagException {
         String realAttrName = property;
 
@@ -81,6 +82,7 @@ public class ObjectTag extends TagSupport {
         return EVAL_BODY_INCLUDE;
     }
 
+    @Override
     public int doEndTag() {
         return EVAL_PAGE;
     }

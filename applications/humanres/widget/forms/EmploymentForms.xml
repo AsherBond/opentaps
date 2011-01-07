@@ -46,7 +46,7 @@
             </drop-down>
         </field>
         <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
-        <field name="searchButton" widget-style="smallSubmit"><submit button-type="button"/></field>
+        <field name="searchButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
     <form name="ListEmploymentsPerson" type="list" paginate-target="FindEmployments" default-entity-name="EmploymentAndPerson" list-name="listIt" separate-columns="true"
         odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
@@ -54,6 +54,8 @@
             <service service-name="performFind" result-map="result" result-map-list="listIt">
                 <field-map field-name="inputFields" from-field="employmentCtx"/>
                 <field-map field-name="entityName" value="EmploymentAndPerson"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
         <field name="partyIdFrom" title="${uiLabelMap.HumanResEmploymentPartyIdFrom}"><display></display></field>
@@ -84,6 +86,8 @@
             <service service-name="performFind" result-map="result" result-map-list="listIt">
                 <field-map field-name="inputFields" from-field="employmentCtx"/>
                 <field-map field-name="entityName" value="Employment"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
         <field name="partyIdFrom" title="${uiLabelMap.HumanResEmploymentPartyIdFrom}"><display></display></field>

@@ -27,7 +27,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.SOAPException;
 
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -68,7 +68,7 @@ public final class AmazonOrderServices {
      */
     public static Map<String, Object> storePendingOrderDocuments(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
 
@@ -165,7 +165,7 @@ public final class AmazonOrderServices {
      */
     public static Map<String, Object> extractOrdersForImport(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
 
@@ -391,7 +391,7 @@ public final class AmazonOrderServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> importOrders(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
@@ -473,7 +473,7 @@ public final class AmazonOrderServices {
         return ServiceUtil.returnSuccess();
     }
 
-    private static String importOrder(LocalDispatcher dispatcher, GenericDelegator delegator, GenericValue amazonOrder, Locale locale, GenericValue userLogin, GenericValue productStore, TimeZone timeZone) throws Exception {
+    private static String importOrder(LocalDispatcher dispatcher, Delegator delegator, GenericValue amazonOrder, Locale locale, GenericValue userLogin, GenericValue productStore, TimeZone timeZone) throws Exception {
 
         String errorMessage = "";
 
@@ -792,14 +792,14 @@ public final class AmazonOrderServices {
         return orderId;
     }
 
-    private static GenericValue constructOrderAdjustment(GenericDelegator delegator, String orderId, String orderItemSeqId, String shipGroupSeqId, Double amount, String orderAdjustmentTypeId) {
+    private static GenericValue constructOrderAdjustment(Delegator delegator, String orderId, String orderItemSeqId, String shipGroupSeqId, Double amount, String orderAdjustmentTypeId) {
         GenericValue orderAdjustment = delegator.makeValue("OrderAdjustment", UtilMisc.toMap("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"), "orderId", orderId, "orderItemSeqId", orderItemSeqId, "shipGroupSeqId", shipGroupSeqId));
         orderAdjustment.set("orderAdjustmentTypeId", orderAdjustmentTypeId);
         orderAdjustment.set("amount", amount);
         return orderAdjustment;
     }
 
-    private static GenericValue constructOrderStatus(GenericDelegator delegator, String orderId, String orderItemSeqId, String statusId, GenericValue userLogin) {
+    private static GenericValue constructOrderStatus(Delegator delegator, String orderId, String orderItemSeqId, String statusId, GenericValue userLogin) {
         GenericValue orderStatus = delegator.makeValue("OrderStatus", UtilMisc.toMap("orderId", orderId, "orderStatusId", delegator.getNextSeqId("OrderStatus"), "statusId", statusId));
         orderStatus.set("orderItemSeqId", orderItemSeqId);
         orderStatus.set("statusDatetime", UtilDateTime.nowTimestamp());
@@ -807,7 +807,7 @@ public final class AmazonOrderServices {
         return orderStatus;
     }
 
-    private static GenericValue constructOrderItemShipGroup(GenericValue amazonOrder, GenericDelegator delegator, String orderId, String shipGroupSeqId, String shippingAddressContactMechId, String shippingPhoneContactMechId, TimeZone timeZone, Locale locale) {
+    private static GenericValue constructOrderItemShipGroup(GenericValue amazonOrder, Delegator delegator, String orderId, String shipGroupSeqId, String shippingAddressContactMechId, String shippingPhoneContactMechId, TimeZone timeZone, Locale locale) {
         String serviceLevel = amazonOrder.getString("fulfillmentServiceLevel");
         GenericValue orderItemShipGroup = delegator.makeValue("OrderItemShipGroup", UtilMisc.toMap("orderId", orderId));
         orderItemShipGroup.set("shipGroupSeqId", shipGroupSeqId);
@@ -822,7 +822,7 @@ public final class AmazonOrderServices {
         return orderItemShipGroup;
     }
 
-    private static List<GenericValue> constructPostalAddress(GenericDelegator delegator, String shippingAddressContactMechId, String orderPartyId, GenericValue amazonOrder, GenericValue stateProvinceGeo, GenericValue countryGeo) {
+    private static List<GenericValue> constructPostalAddress(Delegator delegator, String shippingAddressContactMechId, String orderPartyId, GenericValue amazonOrder, GenericValue stateProvinceGeo, GenericValue countryGeo) {
         List<GenericValue> postalAddressValues = new ArrayList<GenericValue>();
         GenericValue shippingPostalAddress = delegator.makeValue("ContactMech", UtilMisc.toMap("contactMechId", shippingAddressContactMechId, "contactMechTypeId", "POSTAL_ADDRESS"));
         postalAddressValues.add(shippingPostalAddress);
@@ -843,7 +843,7 @@ public final class AmazonOrderServices {
         return postalAddressValues;
     }
 
-    private static GenericValue resolveExistingPostalAddress(GenericValue amazonOrder, String orderPartyId, GenericValue stateProvinceGeo, GenericValue countryGeo, GenericDelegator delegator) throws GenericEntityException {
+    private static GenericValue resolveExistingPostalAddress(GenericValue amazonOrder, String orderPartyId, GenericValue stateProvinceGeo, GenericValue countryGeo, Delegator delegator) throws GenericEntityException {
         Map<String, String> addressData = getAddressFields(amazonOrder);
         EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
                                     EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("partyId"), EntityOperator.EQUALS, EntityFunction.UPPER(orderPartyId)),
@@ -874,7 +874,7 @@ public final class AmazonOrderServices {
         return addressData;
     }
 
-    private static GenericValue resolveExistingPhoneNumber(String phoneNumber, String orderPartyId, GenericDelegator delegator, Locale locale) throws GenericEntityException {
+    private static GenericValue resolveExistingPhoneNumber(String phoneNumber, String orderPartyId, Delegator delegator, Locale locale) throws GenericEntityException {
         if (UtilValidate.isEmpty(phoneNumber)) {
             return null;
         }
@@ -915,7 +915,7 @@ public final class AmazonOrderServices {
         return phoneNumberData;
     }
 
-    private static GenericValue resolveGeo(String geoString, GenericDelegator delegator, GenericValue parentGeo) throws GenericEntityException {
+    private static GenericValue resolveGeo(String geoString, Delegator delegator, GenericValue parentGeo) throws GenericEntityException {
 
         boolean isCountry = UtilValidate.isEmpty(parentGeo);
         List geoTypeIds = isCountry ? Arrays.asList("COUNTRY") : Arrays.asList("STATE", "PROVINCE");
@@ -947,7 +947,7 @@ public final class AmazonOrderServices {
         return geo;
     }
 
-    private static GenericValue constructOrderItem(GenericDelegator delegator, String orderId, String orderItemSeqId, GenericValue amazonOrderItem, Locale locale, LinkedHashMap<String, List<GenericValue>> itemPriceComponents) throws Exception {
+    private static GenericValue constructOrderItem(Delegator delegator, String orderId, String orderItemSeqId, GenericValue amazonOrderItem, Locale locale, LinkedHashMap<String, List<GenericValue>> itemPriceComponents) throws Exception {
         String errorMessage = null;
         GenericValue orderItem = delegator.makeValue("OrderItem", UtilMisc.toMap("orderId", orderId));
         orderItem.set("orderItemSeqId", orderItemSeqId);
@@ -1010,7 +1010,7 @@ public final class AmazonOrderServices {
         return orderItem;
     }
 
-    private static List<GenericValue> constructPhoneNumber(String phoneNumber, GenericDelegator delegator, String customerPhoneContactMechId, Locale locale, String orderPartyId) {
+    private static List<GenericValue> constructPhoneNumber(String phoneNumber, Delegator delegator, String customerPhoneContactMechId, Locale locale, String orderPartyId) {
         List<GenericValue> phoneValues = new ArrayList<GenericValue>();
         GenericValue customerPhoneContactMech = delegator.makeValue("ContactMech", UtilMisc.toMap("contactMechId", customerPhoneContactMechId, "contactMechTypeId", "TELECOM_NUMBER"));
         phoneValues.add(customerPhoneContactMech);
@@ -1033,7 +1033,7 @@ public final class AmazonOrderServices {
         return phoneValues;
     }
 
-    private static List<GenericValue> constructEmailAddress(GenericDelegator delegator, String emailContactMechId, GenericValue amazonOrder, String orderPartyId) {
+    private static List<GenericValue> constructEmailAddress(Delegator delegator, String emailContactMechId, GenericValue amazonOrder, String orderPartyId) {
         List<GenericValue> emailValues = new ArrayList<GenericValue>();
         GenericValue emailContactMech = delegator.makeValue("ContactMech", UtilMisc.toMap("contactMechId", emailContactMechId, "contactMechTypeId", "EMAIL_ADDRESS"));
         emailContactMech.set("infoString", amazonOrder.getString("buyerEmailAddress"));
@@ -1050,7 +1050,7 @@ public final class AmazonOrderServices {
         return emailValues;
     }
 
-    private static GenericValue constructPerson(GenericValue amazonOrder, GenericDelegator delegator, String orderPartyId) {
+    private static GenericValue constructPerson(GenericValue amazonOrder, Delegator delegator, String orderPartyId) {
         // Amazon stores the name as one field, so we'll try to split it based on the first space. If there aren't any spaces
         //  then it all goes into the lastName field.
         String buyerName = amazonOrder.getString("buyerName");
@@ -1062,7 +1062,7 @@ public final class AmazonOrderServices {
         return person;
     }
 
-    private static GenericValue constructOrderHeader(GenericDelegator delegator, String orderId, GenericValue amazonOrder, GenericValue userLogin, String currencyUomId, String orderPartyId, GenericValue productStore) {
+    private static GenericValue constructOrderHeader(Delegator delegator, String orderId, GenericValue amazonOrder, GenericValue userLogin, String currencyUomId, String orderPartyId, GenericValue productStore) {
         GenericValue orderHeader = delegator.makeValue("OrderHeader", UtilMisc.toMap("orderId", orderId));
         orderHeader.set("externalId", amazonOrder.getString("amazonOrderId"));
         orderHeader.set("salesChannelEnumId", productStore.getString("defaultSalesChannelEnumId"));
@@ -1139,7 +1139,7 @@ public final class AmazonOrderServices {
      */
     public static Map<String, Object> acknowledgeOrderDocumentDownload(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
 
@@ -1202,7 +1202,7 @@ public final class AmazonOrderServices {
      */
     public static Map<String, Object> acknowledgeImportedOrders(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
 
@@ -1291,7 +1291,7 @@ public final class AmazonOrderServices {
      */
     public static Map<String, Object> cancelUnimportedOrder(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
 
@@ -1370,7 +1370,7 @@ public final class AmazonOrderServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> queueShippedItemsForFulfillmentPost(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String shipmentId = (String) context.get("shipmentId");
         String shipmentRouteSegmentId = (String) context.get("shipmentRouteSegmentId");
 
@@ -1478,7 +1478,7 @@ public final class AmazonOrderServices {
      */
     public static Map<String, Object> acknowledgeFulfilledOrderItems(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
 
@@ -1586,7 +1586,7 @@ public final class AmazonOrderServices {
      */
     public static Map<String, Object> checkAcknowledgementStatuses(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
 

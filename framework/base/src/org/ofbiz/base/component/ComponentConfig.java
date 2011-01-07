@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -36,7 +35,11 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.location.FlexibleLocation;
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.KeyStoreUtil;
+import org.ofbiz.base.util.UtilURL;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilXml;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -85,6 +88,15 @@ public class ComponentConfig {
             }
         }
         return componentConfig;
+    }
+
+    public static Boolean componentExists(String componentName) {
+        ComponentConfig componentConfig = componentConfigs.get(componentName);
+        if (componentConfig == null) {
+            return Boolean.FALSE;
+        } else {
+            return Boolean.TRUE;
+        }
     }
 
     public static Collection<ComponentConfig> getAllComponents() {
@@ -253,11 +265,11 @@ public class ComponentConfig {
         return cc.getRootLocation();
     }
 
-    public static List getAppBarWebInfos(String serverName) {
+    public static List<WebappInfo> getAppBarWebInfos(String serverName) {
         return ComponentConfig.getAppBarWebInfos(serverName, null, null);
     }
 
-    public static List getAppBarWebInfos(String serverName, String menuName) {
+    public static List<WebappInfo> getAppBarWebInfos(String serverName, String menuName) {
         return ComponentConfig.getAppBarWebInfos(serverName, null, menuName);
     }
 
@@ -485,7 +497,7 @@ public class ComponentConfig {
             buf.append(rootLocation);
         }
 
-        if (resourceLoaderInfo.prependEnv != null && resourceLoaderInfo.prependEnv.length() > 0) {
+        if (UtilValidate.isNotEmpty(resourceLoaderInfo.prependEnv)) {
             String propValue = System.getProperty(resourceLoaderInfo.prependEnv);
             if (propValue == null) {
                 String errMsg = "The Java environment (-Dxxx=yyy) variable with name " + resourceLoaderInfo.prependEnv + " is not set, cannot load resource.";
@@ -494,7 +506,7 @@ public class ComponentConfig {
             }
             buf.append(propValue);
         }
-        if (resourceLoaderInfo.prefix != null && resourceLoaderInfo.prefix.length() > 0) {
+        if (UtilValidate.isNotEmpty(resourceLoaderInfo.prefix)) {
             buf.append(resourceLoaderInfo.prefix);
         }
         buf.append(location);
@@ -681,6 +693,7 @@ public class ComponentConfig {
         public String position;
         public boolean appBarDisplay;
         public boolean sessionCookieAccepted;
+        public boolean privileged;
 
         public WebappInfo(ComponentConfig componentConfig, Element element) {
             this.virtualHosts = FastList.newInstance();
@@ -694,6 +707,7 @@ public class ComponentConfig {
             this.location = element.getAttribute("location");
             this.appBarDisplay = !"false".equals(element.getAttribute("app-bar-display"));
             this.sessionCookieAccepted = !"false".equals(element.getAttribute("session-cookie-accepted"));
+            this.privileged = !"false".equals(element.getAttribute("privileged"));
             String basePermStr = element.getAttribute("base-permission");
             if (UtilValidate.isNotEmpty(basePermStr)) {
                 this.basePermission = basePermStr.split(",");
@@ -702,7 +716,7 @@ public class ComponentConfig {
                 this.basePermission = new String[] { "NONE" };
             }
 
-            // trim the permussions (remove spaces)
+            // trim the permissions (remove spaces)
             for (int i = 0; i < this.basePermission.length; i++) {
                 this.basePermission[i] = this.basePermission[i].trim();
                 if (this.basePermission[i].indexOf('_') != -1) {

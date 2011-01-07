@@ -38,7 +38,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.MapStack;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
 import org.ofbiz.content.content.ContentWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.webapp.control.RequestHandler;
 
@@ -55,7 +55,7 @@ public class RenderContentTransform implements TemplateTransformModel {
 
     public Writer getWriter(final Writer out, Map args) {
         final Environment env = Environment.getCurrentEnvironment();
-        final GenericDelegator delegator = (GenericDelegator) FreeMarkerWorker.getWrappedObject("delegator", env);
+        final Delegator delegator = (Delegator) FreeMarkerWorker.getWrappedObject("delegator", env);
         final LocalDispatcher dispatcher = (LocalDispatcher) FreeMarkerWorker.getWrappedObject("dispatcher", env);
         final HttpServletRequest request = (HttpServletRequest) FreeMarkerWorker.getWrappedObject("request", env);
         final HttpServletResponse response = (HttpServletResponse) FreeMarkerWorker.getWrappedObject("response", env);
@@ -67,13 +67,16 @@ public class RenderContentTransform implements TemplateTransformModel {
 
         return new Writer(out) {
 
+            @Override
             public void write(char cbuf[], int off, int len) {
             }
 
+            @Override
             public void flush() throws IOException {
                 out.flush();
             }
 
+            @Override
             public void close() throws IOException {
                 renderSubContent();
             }
@@ -99,7 +102,7 @@ public class RenderContentTransform implements TemplateTransformModel {
                     String txt = null;
 
                     String mapKey = (String)templateRoot.get("mapKey");
-                    if ( UtilValidate.isEmpty(mapKey)) {
+                    if (UtilValidate.isEmpty(mapKey)) {
                         txt = ContentWorker.renderContentAsText(dispatcher, delegator, thisContentId, templateRoot, locale, mimeTypeId, true);
                     } else {
                         txt = ContentWorker.renderSubContentAsText(dispatcher, delegator, thisContentId, mapKey, templateRoot, locale, mimeTypeId, true);

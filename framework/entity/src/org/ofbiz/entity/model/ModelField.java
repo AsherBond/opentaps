@@ -19,11 +19,17 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.entity.model;
 
-import java.util.*;
-import org.w3c.dom.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import org.ofbiz.entity.jdbc.*;
-import org.ofbiz.base.util.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import org.ofbiz.entity.jdbc.DatabaseUtil;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilXml;
 
 /**
  * Generic Entity - Field model class
@@ -123,7 +129,7 @@ public class ModelField extends ModelChild {
 
     public void setColName(String colName) {
         this.colName = colName;
-        if (this.colName == null || this.colName.length() == 0) {
+        if (UtilValidate.isEmpty(this.colName)) {
             this.colName = ModelUtil.javaNameToDbName(UtilXml.checkEmpty(this.name));
         }
     }
@@ -135,6 +141,9 @@ public class ModelField extends ModelChild {
 
     public void setIsPk(boolean isPk) {
         this.isPk = isPk;
+        if (isPk) {
+            setIsNotNull(true);
+        }
     }
 
     public boolean getIsNotNull() {
@@ -182,16 +191,19 @@ public class ModelField extends ModelChild {
         return this.validators.remove(index);
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (obj.getClass() != getClass()) return false;
         ModelField other = (ModelField) obj;
         return other.getName().equals(getName()) && other.getModelEntity() == getModelEntity();
     }
 
+    @Override
     public int hashCode() {
         return getModelEntity().hashCode() ^ getName().hashCode();
     }
 
+    @Override
     public String toString() {
         return getModelEntity() + "@" + getName();
     }

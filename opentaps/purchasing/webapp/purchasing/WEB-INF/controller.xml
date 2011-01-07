@@ -166,7 +166,7 @@
     </request-map>
     <request-map uri="UpdateProductBom">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/manufacturing/bom/BomSimpleMethods.xml" invoke="eventEditBOM"/>
+        <event type="simple" path="component://manufacturing/script/org/ofbiz/manufacturing/bom/BomSimpleMethods.xml" invoke="eventEditBOM"/>
         <response name="success" type="request-redirect" value="EditProductBom">
             <redirect-parameter name="productId"/>
             <redirect-parameter name="productAssocTypeId"/>
@@ -241,7 +241,7 @@
 
     <request-map uri="AddRoutingTaskAssoc">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/manufacturing/techdata/RoutingSimpleEvents.xml" invoke="addRoutingTaskAssoc"/>
+        <event type="simple" path="component://manufacturing/script/org/ofbiz/manufacturing/techdata/RoutingSimpleEvents.xml" invoke="addRoutingTaskAssoc"/>
         <response name="success" type="request-redirect" value="EditRouting">
             <redirect-parameter name="workEffortId"/>
         </response>

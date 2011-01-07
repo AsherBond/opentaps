@@ -21,10 +21,14 @@ package org.ofbiz.entity.transaction;
 
 import org.ofbiz.base.util.Debug;
 
+import javax.transaction.RollbackException;
+import javax.transaction.Status;
+import javax.transaction.SystemException;
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 import javax.transaction.xa.XAException;
-import javax.transaction.*;
 
 /**
  * GenericXaResource - Abstract XA Resource implementation supporting a single transaction
@@ -199,6 +203,7 @@ public abstract class GenericXaResource extends Thread implements XAResource {
     }
 
     // thread run method
+    @Override
     public void run() {
         try {
             if (timeout != null) {

@@ -28,10 +28,11 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 
+@SuppressWarnings("serial")
 public class PackingSessionLine implements java.io.Serializable {
 
     public final String module = PackingSessionLine.class.getName();
@@ -44,6 +45,11 @@ public class PackingSessionLine implements java.io.Serializable {
     protected String shipmentItemSeqId = null;
     protected BigDecimal quantity = BigDecimal.ZERO;
     protected BigDecimal weight = BigDecimal.ZERO;
+    protected BigDecimal height = null;
+    protected BigDecimal width = null;
+    protected BigDecimal length = null;
+    protected String shipmentBoxTypeId = null;
+    protected String weightPackageSeqId = null;
     protected int packageSeq = 0;
 
     public PackingSessionLine(String orderId, String orderItemSeqId, String shipGroupSeqId, String productId, String inventoryItemId, BigDecimal quantity, BigDecimal weight, int packageSeq) {
@@ -54,6 +60,11 @@ public class PackingSessionLine implements java.io.Serializable {
         this.productId = productId;
         this.quantity = quantity;
         this.weight = weight;
+        this.height = null;
+        this.width = null;
+        this.length = null;
+        this.shipmentBoxTypeId = null;
+        this.weightPackageSeqId = null;
         this.packageSeq = packageSeq;
     }
 
@@ -113,6 +124,46 @@ public class PackingSessionLine implements java.io.Serializable {
         return this.packageSeq;
     }
 
+    public BigDecimal getLength() {
+        return this.length;
+    }
+
+    public void setLength(BigDecimal length) {
+        this.length = length;
+    }
+
+    public BigDecimal getWidth() {
+        return this.width;
+    }
+
+    public void setWidth(BigDecimal width) {
+        this.width = width;
+    }
+
+    public BigDecimal getHeight() {
+        return this.height;
+    }
+
+    public void setHeight(BigDecimal height) {
+        this.height = height;
+    }
+
+    public String getShipmentBoxTypeId() {
+        return this.shipmentBoxTypeId;
+    }
+
+    public void setShipmentBoxTypeId(String shipmentBoxTypeId) {
+        this.shipmentBoxTypeId = shipmentBoxTypeId;
+    }
+
+    public String getWeightPackageSeqId() {
+        return this.weightPackageSeqId;
+    }
+
+    public void setWeightPackageSeqId(String weightPackageSeqId) {
+        this.weightPackageSeqId = weightPackageSeqId;
+    }
+
     public boolean isSameItem(PackingSessionLine line) {
         if (this.getInventoryItemId().equals(line.getInventoryItemId())) {
             if (this.getOrderItemSeqId().equals(line.getOrderItemSeqId())) {
@@ -155,7 +206,7 @@ public class PackingSessionLine implements java.io.Serializable {
         if (picklistBinId != null) {
             // find the pick list item
             Debug.log("Looking up picklist item for bin ID #" + picklistBinId, module);
-            GenericDelegator delegator = dispatcher.getDelegator();
+            Delegator delegator = dispatcher.getDelegator();
             Map<String, Object> itemLookup = FastMap.newInstance();
             itemLookup.put("picklistBinId", picklistBinId);
             itemLookup.put("orderId", this.getOrderId());

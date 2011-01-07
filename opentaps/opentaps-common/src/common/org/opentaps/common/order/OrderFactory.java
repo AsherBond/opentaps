@@ -29,7 +29,7 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -78,8 +78,8 @@ public abstract class OrderFactory {
 
     private static String MODULE = OrderFactory.class.getName();
 
-    /** The <code>GenericDelegator</code>. */
-    protected GenericDelegator delegator;
+    /** The <code>Delegator</code>. */
+    protected Delegator delegator;
     /** The <code>LocalDispatcher</code>. */
     protected LocalDispatcher dispatcher;
     /** The user that creates the order. */
@@ -145,7 +145,7 @@ public abstract class OrderFactory {
 
     /**
      * Constructor for a new Order.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param userLogin the user login <code>GenericValue</code>
      * @param fromParty the vendor party id
@@ -153,7 +153,7 @@ public abstract class OrderFactory {
      * @param productStoreId the product store id
      * @throws GenericEntityException if an error occurs
      */
-    public OrderFactory(GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, String fromParty, String toParty, String productStoreId) throws GenericEntityException {
+    public OrderFactory(Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, String fromParty, String toParty, String productStoreId) throws GenericEntityException {
         this.delegator = delegator;
         this.dispatcher = dispatcher;
         this.userLogin = userLogin;

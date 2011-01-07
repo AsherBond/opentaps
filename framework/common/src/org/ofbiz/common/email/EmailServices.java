@@ -32,7 +32,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Security;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,10 +40,10 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -53,6 +52,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 
 import javolution.util.FastList;
+import javolution.util.FastMap;
 
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.Fop;
@@ -61,6 +61,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.HttpClient;
 import org.ofbiz.base.util.HttpClientException;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
@@ -68,13 +69,17 @@ import org.ofbiz.base.util.collections.MapStack;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.ofbiz.service.mail.MimeMessageWrapper;
 import org.ofbiz.webapp.view.ApacheFopWorker;
 import org.ofbiz.widget.fo.FoScreenRenderer;
 import org.ofbiz.widget.html.HtmlScreenRenderer;
 import org.ofbiz.widget.screen.ScreenRenderer;
 import org.xml.sax.SAXException;
+
+import com.sun.mail.smtp.SMTPAddressFailedException;
 
 /**
  * Email Services
@@ -93,16 +98,29 @@ public class EmailServices {
      *@return Map with the result of the service, the output parameters
      */
     public static Map<String, Object> sendMail(DispatchContext ctx, Map<String, ? extends Object> context) {
-        Map results = ServiceUtil.returnSuccess();
+        String communicationEventId = (String) context.get("communicationEventId");
+        String orderId = (String) context.get("orderId");
+        if (communicationEventId != null) {
+            Debug.logInfo("SendMail Running, for communicationEventId : " + communicationEventId, module);
+        }
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         String subject = (String) context.get("subject");
+        subject = FlexibleStringExpander.expandString(subject, context);
+
         String partyId = (String) context.get("partyId");
         String body = (String) context.get("body");
-        List bodyParts = (List) context.get("bodyParts");
+        List<Map<String, Object>> bodyParts = UtilGenerics.checkList(context.get("bodyParts"));
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
+        results.put("communicationEventId", communicationEventId);
         results.put("partyId", partyId);
         results.put("subject", subject);
+
+        if (UtilValidate.isNotEmpty(orderId)) {
+            results.put("orderId", orderId);
+        }
         if (UtilValidate.isNotEmpty(body)) {
+            body = FlexibleStringExpander.expandString(body, context);
             results.put("body", body);
         }
         if (UtilValidate.isNotEmpty(bodyParts)) {
@@ -110,13 +128,6 @@ public class EmailServices {
         }
         results.put("userLogin", userLogin);
 
-        // first check to see if sending mail is enabled
-        String mailEnabled = UtilProperties.getPropertyValue("general.properties", "mail.notifications.enabled", "N");
-        if (!"Y".equalsIgnoreCase(mailEnabled)) {
-            // no error; just return as if we already processed
-            Debug.logImportant("Mail notifications disabled in general.properties; here is the context with info that would have been sent: " + context, module);
-            return results;
-        }
         String sendTo = (String) context.get("sendTo");
         String sendCc = (String) context.get("sendCc");
         String sendBcc = (String) context.get("sendBcc");
@@ -142,6 +153,7 @@ public class EmailServices {
         String authPass = (String) context.get("authPass");
         String messageId = (String) context.get("messageId");
         String contentType = (String) context.get("contentType");
+        Boolean sendPartial = (Boolean) context.get("sendPartial");
 
         boolean useSmtpAuth = false;
 
@@ -171,6 +183,9 @@ public class EmailServices {
             }
             if (UtilValidate.isEmpty(socketFactoryFallback)) {
                 socketFactoryFallback = UtilProperties.getPropertyValue("general.properties", "mail.smtp.socketFactory.fallback", "false");
+            }
+            if (sendPartial == null) {
+                sendPartial = UtilProperties.propertyValueEqualsIgnoreCase("general.properties", "mail.smtp.sendpartial", "true") ? true : false;
             }
         } else if (sendVia == null) {
             return ServiceUtil.returnError("Parameter sendVia is required when sendType is not mail.smtp.host");
@@ -206,6 +221,9 @@ public class EmailServices {
             if (useSmtpAuth) {
                 props.put("mail.smtp.auth", "true");
             }
+            if (sendPartial != null) {
+                props.put("mail.smtp.sendpartial", sendPartial ? "true" : "false");
+            }
 
             session = Session.getInstance(props);
             boolean debug = UtilProperties.propertyValueEqualsIgnoreCase("general.properties", "mail.debug.on", "Y");
@@ -234,9 +252,7 @@ public class EmailServices {
                 // BodyParts contain a list of Maps items containing content(String) and type(String) of the attachement
                 MimeMultipart mp = new MimeMultipart();
                 Debug.logInfo(bodyParts.size() + " multiparts found",module);
-                Iterator bodyPartIter = bodyParts.iterator();
-                while (bodyPartIter.hasNext()) {
-                    Map bodyPart = (Map) bodyPartIter.next();
+                for (Map<String, Object> bodyPart: bodyParts) {
                     Object bodyPartContent = bodyPart.get("content");
                     MimeBodyPart mbp = new MimeBodyPart();
 
@@ -247,6 +263,8 @@ public class EmailServices {
                         ByteArrayDataSource bads = new ByteArrayDataSource((byte[]) bodyPartContent, (String) bodyPart.get("type"));
                         Debug.logInfo("part of type: " + bodyPart.get("type") + " and size: " + ((byte[]) bodyPartContent).length , module);
                         mbp.setDataHandler(new DataHandler(bads));
+                    } else if (bodyPartContent instanceof DataHandler) {
+                        mbp.setDataHandler((DataHandler) bodyPartContent);
                     } else {
                         mbp.setDataHandler(new DataHandler(bodyPartContent, (String) bodyPart.get("type")));
                     }
@@ -280,22 +298,55 @@ public class EmailServices {
             return ServiceUtil.returnError(errMsg);
         }
 
+        // check to see if sending mail is enabled
+        String mailEnabled = UtilProperties.getPropertyValue("general.properties", "mail.notifications.enabled", "N");
+        if (!"Y".equalsIgnoreCase(mailEnabled)) {
+            // no error; just return as if we already processed
+            Debug.logImportant("Mail notifications disabled in general.properties; mail with subject [" + subject + "] not sent to addressee [" + sendTo + "]", module);
+            Debug.logVerbose("What would have been sent, the addressee: " + sendTo + " subject: " + subject + " context: " + context, module);
+            results.put("messageWrapper", new MimeMessageWrapper(session, mail));
+            return results;
+        }
+
+        Transport trans = null;
         try {
-            Transport trans = session.getTransport("smtp");
+            trans = session.getTransport("smtp");
             if (!useSmtpAuth) {
                 trans.connect();
             } else {
                 trans.connect(sendVia, authUser, authPass);
             }
             trans.sendMessage(mail, mail.getAllRecipients());
+            results.put("messageWrapper", new MimeMessageWrapper(session, mail));
             results.put("messageId", mail.getMessageID());
             trans.close();
         } catch (SendFailedException e) {
             // message code prefix may be used by calling services to determine the cause of the failure
             String errMsg = "[ADDRERR] Address error when sending message to [" + sendTo + "] from [" + sendFrom + "] cc [" + sendCc + "] bcc [" + sendBcc + "] subject [" + subject + "]";
             Debug.logError(e, errMsg, module);
-            Debug.logError("Email message that could not be sent to [" + sendTo + "] had context: " + context, module);
-            return ServiceUtil.returnError(errMsg);
+            List<SMTPAddressFailedException> failedAddresses = FastList.newInstance();
+            Exception nestedException = null;
+            while ((nestedException = e.getNextException()) != null && nestedException instanceof MessagingException) {
+                if (nestedException instanceof SMTPAddressFailedException) {
+                    SMTPAddressFailedException safe = (SMTPAddressFailedException) nestedException;
+                    Debug.logError("Failed to send message to [" + safe.getAddress() + "], return code [" + safe.getReturnCode() + "], return message [" + safe.getMessage() + "]", errMsg);
+                    failedAddresses.add(safe);
+                    break;
+                }
+            }
+            Boolean sendFailureNotification = (Boolean) context.get("sendFailureNotification");
+            if (sendFailureNotification == null || sendFailureNotification) {
+                sendFailureNotification(ctx, context, mail, failedAddresses);
+                results.put("messageWrapper", new MimeMessageWrapper(session, mail));
+                try {
+                    results.put("messageId", mail.getMessageID());
+                    trans.close();
+                } catch (MessagingException e1) {
+                    Debug.logError(e1, module);
+                }
+            } else {
+                return ServiceUtil.returnError(errMsg);
+            }
         } catch (MessagingException e) {
             // message code prefix may be used by calling services to determine the cause of the failure
             String errMsg = "[CON] Connection error when sending message to [" + sendTo + "] from [" + sendFrom + "] cc [" + sendCc + "] bcc [" + sendBcc + "] subject [" + subject + "]";
@@ -313,10 +364,12 @@ public class EmailServices {
      *@return Map with the result of the service, the output parameters
      */
     public static Map<String, Object> sendMailFromUrl(DispatchContext ctx, Map<String, ? extends Object> rcontext) {
-        Map<String, Object> context = UtilMisc.makeMapWritable(rcontext);
         // pretty simple, get the content and then call the sendMail method below
-        String bodyUrl = (String) context.remove("bodyUrl");
-        Map bodyUrlParameters = (Map) context.remove("bodyUrlParameters");
+        Map<String, Object> sendMailContext = UtilMisc.makeMapWritable(rcontext);
+        String bodyUrl = (String) sendMailContext.remove("bodyUrl");
+        Map<String, Object> bodyUrlParameters = UtilGenerics.checkMap(sendMailContext.remove("bodyUrlParameters"));
+
+        LocalDispatcher dispatcher = ctx.getDispatcher();
 
         URL url = null;
 
@@ -337,11 +390,17 @@ public class EmailServices {
             return ServiceUtil.returnError("Error getting content: " + e.toString());
         }
 
-        context.put("body", body);
-        Map result = sendMail(ctx, context);
+        sendMailContext.put("body", body);
+        Map<String, Object> sendMailResult;
+        try {
+            sendMailResult = dispatcher.runSync("sendMail", sendMailContext);
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(e.getMessage());
+        }
 
-        result.put("body", body);
-        return result;
+        // just return the same result; it contains all necessary information
+        return sendMailResult;
     }
 
     /**
@@ -360,7 +419,7 @@ public class EmailServices {
         String xslfoAttachScreenLocation = (String) serviceContext.remove("xslfoAttachScreenLocation");
         String attachmentName = (String) serviceContext.remove("attachmentName");
         Locale locale = (Locale) serviceContext.get("locale");
-        Map bodyParameters = (Map) serviceContext.remove("bodyParameters");
+        Map<String, Object> bodyParameters = UtilGenerics.checkMap(serviceContext.remove("bodyParameters"));
         if (bodyParameters == null) {
             bodyParameters = MapStack.create();
         }
@@ -369,10 +428,14 @@ public class EmailServices {
         } else {
             locale = (Locale) bodyParameters.get("locale");
         }
-        String partyId = (String) bodyParameters.get("partyId");
-        if (UtilValidate.isNotEmpty(webSiteId)) {
-            NotificationServices.setBaseUrl(dctx.getDelegator(), webSiteId, bodyParameters);
+        String partyId = (String) serviceContext.get("partyId");
+        if (partyId == null) {
+            partyId = (String) bodyParameters.get("partyId");
         }
+        String orderId = (String) bodyParameters.get("orderId");
+
+        bodyParameters.put("communicationEventId", serviceContext.get("communicationEventId"));
+        NotificationServices.setBaseUrl(dctx.getDelegator(), webSiteId, bodyParameters);
         String contentType = (String) serviceContext.remove("contentType");
 
         if (UtilValidate.isEmpty(attachmentName)) {
@@ -380,7 +443,7 @@ public class EmailServices {
         }
         StringWriter bodyWriter = new StringWriter();
 
-        MapStack screenContext = MapStack.create();
+        MapStack<String> screenContext = MapStack.create();
         screenContext.put("locale", locale);
         ScreenRenderer screens = new ScreenRenderer(bodyWriter, screenContext, htmlScreenRenderer);
         screens.populateContextForService(dctx, bodyParameters);
@@ -416,7 +479,7 @@ public class EmailServices {
             // start processing fo pdf attachment
             try {
                 Writer writer = new StringWriter();
-                MapStack screenContextAtt = MapStack.create();
+                MapStack<String> screenContextAtt = MapStack.create();
                 // substitute the freemarker variables...
                 ScreenRenderer screensAtt = new ScreenRenderer(writer, screenContext, foScreenRenderer);
                 screensAtt.populateContextForService(dctx, bodyParameters);
@@ -448,14 +511,14 @@ public class EmailServices {
                 baos.close();
 
                 // store in the list of maps for sendmail....
-                List bodyParts = FastList.newInstance();
+                List<Map<String, ? extends Object>> bodyParts = FastList.newInstance();
                 if (bodyText != null) {
                     bodyText = FlexibleStringExpander.expandString(bodyText, screenContext,  locale);
-                    bodyParts.add(UtilMisc.toMap("content", bodyText, "type", "text/html"));
+                    bodyParts.add(UtilMisc.<String, Object>toMap("content", bodyText, "type", "text/html"));
                 } else {
-                    bodyParts.add(UtilMisc.toMap("content", bodyWriter.toString(), "type", "text/html"));
+                    bodyParts.add(UtilMisc.<String, Object>toMap("content", bodyWriter.toString(), "type", "text/html"));
                 }
-                bodyParts.add(UtilMisc.toMap("content", baos.toByteArray(), "type", "application/pdf", "filename", attachmentName));
+                bodyParts.add(UtilMisc.<String, Object>toMap("content", baos.toByteArray(), "type", "application/pdf", "filename", attachmentName));
                 serviceContext.put("bodyParts", bodyParts);
             } catch (GeneralException ge) {
                 String errMsg = "Error rendering PDF attachment for email: " + ge.toString();
@@ -500,25 +563,72 @@ public class EmailServices {
         // also expand the subject at this point, just in case it has the FlexibleStringExpander syntax in it...
         String subject = (String) serviceContext.remove("subject");
         subject = FlexibleStringExpander.expandString(subject, screenContext, locale);
+        Debug.logInfo("Expanded email subject to: " + subject, module);
         serviceContext.put("subject", subject);
         serviceContext.put("partyId", partyId);
+        if (UtilValidate.isNotEmpty(orderId)) {
+            serviceContext.put("orderId", orderId);
+        }
 
         if (Debug.verboseOn()) Debug.logVerbose("sendMailFromScreen sendMail context: " + serviceContext, module);
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Map<String, Object> sendMailResult;
         try {
             if (isMultiPart) {
-                dispatcher.runSync("sendMailMultiPart", serviceContext);
+                sendMailResult = dispatcher.runSync("sendMailMultiPart", serviceContext);
             } else {
-                dispatcher.runSync("sendMail", serviceContext);
+                sendMailResult = dispatcher.runSync("sendMail", serviceContext);
             }
         } catch (Exception e) {
             String errMsg = "Error send email :" + e.toString();
             Debug.logError(e, errMsg, module);
             return ServiceUtil.returnError(errMsg);
         }
+        if (ServiceUtil.isError(sendMailResult)) {
+            return ServiceUtil.returnError(ServiceUtil.getErrorMessage(sendMailResult));
+        }
+
+        result.put("messageWrapper", sendMailResult.get("messageWrapper"));
         result.put("body", bodyWriter.toString());
+        result.put("subject", subject);
+        if (UtilValidate.isNotEmpty(orderId)) {
+            result.put("orderId", orderId);
+        }
         return result;
+    }
+
+    public static void sendFailureNotification(DispatchContext dctx, Map<String, ? extends Object> context, MimeMessage message, List<SMTPAddressFailedException> failures) {
+        Map<String, Object> newContext = FastMap.newInstance();
+        newContext.put("userLogin", context.get("userLogin"));
+        newContext.put("sendFailureNotification", false);
+        newContext.put("sendFrom", context.get("sendFrom"));
+        newContext.put("sendTo", context.get("sendFrom"));
+        newContext.put("subject", "Undelivered Mail Returned to Sender");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Delivery to the following recipient(s) failed:\n\n");
+        for (SMTPAddressFailedException failure : failures) {
+            sb.append(failure.getAddress());
+            sb.append(": ");
+            sb.append(failure.getMessage());
+            sb.append("/n/n");
+        }
+        sb.append("----- Original message -----/n/n");
+        List<Map<String, Object>> bodyParts = FastList.newInstance();
+        bodyParts.add(UtilMisc.<String, Object>toMap("content", sb.toString(), "type", "text/plain"));
+        Map<String, Object> bodyPart = FastMap.newInstance();
+        bodyPart.put("content", sb.toString());
+        bodyPart.put("type", "text/plain");
+        try {
+            bodyParts.add(UtilMisc.<String, Object>toMap("content", message.getDataHandler()));
+        } catch (MessagingException e) {
+            Debug.logError(e, module);
+        }
+        try {
+            dctx.getDispatcher().runSync("sendMailMultiPart", newContext);
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+        }
     }
 
     /** class to create a file in memory required for sending as an attachment */

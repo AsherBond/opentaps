@@ -44,12 +44,13 @@ import java.util.WeakHashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilObject;
 import org.ofbiz.base.util.StringUtil;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
 import org.w3c.dom.Document;
@@ -58,8 +59,8 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 /**
- * <p><b>Title:</b> XmlSerializer
- * <p><b>Description:</b> Simple XML serialization/deserialization routines with embedded type information
+ * XmlSerializer class. This class is deprecated - new code should use the
+ * Java object marshalling/unmarshalling methods in <code>UtilXml.java</code>.
  *
  */
 public class XmlSerializer {
@@ -75,26 +76,54 @@ public class XmlSerializer {
         return UtilXml.writeXmlDocument(document);
     }
 
-    public static Object deserialize(String content, GenericDelegator delegator)
+    /** Deserialize a Java object from an XML string. <p>This method should be used with caution.
+     * If the XML string contains a serialized <code>GenericValue</code> or <code>GenericPK</code>
+     * then it is possible to unintentionally corrupt the database.</p>
+     *
+     * @param content
+     * @param delegator
+     * @return
+     * @throws SerializeException
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     * @throws IOException
+     */
+    public static Object deserialize(String content, Delegator delegator)
         throws SerializeException, SAXException, ParserConfigurationException, IOException {
         // readXmlDocument with false second parameter to disable validation
         Document document = UtilXml.readXmlDocument(content, false);
         if (document != null) {
-            Element rootElement = document.getDocumentElement();
-            // find the first element below the root element, that should be the object
-            Node curChild = rootElement.getFirstChild();
-
-            while (curChild != null && curChild.getNodeType() != Node.ELEMENT_NODE) {
-                curChild = curChild.getNextSibling();
+            if (!"ofbiz-ser".equals(document.getDocumentElement().getTagName())) {
+                return UtilXml.fromXml(content);
             }
-            if (curChild == null) return null;
-            Element element = (Element) curChild;
-
-            return deserializeSingle(element, delegator);
+            return deserialize(document, delegator);
         } else {
             Debug.logWarning("Serialized document came back null", module);
             return null;
         }
+    }
+
+    /** Deserialize a Java object from a DOM <code>Document</code>.
+     * <p>This method should be used with caution. If the DOM <code>Document</code>
+     * contains a serialized <code>GenericValue</code> or <code>GenericPK</code>
+     * then it is possible to unintentionally corrupt the database.</p>
+     *
+     * @param document
+     * @param delegator
+     * @return
+     * @throws SerializeException
+     */
+    public static Object deserialize(Document document, Delegator delegator) throws SerializeException {
+        Element rootElement = document.getDocumentElement();
+        // find the first element below the root element, that should be the object
+        Node curChild = rootElement.getFirstChild();
+        while (curChild != null && curChild.getNodeType() != Node.ELEMENT_NODE) {
+            curChild = curChild.getNextSibling();
+        }
+        if (curChild == null) {
+            return null;
+        }
+        return deserializeSingle((Element) curChild, delegator);
     }
 
     public static Element serializeSingle(Object object, Document document) throws SerializeException {
@@ -158,9 +187,9 @@ public class XmlSerializer {
 
             // if (elementName == null) return serializeCustom(object, document);
 
-            Collection value = (Collection) object;
+            Collection<?> value = UtilGenerics.cast(object);
             Element element = document.createElement(elementName);
-            Iterator iter = value.iterator();
+            Iterator<?> iter = value.iterator();
 
             while (iter.hasNext()) {
                 element.appendChild(serializeSingle(iter.next(), document));
@@ -196,11 +225,11 @@ public class XmlSerializer {
             }
 
             Element element = document.createElement(elementName);
-            Map value = (Map) object;
-            Iterator iter = value.entrySet().iterator();
+            Map<?,?> value = UtilGenerics.cast(object);
+            Iterator<Map.Entry<?, ?>> iter = UtilGenerics.cast(value.entrySet().iterator());
 
             while (iter.hasNext()) {
-                Map.Entry entry = (Map.Entry) iter.next();
+                Map.Entry<?,?> entry = iter.next();
 
                 Element entryElement = document.createElement("map-Entry");
 
@@ -245,8 +274,8 @@ public class XmlSerializer {
         return element;
     }
 
-    public static Object deserializeSingle(Element element, GenericDelegator delegator) throws SerializeException {
-        String tagName = element.getTagName();
+    public static Object deserializeSingle(Element element, Delegator delegator) throws SerializeException {
+        String tagName = element.getLocalName();
 
         if (tagName.equals("null")) return null;
 
@@ -358,7 +387,8 @@ public class XmlSerializer {
                     if (curChild.getNodeType() == Node.ELEMENT_NODE) {
                         Element curElement = (Element) curChild;
 
-                        if ("map-Entry".equals(curElement.getTagName())) {
+                        if ("map-Entry".equals(curElement.getLocalName())) {
+
                             Element mapKeyElement = UtilXml.firstChildElement(curElement, "map-Key");
                             Element keyElement = null;
                             Node tempNode = mapKeyElement.getFirstChild();
@@ -402,7 +432,7 @@ public class XmlSerializer {
     }
 
     public static Object deserializeCustom(Element element) throws SerializeException {
-        String tagName = element.getTagName();
+        String tagName = element.getLocalName();
         if ("cus-obj".equals(tagName)) {
             String value = UtilXml.elementValue(element);
             if (value != null) {
@@ -414,9 +444,9 @@ public class XmlSerializer {
                     }
                 }
             }
-            throw new SerializeException("Problem deserializing object from byte array + " + element.getTagName());
+            throw new SerializeException("Problem deserializing object from byte array + " + element.getLocalName());
         } else {
-            throw new SerializeException("Cannot deserialize element named " + element.getTagName());
+            throw new SerializeException("Cannot deserialize element named " + element.getLocalName());
         }
     }
 

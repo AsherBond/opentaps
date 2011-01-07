@@ -19,16 +19,14 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <div id="browse-forums" class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.ProductBrowseForums}</div>
-    </div>
+    <h3>${uiLabelMap.ProductBrowseForums}</h3>
     <div class="screenlet-body">
-          <div class="browsecategorylist">
+          <ul class="browsecategorylist">
             <#list forums as forum>
-            <div class="browsecategorytext">
+            <li class="browsecategorytext">
                <a href="<@ofbizUrl>showforum?forumId=${forum.contentId}</@ofbizUrl>" class="browsecategorybutton">${forum.contentName}</a>
-            </div>
+            </li>
             </#list>
-          </div>
+          </ul>
     </div>
 </div>

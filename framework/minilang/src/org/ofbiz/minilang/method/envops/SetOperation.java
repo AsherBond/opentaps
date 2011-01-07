@@ -19,9 +19,6 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.minilang.method.envops;
 
-import java.util.Locale;
-import java.util.TimeZone;
-
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
@@ -76,6 +73,7 @@ public class SetOperation extends MethodOperation {
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         Object newValue = null;
         if (!this.fromField.isEmpty()) {
@@ -121,14 +119,16 @@ public class SetOperation extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         return "<set field=\"" + this.field
                 + (this.valueExdr.isEmpty() ? "" : "\" value=\"" + this.valueExdr.getOriginal())
                 + (this.fromField.isEmpty() ? "" : "\" from-field=\"" + this.fromField)
                 + (this.defaultExdr.isEmpty() ? "" : "\" default-value=\"" + this.defaultExdr.getOriginal())
-                + (this.type == null || this.type.length() == 0 ? "" : "\" type=\"" + this.type)
+                + (UtilValidate.isEmpty(this.type) ? "" : "\" type=\"" + this.type)
                 + "\"/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

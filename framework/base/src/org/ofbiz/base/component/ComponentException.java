@@ -19,12 +19,13 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.base.component;
 
-import org.ofbiz.base.config.*;
+import org.ofbiz.base.config.GenericConfigException;
 
 /**
  * ComponentException
  *
  */
+@SuppressWarnings("serial")
 public class ComponentException extends GenericConfigException {
 
     public ComponentException() {

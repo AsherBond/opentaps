@@ -25,7 +25,7 @@ import java.util.Set;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
@@ -50,7 +50,7 @@ public class SupplierServices {
     public static final String module = SupplierServices.class.getName();
 
     public static Map updateSupplier(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -228,7 +228,7 @@ public class SupplierServices {
 
     // See ProductionRunServices.java for more code related to outsourced tasks, especially how this data is used
     public static Map outsourceRoutingTask(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");

@@ -39,7 +39,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.common.email.NotificationServices;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -71,7 +71,7 @@ public final class CrmsfaOrderServices {
     private static final String RESOURCE = "crmsfa";
 
     public static Map<String, Object> getOrderPriorityList(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -186,7 +186,7 @@ public final class CrmsfaOrderServices {
     }
 
     public static Map<String, Object> deleteOrderShipGroupPriority(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
@@ -201,7 +201,7 @@ public final class CrmsfaOrderServices {
     }
 
     public static Map<String, Object> createOrderShipGroupPriority(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
@@ -248,7 +248,7 @@ public final class CrmsfaOrderServices {
     }
 
     public static Map<String, Object> rescheduleOrderShipDates(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = UtilCommon.getTimeZone(context);
 
@@ -275,7 +275,7 @@ public final class CrmsfaOrderServices {
 
 
     public static Map<String, Object> resequenceOrderShipGroupPriorities(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = UtilCommon.getTimeZone(context);
 
@@ -355,7 +355,7 @@ public final class CrmsfaOrderServices {
 
 
     public static Map<String, Object> reReserveInventoryOnSalesOrderStatusChange(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -444,7 +444,7 @@ public final class CrmsfaOrderServices {
     }
 
     public static Map<String, Object> reReserveInventoryByOrderPriority(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -541,7 +541,7 @@ public final class CrmsfaOrderServices {
     }
 
     public static Map<String, Object> createSalesOrderWithOneItem(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -688,7 +688,7 @@ public final class CrmsfaOrderServices {
     }
 
     public static Map<String, Object> invoiceAndCaptureOrder(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -766,7 +766,7 @@ public final class CrmsfaOrderServices {
     }
 
     public static Map<String, Object> addCreditCardToOrder(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -817,7 +817,7 @@ public final class CrmsfaOrderServices {
 
 
     public static Map<String, Object> prepareOrderConfirmationEmail(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -909,7 +909,7 @@ public final class CrmsfaOrderServices {
 
 
     public static Map<String, Object> markServicesAsPerformed(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -947,7 +947,7 @@ public final class CrmsfaOrderServices {
     }
 
     public static Map<String, Object> createShipGroup(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
 
@@ -1222,7 +1222,7 @@ public final class CrmsfaOrderServices {
                 GenericValue newInventoryItemDetail = delegator.makeValue("InventoryItemDetail", UtilMisc.toMap("orderId", orderId, "inventoryItemId", reservation.get("inventoryItemId")));
                 newInventoryItemDetail.put("inventoryItemDetailSeqId", inventoryItemDetailSeqId);
                 newInventoryItemDetail.put("availableToPromiseDiff", diffQty);
-                newInventoryItemDetail.put("quantityOnHandDiff", 0.0);
+                newInventoryItemDetail.put("quantityOnHandDiff", new BigDecimal("0.0"));
                 newInventoryItemDetail.put("shipGroupSeqId", reservation.get("shipGroupSeqId"));
                 valuesToStore.add(newInventoryItemDetail);
                 // the second removed that ATP  to a IDD associated to the new ship group

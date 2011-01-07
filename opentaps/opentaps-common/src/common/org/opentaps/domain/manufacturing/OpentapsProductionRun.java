@@ -25,7 +25,7 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -309,7 +309,7 @@ public class OpentapsProductionRun extends ProductionRun {
      * @exception GenericEntityException if an error occurs
      */
     public GenericValue getDisassemblyWegs() throws GenericEntityException {
-        GenericDelegator delegator = productionRun.getDelegator();
+        Delegator delegator = productionRun.getDelegator();
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition("workEffortId", productionRun.get("workEffortId")),
             EntityCondition.makeCondition("workEffortGoodStdTypeId", "PRUN_PROD_DISASMBL")

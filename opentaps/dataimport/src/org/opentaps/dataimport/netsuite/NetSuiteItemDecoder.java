@@ -19,7 +19,7 @@ package org.opentaps.dataimport.netsuite;
 import org.opentaps.dataimport.ImportDecoder;
 import org.opentaps.common.product.UtilProduct;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.LocalDispatcher;
@@ -53,7 +53,7 @@ public class NetSuiteItemDecoder implements ImportDecoder {
         this.parentCategoryId = parentCategoryId;
     }
 
-    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
+    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, Delegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
         List<GenericValue> toBeStored = FastList.newInstance();
         String productId = entry.getString("itemId");
         Debug.logInfo("Importing NetSuiteItem with itemId [" + productId +"]", module);
@@ -155,7 +155,7 @@ public class NetSuiteItemDecoder implements ImportDecoder {
     }
 
     // decode a variant where the features are delimited by -
-    private List<GenericValue> createVariantProductInfo(GenericValue entry, GenericDelegator delegator, Timestamp importTimestamp) throws GenericEntityException {
+    private List<GenericValue> createVariantProductInfo(GenericValue entry, Delegator delegator, Timestamp importTimestamp) throws GenericEntityException {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
 
         // make sure the parent product has isVirtual=Y, we can also validate the existence of the parent here

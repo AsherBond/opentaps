@@ -37,7 +37,7 @@ import org.ofbiz.service.ServiceUtil;
  */
 public final class BeanShellEngine extends GenericAsyncEngine {
 
-    public static UtilCache<String, String> scriptCache = new UtilCache<String, String>("BeanShellScripts", 0, 0);
+    public static UtilCache<String, String> scriptCache = UtilCache.createUtilCache("BeanShellScripts", 0, 0);
 
     public BeanShellEngine(ServiceDispatcher dispatcher) {
         super(dispatcher);
@@ -46,6 +46,7 @@ public final class BeanShellEngine extends GenericAsyncEngine {
     /**
      * @see org.ofbiz.service.engine.GenericEngine#runSyncIgnore(java.lang.String, org.ofbiz.service.ModelService, java.util.Map)
      */
+    @Override
     public void runSyncIgnore(String localName, ModelService modelService, Map<String, Object> context) throws GenericServiceException {
         runSync(localName, modelService, context);
     }
@@ -53,6 +54,7 @@ public final class BeanShellEngine extends GenericAsyncEngine {
     /**
      * @see org.ofbiz.service.engine.GenericEngine#runSync(java.lang.String, org.ofbiz.service.ModelService, java.util.Map)
      */
+    @Override
     public Map<String, Object> runSync(String localName, ModelService modelService, Map<String, Object> context) throws GenericServiceException {
         return serviceInvoker(localName, modelService, context);
     }

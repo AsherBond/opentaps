@@ -47,25 +47,6 @@ under the License.
         </section>
     </screen>
 
-    <screen name="ServiceLog">
-        <section>
-            <actions>
-                <set field="titleProperty" value="PageTitleServiceList"/>
-                <set field="tabButtonItem" value="serviceLog"/>
-                <script location="component://webtools/webapp/webtools/WEB-INF/actions/service/Services.groovy"/>
-            </actions>
-            <widgets>
-                <decorator-screen name="CommonServiceDecorator" location="${parameters.mainDecoratorLocation}">
-                    <decorator-section name="body">
-                        <platform-specific>
-                            <html><html-template location="component://webtools/webapp/webtools/service/services.ftl"/></html>
-                        </platform-specific>
-                    </decorator-section>
-                </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
     <screen name="FindJob">
         <section>
             <actions>
@@ -80,10 +61,10 @@ under the License.
                             <widgets>
                                 <decorator-screen name="FindScreenDecorator" location="component://common/widget/CommonScreens.xml">
                                     <decorator-section name="search-options">
-                                        <include-form name="FindJobs" location="component://webtools/webapp/webtools/service/ServiceForms.xml"/>
+                                        <include-form name="FindJobs" location="component://webtools/widget/ServiceForms.xml"/>
                                     </decorator-section>
                                     <decorator-section name="search-results">
-                                        <include-form name="ListJobs" location="component://webtools/webapp/webtools/service/ServiceForms.xml"/>
+                                        <include-form name="ListJobs" location="component://webtools/widget/ServiceForms.xml"/>
                                     </decorator-section>
                                 </decorator-screen>
                             </widgets>
@@ -123,21 +104,9 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonServiceDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                         <container style="screenlet">
-                             <container style="screenlet-title-bar">
-                                 <container style="h3">
-                                     <label text="${uiLabelMap.WebtoolsStep1ServiceAndRecurrenceInfo}"/>
-                                 </container>
-                             </container>
-                             <container style="screenlet-body">
-                                 <section>
-                                     <widgets>
-                                         <include-form name="scheduleJob" location="component://webtools/webapp/webtools/service/ServiceForms.xml"/>
-                                     </widgets>
-                                 </section>
-                             </container>
-                         </container>
-
+                        <screenlet title="${uiLabelMap.WebtoolsStep1ServiceAndRecurrenceInfo}">
+                            <include-form name="scheduleJob" location="component://webtools/widget/ServiceForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -154,14 +123,9 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonServiceDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <label style="h3">${uiLabelMap.PageTitleRunService}</label>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="runService" location="component://webtools/webapp/webtools/service/ServiceForms.xml"/>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleRunService}">
+                            <include-form name="runService" location="component://webtools/widget/ServiceForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -178,16 +142,11 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonServiceDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                         <container style="screenlet">
-                             <container style="screenlet-title-bar">
-                                 <label style="h3">${uiLabelMap.WebtoolsStep2ServiceParameters}</label>
-                             </container>
-                             <container style="screenlet-body">
-                                 <platform-specific>
-                                     <html><html-template location="component://webtools/webapp/webtools/service/setServiceParameter.ftl"/></html>
-                                 </platform-specific>
-                             </container>
-                         </container>
+                        <screenlet title="${uiLabelMap.WebtoolsStep2ServiceParameters}">
+                            <platform-specific>
+                                <html><html-template location="component://webtools/webapp/webtools/service/setServiceParameter.ftl"/></html>
+                            </platform-specific>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -205,16 +164,11 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonServiceDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <label style="h3">${uiLabelMap.PageTitleScheduleJob}</label>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific>
-                                    <html><html-template location="component://webtools/webapp/webtools/service/setServiceParameter.ftl"/></html>
-                                </platform-specific>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.PageTitleScheduleJob}">
+                            <platform-specific>
+                                <html><html-template location="component://webtools/webapp/webtools/service/setServiceParameter.ftl"/></html>
+                            </platform-specific>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

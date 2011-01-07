@@ -36,7 +36,19 @@ under the License.
                 <set field="applicationTitle" value="${uiLabelMap.BusinessIntelligenceApplication}" global="true"/>
             </actions>
             <widgets>
-                <include-screen name="GlobalDecorator" location="component://common/widget/CommonScreens.xml"/>
+                <decorator-screen name="GlobalDecorator" location="component://common/widget/CommonScreens.xml">
+                    <decorator-section name="pre-body">
+                        <decorator-section-include name="pre-body"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <container id="column-container">
+                            <container id="content-main-section">
+                                <decorator-section-include name="body"/>
+                            </container>
+                            <container style="clear"></container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>
@@ -49,20 +61,9 @@ under the License.
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.BusinessIntelligenceReportBuilderSelectStarSchema}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="selectStarSchema" location="component://bi/widget/BiForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.BusinessIntelligenceReportBuilderSelectStarSchema}">
+                            <include-form name="selectStarSchema" location="component://bi/widget/BiForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -78,22 +79,11 @@ under the License.
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.BusinessIntelligenceReportBuilderSelectStarSchemaFields}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <platform-specific>
-                                            <html><html-template location="component://bi/webapp/bi/reportbuilder/SelectStarSchemaFields.ftl"/></html>
-                                        </platform-specific>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.BusinessIntelligenceReportBuilderSelectStarSchemaFields}">
+                            <platform-specific>
+                                <html><html-template location="component://bi/webapp/bi/reportbuilder/SelectStarSchemaFields.ftl"/></html>
+                            </platform-specific>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -109,22 +99,11 @@ under the License.
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.BusinessIntelligenceReportBuilderRenderStarSchemaReport}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <platform-specific>
-                                            <html><html-template location="component://bi/webapp/bi/reportbuilder/RenderStarSchemaReport.ftl"/></html>
-                                        </platform-specific>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.BusinessIntelligenceReportBuilderRenderStarSchemaReport}">
+                            <platform-specific>
+                                <html><html-template location="component://bi/webapp/bi/reportbuilder/RenderStarSchemaReport.ftl"/></html>
+                            </platform-specific>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -142,29 +121,25 @@ under the License.
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                        	<container>
-                                <section>
-                                    <widgets>
-                                        <platform-specific>
-                                            <html><html-template location="component://bi/webapp/bi/main.ftl"/></html>
-                                        </platform-specific>
-                                    </widgets>
-                                </section>
+                        <screenlet>
+                            <container>
+                                <platform-specific>
+                                    <html><html-template location="component://bi/webapp/bi/main.ftl"/></html>
+                                </platform-specific>
                             </container>
-                            <container style="screenlet-body">
-                            	<link target="quickInitDataWarehouse" text="${uiLabelMap.BusinessIntelligenceQuickInitDataWarehouse}" style="buttontext">
-                                	<parameter param-name="fromDate"/>
-                                	<parameter param-name="thruDate"/>
-                            	</link>
-                            	<label style="note"> (${uiLabelMap.CommonFromDate} ${fromDate} ${uiLabelMap.CommonThruDate} ${thruDate})</label>
-                            	<label style="note">
-                                	${uiLabelMap.BusinessIntelligenceNote29}
-                                	${uiLabelMap.BusinessIntelligenceNote30}
-                                	${uiLabelMap.BusinessIntelligenceNote31}
-                            	</label>
-                        	</container> 
-                        </container>
+                            <container>
+                                <link target="quickInitDataWarehouse" text="${uiLabelMap.BusinessIntelligenceQuickInitDataWarehouse}" style="buttontext">
+                                    <parameter param-name="fromDate"/>
+                                    <parameter param-name="thruDate"/>
+                                </link>
+                                <label style="note"> (${uiLabelMap.CommonFromDate} ${fromDate} ${uiLabelMap.CommonThruDate} ${thruDate})</label>
+                                <label style="note">
+                                    ${uiLabelMap.BusinessIntelligenceNote29}
+                                    ${uiLabelMap.BusinessIntelligenceNote30}
+                                    ${uiLabelMap.BusinessIntelligenceNote31}
+                                </label>
+                            </container>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

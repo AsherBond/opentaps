@@ -37,6 +37,20 @@
         <action service="sendOrderChangeNotification" mode="async" persist="true"/>
     </eca>
 
+    <eca service="crmsfa.createShipGroup" event="commit">
+        <action service="recreateOrderAdjustments" mode="sync"/>
+        <action service="recalcShippingTotal" mode="sync"/>
+        <action service="recalcTaxTotal" mode="sync"/>
+        <action service="resetGrandTotal" mode="sync"/>
+    </eca>
+
+    <eca service="updateOrderItemShipGroup" event="commit">
+        <action service="recreateOrderAdjustments" mode="sync"/>
+        <action service="recalcShippingTotal" mode="sync"/>
+        <action service="recalcTaxTotal" mode="sync"/>
+        <action service="resetGrandTotal" mode="sync"/>
+    </eca>
+
     <!-- Each receipt of cash, check, money order. and disbursement of cash
             should be recorded in a CashDrawer transaction -->
     <eca service="createPayment" event="commit">

@@ -491,150 +491,174 @@ under the License.
                   </tr>
                 </#list>
               </#if>
-
               <#-- now show planned shipment info per line item -->
               <#assign orderShipments = orderItem.getRelated("OrderShipment")?if_exists>
               <#if orderShipments?has_content>
                 <#list orderShipments as orderShipment>
-                  <tr>
+                                <tr<#if itemClass == "1"> class="alternate-row"</#if>>
                     <td align="right" colspan="2">
-                      <div><span class="label">${uiLabelMap.OrderPlannedInShipment}</span>&nbsp;<a target="facility" href="/facility/control/ViewShipment?shipmentId=${orderShipment.shipmentId}&amp;externalLoginKey=${externalLoginKey}" class="buttontext">${orderShipment.shipmentId}</a>: ${orderShipment.shipmentItemSeqId}</div>
+                                        <span class="label">${uiLabelMap.OrderPlannedInShipment}</span>&nbsp;<a
+                                            target="facility"
+                                            href="/facility/control/ViewShipment?shipmentId=${orderShipment.shipmentId}&amp;externalLoginKey=${externalLoginKey}"
+                                            class="buttontext">${orderShipment.shipmentId}</a>: ${orderShipment.shipmentItemSeqId}
                     </td>
                     <td align="center">
-                      <div>${orderShipment.quantity?string.number}&nbsp;</div>
+                                        ${orderShipment.quantity?string.number}&nbsp;
                     </td>
                     <td colspan="4">&nbsp;</td>
                   </tr>
                 </#list>
               </#if>
-
               <#-- now show item issuances (shipment) per line item -->
               <#assign itemIssuances = itemIssuancesPerItem.get(orderItem.get("orderItemSeqId"))?if_exists>
               <#if itemIssuances?has_content>
                 <#list itemIssuances as itemIssuance>
-                  <tr>
+                            <tr<#if itemClass == "1"> class="alternate-row"</#if>>
                     <td align="right" colspan="2">
-                      <div>
                         <#if itemIssuance.shipmentId?has_content>
                           <span class="label">${uiLabelMap.OrderIssuedToShipmentItem}</span>&nbsp;
-                          <a target="facility" href="/facility/control/ViewShipment?shipmentId=${itemIssuance.shipmentId}&amp;externalLoginKey=${externalLoginKey}" class="buttontext">${itemIssuance.shipmentId}</a>: ${itemIssuance.shipmentItemSeqId?if_exists}
+                                        <a target="facility"
+                                           href="/facility/control/ViewShipment?shipmentId=${itemIssuance.shipmentId}&amp;externalLoginKey=${externalLoginKey}"
+                                           class="buttontext">${itemIssuance.shipmentId}</a>: ${itemIssuance.shipmentItemSeqId?if_exists}
                         <#else>
                           <span class="label">${uiLabelMap.OrderIssuedWithoutShipment}</span>
                         </#if>
-                      </div>
                     </td>
                     <td align="center">
-                      <div>${itemIssuance.quantity?default(0) - itemIssuance.cancelQuantity?default(0)}&nbsp;</div>
+                                    ${itemIssuance.quantity?default(0) - itemIssuance.cancelQuantity?default(0)}&nbsp;
                     </td>
                     <td colspan="4">&nbsp;</td>
                   </tr>
                 </#list>
               </#if>
-
               <#-- now show item issuances (inventory item) per line item -->
               <#if itemIssuances?has_content>
                 <#list itemIssuances as itemIssuance>
-                  <tr>
+                                <tr<#if itemClass == "1"> class="alternate-row"</#if>>
                     <td align="right" colspan="2">
-                      <div>
                         <#if itemIssuance.inventoryItemId?has_content>
                           <#assign inventoryItem = itemIssuance.getRelatedOne("InventoryItem")/>
                           <span class="label">${uiLabelMap.FacilityInventory}</span>
-                          <a href="/facility/control/EditInventoryItem?inventoryItemId=${itemIssuance.inventoryItemId}&amp;externalLoginKey=${externalLoginKey}" class="buttontext">${itemIssuance.inventoryItemId}</a>
+                                            <a href="/facility/control/EditInventoryItem?inventoryItemId=${itemIssuance.inventoryItemId}&amp;externalLoginKey=${externalLoginKey}"
+                                               class="buttontext">${itemIssuance.inventoryItemId}</a>
                           <span class="label">${uiLabelMap.OrderShipGroup}</span>&nbsp;${itemIssuance.shipGroupSeqId?if_exists}
-                          <#if (inventoryItem.serialNumber?has_content)><br><span class="label">${uiLabelMap.ProductSerialNumber}</span>&nbsp;${inventoryItem.serialNumber}&nbsp;</#if>
+                                            <#if (inventoryItem.serialNumber?has_content)>
+                                                <br />
+                                                <span class="label">${uiLabelMap.ProductSerialNumber}</span>&nbsp;${inventoryItem.serialNumber}&nbsp;
+                                            </#if>
                         </#if>
-                      </div>
                     </td>
                     <td align="center">
-                      <div>${itemIssuance.quantity?default(0) - itemIssuance.cancelQuantity?default(0)}</div>
+                                        ${itemIssuance.quantity?default(0) - itemIssuance.cancelQuantity?default(0)}
                     </td>
                     <td colspan="4">&nbsp;</td>
                   </tr>
                 </#list>
               </#if>
-
               <#-- now show shipment receipts per line item -->
               <#assign shipmentReceipts = orderItem.getRelated("ShipmentReceipt")?if_exists>
               <#if shipmentReceipts?has_content>
                 <#list shipmentReceipts as shipmentReceipt>
-                  <tr>
+                                <tr<#if itemClass == "1"> class="alternate-row"</#if>>
                     <td align="right" colspan="2">
-                      <div>
                         <#if shipmentReceipt.shipmentId?has_content>
                           <span class="label">${uiLabelMap.OrderShipmentReceived}</span>&nbsp;
-                          <a target="facility" href="/facility/control/ViewShipment?shipmentId=${shipmentReceipt.shipmentId}&amp;externalLoginKey=${externalLoginKey}" class="buttontext">${shipmentReceipt.shipmentId}</a>:${shipmentReceipt.shipmentItemSeqId?if_exists}
+                                            <a target="facility"
+                                               href="/facility/control/ViewShipment?shipmentId=${shipmentReceipt.shipmentId}&amp;externalLoginKey=${externalLoginKey}"
+                                               class="buttontext">${shipmentReceipt.shipmentId}</a>:${shipmentReceipt.shipmentItemSeqId?if_exists}
                         </#if>
                           &nbsp;${shipmentReceipt.datetimeReceived}&nbsp;
                           <span class="label">${uiLabelMap.FacilityInventory}</span>&nbsp;
-                          <a href="/facility/control/EditInventoryItem?inventoryItemId=${shipmentReceipt.inventoryItemId}&amp;externalLoginKey=${externalLoginKey}" class="buttontext">${shipmentReceipt.inventoryItemId}</a>
-                      </div>
+                                        <a href="/facility/control/EditInventoryItem?inventoryItemId=${shipmentReceipt.inventoryItemId}&amp;externalLoginKey=${externalLoginKey}"
+                                           class="buttontext">${shipmentReceipt.inventoryItemId}</a>
                     </td>
                     <td align="center">
-                      <div>${shipmentReceipt.quantityAccepted?string.number}&nbsp;/&nbsp;${shipmentReceipt.quantityRejected?default(0)?string.number}</div>
+                                        ${shipmentReceipt.quantityAccepted?string.number}&nbsp;/&nbsp;${shipmentReceipt.quantityRejected?default(0)?string.number}
                     </td>
                     <td colspan="4">&nbsp;</td>
                   </tr>
                 </#list>
               </#if>
-
+                        <#if itemClass == "2">
+                            <#assign itemClass = "1">
+                        <#else>
+                            <#assign itemClass = "2">
+                        </#if>
             </#list>
           </#if>
-          <tr><td colspan="7"><hr/></td></tr>
+                <tr><td colspan="7"><hr /></td></tr>
           <#list orderHeaderAdjustments as orderHeaderAdjustment>
             <#assign adjustmentType = orderHeaderAdjustment.getRelatedOne("OrderAdjustmentType")>
             <#assign adjustmentAmount = Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustment(orderHeaderAdjustment, orderSubTotal)>
             <#if adjustmentAmount != 0>
               <tr>
                 <td align="right" colspan="5">
-                  <div><span class="label">${adjustmentType.get("description",locale)}</span>&nbsp;${orderHeaderAdjustment.comments?if_exists}  ${orderHeaderAdjustment.get("description")?if_exists} : </div>
+                                <#if orderHeaderAdjustment.comments?has_content>${orderHeaderAdjustment.comments} - </#if>
+                                <#if orderHeaderAdjustment.description?has_content>${orderHeaderAdjustment.description} - </#if>
+                                <span class="label">${adjustmentType.get("description", locale)}</span>
                 </td>
                 <td align="right" nowrap="nowrap">
-                  <div><@ofbizCurrency amount=adjustmentAmount isoCode=currencyUomId/></div>
+                                <@ofbizCurrency amount=adjustmentAmount isoCode=currencyUomId/>
                 </td>
                 <td>&nbsp;</td>
               </tr>
             </#if>
           </#list>
-
           <#-- subtotal -->
-          <tr><td colspan="1"></td><td colspan="6"><hr/></td></tr>
           <tr>
-            <td align="right" colspan="5"><div><span class="label">${uiLabelMap.OrderItemsSubTotal}</span></div></td>
-            <td align="right" nowrap="nowrap"><div><@ofbizCurrency amount=orderSubTotal isoCode=currencyUomId/></div></td>
+                    <td colspan="1"></td>
+                    <td colspan="6"><hr /></td>
+                </tr>
+                <tr>
+                    <td align="right" colspan="5">
+                        <span class="label">${uiLabelMap.OrderItemsSubTotal}</span>
+                    </td>
+                    <td align="right" nowrap="nowrap">
+                        <@ofbizCurrency amount=orderSubTotal isoCode=currencyUomId/>
+                    </td>
             <td>&nbsp;</td>
           </tr>
-
           <#-- other adjustments -->
           <tr>
-            <td align="right" colspan="5"><div><span class="label">${uiLabelMap.OrderTotalOtherOrderAdjustments}</span></div></td>
-            <td align="right" nowrap="nowrap"><div><@ofbizCurrency amount=otherAdjAmount isoCode=currencyUomId/></div></td>
+                    <td align="right" colspan="5">
+                        <span class="label">${uiLabelMap.OrderTotalOtherOrderAdjustments}</span>
+                    </td>
+                    <td align="right" nowrap="nowrap">
+                        <@ofbizCurrency amount=otherAdjAmount isoCode=currencyUomId/>
+                    </td>
             <td>&nbsp;</td>
           </tr>
-
           <#-- shipping adjustments -->
           <tr>
-            <td align="right" colspan="5"><div><span class="label">${uiLabelMap.OrderTotalShippingAndHandling}</span></div></td>
-            <td align="right" nowrap="nowrap"><div><@ofbizCurrency amount=shippingAmount isoCode=currencyUomId/></div></td>
+                    <td align="right" colspan="5">
+                        <span class="label">${uiLabelMap.OrderTotalShippingAndHandling}</span>
+                    </td>
+                    <td align="right" nowrap="nowrap">
+                        <@ofbizCurrency amount=shippingAmount isoCode=currencyUomId/>
+                    </td>
             <td>&nbsp;</td>
           </tr>
-
           <#-- tax adjustments -->
           <tr>
-            <td align="right" colspan="5"><div><span class="label">${uiLabelMap.OrderTotalSalesTax}</span></div></td>
-            <td align="right" nowrap="nowrap"><div><@ofbizCurrency amount=taxAmount isoCode=currencyUomId/></div></td>
+                    <td align="right" colspan="5">
+                        <span class="label">${uiLabelMap.OrderTotalSalesTax}</span>
+                    </td>
+                    <td align="right" nowrap="nowrap">
+                        <@ofbizCurrency amount=taxAmount isoCode=currencyUomId/>
+                    </td>
             <td>&nbsp;</td>
           </tr>
-
           <#-- grand total -->
           <tr>
-            <td align="right" colspan="5"><div><span class="label">${uiLabelMap.OrderTotalDue}</span></div></td>
+                    <td align="right" colspan="5">
+                        <span class="label">${uiLabelMap.OrderTotalDue}</span>
+                    </td>
             <td align="right" nowrap="nowrap">
-              <div><@ofbizCurrency amount=grandTotal isoCode=currencyUomId/></div>
+                        <@ofbizCurrency amount=grandTotal isoCode=currencyUomId/>
             </td>
             <td>&nbsp;</td>
           </tr>
         </table>
     </div>
-</div>
+  </div>
 </#if>

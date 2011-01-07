@@ -26,7 +26,7 @@ import javolution.util.FastList;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.transaction.TransactionUtil;
@@ -81,7 +81,7 @@ public class ServiceEngineTestServices {
     }
 
     public static Map<String, Object> testServiceDeadLockRetryThreadA(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             // grab entity SVCLRT_A by changing, then wait, then find and change SVCLRT_B
@@ -115,7 +115,7 @@ public class ServiceEngineTestServices {
         return ServiceUtil.returnSuccess();
     }
     public static Map<String, Object> testServiceDeadLockRetryThreadB(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             // grab entity SVCLRT_B by changing, then wait, then change SVCLRT_A
@@ -179,7 +179,7 @@ public class ServiceEngineTestServices {
         return ServiceUtil.returnSuccess();
     }
     public static Map<String, Object> testServiceLockWaitTimeoutRetryGrabber(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             // grab entity SVCLWTRT by changing, then wait a LONG time, ie more than the wait timeout
@@ -205,7 +205,7 @@ public class ServiceEngineTestServices {
         return ServiceUtil.returnSuccess();
     }
     public static Map<String, Object> testServiceLockWaitTimeoutRetryWaiter(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             // wait for a small amount of time to make sure the grabber does it's thing first
@@ -251,7 +251,7 @@ public class ServiceEngineTestServices {
      * @return
      */
     public static Map<String, Object> testServiceLockWaitTimeoutRetryCantRecover(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         try {
             // grab entity SVCLWTRTCR by changing, then wait a LONG time, ie more than the wait timeout
@@ -279,7 +279,7 @@ public class ServiceEngineTestServices {
         return ServiceUtil.returnSuccess();
     }
     public static Map<String, Object> testServiceLockWaitTimeoutRetryCantRecoverWaiter(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             Debug.logInfo("In testServiceLockWaitTimeoutRetryCantRecoverWaiter updating SVCLWTRTCR", module);
@@ -316,7 +316,7 @@ public class ServiceEngineTestServices {
         return ServiceUtil.returnSuccess();
     }
     public static Map<String, Object> testServiceOwnTxSubServiceAfterSetRollbackOnlyInParent(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         try {
             // change the SVC_SRBO value first to test that the rollback really does revert/reset
@@ -361,7 +361,7 @@ public class ServiceEngineTestServices {
         return ServiceUtil.returnSuccess();
     }
     public static Map<String, Object> testServiceEcaGlobalEventExecOnCommit(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             GenericValue testingType = delegator.findOne("TestingType", false, "testingTypeId", "SVC_SECAGC");
@@ -380,7 +380,7 @@ public class ServiceEngineTestServices {
         return ServiceUtil.returnError("Intentional rollback to test global-rollback");
     }
     public static Map<String, Object> testServiceEcaGlobalEventExecOnRollback(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             GenericValue testingType = delegator.findOne("TestingType", false, "testingTypeId", "SVC_SECAGR");

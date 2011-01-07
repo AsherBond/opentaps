@@ -22,6 +22,7 @@ package org.ofbiz.entity;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -42,7 +43,9 @@ import javolution.util.FastMap;
 import org.ofbiz.base.crypto.HashCrypt;
 import org.ofbiz.base.util.Base64;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.ObjectType;
+import org.ofbiz.base.util.TimeDuration;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilProperties;
@@ -66,7 +69,7 @@ import org.w3c.dom.Element;
  * <code>Observer</code>.
  *
  */
-public class GenericEntity extends Observable implements Map<String, Object>, LocalizedMap, Serializable, Comparable<GenericEntity>, Cloneable, Reusable {
+public class GenericEntity extends Observable implements Map<String, Object>, LocalizedMap<Object>, Serializable, Comparable<GenericEntity>, Cloneable, Reusable {
 
     public static final String module = GenericEntity.class.getName();
     public static final GenericEntity NULL_ENTITY = new NullGenericEntity();
@@ -76,7 +79,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     protected String delegatorName = null;
 
     /** Reference to an instance of GenericDelegator used to do some basic operations on this entity value. If null various methods in this class will fail. This is automatically set by the GenericDelegator for all GenericValue objects instantiated through it. You may set this manually for objects you instantiate manually, but it is optional. */
-    protected transient GenericDelegator internalDelegator = null;
+    protected transient Delegator internalDelegator = null;
 
     /** Contains the fields for this entity. Note that this should always be a
      *  HashMap to allow for two things: non-synchronized reads (synchronized
@@ -119,13 +122,13 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     }
 
     /** Creates new GenericEntity from existing Map */
-    public static GenericEntity createGenericEntity(ModelEntity modelEntity, Map<String, ? extends Object> fields) {
+    public static GenericEntity createGenericEntity(Delegator delegator, ModelEntity modelEntity, Map<String, ? extends Object> fields) {
         if (modelEntity == null) {
             throw new IllegalArgumentException("Cannot create a GenericEntity with a null modelEntity parameter");
         }
 
         GenericEntity newEntity = new GenericEntity();
-        newEntity.init(modelEntity, fields);
+        newEntity.init(delegator, modelEntity, fields);
         return newEntity;
     }
 
@@ -155,12 +158,14 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     }
 
     /** Creates new GenericEntity from existing Map */
-    protected void init(ModelEntity modelEntity, Map<String, ? extends Object> fields) {
+    protected void init(Delegator delegator, ModelEntity modelEntity, Map<String, ? extends Object> fields) {
         if (modelEntity == null) {
             throw new IllegalArgumentException("Cannot create a GenericEntity with a null modelEntity parameter");
         }
         this.modelEntity = modelEntity;
         this.entityName = modelEntity.getEntityName();
+        this.delegatorName = delegator.getDelegatorName();
+        this.internalDelegator = delegator;
         setFields(fields);
 
         // check some things
@@ -170,7 +175,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     }
 
     /** Creates new GenericEntity from existing Map */
-    protected void init(ModelEntity modelEntity, Object singlePkValue) {
+    protected void init(Delegator delegator, ModelEntity modelEntity, Object singlePkValue) {
         if (modelEntity == null) {
             throw new IllegalArgumentException("Cannot create a GenericEntity with a null modelEntity parameter");
         }
@@ -179,6 +184,8 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
         }
         this.modelEntity = modelEntity;
         this.entityName = modelEntity.getEntityName();
+        this.delegatorName = delegator.getDelegatorName();
+        this.internalDelegator = delegator;
         set(modelEntity.getOnlyPk().getName(), singlePkValue);
 
         // check some things
@@ -283,10 +290,12 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     /** Get the GenericDelegator instance that created this value object and that is responsible for it.
      *@return GenericDelegator object
      */
-    public GenericDelegator getDelegator() {
+    @SuppressWarnings("deprecation")
+    public Delegator getDelegator() {
         if (internalDelegator == null) {
             if (delegatorName == null) delegatorName = "default";
-            if (delegatorName != null) internalDelegator = GenericDelegator.getGenericDelegator(delegatorName);
+            if (delegatorName != null)
+                internalDelegator = DelegatorFactory.getDelegator(delegatorName);
             if (internalDelegator == null) {
                 throw new IllegalStateException("[GenericEntity.getDelegator] could not find delegator with name " + delegatorName);
             }
@@ -295,7 +304,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     }
 
     /** Set the GenericDelegator instance that created this value object and that is responsible for it. */
-    public void setDelegator(GenericDelegator internalDelegator) {
+    public void setDelegator(Delegator internalDelegator) {
         if (internalDelegator == null) return;
         this.delegatorName = internalDelegator.getDelegatorName();
         this.internalDelegator = internalDelegator;
@@ -303,7 +312,8 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
 
     public Object get(String name) {
         if (getModelEntity().getField(name) == null) {
-            throw new IllegalArgumentException("[GenericEntity.get] \"" + name + "\" is not a field of " + entityName);
+            Debug.logWarning("The field name (or key) [" + name + "] is not valid for entity [" + this.getEntityName() + "], printing IllegalArgumentException instead of throwing it because Map interface specification does not allow throwing that exception.", module);
+            return null;
         }
         return fields.get(name);
     }
@@ -345,7 +355,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     }
 
     public String getPkShortValueString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (ModelField curPk: this.getModelEntity().getPkFieldsUnmodifiable()) {
             if (sb.length() > 0) {
                 sb.append("::");
@@ -403,12 +413,19 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
                 } catch (GenericNotImplementedException e) {
                     throw new IllegalArgumentException(e.getMessage());
                 }
-            } else if (value != null) {
+            } else if (value != null && !(value instanceof NULL)) {
                 // make sure the type matches the field Java type
+                if (value instanceof TimeDuration) {
+                    try {
+                        value = ObjectType.simpleTypeConvert(value, type.getJavaType(), null, null);
+                    } catch (GeneralException e) {}
+                }
                 if (!ObjectType.instanceOf(value, type.getJavaType())) {
-                    String errMsg = "In entity field [" + this.getEntityName() + "." + name + "] set the value passed in [" + value.getClass().getName() + "] is not compatible with the Java type of the field [" + type.getJavaType() + "]";
-                    // eventually we should do this, but for now we'll do a "soft" failure: throw new IllegalArgumentException(errMsg);
-                    Debug.logWarning("Location of database type warning =-=-=-=-=-=-=-=-= Database type warning GenericEntity.set =-=-=-=-=-=-=-=-= " + errMsg, module);
+                    if (!("java.sql.Blob".equals(type.getJavaType()) && (value instanceof byte[] || ObjectType.instanceOf(value, ByteBuffer.class)))) {
+                        String errMsg = "In entity field [" + this.getEntityName() + "." + name + "] set the value passed in [" + value.getClass().getName() + "] is not compatible with the Java type of the field [" + type.getJavaType() + "]";
+                        // eventually we should do this, but for now we'll do a "soft" failure: throw new IllegalArgumentException(errMsg);
+                        Debug.logWarning("Location of database type warning =-=-=-=-=-=-=-=-= Database type warning GenericEntity.set =-=-=-=-=-=-=-=-= " + errMsg, module);
+                    }
                 }
             }
             Object old = fields.put(name, value);
@@ -576,6 +593,30 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
         } else {
             throw new IllegalArgumentException("getBoolean could not map the object '" + obj.toString() + "' to Boolean type, unknown object type: " + obj.getClass().getName());
         }
+    }
+
+    /** Returns the specified field as a <code>TimeDuration</code> instance.
+     * The field's Java data type can be either <code>String</code> or
+     * <code>Number</code>. Invalid Java data types will throw
+     * <code>IllegalArgumentException</code>.
+     *
+     * @param name The name of the desired field
+     * @return A <code>TimeDuration</code> instance or <code>null</code>
+     */
+    public TimeDuration getDuration(String name) {
+        Object obj = get(name);
+        if (obj == null) {
+            return null;
+        }
+        try {
+            Number number = (Number) obj;
+            return TimeDuration.fromNumber(number);
+        } catch (Exception e) {}
+        try {
+            String duration = (String) obj;
+            return TimeDuration.parseDuration(duration);
+        } catch (Exception e) {}
+        throw new IllegalArgumentException("getDuration could not map the object '" + obj.toString() + "' to TimeDuration type, incompatible object type: " + obj.getClass().getName());
     }
 
     public String getString(String name) {
@@ -781,9 +822,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
             ModelField curField = iter.next();
             pkNames.add(curField.getName());
         }
-        GenericPK newPK = GenericPK.create(getModelEntity(), this.getFields(pkNames));
-        newPK.setDelegator(this.getDelegator());
-        return newPK;
+        return GenericPK.create(this.getDelegator(), getModelEntity(), this.getFields(pkNames));
     }
 
     /** go through the pks and for each one see if there is an entry in fields to set */
@@ -911,7 +950,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
 
     public boolean matchesFields(Map<String, ? extends Object> keyValuePairs) {
         if (fields == null) return true;
-        if (keyValuePairs == null || keyValuePairs.size() == 0) return true;
+        if (UtilValidate.isEmpty(keyValuePairs)) return true;
         for (Map.Entry<String, ? extends Object> anEntry: keyValuePairs.entrySet()) {
             if (!UtilValidate.areEqual(anEntry.getValue(), this.fields.get(anEntry.getKey()))) {
                 return false;
@@ -977,9 +1016,9 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
         // else element = new ElementImpl(null, this.getEntityName());
         if (element == null) return null;
 
-        Iterator modelFields = this.getModelEntity().getFieldsIterator();
+        Iterator<ModelField> modelFields = this.getModelEntity().getFieldsIterator();
         while (modelFields.hasNext()) {
-            ModelField modelField = (ModelField) modelFields.next();
+            ModelField modelField = modelFields.next();
             String name = modelField.getName();
             String value = this.getString(name);
 
@@ -1001,7 +1040,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
      */
     public void writeXmlText(PrintWriter writer, String prefix) {
         int indent = 4;
-        StringBuffer indentStrBuf = new StringBuffer();
+        StringBuilder indentStrBuf = new StringBuilder();
         for (int i = 0; i < indent; i++) indentStrBuf.append(' ');
         String indentString = indentStrBuf.toString();
 
@@ -1158,6 +1197,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
      *@param  obj  The object (GenericEntity) to compare this two
      *@return      boolean stating if the two objects are equal
      */
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof GenericEntity)) return false;
 
@@ -1172,6 +1212,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     /** Creates a hashCode for the entity, using the default String hashCode and Map hashCode, overrides the default hashCode
      *@return    Hashcode corresponding to this entity
      */
+    @Override
     public int hashCode() {
         // divide both by two (shift to right one bit) to maintain scale and add together
         if (generateHashCode) {
@@ -1191,6 +1232,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
      *
      *@return String corresponding to this entity
      */
+    @Override
     public String toString() {
         StringBuilder theString = new StringBuilder();
         theString.append("[GenericEntity:");
@@ -1299,6 +1341,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     /** Clones this GenericEntity, this is a shallow clone & uses the default shallow HashMap clone
      *@return Object that is a clone of this GenericEntity
      */
+    @Override
     public Object clone() {
         GenericEntity newEntity = new GenericEntity();
         newEntity.init(this);
@@ -1334,16 +1377,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     }
 
     public Object get(Object key) {
-        try {
-            return this.get((String) key);
-        } catch (IllegalArgumentException e) {
-            if (Debug.verboseOn()) {
-                Debug.logVerbose(e, "The field name (or key) [" + key + "] is not valid for entity [" + this.getEntityName() + "], printing IllegalArgumentException instead of throwing it because Map interface specification does not allow throwing that exception.", module);
-            } else {
-                Debug.logWarning("The field name (or key) [" + key + "] is not valid for entity [" + this.getEntityName() + "], printing IllegalArgumentException instead of throwing it because Map interface specification does not allow throwing that exception.", module);
-            }
-            return null;
-        }
+        return this.get((String) key);
     }
 
     public java.util.Set<String> keySet() {
@@ -1376,9 +1410,11 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     public static class NullGenericEntity extends GenericEntity implements NULL {
         protected NullGenericEntity() { }
 
+        @Override
         public String getEntityName() {
             return "[null-entity]";
         }
+        @Override
         public String toString() {
             return "[null-entity]";
         }
@@ -1387,6 +1423,7 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
     public static class NullField implements NULL, Comparable<NullField> {
         protected NullField() { }
 
+        @Override
         public String toString() {
             return "[null-field]";
         }

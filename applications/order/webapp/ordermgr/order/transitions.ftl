@@ -33,7 +33,7 @@ under the License.
           <!-- Suspended Processes -->
           <#if workEffortStatus == "WF_SUSPENDED">
             <form action="<@ofbizUrl>releasehold</@ofbizUrl>" method="post" name="activityForm">
-              <input type="hidden" name="workEffortId" value="${workEffortId}">
+              <input type="hidden" name="workEffortId" value="${workEffortId}" />
               <table class="basic-table" cellspacing='0'>
                 <tr>
                   <td>${uiLabelMap.OrderProcessingInHold}&nbsp;${uiLabelMap.OrderProcessingInHoldNote}</td>
@@ -47,7 +47,7 @@ under the License.
           <!-- Active Processes -->
           <#if workEffortStatus == "WF_RUNNING">
             <form action="<@ofbizUrl>holdorder</@ofbizUrl>" method="post" name="activityForm">
-              <input type="hidden" name="workEffortId" value="${workEffortId}">
+              <input type="hidden" name="workEffortId" value="${workEffortId}" />
               <table class="basic-table" cellspacing='0'>
                 <tr>
                   <td>${uiLabelMap.OrderProcessingInActive}</td>
@@ -64,7 +64,7 @@ under the License.
   </div>
 </div>
 </#if>
-<br/>
+<br />
 <#if wfTransitions?exists && wfTransitions?has_content>
 <div class="screenlet">
   <div class="screenlet-title-bar">
@@ -78,10 +78,10 @@ under the License.
       <tr>
         <td>
           <form action="<@ofbizUrl>completeassignment</@ofbizUrl>" method="post" name="transitionForm">
-            <input type="hidden" name="workEffortId" value="${workEffortId}">
-            <input type="hidden" name="partyId" value="${assignPartyId}">
-            <input type="hidden" name="roleTypeId" value="${assignRoleTypeId}">
-            <input type="hidden" name="fromDate" value="${fromDate}">
+            <input type="hidden" name="workEffortId" value="${workEffortId}" />
+            <input type="hidden" name="partyId" value="${assignPartyId}" />
+            <input type="hidden" name="roleTypeId" value="${assignRoleTypeId}" />
+            <input type="hidden" name="fromDate" value="${fromDate}" />
             <table class="basic-table" cellspacing='0'>
               <tr>
                 <td>

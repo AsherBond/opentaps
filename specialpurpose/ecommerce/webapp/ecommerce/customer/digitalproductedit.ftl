@@ -21,8 +21,8 @@ under the License.
 <#assign productPrice = productPriceList[0]?if_exists/>
 
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.PageTitleDigitalProductEdit}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">${uiLabelMap.PageTitleDigitalProductEdit}</div>
     </div>
     <div class="screenlet-body">
 <#if !supplierProduct?has_content && parameters.productId?has_content>
@@ -32,14 +32,14 @@ under the License.
     <#if !supplierProduct?exists>
       <h1>${uiLabelMap.EcommerceAddNewDigitalProduct}</h1>
       <form method="post" action="<@ofbizUrl>createCustomerDigitalDownloadProduct</@ofbizUrl>" name="editdigitaluploadform" style="margin: 0;">
-        <input type="hidden" name="productStoreId" value="${productStore.productStoreId}">
+        <input type="hidden" name="productStoreId" value="${productStore.productStoreId}" />
     <#else>
       <h1>${uiLabelMap.EcommerceUpdateDigitalProduct}</h1>
       <form method="post" action="<@ofbizUrl>updateCustomerDigitalDownloadProduct</@ofbizUrl>" name="editdigitaluploadform" style="margin: 0;">
-        <input type="hidden" name="productId" value="${parameters.productId}">
-        <input type="hidden" name="currencyUomId" value="${parameters.currencyUomId}">
-        <input type="hidden" name="minimumOrderQuantity" value="${parameters.minimumOrderQuantity}">
-        <input type="hidden" name="availableFromDate" value="${parameters.availableFromDate}">
+        <input type="hidden" name="productId" value="${parameters.productId}" />
+        <input type="hidden" name="currencyUomId" value="${parameters.currencyUomId}" />
+        <input type="hidden" name="minimumOrderQuantity" value="${parameters.minimumOrderQuantity}" />
+        <input type="hidden" name="availableFromDate" value="${parameters.availableFromDate}" />
     </#if>
     &nbsp;<a href="<@ofbizUrl>digitalproductlist</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonBackToList}</a>
 
@@ -72,8 +72,8 @@ under the License.
 
 <#if supplierProduct?has_content>
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.OrderDigitalProductFiles}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">${uiLabelMap.OrderDigitalProductFiles}</div>
     </div>
     <div class="screenlet-body">
         <#list productContentAndInfoList as productContentAndInfo>
@@ -83,14 +83,14 @@ under the License.
             </div>
         </#list>
 
-        <div><hr/></div>
+        <div><hr /></div>
         <div class="tableheadtext">${uiLabelMap.EcommerceDigitalAddFromMyFiles}</div>
         <div>
         <form method="post" action="<@ofbizUrl>addCustomerDigitalDownloadProductFile</@ofbizUrl>" name="adddigitaluploadfile" style="margin: 0;">
-          <input type="hidden" name="productId" value="${parameters.productId}">
-          <input type="hidden" name="currencyUomId" value="${parameters.currencyUomId}">
-          <input type="hidden" name="minimumOrderQuantity" value="${parameters.minimumOrderQuantity}">
-          <input type="hidden" name="availableFromDate" value="${parameters.availableFromDate}">
+          <input type="hidden" name="productId" value="${parameters.productId}" />
+          <input type="hidden" name="currencyUomId" value="${parameters.currencyUomId}" />
+          <input type="hidden" name="minimumOrderQuantity" value="${parameters.minimumOrderQuantity}" />
+          <input type="hidden" name="availableFromDate" value="${parameters.availableFromDate}" />
           <select name="contentId" class="selectBox">
             <#list ownerContentAndRoleList as ownerContentAndRole>
               <option value="${ownerContentAndRole.contentId}">${ownerContentAndRole.contentName}</option>

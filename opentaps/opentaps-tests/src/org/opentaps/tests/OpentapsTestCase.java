@@ -47,7 +47,8 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -120,7 +121,7 @@ public class OpentapsTestCase extends TestCase {
 
     private static final EtmMonitor etmMonitor = EtmManager.getEtmMonitor();
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected LocalDispatcher dispatcher = null;
     protected GenericValue admin;
     protected Organization organization;
@@ -156,7 +157,7 @@ public class OpentapsTestCase extends TestCase {
 
     @Override
     public void setUp() throws Exception {
-        delegator = GenericDelegator.getGenericDelegator(DELEGATOR_NAME);
+        delegator = DelegatorFactory.getDelegator(DELEGATOR_NAME);
         dispatcher = GenericDispatcher.getLocalDispatcher(DELEGATOR_NAME, delegator);
         admin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "admin"));
         domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));
@@ -187,9 +188,9 @@ public class OpentapsTestCase extends TestCase {
 
     /**
      * Gets the delegator.
-     * @return a <code>GenericDelegator</code> value
+     * @return a <code>Delegator</code> value
      */
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return delegator;
     }
 
@@ -328,6 +329,20 @@ public class OpentapsTestCase extends TestCase {
         BigDecimal valueRounded = value.setScale(decimals, rounding);
         BigDecimal expectedRounded = expected.setScale(decimals, rounding);
         assertEquals(message, valueRounded, expectedRounded);
+    }
+
+    /**
+     * Asserts that two date times are equal.  This method ignore milliseconds as a workaround for DB that do not support milliseconds.
+     * @param message the assert message
+     * @param expected the expected <code>Calendar</code> value  that the actual value should be equal to
+     * @param given the actual <code>Calendar</code> value
+     */
+    public void assertDatesEqual(String message, com.ibm.icu.util.Calendar expected, com.ibm.icu.util.Calendar given) {
+        expected.set(Calendar.MILLISECOND, 0);
+        given.set(Calendar.MILLISECOND, 0);
+        if (expected.compareTo(given) != 0) {
+            TestCase.fail(message + String.format(" Expected [%1$tc] but was [%2$tc].", expected.getTime(), given.getTime()));
+        }
     }
 
     /**

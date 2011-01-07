@@ -17,7 +17,7 @@
  * under the License.
  */
 /* This file has been modified by Open Source Strategies, Inc. */
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.security.Security;
@@ -29,6 +29,7 @@ import org.ofbiz.entity.model.ModelField;
 import org.ofbiz.entity.model.ModelFieldType;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.base.util.UtilFormatOut;
+import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
@@ -86,8 +87,9 @@ String curFindString = "entityName=" + entityName + "&find=" + find;
 
 GenericEntity findByEntity = delegator.makeValue(entityName);
 List errMsgList = FastList.newInstance();
-for (int fnum = 0; fnum < modelEntity.getFieldsSize(); fnum++) {
-    ModelField field = modelEntity.getField(fnum);
+Iterator fieldIterator = modelEntity.getFieldsIterator();
+while (fieldIterator.hasNext()) {
+    ModelField field = fieldIterator.next();
     String fval = parameters.get(field.getName());
     if (fval != null) {
         if (fval.length() > 0) {
@@ -122,7 +124,7 @@ context.viewIndexNext = viewIndex+1;
 try {
     viewSize = Integer.valueOf((String)parameters.get("VIEW_SIZE")).intValue();
 } catch (NumberFormatException nfe) {
-    viewSize = 10;
+    viewSize = Integer.valueOf(UtilProperties.getPropertyValue("widget.properties", "widget.form.defaultViewSize")).intValue();
 }
 
 context.viewSize = viewSize;
@@ -151,14 +153,13 @@ if ("true".equals(find)) {
     }
     condition = EntityCondition.makeCondition(conditionList, EntityOperator.AND);
 
-    // DEJ 20080701 avoid using redundant query, will use eli.getResultsSizeAfterPartialList() below instead: arraySize = (int) delegator.findCountByCondition(entityName, condition, null, null);
-
     if ((highIndex - lowIndex + 1) > 0) {
         boolean beganTransaction = false;
         try {
             beganTransaction = TransactionUtil.begin();
 
             EntityFindOptions efo = new EntityFindOptions();
+            efo.setMaxRows(highIndex);
             efo.setResultSetType(EntityFindOptions.TYPE_SCROLL_INSENSITIVE);
             EntityListIterator resultEli = null;
             fieldsToSelect = null;
@@ -208,8 +209,9 @@ viewIndexLast = (int) (arraySize/viewSize);
 context.viewIndexLast = viewIndexLast;
 
 List fieldList = FastList.newInstance();
-for (int fnum = 0; fnum < modelEntity.getFieldsSize(); fnum++) {
-    ModelField field = modelEntity.getField(fnum);
+fieldIterator = modelEntity.getFieldsIterator();
+while (fieldIterator.hasNext()) {
+    ModelField field = fieldIterator.next();
     ModelFieldType type = delegator.getEntityFieldType(modelEntity, field.getType());
 
     Map fieldMap = FastMap.newInstance();
@@ -232,8 +234,9 @@ if (resultPartialList != null) {
 
         GenericValue value = (GenericValue)resultPartialIter.next();
         String findString = "entityName=" + entityName;
-        for (int pknum = 0; pknum < modelEntity.getPksSize(); pknum++) {
-            ModelField pkField = modelEntity.getPk(pknum);
+        Iterator pkIterator = modelEntity.getPksIterator();
+        while (pkIterator.hasNext()) {
+            ModelField pkField = pkIterator.next();
             ModelFieldType type = delegator.getEntityFieldType(modelEntity, pkField.getType());
             findString += "&" + pkField.getName() + "=" + value.get(pkField.getName());
         }

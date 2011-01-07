@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * InvalidData Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class InvalidData extends WfException {
 
     public InvalidData() {}

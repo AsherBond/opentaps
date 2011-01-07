@@ -38,7 +38,7 @@ import freemarker.template.TemplateException;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.webapp.view.ApacheFopWorker;
@@ -69,7 +69,7 @@ public abstract class MergeFormsFopViewHandler implements ViewHandler {
         this.context = context;
     }
 
-    private String getMergeFormText(GenericDelegator delegator, String mergeFormId) {
+    private String getMergeFormText(Delegator delegator, String mergeFormId) {
         if (UtilValidate.isEmpty(mergeFormId) || UtilValidate.isEmpty(delegator)) {
             return null;
         }
@@ -90,7 +90,7 @@ public abstract class MergeFormsFopViewHandler implements ViewHandler {
      */
     public void render(String name, String page, String info, String contentType, String encoding, HttpServletRequest request, HttpServletResponse response) throws ViewHandlerException {
 
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
 
         String mergeFormId = request.getParameter("mergeFormId");

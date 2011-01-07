@@ -22,6 +22,7 @@ package org.ofbiz.minilang.method.callops;
 import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.minilang.MiniLangException;
 import org.ofbiz.minilang.SimpleMethod;
 import org.ofbiz.minilang.method.MethodContext;
@@ -61,8 +62,9 @@ public class CallSimpleMethod extends MethodOperation {
         return this.methodName;
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
-        if (this.methodName != null && this.methodName.length() > 0) {
+        if (UtilValidate.isNotEmpty(this.methodName)) {
             String methodName = methodContext.expandString(this.methodName);
             String xmlResource = methodContext.expandString(this.xmlResource);
 
@@ -121,7 +123,7 @@ public class CallSimpleMethod extends MethodOperation {
 
     public SimpleMethod getSimpleMethodToCall(ClassLoader loader) throws MiniLangException {
         SimpleMethod simpleMethodToCall = null;
-        if (xmlResource == null || xmlResource.length() == 0) {
+        if (UtilValidate.isEmpty(xmlResource)) {
             simpleMethodToCall = this.simpleMethod.getSimpleMethodInSameFile(methodName);
         } else {
             Map<String, SimpleMethod> simpleMethods = SimpleMethod.getSimpleMethods(xmlResource, loader);
@@ -130,9 +132,11 @@ public class CallSimpleMethod extends MethodOperation {
         return simpleMethodToCall;
     }
 
+    @Override
     public String rawString() {
         return "<call-simple-method xml-resource=\"" + this.xmlResource + "\" method-name=\"" + this.methodName + "\" />";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

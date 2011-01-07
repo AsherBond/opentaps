@@ -50,6 +50,7 @@ public class SetCurrentUserLogin extends MethodOperation {
         valueAcsr = new ContextAccessor<GenericValue>(element.getAttribute("value-field"), element.getAttribute("value-name"));
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         GenericValue userLogin = valueAcsr.get(methodContext);
         if (userLogin == null) {
@@ -61,10 +62,12 @@ public class SetCurrentUserLogin extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<set-current-user-login/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

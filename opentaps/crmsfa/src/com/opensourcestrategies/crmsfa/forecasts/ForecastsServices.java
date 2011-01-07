@@ -56,7 +56,7 @@ import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -86,7 +86,7 @@ public final class ForecastsServices {
     protected static final String FORECAST_CHANGE_NOTE_PREFIX_UILABEL = "CrmForecastChangeNotePrefix";
 
     public static Map<String, Object> updateForecast(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -146,7 +146,7 @@ public final class ForecastsServices {
 
     // TODO: The next two methods have a lot of overlapping code.  We should try to re-factor.
     public static Map<String, Object> computeForecastPeriod(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -206,7 +206,7 @@ public final class ForecastsServices {
     }
 
     public static Map<String, Object> computeForecastParentPeriod(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -269,7 +269,7 @@ public final class ForecastsServices {
     }
 
     public static Map<String, Object> updateForecastsRelatedToOpportunity(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);

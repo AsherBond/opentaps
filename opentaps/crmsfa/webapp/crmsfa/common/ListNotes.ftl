@@ -40,7 +40,7 @@
       <#assign name = Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, note.noteParty, false)>
       <td><span class="tabletext">${name}</span></td>
       <td><span class="tabletext"><@displayDate date=note.noteDateTime format="DATE_TIME"/></span></td>
-      <#if Static["com.opensourcestrategies.crmsfa.security.CrmsfaSecurity"].hasNotePermission(security, hasModulePermission, "_UPDATE", userLogin, note.noteId, note.targetPartyId!, note.custRequestId!)>
+      <#if Static["com.opensourcestrategies.crmsfa.security.CrmsfaSecurity"].hasNotePermission(security, hasModulePermission!"", "_UPDATE", userLogin, note.noteId, note.targetPartyId!, note.custRequestId!)>
         <td>
           <a style="display: block;" id="${getIndexedName('editNoteInfo', counter)}" name="${getIndexedName('editNoteInfo', counter)}" href="javascript:editNotes(${counter})">
             <img src="<@ofbizContentUrl>/opentaps_images/edit.gif</@ofbizContentUrl>" width="22" height="21" border="0" alt="${uiLabelMap.CommonEdit}"/>
@@ -53,7 +53,7 @@
         <td/>
       </#if>
 
-      <#if Static["com.opensourcestrategies.crmsfa.security.CrmsfaSecurity"].hasNotePermission(security, hasModulePermission, "_DELETE", userLogin, note.noteId, note.targetPartyId!, note.custRequestId!)>
+      <#if Static["com.opensourcestrategies.crmsfa.security.CrmsfaSecurity"].hasNotePermission(security, hasModulePermission!"", "_DELETE", userLogin, note.noteId, note.targetPartyId!, note.custRequestId!)>
         <td>
           <a style="display: block;" id="${getIndexedName('deleteNoteInfo', counter)}" name="${getIndexedName('deleteNoteInfo', counter)}" href="javascript:deleteNotes(${counter}, ${note.noteId})">
             <img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/delete.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonDelete}"/>

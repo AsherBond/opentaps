@@ -32,7 +32,8 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -69,7 +70,7 @@ public class GenericWebEvent {
         }
 
         Security security = (Security) request.getAttribute("security");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         if (security == null) {
             String errMsg = UtilProperties.getMessage(GenericWebEvent.err_resource,"genericWebEvent.security_object_not_found", locale) + ".";
@@ -133,7 +134,7 @@ public class GenericWebEvent {
             }
 
             String fval = request.getParameter(field.getName());
-            if (fval != null && fval.length() > 0) {
+            if (UtilValidate.isNotEmpty(fval)) {
                 try {
                     findByEntity.setString(field.getName(), fval);
                 } catch (Exception e) {
@@ -181,7 +182,7 @@ public class GenericWebEvent {
             }
 
             String fval = request.getParameter(field.getName());
-            if (fval != null && fval.length() > 0) {
+            if (UtilValidate.isNotEmpty(fval)) {
                 try {
                     findByEntity.setString(field.getName(), fval);
                 } catch (Exception e) {
@@ -216,8 +217,8 @@ public class GenericWebEvent {
             }
             if (tempEntity != null) {
                 Map<String, String> messageMap = UtilMisc.toMap("primaryKey", findByEntity.getPrimaryKey().toString());
-                String errMsg = entity.getEntityName() + UtilProperties.getMessage(GenericWebEvent.err_resource, "genericWebEvent.already_exists_pk", messageMap, locale)+ ".";
-                Debug.logWarning("[updateGeneric] " + entity.getEntityName() + " already exists with primary key: " + findByEntity.getPrimaryKey().toString() + "; please change.", module);
+                String errMsg = "[updateGeneric] " + entity.getEntityName() + UtilProperties.getMessage(GenericWebEvent.err_resource, "genericWebEvent.already_exists_pk", messageMap, locale)+ ".";
+                Debug.logWarning(errMsg, module);
             }
         }
 
@@ -229,7 +230,7 @@ public class GenericWebEvent {
 
             for (int j = 0; j < field.getValidatorsSize(); j++) {
                 String curValidate = field.getValidator(j);
-                Class[] paramTypes = new Class[] {String.class};
+                Class<?>[] paramTypes = new Class[] {String.class};
                 Object[] params = new Object[] {findByEntity.get(field.getName()).toString()};
 
                 String className = "org.ofbiz.base.util.UtilValidate";
@@ -292,10 +293,8 @@ public class GenericWebEvent {
         }
 
         if (updateMode.equals("CREATE")) {
-            GenericValue value;
-
             try {
-                value = delegator.create(findByEntity.getEntityName(), findByEntity.getAllFields());
+                delegator.create(findByEntity.getEntityName(), findByEntity.getAllFields());
             } catch (GenericEntityException e) {
                 Map<String, String> messageMap = UtilMisc.toMap("entityName", entity.getEntityName());
                 String errMsg = UtilProperties.getMessage(GenericWebEvent.err_resource, "genericWebEvent.creation_param_failed", messageMap, locale)+ ": " + findByEntity.toString() + ": " + e.toString();

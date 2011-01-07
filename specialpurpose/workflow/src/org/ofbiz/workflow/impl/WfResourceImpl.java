@@ -20,13 +20,12 @@
 package org.ofbiz.workflow.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.workflow.NotAssigned;
@@ -41,7 +40,7 @@ import org.ofbiz.workflow.WfResource;
  */
 public class WfResourceImpl implements WfResource {
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected String resourceKey = null;
     protected String resourceName = null;
     protected String description = null;
@@ -57,7 +56,7 @@ public class WfResourceImpl implements WfResource {
      * @param roleTypeId The roleTypeId of this resource
      * @param fromDate The fromDate of this resource
      */
-    public WfResourceImpl(GenericDelegator delegator, String resourceKey, String resourceName, String partyId, String roleTypeId) {
+    public WfResourceImpl(Delegator delegator, String resourceKey, String resourceName, String partyId, String roleTypeId) {
         this.delegator = delegator;
         this.resourceKey = resourceKey;
         this.resourceName = resourceName;
@@ -95,14 +94,14 @@ public class WfResourceImpl implements WfResource {
     /**
      * @see org.ofbiz.workflow.WfResource#getIteratorWorkItem()
      */
-    public Iterator getIteratorWorkItem() throws WfException {
+    public Iterator<WfActivity> getIteratorWorkItem() throws WfException {
         return workItems().iterator();
     }
 
     /**
      * @see org.ofbiz.workflow.WfResource#getSequenceWorkItem(int)
      */
-    public List getSequenceWorkItem(int maxNumber) throws WfException {
+    public List<WfActivity> getSequenceWorkItem(int maxNumber) throws WfException {
         if (maxNumber > 0)
             return workItems().subList(0, (maxNumber - 1));
         return workItems();
@@ -154,21 +153,19 @@ public class WfResourceImpl implements WfResource {
         // log the transaction
     }
 
-    private List workItems() throws WfException {
-        List workList = new ArrayList();
-        Collection c = null;
+    private List<WfActivity> workItems() throws WfException {
+        List<WfActivity> workList = new ArrayList<WfActivity>();
+        List<GenericValue> c = null;
 
         try {
-            Map fields = UtilMisc.toMap("partyId", partyId, "roleTypeId", roleTypeId);
+            Map<String, Object> fields = UtilMisc.toMap("partyId", (Object) partyId, "roleTypeId", roleTypeId);
             c = delegator.findByAnd("WorkEffortPartyAssignment", fields);
         } catch (GenericEntityException e) {
             throw new WfException(e.getMessage(), e);
         }
 
         if (c != null) {
-            Iterator i = c.iterator();
-            while (i.hasNext()) {
-                GenericValue v = (GenericValue) i.next();
+            for (GenericValue v : c) {
                 WfActivity a = null;
 
                 try {

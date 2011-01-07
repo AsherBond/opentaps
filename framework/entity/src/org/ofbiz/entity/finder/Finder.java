@@ -25,8 +25,9 @@ import org.w3c.dom.Element;
 
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 
+@SuppressWarnings("serial")
 public abstract class Finder implements Serializable {
     protected FlexibleStringExpander entityNameExdr;
     protected FlexibleStringExpander useCacheStrExdr;
@@ -43,6 +44,10 @@ public abstract class Finder implements Serializable {
         return entName;
     }
 
-    public abstract void runFind(Map<String, Object> context, GenericDelegator delegator) throws GeneralException;
+    public void setEntityName(String entityName) {
+        this.entityNameExdr = FlexibleStringExpander.getInstance(entityName);
+    }
+
+    public abstract void runFind(Map<String, Object> context, Delegator delegator) throws GeneralException;
 }
 

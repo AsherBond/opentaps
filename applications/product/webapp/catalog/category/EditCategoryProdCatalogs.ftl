@@ -19,10 +19,10 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <#if productCategoryId?exists && productCategory?exists>
+  <div class="screenlet">
     <div class="screenlet-title-bar">
-        <h3>${uiLabelMap.PageTitleEditCategoryProductCatalogs}</h3>
+      <h3>${uiLabelMap.PageTitleEditCategoryProductCatalogs}</h3>
     </div>
-    <div class="screenlet">
         <div class="screenlet-body">
             <table cellspacing="0" class="basic-table">
             <tr class="header-row">
@@ -78,7 +78,7 @@ under the License.
                     <input type="hidden" name="productCategoryId" value="${(prodCatalogCategory.productCategoryId)?if_exists}"/>
                     <input type="hidden" name="prodCatalogCategoryTypeId" value="${prodCatalogCategory.prodCatalogCategoryTypeId}"/>
                     <input type="hidden" name="fromDate" value="${(prodCatalogCategory.fromDate)?if_exists}"/>
-                    <input type="submit" value="${uiLabelMap.CommonDelete}"/>
+                    <a href="javascript:document.lineForm_delete${line}.submit()" class="buttontext">${uiLabelMap.CommonDelete}</a>
                   </form>
                 </td>
             </tr>
@@ -90,7 +90,7 @@ under the License.
             </#if>
             </#list>
             </table>
-            <br/>
+            <br />
         </div>
     </div>
     <div class="screenlet">

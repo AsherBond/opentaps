@@ -62,6 +62,7 @@ public class WebappPropertyToField extends MethodOperation {
         mapAcsr = new ContextAccessor<Map<String, Object>>(element.getAttribute("map-name"));
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         String resource = methodContext.expandString(this.resource);
         String property = methodContext.expandString(this.property);
@@ -84,16 +85,14 @@ public class WebappPropertyToField extends MethodOperation {
                 Debug.logWarning("Webapp resource (properties file) not found with name " + resource, module);
             } else {
                 fieldVal = UtilProperties.getPropertyValue(propsUrl, property);
-                if (fieldVal == null || fieldVal.length() == 0) {
+                if (UtilValidate.isEmpty(fieldVal)) {
                     Debug.logWarning("Webapp resource property value not found with name " + property + " in resource " + resource, module);
                 }
             }
         }
 
         // if fieldVal is null, or has zero length, use defaultVal
-        if ((fieldVal == null) || (fieldVal.length() == 0)) {
-            fieldVal = defaultVal;
-        }
+        if (UtilValidate.isEmpty(fieldVal)) fieldVal = defaultVal;
 
         if (!mapAcsr.isEmpty()) {
             Map<String, Object> fromMap = mapAcsr.get(methodContext);
@@ -111,10 +110,12 @@ public class WebappPropertyToField extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: add all attributes and other info
         return "<webapp-property-to-field field-name=\"" + this.fieldAcsr + "\" map-name=\"" + this.mapAcsr + "\"/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

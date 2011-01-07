@@ -31,16 +31,17 @@ import javolution.context.ObjectFactory;
 public class EntityConditionList<T extends EntityCondition> extends EntityConditionListBase<T> {
     public static final String module = EntityConditionList.class.getName();
 
-    protected static final ObjectFactory<EntityConditionList> entityConditionListFactory = new ObjectFactory<EntityConditionList>() {
-        protected EntityConditionList create() {
-            return new EntityConditionList();
+    protected static final ObjectFactory<EntityConditionList<EntityCondition>> entityConditionListFactory = new ObjectFactory<EntityConditionList<EntityCondition>>() {
+        @Override
+        protected EntityConditionList<EntityCondition> create() {
+            return new EntityConditionList<EntityCondition>();
         }
     };
 
     protected EntityConditionList() {
         super();
     }
-
+    
     /** @deprecated Use EntityCondition.makeCondition() instead */
     public EntityConditionList(EntityJoinOperator operator, T... conditionList) {
         init(operator, conditionList);
@@ -51,14 +52,17 @@ public class EntityConditionList<T extends EntityCondition> extends EntityCondit
         init(conditionList, operator);
     }
 
+    @Override
     public int getConditionListSize() {
         return super.getConditionListSize();
     }
 
+    @Override
     public Iterator<T> getConditionIterator() {
         return super.getConditionIterator();
     }
 
+    @Override
     public void accept(EntityConditionVisitor visitor) {
         visitor.acceptEntityConditionList(this);
     }

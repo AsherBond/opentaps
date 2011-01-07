@@ -1,11 +1,13 @@
 Based on revisions:
-https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@985905
-svn://svn.opentaps.org/opentaps_all/versions/1.0/tags/tests-passed-20091026
+https://svn.apache.org/repos/asf/ofbiz/branches/release10.04@1055412
 
 Note: Opentaps is now using GIT, you can clone and/or contribute at http://gitorious.org/opentaps
 
 Overall changes
 ---------------
+applications/securityext/data/PasswordSecurityData.xml
+ad00f3895b1f Set the admin accounts default passwords to opentaps
+
 Commented out various webapps and components which duplicate or are superseded by opentaps.
 r13679, 13743, 13753
 
@@ -37,13 +39,16 @@ framework/minilang/src/org/ofbiz/minilang/method/envops/SetCalendar.java
 framework/widget/src/org/ofbiz/widget/form/ModelForm.java
 framework/widget/src/org/ofbiz/widget/form/ModelFormField.java
 framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
+framework/widget/src/org/ofbiz/widget/form/MacroFormRenderer.java
 framework/common/config/CommonUiLabels.xml
 framework/common/src/org/ofbiz/common/FindServices.java
 applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
 applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCartEvents.java
+framework/base/src/org/ofbiz/base/conversion/DateTimeConverters.java
 In revisions:
 r13768, r13769, r13784, r13786, r13798, r13812-r13818, r13822, r13824, r13833,
-r13834, 4d0b94a1fdf644d8bdbb4c114a05d9bdb48627bc
+r13834, 4d0b94a1fdf644d8bdbb4c114a05d9bdb48627bc, 5394c0be0b4623e88035ae2c3bbd5789cdae0a90
+371eaa40ed7f1e223432858fb3902ab7f3a9a1fa
 
 Framework changes
 -----------------
@@ -88,7 +93,7 @@ r13645 Filter Spring logging to WARN
 framework/base/src/org/ofbiz/base/util/UtilHttp.java
 r13392 Port back change in makeParamValueFromComposite to return the String representing the parsed Timestamp instead of directly the Timestamp
 
-framework/entity/src/org/ofbiz/entity/GenericDelegator.java
+framework/entity/src/org/ofbiz/entity/Delegator.java
 r12909 Removed depracation tags for the findXXX methods. Ofbiz deprecated them to be replaced with findOne, findList but the old methods are used in too many places to be refactored
 completely for now.
 
@@ -110,6 +115,7 @@ r13031 add field types for pentaho integration
 framework/entity/src/org/ofbiz/entity/GenericEntity.java
 framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
 r13261 Remove backtrace from database type warnings
+0a3ab79b0436322c4c0b691ca382c049b981224c
 
 framework/entity/config/entityengine.xml
 r13534 Add analytics & testing(analytics test database) to entity engine config
@@ -145,6 +151,7 @@ framework/widget/src/org/ofbiz/widget/html/HtmlScreenRenderer.java
 framework/widget/src/org/ofbiz/widget/screen/ScreenWidgetViewHandler.java
 r13276 Save the current content type in the context, and skip inserting an HTML DocType if the content type is not html. This is used for example for javascript files.
 r13298 Fixed, reverted previous change in RequestHandler.java
+6c236eec9f0928214ddda65985966934222ab0a7
 
 framework/widget/src/org/ofbiz/widget/screen/ScreenXmlViewHandler.java
 r14305 Adding content type to the view handler
@@ -216,6 +223,7 @@ r15076 Fix timestamp parsing for single digit hour
 
 framework/service/src/org/ofbiz/service/ModelService.java
 r15196 Fix service model so that semaphore attributes are used
+*** VB Present
 
 framework/common/src/org/ofbiz/common/FindServices.java
 framework/entity/src/org/ofbiz/entity/finder/ByAndFinder.java
@@ -223,6 +231,11 @@ framework/entity/src/org/ofbiz/entity/finder/EntityFinderUtil.java
 framework/entity/src/org/ofbiz/entity/finder/PrimaryKeyFinder.java
 framework/entity/src/org/ofbiz/entity/model/ModelEntity.java
 r15394 Fix localized date conversion error in entity engine for <entity-one ... auto-field-map="true/>.
+
+framework/entity/src/org/ofbiz/entity/condition/EntityConditionList.java
+framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
+1058cb83555da17ac2d08b1c22d521a516dee293 Fix type : added deprecated methods for backwards compatibility.
+f4bb1060fb55056228b527ceab93806898c94f86 Clear runtime/tempfiles completely
 
 Applications changes
 --------------------
@@ -245,6 +258,9 @@ r13145 The following AcctgTransType were removed from Ofbiz as they already exis
  * MANUFACTURING_ATX    -> MANUFACTURING
  * OTHER_INTERNAL_ACCTG -> OTHER_INTERNAL
  * SALES_ACCTG_TRANS    -> SALES
+
+applications/accounting/data/DemoAcctgTransactionData.xml 
+f55541c9b988b9f235fa31cf7b9d021f3a10b7be
 
 applications/accounting/widget/GlSetupForms.xml
 r13565, hide PartyAcctgPreference.errorGlJournalId field
@@ -352,6 +368,9 @@ r14687 rate estimate from non-US warehouses (OFBIZ-3420)
 applications/order/src/org/ofbiz/order/order/OrderServices.java
 r13899 Fix reservation and cancelOrderItem did not account for already issued quantity
 
+applications/workeffort/script/org/ofbiz/workeffort/workeffort/WorkEffortSimpleServices.xml 
+d3e295c8 Remove the status checking and auto change to Reviewed when creating event/task for a Case
+
 applications/workeffort/src/org/ofbiz/workeffort/workeffort/WorkEffortServices.java
 r14110 exclude cancelled task on filter out cancel event is true
 
@@ -379,6 +398,42 @@ applications/party/webapp/partymgr/party/editeftaccount.ftl
 applications/party/webapp/partymgr/party/profileblocks/PaymentMethods.ftl
 r15359 Modified a few italian labels with a better translation, added 2 null checks to prevent verbose FTL exceptions.
 
+applications/accounting/ofbiz-component.xml
+c2bc53033729e40849efcf2a1b84e8a45a130ff7 Commenting DemoGlSetupData.xml, DemoAcctgTransactionData.xml, DemoPaymentsInvoices.xml certain sections of DemoOrderTestData.xml as they interfere with Opentaps financials and demo data load process.
+
+applications/order/data/OrderDemoData.xml
+cda8033d081dd6bc52528354c12759f5f0faafff
+new seed data in 10.04 - this is the reason for democustomer not showing up in crmsfa search result.
+one of the assigned role types is bill to customer,
+party type PERSON prevents seca crmsfa.autoAssignParty from assigning it to role type account.
+
+applications/accounting/data/DemoFinAccountData.xml
+753d780ad0e76e62c4b33ccdf2e79e25390a8e31 Fixed : glaccountId changed, as this causing payment tests to fail.
+
+applications/product/script/org/ofbiz/shipment/issuance/IssuanceServices.xml
+applications/product/servicedef/services_shipment.xml
+cbff7f8f9838b64e76be4e4c698f137c6071551e Fixed : Uncommented as these were causing purchase order test case to fail. As part of new impl in ofbiz r895250, these were commented/ removed.
+
+applications/product/script/org/ofbiz/shipment/receipt/ShipmentReceiptServices.xml
+fdb29a934e2a289046c2429d09bf28e5120e7327 From ofbiz 10.04, status for Non serial inventory items cannot be set to INV_RETURNED (for returned inventory). With this behavior lot of test cases fail, commenting we can avoid changes to opentaps test cases & services.
+
+applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceWorker.java
+e70d3da545082bdb577b73a9d6e71c9ddfd2760e Fixed : invoice items was missing & filters were being applied on empty list.
+
+applications/product/servicedef/secas.xml
+2c6122f4d1e30112cae836c56a74451905dac93b Fix : introduced in 10.04 commented as it causes testNonSerInventoryItemBalancing() to fail
+
+applications/party/servicedef/services.xml
+9f6b7503f24df11d846060cad37c9054532c9455 Fix : allow html
+
+applications/party/servicedef/services.xml
+4c6e7278092b42771f3735026b1b2c2b8f660c10 Fix : allow html
+
+applications/manufacturing/src/org/ofbiz/manufacturing/bom/BOMNode.java
+applications/manufacturing/src/org/ofbiz/manufacturing/bom/BOMTree.java
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRunServices.java
+a8867332388586e986789ea2ef7dadea051c89c8 
+New production run services have been changed causing production run tests cases to fail, files reverted to opentaps 1.4 version.
 applications/order/src/org/ofbiz/order/order/OrderReturnServices.java
 fix createReturnItemOrAdjustment to not skip adjustments when calling createReturnItem, since contrary to the comment they are not selectable by the user in the UI
 
@@ -408,6 +463,23 @@ If the ship group may split, the calculated date is the earliest of the estimate
 Else it is the latest of those values.
 TODO: see when this value get set and with which value, else we can use it to cache the result of this method or just ignore it and leave it to null.
 
+Specialpurpose changes
+----------------------
 
+specialpurpose/ecommerce/data/DemoOrderTestData.xml
+c2bc53033729e40849efcf2a1b84e8a45a130ff7 Commenting DemoGlSetupData.xml, DemoAcctgTransactionData.xml, DemoPaymentsInvoices.xml certain sections of DemoOrderTestData.xml as they interfere with Opentaps financials and demo data load process.
 
+specialpurpose/ecommerce/data/DemoStandardCosting.xml
+4b098d7ad87948b279924c74c6c242387c970f64 Fixed : new demo data having no entry in accounts - causes prod run tests to fail.
 
+specialpurpose/ecommerce/data/DemoStandardCosting.xml
+b373e455f55e0be0d271831ce484bb03bbeee2bc Comments & addition necessary for production run tests to pass.
+
+specialpurpose/ecommerce/data/DemoStandardCosting.xml
+1c520f9f8aae6faa42295c298fbda88ac58e7193 new demo data having no entry in accounts - causes prod run tests to fail.
+
+specialpurpose/ecommerce/data/DemoProduct.xml
+b3f9b748b1eda977fc171af2ab297c60ac995428 Commented as causes marketing package tests to fail
+
+applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCartEvents.java
+04eb4ea53f1ce4ff9d31df61a1a1e2033ce9f8b5 Allow modify the cart which load from quote, and fix an NPE about estimate shipping cost

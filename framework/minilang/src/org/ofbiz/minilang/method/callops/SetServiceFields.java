@@ -19,8 +19,6 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.minilang.method.callops;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -70,6 +68,7 @@ public class SetServiceFields extends MethodOperation {
         errorListAcsr = new ContextAccessor<List<Object>>(element.getAttribute("error-list-name"), "error_list");
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         List<Object> messages = errorListAcsr.get(methodContext);
         if (messages == null) {
@@ -128,10 +127,12 @@ public class SetServiceFields extends MethodOperation {
         return this.serviceName;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<set-service-fields/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

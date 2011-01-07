@@ -30,7 +30,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -66,14 +66,14 @@ public final class UtilOrder {
     /**
      * Helper method to obtain the earliest ship by date for an order, so it may be invoked within a form widget or ftl.
      * The result will be the formatted date.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param orderId the order to get the earliest ship by date for
      * @param timeZone used for date formatting
      * @param locale used for date formatting
      * @return the earliest ship by date for the given order, formatted in a String
      * @deprecated Use the Order domain class instead
      */
-    @Deprecated public static String getEarliestShipByDate(GenericDelegator delegator, String orderId, TimeZone timeZone, Locale locale) {
+    @Deprecated public static String getEarliestShipByDate(Delegator delegator, String orderId, TimeZone timeZone, Locale locale) {
         OrderReadHelper orh = new OrderReadHelper(delegator, orderId);
         Timestamp date = orh.getEarliestShipByDate();
         if (date == null) {
@@ -167,11 +167,11 @@ public final class UtilOrder {
      * Finds the matching orderItemTypeId based on productTypeId and orderTypeId from the ProductOrderItemType entity.
      * @param productTypeId the product type
      * @param orderTypeId the order type
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the orderItemTypeId
      * @exception GenericEntityException if an error occurs
      */
-    public static String getOrderItemTypeId(String productTypeId, String orderTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getOrderItemTypeId(String productTypeId, String orderTypeId, Delegator delegator) throws GenericEntityException {
         String orderItemTypeId = null;
         GenericValue productOrderItemType = delegator.findByPrimaryKeyCache("ProductOrderItemType", UtilMisc.toMap("productTypeId", productTypeId, "orderTypeId", orderTypeId));
         if (UtilValidate.isNotEmpty(productOrderItemType)) {
@@ -202,13 +202,13 @@ public final class UtilOrder {
 
     /**
      * As above, except pass in the orderId and delegator.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param orderId the order to get the customer PO number for
      * @return the customer PO number for the given order
      * @exception GenericEntityException if an error occurs
      * @deprecated Use the Order domain class instead
      */
-    @Deprecated public static String getCustomerPoNumber(GenericDelegator delegator, String orderId) throws GenericEntityException {
+    @Deprecated public static String getCustomerPoNumber(Delegator delegator, String orderId) throws GenericEntityException {
         GenericValue order = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
         if (order == null) {
             Debug.logWarning("Could not find PO number of order [" + orderId + "]:  Order does not exist.", MODULE);
@@ -237,13 +237,13 @@ public final class UtilOrder {
 
     /**
      * Gets the placing customer for the given order.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param orderId the order to get the placing customer for
      * @return the placing customer for the given order, or <code>null</code> if none was found
      * @exception GenericEntityException if an error occurs
      * @deprecated Use the Order domain class instead
      */
-    @Deprecated public static String getPlacingCustomerPartyId(GenericDelegator delegator, String orderId) throws GenericEntityException {
+    @Deprecated public static String getPlacingCustomerPartyId(Delegator delegator, String orderId) throws GenericEntityException {
         if (UtilValidate.isEmpty(orderId)) {
             return null;
         }
@@ -253,14 +253,14 @@ public final class UtilOrder {
 
     /**
      * Gets the placing customer party name for the given order.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param orderId the order to get the placing customer for
      * @param lastNameFirst if true, puts the last name before the first name
      * @return the placing customer party name for the given order, or <code>null</code> if none was found
      * @exception GenericEntityException if an error occurs
      * @deprecated Use the Order domain class instead
      */
-    public static String getPlacingCustomerPartyName(GenericDelegator delegator, String orderId, boolean lastNameFirst) throws GenericEntityException {
+    public static String getPlacingCustomerPartyName(Delegator delegator, String orderId, boolean lastNameFirst) throws GenericEntityException {
         String partyId = getPlacingCustomerPartyId(delegator, orderId);
         String partyName = null;
         if (UtilValidate.isNotEmpty(partyId)) {
@@ -271,13 +271,13 @@ public final class UtilOrder {
 
     /**
      * Gets the bill to customer for the given order.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param orderId the order to get the bill to customer for
      * @return the bill to customer for the given order, or <code>null</code> if none was found
      * @exception GenericEntityException if an error occurs
      * @deprecated Use the Order domain class instead
      */
-    @Deprecated public static String getBillToCustomerPartyId(GenericDelegator delegator, String orderId) throws GenericEntityException {
+    @Deprecated public static String getBillToCustomerPartyId(Delegator delegator, String orderId) throws GenericEntityException {
         if (UtilValidate.isEmpty(orderId)) {
             return null;
         }
@@ -287,14 +287,14 @@ public final class UtilOrder {
 
     /**
      * Gets the bill to customer party name for the given order.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param orderId the order to get the bill to customer for
      * @param lastNameFirst if true, puts the last name before the first name
      * @return the bill to customer party name for the given order, or <code>null</code> if none was found
      * @exception GenericEntityException if an error occurs
      * @deprecated Use the Order domain class instead
      */
-    public static String getBillToCustomerPartyName(GenericDelegator delegator, String orderId, boolean lastNameFirst) throws GenericEntityException {
+    public static String getBillToCustomerPartyName(Delegator delegator, String orderId, boolean lastNameFirst) throws GenericEntityException {
         String partyId = getBillToCustomerPartyId(delegator, orderId);
         String partyName = null;
         if (UtilValidate.isNotEmpty(partyId)) {
@@ -305,13 +305,13 @@ public final class UtilOrder {
 
     /**
      * Gets the ship to customer for the given order.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param orderId the order to get the ship to customer for
      * @return the ship to customer for the given order, or <code>null</code> if none was found
      * @exception GenericEntityException if an error occurs
      * @deprecated Use the Order domain class instead
      */
-    @Deprecated public static String getShipToCustomerPartyId(GenericDelegator delegator, String orderId) throws GenericEntityException {
+    @Deprecated public static String getShipToCustomerPartyId(Delegator delegator, String orderId) throws GenericEntityException {
         if (UtilValidate.isEmpty(orderId)) {
             return null;
         }
@@ -321,14 +321,14 @@ public final class UtilOrder {
 
     /**
      * Gets the ship to customer party name for the given order.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param orderId the order to get the ship to customer for
      * @param lastNameFirst if true, puts the last name before the first name
      * @return the ship to customer party name for the given order, or <code>null</code> if none was found
      * @exception GenericEntityException if an error occurs
      * @deprecated Use the Order domain class instead
      */
-    public static String getShipToCustomerPartyName(GenericDelegator delegator, String orderId, boolean lastNameFirst) throws GenericEntityException {
+    public static String getShipToCustomerPartyName(Delegator delegator, String orderId, boolean lastNameFirst) throws GenericEntityException {
         String partyId = getShipToCustomerPartyId(delegator, orderId);
         String partyName = null;
         if (UtilValidate.isNotEmpty(partyId)) {
@@ -368,7 +368,7 @@ public final class UtilOrder {
         return netCash.setScale(decimals, rounding);
     }
 
-    public static BigDecimal getOrderOpenAmount(GenericDelegator delegator, String orderId) throws GenericEntityException {
+    public static BigDecimal getOrderOpenAmount(Delegator delegator, String orderId) throws GenericEntityException {
         OrderReadHelper orh = new OrderReadHelper(delegator, orderId);
         return getOrderOpenAmount(orh);
     }
@@ -377,7 +377,7 @@ public final class UtilOrder {
         BigDecimal total = orh.getOrderGrandTotal();
         BigDecimal openAmount = ZERO;
 
-        GenericDelegator delegator = orh.getOrderHeader().getDelegator();
+        Delegator delegator = orh.getOrderHeader().getDelegator();
         EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
                                     EntityCondition.makeCondition("orderId", orh.getOrderId()),
                                     EntityCondition.makeCondition("paymentCurrencyUomId", orh.getCurrency()),
@@ -400,7 +400,7 @@ public final class UtilOrder {
         return total.subtract(openAmount).setScale(decimals, rounding);
     }
 
-    public static List<GenericValue> getShipmentOrderShipGroups(GenericDelegator delegator, String shipmentId) throws GenericEntityException {
+    public static List<GenericValue> getShipmentOrderShipGroups(Delegator delegator, String shipmentId) throws GenericEntityException {
         Set<GenericValue> orderShipGroups = new LinkedHashSet<GenericValue>();
         List<GenericValue> shipmentOrderShipGroups = delegator.findByAnd("ShipmentAndOrderItemShipGroup", UtilMisc.toMap("shipmentId", shipmentId));
         for (GenericValue shipmentOrderShipGroup : shipmentOrderShipGroups) {
@@ -431,7 +431,7 @@ public final class UtilOrder {
             return list;
         }
         GenericValue first = list.get(0);
-        GenericDelegator delegator = first.getDelegator();
+        Delegator delegator = first.getDelegator();
         for (Iterator<GenericValue> iter = list.iterator(); iter.hasNext();) {
             GenericValue value = iter.next();
             GenericValue product = delegator.findByPrimaryKeyCache("Product", UtilMisc.toMap("productId", value.get("productId")));
@@ -452,7 +452,7 @@ public final class UtilOrder {
      * @throws GenericEntityException if an error occurs
      */
     public static List<GenericValue> getShippableItems(GenericValue order, String facilityId, String shipGroupSeqId) throws GenericEntityException {
-        GenericDelegator delegator = order.getDelegator();
+        Delegator delegator = order.getDelegator();
         // get list matching the order, ship group and facilityId
         List<GenericValue> orderItems = delegator.findByAnd("OrderItemShipGrpInvResAndItem", UtilMisc.toMap("orderId", order.get("orderId"), "shipGroupSeqId", shipGroupSeqId, "facilityId", facilityId), UtilMisc.toList("orderItemSeqId"));
         List<GenericValue> result = new ArrayList<GenericValue>();
@@ -477,7 +477,7 @@ public final class UtilOrder {
      * @throws GenericEntityException if an error occurs
      */
     public static BigDecimal getQuantityToPack(GenericValue orderItem, String shipGroupSeqId, String facilityId) throws GenericEntityException {
-        GenericDelegator delegator = orderItem.getDelegator();
+        Delegator delegator = orderItem.getDelegator();
         BigDecimal itemQuantity = BigDecimal.ZERO;
         List<GenericValue> reservations = delegator.findByAnd("OrderItemShipGrpInvResAndItem", UtilMisc.toMap("orderId", orderItem.get("orderId"), "orderItemSeqId", orderItem.get("orderItemSeqId"), "shipGroupSeqId", shipGroupSeqId, "facilityId", facilityId), UtilMisc.toList("orderItemSeqId"));
         for (GenericValue res : reservations) {
@@ -514,7 +514,7 @@ public final class UtilOrder {
      */
     public static BigDecimal getQuantityShippedForItemAndShipGroup(GenericValue orderItem, String shipGroupSeqId) throws GenericEntityException {
         BigDecimal shipped = BigDecimal.ZERO;
-        GenericDelegator delegator = orderItem.getDelegator();
+        Delegator delegator = orderItem.getDelegator();
         List<GenericValue> issuances = delegator.findByAnd("ItemIssuance", UtilMisc.toMap("orderId", orderItem.get("orderId"), "orderItemSeqId", orderItem.get("orderItemSeqId"), "shipGroupSeqId", shipGroupSeqId));
         for (GenericValue issuance : issuances) {
             shipped = shipped.add(issuance.getBigDecimal("quantity"));

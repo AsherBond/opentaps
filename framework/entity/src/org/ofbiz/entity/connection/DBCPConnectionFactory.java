@@ -27,7 +27,9 @@ import org.apache.commons.dbcp.managed.ManagedDataSource;
 import org.apache.commons.dbcp.managed.XAConnectionFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.datasource.GenericHelperInfo;
 import org.ofbiz.entity.transaction.TransactionFactory;
 import org.w3c.dom.Element;
 
@@ -48,47 +50,59 @@ public class DBCPConnectionFactory implements ConnectionFactoryInterface {
     public static final String module = DBCPConnectionFactory.class.getName();
     protected static Map<String, ManagedDataSource> dsCache = FastMap.newInstance();
 
-    public Connection getConnection(String helperName, Element jotmJdbcElement) throws SQLException, GenericEntityException {
-        ManagedDataSource mds = dsCache.get(helperName);
+    public Connection getConnection(GenericHelperInfo helperInfo, Element jdbcElement) throws SQLException, GenericEntityException {
+        ManagedDataSource mds = dsCache.get(helperInfo.getHelperFullName());
         if (mds != null) {
-            return TransactionFactory.getCursorConnection(helperName, mds.getConnection());
+            return TransactionFactory.getCursorConnection(helperInfo, mds.getConnection());
         }
 
         synchronized (DBCPConnectionFactory.class) {
-            mds = dsCache.get(helperName);
+            mds = dsCache.get(helperInfo.getHelperFullName());
             if (mds != null) {
-                return TransactionFactory.getCursorConnection(helperName, mds.getConnection());
+                return TransactionFactory.getCursorConnection(helperInfo, mds.getConnection());
             }
 
             // connection properties
             TransactionManager txMgr = TransactionFactory.getTransactionManager();
-            String driverName = jotmJdbcElement.getAttribute("jdbc-driver");
-            String dbUri = jotmJdbcElement.getAttribute("jdbc-uri");
-            String dbUser = jotmJdbcElement.getAttribute("jdbc-username");
-            String dbPass = jotmJdbcElement.getAttribute("jdbc-password");
+            String driverName = jdbcElement.getAttribute("jdbc-driver");
+
+
+            String jdbcUri = UtilValidate.isNotEmpty(helperInfo.getOverrideJdbcUri()) ? helperInfo.getOverrideJdbcUri() : jdbcElement.getAttribute("jdbc-uri");
+            String jdbcUsername = UtilValidate.isNotEmpty(helperInfo.getOverrideUsername()) ? helperInfo.getOverrideUsername() : jdbcElement.getAttribute("jdbc-username");
+            String jdbcPassword = UtilValidate.isNotEmpty(helperInfo.getOverridePassword()) ? helperInfo.getOverridePassword() : jdbcElement.getAttribute("jdbc-password");
 
             // pool settings
-            int maxSize, minSize;
+            int maxSize, minSize, timeBetweenEvictionRunsMillis;
             try {
-                maxSize = Integer.parseInt(jotmJdbcElement.getAttribute("pool-maxsize"));
+                maxSize = Integer.parseInt(jdbcElement.getAttribute("pool-maxsize"));
             } catch (NumberFormatException nfe) {
-                Debug.logError("Problems with pool settings [pool-maxsize=" + jotmJdbcElement.getAttribute("pool-maxsize") + "]; the values MUST be numbers, using default of 20.", module);
+                Debug.logError("Problems with pool settings [pool-maxsize=" + jdbcElement.getAttribute("pool-maxsize") + "]; the values MUST be numbers, using default of 20.", module);
                 maxSize = 20;
             } catch (Exception e) {
-                Debug.logError(e, "Problems with pool settings", module);
+                Debug.logError("Problems with pool settings [pool-maxsize], using default of 20.", module);
                 maxSize = 20;
             }
             try {
-                minSize = Integer.parseInt(jotmJdbcElement.getAttribute("pool-minsize"));
+                minSize = Integer.parseInt(jdbcElement.getAttribute("pool-minsize"));
             } catch (NumberFormatException nfe) {
-                Debug.logError("Problems with pool settings [pool-minsize=" + jotmJdbcElement.getAttribute("pool-minsize") + "]; the values MUST be numbers, using default of 5.", module);
+                Debug.logError("Problems with pool settings [pool-minsize=" + jdbcElement.getAttribute("pool-minsize") + "]; the values MUST be numbers, using default of 2.", module);
                 minSize = 2;
             } catch (Exception e) {
-                Debug.logError(e, "Problems with pool settings", module);
+                Debug.logError("Problems with pool settings [pool-minsize], using default of 2.", module);
                 minSize = 2;
             }
             int maxIdle = maxSize / 2;
             maxIdle = maxIdle > minSize ? maxIdle : minSize;
+
+            try {
+                timeBetweenEvictionRunsMillis = Integer.parseInt(jdbcElement.getAttribute("time-between-eviction-runs-millis"));
+            } catch (NumberFormatException nfe) {
+                Debug.logError("Problems with pool settings [time-between-eviction-runs-millis=" + jdbcElement.getAttribute("time-between-eviction-runs-millis") + "]; the values MUST be numbers, using default of 600000.", module);
+                timeBetweenEvictionRunsMillis = 600000;
+            } catch (Exception e) {
+                Debug.logError("Problems with pool settings [time-between-eviction-runs-millis], using default of 600000.", module);
+                timeBetweenEvictionRunsMillis = 600000;
+            }
 
             // load the driver
             Driver jdbcDriver;
@@ -101,18 +115,19 @@ public class DBCPConnectionFactory implements ConnectionFactoryInterface {
 
             // connection factory properties
             Properties cfProps = new Properties();
-            cfProps.put("user", dbUser);
-            cfProps.put("password", dbPass);
+            cfProps.put("user", jdbcUsername);
+            cfProps.put("password", jdbcPassword);
 
             // create the connection factory
-            ConnectionFactory cf = new DriverConnectionFactory(jdbcDriver, dbUri, cfProps);
+            ConnectionFactory cf = new DriverConnectionFactory(jdbcDriver, jdbcUri, cfProps);
 
             // wrap it with a LocalXAConnectionFactory
             XAConnectionFactory xacf = new LocalXAConnectionFactory(txMgr, cf);
 
             // configure the pool settings
             GenericObjectPool pool = new GenericObjectPool();
-            pool.setTimeBetweenEvictionRunsMillis(600000);
+
+            pool.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
             pool.setMaxActive(maxSize);
             pool.setMaxIdle(maxIdle);
             pool.setMinIdle(minSize);
@@ -124,8 +139,8 @@ public class DBCPConnectionFactory implements ConnectionFactoryInterface {
             factory.setValidationQuery("select example_type_id from example_type limit 1");
             factory.setDefaultReadOnly(false);
 
-            String transIso = jotmJdbcElement.getAttribute("isolation-level");
-            if (transIso != null && transIso.length() > 0) {
+            String transIso = jdbcElement.getAttribute("isolation-level");
+            if (UtilValidate.isNotEmpty(transIso)) {
                 if ("Serializable".equals(transIso)) {
                     factory.setDefaultTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
                 } else if ("RepeatableRead".equals(transIso)) {
@@ -141,12 +156,13 @@ public class DBCPConnectionFactory implements ConnectionFactoryInterface {
             pool.setFactory(factory);
 
             mds = new ManagedDataSource(pool, xacf.getTransactionRegistry());
+            //mds = new DebugManagedDataSource(pool, xacf.getTransactionRegistry()); // Useful to debug the usage of connections in the pool
             mds.setAccessToUnderlyingConnectionAllowed(true);
 
             // cache the pool
-            dsCache.put(helperName, mds);
+            dsCache.put(helperInfo.getHelperFullName(), mds);
 
-            return TransactionFactory.getCursorConnection(helperName, mds.getConnection());
+            return TransactionFactory.getCursorConnection(helperInfo, mds.getConnection());
         }
     }
 

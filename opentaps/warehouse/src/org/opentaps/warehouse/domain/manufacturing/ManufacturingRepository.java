@@ -18,7 +18,7 @@ package org.opentaps.warehouse.domain.manufacturing;
 
 import java.math.BigDecimal;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.opentaps.base.services.GetProductionRunCostService;
 import org.opentaps.domain.manufacturing.ManufacturingRepositoryInterface;
 import org.opentaps.domain.manufacturing.ProductionRun;
@@ -43,7 +43,7 @@ public class ManufacturingRepository extends Repository implements Manufacturing
      * Use this for Repositories which will only access the database via the delegator.
      * @param delegator the delegator
      */
-    public ManufacturingRepository(GenericDelegator delegator) {
+    public ManufacturingRepository(Delegator delegator) {
         super(delegator);
     }
 

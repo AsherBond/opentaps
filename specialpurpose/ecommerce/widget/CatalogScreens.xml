@@ -165,6 +165,10 @@ under the License.
 
                 <set field="titleProperty" value="PageTitleCategoryPage"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/Category.groovy"/>
+                <!-- Open this commented section for the demo of Layered Navigation, navigate through Gizmo and Widgets categories to see it in action.
+                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/catalog/LayeredNavigation.groovy"/>
+                <set field="detailScreen" value="LayeredCategoryDetail"/>
+                 -->
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -246,6 +250,7 @@ under the License.
                 <set field="MainColumnStyle" value="center"/>
                 <set field="titleProperty" value="PageTitleProductPage"/>
                 <set field="layoutSettings.javaScripts[]" value="/images/prototypejs/prototype.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/ecommerce/images/productAdditionalView.js" global="true"/>
                 <set field="configproductdetailScreen" value="component://ecommerce/widget/CatalogScreens.xml#configproductdetail"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/Product.groovy"/>
             </actions>
@@ -442,6 +447,23 @@ under the License.
                         <platform-specific><html><html-template location="component://ecommerce/webapp/ecommerce/catalog/advancedsearch.ftl"/></html></platform-specific>
                     </decorator-section>
                 </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="LayeredNavBar">
+        <section>
+            <widgets>
+                <platform-specific><html><html-template location="component://ecommerce/webapp/ecommerce/catalog/LayeredNavBar.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="LayeredCategoryDetail">
+        <section>
+            <actions>
+                <set field="productsummaryScreen" value="component://ecommerce/widget/CatalogScreens.xml#productsummary"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://ecommerce/webapp/ecommerce/catalog/LayeredCategoryDetail.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>

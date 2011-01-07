@@ -71,8 +71,8 @@ under the License.
         <attribute name="oldProductId" type="String" mode="IN" optional="false"/>
         <attribute name="newInternalName" type="String" mode="IN" optional="true"/>
         <attribute name="newProductName" type="String" mode="IN" optional="true"/>
-        <attribute name="newDescription" type="String" mode="IN" optional="true"/>
-        <attribute name="newLongDescription" type="String" mode="IN" optional="true"/>
+        <attribute name="newDescription" type="String" mode="IN" optional="true" allow-html="safe"/>
+        <attribute name="newLongDescription" type="String" mode="IN" optional="true" allow-html="safe"/>
         <attribute name="duplicatePrices" type="String" mode="IN" optional="true"/>
         <attribute name="duplicateIDs" type="String" mode="IN" optional="true"/>
         <attribute name="duplicateContent" type="String" mode="IN" optional="true"/>
@@ -189,12 +189,11 @@ under the License.
     <service name="createProductReview" engine="simple"
             location="component://product/script/org/ofbiz/product/product/ProductServices.xml" invoke="createProductReview" auth="true">
         <description>Create a product review entity</description>
-        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
-        <attribute name="productId" type="String" mode="IN" optional="false"/>
-        <attribute name="postedAnonymous" type="Boolean" mode="IN" optional="true"/>
-        <attribute name="productRating" type="BigDecimal" mode="IN" optional="false"/>
-        <attribute name="productReview" type="String" mode="IN" optional="true"/>
+        <auto-attributes entity-name="ProductReview" mode="IN" include="nonpk" optional="true"/>
         <attribute name="productReviewId" type="String" mode="OUT" optional="false"/>
+        <override name="productStoreId" optional="false"/>
+        <override name="productId" optional="false"/>
+        <override name="productRating" optional="false"/>
     </service>
     <service name="updateProductReview" engine="simple" default-entity-name="ProductReview"
             location="component://product/script/org/ofbiz/product/product/ProductServices.xml" invoke="updateProductReview" auth="true">
@@ -437,6 +436,25 @@ under the License.
         <attribute mode="IN" name="contentId" optional="true" type="String"/>
         <override name="productContentTypeId" optional="false"/>
         <override name="productId" optional="false"/>
+    </service>
+
+    <service name="uploadProductAdditionalViewImages" engine="simple"
+        location="component://product/script/org/ofbiz/product/product/ProductContentServices.xml" invoke="uploadProductAdditionalViewImages" auth="true">
+        <description>Upload Additional View Images For Product</description>
+        <permission-service service-name="genericContentPermission" main-action="UPDATE"/>
+        <attribute name="productId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="additionalImageOne" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_additionalImageOne_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_additionalImageOne_contentType" type="String" mode="IN" optional="true"/>
+        <attribute name="additionalImageTwo" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_additionalImageTwo_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_additionalImageTwo_contentType" type="String" mode="IN" optional="true"/>
+        <attribute name="additionalImageThree" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_additionalImageThree_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_additionalImageThree_contentType" type="String" mode="IN" optional="true"/>
+        <attribute name="additionalImageFour" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_additionalImageFour_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_additionalImageFour_contentType" type="String" mode="IN" optional="true"/>
     </service>
 
     <!-- SupplierProduct Services -->
@@ -701,7 +719,7 @@ under the License.
     </service>
     <service name="updateProductToCategory" default-entity-name="ProductCategoryMember" engine="simple"
                 location="component://product/script/org/ofbiz/product/category/CategoryServices.xml" invoke="updateProductToCategory" auth="true">
-        <description>Add Product To Category</description>
+        <description>Update a ProductCategoryMember</description>
         <permission-service service-name="checkCategoryPermissionWithViewPurchaseAllow" main-action="UPDATE"/>
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
@@ -763,6 +781,7 @@ under the License.
         <attribute name="roleTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="fromDate" type="Timestamp" mode="IN" optional="true"/>
         <attribute name="thruDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="Long" mode="IN" optional="true"/>
         <attribute name="comments" type="String" mode="IN" optional="true"/>
     </service>
     <service name="updatePartyToProduct" engine="simple"
@@ -773,6 +792,7 @@ under the License.
         <attribute name="roleTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="fromDate" type="Timestamp" mode="IN" optional="false"/>
         <attribute name="thruDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="Long" mode="IN" optional="true"/>
         <attribute name="comments" type="String" mode="IN" optional="true"/>
     </service>
     <service name="removePartyFromProduct" engine="simple"
@@ -1236,8 +1256,69 @@ under the License.
     </service>
 
     <service name="productImportFromSpreadsheet" engine="java"
-            location="org.ofbiz.poi.ImportProductServices" invoke="productImportFromSpreadsheet" auth="true">
+            location="org.ofbiz.product.spreadsheetimport.ImportProductServices" invoke="productImportFromSpreadsheet" auth="true">
         <description>Create product and inventory item</description>
         <attribute name="dirName" type="java.lang.String" mode="IN" optional="true"/>
+    </service>
+
+    <!-- Start Web Analytics configuration services -->
+    <service name="createWebAnalyticsConfig" default-entity-name="WebAnalyticsConfig" engine="entity-auto" invoke="create" auth="true">
+        <description>Create a WebAnalyticsConfig</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="updateWebAnalyticsConfig" default-entity-name="WebAnalyticsConfig" engine="entity-auto" invoke="update" auth="true">
+        <description>Update a WebAnalyticsConfig</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="deleteWebAnalyticsConfig" default-entity-name="WebAnalyticsConfig" engine="entity-auto" invoke="delete" auth="true">
+        <description>Delete a WebAnalyticsConfig</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="createWebAnalyticsType" default-entity-name="WebAnalyticsType" engine="entity-auto" invoke="create" auth="true">
+        <description>Create a WebAnalyticsType</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="updateWebAnalyticsType" default-entity-name="WebAnalyticsType" engine="entity-auto" invoke="update" auth="true">
+        <description>Update a WebAnalyticsType</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="deleteWebAnalyticsType" default-entity-name="WebAnalyticsType" engine="entity-auto" invoke="delete" auth="true">
+        <description>Delete a WebAnalyticsType</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <!-- Product Promo Content services -->
+    <service name="createProductPromoContent" default-entity-name="ProductPromoContent" engine="simple"
+            location="component://product/script/org/ofbiz/product/product/ProductContentServices.xml" invoke="createProductPromoContent" auth="true">
+        <description>Create Product Promo Content</description>
+        <auto-attributes include="pk" mode="INOUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="fromDate" optional="true"/>
+    </service>
+    <service name="updateProductPromoContent" default-entity-name="ProductPromoContent" engine="simple"
+            location="component://product/script/org/ofbiz/product/product/ProductContentServices.xml" invoke="updateProductPromoContent" auth="true">
+        <description>Update Product Promo Content</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="removeProductPromoContent" default-entity-name="ProductPromoContent" engine="simple"
+            location="component://product/script/org/ofbiz/product/product/ProductContentServices.xml" invoke="removeProductPromoContent" auth="true">
+        <description>Remove Product Promo Content</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="addImageForProductPromo" default-entity-name="ProductPromoContent" engine="java"
+            location="org.ofbiz.product.product.ProductServices" invoke="addImageForProductPromo" auth="true">
+        <implements service="uploadFileInterface"/>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="contentId" mode="IN" optional="true" type="String"/>
+        <override name="productPromoContentTypeId" optional="false"/>
+        <override name="productPromoId" optional="false"/>
     </service>
 </services>

@@ -20,7 +20,11 @@
 
 package org.ofbiz.webapp.xmlrpc;
 
-import org.apache.xmlrpc.client.*;
+import org.apache.xmlrpc.client.XmlRpcClientException;
+import org.apache.xmlrpc.client.XmlRpcHttpClientConfig;
+import org.apache.xmlrpc.client.XmlRpcHttpTransport;
+import org.apache.xmlrpc.client.XmlRpcTransport;
+import org.apache.xmlrpc.client.XmlRpcTransportFactoryImpl;
 import org.apache.xmlrpc.XmlRpcRequest;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.util.HttpUtil;
@@ -69,6 +73,7 @@ public class AliasSupportedTransportFactory extends XmlRpcTransportFactoryImpl {
             this.ks = ks;
         }
 
+        @Override
         public Object sendRequest(XmlRpcRequest req) throws XmlRpcException {
             XmlRpcHttpClientConfig config = (XmlRpcHttpClientConfig) req.getConfig();
             URL serverUrl = config.getServerURL();
@@ -104,20 +109,24 @@ public class AliasSupportedTransportFactory extends XmlRpcTransportFactoryImpl {
             return con;
         }
 
+        @Override
         protected void setRequestHeader(String header, String value) {
             con.setRequestProperty(header, value);
         }
 
+        @Override
         protected void close() throws XmlRpcClientException {
             if (con instanceof HttpURLConnection) {
                 ((HttpURLConnection) con).disconnect();
             }
         }
 
+        @Override
         protected boolean isResponseGzipCompressed(XmlRpcStreamRequestConfig config) {
             return HttpUtil.isUsingGzipEncoding(con.getHeaderField("Content-Encoding"));
         }
 
+        @Override
         protected InputStream getInputStream() throws XmlRpcException {
             try {
                 return con.getInputStream();
@@ -126,6 +135,7 @@ public class AliasSupportedTransportFactory extends XmlRpcTransportFactoryImpl {
             }
         }
 
+        @Override
         protected void writeRequest(ReqWriter pWriter) throws IOException, XmlRpcException, SAXException {
             pWriter.write(con.getOutputStream());
         }

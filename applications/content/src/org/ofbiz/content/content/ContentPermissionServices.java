@@ -29,7 +29,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entityext.permission.EntityPermissionChecker;
@@ -94,7 +94,7 @@ public class ContentPermissionServices {
         Debug.logWarning(new Exception(), "This service has been depricated in favor of [genericContentPermission]", module);
 
         Security security = dctx.getSecurity();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String statusId = (String) context.get("statusId");
         String privilegeEnumId = (String) context.get("privilegeEnumId");
         GenericValue content = (GenericValue) context.get("currentContent");
@@ -125,7 +125,7 @@ public class ContentPermissionServices {
                         partyId = userLogin.getString("partyId");
                     }
                 } catch (GenericEntityException e) {
-                    ServiceUtil.returnError(e.getMessage());
+                    return ServiceUtil.returnError(e.getMessage());
                 }
             }
         }
@@ -194,12 +194,12 @@ public class ContentPermissionServices {
             results.put("permissionStatus", "granted");
             permissionStatus = "granted";
             if (displayPassCond) {
-                 errBuf.append("\n    hasEntityPermission(" + entityAction + "): PASSED" );
+                 errBuf.append("\n    hasEntityPermission(" + entityAction + "): PASSED");
             }
 
         } else {
             if (displayFailCond) {
-                 errBuf.append("\n    hasEntityPermission(" + entityAction + "): FAILED" );
+                 errBuf.append("\n    hasEntityPermission(" + entityAction + "): FAILED");
             }
 
             if (content != null)
@@ -217,10 +217,10 @@ public class ContentPermissionServices {
                     results.put("permissionStatus", "rejected");
                 }
             } catch (GenericEntityException e) {
-                ServiceUtil.returnError(e.getMessage());
+                return ServiceUtil.returnError(e.getMessage());
             }
             permissionStatus = (String)results.get("permissionStatus");
-            errBuf.append("\n    permissionStatus:" );
+            errBuf.append("\n    permissionStatus:");
             errBuf.append(permissionStatus);
         }
 
@@ -229,24 +229,24 @@ public class ContentPermissionServices {
             // Don't show this if passed on 'hasEntityPermission'
             if (displayFailCond || displayPassCond) {
               if (!passed) {
-                 errBuf.append("\n    targetOperations:" );
+                 errBuf.append("\n    targetOperations:");
                  errBuf.append(targetOperations);
 
                  String errMsg = permCondGetter.dumpAsText();
-                 errBuf.append("\n" );
+                 errBuf.append("\n");
                  errBuf.append(errMsg);
-                 errBuf.append("\n    partyId:" );
+                 errBuf.append("\n    partyId:");
                  errBuf.append(partyId);
-                 errBuf.append("\n    entityIds:" );
+                 errBuf.append("\n    entityIds:");
                  errBuf.append(entityIds);
 
                  if (auxGetter != null) {
-                     errBuf.append("\n    auxList:" );
+                     errBuf.append("\n    auxList:");
                      errBuf.append(auxGetter.getList());
                  }
 
                  if (roleGetter != null) {
-                     errBuf.append("\n    roleList:" );
+                     errBuf.append("\n    roleList:");
                      errBuf.append(roleGetter.getList());
                  }
               }
@@ -262,7 +262,7 @@ public class ContentPermissionServices {
 
         Map results = FastMap.newInstance();
         Security security = dctx.getSecurity();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Boolean bDisplayFailCond = (Boolean)context.get("displayFailCond");
         String contentIdFrom = (String) context.get("contentIdFrom");
@@ -276,8 +276,8 @@ public class ContentPermissionServices {
         GenericValue contentTo = null;
         GenericValue contentFrom = null;
         try {
-            contentTo = delegator.findByPrimaryKeyCache("Content", UtilMisc.toMap("contentId", contentIdTo) );
-            contentFrom = delegator.findByPrimaryKeyCache("Content",  UtilMisc.toMap("contentId", contentIdFrom) );
+            contentTo = delegator.findByPrimaryKeyCache("Content", UtilMisc.toMap("contentId", contentIdTo));
+            contentFrom = delegator.findByPrimaryKeyCache("Content",  UtilMisc.toMap("contentId", contentIdFrom));
         } catch (GenericEntityException e) {
             return ServiceUtil.returnError("Error in retrieving content To or From. " + e.getMessage());
         }
@@ -292,8 +292,7 @@ public class ContentPermissionServices {
         Map permResults = FastMap.newInstance();
         String skipPermissionCheck = null;
 
-        if (skipPermissionCheck == null
-            || skipPermissionCheck.length() == 0
+        if (UtilValidate.isEmpty(skipPermissionCheck)
             || (!skipPermissionCheck.equalsIgnoreCase("true") && !skipPermissionCheck.equalsIgnoreCase("granted"))) {
             // Use the purposes from the from entity for both cases.
             List relatedPurposes = EntityPermissionChecker.getRelatedPurposes(contentFrom, null);
@@ -311,7 +310,7 @@ public class ContentPermissionServices {
                 Debug.logError(e, "Problem checking permissions", "ContentServices");
             }
             permissionStatus = (String)permResults.get("permissionStatus");
-            if (permissionStatus == null || !permissionStatus.equals("granted") ) {
+            if (permissionStatus == null || !permissionStatus.equals("granted")) {
                 if (bDisplayFailCond != null && bDisplayFailCond.booleanValue()) {
                      String errMsg = (String)permResults.get(ModelService.ERROR_MESSAGE);
                      results.put(ModelService.ERROR_MESSAGE, errMsg);
@@ -327,7 +326,7 @@ public class ContentPermissionServices {
                 Debug.logError(e, "Problem checking permissions", "ContentServices");
             }
             permissionStatus = (String)permResults.get("permissionStatus");
-            if (permissionStatus != null && permissionStatus.equals("granted") ) {
+            if (permissionStatus != null && permissionStatus.equals("granted")) {
                 results.put("permissionStatus", "granted");
             } else {
                 if (bDisplayFailCond != null && bDisplayFailCond.booleanValue()) {

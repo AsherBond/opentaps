@@ -34,11 +34,13 @@ under the License.
 
     <!-- entity resources: model(s), eca(s), group, and data definitions -->
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_view.xml"/>
     <!-- <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/> -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ExampleTypeData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ExampleSecurityData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ExamplePortletData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ExamplePortalSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ExampleHelpData.xml"/>
 
     <!-- service resources: model(s), eca(s) and group definitions -->
     <service-resource type="model" loader="main" location="servicedef/services.xml"/>
@@ -57,4 +59,11 @@ under the License.
         location="webapp/example"
         base-permission="OFBTOOLS,EXAMPLE"
         mount-point="/example"/>-->
+    <webapp name="birt"
+        title="BIRT"
+        server="default-server"
+        location="webapp/birt"
+        base-permission="OFBTOOLS,WEBTOOLS"
+        mount-point="/birt"
+        app-bar-display="false"/>
 </ofbiz-component>

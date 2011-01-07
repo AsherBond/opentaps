@@ -32,10 +32,11 @@ import javolution.util.FastSet;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.transaction.TransactionUtil;
@@ -340,7 +341,7 @@ public class ModelScreen extends ModelWidget implements Serializable {
      *    - autoUserLogin (if a user is automatically logged in, ie no password has been entered)
      *    - formStringRenderer
      *    - request, response, session, application (special case, only in HTML contexts, etc)
-     *    - delegator, dispatcher, security
+     *    - delegator, dispatcher, authz, security
      *    - null (represents a null field value for entity operations)
      *    - sections (used for decorators to reference the sections to be decorated and render them)
      * @param screenStringRenderer An implementation of the ScreenStringRenderer
@@ -355,11 +356,11 @@ public class ModelScreen extends ModelWidget implements Serializable {
         setWidgetBoundaryComments(context);
 
         // wrap the whole screen rendering in a transaction, should improve performance in querying and such
-        Map parameters = (Map) context.get("parameters");
+        Map<String, String> parameters = UtilGenerics.cast(context.get("parameters"));
         boolean beganTransaction = false;
         int transactionTimeout = -1;
         if (parameters != null) {
-            String transactionTimeoutPar = (String) parameters.get("TRANSACTION_TIMEOUT");
+            String transactionTimeoutPar = parameters.get("TRANSACTION_TIMEOUT");
             if (transactionTimeoutPar != null) {
                 try {
                     transactionTimeout = Integer.parseInt(transactionTimeoutPar);
@@ -435,8 +436,8 @@ public class ModelScreen extends ModelWidget implements Serializable {
         return dispatcher;
     }
 
-    public GenericDelegator getDelegator(Map<String, Object> context) {
-        GenericDelegator delegator = (GenericDelegator) context.get("delegator");
+    public Delegator getDelegator(Map<String, Object> context) {
+        Delegator delegator = (Delegator) context.get("delegator");
         return delegator;
     }
 

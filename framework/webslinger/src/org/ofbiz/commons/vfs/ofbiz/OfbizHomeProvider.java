@@ -29,11 +29,12 @@ import org.apache.commons.vfs.provider.AbstractFileProvider;
 import org.apache.commons.vfs.provider.local.DefaultLocalFileProvider;
 
 import org.ofbiz.base.location.FlexibleLocation;
+import org.ofbiz.base.util.UtilMisc;
 
 import org.webslinger.commons.vfs.VFSUtil;
 
 public class OfbizHomeProvider extends AbstractFileProvider {
-    public Collection getCapabilities() {
+    public Collection<?> getCapabilities() {
         return DefaultLocalFileProvider.capabilities;
     }
 
@@ -44,9 +45,7 @@ public class OfbizHomeProvider extends AbstractFileProvider {
             FileObject ofbizBase = getContext().resolveFile(location.toString(), properties);
             return VFSUtil.toFileObject(ofbizBase.getFileSystem().getFileSystemManager(), ofbizBase.resolveFile(name.substring(13)).getURL().toString(), properties);
         } catch (Exception e) {
-            FileSystemException fse = new FileSystemException(e.getMessage(), null, e);
-            fse.initCause(e);
-            throw fse;
+            throw UtilMisc.initCause(new FileSystemException(e.getMessage(), null, e), e);
         }
     }
 }

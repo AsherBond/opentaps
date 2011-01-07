@@ -28,7 +28,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.base.util.UtilHttp;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -45,7 +48,7 @@ public class Captcha {
 
     public static String getCodeCaptcha(HttpServletRequest request,HttpServletResponse response) {
         if (CAPTCHA_FILE_PATH != null) deleteFile();
-        StringBuffer finalString = new StringBuffer();
+        StringBuilder finalString = new StringBuilder();
         String elegibleChars = "ABCDEFGHJKLMPQRSTUVWXYabcdefhjkmnpqrstuvwxy23456789";
         int charsToPrint = 6;
         char[] chars = elegibleChars.toCharArray();
@@ -149,7 +152,7 @@ public class Captcha {
         try {
             String FILE_PATH = File.separator + "runtime" + File.separator + "tempfiles" + File.separator + "captcha" + File.separator;
             String URL_FILE_PATH = "/tempfiles/captcha/";
-            CAPTCHA_FILE_PATH = new java.io.File(".").getCanonicalPath();
+            CAPTCHA_FILE_PATH = new File(".").getCanonicalPath();
             CAPTCHA_FILE_PATH += FILE_PATH;
             File test = new File(CAPTCHA_FILE_PATH);
             if (!test.exists()) {
@@ -158,7 +161,7 @@ public class Captcha {
             CAPTCHA_FILE_NAME = UtilDateTime.nowAsString().concat(".jpg");
             request.setAttribute("captchaFileName", URL_FILE_PATH + CAPTCHA_FILE_NAME);
             request.setAttribute("ID_KEY", ID_KEY);
-            ImageIO.write(image, "jpg", new File( CAPTCHA_FILE_PATH + CAPTCHA_FILE_NAME));
+            ImageIO.write(image, "jpg", new File(CAPTCHA_FILE_PATH + CAPTCHA_FILE_NAME));
         } catch (IOException e) {
             return;
         }

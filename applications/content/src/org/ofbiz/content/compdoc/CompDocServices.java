@@ -38,7 +38,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.content.data.DataResourceWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -78,7 +78,7 @@ public class CompDocServices {
 
     public static Map<String, Object> persistRootCompDoc(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map result = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale)context.get("locale");
         GenericValue userLogin = (GenericValue)context.get("userLogin");
@@ -149,7 +149,7 @@ public class CompDocServices {
         String webSiteId = (String) context.get("webSiteId");
         String https = (String) context.get("https");
 
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String contentId = (String) context.get("contentId");
         String contentRevisionSeqId = (String) context.get("contentRevisionSeqId");
@@ -308,7 +308,7 @@ public class CompDocServices {
         String webSiteId = (String) context.get("webSiteId");
         String https = (String) context.get("https");
 
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String contentId = (String) context.get("contentId");
         String contentRevisionSeqId = (String) context.get("contentRevisionSeqId");

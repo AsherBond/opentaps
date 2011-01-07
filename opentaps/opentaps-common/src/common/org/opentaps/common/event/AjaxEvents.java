@@ -43,7 +43,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -118,7 +118,7 @@ public final class AjaxEvents {
 
     /** Gets a list of states (provinces) that are associated with a given countryGeoId. */
     public static String getStateDataJSON(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String countryGeoId = request.getParameter("countryGeoId");
 
         try {
@@ -132,7 +132,7 @@ public final class AjaxEvents {
     /** Return agreement term list specific for given term type.
      * @throws GenericEntityException */
     public static String getAgreementTermValidFieldsJSON(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request.getSession());
         String termType = UtilCommon.getParameter(request, "termType");
         String itemId = UtilCommon.getParameter(request, "item");
@@ -202,7 +202,7 @@ public final class AjaxEvents {
 
     public static String getPartyCarrierAccountsJSON(HttpServletRequest request, HttpServletResponse response) {
         String partyId = request.getParameter("partyId");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         return org.opentaps.common.event.AjaxEvents.doJSONResponse(response, PartyHelper.getPartyCarrierAccounts(partyId, delegator));
     }
 
@@ -254,7 +254,7 @@ public final class AjaxEvents {
     public static String findSupplierAgreementsJSON(HttpServletRequest request, HttpServletResponse response) {
 
         Locale locale = UtilHttp.getLocale(request);
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
         if (UtilValidate.isEmpty(organizationPartyId)) {

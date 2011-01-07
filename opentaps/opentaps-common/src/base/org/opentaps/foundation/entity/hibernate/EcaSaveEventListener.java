@@ -20,7 +20,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.event.SaveOrUpdateEvent;
 import org.hibernate.event.def.DefaultSaveEventListener;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.foundation.entity.Entity;
 /**
@@ -30,15 +30,15 @@ import org.opentaps.foundation.entity.Entity;
 public class EcaSaveEventListener extends DefaultSaveEventListener {
     private static final String MODULE = EcaSaveOrUpdateEventListener.class
             .getName();
-    private GenericDelegator delegator;
+    private Delegator delegator;
 
     /**
      * EcaSaveEventListener constructor.
      * 
      * @param delegator
-     *            <code>GenericDelegator</code> object.
+     *            <code>Delegator</code> object.
      */
-    public EcaSaveEventListener(GenericDelegator delegator) {
+    public EcaSaveEventListener(Delegator delegator) {
         this.delegator = delegator;
     }
 

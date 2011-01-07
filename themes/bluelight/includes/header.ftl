@@ -16,6 +16,8 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#assign externalKeyParam = "&amp;externalLoginKey=" + requestAttributes.externalLoginKey?if_exists>
+
 <#if (requestAttributes.person)?exists><#assign person = requestAttributes.person></#if>
 <#if (requestAttributes.partyGroup)?exists><#assign partyGroup = requestAttributes.partyGroup></#if>
 <#assign docLangAttr = locale.toString()?replace("_", "-")>
@@ -113,7 +115,7 @@ under the License.
         <#if (userPreferences.COMPACT_HEADER)?default("N") == "Y">
           <li class="logo-area">
             <#if shortcutIcon?has_content>
-              <a href="<@ofbizUrl>${logoLinkURL}</@ofbizUrl>"><img src="<@ofbizContentUrl>${StringUtil.wrapString(shortcutIcon)}</@ofbizContentUrl>" height="16px" width="16px"/></a>
+              <a href="<@ofbizUrl>${logoLinkURL}</@ofbizUrl>"><img src="<@ofbizContentUrl>${StringUtil.wrapString(shortcutIcon)}</@ofbizContentUrl>" height="16px" width="16px" alt="" /></a>
             </#if>
           </li>
         <#else>
@@ -128,41 +130,44 @@ under the License.
             <li class="logo-area"><a href="<@ofbizUrl>${logoLinkURL}</@ofbizUrl>"><img alt="${layoutSettings.companyName}" src="<@ofbizContentUrl>${StringUtil.wrapString(headerImageUrl)}</@ofbizContentUrl>"/></a></li>
           </#if>
         </#if>
-
         <li class="control-area">
           <ul id="preferences-menu">
             <#if userLogin?exists>
               <#if userLogin.partyId?exists>
-                <li class="user"><a href="/partymgr/control/viewprofile?partyId=${userLogin.partyId}">${userName}</a></li>
+                <li class="user"><a href="/partymgr/control/viewprofile?partyId=${userLogin.partyId}${externalKeyParam?if_exists}">${userName}</a></li>
               <#else>
                 <li class="user">${userName}</li>
               </#if>
-              <li class="org">${orgName}</li>
+              <#if orgName?has_content>
+                <li class="org">${orgName}</li>
+              </#if>
             </#if>
-            <li class="first"><a href="<@ofbizUrl>LookupLocales</@ofbizUrl>">${uiLabelMap.CommonLanguageTitle} : ${locale.getDisplayName(locale)}</a></li>
+            <li class="first"><a href="<@ofbizUrl>ListLocales</@ofbizUrl>">${uiLabelMap.CommonLanguageTitle} : ${locale.getDisplayName(locale)}</a></li>
             <#if userLogin?exists>
-              <li><a href="<@ofbizUrl>LookupVisualThemes</@ofbizUrl>">${uiLabelMap.CommonVisualThemes}</a></li>
+              <li><a href="<@ofbizUrl>ListVisualThemes</@ofbizUrl>">${uiLabelMap.CommonVisualThemes}</a></li>
               <li><a href="<@ofbizUrl>logout</@ofbizUrl>">${uiLabelMap.CommonLogout}</a></li>
             <#else>
               <li><a href="<@ofbizUrl>${checkLoginUrl}</@ofbizUrl>">${uiLabelMap.CommonLogin}</a></li>
             </#if>
-            <#include "component://common/webcommon/includes/helplink.ftl" />
-
+            <#if webSiteId?exists && requestAttributes._CURRENT_VIEW_?exists>
+              <#include "component://common/webcommon/includes/helplink.ftl" />
+              <li><a class="help-link <#if pageAvail?has_content> alert</#if>" href="javascript:lookup_popup2('showHelp?helpTopic=${helpTopic}&amp;portalPageId=${parameters.portalPageId?if_exists}','help' ,500,500);" title="${uiLabelMap.CommonHelp}"></a></li>
+            </#if>
             <#if userLogin?exists>
               <#if (userPreferences.COMPACT_HEADER)?default("N") == "Y">
                 <li class="collapsed"><a href="javascript:document.setUserPreferenceCompactHeaderN.submit()">&nbsp;&nbsp;</a>
                 <form name="setUserPreferenceCompactHeaderN" method="post" action="<@ofbizUrl>setUserPreference</@ofbizUrl>">
-                    <input type="hidden" name="userPrefGroupTypeId" value="GLOBAL_PREFERENCES">
-                    <input type="hidden" name="userPrefTypeId" value="COMPACT_HEADER">
-                    <input type="hidden" name="userPrefValue" value="N">
+                    <input type="hidden" name="userPrefGroupTypeId" value="GLOBAL_PREFERENCES"/>
+                    <input type="hidden" name="userPrefTypeId" value="COMPACT_HEADER"/>
+                    <input type="hidden" name="userPrefValue" value="N"/>
                 </form>
                 </li>
               <#else>
                 <li class="expanded"><a href="javascript:document.setUserPreferenceCompactHeaderY.submit()">&nbsp;&nbsp;</a>
                 <form name="setUserPreferenceCompactHeaderY" method="post" action="<@ofbizUrl>setUserPreference</@ofbizUrl>">
-                    <input type="hidden" name="userPrefGroupTypeId" value="GLOBAL_PREFERENCES">
-                    <input type="hidden" name="userPrefTypeId" value="COMPACT_HEADER">
-                    <input type="hidden" name="userPrefValue" value="Y">
+                    <input type="hidden" name="userPrefGroupTypeId" value="GLOBAL_PREFERENCES"/>
+                    <input type="hidden" name="userPrefTypeId" value="COMPACT_HEADER"/>
+                    <input type="hidden" name="userPrefValue" value="Y"/>
                 </form>
                 </li>
               </#if>

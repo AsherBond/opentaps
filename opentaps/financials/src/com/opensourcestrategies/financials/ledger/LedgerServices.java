@@ -46,7 +46,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -126,7 +126,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postInvoiceToGl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -358,7 +358,7 @@ public final class LedgerServices {
      * offsettingGlAccountId, the postingTotal, and a list of transaction entry Maps that
      * are ready to be turned into GenericValues.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param userLogin a <code>GenericValue</code> value
      * @param invoice a <code>GenericValue</code> value
@@ -375,7 +375,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     private static Map processInvoiceItems(
-            GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin,
+            Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin,
             GenericValue invoice, String acctgTransTypeId, String offsettingGlAccountTypeId,
             String organizationPartyId, String transactionPartyId, String transactionPartyRoleTypeId,
             String defaultDebitCreditFlag, String defaultGlAccountTypeId
@@ -486,7 +486,7 @@ public final class LedgerServices {
      * related to the invoice item with the actual value of the invoice item and posts it as a
      * purchase price variance. Note that this method is also used for return invoices.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param userLogin a <code>GenericValue</code> value
      * @param invoice a <code>GenericValue</code> value
@@ -510,7 +510,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     private static Map processPurchaseInvoiceItem(
-            GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin,
+            Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin,
             GenericValue invoice, GenericValue invoiceItem, List acctgTransEntries,
             BigDecimal postingTotal, BigDecimal conversionFactor, BigDecimal amount, BigDecimal quantity,
             String invoiceItemPostingGlAccountId, String acctgTransTypeId, String offsettingGlAccountTypeId,
@@ -623,7 +623,7 @@ public final class LedgerServices {
      * For sales invoices, if an invoice item is a product, then we will need to post COGS and INVENTORY as well.
      * TODO: maybe do COGS/INVENTORY posting for other invoiceItemTypeId (easier now with this refactored method)
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param userLogin a <code>GenericValue</code> value
      * @param invoice a <code>GenericValue</code> value
@@ -647,7 +647,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     private static Map processSalesInvoiceItem(
-            GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin,
+            Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin,
             GenericValue invoice, GenericValue invoiceItem, List acctgTransEntries,
             BigDecimal postingTotal, BigDecimal conversionFactor, BigDecimal amount, BigDecimal quantity,
             String invoiceItemPostingGlAccountId, String acctgTransTypeId, String offsettingGlAccountTypeId,
@@ -717,7 +717,7 @@ public final class LedgerServices {
     /**
      * Process commission invoice items.  Eventually this should handle incomming commission invoices as well.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param userLogin a <code>GenericValue</code> value
      * @param invoice a <code>GenericValue</code> value
@@ -741,7 +741,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     private static Map processCommissionInvoiceItem(
-            GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin,
+            Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin,
             GenericValue invoice, GenericValue invoiceItem, List acctgTransEntries,
             BigDecimal postingTotal, BigDecimal conversionFactor, BigDecimal amount, BigDecimal quantity,
             String invoiceItemPostingGlAccountId, String acctgTransTypeId, String offsettingGlAccountTypeId,
@@ -830,7 +830,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postPaymentToGl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
@@ -1042,7 +1042,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postPaycheckToGl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -1164,7 +1164,7 @@ public final class LedgerServices {
         if (ServiceUtil.isError(tmpResult)) { return tmpResult; }
 
         // if successful then create AcctgTransEntryRole
-        GenericDelegator delegator = dispatcher.getDelegator();
+        Delegator delegator = dispatcher.getDelegator();
         delegator.create("AcctgTransEntryRole", UtilMisc.toMap("acctgTransId", acctgTransId, "acctgTransEntrySeqId", tmpResult.get("acctgTransEntrySeqId"), "partyId", employeePartyId, "roleTypeId", "EMPLOYEE"));
 
         return tmpResult;
@@ -1218,13 +1218,13 @@ public final class LedgerServices {
      * @param debitGlAccountAmounts a <code>Map</code> value
      * @param organizationPartyId a <code>String</code> value
      * @param transactionPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> value
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
     private static List makePaymentEntries(Payment payment, Map creditGlAccountAmounts, Map debitGlAccountAmounts,
-            String organizationPartyId, String transactionPartyId, GenericDelegator delegator) throws GenericEntityException {
+            String organizationPartyId, String transactionPartyId, Delegator delegator) throws GenericEntityException {
         List acctgTransEntries = new LinkedList();
         int itemSeq = 1;
         for (Iterator ai = creditGlAccountAmounts.keySet().iterator(); ai.hasNext();) {
@@ -1262,13 +1262,13 @@ public final class LedgerServices {
      * @param debitGlAccountAmounts a <code>Map</code> value
      * @param organizationPartyId a <code>String</code> value
      * @param transactionPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> value
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
     private static List makePaymentEntries(PaymentApplication paymentApplication, Map creditGlAccountAmounts, Map debitGlAccountAmounts,
-            String organizationPartyId, String transactionPartyId, GenericDelegator delegator) throws GenericEntityException {
+            String organizationPartyId, String transactionPartyId, Delegator delegator) throws GenericEntityException {
         List acctgTransEntries = new LinkedList();
         int itemSeq = 1;
         for (Iterator ai = creditGlAccountAmounts.keySet().iterator(); ai.hasNext();) {
@@ -1306,7 +1306,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map getPaymentAccountAndParties(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String paymentId = (String) context.get("paymentId");
         // return values
@@ -1394,7 +1394,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map matchPaymentInvoiceGlPosts(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -1505,7 +1505,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postInventoryVarianceToGl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1665,7 +1665,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postShipmentToGl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -1814,7 +1814,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postShipmentReceiptToGl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -1937,7 +1937,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postInventoryItemOwnerChange(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -2116,7 +2116,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postInventoryItemStatusChange(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -2238,7 +2238,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postInventoryItemAccountingTagChange(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -2360,7 +2360,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postInventoryItemValueAdjustment(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -2393,7 +2393,8 @@ public final class LedgerServices {
 
             // If there's no record of the previous unit cost, throw an error
             if (UtilValidate.isEmpty(oldUnitCost)) {
-                return UtilMessage.createAndLogServiceError("FinancialsServiceWarning_InventoryItemValueAdj_NoPreviousUnitCost", context, locale, MODULE);
+            	UtilMessage.logServiceWarning("FinancialsServiceWarning_InventoryItemValueAdj_NoPreviousUnitCost", context, locale, MODULE);
+            	return result;
             }
 
             // Return if the unitCost hasn't changed
@@ -2494,7 +2495,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postRawMaterialIssuancesToGl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -2557,7 +2558,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> postInventoryToWorkEffortAssignToGl(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -2635,13 +2636,13 @@ public final class LedgerServices {
      * @param ownerPartyId a <code>String</code> value
      * @param transactionAmount a <code>BigDecimal</code> value
      * @param inventoryAdjAmount a <code>BigDecimal</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> value
      * @exception AccountingException if an error occurs
      */
     @SuppressWarnings("unchecked")
     private static List getAcctgTransEntriesForInventoryIssuanceToAssembly(OpentapsProductionRun productionRunReader, String productId, String finishedProductId,
-                                                                           String ownerPartyId, BigDecimal transactionAmount, BigDecimal inventoryAdjAmount, GenericDelegator delegator) throws AccountingException {
+                                                                           String ownerPartyId, BigDecimal transactionAmount, BigDecimal inventoryAdjAmount, Delegator delegator) throws AccountingException {
         List transEntries = new ArrayList();
 
         // The finished product is retrieved from the production run
@@ -2719,7 +2720,7 @@ public final class LedgerServices {
                                                                 throws GenericEntityException, GenericServiceException {
         int entryCounter = 0;
         List transEntries = new ArrayList();
-        GenericDelegator delegator = dispatcher.getDelegator();
+        Delegator delegator = dispatcher.getDelegator();
         GenericValue productDisassembled = productionRunReader.getProductOfProductionRun();
 
         if (productionRunReader.getProductsToProduce() == null) {
@@ -2781,7 +2782,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postWorkEffortCostsToGl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -2881,7 +2882,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postInventoryProducedToGl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -2977,7 +2978,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map closeTimePeriod(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -3123,7 +3124,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map closeAllTimePeriods(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -3158,7 +3159,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map resetOrgGlAccountBalances(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -3234,7 +3235,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map reconcileGlAccount(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -3344,7 +3345,7 @@ public final class LedgerServices {
 
     /**
      * Helps closing all time periods by closing out all time periods of an asOfDate and a periodTypeId for an organizationPartyId.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param organizationPartyId a <code>String</code> value
      * @param periodTypeId a <code>String</code> value
@@ -3354,7 +3355,7 @@ public final class LedgerServices {
      * @exception GenericServiceException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static void closeAllTimePeriodsByType(GenericDelegator delegator, LocalDispatcher dispatcher, String organizationPartyId,
+    private static void closeAllTimePeriodsByType(Delegator delegator, LocalDispatcher dispatcher, String organizationPartyId,
             String periodTypeId, Date asOfDate, GenericValue userLogin) throws GenericEntityException, GenericServiceException {
         try {
             List timePeriods = delegator.findByAnd("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId, "periodTypeId", periodTypeId,
@@ -3397,7 +3398,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postForeignExchangeMatchingToGl(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -3559,7 +3560,7 @@ public final class LedgerServices {
     @SuppressWarnings("unchecked")
     public static Map postRevertedProductionRunToGl(DispatchContext ctx, Map context) {
 
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Map result = ServiceUtil.returnSuccess();

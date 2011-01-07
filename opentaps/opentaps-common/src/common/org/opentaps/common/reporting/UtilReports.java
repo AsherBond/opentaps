@@ -67,7 +67,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.cache.UtilCache;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -128,7 +128,7 @@ public final class UtilReports {
     }
 
     static {
-        jasperReportsCompiledCache = new UtilCache<String, JasperReport>(
+        jasperReportsCompiledCache = UtilCache.<String, JasperReport>createUtilCache(
                 "webapp.JasperReportsOpentaps",
                 JRProperties.getIntegerProperty("webapp.JasperReportsCompiled.maxSize", 0),
                 0,
@@ -142,11 +142,11 @@ public final class UtilReports {
      * Return subset of MimeType that are supported by JasperReports.
      * Method mainly intended for use in bsh/ftl for filling avaible report types.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a list of <code>MimeType</code> <code>GenericValue</code>
      * @throws GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getJRSupportedMimeType(GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getJRSupportedMimeType(Delegator delegator) throws GenericEntityException {
         List<String> supportedTypes = new ArrayList<String>();
         supportedTypes.add(ContentType.CSV.toString());
         supportedTypes.add(ContentType.HTML.toString());
@@ -429,12 +429,12 @@ public final class UtilReports {
      *
      * @param componentName since the same report can appear in different applications we should define target component name.
      * @param reportGroupId the method may return only group on behalf <code>displayReportGroup</code> macro, otherwise pass <code>null</code>.
-     * @param delegator an instance of <code>GenericDelegator</code>.
+     * @param delegator an instance of <code>Delegator</code>.
      * @param locale target locale, because reports imported from analytics use name and description as resource key in Eclipse style and this method have to decode them.
      * @return
      *   List of groups and reports metadata.
      */
-    public static List<Map<String, Object>> getManagedReports(String componentName, String reportGroupId, GenericDelegator delegator, Locale locale) {
+    public static List<Map<String, Object>> getManagedReports(String componentName, String reportGroupId, Delegator delegator, Locale locale) {
         try {
             List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("application", componentName));
             if (UtilValidate.isNotEmpty(reportGroupId)) {
@@ -503,10 +503,10 @@ public final class UtilReports {
     /**
      * Returns last time of given transformation from <code>DataWarehouseTransform</code> entity.
      * @param enumId transformation type, one of <code>EnumerationType.DATA_TRANSFORM</code> enumeration values
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return Latest time the transformation was successfully run.
      */
-    public static Timestamp getTrasformationTimeByType(String enumId, GenericDelegator delegator) {
+    public static Timestamp getTrasformationTimeByType(String enumId, Delegator delegator) {
         if (UtilValidate.isEmpty(enumId) || delegator == null) {
             throw new IllegalArgumentException();
         }

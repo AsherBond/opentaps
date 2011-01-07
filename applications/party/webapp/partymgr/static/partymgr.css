@@ -34,3 +34,8 @@ width: 47%;
 float: right;
 width: 47%;
 }
+
+.profile-bottom {
+float: left;
+width: 100%;
+}

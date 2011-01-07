@@ -19,45 +19,43 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.entity.finder;
 
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javolution.util.FastList;
-import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.collections.FlexibleMapAccessor;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityJoinOperator;
 import org.ofbiz.entity.finder.EntityFinderUtil.GetAll;
 import org.ofbiz.entity.finder.EntityFinderUtil.LimitRange;
 import org.ofbiz.entity.finder.EntityFinderUtil.LimitView;
 import org.ofbiz.entity.finder.EntityFinderUtil.OutputHandler;
 import org.ofbiz.entity.finder.EntityFinderUtil.UseIterator;
 import org.ofbiz.entity.model.ModelEntity;
+import org.ofbiz.entity.model.ModelFieldTypeReader;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.w3c.dom.Element;
 
-import java.io.Serializable;
-import java.sql.ResultSet;
-
 /**
  * Uses the delegator to find entity values by a and
  *
  */
+@SuppressWarnings("serial")
 public abstract class ListFinder extends Finder {
     public static final String module = ListFinder.class.getName();
 
@@ -118,7 +116,8 @@ public abstract class ListFinder extends Finder {
         }
     }
 
-    public void runFind(Map<String, Object> context, GenericDelegator delegator) throws GeneralException {
+    @Override
+    public void runFind(Map<String, Object> context, Delegator delegator) throws GeneralException {
         String entityName = this.entityNameExdr.expandString(context);
         String useCacheStr = this.useCacheStrExdr.expandString(context);
         String filterByDateStr = this.filterByDateStrExdr.expandString(context);
@@ -138,12 +137,12 @@ public abstract class ListFinder extends Finder {
         if ("forward".equals(resultSetTypeString))
             resultSetType = ResultSet.TYPE_FORWARD_ONLY;
 
-        if (delegatorName != null && delegatorName.length() > 0) {
-            delegator = GenericDelegator.getGenericDelegator(delegatorName);
+        if (UtilValidate.isNotEmpty(delegatorName)) {
+            delegator = DelegatorFactory.getDelegator(delegatorName);
         }
 
-        EntityCondition whereEntityCondition = getWhereEntityCondition(context, modelEntity, delegator);
-        EntityCondition havingEntityCondition = getHavingEntityCondition(context, modelEntity, delegator);
+        EntityCondition whereEntityCondition = getWhereEntityCondition(context, modelEntity, delegator.getModelFieldTypeReader(modelEntity));
+        EntityCondition havingEntityCondition = getHavingEntityCondition(context, modelEntity, delegator.getModelFieldTypeReader(modelEntity));
         if (useCache) {
             // if useCache == true && outputHandler instanceof UseIterator, throw exception; not a valid combination
             if (outputHandler instanceof UseIterator) {
@@ -198,6 +197,17 @@ public abstract class ListFinder extends Finder {
                 EntityFindOptions options = new EntityFindOptions();
                 options.setDistinct(distinct);
                 options.setResultSetType(resultSetType);
+                if (outputHandler instanceof LimitRange) {
+                    LimitRange limitRange = (LimitRange) outputHandler;
+                    int start = limitRange.getStart(context);
+                    int size = limitRange.getSize(context);
+                    options.setMaxRows(start + size);
+                } else if (outputHandler instanceof LimitView) {
+                    LimitView limitView = (LimitView) outputHandler;
+                    int index = limitView.getIndex(context);
+                    int size = limitView.getSize(context);
+                    options.setMaxRows(size * (index + 1));
+                }
                 boolean beganTransaction = false;
                 try {
                     if (useTransaction) {
@@ -229,11 +239,16 @@ public abstract class ListFinder extends Finder {
         }
     }
 
-    protected EntityCondition getWhereEntityCondition(Map<String, Object> context, ModelEntity modelEntity, GenericDelegator delegator) {
+    public List<String> getOrderByFieldList(Map<String, Object> context) {
+        List<String> orderByFields = EntityFinderUtil.makeOrderByFieldList(this.orderByExpanderList, context);
+        return orderByFields;
+    }
+
+    public EntityCondition getWhereEntityCondition(Map<String, Object> context, ModelEntity modelEntity, ModelFieldTypeReader modelFieldTypeReader) {
         return null;
     }
 
-    protected EntityCondition getHavingEntityCondition(Map<String, Object> context, ModelEntity modelEntity, GenericDelegator delegator) {
+    public EntityCondition getHavingEntityCondition(Map<String, Object> context, ModelEntity modelEntity, ModelFieldTypeReader modelFieldTypeReader) {
         return null;
     }
 }

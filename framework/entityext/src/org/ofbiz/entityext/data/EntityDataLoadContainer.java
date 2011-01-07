@@ -23,6 +23,8 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 import java.io.File;
 
 import javolution.util.FastList;
@@ -34,8 +36,13 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.datasource.GenericHelperInfo;
+import org.ofbiz.entity.jdbc.DatabaseUtil;
+import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.util.EntityDataLoader;
 import org.ofbiz.service.ServiceDispatcher;
 
@@ -58,6 +65,11 @@ public class EntityDataLoadContainer implements Container {
     protected boolean maintainTxs = false;
     protected boolean tryInserts = false;
     protected boolean failOnError = false;
+    protected boolean repairColumns = false;
+    protected boolean dropPks = false;
+    protected boolean createPks = false;
+    protected boolean dropConstraints = false;
+    protected boolean createConstraints = false;
     protected int txTimeout = -1;
 
     public EntityDataLoadContainer() {
@@ -135,6 +147,26 @@ public class EntityDataLoadContainer implements Container {
                     this.maintainTxs = "true".equalsIgnoreCase(argumentVal);
                 } else if ("inserts".equalsIgnoreCase(argumentName)) {
                     this.tryInserts = "true".equalsIgnoreCase(argumentVal);
+                } else if ("repair-columns".equalsIgnoreCase(argumentName)) {
+                    if (UtilValidate.isEmpty(argumentVal) || "true".equalsIgnoreCase(argumentVal)) {
+                        repairColumns = true;
+                    }
+                } else if ("drop-pks".equalsIgnoreCase(argumentName)) {
+                    if (UtilValidate.isEmpty(argumentVal) || "true".equalsIgnoreCase(argumentVal)) {
+                        dropPks = true;
+                    }
+                } else if ("create-pks".equalsIgnoreCase(argumentName)) {
+                    if (UtilValidate.isEmpty(argumentVal) || "true".equalsIgnoreCase(argumentVal)) {
+                        createPks = true;
+                    }
+                } else if ("drop-constraints".equalsIgnoreCase(argumentName)) {
+                    if (UtilValidate.isEmpty(argumentVal) || "true".equalsIgnoreCase(argumentVal)) {
+                        dropConstraints = true;
+                    }
+                } else if ("create-constraints".equalsIgnoreCase(argumentName)) {
+                    if (UtilValidate.isEmpty(argumentVal) || "true".equalsIgnoreCase(argumentVal)) {
+                        createConstraints = true;
+                    }
                 } else if ("failonerror".equalsIgnoreCase(argumentName)) {
                     this.failOnError = !"false".equalsIgnoreCase(argumentVal);
                 } else if ("help".equalsIgnoreCase(argumentName)) {
@@ -143,10 +175,15 @@ public class EntityDataLoadContainer implements Container {
                     Debug.log("-component=[name] .... only load from a specific component");
                     Debug.log("-delegator=[name] .... use the defined delegator (default-no-eca", module);
                     Debug.log("-group=[name] ........ override the entity group (org.ofbiz)", module);
-                    Debug.log("-file=[path] ......... load a single from from location", module);
+                    Debug.log("-file=[path] ......... load a single file from location, several files separated by commas.", module);
                     Debug.log("-createfks ........... create dummy (placeholder) FKs", module);
                     Debug.log("-maintainTxs ......... maintain timestamps in data file", module);
                     Debug.log("-inserts ............. use mostly inserts option", module);
+                    Debug.log("-repair-columns ........... repair column sizes", module);
+                    Debug.log("-drop-pks ............ drop primary keys", module);
+                    Debug.log("-create-pks .......... create primary keys", module);
+                    Debug.log("-drop-constraints..... drop indexes and foreign keys before loading", module);
+                    Debug.log("-create-constraints... create indexes and foreign keys after loading (default is true w/ drop-constraints)", module);
                     Debug.log("-failonerror ..........stop the load immediately on error", module);
                     Debug.log("-help ................ display this information", module);
                     System.exit(1);
@@ -171,13 +208,13 @@ public class EntityDataLoadContainer implements Container {
         String delegatorName = null;
         String entityGroupName = null;
 
-        if (delegatorNameProp == null || delegatorNameProp.value == null || delegatorNameProp.value.length() == 0) {
+        if (delegatorNameProp == null || UtilValidate.isEmpty(delegatorNameProp.value)) {
             throw new ContainerException("Invalid delegator-name defined in container configuration");
         } else {
             delegatorName = delegatorNameProp.value;
         }
 
-        if (entityGroupNameProp == null || entityGroupNameProp.value == null || entityGroupNameProp.value.length() == 0) {
+        if (entityGroupNameProp == null || UtilValidate.isEmpty(entityGroupNameProp.value)) {
             throw new ContainerException("Invalid entity-group-name defined in container configuration");
         } else {
             entityGroupName = entityGroupNameProp.value;
@@ -196,22 +233,107 @@ public class EntityDataLoadContainer implements Container {
 
         String delegatorNameToUse = overrideDelegator != null ? overrideDelegator : delegatorName;
         String groupNameToUse = overrideGroup != null ? overrideGroup : entityGroupName;
-        GenericDelegator delegator = GenericDelegator.getGenericDelegator(delegatorNameToUse);
+        Delegator delegator = DelegatorFactory.getDelegator(delegatorNameToUse);
         if (delegator == null) {
             throw new ContainerException("Invalid delegator name!");
         }
 
-        String helperName = delegator.getGroupHelperName(groupNameToUse);
-        if (helperName == null) {
+        GenericHelperInfo helperInfo = delegator.getGroupHelperInfo(groupNameToUse);
+        if (helperInfo == null) {
             throw new ContainerException("Unable to locate the datasource helper for the group [" + groupNameToUse + "]");
+        }
+
+        // get the database util object
+        DatabaseUtil dbUtil = new DatabaseUtil(helperInfo);
+        Map<String, ModelEntity> modelEntities;
+        try {
+            modelEntities = delegator.getModelEntityMapByGroup(groupNameToUse);
+        } catch (GenericEntityException e) {
+            throw new ContainerException(e.getMessage(), e);
+        }
+        TreeSet<String> modelEntityNames = new TreeSet<String>(modelEntities.keySet());
+
+        // check for drop index/fks
+        if (dropConstraints) {
+            List<String> messages = FastList.newInstance();
+
+            Debug.logImportant("Dropping foreign key indcies...", module);
+            for (String entityName : modelEntityNames) {
+                ModelEntity modelEntity = modelEntities.get(entityName);
+                if (modelEntity != null) {
+                    dbUtil.deleteForeignKeyIndices(modelEntity, messages);
+                }
+            }
+
+            Debug.logImportant("Dropping declared indices...", module);
+            for (String entityName : modelEntityNames) {
+                ModelEntity modelEntity = modelEntities.get(entityName);
+                if (modelEntity != null) {
+                    dbUtil.deleteDeclaredIndices(modelEntity, messages);
+                }
+            }
+
+            Debug.logImportant("Dropping foreign keys...", module);
+            for (String entityName : modelEntityNames) {
+                ModelEntity modelEntity = modelEntities.get(entityName);
+                if (modelEntity != null) {
+                    dbUtil.deleteForeignKeys(modelEntity, modelEntities, messages);
+                }
+            }
+
+            if (messages.size() > 0) {
+                if (Debug.infoOn()) {
+                    for (String message : messages) {
+                        Debug.logInfo(message, module);
+                    }
+                }
+            }
+        }
+
+        // drop pks
+        if (dropPks) {
+            List<String> messages = FastList.newInstance();
+            Debug.logImportant("Dropping primary keys...", module);
+            for (String entityName : modelEntityNames) {
+                ModelEntity modelEntity = modelEntities.get(entityName);
+                if (modelEntity != null) {
+                    dbUtil.deletePrimaryKey(modelEntity, messages);
+                }
+            }
+
+            if (messages.size() > 0) {
+                if (Debug.infoOn()) {
+                    for (String message : messages) {
+                        Debug.logInfo(message, module);
+                    }
+                }
+            }
+        }
+
+        // repair columns
+        if (repairColumns) {
+            List<String> fieldsToRepair = FastList.newInstance();
+            List<String> messages = FastList.newInstance();
+            dbUtil.checkDb(modelEntities, fieldsToRepair, messages, false, false, false, false);
+            if (fieldsToRepair.size() > 0) {
+                messages = FastList.newInstance();
+                dbUtil.repairColumnSizeChanges(modelEntities, fieldsToRepair, messages);
+                if (messages.size() > 0) {
+                    if (Debug.infoOn()) {
+                        for (String message : messages) {
+                            Debug.logInfo(message, module);
+                        }
+                    }
+                }
+            }
         }
 
         // get the reader name URLs first
         List<URL> urlList = null;
         if (readerNames != null) {
-            urlList = EntityDataLoader.getUrlList(helperName, component, readerNames);
+            urlList = EntityDataLoader.getUrlList(helperInfo.getHelperBaseName(), component, readerNames);
         } else if (!"none".equalsIgnoreCase(this.readers)) {
-            urlList = EntityDataLoader.getUrlList(helperName, component);
+            urlList = EntityDataLoader.getUrlList(helperInfo.getHelperBaseName(), component);
         }
 
         // need a list if it is empty
@@ -264,7 +386,7 @@ public class EntityDataLoadContainer implements Container {
 
             for (URL dataUrl: urlList) {
                 try {
-                    int rowsChanged = EntityDataLoader.loadData(dataUrl, helperName, delegator, errorMessages, txTimeout, useDummyFks, maintainTxs, tryInserts);
+                    int rowsChanged = EntityDataLoader.loadData(dataUrl, helperInfo.getHelperBaseName(), delegator, errorMessages, txTimeout, useDummyFks, maintainTxs, tryInserts);
                     totalRowsChanged += rowsChanged;
                     infoMessages.add(changedFormat.format(rowsChanged) + " of " + changedFormat.format(totalRowsChanged) + " from " + dataUrl.toExternalForm());
                 } catch (GenericEntityException e) {
@@ -296,6 +418,63 @@ public class EntityDataLoadContainer implements Container {
 
         if (errorMessages.size() > 0 && this.failOnError) {
             throw new ContainerException("Errors occurred during the data load.");
+        }
+ 
+        // create primary keys
+        if (createPks) {
+            List<String> messages = FastList.newInstance();
+
+            Debug.logImportant("Creating primary keys...", module);
+            for (String entityName : modelEntityNames) {
+                ModelEntity modelEntity = modelEntities.get(entityName);
+                if (modelEntity != null) {
+                    dbUtil.createPrimaryKey(modelEntity, messages);
+                }
+            }
+            if (messages.size() > 0) {
+                if (Debug.infoOn()) {
+                    for (String message : messages) {
+                        Debug.logInfo(message, module);
+                    }
+                }
+            }
+        }
+
+        // create constraints
+        if (createConstraints) {
+            List<String> messages = FastList.newInstance();
+
+            Debug.logImportant("Creating foreign keys...", module);
+            for (String entityName : modelEntityNames) {
+                ModelEntity modelEntity = modelEntities.get(entityName);
+                if (modelEntity != null) {
+                    dbUtil.createForeignKeys(modelEntity, modelEntities, messages);
+                }
+            }
+
+            Debug.logImportant("Creating foreign key indcies...", module);
+            for (String entityName : modelEntityNames) {
+                ModelEntity modelEntity = modelEntities.get(entityName);
+                if (modelEntity != null) {
+                    dbUtil.createForeignKeyIndices(modelEntity, messages);
+                }
+            }
+
+            Debug.logImportant("Creating declared indices...", module);
+            for (String entityName : modelEntityNames) {
+                ModelEntity modelEntity = modelEntities.get(entityName);
+                if (modelEntity != null) {
+                    dbUtil.createDeclaredIndices(modelEntity, messages);
+                }
+            }
+
+            if (messages.size() > 0) {
+                if (Debug.infoOn()) {
+                    for (String message : messages) {
+                        Debug.logInfo(message, module);
+                    }
+                }
+            }
         }
 
         return true;

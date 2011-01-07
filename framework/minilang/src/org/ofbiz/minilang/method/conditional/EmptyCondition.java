@@ -30,10 +30,12 @@ import org.ofbiz.minilang.method.*;
  */
 public class EmptyCondition implements Conditional {
     public static final class EmptyConditionFactory extends ConditionalFactory<EmptyCondition> {
+        @Override
         public EmptyCondition createCondition(Element element, SimpleMethod simpleMethod) {
             return new EmptyCondition(element, simpleMethod);
         }
 
+        @Override
         public String getName() {
             return "if-empty";
         }
@@ -74,13 +76,13 @@ public class EmptyCondition implements Conditional {
                     runSubOps = true;
                 }
             } else if (fieldVal instanceof Collection) {
-                Collection fieldCol = (Collection) fieldVal;
+                Collection<?> fieldCol = (Collection<?>) fieldVal;
 
                 if (fieldCol.size() == 0) {
                     runSubOps = true;
                 }
             } else if (fieldVal instanceof Map) {
-                Map fieldMap = (Map) fieldVal;
+                Map<?,?> fieldMap = (Map<?,?>) fieldVal;
 
                 if (fieldMap.size() == 0) {
                     runSubOps = true;

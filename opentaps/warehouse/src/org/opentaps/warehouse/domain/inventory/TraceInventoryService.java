@@ -27,7 +27,7 @@ import javolution.util.FastSet;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -300,7 +300,7 @@ public class TraceInventoryService extends DomainService implements TraceInvento
 
     /** {@inheritDoc} */
     public void clearInventoryTrace() throws ServiceException {
-        GenericDelegator delegator = getInfrastructure().getDelegator();
+        Delegator delegator = getInfrastructure().getDelegator();
 
         try {
             EntityCondition dumbCondition = EntityCondition.makeCondition("inventoryItemTraceId", EntityOperator.NOT_EQUAL, "0");

@@ -28,7 +28,7 @@
         <#assign tag = tagTypes.get(index)/>
         <tr>
             <td class="titleCell"><span class="tableheadtext">${tag.description}</td>
-            <td><@accountingTagsSelect tag=tag/></td>
+            <td><@accountingTagsSelect tag=tag activeOnly=false /></td>
         </tr>
     </#if>
 </#macro>

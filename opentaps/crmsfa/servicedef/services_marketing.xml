@@ -60,7 +60,7 @@
         <override name="contactListName" optional="false"/>
     </service>
     <service name="updateContactList" default-entity-name="ContactList" engine="simple"
-            location="org/ofbiz/marketing/contact/ContactListServices.xml" invoke="updateContactList" auth="true">
+            location="component://marketing/script/org/ofbiz/marketing/contact/ContactListServices.xml" invoke="updateContactList" auth="true">
         <description>Update a ContactList record</description>
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>

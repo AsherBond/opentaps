@@ -19,13 +19,13 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.base.util.cache;
 
-import java.lang.ref.SoftReference;
-import java.lang.ref.ReferenceQueue;
 import java.io.Serializable;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.ReferenceCleaner;
 
-public class CacheSoftReference<V> extends SoftReference<V> implements Serializable {
+@SuppressWarnings("serial")
+public abstract class CacheSoftReference<V> extends ReferenceCleaner.Soft<V> implements Serializable {
 
     public static final String module = CacheSoftReference.class.getName();
 
@@ -33,10 +33,7 @@ public class CacheSoftReference<V> extends SoftReference<V> implements Serializa
         super(o);
     }
 
-    public CacheSoftReference(V o, ReferenceQueue<? super V> referenceQueue) {
-        super(o, referenceQueue);
-    }
-
+    @Override
     public void clear() {
         if (Debug.verboseOn()) {
             Debug.logVerbose(new Exception("UtilCache.CacheSoftRef.clear()"), "Clearing UtilCache SoftReference - " + get(), module);
@@ -44,6 +41,7 @@ public class CacheSoftReference<V> extends SoftReference<V> implements Serializa
         super.clear();
     }
 
+    @Override
     public void finalize() throws Throwable {
         if (Debug.verboseOn()) {
             Debug.logVerbose(new Exception("UtilCache.CacheSoftRef.finalize()"), "Finalize UtilCache SoftReference - " + get(), module);

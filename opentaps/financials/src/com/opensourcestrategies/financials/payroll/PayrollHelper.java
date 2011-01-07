@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -36,15 +36,15 @@ public class PayrollHelper {
     public static final String resource = "FinancialsUiLabels";
 
     protected String organizationPartyId = null;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
 
     /**
      * Creates a new <code>PayrollHelper</code> instance.
      *
      * @param organizationPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      */
-    public PayrollHelper(String organizationPartyId, GenericDelegator delegator) {
+    public PayrollHelper(String organizationPartyId, Delegator delegator) {
         this.organizationPartyId = organizationPartyId;
         this.delegator = delegator;
     }

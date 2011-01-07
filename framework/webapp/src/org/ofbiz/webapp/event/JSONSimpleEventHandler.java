@@ -23,9 +23,10 @@ package org.ofbiz.webapp.event;
 
 import javax.servlet.ServletContext;
 
-
+@Deprecated
 public class JSONSimpleEventHandler extends AbstractJSONEventHandler{
 
+    @Override
     public void init(ServletContext context) throws EventHandlerException {
         this.service = new SimpleEventHandler();
         this.service.init(context);

@@ -1334,7 +1334,8 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         // 650000 (Standard supplies account) 100
         // 631200 (Janitorial services account) 1000
         Map finalBalances = financialAsserts.getFinancialBalances(UtilDateTime.nowTimestamp());
-        Map expectedBalanceChanges = UtilMisc.toMap("ACCOUNTS_PAYABLE", "-1110.0", "PURCHASE_PRICE_VAR", "+10");
+        // Considering 1% sales tax due to new demo data in TaxAuthorityRateProduct, applicable to all stores, min. item price 25   
+        Map expectedBalanceChanges = UtilMisc.toMap("ACCOUNTS_PAYABLE", "-1120.0", "PURCHASE_PRICE_VAR", "+10");
         Map accountMap = UtilFinancial.replaceGlAccountTypeWithGlAccountForOrg(organizationPartyId, expectedBalanceChanges, delegator);
         // additional expense accounts not defined with gl account type
         expectedBalanceChanges.put("650000", "100");

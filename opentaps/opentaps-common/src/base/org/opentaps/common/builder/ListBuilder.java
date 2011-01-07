@@ -38,7 +38,7 @@ import java.util.List;
  * The degenerate example would be an EntityListBuilder, which
  * encapsulates the common process of setting up a lookup
  * on an entity or view entity using
- * GenericDelegator.findListIteratorByCondition().
+ * Delegator.findListIteratorByCondition().
  *
  * As a further example to highlight the advantages of this pattern,
  * if we were to have a lookup that does additional processing

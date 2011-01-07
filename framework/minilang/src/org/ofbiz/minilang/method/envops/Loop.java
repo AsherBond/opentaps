@@ -59,6 +59,7 @@ public class Loop extends MethodOperation {
         SimpleMethod.readOperations(element, subOps, simpleMethod);
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         String countStrExp = methodContext.expandString(this.countStr);
         int count = 0;
@@ -72,8 +73,8 @@ public class Loop extends MethodOperation {
             return false;
         }
 
-        if (count < 1) {
-            Debug.logWarning("Count is less than one, not doing nothing: " + rawString(), module);
+        if (count < 0) {
+            Debug.logWarning("Unable to execute loop operation because the count variable is negative: " + rawString(), module);
             return false;
         }
 
@@ -92,10 +93,12 @@ public class Loop extends MethodOperation {
         return this.subOps;
     }
 
+    @Override
     public String rawString() {
         return "<loop count=\"" + this.countStr + "\"/>";
     }
 
+    @Override
     public String expandedString(MethodContext methodContext) {
         return this.rawString();
     }

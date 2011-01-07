@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +44,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.webapp.control.RequestHandler;
 import org.ofbiz.webapp.taglib.ContentUrlTag;
@@ -66,15 +67,18 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
 
     public static final String module = MacroScreenRenderer.class.getName();
     private Template macroLibrary;
-    private Environment environment;
+    private WeakHashMap<Appendable, Environment> environments = new WeakHashMap<Appendable, Environment>();
     private String rendererName;
     private int elementId = 999;
 
-    public MacroScreenRenderer(String name, String macroLibraryPath, Appendable writer) throws TemplateException, IOException {
+    public MacroScreenRenderer(String name, String macroLibraryPath) throws TemplateException, IOException {
         macroLibrary = FreeMarkerWorker.getTemplate(macroLibraryPath);
-        Map<String, Object> input = UtilMisc.toMap("key", null);
-        environment = FreeMarkerWorker.renderTemplate(macroLibrary, input, writer);
-        rendererName = name; 
+        rendererName = name;
+    }
+
+    @Deprecated
+    public MacroScreenRenderer(String name, String macroLibraryPath, Appendable writer) throws TemplateException, IOException {
+        this(name, macroLibraryPath);
     }
 
     private String getNextElementId() {
@@ -84,25 +88,27 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
 
     private void executeMacro(Appendable writer, String macro) throws IOException {
         try {
+            Environment environment = getEnvironment(writer);
             Reader templateReader = new StringReader(macro);
             // FIXME: I am using a Date as an hack to provide a unique name for the template...
             Template template = new Template((new java.util.Date()).toString(), templateReader, FreeMarkerWorker.getDefaultOfbizConfig());
             templateReader.close();
-            if (writer != null) {
-                Map<String, Object> input = UtilMisc.toMap("key", null);
-                Environment tmpEnvironment = FreeMarkerWorker.renderTemplate(macroLibrary, input, writer);
-                tmpEnvironment.include(template);
-            } else {
-                environment.include(template);
-            }
+            environment.include(template);
         } catch (TemplateException e) {
             Debug.logError(e, "Error rendering screen thru ftl", module);
         } catch (IOException e) {
             Debug.logError(e, "Error rendering screen thru ftl", module);
         }
     }
-    private void executeMacro(String macro) throws IOException {
-        executeMacro(null, macro);
+
+    private Environment getEnvironment(Appendable writer) throws TemplateException, IOException {
+        Environment environment = environments.get(writer);
+        if (environment == null) {
+            Map<String, Object> input = UtilMisc.toMap("key", null);
+            environment = FreeMarkerWorker.renderTemplate(macroLibrary, input, writer);
+            environments.put(writer, environment);
+        }
+        return environment;
     }
 
     public String getRendererName() {
@@ -110,11 +116,11 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
     }
 
     public void renderScreenBegin(Appendable writer, Map<String, Object> context) throws IOException {
-        executeMacro("<@renderScreenBegin/>");
+        executeMacro(writer, "<@renderScreenBegin/>");
     }
 
     public void renderScreenEnd(Appendable writer, Map<String, Object> context) throws IOException {
-        executeMacro("<@renderScreenEnd/>");
+        executeMacro(writer, "<@renderScreenEnd/>");
     }
 
     public void renderSectionBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.Section section) throws IOException {
@@ -125,7 +131,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
             sr.append(section.isMainSection ? "Screen " : "Section Widget ");
             sr.append(section.getBoundaryCommentName());
             sr.append("\"/>");
-            executeMacro(sr.toString());
+            executeMacro(writer, sr.toString());
         }
     }
     public void renderSectionEnd(Appendable writer, Map<String, Object> context, ModelScreenWidget.Section section) throws IOException {
@@ -136,7 +142,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
             sr.append(section.isMainSection ? "Screen " : "Section Widget ");
             sr.append(section.getBoundaryCommentName());
             sr.append("\"/>");
-            executeMacro(sr.toString());
+            executeMacro(writer, sr.toString());
         }
     }
 
@@ -165,13 +171,13 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append("\" autoUpdateInterval=\"");
         sr.append(container.getAutoUpdateInterval());
         sr.append("\" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderContainerEnd(Appendable writer, Map<String, Object> context, ModelScreenWidget.Container container) throws IOException {
         StringWriter sr = new StringWriter();
         sr.append("<@renderContainerEnd/>");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderFrameContainerHeader(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainerHeader container) throws IOException {
@@ -202,7 +208,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append("\" title=\"");
         sr.append(title);
         sr.append("\" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
     public void renderFrameContainerBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
         String containerId = container.getId(context);
@@ -232,13 +238,13 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append("\" title=\"");
         sr.append(title);
         sr.append("\" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderFrameContainerEnd(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
         StringWriter sr = new StringWriter();
         sr.append("<@renderFrameContainerEnd/>");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderLabel(Appendable writer, Map<String, Object> context, ModelScreenWidget.Label label) throws IOException {
@@ -252,7 +258,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append("\" style=\"");
         sr.append(label.getStyle(context));
         sr.append("\" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderHorizontalSeparator(Appendable writer, Map<String, Object> context, ModelScreenWidget.HorizontalSeparator separator) throws IOException {
@@ -263,7 +269,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append("\" style=\"");
         sr.append(separator.getStyle(context));
         sr.append("\" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderLink(Appendable writer, Map<String, Object> context, ModelScreenWidget.Link link) throws IOException {
@@ -285,15 +291,15 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
                     link.getFullPath(), link.getSecure(), link.getEncode(), request, response, context);
             actionUrl = sb.toString();
             parameters.append("[");
-            for (WidgetWorker.Parameter parameter: link.getParameterList()) {
+            for (Map.Entry<String, String> parameter: link.getParameterMap(context).entrySet()) {
                 if (parameters.length() >1) {
                     parameters.append(",");
                 }
                 parameters.append("{'name':'");
-                parameters.append(parameter.getName());
+                parameters.append(parameter.getKey());
                 parameters.append("'");
                 parameters.append(",'value':'");
-                parameters.append(parameter.getValue(context));
+                parameters.append(parameter.getValue());
                 parameters.append("'}");
             }
             parameters.append("]");
@@ -306,17 +312,17 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         if (UtilValidate.isNotEmpty(target)) {
             if (!"hidden-form".equals(linkType)) {
                 StringBuilder sb = new StringBuilder();
-                WidgetWorker.buildHyperlinkUrl(sb, target, link.getUrlMode(), link.getParameterList(), link.getPrefix(context),
+                WidgetWorker.buildHyperlinkUrl(sb, target, link.getUrlMode(), link.getParameterMap(context), link.getPrefix(context),
                         link.getFullPath(), link.getSecure(), link.getEncode(), request, response, context);
                 linkUrl = sb.toString();
             }
         }
         String imgStr = "";
         ModelScreenWidget.Image img = link.getImage();
-        if (img == null) {
-            StringBuilder sb = new StringBuilder();
-            renderImage(sb,context,img);
-            imgStr = sb.toString();
+        if (img != null) {
+            StringWriter sw = new StringWriter();
+            renderImage(sw, context, img);
+            imgStr = sw.toString();
         }
         StringWriter sr = new StringWriter();
         sr.append("<@renderLink ");
@@ -343,13 +349,13 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append("\" text=\"");
         sr.append(text);
         sr.append("\" imgStr=\"");
-        sr.append(imgStr);
+        sr.append(imgStr.replaceAll("\"", "\\\\\""));
         sr.append("\" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderImage(Appendable writer, Map<String, Object> context, ModelScreenWidget.Image image) throws IOException {
-        if ( image == null)
+        if (image == null)
             return ;
         String src = image.getSrc(context);
         String id = image.getId(context);
@@ -376,7 +382,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
             }
         } else  if (urlMode != null && urlMode.equalsIgnoreCase("content")) {
             if (request != null && response != null) {
-                StringBuffer newURL = new StringBuffer();
+                StringBuilder newURL = new StringBuilder();
                 ContentUrlTag.appendContentPrefix(request, newURL);
                 newURL.append(src);
                 urlString = newURL.toString();
@@ -403,7 +409,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append("\" urlString=\"");
         sr.append(urlString);
         sr.append("\" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderContentBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.Content content) throws IOException {
@@ -423,7 +429,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
          sr.append("\" editContainerStyle=\"");
          sr.append(editContainerStyle);
          sr.append("\" />");
-         executeMacro(sr.toString());
+         executeMacro(writer, sr.toString());
     }
 
     public void renderContentBody(Appendable writer, Map<String, Object> context, ModelScreenWidget.Content content) throws IOException {
@@ -434,7 +440,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         String expandedDataResourceId = content.getDataResourceId(context);
         String renderedContent = null;
         LocalDispatcher dispatcher = (LocalDispatcher) context.get("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) context.get("delegator");
+        Delegator delegator = (Delegator) context.get("delegator");
 
         // make a new map for content rendering; so our current map does not get clobbered
         Map<String, Object> contentContext = FastMap.newInstance();
@@ -527,7 +533,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
             sr.append("\" enableEditValue=\"");
             sr.append(enableEditValue);
             sr.append("\" />");
-            executeMacro(sr.toString());
+            executeMacro(writer, sr.toString());
         }
     }
 
@@ -556,7 +562,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append("\" border=\"");
         sr.append(border);
         sr.append("\" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderSubContentBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.SubContent content) throws IOException {
@@ -574,7 +580,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
          sr.append("\" enableEditValue=\"");
          sr.append(enableEditValue);
          sr.append("\" />");
-         executeMacro(sr.toString());
+         executeMacro(writer, sr.toString());
     }
 
     public void renderSubContentBody(Appendable writer, Map<String, Object> context, ModelScreenWidget.SubContent content) throws IOException {
@@ -584,7 +590,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
          String expandedMapKey = content.getMapKey(context);
          String renderedContent = "";
          LocalDispatcher dispatcher = (LocalDispatcher) context.get("dispatcher");
-         GenericDelegator delegator = (GenericDelegator) context.get("delegator");
+         Delegator delegator = (Delegator) context.get("delegator");
 
          // create a new map for the content rendering; so our current context does not get overwritten!
          Map<String, Object> contentContext = FastMap.newInstance();
@@ -666,7 +672,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
          sr.append("\" enableEditValue=\"");
          sr.append(enableEditValue);
          sr.append("\" />");
-         executeMacro(sr.toString());
+         executeMacro(writer, sr.toString());
     }
 
 
@@ -730,6 +736,8 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append(title);
         sr.append("\" collapsible=");
         sr.append(Boolean.toString(collapsible));
+        sr.append(" saveCollapsed=");
+        sr.append(Boolean.toString(screenlet.saveCollapsed()));
         sr.append(" collapsibleAreaId=\"");
         sr.append(collapsibleAreaId);
         sr.append("\" expandToolTip=\"");
@@ -749,7 +757,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         sr.append(" javaScriptEnabled=");
         sr.append(Boolean.toString(javaScriptEnabled));
         sr.append(" />");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     public void renderScreenletSubWidget(Appendable writer, Map<String, Object> context, ModelScreenWidget subWidget, ModelScreenWidget.Screenlet screenlet) throws GeneralException, IOException  {
@@ -773,7 +781,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
     public void renderScreenletEnd(Appendable writer, Map<String, Object> context, ModelScreenWidget.Screenlet screenlet) throws IOException {
         StringWriter sr = new StringWriter();
         sr.append("<@renderScreenletEnd/>");
-        executeMacro(sr.toString());
+        executeMacro(writer, sr.toString());
     }
 
     protected void renderScreenletPaginateMenu(Appendable writer, Map<String, Object> context, ModelScreenWidget.Form form) throws IOException {
@@ -804,7 +812,7 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         if (actualPageSize >= listSize && listSize >= 0) return;
 
         // needed for the "Page" and "rows" labels
-        Map uiLabelMap = (Map) context.get("uiLabelMap");
+        Map<String, String> uiLabelMap = UtilGenerics.cast(context.get("uiLabelMap"));
         String ofLabel = "";
         if (uiLabelMap == null) {
             Debug.logWarning("Could not find uiLabelMap in context", module);

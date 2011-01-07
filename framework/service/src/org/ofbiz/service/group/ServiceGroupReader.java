@@ -19,8 +19,6 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.service.group;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastMap;

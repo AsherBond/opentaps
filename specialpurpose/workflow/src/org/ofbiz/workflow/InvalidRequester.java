@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * InvalidRequester Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class InvalidRequester extends WfException {
 
     public InvalidRequester() {}

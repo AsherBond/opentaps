@@ -18,7 +18,7 @@
 package com.opensourcestrategies.financials.accounts;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 
 import java.math.BigDecimal;
@@ -36,12 +36,12 @@ public class GLAccountInTree extends GLAccount {
     /**
      * Creates a new <code>GLAccountInTree</code> instance.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param glAccountId the GL account ID
      * @param balance a <code>BigDecimal</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public GLAccountInTree(GenericDelegator delegator, String glAccountId, BigDecimal balance) throws GenericEntityException {
+    public GLAccountInTree(Delegator delegator, String glAccountId, BigDecimal balance) throws GenericEntityException {
         super(delegator, glAccountId, balance);
         this.childAccounts = new TreeSet<GLAccountInTree>();
     }
@@ -49,13 +49,13 @@ public class GLAccountInTree extends GLAccount {
     /**
      * Creates a new <code>GLAccountInTree</code> instance.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param glAccountId the GL account ID
      * @param balance a <code>BigDecimal</code> value
      * @param childAccounts the list of child GL accounts
      * @exception GenericEntityException if an error occurs
      */
-    public GLAccountInTree(GenericDelegator delegator, String glAccountId, BigDecimal balance, List<GLAccountInTree> childAccounts) throws GenericEntityException {
+    public GLAccountInTree(Delegator delegator, String glAccountId, BigDecimal balance, List<GLAccountInTree> childAccounts) throws GenericEntityException {
         super(delegator, glAccountId, balance);
         if (childAccounts == null) {
             this.childAccounts = new TreeSet<GLAccountInTree>();

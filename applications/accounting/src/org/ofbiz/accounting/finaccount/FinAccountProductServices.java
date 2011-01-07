@@ -24,7 +24,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.util.EntityUtil;
@@ -45,10 +45,10 @@ public class FinAccountProductServices {
 
     public static final String module = FinAccountProductServices.class.getName();
 
-    public static Map createPartyFinAccountFromPurchase(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createPartyFinAccountFromPurchase(DispatchContext dctx, Map<String, Object> context) {
         // this service should always be called via FULFILLMENT_EXTASYNC
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         GenericValue orderItem = (GenericValue) context.get("orderItem");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -69,7 +69,7 @@ public class FinAccountProductServices {
         String productId = orderItem.getString("productId");
         GenericValue featureAndAppl;
         try {
-            List featureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId,
+            List<GenericValue> featureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId,
                     "productFeatureTypeId", "TYPE", "productFeatureApplTypeId", "STANDARD_FEATURE"));
             featureAndAppls = EntityUtil.filterByDate(featureAndAppls);
             featureAndAppl = EntityUtil.getFirst(featureAndAppls);
@@ -130,13 +130,11 @@ public class FinAccountProductServices {
         }
 
         // payment method info
-        List payPrefs = orh.getPaymentPreferences();
+        List<GenericValue> payPrefs = orh.getPaymentPreferences();
         String paymentMethodId = null;
         if (payPrefs != null) {
-            Iterator i = payPrefs.iterator();
-            while (i.hasNext()) {
+            for (GenericValue pref : payPrefs) {
                 // needs to be a CC or EFT account
-                GenericValue pref = (GenericValue) i.next();
                 String type = pref.getString("paymentMethodTypeId");
                 if ("CREDIT_CARD".equals(type) || "EFT_ACCOUNT".equals(type)) {
                     paymentMethodId = pref.getString("paymentMethodId");
@@ -165,14 +163,14 @@ public class FinAccountProductServices {
         }
 
         // create the context for FSE
-        Map expContext = FastMap.newInstance();
+        Map<String, Object> expContext = FastMap.newInstance();
         expContext.put("orderHeader", orderHeader);
         expContext.put("orderItem", orderItem);
         expContext.put("party", party);
         expContext.put("person", person);
         expContext.put("partyGroup", partyGroup);
 
-        // expand the name field to dynamicly add information
+        // expand the name field to dynamically add information
         FlexibleStringExpander exp = FlexibleStringExpander.getInstance(finAccountName);
         finAccountName = exp.expandString(expContext);
 
@@ -182,7 +180,7 @@ public class FinAccountProductServices {
         BigDecimal deposit = price.multiply(quantity).setScale(FinAccountHelper.decimals, FinAccountHelper.rounding);
 
         // create the financial account
-        Map createCtx = FastMap.newInstance();
+        Map<String, Object> createCtx = FastMap.newInstance();
         String finAccountId;
 
         createCtx.put("finAccountTypeId", finAccountTypeId);
@@ -199,7 +197,7 @@ public class FinAccountProductServices {
             createCtx.put("replenishPaymentId", paymentMethodId);
         }
 
-        Map createResp;
+        Map<String, Object> createResp;
         try {
             createResp = dispatcher.runSync("createFinAccountForStore", createCtx);
         } catch (GenericServiceException e) {
@@ -209,18 +207,18 @@ public class FinAccountProductServices {
         if (ServiceUtil.isError(createResp)) {
             Debug.logFatal(ServiceUtil.getErrorMessage(createResp), module);
             return createResp;
-        } else {
-            finAccountId = (String) createResp.get("finAccountId");
         }
 
+        finAccountId = (String) createResp.get("finAccountId");
+
         // create the owner role
-        Map roleCtx = FastMap.newInstance();
+        Map<String, Object> roleCtx = FastMap.newInstance();
         roleCtx.put("partyId", partyId);
         roleCtx.put("roleTypeId", "OWNER");
         roleCtx.put("finAccountId", finAccountId);
         roleCtx.put("userLogin", userLogin);
         roleCtx.put("fromDate", UtilDateTime.nowTimestamp());
-        Map roleResp;
+        Map<String, Object> roleResp;
         try {
             roleResp = dispatcher.runSync("createFinAccountRole", roleCtx);
         } catch (GenericServiceException e) {
@@ -233,7 +231,7 @@ public class FinAccountProductServices {
         }
 
         // create the initial deposit
-        Map depositCtx = FastMap.newInstance();
+        Map<String, Object> depositCtx = FastMap.newInstance();
         depositCtx.put("finAccountId", finAccountId);
         depositCtx.put("productStoreId", productStoreId);
         depositCtx.put("currency", currency);
@@ -244,7 +242,7 @@ public class FinAccountProductServices {
         depositCtx.put("reasonEnumId", "FATR_IDEPOSIT");
         depositCtx.put("userLogin", userLogin);
 
-        Map depositResp;
+        Map<String, Object> depositResp;
         try {
             depositResp = dispatcher.runSync("finAccountDeposit", depositCtx);
         } catch (GenericServiceException e) {
@@ -256,7 +254,7 @@ public class FinAccountProductServices {
             return depositResp;
         }
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         result.put("finAccountId", finAccountId);
         return result;
     }

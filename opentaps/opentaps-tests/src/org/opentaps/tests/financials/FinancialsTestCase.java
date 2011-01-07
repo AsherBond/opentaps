@@ -33,7 +33,7 @@ import javolution.util.FastSet;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -331,12 +331,12 @@ public class FinancialsTestCase extends OpentapsTestCase {
      * another thread.
      * @param conditions initial <code>List</code> of condition
      * @param since only get the transaction with the created stamp since this date
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>Set</code> of AcctgTransIds matching the conditions
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public Set<String> getAcctgTransCreatedSinceDate(List conditions, Timestamp since, GenericDelegator delegator) throws GenericEntityException {
+    public Set<String> getAcctgTransCreatedSinceDate(List conditions, Timestamp since, Delegator delegator) throws GenericEntityException {
         conditions.add(EntityCondition.makeCondition("createdStamp", EntityOperator.GREATER_THAN_EQUAL_TO, since));
         conditions.add(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.NOT_EQUAL, TEST_TRANSACTIONS));
         List<GenericValue> matches = delegator.findByAnd("AcctgTrans", conditions);
@@ -351,11 +351,11 @@ public class FinancialsTestCase extends OpentapsTestCase {
      * As above, but accepts EntityCondition instead of a List of EntityConditions.
      * @param condition initial <code>EntityCondition</code>
      * @param since only get the transaction with the created stamp since this date
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>Set</code> of AcctgTransIds matching the conditions
      * @exception GenericEntityException if an error occurs
      */
-    public Set<String> getAcctgTransCreatedSinceDate(EntityCondition condition, Timestamp since, GenericDelegator delegator) throws GenericEntityException {
+    public Set<String> getAcctgTransCreatedSinceDate(EntityCondition condition, Timestamp since, Delegator delegator) throws GenericEntityException {
         return getAcctgTransSinceDate(UtilMisc.toList(condition), since, delegator);
     }
 
@@ -366,12 +366,12 @@ public class FinancialsTestCase extends OpentapsTestCase {
      * another thread.
      * @param conditions initial <code>List</code> of condition
      * @param since only get the transaction with the transaction date since this date
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>Set</code> of AcctgTransIds matching the conditions
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public Set<String> getAcctgTransSinceDate(List conditions, Timestamp since, GenericDelegator delegator) throws GenericEntityException {
+    public Set<String> getAcctgTransSinceDate(List conditions, Timestamp since, Delegator delegator) throws GenericEntityException {
         conditions.add(EntityCondition.makeCondition("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, since));
         conditions.add(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.NOT_EQUAL, TEST_TRANSACTIONS));
         List<GenericValue> matches = delegator.findByAnd("AcctgTransAndEntries", conditions);
@@ -386,11 +386,11 @@ public class FinancialsTestCase extends OpentapsTestCase {
      * As above, but accepts EntityCondition instead of a List of EntityConditions.
      * @param condition initial <code>EntityCondition</code>
      * @param since only get the transaction with the transaction date since this date
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>Set</code> of AcctgTransIds matching the conditions
      * @exception GenericEntityException if an error occurs
      */
-    public Set<String> getAcctgTransSinceDate(EntityCondition condition, Timestamp since, GenericDelegator delegator) throws GenericEntityException {
+    public Set<String> getAcctgTransSinceDate(EntityCondition condition, Timestamp since, Delegator delegator) throws GenericEntityException {
         return getAcctgTransSinceDate(UtilMisc.toList(condition), since, delegator);
     }
 

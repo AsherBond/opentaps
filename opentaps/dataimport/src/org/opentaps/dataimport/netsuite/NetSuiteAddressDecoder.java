@@ -4,7 +4,7 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -30,7 +30,7 @@ class NetSuiteAddressDecoder implements ImportDecoder {
         this.userLogin = userLogin;
     }
     
-    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
+    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, Delegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
         String addressBookId = entry.getString("addressBookId");
 
@@ -88,7 +88,7 @@ class NetSuiteAddressDecoder implements ImportDecoder {
      * should map cleanly into the opentaps Geo model.  However, some countries might be missing from the data,
      * in which case this method will throw an exception.
      */
-    public static String mapCountry(String country, GenericDelegator delegator) throws GenericEntityException {
+    public static String mapCountry(String country, Delegator delegator) throws GenericEntityException {
         if (country == null) throw new IllegalArgumentException("Address has no country.  Cannot import.");
         GenericValue geo = EntityUtil.getFirst( delegator.findByAndCache("Geo", UtilMisc.toMap("geoTypeId", "COUNTRY", "geoCode", country) ) );
         if (geo == null) throw new IllegalArgumentException("Cannot find a country corresponding to ["+country+"] for this address.");
@@ -100,7 +100,7 @@ class NetSuiteAddressDecoder implements ImportDecoder {
      * code (NSW for Australia's New South Wales, etc.) then the mapping should be good.  If not, it tries the full
      * name of the province.  See the GeoAssocAndGeoTo view entity for details.
      */
-    public static String mapStateProvince(String countryGeoId, String stateProvince, GenericDelegator delegator) throws GenericEntityException {
+    public static String mapStateProvince(String countryGeoId, String stateProvince, Delegator delegator) throws GenericEntityException {
         if (stateProvince == null) throw new IllegalArgumentException("Address has no state or province.  Cannot import.");
         GenericValue geo = EntityUtil.getFirst( delegator.findByAndCache("GeoAssocAndGeoTo", UtilMisc.toMap("geoIdFrom", countryGeoId, "geoCode", stateProvince)) );
         if (geo == null) {

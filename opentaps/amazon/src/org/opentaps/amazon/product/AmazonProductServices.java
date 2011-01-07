@@ -29,7 +29,7 @@ import java.util.*;
 import javolution.util.FastList;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -66,7 +66,7 @@ public final class AmazonProductServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> createOrUpdateAmazonProduct(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
         String productId = (String) context.get("productId");
@@ -129,7 +129,7 @@ public final class AmazonProductServices {
             product.set("outOfStockWebsiteMessage", outOfStockWebsiteMessage);
             product.set("registeredParameter", registeredParameter);
             product.set("ackStatusId", AmazonConstants.statusProductNotAcked);
-            product.set("postFailures", 0);
+            product.set("postFailures", new Long(0));
             product.set("postTimestamp", null);
             product.set("postErrorMessage", null);
             product.set("acknowledgeTimestamp", null);
@@ -210,7 +210,7 @@ public final class AmazonProductServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> publishProductsToAmazon(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -647,7 +647,7 @@ public final class AmazonProductServices {
         return ServiceUtil.returnSuccess();
     }
 
-    private static String getProductSKU(GenericDelegator delegator, GenericValue amazonProductValue, String upc) throws GenericEntityException {
+    private static String getProductSKU(Delegator delegator, GenericValue amazonProductValue, String upc) throws GenericEntityException {
         String sku = null;
         if (AmazonConstants.useProductIdAsSKU) {
             sku = amazonProductValue.getString("productId");
@@ -659,7 +659,7 @@ public final class AmazonProductServices {
         return sku;
     }
 
-    private static String getProductUPC(GenericDelegator delegator, String productId, Locale locale) throws GenericEntityException {
+    private static String getProductUPC(Delegator delegator, String productId, Locale locale) throws GenericEntityException {
 
         // Amazon only accepts UPC-A codes, so try to find one first
         EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
@@ -694,7 +694,7 @@ public final class AmazonProductServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> publishProductPriceToAmazon(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -954,7 +954,7 @@ public final class AmazonProductServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> publishProductImagesToAmazon(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1177,7 +1177,7 @@ public final class AmazonProductServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> publishProductInventoryToAmazon(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1394,7 +1394,7 @@ public final class AmazonProductServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> deleteProductsFromAmazon(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1559,7 +1559,7 @@ public final class AmazonProductServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> checkLastFeedProcessingDocumentDownloadSuccess(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         TimeZone timeZone = (TimeZone) context.get("timeZone");

@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
@@ -96,10 +96,10 @@ public class ActionContext implements DomainContextInterface {
 
     /**
      * Gets the Delegator from the context.
-     * @return a <code>GenericDelegator</code> value
+     * @return a <code>Delegator</code> value
      */
-    public GenericDelegator getDelegator() {
-        return (GenericDelegator) get("delegator");
+    public Delegator getDelegator() {
+        return (Delegator) get("delegator");
     }
 
     /**

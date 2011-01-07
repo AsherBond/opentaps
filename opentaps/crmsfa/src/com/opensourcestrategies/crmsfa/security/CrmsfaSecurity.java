@@ -53,7 +53,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -113,7 +113,7 @@ public final class CrmsfaSecurity {
 
         try {
             // now we'll need to do some searching so we should get a delegator from user login
-            GenericDelegator delegator = userLogin.getDelegator();
+            Delegator delegator = userLogin.getDelegator();
 
             // validate that partyIdFor is in our system in a proper role
             String roleTypeIdFor = PartyHelper.getFirstValidRoleTypeId(partyIdFor, PartyHelper.CLIENT_PARTY_ROLES, delegator);
@@ -177,7 +177,7 @@ public final class CrmsfaSecurity {
      */
     public static boolean hasOpportunityPermission(Security security, String securityOperation, GenericValue userLogin, String salesOpportunityId) {
 
-        GenericDelegator delegator = userLogin.getDelegator();
+        Delegator delegator = userLogin.getDelegator();
         try {
             // check for existance first
             GenericValue opportunity = delegator.findByPrimaryKeyCache("SalesOpportunity", UtilMisc.toMap("salesOpportunityId", salesOpportunityId));
@@ -227,7 +227,7 @@ public final class CrmsfaSecurity {
      * They also have someone in the role of request taker, but this person cannot do anything. Module CRMSFA_CASE is implied.
      */
     public static boolean hasCasePermission(Security security, String securityOperation, GenericValue userLogin, String custRequestId) {
-        GenericDelegator delegator = userLogin.getDelegator();
+        Delegator delegator = userLogin.getDelegator();
         try {
             // check for existance first
             GenericValue custRequest = delegator.findByPrimaryKeyCache("CustRequest", UtilMisc.toMap("custRequestId", custRequestId));
@@ -283,7 +283,7 @@ public final class CrmsfaSecurity {
             return false;
         }
 
-        GenericDelegator delegator = userLogin.getDelegator();
+        Delegator delegator = userLogin.getDelegator();
         Infrastructure infrastructure = new Infrastructure(GenericDispatcher.getLocalDispatcher(null, delegator));
 
         try {
@@ -448,7 +448,7 @@ public final class CrmsfaSecurity {
      * Get the security module relevant to the role of the given internal partyId.
      * @return The module as a string, such as "CRMSFA_ACCOUNT" for ACCOUNT partyIds or null if the role type is not found
      */
-    public static String getSecurityModuleOfInternalParty(String partyId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getSecurityModuleOfInternalParty(String partyId, Delegator delegator) throws GenericEntityException {
         String roleTypeId = PartyHelper.getFirstValidInternalPartyRoleTypeId(partyId, delegator);
         return getSecurityModuleForRole(roleTypeId);
     }
@@ -526,7 +526,7 @@ public final class CrmsfaSecurity {
     }
 
     private static boolean hasActivityRelation(GenericValue userLogin, String workEffortId, boolean checkForOwner) throws GenericEntityException {
-        GenericDelegator delegator = userLogin.getDelegator();
+        Delegator delegator = userLogin.getDelegator();
         String partyId = (String) userLogin.get("partyId");
 
         // check if user is owner (checkForOwner == true) or just for assignee (checkForOwner == false)
@@ -562,7 +562,7 @@ public final class CrmsfaSecurity {
      * Checks if the user has permission to change activity owner
      * (must have CRMSFA_ACT_ADMIN or be owner of this activity).
      */
-    public static boolean hasChangeActivityOwnerPermission(GenericDelegator delegator, Security security, GenericValue userLogin, String workEffortId) throws GenericEntityException {
+    public static boolean hasChangeActivityOwnerPermission(Delegator delegator, Security security, GenericValue userLogin, String workEffortId) throws GenericEntityException {
 
         GenericValue currentActivityOwner = UtilActivity.getActivityOwner(workEffortId, delegator);
 
@@ -583,7 +583,7 @@ public final class CrmsfaSecurity {
      * Checks if a userLogin has permission to perform an operation on an order.
      */
     public static boolean hasOrderPermission(Security security, String securityOperation, GenericValue userLogin, String orderId) {
-        GenericDelegator delegator = userLogin.getDelegator();
+        Delegator delegator = userLogin.getDelegator();
         try {
             // check for existance first
             GenericValue order = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap("orderId", orderId));
@@ -613,7 +613,7 @@ public final class CrmsfaSecurity {
     public static boolean hasNotePermission(Security security, String modulePermission, String securityOperation, GenericValue userLogin, GenericValue note, String partyId, String custRequestId) {
 
         try {
-            GenericDelegator delegator = userLogin.getDelegator();
+            Delegator delegator = userLogin.getDelegator();
             Infrastructure infrastructure = new Infrastructure(GenericDispatcher.getLocalDispatcher(null, delegator));
 
             if (note == null) {
@@ -682,7 +682,7 @@ public final class CrmsfaSecurity {
      */
     public static boolean hasNotePermission(Security security, String modulePermission, String securityOperation, GenericValue userLogin, String noteId, String partyId, String custRequestId) {
         try {
-            GenericDelegator delegator = userLogin.getDelegator();
+            Delegator delegator = userLogin.getDelegator();
             GenericValue note = delegator.findByPrimaryKeyCache("NoteData", UtilMisc.toMap("noteId", noteId));
 
             if (note == null) {

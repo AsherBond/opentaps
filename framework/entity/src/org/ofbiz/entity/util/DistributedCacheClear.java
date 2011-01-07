@@ -19,7 +19,7 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.entity.util;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
@@ -30,7 +30,7 @@ import org.ofbiz.entity.condition.EntityCondition;
  */
 public interface DistributedCacheClear {
 
-    public void setDelegator(GenericDelegator delegator, String userLoginId);
+    public void setDelegator(Delegator delegator, String userLoginId);
 
     public void distributedClearCacheLine(GenericValue value);
 

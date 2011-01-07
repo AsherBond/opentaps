@@ -23,7 +23,7 @@ under the License.
   <#assign giftCard = giftCard?if_exists>
   <#if paymentMethodTypeId?if_exists != "GIFT_CARD">
     <tr>
-      <td colspan="3"><hr/></td>
+      <td colspan="3"><hr /></td>
     </tr>
   </#if>
   <tr>
@@ -32,21 +32,21 @@ under the License.
     <td width="74%">&nbsp;</td>
   </tr>
   <tr>
-    <td width="26%" align="right" valign=middle><div class="tabletext">${uiLabelMap.AccountingGiftCardNumber}</div></td>
+    <td width="26%" align="right" valign="middle"><div class="tabletext">${uiLabelMap.AccountingGiftCardNumber}</div></td>
     <td width="5">&nbsp;</td>
     <td width="74%">
       <input type="text" class="inputBox" size="20" maxlength="60" name="giftCardNumber" value="${giftCard.cardNumber?if_exists}"/>
     *</td>
   </tr>
   <tr>
-    <td width="26%" align="right" valign=middle><div class="tabletext">${uiLabelMap.AccountingPINNumber}</div></td>
+    <td width="26%" align="right" valign="middle"><div class="tabletext">${uiLabelMap.AccountingPINNumber}</div></td>
     <td width="5">&nbsp;</td>
     <td width="74%">
       <input type="text" class="inputBox" size="10" maxlength="60" name="giftCardPin" value="${giftCard.pinNumber?if_exists}"/>
     *</td>
   </tr>
   <tr>
-    <td width="26%" align="right" valign=middle><div class="tabletext">${uiLabelMap.CommonDescription}</div></td>
+    <td width="26%" align="right" valign="middle"><div class="tabletext">${uiLabelMap.CommonDescription}</div></td>
     <td width="5">&nbsp;</td>
     <td width="74%">
       <input type="text" class="inputBox" size="30" maxlength="60" name="description" value="${giftCard.description?if_exists}"/>
@@ -54,7 +54,7 @@ under the License.
   </tr>
   <#if paymentMethodTypeId?if_exists != "GIFT_CARD">
     <tr>
-      <td width="26%" align="right" valign=middle><div class="tabletext">${uiLabelMap.AccountingAmountToUse}</div></td>
+      <td width="26%" align="right" valign="middle"><div class="tabletext">${uiLabelMap.AccountingAmountToUse}</div></td>
       <td width="5">&nbsp;</td>
       <td width="74%">
         <input type="text" class="inputBox" size="5" maxlength="10" name="giftCardAmount" value="${giftCard.pinNumber?if_exists}"/>

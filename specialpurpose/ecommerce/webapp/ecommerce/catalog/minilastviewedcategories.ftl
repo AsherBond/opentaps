@@ -23,18 +23,17 @@ under the License.
 <#if lastViewedCategories?has_content>
     <#if (lastViewedCategories?size > maxToShow)><#assign limit=maxToShow/><#else><#assign limit=(lastViewedCategories?size-1)/></#if>
     <div id="minilastviewedcategories" class="screenlet">
-        <div class="screenlet-header">
+
             <div class="boxlink">
                 <a href="<@ofbizUrl>clearLastViewed</@ofbizUrl>" class="lightbuttontextsmall">[${uiLabelMap.CommonClear}]</a>
             </div>
-            <div class="boxhead">${uiLabelMap.EcommerceLastCategories}</div>
-        </div>
+        <h3>${uiLabelMap.EcommerceLastCategories}</h3>
         <div class="screenlet-body">
-          <div class="browsecategorylist">
+          <ul class="browsecategorylist">
             <#list lastViewedCategories[0..limit] as categoryId>
                 <#assign category = delegator.findByPrimaryKeyCache("ProductCategory", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", categoryId))?if_exists>
                 <#if category?has_content>
-                    <div class="browsecategorytext">
+                    <li class="browsecategorytext">
                         <#if catContentWrappers?exists && catContentWrappers[category.productCategoryId]?exists && catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?exists>
                             <a href="<@ofbizUrl>category/~category_id=${categoryId}</@ofbizUrl>" class="browsecategorybutton">${catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")}</a>
                         <#elseif catContentWrappers?exists && catContentWrappers[category.productCategoryId]?exists && catContentWrappers[category.productCategoryId].get("DESCRIPTION")?exists>
@@ -42,10 +41,10 @@ under the License.
                         <#else>
                             <a href="<@ofbizUrl>category/~category_id=${categoryId}</@ofbizUrl>" class="browsecategorybutton">${category.description?if_exists}</a>
                         </#if>
-                    </div>
+                    </li>
                 </#if>
             </#list>
-          </div>
+          </ul>
         </div>
     </div>
 </#if>

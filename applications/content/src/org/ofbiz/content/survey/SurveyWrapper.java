@@ -41,7 +41,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -62,7 +62,7 @@ public class SurveyWrapper {
 
     public static final String module = SurveyWrapper.class.getName();
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected String responseId = null;
     protected String partyId = null;
     protected String surveyId = null;
@@ -73,7 +73,7 @@ public class SurveyWrapper {
 
     protected SurveyWrapper() {}
 
-    public SurveyWrapper(GenericDelegator delegator, String responseId, String partyId, String surveyId, Map passThru, Map defaultValues) {
+    public SurveyWrapper(Delegator delegator, String responseId, String partyId, String surveyId, Map passThru, Map defaultValues) {
         this.delegator = delegator;
         this.responseId = responseId;
         this.partyId = partyId;
@@ -83,11 +83,11 @@ public class SurveyWrapper {
         this.checkParameters();
     }
 
-     public SurveyWrapper(GenericDelegator delegator, String responseId, String partyId, String surveyId, Map passThru) {
+     public SurveyWrapper(Delegator delegator, String responseId, String partyId, String surveyId, Map passThru) {
          this(delegator, responseId, partyId, surveyId, passThru, null);
      }
 
-    public SurveyWrapper(GenericDelegator delegator, String surveyId) {
+    public SurveyWrapper(Delegator delegator, String surveyId) {
         this(delegator, null, null, surveyId, null);
     }
 
@@ -265,7 +265,7 @@ public class SurveyWrapper {
         }
 
         GenericValue survey = this.getSurvey();
-        if (!"Y".equals(survey.getString("allowMultiple")) || !"Y".equals(survey.getString("allowUpdate"))) {
+        if (!"Y".equals(survey.getString("allowMultiple")) && !"Y".equals(survey.getString("allowUpdate"))) {
             return false;
         }
         return true;
@@ -408,7 +408,8 @@ public class SurveyWrapper {
         try {
             beganTransaction = TransactionUtil.begin();
 
-            EntityListIterator eli = this.getEli(question);
+            int maxRows = startIndex + number;
+            EntityListIterator eli = this.getEli(question, maxRows);
             if (startIndex > 0 && number > 0) {
                 resp = eli.getPartialList(startIndex, number);
             } else {
@@ -546,7 +547,7 @@ public class SurveyWrapper {
             // index 1 = total yes
             // index 2 = total no
 
-            EntityListIterator eli = this.getEli(question);
+            EntityListIterator eli = this.getEli(question, -1);
 
             if (eli != null) {
                 GenericValue value;
@@ -593,7 +594,7 @@ public class SurveyWrapper {
         try {
             beganTransaction = TransactionUtil.begin();
 
-            EntityListIterator eli = this.getEli(question);
+            EntityListIterator eli = this.getEli(question, -1);
 
             if (eli != null) {
                 GenericValue value;
@@ -682,7 +683,7 @@ public class SurveyWrapper {
         try {
             beganTransaction = TransactionUtil.begin();
 
-            EntityListIterator eli = this.getEli(question);
+            EntityListIterator eli = this.getEli(question, -1);
             if (eli != null) {
                 GenericValue value;
                 while (((value = (GenericValue) eli.next()) != null)) {
@@ -730,12 +731,15 @@ public class SurveyWrapper {
                 EntityCondition.makeCondition("surveyId", EntityOperator.EQUALS, surveyId)), EntityOperator.AND);
     }
 
-    private EntityListIterator getEli(GenericValue question) throws GenericEntityException {
+    private EntityListIterator getEli(GenericValue question, int maxRows) throws GenericEntityException {
         EntityFindOptions efo = new EntityFindOptions();
         efo.setResultSetType(EntityFindOptions.TYPE_SCROLL_INSENSITIVE);
         efo.setResultSetConcurrency(EntityFindOptions.CONCUR_READ_ONLY);
         efo.setSpecifyTypeAndConcur(true);
         efo.setDistinct(false);
+        if (maxRows > 0) {
+            efo.setMaxRows(maxRows);
+        }
 
         EntityListIterator eli = null;
         eli = delegator.find("SurveyResponseAndAnswer", makeEliCondition(question), null, null, null, efo);

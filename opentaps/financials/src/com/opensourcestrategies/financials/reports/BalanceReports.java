@@ -42,7 +42,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilObject;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -88,7 +88,7 @@ public final class BalanceReports {
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         // get parameters
         String organizationPartyId = (String) context.get("organizationPartyId");
         Timestamp fromDate = (Timestamp) context.get("fromDate");
@@ -291,11 +291,11 @@ public final class BalanceReports {
      * @param glFiscalTypeId the fiscal type of the incomeStatement results being added
      * @param accountingTags the <code>Map</code> of accounting tags in the report
      * @param includeBudgetIncome if the Budget amount calculation should also include income
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @throws GenericEntityException if error occur
      */
     @SuppressWarnings("unchecked")
-    private static void addReportLines(List<Map<String, Object>> reportData, Map<String, Object> incomeStatement, String glFiscalTypeId, Map<Integer, String> accountingTags, boolean includeBudgetIncome, GenericDelegator delegator) throws GenericEntityException {
+    private static void addReportLines(List<Map<String, Object>> reportData, Map<String, Object> incomeStatement, String glFiscalTypeId, Map<Integer, String> accountingTags, boolean includeBudgetIncome, Delegator delegator) throws GenericEntityException {
         List<String> glAccountIncomeStatementTypes = new ArrayList(FinancialServices.INCOME_STATEMENT_TYPES);
         glAccountIncomeStatementTypes.add(FinancialServices.UNCLASSIFIED_TYPE);
         Map glAccountSums = (Map) incomeStatement.get("glAccountSums");

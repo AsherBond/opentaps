@@ -39,11 +39,13 @@ under the License.
               <#list orderNotes as note>
                 <tr>
                   <td valign="top" width="35%">
-                    <div>&nbsp;<span class="label">${uiLabelMap.CommonBy}</span>&nbsp;${Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, note.noteParty, true)}</div>
+                    <#if note.noteParty?has_content>
+                      <div>&nbsp;<span class="label">${uiLabelMap.CommonBy}</span>&nbsp;${Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, note.noteParty, true)}</div>
+                    </#if>
                     <div>&nbsp;<span class="label">${uiLabelMap.CommonAt}</span>&nbsp;${note.noteDateTime?string?if_exists}</div>
                   </td>
                   <td valign="top" width="50%">
-                    ${note.noteInfo?if_exists}
+                    ${note.noteInfo?replace("\n", "<br/>")}
                   </td>
                   <td align="right" valign="top" width="15%">
                     <#if note.internalNote?if_exists == "N">
@@ -67,7 +69,7 @@ under the License.
                   </td>
                 </tr>
                 <#if note_has_next>
-                  <tr><td colspan="3"><hr></td></tr>
+                  <tr><td colspan="3"><hr/></td></tr>
                 </#if>
               </#list>
             </table>

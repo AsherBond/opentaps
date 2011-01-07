@@ -20,7 +20,6 @@
 package org.ofbiz.base.util.collections;
 
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +47,7 @@ public class MapComparator implements Comparator<Map<Object, Object>> {
     /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object obj) {
         return obj.equals(this);
     }

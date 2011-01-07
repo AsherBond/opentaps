@@ -19,7 +19,6 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.testtools;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,7 +31,6 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.minilang.MiniLangException;
 import org.ofbiz.minilang.SimpleMethod;
-import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.testtools.OFBizTestCase;
 import org.w3c.dom.Element;
@@ -48,21 +46,27 @@ public class SimpleMethodTest extends OFBizTestCase {
      * @param modelTestSuite
      */
     public SimpleMethodTest(String caseName, Element mainElement) {
-        super(caseName);
-        this.methodLocation = mainElement.getAttribute("location");
-        this.methodName = mainElement.getAttribute("name");
+        this(caseName, mainElement.getAttribute("location"), mainElement.getAttribute("name"));
     }
 
+    public SimpleMethodTest(String caseName, String methodLocation, String methodName) {
+        super(caseName);
+        this.methodLocation = methodLocation;
+        this.methodName = methodName;
+    }
+
+    @Override
     public int countTestCases() {
         return 1;
     }
 
+    @Override
     public void run(TestResult result) {
         result.startTest(this);
 
         try {
 
-            Map serviceResult = SimpleMethod.runSimpleService(methodLocation, methodName, dispatcher.getDispatchContext(),
+            Map<String, Object> serviceResult = SimpleMethod.runSimpleService(methodLocation, methodName, dispatcher.getDispatchContext(),
                     UtilMisc.toMap("test", this, "testResult", result, "locale", Locale.getDefault()));
 
             // do something with the errorMessage

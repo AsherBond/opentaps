@@ -19,12 +19,14 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.base.config;
 
-import java.util.*;
-import org.w3c.dom.*;
+import java.util.Map;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import javolution.util.FastMap;
 
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilXml;
 
 /**
  * JNDIConfigUtil
@@ -34,9 +36,9 @@ public class JNDIConfigUtil {
 
     public static final String module = JNDIConfigUtil.class.getName();
     public static final String JNDI_CONFIG_XML_FILENAME = "jndiservers.xml";
-    protected static Map<String, JndiServerInfo> jndiServerInfos = FastMap.newInstance();
+    private static final FastMap<String, JndiServerInfo> jndiServerInfos = FastMap.newInstance();
 
-    protected static Element getXmlRootElement() throws GenericConfigException {
+    private static Element getXmlRootElement() throws GenericConfigException {
         try {
             return ResourceLoader.getXmlRootElement(JNDIConfigUtil.JNDI_CONFIG_XML_FILENAME);
         } catch (GenericConfigException e) {
@@ -44,7 +46,7 @@ public class JNDIConfigUtil {
         }
     }
 
-    protected static Document getXmlDocument() throws GenericConfigException {
+    private static Document getXmlDocument() throws GenericConfigException {
         try {
             return ResourceLoader.getXmlDocument(JNDIConfigUtil.JNDI_CONFIG_XML_FILENAME);
         } catch (GenericConfigException e) {
@@ -62,13 +64,13 @@ public class JNDIConfigUtil {
     public static void initialize(Element rootElement) throws GenericConfigException {
         // jndi-server - jndiServerInfos
         for (Element curElement: UtilXml.childElementList(rootElement, "jndi-server")) {
-            JNDIConfigUtil.JndiServerInfo jndiServerInfo = new JNDIConfigUtil.JndiServerInfo(curElement);
+            JndiServerInfo jndiServerInfo = new JndiServerInfo(curElement);
 
-            JNDIConfigUtil.jndiServerInfos.put(jndiServerInfo.name, jndiServerInfo);
+            jndiServerInfos.putIfAbsent(jndiServerInfo.name, jndiServerInfo);
         }
     }
 
-    public static JNDIConfigUtil.JndiServerInfo getJndiServerInfo(String name) {
+    public static JndiServerInfo getJndiServerInfo(String name) {
         return jndiServerInfos.get(name);
     }
 

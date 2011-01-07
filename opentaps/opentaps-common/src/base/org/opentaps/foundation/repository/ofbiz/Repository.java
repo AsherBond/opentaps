@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -58,7 +58,7 @@ import org.opentaps.foundation.util.FoundationUtils;
 public class Repository implements RepositoryInterface  {
 
     private Infrastructure infrastructure;
-    private GenericDelegator delegator;
+    private Delegator delegator;
     private LocalDispatcher dispatcher;
     private Security security;
     private User user; // a user associated with an instance of the infrastructure
@@ -79,7 +79,7 @@ public class Repository implements RepositoryInterface  {
      * Use this for Repositories which will only access the database via the delegator.
      * @param delegator the delegator
      */
-    public Repository(GenericDelegator delegator) {
+    public Repository(Delegator delegator) {
         setDelegator(delegator);
     }
 
@@ -160,7 +160,7 @@ public class Repository implements RepositoryInterface  {
      * Sets the delegator.
      * @param delegator the delegator
      */
-    public void setDelegator(GenericDelegator delegator) {
+    public void setDelegator(Delegator delegator) {
         this.delegator = delegator;
     }
 
@@ -170,7 +170,7 @@ public class Repository implements RepositoryInterface  {
      * @deprecated Repositories should avoid using the delegator and use the find methods instead
      */
     @Deprecated
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return delegator;
     }
 
@@ -278,7 +278,7 @@ public class Repository implements RepositoryInterface  {
             }
 
             ModelEntity model = repo.getInfrastructure().getDelegator().getModelReader().getModelEntity(entity.getBaseEntityName());
-            return GenericValue.create(model, entity.toMap());
+            return GenericValue.create(repo.getInfrastructure().getDelegator(), model, entity.toMap());
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);
         }
@@ -291,10 +291,10 @@ public class Repository implements RepositoryInterface  {
      * @return the converted <code>GenericValue</code>
      * @throws RepositoryException if an error occurs
      */
-    public static GenericValue genericValueFromEntity(GenericDelegator delegator, EntityInterface entity) throws RepositoryException {
+    public static GenericValue genericValueFromEntity(Delegator delegator, EntityInterface entity) throws RepositoryException {
         try {
             ModelEntity model = delegator.getModelReader().getModelEntity(entity.getBaseEntityName());
-            return GenericValue.create(model, entity.toMap());
+            return GenericValue.create(delegator, model, entity.toMap());
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);
         }
@@ -307,7 +307,7 @@ public class Repository implements RepositoryInterface  {
      * @return the list of converted <code>GenericValue</code>
      * @throws RepositoryException if an error occurs
      */
-    public static List<GenericValue> genericValueFromEntity(GenericDelegator delegator, Collection<? extends EntityInterface> entities) throws RepositoryException {
+    public static List<GenericValue> genericValueFromEntity(Delegator delegator, Collection<? extends EntityInterface> entities) throws RepositoryException {
         List<GenericValue> results = new ArrayList<GenericValue>();
         if (entities.isEmpty()) {
             return results;
@@ -328,7 +328,7 @@ public class Repository implements RepositoryInterface  {
      * @throws RepositoryException if an error occurs
      */
     @Deprecated
-    public static List<GenericValue> genericValueFromEntity(GenericDelegator delegator, String entityName, Collection<? extends EntityInterface> entities) throws RepositoryException {
+    public static List<GenericValue> genericValueFromEntity(Delegator delegator, String entityName, Collection<? extends EntityInterface> entities) throws RepositoryException {
         List<GenericValue> results = new ArrayList<GenericValue>();
         if (entities.isEmpty()) {
             return results;

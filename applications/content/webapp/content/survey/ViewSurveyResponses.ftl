@@ -31,11 +31,11 @@ under the License.
           <#if question.surveyQuestionTypeId == "SEPERATOR_TEXT">
             <td colspan="5" class="label">${question.question?if_exists}</td>
           <#elseif question.surveyQuestionTypeId == "SEPERATOR_LINE">
-            <td colspan="5"><hr></td>
+            <td colspan="5"><hr/></td>
           <#else>
 
             <#-- standard questions -->
-            <td align='right' nowrap class="label">
+            <td align='right' nowrap="nowrap" class="label">
               <#assign answerString = "${uiLabelMap.ContentAnswers}">
               <#if (results._total?default(0) == 1)>
                 <#assign answerString = "${uiLabelMap.ContentAnswer}">

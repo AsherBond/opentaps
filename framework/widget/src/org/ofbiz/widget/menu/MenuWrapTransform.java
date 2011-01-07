@@ -34,7 +34,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.webapp.ftl.LoopWriter;
 import org.ofbiz.widget.WidgetContentWorker;
@@ -72,12 +72,13 @@ public class MenuWrapTransform implements TemplateTransformModel {
         return FreeMarkerWorker.getArg(args, key, ctx);
     }
 
+    @SuppressWarnings("unchecked")
     public Writer getWriter(final Writer out, Map args) {
         Map<String, Object> checkedArgs = UtilGenerics.checkMap(args);
-        final StringBuffer buf = new StringBuffer();
+        final StringBuilder buf = new StringBuilder();
         final Environment env = Environment.getCurrentEnvironment();
         final Map<String, Object> templateCtx = UtilGenerics.checkMap(FreeMarkerWorker.getWrappedObject("context", env));
-        final GenericDelegator delegator = (GenericDelegator) FreeMarkerWorker.getWrappedObject("delegator", env);
+        final Delegator delegator = (Delegator) FreeMarkerWorker.getWrappedObject("delegator", env);
         final HttpServletRequest request = (HttpServletRequest) FreeMarkerWorker.getWrappedObject("request", env);
         final HttpServletResponse response = (HttpServletResponse) FreeMarkerWorker.getWrappedObject("response", env);
         final HttpSession session = (HttpSession) FreeMarkerWorker.getWrappedObject("session", env);
@@ -141,6 +142,7 @@ public class MenuWrapTransform implements TemplateTransformModel {
 
         return new LoopWriter(out) {
 
+            @Override
             public int onStart() throws TemplateModelException, IOException {
                 String renderOnStart = (String)templateCtx.get("renderOnStart");
                 if (renderOnStart != null && renderOnStart.equalsIgnoreCase("true")) {
@@ -149,14 +151,17 @@ public class MenuWrapTransform implements TemplateTransformModel {
                 return TransformControl.EVALUATE_BODY;
             }
 
+            @Override
             public void write(char cbuf[], int off, int len) {
                 buf.append(cbuf, off, len);
             }
 
+            @Override
             public void flush() throws IOException {
                 out.flush();
             }
 
+            @Override
             public void close() throws IOException {
                 FreeMarkerWorker.reloadValues(templateCtx, savedValues, env);
                 String wrappedContent = buf.toString();

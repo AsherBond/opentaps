@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javolution.lang.Reusable;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
@@ -46,10 +45,11 @@ import org.ofbiz.entity.model.ModelViewEntity.ModelAlias;
  * These can be used in various combinations using the EntityConditionList and EntityExpr objects.
  *
  */
+@SuppressWarnings("serial")
 public abstract class EntityConditionBase implements Serializable {
 
-    public static final List emptyList = Collections.unmodifiableList(FastList.newInstance());
-    public static final Map _emptyMap = Collections.unmodifiableMap(FastMap.newInstance());
+    public static final List<?> emptyList = Collections.unmodifiableList(FastList.newInstance());
+    public static final Map<?,?> _emptyMap = Collections.unmodifiableMap(FastMap.newInstance());
     public static final Map<String, String> emptyAliases = Collections.unmodifiableMap(FastMap.<String, String>newInstance());
 
     protected ModelField getField(ModelEntity modelEntity, String fieldName) {
@@ -102,10 +102,12 @@ public abstract class EntityConditionBase implements Serializable {
         SqlJdbcUtil.addValue(buffer, params == null ? null : field, value, params);
     }
 
+    @Override
     public boolean equals(Object obj) {
         throw new UnsupportedOperationException("equals:" + getClass().getName());
     }
 
+    @Override
     public int hashCode() {
         throw new UnsupportedOperationException("hashCode: " + getClass().getName());
     }

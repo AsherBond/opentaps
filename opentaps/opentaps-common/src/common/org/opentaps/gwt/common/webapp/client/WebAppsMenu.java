@@ -28,6 +28,7 @@ import com.gwtext.client.data.RecordDef;
 import com.gwtext.client.data.Store;
 import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.data.event.StoreListenerAdapter;
+import com.gwtext.client.widgets.Panel;
 import org.opentaps.gwt.common.client.BaseEntry;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.config.OpentapsConfig;
@@ -82,6 +83,14 @@ public class WebAppsMenu extends BaseEntry {
 
     protected void onStoreLoad(Store store, Record[] records) {
 
+        // container
+        // Note: we need to use a GWT-Ext widget somewhere
+        //  else the compiler will remove what it detects as dead-code (not used in the module)
+        //  which removes the widgets initialization methods. But those are static and thus other modules
+        //  may call those trimmed methods instead of the full ones ...
+        Panel container = new Panel();
+        container.setBorder(false);
+
         // Top level menu
         MenuBar menuTop = new MenuBar();
         menuTop.addStyleName("topMenu");
@@ -126,7 +135,8 @@ public class WebAppsMenu extends BaseEntry {
             menuTop.addItem("<span class=\"moreMenu\">more</span>", true, menuMore);
         }
         // add menu to the root panel.
-        RootPanel.get(WEBAPPS_MENU_ID).add(menuTop);
+        container.add(menuTop);
+        RootPanel.get(WEBAPPS_MENU_ID).add(container);
     }
 
     protected void onStoreLoadError(Throwable error) {

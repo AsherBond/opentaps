@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * TransitionNotAllowed Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class TransitionNotAllowed extends WfException {
 
     public TransitionNotAllowed() {}

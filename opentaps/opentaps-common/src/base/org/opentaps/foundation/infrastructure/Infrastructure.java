@@ -34,7 +34,8 @@ import org.hibernate.metadata.CollectionMetadata;
 import org.hibernate.persister.entity.EntityPersister;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.config.DatasourceInfo;
@@ -62,7 +63,7 @@ public class Infrastructure {
     private static final String MODULE = Infrastructure.class.getName();
 
     private LocalDispatcher dispatcher = null;
-    private GenericDelegator delegator = null;
+    private Delegator delegator = null;
     private Security security = null;
     private GenericValue systemUserLogin = null;  // Sometimes, the system user must be used by the Factory or Repository that use the ofbiz Infrastructure
     private User systemUser = null;
@@ -119,7 +120,7 @@ public class Infrastructure {
         if (sessionFactory == null) {
             Debug.logVerbose("building hibernate SessionFactory ...", MODULE);
             AnnotationConfiguration annotationConfiguration = new AnnotationConfiguration();
-            GenericDelegator delegator = GenericDelegator.getGenericDelegator(delegatorName);
+            Delegator delegator = DelegatorFactory.getDelegator(delegatorName);
             //for support eccas, construct persist event listener arrays
             PersistEventListener[] persistEventListeners = {new EcaPersistEventListener(delegator)};
             //for support eccas, construct load event listener arrays
@@ -208,10 +209,10 @@ public class Infrastructure {
 
     /**
      * Constructor.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @exception IllegalArgumentException if the given dispatcher is <code>null</code>
      */
-    public Infrastructure(GenericDelegator delegator) throws IllegalArgumentException {
+    public Infrastructure(Delegator delegator) throws IllegalArgumentException {
         if (delegator == null) {
             throw new IllegalArgumentException("Cannot instantiate Infrastructure from null delegator");
         }
@@ -235,10 +236,10 @@ public class Infrastructure {
     }
 
     /**
-     * Gets the <code>GenericDelegator</code> object.
-     * @return a <code>GenericDelegator</code> value
+     * Gets the <code>Delegator</code> object.
+     * @return a <code>Delegator</code> value
      */
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return this.delegator;
     }
 

@@ -36,12 +36,10 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.product.ProductWorker;
@@ -85,7 +83,7 @@ public class PriceServices {
         // utilTimer.timerString("Starting price calc", module);
         // utilTimer.setLog(false);
 
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Map<String, Object> result = FastMap.newInstance();
         Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
@@ -689,19 +687,19 @@ public class PriceServices {
                 BigDecimal taxPercentage = (BigDecimal) calcTaxForDisplayResult.get("taxPercentage");
                 BigDecimal taxMultiplier = ONE_BASE.add(taxPercentage.divide(PERCENT_SCALE, taxCalcScale));
                 if (result.get("listPrice") != null) {
-                    result.put("listPrice", ((BigDecimal) result.get("listPrice")).multiply(taxMultiplier).setScale( taxFinalScale, taxRounding ));
+                    result.put("listPrice", ((BigDecimal) result.get("listPrice")).multiply(taxMultiplier).setScale(taxFinalScale, taxRounding));
                 }
                 if (result.get("defaultPrice") != null) {
-                    result.put("defaultPrice", ((BigDecimal) result.get("defaultPrice")).multiply(taxMultiplier).setScale( taxFinalScale, taxRounding ));
+                    result.put("defaultPrice", ((BigDecimal) result.get("defaultPrice")).multiply(taxMultiplier).setScale(taxFinalScale, taxRounding));
                 }
                 if (result.get("averageCost") != null) {
-                    result.put("averageCost", ((BigDecimal) result.get("averageCost")).multiply(taxMultiplier).setScale( taxFinalScale, taxRounding ));
+                    result.put("averageCost", ((BigDecimal) result.get("averageCost")).multiply(taxMultiplier).setScale(taxFinalScale, taxRounding));
                 }
                 if (result.get("promoPrice") != null) {
-                    result.put("promoPrice", ((BigDecimal) result.get("promoPrice")).multiply(taxMultiplier).setScale( taxFinalScale, taxRounding ));
+                    result.put("promoPrice", ((BigDecimal) result.get("promoPrice")).multiply(taxMultiplier).setScale(taxFinalScale, taxRounding));
                 }
                 if (result.get("competitivePrice") != null) {
-                    result.put("competitivePrice", ((BigDecimal) result.get("competitivePrice")).multiply(taxMultiplier).setScale( taxFinalScale, taxRounding ));
+                    result.put("competitivePrice", ((BigDecimal) result.get("competitivePrice")).multiply(taxMultiplier).setScale(taxFinalScale, taxRounding));
                 }
             } catch (GenericServiceException e) {
                 String errMsg = "Error calculating VAT tax (with calcTaxForDisplay service): " + e.toString();
@@ -713,7 +711,7 @@ public class PriceServices {
         return null;
     }
 
-    public static List<GenericValue> makeProducePriceRuleList(GenericDelegator delegator, boolean optimizeForLargeRuleSet, String productId, String virtualProductId, String prodCatalogId, String productStoreGroupId, String webSiteId, String partyId, String currencyUomId) throws GenericEntityException {
+    public static List<GenericValue> makeProducePriceRuleList(Delegator delegator, boolean optimizeForLargeRuleSet, String productId, String virtualProductId, String prodCatalogId, String productStoreGroupId, String webSiteId, String partyId, String currencyUomId) throws GenericEntityException {
         List<GenericValue> productPriceRules = null;
 
         // At this point we have two options: optimize for large ruleset, or optimize for small ruleset
@@ -865,7 +863,7 @@ public class PriceServices {
     public static Map<String, Object> calcPriceResultFromRules(List<GenericValue> productPriceRules, BigDecimal listPrice, BigDecimal defaultPrice, BigDecimal promoPrice,
         BigDecimal wholesalePrice, GenericValue maximumPriceValue, GenericValue minimumPriceValue, boolean validPriceFound,
         GenericValue averageCostValue, String productId, String virtualProductId, String prodCatalogId, String productStoreGroupId,
-        String webSiteId, String partyId, BigDecimal quantity, String currencyUomId, GenericDelegator delegator, Timestamp nowTimestamp) throws GenericEntityException {
+        String webSiteId, String partyId, BigDecimal quantity, String currencyUomId, Delegator delegator, Timestamp nowTimestamp) throws GenericEntityException {
 
         Map<String, Object> calcResults = FastMap.newInstance();
 
@@ -1110,7 +1108,7 @@ public class PriceServices {
 
     public static boolean checkPriceCondition(GenericValue productPriceCond, String productId, String virtualProductId, String prodCatalogId,
             String productStoreGroupId, String webSiteId, String partyId, BigDecimal quantity, BigDecimal listPrice,
-            String currencyUomId, GenericDelegator delegator, Timestamp nowTimestamp) throws GenericEntityException {
+            String currencyUomId, Delegator delegator, Timestamp nowTimestamp) throws GenericEntityException {
         if (Debug.verboseOn()) Debug.logVerbose("Checking price condition: " + productPriceCond, module);
         int compare = 0;
 
@@ -1199,7 +1197,9 @@ public class PriceServices {
                 if (partyId.equals(groupPartyId)) {
                     compare = 0;
                 } else {
-                    // look for PartyRelationship with partyRelationshipTypeId=GROUP_ROLLUP, the partyIdTo is the group member, so the partyIdFrom is the groupPartyId
+                    // look for PartyRelationship with
+                    // partyRelationshipTypeId=GROUP_ROLLUP, the partyIdTo is
+                    // the group member, so the partyIdFrom is the groupPartyId
                     List<GenericValue> partyRelationshipList = delegator.findByAndCache("PartyRelationship", UtilMisc.toMap("partyIdFrom", groupPartyId, "partyIdTo", partyId, "partyRelationshipTypeId", "GROUP_ROLLUP"));
                     // and from/thru date within range
                     partyRelationshipList = EntityUtil.filterByDate(partyRelationshipList, nowTimestamp, null, null, true);
@@ -1207,15 +1207,7 @@ public class PriceServices {
                     if (UtilValidate.isNotEmpty(partyRelationshipList)) {
                         compare = 0;
                     } else {
-                        // before setting 1 try one more query: look for a 2 hop relationship
-                        List<GenericValue> partyRelationshipTwoHopList = delegator.findByAndCache("PartyRelationshipToFrom", UtilMisc.toMap("onePartyIdFrom", groupPartyId, "twoPartyIdTo", partyId, "onePartyRelationshipTypeId", "GROUP_ROLLUP", "twoPartyRelationshipTypeId", "GROUP_ROLLUP"));
-                        partyRelationshipTwoHopList = EntityUtil.filterByDate(partyRelationshipTwoHopList, nowTimestamp, "oneFromDate", "oneThruDate", true);
-                        partyRelationshipTwoHopList = EntityUtil.filterByDate(partyRelationshipTwoHopList, nowTimestamp, "twoFromDate", "twoThruDate", true);
-                        if (UtilValidate.isNotEmpty(partyRelationshipTwoHopList)) {
-                            compare = 0;
-                        } else {
-                            compare = 1;
-                        }
+                        compare = checkConditionPartyHierarchy(delegator, nowTimestamp, groupPartyId, partyId);
                     }
                 }
             }
@@ -1282,11 +1274,27 @@ public class PriceServices {
         return false;
     }
 
+    private static int checkConditionPartyHierarchy(Delegator delegator, Timestamp nowTimestamp, String groupPartyId, String partyId) throws GenericEntityException{
+        List<GenericValue> partyRelationshipList = delegator.findByAndCache("PartyRelationship", UtilMisc.toMap("partyIdTo", partyId, "partyRelationshipTypeId", "GROUP_ROLLUP"));
+        partyRelationshipList = EntityUtil.filterByDate(partyRelationshipList, nowTimestamp, null, null, true);
+        for (GenericValue genericValue : partyRelationshipList) {
+            String partyIdFrom = (String)genericValue.get("partyIdFrom");
+            if (partyIdFrom.equals(groupPartyId)) {
+                return 0;
+            }
+            if (0 == checkConditionPartyHierarchy(delegator, nowTimestamp, groupPartyId, partyIdFrom)) {
+                return 0;
+            }
+        }
+
+        return 1;
+    }
+
     /**
      * Calculates the purchase price of a product
      */
     public static Map<String, Object> calculatePurchasePrice(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Map<String, Object> result = FastMap.newInstance();
 
@@ -1356,7 +1364,7 @@ public class PriceServices {
                         "productPricePurposeId", "PURCHASE"), UtilMisc.toList("-fromDate"));
 
                 // if no prices are found; find the prices of the parent product
-                if (prices == null || prices.size() == 0) {
+                if (UtilValidate.isEmpty(prices)) {
                     GenericValue parentProduct = ProductWorker.getParentProduct(productId, delegator);
                     if (parentProduct != null) {
                         String parentProductId = parentProduct.getString("productId");
@@ -1374,10 +1382,10 @@ public class PriceServices {
 
             // first check for the AVERAGE_COST price type
             List<GenericValue> pricesToUse = EntityUtil.filterByAnd(prices, UtilMisc.toMap("productPriceTypeId", "AVERAGE_COST"));
-            if (pricesToUse == null || pricesToUse.size() == 0) {
+            if (UtilValidate.isEmpty(pricesToUse)) {
                 // next go with default price
                 pricesToUse = EntityUtil.filterByAnd(prices, UtilMisc.toMap("productPriceTypeId", "DEFAULT_PRICE"));
-                if (pricesToUse == null || pricesToUse.size() == 0) {
+                if (UtilValidate.isEmpty(pricesToUse)) {
                     // finally use list price
                     pricesToUse = EntityUtil.filterByAnd(prices, UtilMisc.toMap("productPriceTypeId", "LIST_PRICE"));
                 }

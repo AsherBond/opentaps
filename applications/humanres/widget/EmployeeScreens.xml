@@ -36,8 +36,8 @@ under the License.
                                 <set field="tabButtonItem" value="Employee"/>
                             </actions>
                             <widgets>
-                                <container>
-                                    <link target="NewEmployee" text="${uiLabelMap.HumanResNewEmployee}" style="buttontext"/>
+                                <container style="button-bar">
+                                    <link target="NewEmployee" text="${uiLabelMap.HumanResNewEmployee}" style="buttontext create"/>
                                 </container>
                                 <section>
                                     <widgets>
@@ -195,19 +195,13 @@ under the License.
     <screen name="EditEmployeeTrainings">
         <section>
             <actions>
-                <set field="titleProperty" value="PageTitleViewPersonTraining"/>
                 <set field="tabButtonItem" value="EditEmployeeTrainings"/>
-                <set field="partyId" from-field="parameters.partyId"/>
-                <set field="trainingClassTypeId" from-field="parameters.trainingClassTypeId"/>
-                <set field="personTrainingsCtx.partyId" from-field="parameters.partyId"/>
-                <set field="parameters.insideEmployee" value="true"/>
             </actions>
             <widgets>
                 <decorator-screen name="EmployeeDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <include-form name="ListEmployeeTrainings" location="component://humanres/widget/forms/EmployeeForms.xml"/>
-                        <screenlet id="AddPersonTrainingPanel" title="${uiLabelMap.HumanResAddPersonTraining}" collapsible="true">
-                            <include-form name="AddEmployeeTraining" location="component://humanres/widget/forms/EmployeeForms.xml"/>
+                        <screenlet id="TrainingStatus" title="${uiLabelMap.HumanResTrainingStatus}" collapsible="true">
+                            <include-form name="ListTrainingStatus" location="component://humanres/widget/forms/PersonTrainingForms.xml"/>
                         </screenlet>
                     </decorator-section>
                 </decorator-screen>
@@ -281,8 +275,7 @@ under the License.
                 <set field="titleProperty" value="HumanResEditEmplLeave"/>
                 <set field="tabButtonItem" value="EditEmployeeLeaves"/>
                 <set field="partyId" from-field="parameters.partyId"/>
-                <set field="emplLeaveCtx.partyId" from-field="parameters.partyId"/>
-                <set field="parameters.insideEmployee" value="true"/>
+                <entity-one entity-name="EmplLeave" value-field="leaveApp"/>
             </actions>
             <widgets>
                 <decorator-screen name="EmployeeDecorator" location="${parameters.mainDecoratorLocation}">

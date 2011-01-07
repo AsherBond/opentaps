@@ -249,7 +249,7 @@ To use these macros in your page, first put this at the top:
   </div>
 </#macro>
 
-<#macro accountingTagsInputRow tagTypes activeOnly=true>
+<#macro accountingTagsInputRow tagTypes activeOnly=false>
   <#list tagTypes as tag>
     <#if activeOnly>
       <#assign tagValues = tag.activeTagValues/>
@@ -262,7 +262,7 @@ To use these macros in your page, first put this at the top:
   </#list>
 </#macro>
 
-<#macro accountingTagsInputs tagTypes activeOnly=true>
+<#macro accountingTagsInputs tagTypes activeOnly=false>
   <#list tagTypes as tag>
     <div style="margin-left: 30px; margin-top: 5px;">
       <span class="tableheadtext">${tag.description}</span>

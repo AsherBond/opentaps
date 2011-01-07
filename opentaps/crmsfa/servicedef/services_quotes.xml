@@ -21,7 +21,7 @@
     <vendor>Open Source Strategies, Inc.</vendor>
 
     <service name="createQuote" default-entity-name="Quote" engine="simple"
-                location="org/ofbiz/order/quote/QuoteServices.xml" invoke="createQuote" auth="true">
+                location="component://order/script/org/ofbiz/order/quote/QuoteServices.xml" invoke="createQuote" auth="true">
         <description>Creates an Quote</description>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <auto-attributes include="pk" mode="OUT" optional="true"/>

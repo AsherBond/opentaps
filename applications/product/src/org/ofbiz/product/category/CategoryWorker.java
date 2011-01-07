@@ -26,7 +26,6 @@ import java.util.Map;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.PageContext;
 
 import javolution.util.FastList;
 
@@ -37,7 +36,7 @@ import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -51,11 +50,6 @@ import org.ofbiz.product.product.ProductWorker;
 public class CategoryWorker {
 
     public static final String module = CategoryWorker.class.getName();
-
-    /** @deprecated */
-    public static String getCatalogTopCategory(PageContext pageContext, String defaultTopCategory) {
-        return getCatalogTopCategory(pageContext.getRequest(), defaultTopCategory);
-    }
 
     public static String getCatalogTopCategory(ServletRequest request, String defaultTopCategory) {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
@@ -84,35 +78,23 @@ public class CategoryWorker {
         return topCatName;
     }
 
-    /** @deprecated */
-    public static void getCategoriesWithNoParent(PageContext pageContext, String attributeName) {
-        getCategoriesWithNoParent(pageContext.getRequest(), attributeName);
-    }
-
     public static void getCategoriesWithNoParent(ServletRequest request, String attributeName) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Collection<GenericValue> results = FastList.newInstance();
 
         try {
             Collection<GenericValue> allCategories = delegator.findList("ProductCategory", null, null, null, null, false);
 
-            if (allCategories == null)
-                return;
             for (GenericValue curCat: allCategories) {
                 Collection<GenericValue> parentCats = curCat.getRelatedCache("CurrentProductCategoryRollup");
 
-                if (parentCats == null || parentCats.size() <= 0)
+                if (parentCats.isEmpty())
                     results.add(curCat);
             }
         } catch (GenericEntityException e) {
             Debug.logWarning(e, module);
         }
         request.setAttribute(attributeName, results);
-    }
-
-    /** @deprecated */
-    public static void getRelatedCategories(PageContext pageContext, String attributeName, boolean limitView) {
-            getRelatedCategories(pageContext.getRequest(), attributeName, limitView);
     }
 
     public static void getRelatedCategories(ServletRequest request, String attributeName, boolean limitView) {
@@ -128,11 +110,6 @@ public class CategoryWorker {
         getRelatedCategories(request, attributeName, requestId, limitView);
     }
 
-    /** @deprecated */
-    public static void getRelatedCategories(PageContext pageContext, String attributeName, String parentId, boolean limitView) {
-        getRelatedCategories(pageContext.getRequest(), attributeName, parentId, limitView);
-    }
-
     public static void getRelatedCategories(ServletRequest request, String attributeName, String parentId, boolean limitView) {
         getRelatedCategories(request, attributeName, parentId, limitView, false);
     }
@@ -140,13 +117,8 @@ public class CategoryWorker {
     public static void getRelatedCategories(ServletRequest request, String attributeName, String parentId, boolean limitView, boolean excludeEmpty) {
         List<GenericValue> categories = getRelatedCategoriesRet(request, attributeName, parentId, limitView, excludeEmpty);
 
-        if (categories.size() > 0)
+        if (!categories.isEmpty())
             request.setAttribute(attributeName, categories);
-    }
-
-    /** @deprecated */
-    public static List<GenericValue> getRelatedCategoriesRet(PageContext pageContext, String attributeName, String parentId, boolean limitView) {
-        return getRelatedCategoriesRet(pageContext.getRequest(), attributeName, parentId, limitView);
     }
 
     public static List<GenericValue> getRelatedCategoriesRet(ServletRequest request, String attributeName, String parentId, boolean limitView) {
@@ -162,7 +134,7 @@ public class CategoryWorker {
 
         if (Debug.verboseOn()) Debug.logVerbose("[CategoryWorker.getRelatedCategories] ParentID: " + parentId, module);
 
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         List<GenericValue> rollups = null;
 
         try {
@@ -174,9 +146,8 @@ public class CategoryWorker {
             }
         } catch (GenericEntityException e) {
             Debug.logWarning(e.getMessage(), module);
-            rollups = null;
         }
-        if (UtilValidate.isNotEmpty(rollups)) {
+        if (rollups != null) {
             // Debug.log("Rollup size: " + rollups.size(), module);
             for (GenericValue parent: rollups) {
                 // Debug.log("Adding child of: " + parent.getString("parentProductCategoryId"), module);
@@ -186,7 +157,6 @@ public class CategoryWorker {
                     cv = parent.getRelatedOneCache("CurrentProductCategory");
                 } catch (GenericEntityException e) {
                     Debug.logWarning(e.getMessage(), module);
-                    cv = null;
                 }
                 if (cv != null) {
                     if (excludeEmpty) {
@@ -230,7 +200,7 @@ public class CategoryWorker {
 
     public static long categoryMemberCount(GenericValue category) {
         if (category == null) return 0;
-        GenericDelegator delegator = category.getDelegator();
+        Delegator delegator = category.getDelegator();
         long count = 0;
         try {
             count = delegator.findCountByCondition("ProductCategoryMember", buildCountCondition("productCategoryId", category.getString("productCategoryId")), null, null);
@@ -242,7 +212,7 @@ public class CategoryWorker {
 
     public static long categoryRollupCount(GenericValue category) {
         if (category == null) return 0;
-        GenericDelegator delegator = category.getDelegator();
+        Delegator delegator = category.getDelegator();
         long count = 0;
         try {
             count = delegator.findCountByCondition("ProductCategoryRollup", buildCountCondition("parentProductCategoryId", category.getString("productCategoryId")), null, null);
@@ -265,11 +235,6 @@ public class CategoryWorker {
         EntityCondition andCond = EntityCondition.makeCondition(andCondList, EntityOperator.AND);
 
         return andCond;
-    }
-
-    /** @deprecated */
-    public static void setTrail(PageContext pageContext, String currentCategory) {
-        setTrail(pageContext.getRequest(), currentCategory);
     }
 
     public static void setTrail(ServletRequest request, String currentCategory) {
@@ -333,11 +298,10 @@ public class CategoryWorker {
         } else {
             // remove all categories after the previous category, preparing for adding the current category
             int index = trail.indexOf(previousCategoryId);
-
             if (index < (trail.size() - 1)) {
                 for (int i = trail.size() - 1; i > index; i--) {
                     String deadCat = trail.remove(i);
-                    //if (Debug.infoOn()) Debug.logInfo("[CategoryWorker.setTrail] Removed after previous category index: " + i + " catname: " + deadCat, module);
+                    //if (Debug.infoOn()) Debug.logInfo("[CategoryWorker.setTrail] Removed after current category index: " + i + " catname: " + deadCat, module);
                 }
             }
         }
@@ -349,31 +313,16 @@ public class CategoryWorker {
         return trail;
     }
 
-    /** @deprecated */
-    public static List<String> getTrail(PageContext pageContext) {
-        return getTrail(pageContext.getRequest());
-    }
-
     public static List<String> getTrail(ServletRequest request) {
         HttpSession session = ((HttpServletRequest) request).getSession();
         List<String> crumb = UtilGenerics.checkList(session.getAttribute("_BREAD_CRUMB_TRAIL_"));
         return crumb;
     }
 
-    /** @deprecated */
-    public static List<String> setTrail(PageContext pageContext, List<String> crumb) {
-        return setTrail(pageContext.getRequest(), crumb);
-    }
-
     public static List<String> setTrail(ServletRequest request, List<String> crumb) {
         HttpSession session = ((HttpServletRequest) request).getSession();
         session.setAttribute("_BREAD_CRUMB_TRAIL_", crumb);
         return crumb;
-    }
-
-    /** @deprecated */
-    public static boolean checkTrailItem(PageContext pageContext, String category) {
-        return checkTrailItem(pageContext.getRequest(), category);
     }
 
     public static boolean checkTrailItem(ServletRequest request, String category) {
@@ -386,11 +335,6 @@ public class CategoryWorker {
         }
     }
 
-    /** @deprecated */
-    public static String lastTrailItem(PageContext pageContext) {
-        return lastTrailItem(pageContext.getRequest());
-    }
-
     public static String lastTrailItem(ServletRequest request) {
         List<String> crumb = getTrail(request);
 
@@ -401,18 +345,18 @@ public class CategoryWorker {
         }
     }
 
-    public static boolean isProductInCategory(GenericDelegator delegator, String productId, String productCategoryId) throws GenericEntityException {
+    public static boolean isProductInCategory(Delegator delegator, String productId, String productCategoryId) throws GenericEntityException {
         if (productCategoryId == null) return false;
-        if (productId == null || productId.length() == 0) return false;
+        if (UtilValidate.isEmpty(productId)) return false;
 
         List<GenericValue> productCategoryMembers = EntityUtil.filterByDate(delegator.findByAndCache("ProductCategoryMember",
                 UtilMisc.toMap("productCategoryId", productCategoryId, "productId", productId)), true);
-        if (productCategoryMembers == null || productCategoryMembers.size() == 0) {
+        if (UtilValidate.isEmpty(productCategoryMembers)) {
             //before giving up see if this is a variant product, and if so look up the virtual product and check it...
             GenericValue product = delegator.findByPrimaryKeyCache("Product", UtilMisc.toMap("productId", productId));
             List<GenericValue> productAssocs = ProductWorker.getVariantVirtualAssocs(product);
             //this does take into account that a product could be a variant of multiple products, but this shouldn't ever really happen...
-            if (UtilValidate.isNotEmpty(productAssocs)) {
+            if (productAssocs != null) {
                 for (GenericValue productAssoc: productAssocs) {
                     if (isProductInCategory(delegator, productAssoc.getString("productId"), productCategoryId)) {
                         return true;
@@ -426,11 +370,11 @@ public class CategoryWorker {
         }
     }
 
-    public static List<GenericValue> filterProductsInCategory(GenericDelegator delegator, List<GenericValue> valueObjects, String productCategoryId) throws GenericEntityException {
+    public static List<GenericValue> filterProductsInCategory(Delegator delegator, List<GenericValue> valueObjects, String productCategoryId) throws GenericEntityException {
         return filterProductsInCategory(delegator, valueObjects, productCategoryId, "productId");
     }
 
-    public static List<GenericValue> filterProductsInCategory(GenericDelegator delegator, List<GenericValue> valueObjects, String productCategoryId, String productIdFieldName) throws GenericEntityException {
+    public static List<GenericValue> filterProductsInCategory(Delegator delegator, List<GenericValue> valueObjects, String productCategoryId, String productIdFieldName) throws GenericEntityException {
         List<GenericValue> newList = FastList.newInstance();
 
         if (productCategoryId == null) return newList;
@@ -461,7 +405,7 @@ public class CategoryWorker {
             catContentWrappers.put(productCategoryId, catContentWrapper);
             List<GenericValue> subCat = getRelatedCategoriesRet(request, "subCatList", productCategoryId, true);
             if (subCat != null) {
-                getCategoryContentWrappers(catContentWrappers, subCat, request );
+                getCategoryContentWrappers(catContentWrappers, subCat, request);
             }
         }
     }

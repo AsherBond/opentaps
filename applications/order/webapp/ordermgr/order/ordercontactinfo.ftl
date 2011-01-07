@@ -53,7 +53,7 @@ under the License.
               </#if>
               <#if partyId?exists>
                 &nbsp;(<a href="${customerDetailLink}${partyId}" target="partymgr" class="buttontext">${partyId}</a>)
-                </br>
+                <br/>
                 <#if orderHeader.salesChannelEnumId != "POS_SALES_CHANNEL">
                 <div>
                    <a href="<@ofbizUrl>/orderentry?partyId=${partyId}&amp;orderTypeId=${orderHeader.orderTypeId}</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderNewOrder}</a>
@@ -62,7 +62,7 @@ under the License.
                   <form name="searchOtherOrders" method="post" action="<@ofbizUrl>searchorders</@ofbizUrl>">
                     <input type="hidden" name="lookupFlag" value="Y"/>
                     <input type="hidden" name="hideFields" value="Y"/>
-                    <input type="hidden" name="partyId" value="${partyId}">
+                    <input type="hidden" name="partyId" value="${partyId}" />
                     <input type="hidden" name="viewIndex" value="1"/>
                     <input type="hidden" name="viewSize" value="20"/>
                   </form>
@@ -75,7 +75,7 @@ under the License.
           <#assign contactMech = orderContactMechValueMap.contactMech>
           <#assign contactMechPurpose = orderContactMechValueMap.contactMechPurposeType>
           <#--<#assign partyContactMech = orderContactMechValueMap.partyContactMech>-->
-          <tr><td colspan="3"><hr/></td></tr>
+          <tr><td colspan="3"><hr /></td></tr>
           <tr>
             <td align="right" valign="top" width="19%">
               <span class="label">&nbsp;${contactMechPurpose.get("description",locale)}</span>
@@ -86,13 +86,13 @@ under the License.
                 <#assign postalAddress = orderContactMechValueMap.postalAddress>
                 <#if postalAddress?has_content>
                   <div>
-                    <#if postalAddress.toName?has_content><span class="label">${uiLabelMap.CommonTo}</span> ${postalAddress.toName}<br/></#if>
-                    <#if postalAddress.attnName?has_content><span class="label">${uiLabelMap.CommonAttn}</span> ${postalAddress.attnName}<br/></#if>
-                    ${postalAddress.address1}<br/>
-                    <#if postalAddress.address2?has_content>${postalAddress.address2}<br/></#if>
+                    <#if postalAddress.toName?has_content><span class="label">${uiLabelMap.CommonTo}</span> ${postalAddress.toName}<br /></#if>
+                    <#if postalAddress.attnName?has_content><span class="label">${uiLabelMap.CommonAttn}</span> ${postalAddress.attnName}<br /></#if>
+                    ${postalAddress.address1}<br />
+                    <#if postalAddress.address2?has_content>${postalAddress.address2}<br /></#if>
                     ${postalAddress.city?if_exists}<#if postalAddress.stateProvinceGeoId?has_content>, ${postalAddress.stateProvinceGeoId} </#if>
-                    ${postalAddress.postalCode?if_exists}<br/>
-                    ${postalAddress.countryGeoId?if_exists}<br/>
+                    ${postalAddress.postalCode?if_exists}<br />
+                    ${postalAddress.countryGeoId?if_exists}<br />
                     <#if !postalAddress.countryGeoId?exists || postalAddress.countryGeoId == "USA">
                       <#assign addr1 = postalAddress.address1?if_exists>
                       <#if (addr1.indexOf(" ") > 0)>
@@ -107,7 +107,7 @@ under the License.
                      <input type="hidden" name="orderId" value="${orderId?if_exists}"/>
                      <input type="hidden" name="contactMechPurposeTypeId" value="${contactMechPurpose.contactMechPurposeTypeId?if_exists}"/>
                      <input type="hidden" name="oldContactMechId" value="${contactMech.contactMechId?if_exists}"/>
-                     <hr/>
+                     <hr />
                      <div><@partyPostalAddress postalContactMechList = postalContactMechList?if_exists contactMechPurposeTypeId = contactMechPurpose.contactMechPurposeTypeId?if_exists contactPostalAddress=postalAddress?if_exists/><input type="submit" value="${uiLabelMap.CommonUpdate}" class="smallSubmit"/></div>
                   </form>
                   </#if>

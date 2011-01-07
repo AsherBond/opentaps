@@ -19,7 +19,7 @@ under the License.
 -->
 <!-- This file has been modified by Open Source Strategies, Inc. -->
 
-<entity-engine-transform-xml template="org/ofbiz/ecommerce/data/content.ftl">
+<entity-engine-transform-xml template="component://ecommerce/script/org/ofbiz/ecommerce/data/content.ftl">
     <contents>
         <content id="180000" name="rocketoperation" type="text/xml">
             <content_heading>Maintenance</content_heading>

@@ -36,7 +36,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.content.content.ContentWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -60,7 +60,7 @@ public final class GLExportServices {
 
     public static Map<String, Object> exportGLToFile(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         List<GenericValue> allTransactions = (List<GenericValue>) context.get("valuesToCreate");
         allTransactions.addAll((List<GenericValue>) context.get("valuesToStore"));
@@ -109,7 +109,7 @@ public final class GLExportServices {
                                                "externalAccountParties", externalAccountParties);
                 Debug.logInfo("acctgTransId = " + acctgTrans.getString("acctgTransId") + " with " + acctgTransEntries.size() + " entries", MODULE);
                 StringWriter outWriter = new StringWriter();
-                ContentWorker.renderContentAsText(dispatcher, delegator, templateName, outWriter, inContext, locale, "text/plain", false);
+                ContentWorker.renderContentAsText(dispatcher, delegator, templateName, outWriter, inContext, locale, "text/plain", null, null, false);
                 Debug.logInfo("output: " + outWriter.toString(), MODULE);
 
                 // now add it to all the other transactions so far

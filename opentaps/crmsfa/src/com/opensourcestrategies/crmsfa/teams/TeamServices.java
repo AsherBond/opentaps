@@ -48,7 +48,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -85,7 +85,7 @@ public final class TeamServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createTeam(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -170,7 +170,7 @@ public final class TeamServices {
      */
     @SuppressWarnings("unchecked")
     public static Map deactivateTeam(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -211,7 +211,7 @@ public final class TeamServices {
      */
     @SuppressWarnings("unchecked")
     public static Map assignTeamToAccount(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -245,7 +245,7 @@ public final class TeamServices {
      */
     @SuppressWarnings("unchecked")
     public static Map addTeamMember(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -318,7 +318,7 @@ public final class TeamServices {
      */
     @SuppressWarnings("unchecked")
     public static Map removeTeamMember(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -354,7 +354,7 @@ public final class TeamServices {
      */
     @SuppressWarnings("unchecked")
     public static Map setTeamMemberSecurityGroup(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -404,7 +404,7 @@ public final class TeamServices {
      */
     @SuppressWarnings("unchecked")
     public static Map sendTeamAssignmentNotificationEmails(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String accountPartyId = (String) context.get("accountPartyId");
         String teamPartyId = (String) context.get("teamPartyId");

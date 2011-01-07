@@ -73,7 +73,7 @@ public class CallObjectMethod extends MethodOperation {
             parameters = FastList.newInstance();
 
             for (Element parameterElement: parameterElements) {
-                MethodObject methodObject = null;
+                MethodObject<?> methodObject = null;
                 if ("string".equals(parameterElement.getNodeName())) {
                     methodObject = new StringObject(parameterElement, simpleMethod);
                 } else if ("field".equals(parameterElement.getNodeName())) {
@@ -89,6 +89,7 @@ public class CallObjectMethod extends MethodOperation {
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         String methodName = methodContext.expandString(this.methodName);
 
@@ -196,10 +197,12 @@ public class CallObjectMethod extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<call-object-method/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

@@ -34,6 +34,10 @@
     <!-- Expire the demo billing account from ofbiz, since it is intended for use as a revolving credit account, which our UI doesn't allow -->
     <BillingAccount billingAccountId="9010" fromDate="2001-01-01 00:00:00" thruDate="2008-05-06 00:00:00"/>
 
+    <!-- Without a name on account, these eft accounts will cause bugs.  See http://www.opentaps.org/forum/opentaps-general-discussions/general-discussions-english/cannot-update-company-info -->
+    <EftAccount paymentMethodId="ABN_CHECKING" nameOnAccount="Demo Name on Account"/>
+    <EftAccount paymentMethodId="SC_CHECKING" nameOnAccount="Demo Name on Account"/>
+
     <!-- For opentaps applications statusId must be filled. This items modifies Ofbiz demo data. -->
     <Agreement agreementId="9000" statusId="AGR_ACTIVE" fromDate="2005-01-01 00:00:00"/>
     <Agreement agreementId="AGR_TEST" statusId="AGR_ACTIVE" fromDate="2005-01-01 00:00:00"/>

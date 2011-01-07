@@ -21,6 +21,7 @@
 package org.ofbiz.service.eca;
 
 import org.w3c.dom.Element;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
@@ -44,6 +45,10 @@ public class ServiceEcaSetField {
 
     public ServiceEcaSetField(Element set) {
         this.fieldName = set.getAttribute("field-name");
+        if (UtilValidate.isNotEmpty(this.fieldName) && this.fieldName.indexOf('.') != -1) {
+            this.mapName = fieldName.substring(0, this.fieldName.indexOf('.'));
+            this.fieldName = this.fieldName.substring(this.fieldName.indexOf('.') +1);
+        }
         this.envName = set.getAttribute("env-name");
         this.value = set.getAttribute("value");
         this.format = set.getAttribute("format");
@@ -66,7 +71,7 @@ public class ServiceEcaSetField {
             // check if target is a map and create/get from contaxt
             Map<String, Object> valueMap = null;
             if (UtilValidate.isNotEmpty(this.mapName) && context.containsKey(this.mapName)) {
-                valueMap = (Map<String, Object>) context.get(mapName);
+                valueMap = UtilGenerics.checkMap(context.get(mapName));
             } else {
                 valueMap = FastMap.newInstance();
             }
@@ -77,7 +82,7 @@ public class ServiceEcaSetField {
             } else if (UtilValidate.isNotEmpty(this.envName) && context.get(this.envName) != null) {
                 newValue = this.format((String) context.get(this.envName), context);
             }
-            
+
             if (newValue != null) {
                 if (UtilValidate.isNotEmpty(this.mapName)) {
                     valueMap.put(this.fieldName, newValue);
@@ -137,6 +142,7 @@ public class ServiceEcaSetField {
         return s;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof ServiceEcaSetField) {
             ServiceEcaSetField other = (ServiceEcaSetField) obj;

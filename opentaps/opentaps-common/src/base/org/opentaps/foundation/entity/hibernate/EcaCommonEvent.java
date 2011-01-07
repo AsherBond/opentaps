@@ -23,7 +23,7 @@ import java.util.Map;
 import org.hibernate.HibernateException;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericModelException;
 import org.ofbiz.entity.GenericPK;
@@ -45,11 +45,11 @@ public final class EcaCommonEvent {
      * execute the eccas of before save event, and return GenericValue.
      * this method should be call before save event in EcaPersistEventListener\EcaSaveOrUpdateEventListener\EcaSaveEventListener
      * @param entity an <code>Entity</code> value.
-     * @param delegator an <code>GenericDelegator</code> value.
+     * @param delegator an <code>Delegator</code> value.
      * @throws GenericEntityException if an error occurs
      * @return GenericValue
      */
-    public static GenericValue beforeSave(Entity entity, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue beforeSave(Entity entity, Delegator delegator) throws GenericEntityException {
         if (entity == null) {
             return null;
         }
@@ -131,11 +131,11 @@ public final class EcaCommonEvent {
      * execute the eccas of after save event, and return GenericValue.
      * this method should be call after save event in EcaPersistEventListener\EcaSaveOrUpdateEventListener\EcaSaveEventListener
      * @param entity an <code>Entity</code> value.
-     * @param delegator an <code>GenericDelegator</code> value.
+     * @param delegator an <code>Delegator</code> value.
      * @throws GenericEntityException if an error occurs
      * @return GenericValue
      */
-    public static GenericValue afterSave(Entity entity, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue afterSave(Entity entity, Delegator delegator) throws GenericEntityException {
         if (entity == null) {
             return null;
         }
@@ -158,10 +158,10 @@ public final class EcaCommonEvent {
      * execute the eccas of before delete event.
      * this method should be call before delete event in EcaDeleteEventListener
      * @param entity an <code>Entity</code> value.
-     * @param delegator an <code>GenericDelegator</code> value.
+     * @param delegator an <code>Delegator</code> value.
      * @throws GenericEntityException if an error occurs
      */
-    public static void beforeDelete(Entity entity, GenericDelegator delegator) throws GenericEntityException {
+    public static void beforeDelete(Entity entity, Delegator delegator) throws GenericEntityException {
         if (entity == null) {
             return;
         }
@@ -197,10 +197,10 @@ public final class EcaCommonEvent {
      * execute the eccas of after delete event.
      * this method should be call after delete event in EcaDeleteEventListener
      * @param entity an <code>Entity</code> value.
-     * @param delegator an <code>GenericDelegator</code> value.
+     * @param delegator an <code>Delegator</code> value.
      * @throws GenericEntityException if an error occurs
      */
-    public static void afterDelete(Entity entity, GenericDelegator delegator) throws GenericEntityException {
+    public static void afterDelete(Entity entity, Delegator delegator) throws GenericEntityException {
         if (entity == null) {
             return;
         }
@@ -227,10 +227,10 @@ public final class EcaCommonEvent {
      * execute the eccas of before load event.
      * this method should be call before load event in EcaLoadEventListener
      * @param primaryKey an <code>GenericPK</code> value.
-     * @param delegator an <code>GenericDelegator</code> value.
+     * @param delegator an <code>Delegator</code> value.
      * @throws GenericEntityException if an error occurs
      */
-    public static void beforeLoad(GenericPK primaryKey, GenericDelegator delegator) throws GenericEntityException {
+    public static void beforeLoad(GenericPK primaryKey, Delegator delegator) throws GenericEntityException {
         if (primaryKey == null) {
             return;
         }
@@ -244,7 +244,7 @@ public final class EcaCommonEvent {
         }
         // 2. next is cache clear event
         if (!primaryKey.isPrimaryKey()) {
-            throw new GenericModelException("[GenericDelegator.findByPrimaryKey] Passed primary key is not a valid primary key: " + primaryKey);
+            throw new GenericModelException("[Delegator.findByPrimaryKey] Passed primary key is not a valid primary key: " + primaryKey);
         }
         if (ecaEventMap != null) {
             delegator.getEntityEcaHandler().evalRules(EntityEcaHandler.OP_FIND, ecaEventMap, EntityEcaHandler.EV_RUN, primaryKey, false);
@@ -256,10 +256,10 @@ public final class EcaCommonEvent {
      * execute the eccas of after load event.
      * this method should be call after load event in EcaLoadEventListener
      * @param primaryKey an <code>GenericPK</code> value.
-     * @param delegator an <code>GenericDelegator</code> value.
+     * @param delegator an <code>Delegator</code> value.
      * @throws GenericEntityException if an error occurs
      */
-    public static void afterLoad(GenericPK primaryKey, GenericDelegator delegator) throws GenericEntityException {
+    public static void afterLoad(GenericPK primaryKey, Delegator delegator) throws GenericEntityException {
         if (primaryKey == null) {
             return;
         }

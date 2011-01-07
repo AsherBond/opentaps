@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * CannotSuspend Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class CannotSuspend extends WfException {
 
     public CannotSuspend() {}

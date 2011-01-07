@@ -150,10 +150,12 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
         // Initialize the map of available services for each carrier. This starts out populated with every service code defined in the CarrierShipmentMethod records,
         //  and will be trimmed by the loadEstimatesUPS() method and its siblings.
         List<String> carrierPartyIds = EntityUtil.getFieldListFromEntityList(this.shippingMethods, "partyId", true);
-        for (String carrierPartyId : carrierPartyIds) {
-            List<GenericValue> carrierProdStoreShipMethods = EntityUtil.filterByAnd(this.shippingMethods, UtilMisc.toMap("partyId", carrierPartyId));
-            carrierProdStoreShipMethods = EntityUtil.filterByCondition(carrierProdStoreShipMethods, EntityCondition.makeCondition("carrierServiceCode", EntityOperator.NOT_EQUAL, null));
-            availableCarrierServices.put(carrierPartyId, EntityUtil.getFieldListFromEntityList(carrierProdStoreShipMethods, "carrierServiceCode", true));
+        if (UtilValidate.isNotEmpty(carrierPartyIds)) {
+            for (String carrierPartyId : carrierPartyIds) {
+                List<GenericValue> carrierProdStoreShipMethods = EntityUtil.filterByAnd(this.shippingMethods, UtilMisc.toMap("partyId", carrierPartyId));
+                carrierProdStoreShipMethods = EntityUtil.filterByCondition(carrierProdStoreShipMethods, EntityCondition.makeCondition("carrierServiceCode", EntityOperator.NOT_EQUAL, null));
+                availableCarrierServices.put(carrierPartyId, EntityUtil.getFieldListFromEntityList(carrierProdStoreShipMethods, "carrierServiceCode", true));
+            }
         }
     }
 

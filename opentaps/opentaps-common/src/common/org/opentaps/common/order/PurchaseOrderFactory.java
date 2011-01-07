@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
@@ -61,7 +61,7 @@ public class PurchaseOrderFactory extends OrderFactory {
      * @param toFacilityContactMechId
      * @throws GenericEntityException 
      */
-    public PurchaseOrderFactory(GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, String fromParty, String toParty, String toFacilityContactMechId) throws GenericEntityException {
+    public PurchaseOrderFactory(Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, String fromParty, String toParty, String toFacilityContactMechId) throws GenericEntityException {
         super(delegator, dispatcher, userLogin, fromParty, toParty, productStoreId);
         this.orderType = "PURCHASE_ORDER";
         this.toFacilityContactMechId = toFacilityContactMechId;

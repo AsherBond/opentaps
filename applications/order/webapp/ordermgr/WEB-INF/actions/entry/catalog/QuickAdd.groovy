@@ -46,4 +46,6 @@ if (categoryId) {
             context[key] = value;
         }
     }
+    productCategory = delegator.findByPrimaryKey("ProductCategory", ["productCategoryId" : categoryId]);
+    context.productCategory = productCategory;
 }

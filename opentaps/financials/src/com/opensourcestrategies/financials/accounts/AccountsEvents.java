@@ -38,7 +38,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
@@ -87,7 +87,7 @@ public class AccountsEvents {
             UtilMessage.addError(request, "OpentapsError_MissingPaginator");
             return "error";
         }
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request.getSession());
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);

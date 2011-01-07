@@ -29,7 +29,7 @@ ${uiLabelMap.EcommerceReturnRequest}
   ${item.description?default("N/A")} - ${item.returnQuantity?string.number} @ ${item.returnPrice}
 </#list>
 </pre>
-<br/><br/>
+<br /><br />
 
 ${uiLabelMap.EcommerceReturnRequestAccepted} ${returnHeader.returnId}
-<br/><br/>
+<br /><br />

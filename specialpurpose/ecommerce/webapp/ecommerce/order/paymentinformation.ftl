@@ -23,21 +23,21 @@ under the License.
 <script language="JavaScript" type="text/javascript">
 function shipBillAddr() {
     <#if requestParameters.singleUsePayment?default("N") == "Y">
-      <#assign singleUse = "&singleUsePayment=Y">
+      <#assign singleUse = "&amp;singleUsePayment=Y">
     <#else>
       <#assign singleUse = "">
     </#if>
     if (document.billsetupform.useShipAddr.checked) {
-        window.location.replace("setPaymentInformation?createNew=Y&addGiftCard=${requestParameters.addGiftCard?if_exists}&paymentMethodTypeId=${paymentMethodTypeId?if_exists}&useShipAddr=Y${singleUse}");
+        window.location.replace("setPaymentInformation?createNew=Y&amp;addGiftCard=${requestParameters.addGiftCard?if_exists}&amp;paymentMethodTypeId=${paymentMethodTypeId?if_exists}&amp;useShipAddr=Y${singleUse}");
     } else {
-        window.location.replace("setPaymentInformation?createNew=Y&addGiftCard=${requestParameters.addGiftCard?if_exists}&paymentMethodTypeId=${paymentMethodTypeId?if_exists}${singleUse}");
+        window.location.replace("setPaymentInformation?createNew=Y&amp;addGiftCard=${requestParameters.addGiftCard?if_exists}&amp;paymentMethodTypeId=${paymentMethodTypeId?if_exists}${singleUse}");
     }
 }
 </script>
 
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class='boxhead'>&nbsp;${uiLabelMap.AccountingPaymentInformation}</div>
+    <div class="screenlet-title-bar">
+        <div class='h3'>${uiLabelMap.AccountingPaymentInformation}</div>
     </div>
     <div class="screenlet-body">
           <#-- after initial screen; show detailed screens for selected type -->
@@ -85,14 +85,14 @@ function shipBillAddr() {
             <#if cart.getShippingContactMechId()?exists && paymentMethodTypeId?if_exists != "GIFT_CARD">
               <tr>
                 <td width="26%" align="right" valign="top">
-                  <input type="checkbox" name="useShipAddr" value="Y" onClick="javascript:shipBillAddr();" <#if useShipAddr?exists>checked</#if>/>
+                  <input type="checkbox" name="useShipAddr" value="Y" onclick="javascript:shipBillAddr();" <#if useShipAddr?exists>checked="checked"</#if>/>
                 </td>
                 <td colspan="2" valign="middle">
                   <div class="tabletext">${uiLabelMap.FacilityBillingAddressSameShipping}</div>
                 </td>
               </tr>
               <tr>
-                <td colspan="3"><hr/></td>
+                <td colspan="3"><hr /></td>
               </tr>
             </#if>
 
@@ -111,7 +111,7 @@ function shipBillAddr() {
                 <#assign creditCard = requestParameters>
               </#if>
               <tr>
-                <td colspan="3"><hr/></td>
+                <td colspan="3"><hr /></td>
               </tr>
               <tr>
                 <td width="26%" align="right" valign="top"><div class="tableheadtext">${uiLabelMap.AccountingCreditCardInformation}</div></td>
@@ -128,7 +128,7 @@ function shipBillAddr() {
                 <#assign eftAccount = requestParameters>
               </#if>
               <tr>
-                <td colspan="3"><hr/></td>
+                <td colspan="3"><hr /></td>
               </tr>
               <tr>
                 <td width="26%" align="right" valign="top"><div class="tableheadtext">${uiLabelMap.AccountingEFTAccountInformation}</div></td>
@@ -197,7 +197,7 @@ function shipBillAddr() {
               <#assign giftCard = giftCard?if_exists>
               <#if paymentMethodTypeId?if_exists != "GIFT_CARD">
                 <tr>
-                  <td colspan="3"><hr/></td>
+                  <td colspan="3"><hr /></td>
                 </tr>
               </#if>
               <tr>

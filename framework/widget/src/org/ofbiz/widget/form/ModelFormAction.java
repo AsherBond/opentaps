@@ -32,6 +32,7 @@ import java.util.regex.PatternSyntaxException;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.ofbiz.base.util.BshUtil;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
@@ -50,6 +51,7 @@ import org.ofbiz.entity.finder.PrimaryKeyFinder;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.ModelService;
+import org.ofbiz.widget.WidgetWorker;
 import org.w3c.dom.Element;
 
 
@@ -126,6 +128,7 @@ public abstract class ModelFormAction {
             }
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             String globalStr = this.globalExdr.expandString(context);
             // default to false
@@ -136,12 +139,12 @@ public abstract class ModelFormAction {
                 newValue = this.fromField.get(context);
                 if (Debug.verboseOn()) Debug.logVerbose("In screen getting value for field from [" + this.fromField.getOriginalName() + "]: " + newValue, module);
             } else if (!this.valueExdr.isEmpty()) {
-                newValue = this.valueExdr.expandString(context);
+                newValue = this.valueExdr.expand(context);
             }
 
             // If newValue is still empty, use the default value
             if (ObjectType.isEmpty(newValue) && !this.defaultExdr.isEmpty()) {
-                newValue = this.defaultExdr.expandString(context);
+                newValue = this.defaultExdr.expand(context);
             }
 
             if (UtilValidate.isNotEmpty(this.type)) {
@@ -189,6 +192,7 @@ public abstract class ModelFormAction {
             this.globalExdr = FlexibleStringExpander.getInstance(setElement.getAttribute("global"));
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             String globalStr = this.globalExdr.expandString(context);
             // default to false
@@ -229,6 +233,7 @@ public abstract class ModelFormAction {
             this.globalExdr = FlexibleStringExpander.getInstance(setElement.getAttribute("global"));
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             //String globalStr = this.globalExdr.expandString(context);
             // default to false
@@ -244,7 +249,7 @@ public abstract class ModelFormAction {
             } else {
                 value = UtilProperties.getMessage(resource, property, locale);
             }
-            if (value == null || value.length() == 0) {
+            if (UtilValidate.isEmpty(value)) {
                 value = this.defaultExdr.expandString(context);
             }
 
@@ -265,13 +270,18 @@ public abstract class ModelFormAction {
     }
 
     public static class Script extends ModelFormAction {
+        protected static final Object[] EMPTY_ARGS = {};
         protected String location;
+        protected String method;
 
         public Script(ModelForm modelForm, Element scriptElement) {
             super (modelForm, scriptElement);
-            this.location = scriptElement.getAttribute("location");
+            String scriptLocation = scriptElement.getAttribute("location");
+            this.location = WidgetWorker.getScriptLocation(scriptLocation);
+            this.method = WidgetWorker.getScriptMethodName(scriptLocation);
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             if (location.endsWith(".bsh")) {
                 try {
@@ -283,7 +293,12 @@ public abstract class ModelFormAction {
                 }
             } else if (location.endsWith(".groovy")) {
                 try {
-                    GroovyUtil.runScriptAtLocation(location, context);
+                    groovy.lang.Script script = InvokerHelper.createScript(GroovyUtil.getScriptClassFromLocation(location), GroovyUtil.getBinding(context));
+                    if (UtilValidate.isEmpty(method)) {
+                        script.run();
+                    } else {
+                        script.invokeMethod(method, EMPTY_ARGS);
+                    }
                 } catch (GeneralException e) {
                     String errMsg = "Error running Groovy script at location [" + location + "]: " + e.toString();
                     Debug.logError(e, errMsg, module);
@@ -301,6 +316,7 @@ public abstract class ModelFormAction {
         protected FlexibleStringExpander autoFieldMapExdr;
         protected FlexibleStringExpander resultMapListNameExdr;
         protected Map<FlexibleMapAccessor<Object>, Object> fieldMap;
+        protected boolean ignoreError = false;
 
         public Service(ModelForm modelForm, Element serviceElement) {
             super (modelForm, serviceElement);
@@ -326,8 +342,10 @@ public abstract class ModelFormAction {
             }
 
             this.fieldMap = EntityFinderUtil.makeFieldMap(serviceElement);
+            this.ignoreError = "true".equals(serviceElement.getAttribute("ignore-error"));
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             String serviceNameExpanded = this.serviceNameExdr.expandString(context);
             if (UtilValidate.isEmpty(serviceNameExpanded)) {
@@ -349,7 +367,12 @@ public abstract class ModelFormAction {
                     EntityFinderUtil.expandFieldMapToContext(this.fieldMap, context, serviceContext);
                 }
 
-                Map<String, Object> result = this.modelForm.getDispatcher(context).runSync(serviceNameExpanded, serviceContext);
+                Map<String, Object> result = null;
+                if (this.ignoreError) {
+                    result = this.modelForm.getDispatcher(context).runSync(serviceNameExpanded, serviceContext, -1, true);
+                } else {
+                    result = this.modelForm.getDispatcher(context).runSync(serviceNameExpanded, serviceContext);
+                }
 
                 if (!this.resultMapNameAcsr.isEmpty()) {
                     this.resultMapNameAcsr.put(context, result);
@@ -379,7 +402,9 @@ public abstract class ModelFormAction {
             } catch (GenericServiceException e) {
                 String errMsg = "Error in form [" + this.modelForm.getName() + "] calling service with name [" + serviceNameExpanded + "]: " + e.toString();
                 Debug.logError(e, errMsg, module);
-                throw new IllegalArgumentException(errMsg);
+                if (!this.ignoreError) {
+                    throw new IllegalArgumentException(errMsg);
+                }
             }
         }
     }
@@ -392,6 +417,7 @@ public abstract class ModelFormAction {
             finder = new PrimaryKeyFinder(entityOneElement);
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             try {
                 finder.runFind(context, this.modelForm.getDelegator(context));
@@ -428,6 +454,7 @@ public abstract class ModelFormAction {
             finder = new ByAndFinder(entityAndElement);
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             try {
                 // don't want to do this: context.put("defaultFormResultList", null);
@@ -471,6 +498,7 @@ public abstract class ModelFormAction {
             finder = new ByConditionFinder(entityConditionElement);
         }
 
+        @Override
         public void runAction(Map<String, Object> context) {
             try {
                 // don't want to do this: context.put("defaultFormResultList", null);

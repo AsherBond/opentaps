@@ -20,7 +20,7 @@
 
 import org.ofbiz.widget.html.*
 
-createConfigOptionWrapper = new HtmlFormWrapper("component://product/webapp/catalog/config/ConfigForms.xml", "CreateConfigOption", request, response);
+createConfigOptionWrapper = new HtmlFormWrapper("component://product/widget/catalog/ConfigForms.xml", "CreateConfigOption", request, response);
 createConfigOptionWrapper.putInContext("configItemId", configItemId);
 createConfigOptionWrapper.putInContext("configOption", configOption);
 
@@ -28,7 +28,7 @@ context.createConfigOptionWrapper = createConfigOptionWrapper;
 
 
 if (configOption) {
-    createConfigProductWrapper = new HtmlFormWrapper("component://product/webapp/catalog/config/ConfigForms.xml", "CreateProductConfigProduct", request, response);
+    createConfigProductWrapper = new HtmlFormWrapper("component://product/widget/catalog/ConfigForms.xml", "CreateProductConfigProduct", request, response);
     createConfigProductWrapper.putInContext("productConfigProduct", configProduct);
     createConfigProductWrapper.putInContext("configOptionId", configOptionId);
     createConfigProductWrapper.putInContext("configItemId", configItemId);

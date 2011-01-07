@@ -74,7 +74,7 @@ if (hasReportsPermission) {
 organizationDomain = new DomainsLoader(request).loadDomainsDirectory().getOrganizationDomain();
 repo = organizationDomain.getOrganizationRepository();
 organization = repo.getOrganizationById(organizationPartyId);
-if (organization != null) {
+if ((organization != null) && (organization.getPartyAcctgPreference() != null)) {
     context.put("orgCurrencyUomId", organization.getPartyAcctgPreference().getBaseCurrencyUomId());
 }
 

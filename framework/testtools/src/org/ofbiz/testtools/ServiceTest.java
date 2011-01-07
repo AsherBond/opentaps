@@ -19,22 +19,19 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.testtools;
 
-import junit.framework.TestResult;
-import junit.framework.AssertionFailedError;
+import java.util.List;
+import java.util.Map;
 
-import org.w3c.dom.Element;
-import org.ofbiz.service.LocalDispatcher;
-import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.service.ServiceUtil;
-import org.ofbiz.service.ModelService;
-import org.ofbiz.service.testtools.OFBizTestCase;
+import junit.framework.AssertionFailedError;
+import junit.framework.TestResult;
+
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-
-import java.util.Map;
-import java.util.List;
-import java.util.Iterator;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.service.ModelService;
+import org.ofbiz.service.testtools.OFBizTestCase;
+import org.w3c.dom.Element;
 
 public class ServiceTest extends OFBizTestCase {
 
@@ -50,10 +47,12 @@ public class ServiceTest extends OFBizTestCase {
         this.serviceName = mainElement.getAttribute("service-name");
     }
 
+    @Override
     public int countTestCases() {
         return 1;
     }
 
+    @Override
     public void run(TestResult result) {
         result.startTest(this);
 

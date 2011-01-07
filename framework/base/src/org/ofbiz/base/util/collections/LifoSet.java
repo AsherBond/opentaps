@@ -29,6 +29,7 @@ import java.util.EmptyStackException;
  * LifoSet - Set interface wrapper around a LinkedList
  *
  */
+@SuppressWarnings("serial")
 public class LifoSet<V> extends AbstractSet<V> implements Serializable {
 
     // This set's back LinkedList
@@ -64,6 +65,7 @@ public class LifoSet<V> extends AbstractSet<V> implements Serializable {
     /**
      * @see java.util.Collection#size()
      */
+    @Override
     public int size() {
         return backedList.size();
     }
@@ -71,6 +73,7 @@ public class LifoSet<V> extends AbstractSet<V> implements Serializable {
     /**
      * @see java.util.Collection#add(java.lang.Object)
      */
+    @Override
     public boolean add(V obj) {
         int index = backedList.indexOf(obj);
 
@@ -88,6 +91,7 @@ public class LifoSet<V> extends AbstractSet<V> implements Serializable {
     /**
      * @see java.util.Collection#iterator()
      */
+    @Override
     public Iterator<V> iterator() {
         return backedList.iterator();
     }

@@ -18,66 +18,62 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
-    <h1>${title}</h1>
     <div class="button-bar">
       <a href="<@ofbizUrl>EditFacility</@ofbizUrl>" class="buttontext">${uiLabelMap.ProductNewFacility}</a>
       <a href="<@ofbizUrl>EditFacilityLocation?facilityId=${facilityId?if_exists}</@ofbizUrl>" class="buttontext">${uiLabelMap.ProductNewFacilityLocation}</a>
     </div>
 
-    <form action="<@ofbizUrl>FindFacilityLocation</@ofbizUrl>" method="GET" name="findFacilityLocation">
+    <form action="<@ofbizUrl>FindFacilityLocation</@ofbizUrl>" method="get" name="findFacilityLocation">
+        <#if (facilityId?exists)>
+            <input type="hidden" name="facilityId" value="${facilityId}" />
+        </#if>        
         <table class="basic-table" cellspacing="0">
         <#if !(facilityId?exists)>
             <tr>
                 <td class="label">${uiLabelMap.ProductFacility}</td>
-                <td><input type="text" value="" size="19" maxlength="20"></td>
+                <td><input type="text" value="" size="19" maxlength="20" /></td>
             </tr>
-        <#else>
-            <input type="hidden" name="facilityId" value="${facilityId}">
         </#if>
         <tr>
             <td class="label">${uiLabelMap.ProductLocationSeqId}</td>
             <td>
-                <input type="text" name="locationSeqId" value="" size="19" maxlength="20">
-                <a href="javascript:call_fieldlookup2(document.findFacilityLocation.locationSeqId,'LookupFacilityLocation<#if (facilityId?exists)>?facilityId=${facilityId}</#if>');">
-                    <img src="<@ofbizContentUrl>/images/fieldlookup.gif</@ofbizContentUrl>" width="15" height="14" border="0" alt="${uiLabelMap.CommonClickHereForFieldLookup}"/>
-                </a>
+                <@htmlTemplate.lookupField formName="findFacilityLocation" name="locationSeqId" id="locationSeqId" fieldFormName="LookupFacilityLocation<#if (facilityId?exists)>?facilityId=${facilityId}</#if>"/>
             </td>
         </tr>
         <tr>
-        <tr>
             <td class="label">${uiLabelMap.CommonArea}</td>
-            <td><input type="text" name="areaId" value="" size="19" maxlength="20"></td>
+            <td><input type="text" name="areaId" value="" size="19" maxlength="20" /></td>
         </tr>
         <tr>
             <td class="label">${uiLabelMap.ProductAisle}</td>
-            <td><input type="text" name="aisleId" value="" size="19" maxlength="20"></td>
+            <td><input type="text" name="aisleId" value="" size="19" maxlength="20" /></td>
         </tr>
         <tr>
             <td class="label">${uiLabelMap.ProductSection}</td>
-            <td><input type="text" name="sectionId" value="" size="19" maxlength="20"></td>
+            <td><input type="text" name="sectionId" value="" size="19" maxlength="20" /></td>
         </tr>
         <tr>
             <td class="label">${uiLabelMap.ProductLevel}</td>
-            <td><input type="text" name="levelId" value="" size="19" maxlength="20"></td>
+            <td><input type="text" name="levelId" value="" size="19" maxlength="20" /></td>
         </tr>
         <tr>
             <td class="label">${uiLabelMap.ProductPosition}</td>
-            <td><input type="text" name="positionId" value="" size="19" maxlength="20"></td>
+            <td><input type="text" name="positionId" value="" size="19" maxlength="20" /></td>
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td><input type="submit" name="look_up" value="${uiLabelMap.CommonFind}"></td>
+            <td><input type="submit" name="look_up" value="${uiLabelMap.CommonFind}" /></td>
         </tr>
         </table>
     </form>
 
     <#if foundLocations?exists>
         <#-- TODO: Put this in a screenlet - make it look more like the party find screen -->
-        <br/>
+        <br />
         <h1>${uiLabelMap.CommonFound}:&nbsp;${foundLocations.size()}&nbsp;${uiLabelMap.ProductLocationsFor}&nbsp;<#if facility?exists>${(facility.facilityName)?if_exists}</#if> [ID:${facilityId?if_exists}]</h1>
-        <br/>
+        <br />
         <table class="basic-table hover-bar" cellspacing="0">
-        <tr class="header-row">
+        <tr class="header-row-2">
             <td>${uiLabelMap.ProductFacility}</td>
             <td>${uiLabelMap.ProductLocationSeqId}</td>
             <td>${uiLabelMap.ProductType}</td>

@@ -21,7 +21,7 @@ import javolution.util.FastSet;
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilDateTime;
@@ -45,7 +45,7 @@ public class PartyReader {
     public static final String module = PartyReader.class.getName();
 
     protected GenericValue party = null;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected Set classifications = null;
 
     protected PartyReader() {}
@@ -66,7 +66,7 @@ public class PartyReader {
     }
 
     /** As a bove, but construct from a partyId and delegator */
-    public PartyReader(String partyId, GenericDelegator delegator) throws GenericEntityException, PartyNotFoundException {
+    public PartyReader(String partyId, Delegator delegator) throws GenericEntityException, PartyNotFoundException {
         GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyId));
         this.delegator = delegator;
         if (UtilValidate.isEmpty(party)) {

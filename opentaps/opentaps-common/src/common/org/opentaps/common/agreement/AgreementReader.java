@@ -22,7 +22,7 @@ import java.util.List;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -40,7 +40,7 @@ public class AgreementReader {
     protected GenericValue agreement = null;
     protected String agreementId = null;
     protected List<GenericValue> agreementTerms = null;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
 
     protected AgreementReader() { }
 
@@ -59,7 +59,7 @@ public class AgreementReader {
         this.agreementTerms = EntityUtil.filterByDate(this.agreement.getRelated("AgreementTerm"));
     }
 
-    public AgreementReader(String agreementId, GenericDelegator delegator) throws GenericEntityException {
+    public AgreementReader(String agreementId, Delegator delegator) throws GenericEntityException {
         this(delegator.findByPrimaryKey("Agreement", UtilMisc.toMap("agreementId", agreementId)));
     }
 
@@ -120,7 +120,7 @@ public class AgreementReader {
     /**
      * Finds agreement for any status.
      */
-    public static AgreementReader findAgreement(String partyIdFrom, String partyIdTo, String agreementTypeId, String termTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static AgreementReader findAgreement(String partyIdFrom, String partyIdTo, String agreementTypeId, String termTypeId, Delegator delegator) throws GenericEntityException {
         return findAgreement(partyIdFrom, partyIdTo, agreementTypeId, termTypeId, null, delegator);
     }
 
@@ -129,7 +129,7 @@ public class AgreementReader {
      * this will return the earliest defined agreement and log a warning about there being conflicting terms.
      * TODO: this doesn't enforce agreement roles.
      */
-    public static AgreementReader findAgreement(String partyIdFrom, String partyIdTo, String agreementTypeId, String termTypeId, String statusId, GenericDelegator delegator) throws GenericEntityException {
+    public static AgreementReader findAgreement(String partyIdFrom, String partyIdTo, String agreementTypeId, String termTypeId, String statusId, Delegator delegator) throws GenericEntityException {
         List<EntityCondition> conditions = UtilMisc.toList(
                 EntityCondition.makeCondition("agreementTypeId", agreementTypeId),
                 EntityCondition.makeCondition("partyIdFrom", partyIdFrom),

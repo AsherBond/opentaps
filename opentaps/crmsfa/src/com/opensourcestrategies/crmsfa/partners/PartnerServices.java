@@ -8,7 +8,7 @@ import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
@@ -24,7 +24,7 @@ public class PartnerServices {
     public static final String module = PartnerServices.class.getName();
 
     public static Map createPartner(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -91,7 +91,7 @@ public class PartnerServices {
     }
 
     public static Map updatePartner(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -137,7 +137,7 @@ public class PartnerServices {
      * This method helps avoid semantic mistakes and typos from the repeated use of this code pattern.
      */
     public static boolean createResponsiblePartnerRelationshipForParty(String partyId, String partnerPartyId,
-            GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
+            GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher)
         throws GenericServiceException, GenericEntityException {
         return PartyHelper.createNewPartyToRelationship(partyId, partnerPartyId, "PARTNER", "RESPONSIBLE_FOR",
                 "PARTNER_OWNER", PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);

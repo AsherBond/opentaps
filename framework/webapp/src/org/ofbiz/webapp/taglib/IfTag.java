@@ -75,6 +75,7 @@ public class IfTag extends BodyTagSupport {
         return size.toString();
     }
 
+    @Override
     public int doStartTag() throws JspTagException {
         Object object = null;
 
@@ -97,7 +98,7 @@ public class IfTag extends BodyTagSupport {
             try {
                 if (object instanceof Collection) {
                     // the object is a Collection so compare the size.
-                    if (((Collection) object).size() > localSize)
+                    if (((Collection<?>) object).size() > localSize)
                         return EVAL_BODY_AGAIN;
                 } else if (object instanceof String) {
                     // the object is a Collection so compare the size.
@@ -221,10 +222,12 @@ public class IfTag extends BodyTagSupport {
         return SKIP_BODY;
     }
 
+    @Override
     public int doAfterBody() {
         return SKIP_BODY;
     }
 
+    @Override
     public int doEndTag() {
         try {
             BodyContent body = getBodyContent();

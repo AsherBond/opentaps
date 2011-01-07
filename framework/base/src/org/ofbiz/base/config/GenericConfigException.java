@@ -19,12 +19,13 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.base.config;
 
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.GeneralException;
 
 /**
  * GenericConfigException
  *
  */
+@SuppressWarnings("serial")
 public class GenericConfigException extends GeneralException {
 
     public GenericConfigException() {

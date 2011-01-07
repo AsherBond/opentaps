@@ -22,12 +22,16 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.order.shoppingcart.product.ProductDisplayWorker;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
+import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
 
 // Get the Cart and Prepare Size
 shoppingCart = ShoppingCartEvents.getCartObject(request);
 context.shoppingCartSize = shoppingCart?.size() ?: 0;
 context.shoppingCart = shoppingCart;
+
+context.productStore = ProductStoreWorker.getProductStore(request);
 
 if (parameters.add_product_id) { // check if a parameter is passed
     add_product_id = parameters.add_product_id;
@@ -53,3 +57,25 @@ associatedProducts = ProductDisplayWorker.getRandomCartProductAssoc(request, tru
 context.associatedProducts = associatedProducts;
 
 context.contentPathPrefix = CatalogWorker.getContentPathPrefix(request);
+
+//Get Cart Items
+shoppingCartItems = shoppingCart.items();
+
+if(shoppingCartItems) {
+    shoppingCartItems.each { shoppingCartItem ->
+        if (shoppingCartItem.getProductId()) {
+            if (shoppingCartItem.getParentProductId()) {
+                parentProductId = shoppingCartItem.getParentProductId();
+            } else {
+                parentProductId = shoppingCartItem.getProductId();
+            }
+            context.parentProductId = parentProductId;
+        }
+        productCategoryMembers = delegator.findList("ProductCategoryMember", EntityCondition.makeCondition("productId", EntityOperator.EQUALS, parentProductId), null, null, null, false);
+        if (productCategoryMembers) {
+            productCategoryMember = EntityUtil.getFirst(productCategoryMembers);
+            productCategory = productCategoryMember.getRelatedOne("ProductCategory");
+            context.productCategory = productCategory;
+        }
+    }
+}

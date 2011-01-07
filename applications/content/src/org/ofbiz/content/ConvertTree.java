@@ -32,7 +32,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
@@ -65,7 +65,7 @@ In order ta make this service active add the following to the service definition
 
 
     public static  Map<String, Object> convertTree(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String file = (String) context.get("file");
@@ -75,7 +75,7 @@ In order ta make this service active add the following to the service definition
              BufferedReader input = null;
              try {
                  if (!UtilValidate.isEmpty(file)) {
-                     input = new BufferedReader( new FileReader(file));
+                     input = new BufferedReader(new FileReader(file));
                      String line = null;
                      int size=0;
                      if (file != null) {
@@ -116,7 +116,7 @@ In order ta make this service active add the following to the service definition
                         contentAssoc.put("userLogin", userLogin);
                         dispatcher.runSync("createContentAssoc", contentAssoc);
                         int recordCount = 0;
-                        while (( line = input.readLine()) != null) {//start line
+                        while ((line = input.readLine()) != null) {//start line
                              boolean hasFolder=true;
                              String
                              rootContent=null,
@@ -174,7 +174,7 @@ In order ta make this service active add the following to the service definition
                                             contentAssocSize=contentAssocs.size();
                                         }
 
-                                        if ( contentAssocSize == 0 && contentNameMatch==false) {//New Root Content
+                                        if (contentAssocSize == 0 && contentNameMatch==false) {//New Root Content
                                             Entity = null;
                                             contentId = delegator.getNextSeqId("Content");
                                             Entity = delegator.makeValue("Content");
@@ -256,7 +256,7 @@ In order ta make this service active add the following to the service definition
     }
 
     public static  Map<String,Object> createSubContent(int index,String line,String rootContent, Map context, DispatchContext dctx) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String
@@ -281,7 +281,7 @@ In order ta make this service active add the following to the service definition
                     if (contentName.length()>100) {
                         contentName = contentName.substring(0,100);
                     }
-                    List<GenericValue> contents = delegator.findByAnd("Content", UtilMisc.toMap("contentName",contentName),null,"-contentId");
+                    List<GenericValue> contents = delegator.findByAnd("Content", UtilMisc.toMap("contentName",contentName), UtilMisc.toList("-contentId"));
                     if (contents!=null) {
                         Iterator<GenericValue> contentCheck = contents.iterator();
                         while (contentCheck.hasNext() && contentNameMatch==false) {

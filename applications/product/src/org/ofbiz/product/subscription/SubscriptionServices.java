@@ -21,7 +21,7 @@ package org.ofbiz.product.subscription;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +31,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -49,8 +49,8 @@ public class SubscriptionServices {
 
     public static final String module = SubscriptionServices.class.getName();
 
-    public static Map<String, Object> processExtendSubscription(DispatchContext dctx, Map<String, ? extends Object> context) throws GenericServiceException{
-        GenericDelegator delegator = dctx.getDelegator();
+    public static Map<String, Object> processExtendSubscription(DispatchContext dctx, Map<String, ? extends Object> context) {
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
 
@@ -120,7 +120,7 @@ public class SubscriptionServices {
             calendar.add(times[0], (useTime.intValue() * times[1]));
         } else {
             Debug.logWarning("Don't know anything about useTimeUomId [" + useTimeUomId + "], defaulting to month", module);
-            calendar.add(Calendar.MONTH, (useTime.intValue() * times[1]));
+            calendar.add(Calendar.MONTH, useTime);
         }
 
         thruDate = new Timestamp(calendar.getTimeInMillis());
@@ -166,7 +166,7 @@ public class SubscriptionServices {
     }
 
     public static Map<String, Object> processExtendSubscriptionByProduct(DispatchContext dctx, Map<String, ? extends Object> context) throws GenericServiceException{
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String productId = (String) context.get("productId");
         Integer qty = (Integer) context.get("quantity");
@@ -219,7 +219,7 @@ public class SubscriptionServices {
     }
 
     public static Map<String, Object> processExtendSubscriptionByOrder(DispatchContext dctx, Map<String, ? extends Object> context) throws GenericServiceException{
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Map<String, Object> subContext = UtilMisc.makeMapWritable(context);
         String orderId = (String) context.get("orderId");
@@ -229,7 +229,7 @@ public class SubscriptionServices {
         GenericValue orderHeader = null;
         try {
             List<GenericValue> orderRoleList = delegator.findByAnd("OrderRole", UtilMisc.toMap("orderId", orderId, "roleTypeId", "END_USER_CUSTOMER"));
-            if (orderRoleList.size() > 0 ) {
+            if (orderRoleList.size() > 0) {
                 GenericValue orderRole = orderRoleList.get(0);
                 String partyId = (String) orderRole.get("partyId");
                 subContext.put("partyId", partyId);
@@ -237,7 +237,7 @@ public class SubscriptionServices {
                 String msg = "No OrderRole found for orderId:" + orderId;
                 return ServiceUtil.returnFailure(msg);
             }
-            orderHeader = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap("orderId", orderId));
+            orderHeader = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
             if (orderHeader == null) {
                 String msg = "No OrderHeader found for orderId:" + orderId;
                 return ServiceUtil.returnError(msg);

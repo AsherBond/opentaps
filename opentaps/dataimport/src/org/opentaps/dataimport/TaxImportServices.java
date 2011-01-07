@@ -2,7 +2,7 @@ package org.opentaps.dataimport;
 
 import javolution.util.FastList;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -60,7 +60,7 @@ public class TaxImportServices {
 class ZipCodeDecoder implements ImportDecoder {
     public static final String module = ZipCodeDecoder.class.getName();
 
-    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
+    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, Delegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
         List<GenericValue> toBeStored = FastList.newInstance();
 
         // do some basic validation
@@ -124,7 +124,7 @@ class USTaxDecoder implements ImportDecoder {
     }
 
     // first of the custom arguments is the productStoreId
-    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
+    public List<GenericValue> decode(GenericValue entry, Timestamp importTimestamp, Delegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception {
         List<GenericValue> toBeStored = FastList.newInstance();
 
         GenericValue county = EntityUtil.getFirst( delegator.findByAndCache("Geo", UtilMisc.toMap("geoName", entry.getString("county").toUpperCase(), "geoTypeId", "COUNTY")) );

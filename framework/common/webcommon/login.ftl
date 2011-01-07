@@ -19,6 +19,7 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <#if requestAttributes.uiLabelMap?exists><#assign uiLabelMap = requestAttributes.uiLabelMap></#if>
+<#assign useMultitenant = Static["org.ofbiz.base.util.UtilProperties"].getPropertyValue("general.properties", "multitenant")>
 
 <#assign username = requestParameters.USERNAME?default((sessionAttributes.autoUserLogin.userLoginId)?default(""))>
 <#if username != "">
@@ -42,6 +43,12 @@ under the License.
             <td class="label">${uiLabelMap.CommonPassword}</td>
             <td><input type="password" name="PASSWORD" value="" size="20"/></td>
           </tr>
+          <#if ("Y" == useMultitenant)>
+            <tr>
+              <td class="label">${uiLabelMap.CommonTenantId}</td>
+              <td><input type="text" name="tenantId" value="${parameters.tenantId?if_exists}" size="20"/></td>
+            </tr>
+          </#if>
           <tr>
             <td colspan="2" align="center">
               <input type="submit" value="${uiLabelMap.CommonLogin}"/>
@@ -49,7 +56,7 @@ under the License.
           </tr>
         </table>
         <input type="hidden" name="JavaScriptEnabled" value="N"/>
-        <br/>
+        <br />
         <a href="<@ofbizUrl>forgotPassword</@ofbizUrl>">${uiLabelMap.CommonForgotYourPassword}?</a>
       </form>
     </div>

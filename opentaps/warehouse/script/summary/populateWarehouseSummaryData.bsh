@@ -115,7 +115,7 @@ if (UtilValidate.isNotEmpty(facilities)) {
                 shipmentMethodType = delegator.findByPrimaryKeyCache("ShipmentMethodType", UtilMisc.toMap("shipmentMethodTypeId", shipmentMethodTypeId));
                 shipmentMethodDesc = shipmentMethodType.get("description");
 
-                fields = UtilMisc.toMap("wspickmoveId", facilityId + shipmentMethodTypeId, "facilityId", facilityId, "shipmentMethodType", shipmentMethodDesc, "orderReadyToPickInfo", orderShipment.get(shipmentMethodTypeId));
+                fields = UtilMisc.toMap("wspickmoveId", facilityId + shipmentMethodTypeId, "facilityId", facilityId, "shipmentMethodType", shipmentMethodDesc, "orderReadyToPickInfo", new Long(orderShipment.get(shipmentMethodTypeId)));
                 if ((entity = delegator.findByPrimaryKey("WarehouseSummaryPickMove", UtilMisc.toMap("wspickmoveId", facilityId + shipmentMethodTypeId))) == null) {
                     entity = delegator.create("WarehouseSummaryPickMove", fields);
                 } else {

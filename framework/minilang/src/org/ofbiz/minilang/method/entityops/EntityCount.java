@@ -27,12 +27,14 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.collections.FlexibleMapAccessor;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.finder.EntityFinderUtil.Condition;
 import org.ofbiz.entity.finder.EntityFinderUtil.ConditionExpr;
 import org.ofbiz.entity.finder.EntityFinderUtil.ConditionList;
 import org.ofbiz.entity.finder.EntityFinderUtil.ConditionObject;
+import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.minilang.SimpleMethod;
 import org.ofbiz.minilang.method.MethodContext;
 import org.ofbiz.minilang.method.MethodOperation;
@@ -92,27 +94,30 @@ public class EntityCount extends MethodOperation {
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         try {
             Map<String, Object> context = methodContext.getEnvMap();
-            GenericDelegator delegator = methodContext.getDelegator();
+            Delegator delegator = methodContext.getDelegator();
             String entityName = this.entityNameExdr.expandString(context);
             String delegatorName = this.delegatorNameExdr.expandString(context);
 
-            if (delegatorName != null && delegatorName.length() > 0) {
-                delegator = GenericDelegator.getGenericDelegator(delegatorName);
+            if (UtilValidate.isNotEmpty(delegatorName)) {
+                delegator = DelegatorFactory.getDelegator(delegatorName);
             }
+
+            ModelEntity modelEntity = delegator.getModelEntity(entityName);
 
             // create whereEntityCondition from whereCondition
             EntityCondition whereEntityCondition = null;
             if (this.whereCondition != null) {
-                whereEntityCondition = this.whereCondition.createCondition(context, entityName, delegator);
+                whereEntityCondition = this.whereCondition.createCondition(context, modelEntity, delegator.getModelFieldTypeReader(modelEntity));
             }
 
             // create havingEntityCondition from havingCondition
             EntityCondition havingEntityCondition = null;
             if (this.havingCondition != null) {
-                havingEntityCondition = this.havingCondition.createCondition(context, entityName, delegator);
+                havingEntityCondition = this.havingCondition.createCondition(context, modelEntity, delegator.getModelFieldTypeReader(modelEntity));
             }
 
             long count = delegator.findCountByCondition(entityName, whereEntityCondition, havingEntityCondition, null);
@@ -141,10 +146,12 @@ public class EntityCount extends MethodOperation {
         return entName;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<entity-count/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

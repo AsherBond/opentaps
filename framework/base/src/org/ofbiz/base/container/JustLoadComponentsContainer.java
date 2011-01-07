@@ -40,7 +40,7 @@ public class JustLoadComponentsContainer implements Container {
             Debug.logError(e, module);
         } catch (ComponentException e) {
             Debug.logError(e, module);
-            //throw (ContainerException) new ContainerException(e.getMessage()).initCause(e);
+            //throw UtilMisc.initCause(new ContainerException(e.getMessage()), e);
         }
     }
 

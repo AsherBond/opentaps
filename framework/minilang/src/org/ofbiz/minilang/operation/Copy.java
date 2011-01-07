@@ -20,6 +20,8 @@
 package org.ofbiz.minilang.operation;
 
 import java.util.*;
+
+import org.ofbiz.base.util.UtilValidate;
 import org.w3c.dom.*;
 
 /**
@@ -34,7 +36,7 @@ public class Copy extends SimpleMapOperation {
     public Copy(Element element, SimpleMapProcess simpleMapProcess) {
         super(element, simpleMapProcess);
         toField = element.getAttribute("to-field");
-        if (this.toField == null || this.toField.length() == 0) {
+        if (UtilValidate.isEmpty(this.toField)) {
             this.toField = this.fieldName;
         }
 
@@ -44,6 +46,7 @@ public class Copy extends SimpleMapOperation {
         setIfNull = !"false".equals(element.getAttribute("set-if-null"));
     }
 
+    @Override
     public void exec(Map<String, Object> inMap, Map<String, Object> results, List<Object> messages, Locale locale, ClassLoader loader) {
         Object fieldValue = inMap.get(fieldName);
 

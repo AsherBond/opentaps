@@ -20,9 +20,11 @@
 package org.ofbiz.entity.jdbc;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.config.EntityConfigUtil;
 import org.ofbiz.entity.connection.ConnectionFactoryInterface;
+import org.ofbiz.entity.datasource.GenericHelperInfo;
 import org.ofbiz.entity.transaction.TransactionFactory;
 import org.w3c.dom.Element;
 
@@ -48,7 +50,7 @@ public class ConnectionFactory {
         }
 
         try {
-            if (userName != null && userName.length() > 0)
+            if (UtilValidate.isNotEmpty(userName))
                 return DriverManager.getConnection(connectionUrl, userName, password);
             else if (props != null)
                 return DriverManager.getConnection(connectionUrl, props);
@@ -71,16 +73,21 @@ public class ConnectionFactory {
     public static Connection getConnection(String helperName) throws SQLException, GenericEntityException {
         // Debug.logVerbose("Getting a connection", module);
 
-        Connection con = TransactionFactory.getConnection(helperName);
+        Connection con = TransactionFactory.getConnection(new GenericHelperInfo(null, helperName));
         if (con == null) {
             Debug.logError("******* ERROR: No database connection found for helperName \"" + helperName + "\"", module);
         }
         return con;
     }
 
-    @Deprecated
-    public static Connection tryGenericConnectionSources(String helperName, Element inlineJdbcElement) throws SQLException, GenericEntityException {
-        return getManagedConnectionFactory().getConnection(helperName, inlineJdbcElement);
+    public static Connection getConnection(GenericHelperInfo helperInfo) throws SQLException, GenericEntityException {
+        // Debug.logVerbose("Getting a connection", module);
+
+        Connection con = TransactionFactory.getConnection(helperInfo);
+        if (con == null) {
+            Debug.logError("******* ERROR: No database connection found for helperName \"" + helperInfo.getHelperFullName() + "\"", module);
+        }
+        return con;
     }
 
     public static ConnectionFactoryInterface getManagedConnectionFactory() {
@@ -94,9 +101,9 @@ public class ConnectionFactory {
                         if (className == null) {
                             throw new IllegalStateException("Could not find connection factory class name definition");
                         }
-                        Class cfClass = null;
+                        Class<?> cfClass = null;
 
-                        if (className != null && className.length() > 0) {
+                        if (UtilValidate.isNotEmpty(className)) {
                             try {
                                 ClassLoader loader = Thread.currentThread().getContextClassLoader();
                                 cfClass = loader.loadClass(className);
@@ -125,8 +132,8 @@ public class ConnectionFactory {
         return _factory;
     }
 
-    public static Connection getManagedConnection(String helperName, Element inlineJdbcElement) throws SQLException, GenericEntityException {
-        return getManagedConnectionFactory().getConnection(helperName, inlineJdbcElement);
+    public static Connection getManagedConnection(GenericHelperInfo helperInfo, Element inlineJdbcElement) throws SQLException, GenericEntityException {
+        return getManagedConnectionFactory().getConnection(helperInfo, inlineJdbcElement);
     }
 
     public static void closeAllManagedConnections() {

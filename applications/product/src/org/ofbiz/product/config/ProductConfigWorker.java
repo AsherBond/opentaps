@@ -28,11 +28,12 @@ import javax.servlet.http.HttpServletRequest;
 import javolution.util.FastList;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.product.catalog.CatalogWorker;
@@ -52,7 +53,7 @@ public class ProductConfigWorker {
     public static final String resource = "ProductUiLabels";
     public static final String SEPARATOR = "::";    // cache key separator
 
-    public static UtilCache<String, ProductConfigWrapper> productConfigCache = new UtilCache<String, ProductConfigWrapper>("product.config", true);     // use soft reference to free up memory if needed
+    public static UtilCache<String, ProductConfigWrapper> productConfigCache = UtilCache.createUtilCache("product.config", true);     // use soft reference to free up memory if needed
 
     public static ProductConfigWrapper getProductConfigWrapper(String productId, String currencyUomId, HttpServletRequest request) {
         ProductConfigWrapper configWrapper = null;
@@ -66,7 +67,7 @@ public class ProductConfigWorker {
              */
             String cacheKey = productId + SEPARATOR + productStoreId + SEPARATOR + catalogId + SEPARATOR + webSiteId + SEPARATOR + currencyUomId;
             if (!productConfigCache.containsKey(cacheKey)) {
-                configWrapper = new ProductConfigWrapper((GenericDelegator)request.getAttribute("delegator"),
+                configWrapper = new ProductConfigWrapper((Delegator)request.getAttribute("delegator"),
                                                          (LocalDispatcher)request.getAttribute("dispatcher"),
                                                          productId, productStoreId, catalogId, webSiteId,
                                                          currencyUomId, UtilHttp.getLocale(request),
@@ -130,17 +131,17 @@ public class ProductConfigWorker {
                             GenericValue component = components.get(i);
                             if (option.isVirtualComponent(component)) {
                                 String productParamName = "add_product_id" + k + "_" + cnt + "_" + variantIndex;
-                                String selectedProdcutId = request.getParameter(productParamName);
-                                if (UtilValidate.isEmpty(selectedProdcutId)) {
+                                String selectedProductId = request.getParameter(productParamName);
+                                if (UtilValidate.isEmpty(selectedProductId)) {
                                     Debug.logWarning("ERROR: Request param [" + productParamName + "] not found!", module);
                                 } else {
 
                                     //  handle also feature tree virtual variant methods
-                                    if (ProductWorker.isVirtual((GenericDelegator)request.getAttribute("delegator"), selectedProdcutId)) {
-                                        if ("VV_FEATURETREE".equals(ProductWorker.getProductvirtualVariantMethod((GenericDelegator)request.getAttribute("delegator"), selectedProdcutId))) {
+                                    if (ProductWorker.isVirtual((Delegator)request.getAttribute("delegator"), selectedProductId)) {
+                                        if ("VV_FEATURETREE".equals(ProductWorker.getProductVirtualVariantMethod((Delegator)request.getAttribute("delegator"), selectedProductId))) {
                                             // get the selected features
                                             List<String> selectedFeatures = FastList.newInstance();
-                                            Enumeration paramNames = request.getParameterNames();
+                                            Enumeration<String> paramNames = UtilGenerics.cast(request.getParameterNames());
                                             while (paramNames.hasMoreElements()) {
                                                 String paramName = (String)paramNames.nextElement();
                                                 if (paramName.startsWith("FT" + k + "_" + cnt + "_" + variantIndex)) {
@@ -150,19 +151,19 @@ public class ProductConfigWorker {
 
                                             // check if features are selected
                                             if (UtilValidate.isEmpty(selectedFeatures)) {
-                                                Debug.logWarning("ERROR: No features selected for productId [" + selectedProdcutId+ "]", module);
+                                                Debug.logWarning("ERROR: No features selected for productId [" + selectedProductId+ "]", module);
                                             }
 
-                                            String variantProductId = ProductWorker.getVariantFromFeatureTree(selectedProdcutId, selectedFeatures, (GenericDelegator)request.getAttribute("delegator"));
+                                            String variantProductId = ProductWorker.getVariantFromFeatureTree(selectedProductId, selectedFeatures, (Delegator)request.getAttribute("delegator"));
                                             if (UtilValidate.isNotEmpty(variantProductId)) {
-                                                selectedProdcutId = variantProductId;
+                                                selectedProductId = variantProductId;
                                             } else {
                                                 Debug.logWarning("ERROR: Variant product not found!", module);
                                                 request.setAttribute("_EVENT_MESSAGE_", UtilProperties.getMessage("OrderErrorUiLabels", "cart.addToCart.incompatibilityVariantFeature", UtilHttp.getLocale(request)));
                                            }
                                         }
                                     }
-                                    configWrapper.setSelected(k, cnt, i, selectedProdcutId);
+                                    configWrapper.setSelected(k, cnt, i, selectedProductId);
                                 }
                                 variantIndex ++;
                             }
@@ -182,7 +183,7 @@ public class ProductConfigWorker {
      * @param ProductConfigWrapper
      * @param delegator
      */
-    public static void storeProductConfigWrapper(ProductConfigWrapper configWrapper, GenericDelegator delegator) {
+    public static void storeProductConfigWrapper(ProductConfigWrapper configWrapper, Delegator delegator) {
         if (configWrapper == null || (!configWrapper.isCompleted()))  return;
         String configId = null;
         List<ConfigItem> questions = configWrapper.getQuestions();
@@ -385,7 +386,7 @@ public class ProductConfigWorker {
      * @param autoUserLogin
      * @return ProductConfigWrapper
      */
-    public static ProductConfigWrapper loadProductConfigWrapper(GenericDelegator delegator, LocalDispatcher dispatcher, String configId, String productId, String productStoreId, String catalogId, String webSiteId, String currencyUomId, Locale locale, GenericValue autoUserLogin) {
+    public static ProductConfigWrapper loadProductConfigWrapper(Delegator delegator, LocalDispatcher dispatcher, String configId, String productId, String productStoreId, String catalogId, String webSiteId, String currencyUomId, Locale locale, GenericValue autoUserLogin) {
         ProductConfigWrapper configWrapper = null;
         try {
              configWrapper = new ProductConfigWrapper(delegator, dispatcher, productId, productStoreId, catalogId, webSiteId, currencyUomId, locale, autoUserLogin);

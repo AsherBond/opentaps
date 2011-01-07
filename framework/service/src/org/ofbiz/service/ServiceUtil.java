@@ -18,9 +18,9 @@
  *******************************************************************************/
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.service;
-
+ 
 import java.sql.Timestamp;
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -38,7 +38,7 @@ import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -74,6 +74,13 @@ public class ServiceUtil {
         return ModelService.RESPOND_FAIL.equals(results.get(ModelService.RESPONSE_MESSAGE));
     }
 
+    /** A little short-cut method to check to see if a service was successful (neither error or failed) */
+    public static boolean isSuccess(Map<String, ? extends Object> results) {
+        if (ServiceUtil.isError(results) || ServiceUtil.isFailure(results)) {
+            return false;
+        }
+        return true;
+    }
 
     /** A small routine used all over to improve code efficiency, make a result map with the message and the error response code */
     public static Map<String, Object> returnError(String errorMessage) {
@@ -155,6 +162,13 @@ public class ServiceUtil {
         return returnMessage(ModelService.RESPOND_SUCCESS, null);
     }
 
+    /** A small routine used all over to improve code efficiency, make a result map with the message and the success response code */
+    public static Map<String, Object> returnSuccess(List<String> successMessageList) {
+        Map<String, Object> result = returnMessage(ModelService.RESPOND_SUCCESS, null);
+        result.put(ModelService.SUCCESS_MESSAGE_LIST, successMessageList);
+        return result;
+    }
+
     /** A small routine to make a result map with the message and the response code
      * NOTE: This brings out some bad points to our message convention: we should be using a single message or message list
      *  and what type of message that is should be determined by the RESPONSE_MESSAGE (and there's another annoyance, it should be RESPONSE_CODE)
@@ -172,12 +186,12 @@ public class ServiceUtil {
     public static String getPartyIdCheckSecurity(GenericValue userLogin, Security security, Map<String, ? extends Object> context, Map<String, Object> result, String secEntity, String secOperation) {
         String partyId = (String) context.get("partyId");
         Locale locale = getLocale(context);
-        if (partyId == null || partyId.length() == 0) {
+        if (UtilValidate.isEmpty(partyId)) {
             partyId = userLogin.getString("partyId");
         }
 
         // partyId might be null, so check it
-        if (partyId == null || partyId.length() == 0) {
+        if (UtilValidate.isEmpty(partyId)) {
             result.put(ModelService.RESPONSE_MESSAGE, ModelService.RESPOND_ERROR);
             String errMsg = UtilProperties.getMessage(ServiceUtil.resource, "serviceUtil.party_id_missing", locale) + ".";
             result.put(ModelService.ERROR_MESSAGE, errMsg);
@@ -329,13 +343,13 @@ public class ServiceUtil {
      * @param targetMap The Map to add any Map error messages to
      * @param callResult The result from an invocation
      */
-    public static void addErrors(List<Object> targetList, Map<String, Object> targetMap, Map<String, ? extends Object> callResult) {
-        List<? extends Object> newList;
-        Map<String, ? extends Object> errorMsgMap;
+    public static void addErrors(List<String> targetList, Map<String, Object> targetMap, Map<String, ? extends Object> callResult) {
+        List<String> newList;
+        Map<String, Object> errorMsgMap;
 
         //See if there is a single message
         if (callResult.containsKey(ModelService.ERROR_MESSAGE)) {
-            targetList.add(callResult.get(ModelService.ERROR_MESSAGE));
+            targetList.add((String) callResult.get(ModelService.ERROR_MESSAGE));
         }
 
         //See if there is a message list
@@ -354,7 +368,7 @@ public class ServiceUtil {
     public static Map<String, Object> purgeOldJobs(DispatchContext dctx, Map<String, ? extends Object> context) {
         String sendPool = ServiceConfigUtil.getSendPool();
         int daysToKeep = ServiceConfigUtil.getPurgeJobDays();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         Timestamp now = UtilDateTime.nowTimestamp();
         Calendar cal = Calendar.getInstance();
@@ -401,8 +415,11 @@ public class ServiceUtil {
                     beganTx1 = TransactionUtil.begin();
 
                     EntityListIterator foundJobs = delegator.find("JobSandbox", mainCond, null, null, null, findOptions);
-                    curList = foundJobs.getPartialList(1, 1000);
-                    foundJobs.close();
+                    try {
+                        curList = foundJobs.getPartialList(1, 1000);
+                    } finally {
+                        foundJobs.close();
+                    }
 
                 } catch (GenericEntityException e) {
                     Debug.logError(e, "Cannot obtain job data from datasource", module);
@@ -496,7 +513,7 @@ public class ServiceUtil {
     }
 
     public static Map<String, Object> cancelJob(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = getLocale(context);
@@ -535,7 +552,7 @@ public class ServiceUtil {
     }
 
     public static Map<String, Object> cancelJobRetries(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = getLocale(context);
@@ -585,7 +602,7 @@ public class ServiceUtil {
 
     public static GenericValue getUserLogin(DispatchContext dctx, Map<String, ? extends Object> context, String runAsUser) {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         if (UtilValidate.isNotEmpty(runAsUser)) {
             try {
                 GenericValue runAs = delegator.findByPrimaryKeyCache("UserLogin", "userLoginId", runAsUser);
@@ -617,7 +634,7 @@ public class ServiceUtil {
     }
 
     public static Map<String, Object> resetJob(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = getLocale(context);

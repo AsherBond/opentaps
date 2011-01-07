@@ -36,11 +36,17 @@ under the License.
         <attribute name="authPass" type="String" mode="IN" optional="true"/>
         <attribute name="sendVia" type="String" mode="IN" optional="true"/>
         <attribute name="sendType" type="String" mode="IN" optional="true"/>
+        <attribute name="sendFailureNotification" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="sendPartial" mode="IN" type="Boolean" optional="true"/>
         <attribute name="subject" type="String" mode="INOUT" optional="true" allow-html="safe"/>
         <attribute name="contentType" type="String" mode="INOUT" optional="true"/>
         <attribute name="partyId" type="String" mode="INOUT" optional="true"/>
         <attribute name="messageId" type="String" mode="INOUT" optional="true"/>
         <attribute name="emailType" type="String" mode="INOUT" optional="true"/>
+        <attribute name="orderId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="messageWrapper" type="org.ofbiz.service.mail.MimeMessageWrapper" mode="OUT" optional="true"/><!-- mail can be disabled in general.properties so no output -->
+        <!--  used for parsing and ECAs -->
+        <attribute name="communicationEventId" type="String" mode="INOUT" optional="true"/>    
     </service>
     <service name="sendMail" engine="java"
             location="org.ofbiz.common.email.EmailServices" invoke="sendMail">
@@ -48,7 +54,6 @@ under the License.
             but are passed down to storeEmailAsCommunication during the SECA chain.  See sendMailInterface for more comments.</description>
         <implements service="sendMailInterface"/>
         <attribute name="body" type="String" mode="INOUT" optional="false" allow-html="any"/>
-        <attribute name="communicationEventId" type="String" mode="INOUT" optional="true"/>
         <override name="contentType" mode="INOUT"/>
         <override name="subject" mode="INOUT" optional="false"/>
         <override name="emailType" type="String" mode="INOUT" optional="true"/>
@@ -80,6 +85,7 @@ under the License.
         <attribute name="attachmentName" type="String" mode="IN" optional="true"/>
         <attribute name="bodyParameters" type="Map" mode="IN" optional="true"/>
         <attribute name="webSiteId" type="String" mode="IN" optional="true"/>
+        <attribute name="subject" type="String" mode="OUT" optional="true"/>
         <attribute name="body" type="String" mode="OUT" optional="false"/>
     </service>
     <service name="sendMailFromTemplateSetting" engine="simple"

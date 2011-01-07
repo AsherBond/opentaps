@@ -50,6 +50,7 @@ public class GenericValue extends GenericEntity implements Reusable {
     public static final GenericValue NULL_VALUE = new NullGenericValue();
 
     protected static final ObjectFactory<GenericValue> genericValueFactory = new ObjectFactory<GenericValue>() {
+        @Override
         protected GenericValue create() {
             return new GenericValue();
         }
@@ -77,16 +78,16 @@ public class GenericValue extends GenericEntity implements Reusable {
     }
 
     /** Creates new GenericValue from existing Map */
-    public static GenericValue create(ModelEntity modelEntity, Map<String, ? extends Object> fields) {
+    public static GenericValue create(Delegator delegator, ModelEntity modelEntity, Map<String, ? extends Object> fields) {
         GenericValue newValue = genericValueFactory.object();
-        newValue.init(modelEntity, fields);
+        newValue.init(delegator, modelEntity, fields);
         return newValue;
     }
 
     /** Creates new GenericValue from existing Map */
-    public static GenericValue create(ModelEntity modelEntity, Object singlePkValue) {
+    public static GenericValue create(Delegator delegator, ModelEntity modelEntity, Object singlePkValue) {
         GenericValue newValue = genericValueFactory.object();
-        newValue.init(modelEntity, singlePkValue);
+        newValue.init(delegator, modelEntity, singlePkValue);
         return newValue;
     }
 
@@ -104,6 +105,7 @@ public class GenericValue extends GenericEntity implements Reusable {
         return newValue;
     }
 
+    @Override
     public void reset() {
         // from GenericEntity
         super.reset();
@@ -114,6 +116,7 @@ public class GenericValue extends GenericEntity implements Reusable {
         this.originalDbValues = null;
     }
 
+    @Override
     public void synchronizedWithDatasource() {
         super.synchronizedWithDatasource();
         this.copyOriginalDbValues();
@@ -491,16 +494,17 @@ public class GenericValue extends GenericEntity implements Reusable {
     /** Clones this GenericValue, this is a shallow clone & uses the default shallow HashMap clone
      *@return Object that is a clone of this GenericValue
      */
+    @Override
     public Object clone() {
-        GenericValue newEntity = GenericValue.create(this);
-        newEntity.setDelegator(internalDelegator);
-        return newEntity;
+        return GenericValue.create(this);
     }
 
     protected static class NullGenericValue extends GenericValue implements NULL {
+        @Override
         public String getEntityName() {
             return "[null-entity-value]";
         }
+        @Override
         public String toString() {
             return "[null-entity-value]";
         }

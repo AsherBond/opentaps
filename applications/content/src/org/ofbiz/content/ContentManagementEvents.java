@@ -38,7 +38,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
@@ -62,12 +62,12 @@ public class ContentManagementEvents {
         GenericValue userLogin = (GenericValue)session.getAttribute("userLogin");
         ServletContext servletContext = session.getServletContext();
         String webSiteId = (String) servletContext.getAttribute("webSiteId");
-        GenericDelegator delegator = (GenericDelegator)request.getAttribute("delegator");
+        Delegator delegator = (Delegator)request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher)request.getAttribute("dispatcher");
         Map paramMap = UtilHttp.getParameterMap(request);
                 //if (Debug.infoOn()) Debug.logInfo("in updateStaticValues, paramMap:" + paramMap , module);
         String parentPlaceholderId = (String)paramMap.get("ph");
-        if ( UtilValidate.isEmpty(parentPlaceholderId)) {
+        if (UtilValidate.isEmpty(parentPlaceholderId)) {
             request.setAttribute("_ERROR_MESSAGE_", "ParentPlaceholder is empty.");
             return "error";
         }
@@ -132,7 +132,7 @@ public class ContentManagementEvents {
                                 Map results = dispatcher.runSync("updateContentAssoc", serviceIn);
                             }
                         }
-                    } else if ( UtilValidate.isNotEmpty(pubValue)) {
+                    } else if (UtilValidate.isNotEmpty(pubValue)) {
                         if (pubValue.equalsIgnoreCase("Y")) {
                                 serviceIn.put("thruDate", UtilDateTime.nowTimestamp());
                                 Timestamp fromDate = (Timestamp)map.get(pubContentId + "FromDate");
@@ -163,7 +163,7 @@ public class ContentManagementEvents {
         GenericValue userLogin = (GenericValue)session.getAttribute("userLogin");
         ServletContext servletContext = session.getServletContext();
         String webSiteId = (String) servletContext.getAttribute("webSiteId");
-        GenericDelegator delegator = (GenericDelegator)request.getAttribute("delegator");
+        Delegator delegator = (Delegator)request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher)request.getAttribute("dispatcher");
         Map paramMap = UtilHttp.getParameterMap(request);
                 //if (Debug.infoOn()) Debug.logInfo("in updatePublishLinks, paramMap:" + paramMap , module);
@@ -191,7 +191,7 @@ public class ContentManagementEvents {
         //if (Debug.infoOn()) Debug.logInfo("in updatePublishLinks, roles:" + roles +" roleTypeList:" + roleTypeList , module);
         String permittedAction = (String)paramMap.get("permittedAction"); // The content to be linked to one or more sites
         String permittedOperations = (String)paramMap.get("permittedOperations"); // The content to be linked to one or more sites
-        if ( UtilValidate.isEmpty(targContentId)) {
+        if (UtilValidate.isEmpty(targContentId)) {
             request.setAttribute("_ERROR_MESSAGE_", "targContentId is empty.");
             return "error";
         }
@@ -201,7 +201,7 @@ public class ContentManagementEvents {
         try {
             // TODO: this needs to be given author userLogin
             GenericValue authorUserLogin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", authorId));
-            origPublishedLinkList = ContentManagementWorker.getPublishedLinks(delegator, targContentId, webSiteId, userLogin, security, permittedAction, permittedOperations, roles );
+            origPublishedLinkList = ContentManagementWorker.getPublishedLinks(delegator, targContentId, webSiteId, userLogin, security, permittedAction, permittedOperations, roles);
         } catch (GenericEntityException e) {
             request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
             return "error";
@@ -322,7 +322,7 @@ public class ContentManagementEvents {
                             }
                         }
                     }
-                } else if ( UtilValidate.isNotEmpty(origSubContentId)) {
+                } else if (UtilValidate.isNotEmpty(origSubContentId)) {
                     // if no current link is passed in, look to see if there is an existing link(s) that must be disabled
                     List oldActiveValues = delegator.findByAnd("ContentAssoc", UtilMisc.toMap("contentId", targContentId, "contentIdTo", origSubContentId, "contentAssocTypeId", "PUBLISH_LINK", "thruDate", null));
                     Iterator iterOldActive = oldActiveValues.iterator();

@@ -27,6 +27,7 @@ import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.cache.UtilCache;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericPK;
@@ -110,7 +111,7 @@ public abstract class AbstractEntityConditionCache<K, V> extends AbstractCache<E
         return conditionCache;
     }
 
-    protected static final boolean isNull(Map value) {
+    protected static final <K,V> boolean isNull(Map<K,V> value) {
         return value == null || value == GenericEntity.NULL_ENTITY || value == GenericValue.NULL_VALUE;
     }
 
@@ -165,10 +166,9 @@ public abstract class AbstractEntityConditionCache<K, V> extends AbstractCache<E
             //Debug.logInfo("In storeHook calling sub-storeHook for entity name [" + entityName + "] for the oldEntity: " + oldEntity, module);
         }
         storeHook(entityName, isPK, UtilMisc.toList(oldEntity), UtilMisc.toList(newEntity));
-        Iterator<Map.Entry<String, ModelViewEntity>> it = model.getViewConvertorsIterator();
+        Iterator<String> it = model.getViewConvertorsIterator();
         while (it.hasNext()) {
-            Map.Entry<String, ModelViewEntity> entry = it.next();
-            String targetEntityName = entry.getKey();
+            String targetEntityName = it.next();
             storeHook(targetEntityName, isPK, convert(isPK, targetEntityName, oldEntity), convert(false, targetEntityName, newEntity));
         }
     }
@@ -176,7 +176,7 @@ public abstract class AbstractEntityConditionCache<K, V> extends AbstractCache<E
     protected <T1 extends Map<String, Object>, T2 extends Map<String, Object>> void storeHook(String entityName, boolean isPK, List<T1> oldValues, List<T2> newValues) {
         UtilCache<EntityCondition, Map<K, V>> entityCache = UtilCache.findCache(getCacheName(entityName));
         // for info about cache clearing
-        if (newValues == null || newValues.size() == 0 || newValues.get(0) == null) {
+        if (UtilValidate.isEmpty(newValues) || newValues.get(0) == null) {
             //Debug.logInfo("In storeHook (cache clear) for entity name [" + entityName + "], got entity cache with name: " + (entityCache == null ? "[No cache found to remove from]" : entityCache.getName()), module);
         }
         if (entityCache == null) {

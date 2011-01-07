@@ -25,7 +25,7 @@ import java.util.Map;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
@@ -46,7 +46,7 @@ public class InventoryEventPlannedServices {
      * @return result: a map with service status
      */
     public static Map createMrpEvent(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         Map parameters = UtilMisc.toMap("mrpId", context.get("mrpId"),
                                         "productId", context.get("productId"),
                                         "eventDate", context.get("eventDate"),
@@ -62,19 +62,19 @@ public class InventoryEventPlannedServices {
         return ServiceUtil.returnSuccess();
     }
 
-    public static void createOrUpdateMrpEvent(Map mrpEventKeyMap, BigDecimal newQuantity, String facilityId, String eventName, boolean isLate, GenericDelegator delegator) throws GenericEntityException {
+    public static void createOrUpdateMrpEvent(Map mrpEventKeyMap, BigDecimal newQuantity, String facilityId, String eventName, boolean isLate, Delegator delegator) throws GenericEntityException {
         GenericValue mrpEvent = null;
         mrpEvent = delegator.findByPrimaryKey("MrpEvent", mrpEventKeyMap);
         if (mrpEvent == null) {
             mrpEvent = delegator.makeValue("MrpEvent", mrpEventKeyMap);
-            mrpEvent.put("quantity", newQuantity);
+            mrpEvent.put("quantity", newQuantity.doubleValue());
             mrpEvent.put("eventName", eventName);
             mrpEvent.put("facilityId", facilityId);
             mrpEvent.put("isLate", (isLate? "Y": "N"));
             mrpEvent.create();
         } else {
             BigDecimal qties = newQuantity.add((BigDecimal)mrpEvent.getBigDecimal("quantity"));
-            mrpEvent.put("quantity", qties);
+            mrpEvent.put("quantity", qties.doubleValue());
             if (!UtilValidate.isEmpty(eventName)) {
                 String existingEventName = mrpEvent.getString("eventName");
                 mrpEvent.put("eventName", (UtilValidate.isEmpty(existingEventName)? eventName: existingEventName + ", " + eventName));

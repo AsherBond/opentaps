@@ -49,7 +49,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.transaction.TransactionUtil;
@@ -76,7 +76,7 @@ public final class NotificationServices {
 
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> sendCrmNotificationEmails(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String eventType = (String) context.get("eventType");
         String subject = (String) context.get("subject");
@@ -145,7 +145,7 @@ public final class NotificationServices {
     public static Map<String, Object> sendCatalogRequestNotificationEmail(DispatchContext dctx, Map<String, Object> context) {
 
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");

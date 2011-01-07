@@ -22,7 +22,8 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -45,13 +46,13 @@ public final class UtilAgreement {
 
     /**
      * This method controls what fields are available for each agreement term type.
-     * @deprecated Use <code>getValidFields(String, GenericDelegator)</code> instead.  This will always use the "default" delegator
+     * @deprecated Use <code>getValidFields(String, Delegator)</code> instead.  This will always use the "default" delegator
      * @param termTypeId a <code>String</code> value
      * @return a <code>List</code> value
      */
     public static List<String> getValidFields(String termTypeId) {
         Debug.logWarning("Deprecated method UtilAgreement.getValidFields(termTypeId) called: You should be using getValidFields(termTypeId, delegator)", MODULE);
-        return getValidFields(termTypeId, GenericDelegator.getGenericDelegator("default"));
+        return getValidFields(termTypeId, DelegatorFactory.getDelegator("default"));
     }
 
     /**
@@ -60,10 +61,10 @@ public final class UtilAgreement {
      * Returns a List of fields for AgreementTerm which should be displayed for each termTypeId defined in TermType
      * If null then assume that all fields should be displayed
      * @param termTypeId String
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> value
      */
-    public static List<String> getValidFields(String termTypeId, GenericDelegator delegator) {
+    public static List<String> getValidFields(String termTypeId, Delegator delegator) {
 
         List<String> fieldNames = new ArrayList<String>();
         try {
@@ -127,11 +128,11 @@ public final class UtilAgreement {
      * @param agreementItemTypeId String
      * @param agreementId a <code>String</code> value
      * @param agreementItemSeqId a <code>String</code> value
-     * @param delegator GenericDelegator
+     * @param delegator Delegator
      * @return List
      * @exception GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getTermsByItemType(String agreementItemTypeId, String agreementId, String agreementItemSeqId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getTermsByItemType(String agreementItemTypeId, String agreementId, String agreementItemSeqId, Delegator delegator) throws GenericEntityException {
 
         List<String> selectList = UtilMisc.toList("termTypeId", "maxAllowed");
         List<GenericValue> termsMap = delegator.findByConditionCache("AgreementItemToTermMap", EntityCondition.makeCondition("agreementItemTypeId", agreementItemTypeId), selectList, null);
@@ -176,7 +177,7 @@ public final class UtilAgreement {
         if (agreement == null) {
             throw new IllegalArgumentException("Must supply agreement when checking if invoice is covered by agreement.");
         }
-        GenericDelegator delegator = agreement.getDelegator();
+        Delegator delegator = agreement.getDelegator();
         if ("COMMISSION_AGREEMENT".equals(agreement.get("agreementTypeId"))) {
             List<GenericValue> customerTerms = delegator.findByAnd("AgreementAndItemAndTerm", UtilMisc.toMap("agreementId", agreement.get("agreementId"), "agreementItemTypeId", "COMM_CUSTOMERS"));
             boolean isInvoiceCovered = false;
@@ -270,11 +271,11 @@ public final class UtilAgreement {
      * These agreements have a COMM_PARTY_APPL term which identifies the customer party.
      * @param organizationPartyId a <code>String</code> value
      * @param customerPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>Set</code> of commission agent ids for the given customer and organization
      * @exception GenericEntityException if an error occurs
      */
-    public static Set<String> getCommissionAgentIdsForCustomer(String organizationPartyId, String customerPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static Set<String> getCommissionAgentIdsForCustomer(String organizationPartyId, String customerPartyId, Delegator delegator) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition("termTypeId", "COMM_PARTY_APPL"),
             EntityCondition.makeCondition("partyId", customerPartyId)
@@ -286,11 +287,11 @@ public final class UtilAgreement {
      * Gets the agent partyIds that have agreements which allow them to earn commission on orders they place for
      * the organization.  These agreements have a COMM_ORDER_ROLE term that implies coverage of all orders.
      * @param organizationPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>Set</code> of commission agent ids for the given organization
      * @exception GenericEntityException if an error occurs
      */
-    public static Set<String> getCommissionAgentIdsForOrganizationOrders(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static Set<String> getCommissionAgentIdsForOrganizationOrders(String organizationPartyId, Delegator delegator) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition("termTypeId", "COMM_ORDER_ROLE"),
             EntityCondition.makeCondition("roleTypeId", "COMMISSION_AGENT")
@@ -304,11 +305,11 @@ public final class UtilAgreement {
      * organization.  These agreements have a COMM_ORDER_ROLE term that implies coverage of all orders.
      * @param organizationPartyId a <code>String</code> value
      * @param agentPartyId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static boolean doesAgentEarnCommissionForOrganizationOrders(String organizationPartyId, String agentPartyId, GenericDelegator delegator) throws GenericEntityException {
+    public static boolean doesAgentEarnCommissionForOrganizationOrders(String organizationPartyId, String agentPartyId, Delegator delegator) throws GenericEntityException {
         Set<String> agentIds = getCommissionAgentIdsForOrganizationOrders(organizationPartyId, delegator);
         return agentIds.contains(agentPartyId);
     }
@@ -318,11 +319,11 @@ public final class UtilAgreement {
      * constraints to narrow down the results.  This is really meant to be used by other UtilAgreement methods.
      * @param organizationPartyId a <code>String</code> value
      * @param constraintConditions an <code>EntityCondition</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the <code>Set</code> of commission agent ids for the given organization and constraintConditions
      * @exception GenericEntityException if an error occurs
      */
-    public static Set<String> getActiveCommissionAgentIds(String organizationPartyId, EntityCondition constraintConditions, GenericDelegator delegator) throws GenericEntityException {
+    public static Set<String> getActiveCommissionAgentIds(String organizationPartyId, EntityCondition constraintConditions, Delegator delegator) throws GenericEntityException {
         Set<String> commissionAgentIds = FastSet.newInstance();
 
         List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(

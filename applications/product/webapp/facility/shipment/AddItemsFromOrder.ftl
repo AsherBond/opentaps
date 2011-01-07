@@ -30,11 +30,8 @@ under the License.
             <input type="hidden" name="shipmentId" value="${shipmentId}"/>
             <div>
                 <span class="label">${uiLabelMap.ProductOrderId}</span>
-                <input type="text" size="20" name="orderId" value="${orderId?if_exists}"/>
                 <span>
-                    <a href="javascript:call_fieldlookup2(document.additemsfromorder.orderId,'LookupOrderHeaderAndShipInfo');">
-                        <img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}">
-                    </a>
+                  <@htmlTemplate.lookupField value="${orderId?if_exists}" formName="additemsfromorder" name="orderId" id="orderId" fieldFormName="LookupOrderHeaderAndShipInfo"/>
                 </span>
                 <span class="label">${uiLabelMap.ProductOrderShipGroupId}</span>
                 <input type="text" size="20" name="shipGroupSeqId" value="${shipGroupSeqId?if_exists}"/>
@@ -76,7 +73,7 @@ under the License.
             <h3 style="color: red;">${uiLabelMap.ProductWarningOrderStatus} ${(orderHeaderStatus.get("description",locale))?default(orderHeader.statusId?if_exists)}; ${uiLabelMap.ProductApprovedBeforeShipping}.</h3>
         </#if>
     </#if>
-    <br/>
+    <br />
     <#if orderItemDatas?exists>
         <#assign rowCount = 0>
         <#if isSalesOrder>
@@ -84,11 +81,11 @@ under the License.
         <#else>
             <form action="<@ofbizUrl>issueOrderItemToShipment</@ofbizUrl>" method="post" name="selectAllForm">
         </#if>
-        <input type="hidden" name="shipmentId" value="${shipmentId}">
-        <input type="hidden" name="_useRowSubmit" value="Y">
+        <input type="hidden" name="shipmentId" value="${shipmentId}" />
+        <input type="hidden" name="_useRowSubmit" value="Y" />
         <table cellspacing="0" cellpadding="2" class="basic-table hover-bar">
             <tr class="header-row">
-                <td>${uiLabelMap.ProductOrderId}<br/>${uiLabelMap.ProductOrderShipGroupId}<br/>${uiLabelMap.ProductOrderItem}</td>
+                <td>${uiLabelMap.ProductOrderId}<br />${uiLabelMap.ProductOrderShipGroupId}<br />${uiLabelMap.ProductOrderItem}</td>
                 <td>${uiLabelMap.ProductProduct}</td>
                 <#if isSalesOrder>
                     <td>${uiLabelMap.ProductItemsIssuedReserved}</td>
@@ -102,7 +99,7 @@ under the License.
                 <td>${uiLabelMap.ProductIssue}</td>
                 <td align="right">
                     <div>${uiLabelMap.CommonSubmit} ?</div>
-                    <div>${uiLabelMap.CommonAll}<input type="checkbox" name="selectAll" value="${uiLabelMap.CommonY}" onclick="javascript:toggleAll(this, 'selectAllForm');highlightAllRows(this, 'orderItemData_tableRow_', 'selectAllForm');"></div>
+                    <div>${uiLabelMap.CommonAll}<input type="checkbox" name="selectAll" value="${uiLabelMap.CommonY}" onclick="javascript:toggleAll(this, 'selectAllForm');highlightAllRows(this, 'orderItemData_tableRow_', 'selectAllForm');" /></div>
                 </td>
             </tr>
             <#assign alt_row = false>
@@ -171,7 +168,7 @@ under the License.
                                 <input type="text" size="5" name="quantity_o_${rowCount}" value="${quantityNotIssued}"/>
                             </td>
                             <td align="right">
-                              <input type="checkbox" name="_rowSubmit_o_${rowCount}" value="Y" onclick="javascript:checkToggle(this, 'selectAllForm');highlightRow(this,'orderItemData_tableRow_${rowCount}');">
+                              <input type="checkbox" name="_rowSubmit_o_${rowCount}" value="Y" onclick="javascript:checkToggle(this, 'selectAllForm');highlightRow(this,'orderItemData_tableRow_${rowCount}');" />
                             </td>
                             <#assign rowCount = rowCount + 1>
                         <#else>
@@ -215,7 +212,7 @@ under the License.
                                     <input type="text" size="5" name="quantity_o_${rowCount}" value="${(orderItemShipGrpInvResData.shipmentPlanQuantity)?default(availableQuantity)}"/>
                                 </td>
                                 <td align="right">
-                                  <input type="checkbox" name="_rowSubmit_o_${rowCount}" value="Y" onclick="javascript:checkToggle(this, 'selectAllForm');highlightRow(this,'orderItemData_tableRow_${rowCount}');">
+                                  <input type="checkbox" name="_rowSubmit_o_${rowCount}" value="Y" onclick="javascript:checkToggle(this, 'selectAllForm');highlightRow(this,'orderItemData_tableRow_${rowCount}');" />
                                 </td>
                                 <#assign rowCount = rowCount + 1>
                             <#else>
@@ -230,7 +227,7 @@ under the License.
             </#list>
         </table>
         <div align="right"><input type="submit" class="smallSubmit" value="${uiLabelMap.ProductIssueAll}"/></div>
-        <input type="hidden" name="_rowCount" value="${rowCount}">
+        <input type="hidden" name="_rowCount" value="${rowCount}" />
         </form>
         <script language="JavaScript" type="text/javascript">selectAll('selectAllForm');</script>
     </#if>

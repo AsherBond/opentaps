@@ -65,22 +65,27 @@ public class ServiceEcaArtifactInfo extends ArtifactInfoBase {
         }
     }
 
+    @Override
     public String getDisplayName() {
         return this.getDisplayPrefixedName();
     }
 
+    @Override
     public String getDisplayType() {
         return "Service ECA";
     }
 
+    @Override
     public String getType() {
         return ArtifactInfoFactory.ServiceEcaInfoTypeId;
     }
 
+    @Override
     public String getUniqueId() {
         return this.serviceEcaRule.toString();
     }
 
+    @Override
     public URL getLocationURL() throws MalformedURLException {
         return FlexibleLocation.resolveLocation(this.serviceEcaRule.getDefinitionLocation(), null);
     }
@@ -180,6 +185,7 @@ public class ServiceEcaArtifactInfo extends ArtifactInfoBase {
         return topLevelMap;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof ServiceEcaArtifactInfo) {
             ServiceEcaArtifactInfo that = (ServiceEcaArtifactInfo) obj;

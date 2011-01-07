@@ -32,8 +32,8 @@ under the License.
 </#if>
 
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">&nbsp;${uiLabelMap.PartyContactInformation}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">${uiLabelMap.PartyContactInformation}</div>
     </div>
     <div class="screenlet-body">
         <table cellspacing="0" class="basic-table">
@@ -47,17 +47,17 @@ under the License.
                       <#if emailAddress?has_content>${emailAddress}</#if>
 
                       <#if postalAddress?has_content>
-                        <#if postalAddress.toName?has_content><span class="label">${uiLabelMap.PartyAddrToName}</span>&nbsp;${postalAddress.toName}<br/></#if>
-                        <#if postalAddress.attnName?has_content><span class="label">${uiLabelMap.PartyAddrAttnName}</span>&nbsp;${postalAddress.attnName}<br/></#if>
-                        ${postalAddress.address1?if_exists}<br/>
-                        <#if postalAddress.address2?has_content>${postalAddress.address2}<br/></#if>
+                        <#if postalAddress.toName?has_content><span class="label">${uiLabelMap.PartyAddrToName}</span>&nbsp;${postalAddress.toName}<br /></#if>
+                        <#if postalAddress.attnName?has_content><span class="label">${uiLabelMap.PartyAddrAttnName}</span>&nbsp;${postalAddress.attnName}<br /></#if>
+                        ${postalAddress.address1?if_exists}<br />
+                        <#if postalAddress.address2?has_content>${postalAddress.address2}<br /></#if>
                         ${postalAddress.city?if_exists},
                         <#if postalAddress.stateProvinceGeoId?has_content>
                             <#assign stateProvince = postalAddress.getRelatedOneCache("StateProvinceGeo")>
                             ${stateProvince.abbreviation?default(stateProvince.geoId)}
                         </#if>
                         ${postalAddress.postalCode?if_exists}
-                        <#if postalAddress.countryGeoId?has_content><br/>
+                        <#if postalAddress.countryGeoId?has_content><br />
                              <#assign country = postalAddress.getRelatedOneCache("CountryGeo")>
                              ${country.geoName?default(country.geoId)}
                         </#if>

@@ -101,6 +101,7 @@ public class EntityEcaCondition implements java.io.Serializable {
         }
     }
 
+    @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("[").append(lhsValueName).append("]");

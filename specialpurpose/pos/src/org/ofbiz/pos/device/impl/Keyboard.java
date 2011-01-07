@@ -47,11 +47,13 @@ public class Keyboard extends GenericDevice {
         this.control = new jpos.POSKeyboard();
     }
 
+    @Override
     protected void initialize() throws JposException {
         Debug.logInfo("Keyboard [" + control.getPhysicalDeviceName() + "] Claimed : " + control.getClaimed(), module);
         final jpos.POSKeyboard keyboard = (jpos.POSKeyboard) control;
 
         keyboard.addDataListener(new DataEventAdaptor() {
+            @Override
             public void dataOccurred(jpos.events.DataEvent event) {
                 Debug.log("POSKeyboard DataEvent - " + event.getWhen(), module);
                 try {
@@ -69,7 +71,7 @@ public class Keyboard extends GenericDevice {
                         return;
                     }
 
-                    List buttonEvents = ButtonEventConfig.findButtonKeyAssign(keyCode);
+                    List<String> buttonEvents = ButtonEventConfig.findButtonKeyAssign(keyCode);
                     if (UtilValidate.isNotEmpty(buttonEvents)) {
 
                         Debug.log("Key -> Button Mapping(s) Found [" + keyCode + "]", module);

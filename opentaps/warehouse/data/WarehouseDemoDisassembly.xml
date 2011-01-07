@@ -25,7 +25,7 @@
     <WorkEffort workEffortId="DemoDisasmblTempl" workEffortTypeId="ROUTING" workEffortPurposeTypeId="ROU_DISASSEMBLY" currentStatusId="ROU_ACTIVE" workEffortName="Demo disassembly of PROD_COST" description="Disassembly production run for PROD_COST which should produce MAT_A_COST and MAT_B_COST in the quantities specified by the Bill of Materials."/>
 
     <!-- Link the product to be disassembled to this disassembly template -->
-    <WorkEffortGoodStandard workEffortId="DemoDisasmblTempl" productId="PROD_COST" workEffortGoodStdTypeId="ROU_DISASMBL_TEMPL" fromDate="2007-01-01 00:00:00.000"/>
+    <WorkEffortGoodStandard workEffortId="DemoDisasmblTempl" productId="PROD_MANUF" workEffortGoodStdTypeId="ROU_DISASMBL_TEMPL" fromDate="2007-01-01 00:00:00.000"/>
 
     <!-- Define a template task to consume the PROD_COST as a material issuance. -->
     <WorkEffort workEffortId="DemoDismblTskTmpl" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_DISASSEMBLY" currentStatusId="ROU_ACTIVE" workEffortName="Disassemble the PROD_COST" description="This task is to disassemble the PROD_COST.  The materials are PROD_COST and are issued to complete the task."/>

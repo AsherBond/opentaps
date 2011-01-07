@@ -26,7 +26,7 @@ under the License.
   <!-- ========================================================= -->
     <title>Entity of an Open For Business Project Component</title>
     <description>None</description>
-    <copyright>Copyright 2001-2008 The Apache Software Foundation</copyright>
+    <copyright>Copyright 2001-2009 The Apache Software Foundation</copyright>
     <author>None</author>
     <version>1.0</version>
 
@@ -35,6 +35,7 @@ under the License.
   <!-- The modules in this file are as follows:                  -->
   <!--  - org.ofbiz.entity.group -->
   <!--  - org.ofbiz.entity.synchronization -->
+  <!--  - org.ofbiz.entity.tenant -->
   <!-- ========================================================= -->
 
 
@@ -172,4 +173,3 @@ under the License.
       <prim-key field="entitySyncRemoveId"/>
     </entity>
 </entitymodel>
-

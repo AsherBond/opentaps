@@ -32,6 +32,7 @@ public class ObjectTEI extends TagExtraInfo {
         super();
     }
 
+    @Override
     public VariableInfo[] getVariableInfo(TagData data) {
         String name = null;
         String className = null;
@@ -48,6 +49,7 @@ public class ObjectTEI extends TagExtraInfo {
         return result;
     }
 
+    @Override
     public boolean isValid(TagData data) {
         return true;
     }

@@ -19,8 +19,8 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.webapp.taglib;
 
-import java.util.Iterator;
 import java.util.Map;
+
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 
@@ -64,6 +64,7 @@ public class ServiceTag extends AbstractParameterTag {
         return resultScope;
     }
 
+    @Override
     public int doEndTag() throws JspTagException {
         LocalDispatcher dispatcher = (LocalDispatcher) pageContext.getRequest().getAttribute("dispatcher");
 

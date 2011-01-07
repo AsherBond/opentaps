@@ -19,7 +19,12 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.webapp.view;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
 
 import javax.xml.transform.Result;
@@ -74,12 +79,12 @@ public class ApacheFopWorker {
                 fopFactory.setStrictValidation(false);
 
                 try {
-                    String fopPath = UtilProperties.getPropertyValue("fop.properties", "fop.path", "framework/webapp/config");
+                    String ofbizHome = System.getProperty("ofbiz.home");
+                    String fopPath = UtilProperties.getPropertyValue("fop.properties", "fop.path", ofbizHome + "/framework/webapp/config");
                     File userConfigFile = FileUtil.getFile(fopPath + "/fop.xconf");
                     fopFactory.setUserConfig(userConfigFile);
                     String fopFontBaseUrl = fopFactory.getFontBaseURL();
                     if (fopFontBaseUrl == null) {
-                        String ofbizHome = System.getProperty("ofbiz.home");
                         fopFontBaseUrl = UtilProperties.getPropertyValue("fop.properties", "fop.font.base.url", ofbizHome + "/opentaps/opentaps-common/lib/DejaVu/");
                         fopFactory.setFontBaseURL(fopFontBaseUrl);
                     }
@@ -147,8 +152,6 @@ public class ApacheFopWorker {
             }
             transformer.setURIResolver(new LocalResolver(transformer.getURIResolver()));
             transformer.transform(src, res);
-            FopFactory fopFactory = getFactoryInstance();
-            fopFactory.getImageFactory().clearCaches();
         } catch (Exception e) {
             throw new FOPException(e);
         }

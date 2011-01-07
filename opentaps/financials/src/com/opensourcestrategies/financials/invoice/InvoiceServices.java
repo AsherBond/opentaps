@@ -54,10 +54,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.security.FinancialsSecurity;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
-
 import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.accounting.payment.PaymentWorker;
 import org.ofbiz.base.util.Debug;
@@ -68,7 +70,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -100,16 +102,16 @@ import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import org.opentaps.domain.order.Order;
+import org.opentaps.domain.order.OrderItem;
+import org.opentaps.domain.order.OrderItemShipGroup;
+import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.security.FinancialsSecurity;
-import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * InvoiceServices - Services for creating invoices.
@@ -144,7 +146,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> createPartnerSalesInvoice(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -431,7 +433,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> sendInvoiceEmail(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String invoiceId = (String) context.get("invoiceId");
@@ -663,7 +665,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> updateInvoiceRecurrence(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String invoiceId = (String) context.get("invoiceId");
         String recurrenceRuleId = (String) context.get("recurrenceRuleId");
         String recurrenceInfoId = (String) context.get("recurrenceInfoId");
@@ -740,7 +742,7 @@ public final class InvoiceServices {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> runInvoiceRecurrence(DispatchContext dctx, Map<String, ?> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -845,7 +847,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> cloneInvoice(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String invoiceId = (String) context.get("invoiceId");
@@ -922,7 +924,7 @@ public final class InvoiceServices {
         }
     }
 
-    private static void updateValues(List<GenericValue> values, String fieldName, String newFieldValue, GenericDelegator delegator) throws GenericEntityException {
+    private static void updateValues(List<GenericValue> values, String fieldName, String newFieldValue, Delegator delegator) throws GenericEntityException {
         if (values == null) {
             return;
         }
@@ -941,7 +943,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map convertToBillingAccount(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1058,7 +1060,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createInvoiceTerms(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String invoiceId = (String) context.get("invoiceId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1112,7 +1114,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createInvoiceTerm(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
@@ -1166,7 +1168,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateInvoiceTerm(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
@@ -1225,7 +1227,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map setInvoiceDueDate(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String invoiceId = (String) context.get("invoiceId");
         TimeZone timeZone = UtilCommon.getTimeZone(context);
         Locale locale = UtilCommon.getLocale(context);
@@ -1315,7 +1317,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map invoiceAgreementTerm(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         String invoiceId = (String) context.get("invoiceId");
@@ -1448,7 +1450,7 @@ public final class InvoiceServices {
     @SuppressWarnings("unchecked")
 
     public static Map billToThirdParty(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -1676,7 +1678,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createThirdPartySalesInvoice(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         String partyIdFrom = (String) context.get("partyIdFrom");
@@ -1715,7 +1717,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map processCODReceipt(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1865,7 +1867,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map isInvoiceReady(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1936,7 +1938,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map setInvoiceProcessingStatus(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String invoiceId = (String) context.get("invoiceId");
         String statusId = (String) context.get("statusId");
@@ -1969,7 +1971,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> voidInvoice(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -2027,7 +2029,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createShippingInvoiceContactMech(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -2073,7 +2075,7 @@ public final class InvoiceServices {
     /*
     // TODO: perhaps this belongs in Purchasing application
     public static Map updateSupplierProduct(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -2126,7 +2128,7 @@ public final class InvoiceServices {
      */
 
     public static Map<String, ? extends Object> createCommissionInvoicesOnConfirmedPayment(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -2259,7 +2261,7 @@ public final class InvoiceServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        GenericDelegator delegator = dispatcher.getDelegator();
+        Delegator delegator = dispatcher.getDelegator();
 
         // invoice created by the service
         String invoiceId = null;
@@ -2419,7 +2421,7 @@ public final class InvoiceServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createInvoiceForOrder(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -2437,10 +2439,16 @@ public final class InvoiceServices {
         }
 
         try {
+
             GenericValue orderHeader = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
             if (orderHeader == null) {
                 return UtilMessage.createAndLogServiceError("AccountingNoOrderHeader", locale, MODULE);
             }
+
+            DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+            DomainsDirectory dd = domainLoader.getDomainsDirectory();
+            OrderRepositoryInterface orderRepository = dd.getOrderDomain().getOrderRepository();
+            Order order = orderRepository.getOrderById(orderId);
 
             // get list of previous invoices for the order
             List billedItems = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId));
@@ -2798,7 +2806,7 @@ public final class InvoiceServices {
                     invoiceItemSeqId = UtilFormatOut.formatPaddedNumber(invoiceItemSeqNum, INVOICE_ITEM_SEQUENCE_ID_DIGITS);
 
                     // Get the original order item from the DB, in case the quantity has been overridden
-                    GenericValue originalOrderItem = delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItem.getString("orderItemSeqId")));
+                    OrderItem originalOrderItem = order.getOrderItem(orderItem.getString("orderItemSeqId"));
 
                     // create the item adjustment as line items
                     List itemAdjustments = OrderReadHelper.getOrderItemAdjustmentList(orderItem, orh.getAdjustments());
@@ -2819,14 +2827,34 @@ public final class InvoiceServices {
 
                         // to determine if the full adjustment was already invoiced
                         BigDecimal adjFullAmount = ZERO;
+                        // determine the amount to bill for this adjustment, as it is pro rated according to the quantity
+                        //  of the item it totally applies to vs. the quantity of items billed
                         BigDecimal amount = ZERO;
+                        // get the original quantity of the item in the adjustment ship group (if a ship group is set)
+                        BigDecimal originalOrderItemQty = originalOrderItem.getOrderedQuantity();
+                        String shipGroupSeqId = adj.getString("shipGroupSeqId");
+                        OrderItemShipGroup shipGroup = null;
+                        // some adjustment have _NA_ as the shipGroupSeqId
+                        if (UtilValidate.isNotEmpty(shipGroupSeqId) && !"_NA_".equals(shipGroupSeqId)) {
+                            shipGroup = order.getOrderItemShipGroup(shipGroupSeqId);
+                            originalOrderItemQty = originalOrderItem.getOrderedQuantity(shipGroup);
+                        }
+                        // get the quantity to apply the adjustment to, usually it is the billingQuantity unless the adjustment has a appliesToQuantity set
+                        BigDecimal appliesToQty = billingQuantity;
+                        if (adj.getBigDecimal("appliesToQuantity") != null) {
+                            // then applies to the minimum of those quantities
+                            appliesToQty = adj.getBigDecimal("appliesToQuantity").min(billingQuantity);
+                            // and limit the pro rating
+                            originalOrderItemQty = adj.getBigDecimal("appliesToQuantity").min(originalOrderItemQty);
+                        }
+
                         if (adj.get("amount") != null) {
                             amount = adj.getBigDecimal("amount");
                             adjFullAmount = amount;
                             // pro-rate the amount
                             // set decimals = 100 means we don't round this intermediate value, which is very important
-                            amount = amount.divide(originalOrderItem.getBigDecimal("quantity"), 100, rounding);
-                            amount = amount.multiply(billingQuantity);
+                            amount = amount.divide(originalOrderItemQty, 100, rounding);
+                            amount = amount.multiply(appliesToQty);
                             // Tax needs to be rounded differently from other order adjustments
                             if (adj.getString("orderAdjustmentTypeId").equals("SALES_TAX")) {
                                 amount = amount.setScale(taxDecimals, taxRounding);
@@ -2840,8 +2868,8 @@ public final class InvoiceServices {
                             BigDecimal percent = adj.getBigDecimal("sourcePercentage");
                             percent = percent.divide(new BigDecimal(100), 100, rounding);
                             amount = billingAmount.multiply(percent);
-                            adjFullAmount = amount.multiply(originalOrderItem.getBigDecimal("quantity"));
-                            amount = amount.multiply(billingQuantity);
+                            adjFullAmount = amount.multiply(originalOrderItemQty);
+                            amount = amount.multiply(appliesToQty);
                             amount = amount.setScale(invoiceTypeDecimals, rounding);
                             Debug.logInfo("the adjustment amount was originally null, percentage is : " + adj.get("sourcePercentage") + " and for this item is pro-rated to : " + amount, MODULE);
                         }
@@ -2853,7 +2881,8 @@ public final class InvoiceServices {
                         }
                         // If the absolute invoiced amount >= the abs of the adjustment full amount, the full amount has already been invoiced,
                         //  so skip this adjustment
-                        if (adjAlreadyInvoicedAmount.abs().compareTo(adjFullAmount.setScale(invoiceTypeDecimals, rounding).abs()) > 0) {
+                        Debug.logInfo("Comparing adjFullAmount.abs =" + adjFullAmount.setScale(invoiceTypeDecimals, rounding).abs() + " and adjAlreadyInvoicedAmount.abs =" + adjAlreadyInvoicedAmount.abs() + " >> " + adjAlreadyInvoicedAmount.abs().compareTo(adjFullAmount.setScale(invoiceTypeDecimals, rounding).abs()), MODULE);
+                        if (adjAlreadyInvoicedAmount.abs().compareTo(adjFullAmount.setScale(invoiceTypeDecimals, rounding).abs()) >= 0) {
                             Debug.logWarning("Absolute invoiced amount : " + adjAlreadyInvoicedAmount.abs() + " >= the absolute full amount of the adjustment : " + adjFullAmount.setScale(invoiceTypeDecimals, rounding).abs() + ", the full amount has already been invoiced, skipping this adjustment [" + adj.get("orderAdjustmentId") + "].", MODULE);
                             continue;
                         }
@@ -2936,12 +2965,14 @@ public final class InvoiceServices {
             Iterator headerAdjIter = headerAdjustments.iterator();
             while (headerAdjIter.hasNext()) {
                 GenericValue adj = (GenericValue) headerAdjIter.next();
+                Debug.logInfo("For OrderAdjustment [" + adj.get("orderAdjustmentId") + "] of type " + adj.get("orderAdjustmentTypeId"), MODULE);
 
                 // Check against OrderAdjustmentBilling to see how much of this adjustment has already been invoiced
                 BigDecimal adjAlreadyInvoicedAmount = null;
                 try {
                     Map checkResult = dispatcher.runSync("calculateInvoicedAdjustmentTotal", UtilMisc.toMap("orderAdjustment", adj));
                     adjAlreadyInvoicedAmount = ((BigDecimal) checkResult.get("invoicedTotal")).setScale(invoiceTypeDecimals, rounding);
+                    Debug.logInfo("amount already invoiced for this adjustment is : " + adjAlreadyInvoicedAmount, MODULE);
                 } catch (GenericServiceException e) {
                     UtilMessage.createAndLogServiceError("AccountingTroubleCallingCalculateInvoicedAdjustmentTotalService", locale, MODULE);
                 }
@@ -2949,15 +2980,20 @@ public final class InvoiceServices {
                 // If the absolute invoiced amount >= the abs of the adjustment amount, the full amount has already been invoiced,
                 //  so skip this adjustment
                 if (null == adj.get("amount")) { // JLR 17/4/7 : fix a bug coming from POS in case of use of a discount (on item(s) or sale, sale here) and a cash amount higher than total (hence issuing change)
+                    Debug.logWarning("Null amount, skipping this adjustment.", MODULE);
                     continue;
                 }
-                if (adjAlreadyInvoicedAmount.abs().compareTo(adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding).abs()) > 0) {
+                Debug.logInfo("Comparing adjFullAmount.abs =" + adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding).abs() + " and adjAlreadyInvoicedAmount.abs =" + adjAlreadyInvoicedAmount.abs() + " >> " + adjAlreadyInvoicedAmount.abs().compareTo(adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding).abs()), MODULE);
+                if (adjAlreadyInvoicedAmount.abs().compareTo(adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding).abs()) >= 0) {
+                    Debug.logWarning("Absolute invoiced amount : " + adjAlreadyInvoicedAmount.abs() + " >= the absolute full amount of the adjustment : " + adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding).abs() + ", the full amount has already been invoiced, skipping this adjustment [" + adj.get("orderAdjustmentId") + "].", MODULE);
                     continue;
                 }
 
                 if ("SHIPPING_CHARGES".equals(adj.getString("orderAdjustmentTypeId"))) {
+                    Debug.logInfo("Defer SHIPPING_CHARGES adj [" + adj.get("orderAdjustmentId") + "] with adjAlreadyInvoicedAmount = " + adjAlreadyInvoicedAmount, MODULE);
                     shipAdjustments.put(adj, adjAlreadyInvoicedAmount);
                 } else if ("SALES_TAX".equals(adj.getString("orderAdjustmentTypeId"))) {
+                    Debug.logInfo("Defer SALES_TAX adj [" + adj.get("orderAdjustmentId") + "] with adjAlreadyInvoicedAmount = " + adjAlreadyInvoicedAmount, MODULE);
                     taxAdjustments.put(adj, adjAlreadyInvoicedAmount);
                 } else {
                     // these will effect the shipping pro-rate (unless commented)
@@ -2980,6 +3016,7 @@ public final class InvoiceServices {
             while (shipAdjIter.hasNext()) {
                 GenericValue adj = (GenericValue) shipAdjIter.next();
                 BigDecimal adjAlreadyInvoicedAmount = (BigDecimal) shipAdjustments.get(adj);
+                Debug.logInfo("For OrderAdjustment [" + adj.get("orderAdjustmentId") + "] of type " + adj.get("orderAdjustmentTypeId") + ", amount already invoiced for this adjustment is : " + adjAlreadyInvoicedAmount, MODULE);
 
                 if ("N".equalsIgnoreCase(prorateShipping)) {
 
@@ -3018,9 +3055,13 @@ public final class InvoiceServices {
             while (taxAdjIter.hasNext()) {
                 GenericValue adj = (GenericValue) taxAdjIter.next();
                 BigDecimal adjAlreadyInvoicedAmount = (BigDecimal) taxAdjustments.get(adj);
+                Debug.logInfo("For OrderAdjustment [" + adj.get("orderAdjustmentId") + "] of type " + adj.get("orderAdjustmentTypeId") + ", amount already invoiced for this adjustment is : " + adjAlreadyInvoicedAmount, MODULE);
                 BigDecimal adjAmount = null;
+                // for example some adjustments like offsetting adjustments that were created after an order change
+                // cannot be prorated (because they did not exist when the order was first billed).
+                Debug.logInfo("Product Store prorating setting is : " + prorateTaxes + ", adj neverProrate = " + adj.get("neverProrate"), MODULE);
 
-                if ("N".equalsIgnoreCase(prorateTaxes)) {
+                if ("N".equalsIgnoreCase(prorateTaxes) || "Y".equalsIgnoreCase(adj.getString("neverProrate"))) {
 
                     // Set the divisor and multiplier to 1 to avoid prorating
                     BigDecimal divisor = BigDecimal.ONE;
@@ -3031,6 +3072,7 @@ public final class InvoiceServices {
                     //  Note this should use invoice decimals & rounding instead of taxDecimals and taxRounding for tax adjustments, because it will be added to the invoice
                     BigDecimal baseAmount = adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding).subtract(adjAlreadyInvoicedAmount);
                     adjAmount = calcHeaderAdj(delegator, adj, globalAccountingTags, invoiceType, invoiceId, invoiceItemSeqId, divisor, multiplier, baseAmount, invoiceTypeDecimals, rounding, userLogin, dispatcher, locale);
+                    Debug.logInfo("Not prorated global tax, billed = " + adjAmount, MODULE);
                 } else {
 
                     // Pro-rate the tax amount based on shippable information
@@ -3041,6 +3083,7 @@ public final class InvoiceServices {
                     //  Note this should use invoice decimals & rounding instead of taxDecimals and taxRounding for tax adjustments, because it will be added to the invoice
                     BigDecimal baseAmount = adj.getBigDecimal("amount").setScale(invoiceTypeDecimals, rounding);
                     adjAmount = calcHeaderAdj(delegator, adj, globalAccountingTags, invoiceType, invoiceId, invoiceItemSeqId, divisor, multiplier, baseAmount, invoiceTypeDecimals, rounding, userLogin, dispatcher, locale);
+                    Debug.logInfo("Prorated global tax based on orderSubTotal = " + orderSubTotal + " and invoiceSubTotal = " + invoiceSubTotal + ", billed = " + adjAmount, MODULE);
                 }
                 invoiceSubTotal = invoiceSubTotal.add(adjAmount).setScale(invoiceTypeDecimals, rounding);
 
@@ -3112,7 +3155,7 @@ public final class InvoiceServices {
 
     /* Creates InvoiceTerm entries for a list of terms, which can be BillingAccountTerms, OrderTerms, etc. Required by createInvoiceForOrder */
     @SuppressWarnings("unchecked")
-    private static void createInvoiceTerms(GenericDelegator delegator, LocalDispatcher dispatcher, String invoiceId, List<GenericValue> terms, GenericValue userLogin, Locale locale) {
+    private static void createInvoiceTerms(Delegator delegator, LocalDispatcher dispatcher, String invoiceId, List<GenericValue> terms, GenericValue userLogin, Locale locale) {
         if ((terms != null) && (terms.size() > 0)) {
             for (GenericValue term : terms) {
                 Map createInvoiceTermContext = FastMap.newInstance();
@@ -3143,7 +3186,7 @@ public final class InvoiceServices {
 
     /* Required by createInvoiceForOrder */
     @SuppressWarnings("unchecked")
-    private static BigDecimal calcHeaderAdj(GenericDelegator delegator, GenericValue adj, Map accountingTags, String invoiceTypeId, String invoiceId, String invoiceItemSeqId,
+    private static BigDecimal calcHeaderAdj(Delegator delegator, GenericValue adj, Map accountingTags, String invoiceTypeId, String invoiceId, String invoiceItemSeqId,
             BigDecimal divisor, BigDecimal multiplier, BigDecimal baseAmount, int decimals, int rounding, GenericValue userLogin, LocalDispatcher dispatcher, Locale locale) {
         BigDecimal adjAmount = ZERO;
         if (adj.get("amount") != null) {
@@ -3264,7 +3307,7 @@ public final class InvoiceServices {
     }
 
     /* Required by createInvoiceForOrder */
-    private static String getInvoiceItemType(GenericDelegator delegator, String key1, String key2, String invoiceTypeId, String defaultValue) {
+    private static String getInvoiceItemType(Delegator delegator, String key1, String key2, String invoiceTypeId, String defaultValue) {
         GenericValue itemMap = null;
         try {
             if (UtilValidate.isNotEmpty(key1)) {

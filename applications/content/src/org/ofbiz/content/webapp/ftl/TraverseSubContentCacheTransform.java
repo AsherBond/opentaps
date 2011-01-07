@@ -35,7 +35,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
 import org.ofbiz.content.content.ContentWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.webapp.ftl.LoopWriter;
 
@@ -79,9 +79,9 @@ public class TraverseSubContentCacheTransform implements TemplateTransformModel 
         FreeMarkerWorker.saveContextValues(templateRoot, upSaveKeyNames, savedValuesUp);
         final Map savedValues = FastMap.newInstance();
         FreeMarkerWorker.overrideWithArgs(templateRoot, args);
-        String startContentAssocTypeId = (String)templateRoot.get( "contentAssocTypeId");
+        String startContentAssocTypeId = (String)templateRoot.get("contentAssocTypeId");
             //if (Debug.infoOn()) Debug.logInfo("in TraverseSubContentCache, startContentAssocTypeId:" + startContentAssocTypeId, module);
-        final GenericDelegator delegator = (GenericDelegator) FreeMarkerWorker.getWrappedObject("delegator", env);
+        final Delegator delegator = (Delegator) FreeMarkerWorker.getWrappedObject("delegator", env);
         final HttpServletRequest request = (HttpServletRequest) FreeMarkerWorker.getWrappedObject("request", env);
         FreeMarkerWorker.getSiteParameters(request, templateRoot);
         final GenericValue userLogin = (GenericValue) FreeMarkerWorker.getWrappedObject("userLogin", env);
@@ -108,21 +108,21 @@ public class TraverseSubContentCacheTransform implements TemplateTransformModel 
         final Map traverseContext = FastMap.newInstance();
         traverseContext.put("delegator", delegator);
         Map whenMap = FastMap.newInstance();
-        whenMap.put("followWhen", (String)templateRoot.get( "followWhen"));
-        whenMap.put("pickWhen", (String)templateRoot.get( "pickWhen"));
-        whenMap.put("returnBeforePickWhen", (String)templateRoot.get( "returnBeforePickWhen"));
-        whenMap.put("returnAfterPickWhen", (String)templateRoot.get( "returnAfterPickWhen"));
+        whenMap.put("followWhen", (String)templateRoot.get("followWhen"));
+        whenMap.put("pickWhen", (String)templateRoot.get("pickWhen"));
+        whenMap.put("returnBeforePickWhen", (String)templateRoot.get("returnBeforePickWhen"));
+        whenMap.put("returnAfterPickWhen", (String)templateRoot.get("returnAfterPickWhen"));
         traverseContext.put("whenMap", whenMap);
         env.setVariable("whenMap", FreeMarkerWorker.autoWrap(whenMap, env));
-        String fromDateStr = (String)templateRoot.get( "fromDateStr");
-        String thruDateStr = (String)templateRoot.get( "thruDateStr");
+        String fromDateStr = (String)templateRoot.get("fromDateStr");
+        String thruDateStr = (String)templateRoot.get("thruDateStr");
         Timestamp fromDate = null;
-        if (fromDateStr != null && fromDateStr.length() > 0) {
+        if (UtilValidate.isNotEmpty(fromDateStr)) {
             fromDate = UtilDateTime.toTimestamp(fromDateStr);
         }
         traverseContext.put("fromDate", fromDate);
         Timestamp thruDate = null;
-        if (thruDateStr != null && thruDateStr.length() > 0) {
+        if (UtilValidate.isNotEmpty(thruDateStr)) {
             thruDate = UtilDateTime.toTimestamp(thruDateStr);
         }
         traverseContext.put("thruDate", thruDate);
@@ -130,7 +130,7 @@ public class TraverseSubContentCacheTransform implements TemplateTransformModel 
             //throw new RuntimeException("contentAssocTypeId is empty.");
         //}
         traverseContext.put("contentAssocTypeId", startContentAssocTypeId);
-        String direction = (String)templateRoot.get( "direction");
+        String direction = (String)templateRoot.get("direction");
         if (UtilValidate.isEmpty(direction)) {
             direction = "From";
         }
@@ -139,16 +139,19 @@ public class TraverseSubContentCacheTransform implements TemplateTransformModel 
 
         return new LoopWriter(out) {
 
+            @Override
             public void write(char cbuf[], int off, int len) {
                 //StringBuilder ctxBuf = (StringBuilder) templateContext.get("buf");
                 //ctxBuf.append(cbuf, off, len);
                 buf.append(cbuf, off, len);
             }
 
+            @Override
             public void flush() throws IOException {
                 out.flush();
             }
 
+            @Override
             public int onStart() throws TemplateModelException, IOException {
                 //templateContext.put("buf", new StringBuilder());
                 List nodeTrail = null;
@@ -201,6 +204,7 @@ public class TraverseSubContentCacheTransform implements TemplateTransformModel 
                 }
             }
 
+            @Override
             public int afterBody() throws TemplateModelException, IOException {
 
 
@@ -222,6 +226,7 @@ public class TraverseSubContentCacheTransform implements TemplateTransformModel 
                     return TransformControl.END_EVALUATION;
             }
 
+            @Override
             public void close() throws IOException {
 
                 FreeMarkerWorker.reloadValues(templateRoot, savedValuesUp, env);

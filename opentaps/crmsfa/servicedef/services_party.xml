@@ -113,13 +113,13 @@
  
     <!-- user view preference services -->
     <service name="crmsfa.createViewPreference" engine="simple" default-entity-name="ViewPreference"
-        location="com/opensourcestrategies/crmsfa/party/ViewPrefServices.xml" invoke="createViewPreference" auth="true">
+        location="component://crmsfa/script/com/opensourcestrategies/crmsfa/party/ViewPrefServices.xml" invoke="createViewPreference" auth="true">
         <description>NOTE: DEPRECATED USE opentaps.createViewPreference INSTEAD</description>
         <auto-attributes mode="IN" include="pk" optional="false"/>
         <auto-attributes mode="IN" include="nonpk" optional="true"/>
     </service>
     <service name="crmsfa.updateViewPreference" engine="simple" default-entity-name="ViewPreference"
-        location="com/opensourcestrategies/crmsfa/party/ViewPrefServices.xml" invoke="updateViewPreference" auth="true">
+        location="component://crmsfa/script/com/opensourcestrategies/crmsfa/party/ViewPrefServices.xml" invoke="updateViewPreference" auth="true">
         <description>NOTE: DEPRECATED USE opentaps.updateViewPreference INSTEAD</description>
         <auto-attributes mode="IN" include="pk" optional="false"/>
         <auto-attributes mode="IN" include="nonpk" optional="true"/>

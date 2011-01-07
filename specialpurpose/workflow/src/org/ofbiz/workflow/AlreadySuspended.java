@@ -22,6 +22,7 @@ package org.ofbiz.workflow;
 /**
  * AlreadySuspended Workflow Exception
  */
+@SuppressWarnings("serial")
 public final class AlreadySuspended extends WfException {
 
     public AlreadySuspended() {}

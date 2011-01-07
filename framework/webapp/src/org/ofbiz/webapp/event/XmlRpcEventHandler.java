@@ -50,7 +50,8 @@ import org.apache.xmlrpc.server.XmlRpcNoSuchHandlerException;
 import org.apache.xmlrpc.util.HttpUtil;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericDispatcher;
 import org.ofbiz.service.GenericServiceException;
@@ -67,7 +68,7 @@ public class XmlRpcEventHandler extends XmlRpcHttpServer implements EventHandler
 
     public static final String module = XmlRpcEventHandler.class.getName();
     public static final String dispatcherName = "xmlrpc-dispatcher";
-    protected GenericDelegator delegator;
+    protected Delegator delegator;
     protected LocalDispatcher dispatcher;
 
     private Boolean enabledForExtensions = null;
@@ -75,7 +76,7 @@ public class XmlRpcEventHandler extends XmlRpcHttpServer implements EventHandler
 
     public void init(ServletContext context) throws EventHandlerException {
         String delegatorName = context.getInitParameter("entityDelegatorName");
-        this.delegator = GenericDelegator.getGenericDelegator(delegatorName);
+        this.delegator = DelegatorFactory.getDelegator(delegatorName);
         this.dispatcher = GenericDispatcher.getLocalDispatcher(dispatcherName, delegator);
         this.setHandlerMapping(new ServiceRpcHandler());
 
@@ -136,6 +137,7 @@ public class XmlRpcEventHandler extends XmlRpcHttpServer implements EventHandler
         return null;
     }
 
+    @Override
     protected void setResponseHeader(ServerStreamConnection con, String header, String value) {
         ((HttpStreamConnection) con).getResponse().setHeader(header, value);
     }
@@ -206,6 +208,7 @@ public class XmlRpcEventHandler extends XmlRpcHttpServer implements EventHandler
             this.setAuthenticationHandler(new OfbizRpcAuthHandler());
         }
 
+        @Override
         public XmlRpcHandler getHandler(String method) throws XmlRpcNoSuchHandlerException, XmlRpcException {
             ModelService model = null;
             try {

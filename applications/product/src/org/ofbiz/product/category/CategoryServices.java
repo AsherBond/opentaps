@@ -31,12 +31,10 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.util.EntityFindOptions;
@@ -54,7 +52,7 @@ public class CategoryServices {
     public static final String module = CategoryServices.class.getName();
 
     public static Map<String, Object> getCategoryMembers(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String categoryId = (String) context.get("categoryId");
         GenericValue productCategory = null;
         List<GenericValue> members = null;
@@ -75,11 +73,13 @@ public class CategoryServices {
     }
 
     public static Map<String, Object> getPreviousNextProducts(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String categoryId = (String) context.get("categoryId");
         String productId = (String) context.get("productId");
         boolean activeOnly = (context.get("activeOnly") != null ? ((Boolean) context.get("activeOnly")).booleanValue() : true);
         Integer index = (Integer) context.get("index");
+        Timestamp introductionDateLimit = (Timestamp) context.get("introductionDateLimit");
+        Timestamp releaseDateLimit = (Timestamp) context.get("releaseDateLimit");
 
         if (index == null && productId == null) {
             return ServiceUtil.returnError("Both Index and ProductID cannot be null.");
@@ -87,7 +87,7 @@ public class CategoryServices {
 
         List<String> orderByFields = UtilGenerics.checkList(context.get("orderByFields"));
         if (orderByFields == null) orderByFields = FastList.newInstance();
-        String entityName = getCategoryFindEntityName(delegator, orderByFields);
+        String entityName = getCategoryFindEntityName(delegator, orderByFields, introductionDateLimit, releaseDateLimit);
 
         GenericValue productCategory;
         List<GenericValue> productCategoryMembers;
@@ -102,7 +102,18 @@ public class CategoryServices {
         if (activeOnly) {
             productCategoryMembers = EntityUtil.filterByDate(productCategoryMembers, true);
         }
-
+        List<EntityCondition> filterConditions = FastList.newInstance();
+        if (introductionDateLimit != null) {
+            EntityCondition condition = EntityCondition.makeCondition(EntityCondition.makeCondition("introductionDate", EntityOperator.EQUALS, null), EntityOperator.OR, EntityCondition.makeCondition("introductionDate", EntityOperator.LESS_THAN_EQUAL_TO, introductionDateLimit));
+            filterConditions.add(condition);
+        }
+        if (releaseDateLimit != null) {
+            EntityCondition condition = EntityCondition.makeCondition(EntityCondition.makeCondition("releaseDate", EntityOperator.EQUALS, null), EntityOperator.OR, EntityCondition.makeCondition("releaseDate", EntityOperator.LESS_THAN_EQUAL_TO, releaseDateLimit));
+            filterConditions.add(condition);
+        }
+        if (!filterConditions.isEmpty()) {
+            productCategoryMembers = EntityUtil.filterByCondition(productCategoryMembers, EntityCondition.makeCondition(filterConditions, EntityOperator.AND));
+        }
 
         if (productId != null && index == null) {
             for (GenericValue v: productCategoryMembers) {
@@ -141,9 +152,9 @@ public class CategoryServices {
         return result;
     }
 
-    private static String getCategoryFindEntityName(GenericDelegator delegator, List<String> orderByFields) {
+    private static String getCategoryFindEntityName(Delegator delegator, List<String> orderByFields, Timestamp introductionDateLimit, Timestamp releaseDateLimit) {
         // allow orderByFields to contain fields from the Product entity, if there are such fields
-        String entityName = "ProductCategoryMember";
+        String entityName = introductionDateLimit == null && releaseDateLimit == null ? "ProductCategoryMember" : "ProductAndCategoryMember";
         if (orderByFields == null) {
             return entityName;
         }
@@ -188,14 +199,16 @@ public class CategoryServices {
     }
 
     public static Map<String, Object> getProductCategoryAndLimitedMembers(DispatchContext dctx, Map<String, ? extends Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String productCategoryId = (String) context.get("productCategoryId");
         boolean limitView = ((Boolean) context.get("limitView")).booleanValue();
         int defaultViewSize = ((Integer) context.get("defaultViewSize")).intValue();
+        Timestamp introductionDateLimit = (Timestamp) context.get("introductionDateLimit");
+        Timestamp releaseDateLimit = (Timestamp) context.get("releaseDateLimit");
 
         List<String> orderByFields = UtilGenerics.checkList(context.get("orderByFields"));
         if (orderByFields == null) orderByFields = FastList.newInstance();
-        String entityName = getCategoryFindEntityName(delegator, orderByFields);
+        String entityName = getCategoryFindEntityName(delegator, orderByFields, introductionDateLimit, releaseDateLimit);
 
         String prodCatalogId = (String) context.get("prodCatalogId");
 
@@ -256,6 +269,18 @@ public class CategoryServices {
                     if (activeOnly) {
                         productCategoryMembers = EntityUtil.filterByDate(productCategoryMembers, true);
                     }
+                    List<EntityCondition> filterConditions = FastList.newInstance();
+                    if (introductionDateLimit != null) {
+                        EntityCondition condition = EntityCondition.makeCondition(EntityCondition.makeCondition("introductionDate", EntityOperator.EQUALS, null), EntityOperator.OR, EntityCondition.makeCondition("introductionDate", EntityOperator.LESS_THAN_EQUAL_TO, introductionDateLimit));
+                        filterConditions.add(condition);
+                    }
+                    if (releaseDateLimit != null) {
+                        EntityCondition condition = EntityCondition.makeCondition(EntityCondition.makeCondition("releaseDate", EntityOperator.EQUALS, null), EntityOperator.OR, EntityCondition.makeCondition("releaseDate", EntityOperator.LESS_THAN_EQUAL_TO, releaseDateLimit));
+                        filterConditions.add(condition);
+                    }
+                    if (!filterConditions.isEmpty()) {
+                        productCategoryMembers = EntityUtil.filterByCondition(productCategoryMembers, EntityCondition.makeCondition(filterConditions, EntityOperator.AND));
+                    }
 
                     // filter out the view allow before getting the sublist
                     if (UtilValidate.isNotEmpty(viewProductCategoryId)) {
@@ -271,7 +296,9 @@ public class CategoryServices {
 
                     // get only between low and high indexes
                     if (limitView) {
-                        productCategoryMembers = productCategoryMembers.subList(lowIndex-1, highIndex);
+                        if (UtilValidate.isNotEmpty(productCategoryMembers)) {
+                            productCategoryMembers = productCategoryMembers.subList(lowIndex-1, highIndex);
+                        }
                     } else {
                         lowIndex = 1;
                         highIndex = listSize;
@@ -283,10 +310,17 @@ public class CategoryServices {
                         mainCondList.add(EntityCondition.makeCondition("fromDate", EntityOperator.LESS_THAN_EQUAL_TO, nowTimestamp));
                         mainCondList.add(EntityCondition.makeCondition(EntityCondition.makeCondition("thruDate", EntityOperator.EQUALS, null), EntityOperator.OR, EntityCondition.makeCondition("thruDate", EntityOperator.GREATER_THAN, nowTimestamp)));
                     }
+                    if (introductionDateLimit != null) {
+                        mainCondList.add(EntityCondition.makeCondition(EntityCondition.makeCondition("introductionDate", EntityOperator.EQUALS, null), EntityOperator.OR, EntityCondition.makeCondition("introductionDate", EntityOperator.LESS_THAN_EQUAL_TO, introductionDateLimit)));
+                    }
+                    if (releaseDateLimit != null) {
+                        mainCondList.add(EntityCondition.makeCondition(EntityCondition.makeCondition("releaseDate", EntityOperator.EQUALS, null), EntityOperator.OR, EntityCondition.makeCondition("releaseDate", EntityOperator.LESS_THAN_EQUAL_TO, releaseDateLimit)));
+                    }
                     EntityCondition mainCond = EntityCondition.makeCondition(mainCondList, EntityOperator.AND);
 
                     // set distinct on
-                    EntityFindOptions findOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+                    EntityFindOptions findOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, false);
+                    findOpts.setMaxRows(highIndex);
                     // using list iterator
                     EntityListIterator pli = delegator.find(entityName, mainCond, null, null, orderByFields, findOpts);
 
@@ -312,9 +346,7 @@ public class CategoryServices {
                         } else {
                             productCategoryMembers = pli.getPartialList(lowIndex, viewSize);
 
-                            // attempt to get the full size
-                            pli.last();
-                            listSize = pli.currentIndex();
+                            listSize = pli.getResultsSizeAfterPartialList();
                         }
                     } else {
                         productCategoryMembers = pli.getCompleteList();

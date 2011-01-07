@@ -30,8 +30,8 @@ under the License.
           <td valign="middle">
             <div>
               <input type="text" name="SEARCH_STRING" size="40" value="${requestParameters.SEARCH_STRING?if_exists}"/>&nbsp;
-              ${uiLabelMap.CommonAny}<input type="radio" name="SEARCH_OPERATOR" value="OR" <#if searchOperator == "OR">checked</#if>/>
-              ${uiLabelMap.CommonAll}<input type="radio" name="SEARCH_OPERATOR" value="AND" <#if searchOperator == "AND">checked</#if>/>
+              ${uiLabelMap.CommonAny}<input type="radio" name="SEARCH_OPERATOR" value="OR" <#if searchOperator == "OR">checked="checked"</#if>/>
+              ${uiLabelMap.CommonAll}<input type="radio" name="SEARCH_OPERATOR" value="AND" <#if searchOperator == "AND">checked="checked"</#if>/>
             </div>
           </td>
         </tr>
@@ -47,14 +47,13 @@ under the License.
           <td align="right" valign="middle" class="label">${uiLabelMap.FormFieldTitle_workEffortId}</td>
           <td valign="middle">
             <div>
-              <input type="text" name="SEARCH_WORK_EFFORT_ID" size="40" value="${requestParameters.SEARCH_WORK_EFFORT_ID?if_exists}"/>&nbsp;
-              <a href="javascript:call_fieldlookup2(document.advToKeyWordSearchForm.SEARCH_WORK_EFFORT_ID,'LookupWorkEffort');"><img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/></a>
+              <@htmlTemplate.lookupField value="${requestParameters.SEARCH_WORK_EFFORT_ID?if_exists}" formName="advToKeyWordSearchForm" name="SEARCH_WORK_EFFORT_ID" id="SEARCH_WORK_EFFORT_ID" fieldFormName="LookupWorkEffort"/>
             </div>
           </td>
         </tr>
         <tr>
-          <td align="right" valign="middle" nowrap class="label">${uiLabelMap.FormFieldTitle_workEffortAssocTypeId}</td>
-          <td valign="middle" nowrap>
+          <td align="right" valign="middle" nowrap="nowrap" class="label">${uiLabelMap.FormFieldTitle_workEffortAssocTypeId}</td>
+          <td valign="middle" nowrap="nowrap">
             <div>
               <select name="workEffortAssocTypeId">
                 <option value="">- ${uiLabelMap.WorkEffortAnyAssocType} -</option>
@@ -63,7 +62,7 @@ under the License.
                   </#list>
                   </select>
                   ${uiLabelMap.WorkEffortIncludeAllSubWorkEfforts}?
-                  ${uiLabelMap.CommonYes}<input type="radio" name="SEARCH_SUB_WORK_EFFORTS" value="Y" checked/>
+                  ${uiLabelMap.CommonYes}<input type="radio" name="SEARCH_SUB_WORK_EFFORTS" value="Y" checked="checked"/>
                   ${uiLabelMap.CommonNo}<input type="radio" name="SEARCH_SUB_WORK_EFFORTS" value="N"/>
             </div>
           </td>
@@ -72,8 +71,7 @@ under the License.
           <td align="right" valign="middle" class="label">${uiLabelMap.PartyPartyId}</td>
           <td valign="middle">
             <div>
-              <input type="text" name="partyId" size="40" value="${requestParameters.partyId?if_exists}"/>&nbsp;
-              <a href="javascript:call_fieldlookup2(document.advToKeyWordSearchForm.partyId,'LookupPartyName');"><img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/></a>
+              <@htmlTemplate.lookupField value="${requestParameters.partyId?if_exists}" formName="advToKeyWordSearchForm" name="partyId" id="partyId" fieldFormName="LookupPartyName"/>
             </div>
           </td>
         </tr>
@@ -94,8 +92,7 @@ under the License.
           <td align="right" valign="middle" class="label">${uiLabelMap.WorkEffortProductId1}</td>
           <td valign="middle">
             <div>
-              <input type="text" name="productId_1" size="40" value="${requestParameters.productId_1?if_exists}"/>&nbsp;
-              <a href="javascript:call_fieldlookup2(document.advToKeyWordSearchForm.productId_1,'LookupProduct');"><img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/></a>
+              <@htmlTemplate.lookupField value="${requestParameters.productId_1?if_exists}" formName="advToKeyWordSearchForm" name="productId_1" id="productId_1" fieldFormName="LookupProduct"/>
             </div>
           </td>
         </tr>
@@ -103,8 +100,7 @@ under the License.
           <td align="right" valign="middle" class="label">${uiLabelMap.WorkEffortProductId2}</td>
           <td valign="middle">
             <div>
-              <input type="text" name="productId_2" size="40" value="${requestParameters.productId_2?if_exists}"/>&nbsp;
-              <a href="javascript:call_fieldlookup2(document.advToKeyWordSearchForm.productId_2,'LookupProduct');"><img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/></a>
+              <@htmlTemplate.lookupField value="${requestParameters.productId_2?if_exists}" formName="advToKeyWordSearchForm" name="productId_2" id="productId_2" fieldFormName="LookupProduct"/>
             </div>
           </td>
         </tr>
@@ -113,14 +109,14 @@ under the License.
           <td>
             <table class="basic-table" cellspacing="0">
                <tr>
-                  <td nowrap>
+                  <td nowrap="nowrap">
                     <input type='text' size='25' name='fromDate' value='${requestParameters.fromDate?if_exists}'/>
                       <a href="javascript:call_cal(document.advToKeyWordSearchForm.fromDate,'${fromDateStr}');"><img src='/images/cal.gif' width='16' height='16' border='0' alt='Calendar'/></a>
                         <span>${uiLabelMap.CommonFrom}</span>
                   </td>
                </tr>
                <tr>
-                  <td nowrap>
+                  <td nowrap="nowrap">
                     <input type='text' size='25' name='thruDate' value='${requestParameters.thruDate?if_exists}'/>
                     <a href="javascript:call_cal(document.advToKeyWordSearchForm.thruDate,'${thruDateStr}');"><img src='/images/cal.gif' width='16' height='16' border='0' alt='Calendar'/></a>
                     <span>${uiLabelMap.CommonThru}</span>
@@ -137,7 +133,7 @@ under the License.
                 <option value="SortKeywordRelevancy">${uiLabelMap.ProductKeywordRelevancy}</option>
                 <option value="SortWorkEffortField:workEffortName">${uiLabelMap.WorkEffortName}</option>
               </select>
-              ${uiLabelMap.ProductLowToHigh}<input type="radio" name="sortAscending" value="Y" checked/>
+              ${uiLabelMap.ProductLowToHigh}<input type="radio" name="sortAscending" value="Y" checked="checked"/>
               ${uiLabelMap.ProductHighToLow}<input type="radio" name="sortAscending" value="N"/>
             </div>
           </td>
@@ -151,8 +147,8 @@ under the License.
                 </#list>
                 <div class="label">${uiLabelMap.CommonSortedBy} ${searchSortOrderString}</div>
                 <div>
-                  ${uiLabelMap.ProductNewSearch}<input type="radio" name="clearSearch" value="Y" checked/>
-                  ${uiLabelMap.ProductRefineSearch}<input type="radio" name="clearSearch" value="N"/>
+                  ${uiLabelMap.ProductNewSearch}<input type="radio" name="clearSearch" value="Y" checked="checked"/>
+                  ${uiLabelMap.CommonRefineSearch}<input type="radio" name="clearSearch" value="N"/>
                 </div>
             </td>
           </tr>
@@ -164,8 +160,8 @@ under the License.
             </div>
           </td>
         </tr>
-        <input type="image" src="<@ofbizContentUrl>/images/spacer.gif</@ofbizContentUrl>" onClick="javascript:document.advToKeyWordSearchForm.submit();"/>
       </table>
+        <input type="image" src="<@ofbizContentUrl>/images/spacer.gif</@ofbizContentUrl>" onclick="javascript:document.advToKeyWordSearchForm.submit();"/>
     </form>
   </div>
 </div>

@@ -31,20 +31,25 @@ under the License.
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="pre-body">
+                        <section>
+                            <condition>
+                                <and>
+                                    <if-has-permission permission="CONTENTMGR" action="_VIEW"/>
+                                    <not><if-empty field="tabBar"/></not>
+                                </and>
+                            </condition>
+                            <widgets>
+                                <include-menu name="${tabBar}" location="component://content/widget/forum/ForumMenus.xml"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
                     <decorator-section name="body">
                         <section>
                             <condition>
                                 <if-has-permission permission="CONTENTMGR" action="_VIEW"/>
                             </condition>
                             <widgets>
-                                <section>
-                                    <condition>
-                                        <not><if-empty field="tabBar"/></not>
-                                    </condition>
-                                    <widgets>
-                                        <include-menu name="${tabBar}" location="component://content/widget/forum/ForumMenus.xml"/>
-                                    </widgets>
-                                </section>
                                 <container style="h1"><label text="${pageTitle}"/></container>
                                 <decorator-section-include name="body"/>
                             </widgets>
@@ -193,16 +198,9 @@ under the License.
                 <decorator-screen name="commonForumDecorator" location="${parameters.forumDecoratorLocation}">
                     <decorator-section name="body">
                         <include-form name="ListForumMessages" location="component://content/widget/forum/ForumForms.xml"/>
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ContentForumAddThreadTo} ${forum.description}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="AddForumMessage" location="component://content/widget/forum/ForumForms.xml"/>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.ContentForumAddThreadTo} ${forum.description}">
+                            <include-form name="AddForumMessage" location="component://content/widget/forum/ForumForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -256,20 +254,9 @@ under the License.
                                 <not><if-empty field="parameters.forumThreadId"/></not>
                             </condition>
                             <widgets>
-                                <container style="screenlet">
-                                    <container style="screenlet-title-bar">
-                                        <container style="h3">
-                                            <label text="${uiLabelMap.ContentForumThread} ${parameters.forumThreadId}"/>
-                                        </container>
-                                    </container>
-                                    <container style="screenlet-body">
-                                        <section>
-                                            <widgets>
-                                                <include-form name="EditForumThreadMessage" location="component://content/widget/forum/ForumForms.xml"/>
-                                            </widgets>
-                                        </section>
-                                    </container>
-                                </container>
+                                <screenlet title="${uiLabelMap.ContentForumThread} ${parameters.forumThreadId}">
+                                    <include-form name="EditForumThreadMessage" location="component://content/widget/forum/ForumForms.xml"/>
+                                </screenlet>
                             </widgets>
                         </section>
                                 <section>
@@ -277,20 +264,9 @@ under the License.
                                         <not><if-empty field="parameters.forumMessageId"/></not>
                                     </condition>
                                     <widgets>
-                                        <container style="screenlet">
-                                            <container style="screenlet-title-bar">
-                                                <container style="h3">
-                                                    <label text="${uiLabelMap.ContentForumMessage} ${parameters.forumMessageId}"/>
-                                                </container>
-                                            </container>
-                                            <container style="screenlet-body">
-                                                <section>
-                                                    <widgets>
-                                                        <include-form name="EditForumThreadMessage" location="component://content/widget/forum/ForumForms.xml"/>
-                                                    </widgets>
-                                                </section>
-                                            </container>
-                                        </container>
+                                        <screenlet title="${uiLabelMap.ContentForumMessage} ${parameters.forumMessageId}">
+                                            <include-form name="EditForumThreadMessage" location="component://content/widget/forum/ForumForms.xml"/>
+                                        </screenlet>
                                     </widgets>
                                 </section>
                     </decorator-section>
@@ -312,20 +288,9 @@ under the License.
             <widgets>
                 <decorator-screen name="commonForumDecorator" location="${parameters.forumDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ContentForumAddResponseToMessage} ${contentData.resultData.content.description}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="EditForumMessage" location="component://content/widget/forum/ForumForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.ContentForumAddResponseToMessage} ${contentData.resultData.content.description}">
+                            <include-form name="EditForumMessage" location="component://content/widget/forum/ForumForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -348,20 +313,9 @@ under the License.
             <widgets>
                 <decorator-screen name="commonForumDecorator" location="${parameters.forumDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ContentForumAddResponseToMessage} ${forumMessage.description}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddForumMessage" location="component://content/widget/forum/ForumForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.ContentForumAddResponseToMessage} ${forumMessage.description}">
+                            <include-form name="AddForumMessage" location="component://content/widget/forum/ForumForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -384,20 +338,9 @@ under the License.
             <widgets>
                 <decorator-screen name="commonForumDecorator" location="${parameters.forumDecoratorLocation}">
                     <decorator-section name="body">
-                        <container style="screenlet">
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ContentForumAddResponseToMessage} ${forumMessage.description} [${forumMessage.contentId}]"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <section>
-                                    <widgets>
-                                        <include-form name="AddForumThreadMessage" location="component://content/widget/forum/ForumForms.xml"/>
-                                    </widgets>
-                                </section>
-                            </container>
-                        </container>
+                        <screenlet title="${uiLabelMap.ContentForumAddResponseToMessage} ${forumMessage.description} [${forumMessage.contentId}]">
+                            <include-form name="AddForumThreadMessage" location="component://content/widget/forum/ForumForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

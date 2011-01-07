@@ -40,10 +40,12 @@ public class InventoryItemTransferTest extends OFBizTestCase {
         super(name);
     }
 
+    @Override
     protected void setUp() throws Exception {
         userLogin = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", "system"));
     }
 
+    @Override
     protected void tearDown() throws Exception {
     }
 
@@ -52,7 +54,7 @@ public class InventoryItemTransferTest extends OFBizTestCase {
         String statusId = "IXF_REQUESTED";
         String inventoryItemId = "9005";
         ctx.put("inventoryItemId", inventoryItemId);
-        ctx.put("statusId", statusId );
+        ctx.put("statusId", statusId);
         ctx.put("facilityId", "WebStoreWarehouse");
         ctx.put("facilityIdTo", "WebStoreWarehouse");
         ctx.put("receiveDate", UtilDateTime.nowTimestamp());

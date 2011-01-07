@@ -91,43 +91,93 @@ under the License.
 </#macro>
 
 <#macro renderHorizontalSeparator id style><hr<#if id?has_content> id="${id}"</#if><#if style?has_content> class="${style}"</#if>/></#macro>
-<#macro renderLabel text id style><#if text?exists><#if id?has_content || style?has_content><span<#if id?has_content> id="${id}"</#if><#if style?has_content> class="${style}"</#if>></#if>${text}<#if id?has_content || style?has_content></span></#if></#if></#macro>
+
+<#macro renderLabel text id style>
+  <#if text?has_content>
+    <#-- Label is considered block level element in screen widget. There is not reason to render text outside of any html element. Use of style element has set pattern and we'll use style
+       to determine appropriate html element to use -->
+    <#if style?has_content>
+      <#if style=="h1">
+        <h1
+      <#elseif style=="h2">
+        <h2
+      <#elseif style=="h3">
+        <h3
+      <#elseif style=="h4">
+        <h4
+      <#elseif style=="h5">
+        <h5
+      <#elseif style=="h6">
+        <h6
+      <#else>
+        <p class="${style}"
+      </#if>
+    <#else>
+      <p
+    </#if>
+    <#if id?has_content >
+        <#if id?has_content> id="${id}"</#if>
+    </#if>
+        >${text}
+    <#if style?has_content>
+      <#if style=="h1">
+        </h1>
+      <#elseif style=="h2">
+        </h2>
+      <#elseif style=="h3">
+        </h3>
+      <#elseif style=="h4">
+        </h4>
+      <#elseif style=="h5">
+        </h5>
+      <#elseif style=="h6">
+        </h6>
+      <#else>
+        </p>
+      </#if>
+    <#else>
+      </p>
+    </#if>
+  </#if>
+</#macro>
+
 <#macro renderLink parameterList targetWindow target uniqueItemName linkType actionUrl id style name linkUrl text imgStr>
 <#if "hidden-form" == linkType>
-<form method="post" action="${actionUrl}" <#if targetWindow?has_content>target="${targetWindow}"</#if> onSubmit="javascript:submitFormDisableSubmits(this)" name="${uniqueItemName}"><#rt/>
+<form method="post" action="${actionUrl}" <#if targetWindow?has_content>target="${targetWindow}"</#if> onsubmit="javascript:submitFormDisableSubmits(this)" name="${uniqueItemName}"><#rt/>
 <#list parameterList as parameter>
 <input name="${parameter.name}" value="${parameter.value}" type="hidden"/><#rt/>
 </#list>
 </form><#rt/>
 </#if>
 <a <#if id?has_content>id="${id}"</#if> <#if style?has_content>class="${style}"</#if> <#if name?has_content>name="${name}"</#if> <#if targetWindow?has_content>target="${targetWindow}"</#if> href="<#if "hidden-form"==linkType>javascript:document.${uniqueItemName}.submit()<#else>${linkUrl}</#if>"><#rt/>
-<#if image?has_content>${imgStr}<#else><#if text?has_content>${text}</#if></#if></a>
+<#if imgStr?has_content>${imgStr}<#else><#if text?has_content>${text}</#if></#if></a>
 </#macro>
 <#macro renderImage src id style wid hgt border alt urlString>
 <#if src?has_content>
-<img <#if id?has_content>id="${id}"</#if><#if style?has_content> class="${style}"</#if><#if wid?has_content> width="${wid}"</#if><#if hgt?has_content> height="${hgt}"</#if><#if border?has_content> border="${border}"</#if><#if alt?has_content> alt="${alt}"</#if> src="${urlString}" />
+<img <#if id?has_content>id="${id}"</#if><#if style?has_content> class="${style}"</#if><#if wid?has_content> width="${wid}"</#if><#if hgt?has_content> height="${hgt}"</#if><#if border?has_content> border="${border}"</#if> alt="<#if alt?has_content>${alt}</#if>" src="${urlString}" />
 </#if>
 </#macro>
 
 <#macro renderContentFrame fullUrl width height border><iframe src="${fullUrl}" width="${width}" height="${height}" <#if border?has_content>border="${border}"</#if> /></#macro>
-<#macro renderScreenletBegin id title collapsible collapsibleAreaId expandToolTip collapseToolTip fullUrlString padded menuString showMore collapsed javaScriptEnabled>
+<#macro renderScreenletBegin id title collapsible saveCollapsed collapsibleAreaId expandToolTip collapseToolTip fullUrlString padded menuString showMore collapsed javaScriptEnabled>
 <div class="screenlet"<#if id?has_content> id="${id}"</#if>><#rt/>
 <#if showMore>
 <div class="screenlet-title-bar"><ul><#if title?has_content><li class="h3">${title}</li></#if>
 <#if collapsible>
 <li class="<#rt/>
 <#if collapsed>
-collapsed"><a <#if javaScriptEnabled>onclick="javascript:toggleScreenlet(this, '${collapsibleAreaId}', '${expandToolTip}', '${collapseToolTip}');"<#else>href="${fullUrlString}"</#if><#if expandToolTip?has_content> title="${expandToolTip}"</#if>
+collapsed"><a <#if javaScriptEnabled>onclick="javascript:toggleScreenlet(this, '${collapsibleAreaId}', '${saveCollapsed?string}', '${expandToolTip}', '${collapseToolTip}');"<#else>href="${fullUrlString}"</#if><#if expandToolTip?has_content> title="${expandToolTip}"</#if>
 <#else>
-expanded"><a <#if javaScriptEnabled>onclick="javascript:toggleScreenlet(this, '${collapsibleAreaId}', '${expandToolTip}', '${collapseToolTip}');"<#else>href="${fullUrlString}"</#if><#if expandToolTip?has_content> title="${expandToolTip}"</#if>
+expanded"><a <#if javaScriptEnabled>onclick="javascript:toggleScreenlet(this, '${collapsibleAreaId}', '${saveCollapsed?string}', '${expandToolTip}', '${collapseToolTip}');"<#else>href="${fullUrlString}"</#if><#if expandToolTip?has_content> title="${expandToolTip}"</#if>
 </#if>
->&nbsp</a></li>
+>&nbsp;</a></li>
 </#if>
 <#if !collapsed>
 ${menuString}
 </#if>
-</ul><br class="clear" /></div><div <#if collapsibleAreaId?has_content> id="${collapsibleAreaId}" <#if collapsed> style="display: none;"</#if></#if><#if padded> class="screenlet-body"</#if>>
+</ul><br class="clear" /></div>
 </#if>
+<div <#if collapsibleAreaId?has_content> id="${collapsibleAreaId}" <#if collapsed> style="display: none;"</#if></#if><#if padded> class="screenlet-body"<#else> class="screenlet-body no-padding"</#if>>
 </#macro>
 <#macro renderScreenletSubWidget></#macro>
 <#macro renderScreenletEnd></div></div></#macro>

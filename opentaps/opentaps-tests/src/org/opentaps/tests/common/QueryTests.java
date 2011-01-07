@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -59,14 +60,14 @@ public class QueryTests extends OpentapsTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         // delegator is reset to null by super.tearDown() so we have to get it again
-        removeTestingRecords(GenericDelegator.getGenericDelegator(OpentapsTestCase.DELEGATOR_NAME));
+        removeTestingRecords(DelegatorFactory.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
     }
 
     private String makeTestId(int i) {
         return "TEST" + i;
     }
 
-    private void removeTestingRecords(GenericDelegator delegator) throws GenericEntityException {
+    private void removeTestingRecords(Delegator delegator) throws GenericEntityException {
         delegator.removeByCondition("TestingNode", EntityCondition.makeCondition("testingNodeId", EntityOperator.LIKE, "TEST%"));
     }
 

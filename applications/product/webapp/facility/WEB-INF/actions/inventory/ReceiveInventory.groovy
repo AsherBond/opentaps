@@ -27,6 +27,11 @@ purchaseOrderId = request.getParameter("purchaseOrderId");
 productId = request.getParameter("productId");
 shipmentId = request.getParameter("shipmentId");
 
+partialReceive = parameters.partialReceive;
+if (partialReceive) {
+    context.partialReceive = partialReceive;
+}
+
 facility = null;
 if (facilityId) {
     facility = delegator.findOne("Facility", [facilityId : facilityId], false);
@@ -58,6 +63,19 @@ if (productId) {
 
 shipments = null;
 if (purchaseOrder && !shipmentId) {
+    orderShipments = delegator.findList("OrderShipment", EntityCondition.makeCondition([orderId : purchaseOrderId]), null, null, null, false);
+    if (orderShipments) {
+        shipments = [] as TreeSet;
+        orderShipments.each { orderShipment ->
+            shipment = orderShipment.getRelatedOne("Shipment");
+            if (!"PURCH_SHIP_RECEIVED".equals(shipment.statusId) &&
+                !"SHIPMENT_CANCELLED".equals(shipment.statusId) &&
+                (!shipment.destinationFacilityId || facilityId.equals(shipment.destinationFacilityId))) {
+                shipments.add(shipment);
+            }
+        }
+    }
+    // This is here for backward compatibility: ItemIssuances are no more created for purchase shipments.
     issuances = delegator.findList("ItemIssuance", EntityCondition.makeCondition([orderId : purchaseOrderId]), null, null, null, false);
     if (issuances) {
         shipments = [] as TreeSet;
@@ -84,28 +102,44 @@ if (purchaseOrder) {
         purchaseOrderItems = purchaseOrder.getRelated("OrderItem", [productId : productId], null);
     } else if (shipment) {
         orderItems = purchaseOrder.getRelated("OrderItem");
-        issuances = shipment.getRelated("ItemIssuance", [orderId : purchaseOrderId], null);
         exprs = [] as ArrayList;
-        issuances.each { issuance ->
-            exprs.add(EntityCondition.makeCondition("orderItemSeqId", EntityOperator.EQUALS, issuance.orderItemSeqId));
-            double issuanceQty = issuance.getDouble("quantity").doubleValue();
-            if (shippedQuantities.containsKey(issuance.orderItemSeqId)) {
-                issuanceQty += ((Double)shippedQuantities.get(issuance.orderItemSeqId)).doubleValue();
+        orderShipments = shipment.getRelated("OrderShipment", [orderId : purchaseOrderId], null);
+        if (orderShipments) {
+            orderShipments.each { orderShipment ->
+                exprs.add(EntityCondition.makeCondition("orderItemSeqId", EntityOperator.EQUALS, orderShipment.orderItemSeqId));
+                double orderShipmentQty = orderShipment.getDouble("quantity").doubleValue();
+                if (shippedQuantities.containsKey(orderShipment.orderItemSeqId)) {
+                    orderShipmentQty += ((Double)shippedQuantities.get(orderShipment.orderItemSeqId)).doubleValue();
+                }
+                shippedQuantities.put(orderShipment.orderItemSeqId, orderShipmentQty);
             }
-            shippedQuantities.put(issuance.orderItemSeqId, issuanceQty);
+        } else {
+            // this is here for backward compatibility only: ItemIssuances are no more created for purchase shipments.
+            issuances = shipment.getRelated("ItemIssuance", [orderId : purchaseOrderId], null);
+            issuances.each { issuance ->
+                exprs.add(EntityCondition.makeCondition("orderItemSeqId", EntityOperator.EQUALS, issuance.orderItemSeqId));
+                double issuanceQty = issuance.getDouble("quantity").doubleValue();
+                if (shippedQuantities.containsKey(issuance.orderItemSeqId)) {
+                    issuanceQty += ((Double)shippedQuantities.get(issuance.orderItemSeqId)).doubleValue();
+                }
+                shippedQuantities.put(issuance.orderItemSeqId, issuanceQty);
+            }
         }
         purchaseOrderItems = EntityUtil.filterByOr(orderItems, exprs);
     } else {
         purchaseOrderItems = purchaseOrder.getRelated("OrderItem");
     }
+    purchaseOrderItems = EntityUtil.filterByAnd(purchaseOrderItems, [EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ITEM_CANCELLED")]);
 }
 // convert the unit prices to that of the facility owner's currency
+orderCurrencyUnitPriceMap = [:];
 if (purchaseOrder && facility) {
     if (ownerAcctgPref) {
         ownerCurrencyUomId = ownerAcctgPref.baseCurrencyUomId;
         orderCurrencyUomId = purchaseOrder.currencyUom;
         if (!orderCurrencyUomId.equals(ownerCurrencyUomId)) {
             purchaseOrderItems.each { item ->
+            orderCurrencyUnitPriceMap.(item.orderItemSeqId) = item.unitPrice;
                 serviceResults = dispatcher.runSync("convertUom",
                         [uomId : orderCurrencyUomId, uomIdTo : ownerCurrencyUomId, originalValue : item.unitPrice]);
                 if (ServiceUtil.isError(serviceResults)) {
@@ -122,10 +156,13 @@ if (purchaseOrder && facility) {
 
         // put the pref currency in the map for display and form use
         context.currencyUomId = ownerCurrencyUomId;
+        context.orderCurrencyUomId = orderCurrencyUomId;
     } else {
         request.setAttribute("_ERROR_MESSAGE_", "Either no owner party was set for this facility, or no accounting preferences were set for this owner party.");
     }
 }
+context.orderCurrencyUnitPriceMap = orderCurrencyUnitPriceMap;
+
 receivedQuantities = [:];
 salesOrderItems = [:];
 if (purchaseOrderItems) {

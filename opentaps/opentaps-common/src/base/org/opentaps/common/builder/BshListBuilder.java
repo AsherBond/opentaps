@@ -26,7 +26,7 @@ import bsh.Primitive;
 import bsh.This;
 import bsh.UtilEvalError;
 import javolution.util.FastList;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
@@ -77,7 +77,7 @@ public class BshListBuilder extends EntityListBuilder {
 
     private static final String ERR = "Cannot set up pagination from bsh closure:  ";
 
-    public BshListBuilder(This closure, GenericDelegator delegator) throws ListBuilderException {
+    public BshListBuilder(This closure, Delegator delegator) throws ListBuilderException {
         this.delegator = delegator;
 
         try {

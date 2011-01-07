@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.MapStack;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
 import org.ofbiz.webapp.view.AbstractViewHandler;
@@ -62,7 +63,7 @@ public class FreeMarkerViewHandler extends AbstractViewHandler {
 
     public void render(String name, String page, String info, String contentType, String encoding,
             HttpServletRequest request, HttpServletResponse response) throws ViewHandlerException {
-        if (page == null || page.length() == 0)
+        if (UtilValidate.isEmpty(page))
             throw new ViewHandlerException("Invalid template source");
 
         // make the root context (data model) for freemarker
@@ -95,6 +96,7 @@ public class FreeMarkerViewHandler extends AbstractViewHandler {
         // add in the OFBiz objects
         root.put("delegator", request.getAttribute("delegator"));
         root.put("dispatcher", request.getAttribute("dispatcher"));
+        root.put("authz", request.getAttribute("authz"));
         root.put("security", request.getAttribute("security"));
         root.put("userLogin", session.getAttribute("userLogin"));
 

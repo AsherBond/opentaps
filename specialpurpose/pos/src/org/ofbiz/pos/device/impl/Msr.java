@@ -43,6 +43,7 @@ public class Msr extends GenericDevice {
         this.control = new jpos.MSR();
     }
 
+    @Override
     protected void initialize() throws JposException {
         Debug.logInfo("MSR [" + control.getPhysicalDeviceName() + "] Claimed : " + control.getClaimed(), module);
         final jpos.MSR msr = (jpos.MSR) control;
@@ -52,6 +53,7 @@ public class Msr extends GenericDevice {
         // create the data listner
         msr.addDataListener(new DataEventAdaptor() {
 
+            @Override
             public void dataOccurred(jpos.events.DataEvent event) {
                 String[] decodedData = new String[7];
                 byte[] track1 = null;
@@ -98,6 +100,7 @@ public class Msr extends GenericDevice {
         // create the error listener
         msr.addErrorListener(new ErrorEventAdaptor() {
 
+            @Override
             public void errorOccurred(jpos.events.ErrorEvent event) {
                 Debug.log("Error Occurred : " + event.getErrorCodeExtended(), module);
                 PosScreen.currentScreen.showDialog("dialog/error/cardreaderror");

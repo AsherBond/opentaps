@@ -28,7 +28,7 @@ under the License.
 <ul>
 <li><a href="<@ofbizUrl>FindAgreement</@ofbizUrl>">${uiLabelMap.AccountingAgreementAvailable}</a></li>
 </ul>
-<br/>
+<br />
      </td>
   </tr>
   <tr>
@@ -40,7 +40,7 @@ under the License.
 <ul>
 <li><a href="<@ofbizUrl>FindBillingAccount</@ofbizUrl>">${uiLabelMap.CommonShow} ${uiLabelMap.AccountingCustomer} ${uiLabelMap.AccountingBillingAccount}</a></li>
 </ul>
-<br/>
+<br />
      </td>
   </tr>
 
@@ -53,7 +53,7 @@ under the License.
 <ul>
 <li><a href="<@ofbizUrl>ListFixedAssets</@ofbizUrl>">${uiLabelMap.AccountingShowAllFixedAssets}</a></li>
 </ul>
-<br/>
+<br />
      </td>
   </tr>
 
@@ -64,21 +64,21 @@ under the License.
   <tr valign="top">
 <td>
 <ul>
-<li><a href="<@ofbizUrl>findInvoices?noConditionFind=Y&lookupFlag=Y</@ofbizUrl>">${uiLabelMap.AccountingShowAllInvoices}</a></li>
+<li><a href="<@ofbizUrl>findInvoices?noConditionFind=Y&amp;lookupFlag=Y</@ofbizUrl>">${uiLabelMap.AccountingShowAllInvoices}</a></li>
 </ul>
 </td>
 
 <td>
 <ul>
 <#list invoiceTypes as invoiceType>
-<li><a href="<@ofbizUrl>findInvoices?lookupFlag=Y&invoiceTypeId=${invoiceType.invoiceTypeId}</@ofbizUrl>">${uiLabelMap.AccountingShowInvoices} ${invoiceType.get("description",locale)}</a></li>
+<li><a href="<@ofbizUrl>findInvoices?lookupFlag=Y&amp;invoiceTypeId=${invoiceType.invoiceTypeId}</@ofbizUrl>">${uiLabelMap.AccountingShowInvoices} ${invoiceType.get("description",locale)}</a></li>
 </#list>
 </ul>
 </td>
 <td>
 <ul>
 <#list invoiceStatus as status>
-<li><a href="<@ofbizUrl>findInvoices?lookupFlag=Y&statusId=${status.statusId}</@ofbizUrl>">${uiLabelMap.AccountingShowInvoices} ${status.get("description",locale)}</a></li>
+<li><a href="<@ofbizUrl>findInvoices?lookupFlag=Y&amp;statusId=${status.statusId}</@ofbizUrl>">${uiLabelMap.AccountingShowInvoices} ${status.get("description",locale)}</a></li>
 </#list>
 </ul>
 </td>
@@ -91,14 +91,14 @@ under the License.
 <tr valign="top">
 <td>
 <ul>
-<li><a href="<@ofbizUrl>findPayments?noConditionFind=Y&lookupFlag=Y</@ofbizUrl>">${uiLabelMap.AccountingShowAllPayments}</a></li>
+<li><a href="<@ofbizUrl>findPayments?noConditionFind=Y&amp;lookupFlag=Y</@ofbizUrl>">${uiLabelMap.AccountingShowAllPayments}</a></li>
 </ul>
 </td>
 <td>
 
 <ul>
 <#list paymentTypes as paymentType>
-<li><a href="<@ofbizUrl>findPayments?lookupFlag=Y&paymentTypeId=${paymentType.paymentTypeId}</@ofbizUrl>">${uiLabelMap.AccountingShowPayments} ${paymentType.get("description",locale)}</a></li>
+<li><a href="<@ofbizUrl>findPayments?lookupFlag=Y&amp;paymentTypeId=${paymentType.paymentTypeId}</@ofbizUrl>">${uiLabelMap.AccountingShowPayments} ${paymentType.get("description",locale)}</a></li>
 </#list>
 </ul>
 </td>
@@ -107,7 +107,7 @@ under the License.
 <td>
 <ul>
 <#list paymentMethodTypes as paymentMethodType>
-<li><a href="<@ofbizUrl>findPayments?lookupFlag=Y&paymentMethodTypeId=${paymentMethodType.paymentMethodTypeId}</@ofbizUrl>">${uiLabelMap.AccountingShowPayments} ${paymentMethodType.get("description",locale)}</a></li>
+<li><a href="<@ofbizUrl>findPayments?lookupFlag=Y&amp;paymentMethodTypeId=${paymentMethodType.paymentMethodTypeId}</@ofbizUrl>">${uiLabelMap.AccountingShowPayments} ${paymentMethodType.get("description",locale)}</a></li>
 </#list>
 </ul>
 </td>
@@ -115,7 +115,7 @@ under the License.
 <td>
 <ul>
 <#list paymentStatus as status>
-<li><a href="<@ofbizUrl>findPayments?lookupFlag=Y&statusId=${status.statusId}</@ofbizUrl>">${uiLabelMap.AccountingShowPayments} ${status.get("description",locale)}</a></li>
+<li><a href="<@ofbizUrl>findPayments?lookupFlag=Y&amp;statusId=${status.statusId}</@ofbizUrl>">${uiLabelMap.AccountingShowPayments} ${status.get("description",locale)}</a></li>
 </#list>
 </ul>
 </td>

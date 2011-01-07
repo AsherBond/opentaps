@@ -20,10 +20,7 @@ under the License.
 
 <#if mrvList?has_content>
     <div id="recentlyviewed" class="screenlet">
-      <div class="browsecategorylist">
-        <div class="screenlet-header">
-            <div class="boxhead">${uiLabelMap.EcommerceLastContent}</div>
-        </div>
+        <h3>${uiLabelMap.EcommerceLastContent}</h3>
         <div class="screenlet-body">
             <#list mrvList as mrvArr>
                 <div class="browsecategorytext">
@@ -31,6 +28,5 @@ under the License.
                 </div>
             </#list>
         </div>
-      </div>
     </div>
 </#if>

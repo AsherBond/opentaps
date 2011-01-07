@@ -49,12 +49,28 @@
     <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
     <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/opentaps_images/favicon.ico"       sequenceId="01"/>
 
-    <!-- Smooth Feather Theme -->
-    <VisualThemeResource visualThemeId="SMOOTH_FEATHER" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/opentaps_js/jscalendar-1.0/calendar-system.css" sequenceId="99"/>
-    <VisualThemeResource visualThemeId="SMOOTH_FEATHER" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar.js" sequenceId="97"/>
-    <VisualThemeResource visualThemeId="SMOOTH_FEATHER" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/lang/calendar-en.js" sequenceId="98"/>
-    <VisualThemeResource visualThemeId="SMOOTH_FEATHER" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar-setup.js" sequenceId="99"/>
-    <VisualThemeResource visualThemeId="SMOOTH_FEATHER" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
-    <VisualThemeResource visualThemeId="SMOOTH_FEATHER" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/opentaps_images/favicon.ico"       sequenceId="01"/>
+    <!-- Tomahawk Theme -->
+    <VisualThemeResource visualThemeId="TOMAHAWK" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/opentaps_js/jscalendar-1.0/calendar-system.css" sequenceId="99"/>
+    <VisualThemeResource visualThemeId="TOMAHAWK" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar.js" sequenceId="97"/>
+    <VisualThemeResource visualThemeId="TOMAHAWK" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/lang/calendar-en.js" sequenceId="98"/>
+    <VisualThemeResource visualThemeId="TOMAHAWK" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar-setup.js" sequenceId="99"/>
+    <VisualThemeResource visualThemeId="TOMAHAWK" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="TOMAHAWK" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/opentaps_images/favicon.ico"       sequenceId="01"/>
+
+    <!-- Bizzness Time Theme -->
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/opentaps_js/jscalendar-1.0/calendar-system.css" sequenceId="99"/>
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar.js" sequenceId="97"/>
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/lang/calendar-en.js" sequenceId="98"/>
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar-setup.js" sequenceId="99"/>
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/opentaps_images/favicon.ico"       sequenceId="01"/>
+
+    <!-- Dropping Crumbs Theme -->
+    <VisualThemeResource visualThemeId="DROPPINGCRUMBS" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/opentaps_js/jscalendar-1.0/calendar-system.css" sequenceId="99"/>
+    <VisualThemeResource visualThemeId="DROPPINGCRUMBS" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar.js" sequenceId="97"/>
+    <VisualThemeResource visualThemeId="DROPPINGCRUMBS" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/lang/calendar-en.js" sequenceId="98"/>
+    <VisualThemeResource visualThemeId="DROPPINGCRUMBS" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar-setup.js" sequenceId="99"/>
+    <VisualThemeResource visualThemeId="DROPPINGCRUMBS" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="DROPPINGCRUMBS" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/opentaps_images/favicon.ico"       sequenceId="01"/>
 
 </entity-engine-xml>

@@ -18,7 +18,7 @@ package org.opentaps.tests.service;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -97,7 +97,7 @@ public class POJOTestServices extends Service {
         }
         List<String> key2s = getKey2Values();
         try {
-            GenericDelegator delegator = getInfrastructure().getDelegator();
+            Delegator delegator = getInfrastructure().getDelegator();
             for (String key2 : key2s) {
                 delegator.create("ServiceTestRecord", UtilMisc.toMap("key1", getKey1Value(), "key2", key2, "value1", increment, "testTimestamp", testTimestamp,
                         "createdByUserLogin", getUser().getOfbizUserLogin().getString("userLoginId")));
@@ -108,7 +108,7 @@ public class POJOTestServices extends Service {
     }
 
     // get every row of key1  key2 combination
-    public static List getAllValues(String key1, List key2s, GenericDelegator delegator) throws GenericEntityException {
+    public static List getAllValues(String key1, List key2s, Delegator delegator) throws GenericEntityException {
         List<GenericValue> values = delegator.findByAnd("ServiceTestRecord", UtilMisc.toList(
                 EntityCondition.makeCondition("key1", EntityOperator.EQUALS, key1),
                 EntityCondition.makeCondition("key2", EntityOperator.IN, key2s)));
@@ -134,7 +134,7 @@ public class POJOTestServices extends Service {
 
     // old school static Java service
     public static Map pojoTestFollowup(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         try {

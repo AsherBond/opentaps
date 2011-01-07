@@ -19,29 +19,35 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.accounting.thirdparty.clearcommerce;
 
-import java.util.Map;
-import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.text.DecimalFormat;
-import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
-import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericValue;
+import org.ofbiz.accounting.payment.PaymentGatewayServices;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.HttpClient;
+import org.ofbiz.base.util.HttpClientException;
+import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.base.util.UtilNumber;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
-import org.ofbiz.accounting.payment.PaymentGatewayServices;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
-import org.apache.xml.serialize.XMLSerializer;
-import org.apache.xml.serialize.OutputFormat;
 
 
 /**
@@ -54,9 +60,9 @@ public class CCPaymentServices {
     private static int rounding = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
 
 
-    public static Map ccAuth(DispatchContext dctx, Map context) {
+    public static Map<String, Object> ccAuth(DispatchContext dctx, Map<String, Object> context) {
         String ccAction = (String) context.get("ccAction");
-        if (ccAction == null) ccAction = new String("PreAuth");
+        if (ccAction == null) ccAction = "PreAuth";
         Document authRequestDoc = buildPrimaryTxRequest(context, ccAction, (BigDecimal) context.get("processAmount"),
                 (String) context.get("orderId"));
 
@@ -68,11 +74,11 @@ public class CCPaymentServices {
         }
 
         if (getMessageListMaxSev(authResponseDoc) > 4) {  // 5 and higher, process error from HSBC
-            Map result = ServiceUtil.returnSuccess();
+            Map<String, Object> result = ServiceUtil.returnSuccess();
             result.put("authResult", new Boolean(false));
-            result.put("processAmount", new BigDecimal("0.00"));
+            result.put("processAmount", BigDecimal.ZERO);
             result.put("authRefNum", getReferenceNum(authResponseDoc));
-            List messages = getMessageList(authResponseDoc);
+            List<String> messages = getMessageList(authResponseDoc);
             if (UtilValidate.isNotEmpty(messages)) {
                 result.put("internalRespMsgs", messages);
             }
@@ -82,10 +88,10 @@ public class CCPaymentServices {
         return processAuthResponse(authResponseDoc);
     }
 
-    public static Map ccCredit(DispatchContext dctx, Map context) {
-        String action = new String("Credit");
+    public static Map<String, Object> ccCredit(DispatchContext dctx, Map<String, Object> context) {
+        String action = "Credit";
         if (context.get("pbOrder") != null) {
-            action = new String("Auth");  // required for periodic billing....
+            action = "Auth";  // required for periodic billing....
         }
 
         Document creditRequestDoc = buildPrimaryTxRequest(context, action, (BigDecimal) context.get("creditAmount"),
@@ -98,11 +104,11 @@ public class CCPaymentServices {
         }
 
         if (getMessageListMaxSev(creditResponseDoc) > 4) {
-            Map result = ServiceUtil.returnSuccess();
+            Map<String, Object> result = ServiceUtil.returnSuccess();
             result.put("creditResult", new Boolean(false));
-            result.put("creditAmount", new BigDecimal("0.00"));
+            result.put("creditAmount", BigDecimal.ZERO);
             result.put("creditRefNum", getReferenceNum(creditResponseDoc));
-            List messages = getMessageList(creditResponseDoc);
+            List<String> messages = getMessageList(creditResponseDoc);
             if (UtilValidate.isNotEmpty(messages)) {
                 result.put("internalRespMsgs", messages);
             }
@@ -112,7 +118,7 @@ public class CCPaymentServices {
         return processCreditResponse(creditResponseDoc);
     }
 
-    public static Map ccCapture(DispatchContext dctx, Map context) {
+    public static Map<String, Object> ccCapture(DispatchContext dctx, Map<String, Object> context) {
 
         GenericValue orderPaymentPreference = (GenericValue) context.get("orderPaymentPreference");
         GenericValue authTransaction = PaymentGatewayServices.getAuthTransaction(orderPaymentPreference);
@@ -131,11 +137,11 @@ public class CCPaymentServices {
         }
 
         if (getMessageListMaxSev(captureResponseDoc) > 4) {
-            Map result = ServiceUtil.returnSuccess();
+            Map<String, Object> result = ServiceUtil.returnSuccess();
             result.put("captureResult", new Boolean(false));
-            result.put("captureAmount", new BigDecimal("0.00"));
+            result.put("captureAmount", BigDecimal.ZERO);
             result.put("captureRefNum", getReferenceNum(captureResponseDoc));
-            List messages = getMessageList(captureResponseDoc);
+            List<String> messages = getMessageList(captureResponseDoc);
             if (UtilValidate.isNotEmpty(messages)) {
                 result.put("internalRespMsgs", messages);
             }
@@ -145,7 +151,7 @@ public class CCPaymentServices {
         return processCaptureResponse(captureResponseDoc);
     }
 
-    public static Map ccRelease(DispatchContext dctx, Map context) {
+    public static Map<String, Object> ccRelease(DispatchContext dctx, Map<String, Object> context) {
 
         GenericValue orderPaymentPreference = (GenericValue) context.get("orderPaymentPreference");
         GenericValue authTransaction = PaymentGatewayServices.getAuthTransaction(orderPaymentPreference);
@@ -163,11 +169,11 @@ public class CCPaymentServices {
         }
 
         if (getMessageListMaxSev(releaseResponseDoc) > 4) {
-            Map result = ServiceUtil.returnSuccess();
+            Map<String, Object> result = ServiceUtil.returnSuccess();
             result.put("releaseResult", new Boolean(false));
-            result.put("releaseAmount", new BigDecimal("0.00"));
+            result.put("releaseAmount", BigDecimal.ZERO);
             result.put("releaseRefNum", getReferenceNum(releaseResponseDoc));
-            List messages = getMessageList(releaseResponseDoc);
+            List<String> messages = getMessageList(releaseResponseDoc);
             if (UtilValidate.isNotEmpty(messages)) {
                 result.put("internalRespMsgs", messages);
             }
@@ -177,7 +183,7 @@ public class CCPaymentServices {
         return processReleaseResponse(releaseResponseDoc);
     }
 
-    public static Map ccReleaseNoop(DispatchContext dctx, Map context) {
+    public static Map<String, Object> ccReleaseNoop(DispatchContext dctx, Map<String, Object> context) {
 
         GenericValue orderPaymentPreference = (GenericValue) context.get("orderPaymentPreference");
         GenericValue authTransaction = PaymentGatewayServices.getAuthTransaction(orderPaymentPreference);
@@ -185,7 +191,7 @@ public class CCPaymentServices {
             return ServiceUtil.returnError("No authorization transaction found; cannot release");
         }
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         result.put("releaseResult", Boolean.valueOf(true));
         result.put("releaseCode", authTransaction.getString("gatewayCode"));
         result.put("releaseAmount", authTransaction.getBigDecimal("amount"));
@@ -196,7 +202,7 @@ public class CCPaymentServices {
         return result;
     }
 
-    public static Map ccRefund(DispatchContext dctx, Map context) {
+    public static Map<String, Object> ccRefund(DispatchContext dctx, Map<String, Object> context) {
 
         GenericValue orderPaymentPreference = (GenericValue) context.get("orderPaymentPreference");
         GenericValue authTransaction = PaymentGatewayServices.getAuthTransaction(orderPaymentPreference);
@@ -217,11 +223,11 @@ public class CCPaymentServices {
         }
 
         if (getMessageListMaxSev(refundResponseDoc) > 4) {
-            Map result = ServiceUtil.returnSuccess();
+            Map<String, Object> result = ServiceUtil.returnSuccess();
             result.put("refundResult", new Boolean(false));
-            result.put("refundAmount", new BigDecimal("0.00"));
+            result.put("refundAmount", BigDecimal.ZERO);
             result.put("refundRefNum", getReferenceNum(refundResponseDoc));
-            List messages = getMessageList(refundResponseDoc);
+            List<String> messages = getMessageList(refundResponseDoc);
             if (UtilValidate.isNotEmpty(messages)) {
                 result.put("internalRespMsgs", messages);
             }
@@ -231,7 +237,7 @@ public class CCPaymentServices {
         return processRefundResponse(refundResponseDoc);
     }
 
-    public static Map ccReAuth(DispatchContext dctx, Map context) {
+    public static Map<String, Object> ccReAuth(DispatchContext dctx, Map<String, Object> context) {
 
         GenericValue orderPaymentPreference = (GenericValue) context.get("orderPaymentPreference");
         GenericValue authTransaction = PaymentGatewayServices.getAuthTransaction(orderPaymentPreference);
@@ -250,11 +256,11 @@ public class CCPaymentServices {
         }
 
         if (getMessageListMaxSev(reauthResponseDoc) > 4) {
-            Map result = ServiceUtil.returnSuccess();
+            Map<String, Object> result = ServiceUtil.returnSuccess();
             result.put("reauthResult", new Boolean(false));
-            result.put("reauthAmount", new BigDecimal("0.00"));
+            result.put("reauthAmount", BigDecimal.ZERO);
             result.put("reauthRefNum", getReferenceNum(reauthResponseDoc));
-            List messages = getMessageList(reauthResponseDoc);
+            List<String> messages = getMessageList(reauthResponseDoc);
             if (UtilValidate.isNotEmpty(messages)) {
                 result.put("internalRespMsgs", messages);
             }
@@ -265,7 +271,7 @@ public class CCPaymentServices {
 
     }
 
-    public static Map ccReport(DispatchContext dctx, Map context) {
+    public static Map<String, Object> ccReport(DispatchContext dctx, Map<String, Object> context) {
 
         // configuration file
         String paymentConfig = (String) context.get("paymentConfig");
@@ -346,28 +352,29 @@ public class CCPaymentServices {
         UtilXml.addChildElementValue(value,"OrderId", orderId, requestDocument);
 
         Debug.set(Debug.VERBOSE, true);
-        Document reportResponseDoc = null;
+        //Document reportResponseDoc = null;
         try {
-            reportResponseDoc = sendRequest(requestDocument, (String) context.get("paymentConfig"));
+            //reportResponseDoc =
+            sendRequest(requestDocument, (String) context.get("paymentConfig"));
         } catch (ClearCommerceException cce) {
             return ServiceUtil.returnError(cce.getMessage());
         }
         Debug.set(Debug.VERBOSE, true);
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
 
         return result;
     }
 
 
-    private static Map processAuthResponse(Document responseDocument) {
+    private static Map<String, Object> processAuthResponse(Document responseDocument) {
 
         Element engineDocElement = UtilXml.firstChildElement(responseDocument.getDocumentElement(), "EngineDoc");
         Element orderFormElement = UtilXml.firstChildElement(engineDocElement, "OrderFormDoc");
         Element transactionElement = UtilXml.firstChildElement(orderFormElement, "Transaction");
         Element procResponseElement = UtilXml.firstChildElement(transactionElement, "CardProcResp");
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
 
         String errorCode = UtilXml.childElementValue(procResponseElement, "CcErrCode");
         if ("1".equals(errorCode)) {
@@ -380,7 +387,7 @@ public class CCPaymentServices {
             result.put("processAmount", new BigDecimal(authAmountStr).movePointLeft(2));
         } else {
             result.put("authResult", Boolean.valueOf(false));
-            result.put("processAmount", new BigDecimal("0.00"));
+            result.put("processAmount", BigDecimal.ZERO);
         }
 
         result.put("authRefNum", UtilXml.childElementValue(orderFormElement, "Id"));
@@ -399,21 +406,21 @@ public class CCPaymentServices {
             result.put("scoreCode", UtilXml.childElementValue(fraudInfoElement, "TotalScore"));
         }
 
-        List messages = getMessageList(responseDocument);
+        List<String> messages = getMessageList(responseDocument);
         if (UtilValidate.isNotEmpty(messages)) {
             result.put("internalRespMsgs", messages);
         }
         return result;
     }
 
-    private static Map processCreditResponse(Document responseDocument) {
+    private static Map<String, Object> processCreditResponse(Document responseDocument) {
 
         Element engineDocElement = UtilXml.firstChildElement(responseDocument.getDocumentElement(), "EngineDoc");
         Element orderFormElement = UtilXml.firstChildElement(engineDocElement, "OrderFormDoc");
         Element transactionElement = UtilXml.firstChildElement(orderFormElement, "Transaction");
         Element procResponseElement = UtilXml.firstChildElement(transactionElement, "CardProcResp");
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
 
         String errorCode = UtilXml.childElementValue(procResponseElement, "CcErrCode");
         if ("1".equals(errorCode)) {
@@ -426,28 +433,28 @@ public class CCPaymentServices {
             result.put("creditAmount", new BigDecimal(creditAmountStr).movePointLeft(2));
         } else {
             result.put("creditResult", Boolean.valueOf(false));
-            result.put("creditAmount", new BigDecimal("0.00"));
+            result.put("creditAmount", BigDecimal.ZERO);
         }
 
         result.put("creditRefNum", UtilXml.childElementValue(orderFormElement, "Id"));
         result.put("creditFlag", UtilXml.childElementValue(procResponseElement, "Status"));
         result.put("creditMessage", UtilXml.childElementValue(procResponseElement, "CcReturnMsg"));
 
-        List messages = getMessageList(responseDocument);
+        List<String> messages = getMessageList(responseDocument);
         if (UtilValidate.isNotEmpty(messages)) {
             result.put("internalRespMsgs", messages);
         }
         return result;
     }
 
-    private static Map processCaptureResponse(Document responseDocument) {
+    private static Map<String, Object> processCaptureResponse(Document responseDocument) {
 
         Element engineDocElement = UtilXml.firstChildElement(responseDocument.getDocumentElement(), "EngineDoc");
         Element orderFormElement = UtilXml.firstChildElement(engineDocElement, "OrderFormDoc");
         Element transactionElement = UtilXml.firstChildElement(orderFormElement, "Transaction");
         Element procResponseElement = UtilXml.firstChildElement(transactionElement, "CardProcResp");
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
 
         String errorCode = UtilXml.childElementValue(procResponseElement, "CcErrCode");
         if ("1".equals(errorCode)) {
@@ -460,28 +467,28 @@ public class CCPaymentServices {
             result.put("captureAmount", new BigDecimal(captureAmountStr).movePointLeft(2));
         } else {
             result.put("captureResult", Boolean.valueOf(false));
-            result.put("captureAmount", new BigDecimal("0.00"));
+            result.put("captureAmount", BigDecimal.ZERO);
         }
 
         result.put("captureRefNum", UtilXml.childElementValue(orderFormElement, "Id"));
         result.put("captureFlag", UtilXml.childElementValue(procResponseElement, "Status"));
         result.put("captureMessage", UtilXml.childElementValue(procResponseElement, "CcReturnMsg"));
 
-        List messages = getMessageList(responseDocument);
+        List<String> messages = getMessageList(responseDocument);
         if (UtilValidate.isNotEmpty(messages)) {
             result.put("internalRespMsgs", messages);
         }
         return result;
     }
 
-    private static Map processReleaseResponse(Document responseDocument) {
+    private static Map<String, Object> processReleaseResponse(Document responseDocument) {
 
         Element engineDocElement = UtilXml.firstChildElement(responseDocument.getDocumentElement(), "EngineDoc");
         Element orderFormElement = UtilXml.firstChildElement(engineDocElement, "OrderFormDoc");
         Element transactionElement = UtilXml.firstChildElement(orderFormElement, "Transaction");
         Element procResponseElement = UtilXml.firstChildElement(transactionElement, "CardProcResp");
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
 
         String errorCode = UtilXml.childElementValue(procResponseElement, "CcErrCode");
         if ("1".equals(errorCode)) {
@@ -494,28 +501,28 @@ public class CCPaymentServices {
             result.put("releaseAmount", new BigDecimal(releaseAmountStr).movePointLeft(2));
         } else {
             result.put("releaseResult", Boolean.valueOf(false));
-            result.put("releaseAmount", new BigDecimal("0.00"));
+            result.put("releaseAmount", BigDecimal.ZERO);
         }
 
         result.put("releaseRefNum", UtilXml.childElementValue(orderFormElement, "Id"));
         result.put("releaseFlag", UtilXml.childElementValue(procResponseElement, "Status"));
         result.put("releaseMessage", UtilXml.childElementValue(procResponseElement, "CcReturnMsg"));
 
-        List messages = getMessageList(responseDocument);
+        List<String> messages = getMessageList(responseDocument);
         if (UtilValidate.isNotEmpty(messages)) {
             result.put("internalRespMsgs", messages);
         }
         return result;
     }
 
-    private static Map processRefundResponse(Document responseDocument) {
+    private static Map<String, Object> processRefundResponse(Document responseDocument) {
 
         Element engineDocElement = UtilXml.firstChildElement(responseDocument.getDocumentElement(), "EngineDoc");
         Element orderFormElement = UtilXml.firstChildElement(engineDocElement, "OrderFormDoc");
         Element transactionElement = UtilXml.firstChildElement(orderFormElement, "Transaction");
         Element procResponseElement = UtilXml.firstChildElement(transactionElement, "CardProcResp");
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
 
         String errorCode = UtilXml.childElementValue(procResponseElement, "CcErrCode");
         if ("1".equals(errorCode)) {
@@ -528,28 +535,28 @@ public class CCPaymentServices {
             result.put("refundAmount", new BigDecimal(refundAmountStr).movePointLeft(2));
         } else {
             result.put("refundResult", Boolean.valueOf(false));
-            result.put("refundAmount", new BigDecimal("0.00"));
+            result.put("refundAmount", BigDecimal.ZERO);
         }
 
         result.put("refundRefNum", UtilXml.childElementValue(orderFormElement, "Id"));
         result.put("refundFlag", UtilXml.childElementValue(procResponseElement, "Status"));
         result.put("refundMessage", UtilXml.childElementValue(procResponseElement, "CcReturnMsg"));
 
-        List messages = getMessageList(responseDocument);
+        List<String> messages = getMessageList(responseDocument);
         if (UtilValidate.isNotEmpty(messages)) {
             result.put("internalRespMsgs", messages);
         }
         return result;
     }
 
-    private static Map processReAuthResponse(Document responseDocument) {
+    private static Map<String, Object> processReAuthResponse(Document responseDocument) {
 
         Element engineDocElement = UtilXml.firstChildElement(responseDocument.getDocumentElement(), "EngineDoc");
         Element orderFormElement = UtilXml.firstChildElement(engineDocElement, "OrderFormDoc");
         Element transactionElement = UtilXml.firstChildElement(orderFormElement, "Transaction");
         Element procResponseElement = UtilXml.firstChildElement(transactionElement, "CardProcResp");
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
 
         String errorCode = UtilXml.childElementValue(procResponseElement, "CcErrCode");
         if ("1".equals(errorCode)) {
@@ -562,30 +569,30 @@ public class CCPaymentServices {
             result.put("reauthAmount", new BigDecimal(reauthAmountStr).movePointLeft(2));
         } else {
             result.put("reauthResult", Boolean.valueOf(false));
-            result.put("reauthAmount", new BigDecimal("0.00"));
+            result.put("reauthAmount", BigDecimal.ZERO);
         }
 
         result.put("reauthRefNum", UtilXml.childElementValue(orderFormElement, "Id"));
         result.put("reauthFlag", UtilXml.childElementValue(procResponseElement, "Status"));
         result.put("reauthMessage", UtilXml.childElementValue(procResponseElement, "CcReturnMsg"));
 
-        List messages = getMessageList(responseDocument);
+        List<String> messages = getMessageList(responseDocument);
         if (UtilValidate.isNotEmpty(messages)) {
             result.put("internalRespMsgs", messages);
         }
         return result;
     }
 
-    private static List getMessageList(Document responseDocument) {
+    private static List<String> getMessageList(Document responseDocument) {
 
-        List messageList = new ArrayList();
+        List<String> messageList = new ArrayList<String>();
 
         Element engineDocElement = UtilXml.firstChildElement(responseDocument.getDocumentElement(), "EngineDoc");
         Element messageListElement = UtilXml.firstChildElement(engineDocElement, "MessageList");
-        List messageElementList = UtilXml.childElementList(messageListElement, "Message");
+        List<? extends Element> messageElementList = UtilXml.childElementList(messageListElement, "Message");
         if (UtilValidate.isNotEmpty(messageElementList)) {
-            for (Iterator i = messageElementList.iterator(); i.hasNext();) {
-                Element messageElement = (Element) i.next();
+            for (Iterator<? extends Element> i = messageElementList.iterator(); i.hasNext();) {
+                Element messageElement = i.next();
                 int severity = 0;
                 try {
                     severity = Integer.parseInt(UtilXml.childElementValue(messageElement, "Sev"));
@@ -632,7 +639,7 @@ public class CCPaymentServices {
         return referenceNum;
     }
 
-    private static Document buildPrimaryTxRequest(Map context, String type, BigDecimal amount, String refNum) {
+    private static Document buildPrimaryTxRequest(Map<String, Object> context, String type, BigDecimal amount, String refNum) {
 
         String paymentConfig = (String) context.get("paymentConfig");
         if (UtilValidate.isEmpty(paymentConfig)) {
@@ -690,7 +697,7 @@ public class CCPaymentServices {
 
         // TODO: determine if adding OrderItemList is worthwhile - JFE 2004.02.14
 
-        Map pbOrder = (Map) context.get("pbOrder");
+        Map<String, Object> pbOrder = UtilGenerics.checkMap(context.get("pbOrder"));
         if (pbOrder != null) {
             if (Debug.verboseOn()) Debug.logInfo("pbOrder Map not empty:" + pbOrder.toString(),module);
             Element pbOrderElement =  UtilXml.addChildElement(orderFormDocElement, "PbOrder", requestDocument); // periodic billing order
@@ -703,16 +710,16 @@ public class CCPaymentServices {
         else if  (context.get("OrderFrequencyCycle") != null && context.get("OrderFrequencyInterval") != null && context.get("TotalNumberPayments") != null) {
             Element pbOrderElement =  UtilXml.addChildElement(orderFormDocElement, "PbOrder", requestDocument); // periodic billing order
             UtilXml.addChildElementValue(pbOrderElement, "OrderFrequencyCycle", (String) context.get("OrderFrequencyCycle"), requestDocument);
-            Element interval = UtilXml.addChildElementValue(pbOrderElement, "OrderFrequencyInterval", (String) pbOrder.get("OrderFrequencyInterval"), requestDocument);
+            Element interval = UtilXml.addChildElementValue(pbOrderElement, "OrderFrequencyInterval", (String) context.get("OrderFrequencyInterval"), requestDocument);
             interval.setAttribute("DataType", "S32");
-            Element total = UtilXml.addChildElementValue(pbOrderElement, "TotalNumberPayments", (String) pbOrder.get("TotalNumberPayments"), requestDocument);
+            Element total = UtilXml.addChildElementValue(pbOrderElement, "TotalNumberPayments", (String) context.get("TotalNumberPayments"), requestDocument);
             total.setAttribute("DataType", "S32");
         }
 
         return requestDocument;
     }
 
-    private static Document buildSecondaryTxRequest(Map context, String id, String type, BigDecimal amount) {
+    private static Document buildSecondaryTxRequest(Map<String, Object> context, String id, String type, BigDecimal amount) {
 
         String paymentConfig = (String) context.get("paymentConfig");
         if (UtilValidate.isEmpty(paymentConfig)) {
@@ -876,17 +883,10 @@ public class CCPaymentServices {
 
         OutputStream os = new ByteArrayOutputStream();
 
-        OutputFormat format = new OutputFormat();
-        format.setOmitDocumentType(true);
-        format.setOmitXMLDeclaration(true);
-        format.setIndenting(false);
-
-        XMLSerializer serializer = new XMLSerializer(os, format);
         try {
-            serializer.asDOMSerializer();
-            serializer.serialize(requestDocument.getDocumentElement());
-        } catch (IOException ioe) {
-            throw new ClearCommerceException("Error serializing requestDocument: " + ioe.getMessage());
+            UtilXml.writeXmlDocument(requestDocument, os, "UTF-8", true, false, 0);
+        } catch (TransformerException e) {
+            throw new ClearCommerceException("Error serializing requestDocument: " + e.getMessage());
         }
 
         String xmlString = os.toString();

@@ -138,7 +138,7 @@ public class ServiceEcaCondition implements java.io.Serializable {
 
         Object lhsValue = null;
         Object rhsValue = null;
-        if (lhsMapName != null && lhsMapName.length() > 0) {
+        if (UtilValidate.isNotEmpty(lhsMapName)) {
             try {
                 if (context.containsKey(lhsMapName)) {
                     Map<String, ? extends Object> envMap = UtilGenerics.checkMap(context.get(lhsMapName));
@@ -159,7 +159,7 @@ public class ServiceEcaCondition implements java.io.Serializable {
 
         if (isConstant) {
             rhsValue = rhsValueName;
-        } else if (rhsMapName != null && rhsMapName.length() > 0) {
+        } else if (UtilValidate.isNotEmpty(rhsMapName)) {
             try {
                 if (context.containsKey(rhsMapName)) {
                     Map<String, ? extends Object> envMap = UtilGenerics.checkMap(context.get(rhsMapName));
@@ -198,6 +198,7 @@ public class ServiceEcaCondition implements java.io.Serializable {
         }
     }
 
+    @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
 
@@ -213,6 +214,7 @@ public class ServiceEcaCondition implements java.io.Serializable {
         return buf.toString();
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof ServiceEcaCondition) {
             ServiceEcaCondition other = (ServiceEcaCondition) obj;

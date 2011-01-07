@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -61,7 +61,7 @@ public final class AmazonSyncServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> batchUpdateAmazonProducts(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Timestamp now = UtilDateTime.nowTimestamp();
         Locale locale = (Locale) context.get("locale");
@@ -159,7 +159,7 @@ public final class AmazonSyncServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object> updateAmazonProductPrices(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
         String productId = (String) context.get("productId");
@@ -204,7 +204,7 @@ public final class AmazonSyncServices {
      * @return the service response <code>Map</code>
      */
     public static Map<String, Object>  updateAmazonProductInventory(DispatchContext dctx, Map<String, Object>  context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
         String productId = (String) context.get("productId");

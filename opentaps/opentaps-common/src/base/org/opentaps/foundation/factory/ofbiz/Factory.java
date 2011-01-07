@@ -3,7 +3,7 @@ package org.opentaps.foundation.factory.ofbiz;
 import org.opentaps.foundation.factory.FactoryInterface;
 import org.opentaps.foundation.factory.FactoryException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.security.Security;
@@ -33,7 +33,7 @@ import org.ofbiz.security.Security;
 public class Factory implements FactoryInterface {
 
     protected Infrastructure infrastructure = null;
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected LocalDispatcher dispatcher = null;
     protected Security security = null;
     protected GenericValue userLogin = null; // a user associated with an instance of the infrastructure
@@ -50,7 +50,7 @@ public class Factory implements FactoryInterface {
         this.userLogin = userLogin;
     }
 
-    public GenericDelegator getDelegator() {
+    public Delegator getDelegator() {
         return delegator;
     }
 }

@@ -97,7 +97,7 @@ under the License.
                 <set field="userLoginExistsMap.userLoginId"  from-field="userLoginContext.userLoginId"/>
                 <find-by-primary-key entity-name="UserLogin" map="userLoginExistsMap" value-field="existingUserLogin"/>
                 <if-not-empty field="existingUserLogin">
-                    <set field="tempErrorMessage" value="Username in use, please choose another."/>
+                    <property-to-field field="tempErrorMessage" property="PartyUserNameInUse" resource="PartyUiLabels"/>
                     <field-to-list field="tempErrorMessage" list="error_list"/>
                 </if-not-empty>
             </if-not-empty>
@@ -131,6 +131,7 @@ under the License.
                 <process field="USER_TITLE"><copy to-field="personalTitle"/></process>
                 <process field="USER_SUFFIX"><copy to-field="suffix"/></process>
                 <process field="USER_BIRTHDATE"><convert type="Date" to-field="birthDate"><fail-property resource="PartyUiLabels" property="PartyBirthDateMissingError"/></convert></process>
+                <process field="USER_DECEASEDDATE"><convert type="Date" to-field="deceasedDate"><fail-property resource="PartyUiLabels" property="PartyDeceasedDateMissingError"/></convert></process>
                 <process field="USER_GENDER"><copy to-field="gender"/></process>
             </simple-map-processor>
         </call-map-processor>
@@ -394,10 +395,21 @@ under the License.
         <!-- set the partyId in the request -->
         <field-to-request field="tempMap.partyId" request-name="partyId"/>
 
+        <!-- Associated to Product Store -->
+        <entity-one entity-name="UserLogin" value-field="userLogin">
+            <field-map field-name="userLoginId" value="system"/>
+        </entity-one>
+        <set field="createProductStoreRoleMap.userLogin" from-field="userLogin"/>
+        <set field="createProductStoreRoleMap.partyId" from-field="tempMap.partyId"/>
+        <set field="createProductStoreRoleMap.roleTypeId" from-field="parameters.roleTypeId"/>
+        <set field="createProductStoreRoleMap.productStoreId" from-field="parameters.PRODUCT_STORE_ID"/>
+        <call-service service-name="createProductStoreRole" in-map-name="createProductStoreRoleMap"/>
+
         <!--send New User Email Notification-->
         <set field="emailContext.partyId" from-field="partyId"/>
+        <set field="emailContext.productStoreId" from-field="parameters.PRODUCT_STORE_ID"/>
         <set-service-fields service-name="sendCreatePartyEmailNotification" map="emailContext" to-map="serviceInMap"/>
-        <call-service service-name="sendCreatePartyEmailNotification" in-map-name="serviceInMap"/>
+        <call-service-asynch service-name="sendCreatePartyEmailNotification" in-map-name="serviceInMap"/>
     </simple-method>
 
 </simple-methods>

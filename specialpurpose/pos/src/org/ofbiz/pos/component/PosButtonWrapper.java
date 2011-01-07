@@ -194,7 +194,7 @@ public class PosButtonWrapper {
             if (thisPosition == text.length()) {
                 line = text;
                 buf.append(line);
-                text = new String();
+                text = "";
                 break;
             }
 

@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -72,7 +72,7 @@ public final class UtilCase {
      * Get the active account and contacts for a case.
      * @return List of PartyRelationshipAndCaseRoles with the requested partyId's.
      */
-    public static List<GenericValue> getCaseAccountsAndContacts(GenericDelegator delegator, String custRequestId) throws GenericEntityException {
+    public static List<GenericValue> getCaseAccountsAndContacts(Delegator delegator, String custRequestId) throws GenericEntityException {
         return getCasePartiesByRole(delegator, custRequestId, UtilMisc.toList("ACCOUNT", "CONTACT"));
     }
 
@@ -80,7 +80,7 @@ public final class UtilCase {
      * Gets the first active contact party ID for a case.
      * @return partyId of contact or null
      */
-    public static String getCasePrimaryContactPartyId(GenericDelegator delegator, String custRequestId) throws GenericEntityException {
+    public static String getCasePrimaryContactPartyId(Delegator delegator, String custRequestId) throws GenericEntityException {
         List<GenericValue> candidates = getCasePartiesByRole(delegator, custRequestId, UtilMisc.toList("CONTACT"));
         if (candidates.size() > 0) {
             return candidates.get(0).getString("partyId");
@@ -92,7 +92,7 @@ public final class UtilCase {
      * Gets the first active account party ID for a case.
      * @return partyId of account or null
      */
-    public static String getCasePrimaryAccountPartyId(GenericDelegator delegator, String custRequestId) throws GenericEntityException {
+    public static String getCasePrimaryAccountPartyId(Delegator delegator, String custRequestId) throws GenericEntityException {
         List<GenericValue> candidates = getCasePartiesByRole(delegator, custRequestId, UtilMisc.toList("ACCOUNT"));
         if (candidates.size() > 0) {
             return candidates.get(0).getString("partyId");
@@ -106,7 +106,7 @@ public final class UtilCase {
      * requires ordering and fields from other joined entities. Don't use this directly, use one of the more convenient helper methods.
      * @return  A list of PartyRelationshipAndCaseRole with partyId's of the requested parties
      */
-    public static List<GenericValue> getCasePartiesByRole(GenericDelegator delegator, String custRequestId, List<String> roleTypeIds) throws GenericEntityException {
+    public static List<GenericValue> getCasePartiesByRole(Delegator delegator, String custRequestId, List<String> roleTypeIds) throws GenericEntityException {
 
         // add each role type id to an OR condition list
         List<EntityCondition> roleCondList = new ArrayList<EntityCondition>();
@@ -141,7 +141,7 @@ public final class UtilCase {
      * @return list iterator of the cases
      * @throws GenericEntityException
      */
-    public static EntityListIterator getCasesForParty(GenericDelegator delegator, String partyId, String roleTypeId, String casesOrderBy) throws GenericEntityException {
+    public static EntityListIterator getCasesForParty(Delegator delegator, String partyId, String roleTypeId, String casesOrderBy) throws GenericEntityException {
         if (casesOrderBy == null) {
             casesOrderBy = "priority DESC";
         }

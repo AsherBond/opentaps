@@ -99,7 +99,7 @@ public final class PackingServices {
         } catch (FoundationException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
-
+        context.put("orderId", session.getPrimaryOrderId());
         Map<String, String> packageWeights = (Map<String, String>) context.get("packageWeights");
         org.ofbiz.shipment.packing.PackingServices.setSessionPackageWeights(session, packageWeights);
         context.remove("packageWeights");

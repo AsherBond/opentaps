@@ -20,7 +20,7 @@ package com.opensourcestrategies.financials.accounts;
 import java.math.BigDecimal;
 
 import org.ofbiz.accounting.util.UtilAccounting;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.base.util.UtilMisc;
@@ -45,12 +45,12 @@ public class GLAccount implements Comparable {
     /**
      * Creates a new <code>GLAccount</code> instance.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param glAccountId the GL account ID
      * @param balance a <code>BigDecimal</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public GLAccount(GenericDelegator delegator, String glAccountId, BigDecimal balance) throws GenericEntityException {
+    public GLAccount(Delegator delegator, String glAccountId, BigDecimal balance) throws GenericEntityException {
         this.glAccountId = glAccountId;
         if (balance == null) {
             this.balance = BigDecimal.ZERO;

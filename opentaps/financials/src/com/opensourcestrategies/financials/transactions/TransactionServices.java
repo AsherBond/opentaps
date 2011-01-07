@@ -30,7 +30,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -146,7 +146,7 @@ public final class TransactionServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> reverseAcctgTrans(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Security security = dctx.getSecurity();
@@ -244,7 +244,7 @@ public final class TransactionServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> voidPayment(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Security security = dctx.getSecurity();
@@ -322,7 +322,7 @@ public final class TransactionServices {
      */
     @SuppressWarnings("unchecked")
     public static Map postScheduledAcctgTrans(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Security security = dctx.getSecurity();
@@ -369,7 +369,7 @@ public final class TransactionServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createAcctgTransEntryManual(DispatchContext dctx, Map context) throws GenericServiceException {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -453,7 +453,7 @@ public final class TransactionServices {
     public static Map createSettlementAcctgTrans(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String organizationPartyId = (String) context.get("organizationPartyId");
         String debitGlAccountId = null;
         String creditGlAccountId = null;

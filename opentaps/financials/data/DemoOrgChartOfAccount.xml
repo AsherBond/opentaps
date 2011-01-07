@@ -503,7 +503,7 @@
 
     <!-- sample payment method for this company -->
     <PaymentMethod paymentMethodId="COCHECKING" description="Primary Checking Account" paymentMethodTypeId="COMPANY_CHECK" partyId="Company" glAccountId="111100"/> <!-- GENERAL CHECKING ACCOUNT -->
-    <EftAccount paymentMethodId="COCHECKING" bankName="Test company bank" routingNumber="1111111111" accountType="Checking" accountNumber="3333333333" />
+    <EftAccount paymentMethodId="COCHECKING" bankName="Test company bank" routingNumber="1111111111" accountType="Checking" accountNumber="3333333333" nameOnAccount="Demo Name on Account"/>
     <PaymentMethod paymentMethodId="COMMKT" description="Secondary Money Market Account" paymentMethodTypeId="COMPANY_CHECK" partyId="Company" glAccountId="111400"/> <!-- MONEY MARKET -->
     <PaymentMethod paymentMethodId="COVISA" description="Company VISA Business Card" paymentMethodTypeId="CREDIT_CARD" partyId="Company" glAccountId="231000"/> <!-- SHORT TERM OBLIGATION -->
     <CreditCard paymentMethodId="COVISA" cardType="Visa" cardNumber="4111111111111111" expireDate="02/2011" firstNameOnCard="JOHN" lastNameOnCard="PRESIDENT" companyNameOnCard="Company" contactMechId="9000"/>

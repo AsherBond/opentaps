@@ -54,7 +54,7 @@ import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilObject;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -110,7 +110,7 @@ public final class PaymentServices {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> createPayment(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String paymentType = (String) context.get("paymentType");
         String partyIdFrom = (String) context.get("partyIdFrom");
@@ -199,7 +199,7 @@ public final class PaymentServices {
      * @throws RepositoryException an exception occurs
      */
     private static List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, RepositoryException {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String paymentTypeId = (String) context.get("paymentTypeId");
         String partyIdFrom = (String) context.get("partyIdFrom");
         String partyIdTo = (String) context.get("partyIdTo");
@@ -299,7 +299,7 @@ public final class PaymentServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updatePayment(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -378,7 +378,7 @@ public final class PaymentServices {
 
         String paymentMethodId = (String) context.get("paymentMethodId");
         String paymentMethodTypeId = (String) context.get("paymentMethodTypeId");
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         Map result = ServiceUtil.returnSuccess();
 
@@ -417,7 +417,7 @@ public final class PaymentServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> createPaymentApplication(DispatchContext dctx, Map<String, Object> context) throws GenericServiceException {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -572,7 +572,7 @@ public final class PaymentServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> updatePaymentApplication(DispatchContext dctx, Map<String, Object> context) throws GenericServiceException {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
@@ -664,7 +664,7 @@ public final class PaymentServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> updatePaymentApplicationDef(DispatchContext dctx, Map<String, Object> context) {
-            GenericDelegator delegator = dctx.getDelegator();
+            Delegator delegator = dctx.getDelegator();
             Locale locale = (Locale) context.get("locale");
 
         if (DECIMALS == -1 || ROUNDING == -1) {
@@ -1381,7 +1381,7 @@ public final class PaymentServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> partiallyReconcilePayment(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         // it is assumed that this service is attached as a seca, so no security is checked
         String paymentId = (String) context.get("paymentId");
@@ -1408,7 +1408,7 @@ public final class PaymentServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> setPaymentStatus(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
@@ -1496,7 +1496,7 @@ public final class PaymentServices {
     public static Map<String, Object> updatePaymentApplicationDefBd(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
         if (DECIMALS == -1 || ROUNDING == -1) {
@@ -2224,12 +2224,12 @@ public final class PaymentServices {
      * This method was copy from ofbiz InvoiceServices for add accounting tags support.
      * Update/add to the paymentApplication table and making sure no duplicate record exist.
      *
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param paymentApplication a <code>GenericValue</code> value
      * @param locale a <code>Locale</code> value
      * @return a <code>Map<String,Object></code> value
      */
-    private static Map<String, Object> storePaymentApplication(GenericDelegator delegator, GenericValue paymentApplication, Locale locale) {
+    private static Map<String, Object> storePaymentApplication(Delegator delegator, GenericValue paymentApplication, Locale locale) {
         Map<String, Object> results = ServiceUtil.returnSuccess(successMessage);
         boolean debug = true;
         if (debug) {

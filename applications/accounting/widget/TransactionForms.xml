@@ -24,9 +24,28 @@ under the License.
     <form name="FindGatewayResponses" type="single" target="FindGatewayResponses" title=""
         header-row-style="header-row" default-table-style="basic-table">
         <field name="hideSearch"><hidden value="Y"/></field> <!-- what is this for? -->
-        <field name="paymentGatewayResponseId" title="${uiLabelMap.AccountingPaymentGatewayResponseId}"><text-find/></field>
-        <field name="orderPaymentPreferenceId" title="${uiLabelMap.AccountingOrderPaymentPreferenceId}"><text-find/></field>
-        <field name="transCodeEnumId" title="${uiLabelMap.AccountingStatus}">
+        <field name="paymentGatewayResponseId" title="${uiLabelMap.AccountingPaymentGatewayResponseId}">
+            <text-find/>
+        </field>
+        <field name="paymentServiceTypeEnumId">
+            <drop-down allow-empty="true">
+                <entity-options entity-name="Enumeration" description="${description}" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="PRDS_PAYSVC"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="orderPaymentPreferenceId" title="${uiLabelMap.AccountingOrderPaymentPreferenceId}">
+            <text-find/>
+        </field>
+        <field name="paymentMethodTypeId">
+            <drop-down allow-empty="true">
+                <entity-options entity-name="PaymentMethodType" description="${description}" key-field-name="paymentMethodTypeId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="transCodeEnumId">
             <drop-down allow-empty="true">
                 <entity-options entity-name="Enumeration" description="${description}" key-field-name="enumId">
                     <entity-constraint name="enumTypeId" operator="equals" value="PGT_CODE"/>
@@ -34,7 +53,12 @@ under the License.
                 </entity-options>
             </drop-down>
         </field>
-        <field name="submitButton" title="${uiLabelMap.CommonLookup}" widget-style="smallSubmit">
+        <field name="referenceNum">
+            <text-find size="60" maxlength="60"/>
+        </field>
+        <field name="performSearch"><hidden value="Y"/></field>
+        <field name="noConditionFind"><hidden value="Y"/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit">
             <submit button-type="button"/>
         </field>
     </form>
@@ -49,6 +73,8 @@ under the License.
                 <field-map field-name="inputFields" from-field="requestParameters"/>
                 <field-map field-name="entityName" from-field="entityName"/>
                 <field-map field-name="orderBy" from-field="orderBy"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
         <auto-fields-entity entity-name="PaymentGatewayResponse" default-field-type="display"/>
@@ -58,17 +84,53 @@ under the License.
                 <parameter param-name="paymentGatewayResponseId"/>
             </hyperlink>
         </field>
+        <field name="paymentServiceTypeEnumId">
+            <display-entity entity-name="Enumeration" key-field-name="enumId" description="${description}"/>
+        </field>
+        <field name="paymentMethodTypeId">
+            <display-entity entity-name="PaymentMethodType" key-field-name="paymentMethodTypeId" description="${description}"/>
+        </field>
+        <field name="transCodeEnumId">
+            <display-entity entity-name="Enumeration" key-field-name="enumId" description="${description}"/>
+        </field>
     </form>
 
     <!-- presents the orderId and orderPaymentPreferenceId for a gateway response with links to the order -->
     <form name="ViewGatewayResponseRelations" type="single" target="" title=""
         header-row-style="header-row" default-table-style="basic-table">
         <field name="orderId" widget-style="buttontext">
-          <hyperlink also-hidden="false" target-type="inter-app" description="${orderId}" target="/ordermgr/control/orderview">
+            <hyperlink also-hidden="false" target-type="inter-app" description="${orderId}" target="/ordermgr/control/orderview">
                 <parameter param-name="orderId"/>
             </hyperlink>
         </field>
         <field name="orderPaymentPreferenceId"><display/></field>
+    </form>
+    <form name="ViewGatewayResponsePayments" type="list" list-name="payments" title="">
+        <field name="paymentId" widget-style="buttontext">
+            <hyperlink description="${paymentId}" target="paymentOverview">
+                <parameter param-name="paymentId"/>
+            </hyperlink>
+        </field>
+        <field name="paymentTypeId" title="${uiLabelMap.AccountingPaymentType}"><display-entity entity-name="PaymentType"/></field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}"><display-entity entity-name="StatusItem"/></field>
+        <field name="comments"><display/></field>
+        <field name="partyIdFrom" title="${uiLabelMap.AccountingFromParty}">
+            <display-entity entity-name="PartyNameView" key-field-name="partyId" description="${groupName}${lastName},${firstName}">
+                <sub-hyperlink target="/partymgr/control/viewprofile" target-type="inter-app" description="[${partyIdFrom}]" >
+                    <parameter param-name="partyId" from-field="partyIdFrom"/>
+                </sub-hyperlink>
+            </display-entity>
+        </field>
+        <field name="partyIdTo" title="${uiLabelMap.AccountingToParty}">
+            <display-entity entity-name="PartyNameView" key-field-name="partyId" description="${groupName}${lastName},${firstName}">
+                <sub-hyperlink target="/partymgr/control/viewprofile" target-type="inter-app" description="[${partyIdTo}]" >
+                    <parameter param-name="partyId" from-field="partyIdTo"/>
+                </sub-hyperlink>
+            </display-entity>
+        </field>
+        <field name="effectiveDate"><display/></field>
+        <field name="currencyUomId"><hidden/></field>
+        <field name="amount"><display also-hidden="false" type="currency" currency="${currencyUomId}"/></field>
     </form>
 
     <!-- displays the gateway response in detail -->
@@ -78,6 +140,15 @@ under the License.
         <!-- TODO: what is the correct way to ensure that the response was authorized?
         <field name="submitButton" use-when="paymentGatewayResponse!=null&amp;&amp;paymentGatewayResponse.getString(&quot;gatewayFlag&quot;).equals(&quot;A&quot;)" title="${uiLabelMap.AccountingCapture}" widget-style="smallSubmit"><submit button-type="button"/></field>
         -->
+        <field name="paymentServiceTypeEnumId">
+            <display-entity entity-name="Enumeration" key-field-name="enumId" description="${description}"/>
+        </field>
+        <field name="paymentMethodTypeId">
+            <display-entity entity-name="PaymentMethodType" key-field-name="paymentMethodTypeId" description="${description}"/>
+        </field>
+        <field name="transCodeEnumId">
+            <display-entity entity-name="Enumeration" key-field-name="enumId" description="${description}"/>
+        </field>
     </form>
 
     <!-- form for authorizing a transaction -->

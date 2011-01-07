@@ -40,21 +40,12 @@ under the License.
                                 <if-has-permission permission="CONTENTMGR" action="_VIEW"/>
                             </condition>
                             <widgets>
-                                <container style="screenlet">
-                                    <container style="screenlet-title-bar">
-                                        <container style="h3">
-                                            <label text="${uiLabelMap.PageTitleListWebSite}"/>
-                                        </container>
+                                <screenlet title="${uiLabelMap.PageTitleListWebSite}">
+                                    <container style="button-bar">
+                                        <link  text="${uiLabelMap.ContentCreateNewWebSite}" target="EditWebSite" style="buttontext create"/>
                                     </container>
-                                    <container style="screenlet-body">
-                                        <section>
-                                            <widgets>
-                                                <container><link  text="${uiLabelMap.CommonCreateNew} ${uiLabelMap.ContentWebSite}" target="EditWebSite" style="buttontext"/></container>
-                                                <include-form name="ListWebSites" location="component://content/webapp/content/website/WebSiteForms.xml"/>
-                                            </widgets>
-                                        </section>
-                                    </container>
-                                </container>
+                                    <include-form name="ListWebSites" location="component://content/webapp/content/website/WebSiteForms.xml"/>
+                                </screenlet>
                             </widgets>
                             <fail-widgets>
                                 <label style="h3">${uiLabelMap.ContentViewPermissionError}</label>
@@ -80,20 +71,9 @@ under the License.
                     <decorator-section name="body">
                         <section>
                             <widgets>
-                                <container style="screenlet">
-                                    <container style="screenlet-title-bar">
-                                        <container style="h3">
-                                            <label text="${uiLabelMap.PageTitleEditWebSite}"/>
-                                        </container>
-                                    </container>
-                                    <container style="screenlet-body">
-                                        <section>
-                                            <widgets>
-                                                <include-form name="EditWebSite" location="component://content/webapp/content/website/WebSiteForms.xml"/>
-                                            </widgets>
-                                        </section>
-                                    </container>
-                                </container>
+                                <screenlet title="${uiLabelMap.PageTitleEditWebSite}">
+                                    <include-form name="EditWebSite" location="component://content/webapp/content/website/WebSiteForms.xml"/>
+                                </screenlet>
                             </widgets>
                         </section>
                     </decorator-section>
@@ -119,48 +99,15 @@ under the License.
                     <decorator-section name="body">
                         <section>
                             <widgets>
-                                <container style="screenlet">
-                                    <container style="screenlet-title-bar">
-                                        <container style="h3">
-                                            <label text="${uiLabelMap.PageTitleWebSiteContent}"/>
-                                        </container>
-                                    </container>
-                                    <container style="screenlet-body">
-                                        <section>
-                                            <widgets>
-                                                <include-form name="ListWebSiteContent" location="component://content/webapp/content/website/WebSiteForms.xml"/>
-                                            </widgets>
-                                        </section>
-                                    </container>
-                                </container>
-                                <container style="screenlet">
-                                    <container style="screenlet-title-bar">
-                                        <container style="h3">
-                                            <label text="${uiLabelMap.PageTitleCreateWebSiteContent}"/>
-                                        </container>
-                                    </container>
-                                    <container style="screenlet-body">
-                                        <section>
-                                            <widgets>
-                                                <include-form name="CreateWebSiteContent" location="component://content/webapp/content/website/WebSiteForms.xml"/>
-                                            </widgets>
-                                        </section>
-                                    </container>
-                                </container>
-                                <container style="screenlet">
-                                    <container style="screenlet-title-bar">
-                                        <container style="h3">
-                                            <label text="${uiLabelMap.PageTitleAutoCreateContentPublishPoints}"/>
-                                        </container>
-                                    </container>
-                                    <container style="screenlet-body">
-                                        <section>
-                                            <widgets>
-                                                <include-form name="AutoCreateWebsiteContent" location="component://content/webapp/content/website/WebSiteForms.xml"/>
-                                            </widgets>
-                                        </section>
-                                    </container>
-                                </container>
+                                <screenlet title="${uiLabelMap.PageTitleWebSiteContent}">
+                                    <include-form name="ListWebSiteContent" location="component://content/webapp/content/website/WebSiteForms.xml"/>
+                                </screenlet>
+                                <screenlet title="${uiLabelMap.PageTitleCreateWebSiteContent}">
+                                    <include-form name="CreateWebSiteContent" location="component://content/webapp/content/website/WebSiteForms.xml"/>
+                                </screenlet>
+                                <screenlet title="${uiLabelMap.PageTitleAutoCreateContentPublishPoints}">
+                                    <include-form name="AutoCreateWebsiteContent" location="component://content/webapp/content/website/WebSiteForms.xml"/>
+                                </screenlet>
                             </widgets>
                         </section>
                     </decorator-section>
@@ -247,24 +194,9 @@ under the License.
                 <script location="component://content/webapp/content/WEB-INF/actions/website/WebSitePublishPoint.groovy"/>
             </actions>
             <widgets>
-                <container style="screenlet">
-                    <container style="screenlet-title-bar">
-                        <container style="h3">
-                            <label text="${uiLabelMap.PageTitleWebSiteCMSNav}"/>
-                        </container>
-                    </container>
-                    <container style="screenlet-body">
-                        <section>
-                            <widgets>
-                                <platform-specific>
-                                    <html>
-                                        <html-template location="component://content/webapp/content/website/WebSiteCMSNav.ftl"/>
-                                    </html>
-                                </platform-specific>
-                            </widgets>
-                        </section>
-                    </container>
-                </container>
+                <screenlet title="${uiLabelMap.PageTitleWebSiteCMSNav}">
+                    <platform-specific><html><html-template location="component://content/webapp/content/website/WebSiteCMSNav.ftl"/></html></platform-specific>
+                </screenlet>
             </widgets>
         </section>
     </screen>
@@ -290,6 +222,7 @@ under the License.
                 <entity-one entity-name="ElectronicText" value-field="dataText">
                     <field-map field-name="dataResourceId" from-field="content.dataResourceId"/>
                 </entity-one>
+                <set field="parameters.fromDate" type="Timestamp" from-field="parameters.fromDate"/>
                 <entity-one entity-name="ContentAssoc" value-field="assoc">
                     <field-map field-name="contentId" from-field="parameters.contentIdFrom"/>
                     <field-map field-name="contentIdTo" from-field="parameters.contentId"/>

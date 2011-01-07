@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilHttp;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
@@ -71,7 +71,7 @@ public class ProductStoreCartAwareEvents {
             return;
         }
 
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         // get the ProductStore record, make sure it's valid
         GenericValue productStore = ProductStoreWorker.getProductStore(productStoreId, delegator);

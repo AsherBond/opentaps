@@ -284,6 +284,7 @@ under the License.
             location="org.opentaps.common.domain.order.OrderService" invoke="recalcOrderTax">
         <description>Adjust the order tax amount</description>
         <attribute name="orderId" type="String" mode="IN"/>
+        <attribute name="contactMechId" type="String" mode="IN" optional="true"/>
     </service>
 
     <service name="recalcShippingTotal" engine="java"
@@ -301,7 +302,7 @@ under the License.
 
 	<!-- move from ofbiz applications/order/servicedef/services_request.xml, we move it here because it missing action node -->
     <service name="createCustRequestRole" engine="simple"
-            location="com/opensourcestrategies/order/request/CustRequestServices.xml" invoke="createCustRequestRole" auth="true">
+            location="component://opentaps-common/script/com/opensourcestrategies/order/request/CustRequestServices.xml" invoke="createCustRequestRole" auth="true">
         <description>Create a CustRequestRole record</description>
         <attribute name="custRequestId" type="String" mode="IN" optional="false"/>
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
@@ -310,7 +311,7 @@ under the License.
 
 	<!-- move from ofbiz applications/order/servicedef/services_request.xml, we move it here because it missing action node -->
     <service name="removeCustRequestRole" engine="simple"
-            location="com/opensourcestrategies/order/request/CustRequestServices.xml" invoke="removeCustRequestRole" auth="true">
+            location="component://opentaps-common/script/com/opensourcestrategies/order/request/CustRequestServices.xml" invoke="removeCustRequestRole" auth="true">
         <description>Remove a CustRequestRole record</description>
         <attribute name="custRequestId" type="String" mode="IN" optional="false"/>
         <attribute name="partyId" type="String" mode="IN" optional="false"/>

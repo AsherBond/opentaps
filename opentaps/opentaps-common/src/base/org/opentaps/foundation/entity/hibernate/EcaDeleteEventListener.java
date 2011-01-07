@@ -20,7 +20,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.event.DeleteEvent;
 import org.hibernate.event.def.DefaultDeleteEventListener;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.foundation.entity.Entity;
 
@@ -31,15 +31,15 @@ import org.opentaps.foundation.entity.Entity;
 public class EcaDeleteEventListener extends DefaultDeleteEventListener {
 
     private static final String MODULE = EcaPersistEventListener.class.getName();
-    private GenericDelegator delegator;
+    private Delegator delegator;
 
     /**
      * EcaDeleteEventListener constructor.
      *
      * @param delegator
-     *            <code>GenericDelegator</code> object.
+     *            <code>Delegator</code> object.
      */
-    public EcaDeleteEventListener(GenericDelegator delegator) {
+    public EcaDeleteEventListener(Delegator delegator) {
         this.delegator = delegator;
     }
 

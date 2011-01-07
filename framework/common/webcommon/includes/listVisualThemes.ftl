@@ -17,14 +17,14 @@ specific language governing permissions and limitations
 under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
-
+<!--
 <style type="text/css">
 .screenlet {
 margin: 1em;
 }
 </style>
-
-<div class="screenlet">
+-->
+<div class="screenlet" style="margin: 1em;">
   <div class="screenlet-title-bar">
     <ul>
       <li class="h3">${uiLabelMap.CommonVisualThemes}</li>
@@ -46,7 +46,7 @@ margin: 1em;
               <input type="hidden" name="userPrefTypeId" value="VISUAL_THEME"/>
               <input type="hidden" name="userPrefValue" value="${visualTheme.visualThemeId}"/>
             </form>
-            <a href="javascript:document.SetUserPreferences_${visualTheme.visualThemeId}.submit()">${visualTheme.description}</a>
+            <a href="javascript:document.SetUserPreferences_${visualTheme.visualThemeId}.submit()">${visualTheme.get("description", locale)?default(visualTheme.visualThemeId)}</a>
           </td>
           <td>
             <#if visualTheme.visualThemeId == visualThemeId>${uiLabelMap.CommonVisualThemeSelected}<#else>&nbsp;</#if>
@@ -54,7 +54,7 @@ margin: 1em;
           <td>
             <#if screenshots?has_content>
               <#list screenshots as screenshot>
-                <a href="<@ofbizContentUrl>${screenshot.resourceValue}</@ofbizContentUrl>"><img src="<@ofbizContentUrl>${screenshot.resourceValue}</@ofbizContentUrl>" width="150"/></a>
+                <a href="<@ofbizContentUrl>${screenshot.resourceValue}</@ofbizContentUrl>"><img src="<@ofbizContentUrl>${screenshot.resourceValue}</@ofbizContentUrl>" width="150" alt=""/></a>
               </#list>
            <#else>
               ${uiLabelMap.CommonVisualThemeNoScreenshots}

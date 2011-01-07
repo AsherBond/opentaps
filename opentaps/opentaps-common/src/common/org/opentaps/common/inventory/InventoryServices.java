@@ -23,7 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -59,7 +59,7 @@ public final class InventoryServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createInventoryItem(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -149,7 +149,7 @@ public final class InventoryServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateInventoryItem(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -217,7 +217,7 @@ public final class InventoryServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateInventoryItemValueHistory(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
 
@@ -257,7 +257,7 @@ public final class InventoryServices {
             // Create a new InventoryItemValueHistory record
             GenericValue newInventoryItemValue = delegator.makeValue("InventoryItemValueHistory", UtilMisc.toMap("inventoryItemValueHistId", delegator.getNextSeqId("InventoryItemValueHistory"), "inventoryItemId", inventoryItemId, "setByUserLogin", userLogin.getString("userLoginId")));
             newInventoryItemValue.set("dateTime", UtilDateTime.nowTimestamp());
-            newInventoryItemValue.set("unitCost", newUnitCost.doubleValue());
+            newInventoryItemValue.set("unitCost", new BigDecimal(newUnitCost.doubleValue()));
             newInventoryItemValue.create();
 
         } catch (GeneralException e) {
@@ -276,7 +276,7 @@ public final class InventoryServices {
      */
     @SuppressWarnings("unchecked")
     public static Map checkInventoryAlreadyReserved(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");

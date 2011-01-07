@@ -25,7 +25,7 @@ under the License.
     </div>
     <div class="screenlet-body">
         ${errorMessage?if_exists}
-        <br/>
+        <br />
     </div>
   </div>
 </center>

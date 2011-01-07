@@ -44,10 +44,11 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.security.Security;
+import org.ofbiz.security.authz.Authorization;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericDispatcher;
 import org.ofbiz.service.GenericServiceException;
@@ -104,10 +105,10 @@ public class CoreEvents {
      */
     public static String changeDelegator(HttpServletRequest request, HttpServletResponse response) {
         String delegatorName = request.getParameter("delegator");
-        Security security = (Security) request.getAttribute("security");
+        Authorization authz = (Authorization) request.getAttribute("authz");
         Locale locale = UtilHttp.getLocale(request);
 
-        if (!security.hasPermission("ENTITY_MAINT", request.getSession())) {
+        if (!authz.hasPermission(request.getSession(), "ENTITY_MAINT", null)) {
             String errMsg = UtilProperties.getMessage(CoreEvents.err_resource, "coreEvents.not_authorized_use_fct", locale);
             request.setAttribute("_ERROR_MESSAGE_", "<li>" + errMsg);
             return "error";
@@ -118,7 +119,7 @@ public class CoreEvents {
             return "error";
         }
 
-        GenericDelegator delegator = GenericDelegator.getGenericDelegator(delegatorName);
+        Delegator delegator = DelegatorFactory.getDelegator(delegatorName);
 
         if (delegator == null) {
             String errMsg = UtilProperties.getMessage(CoreEvents.err_resource, "coreEvents.no_delegator_name_defined", locale);
@@ -158,10 +159,10 @@ public class CoreEvents {
      */
     public static String changeDispatcher(HttpServletRequest request, HttpServletResponse response) {
         String dispatcherName = request.getParameter("dispatcher");
-        Security security = (Security) request.getAttribute("security");
+        Authorization authz = (Authorization) request.getAttribute("authz");
         Locale locale = UtilHttp.getLocale(request);
 
-        if (!security.hasPermission("ENTITY_MAINT", request.getSession())) {
+        if (!authz.hasPermission(request.getSession(), "ENTITY_MAINT", null)) {
             String errMsg = UtilProperties.getMessage(CoreEvents.err_resource, "coreEvents.not_authorized_use_fct", locale);
             request.setAttribute("_ERROR_MESSAGE_", "<li>" + errMsg);
             return "error";
@@ -172,7 +173,7 @@ public class CoreEvents {
             return "error";
         }
 
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         ServiceDispatcher sd = ServiceDispatcher.getInstance(dispatcherName, delegator);
 
         if (sd == null) {
@@ -201,9 +202,9 @@ public class CoreEvents {
      */
     public static String scheduleService(HttpServletRequest request, HttpServletResponse response) {
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
-        Security security = (Security) request.getAttribute("security");
+        Authorization authz = (Authorization) request.getAttribute("authz");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        //GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        //Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
 
@@ -306,14 +307,14 @@ public class CoreEvents {
             serviceContext.put("locale", locale);
         }
 
-        if (!modelService.export && !security.hasPermission("SERVICE_INVOKE_ANY", request.getSession())) {
+        if (!modelService.export && !authz.hasPermission(request.getSession(), "SERVICE_INVOKE_ANY", null)) {
             String errMsg = UtilProperties.getMessage(CoreEvents.err_resource, "coreEvents.not_authorized_to_call", locale);
             request.setAttribute("_ERROR_MESSAGE_", "<li>" + errMsg);
             return "error";
         }
 
         // some conversions
-        if (serviceTime != null && serviceTime.length() > 0) {
+        if (UtilValidate.isNotEmpty(serviceTime)) {
             try {
                 Timestamp ts1 = Timestamp.valueOf(serviceTime);
                 startTime = ts1.getTime();
@@ -330,7 +331,7 @@ public class CoreEvents {
                 errorBuf.append("<li>" + errMsg);
             }
         }
-        if (serviceEndTime != null && serviceEndTime.length() > 0) {
+        if (UtilValidate.isNotEmpty(serviceEndTime)) {
             try {
                 Timestamp ts1 = Timestamp.valueOf(serviceEndTime);
                 endTime = ts1.getTime();
@@ -347,7 +348,7 @@ public class CoreEvents {
                 errorBuf.append("<li>" + errMsg);
             }
         }
-        if (serviceIntr != null && serviceIntr.length() > 0) {
+        if (UtilValidate.isNotEmpty(serviceIntr)) {
             try {
                 interval = Integer.parseInt(serviceIntr);
             } catch (NumberFormatException nfe) {
@@ -355,7 +356,7 @@ public class CoreEvents {
                 errorBuf.append("<li>" + errMsg);
             }
         }
-        if (serviceCnt != null && serviceCnt.length() > 0) {
+        if (UtilValidate.isNotEmpty(serviceCnt)) {
             try {
                 count = Integer.parseInt(serviceCnt);
             } catch (NumberFormatException nfe) {
@@ -363,7 +364,7 @@ public class CoreEvents {
                 errorBuf.append("<li>" + errMsg);
             }
         }
-        if (serviceFreq != null && serviceFreq.length() > 0) {
+        if (UtilValidate.isNotEmpty(serviceFreq)) {
             int parsedValue = 0;
 
             try {
@@ -382,7 +383,7 @@ public class CoreEvents {
                 }
             }
         }
-        if (retryCnt != null && retryCnt.length() > 0) {
+        if (UtilValidate.isNotEmpty(retryCnt)) {
             int parsedValue = -2;
 
             try {
@@ -527,8 +528,7 @@ public class CoreEvents {
         }
 
         // now do a security check
-
-        Security security = (Security) request.getAttribute("security");
+        Authorization authz = (Authorization) request.getAttribute("authz");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
 
         //lookup the service definition to see if this service is externally available, if not require the SERVICE_INVOKE_ANY permission
@@ -547,7 +547,7 @@ public class CoreEvents {
             return "error";
         }
 
-        if (!modelService.export && !security.hasPermission("SERVICE_INVOKE_ANY", request.getSession())) {
+        if (!modelService.export && !authz.hasPermission(request.getSession(), "SERVICE_INVOKE_ANY", null)) {
             String errMsg = UtilProperties.getMessage(CoreEvents.err_resource, "coreEvents.not_authorized_to_call", locale);
             request.setAttribute("_ERROR_MESSAGE_", "<li>" + errMsg + ".");
             return "error";

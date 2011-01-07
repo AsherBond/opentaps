@@ -33,7 +33,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -58,9 +57,17 @@ public class Start implements Runnable {
 
     private static final String SHUTDOWN_COMMAND = "SHUTDOWN";
     private static final String STATUS_COMMAND = "STATUS";
-    private static final double REQUIRED_JDK = 1.5;
+    private static final double REQUIRED_JDK = 1.6;
 
     public void init(String[] args, boolean fullInit) throws IOException {
+        String globalSystemPropsFileName = System.getProperty("ofbiz.system.props");
+        if (globalSystemPropsFileName != null) {
+            try {
+                System.getProperties().load(new FileInputStream(globalSystemPropsFileName));
+            } catch (IOException e) {
+                throw (IOException) new IOException("Couldn't load global system props").initCause(e);
+            }
+        }
         String firstArg = args.length > 0 ? args[0] : "";
         String cfgFile = Start.getConfigFileName(firstArg);
 
@@ -139,6 +146,7 @@ public class Start implements Runnable {
                 if (command.equals(Start.SHUTDOWN_COMMAND)) {
                     if (serverStopping) return "IN-PROGRESS";
                     Thread t = new Thread() {
+                        @Override
                         public void run() {
                             shutdownServer();
                         }
@@ -218,6 +226,7 @@ public class Start implements Runnable {
             classPath.addComponent(config.baseConfig);
         }
 
+        classPath.instrument(config.instrumenterFile, config.instrumenterClassName);
         // set the classpath/classloader
         System.setProperty("java.class.path", classPath.toString());
         this.classloader = classPath.getClassLoader();
@@ -246,7 +255,7 @@ public class Start implements Runnable {
         // initialize the loaders
         for (String loaderClassName: config.loaders) {
             try {
-                Class loaderClass = classloader.loadClass(loaderClassName);
+                Class<?> loaderClass = classloader.loadClass(loaderClassName);
                 StartupLoader loader = (StartupLoader) loaderClass.newInstance();
                 loader.load(config, loaderArgs);
                 loaders.add(loader);
@@ -274,6 +283,7 @@ public class Start implements Runnable {
         try {
             Method shutdownHook = java.lang.Runtime.class.getMethod("addShutdownHook", new Class[]{java.lang.Thread.class});
             Thread hook = new Thread() {
+                @Override
                 public void run() {
                     setName("OFBiz_Shutdown_Hook");
                     shutdownServer();
@@ -377,8 +387,10 @@ public class Start implements Runnable {
         if (firstArg.equals("-help") || firstArg.equals("-?")) {
             System.out.println("");
             System.out.println("Usage: java -jar ofbiz.jar [command] [arguments]");
+            System.out.println("-both    -----> Run simultaneously the POS (Point of Sales) application and OFBiz standard");
             System.out.println("-help, -? ----> This screen");
             System.out.println("-install -----> Run install (create tables/load data)");
+            System.out.println("-pos     -----> Run the POS (Point of Sales) application");
             System.out.println("-setup -------> Run external application server setup");
             System.out.println("-start -------> Start the server");
             System.out.println("-status ------> Status of the server");
@@ -437,6 +449,8 @@ public class Start implements Runnable {
         public String baseDtd;
         public String baseConfig;
         public String logDir;
+        public String instrumenterClassName;
+        public String instrumenterFile;
         public List<String> loaders;
         public String awtHeadless;
         public String splashLogo;
@@ -632,6 +646,9 @@ public class Start implements Runnable {
             if (tzString != null && tzString.length() > 0) {
                 TimeZone.setDefault(TimeZone.getTimeZone(tzString));
             }
+
+            instrumenterClassName = getProp(props, "ofbiz.instrumenterClassName", null);
+            instrumenterFile = getProp(props, "ofbiz.instrumenterFile", null);
 
             // loader classes
             loaders = new ArrayList<String>();

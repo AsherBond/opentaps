@@ -32,8 +32,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericEntity;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -62,7 +61,7 @@ public class ProductFeatureServices {
      */
     public static Map<String, Object> getProductFeaturesByType(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> results = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         /* because we might need to search either for product features or for product features of a product, the search code has to be generic.
          * we will determine which entity and field to search on based on what the user has supplied us with.
@@ -128,7 +127,7 @@ public class ProductFeatureServices {
      */
     public static Map<String, Object> getAllExistingVariants(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> results = FastMap.newInstance();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String productId = (String) context.get("productId");
         List<String> curProductFeatureAndAppls = UtilGenerics.checkList(context.get("productFeatureAppls"));
@@ -203,7 +202,6 @@ public class ProductFeatureServices {
 
             // loop through each feature type
             for (Map.Entry<String, List<GenericValue>> entry: features.entrySet()) {
-                String currentFeatureType = entry.getKey();
                 List<GenericValue> currentFeatures = entry.getValue();
 
                 List<Map<String, Object>> newCombinations = FastList.newInstance();
@@ -304,7 +302,7 @@ public class ProductFeatureServices {
         String productCategoryId = (String) context.get("productCategoryId");
 
         // get all the product members of the product category
-        Map result;
+        Map<String, Object> result;
         try {
             result = dispatcher.runSync("getProductCategoryMembers", UtilMisc.toMap("categoryId", productCategoryId));
         } catch (GenericServiceException ex) {

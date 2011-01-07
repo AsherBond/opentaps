@@ -2579,6 +2579,9 @@ public class OrderTests extends OrderTestCase {
         GenericValue productA = createTestProduct("Test Product A for testReReserveInventoryOnSplitOrder", demowarehouse1);
         GenericValue productB = createTestProduct("Test Product B for testReReserveInventoryOnSplitOrder", demowarehouse1);
         GenericValue productC = createTestProduct("Test Product C for testReReserveInventoryOnSplitOrder", demowarehouse1);
+        assignDefaultPrice(productA, new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productB, new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productC, new BigDecimal("1.0"), admin);
         // create a customer from template of DemoCustomer
         String customerPartyId = createPartyFromTemplate(DemoCustomer.getString("partyId"), "Customer for testMultiFacilityOrder");
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
@@ -2705,6 +2708,9 @@ public class OrderTests extends OrderTestCase {
         GenericValue productA = createTestProduct("Test Product A for testMultiFacilityMultiShipGroupOrder", demowarehouse1);
         GenericValue productB = createTestProduct("Test Product B for testMultiFacilityMultiShipGroupOrder", demowarehouse1);
         GenericValue productC = createTestProduct("Test Product C for testMultiFacilityMultiShipGroupOrder", demowarehouse1);
+        assignDefaultPrice(productA, new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productB, new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productC, new BigDecimal("1.0"), admin);
         // create a customer from template of DemoCustomer
         String customerPartyId = createPartyFromTemplate(DemoCustomer.getString("partyId"), "Customer for testMultiFacilityOrder");
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
@@ -2997,7 +3003,7 @@ public class OrderTests extends OrderTestCase {
 
         shipmentIds = testShipOrder.getOutShipmentIds();
         assertEquals("Check 1 shipment was created", 1, shipmentIds.size());
-        shipment1 = EntityUtil.getFirst(delegator.findByAnd("Shipment", UtilMisc.toMap("primaryOrderId", order.getOrderId(), "primaryShipGroupSeqId", "00001")));
+        shipment1 = EntityUtil.getFirst(delegator.findByAnd("Shipment", UtilMisc.toMap("primaryOrderId", order.getOrderId(), "primaryShipGroupSeqId", "00001", "shipmentId", shipmentIds.get(0))));
         orderShipment1s = delegator.findByAnd("OrderShipment", UtilMisc.toMap("shipmentId", shipment1.getString("shipmentId")));
         orderShipments1It = orderShipment1s.iterator();
         while (orderShipments1It.hasNext()) {
@@ -3151,9 +3157,19 @@ public class OrderTests extends OrderTestCase {
         InvoiceItem invoiceItemFirst = null;
         InvoiceItem invoiceItemA = null;
         InvoiceItem invoiceItemB = null;
+        boolean firstInvoiceItemIsLikeA = true;
         for (InvoiceItem invoiceItem : invoice.getInvoiceItems()) {
             if (invoiceItemFirst == null) {
                 invoiceItemFirst = invoiceItem;
+                // determine how it was tagged
+                if (orderItemTagsA.get("acctgTagEnumId1").equals(invoiceItem.getAcctgTagEnumId1())) {
+                    firstInvoiceItemIsLikeA = true;
+                } else if (orderItemTagsB.get("acctgTagEnumId1").equals(invoiceItem.getAcctgTagEnumId1())) {
+                    firstInvoiceItemIsLikeA = false;
+                } else {
+                    // not tagged like either A or B ?
+                    fail("Unexpected accounting tags on the first invoice item of invoice [], expected either [" + orderItemTagsA.get("acctgTagEnumId1") + "] or [" + orderItemTagsB.get("acctgTagEnumId1") + "] but found [" + invoiceItem.getAcctgTagEnumId1() + "]");
+                }
             }
 
             // invoice item related to an order item are tagged according
@@ -3198,7 +3214,11 @@ public class OrderTests extends OrderTestCase {
                                                                 EntityCondition.makeCondition("productId", null),
                                                                 EntityCondition.makeCondition("debitCreditFlag", "C"))
                                                                               , null, null);
-        transInvoiceItemAs.addAll(transInvoiceItemOthers);
+        if (firstInvoiceItemIsLikeA) {
+            transInvoiceItemAs.addAll(transInvoiceItemOthers);
+        } else {
+            transInvoiceItemBs.addAll(transInvoiceItemOthers);
+        }
 
         BigDecimal totalA = BigDecimal.ZERO;
         for (GenericValue entry : transInvoiceItemAs) {

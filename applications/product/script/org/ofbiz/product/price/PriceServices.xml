@@ -25,7 +25,7 @@ under the License.
     <simple-method method-name="createProductPrice" short-description="Create an ProductPrice">
         <set field="callingMethodName" value="createProductPrice"/>
         <set field="checkAction" value="CREATE"/>
-        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="org/ofbiz/product/product/ProductServices.xml"/>
+        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="component://product/script/org/ofbiz/product/product/ProductServices.xml"/>
         <check-permission permission="CATALOG_PRICE_MAINT"><fail-property resource="ProductUiLabels" property="ProductPriceMaintPermissionError"/></check-permission>
         <check-errors/>
 
@@ -50,7 +50,7 @@ under the License.
     <simple-method method-name="updateProductPrice" short-description="Update an ProductPrice">
         <set field="callingMethodName" value="updateProductPrice"/>
         <set field="checkAction" value="UPDATE"/>
-        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="org/ofbiz/product/product/ProductServices.xml"/>
+        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="component://product/script/org/ofbiz/product/product/ProductServices.xml"/>
         <check-permission permission="CATALOG_PRICE_MAINT"><fail-property resource="ProductUiLabels" property="ProductPriceMaintPermissionError"/></check-permission>
         <check-errors/>
 
@@ -70,7 +70,7 @@ under the License.
     <simple-method method-name="deleteProductPrice" short-description="Delete an ProductPrice">
         <set field="callingMethodName" value="deleteProductPrice"/>
         <set field="checkAction" value="DELETE"/>
-        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="org/ofbiz/product/product/ProductServices.xml"/>
+        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="component://product/script/org/ofbiz/product/product/ProductServices.xml"/>
         <check-permission permission="CATALOG_PRICE_MAINT"><fail-property resource="ProductUiLabels" property="ProductPriceMaintPermissionError"/></check-permission>
         <check-errors/>
 
@@ -112,7 +112,7 @@ under the License.
     <simple-method method-name="createProductPaymentMethodType" short-description="create a ProductPaymentMethodType">
         <set field="callingMethodName" value="createProductPaymentMethodType"/>
         <set field="checkAction" value="CREATE"/>
-        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="org/ofbiz/product/product/ProductServices.xml"/>
+        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="component://product/script/org/ofbiz/product/product/ProductServices.xml"/>
         <check-errors/>
         <make-value entity-name="ProductPaymentMethodType" value-field="newEntity"/>
         <set-pk-fields map="parameters" value-field="newEntity"/>
@@ -123,7 +123,7 @@ under the License.
     <simple-method method-name="updateProductPaymentMethodType" short-description="update a ProductPaymentMethodType">
         <set field="callingMethodName" value="updateProductPaymentMethodType"/>
         <set field="checkAction" value="UPDATE"/>
-        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="org/ofbiz/product/product/ProductServices.xml"/>
+        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="component://product/script/org/ofbiz/product/product/ProductServices.xml"/>
         <check-errors/>
         <entity-one entity-name="ProductPaymentMethodType" value-field="lookedUpValue"/>
         <set-nonpk-fields value-field="lookedUpValue" map="parameters"/>
@@ -132,7 +132,7 @@ under the License.
     <simple-method method-name="deleteProductPaymentMethodType" short-description="delete a ProductPaymentMethodType">
         <set field="callingMethodName" value="deleteProductPaymentMethodType"/>
         <set field="checkAction" value="DELETE"/>
-        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="org/ofbiz/product/product/ProductServices.xml"/>
+        <call-simple-method method-name="checkProductRelatedPermission" xml-resource="component://product/script/org/ofbiz/product/product/ProductServices.xml"/>
         <check-errors/>
         <entity-one entity-name="ProductPaymentMethodType" value-field="lookedUpValue"/>
         <remove-value value-field="lookedUpValue"/>

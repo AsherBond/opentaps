@@ -40,7 +40,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.accounting.payment.PaymentGatewayServices;
@@ -328,7 +328,7 @@ public class RitaServices {
 
     public static Map ccRefund(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue orderPaymentPreference = (GenericValue) context.get("orderPaymentPreference");
         GenericValue orderHeader = null;
         try {
@@ -380,7 +380,7 @@ public class RitaServices {
         }
     }
 
-    private static void setCreditCardInfo(RitaApi api, GenericDelegator delegator, Map context) throws GeneralException {
+    private static void setCreditCardInfo(RitaApi api, Delegator delegator, Map context) throws GeneralException {
         GenericValue orderPaymentPreference = (GenericValue) context.get("orderPaymentPreference");
         GenericValue creditCard = (GenericValue) context.get("creditCard");
         if (creditCard == null) {
@@ -397,18 +397,18 @@ public class RitaServices {
             String mname = creditCard.getString("middleNameOnCard");
             String lname = creditCard.getString("lastNameOnCard");
             String sufix = creditCard.getString("suffixOnCard");
-            StringBuffer name = new StringBuffer();
+            StringBuilder name = new StringBuilder();
             if (UtilValidate.isNotEmpty(title)) {
-                name.append(title + " ");
+                name.append(title).append(" ");
             }
             if (UtilValidate.isNotEmpty(fname)) {
-                name.append(fname + " ");
+                name.append(fname).append(" ");
             }
             if (UtilValidate.isNotEmpty(mname)) {
-                name.append(mname + " ");
+                name.append(mname).append(" ");
             }
             if (UtilValidate.isNotEmpty(lname)) {
-                name.append(lname + " ");
+                name.append(lname).append(" ");
             }
             if (UtilValidate.isNotEmpty(sufix)) {
                 name.append(sufix);

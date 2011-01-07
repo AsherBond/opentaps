@@ -24,7 +24,7 @@
 
     <!-- general COGS services -->
     <service name="getInvoiceItemCOGS" engine="simple"
-        location="com/opensourcestrategies/financials/cogs/COGSServices.xml" invoke="getInvoiceItemCOGS" use-transaction="false">
+        location="component://financials/script/com/opensourcestrategies/financials/cogs/COGSServices.xml" invoke="getInvoiceItemCOGS" use-transaction="false">
         <description>Get the COGS for an item on an invoice.</description>
         <attribute type="String" mode="IN" name="organizationPartyId" optional="false"/>
         <attribute type="String" mode="IN" name="invoiceId" optional="false"/>

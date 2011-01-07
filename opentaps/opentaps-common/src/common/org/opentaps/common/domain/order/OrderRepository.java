@@ -35,10 +35,6 @@ import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
-import org.opentaps.common.domain.order.OrderSpecification.OrderTypeEnum;
-import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
-import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.domain.DomainRepository;
 import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.ContactMech;
@@ -66,6 +62,10 @@ import org.opentaps.base.entities.ReturnItemResponse;
 import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.base.services.ChangeOrderItemStatusService;
 import org.opentaps.base.services.GetReturnableItemsService;
+import org.opentaps.common.domain.order.OrderSpecification.OrderTypeEnum;
+import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.DomainRepository;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentGatewayResponse;
@@ -95,11 +95,12 @@ import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.service.ServiceException;
 
 
-/** {@inheritDoc}. */
+/**
+ * Implementation of the order repository.
+ */
 public class OrderRepository extends DomainRepository implements OrderRepositoryInterface {
 
    private PartyRepositoryInterface partyRepository;
@@ -138,23 +139,23 @@ public class OrderRepository extends DomainRepository implements OrderRepository
     }
 
     /** {@inheritDoc} */
-	public List<Order> getOrdersByExternalId(String externalId) throws RepositoryException {
-		return findList(Order.class, map(Order.Fields.externalId, externalId));
-	}
-    
-	/** {@inheritDoc} */
-	public Order getOrderByExternalId(String externalId) throws RepositoryException, EntityNotFoundException {
-		List<Order> orders = getOrdersByExternalId(externalId);
-		// if no orders are found, the EntityNotFoundException should have already been thrown, so just check multiple orders case
-		if (UtilValidate.isEmpty(orders)) {
-			throw new EntityNotFoundException(Order.class, "No order found for external ID [" + externalId + "]");
-		} else if ((orders != null) && (orders.size() > 1)) {
-			throw new EntityNotFoundException(Order.class, "[" + orders.size() + "] orders found for reference ID [" + externalId + "]");
-		}
-		return orders.get(0);
-	}
+    public List<Order> getOrdersByExternalId(String externalId) throws RepositoryException {
+        return findList(Order.class, map(Order.Fields.externalId, externalId));
+    }
 
-	/** {@inheritDoc} */
+    /** {@inheritDoc} */
+    public Order getOrderByExternalId(String externalId) throws RepositoryException, EntityNotFoundException {
+        List<Order> orders = getOrdersByExternalId(externalId);
+        // if no orders are found, the EntityNotFoundException should have already been thrown, so just check multiple orders case
+        if (UtilValidate.isEmpty(orders)) {
+            throw new EntityNotFoundException(Order.class, "No order found for external ID [" + externalId + "]");
+        } else if ((orders != null) && (orders.size() > 1)) {
+            throw new EntityNotFoundException(Order.class, "[" + orders.size() + "] orders found for reference ID [" + externalId + "]");
+        }
+        return orders.get(0);
+    }
+
+    /** {@inheritDoc} */
     public List<OrderAdjustmentType> getOrderAdjustmentTypes() throws RepositoryException {
         return findAll(OrderAdjustmentType.class, Arrays.asList("description"));
     }

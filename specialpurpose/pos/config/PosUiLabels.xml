@@ -26,7 +26,7 @@
         <value xml:lang="fr">(ajustement)</value>
         <value xml:lang="it">(adjustment)</value>
         <value xml:lang="ro">(adjustment)</value>
-        <value xml:lang="zh">(adjustment)</value>
+        <value xml:lang="zh">(调整)</value>
     </property>
     <property key="PosAmt">
         <value xml:lang="en">AMT</value>
@@ -76,20 +76,27 @@
         <value xml:lang="ro">Ang:</value>
         <value xml:lang="zh">收银员:</value>
     </property>
+    <property key="PosClientProfile">
+        <value xml:lang="en">Customer informations, selection adds the card number as a promo code</value>
+        <value xml:lang="fr">Informations sur le client, sa sélection entraîne celle de son n° de carte comme code de promotion.</value>
+        <value xml:lang="zh">客户资料,选择添加卡号作为优惠券代码</value>
+    </property>
     <property key="PosConfigureItem">
         <value xml:lang="en">Item Configuration</value>
         <value xml:lang="fr">Configuration de l'article</value>
         <value xml:lang="it">Riga configurazione</value>
+        <value xml:lang="zh">明细配置</value>
     </property>
     <property key="PosCreateOrChooseReasonInOut">
         <value xml:lang="en">You have to create or choose a reason</value>
         <value xml:lang="fr">Vous devez créer ou choisir le motif de ce mouvement de caisse</value>
         <value xml:lang="it">Tu devi creare o scegliere una motivazione</value>
+        <value xml:lang="zh">你必须创建或选择一个原因</value>
     </property>
     <property key="PosCredNo">
         <value xml:lang="en">Enter Card Number:</value>
         <value xml:lang="es">Ingrese número de tarjeta :</value>
-        <value xml:lang="fr">Entrez le n° de la carte :</value>
+        <value xml:lang="fr">Entrez le n° de carte :</value>
         <value xml:lang="it">Inserire Numero Carta:</value>
         <value xml:lang="ro">Introduceti Numarul Cartii:</value>
         <value xml:lang="zh">输入卡号:</value>
@@ -126,6 +133,11 @@
         <value xml:lang="ro">CARTE DE CREDIT</value>
         <value xml:lang="zh">信用卡</value>
     </property>
+    <property key="PosCustomer">
+        <value xml:lang="en">Customer:</value>
+        <value xml:lang="fr">Client :</value>
+        <value xml:lang="zh">客户:</value>
+    </property>
     <property key="PosDate">
         <value xml:lang="en">DATE</value>
         <value xml:lang="es">FECHA</value>
@@ -148,6 +160,7 @@
         <value xml:lang="fr">'le' dd MMMMM yyyy 'à'  HH:mm:ss</value>
         <value xml:lang="it">'il' yyyy MMMMM dd 'alle'  hh:mm:ss aaa</value>
         <value xml:lang="ro">yyyy MMMMM dd 'la' hh:mm:ss aaa </value>
+        <value xml:lang="zh">yyyy MMMMM dd HH:mm:ss</value>
     </property>
     <property key="PosDraw">
         <value xml:lang="en">Dr:</value>
@@ -217,6 +230,7 @@
         <value xml:lang="en">Enter Promo Code:</value>
         <value xml:lang="fr">Entrez le code promo:</value>
         <value xml:lang="it">Inserire codice promozione:</value>
+        <value xml:lang="zh">输入促销代码:</value>
     </property>
     <property key="PosGiftCard">
         <value xml:lang="en">GIFT CARD</value>
@@ -241,6 +255,10 @@
         <value xml:lang="it">LORDO VENDITA</value>
         <value xml:lang="ro">Valoare BRUTA-VANZARE</value>
         <value xml:lang="zh">毛销售额</value>
+    </property>
+    <property key="PosFieldsRequired">
+        <value xml:lang="en">Name is required</value>
+        <value xml:lang="fr">Le nom doit être renseignés</value>
     </property>
     <property key="PosInvalidSelection">
         <value xml:lang="en">Invalid Selection!</value>
@@ -280,18 +298,25 @@
         <value xml:lang="fr">Remise sur l'article</value>
         <value xml:lang="it">(Item discount)</value>
         <value xml:lang="ro">(Item discount)</value>
-        <value xml:lang="zh">(Item discount)</value>
+        <value xml:lang="zh">(明细折扣)</value>
     </property>
     <property key="PosLoadASale">
         <value xml:lang="en">Load a sale</value>
         <value xml:lang="fr">Charger une vente</value>
         <value xml:lang="it">Carica una vendita</value>
+        <value xml:lang="zh">载入一个销售</value>
     </property>
     <property key="PosLoadSaleListDblClickTip">
         <value xml:lang="en">You may use a double click to replace the current sale and delete this one</value>
         <value xml:lang="fr">Vous pouvez utiliser le double-clic pour remplacer la vente en cours et supprimer celle ci</value>
         <value xml:lang="it">Tu devi usare un doppio click per sostituire l'attuale vendita and cancellarla</value>
         <value xml:lang="ro">Poti folosi dublu click  pentru a rescrie vanzarea cruenta si pentru a o sterge.</value>
+        <value xml:lang="zh">你可以双击鼠标来替换当前的销售并删除这个</value>
+    </property>
+    <property key="PosNoClientProfile">
+        <value xml:lang="en">Any customer profile to update</value>
+        <value xml:lang="fr">Aucun client à mettre à jour</value>
+        <value xml:lang="zh">更新客户资料</value>
     </property>
     <property key="PosOpDrAm">
         <value xml:lang="en">Starting Drawer Amount:</value>
@@ -313,11 +338,13 @@
         <value xml:lang="en">Enter amount to paid in and create or choose a reason</value>
         <value xml:lang="fr">Entrez le montant à remettre en caisse et créez ou choisissez un motif</value>
         <value xml:lang="it">Inserire importo da pagare in ingresso e creare o scegliere una motivazione</value>
+        <value xml:lang="zh">输入要收取的金额并创建或选择一个原因</value>
     </property>
     <property key="PosPaidOutTitle">
         <value xml:lang="en">Enter amount to withdraw and create or choose a reason</value>
         <value xml:lang="fr">Entrez le montant à retirer et créez ou choisissez un motif</value>
         <value xml:lang="it">Inserire un'importo da prelevare e crea o scegliere una motivazione</value>
+        <value xml:lang="zh">输入要撤销的金额并创建或输入一个原因</value>
     </property>
     <property key="PosPayFin">
         <value xml:lang="en">Press Finish To Complete Sale</value>
@@ -327,10 +354,16 @@
         <value xml:lang="ro">Apasa Terminare(FINISH) Pentru a Completa Vanzarea</value>
         <value xml:lang="zh">按完成键结束销售</value>
     </property>
+    <property key="PosPhoneField5Required">
+        <value xml:lang="en">The phone number must be at least 5 characters long (also used as password).</value>
+        <value xml:lang="fr">Le n° de téléphone doit être au moins de 5 caractèrs (sert aussi de mot de passe).</value>
+        <value xml:lang="zh">电话号码必须有五位数字以上(也作为密码用途)</value>
+    </property>
     <property key="PosPostalCode">
         <value xml:lang="en">Enter the billing postal code:</value>
         <value xml:lang="fr">Entrez le code postal :</value>
         <value xml:lang="it">Inserire il codice postale di fatturazione:</value>
+        <value xml:lang="zh">输入寄账单邮政编码:</value>
     </property>
     <property key="PosProcessing">
         <value xml:lang="en">Processing payments...</value>
@@ -339,6 +372,11 @@
         <value xml:lang="it">Esecuzione pagamenti...</value>
         <value xml:lang="ro">Executie plati...</value>
         <value xml:lang="zh">处理支付...</value>
+    </property>
+    <property key="PosPromoCode">
+        <value xml:lang="en">Promo code(s):</value>
+        <value xml:lang="fr">Code(s) de promotion :</value>
+        <value xml:lang="zh">优惠券代码:</value>
     </property>
     <property key="PosQty">
         <value xml:lang="en">QTY</value>
@@ -351,7 +389,7 @@
     <property key="PosRefNum">
         <value xml:lang="en">Enter Reference Number:</value>
         <value xml:lang="es">Ingrese número  de referencia</value>
-        <value xml:lang="fr">Entrez la référence (nombre) :</value>
+        <value xml:lang="fr">Entrez le n° du chèque ou la référence :</value>
         <value xml:lang="it">Inserire Numero Riferimento:</value>
         <value xml:lang="ro">Introduceti Numar de Referinta:</value>
         <value xml:lang="zh">输入流水号:</value>
@@ -362,7 +400,7 @@
         <value xml:lang="fr">Remise sur la vente</value>
         <value xml:lang="it">(Sales discount)</value>
         <value xml:lang="ro">(Sales discount)</value>
-        <value xml:lang="zh">(Sales discount)</value>
+        <value xml:lang="zh">(销售折扣)</value>
     </property>
     <property key="PosSalesTax">
         <value xml:lang="en">Sales Tax</value>
@@ -377,6 +415,7 @@
         <value xml:lang="fr">Sauver la vente en cours</value>
         <value xml:lang="it">Salvare attuale vendita</value>
         <value xml:lang="ro">Salveaza vanzarea curenta</value>
+        <value xml:lang="zh">保存当前销售</value>
     </property>
     <property key="PosSaving">
         <value xml:lang="en">Saving sale...</value>
@@ -390,16 +429,24 @@
         <value xml:lang="en">Enter security code:</value>
         <value xml:lang="fr">Entrez votre code :</value>
         <value xml:lang="it">Inserire codice sicurezza:</value>
+        <value xml:lang="zh">输入安全码:</value>
     </property>
     <property key="PosSelectAProduct">
         <value xml:lang="en">Select a product</value>
         <value xml:lang="fr">Sélectionnez un produit</value>
         <value xml:lang="it">Selezionare un prodotto</value>
+        <value xml:lang="zh">选择一个产品</value>
+    </property>
+    <property key="PosSelectClientToEdit">
+        <value xml:lang="en">Select a customer to edit or select</value>
+        <value xml:lang="fr">Choisissez le client à modifier ou à sélectionner</value>
+        <value xml:lang="zh">选择编辑客户资料</value>
     </property>
     <property key="PosSelectProductListDblClickTip">
         <value xml:lang="en">You may use a double click to select the current product</value>
         <value xml:lang="fr">Vous pouvez utiliser le double-clic pour choisir un produit</value>
         <value xml:lang="it">Tu devi usare un doppio clieck per selezionare il prodotto corrente</value>
+        <value xml:lang="zh">你可以双击鼠标来选择当前产品</value>
     </property>
     <property key="PosShuttingDown">
         <value xml:lang="en">Shutting down...</value>
@@ -415,7 +462,7 @@
         <value xml:lang="fr">Code</value>
         <value xml:lang="it">CODICE PRODOTTO</value>
         <value xml:lang="ro">COD PRODUS</value>
-        <value xml:lang="zh">SKU</value>
+        <value xml:lang="zh">产品统一编号</value>
     </property>
     <property key="PosTerm">
         <value xml:lang="en">Term:</value>
@@ -424,6 +471,16 @@
         <value xml:lang="it">Termine:</value>
         <value xml:lang="ro">Term:</value>
         <value xml:lang="zh">终端:</value>
+    </property>
+    <property key="PosTipNameRadioContains">
+        <value xml:lang="en">To look for names which contain the name entered</value>
+        <value xml:lang="fr">Pour rechercher des noms contenant celui entré</value>
+        <value xml:lang="zh">用部分名字去查找全名</value>
+    </property>
+    <property key="PosTipNameRadioEquals">
+        <value xml:lang="en">To look for names strictly equals to the name entered</value>
+        <value xml:lang="fr">Pour rechercher des noms exactement égaux à celui entré</value>
+        <value xml:lang="zh">查找的名字需要与资料一致</value>
     </property>
     <property key="PosTotal">
         <value xml:lang="en">TOTAL</value>
@@ -489,10 +546,20 @@
         <value xml:lang="ro">Validare...</value>
         <value xml:lang="zh">确认...</value>
     </property>
+    <property key="PosVirtualKeyboardTitle">
+        <value xml:lang="en">To inactivate the virtual keyboard: 1. Permanently, parameters.properties file. 2. Temporarily, button VIRTUAL on Admin Panel.</value>
+        <value xml:lang="fr">Pour désactiver le clavier virtuel : 1. En permanence, fichier parameters.properties. 2. Temporairement, bouton Clavier virtuel du panneau Gestion.</value>
+        <value xml:lang="zh">关闭虚拟键盘: 1.永远的,parameters.properties 文件. 2.临时的,控制页面的[虚拟键盘]按钮</value>
+    </property>
+    <property key="PosVirtualNumPadTitle">
+        <value xml:lang="en">To inactivate: see virtual keyboard.</value>
+        <value xml:lang="fr">Pour désactiver voir le clavier virtuel.</value>
+        <value xml:lang="zh">要关闭: 看虚拟键盘</value>
+    </property>
     <property key="PosVoid">
         <value xml:lang="en">Enter Order Number To Void:</value>
         <value xml:lang="es">Ingrese número de orden a anular</value>
-        <value xml:lang="fr">Entrez le n° d'ordre à annuler :</value>
+        <value xml:lang="fr">Entrez le n° de commande à annuler :</value>
         <value xml:lang="it">Inserire Numero Ordine Da Svuotare:</value>
         <value xml:lang="ro">Introduceti Numarul Comenzii de Descarcat:</value>
         <value xml:lang="zh">输入要作废的订单号:</value>

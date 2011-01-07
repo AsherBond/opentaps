@@ -21,7 +21,7 @@ package org.ofbiz.service.job;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.service.calendar.TemporalExpression;
 import org.ofbiz.service.calendar.TemporalExpressionWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -58,7 +58,7 @@ public class PersistedServiceJob extends GenericServiceJob {
 
     public static final String module = PersistedServiceJob.class.getName();
 
-    private transient GenericDelegator delegator = null;
+    private transient Delegator delegator = null;
     private Timestamp storedDate = null;
     private long nextRecurrence = -1;
     private long maxRetry = -1;
@@ -78,8 +78,11 @@ public class PersistedServiceJob extends GenericServiceJob {
         this.storedDate = jobValue.getTimestamp("runTime");
         this.runtime = storedDate.getTime();
         this.maxRetry = jobValue.get("maxRetry") != null ? jobValue.getLong("maxRetry").longValue() : -1;
+
+        // Debug.logInfo("=============== New PersistedServiceJob, delegator from dctx is [" + dctx.getDelegator().getDelegatorName() + "] and delegator from jobValue is [" + jobValue.getDelegator().getDelegatorName() + "]", module);
     }
 
+    @Override
     public void queue() throws InvalidJobException {
         super.queue();
 
@@ -120,6 +123,7 @@ public class PersistedServiceJob extends GenericServiceJob {
     /**
      * @see org.ofbiz.service.job.GenericServiceJob#init()
      */
+    @Override
     protected void init() throws InvalidJobException {
         super.init();
 
@@ -202,6 +206,7 @@ public class PersistedServiceJob extends GenericServiceJob {
     /**
      * @see org.ofbiz.service.job.GenericServiceJob#finish()
      */
+    @Override
     protected void finish() throws InvalidJobException {
         super.finish();
 
@@ -222,6 +227,7 @@ public class PersistedServiceJob extends GenericServiceJob {
     /**
      * @see org.ofbiz.service.job.GenericServiceJob#failed(Throwable)
      */
+    @Override
     protected void failed(Throwable t) throws InvalidJobException {
         super.failed(t);
 
@@ -257,6 +263,7 @@ public class PersistedServiceJob extends GenericServiceJob {
     /**
      * @see org.ofbiz.service.job.GenericServiceJob#getServiceName()
      */
+    @Override
     protected String getServiceName() throws InvalidJobException {
         GenericValue jobObj = getJob();
         if (jobObj == null || jobObj.get("serviceName") == null) {
@@ -268,6 +275,7 @@ public class PersistedServiceJob extends GenericServiceJob {
     /**
      * @see org.ofbiz.service.job.GenericServiceJob#getContext()
      */
+    @Override
     protected Map<String, Object> getContext() throws InvalidJobException {
         Map<String, Object> context = null;
         try {
@@ -311,7 +319,7 @@ public class PersistedServiceJob extends GenericServiceJob {
             GenericValue jobObj = delegator.findOne("JobSandbox", false, "jobId", getJobId());
 
             if (jobObj == null) {
-                throw new InvalidJobException("Job [" + getJobId() + "] came back null from datasource");
+                throw new InvalidJobException("Job [" + getJobId() + "] came back null from datasource from delegator " + delegator.getDelegatorName());
             }
             return jobObj;
         } catch (GenericEntityException e) {

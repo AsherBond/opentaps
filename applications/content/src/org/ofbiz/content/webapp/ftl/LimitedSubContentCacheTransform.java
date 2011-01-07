@@ -40,7 +40,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
 import org.ofbiz.content.content.ContentServicesComplex;
 import org.ofbiz.content.content.ContentWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.minilang.MiniLangException;
@@ -82,7 +82,7 @@ public class LimitedSubContentCacheTransform implements TemplateTransformModel {
         final StringBuilder buf = new StringBuilder();
         final Environment env = Environment.getCurrentEnvironment();
         final Map templateRoot = FreeMarkerWorker.createEnvironmentMap(env);
-        final GenericDelegator delegator = (GenericDelegator) FreeMarkerWorker.getWrappedObject("delegator", env);
+        final Delegator delegator = (Delegator) FreeMarkerWorker.getWrappedObject("delegator", env);
         final HttpServletRequest request = (HttpServletRequest) FreeMarkerWorker.getWrappedObject("request", env);
         FreeMarkerWorker.getSiteParameters(request, templateRoot);
         final Map savedValuesUp = FastMap.newInstance();
@@ -146,10 +146,10 @@ public class LimitedSubContentCacheTransform implements TemplateTransformModel {
         String contentAssocPredicateId = (String) templateRoot.get("contentAssocPredicateId");
         try {
             results = ContentServicesComplex.getAssocAndContentAndDataResourceCacheMethod(delegator, contentId, null, "From", fromDate, null, assocTypes, null, Boolean.TRUE, contentAssocPredicateId, orderBy);
-        } catch (MiniLangException e2) {
-            throw new RuntimeException(e2.getMessage());
+        } catch (MiniLangException e) {
+            throw new RuntimeException(e.getMessage(), e);
         } catch (GenericEntityException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e.getMessage(), e);
         }
         List longList = (List) results.get("entityList");
         templateRoot.put("entityList", longList);
@@ -157,16 +157,19 @@ public class LimitedSubContentCacheTransform implements TemplateTransformModel {
 
         return new LoopWriter(out) {
 
+            @Override
             public void write(char cbuf[], int off, int len) {
                 buf.append(cbuf, off, len);
                 //StringBuilder ctxBuf = (StringBuilder) templateRoot.get("buf");
                 //ctxBuf.append(cbuf, off, len);
             }
 
+            @Override
             public void flush() throws IOException {
                 out.flush();
             }
 
+            @Override
             public int onStart() throws TemplateModelException, IOException {
 
                 List globalNodeTrail = (List) templateRoot.get("globalNodeTrail");
@@ -185,6 +188,7 @@ public class LimitedSubContentCacheTransform implements TemplateTransformModel {
                 }
             }
 
+            @Override
             public int afterBody() throws TemplateModelException, IOException {
                 FreeMarkerWorker.reloadValues(templateRoot, savedValues, env);
                 List list = (List) templateRoot.get("globalNodeTrail");
@@ -208,6 +212,7 @@ public class LimitedSubContentCacheTransform implements TemplateTransformModel {
                 }
             }
 
+            @Override
             public void close() throws IOException {
                 FreeMarkerWorker.reloadValues(templateRoot, savedValuesUp, env);
                 String wrappedContent = buf.toString();
@@ -222,7 +227,7 @@ public class LimitedSubContentCacheTransform implements TemplateTransformModel {
                 //}
             }
 
-            public boolean prepCtx(GenericDelegator delegator, Map ctx, Environment env, GenericValue view) throws GeneralException {
+            public boolean prepCtx(Delegator delegator, Map ctx, Environment env, GenericValue view) throws GeneralException {
 
                 String dataResourceId = (String) view.get("drDataResourceId");
                 String subContentIdSub = (String) view.get("contentId");
@@ -306,7 +311,7 @@ public class LimitedSubContentCacheTransform implements TemplateTransformModel {
                 return pickEntity;
             }
 
-            public boolean getNextMatchingEntity(Map templateRoot, GenericDelegator delegator, Environment env) throws IOException {
+            public boolean getNextMatchingEntity(Map templateRoot, Delegator delegator, Environment env) throws IOException {
                 boolean matchFound = false;
                 GenericValue pickEntity = getRandomEntity();
 

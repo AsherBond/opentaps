@@ -36,7 +36,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -168,12 +168,12 @@ public final class InvoiceHelper {
      * </li>
      * <li> One line per tax rate group, which is based on taxAuthorityRateSeqId.  The amountTotal field is the total tax amount for this group. </li>
      * </ul>
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param invoiceId a <code>String</code> value
      * @return the invoice lines
      * @exception GenericEntityException if an error occurs
      */
-    public static List<Map<String, Object>> getInvoiceLinesForPresentation(GenericDelegator delegator, String invoiceId) throws GenericEntityException {
+    public static List<Map<String, Object>> getInvoiceLinesForPresentation(Delegator delegator, String invoiceId) throws GenericEntityException {
         return getInvoiceLinesForPresentation(delegator, invoiceId, Boolean.FALSE);
     }
 
@@ -193,13 +193,13 @@ public final class InvoiceHelper {
      * </li>
      * <li> One line per tax rate group, which is based on taxAuthorityRateSeqId.  The amountTotal field is the total tax amount for this group. </li>
      * </ul>
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param invoiceId a <code>String</code> value
      * @param groupSalesTaxOnInvoicePdf  a <code>Boolean</code> value
      * @return the invoice lines
      * @exception GenericEntityException if an error occurs
      */
-    public static List<Map<String, Object>> getInvoiceLinesForPresentation(GenericDelegator delegator, String invoiceId, Boolean groupSalesTaxOnInvoicePdf) throws GenericEntityException {
+    public static List<Map<String, Object>> getInvoiceLinesForPresentation(Delegator delegator, String invoiceId, Boolean groupSalesTaxOnInvoicePdf) throws GenericEntityException {
 
         List<Map<String, Object>> invoiceLines = FastList.newInstance();
         List<GenericValue> invoiceItems = delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", invoiceId), UtilMisc.toList("invoiceItemSeqId"));
@@ -330,14 +330,14 @@ public final class InvoiceHelper {
 
     /**
      * Retrieve a list of AgreementTerms which apply to an invoice.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param invoiceId a <code>String</code> value
      * @return List of agreementTerms which apply to the invoice, in descending order by lastUpdatedStamp. AgreementTerms which are present due
      *  to a PartyClassification relationship will be folded into the ordered list based on the lastUpdatedStamp of the PartyClassification record.
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List getAgreementTermsForInvoice(GenericDelegator delegator, String invoiceId) throws GenericEntityException {
+    public static List getAgreementTermsForInvoice(Delegator delegator, String invoiceId) throws GenericEntityException {
 
         List terms = new ArrayList();
 
@@ -498,7 +498,7 @@ public final class InvoiceHelper {
      * @exception GeneralException if an error occurs
      */
     public static BigDecimal getInvoiceAuthorizedAmount(GenericValue invoice) throws GeneralException {
-        GenericDelegator delegator = invoice.getDelegator();
+        Delegator delegator = invoice.getDelegator();
         String invoiceCurrencyUomId = invoice.getString("currencyUomId");
 
         // presently, the only authorizations are order payment preferences with statusId PAYMENT_AUTHORIZED

@@ -38,8 +38,8 @@ under the License.
         <!-- ***   field9  *** -->
         <!-- ***************** -->
         <field name="field9"
-               title="${uiLabelMap.ExampleDateField9Title}"
-               tooltip="${uiLabelMap.ExampleDateField9Tooltip}">
+            title="${uiLabelMap.ExampleDateField9Title}">
+            <!--tooltip="${uiLabelMap.ExampleDateField9Tooltip}"-->
             <date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/>
         </field>
         <!-- ***************** -->
@@ -80,7 +80,7 @@ under the License.
         <field name="field4"
                title="${uiLabelMap.ExampleDateField4Title}"
                tooltip="${uiLabelMap.ExampleDateField4Tooltip}">
-            <date-time input-method="time-dropdown" clock="24"/>
+            <date-time input-method="time-dropdown" clock="24" default-value="${exampleDateField}"/>
         </field>
         <!-- ***************** -->
         <!-- ***   field5  *** -->
@@ -88,7 +88,7 @@ under the License.
         <field name="field5"
                title="${uiLabelMap.ExampleDateField5Title}"
                tooltip="${uiLabelMap.ExampleDateField4Tooltip}">
-            <date-time input-method="time-dropdown" clock="12"/>
+            <date-time input-method="time-dropdown" clock="12" default-value="${exampleDateField}"/>
         </field>
         <!-- ***************** -->
         <!-- ***   field6  *** -->
@@ -161,7 +161,7 @@ under the License.
         <!-- ***************** -->
         <field name="field8"
                title="${uiLabelMap.ExampleDropDownField8Title}"
-               event="onChange"
+               event="onchange"
                action="return alert('You have changed the value in the select box');"
                tooltip="${uiLabelMap.ExampleDropDownField8Tooltip}">
             <drop-down>
@@ -247,6 +247,11 @@ under the License.
         <field name="field8" title="${uiLabelMap.ExampleField} 8"><text/></field>
         <field name="field9" title="${uiLabelMap.ExampleField} 9"><text/></field>
         <field name="field10" title="${uiLabelMap.ExampleField} 10"><text/></field>
+        <field name="field11" title="${uiLabelMap.ExampleField} 11"><text/></field>
+        <field name="field12" title="${uiLabelMap.ExampleField} 12"><text/></field>
+        <field name="field13" title="${uiLabelMap.ExampleField} 13"><text/></field>
+        <field name="field14" title="${uiLabelMap.ExampleField} 14"><text/></field>
+        <field name="field14" title="${uiLabelMap.ExampleField} 15"><text/></field>
 
         <sort-order>
             <field-group title="${uiLabelMap.ExampleGroupField} 1" collapsible="true" initially-collapsed="true">
@@ -264,8 +269,49 @@ under the License.
                 <sort-field name="field9"/>
                 <sort-field name="field10"/>
             </field-group>
+
+            <field-group title="${uiLabelMap.ExampleGroupField} 3">
+                <sort-field name="field11"/>
+                <sort-field name="field12"/>
+                <sort-field name="field13"/>
+                <sort-field name="field14"/>
+                <sort-field name="field15"/>
+            </field-group>
         </sort-order>
 
+    </form>
+
+    <!-- Lookup Layer Example -->
+    <form name="ExampleLookupFields" type="single" title="">
+        <!-- Old style lookup (in a popup window) -->
+        <!-- Using separated labels is not recommended (it's better using sentences than words for translation) -->
+        <field name="partyIdFrom" title="${uiLabelMap.CommonPartyID} ${uiLabelMap.CommonFrom}">
+            <lookup target-form-name="LookupPartyExample" presentation="window"/>
+        </field>
+        <!-- Standard lookup (in a layer)-->
+        <!-- passes the name in one and the id in another field, the layer is centered -->
+        <field name="partyName" title="${uiLabelMap.CommonName}">
+            <lookup target-form-name="LookupPartyExampleByName" description-field-name="partyIdTo" presentation="layer"/>
+        </field>
+        <!-- This field may be hidden and the name rendered in partyName using default-value if partyIdTo exists-->
+        <field name="partyIdTo" title="${uiLabelMap.CommonPartyID} ${uiLabelMap.CommonTo}"><text/></field><!-- the text field is only used for rendering  -->
+        <sort-order>
+            <field-group>
+                <sort-field name="partyIdFrom"/>
+            </field-group>
+            <field-group>
+                <sort-field name="partyName"/>
+                <sort-field name="partyIdTo"/>
+            </field-group>
+        </sort-order>
+    </form>
+
+    <form name="SelectionBoxesExampleForm" type="single">
+        <field name="ExampleTypeId">
+           <check>
+              <entity-options key-field-name="exampleTypeId" description="${description}" entity-name="ExampleType"/>
+           </check>
+        </field>
     </form>
 
 </forms>

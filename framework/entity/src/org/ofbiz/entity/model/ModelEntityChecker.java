@@ -29,7 +29,7 @@ import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 
 /**
@@ -40,7 +40,7 @@ public class ModelEntityChecker {
 
     public static final String module = ModelEntityChecker.class.getName();
 
-    public static void checkEntities(GenericDelegator delegator, List<String> warningList) throws GenericEntityException {
+    public static void checkEntities(Delegator delegator, List<String> warningList) throws GenericEntityException {
         ModelReader reader = delegator.getModelReader();
 
         TreeSet<String> reservedWords = new TreeSet<String>();
@@ -195,7 +195,8 @@ public class ModelEntityChecker {
 
                         // make sure all FK names are <= 18 characters
                         if (relation.getFkName().length() > 18) {
-                            warningList.add("[RelFKNameGT18] The foregn key name (length:" + relation.getFkName().length()
+                            warningList.add("[RelFKNameGT18] The foreign key named " + relation.getFkName()
+                                            + " (length:" + relation.getFkName().length()
                                             + ") was greater than 18 characters in length for relation " + relation.getTitle() + relation.getRelEntityName()
                                             + " of entity " + entity.getEntityName() + ".");
                         }

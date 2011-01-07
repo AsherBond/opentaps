@@ -42,7 +42,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.util.EntityUtil;
@@ -89,7 +89,7 @@ public final class ShippingServices {
      */
     @SuppressWarnings("unchecked")
     public static Map setShipmentRouteSegmentFromShipGroup(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -144,7 +144,7 @@ public final class ShippingServices {
     }
 
     public static Map upperCasePostalAddress(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String contactMechId = (String) context.get("contactMechId");
         try {
@@ -186,7 +186,7 @@ public final class ShippingServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updatePartyCarrierAccountFromShipGroup(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -246,7 +246,7 @@ public final class ShippingServices {
      */
     @SuppressWarnings("unchecked")
     public static Map setShipmentOrderShipGroupsPacked(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String shipmentId = (String) context.get("shipmentId");
         try {
             List<GenericValue> shipmentOrderShipGroups = UtilOrder.getShipmentOrderShipGroups(delegator, shipmentId);
@@ -308,7 +308,7 @@ public final class ShippingServices {
      */
     @SuppressWarnings("unchecked")
     public static Map checkCanPack(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         String shipmentId = (String) context.get("shipmentId");
@@ -347,7 +347,7 @@ public final class ShippingServices {
 
     @SuppressWarnings("unchecked")
     public static Map createAndConfirmReturnShipment(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -453,7 +453,7 @@ public final class ShippingServices {
      */
     @SuppressWarnings("unchecked")
     public static Map scheduleReturnShipmentUPS(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         if (shipmentUpsSaveCertificationInfo) {

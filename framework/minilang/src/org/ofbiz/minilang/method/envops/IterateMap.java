@@ -19,17 +19,16 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.minilang.method.envops;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastList;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.minilang.SimpleMethod;
 import org.ofbiz.minilang.method.ContextAccessor;
 import org.ofbiz.minilang.method.MethodContext;
 import org.ofbiz.minilang.method.MethodOperation;
-import org.ofbiz.base.util.Debug;
 import org.w3c.dom.Element;
 
 /**
@@ -63,6 +62,7 @@ public class IterateMap extends MethodOperation {
         SimpleMethod.readOperations(element, subOps, simpleMethod);
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
 
 
@@ -107,9 +107,11 @@ public class IterateMap extends MethodOperation {
         return this.subOps;
     }
 
+    @Override
     public String rawString() {
         return "<iterate-map map-name=\"" + this.mapAcsr + "\" key=\"" + this.keyAcsr + "\" value=\"" + this.valueAcsr + "\"/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

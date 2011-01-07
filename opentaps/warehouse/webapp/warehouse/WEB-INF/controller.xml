@@ -380,13 +380,19 @@ under the License.
     <request-map uri="receiveSingleInventoryProduct">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="receiveInventoryProduct"/>
-        <response name="success" type="request-redirect-filterparam" value="EditInventoryItem" allowed-params="inventoryItemId" allowed-attributes="inventoryItemId"/>
+        <response name="success" type="request-redirect" value="EditInventoryItem">
+            <redirect-parameter name="inventoryItemId"/>
+        </response>
         <response name="error" type="view" value="receiveInventoryItem"/>
     </request-map>
     <request-map uri="issueOrderItemToShipmentAndReceiveAgainstPO">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="warehouse.issueOrderItemToShipmentAndReceiveAgainstPO"/>
-        <response name="success" type="request-redirect-filterparam" value="ReceiveInventoryAgainstPurchaseOrder" allowed-params="purchaseOrderId,shipGroupSeqId,clearAll"/>
+        <response name="success" type="request-redirect" value="ReceiveInventoryAgainstPurchaseOrder">
+            <redirect-parameter name="purchaseOrderId"/>
+            <redirect-parameter name="shipGroupSeqId"/>
+            <redirect-parameter name="clearAll"/>
+        </response>
         <response name="error" type="view" value="ReceiveInventoryAgainstPurchaseOrder"/>
     </request-map>
     <request-map uri="completePurchaseOrder">
@@ -1153,7 +1159,10 @@ under the License.
     </request-map>
     <request-map uri="EditProductionRun">
         <security https="true" auth="true"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
     </request-map>
     <request-map uri="PrintProductionRun.pdf">
         <security https="true" auth="true"/>
@@ -1162,67 +1171,103 @@ under the License.
     <request-map uri="scheduleProductionRun">
         <security https="true" auth="true"/>
         <event type="service" invoke="quickChangeProductionRunStatus"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="changeProductionRunStatusToPrinted">
         <security https="true" auth="true"/>
         <event type="service" invoke="changeProductionRunStatus"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="changeProductionRunStatusToClosed">
         <security https="true" auth="true"/>
         <event type="service" invoke="changeProductionRunStatus"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="quickChangeProductionRunStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="quickChangeProductionRunStatus"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="cancelProductionRun">
         <security https="true" auth="true"/>
         <event type="service" invoke="cancelProductionRun"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="revertProductionRun">
         <security https="true" auth="true"/>
         <event type="service" invoke="revertProductionRunAndSaveAllParts"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="productionRunTaskReturnMaterials">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="productionRunTaskReturnMaterial"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="quickRunAllProductionRunTasks">
         <security https="true" auth="true"/>
         <event type="service" invoke="quickRunAllProductionRunTasks"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="productionRunProduce">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.productionRunProduce"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="productionRunProduceDisassembly">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="opentaps.productionRunProduce"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
-        <response name="error" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
+        <response name="error" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
     </request-map>
     <request-map uri="updateProductionRun">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateProductionRun"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="ProductionRunTasks">
@@ -1231,84 +1276,120 @@ under the License.
     </request-map>
     <request-map uri="addProductionRunRoutingTask">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/manufacturing/jobshopmgt/ProductionRunSimpleEvents.xml" invoke="addProductionRunRoutingTask"/>
+        <event type="simple" path="component://manufacturing/script/org/ofbiz/manufacturing/jobshopmgt/ProductionRunSimpleEvents.xml" invoke="addProductionRunRoutingTask"/>
         <response name="success" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="updateProductionRunRoutingTask">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/manufacturing/jobshopmgt/ProductionRunSimpleEvents.xml" invoke="editProductionRunRoutingTask"/>
+        <event type="simple" path="component://manufacturing/script/org/ofbiz/manufacturing/jobshopmgt/ProductionRunSimpleEvents.xml" invoke="editProductionRunRoutingTask"/>
         <response name="success" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="deleteProductionRunRoutingTask">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteWorkEffort"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="addProductionRunComponent">
         <security https="true" auth="true"/>
         <event type="service" invoke="addProductionRunComponent"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="updateProductionRunComponent">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateProductionRunComponent"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="deleteProductionRunComponent">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeWorkEffortGoodStandard"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="createWorkEffortFixedAssetAssign">
         <security https="true" auth="true"/>
         <event type="service" invoke="createWorkEffortFixedAssetAssign"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="updateWorkEffortFixedAssetAssign">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateWorkEffortFixedAssetAssign"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="removeWorkEffortFixedAssetAssign">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeWorkEffortFixedAssetAssign"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="changeProductionRunTaskStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="changeProductionRunTaskStatus"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="issueProductionRunTaskComponent">
         <security https="true" auth="true"/>
         <event type="service" invoke="issueProductionRunTaskComponent"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="updateProductionRunTask">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateProductionRunTask"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="createProductionRunTaskProduct">
         <security https="true" auth="true"/>
         <event type="service" invoke="productionRunTaskProduce"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
     <request-map uri="updateInventoryItemsProdRun">
         <security https="true" auth="true"/>
         <event type="service-multi" path="" invoke="updateInventoryItem"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="ShowProductionRun"/>
     </request-map>
 
@@ -1395,7 +1476,10 @@ under the License.
     <request-map uri="issueAdditionalMaterial">
         <security https="true" auth="true" direct-request="false"/>
         <event type="service" path="" invoke="issueProductionRunTaskComponent"/>
-        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="success" type="request-redirect" value="ShowProductionRun">
+            <redirect-parameter name="productionRunId"/>
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="issueAdditionalMaterialForm"/>
     </request-map>
     <request-map uri="issueMaterialsCheck">

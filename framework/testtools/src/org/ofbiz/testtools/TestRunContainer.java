@@ -18,23 +18,31 @@
  *******************************************************************************/
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.testtools;
+ 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.DecimalFormat;
+import java.util.Enumeration;
+import java.util.Map;
 
 import javolution.util.FastMap;
-import junit.framework.*;
+import junit.framework.AssertionFailedError;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestFailure;
+import junit.framework.TestListener;
+import junit.framework.TestResult;
+import junit.framework.TestSuite;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.optional.junit.JUnitTest;
 import org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter;
 import org.ofbiz.base.container.Container;
 import org.ofbiz.base.container.ContainerException;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.entity.GenericDelegator;
-
-import java.io.*;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.text.DecimalFormat;
+import org.ofbiz.entity.Delegator;
 
 /**
  * A Container implementation to run the tests configured through this testtools stuff.
@@ -124,8 +132,9 @@ public class TestRunContainer implements Container {
         long suiteIdx = 1;
         long testIdx = 1;
 
+        boolean failedRun = false;
         for (ModelTestSuite modelSuite: jsWrapper.getModelTestSuites()) {
-            GenericDelegator testDelegator = modelSuite.getDelegator();
+            Delegator testDelegator = modelSuite.getDelegator();
             TestSuite suite = modelSuite.makeTestSuite();
             JUnitTest test = new JUnitTest();
             test.setName(suite.getName());
@@ -153,13 +162,16 @@ public class TestRunContainer implements Container {
             testDelegator.rollback();
             xml.endTestSuite(test);
             Debug.log("[JUNIT:Suite:End] Ending test suite: [" + suiteIdx + "/" + suiteCount + "] " + suite.getName(), module);
+            if (!results.wasSuccessful()) {
+                failedRun = true;
+            }
 
             // display the results
             Debug.log("[JUNIT] Pass: " + results.wasSuccessful() + " | # Tests: " + results.runCount() + " | # Failed: " +
                     results.failureCount() + " # Errors: " + results.errorCount(), module);
             if (Debug.importantOn()) {
                 Debug.log("[JUNIT] ----------------------------- ERRORS ----------------------------- [JUNIT]", module);
-                Enumeration err = results.errors();
+                Enumeration<?> err = results.errors();
                 if (!err.hasMoreElements()) {
                     Debug.log("None");
                 } else {
@@ -173,7 +185,7 @@ public class TestRunContainer implements Container {
                 }
                 Debug.log("[JUNIT] ------------------------------------------------------------------ [JUNIT]", module);
                 Debug.log("[JUNIT] ---------------------------- FAILURES ---------------------------- [JUNIT]", module);
-                Enumeration fail = results.failures();
+                Enumeration<?> fail = results.failures();
                 if (!fail.hasMoreElements()) {
                     Debug.log("None");
                 } else {
@@ -191,6 +203,9 @@ public class TestRunContainer implements Container {
             testIdx += results.runCount();
         }
 
+        if (failedRun) {
+            throw new ContainerException("Test run was unsuccessful");
+        }
         return true;
     }
 
@@ -214,11 +229,13 @@ public class TestRunContainer implements Container {
             this.setOutput(out);
         }
 
+        @Override
         public void startTestSuite(JUnitTest suite) {
             startTimes.put(suite.getName(), System.currentTimeMillis());
             super.startTestSuite(suite);
         }
 
+        @Override
         public void endTestSuite(JUnitTest suite) throws BuildException {
             long startTime = startTimes.get(suite.getName());
             suite.setRunTime((System.currentTimeMillis() - startTime));
@@ -239,21 +256,29 @@ public class TestRunContainer implements Container {
         private long startTime;
 
         public void addError(Test test, Throwable throwable) {
-            Debug.logWarning(throwable, "[JUNIT (error)] - " + test.getClass().getName() + " : " + throwable.toString(), module);
+            Debug.logWarning(throwable, "[JUNIT (error)] - " + getTestName(test) + " : " + throwable.toString(), module);
         }
 
         public void addFailure(Test test, AssertionFailedError assertionFailedError) {
-            Debug.logWarning(assertionFailedError, "[JUNIT (failure)] - " + test.getClass().getName() + " : " + assertionFailedError.getMessage(), module);
+            Debug.logWarning(assertionFailedError, "[JUNIT (failure)] - " + getTestName(test) + " : " + assertionFailedError.getMessage(), module);
         }
 
         public void endTest(Test test) {
-            Debug.logInfo("[JUNIT (end)] : [" + testIdx + "/" + testCount + "][" + getProgress(testCount, testIdx) + "] " + test + " finished. (in " + (System.currentTimeMillis() - startTime) + " ms)", module);
+            Debug.logInfo("[JUNIT (end)] : [" + testIdx + "/" + testCount + "][" + getProgress(testCount, testIdx) + "] " + getTestName(test) + " finished. (in " + (System.currentTimeMillis() - startTime) + " ms)", module);
             testIdx++;
         }
 
         public void startTest(Test test) {
-            Debug.logInfo("[JUNIT (start)] : [" + testIdx + "/" + testCount + "][" + getProgress(testCount, testIdx) + "] " + test + " starting...", module);
+            Debug.logInfo("[JUNIT (start)] : [" + testIdx + "/" + testCount + "][" + getProgress(testCount, testIdx) + "] " + getTestName(test) + " starting...", module);
             startTime = System.currentTimeMillis();
         }
+
+        private String getTestName(Test test) {
+            if (test instanceof TestCase) {
+                return ((TestCase)test).getName();
+            } else {
+                return test.getClass().getName();
+            }
+         }
     }
 }

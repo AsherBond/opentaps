@@ -21,8 +21,6 @@ package org.ofbiz.minilang.method.otherops;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Locale;
@@ -101,6 +99,7 @@ public class Calculate extends MethodOperation {
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         String typeString = methodContext.expandString(this.typeString);
         int type;
@@ -223,10 +222,12 @@ public class Calculate extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: add all attributes and other info
         return "<calculate field-name=\"" + this.fieldAcsr + "\" map-name=\"" + this.mapAcsr + "\"/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

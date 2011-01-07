@@ -54,6 +54,9 @@ context.todayDate = new java.sql.Date(System.currentTimeMillis()).toString();
 
 
 orderHeader = null;
+orderItems = null;
+orderAdjustments = null;
+
 if (orderId) {
     orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
 }
@@ -106,14 +109,20 @@ if (orderHeader) {
     shippingAmount = shippingAmount.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true));
     context.shippingAmount = shippingAmount;
 
-    taxAmount = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, true, false);
-    taxAmount = taxAmount.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, true, false));
+    taxAmount = OrderReadHelper.getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal;
     context.taxAmount = taxAmount;
 
     grandTotal = OrderReadHelper.getOrderGrandTotal(orderItems, orderAdjustments);
     context.grandTotal = grandTotal;
 
+    canceledPromoOrderItem = [:];
     orderItemList = orderReadHelper.getOrderItems();
+    orderItemList.each { orderItem ->
+        if("Y".equals(orderItem.get("isPromo")) && "ITEM_CANCELLED".equals(orderItem.get("statusId"))) {
+            canceledPromoOrderItem = orderItem;
+        }
+        orderItemList.remove(canceledPromoOrderItem);
+    }
     context.orderItemList = orderItemList;
 
     shippingAddress = orderReadHelper.getShippingAddress();
@@ -386,9 +395,9 @@ if (orderHeader) {
     context.shippingContactMechList = shippingContactMechList;
 
     // list to find all the shipmentMethods from the view named "ProductStoreShipmentMethView".
-    productStoreId = orderHeader.getRelatedOne("ProductStore").productStoreId;
-    productStoreShipmentMethList = delegator.findByAndCache("ProductStoreShipmentMethView", [productStoreId : productStoreId], ["sequenceNumber"]);
-    context.productStoreShipmentMethList = productStoreShipmentMethList;
+    if (productStore) {
+        context.productStoreShipmentMethList = delegator.findByAndCache('ProductStoreShipmentMethView', [productStoreId: productStore.productStoreId], ['sequenceNumber']);
+    }
 
     // Get a map of returnable items
     returnableItems = [:];
@@ -400,8 +409,8 @@ if (orderHeader) {
 
     // get the catalogIds for appending items
     if (context.request != null) {
-        if ("SALES_ORDER".equals(orderType)) {
-            catalogCol = CatalogWorker.getCatalogIdsAvailable(delegator, productStoreId, partyId);
+        if ("SALES_ORDER".equals(orderType) && productStore) {
+            catalogCol = CatalogWorker.getCatalogIdsAvailable(delegator, productStore.productStoreId, partyId);
         } else {
             catalogCol = CatalogWorker.getAllCatalogIds(request);
         }
@@ -426,3 +435,49 @@ if (orderItems) {
     orderItem = EntityUtil.getFirst(orderItems);
     context.orderItem = orderItem;
 }
+
+// getting online ship estimates corresponding to this Order from UPS when "Hold" button will be clicked, when user packs from weight package screen.
+// This case comes when order's shipping amount is  more then or less than default percentage (defined in shipment.properties) of online UPS shipping amount.
+
+    condn = EntityCondition.makeCondition([
+                                      EntityCondition.makeCondition("primaryOrderId", EntityOperator.EQUALS, orderId),
+                                      EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SHIPMENT_PICKED")],
+                                  EntityOperator.AND);
+    shipments = delegator.findList("Shipment", condn, null, null, null, false);
+    if (shipments) {
+        pickedShipmentId = EntityUtil.getFirst(shipments).shipmentId;
+        shipmentRouteSegment = EntityUtil.getFirst(delegator.findList("ShipmentRouteSegment",EntityCondition.makeCondition([shipmentId : pickedShipmentId]), null, null, null, false));
+        context.shipmentRouteSegmentId = shipmentRouteSegment.shipmentRouteSegmentId;
+        context.pickedShipmentId = pickedShipmentId;
+        if (pickedShipmentId && shipmentRouteSegment.trackingIdNumber) {
+            if ("UPS" == shipmentRouteSegment.carrierPartyId && productStore) {
+                resultMap = dispatcher.runSync('upsShipmentAlternateRatesEstimate', [productStoreId: productStore.productStoreId, shipmentId: pickedShipmentId]);
+                shippingRates = resultMap.shippingRates;
+                shippingRateList = [];
+                shippingRates.each { shippingRate ->
+                    shippingMethodAndRate = [:];
+                    serviceCodes = shippingRate.keySet();
+                    serviceCodes.each { serviceCode ->
+                        carrierShipmentMethod = EntityUtil.getFirst(delegator.findByAnd("CarrierShipmentMethod", [partyId : "UPS", carrierServiceCode : serviceCode]));
+                        shipmentMethodTypeId = carrierShipmentMethod.shipmentMethodTypeId;
+                        rate = shippingRate.get(serviceCode);
+                        shipmentMethodDescription = EntityUtil.getFirst(carrierShipmentMethod.getRelated("ShipmentMethodType")).description;
+                        shippingMethodAndRate.shipmentMethodTypeId = carrierShipmentMethod.shipmentMethodTypeId;
+                        shippingMethodAndRate.rate = rate;
+                        shippingMethodAndRate.shipmentMethodDescription = shipmentMethodDescription;
+                        shippingRateList.add(shippingMethodAndRate);
+                    }
+               }
+                context.shippingRateList = shippingRateList;
+            }
+        }
+    }
+
+    // get orderAdjustmentId for SHIPPING_CHARGES
+    orderAdjustmentId = null;
+    orderAdjustments.each { orderAdjustment ->
+        if(orderAdjustment.orderAdjustmentTypeId.equals("SHIPPING_CHARGES")) {
+            orderAdjustmentId = orderAdjustment.orderAdjustmentId;
+        }
+    }
+    context.orderAdjustmentId = orderAdjustmentId;

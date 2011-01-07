@@ -39,7 +39,7 @@
 package org.opentaps.common.paypal;
 
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.transaction.GenericTransactionException;
@@ -72,7 +72,7 @@ public class OpentapsPaypalEvents {
     
     /** PayPal Call-Back Event */
     public static String payPalIPN(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");   
         
         // get the webSiteId
@@ -220,7 +220,7 @@ public class OpentapsPaypalEvents {
         return "success";
     }
 
-    private static boolean setPaymentPreferences(GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, String orderId, ServletRequest request) {
+    private static boolean setPaymentPreferences(Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, String orderId, ServletRequest request) {
         Debug.logVerbose("Setting payment prefrences..", module);
         List paymentPrefs = null;
         try {
@@ -270,7 +270,7 @@ public class OpentapsPaypalEvents {
             authDate = UtilDateTime.nowTimestamp();
         }
 
-        GenericDelegator delegator = paymentPreference.getDelegator();
+        Delegator delegator = paymentPreference.getDelegator();
 
         // get the order header
         GenericValue orderHeader = null;

@@ -23,7 +23,7 @@ import java.util.List;
 import javax.transaction.UserTransaction;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.base.entities.TestEntity;
 import org.opentaps.base.entities.TestEntityItem;
@@ -140,7 +140,7 @@ public class TestEntityPojoServices extends Service {
             }
 
             //create TestEntity by delegator
-            GenericDelegator delegator = getInfrastructure().getDelegator();
+            Delegator delegator = getInfrastructure().getDelegator();
             String testId = delegator.getNextSeqId("TestEntity");
             delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", getDescription()));
             //create numberOfItems TestEntityItem

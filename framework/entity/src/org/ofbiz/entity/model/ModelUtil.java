@@ -19,9 +19,9 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.entity.model;
 
-import java.io.*;
+import java.io.File;
 
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.StringUtil;
 
 /**
  * Generic Entity - General Utilities

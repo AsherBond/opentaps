@@ -77,7 +77,7 @@ public class FreeMarkerWorker {
     public static final String module = FreeMarkerWorker.class.getName();
 
     // use soft references for this so that things from Content records don't kill all of our memory, or maybe not for performance reasons... hmmm, leave to config file...
-    public static UtilCache<String, Template> cachedTemplates = new UtilCache<String, Template>("template.ftl.general", 0, 0, false);
+    public static UtilCache<String, Template> cachedTemplates = UtilCache.createUtilCache("template.ftl.general", 0, 0, false);
     protected static BeansWrapper defaultOfbizWrapper = BeansWrapper.getDefaultInstance();
     protected static Configuration defaultOfbizConfig = makeConfiguration(defaultOfbizWrapper);
 
@@ -89,6 +89,7 @@ public class FreeMarkerWorker {
         newConfig.setLocalizedLookup(false);
         newConfig.setSharedVariable("StringUtil", new BeanModel(new StringUtil(), wrapper));
         newConfig.setTemplateLoader(new FlexibleTemplateLoader());
+        newConfig.setAutoImports(UtilProperties.getProperties("freemarkerImports"));
         newConfig.setTemplateExceptionHandler(new FreeMarkerWorker.OFBizTemplateExceptionHandler());
         try {
             newConfig.setSetting("datetime_format", "yyyy-MM-dd HH:mm:ss.SSS");
@@ -103,7 +104,7 @@ public class FreeMarkerWorker {
             resources = loader.getResources("freemarkerTransforms.properties");
         } catch (IOException e) {
             Debug.logError(e, "Could not load list of freemarkerTransforms.properties", module);
-            throw (InternalError) new InternalError(e.getMessage()).initCause(e);
+            throw UtilMisc.initCause(new InternalError(e.getMessage()), e);
         }
         while (resources.hasMoreElements()) {
             URL propertyURL = resources.nextElement();
@@ -400,9 +401,9 @@ public class FreeMarkerWorker {
                 Debug.logInfo(e.getMessage(), module);
                 return returnObj;
             }
-            Map ctx = null;
+            Map<String, ?> ctx = null;
             if (ctxObj instanceof BeanModel) {
-                ctx = (Map)((BeanModel)ctxObj).getWrappedObject();
+                ctx = UtilGenerics.cast(((BeanModel)ctxObj).getWrappedObject());
             returnObj = ctx.get(key);
             }
             /*
@@ -456,7 +457,7 @@ public class FreeMarkerWorker {
         }
         if (varNames != null) {
             for (String varName: varNames) {
-                //freemarker.ext.beans.StringModel varObj = (freemarker.ext.beans.StringModel ) varNameIter.next();
+                //freemarker.ext.beans.StringModel varObj = (freemarker.ext.beans.StringModel) varNameIter.next();
                 //Object varObj =  varNameIter.next();
                 //String varName = varObj.toString();
                 templateRoot.put(varName, FreeMarkerWorker.getWrappedObject(varName, env));
@@ -465,7 +466,7 @@ public class FreeMarkerWorker {
         return templateRoot;
     }
 
-    public static void saveContextValues(Map<String, Object> context, String [] saveKeyNames, Map<String, Object> saveMap ) {
+    public static void saveContextValues(Map<String, Object> context, String [] saveKeyNames, Map<String, Object> saveMap) {
         //Map saveMap = new HashMap();
         for (String key: saveKeyNames) {
             Object o = context.get(key);
@@ -491,7 +492,7 @@ public class FreeMarkerWorker {
     }
 
 
-    public static void reloadValues(Map<String, Object> context, Map<String, Object> saveValues, Environment env ) {
+    public static void reloadValues(Map<String, Object> context, Map<String, Object> saveValues, Environment env) {
         for (Map.Entry<String, Object> entry: saveValues.entrySet()) {
             String key = entry.getKey();
             Object o = entry.getValue();
@@ -510,7 +511,7 @@ public class FreeMarkerWorker {
         }
     }
 
-    public static void removeValues(Map<String, ?> context, String... removeKeyNames ) {
+    public static void removeValues(Map<String, ?> context, String... removeKeyNames) {
         for (String key: removeKeyNames) {
             context.remove(key);
         }
@@ -596,9 +597,11 @@ public class FreeMarkerWorker {
             this.templateLocation = templateLocation;
         }
 
+        @Override
         public int hashCode() {
             return templateLocation.hashCode();
         }
+        @Override
         public boolean equals(Object obj) {
             return obj instanceof FlexibleTemplateSource && obj.hashCode() == this.hashCode();
         }
@@ -637,6 +640,8 @@ public class FreeMarkerWorker {
      *
      */
     static class OFBizTemplateExceptionHandler implements TemplateExceptionHandler {
+
+        @Override
         public void handleTemplateException(TemplateException te, Environment env, Writer out) throws TemplateException {
             StringWriter tempWriter = new StringWriter();
             PrintWriter pw = new PrintWriter(tempWriter, true);
@@ -653,5 +658,9 @@ public class FreeMarkerWorker {
                 Debug.logError(e, module);
             }
         }
+    }
+
+    public static String encodeDoubleQuotes(String htmlString) {
+        return htmlString.replaceAll("\"", "\\\\\"");
     }
 }

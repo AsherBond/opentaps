@@ -34,11 +34,12 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ServiceUtil;
 
 import javolution.util.FastMap;
 
@@ -48,7 +49,7 @@ public class ProductionRunEvents {
 
     public static String productionRunDeclareAndProduce(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
 
@@ -76,7 +77,7 @@ public class ProductionRunEvents {
                 request.setAttribute("_ERROR_MESSAGE_", errMsg);
                 return "error";
             }
-            GenericPK key = GenericPK.create(delegator.getModelEntity("WorkEffortGoodStandard"), UtilMisc.toMap("workEffortId", (String)componentRow.get("productionRunTaskId"),
+            GenericPK key = delegator.makePK("WorkEffortGoodStandard", UtilMisc.toMap("workEffortId", (String)componentRow.get("productionRunTaskId"),
                                                                                                                 "productId", (String)componentRow.get("productId"),
                                                                                                                 "fromDate", fromDate,
                                                                                                                 "workEffortGoodStdTypeId", "PRUNT_PROD_NEEDED"));
@@ -92,6 +93,10 @@ public class ProductionRunEvents {
             inputMap.put("lotId", parameters.get("lotId"));
             inputMap.put("userLogin", userLogin);
             Map result = dispatcher.runSync("productionRunDeclareAndProduce", inputMap);
+            if (ServiceUtil.isError(result)) {
+                request.setAttribute("_ERROR_MESSAGE_", ServiceUtil.getErrorMessage(result));
+                return "error";
+            }
         } catch (GenericServiceException e) {
             String errMsg = "Error issuing materials: " + e.toString();
             Debug.logError(e, errMsg, module);

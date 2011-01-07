@@ -25,8 +25,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
+
 import static org.ofbiz.base.util.UtilGenerics.checkList;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.eca.EntityEcaHandler;
@@ -40,17 +42,17 @@ public class DelegatorEcaHandler implements EntityEcaHandler<EntityEcaRule> {
 
     public static final String module = DelegatorEcaHandler.class.getName();
 
-    protected GenericDelegator delegator = null;
+    protected Delegator delegator = null;
     protected String delegatorName = null;
     protected String entityEcaReaderName = null;
     protected DispatchContext dctx = null;
 
     public DelegatorEcaHandler() { }
 
-    public void setDelegator(GenericDelegator delegator) {
+    public void setDelegator(Delegator delegator) {
         this.delegator = delegator;
         this.delegatorName = delegator.getDelegatorName();
-        this.entityEcaReaderName = EntityEcaUtil.getEntityEcaReaderName(delegator.getOriginalDelegatorName());
+        this.entityEcaReaderName = EntityEcaUtil.getEntityEcaReaderName(delegator.getDelegatorBaseName());
         this.dctx = EntityServiceFactory.getDispatchContext(delegator);
 
         //preload the cache
@@ -66,7 +68,7 @@ public class DelegatorEcaHandler implements EntityEcaHandler<EntityEcaRule> {
     public void evalRules(String currentOperation, Map<String, List<EntityEcaRule>> eventMap, String event, GenericEntity value, boolean isError) throws GenericEntityException {
         // if the eventMap is passed we save a HashMap lookup, but if not that's okay we'll just look it up now
         if (eventMap == null) eventMap = this.getEntityEventMap(value.getEntityName());
-        if (eventMap == null || eventMap.size() == 0) {
+        if (UtilValidate.isEmpty(eventMap)) {
             //Debug.logInfo("Handler.evalRules for entity " + value.getEntityName() + ", event " + event + ", no eventMap for this entity", module);
             return;
         }
@@ -74,7 +76,7 @@ public class DelegatorEcaHandler implements EntityEcaHandler<EntityEcaRule> {
         List<EntityEcaRule> rules = eventMap.get(event);
         //Debug.logInfo("Handler.evalRules for entity " + value.getEntityName() + ", event " + event + ", num rules=" + (rules == null ? 0 : rules.size()), module);
 
-        if (rules == null || rules.size() == 0) {
+        if (UtilValidate.isEmpty(rules)) {
             return;
         }
 

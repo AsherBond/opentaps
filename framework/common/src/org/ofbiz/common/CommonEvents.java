@@ -21,8 +21,8 @@ package org.ofbiz.common;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import javolution.util.FastMap;
+import net.sf.json.JSONObject;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.StringUtil;
@@ -37,7 +38,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.cache.UtilCache;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
@@ -49,10 +50,10 @@ public class CommonEvents {
 
     public static final String module = CommonEvents.class.getName();
 
-    public static UtilCache<String, Map<String, String>> appletSessions = new UtilCache<String, Map<String, String>>("AppletSessions", 0, 600000, true);
+    public static UtilCache<String, Map<String, String>> appletSessions = UtilCache.createUtilCache("AppletSessions", 0, 600000, true);
 
     public static String checkAppletRequest(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String sessionId = request.getParameter("sessionId");
         String visitId = request.getParameter("visitId");
         sessionId = sessionId.trim();
@@ -86,7 +87,7 @@ public class CommonEvents {
     }
 
     public static String receiveAppletRequest(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         String sessionId = request.getParameter("sessionId");
         String visitId = request.getParameter("visitId");
         sessionId = sessionId.trim();
@@ -242,6 +243,40 @@ public class CommonEvents {
                 }
             }
         }
+        return "success";
+    }
+
+    public static String jsonResponseFromRequestAttributes(HttpServletRequest request, HttpServletResponse response) {
+        // pull out the service response from the request attribute
+        Map<String, Object> attrMap = UtilHttp.getJSONAttributeMap(request);
+
+        // create a JSON Object for return
+        JSONObject json = JSONObject.fromObject(attrMap);
+        String jsonStr = json.toString();
+        if (jsonStr == null) {
+            Debug.logError("JSON Object was empty; fatal error!", module);
+            return "success";
+        }
+
+        // set the X-JSON content type
+        response.setContentType("application/x-json");
+        // jsonStr.length is not reliable for unicode characters
+        try {
+            response.setContentLength(jsonStr.getBytes("UTF8").length);
+        } catch (UnsupportedEncodingException e) {
+            Debug.logError("Problems with Json encoding: " + e, module);
+        }
+
+        // return the JSON String
+        Writer out;
+        try {
+            out = response.getWriter();
+            out.write(jsonStr);
+            out.flush();
+        } catch (IOException e) {
+            Debug.logError(e, module);
+        }
+
         return "success";
     }
 }

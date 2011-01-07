@@ -34,7 +34,7 @@ public class RaceConditionTests extends OpentapsTestCase {
     private static final String MODULE = RaceConditionTests.class.getName();
 
     /**
-     * Tests the GenericDelegator.setNextSubSeqId() method for a race condition that causes pk violations.
+     * Tests the Delegator.setNextSubSeqId() method for a race condition that causes pk violations.
      * Notably occurs in minilang services that use the make-next-seq-id directive.  One known entity with
      * issues is InventoryItemDetail, for which we'll create one in different threads for WG-1111.
      * @exception Exception if an error occurs

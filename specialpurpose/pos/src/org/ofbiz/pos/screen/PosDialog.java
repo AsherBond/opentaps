@@ -49,7 +49,7 @@ import org.ofbiz.base.util.cache.UtilCache;
 public class PosDialog {
 
     public static final String module = PosDialog.class.getName();
-    protected static UtilCache instances = new UtilCache("pos.Dialogs", 0, 0);
+    protected static UtilCache<Object, Object> instances = UtilCache.createUtilCache("pos.Dialogs", 0, 0);
 
     protected final Frame clientFrame = XProjectManager.getCurrentProject().getAppFrame();
     protected final Window appWindow = XProjectManager.getCurrentProject().getAppWindow();
@@ -303,7 +303,7 @@ public class PosDialog {
         Point size = this.getMaxCoordinates(contentPane);
         size.x += 2 * padding + 2;
         size.y += 2 * padding + 4 + 2;
-        if ( size.x != wSize.width || size.y != wSize.height ) {
+        if (size.x != wSize.width || size.y != wSize.height) {
             this.pack();
         }
     }
@@ -344,7 +344,7 @@ public class PosDialog {
                   dialog.setVisible(posDialogVisible);
               }
           }
-      );
+     );
     }
 
 }

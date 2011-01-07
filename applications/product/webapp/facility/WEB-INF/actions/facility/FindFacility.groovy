@@ -19,7 +19,7 @@
 /* This file has been modified by Open Source Strategies, Inc. */
  import org.ofbiz.base.util.*
 
-findResult = delegator.findAll("Facility");
+findResult = delegator.findList("Facility", null, null, null, null, false);
 findResultSize = findResult.size();
 if (findResultSize == 1) {
     context.showScreen = "one";

@@ -23,13 +23,11 @@ under the License.
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
     <screen name="CommonPriceDecorator">
         <section>
-            <actions>
-                <set field="leftbarScreenName" value="leftbar"/>
-                <set field="leftbarScreenLocation" value="component://product/widget/catalog/CommonScreens.xml"/>
-                <set field="MainColumnStyle" value="leftonly"/>
-            </actions>
             <widgets>
                 <decorator-screen name="main-decorator"  location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="left-column">
+                        <include-screen name="leftbar" location="component://product/widget/catalog/CommonScreens.xml"/>
+                    </decorator-section>
                     <decorator-section name="body">
                         <section>
                             <!-- do check for CATALOG, _VIEW permission -->
@@ -59,23 +57,11 @@ under the License.
             <widgets>
                 <decorator-screen name="CommonPriceDecorator">
                     <decorator-section name="body">
-                        <screenlet>
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductGlobalPriceRules}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="FindProductPriceRules" location="component://product/webapp/catalog/price/PriceForms.xml"/>
-                            </container>
-                            <container style="screenlet-title-bar">
-                                <container style="h3">
-                                    <label text="${uiLabelMap.ProductAddPriceRule}"/>
-                                </container>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form location="component://product/webapp/catalog/price/PriceForms.xml" name="AddPriceRules"/>
-                            </container>
+                        <screenlet title="${uiLabelMap.ProductGlobalPriceRules}">
+                            <include-form name="FindProductPriceRules" location="component://product/widget/catalog/PriceForms.xml"/>
+                        </screenlet>
+                        <screenlet title="${uiLabelMap.ProductAddPriceRule}">
+                            <include-form location="component://product/widget/catalog/PriceForms.xml" name="AddPriceRules"/>
                         </screenlet>
                     </decorator-section>
                 </decorator-screen>

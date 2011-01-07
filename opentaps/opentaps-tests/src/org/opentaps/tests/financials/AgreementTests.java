@@ -19,12 +19,13 @@ package org.opentaps.tests.financials;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+
+import com.ibm.icu.util.Calendar;
 
 import javolution.util.FastList;
 import org.ofbiz.base.util.GeneralException;

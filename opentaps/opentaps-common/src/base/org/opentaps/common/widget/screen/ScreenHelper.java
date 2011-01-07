@@ -47,8 +47,10 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.collections.MapStack;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.security.authz.Authorization;
+import org.ofbiz.security.authz.AuthorizationFactory;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
@@ -84,7 +86,7 @@ public class ScreenHelper {
     /**
      * Renders a screen widget as text.
      * @param screenLocation location in component:// notation
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param security a <code>Security</code> value
      * @return Rendered contents of the screen as text
@@ -93,7 +95,7 @@ public class ScreenHelper {
      * @exception SAXException if an error occurs
      * @exception ParserConfigurationException if an error occurs
      */
-    public static String renderScreenLocationAsText(String screenLocation, GenericDelegator delegator, LocalDispatcher dispatcher, Security security, Map<String, Object> screenContext, Map<String, Object> screenParameters) throws GeneralException, IOException, SAXException, ParserConfigurationException {
+    public static String renderScreenLocationAsText(String screenLocation, Delegator delegator, LocalDispatcher dispatcher, Security security, Map<String, Object> screenContext, Map<String, Object> screenParameters) throws GeneralException, IOException, SAXException, ParserConfigurationException {
 
 
         // Construct a new writer and use it to construct a new ScreenRenderer instead of using
@@ -101,7 +103,12 @@ public class ScreenHelper {
         //  ${screens.render(...)} is captured
         Writer writer = new StringWriter();
         ScreenRenderer screens = new ScreenRenderer(writer, MapStack.<String>create(screenContext), new HtmlScreenRenderer());
-        ScreenRenderer.populateBasicContext(MapStack.<String>create(screenContext), screens, screenParameters, delegator, dispatcher, security, (Locale) screenContext.get("locale"), (GenericValue) screenContext.get("userLogin"));
+        Authorization authz = (Authorization) screenParameters.get("authz");
+        if (authz == null) {
+            authz = AuthorizationFactory.getInstance(delegator);
+        }
+
+        ScreenRenderer.populateBasicContext(MapStack.<String>create(screenContext), screens, screenParameters, delegator, dispatcher, (Authorization) screenParameters.get("authz"), security, (Locale) screenContext.get("locale"), (GenericValue) screenContext.get("userLogin"));
 
         // Get the screen and render it
         ScreenStringRenderer renderer = screens.getScreenStringRenderer();

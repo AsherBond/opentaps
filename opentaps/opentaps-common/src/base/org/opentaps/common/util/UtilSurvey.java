@@ -19,7 +19,7 @@ package org.opentaps.common.util;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 
@@ -38,7 +38,7 @@ public class UtilSurvey {
      * It has all fields of SurveyResponseAndAnswer, the surveyQuestionTypeId and question fields of SurveyQuestion, and
      * the description field of SurveyQuestionOption.
      */
-    public static List<Map> getSurveyResponses(String surveyResponseId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<Map> getSurveyResponses(String surveyResponseId, Delegator delegator) throws GenericEntityException {
         List<Map> lines = FastList.newInstance();
         List<GenericValue> responses = delegator.findByAndCache("SurveyResponseAndAnswer", UtilMisc.toMap("surveyResponseId", surveyResponseId), UtilMisc.toList("sequenceNum"));
         for (GenericValue response : responses) {

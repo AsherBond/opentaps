@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDataSourceException;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
@@ -55,7 +55,7 @@ public final class ConfigurationServices {
      */
     @SuppressWarnings("unchecked")
     public static Map removeGlAccountFromOrganization(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String glAccountId = (String) context.get("glAccountId");
@@ -133,7 +133,7 @@ public final class ConfigurationServices {
      */
     @SuppressWarnings("unchecked")
     public static Map addNewGlAccount(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String glAccountId = null;
@@ -202,7 +202,7 @@ public final class ConfigurationServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateExistingGlAccount(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String glAccountClassTypeKey = (String) context.get("glAccountClassTypeKey");
         context.remove("glAccountClassTypeKey");
@@ -234,7 +234,7 @@ public final class ConfigurationServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updatePartyAcctgPreference(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
@@ -267,7 +267,7 @@ public final class ConfigurationServices {
     @SuppressWarnings("unchecked")
     public static Map addGlAccountToOrganization(DispatchContext dctx, Map context) {
 
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -302,7 +302,7 @@ public final class ConfigurationServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createAccountingTag(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             String enumId = (String) context.get("enumId");
@@ -335,7 +335,7 @@ public final class ConfigurationServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateAccountingTag(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             GenericValue pk = delegator.makeValue("Enumeration");
@@ -362,7 +362,7 @@ public final class ConfigurationServices {
      */
     @SuppressWarnings("unchecked")
     public static Map deleteAccountingTag(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
         try {
@@ -391,7 +391,7 @@ public final class ConfigurationServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateAccountingTagUsage(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             GenericValue pk = delegator.makeValue("AcctgTagEnumType");
@@ -417,7 +417,7 @@ public final class ConfigurationServices {
      */
     @SuppressWarnings("unchecked")
     public static Map updateAccountingTagPostingCheck(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         try {
             GenericValue pk = delegator.makeValue("AcctgTagPostingCheck");

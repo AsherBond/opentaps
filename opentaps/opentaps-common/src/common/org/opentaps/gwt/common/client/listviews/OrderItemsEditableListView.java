@@ -398,6 +398,12 @@ public class OrderItemsEditableListView extends EntityEditableListView {
         return null;
     }
 
+    @Override
+    public boolean isEditableCell(int rowIndex, int colIndex, String field, Object value) {
+        // we can not change order item product after it was selected (have value)
+        return (OrderItemsCartLookupConfiguration.INOUT_PRODUCT.equals(field) && !UtilUi.isEmpty((String) value)) ? false : super.isEditableCell(rowIndex, colIndex, field, value);
+    }
+
     /**
      * Gets the form linked to the grid.
      * @return a <code>CreateOrUpdateEntityForm</code> value

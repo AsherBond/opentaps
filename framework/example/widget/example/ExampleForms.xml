@@ -35,13 +35,10 @@ under the License.
         </field>
         <field name="statusId" title="${uiLabelMap.CommonStatus}">
             <drop-down allow-empty="true" current-description="">
-                <entity-options description="${description}" key-field-name="statusId" entity-name="StatusItem">
-                    <entity-constraint name="statusTypeId" operator="equals" value="EXAMPLE_STATUS"/>
-                    <entity-order-by field-name="description"/>
-                </entity-options>
+                <entity-options description="${description}" key-field-name="statusId" entity-name="ExampleStatusItem"/>
             </drop-down>
         </field>
-        <field name="searchButton" widget-style="smallSubmit"><submit button-type="button"/></field>
+        <field name="searchButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
 
     <form name="ListExamples" type="list" list-name="listIt" paginate-target="FindExample" default-entity-name="Example" separate-columns="true"
@@ -51,6 +48,8 @@ under the License.
                 <field-map field-name="inputFields" from-field="exampleCtx"/>
                 <field-map field-name="entityName" value="Example"/>
                 <field-map field-name="orderBy" from-field="parameters.sortField"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
         <alt-row-style use-when="&quot;EXST_APPROVED&quot;.equals(statusId)" style="Validate"/>
@@ -74,7 +73,7 @@ under the License.
         <actions>
             <entity-condition entity-name="Example"><order-by field-name="exampleName"/></entity-condition>
         </actions>
-        <field name="exampleName" title="${uiLabelMap.CommonName}" id-name="exampleName" widget-style="tabletext">
+        <field name="exampleName" title="${uiLabelMap.CommonName}" id-name="exampleName">
             <display>
                 <in-place-editor url="/example/control/updateExample" cancel-control="button" saving-text="Updating..." text-between-controls=" ">
                     <simple-editor/>
@@ -83,7 +82,7 @@ under the License.
                 </in-place-editor>
             </display>
         </field>
-        <field name="description" title="${uiLabelMap.CommonDescription}" id-name="description" widget-style="tabletext">
+        <field name="description" title="${uiLabelMap.CommonDescription}" id-name="description">
             <display>
                 <in-place-editor url="/example/control/updateExample" cancel-control="button" saving-text="Updating..." text-between-controls=" ">
                     <simple-editor/>
@@ -95,7 +94,7 @@ under the License.
         <on-event-update-area event-type="paginate" area-id="ListExamplesAjax" area-target="ListExampleFormOnly"/>
     </form>
 
-    <form name="EditExample" type="single" target="updateExample" title="" default-map-name="example">
+    <form name="EditExample" type="single" target="updateExample" title="" default-map-name="example" default-entity-name="Example">
         <actions>
             <entity-one entity-name="StatusItem" value-field="currentStatus" auto-field-map="false">
                 <field-map field-name="statusId" from-field="example.statusId"/>
@@ -104,8 +103,8 @@ under the License.
         <alt-target use-when="example==null" target="createExample"/>
         <auto-fields-service service-name="updateExample"/>
         <field use-when="example!=null" name="exampleId" title="${uiLabelMap.ExampleExampleId}" tooltip="${uiLabelMap.CommonNotModifRecreat}"><display/></field>
-        <field use-when="example==null&amp;&amp;exampleId==null" name="exampleId" title="${uiLabelMap.ExampleExampleId}"><ignored/></field>
-        <field use-when="example==null&amp;&amp;exampleId!=null" name="exampleId" title="${uiLabelMap.ExampleExampleId}"><display description="${uiLabelMap.CommonCannotBeFound}: [${exampleId}]" also-hidden="false"/></field>
+        <field use-when="example==null @and exampleId==null" name="exampleId" title="${uiLabelMap.ExampleExampleId}"><ignored/></field>
+        <field use-when="example==null @and exampleId!=null" name="exampleId" title="${uiLabelMap.ExampleExampleId}"><display description="${uiLabelMap.CommonCannotBeFound}: [${exampleId}]" also-hidden="false"/></field>
         <field name="exampleTypeId" title="${uiLabelMap.CommonType}" id-name="exampleTypeId">
             <drop-down allow-empty="false">
                 <!-- this is a neat feature, but not good for the type because the user would have to know the possible types in order to enter at least the first letter, so leaving it out by default; just uncomment to enable: <auto-complete/> -->
@@ -114,19 +113,15 @@ under the License.
                 </entity-options>
             </drop-down>
         </field>
-        <field name="statusId" use-when="example==null" title="${uiLabelMap.CommonStatus}">
+        <field name="statusId"  use-when="example==null" title="${uiLabelMap.CommonStatus}">
             <drop-down allow-empty="false">
-                <entity-options entity-name="StatusItem" description="${description}">
-                    <entity-constraint name="statusTypeId" value="EXAMPLE_STATUS"/>
-                    <entity-order-by field-name="sequenceId"/>
-                </entity-options>
+                <entity-options entity-name="ExampleStatusItem" description="${description}"/>
             </drop-down>
         </field>
         <field name="statusId" use-when="example!=null" title="${uiLabelMap.CommonStatus}">
             <drop-down allow-empty="false" current-description="${currentStatus.description}">
                 <entity-options entity-name="StatusValidChangeToDetail" key-field-name="statusIdTo" description="${transitionName} (${description})">
                     <entity-constraint name="statusId" env-name="example.statusId"/>
-                    <entity-order-by field-name="sequenceId"/>
                 </entity-options>
             </drop-down>
         </field>
@@ -140,7 +135,7 @@ under the License.
                 </entity-options>
             </drop-down>
         </field>
-        <field name="displayAnotherText" use-when="example!=null&amp;&amp;example.get(&quot;anotherText&quot;)!=null">
+        <field name="displayAnotherText" use-when="example!=null @and example.get(&quot;anotherText&quot;)!=null">
             <display description="${example.anotherText}"/>
         </field>
         <field name="submitButton" use-when="example==null" title="${uiLabelMap.CommonCreate}"><submit button-type="button"/></field>
@@ -153,10 +148,7 @@ under the License.
         <alt-target use-when="example==null" target="createExampleAjax"/>
         <field name="statusId" use-when="example==null" title="${uiLabelMap.CommonStatus}" id-name="statusId">
             <drop-down allow-empty="false">
-                <entity-options entity-name="StatusItem" description="${description}">
-                    <entity-constraint name="statusTypeId" value="EXAMPLE_STATUS"/>
-                    <entity-order-by field-name="sequenceId"/>
-                </entity-options>
+                <entity-options entity-name="ExampleStatusItem" description="${description}"/>
             </drop-down>
         </field>
         <on-event-update-area event-type="submit" area-id="ListExamplesAjax" area-target="ListExampleFormOnly"/>
@@ -184,7 +176,7 @@ under the License.
             </drop-down>
         </field>
         <field name="deleteLink" title="" widget-style="buttontext">
-            <hyperlink target="deleteExampleItem" description="${uiLabelMap.CommonDelete}" also-hidden="false">
+            <hyperlink target="deleteExampleItem" description="${uiLabelMap.CommonDelete}" also-hidden="false" confirmation-message="${uiLabelMap.CommonConfirmDelete}">
                 <parameter param-name="exampleId"/>
                 <parameter param-name="exampleItemSeqId"/>
             </hyperlink>
@@ -204,7 +196,7 @@ under the License.
                 </entity-options>
             </drop-down>
         </field>
-        <field name="submitButton" title="${uiLabelMap.CommonAdd}"><submit button-type="button"/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}"><submit button-type="button" request-confirmation="true"/></field>
     </form>
 
     <!-- ExampleFeatureAppl -->
@@ -248,7 +240,7 @@ under the License.
 
         <!-- a nice combination of the lookup option and the auto-complete, but unfortunately still requires a custom companion controller.xml request to handle AJAX data retreival -->
         <field name="exampleFeatureId" title="${uiLabelMap.ExampleFeature}">
-            <lookup target-form-name="LookupExampleFeature"/>
+            <lookup presentation="layer" position="center" target-form-name="LookupExampleFeature"/>
             <on-field-event-update-area event-type="change" area-id="AddExampleFeatureAppl_exampleFeatureId" area-target="findExampleFeatures"/>
         </field>
         <!-- basic example of server-side AJAX enabled option, requires use of custom companion request in controller.xml file to get data for drop-down -->

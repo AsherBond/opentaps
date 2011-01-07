@@ -42,6 +42,7 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -54,6 +55,7 @@ import org.ofbiz.base.location.FlexibleLocation;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.FileUtil;
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
@@ -61,14 +63,15 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.collections.MapStack;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
+import org.ofbiz.base.util.template.XslTransform;
 import org.ofbiz.common.email.NotificationServices;
 import org.ofbiz.content.content.UploadContentAndImage;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
-import org.ofbiz.widget.html.HtmlScreenRenderer;
+import org.ofbiz.widget.screen.MacroScreenRenderer;
 import org.ofbiz.widget.screen.ModelScreen;
 import org.ofbiz.widget.screen.ScreenFactory;
 import org.ofbiz.widget.screen.ScreenRenderer;
@@ -93,7 +96,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
      * @param getAll Indicates that all descendants are to be gotten. Used as "true" to populate an
      *     indented select list.
      */
-    public static String getDataCategoryMap(GenericDelegator delegator, int depth, Map categoryNode, List categoryTypeIds, boolean getAll) throws GenericEntityException {
+    public static String getDataCategoryMap(Delegator delegator, int depth, Map<String, Object> categoryNode, List<String> categoryTypeIds, boolean getAll) throws GenericEntityException {
         String errorMsg = null;
         String parentCategoryId = (String) categoryNode.get("id");
         String currentDataCategoryId = null;
@@ -103,24 +106,22 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         // work backwards. As "depth" is incremented, that is the effect.
         // The convention for the topmost type is "ROOT".
         if (depth >= 0 && (sz - depth) > 0) {
-            currentDataCategoryId = (String) categoryTypeIds.get(sz - depth - 1);
+            currentDataCategoryId = categoryTypeIds.get(sz - depth - 1);
         }
 
         // Find all the categoryTypes that are children of the categoryNode.
         String matchValue = null;
         if (parentCategoryId != null) {
             matchValue = parentCategoryId;
-        } else {
-            matchValue = null;
         }
-        List categoryValues = delegator.findByAndCache("DataCategory", UtilMisc.toMap("parentCategoryId", matchValue));
+        List<GenericValue> categoryValues = delegator.findByAndCache("DataCategory", UtilMisc.toMap("parentCategoryId", matchValue));
         categoryNode.put("count", Integer.valueOf(categoryValues.size()));
-        List subCategoryIds = FastList.newInstance();
+        List<Map<String, Object>> subCategoryIds = FastList.newInstance();
         for (int i = 0; i < categoryValues.size(); i++) {
-            GenericValue category = (GenericValue) categoryValues.get(i);
+            GenericValue category = categoryValues.get(i);
             String id = (String) category.get("dataCategoryId");
             String categoryName = (String) category.get("categoryName");
-            Map newNode = FastMap.newInstance();
+            Map<String, Object> newNode = FastMap.newInstance();
             newNode.put("id", id);
             newNode.put("name", categoryName);
             errorMsg = getDataCategoryMap(delegator, depth + 1, newNode, categoryTypeIds, getAll);
@@ -147,7 +148,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
     /**
      * Finds the parents of DataCategory entity and puts them in a list, the start entity at the top.
      */
-    public static void getDataCategoryAncestry(GenericDelegator delegator, String dataCategoryId, List categoryTypeIds) throws GenericEntityException {
+    public static void getDataCategoryAncestry(Delegator delegator, String dataCategoryId, List<String> categoryTypeIds) throws GenericEntityException {
         categoryTypeIds.add(dataCategoryId);
         GenericValue dataCategoryValue = delegator.findByPrimaryKey("DataCategory", UtilMisc.toMap("dataCategoryId", dataCategoryId));
         if (dataCategoryValue == null)
@@ -162,41 +163,39 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
      * Takes a DataCategory structure and builds a list of maps, one value (id) is the dataCategoryId value and the other is an indented string suitable for
      * use in a drop-down pick list.
      */
-    public static void buildList(Map nd, List lst, int depth) {
+    public static void buildList(Map<String, Object> nd, List<Map<String, Object>> lst, int depth) {
         String id = (String) nd.get("id");
         String nm = (String) nd.get("name");
         String spc = "";
         for (int i = 0; i < depth; i++)
             spc += "&nbsp;&nbsp;";
-        Map map = FastMap.newInstance();
+        Map<String, Object> map = FastMap.newInstance();
         map.put("dataCategoryId", id);
         map.put("categoryName", spc + nm);
         if (id != null && !id.equals("ROOT") && !id.equals("")) {
             lst.add(map);
         }
-        List kids = (List) nd.get("kids");
-        int sz = kids.size();
-        for (int i = 0; i < sz; i++) {
-            Map kidNode = (Map) kids.get(i);
+        List<Map<String, Object>> kids = UtilGenerics.checkList(nd.get("kids"));
+        for (Map<String, Object> kidNode : kids) {
             buildList(kidNode, lst, depth + 1);
         }
     }
 
     /**
-     * Uploads image data from a form and stores it in ImageDataResource. Expects key data in a field identitified by the "idField" value and the binary data
+     * Uploads image data from a form and stores it in ImageDataResource. Expects key data in a field identified by the "idField" value and the binary data
      * to be in a field id'd by uploadField.
      */
     // TODO: This method is not used and should be removed. amb
     public static String uploadAndStoreImage(HttpServletRequest request, String idField, String uploadField) {
-        //GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        //Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         //String idFieldValue = null;
         ServletFileUpload fu = new ServletFileUpload(new DiskFileItemFactory(10240, FileUtil.getFile("runtime/tmp")));
-        List lst = null;
+        List<FileItem> lst = null;
         Locale locale = UtilHttp.getLocale(request);
 
         try {
-            lst = fu.parseRequest(request);
+            lst = UtilGenerics.checkList(fu.parseRequest(request));
         } catch (FileUploadException e) {
             request.setAttribute("_ERROR_MESSAGE_", e.toString());
             return "error";
@@ -213,13 +212,13 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         FileItem fi = null;
         FileItem imageFi = null;
         String imageFileName = null;
-        Map passedParams = FastMap.newInstance();
+        Map<String, Object> passedParams = FastMap.newInstance();
         HttpSession session = request.getSession();
         GenericValue userLogin = (GenericValue)session.getAttribute("userLogin");
         passedParams.put("userLogin", userLogin);
         byte[] imageBytes = null;
         for (int i = 0; i < lst.size(); i++) {
-            fi = (FileItem) lst.get(i);
+            fi = lst.get(i);
             //String fn = fi.getName();
             String fieldName = fi.getFieldName();
             if (fi.isFormField()) {
@@ -278,8 +277,8 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
     /**
      * callDataResourcePermissionCheck Formats data for a call to the checkContentPermission service.
      */
-    public static String callDataResourcePermissionCheck(GenericDelegator delegator, LocalDispatcher dispatcher, Map context) {
-        Map permResults = callDataResourcePermissionCheckResult(delegator, dispatcher, context);
+    public static String callDataResourcePermissionCheck(Delegator delegator, LocalDispatcher dispatcher, Map<String, Object> context) {
+        Map<String, Object> permResults = callDataResourcePermissionCheckResult(delegator, dispatcher, context);
         String permissionStatus = (String) permResults.get("permissionStatus");
         return permissionStatus;
     }
@@ -287,17 +286,16 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
     /**
      * callDataResourcePermissionCheck Formats data for a call to the checkContentPermission service.
      */
-    public static Map callDataResourcePermissionCheckResult(GenericDelegator delegator, LocalDispatcher dispatcher, Map context) {
+    public static Map<String, Object> callDataResourcePermissionCheckResult(Delegator delegator, LocalDispatcher dispatcher, Map<String, Object> context) {
 
-        Map permResults = FastMap.newInstance();
+        Map<String, Object> permResults = FastMap.newInstance();
         String skipPermissionCheck = (String) context.get("skipPermissionCheck");
             if (Debug.infoOn()) Debug.logInfo("in callDataResourcePermissionCheckResult, skipPermissionCheck:" + skipPermissionCheck,"");
 
-        if (skipPermissionCheck == null
-            || skipPermissionCheck.length() == 0
+        if (UtilValidate.isEmpty(skipPermissionCheck)
             || (!skipPermissionCheck.equalsIgnoreCase("true") && !skipPermissionCheck.equalsIgnoreCase("granted"))) {
             GenericValue userLogin = (GenericValue) context.get("userLogin");
-            Map serviceInMap = FastMap.newInstance();
+            Map<String, Object> serviceInMap = FastMap.newInstance();
             serviceInMap.put("userLogin", userLogin);
             serviceInMap.put("targetOperationList", context.get("targetOperationList"));
             serviceInMap.put("contentPurposeList", context.get("contentPurposeList"));
@@ -306,7 +304,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
             // It is possible that permission to work with DataResources will be controlled
             // by an external Content entity.
             String ownerContentId = (String) context.get("ownerContentId");
-            if (ownerContentId != null && ownerContentId.length() > 0) {
+            if (UtilValidate.isNotEmpty(ownerContentId)) {
                 try {
                     GenericValue content = delegator.findByPrimaryKeyCache("Content", UtilMisc.toMap("contentId", ownerContentId));
                     if (content != null)
@@ -329,7 +327,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
     /**
      * Gets image data from ImageDataResource and returns it as a byte array.
      */
-    public static byte[] acquireImage(GenericDelegator delegator, String dataResourceId) throws GenericEntityException {
+    public static byte[] acquireImage(Delegator delegator, String dataResourceId) throws GenericEntityException {
 
         byte[] b = null;
         GenericValue dataResource = delegator.findByPrimaryKeyCache("DataResource", UtilMisc.toMap("dataResourceId", dataResourceId));
@@ -340,9 +338,8 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         return b;
     }
 
-    public static byte[] acquireImage(GenericDelegator delegator, GenericValue dataResource) throws  GenericEntityException {
+    public static byte[] acquireImage(Delegator delegator, GenericValue dataResource) throws  GenericEntityException {
         byte[] b = null;
-        String dataResourceTypeId = dataResource.getString("dataResourceTypeId");
         String dataResourceId = dataResource.getString("dataResourceId");
         GenericValue imageDataResource = delegator.findByPrimaryKey("ImageDataResource", UtilMisc.toMap("dataResourceId", dataResourceId));
         if (imageDataResource != null) {
@@ -354,10 +351,12 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
 
     /**
      * Returns the image type.
+     * @deprecated Use getMimeType(GenericValue) instead
      */
-    public static String getImageType(GenericDelegator delegator, String dataResourceId) throws GenericEntityException {
+    @Deprecated
+    public static String getImageType(Delegator delegator, String dataResourceId) throws GenericEntityException {
         GenericValue dataResource = delegator.findByPrimaryKey("DataResource", UtilMisc.toMap("dataResourceId", dataResourceId));
-        String imageType = getImageType(delegator, dataResource);
+        String imageType = getMimeType(dataResource);
         return imageType;
     }
 
@@ -393,27 +392,8 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         return mimeTypeId;
     }
 
-    /** @deprecated */
-    public static String getImageType(GenericDelegator delegator, GenericValue dataResource) {
-        String imageType = null;
-        if (dataResource != null) {
-            imageType = (String) dataResource.get("mimeTypeId");
-            if (UtilValidate.isEmpty(imageType)) {
-                String imageFileNameExt = null;
-                String imageFileName = (String)dataResource.get("objectInfo");
-                if (UtilValidate.isNotEmpty(imageFileName)) {
-                    int pos = imageFileName.lastIndexOf(".");
-                    if (pos >= 0)
-                        imageFileNameExt = imageFileName.substring(pos + 1);
-                }
-                imageType = "image/" + imageFileNameExt;
-            }
-        }
-        return imageType;
-    }
-
-    public static String buildRequestPrefix(GenericDelegator delegator, Locale locale, String webSiteId, String https) {
-        Map prefixValues = FastMap.newInstance();
+    public static String buildRequestPrefix(Delegator delegator, Locale locale, String webSiteId, String https) {
+        Map<String, Object> prefixValues = FastMap.newInstance();
         String prefix;
 
         NotificationServices.setBaseUrl(delegator, webSiteId, prefixValues);
@@ -474,7 +454,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
     }
 
 
-    public static String getDataResourceMimeType(GenericDelegator delegator, String dataResourceId, GenericValue view) throws GenericEntityException {
+    public static String getDataResourceMimeType(Delegator delegator, String dataResourceId, GenericValue view) throws GenericEntityException {
 
         String mimeType = null;
         if (view != null)
@@ -513,7 +493,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         }
 
         // descending comparator
-        Comparator desc = new Comparator() {
+        Comparator<Object> desc = new Comparator<Object>() {
             public int compare(Object o1, Object o2) {
                 if (((Long) o1).longValue() > ((Long) o2).longValue()) {
                     return -1;
@@ -527,7 +507,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         // check for the latest subdirectory
         String parentDir = ofbizHome + initialPath;
         File parent = FileUtil.getFile(parentDir);
-        TreeMap dirMap = new TreeMap(desc);
+        TreeMap<Long, File> dirMap = new TreeMap<Long, File>(desc);
         if (parent.exists()) {
             File[] subs = parent.listFiles();
             for (int i = 0; i < subs.length; i++) {
@@ -546,7 +526,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         // first item in map is the most current directory
         File latestDir = null;
         if (UtilValidate.isNotEmpty(dirMap)) {
-            latestDir = (File) dirMap.values().iterator().next();
+            latestDir = dirMap.values().iterator().next();
             if (latestDir != null) {
                 File[] dirList = latestDir.listFiles();
                 if (dirList.length >= maxFiles) {
@@ -578,15 +558,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
     // DataResource rendering methods
     // -------------------------------------
 
-    public static String renderDataResourceAsText(GenericDelegator delegator, String dataResourceId, Map templateContext,
-
-             Locale locale, String targetMimeTypeId, boolean cache) throws GeneralException, IOException {
-        Writer writer = new StringWriter();
-        renderDataResourceAsText(delegator, dataResourceId, writer, templateContext, locale, targetMimeTypeId, cache);
-        return writer.toString();
-    }
-
-    public static void clearAssociatedRenderCache(GenericDelegator delegator, String dataResourceId) throws GeneralException {
+    public static void clearAssociatedRenderCache(Delegator delegator, String dataResourceId) throws GeneralException {
         if (dataResourceId == null) {
             throw new GeneralException("Cannot clear dataResource related cache for a null dataResourceId");
         }
@@ -600,8 +572,15 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         }
     }
 
-    public static void renderDataResourceAsText(GenericDelegator delegator, String dataResourceId, Appendable out,
-            Map templateContext, Locale locale, String targetMimeTypeId, boolean cache) throws GeneralException, IOException {
+    public static String renderDataResourceAsText(Delegator delegator, String dataResourceId, Map<String, Object> templateContext,
+             Locale locale, String targetMimeTypeId, boolean cache) throws GeneralException, IOException {
+        Writer writer = new StringWriter();
+        renderDataResourceAsText(delegator, dataResourceId, writer, templateContext, locale, targetMimeTypeId, cache);
+        return writer.toString();
+    }
+
+    public static void renderDataResourceAsText(Delegator delegator, String dataResourceId, Appendable out,
+            Map<String, Object> templateContext, Locale locale, String targetMimeTypeId, boolean cache) throws GeneralException, IOException {
         if (dataResourceId == null) {
             throw new GeneralException("Cannot lookup data resource with for a null dataResourceId");
         }
@@ -677,15 +656,45 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
                     throw new GeneralException("Error rendering FTL template", e);
                 }
 
+            } else if ("XSLT".equals(dataTemplateTypeId)) {
+                File sourceFileLocation = null;
+                File targetFileLocation = new File(System.getProperty("ofbiz.home")+"/runtime/tempfiles/docbook.css");
+                if (templateContext.get("visualThemeId") != null) {
+                    Map<String, Object> layoutSettings  = UtilGenerics.checkMap(templateContext.get("layoutSettings"));
+                    List<String> docbookStyleSheets = UtilGenerics.checkList(layoutSettings.get("VT_DOCBOOKSTYLESHEET"));
+                    String docbookStyleLocation = docbookStyleSheets.get(0);
+                    sourceFileLocation = new File(System.getProperty("ofbiz.home")+"/themes"+docbookStyleLocation);
+                }
+                if (sourceFileLocation != null && sourceFileLocation.exists()) {
+                    UtilMisc.copyFile(sourceFileLocation,targetFileLocation);
+                } else {
+                    String defaultVisualThemeId = UtilProperties.getPropertyValue("general", "VISUAL_THEME");
+                    if (defaultVisualThemeId != null) {
+                        GenericValue themeValue = delegator.findByPrimaryKeyCache("VisualThemeResource", UtilMisc.toMap("visualThemeId", defaultVisualThemeId, "resourceTypeEnumId", "VT_DOCBOOKSTYLESHEET", "sequenceId", "01"));
+                        sourceFileLocation = new File(System.getProperty("ofbiz.home") + "/themes" + themeValue.get("resourceValue"));
+                        UtilMisc.copyFile(sourceFileLocation,targetFileLocation);
+                    }
+                }
+                // get the template data for rendering
+                String templateLocation = DataResourceWorker.getContentFile(dataResource.getString("dataResourceTypeId"), dataResource.getString("objectInfo"), (String) templateContext.get("contextRoot")).toString();
+                // render the XSLT template and file
+                String outDoc = null;
+                try {
+                    outDoc = XslTransform.renderTemplate(templateLocation, (String) templateContext.get("docFile"));
+                } catch (TransformerException c) {
+                    Debug.logError("XSL TransformerException: " + c.getMessage(), module);
+                }
+                out.append(outDoc);
+
             // Screen Widget template
             } else if ("SCREEN_COMBINED".equals(dataTemplateTypeId)) {
                 try {
-                    MapStack context = MapStack.create(templateContext);
+                    MapStack<String> context = MapStack.create(templateContext);
                     context.put("locale", locale);
                     // prepare the map for preRenderedContent
                     String textData = (String) context.get("textData");
                     if (UtilValidate.isNotEmpty(textData)) {
-                        Map prc = FastMap.newInstance();
+                        Map<String, Object> prc = FastMap.newInstance();
                         String mapKey = (String) context.get("mapKey");
                         if (mapKey != null) {
                             prc.put(mapKey, mapKey);
@@ -696,7 +705,9 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
                     // get the screen renderer; or create a new one
                     ScreenRenderer screens = (ScreenRenderer) context.get("screens");
                     if (screens == null) {
-                        screens = new ScreenRenderer(out, context, new HtmlScreenRenderer());
+                     // TODO: replace "screen" to support dynamic rendering of different output
+                        ScreenStringRenderer screenStringRenderer = new MacroScreenRenderer(UtilProperties.getPropertyValue("widget", "screen.name"), UtilProperties.getPropertyValue("widget", "screen.screenrenderer"));
+                        screens = new ScreenRenderer(out, context, screenStringRenderer);
                         screens.getContext().put("screens", screens);
                     }
                     // render the screen
@@ -707,10 +718,10 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
                         modelScreen = ScreenFactory.getScreenFromLocation(combinedName);
                     } else { // stored in  a single file, long or short text
                         Document screenXml = UtilXml.readXmlDocument(getDataResourceText(dataResource, targetMimeTypeId, locale, templateContext, delegator, cache), true);
-                        Map modelScreenMap = ScreenFactory.readScreenDocument(screenXml, "DataResourceId: " + dataResource.getString("dataResourceId"));
+                        Map<String, ModelScreen> modelScreenMap = ScreenFactory.readScreenDocument(screenXml, "DataResourceId: " + dataResource.getString("dataResourceId"));
                         if (UtilValidate.isNotEmpty(modelScreenMap)) {
-                            Map.Entry entry = (Map.Entry) (modelScreenMap.entrySet().iterator().next()); // get first entry, only one screen allowed per file
-                            modelScreen = (ModelScreen) entry.getValue();
+                            Map.Entry<String, ModelScreen> entry = modelScreenMap.entrySet().iterator().next(); // get first entry, only one screen allowed per file
+                            modelScreen = entry.getValue();
                         }
                     }
                     if (UtilValidate.isNotEmpty(modelScreen)) {
@@ -722,6 +733,8 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
                     throw new GeneralException("Error rendering Screen template", e);
                 } catch (ParserConfigurationException e) {
                     throw new GeneralException("Error rendering Screen template", e);
+                } catch (TemplateException e) {
+                    throw new GeneralException("Error creating Screen renderer", e);
                 }
             } else {
                 throw new GeneralException("The dataTemplateTypeId [" + dataTemplateTypeId + "] is not yet supported");
@@ -729,45 +742,20 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         }
     }
 
-
-    /** @deprecated */
-    public static String renderDataResourceAsText(GenericDelegator delegator, String dataResourceId, Map templateContext,
-            GenericValue view, Locale locale, String mimeTypeId) throws GeneralException, IOException {
-        return renderDataResourceAsText(delegator, dataResourceId, templateContext, locale, mimeTypeId, false);
-    }
-
-    /** @deprecated */
-    public static void renderDataResourceAsText(GenericDelegator delegator, String dataResourceId, Appendable out,
-            Map templateContext, GenericValue view, Locale locale, String targetMimeTypeId) throws GeneralException, IOException {
-        renderDataResourceAsText(delegator, dataResourceId, out, templateContext, locale, targetMimeTypeId, false);
-    }
-
-    /** @deprecated */
-    public static String renderDataResourceAsTextCache(GenericDelegator delegator, String dataResourceId, Map templateContext,
-            GenericValue view, Locale locale, String mimeTypeId) throws GeneralException, IOException {
-        return renderDataResourceAsText(delegator, dataResourceId, templateContext, locale, mimeTypeId, true);
-    }
-
-    /** @deprecated */
-    public static void renderDataResourceAsTextCache(GenericDelegator delegator, String dataResourceId, Appendable out,
-            Map templateContext, GenericValue view, Locale locale, String targetMimeTypeId) throws GeneralException, IOException {
-        renderDataResourceAsText(delegator, dataResourceId, out, templateContext, locale, targetMimeTypeId, true);
-    }
-
     // ----------------------------
     // Data Resource Data Gathering
     // ----------------------------
 
-    public static String getDataResourceText(GenericValue dataResource, String mimeTypeId, Locale locale, Map context,
-            GenericDelegator delegator, boolean cache) throws IOException, GeneralException {
+    public static String getDataResourceText(GenericValue dataResource, String mimeTypeId, Locale locale, Map<String, Object> context,
+            Delegator delegator, boolean cache) throws IOException, GeneralException {
         Writer out = new StringWriter();
         writeDataResourceText(dataResource, mimeTypeId, locale, context, delegator, out, cache);
         return out.toString();
     }
 
-    public static void writeDataResourceText(GenericValue dataResource, String mimeTypeId, Locale locale, Map templateContext,
-            GenericDelegator delegator, Appendable out, boolean cache) throws IOException, GeneralException {
-        Map context = (Map) templateContext.get("context");
+    public static void writeDataResourceText(GenericValue dataResource, String mimeTypeId, Locale locale, Map<String, Object> templateContext,
+            Delegator delegator, Appendable out, boolean cache) throws IOException, GeneralException {
+        Map<String, Object> context = UtilGenerics.checkMap(templateContext.get("context"));
         if (context == null) {
             context = FastMap.newInstance();
         }
@@ -859,33 +847,9 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         }
     }
 
-    /** @deprecated */
-    public static String getDataResourceTextCache(GenericValue dataResource, String mimeTypeId, Locale locale, Map context,
-            GenericDelegator delegator) throws IOException, GeneralException {
-        return getDataResourceText(dataResource, mimeTypeId, locale, context, delegator, true);
-    }
-
-    /** @deprecated */
-    public static void writeDataResourceTextCache(GenericValue dataResource, String mimeTypeId, Locale locale, Map context,
-            GenericDelegator delegator, Appendable outWriter) throws IOException, GeneralException {
-        writeDataResourceText(dataResource, mimeTypeId, locale, context, delegator, outWriter, true);
-    }
-
-    /** @deprecated */
-    public static String getDataResourceText(GenericValue dataResource, String mimeTypeId, Locale locale, Map context,
-            GenericDelegator delegator) throws IOException, GeneralException {
-        return getDataResourceText(dataResource, mimeTypeId, locale, context, delegator, false);
-    }
-
-    /** @deprecated */
-    public static void writeDataResourceText(GenericValue dataResource, String mimeTypeId, Locale locale, Map context,
-            GenericDelegator delegator, Appendable out) throws IOException, GeneralException {
-        writeDataResourceText(dataResource, mimeTypeId, locale, context, delegator, out, false);
-    }
-
-    public static void writeText(GenericValue dataResource, String textData, Map context, String targetMimeTypeId, Locale locale, Appendable out) throws GeneralException, IOException {
+    public static void writeText(GenericValue dataResource, String textData, Map<String, Object> context, String targetMimeTypeId, Locale locale, Appendable out) throws GeneralException, IOException {
         String dataResourceMimeTypeId = dataResource.getString("mimeTypeId");
-        GenericDelegator delegator = dataResource.getDelegator();
+        Delegator delegator = dataResource.getDelegator();
 
         // assume HTML as data resource data
         if (UtilValidate.isEmpty(dataResourceMimeTypeId)) {
@@ -908,7 +872,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
 
             if (mimeTypeTemplate != null && mimeTypeTemplate.get("templateLocation") != null) {
                 // prepare the context
-                Map mimeContext = FastMap.newInstance();
+                Map<String, Object> mimeContext = FastMap.newInstance();
                 mimeContext.putAll(context);
                 mimeContext.put("dataResource", dataResource);
                 mimeContext.put("textData", textData);
@@ -918,12 +882,12 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
             } else {
                 out.append(textData);
             }
-        } else if ("text/plain".equals(targetMimeTypeId)) {
+        } else {
             out.append(textData);
         }
     }
 
-    public static String renderMimeTypeTemplate(GenericValue mimeTypeTemplate, Map context) throws GeneralException, IOException {
+    public static String renderMimeTypeTemplate(GenericValue mimeTypeTemplate, Map<String, Object> context) throws GeneralException, IOException {
         String location = mimeTypeTemplate.getString("templateLocation");
         StringWriter writer = new StringWriter();
         try {
@@ -1002,14 +966,14 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
      * @throws IOException
      * @throws GeneralException
      */
-    public static Map getDataResourceStream(GenericValue dataResource, String https, String webSiteId, Locale locale, String contextRoot, boolean cache) throws IOException, GeneralException {
+    public static Map<String, Object> getDataResourceStream(GenericValue dataResource, String https, String webSiteId, Locale locale, String contextRoot, boolean cache) throws IOException, GeneralException {
         if (dataResource == null) {
             throw new GeneralException("Cannot stream null data resource!");
         }
 
         String dataResourceTypeId = dataResource.getString("dataResourceTypeId");
         String dataResourceId = dataResource.getString("dataResourceId");
-        GenericDelegator delegator = dataResource.getDelegator();
+        Delegator delegator = dataResource.getDelegator();
 
         // first text based data
         if (dataResourceTypeId.endsWith("_TEXT") || "LINK".equals(dataResourceTypeId)) {
@@ -1117,7 +1081,7 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
     }
 
     // TODO: remove this method in favor of getDataResourceStream
-    public static void streamDataResource(OutputStream os, GenericDelegator delegator, String dataResourceId, String https, String webSiteId, Locale locale, String rootDir) throws IOException, GeneralException {
+    public static void streamDataResource(OutputStream os, Delegator delegator, String dataResourceId, String https, String webSiteId, Locale locale, String rootDir) throws IOException, GeneralException {
         try {
             GenericValue dataResource = delegator.findByPrimaryKeyCache("DataResource", UtilMisc.toMap("dataResourceId", dataResourceId));
             if (dataResource == null) {
@@ -1181,19 +1145,19 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
         }
     }
 
-    public static ByteBuffer getContentAsByteBuffer(GenericDelegator delegator, String dataResourceId, String https, String webSiteId, Locale locale, String rootDir) throws IOException, GeneralException {
+    public static ByteBuffer getContentAsByteBuffer(Delegator delegator, String dataResourceId, String https, String webSiteId, Locale locale, String rootDir) throws IOException, GeneralException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         streamDataResource(baos, delegator, dataResourceId, https, webSiteId, locale, rootDir);
         ByteBuffer byteBuffer = ByteBuffer.wrap(baos.toByteArray());
         return byteBuffer;
     }
 
-    public String renderDataResourceAsTextExt(GenericDelegator delegator, String dataResourceId, Map templateContext,
+    public String renderDataResourceAsTextExt(Delegator delegator, String dataResourceId, Map<String, Object> templateContext,
             Locale locale, String targetMimeTypeId, boolean cache) throws GeneralException, IOException {
         return renderDataResourceAsText(delegator, dataResourceId, templateContext, locale, targetMimeTypeId, cache);
     }
 
-    public void renderDataResourceAsTextExt(GenericDelegator delegator, String dataResourceId, Appendable out, Map templateContext,
+    public void renderDataResourceAsTextExt(Delegator delegator, String dataResourceId, Appendable out, Map<String, Object> templateContext,
             Locale locale, String targetMimeTypeId, boolean cache) throws GeneralException, IOException {
         renderDataResourceAsText(delegator, dataResourceId, out, templateContext, locale, targetMimeTypeId, cache);
     }

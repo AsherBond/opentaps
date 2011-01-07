@@ -43,7 +43,7 @@ import javolution.util.FastList;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -177,7 +177,7 @@ public final class AutoComplete {
             return "error";
         }
 
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         String keyword = UtilCommon.getUTF8Parameter(request, "keyword");
         if (keyword == null) {
@@ -252,7 +252,7 @@ public final class AutoComplete {
             Debug.logError("Failed to retrieve the login user from the session.", MODULE);
             return "error";
         }
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         HttpSession session = request.getSession();
         String organizationPartyId = (String) session.getAttribute("organizationPartyId");
@@ -312,7 +312,7 @@ public final class AutoComplete {
             Debug.logError("Failed to retrieve the login user from the session.", MODULE);
             return "error";
         }
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         String keyword = UtilCommon.getUTF8Parameter(request, "keyword");
         if (keyword == null) {
@@ -349,7 +349,7 @@ public final class AutoComplete {
             Debug.logError("Failed to retrieve the login user from the session.", MODULE);
             return "error";
         }
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         String keyword = UtilCommon.getUTF8Parameter(request, "keyword");
         if (keyword == null) {
@@ -373,7 +373,7 @@ public final class AutoComplete {
         return makeSelectionJSONResponse(response, products, "productId", new ProductSelectionBuilder(), UtilCommon.getLocale(request));
     }
 
-    private static List<GenericValue> getProductSelection(String keyword, boolean disallowVirtual, GenericDelegator delegator) throws GenericEntityException {
+    private static List<GenericValue> getProductSelection(String keyword, boolean disallowVirtual, Delegator delegator) throws GenericEntityException {
         List<GenericValue> products = FastList.<GenericValue>newInstance();
 
         if (keyword.length() > 0) {

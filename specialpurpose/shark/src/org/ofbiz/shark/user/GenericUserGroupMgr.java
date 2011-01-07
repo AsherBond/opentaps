@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.shark.container.SharkContainer;
 import org.ofbiz.base.util.UtilMisc;
@@ -49,7 +49,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     public List getAllGroupnames(UserTransaction trans) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         List groupNames = new ArrayList();
         List groups = null;
         try {
@@ -69,7 +69,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     public List getAllUsers(UserTransaction trans) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         List userNames = new ArrayList();
         List users = null;
         try {
@@ -89,7 +89,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     public List getAllUsers(UserTransaction trans, String groupName) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         List userNames = new ArrayList();
         List members = null;
         try {
@@ -125,7 +125,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     public List getAllSubgroups(UserTransaction trans, String groupName) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         List subGroups = new ArrayList();
         List rollups = null;
         try {
@@ -161,7 +161,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     public void createGroup(UserTransaction trans, String groupName, String description) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         GenericValue group = delegator.makeValue(org.ofbiz.shark.SharkConstants.SharkGroup);
         group.set(org.ofbiz.shark.SharkConstants.groupName, groupName);
         group.set(org.ofbiz.shark.SharkConstants.description, description);
@@ -215,7 +215,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     public void addGroupToGroup(UserTransaction trans, String parentGroupName, String groupName) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         GenericValue rollup = delegator.makeValue(org.ofbiz.shark.SharkConstants.SharkGroupRollup);
         rollup.set(org.ofbiz.shark.SharkConstants.parentGroupName, parentGroupName);
         rollup.set(org.ofbiz.shark.SharkConstants.groupName, groupName);
@@ -261,7 +261,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     public void addUserToGroup(UserTransaction trans, String groupName, String username) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         GenericValue member = delegator.makeValue(org.ofbiz.shark.SharkConstants.SharkGroupMember);
         member.set(org.ofbiz.shark.SharkConstants.groupName, groupName);
         member.set(org.ofbiz.shark.SharkConstants.userName, username);
@@ -299,7 +299,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     public void createUser(UserTransaction trans, String groupName, String username, String password, String firstName, String lastName, String email) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         GenericValue user = delegator.makeValue(org.ofbiz.shark.SharkConstants.SharkUser);
         user.set(org.ofbiz.shark.SharkConstants.userName, username);
         user.set(org.ofbiz.shark.SharkConstants.firstName, firstName);
@@ -400,7 +400,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     private GenericValue getUser(String username) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         GenericValue value = null;
         try {
             value = delegator.findByPrimaryKey(org.ofbiz.shark.SharkConstants.SharkUser, UtilMisc.toMap(org.ofbiz.shark.SharkConstants.userName, username));
@@ -412,7 +412,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     private GenericValue getGroup(String groupName) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         GenericValue value = null;
         try {
             value = delegator.findByPrimaryKey(org.ofbiz.shark.SharkConstants.SharkGroup, UtilMisc.toMap(org.ofbiz.shark.SharkConstants.groupName, groupName));
@@ -424,7 +424,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     private GenericValue getGroupMember(String groupName, String username) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         GenericValue member = null;
         try {
             member = delegator.findByPrimaryKey(org.ofbiz.shark.SharkConstants.SharkGroupMember, UtilMisc.toMap(org.ofbiz.shark.SharkConstants.groupName, groupName, org.ofbiz.shark.SharkConstants.userName, username));
@@ -436,7 +436,7 @@ public class GenericUserGroupMgr implements UserGroupManager {
     }
 
     private GenericValue getGroupRollup(String parentGroup, String group) throws RootException {
-        GenericDelegator delegator = SharkContainer.getDelegator();
+        Delegator delegator = SharkContainer.getDelegator();
         GenericValue rollup = null;
         try {
             rollup = delegator.findByPrimaryKey(org.ofbiz.shark.SharkConstants.SharkGroupRollup, UtilMisc.toMap(org.ofbiz.shark.SharkConstants.parentGroupName, parentGroup, org.ofbiz.shark.SharkConstants.groupName, group));

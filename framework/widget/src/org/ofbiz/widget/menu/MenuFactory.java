@@ -22,9 +22,8 @@ package org.ofbiz.widget.menu;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,9 +33,8 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.cache.UtilCache;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.service.LocalDispatcher;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -49,8 +47,8 @@ public class MenuFactory {
 
     public static final String module = MenuFactory.class.getName();
 
-    public static final UtilCache<String, Map<String, ModelMenu>> menuWebappCache = new UtilCache<String, Map<String, ModelMenu>>("widget.menu.webappResource", 0, 0, false);
-    public static final UtilCache<String, Map<String, ModelMenu>> menuLocationCache = new UtilCache<String, Map<String, ModelMenu>>("widget.menu.locationResource", 0, 0, false);
+    public static final UtilCache<String, Map<String, ModelMenu>> menuWebappCache = UtilCache.createUtilCache("widget.menu.webappResource", 0, 0, false);
+    public static final UtilCache<String, Map<String, ModelMenu>> menuLocationCache = UtilCache.createUtilCache("widget.menu.locationResource", 0, 0, false);
 
     public static ModelMenu getMenuFromWebappContext(String resourceName, String menuName, HttpServletRequest request)
             throws IOException, SAXException, ParserConfigurationException {
@@ -64,7 +62,7 @@ public class MenuFactory {
                 modelMenuMap = menuWebappCache.get(cacheKey);
                 if (modelMenuMap == null) {
                     ServletContext servletContext = (ServletContext) request.getAttribute("servletContext");
-                    GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+                    Delegator delegator = (Delegator) request.getAttribute("delegator");
                     LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
 
                     URL menuFileUrl = servletContext.getResource(resourceName);
@@ -86,24 +84,21 @@ public class MenuFactory {
         return modelMenu;
     }
 
-    public static Map<String, ModelMenu> readMenuDocument(Document menuFileDoc, GenericDelegator delegator, LocalDispatcher dispatcher, String menuLocation) {
+    public static Map<String, ModelMenu> readMenuDocument(Document menuFileDoc, Delegator delegator, LocalDispatcher dispatcher, String menuLocation) {
         Map<String, ModelMenu> modelMenuMap = new HashMap<String, ModelMenu>();
         if (menuFileDoc != null) {
             // read document and construct ModelMenu for each menu element
             Element rootElement = menuFileDoc.getDocumentElement();
-            List menuElements = UtilXml.childElementList(rootElement, "menu");
-            Iterator menuElementIter = menuElements.iterator();
-            while (menuElementIter.hasNext()) {
-                Element menuElement = (Element) menuElementIter.next();
+            for (Element menuElement: UtilXml.childElementList(rootElement, "menu")){
                 ModelMenu modelMenu = new ModelMenu(menuElement, delegator, dispatcher);
                 modelMenu.setMenuLocation(menuLocation);
                 modelMenuMap.put(modelMenu.getName(), modelMenu);
             }
-        }
+         }
         return modelMenuMap;
     }
 
-    public static ModelMenu getMenuFromLocation(String resourceName, String menuName, GenericDelegator delegator, LocalDispatcher dispatcher)
+    public static ModelMenu getMenuFromLocation(String resourceName, String menuName, Delegator delegator, LocalDispatcher dispatcher)
             throws IOException, SAXException, ParserConfigurationException {
         Map<String, ModelMenu> modelMenuMap = menuLocationCache.get(resourceName);
         if (modelMenuMap == null) {

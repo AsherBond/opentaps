@@ -16,7 +16,7 @@
  */
 package org.opentaps.dataimport;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.LocalDispatcher;
 
@@ -44,6 +44,6 @@ public interface ImportDecoder {
      * If this method throws *any* kind of exception, the import of this particular entity will be aborted and the import
      * will continue to the next entry.
      */
-    public List<GenericValue> decode(GenericValue flatEntity, Timestamp importTime, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception;
+    public List<GenericValue> decode(GenericValue flatEntity, Timestamp importTime, Delegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception;
 
 }

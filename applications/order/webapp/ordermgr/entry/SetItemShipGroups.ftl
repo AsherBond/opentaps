@@ -56,7 +56,7 @@ under the License.
               <#assign shipGroupItems = shoppingCart.getShipGroupItems(shipGroupIndex)>
               <#assign shoppingCartItems = shipGroupItems.keySet().iterator()>
               <form method="post" action="<@ofbizUrl>assignItemToShipGroups</@ofbizUrl>" name="assignitemtoshipgroup${shipGroupIndex}">
-              <input type="hidden" name="_useRowSubmit" value="N">
+              <input type="hidden" name="_useRowSubmit" value="N" />
               <#assign rowCount = 0>
               <#list shoppingCartItems as shoppingCartItem>
                 <#assign cartLineIndex = shoppingCart.getItemIndex(shoppingCartItem)>
@@ -97,7 +97,7 @@ under the License.
               </tr>
               </#if>
               </table>
-            <input type="hidden" name="_rowCount" value="${rowCount}">
+            <input type="hidden" name="_rowCount" value="${rowCount}" />
             </form>
             </#list>
           </td>
@@ -107,7 +107,7 @@ under the License.
   </tr>
 </table>
 
-<br/>
+<br />
 <#else>
   <h3>${uiLabelMap.OrderViewPermissionError}</h3>
 </#if>

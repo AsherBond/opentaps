@@ -18,25 +18,60 @@
  */
 /* This file has been modified by Open Source Strategies, Inc. */
 
-import java.util.TreeSet;
-import javolution.util.FastList;
+import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityFieldValue;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.base.util.StringUtil;
-import org.ofbiz.base.util.UtilValidate;
 
-andExprs = FastList.newInstance();
-fieldValue = parameters[fieldName];
-if (fieldValue) {
-    andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER(EntityFieldValue.makeFieldValue(fieldName)),
-            EntityOperator.LIKE, "%" + fieldValue.toUpperCase() + "%"));
+andExprs = [];
+entityName = context.entityName;
+searchFields = context.searchFields;
+displayFields = context.displayFields ?: searchFields;
+searchValueFieldName = parameters.searchValueField;
+if (searchValueFieldName) fieldValue = parameters.get(searchValueFieldName);
+searchType = context.searchType;
+
+if (searchFields && fieldValue) {
+    searchFieldsList = StringUtil.toList(searchFields);
+    displayFieldsSet = StringUtil.toSet(displayFields);
+    returnField = searchFieldsList[0]; //default to first element of searchFields
+    displayFieldsSet.add(returnField); //add it to select fields, in case it is missing
+    context.returnField = returnField;
+    context.displayFieldsSet = displayFieldsSet;
+    if ("STARTS_WITH".equals(searchType)) {
+        searchValue = fieldValue.toUpperCase() + "%";
+    } else if ("EQUALS".equals(searchType)) {
+        searchValue = fieldValue;
+    } else {//default is CONTAINS
+        searchValue = "%" + fieldValue.toUpperCase() + "%";
+    }
+    searchFieldsList.each { fieldName ->
+        if ("EQUALS".equals(searchType)) {
+            andExprs.add(EntityCondition.makeCondition(EntityFieldValue.makeFieldValue(returnField), EntityOperator.EQUALS, searchValue));    
+            return;//in case of EQUALS, we search only a match for the returned field
+        } else {
+            andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER(EntityFieldValue.makeFieldValue(fieldName)), EntityOperator.LIKE, searchValue));
+        }        
+    }
 }
 
-if (andExprs) {
-    entityConditionList = EntityCondition.makeCondition(andExprs, EntityOperator.AND);
-    autocompleteOptions = delegator.findList(entityName, entityConditionList, StringUtil.toList(selectFields) as Set, StringUtil.toList(sortByFields), null, false);
-    context.autocompleteOptions = autocompleteOptions;
+if (andExprs && entityName && displayFieldsSet) {
+    entityConditionList = EntityCondition.makeCondition(andExprs, EntityOperator.OR);
+
+    //if there is an extra condition, add it to main condition
+    if (context.andCondition && context.andCondition  instanceof EntityCondition) {
+        entityConditionList = EntityCondition.makeCondition(context.andCondition, entityConditionList);
+    }
+
+    Integer autocompleterViewSize = Integer.valueOf(context.autocompleterViewSize ?: 10);
+    EntityFindOptions findOptions = new EntityFindOptions();
+    findOptions.setMaxRows(autocompleterViewSize);
+    autocompleteOptions = delegator.findList(entityName, entityConditionList, displayFieldsSet, StringUtil.toList(displayFields), findOptions, false);
+    if (autocompleteOptions) {
+        context.autocompleteOptions = autocompleteOptions;
+    }
 }

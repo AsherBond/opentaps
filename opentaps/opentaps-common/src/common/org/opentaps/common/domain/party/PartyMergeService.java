@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
@@ -68,7 +68,7 @@ public class PartyMergeService extends DomainService implements PartyMergeServic
     /** {@inheritDoc} */
     public void validateMergeParties() throws ServiceException {
 
-        GenericDelegator delegator = getInfrastructure().getDelegator();
+        Delegator delegator = getInfrastructure().getDelegator();
 
         try {
             // ensure that merging parties are the same type (ACCOUNT, CONTACT, PROSPECT, SUPPLIER)
@@ -109,7 +109,7 @@ public class PartyMergeService extends DomainService implements PartyMergeServic
     /** {@inheritDoc} */
     public void mergeParties() throws ServiceException {
 
-        GenericDelegator delegator = getInfrastructure().getDelegator();
+        Delegator delegator = getInfrastructure().getDelegator();
 
         try {
 
@@ -154,7 +154,7 @@ public class PartyMergeService extends DomainService implements PartyMergeServic
                                     newRecord.set(modelField.getName(), partyIdTo);
 
                                     // Create the new record if a record with the same primary key doesn't already exist
-                                    if (delegator.findByPrimaryKey(newRecord.getPrimaryKey()) == null) {
+                                    if (delegator.findOne(newRecord.getPrimaryKey().getEntityName(), newRecord.getPrimaryKey(), false) == null) {
                                         newRecord.create();
                                     }
 
@@ -191,10 +191,10 @@ public class PartyMergeService extends DomainService implements PartyMergeServic
      * @param entityName the name of the <code>GenericValue</code> entity
      * @param fromKeys <code>Map</code> representing the primary key of the entity to merge from
      * @param toKeys <code>Map</code> representing the primary key of the entity to merge to
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @exception GenericEntityException if an error occurs
      */
-    private static void mergeTwoValues(String entityName, Map<String, String> fromKeys, Map<String, String> toKeys, GenericDelegator delegator) throws GenericEntityException {
+    private static void mergeTwoValues(String entityName, Map<String, String> fromKeys, Map<String, String> toKeys, Delegator delegator) throws GenericEntityException {
         GenericValue from = delegator.findByPrimaryKey(entityName, fromKeys);
         GenericValue to = delegator.findByPrimaryKey(entityName, toKeys);
         if (from == null || to == null) {
@@ -205,7 +205,7 @@ public class PartyMergeService extends DomainService implements PartyMergeServic
         to.store();
     }
 
-    private static List<ModelEntity> getRelatedEntities(String parentEntityName, GenericDelegator delegator) {
+    private static List<ModelEntity> getRelatedEntities(String parentEntityName, Delegator delegator) {
         ModelEntity parentEntity = delegator.getModelEntity(parentEntityName);
         // Start the recursion
         return getRelatedEntities(new ArrayList<ModelEntity>(), parentEntity, delegator);
@@ -215,10 +215,10 @@ public class PartyMergeService extends DomainService implements PartyMergeServic
      * Recursive method to map relations from a single entity.
      * @param relatedEntities List of related ModelEntity objects in descending order of relation from the parent entity
      * @param parentEntity Root ModelEntity for deriving relations
-     * @param delegator GenericDelegator
+     * @param delegator Delegator
      * @return List of ModelEntity objects in descending order of relation from the original parent entity
      */
-    private static List<ModelEntity> getRelatedEntities(List<ModelEntity> relatedEntities, ModelEntity parentEntity, GenericDelegator delegator) {
+    private static List<ModelEntity> getRelatedEntities(List<ModelEntity> relatedEntities, ModelEntity parentEntity, Delegator delegator) {
 
         // Do nothing if the parent entity has already been mapped
         if (relatedEntities.contains(parentEntity)) {

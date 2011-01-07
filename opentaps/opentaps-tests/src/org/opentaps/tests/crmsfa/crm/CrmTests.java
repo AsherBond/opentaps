@@ -16,7 +16,6 @@
  */
 package org.opentaps.tests.crmsfa.crm;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -158,12 +157,20 @@ public class CrmTests extends OpentapsTestCase {
         // Verify that account has two contacts
         assertEquals("Account contacts not equals 2", setContact.size(), 2);
 
-        Iterator<Contact> contactIterator = setContact.iterator();
-
-        // Verify contacts name
-        assertEquals("Does not match the name of the first contact", contactIterator.next().getName(), TEST_LEAD_01_FIRST_NAME + " " + TEST_LEAD_01_LAST_NAME);
-        assertEquals("Does not match the name of the second contact", contactIterator.next().getName(), TEST_LEAD_02_FIRST_NAME + " " + TEST_LEAD_02_LAST_NAME);
-
+        // Verify contacts name, note: there is no guarantee of the order
+        boolean foundFirst = false;
+        boolean foundSecond = false;
+        for (Contact c : setContact) {
+            if ((TEST_LEAD_01_FIRST_NAME + " " + TEST_LEAD_01_LAST_NAME).equals(c.getName())) {
+                foundFirst = true;
+            } else if ((TEST_LEAD_02_FIRST_NAME + " " + TEST_LEAD_02_LAST_NAME).equals(c.getName())) {
+                foundSecond = true;
+            } else {
+                fail("Does not match the name of the first or second contact : " + c.getName());
+            }
+        }
+        assertTrue("Did not match the name of the first contact", foundFirst);
+        assertTrue("Did not match the name of the second contact", foundSecond);
     }
 
     /**
@@ -241,7 +248,7 @@ public class CrmTests extends OpentapsTestCase {
 
         GenericValue communicationEvent = delegator.findByPrimaryKey("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId));
         //GenericValue communicationEventRole = delegator.findByPrimaryKey("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId));
-        List<GenericValue> communicationEventRole = delegator.findByLike("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "roleTypeId", "ORIGINATOR"));
+        List<GenericValue> communicationEventRole = delegator.findByAnd("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "roleTypeId", "ORIGINATOR"));
 
         // Verify CommunicationEvent partyIdFrom before merge
         assertEquals("CommunicationEvent partyIdFrom must be " + partyIdSecond, partyIdSecond, communicationEvent.getString("partyIdFrom"));
@@ -297,7 +304,7 @@ public class CrmTests extends OpentapsTestCase {
         communicationEventId = communicationEvents.get(0).getString("communicationEventId");
 
         communicationEvent = delegator.findByPrimaryKey("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId));
-        communicationEventRole = delegator.findByLike("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "roleTypeId", "ORIGINATOR"));
+        communicationEventRole = delegator.findByAnd("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "roleTypeId", "ORIGINATOR"));
 
         // Verify CommunicationEvent partyIdFrom after merge
         assertEquals("Communication Event partyIdFrom after merge must be " + partyIdFirst, partyIdFirst, communicationEvent.getString("partyIdFrom"));

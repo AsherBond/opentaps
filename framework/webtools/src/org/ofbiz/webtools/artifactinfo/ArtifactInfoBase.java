@@ -34,6 +34,7 @@ public abstract class ArtifactInfoBase implements Comparable<ArtifactInfoBase> {
         this.aif = aif;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof ArtifactInfoBase) {
             return this.equals(obj);

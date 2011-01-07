@@ -18,10 +18,11 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">&nbsp;${uiLabelMap.OrderOrderQuoteRoles}</div>
+    <div class="screenlet-title-bar">
+        <div class="h3">${uiLabelMap.OrderOrderQuoteRoles}</div>
     </div>
     <div class="screenlet-body">
+      <#if quoteRoles?has_content>
         <table cellspacing="0" class="basic-table">
             <#assign row = 1>
             <#list quoteRoles as quoteRole>
@@ -38,10 +39,13 @@ under the License.
                     </td>
                 </tr>
             <#if quoteRoles.size() != row>
-                <tr><td colspan="3"><hr/></td></tr>
+                <tr><td colspan="3"><hr /></td></tr>
             </#if>
             <#assign row = row + 1>
             </#list>
         </table>
+      <#else>
+        &nbsp;
+      </#if>
     </div>
 </div>

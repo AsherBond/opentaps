@@ -41,14 +41,14 @@ under the License.
                             <option value="${picklistInfo.statusItem.statusId}" selected>${picklistInfo.statusItem.get("description",locale)}</option>
                             <option value="${picklistInfo.statusItem.statusId}">---</option>
                             <#list picklistInfo.statusValidChangeToDetailList as statusValidChangeToDetail>
-                                <option value="${statusValidChangeToDetail.statusIdTo}">${statusValidChangeToDetail.description} (${statusValidChangeToDetail.transitionName})</option>
+                                <option value="${statusValidChangeToDetail.get("statusIdTo", locale)}">${statusValidChangeToDetail.get("description", locale)} (${statusValidChangeToDetail.get("transitionName", locale)})</option>
                             </#list>
                         </select>
                         <input type="submit" value="${uiLabelMap.CommonUpdate}" class="smallSubmit"/>
                     </form>
                     <span class="label">${uiLabelMap.ProductCreatedModifiedBy}</span> ${picklist.createdByUserLogin}/${picklist.lastModifiedByUserLogin}
                     <a href="<@ofbizUrl>PicklistReport.pdf?picklistId=${picklist.picklistId}</@ofbizUrl>" target="_blank" class="buttontext">${uiLabelMap.ProductPick}/${uiLabelMap.ProductPacking} ${uiLabelMap.CommonReports}</a>
-                    <hr/>
+                    <hr />
                 </div>
                 <#if picklistInfo.shipmentMethodType?has_content>
                     <div style="margin-left: 15px;">
@@ -89,7 +89,7 @@ under the License.
                         ${uiLabelMap.CommonBy} ${picklistStatusHistoryInfo.picklistStatusHistory.changeUserLoginId}
                     </div>
                 </#list>
-                <hr/>
+                <hr />
                 <#-- PicklistBin -->
                 <#list picklistInfo.picklistBinInfoList?if_exists as picklistBinInfo>
                     <#assign isBinComplete = Static["org.ofbiz.shipment.picklist.PickListServices"].isBinComplete(delegator, picklistBinInfo.picklistBin.picklistBinId)/>
@@ -111,7 +111,7 @@ under the License.
                                 <select name="picklistId">
                                     <#list picklistActiveList as picklistActive>
                                         <#assign picklistActiveStatusItem = picklistActive.getRelatedOneCache("StatusItem")>
-                                        <option value="${picklistActive.picklistId}"<#if picklistActive.picklistId == picklist.picklistId> selected</#if>>${picklistActive.picklistId} [${uiLabelMap.CommonDate}:${picklistActive.picklistDate},${uiLabelMap.CommonStatus}:${picklistActiveStatusItem.get("description",locale)}]</option>
+                                        <option value="${picklistActive.picklistId}"<#if picklistActive.picklistId == picklist.picklistId> selected="selected"</#if>>${picklistActive.picklistId} [${uiLabelMap.CommonDate}:${picklistActive.picklistDate},${uiLabelMap.CommonStatus}:${picklistActiveStatusItem.get("description",locale)}]</option>
                                     </#list>
                                 </select>
                                 <input type="submit" value="${uiLabelMap.CommonUpdate}" class="smallSubmit"/>
@@ -174,7 +174,7 @@ under the License.
                     </#if>
                 </#list>
                 <#if picklistInfo_has_next>
-                   <hr/>
+                   <hr />
                 </#if>
             </#list>
         <#else/>

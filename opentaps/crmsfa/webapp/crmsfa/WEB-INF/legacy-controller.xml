@@ -588,7 +588,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     </request-map>
     <request-map uri="createCustomer">
         <security https="true" auth="true"/>
-        <event type="simple" path="org/ofbiz/order/customer/CustomerEvents.xml" invoke="createCustomer"/>
+        <event type="simple" path="component://order/script/org/ofbiz/order/customer/CustomerEvents.xml" invoke="createCustomer"/>
         <response name="success" type="request" value="finalizeOrder"/>
         <response name="error" type="view" value="custsetting"/>
     </request-map>

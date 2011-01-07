@@ -26,7 +26,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
-import javax.servlet.jsp.PageContext;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -36,10 +35,12 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
@@ -53,7 +54,7 @@ public class PartyWorker {
     public static String module = PartyWorker.class.getName();
 
     public static Map<String, GenericValue> getPartyOtherValues(ServletRequest request, String partyId, String partyAttr, String personAttr, String partyGroupAttr) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Map<String, GenericValue> result = FastMap.newInstance();
         try {
             GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyId));
@@ -84,15 +85,6 @@ public class PartyWorker {
         return result;
     }
 
-    /** @deprecated */
-    public static void getPartyOtherValues(PageContext pageContext, String partyId, String partyAttr, String personAttr, String partyGroupAttr) {
-        Map<String, GenericValue> partyMap = getPartyOtherValues(pageContext.getRequest(), partyId, partyAttr, personAttr, partyGroupAttr);
-        for (Map.Entry<String, GenericValue> e: partyMap.entrySet()) {
-            pageContext.setAttribute(e.getKey(), e.getValue());
-
-        }
-    }
-
     /**
      * Generate a sequenced club id using the prefix passed and a sequence value + check digit
      * @param delegator used to obtain a sequenced value
@@ -100,7 +92,7 @@ public class PartyWorker {
      * @param length total length of the ID including prefix and check digit
      * @return Sequenced Club ID string with a length as defined starting with the prefix defined
      */
-    public static String createClubId(GenericDelegator delegator, String prefix, int length) {
+    public static String createClubId(Delegator delegator, String prefix, int length) {
         final String clubSeqName = "PartyClubSeq";
         String clubId = prefix != null ? prefix : "";
 
@@ -115,7 +107,7 @@ public class PartyWorker {
         return clubId;
     }
 
-    public static GenericValue findPartyLatestContactMech(String partyId, String contactMechTypeId, GenericDelegator delegator) {
+    public static GenericValue findPartyLatestContactMech(String partyId, String contactMechTypeId, Delegator delegator) {
         try {
             List<GenericValue> cmList = delegator.findByAnd("PartyAndContactMech", UtilMisc.toMap("partyId", partyId, "contactMechTypeId", contactMechTypeId), UtilMisc.toList("-fromDate"));
             cmList = EntityUtil.filterByDate(cmList);
@@ -126,7 +118,7 @@ public class PartyWorker {
         }
     }
 
-    public static GenericValue findPartyLatestPostalAddress(String partyId, GenericDelegator delegator) {
+    public static GenericValue findPartyLatestPostalAddress(String partyId, Delegator delegator) {
         GenericValue pcm = findPartyLatestContactMech(partyId, "POSTAL_ADDRESS", delegator);
         if (pcm != null) {
             try {
@@ -138,7 +130,7 @@ public class PartyWorker {
         return null;
     }
 
-    public static GenericValue findPartyLatestPostalAddressGeoPoint(String partyId, GenericDelegator delegator) {
+    public static GenericValue findPartyLatestPostalAddressGeoPoint(String partyId, Delegator delegator) {
         GenericValue latestPostalAddress = findPartyLatestPostalAddress(partyId, delegator);
         if (latestPostalAddress  != null) {
             try {
@@ -154,7 +146,7 @@ public class PartyWorker {
         return null;
     }
 
-    public static GenericValue findPartyLatestTelecomNumber(String partyId, GenericDelegator delegator) {
+    public static GenericValue findPartyLatestTelecomNumber(String partyId, Delegator delegator) {
         GenericValue pcm = findPartyLatestContactMech(partyId, "TELECOM_NUMBER", delegator);
         if (pcm != null) {
             try {
@@ -166,7 +158,7 @@ public class PartyWorker {
         return null;
     }
 
-    public static GenericValue findPartyLatestUserLogin(String partyId, GenericDelegator delegator) {
+    public static GenericValue findPartyLatestUserLogin(String partyId, Delegator delegator) {
         try {
             List<GenericValue> userLoginList = delegator.findByAnd("UserLogin", UtilMisc.toMap("partyId", partyId), UtilMisc.toList("-" + ModelEntity.STAMP_FIELD));
             return EntityUtil.getFirst(userLoginList);
@@ -176,7 +168,7 @@ public class PartyWorker {
         }
     }
 
-    public static Timestamp findPartyLastLoginTime(String partyId, GenericDelegator delegator) {
+    public static Timestamp findPartyLastLoginTime(String partyId, Delegator delegator) {
         try {
             List<GenericValue> loginHistory = delegator.findByAnd("UserLoginHistory", UtilMisc.toMap("partyId", partyId), UtilMisc.toList("-fromDate"));
             GenericValue v = EntityUtil.getFirst(loginHistory);
@@ -192,7 +184,7 @@ public class PartyWorker {
 
     }
 
-    public static Locale findPartyLastLocale(String partyId, GenericDelegator delegator) {
+    public static Locale findPartyLastLocale(String partyId, Delegator delegator) {
         // just get the most recent UserLogin for this party, if there is one...
         GenericValue userLogin = findPartyLatestUserLogin(partyId, delegator);
         if (userLogin == null) {
@@ -206,7 +198,7 @@ public class PartyWorker {
         }
     }
 
-    public static String findFirstMatchingPartyId(GenericDelegator delegator, String address1, String address2, String city,
+    public static String findFirstMatchingPartyId(Delegator delegator, String address1, String address2, String city,
             String stateProvinceGeoId, String postalCode, String postalCodeExt, String countryGeoId,
             String firstName, String middleName, String lastName) throws GeneralException {
 
@@ -218,7 +210,7 @@ public class PartyWorker {
         return null;
     }
 
-    public static String[] findFirstMatchingPartyAndContactMechId(GenericDelegator delegator, String address1, String address2, String city,
+    public static String[] findFirstMatchingPartyAndContactMechId(Delegator delegator, String address1, String address2, String city,
             String stateProvinceGeoId, String postalCode, String postalCodeExt, String countryGeoId,
             String firstName, String middleName, String lastName) throws GeneralException {
 
@@ -231,7 +223,7 @@ public class PartyWorker {
         return null;
     }
 
-    public static List<GenericValue> findMatchingPartyAndPostalAddress(GenericDelegator delegator, String address1, String address2, String city,
+    public static List<GenericValue> findMatchingPartyAndPostalAddress(Delegator delegator, String address1, String address2, String city,
                             String stateProvinceGeoId, String postalCode, String postalCodeExt, String countryGeoId,
                             String firstName, String middleName, String lastName) throws GeneralException {
 
@@ -322,7 +314,6 @@ public class PartyWorker {
             if (UtilValidate.isNotEmpty(validFound)) {
                 for (GenericValue partyAndAddr: validFound) {
                     String partyId = partyAndAddr.getString("partyId");
-                    String cmId = partyAndAddr.getString("contactMechId");
                     if (UtilValidate.isNotEmpty(partyId)) {
                         GenericValue p = delegator.findByPrimaryKey("Person", UtilMisc.toMap("partyId", partyId));
                         if (p != null) {
@@ -334,11 +325,9 @@ public class PartyWorker {
                                     if (mName != null && middleName != null) {
                                         if (mName.toUpperCase().equals(middleName.toUpperCase())) {
                                             returnList.add(partyAndAddr);
-                                            //return new String[] { partyId, cmId };
                                         }
                                     } else if (middleName == null) {
                                         returnList.add(partyAndAddr);
-                                        //return new String[] { partyId, cmId };
                                     }
                                 }
                             }
@@ -351,7 +340,7 @@ public class PartyWorker {
         return returnList;
     }
 
-    public static String makeMatchingString(GenericDelegator delegator, String address) {
+    public static String makeMatchingString(Delegator delegator, String address) {
         if (address == null) {
             return null;
         }
@@ -375,6 +364,138 @@ public class PartyWorker {
 
         // remove all non-word characters
         return str.replaceAll("\\W", "");
+    }
+
+    public static List<String> getAssociatedPartyIdsByRelationshipType(Delegator delegator, String partyIdFrom, String partyRelationshipTypeId) {
+        List<GenericValue> partyList = FastList.newInstance();
+        List<String> partyIds = null;
+        try {
+            EntityConditionList<EntityExpr> baseExprs = EntityCondition.makeCondition(UtilMisc.toList(
+                    EntityCondition.makeCondition("partyIdFrom", partyIdFrom),
+                    EntityCondition.makeCondition("partyRelationshipTypeId", partyRelationshipTypeId)), EntityOperator.AND);
+            List<GenericValue> associatedParties = delegator.findList("PartyRelationship", baseExprs, null, null, null, true);
+            partyList.addAll(associatedParties);
+            while (UtilValidate.isNotEmpty(associatedParties)) {
+                List<GenericValue> currentAssociatedParties = FastList.newInstance();
+                for (GenericValue associatedParty : associatedParties) {
+                    EntityConditionList<EntityExpr> innerExprs = EntityCondition.makeCondition(UtilMisc.toList(
+                            EntityCondition.makeCondition("partyIdFrom", associatedParty.get("partyIdTo")),
+                            EntityCondition.makeCondition("partyRelationshipTypeId", partyRelationshipTypeId)), EntityOperator.AND);
+                    List<GenericValue> associatedPartiesChilds = delegator.findList("PartyRelationship", innerExprs, null, null, null, true);
+                    if (UtilValidate.isNotEmpty(associatedPartiesChilds)) {
+                        currentAssociatedParties.addAll(associatedPartiesChilds);
+                    }
+                    partyList.add(associatedParty);
+                }
+                associatedParties  = currentAssociatedParties;
+            }
+            partyIds = EntityUtil.getFieldListFromEntityList(partyList, "partyIdTo", true);
+        } catch (GenericEntityException e) {
+            Debug.logWarning(e, module);
+        }
+        return partyIds;
+    }
+
+    /**
+     * Generic service to find party by id.
+     * By default return the party find by partyId
+     * but you can pass searchPartyFirst at false if you want search in partyIdentification before
+     * or pass searchAllId at true to find apartyuct with this id (party.partyId and partyIdentification.idValue)
+     * @param delegator
+     * @param idToFind
+     * @param partyIdentificationTypeId
+     * @param searchPartyFirst
+     * @param searchAllId
+     * @return
+     * @throws GenericEntityException
+     */
+    public static List<GenericValue> findPartiesById(Delegator delegator,
+            String idToFind, String partyIdentificationTypeId,
+            boolean searchPartyFirst, boolean searchAllId) throws GenericEntityException {
+
+        if (Debug.verboseOn()) Debug.logVerbose("Analyze partyIdentification: entered id = " + idToFind + ", partyIdentificationTypeId = " + partyIdentificationTypeId, module);
+
+        GenericValue party = null;
+        List<GenericValue> partiesFound = null;
+
+        // 1) look if the idToFind given is a real partyId
+        if (searchPartyFirst) {
+            party = delegator.findByPrimaryKeyCache("Party", UtilMisc.toMap("partyId", idToFind));
+        }
+
+        if (searchAllId || (searchPartyFirst && UtilValidate.isEmpty(party))) {
+            // 2) Retrieve party in PartyIdentification
+            Map<String, String> conditions = UtilMisc.toMap("idValue", idToFind);
+            if (UtilValidate.isNotEmpty(partyIdentificationTypeId)) {
+                conditions.put("partyIdentificationTypeId", partyIdentificationTypeId);
+            }
+            partiesFound = delegator.findByAndCache("PartyIdentificationAndParty", conditions, UtilMisc.toList("partyId"));
+        }
+
+        if (! searchPartyFirst) {
+            party = delegator.findByPrimaryKeyCache("Party", UtilMisc.toMap("partyId", idToFind));
+        }
+
+        if (UtilValidate.isNotEmpty(party)) {
+            if (UtilValidate.isNotEmpty(partiesFound)) partiesFound.add(party);
+            else partiesFound = UtilMisc.toList(party);
+        }
+        if (Debug.verboseOn()) Debug.logVerbose("Analyze partyIdentification: found party.partyId = " + party + ", and list : " + partiesFound, module);
+        return partiesFound;
+    }
+
+    public static List<GenericValue> findPartiesById(Delegator delegator, String idToFind, String partyIdentificationTypeId)
+    throws GenericEntityException {
+        return findPartiesById(delegator, idToFind, partyIdentificationTypeId, true, false);
+    }
+
+    public static String findPartyId(Delegator delegator, String idToFind, String partyIdentificationTypeId) throws GenericEntityException {
+        GenericValue party = findParty(delegator, idToFind, partyIdentificationTypeId);
+        if (UtilValidate.isNotEmpty(party)) {
+            return party.getString("partyId");
+        } else {
+            return null;
+        }
+    }
+
+    public static String findPartyId(Delegator delegator, String idToFind) throws GenericEntityException {
+        return findPartyId(delegator, idToFind, null);
+    }
+
+    public static GenericValue findParty(Delegator delegator, String idToFind, String partyIdentificationTypeId) throws GenericEntityException {
+        List<GenericValue> parties = findPartiesById(delegator, idToFind, partyIdentificationTypeId);
+        GenericValue party = EntityUtil.getFirst(parties);
+        return party;
+    }
+
+    public static List<GenericValue> findParties(Delegator delegator, String idToFind, String partyIdentificationTypeId) throws GenericEntityException {
+        List<GenericValue> partiesByIds = findPartiesById(delegator, idToFind, partyIdentificationTypeId);
+        List<GenericValue> parties = null;
+        if (UtilValidate.isNotEmpty(partiesByIds)) {
+            for (GenericValue party : partiesByIds) {
+                GenericValue partyToAdd = party;
+                //retreive party GV if the actual genericValue came from viewEntity
+                if (! "Party".equals(party.getEntityName())) {
+                    partyToAdd = delegator.findByPrimaryKeyCache("Party", UtilMisc.toMap("partyId", party.get("partyId")));
+                }
+
+                if (UtilValidate.isEmpty(parties)) {
+                    parties = UtilMisc.toList(partyToAdd);
+                }
+                else {
+                    parties.add(partyToAdd);
+                }
+            }
+        }
+        return parties;
+    }
+
+    public static List<GenericValue> findParties(Delegator delegator, String idToFind) throws GenericEntityException {
+        return findParties(delegator, idToFind, null);
+    }
+
+    public static GenericValue findParty(Delegator delegator, String idToFind) throws GenericEntityException {
+        return findParty(delegator, idToFind, null);
     }
 
 }

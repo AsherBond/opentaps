@@ -22,7 +22,7 @@ package org.ofbiz.order.order;
 
 import javolution.util.FastList;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.*;
@@ -30,6 +30,7 @@ import org.ofbiz.entity.model.DynamicViewEntity;
 import org.ofbiz.entity.model.ModelKeyMap;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
+import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
@@ -50,7 +51,7 @@ public class OrderLookupServices {
 
     public static Map findOrders(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -260,6 +261,55 @@ public class OrderLookupServices {
             }
         }
 
+        String isViewed = (String) context.get("isViewed");
+        if (UtilValidate.isNotEmpty(isViewed)) {
+            paramList.add("isViewed=" + isViewed);
+            conditions.add(makeExpr("isViewed", isViewed));
+        }
+
+        // Shipment Method
+        String shipmentMethod = (String) context.get("shipmentMethod");
+        if (UtilValidate.isNotEmpty(shipmentMethod)) {
+            String carrierPartyId = (String) shipmentMethod.substring(0, shipmentMethod.indexOf("@"));
+            String ShippingMethodTypeId = (String) shipmentMethod.substring(shipmentMethod.indexOf("@")+1);
+            dve.addMemberEntity("OISG", "OrderItemShipGroup");
+            dve.addAlias("OISG", "shipmentMethodTypeId");
+            dve.addAlias("OISG", "carrierPartyId");
+            dve.addViewLink("OH", "OISG", Boolean.FALSE, UtilMisc.toList(new ModelKeyMap("orderId", "orderId")));
+
+            if (UtilValidate.isNotEmpty(carrierPartyId)) {
+                paramList.add("carrierPartyId=" + carrierPartyId);
+                conditions.add(makeExpr("carrierPartyId", carrierPartyId));
+            }
+
+            if (UtilValidate.isNotEmpty(ShippingMethodTypeId)) {
+                paramList.add("ShippingMethodTypeId=" + ShippingMethodTypeId);
+                conditions.add(makeExpr("shipmentMethodTypeId", ShippingMethodTypeId));
+            }
+        }
+        // PaymentGatewayResponse
+        String gatewayAvsResult = (String) context.get("gatewayAvsResult");
+        String gatewayScoreResult = (String) context.get("gatewayScoreResult");
+        if (UtilValidate.isNotEmpty(gatewayAvsResult) || UtilValidate.isNotEmpty(gatewayScoreResult)) {
+            dve.addMemberEntity("OPP", "OrderPaymentPreference");
+            dve.addMemberEntity("PGR", "PaymentGatewayResponse");
+            dve.addAlias("OPP", "orderPaymentPreferenceId");
+            dve.addAlias("PGR", "gatewayAvsResult");
+            dve.addAlias("PGR", "gatewayScoreResult");
+            dve.addViewLink("OH", "OPP", Boolean.FALSE, UtilMisc.toList(new ModelKeyMap("orderId", "orderId")));
+            dve.addViewLink("OPP", "PGR", Boolean.FALSE, UtilMisc.toList(new ModelKeyMap("orderPaymentPreferenceId", "orderPaymentPreferenceId")));
+        }
+
+        if (UtilValidate.isNotEmpty(gatewayAvsResult)) {
+            paramList.add("gatewayAvsResult=" + gatewayAvsResult);
+            conditions.add(EntityCondition.makeCondition("gatewayAvsResult", gatewayAvsResult));
+        }
+
+        if (UtilValidate.isNotEmpty(gatewayScoreResult)) {
+            paramList.add("gatewayScoreResult=" + gatewayScoreResult);
+            conditions.add(EntityCondition.makeCondition("gatewayScoreResult", gatewayScoreResult));
+        }
+
         // add the role data to the view
         if (roleTypeList != null || partyId != null) {
             dve.addMemberEntity("OT", "OrderRole");
@@ -466,6 +516,34 @@ public class OrderLookupServices {
             }
         }
 
+        // Get all orders according to specific ship to country with "Only Include" or "Do not Include".
+        String countryGeoId = (String) context.get("countryGeoId");
+        String includeCountry = (String) context.get("includeCountry");
+        if (UtilValidate.isNotEmpty(countryGeoId) && UtilValidate.isNotEmpty(includeCountry)) {
+            paramList.add("countryGeoId=" + countryGeoId);
+            paramList.add("includeCountry=" + includeCountry);
+            // add condition to dynamic view
+            dve.addMemberEntity("OCM", "OrderContactMech");
+            dve.addMemberEntity("PA", "PostalAddress");
+            dve.addAlias("OCM", "contactMechId");
+            dve.addAlias("OCM", "contactMechPurposeTypeId");
+            dve.addAlias("PA", "countryGeoId");
+            dve.addViewLink("OH", "OCM", Boolean.FALSE, ModelKeyMap.makeKeyMapList("orderId"));
+            dve.addViewLink("OCM", "PA", Boolean.FALSE, ModelKeyMap.makeKeyMapList("contactMechId"));
+
+            EntityConditionList exprs = null;
+            if ("Y".equals(includeCountry)) {
+                exprs = EntityCondition.makeCondition(UtilMisc.toList(
+                            EntityCondition.makeCondition("contactMechPurposeTypeId", "SHIPPING_LOCATION"),
+                            EntityCondition.makeCondition("countryGeoId", countryGeoId)), EntityOperator.AND);
+            } else {
+                exprs = EntityCondition.makeCondition(UtilMisc.toList(
+                            EntityCondition.makeCondition("contactMechPurposeTypeId", "SHIPPING_LOCATION"),
+                            EntityCondition.makeCondition("countryGeoId", EntityOperator.NOT_EQUAL, countryGeoId)), EntityOperator.AND);
+            }
+            conditions.add(exprs);
+        }
+
         // set distinct on so we only get one row per order
         EntityFindOptions findOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
 
@@ -485,6 +563,7 @@ public class OrderLookupServices {
         // get the index for the partial list
         int lowIndex = (((viewIndex.intValue() - 1) * viewSize.intValue()) + 1);
         int highIndex = viewIndex.intValue() * viewSize.intValue();
+        findOpts.setMaxRows(highIndex);
 
         if (cond != null) {
             EntityListIterator eli = null;
@@ -492,9 +571,7 @@ public class OrderLookupServices {
                 // do the lookup
                 eli = delegator.findListIteratorByCondition(dve, cond, null, fieldsToSelect, orderBy, findOpts);
 
-                // attempt to get the full size
-                eli.last();
-                orderCount = eli.currentIndex();
+                orderCount = eli.getResultsSizeAfterPartialList();
 
                 // get the partial list for this page
                 eli.beforeFirst();
@@ -530,15 +607,15 @@ public class OrderLookupServices {
         // format the param list
         String paramString = StringUtil.join(paramList, "&amp;");
 
-        result.put("highIndex", new Integer(highIndex));
-        result.put("lowIndex", new Integer(lowIndex));
+        result.put("highIndex", Integer.valueOf(highIndex));
+        result.put("lowIndex", Integer.valueOf(lowIndex));
         result.put("viewIndex", viewIndex);
         result.put("viewSize", viewSize);
         result.put("showAll", showAll);
 
         result.put("paramList", (paramString != null? paramString: ""));
         result.put("orderList", orderList);
-        result.put("orderListSize", new Integer(orderCount));
+        result.put("orderListSize", Integer.valueOf(orderCount));
 
         return result;
     }

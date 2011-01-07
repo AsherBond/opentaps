@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilJ2eeCompat;
@@ -39,6 +40,7 @@ import org.ofbiz.webapp.view.AbstractViewHandler;
 import org.ofbiz.webapp.view.ViewHandlerException;
 import org.ofbiz.widget.html.HtmlFormRenderer;
 import org.ofbiz.widget.html.HtmlScreenRenderer;
+import org.ofbiz.widget.html.HtmlTreeRenderer;
 import org.xml.sax.SAXException;
 
 import freemarker.template.TemplateModelException;
@@ -95,9 +97,12 @@ public class ScreenWidgetViewHandler extends AbstractViewHandler {
             // this is the object used to render forms from their definitions
             FreeMarkerWorker.getSiteParameters(request, screens.getContext());
             screens.getContext().put("formStringRenderer", new HtmlFormRenderer(request, response));
+            screens.getContext().put("treeStringRenderer", new HtmlTreeRenderer());
             screens.getContext().put("simpleEncoder", StringUtil.htmlEncoder);
             screens.getContext().put("_CONTENT_TYPE_", contentType);
+            htmlScreenRenderer.renderScreenBegin(writer, screens.getContext());
             screens.render(page);
+            htmlScreenRenderer.renderScreenEnd(writer, screens.getContext());
             writer.flush();
         } catch (IOException e) {
             throw new ViewHandlerException("Error in the response writer/output stream: " + e.toString(), e);

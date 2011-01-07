@@ -22,7 +22,7 @@ under the License.
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <description>Common ControlServlet Configuration File</description>
-    <owner>Copyright 2001-2008 The Apache Software Foundation</owner>
+    <owner>Copyright 2001-2009 The Apache Software Foundation</owner>
 
     <errorpage>/error/error.jsp</errorpage>
 
@@ -35,18 +35,28 @@ under the License.
     <handler name="service-stream" type="request" class="org.ofbiz.webapp.event.ServiceStreamHandler"/>
     <handler name="simple" type="request" class="org.ofbiz.webapp.event.SimpleEventHandler"/>
     <handler name="groovy" type="request" class="org.ofbiz.webapp.event.GroovyEventHandler"/>
-    <handler name="jsonservice" type="request" class="org.ofbiz.webapp.event.JSONServiceEventHandler"/>
-    <handler name="jsonsimple" type="request" class="org.ofbiz.webapp.event.JSONSimpleEventHandler"/>
     <handler name="rome" type="request" class="org.ofbiz.webapp.event.RomeEventHandler"/>
+    <!-- These event handlers have been deprecated, if you need to send json responses then chain
+         the json request from this controller after calling your event
+    <handler name="jsonservice" type="request" class="org.ofbiz.webapp.event.JSONServiceEventHandler"/>
+    <handler name="jsonservice-multi" type="request" class="org.ofbiz.webapp.event.JSONServiceMultiEventHandler"/>
+    <handler name="jsonsimple" type="request" class="org.ofbiz.webapp.event.JSONSimpleEventHandler"/>
+    <handler name="jsonjava" type="request" class="org.ofbiz.webapp.event.JSONJavaEventHandler"/>
+     -->
 
     <!-- view handlers -->
-    <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
-    <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopViewHandler"/>
+    <handler name="screen" type="view" class="org.ofbiz.widget.screen.MacroScreenViewHandler"/>
+    <handler name="screenxml" type="view" class="org.ofbiz.widget.screen.MacroScreenViewHandler"/>
+    <handler name="screentext" type="view" class="org.ofbiz.widget.screen.MacroScreenViewHandler"/>
+    <handler name="screencsv" type="view" class="org.ofbiz.widget.screen.MacroScreenViewHandler"/>
+    <!--handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
     <handler name="screenxml" type="view" class="org.ofbiz.widget.screen.ScreenXmlViewHandler"/>
-    <handler name="screentext" type="view" class="org.ofbiz.widget.screen.ScreenTextViewHandler"/>
+    <handler name="screentext" type="view" class="org.ofbiz.widget.screen.ScreenTextViewHandler"/-->
+    <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopViewHandler"/>
     <handler name="jsp" type="view" class="org.ofbiz.webapp.view.JspViewHandler"/>
     <handler name="ftl" type="view" class="org.ofbiz.webapp.ftl.FreeMarkerViewHandler"/>
     <handler name="http" type="view" class="org.ofbiz.webapp.view.HttpViewHandler"/>
+    <handler name="birt" type="view" class="org.ofbiz.birt.webapp.view.BirtViewHandler"/>
 
     <preprocessor>
         <!-- Events to run on every request before security (chains exempt) -->
@@ -87,16 +97,24 @@ under the License.
         <response name="success" type="view" value="forgotPassword"/>
         <response name="error" type="view" value="forgotPassword"/>
     </request-map>
+    <request-map uri="view">
+        <security https="false" auth="false"/>
+        <response name="success" type="request" value="main"/>
+    </request-map>
+    <request-map uri="views">
+        <security https="true" auth="false"/>
+        <response name="success" type="request" value="main"/>
+    </request-map>
 
     <!-- Common Mappings used for locales and timezones -->
-    <request-map uri="LookupLocales"><security https="true" auth="false"/><response name="success" type="view" value="LookupLocales" save-last-view="true"/></request-map>
+    <request-map uri="ListLocales"><security https="true" auth="false"/><response name="success" type="view" value="ListLocales" save-last-view="true"/></request-map>
     <request-map uri="setSessionLocale">
         <security https="true" auth="false"/>
         <event type="java" path="org.ofbiz.common.CommonEvents" invoke="setSessionLocale"/>
         <response name="success" type="view-last" value="main"/>
         <response name="error" type="request" value="main"/>
     </request-map>
-    <request-map uri="LookupTimezones"><security https="true" auth="false"/><response name="success" type="view" value="LookupTimezones" save-last-view="true"/></request-map>
+    <request-map uri="ListTimezones"><security https="true" auth="false"/><response name="success" type="view" value="ListTimezones" save-last-view="true"/></request-map>
     <request-map uri="setSessionTimeZone">
         <security https="true" auth="false"/>
         <event type="java" path="org.ofbiz.common.CommonEvents" invoke="setSessionTimeZone"/>
@@ -112,6 +130,12 @@ under the License.
         <response name="error" type="request" value="main"/>
     </request-map>
 
+    <request-map uri="ajaxSetUserPreference">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setUserPreference"/>
+        <response name="success" type="none"/>
+    </request-map>
+
     <request-map uri="ajaxAutocompleteOptions">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="ajaxAutocompleteOptions"/>
@@ -124,9 +148,9 @@ under the License.
     </request-map>
 
     <!-- Visual theme mapping -->
-    <request-map uri="LookupVisualThemes">
+    <request-map uri="ListVisualThemes">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="LookupVisualThemes"/>
+        <response name="success" type="view" value="ListVisualThemes"/>
     </request-map>
 
     <request-map uri="main">
@@ -141,6 +165,10 @@ under the License.
         <response name="success" type="view" value="geoLocation"/>
     </request-map>
 
+    <request-map uri="LookupTimeDuration">
+        <response name="success" type="view" value="LookupTimeDuration"/>
+    </request-map>
+
     <!-- home/last/current mappings -->
     <request-map uri="backHome">
         <security https="true" auth="true"/>
@@ -151,6 +179,19 @@ under the License.
         <response name="success" type="view-last"/>
     </request-map>
 
+    <!-- Common json reponse events, chain these after events to send json reponses -->
+    <!-- Standard json response, uses all compatible request attributes -->
+    <request-map uri="json">
+        <security direct-request="false"/>
+        <event type="java" path="org.ofbiz.common.CommonEvents" invoke="jsonResponseFromRequestAttributes"/>
+        <response name="success" type="none"/>
+    </request-map>
+
+    <request-map uri="showHelp">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="showHelp"/>
+    </request-map>
+
     <!-- View Mappings -->
     <view-map name="error" page="/error/error.jsp"/>
     <view-map name="main" type="none"/>
@@ -159,13 +200,16 @@ under the License.
     <view-map name="forgotPassword" type="screen" page="component://common/widget/CommonScreens.xml#forgotPassword"/>
     <view-map name="EventMessages" type="screen" page="component://common/widget/CommonScreens.xml#EventMessages"/>
 
-    <view-map name="LookupLocales" type="screen" page="component://common/widget/LookupScreens.xml#LookupLocales"/>
-    <view-map name="LookupTimezones" type="screen" page="component://common/widget/LookupScreens.xml#LookupTimezones"/>
-    <view-map name="LookupVisualThemes" type="screen" page="component://common/widget/LookupScreens.xml#LookupVisualThemes"/>
+    <view-map name="ListLocales" type="screen" page="component://common/widget/LookupScreens.xml#ListLocales"/>
+    <view-map name="LookupTimeDuration" type="screen" page="component://common/widget/LookupScreens.xml#TimeDuration"/>
+    <view-map name="ListTimezones" type="screen" page="component://common/widget/LookupScreens.xml#ListTimezones"/>
+    <view-map name="ListVisualThemes" type="screen" page="component://common/widget/LookupScreens.xml#ListVisualThemes"/>
 
     <view-map name="ajaxAutocompleteOptions" type="screen" page="component://common/widget/CommonScreens.xml#ajaxAutocompleteOptions"/>
 
     <view-map name="help" type="screen" page="component://common/widget/CommonScreens.xml#help"/>
+    <view-map name="showHelp" type="screen" page="component://common/widget/HelpScreens.xml#ShowHelp"/>
+    <view-map name="ShowDocument" type="screen" page="component://common/widget/HelpScreens.xml#showDocument"/>
     <view-map name="geoLocation" type="screen" page="component://common/widget/CommonScreens.xml#geoLocation"/>
 
     <view-map name="viewBlocked" type="screen" page="component://common/widget/CommonScreens.xml#viewBlocked"/>

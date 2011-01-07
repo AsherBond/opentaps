@@ -45,15 +45,16 @@ under the License.
   </div>
   <div class="screenlet-body">
       <form method="post" name="salesentryform" action="<@ofbizUrl>initorderentry</@ofbizUrl>">
+      <input type="hidden" name="originOrderId" value="${parameters.originOrderId?if_exists}"/>
       <input type="hidden" name="finalizeMode" value="type"/>
       <input type="hidden" name="orderMode" value="SALES_ORDER"/>
       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="boxbottom">
         <tr>
           <td >&nbsp;</td>
-          <td width=300 align='right' valign='middle' nowrap><div class='tableheadtext'>${uiLabelMap.ProductProductStore}</div></td>
+          <td width="300" align='right' valign='middle' nowrap="nowrap"><div class='tableheadtext'>${uiLabelMap.ProductProductStore}</div></td>
           <td >&nbsp;</td>
           <td valign='middle'>
-            <div class='tabletext' valign='top'>
+            <div class='tabletext'>
               <select name="productStoreId"<#if sessionAttributes.orderMode?exists> disabled</#if>>
                 <#assign currentStore = shoppingCartProductStore>
                 <#if defaultProductStore?has_content>
@@ -61,7 +62,7 @@ under the License.
                    <option value="${defaultProductStore.productStoreId}">----</option>
                 </#if>
                 <#list productStores as productStore>
-                  <option value="${productStore.productStoreId}"<#if productStore.productStoreId == currentStore> selected</#if>>${productStore.storeName?if_exists}</option>
+                  <option value="${productStore.productStoreId}"<#if productStore.productStoreId == currentStore> selected="selected"</#if>>${productStore.storeName?if_exists}</option>
                 </#list>
               </select>
               <#if sessionAttributes.orderMode?exists>${uiLabelMap.OrderCannotBeChanged}</#if>
@@ -71,10 +72,10 @@ under the License.
         <tr><td colspan="4">&nbsp;</td></tr>
         <tr>
           <td>&nbsp;</td>
-          <td align='right' valign='middle' nowrap><div class='tableheadtext'>${uiLabelMap.OrderSalesChannel}</div></td>
+          <td align='right' valign='middle' nowrap="nowrap"><div class='tableheadtext'>${uiLabelMap.OrderSalesChannel}</div></td>
           <td>&nbsp;</td>
           <td valign='middle'>
-            <div class='tabletext' valign='top'>
+            <div class='tabletext'>
               <select name="salesChannelEnumId">
                 <#assign currentChannel = shoppingCartChannelType>
                 <#if defaultSalesChannel?has_content>
@@ -83,7 +84,7 @@ under the License.
                 </#if>
                 <option value="">${uiLabelMap.OrderNoChannel}</option>
                 <#list salesChannels as salesChannel>
-                  <option value="${salesChannel.enumId}" <#if (salesChannel.enumId == currentChannel)>selected</#if>>${salesChannel.get("description",locale)}</option>
+                  <option value="${salesChannel.enumId}" <#if (salesChannel.enumId == currentChannel)>selected="selected"</#if>>${salesChannel.get("description",locale)}</option>
                 </#list>
               </select>
             </div>
@@ -97,27 +98,21 @@ under the License.
         </#if>
         <tr>
           <td>&nbsp;</td>
-          <td align='right' valign='middle' nowrap><div class='tableheadtext'>${uiLabelMap.PartyUserLoginId}</div></td>
+          <td align='right' valign='middle' nowrap="nowrap"><div class='tableheadtext'>${uiLabelMap.PartyUserLoginId}</div></td>
           <td>&nbsp;</td>
           <td valign='middle'>
-            <div class='tabletext' valign='top'>
-              <input type="text" name="userLoginId" value="${parameters.userLogin.userLoginId}"/>
-              <a href="javascript:call_fieldlookup2(document.salesentryform.userLoginId,'LookupUserLoginAndPartyDetails');">
-                <img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/>
-              </a>
+            <div class='tabletext'>
+              <@htmlTemplate.lookupField value="${parameters.userLogin.userLoginId}" formName="salesentryform" name="userLoginId" id="userLoginId_sales" fieldFormName="LookupUserLoginAndPartyDetails"/>
             </div>
           </td>
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td align='right' valign='middle' nowrap><div class='tableheadtext'>${uiLabelMap.OrderCustomer}</div></td>
+          <td align='right' valign='middle' nowrap="nowrap"><div class='tableheadtext'>${uiLabelMap.OrderCustomer}</div></td>
           <td>&nbsp;</td>
           <td valign='middle'>
-            <div class='tabletext' valign='top'>
-              <input type='text' class='inputBox' name='partyId' value='${thisPartyId?if_exists}'/>
-              <a href="javascript:call_fieldlookup2(document.salesentryform.partyId,'LookupCustomerName');">
-                <img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/>
-              </a>
+            <div class='tabletext'>
+              <@htmlTemplate.lookupField value='${thisPartyId?if_exists}' formName="salesentryform" name="partyId" id="partyId" fieldFormName="LookupCustomerName"/>
             </div>
           </td>
         </tr>
@@ -127,7 +122,7 @@ under the License.
 </div>
 </#if>
 </#if>
-<br/>
+<br />
 <!-- Purchase Order Entry -->
 <#if security.hasEntityPermission("ORDERMGR", "_PURCHASE_CREATE", session)>
   <#if shoppingCartOrderType != "SALES_ORDER">
@@ -152,10 +147,10 @@ under the License.
         </#if>
         <tr>
           <td>&nbsp;</td>
-          <td width=300 align='right' valign='middle' nowrap><div class='tableheadtext'>${uiLabelMap.OrderOrderEntryInternalOrganization}</div></td>
+          <td width="300" align='right' valign='middle' nowrap="nowrap"><div class='tableheadtext'>${uiLabelMap.OrderOrderEntryInternalOrganization}</div></td>
           <td>&nbsp;</td>
           <td valign='middle'>
-            <div class='tabletext' valign='top'>
+            <div class='tabletext'>
               <select name="billToCustomerPartyId"<#if sessionAttributes.orderMode?default("") == "SALES_ORDER"> disabled</#if>>
                 <#list organizations as organization>
                   <#assign organizationName = Static["org.ofbiz.party.party.PartyHelper"].getPartyName(organization, true)/>
@@ -170,27 +165,24 @@ under the License.
         <tr><td colspan="4">&nbsp;</td></tr>
         <tr>
           <td>&nbsp;</td>
-          <td align='right' valign='middle' nowrap><div class='tableheadtext'>${uiLabelMap.PartyUserLoginId}</div></td>
+          <td align='right' valign='middle' nowrap="nowrap"><div class='tableheadtext'>${uiLabelMap.PartyUserLoginId}</div></td>
           <td>&nbsp;</td>
           <td valign='middle'>
-            <div class='tabletext' valign='top'>
-              <input type='text' class='inputBox' name='userLoginId' value='${parameters.userLogin.userLoginId}'/>
-              <a href="javascript:call_fieldlookup2(document.poentryform.userLoginId,'LookupUserLoginAndPartyDetails');">
-                <img src='/images/fieldlookup.gif' width='15' height='14' border='0' alt="${uiLabelMap.CommonClickHereForFieldLookup}"/>
-              </a>
+            <div class='tabletext'>
+              <@htmlTemplate.lookupField value='${parameters.userLogin.userLoginId}'formName="poentryform" name="userLoginId" id="userLoginId_purchase" fieldFormName="LookupUserLoginAndPartyDetails"/>
             </div>
           </td>
         </tr>
         <tr>
           <td>&nbsp;</td>
-          <td align='right' valign='middle' nowrap><div class='tableheadtext'>${uiLabelMap.PartySupplier}</div></td>
+          <td align='right' valign='middle' nowrap="nowrap"><div class='tableheadtext'>${uiLabelMap.PartySupplier}</div></td>
           <td>&nbsp;</td>
           <td valign='middle'>
-            <div class='tabletext' valign='top'>
+            <div class='tabletext'>
               <select name="supplierPartyId"<#if sessionAttributes.orderMode?default("") == "SALES_ORDER"> disabled</#if>>
                 <option value="">${uiLabelMap.OrderSelectSupplier}</option>
                 <#list suppliers as supplier>
-                  <option value="${supplier.partyId}"<#if supplier.partyId == thisPartyId> selected</#if>>${Static["org.ofbiz.party.party.PartyHelper"].getPartyName(supplier, true)}</option>
+                  <option value="${supplier.partyId}"<#if supplier.partyId == thisPartyId> selected="selected"</#if>>[${supplier.partyId}] - ${Static["org.ofbiz.party.party.PartyHelper"].getPartyName(supplier, true)}</option>
                 </#list>
               </select>
             </div>

@@ -21,7 +21,7 @@ package org.ofbiz.shark.audit;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 
@@ -38,7 +38,7 @@ public class EventAudit extends AuditEntityObject implements EventAuditPersisten
     private GenericValue eventAudit = null;
     private boolean newValue = false;
 
-    public EventAudit(EntityAuditMgr mgr, GenericDelegator delegator, String eventAuditId) {
+    public EventAudit(EntityAuditMgr mgr, Delegator delegator, String eventAuditId) {
         super(mgr, delegator);
         this.eventAuditId = eventAuditId;
         if (this.delegator != null) {
@@ -52,7 +52,7 @@ public class EventAudit extends AuditEntityObject implements EventAuditPersisten
         }
     }
 
-    public EventAudit(EntityAuditMgr mgr, GenericDelegator delegator) {
+    public EventAudit(EntityAuditMgr mgr, Delegator delegator) {
         super(mgr, delegator);
         this.newValue = true;
         this.eventAuditId = delegator.getNextSeqId(org.ofbiz.shark.SharkConstants.WfEventAudit);

@@ -47,7 +47,7 @@ import org.ofbiz.accounting.payment.PaymentGatewayServices;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -68,7 +68,7 @@ public final class BillingAccountServices {
 
     public static Map<String, Object> createCustomerBillingAccount(DispatchContext dctx, Map<String, ?> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String organizationPartyId = (String) context.get("organizationPartyId");
         String customerPartyId = (String) context.get("customerPartyId");
@@ -167,7 +167,7 @@ public final class BillingAccountServices {
     }
 
     public static Map<String, Object> captureBillingAccountPayment(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String invoiceId = (String) context.get("invoiceId");
@@ -252,7 +252,7 @@ public final class BillingAccountServices {
     }
 
     public static Map<String, Object> calcBillingAccountBalance(DispatchContext dctx, Map<String, ?> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String billingAccountId = (String) context.get("billingAccountId");
         Map<String, Object> result = ServiceUtil.returnSuccess();
 

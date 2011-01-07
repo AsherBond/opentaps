@@ -21,6 +21,8 @@ package org.ofbiz.service;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
@@ -37,20 +39,24 @@ import org.ofbiz.base.config.GenericConfigException;
 import org.ofbiz.base.config.ResourceHandler;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilTimer;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
 import org.ofbiz.entity.model.ModelFieldType;
+import org.ofbiz.service.engine.GenericEngine;
 import org.ofbiz.service.group.GroupModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import org.webslinger.invoker.Wrap;
 
 import freemarker.template.utility.StringUtil;
 
@@ -61,6 +67,7 @@ import freemarker.template.utility.StringUtil;
 public class ModelServiceReader implements Serializable {
 
     public static final String module = ModelServiceReader.class.getName();
+    protected static boolean serviceDebugMode = true;
 
     /** is either from a URL or from a ResourceLoader (through the ResourceHandler) */
     protected boolean isFromURL;
@@ -75,190 +82,145 @@ public class ModelServiceReader implements Serializable {
             return null;
         }
 
-        ModelServiceReader reader = new ModelServiceReader(readerURL, dctx);
+        ModelServiceReader reader = new ModelServiceReader(true, readerURL, null, dctx);
         return reader.getModelServices();
     }
 
     public static Map<String, ModelService> getModelServiceMap(ResourceHandler handler, DispatchContext dctx) {
-        ModelServiceReader reader = new ModelServiceReader(handler, dctx);
+        ModelServiceReader reader = new ModelServiceReader(false, null, handler, dctx);
         return reader.getModelServices();
     }
 
-    protected ModelServiceReader(URL readerURL, DispatchContext dctx) {
-        this.isFromURL = true;
+    private ModelServiceReader(boolean isFromURL, URL readerURL, ResourceHandler handler, DispatchContext dctx) {
+        this.isFromURL = isFromURL;
         this.readerURL = readerURL;
-        this.handler = null;
-        this.dctx = dctx;
-        // preload models...
-        getModelServices();
-    }
-
-    protected ModelServiceReader(ResourceHandler handler, DispatchContext dctx) {
-        this.isFromURL = false;
-        this.readerURL = null;
         this.handler = handler;
         this.dctx = dctx;
-        // preload models...
-        getModelServices();
+        serviceDebugMode = "true".equals(UtilProperties.getPropertyValue("service", "servicedispatcher.servicedebugmode", "true"));
     }
 
-    public Map<String, ModelService> getModelServices() {
-        if (modelServices == null) { // don't want to block here
-            synchronized (ModelServiceReader.class) {
-                // must check if null again as one of the blocked threads can still enter
-                if (modelServices == null) { // now it's safe
-                    modelServices = FastMap.newInstance();
+    private Map<String, ModelService> getModelServices() {
+        UtilTimer utilTimer = new UtilTimer();
+        Document document;
+        if (this.isFromURL) {
+            // utilTimer.timerString("Before getDocument in file " + readerURL);
+            document = getDocument(readerURL);
 
-                    UtilTimer utilTimer = new UtilTimer();
+            if (document == null) {
+                return null;
+            }
+        } else {
+            // utilTimer.timerString("Before getDocument in " + handler);
+            try {
+                document = handler.getDocument();
+            } catch (GenericConfigException e) {
+                Debug.logError(e, "Error getting XML document from resource", module);
+                return null;
+            }
+        }
 
-                    Document document;
+        Map<String, ModelService> modelServices = FastMap.newInstance();
+        if (this.isFromURL) {// utilTimer.timerString("Before getDocumentElement in file " + readerURL);
+        } else {// utilTimer.timerString("Before getDocumentElement in " + handler);
+        }
 
-                    if (this.isFromURL) {
-                        // utilTimer.timerString("Before getDocument in file " + readerURL);
-                        document = getDocument(readerURL);
+        Element docElement = document.getDocumentElement();
+        if (docElement == null) {
+            return null;
+        }
 
-                        if (document == null) {
-                            modelServices = null;
-                            return null;
+        docElement.normalize();
+
+        String resourceLocation = handler.getLocation();
+        try {
+            resourceLocation = handler.getURL().toExternalForm();
+        } catch (GenericConfigException e) {
+            Debug.logError(e, "Could not get resource URL", module);
+        }
+
+        int i = 0;
+        Node curChild = docElement.getFirstChild();
+        if (curChild != null) {
+            if (this.isFromURL) {
+                utilTimer.timerString("Before start of service loop in file " + readerURL);
+            } else {
+                utilTimer.timerString("Before start of service loop in " + handler);
+            }
+
+            do {
+                if (curChild.getNodeType() == Node.ELEMENT_NODE && "service".equals(curChild.getNodeName())) {
+                    i++;
+                    Element curServiceElement = (Element) curChild;
+                    String serviceName = UtilXml.checkEmpty(curServiceElement.getAttribute("name"));
+
+                    // check to see if service with same name has already been read
+                    if (modelServices.containsKey(serviceName)) {
+                        Debug.logWarning("WARNING: Service " + serviceName + " is defined more than once, " +
+                            "most recent will over-write previous definition(s)", module);
+                    }
+
+                    // utilTimer.timerString("  After serviceName -- " + i + " --");
+                    ModelService service = createModelService(curServiceElement, resourceLocation);
+
+                    // utilTimer.timerString("  After createModelService -- " + i + " --");
+                    if (service != null) {
+                        modelServices.put(serviceName, service);
+                        // utilTimer.timerString("  After modelServices.put -- " + i + " --");
+                        /*
+                        int reqIn = service.getParameterNames(ModelService.IN_PARAM, false).size();
+                        int optIn = service.getParameterNames(ModelService.IN_PARAM, true).size() - reqIn;
+                        int reqOut = service.getParameterNames(ModelService.OUT_PARAM, false).size();
+                        int optOut = service.getParameterNames(ModelService.OUT_PARAM, true).size() - reqOut;
+
+                        if (Debug.verboseOn()) {
+                            String msg = "-- getModelService: # " + i + " Loaded service: " + serviceName +
+                                " (IN) " + reqIn + "/" + optIn + " (OUT) " + reqOut + "/" + optOut;
+
+                            Debug.logVerbose(msg, module);
                         }
+                        */
                     } else {
-                        // utilTimer.timerString("Before getDocument in " + handler);
-                        try {
-                            document = handler.getDocument();
-                        } catch (GenericConfigException e) {
-                            Debug.logError(e, "Error getting XML document from resource", module);
-                            return null;
-                        }
+                        Debug.logWarning(
+                            "-- -- SERVICE ERROR:getModelService: Could not create service for serviceName: " +
+                            serviceName, module);
                     }
 
-                    if (this.isFromURL) {// utilTimer.timerString("Before getDocumentElement in file " + readerURL);
-                    } else {// utilTimer.timerString("Before getDocumentElement in " + handler);
-                    }
-
-                    Element docElement = document.getDocumentElement();
-                    if (docElement == null) {
-                        modelServices = null;
-                        return null;
-                    }
-
-                    docElement.normalize();
-
-                    String resourceLocation = handler.getLocation();
-                    try {
-                        resourceLocation = handler.getURL().toExternalForm();
-                    } catch (GenericConfigException e) {
-                        Debug.logError(e, "Could not get resource URL", module);
-                    }
-
-                    int i = 0;
-                    Node curChild = docElement.getFirstChild();
-                    if (curChild != null) {
-                        if (this.isFromURL) {
-                            utilTimer.timerString("Before start of service loop in file " + readerURL);
-                        } else {
-                            utilTimer.timerString("Before start of service loop in " + handler);
-                        }
-
-                        do {
-                            if (curChild.getNodeType() == Node.ELEMENT_NODE && "service".equals(curChild.getNodeName())) {
-                                i++;
-                                Element curServiceElement = (Element) curChild;
-                                String serviceName = UtilXml.checkEmpty(curServiceElement.getAttribute("name"));
-
-                                // check to see if service with same name has already been read
-                                if (modelServices.containsKey(serviceName)) {
-                                    Debug.logWarning("WARNING: Service " + serviceName + " is defined more than once, " +
-                                        "most recent will over-write previous definition(s)", module);
-                                }
-
-                                // utilTimer.timerString("  After serviceName -- " + i + " --");
-                                ModelService service = createModelService(curServiceElement, resourceLocation);
-
-                                // utilTimer.timerString("  After createModelService -- " + i + " --");
-                                if (service != null) {
-                                    modelServices.put(serviceName, service);
-                                    // utilTimer.timerString("  After modelServices.put -- " + i + " --");
-                                    /*
-                                    int reqIn = service.getParameterNames(ModelService.IN_PARAM, false).size();
-                                    int optIn = service.getParameterNames(ModelService.IN_PARAM, true).size() - reqIn;
-                                    int reqOut = service.getParameterNames(ModelService.OUT_PARAM, false).size();
-                                    int optOut = service.getParameterNames(ModelService.OUT_PARAM, true).size() - reqOut;
-
-                                    if (Debug.verboseOn()) {
-                                        String msg = "-- getModelService: # " + i + " Loaded service: " + serviceName +
-                                            " (IN) " + reqIn + "/" + optIn + " (OUT) " + reqOut + "/" + optOut;
-
-                                        Debug.logVerbose(msg, module);
-                                    }
-                                    */
-                                } else {
-                                    Debug.logWarning(
-                                        "-- -- SERVICE ERROR:getModelService: Could not create service for serviceName: " +
-                                        serviceName, module);
-                                }
-
-                            }
-                        } while ((curChild = curChild.getNextSibling()) != null);
-                    } else {
-                        Debug.logWarning("No child nodes found.", module);
-                    }
-                    if (this.isFromURL) {
-                        utilTimer.timerString("Finished file " + readerURL + " - Total Services: " + i + " FINISHED");
-                        Debug.logImportant("Loaded [" + StringUtil.leftPad(Integer.toString(i), 3) + "] Services from " + readerURL, module);
-                    } else {
-                        utilTimer.timerString("Finished document in " + handler + " - Total Services: " + i + " FINISHED");
-                        if (Debug.importantOn()) {
-                            Debug.logImportant("Loaded [" + StringUtil.leftPad(Integer.toString(i), 3) + "] Services from " + resourceLocation, module);
-                        }
-                    }
                 }
+            } while ((curChild = curChild.getNextSibling()) != null);
+        } else {
+            Debug.logWarning("No child nodes found.", module);
+        }
+        if (this.isFromURL) {
+            utilTimer.timerString("Finished file " + readerURL + " - Total Services: " + i + " FINISHED");
+            Debug.logImportant("Loaded [" + StringUtil.leftPad(Integer.toString(i), 3) + "] Services from " + readerURL, module);
+        } else {
+            utilTimer.timerString("Finished document in " + handler + " - Total Services: " + i + " FINISHED");
+            if (Debug.importantOn()) {
+                Debug.logImportant("Loaded [" + StringUtil.leftPad(Integer.toString(i), 3) + "] Services from " + resourceLocation, module);
             }
         }
         return modelServices;
     }
 
-    /**
-     * Gets an Service object based on a definition from the specified XML Service descriptor file.
-     * @param serviceName The serviceName of the Service definition to use.
-     * @return An Service object describing the specified service of the specified descriptor file.
-     */
-    public ModelService getModelService(String serviceName) {
-        Map<String, ModelService> ec = getModelServices();
-
-        if (ec != null)
-            return ec.get(serviceName);
-        else
-            return null;
-    }
-
-    /**
-     * Creates a Iterator with the serviceName of each Service defined in the specified XML Service Descriptor file.
-     * @return A Iterator of serviceName Strings
-     */
-    public Iterator<String> getServiceNamesIterator() {
-        Collection<String> collection = getServiceNames();
-
-        if (collection != null) {
-            return collection.iterator();
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Creates a Collection with the serviceName of each Service defined in the specified XML Service Descriptor file.
-     * @return A Collection of serviceName Strings
-     */
-    public Collection<String> getServiceNames() {
-        Map<String, ModelService> ec = getModelServices();
-
-        return ec.keySet();
-    }
-
-    protected ModelService createModelService(Element serviceElement, String resourceLocation) {
+    private ModelService createModelService(Element serviceElement, String resourceLocation) {
         ModelService service = new ModelService();
 
         service.name = UtilXml.checkEmpty(serviceElement.getAttribute("name")).intern();
+        if (serviceDebugMode) {
+            Wrap<GenericInvoker> wrap = new Wrap<GenericInvoker>().fileName(resourceLocation + '#' + service.name).wrappedClass(GenericInvokerImpl.class);
+            for (Method method: GenericInvokerImpl.class.getDeclaredMethods()) {
+                if (method.getName().startsWith("run")) {
+                    wrap.wrap(method);
+                } else if (method.getName().startsWith("send")) {
+                    wrap.wrap(method);
+                }
+            }
+            Object startLine = serviceElement.getUserData("startLine");
+            if (startLine != null) {
+                wrap.lineNumber(((Integer) startLine).intValue());
+            }
+            service.invoker = wrap.newInstance(new Class<?>[] {ModelService.class}, new Object[] {service});
+        }
         service.definitionLocation = resourceLocation;
         service.engineName = UtilXml.checkEmpty(serviceElement.getAttribute("engine")).intern();
         service.location = UtilXml.checkEmpty(serviceElement.getAttribute("location")).intern();
@@ -345,7 +307,7 @@ public class ModelServiceReader implements Serializable {
         return service;
     }
 
-    protected String getCDATADef(Element baseElement, String tagName) {
+    private String getCDATADef(Element baseElement, String tagName) {
         String value = "";
         NodeList nl = baseElement.getElementsByTagName(tagName);
 
@@ -363,7 +325,7 @@ public class ModelServiceReader implements Serializable {
         return value;
     }
 
-    protected void createNotification(Element baseElement, ModelService model) {
+    private void createNotification(Element baseElement, ModelService model) {
         List<? extends Element> n = UtilXml.childElementList(baseElement, "notification");
         // default notification groups
         ModelNotification nSuccess = new ModelNotification();
@@ -391,7 +353,7 @@ public class ModelServiceReader implements Serializable {
         }
     }
 
-    protected void createPermission(Element baseElement, ModelService model) {
+    private void createPermission(Element baseElement, ModelService model) {
         Element e = UtilXml.firstChildElement(baseElement, "permission-service");
         if (e != null) {
             model.permissionServiceName = e.getAttribute("service-name");
@@ -401,7 +363,7 @@ public class ModelServiceReader implements Serializable {
         }
     }
 
-    protected void createPermGroups(Element baseElement, ModelService model) {
+    private void createPermGroups(Element baseElement, ModelService model) {
         for (Element element: UtilXml.childElementList(baseElement, "required-permissions")) {
             ModelPermGroup group = new ModelPermGroup();
             group.joinType = element.getAttribute("join-type");
@@ -410,13 +372,13 @@ public class ModelServiceReader implements Serializable {
         }
     }
 
-    protected void createGroupPermissions(Element baseElement, ModelPermGroup group, ModelService service) {
+    private void createGroupPermissions(Element baseElement, ModelPermGroup group, ModelService service) {
         // create the simple permissions
         for (Element element: UtilXml.childElementList(baseElement, "check-permission")) {
             ModelPermission perm = new ModelPermission();
             perm.nameOrRole = element.getAttribute("permission").intern();
             perm.action = element.getAttribute("action").intern();
-            if (perm.action != null && perm.action.length() > 0) {
+            if (UtilValidate.isNotEmpty(perm.action)) {
                 perm.permissionType = ModelPermission.ENTITY_PERMISSION;
             } else {
                 perm.permissionType = ModelPermission.PERMISSION;
@@ -433,9 +395,22 @@ public class ModelServiceReader implements Serializable {
             perm.serviceModel = service;
             group.permissions.add(perm);
         }
+        // Create the permissions based on permission services
+        for (Element element : UtilXml.childElementList(baseElement, "permission-service")) {
+            ModelPermission perm = new ModelPermission();
+            if (baseElement != null) {
+                perm.permissionType = ModelPermission.PERMISSION_SERVICE;
+                perm.permissionServiceName = element.getAttribute("service-name");
+                perm.action = element.getAttribute("main-action");
+                perm.permissionResourceDesc = element.getAttribute("resource-description");
+                perm.auth = true; // auth is always required when permissions are set
+                perm.serviceModel = service;
+                group.permissions.add(perm);
+            }
+        }
     }
 
-    protected void createGroupDefs(Element baseElement, ModelService service) {
+    private void createGroupDefs(Element baseElement, ModelService service) {
         List<? extends Element> group = UtilXml.childElementList(baseElement, "group");
         if (UtilValidate.isNotEmpty(group)) {
             Element groupElement = group.get(0);
@@ -446,7 +421,7 @@ public class ModelServiceReader implements Serializable {
         }
     }
 
-    protected void createImplDefs(Element baseElement, ModelService service) {
+    private void createImplDefs(Element baseElement, ModelService service) {
         for (Element implement: UtilXml.childElementList(baseElement, "implements")) {
             String serviceName = UtilXml.checkEmpty(implement.getAttribute("service")).intern();
             boolean optional = UtilXml.checkBoolean(implement.getAttribute("optional"), false);
@@ -456,18 +431,18 @@ public class ModelServiceReader implements Serializable {
         }
     }
 
-    protected void createAutoAttrDefs(Element baseElement, ModelService service) {
+    private void createAutoAttrDefs(Element baseElement, ModelService service) {
         for (Element element: UtilXml.childElementList(baseElement, "auto-attributes")) {
             createAutoAttrDef(element, service);
         }
     }
 
-    protected void createAutoAttrDef(Element autoElement, ModelService service) {
+    private void createAutoAttrDef(Element autoElement, ModelService service) {
         // get the entity name; first from the auto-attributes then from the service def
         String entityName = UtilXml.checkEmpty(autoElement.getAttribute("entity-name"));
-        if (entityName == null || entityName.length() == 0) {
+        if (UtilValidate.isEmpty(entityName)) {
             entityName = service.defaultEntityName;
-            if (entityName == null || entityName.length() == 0) {
+            if (UtilValidate.isEmpty(entityName)) {
                 Debug.logWarning("Auto-Attribute does not specify an entity-name; not default-entity on service definition", module);
             }
         }
@@ -478,7 +453,7 @@ public class ModelServiceReader implements Serializable {
         boolean includeNonPk = "nonpk".equals(includeType) || "all".equals(includeType);
 
         // need a delegator for this
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         if (delegator == null) {
             Debug.logWarning("Cannot use auto-attribute fields with a null delegator", module);
         }
@@ -538,7 +513,7 @@ public class ModelServiceReader implements Serializable {
         }
     }
 
-    protected void createAttrDefs(Element baseElement, ModelService service) {
+    private void createAttrDefs(Element baseElement, ModelService service) {
         // Add in the defined attributes (override the above defaults if specified)
         for (Element attribute: UtilXml.childElementList(baseElement, "attribute")) {
             ModelParam param = new ModelParam();
@@ -628,6 +603,22 @@ public class ModelServiceReader implements Serializable {
         def.optional = true;
         def.internal = true;
         service.addParam(def);
+        // login.username
+        def = new ModelParam();
+        def.name = "login.username";
+        def.type = "String";
+        def.mode = "IN";
+        def.optional = true;
+        def.internal = true;
+        service.addParam(def);
+        // login.password
+        def = new ModelParam();
+        def.name = "login.password";
+        def.type = "String";
+        def.mode = "IN";
+        def.optional = true;
+        def.internal = true;
+        service.addParam(def);
         // Locale
         def = new ModelParam();
         def.name = "locale";
@@ -646,7 +637,7 @@ public class ModelServiceReader implements Serializable {
         service.addParam(def);
     }
 
-    protected void createOverrideDefs(Element baseElement, ModelService service) {
+    private void createOverrideDefs(Element baseElement, ModelService service) {
         for (Element overrideElement: UtilXml.childElementList(baseElement, "override")) {
             String name = UtilXml.checkEmpty(overrideElement.getAttribute("name"));
             ModelParam param = service.getParam(name);
@@ -711,7 +702,7 @@ public class ModelServiceReader implements Serializable {
         }
     }
 
-    protected void addValidators(Element attribute, ModelParam param) {
+    private void addValidators(Element attribute, ModelParam param) {
         List<? extends Element> validateElements = UtilXml.childElementList(attribute, "type-validate");
         if (UtilValidate.isNotEmpty(validateElements)) {
             // always clear out old ones; never append
@@ -736,13 +727,13 @@ public class ModelServiceReader implements Serializable {
         }
     }
 
-    protected Document getDocument(URL url) {
+    private Document getDocument(URL url) {
         if (url == null)
             return null;
         Document document = null;
 
         try {
-            document = UtilXml.readXmlDocument(url, true);
+            document = UtilXml.readXmlDocument(url, true, true);
         } catch (SAXException sxe) {
             // Error generated during parsing)
             Exception x = sxe;
@@ -758,5 +749,55 @@ public class ModelServiceReader implements Serializable {
         }
 
         return document;
+    }
+
+    public static class GenericInvokerImpl implements GenericInvoker {
+        private final ModelService modelService;
+
+        public GenericInvokerImpl(ModelService modelService) {
+            this.modelService = modelService;
+        }
+
+        public Map<String, Object> runSync(String localName, GenericEngine engine, Map<String, Object> context) throws GenericServiceException {
+            return engine.runSync(localName, modelService, context);
+        }
+
+        public void runSyncIgnore(String localName, GenericEngine engine, Map<String, Object> context) throws GenericServiceException {
+            engine.runSyncIgnore(localName, modelService, context);
+        }
+
+        public void runAsync(String localName, GenericEngine engine, Map<String, Object> context, GenericRequester requester, boolean persist) throws GenericServiceException {
+            if (requester != null) {
+                engine.runAsync(localName, modelService, context, requester, persist);
+            } else {
+                engine.runAsync(localName, modelService, context, persist);
+            }
+        }
+
+        public void sendCallbacks(GenericEngine engine, Map<String, Object> context, Map<String, Object> result, Throwable t, int mode) throws GenericServiceException {
+            if (t != null) {
+                engine.sendCallbacks(modelService, context, t, mode);
+            } else if (result != null) {
+                engine.sendCallbacks(modelService, context, result, mode);
+            } else {
+                engine.sendCallbacks(modelService, context, mode);
+            }
+        }
+
+        public GenericInvokerImpl copy(ModelService modelService) {
+            try {
+                try {
+                    return getClass().getConstructor(ModelService.class).newInstance(modelService);
+                } catch (InvocationTargetException e) {
+                    throw e.getCause();
+                }
+            } catch (RuntimeException e) {
+                throw e;
+            } catch (Error e) {
+                throw e;
+            } catch (Throwable e) {
+                throw (InternalError) new InternalError(e.getMessage()).initCause(e);
+            }
+        }
     }
 }

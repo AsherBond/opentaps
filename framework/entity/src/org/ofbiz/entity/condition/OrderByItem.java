@@ -157,6 +157,7 @@ public class OrderByItem implements Comparator<GenericEntity> {
         sb.append(descending ? " DESC" : " ASC");
     }
 
+    @Override
     public boolean equals(java.lang.Object obj) {
         if (!(obj instanceof OrderByItem)) return false;
         OrderByItem that = (OrderByItem) obj;
@@ -164,6 +165,7 @@ public class OrderByItem implements Comparator<GenericEntity> {
         return getValue().equals(that.getValue()) && getDescending() == that.getDescending();
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getValue());

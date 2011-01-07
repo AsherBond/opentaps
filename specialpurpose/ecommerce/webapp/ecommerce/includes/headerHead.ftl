@@ -17,9 +17,7 @@ specific language governing permissions and limitations
 under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<#-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"> <html> -->
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <title><#if title?has_content>${title}<#elseif titleProperty?has_content>${uiLabelMap.get(titleProperty)}</#if>: ${(productStore.storeName)?if_exists}</title>
@@ -38,7 +36,7 @@ under the License.
     <#list layoutSettings.javaScripts as javaScript>
       <#if javaScriptsSet.contains(javaScript)>
         <#assign nothing = javaScriptsSet.remove(javaScript)/>
-        <script type="text/javascript" src="<@ofbizContentUrl>${StringUtil.wrapString(javaScript)}</@ofbizContentUrl>" type="text/javascript"></script>
+        <script type="text/javascript" src="<@ofbizContentUrl>${StringUtil.wrapString(javaScript)}</@ofbizContentUrl>"></script>
       </#if>
     </#list>
   </#if>

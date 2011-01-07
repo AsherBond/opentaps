@@ -54,7 +54,7 @@ public class CheckErrors extends MethodOperation {
     public CheckErrors(Element element, SimpleMethod simpleMethod) {
         super(element, simpleMethod);
         errorCode = element.getAttribute("error-code");
-        if (errorCode == null || errorCode.length() == 0) errorCode = "error";
+        if (UtilValidate.isEmpty(errorCode)) errorCode = "error";
 
         errorListAcsr = new ContextAccessor<List<Object>>(element.getAttribute("error-list-name"), "error_list");
 
@@ -64,6 +64,7 @@ public class CheckErrors extends MethodOperation {
         messageSuffix = new FlexibleMessage(UtilXml.firstChildElement(element, "message-suffix"), "check.message.suffix");
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         List<Object> messages = errorListAcsr.get(methodContext);
 
@@ -93,10 +94,12 @@ public class CheckErrors extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<check-errors/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

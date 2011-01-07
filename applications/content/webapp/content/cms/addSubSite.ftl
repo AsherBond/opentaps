@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
-<script language="javascript1.2">
+<script language="javascript1.2" type="text/javascript">
 function submit_add() {
     window.close();
     document.addSubSite.submit();

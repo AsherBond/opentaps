@@ -41,7 +41,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.LifoSet;
 import org.ofbiz.content.content.ContentServicesComplex;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericPK;
@@ -65,12 +65,12 @@ public class ContentManagementWorker {
     public static Map cachedWebSitePublishPoints = FastMap.newInstance();
     public static Map cachedStaticValues = FastMap.newInstance();
 
-    public static void mruAdd(HttpServletRequest request, GenericEntity pk, String suffix ) {
+    public static void mruAdd(HttpServletRequest request, GenericEntity pk, String suffix) {
         HttpSession session = request.getSession();
         mruAdd(session, pk);
     }
 
-    public static void mruAdd(HttpServletRequest request, GenericEntity pk ) {
+    public static void mruAdd(HttpServletRequest request, GenericEntity pk) {
         HttpSession session = request.getSession();
         mruAdd(session, pk);
     }
@@ -86,7 +86,7 @@ public class ContentManagementWorker {
         }
         String entityName = pk.getEntityName();
 
-        mruAddByEntityName( entityName, pk, lookupCaches);
+        mruAddByEntityName(entityName, pk, lookupCaches);
     }
 
    /**
@@ -130,7 +130,7 @@ public class ContentManagementWorker {
     * @param pk either a populated GenericValue or GenericPK.
     * @param suffix a string that can be used to distinguish the signature (probably not used).
     */
-    public static String buildPKSig( GenericEntity pk, String suffix ) {
+    public static String buildPKSig(GenericEntity pk, String suffix) {
 
         String sig = "";
         Collection keyColl = pk.getPrimaryKey().getAllKeys();
@@ -140,12 +140,12 @@ public class ContentManagementWorker {
         while (it.hasNext()) {
             String ky = (String)it.next();
             String val = (String)pk.get(ky);
-            if (val != null && val.length() > 0) {
+            if (UtilValidate.isNotEmpty(val)) {
                 if (sig.length() > 0) sig += "_";
                 sig += val;
             }
         }
-        if (suffix != null && suffix.length() > 0) {
+        if (UtilValidate.isNotEmpty(suffix)) {
             if (sig.length() > 0) sig += "_";
             sig += suffix;
         }
@@ -214,7 +214,7 @@ public class ContentManagementWorker {
         return ret;
     } */
 
-    public static void getCurrentValue(HttpServletRequest request, GenericDelegator delegator) {
+    public static void getCurrentValue(HttpServletRequest request, Delegator delegator) {
 
 
         HttpSession session = request.getSession();
@@ -230,12 +230,12 @@ public class ContentManagementWorker {
         GenericPK cachedPK = null;
         if (UtilValidate.isNotEmpty(entityName))
             cachedPK = (GenericPK)currentEntityMap.get(entityName);
-        getCurrentValueWithCachedPK( request, delegator, cachedPK, entityName);
+        getCurrentValueWithCachedPK(request, delegator, cachedPK, entityName);
         GenericPK currentPK = (GenericPK)request.getAttribute("currentPK");
         currentEntityMap.put(entityName, currentPK);
     }
 
-    public static void getCurrentValueWithCachedPK(HttpServletRequest request, GenericDelegator delegator, GenericPK cachedPK, String entityName) {
+    public static void getCurrentValueWithCachedPK(HttpServletRequest request, Delegator delegator, GenericPK cachedPK, String entityName) {
 
         Map paramMap = UtilHttp.getParameterMap(request);
         // Build the primary key that may have been passed in as key values
@@ -259,7 +259,7 @@ public class ContentManagementWorker {
         // whether or not a field is populated.
         boolean useCached = false;
         boolean usePassed = true;
-        if (cachedPK != null ) {
+        if (cachedPK != null) {
             useCached = true;
             keyColl = cachedPK.getPrimaryKey().getAllKeys();
             keyIt = keyColl.iterator();
@@ -315,7 +315,7 @@ public class ContentManagementWorker {
 
     }
 
-    public static List getPermittedPublishPoints(GenericDelegator delegator, List allPublishPoints, GenericValue userLogin, Security security, String permittedAction, String permittedOperations, String passedRoles) throws GeneralException {
+    public static List getPermittedPublishPoints(Delegator delegator, List allPublishPoints, GenericValue userLogin, Security security, String permittedAction, String permittedOperations, String passedRoles) throws GeneralException {
 
         List permittedPublishPointList = FastList.newInstance();
 
@@ -356,7 +356,7 @@ public class ContentManagementWorker {
 
      @param parentPubPt The parent publish point.
      */
-    public static List getAllPublishPoints(GenericDelegator delegator, String parentPubPt) throws GeneralException {
+    public static List getAllPublishPoints(Delegator delegator, String parentPubPt) throws GeneralException {
 
         GenericValue rootContent = null;
         List relatedPubPts = null;
@@ -384,9 +384,9 @@ public class ContentManagementWorker {
         return allPublishPoints;
     }
 
-    public static Map getPublishPointMap(GenericDelegator delegator, String pubPtId ) throws GeneralException {
+    public static Map getPublishPointMap(Delegator delegator, String pubPtId) throws GeneralException {
 
-        List publishPointList = getAllPublishPoints( delegator, pubPtId );
+        List publishPointList = getAllPublishPoints(delegator, pubPtId);
         Map publishPointMap = FastMap.newInstance();
         Iterator it = publishPointList.iterator();
         while (it.hasNext()) {
@@ -398,9 +398,9 @@ public class ContentManagementWorker {
     }
 
 
-    public static void getAllPublishPointMap(GenericDelegator delegator, String pubPtId, Map publishPointMap ) throws GeneralException {
+    public static void getAllPublishPointMap(Delegator delegator, String pubPtId, Map publishPointMap) throws GeneralException {
 
-        List publishPointList = getAllPublishPoints( delegator, pubPtId );
+        List publishPointList = getAllPublishPoints(delegator, pubPtId);
         Iterator it = publishPointList.iterator();
         while (it.hasNext()) {
            GenericValue webSitePublishPoint = (GenericValue)it.next();
@@ -410,7 +410,7 @@ public class ContentManagementWorker {
         }
     }
 
-    public static Map getPublishPointMap(GenericDelegator delegator, List publishPointList ) {
+    public static Map getPublishPointMap(Delegator delegator, List publishPointList) {
 
         Map publishPointMap = FastMap.newInstance();
         Iterator it = publishPointList.iterator();
@@ -422,7 +422,7 @@ public class ContentManagementWorker {
         return publishPointMap;
     }
 
-    public static List getStaticValues(GenericDelegator delegator,  String parentPlaceholderId, List permittedPublishPointList) throws GeneralException {
+    public static List getStaticValues(Delegator delegator,  String parentPlaceholderId, List permittedPublishPointList) throws GeneralException {
 
         List assocValueList = null;
         try {
@@ -466,11 +466,11 @@ public class ContentManagementWorker {
         return staticValueList;
     }
 
-    public static GenericValue getWebSitePublishPoint(GenericDelegator delegator, String contentId) throws GenericEntityException {
+    public static GenericValue getWebSitePublishPoint(Delegator delegator, String contentId) throws GenericEntityException {
            return getWebSitePublishPoint(delegator, contentId, false);
     }
 
-    public static GenericValue getWebSitePublishPoint(GenericDelegator delegator, String contentId, boolean ignoreCache) throws GenericEntityException {
+    public static GenericValue getWebSitePublishPoint(Delegator delegator, String contentId, boolean ignoreCache) throws GenericEntityException {
         GenericValue webSitePublishPoint = null;
         if (!ignoreCache)
             webSitePublishPoint = (GenericValue)cachedWebSitePublishPoints.get(contentId);
@@ -488,7 +488,7 @@ public class ContentManagementWorker {
         return webSitePublishPoint;
     }
 
-    public static GenericValue overrideWebSitePublishPoint(GenericDelegator delegator, GenericValue passedValue) throws GenericEntityException {
+    public static GenericValue overrideWebSitePublishPoint(Delegator delegator, GenericValue passedValue) throws GenericEntityException {
         String contentId = passedValue.getString("contentId");
         GenericValue webSitePublishPoint = passedValue;
         String contentIdTo = getParentWebSitePublishPointId(delegator, contentId);
@@ -507,14 +507,14 @@ public class ContentManagementWorker {
         return webSitePublishPoint;
     }
 
-    public static GenericValue getParentWebSitePublishPointValue(GenericDelegator delegator, String  contentId) throws GenericEntityException {
+    public static GenericValue getParentWebSitePublishPointValue(Delegator delegator, String  contentId) throws GenericEntityException {
 
         String contentIdTo = getParentWebSitePublishPointId(delegator, contentId);
         GenericValue content = delegator.findByPrimaryKeyCache("Content", UtilMisc.toMap("contentId", contentIdTo));
         return content;
     }
 
-    public static String getParentWebSitePublishPointId(GenericDelegator delegator, String  contentId) throws GenericEntityException {
+    public static String getParentWebSitePublishPointId(Delegator delegator, String  contentId) throws GenericEntityException {
 
 
         String contentIdTo = null;
@@ -528,7 +528,7 @@ public class ContentManagementWorker {
         return contentIdTo;
     }
 
-    public static GenericValue getStaticValue(GenericDelegator delegator, String parentPlaceholderId, String webSitePublishPointId, boolean ignoreCache) throws GenericEntityException {
+    public static GenericValue getStaticValue(Delegator delegator, String parentPlaceholderId, String webSitePublishPointId, boolean ignoreCache) throws GenericEntityException {
         GenericValue webSitePublishPoint = null;
         GenericValue staticValue = null;
         if (!ignoreCache) {
@@ -555,13 +555,13 @@ public class ContentManagementWorker {
     }
 
 
-    public static List getPublishedLinks(GenericDelegator delegator,  String targContentId, String rootPubId, GenericValue userLogin, Security security, String permittedAction, String permittedOperations , String passedRoles) throws GeneralException {
+    public static List getPublishedLinks(Delegator delegator,  String targContentId, String rootPubId, GenericValue userLogin, Security security, String permittedAction, String permittedOperations , String passedRoles) throws GeneralException {
 
         // Set up one map with all the top-level publish points (to which only one sub point can be attached to)
         // and another map (publishPointMapAll) that points to one of the top-level points.
-        List allPublishPointList = getAllPublishPoints( delegator, rootPubId );
+        List allPublishPointList = getAllPublishPoints(delegator, rootPubId);
         //if (Debug.infoOn()) Debug.logInfo("in getPublishLinks, allPublishPointList:" + allPublishPointList, module);
-        List publishPointList = getPermittedPublishPoints( delegator, allPublishPointList, userLogin, security , permittedAction, permittedOperations, passedRoles );
+        List publishPointList = getPermittedPublishPoints(delegator, allPublishPointList, userLogin, security , permittedAction, permittedOperations, passedRoles);
         Map publishPointMap = FastMap.newInstance();
         Map publishPointMapAll = FastMap.newInstance();
         Iterator it = publishPointList.iterator();
@@ -577,7 +577,7 @@ public class ContentManagementWorker {
             Object [] subArr = {contentId, subPointList, description, nullObj};
             publishPointMap.put(contentId, subArr);
             publishPointMapAll.put(contentId, contentId);
-            List subPublishPointList = getAllPublishPoints( delegator, contentId );
+            List subPublishPointList = getAllPublishPoints(delegator, contentId);
             Iterator it2 = subPublishPointList.iterator();
             while (it2.hasNext()) {
                 //String [] arr2 = (String [])it2.next();
@@ -637,7 +637,7 @@ public class ContentManagementWorker {
         return publishedLinkList;
     }
 
-    public static GenericValue getAuthorContent(GenericDelegator delegator, String contentId) {
+    public static GenericValue getAuthorContent(Delegator delegator, String contentId) {
 
         GenericValue authorContent = null;
         try {
@@ -661,7 +661,7 @@ public class ContentManagementWorker {
         return authorContent;
     }
 
-    public static List getPermittedDepartmentPoints(GenericDelegator delegator, List allDepartmentPoints, GenericValue userLogin, Security security, String permittedAction, String permittedOperations, String passedRoles) throws GeneralException {
+    public static List getPermittedDepartmentPoints(Delegator delegator, List allDepartmentPoints, GenericValue userLogin, Security security, String permittedAction, String permittedOperations, String passedRoles) throws GeneralException {
 
         List permittedDepartmentPointList = FastList.newInstance();
 
@@ -701,7 +701,7 @@ public class ContentManagementWorker {
 
      @param parentPubPt The parent publish point.
      */
-    public static List getAllDepartmentContent(GenericDelegator delegator, String parentPubPt) throws GeneralException {
+    public static List getAllDepartmentContent(Delegator delegator, String parentPubPt) throws GeneralException {
 
         GenericValue rootContent = null;
         List relatedPubPts = null;
@@ -729,23 +729,23 @@ public class ContentManagementWorker {
     public static String getUserName(HttpServletRequest request, String userLoginId) throws GenericEntityException {
 
         String userName = null;
-        GenericDelegator delegator = (GenericDelegator)request.getAttribute("delegator");
+        Delegator delegator = (Delegator)request.getAttribute("delegator");
         GenericValue userLogin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", userLoginId));
         GenericValue person = userLogin.getRelatedOneCache("Person");
         userName = person.getString("firstName") + " " + person.getString("lastName");
         return userName;
     }
 
-    public static int updateStatsTopDown(GenericDelegator delegator, String contentId, List typeList) throws GenericEntityException {
+    public static int updateStatsTopDown(Delegator delegator, String contentId, List typeList) throws GenericEntityException {
         int subLeafCount = 0;
         GenericValue thisContent = delegator.findByPrimaryKey("Content", UtilMisc.toMap("contentId", contentId));
         if (thisContent == null)
             throw new RuntimeException("No entity found for id=" + contentId);
 
        EntityCondition conditionMain = null;
-       if (typeList.size() > 0 ) {
+       if (typeList.size() > 0) {
            EntityCondition conditionType = EntityCondition.makeCondition("contentAssocTypeId", EntityOperator.IN, typeList);
-           conditionMain = EntityCondition.makeCondition(UtilMisc.toList( EntityCondition.makeCondition("contentIdTo", EntityOperator.EQUALS, contentId), conditionType), EntityOperator.AND);
+           conditionMain = EntityCondition.makeCondition(UtilMisc.toList(EntityCondition.makeCondition("contentIdTo", EntityOperator.EQUALS, contentId), conditionType), EntityOperator.AND);
        } else {
            conditionMain = EntityCondition.makeCondition("contentIdTo", EntityOperator.EQUALS, contentId);
        }
@@ -768,13 +768,13 @@ public class ContentManagementWorker {
         return subLeafCount;
     }
 
-    public static void updateStatsBottomUp(GenericDelegator delegator, String contentId, List typeList, int branchChangeAmount, int leafChangeAmount) throws GenericEntityException {
+    public static void updateStatsBottomUp(Delegator delegator, String contentId, List typeList, int branchChangeAmount, int leafChangeAmount) throws GenericEntityException {
         GenericValue thisContent = delegator.findByPrimaryKey("Content", UtilMisc.toMap("contentId", contentId));
         if (thisContent == null)
             throw new RuntimeException("No entity found for id=" + contentId);
 
        EntityCondition conditionType = EntityCondition.makeCondition("contentAssocTypeId", EntityOperator.IN, typeList);
-       EntityCondition conditionMain = EntityCondition.makeCondition(UtilMisc.toList( EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId), conditionType), EntityOperator.AND);
+       EntityCondition conditionMain = EntityCondition.makeCondition(UtilMisc.toList(EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId), conditionType), EntityOperator.AND);
             List listAll = delegator.findList("ContentAssoc", conditionMain, null, null, null, true);
             List listFiltered = EntityUtil.filterByDate(listAll);
             Iterator iter = listFiltered.iterator();

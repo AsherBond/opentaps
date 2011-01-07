@@ -22,8 +22,9 @@ under the License.
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
+    <include location="component://commonext/webapp/WEB-INF/controller.xml"/>
     <description>Catalog Module Site Configuration File</description>
-    <owner>Copyright 2001-2008 The Apache Software Foundation</owner>
+    <owner>Copyright 2001-2009 The Apache Software Foundation</owner>
 
     <handler name="service-multi" type="request" class="org.ofbiz.webapp.event.ServiceMultiEventHandler"/>
     <handler name="groovy" type="request" class="org.ofbiz.webapp.event.GroovyEventHandler"/>
@@ -629,6 +630,12 @@ under the License.
         <security https="true" auth="true"/>
         <response name="success" type="view" value="EditProductContentContent"/>
     </request-map>
+    <request-map uri="addAdditionalImagesForProduct">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="uploadProductAdditionalViewImages"/>
+        <response name="success" type="view" value="EditProductContent"/>
+        <response name="error" type="view" value="EditProductContent"/>
+    </request-map>
     <request-map uri="addContentToProduct">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createProductContent"/>
@@ -686,7 +693,7 @@ under the License.
     <request-map uri="updateSimpleTextContentForProduct">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="updateSimpleTextContentForProduct"/>
-        <response name="success" type="view" value="EditProductContentContent"/>
+        <response name="success" type="view" value="EditProductContent"/>
         <response name="error" type="view" value="EditProductContentContent"/>
     </request-map>
     <request-map uri="createSimpleTextContentForProduct">
@@ -822,7 +829,10 @@ under the License.
     </request-map>
 
     <!-- ================ Product Costs Requests ================= -->
-    <request-map uri="EditProductCosts"><security https="true" auth="true"/><response name="success" type="view" value="EditProductCosts"/></request-map>
+    <request-map uri="EditProductCosts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductCosts"/>
+    </request-map>
     <request-map uri="createCostComponent">
         <security https="true" auth="true"/>
         <event type="service" invoke="createCostComponent"/>
@@ -838,6 +848,24 @@ under the License.
     <request-map uri="deleteCostComponent">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteCostComponent"/>
+        <response name="success" type="view" value="EditProductCosts"/>
+        <response name="error" type="view" value="EditProductCosts"/>
+    </request-map>
+    <request-map uri="createProductCostComponentCalc">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createProductCostComponentCalc"/>
+        <response name="success" type="view" value="EditProductCosts"/>
+        <response name="error" type="view" value="EditProductCosts"/>
+    </request-map>
+    <request-map uri="updateProductCostComponentCalc">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateProductCostComponentCalc"/>
+        <response name="success" type="view" value="EditProductCosts"/>
+        <response name="error" type="view" value="EditProductCosts"/>
+    </request-map>
+    <request-map uri="deleteProductCostComponentCalc">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteProductCostComponentCalc"/>
         <response name="success" type="view" value="EditProductCosts"/>
         <response name="error" type="view" value="EditProductCosts"/>
     </request-map>
@@ -1208,10 +1236,6 @@ under the License.
         <response name="success" type="view" value="EditFeatureTypes"/>
         <response name="error" type="view" value="EditFeatureType"/>
     </request-map>
-    <request-map uri="EditFeatureCategories">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="EditFeatureCategories"/>
-    </request-map>
     <request-map uri="ListFeaturePrice">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="EditFeature"/>
@@ -1557,8 +1581,14 @@ under the License.
     </request-map>
 
     <!-- ================ Subscription Requests ================= -->
-    <request-map uri="FindSubscription"><security https="true" auth="true"/><response name="success" type="view" value="FindSubscription"/></request-map>
-    <request-map uri="EditSubscription"><security https="true" auth="true"/><response name="success" type="view" value="EditSubscription"/></request-map>
+    <request-map uri="FindSubscription">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindSubscription"/>
+    </request-map>
+    <request-map uri="EditSubscription">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditSubscription"/>
+    </request-map>
     <request-map uri="createSubscription">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createSubscription"/>
@@ -1573,8 +1603,14 @@ under the License.
     </request-map>
 
     <!-- ================ SubscriptionResource Requests ================= -->
-    <request-map uri="FindSubscriptionResource"><security https="true" auth="true"/><response name="success" type="view" value="FindSubscriptionResource"/></request-map>
-    <request-map uri="EditSubscriptionResource"><security https="true" auth="true"/><response name="success" type="view" value="EditSubscriptionResource"/></request-map>
+    <request-map uri="FindSubscriptionResource">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindSubscriptionResource"/>
+    </request-map>
+    <request-map uri="EditSubscriptionResource">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditSubscriptionResource"/>
+    </request-map>
     <request-map uri="createSubscriptionResource">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createSubscriptionResource"/>
@@ -1588,7 +1624,10 @@ under the License.
         <response name="error" type="view" value="EditSubscriptionResource"/>
     </request-map>
 
-    <request-map uri="EditSubscriptionResourceProducts"><security https="true" auth="true"/><response name="success" type="view" value="EditSubscriptionResourceProducts"/></request-map>
+    <request-map uri="EditSubscriptionResourceProducts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditSubscriptionResourceProducts"/>
+    </request-map>
     <request-map uri="createProductSubscriptionResourceSr">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createProductSubscriptionResource"/>
@@ -1915,21 +1954,27 @@ under the License.
     </request-map>
 
     <!-- ================ ProductStore Role Requests ================= -->
-    <request-map uri="EditProductStoreRoles">
+    <request-map uri="FindProductStoreRoles">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="EditProductStoreRoles"/>
+        <response name="success" type="view" value="FindProductStoreRoles"/>
     </request-map>
     <request-map uri="storeCreateRole">
         <security https="true" auth="true"/>
         <event type="service" invoke="createProductStoreRole"/>
-        <response name="success" type="view" value="EditProductStoreRoles"/>
-        <response name="error" type="view" value="EditProductStoreRoles"/>
+        <response name="success" type="view" value="FindProductStoreRoles"/>
+        <response name="error" type="view" value="FindProductStoreRoles"/>
+    </request-map>
+    <request-map uri="storeUpdateRole">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateProductStoreRole"/>
+        <response name="success" type="view" value="FindProductStoreRoles"/>
+        <response name="error" type="view" value="FindProductStoreRoles"/>
     </request-map>
     <request-map uri="storeRemoveRole">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeProductStoreRole"/>
-        <response name="success" type="view" value="EditProductStoreRoles"/>
-        <response name="error" type="view" value="EditProductStoreRoles"/>
+        <response name="success" type="view" value="FindProductStoreRoles"/>
+        <response name="error" type="view" value="FindProductStoreRoles"/>
     </request-map>
 
     <!-- ================ ProductStore Payment Requests ================= -->
@@ -2091,7 +2136,10 @@ under the License.
     </request-map>
 
     <!-- ================ ProductStore Promos Requests ================= -->
-    <request-map uri="EditProductStorePromos"><security https="true" auth="true"/><response name="success" type="view" value="EditProductStorePromos"/></request-map>
+    <request-map uri="EditProductStorePromos">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductStorePromos"/>
+    </request-map>
     <request-map uri="createProductStorePromoAppl">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createProductStorePromoAppl"/>
@@ -2112,7 +2160,10 @@ under the License.
     </request-map>
 
     <!-- ================ ProductStore ProdCatalogs Requests ================= -->
-    <request-map uri="EditProductStoreCatalogs"><security https="true" auth="true"/><response name="success" type="view" value="EditProductStoreCatalogs"/></request-map>
+    <request-map uri="EditProductStoreCatalogs">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductStoreCatalogs"/>
+    </request-map>
     <request-map uri="createProductStoreCatalog">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createProductStoreCatalog"/>
@@ -2157,7 +2208,10 @@ under the License.
     </request-map>
 
     <!-- ================ Product Store Keyword Override ============= -->
-    <request-map uri="editProductStoreKeywordOvrd"><security https="true" auth="true"/><response name="success" type="view" value="EditProductStoreKeywordOvrd"/></request-map>
+    <request-map uri="editProductStoreKeywordOvrd">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductStoreKeywordOvrd"/>
+    </request-map>
     <request-map uri="createProductStoreKeywordOvrd">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createProductStoreKeywordOvrd"/>
@@ -2262,7 +2316,10 @@ under the License.
     </request-map>
 
     <!-- ================ Product Review Requests ================= -->
-    <request-map uri="pendingReviews"><security https="true" auth="true"/><response name="success" type="view" value="pendingReviews"/></request-map>
+    <request-map uri="pendingReviews">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="pendingReviews"/>
+    </request-map>
     <request-map uri="updateProductReview">
         <security https="true" auth="true"/>
         <event type="service-multi" path="" invoke="updateProductReview"/>
@@ -2271,7 +2328,10 @@ under the License.
     </request-map>
 
     <!-- ================ Supplier Product Requests ================= -->
-    <request-map uri="EditProductSuppliers"><security https="true" auth="true"/><response name="success" type="view" value="EditSupplierProduct"/></request-map>
+    <request-map uri="EditProductSuppliers">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditSupplierProduct"/>
+    </request-map>
     <request-map uri="createSupplierProduct">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createSupplierProduct"/>
@@ -2333,8 +2393,14 @@ under the License.
     </request-map>
 
     <!-- ================ Configuration Requests ================= -->
-    <request-map uri="FindProductConfigItems"><security auth="true" https="true"/><response name="success" type="view" value="FindProductConfigItems"/></request-map>
-    <request-map uri="EditProductConfigItem"><security auth="true" https="true"/><response name="success" type="view" value="EditProductConfigItem"/></request-map>
+    <request-map uri="FindProductConfigItems">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="FindProductConfigItems"/>
+    </request-map>
+    <request-map uri="EditProductConfigItem">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="EditProductConfigItem"/>
+    </request-map>
     <request-map uri="createProductConfigItem">
         <security auth="true" https="true"/>
         <event invoke="createProductConfigItem" path="" type="service"/>
@@ -2355,7 +2421,10 @@ under the License.
     </request-map>
 
     <!-- Config Options Requests -->
-    <request-map uri="EditProductConfigOptions"><security auth="true" https="true"/><response name="success" type="view" value="EditProductConfigOptions"/></request-map>
+    <request-map uri="EditProductConfigOptions">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="EditProductConfigOptions"/>
+    </request-map>
     <request-map uri="createProductConfigOption">
         <security auth="true" https="true"/>
         <event invoke="createProductConfigOption" type="service"/>
@@ -2395,18 +2464,30 @@ under the License.
         <response name="error" type="view" value="EditProductConfigOptions"/>
     </request-map>
     <!-- ================ Product Content Requests ================= -->
-    <request-map uri="EditProductConfigItemContent"><security https="true" auth="true"/><response name="success" type="view" value="EditProductConfigItemContent"/></request-map>
+    <request-map uri="EditProductConfigItemContent">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductConfigItemContent"/>
+    </request-map>
     <request-map uri="updateProductConfigItemContent">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="updateProductConfigItem"/>
         <response name="success" type="view" value="EditProductConfigItemContent"/>
         <response name="error" type="view" value="EditProductConfigItemContent"/>
     </request-map>
-    <request-map uri="UploadProductConfigItemImage"><security https="true" auth="true"/><response name="success" type="view" value="EditProductConfigItemContent"/></request-map>
+    <request-map uri="UploadProductConfigItemImage">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductConfigItemContent"/>
+    </request-map>
 
     <!-- ================ Product Content Assoc Requests ================= -->
-    <request-map uri="EditProductConfigItemContentContent"><security https="true" auth="true"/><response name="success" type="view" value="EditProductConfigItemContentContent"/></request-map>
-    <request-map uri="prepareAddContentToProductConfigItem"><security https="true" auth="true"/><response name="success" type="view" value="EditProductConfigItemContentContent"/></request-map>
+    <request-map uri="EditProductConfigItemContentContent">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductConfigItemContentContent"/>
+    </request-map>
+    <request-map uri="prepareAddContentToProductConfigItem">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductConfigItemContentContent"/>
+    </request-map>
     <request-map uri="addContentToProductConfigItem">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createProductConfigItemContent"/>
@@ -2465,6 +2546,89 @@ under the License.
         <response name="error" type="view" value="EditProductWorkEfforts"/>
     </request-map>
 
+    <request-map uri="viewProductOrder">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="findOrders"/>
+        <response name="success" type="view" value="ViewProductOrder"/>
+        <response name="error" type="view" value="EditProduct"/>
+    </request-map>
+
+    <request-map uri="EditProductCommunicationEvents">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductCommunicationEvents"/>
+    </request-map>
+    <request-map uri="AddCommEventForProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditCommunicationEvent"/>
+    </request-map>
+    <request-map uri="createCommunicationEvent">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createCommunicationEvent"/>
+        <response name="success" type="view" value="EditProductCommunicationEvents"/>
+        <response name="error" type="view" value="EditProductCommunicationEvents"/>
+    </request-map>
+
+    <!-- Web Analytics Request Mappings -->
+    <request-map uri="WebAnalytics">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindWebAnalyticsConfigs"/>
+        <response name="error" type="view" value="FindWebAnalyticsConfigs"/>
+    </request-map>
+    <request-map uri="WebAnalyticsConfigs">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindWebAnalyticsConfigs"/>
+        <response name="error" type="view" value="FindWebAnalyticsConfigs"/>
+    </request-map>
+    <request-map uri="FindWebAnalyticsConfigs">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindWebAnalyticsConfigs"/>
+        <response name="error" type="view" value="FindWebAnalyticsConfigs"/>
+    </request-map>
+    <request-map uri="EditWebAnalyticsConfig">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditWebAnalyticsConfig"/>
+        <response name="error" type="view" value="EditWebAnalyticsConfig"/>
+    </request-map>
+    <request-map uri="createWebAnalyticsConfig">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createWebAnalyticsConfig"/>
+        <response name="success" type="view" value="EditWebAnalyticsConfig"/>
+        <response name="error" type="view" value="EditWebAnalyticsConfig"/>
+    </request-map>
+    <request-map uri="updateWebAnalyticsConfig">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateWebAnalyticsConfig"/>
+        <response name="success" type="view" value="EditWebAnalyticsConfig"/>
+        <response name="error" type="view" value="EditWebAnalyticsConfig"/>
+    </request-map>
+
+    <request-map uri="WebAnalyticsTypes">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindWebAnalyticsTypes"/>
+        <response name="error" type="view" value="FindWebAnalyticsTypes"/>
+    </request-map>
+    <request-map uri="FindWebAnalyticsTypes">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindWebAnalyticsTypes"/>
+        <response name="error" type="view" value="FindWebAnalyticsTypes"/>
+    </request-map>
+    <request-map uri="EditWebAnalyticsType">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditWebAnalyticsType"/>
+        <response name="error" type="view" value="EditWebAnalyticsType"/>
+    </request-map>
+    <request-map uri="createWebAnalyticsType">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createWebAnalyticsType"/>
+        <response name="success" type="view" value="EditWebAnalyticsType"/>
+        <response name="error" type="view" value="EditWebAnalyticsType"/>
+    </request-map>
+    <request-map uri="updateWebAnalyticsType">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateWebAnalyticsType"/>
+        <response name="success" type="view" value="EditWebAnalyticsType"/>
+        <response name="error" type="view" value="EditWebAnalyticsType"/>
+    </request-map>
 
    <!-- ================ Lookup Requests ================= -->
     <request-map uri="LookupContent"><security auth="true" https="true"/><response name="success" type="view" value="LookupContent"/></request-map>
@@ -2485,6 +2649,8 @@ under the License.
     <request-map uri="LookupWorkEffort"><security https="true" auth="true"/><response name="success" type="view" value="LookupWorkEffort"/></request-map>
     <request-map uri="LookupDataResource"><security auth="true" https="true"/><response name="success" type="view" value="LookupDataResource"/></request-map>
     <request-map uri="LookupPerson"><security auth="true" https="true"/><response name="success" type="view" value="LookupPerson"/></request-map>
+    <request-map uri="LookupPreferredContactMech"><security https="true" auth="true"/><response name="success" type="view" value="LookupPreferredContactMech"/></request-map>
+    <request-map uri="LookupContactList"><security https="true" auth="true"/><response name="success" type="view" value="LookupContactList"/></request-map>
 
     <!-- ================ Vendor Product Requests ================= -->
     <request-map uri="EditVendorProduct">
@@ -2507,6 +2673,25 @@ under the License.
     </request-map>
 
     <!-- end of request mappings -->
+
+    <!-- ================ Product Promo Content Requests ================= -->
+    <request-map uri="EditProductPromoContent">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditProductPromoContent"/>
+        <response name="error" type="view" value="EditProductPromoContent"/>
+    </request-map>
+    <request-map uri="removeContentFromProductPromo">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeProductPromoContent"/>
+        <response name="success" type="view" value="EditProductPromoContent"/>
+        <response name="error" type="view" value="EditProductPromoContent"/>
+    </request-map>
+    <request-map uri="addImageContentForProductPromo">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="addImageForProductPromo"/>
+        <response name="success" type="view" value="EditProductPromoContent"/>
+        <response name="error" type="view" value="EditProductPromoContent"/>
+    </request-map>
 
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://product/widget/catalog/CommonScreens.xml#main"/>
@@ -2606,13 +2791,14 @@ under the License.
     <view-map name="EditProductPromoStores" type="screen" page="component://product/widget/catalog/PromoScreens.xml#EditProductPromoStores"/>
     <view-map name="FindProductPromoCode" type="screen" page="component://product/widget/catalog/PromoScreens.xml#FindProductPromoCode"/>
     <view-map name="EditProductPromoCode" type="screen" page="component://product/widget/catalog/PromoScreens.xml#EditProductPromoCode"/>
+    <view-map name="EditProductPromoContent" type="screen" page="component://product/widget/catalog/PromoScreens.xml#EditProductPromoContent"/>
 
     <view-map name="FindPriceRules" type="screen" page="component://product/widget/catalog/PriceScreens.xml#FindProductPriceRule"/>
     <view-map name="EditProductPriceRules" type="screen" page="component://product/widget/catalog/PriceScreens.xml#EditProductPriceRules"/>
 
     <view-map name="FindProductStore" type="screen" page="component://product/widget/catalog/StoreScreens.xml#FindProductStore"/>
     <view-map name="EditProductStore" type="screen" page="component://product/widget/catalog/StoreScreens.xml#EditProductStore"/>
-    <view-map name="EditProductStoreRoles" type="screen" page="component://product/widget/catalog/StoreScreens.xml#EditProductStoreRoles"/>
+    <view-map name="FindProductStoreRoles" type="screen" page="component://product/widget/catalog/StoreScreens.xml#FindProductStoreRoles"/>
     <view-map name="EditProductStoreEmails" type="screen" page="component://product/widget/catalog/StoreScreens.xml#EditProductStoreEmails"/>
     <view-map name="EditProductStorePromos" type="screen" page="component://product/widget/catalog/StoreScreens.xml#EditProductStorePromos"/>
     <view-map name="EditProductStoreCatalogs" type="screen" page="component://product/widget/catalog/StoreScreens.xml#EditProductStoreCatalogs"/>
@@ -2631,6 +2817,10 @@ under the License.
 
     <view-map name="pendingReviews" type="screen" page="component://product/widget/catalog/ReviewScreens.xml#pendingReviews"/>
 
+    <view-map name="ViewProductOrder" type="screen" page="component://product/widget/catalog/ProductScreens.xml#ViewProductOrder"/>
+    <view-map name="EditProductCommunicationEvents" type="screen" page="component://product/widget/catalog/ProductScreens.xml#EditProductCommunicationEvents"/>
+    <view-map name="EditCommunicationEvent" type="screen" page="component://product/widget/catalog/ProductScreens.xml#EditCommunicationEvent"/>
+
     <!-- Product Configuration views -->
     <view-map name="ProductConfigItemArticle" type="screen" page="component://product/widget/catalog/ConfigScreens.xml#ProductConfigItemArticle"/>
     <view-map name="FindProductConfigItems" type="screen" page="component://product/widget/catalog/ConfigScreens.xml#FindProductConfigItems"/>
@@ -2644,6 +2834,12 @@ under the License.
     <view-map name="ListQuantityBreaks" type="screen" page="component://product/widget/catalog/ShippingScreens.xml#ListQuantityBreaks"/>
     <view-map name="ListShipmentMethodTypes" type="screen" page="component://product/widget/catalog/ShippingScreens.xml#ListShipmentMethodTypes"/>
     <view-map name="ListCarrierShipmentMethods" type="screen" page="component://product/widget/catalog/ShippingScreens.xml#ListCarrierShipmentMethods"/>
+
+    <!-- Web Analytics View -->
+    <view-map name="FindWebAnalyticsConfigs" type="screen" page="component://product/widget/catalog/WebAnalyticsScreens.xml#FindWebAnalyticsConfigs"/>
+    <view-map name="EditWebAnalyticsConfig" type="screen" page="component://product/widget/catalog/WebAnalyticsScreens.xml#EditWebAnalyticsConfig"/>
+    <view-map name="FindWebAnalyticsTypes" type="screen" page="component://product/widget/catalog/WebAnalyticsScreens.xml#FindWebAnalyticsTypes"/>
+    <view-map name="EditWebAnalyticsType" type="screen" page="component://product/widget/catalog/WebAnalyticsScreens.xml#EditWebAnalyticsType"/>
 
     <!-- Lookup request mappings -->
     <view-map name="LookupContent" page="component://content/widget/content/ContentScreens.xml#LookupContent" type="screen"/>
@@ -2664,5 +2860,7 @@ under the License.
     <view-map name="LookupWorkEffort" type="screen" page="component://workeffort/widget/LookupScreens.xml#LookupWorkEffort"/>
     <view-map name="LookupDataResource" page="component://content/widget/content/DataResourceScreens.xml#LookupDataResource" type="screen"/>
     <view-map name="LookupPerson" page="component://party/widget/partymgr/LookupScreens.xml#LookupPerson" type="screen"/>
+    <view-map name="LookupPreferredContactMech" type="screen" page="component://marketing/widget/ContactListScreens.xml#LookupPreferredContactMech"/>
+    <view-map name="LookupContactList" type="screen" page="component://party/widget/partymgr/PartyContactListScreens.xml#ListLookupContactList"/>
     <!-- end of view mappings -->
 </site-conf>

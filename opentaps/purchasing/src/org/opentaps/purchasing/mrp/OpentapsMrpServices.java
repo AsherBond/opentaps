@@ -60,7 +60,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -113,7 +113,7 @@ public final class OpentapsMrpServices {
      */
     @SuppressWarnings("unchecked")
     public static Map initInventoryEventPlanned(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = UtilCommon.getTimeZone(context);
@@ -489,12 +489,12 @@ public final class OpentapsMrpServices {
      * @param facilityId a <code>String</code> value
      * @param facilityIdTo a <code>String</code> value
      * @param mrpRunProductIds a <code>List</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> value
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static List<GenericValue> getMrpInfoForApprovedRequirements(String facilityId, String facilityIdTo, List mrpRunProductIds, GenericDelegator delegator) throws GenericEntityException {
+    private static List<GenericValue> getMrpInfoForApprovedRequirements(String facilityId, String facilityIdTo, List mrpRunProductIds, Delegator delegator) throws GenericEntityException {
         return getMrpInfoForRequirements(facilityId, facilityIdTo, UtilMisc.toList("PRODUCT_REQUIREMENT", "TRANSFER_REQUIREMENT", "PENDING_INTERNAL_REQ"), UtilMisc.toList("REQ_APPROVED"), mrpRunProductIds, delegator);
     }
 
@@ -505,12 +505,12 @@ public final class OpentapsMrpServices {
      * @param requirementTypeIds a <code>List</code> value
      * @param statusIds a <code>List</code> value
      * @param mrpRunProductIds a <code>List</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> value
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static List<GenericValue> getMrpInfoForRequirements(String facilityId, String facilityIdTo, List requirementTypeIds, List statusIds, List mrpRunProductIds, GenericDelegator delegator) throws GenericEntityException {
+    private static List<GenericValue> getMrpInfoForRequirements(String facilityId, String facilityIdTo, List requirementTypeIds, List statusIds, List mrpRunProductIds, Delegator delegator) throws GenericEntityException {
         List conditions = UtilMisc.toList(EntityCondition.makeCondition("requirementTypeId", EntityOperator.IN, requirementTypeIds),
                 EntityCondition.makeCondition("statusId", EntityOperator.IN, statusIds),
                 EntityCondition.makeCondition("quantity", EntityOperator.NOT_EQUAL, null));
@@ -542,13 +542,13 @@ public final class OpentapsMrpServices {
      * @param now a <code>Timestamp</code> value
      * @param receiptEventBufferMilliseconds a <code>Double</code> value
      * @param userLogin the userLogin <code>GenericValue</code>
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static void initInventoryEventPlanForApprovedRequirements(String facilityId, List mrpRunProductIds, Timestamp now, BigDecimal receiptEventBufferMilliseconds, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
+    private static void initInventoryEventPlanForApprovedRequirements(String facilityId, List mrpRunProductIds, Timestamp now, BigDecimal receiptEventBufferMilliseconds, GenericValue userLogin, Delegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
         Map parameters = null;
 
         // first create inventory event plans for approved requirements from this facility
@@ -611,7 +611,7 @@ public final class OpentapsMrpServices {
     }
 
     @SuppressWarnings("unchecked")
-    private static List getMrpRunProductIds(String mrpTargetProductId, String supplierPartyId, GenericDelegator delegator) throws GenericEntityException {
+    private static List getMrpRunProductIds(String mrpTargetProductId, String supplierPartyId, Delegator delegator) throws GenericEntityException {
         List productIds = null;
         if (UtilValidate.isNotEmpty(mrpTargetProductId)) {
             productIds = new LinkedList();
@@ -625,7 +625,7 @@ public final class OpentapsMrpServices {
     }
 
     @SuppressWarnings("unchecked")
-    private static List getMrpOrderInfoForSalesOrders(String facilityId, List mrpRunProductIds, String productStoreId, String productStoreGroupId, GenericDelegator delegator) throws GenericEntityException {
+    private static List getMrpOrderInfoForSalesOrders(String facilityId, List mrpRunProductIds, String productStoreId, String productStoreGroupId, Delegator delegator) throws GenericEntityException {
         List resultList = new LinkedList();
         List fieldsToSelect = UtilMisc.toList("orderId", "orderItemSeqId", "productId", "quantity", "cancelQuantity", "quantityReserved");
         fieldsToSelect.addAll(UtilMisc.toList("itemShipBeforeDate", "itemShipAfterDate", "itemEstimatedDeliveryDate", "shipByDate", "shipAfterDate"));
@@ -666,7 +666,7 @@ public final class OpentapsMrpServices {
     }
 
     @SuppressWarnings("unchecked")
-    private static void removeOldRequirementRecords(EntityCondition condition, boolean removeRoles, GenericDelegator delegator)    throws GenericEntityException {
+    private static void removeOldRequirementRecords(EntityCondition condition, boolean removeRoles, Delegator delegator)    throws GenericEntityException {
         List listResult = null;
         List listResultRoles = new ArrayList();
         List listResultOrderReqCommitments = new ArrayList();
@@ -689,7 +689,7 @@ public final class OpentapsMrpServices {
         }
     }
 
-    private static void removeOldMrpInventoryEventRecords(EntityCondition condition, GenericDelegator delegator) throws GenericEntityException {
+    private static void removeOldMrpInventoryEventRecords(EntityCondition condition, Delegator delegator) throws GenericEntityException {
         /*
          * The ideal solution is to remove the MrpInventoryEvent and then use DELETE ON CASCADE to remove the _Detail records.  However, the Delegator does not support that.
          * The "correct" solution is then to find all the MrpInventoryEvent and then remove the _Detail first, then the MrpInventoryEvent.  However, that is extremely
@@ -713,7 +713,7 @@ public final class OpentapsMrpServices {
      */
     @SuppressWarnings("unchecked")
     private static BigDecimal getRoundedQuantityToStock(BigDecimal qtyToStock, GenericValue inventoryEventForMRP, int decimals, RoundingMode interimRequirementRoundingMode, RoundingMode finalRequirementRoundingMode) throws GenericEntityException {
-        GenericDelegator delegator = inventoryEventForMRP.getDelegator();
+        Delegator delegator = inventoryEventForMRP.getDelegator();
 
         Debug.logInfo("Getting rounded quantity for inventory event " + inventoryEventForMRP, MODULE);
         Debug.logInfo("quantity to stock [" + qtyToStock + "]", MODULE);
@@ -826,7 +826,7 @@ public final class OpentapsMrpServices {
      */
     @SuppressWarnings("unchecked")
     public static void processBomComponent(GenericValue product, String facilityId, BigDecimal eventQuantity, Timestamp startDate, Timestamp now, Map routingTaskStartDate, List listComponent, TimeZone timeZone, Locale locale) throws GenericEntityException {
-        GenericDelegator delegator = product.getDelegator();
+        Delegator delegator = product.getDelegator();
 
         if (listComponent != null && listComponent.size() > 0) {
             Iterator listComponentIter = listComponent.iterator();
@@ -885,7 +885,7 @@ public final class OpentapsMrpServices {
      * @return a <code>Map</code> value
      */
     public static Map<String, Object> runMrp(DispatchContext ctx, Map<String, Object> context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
 
         String facilityGroupId = (String) context.get("facilityGroupId");
@@ -957,7 +957,7 @@ public final class OpentapsMrpServices {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> runMrpForFacility(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = UtilCommon.getTimeZone(context);
@@ -1371,7 +1371,7 @@ public final class OpentapsMrpServices {
      * @throws GenericEntityException
      */
     @SuppressWarnings("unchecked")
-    private static List getInventoryEventPlanned(String facilityId, String productStoreId, String productStoreGroupId, List mrpRunProductIds, int bomLevel, GenericDelegator delegator) throws GenericEntityException {
+    private static List getInventoryEventPlanned(String facilityId, String productStoreId, String productStoreGroupId, List mrpRunProductIds, int bomLevel, Delegator delegator) throws GenericEntityException {
         EntityCondition bomLevelCondition = null;
         if (bomLevel == 0) {
             bomLevelCondition = EntityCondition.makeCondition(EntityCondition.makeCondition("billOfMaterialLevel", EntityOperator.EQUALS, null),
@@ -1434,7 +1434,7 @@ public final class OpentapsMrpServices {
     @SuppressWarnings("unchecked")
     private static BigDecimal transferInventoryForMrp(String productId, String facilityId, BigDecimal maxTransferQuantity, Timestamp eventDate, BigDecimal receiptEventBufferMilliseconds, BigDecimal initialQoh, Timestamp now, Boolean createTransferRequirements, LocalDispatcher dispatcher, Locale locale, GenericValue userLogin) throws GenericEntityException, GenericServiceException {
 
-        GenericDelegator delegator = dispatcher.getDelegator();
+        Delegator delegator = dispatcher.getDelegator();
 
         // get the replenish method as configured in the ProductFacility.  See http://opentaps.org/docs/index.php/Inventory_Stock_Levels for more information.
         //  * PF_RM_NEVER:      never transfer from backup warehouse
@@ -1598,7 +1598,7 @@ public final class OpentapsMrpServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createInventoryTransferFromRequirement(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
 
         Locale locale = UtilCommon.getLocale(context);
@@ -1672,7 +1672,7 @@ public final class OpentapsMrpServices {
      */
     @SuppressWarnings("unchecked")
     public static Map createProductionRunsFromPendingInternalRequirements(DispatchContext ctx, Map context) {
-        GenericDelegator delegator = ctx.getDelegator();
+        Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1824,12 +1824,12 @@ public final class OpentapsMrpServices {
      *
      * @param qty initial quantity of product
      * @param productId product id to produce
-     * @param delegator <code>GenericDelegator</code> value
+     * @param delegator <code>Delegator</code> value
      * @return
      *     Requirement minimal quantity allowed for given product.
      * @throws GenericEntityException
      */
-    private static BigDecimal ensureMinQuantity(BigDecimal qty, String productId, GenericDelegator delegator) throws GenericEntityException {
+    private static BigDecimal ensureMinQuantity(BigDecimal qty, String productId, Delegator delegator) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
                 EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
@@ -1872,7 +1872,7 @@ public final class OpentapsMrpServices {
      * @return list of quantities for every requirement
      * @throws GenericEntityException on error
      */
-    private static List<BigDecimal> splitJob(BigDecimal qty, String productId, GenericDelegator delegator)  throws GenericEntityException {
+    private static List<BigDecimal> splitJob(BigDecimal qty, String productId, Delegator delegator)  throws GenericEntityException {
         // select WEGS for product which has max quantity in descending order
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),

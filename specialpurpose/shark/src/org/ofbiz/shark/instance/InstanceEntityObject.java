@@ -19,16 +19,20 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.shark.instance;
 
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilObject;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericDelegator;
 
 public abstract class InstanceEntityObject {
 
-    protected transient GenericDelegator delegator = null;
+    protected transient Delegator delegator = null;
     protected EntityPersistentMgr mgr = null;
     protected String delegatorName = null;
 
-    public InstanceEntityObject(EntityPersistentMgr mgr, GenericDelegator delegator) {
+    public InstanceEntityObject(EntityPersistentMgr mgr, Delegator delegator) {
         this.delegatorName = delegator.getDelegatorName();
         this.delegator = delegator;
         this.mgr = mgr;
@@ -38,9 +42,9 @@ public abstract class InstanceEntityObject {
         return this.mgr;
     }
 
-    public GenericDelegator getGenericDelegator() {
+    public Delegator getGenericDelegator() {
         if (this.delegator == null && delegatorName != null) {
-            this.delegator = GenericDelegator.getGenericDelegator(delegatorName);
+            this.delegator = DelegatorFactory.getDelegator(this.delegatorName);
         }
         return this.delegator;
     }

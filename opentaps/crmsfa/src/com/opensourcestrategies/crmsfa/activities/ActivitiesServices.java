@@ -72,7 +72,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -139,7 +139,7 @@ public final class ActivitiesServices {
      */
     @SuppressWarnings("unchecked")
 	private static Map<String, Object> sendOrSaveEmailHelper(DispatchContext dctx, Map<String, Object> context, boolean sending, String errorLabel) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -563,7 +563,7 @@ public final class ActivitiesServices {
     /**
      * Creates a CommunicationEventRole and WorkeffortPartyAssignment (if the party has a CRM role) for each party in the list
      * */
-    private static void associateCommunicationEventWorkEffortAndParties(List<GenericValue> partyAndContactMechs, String communicationEventId, String roleTypeId, String workEffortId, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin)
+    private static void associateCommunicationEventWorkEffortAndParties(List<GenericValue> partyAndContactMechs, String communicationEventId, String roleTypeId, String workEffortId, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin)
                    throws GenericEntityException, GenericServiceException {
         if (UtilValidate.isNotEmpty(partyAndContactMechs)) {
 
@@ -639,7 +639,7 @@ public final class ActivitiesServices {
      * Calls the storeIncomingEmail service to process incoming emails
      */
     public static Map<String, Object> processIncomingEmail(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue login = (GenericValue) context.get("userLogin");
@@ -915,7 +915,7 @@ public final class ActivitiesServices {
     }
 
     public static Map<String, Object> updateActivity(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1042,7 +1042,7 @@ public final class ActivitiesServices {
      * If WorkEffort status is completed then change the status of related CommunicationEvents from pending to completed.
      */
     public static Map<String, Object> updateActivityCommEvent(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1116,7 +1116,7 @@ public final class ActivitiesServices {
      * beforehand obsolete all assigned parties with role CAL_OWNER.
      */
     public static Map<String, Object> changeActivityOwner(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1164,7 +1164,7 @@ public final class ActivitiesServices {
     }
 
     public static Map<String, Object> updateActivityAssociation(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String workEffortId = (String) context.get("workEffortId");
         String custRequestId = (String) context.get("custRequestId");
@@ -1279,7 +1279,7 @@ public final class ActivitiesServices {
     }
 
     public static Map<String, Object> logTask(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1397,7 +1397,7 @@ public final class ActivitiesServices {
     /*************************************************************************/
 
     public static Map<String, Object> addWorkEffortPartyAssignment(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -1447,7 +1447,7 @@ public final class ActivitiesServices {
     }
 
     public static Map<String, Object> removeWorkEffortPartyAssignment(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1485,7 +1485,7 @@ public final class ActivitiesServices {
     }
 
     public static Map<String, Object> updateWorkEffortPartyAssignment(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1526,7 +1526,7 @@ public final class ActivitiesServices {
 
     @SuppressWarnings("unchecked")
 	public static Map<String, Object> findActivities(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1641,7 +1641,7 @@ public final class ActivitiesServices {
      */
     private static Map<String, Object> createWorkEffortPartyAssociations(DispatchContext dctx, Map<String, Object> context, String workEffortId, String errorLabel, boolean reassign)
         throws GenericEntityException, GenericServiceException {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -1720,7 +1720,7 @@ public final class ActivitiesServices {
             }
         }
 
-        // associate the opportunity with the work effort
+        // associate the opportunity with the work effort if it is not associated yet
         if (salesOpportunityId != null) {
             input = UtilMisc.<String, Object>toMap("salesOpportunityId", salesOpportunityId, "workEffortId", workEffortId);
             GenericValue map = delegator.findByPrimaryKey("SalesOpportunityWorkEffort", input);
@@ -1731,12 +1731,14 @@ public final class ActivitiesServices {
             }
         }
 
-        // associate the case with the work effort
+        // associate the case with the work effort if it is not associated yet
         if (custRequestId != null) {
-            serviceResults = dispatcher.runSync("createWorkEffortRequest",
+            if (UtilValidate.isEmpty(delegator.findByPrimaryKeyCache("CustRequestWorkEffort", UtilMisc.toMap("workEffortId", workEffortId, "custRequestId", custRequestId)))) {
+                serviceResults = dispatcher.runSync("createWorkEffortRequest",
                     UtilMisc.toMap("workEffortId", workEffortId, "custRequestId", custRequestId, "userLogin", userLogin));
-            if (ServiceUtil.isError(serviceResults)) {
-                return UtilMessage.createAndLogServiceError(serviceResults, errorLabel, locale, MODULE);
+                if (ServiceUtil.isError(serviceResults)) {
+                    return UtilMessage.createAndLogServiceError(serviceResults, errorLabel, locale, MODULE);
+                }
             }
         }
 
@@ -1772,7 +1774,7 @@ public final class ActivitiesServices {
      */
     private static Map<String, Object> validateWorkEffortAssociations(DispatchContext dctx, Map<String, Object> context)
         throws GenericEntityException, GenericServiceException {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
@@ -1813,7 +1815,7 @@ public final class ActivitiesServices {
     }
 
     public static Map<String, Object> autoCreateTimesheetEntryForActivity(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
         String workEffortId = (String) context.get("workEffortId");
@@ -1909,7 +1911,7 @@ public final class ActivitiesServices {
      *  Prepares context for crmsfa.sendCrmNotificationEmails service with email subject, body parameters, and list of internal parties related to the activity to email.
      */
     public static Map<String, Object> sendActivityNotificationEmails(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String workEffortId = (String) context.get("workEffortId");
         String partyId = (String) context.get("partyId");
@@ -1978,7 +1980,7 @@ public final class ActivitiesServices {
      * Removes associated communicationEvents (with attachments) when a pending email task is cancelled
      */
     public static Map<String, Object> deleteCancelledActivityEmail(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String workEffortId = (String) context.get("workEffortId");
         String workEffortTypeId = (String) context.get("workEffortTypeId");
@@ -2035,7 +2037,7 @@ public final class ActivitiesServices {
 
     public static Map<String, Object> deleteActivityEmail(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String communicationEventId = (String) context.get("communicationEventId");
         String workEffortId = (String) context.get("workEffortId");
         String delContentDataResourceStr = (String) context.get("delContentDataResource");
@@ -2141,7 +2143,7 @@ public final class ActivitiesServices {
      * @param context
      */
     public static Map<String, Object> updateActivityEmailsAssocs(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String emailAddress = (String) context.get("emailAddress");
         String partyId = (String) context.get("partyId");
@@ -2224,7 +2226,7 @@ public final class ActivitiesServices {
      * @return the list of <code>PartyAndContactMech</code>
      * @throws GenericEntityException if an error occurs
      */
-    private static List<GenericValue> findPartyAndContactMechsForEmailAddress(Collection<String> addresses, GenericDelegator delegator) throws GenericEntityException {
+    private static List<GenericValue> findPartyAndContactMechsForEmailAddress(Collection<String> addresses, Delegator delegator) throws GenericEntityException {
         // option for matching email addresses and parties
         String caseInsensitiveEmail = UtilProperties.getPropertyValue("general.properties", "mail.address.caseInsensitive", "N");
         boolean ci = "Y".equals(caseInsensitiveEmail);
@@ -2246,7 +2248,7 @@ public final class ActivitiesServices {
         return partyAndContactMechs;
     }
 
-    private static List<GenericValue> findWorkEffortCommunicationEventViews(String field, String address, GenericDelegator delegator) throws GenericEntityException {
+    private static List<GenericValue> findWorkEffortCommunicationEventViews(String field, String address, Delegator delegator) throws GenericEntityException {
         // option for matching email addresses and parties
         String caseInsensitiveEmail = UtilProperties.getPropertyValue("general.properties", "mail.address.caseInsensitive", "N");
         boolean ci = "Y".equals(caseInsensitiveEmail);

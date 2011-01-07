@@ -19,7 +19,7 @@ package org.opentaps.common.workeffort;
 
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
@@ -36,7 +36,7 @@ public final class WorkEffortServices {
     private static final String MODULE = WorkEffortServices.class.getName();
 
     public static Map<String, Object> markWorkEffortAsUpdated(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String workEffortId = (String) context.get("workEffortId");
         try {
             WorkEffortHelper.markAsUpdated(delegator, workEffortId);

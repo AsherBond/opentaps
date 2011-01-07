@@ -49,6 +49,10 @@ context.productStores = stores;
 channels = delegator.findByAnd("Enumeration", [enumTypeId : "ORDER_SALES_CHANNEL"], ["sequenceId"]);
 context.salesChannels = channels;
 
+// get the Shipping Methods
+carrierShipmentMethods = delegator.findList("CarrierShipmentMethod", null, null, null, null, false);
+context.carrierShipmentMethods = carrierShipmentMethods;
+
 // current role type
 currentRoleTypeId = request.getParameter("roleTypeId");
 if (currentRoleTypeId) {
@@ -81,6 +85,17 @@ currentProductStoreId = request.getParameter("productStoreId");
 if (currentProductStoreId) {
     currentProductStore = delegator.findByPrimaryKeyCache("ProductStore", [productStoreId : currentProductStoreId]);
     context.currentProductStore = currentProductStore;
+}
+
+// current Shipping Method
+shipmentMethod = request.getParameter("shipmentMethod");
+if (shipmentMethod) {
+    carrierPartyId = shipmentMethod.substring(0, shipmentMethod.indexOf("@"));
+    shipmentMethodTypeId = shipmentMethod.substring(shipmentMethod.indexOf("@")+1);
+    if (carrierPartyId && shipmentMethodTypeId) {
+        currentCarrierShipmentMethod = delegator.findByAnd("CarrierShipmentMethod", [partyId : carrierPartyId, shipmentMethodTypeId : shipmentMethodTypeId]);
+        context.currentCarrierShipmentMethod = currentCarrierShipmentMethod;
+    }
 }
 
 // current channel

@@ -45,7 +45,7 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.common.login.LoginServices;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityFindOptions;
@@ -117,11 +117,11 @@ public class UtilCommon {
     /**
      * Returns a true if the time period has passed or is closed.
      * @param customTimePeriodId a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static boolean isTimePeriodOpen(String customTimePeriodId, GenericDelegator delegator) throws GenericEntityException {
+    public static boolean isTimePeriodOpen(String customTimePeriodId, Delegator delegator) throws GenericEntityException {
 
         // first check time period -- is closed or passed?  if so, cannot create a forecast
         GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
@@ -151,7 +151,7 @@ public class UtilCommon {
      * Returns Error if Party not found.
      */
     public static String getPartyRole(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
 
         String partyId = (String) request.getParameter("partyId");

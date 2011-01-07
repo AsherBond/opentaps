@@ -19,7 +19,6 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.minilang.method.ifops;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +33,11 @@ import org.ofbiz.minilang.method.ContextAccessor;
 import org.ofbiz.minilang.method.MethodContext;
 import org.ofbiz.minilang.method.MethodOperation;
 import org.ofbiz.security.Security;
+import org.ofbiz.security.authz.Authorization;
 import org.w3c.dom.Element;
 
 /**
- * Iff the user does not have the specified permission the fail-message
+ * If the user does not have the specified permission the fail-message
  * or fail-property sub-elements are used to add a message to the error-list.
  */
 public class CheckPermission extends MethodOperation {
@@ -92,6 +92,7 @@ public class CheckPermission extends MethodOperation {
         }
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         boolean hasPermission = false;
 
@@ -104,15 +105,16 @@ public class CheckPermission extends MethodOperation {
         // if no user is logged in, treat as if the user does not have permission: do not run subops
         GenericValue userLogin = methodContext.getUserLogin();
         if (userLogin != null) {
+            Authorization authz = methodContext.getAuthz();
             Security security = methodContext.getSecurity();
-            if (this.permissionInfo.hasPermission(methodContext, userLogin, security)) {
+            if (this.permissionInfo.hasPermission(methodContext, userLogin, authz, security)) {
                 hasPermission = true;
             }
 
             // if failed, check alternate permissions
             if (!hasPermission && altPermissions != null) {
                 for (PermissionInfo altPermInfo: altPermissions) {
-                    if (altPermInfo.hasPermission(methodContext, userLogin, security)) {
+                    if (altPermInfo.hasPermission(methodContext, userLogin, authz, security)) {
                         hasPermission = true;
                         break;
                     }
@@ -152,7 +154,7 @@ public class CheckPermission extends MethodOperation {
         } else if (isProperty && propertyResource != null && message != null) {
             //String propMsg = UtilProperties.getPropertyValue(UtilURL.fromResource(propertyResource, loader), message);
             String propMsg = UtilProperties.getMessage(propertyResource, message, methodContext.getEnvMap(), methodContext.getLocale());
-            if (propMsg == null || propMsg.length() == 0) {
+            if (UtilValidate.isEmpty(propMsg)) {
                 messages.add("Simple Method Permission error occurred, but no message was found, sorry.");
             } else {
                 messages.add(methodContext.expandString(propMsg));
@@ -173,24 +175,26 @@ public class CheckPermission extends MethodOperation {
             this.action = altPermissionElement.getAttribute("action");
         }
 
-        public boolean hasPermission(MethodContext methodContext, GenericValue userLogin, Security security) {
+        public boolean hasPermission(MethodContext methodContext, GenericValue userLogin, Authorization authz, Security security) {
             String permission = methodContext.expandString(this.permission);
             String action = methodContext.expandString(this.action);
 
-            if (action != null && action.length() > 0) {
+            if (UtilValidate.isNotEmpty(action)) {
                 // run hasEntityPermission
                 return security.hasEntityPermission(permission, action, userLogin);
             } else {
                 // run hasPermission
-                return security.hasPermission(permission, userLogin);
+                return authz.hasPermission(userLogin.getString("userLoginId"), permission, methodContext.getEnvMap());
             }
         }
     }
 
+    @Override
     public String rawString() {
         // TODO: add all attributes and other info
         return "<check-permission/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

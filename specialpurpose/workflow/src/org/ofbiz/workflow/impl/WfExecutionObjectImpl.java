@@ -33,9 +33,11 @@ import java.util.Map;
 import org.ofbiz.base.util.BshUtil;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.ObjectType;
+import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.serialize.SerializeException;
@@ -74,8 +76,8 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     protected String processVersion = null;
     protected String activityId = null;
     protected String workEffortId = null;
-    protected GenericDelegator delegator = null;
-    protected List history = null;
+    protected Delegator delegator = null;
+    protected List<?> history = null;
 
     public WfExecutionObjectImpl(GenericValue valueObject, String parentId) throws WfException {
         this.packageId = valueObject.getString("packageId");
@@ -91,7 +93,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
         createRuntime(parentId);
     }
 
-    public WfExecutionObjectImpl(GenericDelegator delegator, String workEffortId) throws WfException {
+    public WfExecutionObjectImpl(Delegator delegator, String workEffortId) throws WfException {
         this.delegator = delegator;
         this.workEffortId = workEffortId;
         this.packageId = getRuntimeObject().getString("workflowPackageId");
@@ -111,7 +113,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
         GenericValue dataObject = null;
 
         workEffortId = getDelegator().getNextSeqId("WorkEffort");
-        Map dataMap = new HashMap();
+        Map<String, Object> dataMap = new HashMap<String, Object>();
         String weType = activityId != null ? "ACTIVITY" : "WORK_FLOW";
 
         dataMap.put("workEffortId", workEffortId);
@@ -147,7 +149,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
         }
     }
 
-    protected void parseDescriptions(Map parseContext) throws WfException {
+    protected void parseDescriptions(Map<String, Object> parseContext) throws WfException {
         GenericValue runtime = getRuntimeObject();
         String name = runtime.getString("workEffortName");
         String desc = runtime.getString("description");
@@ -242,14 +244,14 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     /**
      * @see org.ofbiz.workflow.WfExecutionObject#validStates()
      */
-    public List validStates() throws WfException {
+    public List<String> validStates() throws WfException {
         String statesArr[] = {"open.running", "open.not_running.not_started", "open.not_running.suspended",
                 "closed.completed", "closed.terminated", "closed.aborted"};
-        ArrayList possibleStates = new ArrayList(Arrays.asList(statesArr));
+        ArrayList<String> possibleStates = new ArrayList<String>(Arrays.asList(statesArr));
         String currentState = state();
 
         if (currentState.startsWith("closed"))
-            return new ArrayList();
+            return new ArrayList<String>();
         if (!currentState.startsWith("open"))
             throw new WfException("Currently in an unknown state.");
         if (currentState.equals("open.running")) {
@@ -271,7 +273,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
             possibleStates.remove("closed.terminated");
             return possibleStates;
         }
-        return new ArrayList();
+        return new ArrayList<String>();
     }
 
     /**
@@ -304,7 +306,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     /**
      * @see org.ofbiz.workflow.WfExecutionObject#whileOpenType()
      */
-    public List whileOpenType() throws WfException {
+    public List<String> whileOpenType() throws WfException {
         String[] list = {"running", "not_running"};
 
         return Arrays.asList(list);
@@ -313,7 +315,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     /**
      * @see org.ofbiz.workflow.WfExecutionObject#whyNotRunningType()
      */
-    public List whyNotRunningType() throws WfException {
+    public List<String> whyNotRunningType() throws WfException {
         String[] list = {"not_started", "suspended"};
 
         return Arrays.asList(list);
@@ -346,7 +348,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     /**
      * @see org.ofbiz.workflow.WfExecutionObject#setProcessContext(java.util.Map)
      */
-    public void setProcessContext(Map newValue) throws WfException, InvalidData, UpdateNotAllowed {
+    public void setProcessContext(Map<String, Object> newValue) throws WfException, InvalidData, UpdateNotAllowed {
         setSerializedData(newValue);
     }
 
@@ -377,14 +379,14 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     /**
      * @see org.ofbiz.workflow.WfExecutionObject#processContext()
      */
-    public Map processContext() throws WfException {
+    public Map<String, Object> processContext() throws WfException {
         return getContext();
     }
 
     /**
      * @see org.ofbiz.workflow.WfExecutionObject#workflowStateType()
      */
-    public List workflowStateType() throws WfException {
+    public List<String> workflowStateType() throws WfException {
         String[] list = {"open", "closed"};
         return Arrays.asList(list);
     }
@@ -437,7 +439,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     /**
      * @see org.ofbiz.workflow.WfExecutionObject#getSequenceHistory(int)
      */
-    public List getSequenceHistory(int maxNumber) throws WfException,
+    public List<?> getSequenceHistory(int maxNumber) throws WfException,
             HistoryNotAvailable {
         return history;
     }
@@ -445,8 +447,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     /**
      * @see org.ofbiz.workflow.WfExecutionObject#getIteratorHistory(java.lang.String, java.util.Map)
      */
-    public Iterator getIteratorHistory(String query,
-        Map namesInQuery) throws WfException, HistoryNotAvailable {
+    public Iterator<?> getIteratorHistory(String query, Map<String, Object> namesInQuery) throws WfException, HistoryNotAvailable {
         return history.iterator();
     }
 
@@ -470,7 +471,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     /**
      * @see org.ofbiz.workflow.WfExecutionObject#howClosedType()
      */
-    public List howClosedType() throws WfException {
+    public List<String> howClosedType() throws WfException {
         String[] list = {"completed", "terminated", "aborted"};
 
         return Arrays.asList(list);
@@ -508,7 +509,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     /**
      * @see org.ofbiz.workflow.WfExecutionObject#getDelegator()
      */
-    public GenericDelegator getDelegator() throws WfException {
+    public Delegator getDelegator() throws WfException {
         return delegator;
     }
 
@@ -518,7 +519,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
     public GenericValue getDefinitionObject() throws WfException {
         String entityName = activityId != null ? "WorkflowActivity" : "WorkflowProcess";
         GenericValue value = null;
-        Map fields = UtilMisc.toMap("packageId", packageId, "packageVersion", packageVersion, "processId", processId,
+        Map<String, Object> fields = UtilMisc.toMap("packageId", (Object) packageId, "packageVersion", packageVersion, "processId", processId,
                 "processVersion", processVersion);
 
         if (activityId != null)
@@ -555,7 +556,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
      * @param value The value to serialize and set
      * @throws WfException
      */
-    protected void setSerializedData(Map value) throws WfException, InvalidData {
+    protected void setSerializedData(Map<String, Object> value) throws WfException, InvalidData {
         GenericValue runtimeData = null;
         GenericValue dataObject = getRuntimeObject();
 
@@ -596,10 +597,10 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
         return GenericDispatcher.getLocalDispatcher(dispatcherName, getDelegator());
     }
 
-    private Map getContext() throws WfException {
+    private Map<String, Object> getContext() throws WfException {
         GenericValue dataObject = getRuntimeObject();
         String contextXML = null;
-        Map context = null;
+        Map<String, Object> context = null;
 
         if (dataObject.get("runtimeDataId") == null)
             return context;
@@ -613,7 +614,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
         // De-serialize the context
         if (contextXML != null) {
             try {
-                context = (Map) XmlSerializer.deserialize(contextXML, getDelegator());
+                context = UtilGenerics.checkMap(XmlSerializer.deserialize(contextXML, getDelegator()));
             } catch (SerializeException e) {
                 throw new WfException(e.getMessage(), e);
             } catch (IOException e) {
@@ -642,7 +643,7 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
      * @return The result of the evaluation (True/False)
      * @throws WfException
      */
-    protected boolean evalConditionClass(String className, String expression, Map context, Map attrs) throws WfException {
+    protected boolean evalConditionClass(String className, String expression, Map<String, Object> context, Map<String, String> attrs) throws WfException {
         // attempt to load and instance of the class
         Object conditionObject = null;
         try {
@@ -692,8 +693,8 @@ public abstract class WfExecutionObjectImpl implements WfExecutionObject {
      * @return The result of the evaluation (True/False)
      * @throws WfException
      */
-    protected boolean evalBshCondition(String expression, Map context) throws WfException {
-        if (expression == null || expression.length() == 0) {
+    protected boolean evalBshCondition(String expression, Map<String, Object> context) throws WfException {
+        if (UtilValidate.isEmpty(expression)) {
             Debug.logVerbose("Null or empty expression, returning true.", module);
             return true;
         }

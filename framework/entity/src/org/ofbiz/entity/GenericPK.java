@@ -32,6 +32,7 @@ import org.ofbiz.entity.model.ModelEntity;
 public class GenericPK extends GenericEntity {
 
     protected static final ObjectFactory<GenericPK> genericPKFactory = new ObjectFactory<GenericPK>() {
+        @Override
         protected GenericPK create() {
             return new GenericPK();
         }
@@ -47,16 +48,16 @@ public class GenericPK extends GenericEntity {
     }
 
     /** Creates new GenericPK from existing Map */
-    public static GenericPK create(ModelEntity modelEntity, Map<String, ? extends Object> fields) {
+    public static GenericPK create(Delegator delegator, ModelEntity modelEntity, Map<String, ? extends Object> fields) {
         GenericPK newPK = genericPKFactory.object();
-        newPK.init(modelEntity, fields);
+        newPK.init(delegator, modelEntity, fields);
         return newPK;
     }
 
     /** Creates new GenericPK from existing Map */
-    public static GenericPK create(ModelEntity modelEntity, Object singlePkValue) {
+    public static GenericPK create(Delegator delegator, ModelEntity modelEntity, Object singlePkValue) {
         GenericPK newPK = genericPKFactory.object();
-        newPK.init(modelEntity, singlePkValue);
+        newPK.init(delegator, modelEntity, singlePkValue);
         return newPK;
     }
 
@@ -70,9 +71,8 @@ public class GenericPK extends GenericEntity {
     /** Clones this GenericPK, this is a shallow clone & uses the default shallow HashMap clone
      *@return Object that is a clone of this GenericPK
      */
+    @Override
     public Object clone() {
-        GenericPK newEntity = GenericPK.create(this);
-        newEntity.setDelegator(internalDelegator);
-        return newEntity;
+        return GenericPK.create(this);
     }
 }

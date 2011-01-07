@@ -26,7 +26,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -53,7 +53,7 @@ public final class CommissionServices {
      * If an agent gets commission on orders with a customer, then term is COMM_PARTY_APPL with partyId DemoCustCompany
      */
     public static Map<String, Object> createCommissionInvoices(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String parentInvoiceId = (String) context.get("invoiceId");
         List<String> invoiceIds = FastList.newInstance();
@@ -95,7 +95,7 @@ public final class CommissionServices {
     }
 
     private static List<String> createCommissionInvoicesForAgent(DispatchContext dctx, Map<String, Object> context, GenericValue parentInvoice, String agentPartyId) throws GeneralException {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String organizationPartyId = parentInvoice.getString("partyIdFrom");
         List<String> invoiceIds = FastList.newInstance();
 

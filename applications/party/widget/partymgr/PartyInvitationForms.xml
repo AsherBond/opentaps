@@ -23,11 +23,11 @@ under the License.
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
     <form name="FindPartyInvitations" type="single" default-map-name="partyInvitations" target="partyInvitation"
         header-row-style="header-row" default-table-style="basic-table">
-        <field name="partyInvitationId"><text-find default-option="contains" ignore-case="true"/></field>
+        <field name="partyInvitationId"><text-find ignore-case="true"/></field>
         <field position="1" name="partyIdFrom" title="${uiLabelMap.PartyPartyFrom}"><lookup target-form-name="LookupPartyName"/></field>
         <field position="2" name="partyId" title="${uiLabelMap.PartyPartyId}"><lookup target-form-name="LookupPartyName"/></field>
-        <field position="1" name="emailAddress"><text-find default-option="contains" ignore-case="true"/></field>
-        <field position="2" name="toName"><text-find default-option="contains" ignore-case="true"/></field>
+        <field position="1" name="emailAddress"><text-find ignore-case="true"/></field>
+        <field position="2" name="toName"><text-find ignore-case="true"/></field>
         <field name="statusId">
             <drop-down allow-empty="true">
                 <entity-options description="${description}" entity-name="StatusItem" key-field-name="statusId">
@@ -38,7 +38,7 @@ under the License.
         </field>
         <field name="performSearch"><hidden value="Y"/></field>
         <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
-        <field name="searchButton" widget-style="smallSubmit"><submit button-type="button"/></field>
+        <field name="searchButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
 
     <form name="ListPartyInvitations" type="list" list-name="listIt" default-entity-name="PartyInvitation"
@@ -48,6 +48,8 @@ under the License.
                 <field-map field-name="inputFields" from-field="parameters"/>
                 <field-map field-name="entityName" value="PartyInvitation"/>
                 <field-map field-name="orderBy" value="partyInvitationId"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
             </service>
         </actions>
         <field name="partyInvitationId" title="${uiLabelMap.PartyInvitationPartyInvitationId}" widget-style="buttontext">

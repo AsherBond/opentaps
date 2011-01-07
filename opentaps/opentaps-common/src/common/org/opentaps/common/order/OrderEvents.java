@@ -64,7 +64,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -321,7 +321,7 @@ public final class OrderEvents {
         }
 
         // pass all the customized fields from the request parameters into the item attributes
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         ModelEntity model = delegator.getModelEntity("OrderItem");
         for (Object o : request.getParameterMap().keySet()) {
             if (!(o instanceof String)) {
@@ -442,7 +442,7 @@ public final class OrderEvents {
     @SuppressWarnings("unchecked")
     public static String appendItemToOrder(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
 
         String orderId = UtilCommon.getParameter(request, "orderId");
@@ -518,7 +518,7 @@ public final class OrderEvents {
      */
     public static ShoppingCart getOrInitializeCart(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         // if one already exists, return it
         ShoppingCart cart = getCart(request);
@@ -614,7 +614,7 @@ public final class OrderEvents {
         String thirdPartyPostalCode = request.getParameter("thirdPartyPostalCode");
         String thirdPartyCountryCode = request.getParameter("thirdPartyCountryCode");
         Boolean isCOD = new Boolean("Y".equals(request.getParameter("isCOD")));
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         ShoppingCart cart = getOrInitializeCart(request);
         return updateShipGroup(dispatcher, delegator, cart, shipGroupSeqId, contactMechId, carrierPartyId, shipmentMethodTypeId, maySplit, isGift, shippingInstructions, giftMessage, shipBeforeDate, thirdPartyAccountNumber, thirdPartyPostalCode, thirdPartyCountryCode, isCOD, shipWrapper, UtilCommon.getTimeZone(request), UtilHttp.getLocale(request));
@@ -624,7 +624,7 @@ public final class OrderEvents {
      * Describe <code>updateShipGroup</code> method here.
      *
      * @param dispatcher a <code>LocalDispatcher</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param cart the <code>ShoppingCart</code>
      * @param shipGroupSeqId the ID of the ship group to update
      * @param contactMechId the shipping address to set
@@ -646,7 +646,7 @@ public final class OrderEvents {
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static String updateShipGroup(LocalDispatcher dispatcher, GenericDelegator delegator, ShoppingCart cart, int shipGroupSeqId, String contactMechId, String carrierPartyId, String shipmentMethodTypeId,
+    public static String updateShipGroup(LocalDispatcher dispatcher, Delegator delegator, ShoppingCart cart, int shipGroupSeqId, String contactMechId, String carrierPartyId, String shipmentMethodTypeId,
             Boolean maySplit, Boolean isGift, String shippingInstructions, String giftMessage, String shipBeforeDateString,
             String thirdPartyAccountNumber, String thirdPartyPostalCode, String thirdPartyCountryCode, Boolean isCOD, OpentapsShippingEstimateWrapper shipWrapper, TimeZone timeZone, Locale locale) throws GenericEntityException {
 
@@ -760,13 +760,13 @@ public final class OrderEvents {
      * Updates the shipping estimate for the given ship group in the cart.
      *
      * @param dispatcher a <code>LocalDispatcher</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param cart a <code>ShoppingCart</code> value
      * @param shipGroupSeqId an <code>int</code> value
      * @param shipWrapper an <code>OpentapsShippingEstimateWrapper</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public static void updateShipGroupShippingEstimate(LocalDispatcher dispatcher, GenericDelegator delegator, ShoppingCart cart, int shipGroupSeqId, OpentapsShippingEstimateWrapper shipWrapper) throws GenericEntityException {
+    public static void updateShipGroupShippingEstimate(LocalDispatcher dispatcher, Delegator delegator, ShoppingCart cart, int shipGroupSeqId, OpentapsShippingEstimateWrapper shipWrapper) throws GenericEntityException {
         updateShipGroupShippingEstimate(dispatcher, delegator, cart, shipGroupSeqId, shipWrapper, false);
     }
 
@@ -774,14 +774,14 @@ public final class OrderEvents {
      * Updates the shipping estimate for the given ship group in the cart.
      *
      * @param dispatcher a <code>LocalDispatcher</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param cart a <code>ShoppingCart</code> value
      * @param shipGroupSeqId an <code>int</code> value
      * @param shipWrapper an <code>OpentapsShippingEstimateWrapper</code> value
      * @param force set to <code>true</code> to force the estimate re-calculation, else only updates it if the shipping address changed
      * @exception GenericEntityException if an error occurs
      */
-    public static void updateShipGroupShippingEstimate(LocalDispatcher dispatcher, GenericDelegator delegator, ShoppingCart cart, int shipGroupSeqId, OpentapsShippingEstimateWrapper shipWrapper, boolean force) throws GenericEntityException {
+    public static void updateShipGroupShippingEstimate(LocalDispatcher dispatcher, Delegator delegator, ShoppingCart cart, int shipGroupSeqId, OpentapsShippingEstimateWrapper shipWrapper, boolean force) throws GenericEntityException {
         if (shipWrapper == null && cart instanceof OpentapsShoppingCart) {
             shipWrapper = ((OpentapsShoppingCart) cart).getShipEstimateWrapper(shipGroupSeqId);
         }
@@ -824,7 +824,7 @@ public final class OrderEvents {
     public static String updateCartShippingEstimates(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
         ShoppingCart cart = getOrInitializeCart(request);
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         Debug.logInfo("updateCartShippingEstimates", MODULE);
         int shipGroups = cart.getShipGroupSize();
@@ -902,7 +902,7 @@ public final class OrderEvents {
      */
     @SuppressWarnings("unchecked")
     public static List getCartShipEstimates(HttpServletRequest request, ShoppingCart cart, OpentapsShippingEstimateWrapper shipWrapper) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         List shipEstimates = new ArrayList();
 
@@ -976,7 +976,7 @@ public final class OrderEvents {
      * @exception GenericEntityException if an error occurs
      */
     public static String validateOrderShippingOptions(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         ShoppingCart cart = getOrInitializeCart(request);
         int shipGroups = cart.getShipGroupSize();
@@ -1034,7 +1034,7 @@ public final class OrderEvents {
     @SuppressWarnings("unchecked")
     public static String updatePostalAddress(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException, GenericServiceException {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         HttpSession session = request.getSession();
 
         // validation
@@ -1345,7 +1345,7 @@ public final class OrderEvents {
     /**
      * Prepare jasper parameters for running order report.
      * @param dl a <code>DomainsLoader</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param userLogin a <code>GenericValue</code> value
      * @param locale a <code>Locale</code> value
@@ -1359,7 +1359,7 @@ public final class OrderEvents {
      * @throws EntityNotFoundException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static Map prepareOrderReportParameters(DomainsLoader dl, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, Locale locale, String orderId, String organizationPartyId) throws GenericServiceException, GenericEntityException, PartyNotFoundException, RepositoryException, EntityNotFoundException {
+    public static Map prepareOrderReportParameters(DomainsLoader dl, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, Locale locale, String orderId, String organizationPartyId) throws GenericServiceException, GenericEntityException, PartyNotFoundException, RepositoryException, EntityNotFoundException {
         Map<String, Object> parameters = FastMap.newInstance();
 
         //  placeholder for report parameters
@@ -1578,7 +1578,7 @@ public final class OrderEvents {
      */
     @SuppressWarnings("unchecked")
     public static String prepareOrderReport(HttpServletRequest request, HttpServletResponse response) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         Locale locale = UtilHttp.getLocale(request);
@@ -1623,13 +1623,13 @@ public final class OrderEvents {
      * From Ofbiz <code>ShippingEvents</code>, but also account for the COD surcharge.
      *
      * @param dispatcher a <code>LocalDispatcher</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param orh an <code>OrderReadHelper</code> value
      * @param shipGroupSeqId a <code>String</code> value
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map getShipEstimate(LocalDispatcher dispatcher, GenericDelegator delegator, OrderReadHelper orh, String shipGroupSeqId) {
+    public static Map getShipEstimate(LocalDispatcher dispatcher, Delegator delegator, OrderReadHelper orh, String shipGroupSeqId) {
         // check for shippable items
         if (!orh.shippingApplies()) {
             Map responseResult = ServiceUtil.returnSuccess();
@@ -1674,13 +1674,13 @@ public final class OrderEvents {
      * From Ofbiz <code>ShippingEvents</code>, but also account for the COD surcharge.
      *
      * @param dispatcher a <code>LocalDispatcher</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param cart a <code>ShoppingCart</code> value
      * @param groupNo an <code>int</code> value
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map getShipGroupEstimate(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, int groupNo) {
+    public static Map getShipGroupEstimate(LocalDispatcher dispatcher, Delegator delegator, OpentapsShoppingCart cart, int groupNo) {
         // check for shippable items
         if (!cart.shippingApplies()) {
             Map responseResult = ServiceUtil.returnSuccess();
@@ -1700,7 +1700,7 @@ public final class OrderEvents {
      * From Ofbiz <code>ShippingEvents</code>, but also account for the COD surcharge.
      *
      * @param dispatcher a <code>LocalDispatcher</code> value
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param orderTypeId a <code>String</code> value
      * @param shipmentMethodTypeId a <code>String</code> value
      * @param carrierPartyId a <code>String</code> value
@@ -1716,7 +1716,7 @@ public final class OrderEvents {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map getShipGroupEstimate(LocalDispatcher dispatcher, GenericDelegator delegator, String orderTypeId,
+    public static Map getShipGroupEstimate(LocalDispatcher dispatcher, Delegator delegator, String orderTypeId,
             String shipmentMethodTypeId, String carrierPartyId, String carrierRoleTypeId, String shippingContactMechId,
             String productStoreId, String supplierPartyId, List itemInfo, BigDecimal shippableWeight, BigDecimal shippableQuantity,
             BigDecimal shippableTotal, boolean isCod) {

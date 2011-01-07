@@ -33,6 +33,7 @@ import org.ofbiz.base.config.GenericConfigException;
 import org.ofbiz.base.config.MainResourceHandler;
 import org.ofbiz.base.config.ResourceHandler;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
@@ -57,6 +58,10 @@ public class ServiceEcaUtil {
     }
 
     public static void readConfig() {
+        // Only proceed if the cache hasn't already been populated, caller should be using reloadConfig() in that situation
+        if (UtilValidate.isNotEmpty(ecaCache)) {
+            return;
+        }
         Element rootElement = null;
         try {
             rootElement = ServiceConfigUtil.getXmlRootElement();
@@ -143,12 +148,12 @@ public class ServiceEcaUtil {
     public static void evalRules(String serviceName, Map<String, List<ServiceEcaRule>> eventMap, String event, DispatchContext dctx, Map<String, Object> context, Map<String, Object> result, boolean isError, boolean isFailure) throws GenericServiceException {
         // if the eventMap is passed we save a Map lookup, but if not that's okay we'll just look it up now
         if (eventMap == null) eventMap = getServiceEventMap(serviceName);
-        if (eventMap == null || eventMap.size() == 0) {
+        if (UtilValidate.isEmpty(eventMap)) {
             return;
         }
 
         Collection<ServiceEcaRule> rules = eventMap.get(event);
-        if (rules == null || rules.size() == 0) {
+        if (UtilValidate.isEmpty(rules)) {
             return;
         }
 

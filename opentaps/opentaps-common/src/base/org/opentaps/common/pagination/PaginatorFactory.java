@@ -17,7 +17,7 @@
 
 package org.opentaps.common.pagination;
 
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.common.builder.*;
 
@@ -109,11 +109,11 @@ public final class PaginatorFactory {
         ListBuilder builder = null;
 
         if (list instanceof EntityListBuilder) {
-            GenericDelegator delegator = (GenericDelegator) context.get("delegator");
+            Delegator delegator = (Delegator) context.get("delegator");
             ((EntityListBuilder) list).setDelegator(delegator);
             builder = (ListBuilder) list;
         } else if (list instanceof bsh.This) {
-            builder = new BshListBuilder((bsh.This) list, (GenericDelegator) context.get("delegator"));
+            builder = new BshListBuilder((bsh.This) list, (Delegator) context.get("delegator"));
         } else if (list instanceof List) {
             builder = new MapListBuilder((List) list);
         } else {
@@ -161,7 +161,7 @@ public final class PaginatorFactory {
 
         // for bsh, we need to reload the closure, which rebuilds everything
         if (list instanceof bsh.This) {
-            ListBuilder builder = new BshListBuilder((bsh.This) list, (GenericDelegator) context.get("delegator"));
+            ListBuilder builder = new BshListBuilder((bsh.This) list, (Delegator) context.get("delegator"));
             if (rememberOrderBy) {
                 builder.changeOrderBy(paginator.getOrderBy()); // preserve the order by
             }
@@ -181,7 +181,7 @@ public final class PaginatorFactory {
         // set the delegator again because the above will have erased it
         if (list instanceof EntityListBuilder) {
             EntityListBuilder builder = (EntityListBuilder) paginator.getListBuilder();
-            builder.setDelegator((GenericDelegator) context.get("delegator"));
+            builder.setDelegator((Delegator) context.get("delegator"));
         }
     }
 }

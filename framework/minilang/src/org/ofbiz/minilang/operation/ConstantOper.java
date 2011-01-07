@@ -36,6 +36,7 @@ public class ConstantOper extends MakeInStringOperation {
         constant = UtilXml.elementValue(element);
     }
 
+    @Override
     public String exec(Map<String, Object> inMap, List<Object> messages, Locale locale, ClassLoader loader) {
         return constant;
     }

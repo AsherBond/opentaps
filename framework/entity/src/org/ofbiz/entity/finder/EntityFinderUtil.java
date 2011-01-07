@@ -19,11 +19,11 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.entity.finder;
 
+import static org.ofbiz.base.util.UtilGenerics.cast;
+
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,26 +32,23 @@ import java.util.Set;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.ObjectType;
-import static org.ofbiz.base.util.UtilGenerics.cast;
+import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilFormatOut;
+import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.collections.FlexibleMapAccessor;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityComparisonOperator;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityJoinOperator;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
-import org.ofbiz.entity.model.ModelField;
+import org.ofbiz.entity.model.ModelFieldTypeReader;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.w3c.dom.Element;
 
@@ -151,7 +148,7 @@ public class EntityFinderUtil {
     }
 
     public static interface Condition extends Serializable {
-        public EntityCondition createCondition(Map<String, ? extends Object> context, String entityName, GenericDelegator delegator);
+        public EntityCondition createCondition(Map<String, ? extends Object> context, ModelEntity modelEntity, ModelFieldTypeReader modelFieldTypeReader);
     }
     public static class ConditionExpr implements Condition {
         protected FlexibleStringExpander fieldNameExdr;
@@ -183,12 +180,7 @@ public class EntityFinderUtil {
             this.ignoreExdr = FlexibleStringExpander.getInstance(conditionExprElement.getAttribute("ignore"));
         }
 
-        public EntityCondition createCondition(Map<String, ? extends Object> context, String entityName, GenericDelegator delegator) {
-            ModelEntity modelEntity = delegator.getModelEntity(entityName);
-            if (modelEntity == null) {
-                throw new IllegalArgumentException("Error in Entity Find: could not find entity with name [" + entityName + "]");
-            }
-
+        public EntityCondition createCondition(Map<String, ? extends Object> context, ModelEntity modelEntity, ModelFieldTypeReader modelFieldTypeReader) {
             String fieldName = fieldNameExdr.expandString(context);
 
             Object value = null;
@@ -202,7 +194,7 @@ public class EntityFinderUtil {
             }
 
             String operatorName = operatorExdr.expandString(context);
-            EntityOperator operator = EntityOperator.lookup(operatorName);
+            EntityOperator<?,?,?> operator = EntityOperator.lookup(operatorName);
             if (operator == null) {
                 throw new IllegalArgumentException("Could not find an entity operator for the name: " + operatorName);
             }
@@ -225,7 +217,7 @@ public class EntityFinderUtil {
             if (!((operator.equals(EntityOperator.IN) || operator.equals(EntityOperator.BETWEEN) || operator.equals(EntityOperator.NOT_IN))
                     && value instanceof Collection)) {
                 // now to a type conversion for the target fieldName
-                value = modelEntity.convertFieldValue(modelEntity.getField(fieldName), value, delegator, context, null);
+                value = modelEntity.convertFieldValue(modelEntity.getField(fieldName), value, modelFieldTypeReader, context);
             }
 
             if (Debug.verboseOn()) Debug.logVerbose("Got value for fieldName [" + fieldName + "]: " + value, module);
@@ -246,21 +238,21 @@ public class EntityFinderUtil {
                 // this makes more sense logically, but if anyone ever needs it to not behave this way we should add an "or-null" attribute that is true by default
                 if (ignoreCase) {
                     return EntityCondition.makeCondition(
-                            EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(fieldName), (EntityComparisonOperator) operator, EntityFunction.UPPER(value)),
+                            EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(fieldName), UtilGenerics.<EntityComparisonOperator<?,?>>cast(operator), EntityFunction.UPPER(value)),
                             EntityOperator.OR,
                             EntityCondition.makeCondition(fieldName, EntityOperator.EQUALS, null));
                 } else {
                     return EntityCondition.makeCondition(
-                            EntityCondition.makeCondition(fieldName, (EntityComparisonOperator) operator, value),
+                            EntityCondition.makeCondition(fieldName, UtilGenerics.<EntityComparisonOperator<?,?>>cast(operator), value),
                             EntityOperator.OR,
                             EntityCondition.makeCondition(fieldName, EntityOperator.EQUALS, null));
                 }
             } else {
                 if (ignoreCase) {
                     // use the stuff to upper case both sides
-                    return EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(fieldName), (EntityComparisonOperator) operator, EntityFunction.UPPER(value));
+                    return EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(fieldName), UtilGenerics.<EntityComparisonOperator<?,?>>cast(operator), EntityFunction.UPPER(value));
                 } else {
-                    return EntityCondition.makeCondition(fieldName, (EntityComparisonOperator) operator, value);
+                    return EntityCondition.makeCondition(fieldName, UtilGenerics.<EntityComparisonOperator<?,?>>cast(operator), value);
                 }
             }
         }
@@ -287,30 +279,30 @@ public class EntityFinderUtil {
             }
         }
 
-        public EntityCondition createCondition(Map<String, ? extends Object> context, String entityName, GenericDelegator delegator) {
+        public EntityCondition createCondition(Map<String, ? extends Object> context, ModelEntity modelEntity, ModelFieldTypeReader modelFieldTypeReader) {
             if (this.conditionList.size() == 0) {
                 return null;
             }
             if (this.conditionList.size() == 1) {
                 Condition condition = this.conditionList.get(0);
-                return condition.createCondition(context, entityName, delegator);
+                return condition.createCondition(context, modelEntity, modelFieldTypeReader);
             }
 
             List<EntityCondition> entityConditionList = new LinkedList<EntityCondition>();
             for (Condition curCondition: conditionList) {
-                EntityCondition econd = curCondition.createCondition(context, entityName, delegator);
+                EntityCondition econd = curCondition.createCondition(context, modelEntity, modelFieldTypeReader);
                 if (econd != null) {
                     entityConditionList.add(econd);
                 }
             }
 
             String operatorName = combineExdr.expandString(context);
-            EntityOperator operator = EntityOperator.lookup(operatorName);
+            EntityOperator<?,?,?> operator = EntityOperator.lookup(operatorName);
             if (operator == null) {
                 throw new IllegalArgumentException("Could not find an entity operator for the name: " + operatorName);
             }
 
-            return EntityCondition.makeCondition(entityConditionList, (EntityJoinOperator) operator);
+            return EntityCondition.makeCondition(entityConditionList, UtilGenerics.<EntityJoinOperator>cast(operator));
         }
     }
     public static class ConditionObject implements Condition {
@@ -324,7 +316,7 @@ public class EntityFinderUtil {
             }
         }
 
-        public EntityCondition createCondition(Map<String, ? extends Object> context, String entityName, GenericDelegator delegator) {
+        public EntityCondition createCondition(Map<String, ? extends Object> context, ModelEntity modelEntity, ModelFieldTypeReader modelFieldTypeReader) {
             EntityCondition condition = (EntityCondition) fieldNameAcsr.get(context);
             return condition;
         }

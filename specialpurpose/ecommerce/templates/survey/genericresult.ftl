@@ -21,7 +21,7 @@ under the License.
 <#assign uiLabelMap = Static["org.ofbiz.base.util.UtilProperties"].getResourceBundleMap("CommonUiLabels", locale)>
 
 <h1>${survey.description?if_exists}</h1>
-<br/>
+<br />
 
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
   <#list surveyQuestionAndAppls as surveyQuestionAndAppl>
@@ -48,11 +48,11 @@ under the License.
       <#if surveyQuestionAndAppl.surveyQuestionTypeId == "SEPERATOR_TEXT">
         <td colspan="5"><div class="tabletext">${surveyQuestionAndAppl.question?if_exists}</div></td>
       <#elseif surveyQuestionAndAppl.surveyQuestionTypeId == "SEPERATOR_LINE">
-        <td colspan="5"><hr/></td>
+        <td colspan="5"><hr /></td>
       <#else>
 
         <#-- standard question options -->
-        <td align='right' nowrap>
+        <td align='right' nowrap="nowrap">
           <#assign answerString = "answers">
           <#if (results._total?default(0) == 1)>
              <#assign answerString = "answer">

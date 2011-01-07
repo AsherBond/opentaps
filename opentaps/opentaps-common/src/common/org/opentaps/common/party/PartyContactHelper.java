@@ -22,7 +22,7 @@ import java.util.*;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -49,11 +49,11 @@ public final class PartyContactHelper {
      * @param contactMechTypeId the contact mech type ID
      * @param contactMechPurposeTypeId will be used if not null
      * @param getActiveOnly get only active ones (filter out expired contacts and expired contact purposes)
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the list of contact mech <code>GenericValue</code> for the given party id matching the given purpose ID
      * @throws GenericEntityException if an error occurs
      */
-    public static List<GenericValue> getContactMechsByPurpose(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, boolean getActiveOnly, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getContactMechsByPurpose(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, boolean getActiveOnly, Delegator delegator) throws GenericEntityException {
         List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("partyId", partyId));
         if (contactMechTypeId != null) {
             conditions.add(EntityCondition.makeCondition("contactMechTypeId", contactMechTypeId));
@@ -82,11 +82,11 @@ public final class PartyContactHelper {
      * @param partyId the party ID
      * @param contactMechPurposeTypeId purpose of phone number
      * @param getActiveOnly flag to return only the currently active telecom numbers
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return Map of TelecomNumber fields + "extension"
      * @throws GenericEntityException if an error occurs
      */
-    public static Map<String, Object> getTelecomNumberMapByPurpose(String partyId, String contactMechPurposeTypeId, boolean getActiveOnly, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, Object> getTelecomNumberMapByPurpose(String partyId, String contactMechPurposeTypeId, boolean getActiveOnly, Delegator delegator) throws GenericEntityException {
 
         List<GenericValue> possibleTelecomNumbers = getContactMechsByPurpose(partyId, "TELECOM_NUMBER", contactMechPurposeTypeId, getActiveOnly, delegator);
         if ((possibleTelecomNumbers == null) || (possibleTelecomNumbers.size() == 0)) {
@@ -122,12 +122,12 @@ public final class PartyContactHelper {
      * @param partyId the party ID
      * @param contactMechPurposeTypeId purpose of phone number
      * @param getActiveOnly flag to return only the currently active telecom numbers
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return GenericValue TelecomNumber
      * @throws GenericEntityException if an error occurs
      * @deprecated
      */
-    public static GenericValue getTelecomNumberValueByPurpose(String partyId, String contactMechPurposeTypeId, boolean getActiveOnly, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue getTelecomNumberValueByPurpose(String partyId, String contactMechPurposeTypeId, boolean getActiveOnly, Delegator delegator) throws GenericEntityException {
 
         List<GenericValue> possibleTelecomNumbers = getContactMechsByPurpose(partyId, "TELECOM_NUMBER", contactMechPurposeTypeId, getActiveOnly, delegator);
         if ((possibleTelecomNumbers == null) || (possibleTelecomNumbers.size() == 0)) {
@@ -151,11 +151,11 @@ public final class PartyContactHelper {
      * @param partyId the party ID
      * @param contactMechPurposeTypeId purpose of phone number
      * @param getActiveOnly flag to return only the currently active telecom numbers
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return String phone number in 1 (123) 4567890 format or null if there is no phone number
      * @throws GenericEntityException if an error occurs
      */
-    public static String getTelecomNumberByPurpose(String partyId, String contactMechPurposeTypeId, boolean getActiveOnly, GenericDelegator delegator) throws GenericEntityException {
+    public static String getTelecomNumberByPurpose(String partyId, String contactMechPurposeTypeId, boolean getActiveOnly, Delegator delegator) throws GenericEntityException {
 
         StringBuffer buff = new StringBuffer();
 
@@ -190,11 +190,11 @@ public final class PartyContactHelper {
      *
      * @param partyId the party ID
      * @param contactMechPurposeTypeId purpose of phone number
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return String phone number in 1 (123) 4567890 format or null if there is no phone number
      * @throws GenericEntityException if an error occurs
      */
-    public static String getTelecomNumberByPurpose(String partyId, String contactMechPurposeTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getTelecomNumberByPurpose(String partyId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
         return getTelecomNumberByPurpose(partyId, contactMechPurposeTypeId, true, delegator);
     }
 
@@ -206,11 +206,11 @@ public final class PartyContactHelper {
      * @param contactMechTypeId the contact mech type ID
      * @param contactMechPurposeTypeId purpose of electronic address
      * @param getActiveOnly flag to return only the currently active electronic addresses
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the first matching electronic address string
      * @throws GenericEntityException if an error occurs
      */
-    public static String getElectronicAddressByPurpose(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, boolean getActiveOnly, GenericDelegator delegator) throws GenericEntityException {
+    public static String getElectronicAddressByPurpose(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, boolean getActiveOnly, Delegator delegator) throws GenericEntityException {
 
         List<GenericValue> possibleAddresses = getContactMechsByPurpose(partyId, contactMechTypeId, contactMechPurposeTypeId, getActiveOnly, delegator);
         if ((possibleAddresses != null) && (possibleAddresses.size() > 0)) {
@@ -233,11 +233,11 @@ public final class PartyContactHelper {
      * @param partyId the party ID
      * @param contactMechTypeId the contact mech type ID
      * @param contactMechPurposeTypeId purpose of electronic address
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return the first matching electronic address string
      * @throws GenericEntityException if an error occurs
      */
-    public static String getElectronicAddressByPurpose(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getElectronicAddressByPurpose(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
         return getElectronicAddressByPurpose(partyId, contactMechTypeId, contactMechPurposeTypeId, true, delegator);
     }
 
@@ -247,11 +247,11 @@ public final class PartyContactHelper {
      * @param partyId the party ID
      * @param contactMechPurposeTypeId purpose of postal address
      * @param getActiveOnly flag to return only the currently active electronic addresses
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return First PostalAddress of the specified contactMechPurposeTypeId
      * @throws GenericEntityException if an error occurs
      */
-    public static GenericValue getPostalAddressValueByPurpose(String partyId, String contactMechPurposeTypeId, boolean getActiveOnly, GenericDelegator delegator) throws GenericEntityException {
+    public static GenericValue getPostalAddressValueByPurpose(String partyId, String contactMechPurposeTypeId, boolean getActiveOnly, Delegator delegator) throws GenericEntityException {
         List<GenericValue> possibleAddresses = getContactMechsByPurpose(partyId, "POSTAL_ADDRESS", contactMechPurposeTypeId, getActiveOnly, delegator);
 
         if ((possibleAddresses != null) && (possibleAddresses.size() > 0)) {
@@ -271,11 +271,11 @@ public final class PartyContactHelper {
      *
      * @param partyId the party ID
      * @param contactMechPurposeTypeId purpose of postal address
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @return Abbreviated string for postal address of the contactMechPurposeTypeId.  Currently just City, ST.  null if no postal address.
      * @throws GenericEntityException if an error occurs
      */
-    public static String getAbbrevPostalAddressByPurpose(String partyId, String contactMechPurposeTypeId, GenericDelegator delegator) throws GenericEntityException {
+    public static String getAbbrevPostalAddressByPurpose(String partyId, String contactMechPurposeTypeId, Delegator delegator) throws GenericEntityException {
         GenericValue postalAddress = getPostalAddressValueByPurpose(partyId, contactMechPurposeTypeId, true, delegator);
 
         String abbrevPostalAddress = "";
@@ -299,13 +299,13 @@ public final class PartyContactHelper {
 
     /**
      * Provides a list of partyIds matching any email addresses in the input string. The input string is split by the provided delimiter, if provided.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param possibleEmailString a list of email addresses separated by the given delimiter
      * @param delimiter to split the given possibleEmailString
      * @return a list of partyIds matching any email addresses in the input string
      * @throws GenericEntityException if an error occurs
      */
-    public static List<String> getPartyIdsMatchingEmailsInString(GenericDelegator delegator, String possibleEmailString, String delimiter) throws GenericEntityException {
+    public static List<String> getPartyIdsMatchingEmailsInString(Delegator delegator, String possibleEmailString, String delimiter) throws GenericEntityException {
         Set<String> partyIds = new LinkedHashSet<String>();
         String[] possibleEmails = {possibleEmailString};
         if (delimiter != null) {

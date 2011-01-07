@@ -53,6 +53,7 @@ public class MapToMap extends MethodOperation {
         toMapAcsr = new ContextAccessor<Map<String, Object>>(element.getAttribute("to-map"), element.getAttribute("to-map-name"));
     }
 
+    @Override
     public boolean exec(MethodContext methodContext) {
         Map<String, Object> fromMap = null;
         if (!mapAcsr.isEmpty()) {
@@ -80,10 +81,12 @@ public class MapToMap extends MethodOperation {
         return true;
     }
 
+    @Override
     public String rawString() {
         // TODO: something more than the empty tag
         return "<map-to-map/>";
     }
+    @Override
     public String expandedString(MethodContext methodContext) {
         // TODO: something more than a stub/dummy
         return this.rawString();

@@ -50,7 +50,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -67,7 +67,7 @@ public class BomNode implements BomNodeInterface {
     private static final String MODULE = BomNode.class.getName();
 
     private LocalDispatcher dispatcher;
-    private GenericDelegator delegator;
+    private Delegator delegator;
     private GenericValue userLogin;
 
     private BomTreeInterface tree; // the tree to which this node belongs
@@ -128,12 +128,12 @@ public class BomNode implements BomNodeInterface {
     /**
      * Creates a new <code>BomNode</code> instance.
      * @param productId the node Product entity ID
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
      * @param userLogin a <code>GenericValue</code> value
      * @exception GenericEntityException if an error occurs
      */
-    public BomNode(String productId, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
+    public BomNode(String productId, Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException {
         this(delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId)), dispatcher, userLogin);
     }
 
@@ -399,7 +399,7 @@ public class BomNode implements BomNodeInterface {
         }
 
         bomTypeId = partBomTypeId;
-        // GenericDelegator delegator = product.getDelegator();
+        // Delegator delegator = product.getDelegator();
         List rows = delegator.findByAnd("ProductAssoc",
                                             UtilMisc.toMap("productIdTo", product.get("productId"),
                                                        "productAssocTypeId", partBomTypeId),

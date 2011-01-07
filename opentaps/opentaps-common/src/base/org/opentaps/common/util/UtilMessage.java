@@ -91,7 +91,7 @@ public final class UtilMessage {
     private static final String EVENT_ERROR = "error";
 
     // uiLabelMap used by by the opentaps applications, keyed by Locale (these don't have to be synchronized since they are read only)
-    private static UtilCache UI_LABELS = new UtilCache("opentaps.ui.labels", 0, 0);
+    private static UtilCache UI_LABELS = UtilCache.createUtilCache("opentaps.ui.labels", 0, 0);
 
     /** Generic 'internal error' message.  Use this if the user would be confused by the error, then log the details. */
     public static final String GENERIC_ERROR_LABEL = "OpentapsError_Internal";

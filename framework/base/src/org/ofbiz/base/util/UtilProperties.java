@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Enumeration;
@@ -59,21 +60,19 @@ import org.w3c.dom.Element;
  * method).</p>
  */
 @SuppressWarnings("serial")
-public class UtilProperties implements java.io.Serializable {
+public class UtilProperties implements Serializable {
 
     public static final String module = UtilProperties.class.getName();
 
     /** An instance of the generic cache for storing the non-locale-specific properties.
      *  Each Properties instance is keyed by the resource String.
      */
-    protected static UtilCache<String, Properties> resourceCache = new UtilCache<String, Properties>("properties.UtilPropertiesResourceCache");
+    protected static UtilCache<String, Properties> resourceCache = UtilCache.createUtilCache("properties.UtilPropertiesResourceCache");
 
     /** An instance of the generic cache for storing the non-locale-specific properties.
      *  Each Properties instance is keyed by the file's URL.
      */
-    protected static UtilCache<String, Properties> urlCache = new UtilCache<String, Properties>("properties.UtilPropertiesUrlCache");
-
-    public static final Locale LOCALE_ROOT = new Locale("", "", "");
+    protected static UtilCache<String, Properties> urlCache = UtilCache.createUtilCache("properties.UtilPropertiesUrlCache");
 
     protected static Locale fallbackLocale = null;
     protected static Set<Locale> defaultCandidateLocales = null;
@@ -115,20 +114,27 @@ public class UtilProperties implements java.io.Serializable {
     public static String getPropertyValue(String resource, String name, String defaultValue) {
         String value = getPropertyValue(resource, name);
 
-        if (value == null || value.length() == 0)
+        if (UtilValidate.isEmpty(value))
             return defaultValue;
         else
             return value;
     }
 
-    public static double getPropertyNumber(String resource, String name) {
+    public static double getPropertyNumber(String resource, String name, double defaultValue) {
         String str = getPropertyValue(resource, name);
-        double strValue = 0.00000;
+        if (str == null) {
+            return defaultValue;
+        }
 
         try {
-            strValue = Double.parseDouble(str);
-        } catch (NumberFormatException nfe) {}
-        return strValue;
+            return Double.parseDouble(str);
+        } catch (NumberFormatException nfe) {
+            return defaultValue;
+        }
+    }
+
+    public static double getPropertyNumber(String resource, String name) {
+        return getPropertyNumber(resource, name, 0.00000);
     }
 
     /** Returns the value of the specified property name from the specified resource/properties file
@@ -150,7 +156,7 @@ public class UtilProperties implements java.io.Serializable {
         try {
             value = properties.getProperty(name);
         } catch (Exception e) {
-            Debug.log(e.getMessage(), module);
+            Debug.log(e, module);
         }
         return value == null ? "" : value.trim();
     }
@@ -174,7 +180,7 @@ public class UtilProperties implements java.io.Serializable {
                 properties = getProperties(url);
                 resourceCache.put(cacheKey, properties);
             } catch (MissingResourceException e) {
-                Debug.log(e.getMessage(), module);
+                Debug.log(e, module);
             }
         }
         if (properties == null) {
@@ -199,7 +205,7 @@ public class UtilProperties implements java.io.Serializable {
                 properties.load(url.openStream());
                 urlCache.put(url.toString(), properties);
             } catch (Exception e) {
-                Debug.log(e.getMessage(), module);
+                Debug.log(e, module);
             }
         }
         if (properties == null) {
@@ -254,14 +260,21 @@ public class UtilProperties implements java.io.Serializable {
             return value;
     }
 
-    public static double getPropertyNumber(URL url, String name) {
+    public static double getPropertyNumber(URL url, String name, double defaultValue) {
         String str = getPropertyValue(url, name);
-        double strValue = 0.00000;
+        if (str == null) {
+            return defaultValue;
+        }
 
         try {
-            strValue = Double.parseDouble(str);
-        } catch (NumberFormatException nfe) {}
-        return strValue;
+            return Double.parseDouble(str);
+        } catch (NumberFormatException nfe) {
+            return defaultValue;
+        }
+    }
+
+    public static double getPropertyNumber(URL url, String name) {
+        return getPropertyNumber(url, name, 0.00000);
     }
 
     /** Returns the value of the specified property name from the specified resource/properties file
@@ -283,7 +296,7 @@ public class UtilProperties implements java.io.Serializable {
         try {
             value = properties.getProperty(name);
         } catch (Exception e) {
-            Debug.log(e.getMessage(), module);
+            Debug.log(e, module);
         }
         return value == null ? "" : value.trim();
     }
@@ -320,56 +333,102 @@ public class UtilProperties implements java.io.Serializable {
                 curIdx++;
             }
         } catch (Exception e) {
-            Debug.log(e.getMessage(), module);
+            Debug.log(e, module);
         }
         return value == null ? "" : value.trim();
     }
 
     /** Sets the specified value of the specified property name to the specified resource/properties file
-    * @param resource The name of the resource - must be a file
-    * @param name The name of the property in the properties file
-    * @param value The value of the property in the properties file */
-    public static void setPropertyValue(String resource, String name, String value) {
-        if (resource == null || resource.length() <= 0) return;
-        if (name == null || name.length() <= 0) return;
+     * @param resource The name of the resource - must be a file
+     * @param name The name of the property in the properties file
+     * @param value The value of the property in the properties file */
+     public static void setPropertyValue(String resource, String name, String value) {
+         if (resource == null || resource.length() <= 0) return;
+         if (name == null || name.length() <= 0) return;
 
-        Properties properties = getProperties(resource);
-        if (properties == null) {
-            return;
-        }
+         Properties properties = getProperties(resource);
+         if (properties == null) {
+             return;
+         }
 
-        try {
-            properties.setProperty(name, value);
-            FileOutputStream propFile = new FileOutputStream(resource);
-            properties.store(propFile,
-            "##############################################################################\n"
-            +"# Licensed to the Apache Software Foundation (ASF) under one                   \n"
-            +"# or more contributor license agreements.  See the NOTICE file                 \n"
-            +"# distributed with this work for additional information                        \n"
-            +"# regarding copyright ownership.  The ASF licenses this file                   \n"
-            +"# to you under the Apache License, Version 2.0 (the                            \n"
-            +"# \"License\"); you may not use this file except in compliance                 \n"
-            +"# with the License.  You may obtain a copy of the License at                   \n"
-            +"#                                                                              \n"
-            +"# http://www.apache.org/licenses/LICENSE-2.0                                   \n"
-            +"#                                                                              \n"
-            +"# Unless required by applicable law or agreed to in writing,                   \n"
-            +"# software distributed under the License is distributed on an                  \n"
-            +"# \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY                     \n"
-            +"# KIND, either express or implied.  See the License for the                    \n"
-            +"# specific language governing permissions and limitations                      \n"
-            +"# under the License.                                                           \n"
-            +"###############################################################################\n"
-            +"#                                                                              \n"
-            +"#Dynamically modified by OFBiz Framework (org.ofbiz.base.util : UtilProperties.setPropertyValue)");
+         try {
+             properties.setProperty(name, value);
+             FileOutputStream propFile = new FileOutputStream(resource);
+             if ("XuiLabels".equals(name)) {
+                 properties.store(propFile,
+                     "##############################################################################\n"
+                     +"# Licensed to the Apache Software Foundation (ASF) under one                   \n"
+                     +"# or more contributor license agreements.  See the NOTICE file                 \n"
+                     +"# distributed with this work for additional information                        \n"
+                     +"# regarding copyright ownership.  The ASF licenses this file                   \n"
+                     +"# to you under the Apache License, Version 2.0 (the                            \n"
+                     +"# \"License\"); you may not use this file except in compliance                 \n"
+                     +"# with the License.  You may obtain a copy of the License at                   \n"
+                     +"#                                                                              \n"
+                     +"# http://www.apache.org/licenses/LICENSE-2.0                                   \n"
+                     +"#                                                                              \n"
+                     +"# Unless required by applicable law or agreed to in writing,                   \n"
+                     +"# software distributed under the License is distributed on an                  \n"
+                     +"# \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY                     \n"
+                     +"# KIND, either express or implied.  See the License for the                    \n"
+                     +"# specific language governing permissions and limitations                      \n"
+                     +"# under the License.                                                           \n"
+                     +"###############################################################################\n"
+                     +"#                                                                              \n"
+                     +"# Dynamically modified by OFBiz Framework (org.ofbiz.base.util : UtilProperties.setPropertyValue)\n"
+                     +"#                                                                              \n"
+                     +"# By default the screen is 1024x768 wide. If you want to use another screen size,\n"
+                     +"# you must create a new directory under specialpurpose/pos/screens, like the 800x600.\n"
+                     +"# You must also set the 3 related parameters (StartClass, ClientWidth, ClientHeight) accordingly.\n"
+                     +"#");
+             } else {
+                 properties.store(propFile,
+                     "##############################################################################\n"
+                     +"# Licensed to the Apache Software Foundation (ASF) under one                   \n"
+                     +"# or more contributor license agreements.  See the NOTICE file                 \n"
+                     +"# distributed with this work for additional information                        \n"
+                     +"# regarding copyright ownership.  The ASF licenses this file                   \n"
+                     +"# to you under the Apache License, Version 2.0 (the                            \n"
+                     +"# \"License\"); you may not use this file except in compliance                 \n"
+                     +"# with the License.  You may obtain a copy of the License at                   \n"
+                     +"#                                                                              \n"
+                     +"# http://www.apache.org/licenses/LICENSE-2.0                                   \n"
+                     +"#                                                                              \n"
+                     +"# Unless required by applicable law or agreed to in writing,                   \n"
+                     +"# software distributed under the License is distributed on an                  \n"
+                     +"# \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY                     \n"
+                     +"# KIND, either express or implied.  See the License for the                    \n"
+                     +"# specific language governing permissions and limitations                      \n"
+                     +"# under the License.                                                           \n"
+                     +"###############################################################################\n"
+                     +"#                                                                              \n"
+                     +"# Dynamically modified by OFBiz Framework (org.ofbiz.base.util : UtilProperties.setPropertyValue)\n"
+                     +"# The comments have been removed, you may still find them on the OFBiz repository... \n"
+                     +"#");
+             }
 
-            propFile.close();
-        } catch (FileNotFoundException e) {
-            Debug.log(e, "Unable to located the resource file.", module);
-        } catch (IOException e) {
-            Debug.logError(e, module);
-        }
-    }
+             propFile.close();
+         } catch (FileNotFoundException e) {
+             Debug.log(e, "Unable to located the resource file.", module);
+         } catch (IOException e) {
+             Debug.logError(e, module);
+         }
+     }
+
+     /** Sets the specified value of the specified property name to the specified resource/properties in memory, does not persist it
+      * @param resource The name of the resource
+      * @param name The name of the property in the resource
+      * @param value The value of the property to set in memory */
+      public static void setPropertyValueInMemory(String resource, String name, String value) {
+          if (resource == null || resource.length() <= 0) return;
+          if (name == null || name.length() <= 0) return;
+
+          Properties properties = getProperties(resource);
+          if (properties == null) {
+              return;
+          }
+          properties.setProperty(name, value);
+      }
 
     // ========= Locale & Resource Based Methods ==========
 
@@ -392,7 +451,7 @@ public class UtilProperties implements java.io.Serializable {
         try {
             value = (String) bundle.getString(name);
         } catch (Exception e) {
-            //Debug.log(e.getMessage(), module);
+            //Debug.log(e, module);
         }
         return value == null ? name : value.trim();
     }
@@ -408,7 +467,7 @@ public class UtilProperties implements java.io.Serializable {
     public static String getMessage(String resource, String name, Object[] arguments, Locale locale) {
         String value = getMessage(resource, name, locale);
 
-        if (value == null || value.length() == 0) {
+        if (UtilValidate.isEmpty(value)) {
             return "";
         } else {
             if (arguments != null && arguments.length > 0) {
@@ -426,10 +485,10 @@ public class UtilProperties implements java.io.Serializable {
      * @param arguments A List of Objects to insert into the message argument place holders
      * @return The value of the property in the properties file
      */
-    public static String getMessage(String resource, String name, List arguments, Locale locale) {
+    public static <E> String getMessage(String resource, String name, List<E> arguments, Locale locale) {
         String value = getMessage(resource, name, locale);
 
-        if (value == null || value.length() == 0) {
+        if (UtilValidate.isEmpty(value)) {
             return "";
         } else {
             if (UtilValidate.isNotEmpty(arguments)) {
@@ -454,7 +513,7 @@ public class UtilProperties implements java.io.Serializable {
     public static String getMessage(String resource, String name, Map<String, ? extends Object> context, Locale locale) {
         String value = getMessage(resource, name, locale);
 
-        if (value == null || value.length() == 0) {
+        if (UtilValidate.isEmpty(value)) {
             return "";
         } else {
             if (UtilValidate.isNotEmpty(context)) {
@@ -560,7 +619,9 @@ public class UtilProperties implements java.io.Serializable {
      * configured using the <code>locale.properties.fallback</code> property in
      * <code>general.properties</code>.
      * @return The configured fallback locale
+     * @deprecated Use <code>java.util.ResourceBundle.Control.getFallbackLocale(...)</code>
      */
+    @Deprecated
     public static Locale getFallbackLocale() {
         if (fallbackLocale == null) {
             synchronized (UtilProperties.class) {
@@ -608,9 +669,8 @@ public class UtilProperties implements java.io.Serializable {
                 if (defaultCandidateLocales == null) {
                     defaultCandidateLocales = FastSet.newInstance();
                     defaultCandidateLocales.addAll(localeToCandidateList(Locale.getDefault()));
-                    // Change to Locale.ROOT in Java 6
-                    defaultCandidateLocales.add(LOCALE_ROOT);
                     defaultCandidateLocales.addAll(localeToCandidateList(getFallbackLocale()));
+                    defaultCandidateLocales.add(Locale.ROOT);
                 }
             }
         }
@@ -623,10 +683,12 @@ public class UtilProperties implements java.io.Serializable {
      * - in that order.
      * @param locale The desired locale
      * @return A list of candidate locales
+     * @deprecated Use <code>java.util.ResourceBundle.Control.getCandidateLocales(...)</code>
      */
+    @Deprecated
     public static List<Locale> getCandidateLocales(Locale locale) {
         // Java 6 conformance
-        if (LOCALE_ROOT.equals(locale)) {
+        if (Locale.ROOT.equals(locale)) {
             return UtilMisc.toList(locale);
         }
         Set<Locale> localeSet = FastSet.newInstance();
@@ -765,6 +827,7 @@ public class UtilProperties implements java.io.Serializable {
             doc = UtilXml.readXmlDocument(in, false, "XML Properties file");
             in.close();
         } catch (Exception e) {
+            Debug.logWarning(e, "XML Locale file for locale " + locale + " could not be loaded.", module);
             in.close();
             return null;
         }
@@ -812,7 +875,7 @@ public class UtilProperties implements java.io.Serializable {
      * properties file format.
      */
     public static class UtilResourceBundle extends ResourceBundle {
-        protected static UtilCache<String, UtilResourceBundle> bundleCache = new UtilCache<String, UtilResourceBundle>("properties.UtilPropertiesBundleCache");
+        protected static UtilCache<String, UtilResourceBundle> bundleCache = UtilCache.createUtilCache("properties.UtilPropertiesBundleCache");
         protected Properties properties = null;
         protected Locale locale = null;
         protected int hashCode = hashCode();
@@ -875,30 +938,35 @@ public class UtilProperties implements java.io.Serializable {
             return bundle;
         }
 
+        @Override
         public int hashCode() {
             return this.hashCode;
         }
 
+        @Override
         public boolean equals(Object obj) {
             return obj == null ? false : obj.hashCode() == this.hashCode;
         }
 
+        @Override
         public Locale getLocale() {
             return this.locale;
         }
 
+        @Override
         protected Object handleGetObject(String key) {
             return properties.get(key);
         }
 
+        @Override
         public Enumeration<String> getKeys() {
             return new Enumeration<String>() {
-                Iterator i = properties.keySet().iterator();
+                Iterator<String> i = UtilGenerics.cast(properties.keySet().iterator());
                 public boolean hasMoreElements() {
                     return (i.hasNext());
                 }
                 public String nextElement() {
-                    return (String) i.next();
+                    return i.next();
                 }
             };
         }
@@ -925,6 +993,7 @@ public class UtilProperties implements java.io.Serializable {
             }
             in.close();
         }
+        @Override
         public void loadFromXML(InputStream in) throws IOException, InvalidPropertiesFormatException {
             xmlToProperties(in, null, this);
             in.close();

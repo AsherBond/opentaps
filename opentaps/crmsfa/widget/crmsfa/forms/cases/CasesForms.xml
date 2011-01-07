@@ -117,13 +117,13 @@
         <field name="accountPartyId" widget-style="tabletext" title="${uiLabelMap.CrmAccountName}" widget-area-style="fieldWidth300" position="1"
             use-when="accountPartyId!=null">
             <display-entity entity-name="PartySummaryCRMView" description="${groupName} (${partyId})" key-field-name="partyId">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount?partyId=${case.accountPartyId}"/>
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount?partyId=${case.accountPartyId}" link-type="anchor"/>
             </display-entity>
         </field>
         <field name="contactPartyId" widget-style="tabletext" title="${uiLabelMap.CrmContactName}" widget-area-style="fieldWidth300" position="1"
             use-when="contactPartyId!=null">
             <display-entity entity-name="PartySummaryCRMView" description="${firstName} ${lastName} (${partyId})" key-field-name="partyId">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewContact?partyId=${case.contactPartyId}"/>
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewContact?partyId=${case.contactPartyId}" link-type="anchor"/>
             </display-entity>
         </field>
         <field name="priority" title="${uiLabelMap.CommonPriority}"><display/></field> <!-- TODO: translate the number to a value somehow -->

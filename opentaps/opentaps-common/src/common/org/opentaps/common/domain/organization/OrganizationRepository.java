@@ -27,7 +27,7 @@ import java.util.TreeMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -82,11 +82,11 @@ public class OrganizationRepository extends PartyRepository implements Organizat
 
     /**
      * Constructor with delegator.
-     * @param delegator a <code>GenericDelegator</code> value
+     * @param delegator a <code>Delegator</code> value
      * @deprecated for legacy support only
      */
     @Deprecated
-    public OrganizationRepository(GenericDelegator delegator) {
+    public OrganizationRepository(Delegator delegator) {
         super(delegator);
     }
 

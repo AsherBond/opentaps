@@ -43,7 +43,7 @@ public class XaPoolConnectionFactory {
 
     protected static Map dsCache = new HashMap();
 
-    public static Connection getConnection(String helperName, Element jotmJdbcElement) throws SQLException, GenericEntityException {
+    public static Connection getConnection(String helperName, Element jdbcElement) throws SQLException, GenericEntityException {
         StandardXAPoolDataSource pds = (StandardXAPoolDataSource) dsCache.get(helperName);
         if (pds != null) {
             if (Debug.verboseOn()) Debug.logVerbose(helperName + " pool size: " + pds.pool.getCount(), module);
@@ -57,7 +57,7 @@ public class XaPoolConnectionFactory {
             }
 
             // the xapool wrapper class
-            String wrapperClass = jotmJdbcElement.getAttribute("pool-xa-wrapper-class");
+            String wrapperClass = jdbcElement.getAttribute("pool-xa-wrapper-class");
 
             StandardXADataSource ds = null;
             try {
@@ -77,15 +77,15 @@ public class XaPoolConnectionFactory {
             if (ds == null)
                 throw new GenericEntityException("StandardXaDataSource was not created, big problem!");
 
-            ds.setDriverName(jotmJdbcElement.getAttribute("jdbc-driver"));
-            ds.setUrl(jotmJdbcElement.getAttribute("jdbc-uri"));
-            ds.setUser(jotmJdbcElement.getAttribute("jdbc-username"));
-            ds.setPassword(jotmJdbcElement.getAttribute("jdbc-password"));
+            ds.setDriverName(jdbcElement.getAttribute("jdbc-driver"));
+            ds.setUrl(jdbcElement.getAttribute("jdbc-uri"));
+            ds.setUser(jdbcElement.getAttribute("jdbc-username"));
+            ds.setPassword(jdbcElement.getAttribute("jdbc-password"));
             ds.setDescription(helperName);
             ds.setTransactionManager(TransactionFactory.getTransactionManager());
 
-            String transIso = jotmJdbcElement.getAttribute("isolation-level");
-            if (transIso != null && transIso.length() > 0) {
+            String transIso = jdbcElement.getAttribute("isolation-level");
+            if (UtilValidate.isNotEmpty(transIso)) {
                 if ("Serializable".equals(transIso)) {
                     ((StandardXADataSource) ds).setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
                 } else if ("RepeatableRead".equals(transIso)) {
@@ -111,16 +111,16 @@ public class XaPoolConnectionFactory {
 
             // configure the pool settings
             try {
-                pds.setMaxSize(Integer.parseInt(jotmJdbcElement.getAttribute("pool-maxsize")));
-                pds.setMinSize(Integer.parseInt(jotmJdbcElement.getAttribute("pool-minsize")));
-                pds.setSleepTime(Long.parseLong(jotmJdbcElement.getAttribute("pool-sleeptime")));
-                pds.setLifeTime(Long.parseLong(jotmJdbcElement.getAttribute("pool-lifetime")));
-                pds.setDeadLockMaxWait(Long.parseLong(jotmJdbcElement.getAttribute("pool-deadlock-maxwait")));
-                pds.setDeadLockRetryWait(Long.parseLong(jotmJdbcElement.getAttribute("pool-deadlock-retrywait")));
+                pds.setMaxSize(Integer.parseInt(jdbcElement.getAttribute("pool-maxsize")));
+                pds.setMinSize(Integer.parseInt(jdbcElement.getAttribute("pool-minsize")));
+                pds.setSleepTime(Long.parseLong(jdbcElement.getAttribute("pool-sleeptime")));
+                pds.setLifeTime(Long.parseLong(jdbcElement.getAttribute("pool-lifetime")));
+                pds.setDeadLockMaxWait(Long.parseLong(jdbcElement.getAttribute("pool-deadlock-maxwait")));
+                pds.setDeadLockRetryWait(Long.parseLong(jdbcElement.getAttribute("pool-deadlock-retrywait")));
 
                 // set the test statement to test connections
-                String testStmt = jotmJdbcElement.getAttribute("pool-jdbc-test-stmt");
-                if (testStmt != null && testStmt.length() > 0) {
+                String testStmt = jdbcElement.getAttribute("pool-jdbc-test-stmt");
+                if (UtilValidate.isNotEmpty(testStmt)) {
                     pds.setJdbcTestStmt(testStmt);
                     Debug.logInfo("Set JDBC Test Statement : " + testStmt, module);
                 }

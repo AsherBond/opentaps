@@ -1,23 +1,6 @@
-package org.opentaps.tests.service;
-
-import org.opentaps.tests.OpentapsTestCase;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
-import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilDateTime;
-
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.sql.Timestamp;
-import java.math.BigDecimal;
-
 /*
-* Copyright (c) Open Source Strategies, Inc.
-* 
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -30,7 +13,25 @@ import java.math.BigDecimal;
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
+package org.opentaps.tests.service;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.tests.OpentapsTestCase;
+
 public class POJOServiceTests extends OpentapsTestCase {
 
     private GenericValue user = null;
@@ -54,11 +55,11 @@ public class POJOServiceTests extends OpentapsTestCase {
     public void tearDown() throws Exception {
         super.tearDown();
         // delegator is reset to null by super.tearDown() so we have to get it again
-        removeTestingRecords(GenericDelegator.getGenericDelegator(OpentapsTestCase.DELEGATOR_NAME));
+        removeTestingRecords(DelegatorFactory.getDelegator(OpentapsTestCase.DELEGATOR_NAME));
     }
 
-    private void removeTestingRecords(GenericDelegator delegator) throws GenericEntityException {
-        delegator.removeByCondition("ServiceTestRecord", new EntityExpr("key1", EntityOperator.EQUALS, "TEST"));
+    private void removeTestingRecords(Delegator delegator) throws GenericEntityException {
+        delegator.removeByCondition("ServiceTestRecord", EntityCondition.makeCondition("key1", EntityOperator.EQUALS, "TEST"));
     }
 
     public void testErrorDueToMissingUserLogin() {
@@ -78,7 +79,7 @@ public class POJOServiceTests extends OpentapsTestCase {
     }
 
     public void testFailureOnTrigger() {
-        Map params = UtilMisc.toMap("key1Value", key1Value, "key2Values", key2Values, "failTrigger", new Boolean(true), "userLogin", user);
+        Map params = UtilMisc.toMap("key1Value", key1Value, "key2Values", key2Values, "failureTrigger", new Boolean(true), "userLogin", user);
         runAndAssertServiceFailure("pojoTest", params);
     }
 

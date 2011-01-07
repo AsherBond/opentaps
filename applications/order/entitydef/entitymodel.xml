@@ -26,7 +26,7 @@ under the License.
   <!-- ========================================================= -->
     <title>Entity of an Open For Business Project Component</title>
     <description>None</description>
-    <copyright>Copyright 2001-2008 The Apache Software Foundation</copyright>
+    <copyright>Copyright 2001-2009 The Apache Software Foundation</copyright>
     <author>None</author>
     <version>1.0</version>
 
@@ -373,6 +373,7 @@ under the License.
       <field name="orderDate" type="date-time"></field>
       <field name="priority" type="indicator"><description>Sets priority for Inventory Reservation</description></field>
       <field name="entryDate" type="date-time"></field>
+      <field name="pickSheetPrintedDate" type="date-time"><description>This will be set to a date when pick sheet of the order is printed</description></field>
       <field name="visitId" type="id"></field>
       <field name="statusId" type="id"></field>
       <field name="createdBy" type="id-vlong"></field>
@@ -391,6 +392,7 @@ under the License.
       <field name="internalCode" type="id-long"></field>
       <field name="remainingSubTotal" type="currency-amount"></field>
       <field name="grandTotal" type="currency-amount"></field>
+      <field name="isViewed" type="indicator"></field>
       <prim-key field="orderId"/>
       <relation type="one" fk-name="ORDER_HDR_TYPE" rel-entity-name="OrderType">
         <key-map field-name="orderTypeId"/>
@@ -479,6 +481,7 @@ under the License.
       <field name="budgetId" type="id"></field>
       <field name="budgetItemSeqId" type="id"></field>
       <field name="productId" type="id"></field>
+      <field name="supplierProductId" type="id"></field>
       <field name="productFeatureId" type="id"></field>
       <field name="prodCatalogId" type="id"></field>
       <field name="productCategoryId" type="id"></field>
@@ -489,10 +492,10 @@ under the License.
       <field name="shoppingListItemSeqId" type="id"></field>
       <field name="subscriptionId" type="id"></field>
       <field name="deploymentId" type="id"></field>
-      <field name="quantity" type="fixed-point"></field>
+      <field name="quantity" type="fixed-point" enable-audit-log="true"></field>
       <field name="cancelQuantity" type="fixed-point"></field>
       <field name="selectedAmount" type="fixed-point"></field>
-      <field name="unitPrice" type="currency-amount"></field>
+      <field name="unitPrice" type="currency-amount" enable-audit-log="true"></field>
       <field name="unitListPrice" type="currency-amount"></field>
       <field name="unitAverageCost" type="currency-amount"></field>
       <field name="unitRecurringPrice" type="currency-amount"></field>
@@ -513,6 +516,7 @@ under the License.
       <field name="cancelBackOrderDate" type="date-time"><description>Used to cancel all orders from suppliers when its in past</description></field>
       <field name="overrideGlAccountId" type="id"><description>Used to specify the override or actual glAccountId used for the adjustment, avoids problems if configuration changes after initial posting, etc.</description></field>
       <field name="salesOpportunityId" type="id-ne"></field>
+      <field name="changeByUserLoginId" type="id-vlong" enable-audit-log="true"></field>
       <prim-key field="orderId"/>
       <prim-key field="orderItemSeqId"/>
       <relation type="one" fk-name="ORDER_ITEM_HDR" rel-entity-name="OrderHeader">
@@ -562,6 +566,9 @@ under the License.
       <relation type="one" fk-name="ORDER_ITEM_SLSOPP" rel-entity-name="SalesOpportunity" >
             <key-map field-name="salesOpportunityId"/>
       </relation>
+        <relation type="one" fk-name="ORDER_ITEM_USRLGN" title="ChangeBy" rel-entity-name="UserLogin">
+            <key-map field-name="changeByUserLoginId" rel-field-name="userLoginId"/>
+        </relation>
       <index name="ORDITMEXT_ID_IDX">
         <index-field name="externalId"/>
       </index>
@@ -826,10 +833,10 @@ under the License.
             title="Order Item Ship Group">
       <field name="orderId" type="id-ne"></field>
       <field name="shipGroupSeqId" type="id-ne"></field>
-      <field name="shipmentMethodTypeId" type="id"></field>
+      <field name="shipmentMethodTypeId" type="id" enable-audit-log="true"></field>
       <field name="supplierPartyId" type="id"></field>
       <field name="vendorPartyId" type="id"><description>For use with multi-vendor stores, order will be split so that each ship group is associated with only one vendor (only if applicable)</description></field>
-      <field name="carrierPartyId" type="id"></field>
+      <field name="carrierPartyId" type="id" enable-audit-log="true"></field>
       <field name="carrierRoleTypeId" type="id"></field>
       <field name="facilityId" type="id"></field>
       <field name="contactMechId" type="id"></field>
@@ -1126,11 +1133,13 @@ under the License.
             title="Order Shipment Entity">
       <field name="orderId" type="id-ne"></field>
       <field name="orderItemSeqId" type="id-ne"></field>
+      <field name="shipGroupSeqId" type="id-ne"></field>
       <field name="shipmentId" type="id-ne"></field>
       <field name="shipmentItemSeqId" type="id-ne"></field>
       <field name="quantity" type="fixed-point"></field>
       <prim-key field="orderId"/>
       <prim-key field="orderItemSeqId"/>
+      <prim-key field="shipGroupSeqId"/>
       <prim-key field="shipmentId"/>
       <prim-key field="shipmentItemSeqId"/>
       <relation type="one" fk-name="ORDER_SHPMT_OHDR" rel-entity-name="OrderHeader">
@@ -1146,6 +1155,11 @@ under the License.
       <relation type="one-nofk" rel-entity-name="ShipmentItem">
         <key-map field-name="shipmentId"/>
         <key-map field-name="shipmentItemSeqId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="OrderItemShipGroupAssoc">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>
+        <key-map field-name="shipGroupSeqId"/>
       </relation>
     </entity>
     <entity entity-name="OrderStatus"
@@ -1309,6 +1323,7 @@ under the License.
       <field name="workEffortId" type="id-ne"></field>
       <field name="orderId" type="id-ne"></field>
       <field name="orderItemSeqId" type="id-ne"></field>
+      <field name="shipGroupSeqId" type="id"></field>
       <prim-key field="workEffortId"/>
       <prim-key field="orderId"/>
       <prim-key field="orderItemSeqId"/>
@@ -1321,6 +1336,11 @@ under the License.
       </relation>
       <relation type="one" fk-name="WORDER_ITFMT_WEFRT" rel-entity-name="WorkEffort">
         <key-map field-name="workEffortId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="OrderItemShipGroupAssoc">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>
+        <key-map field-name="shipGroupSeqId"/>
       </relation>
     </entity>
 
@@ -1815,6 +1835,9 @@ under the License.
       <field name="noteId" type="id-ne"></field>
       <prim-key field="custRequestId"/>
       <prim-key field="noteId"/>
+      <relation type="one" fk-name="CRQ_CR" rel-entity-name="CustRequest">
+        <key-map field-name="custRequestId"/>
+      </relation>
       <relation type="one" fk-name="CRQ_NOTE" rel-entity-name="NoteData">
         <key-map field-name="noteId"/>
       </relation>
@@ -2411,10 +2434,10 @@ under the License.
             title="Return Item Entity">
         <field name="returnId" type="id-ne"></field>
         <field name="returnItemSeqId" type="id-ne"></field>
-        <field name="returnReasonId" type="id">
+        <field name="returnReasonId" type="id" enable-audit-log="true">
             <description>why item is returned: did not like, wrong item, damaged, etc. etc.</description>
         </field>
-        <field name="returnTypeId" type="id">
+        <field name="returnTypeId" type="id" enable-audit-log="true">
             <description>actually used for disbursement type: store credit, cash refund, exchange</description>
         </field>
         <field name="returnItemTypeId" type="id">
@@ -2428,9 +2451,9 @@ under the License.
         <field name="orderItemSeqId" type="id"></field>
         <field name="statusId" type="id"></field>
         <field name="expectedItemStatus" type="id"></field>
-        <field name="returnQuantity" type="fixed-point"><description>promised by the customer</description></field>
-        <field name="receivedQuantity" type="fixed-point"><description>actually received from the customer</description></field>
-        <field name="returnPrice" type="currency-amount"></field>
+        <field name="returnQuantity" type="fixed-point" enable-audit-log="true"><description>promised by the customer</description></field>
+        <field name="receivedQuantity" type="fixed-point" enable-audit-log="true"><description>actually received from the customer</description></field>
+        <field name="returnPrice" type="currency-amount" enable-audit-log="true"></field>
         <field name="returnItemResponseId" type="id"></field>
         <prim-key field="returnId"/>
         <prim-key field="returnItemSeqId"/>
@@ -2484,6 +2507,7 @@ under the License.
         <field name="replacementOrderId" type="id"></field>
         <field name="paymentId" type="id"></field>
         <field name="billingAccountId" type="id"></field>
+        <field name="finAccountTransId" type="id"></field>
         <field name="responseAmount" type="currency-amount"></field>
         <field name="responseDate" type="date-time"></field>
         <prim-key field="returnItemResponseId"/>
@@ -2498,6 +2522,9 @@ under the License.
         </relation>
         <relation type="one" fk-name="RTN_PAY_BACT" rel-entity-name="BillingAccount">
             <key-map field-name="billingAccountId"/>
+        </relation>
+        <relation type="one" fk-name="RTN_PAY_FINACTTX" rel-entity-name="FinAccountTrans">
+            <key-map field-name="finAccountTransId"/>
         </relation>
     </entity>
     <entity entity-name="ReturnItemType"
@@ -2548,6 +2575,7 @@ under the License.
         <field name="statusId" type="id"></field>
         <field name="returnId" type="id"></field>
         <field name="returnItemSeqId" type="id"></field>
+        <field name="changeByUserLoginId" type="id-vlong"></field>
         <field name="statusDatetime" type="date-time"></field>
         <prim-key field="returnStatusId"/>
         <relation type="one" fk-name="RTN_STTS_STTS" rel-entity-name="StatusItem">
@@ -2559,6 +2587,9 @@ under the License.
         <relation type="one-nofk" rel-entity-name="ReturnItem">
             <key-map field-name="returnId"/>
             <key-map field-name="returnItemSeqId"/>
+        </relation>
+        <relation type="one" fk-name="RTN_STTS_USRLGN" title="ChangeBy" rel-entity-name="UserLogin">
+            <key-map field-name="changeByUserLoginId" rel-field-name="userLoginId"/>
         </relation>
     </entity>
     <entity entity-name="ReturnType"
@@ -2897,6 +2928,17 @@ under the License.
             <key-map field-name="roleTypeId"/>
         </relation>
     </entity>
+
+    <view-entity entity-name="SalesOpportunityAndRole" package-name="org.ofbiz.order.opportunity" title="SalesOpportunity And Role View Entity">
+      <member-entity entity-alias="SO" entity-name="SalesOpportunity"/>
+      <member-entity entity-alias="SR" entity-name="SalesOpportunityRole"/>
+      <alias-all entity-alias="SO"/>
+      <alias name="partyId" entity-alias="SR"/>
+      <alias name="roleTypeId" entity-alias="SR"/>
+      <view-link entity-alias="SO" rel-entity-alias="SR">
+        <key-map field-name="salesOpportunityId"/>
+      </view-link>
+    </view-entity>
 
     <entity entity-name="SalesOpportunityStage"
             package-name="org.ofbiz.order.opportunity"

@@ -35,7 +35,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -60,7 +60,7 @@ public class GiftCertificateServices {
     // Base Gift Certificate Services
     public static Map createGiftCertificate(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String productStoreId = (String) context.get("productStoreId");
@@ -155,7 +155,7 @@ public class GiftCertificateServices {
 
     public static Map addFundsToGiftCertificate(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         final String deposit = "DEPOSIT";
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -237,7 +237,7 @@ public class GiftCertificateServices {
 
     public static Map redeemGiftCertificate(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         final String withdrawl = "WITHDRAWAL";
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -313,7 +313,7 @@ public class GiftCertificateServices {
     }
 
     public static Map checkGiftCertificateBalance(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         String cardNumber = (String) context.get("cardNumber");
         String pinNumber = (String) context.get("pinNumber");
 
@@ -343,7 +343,7 @@ public class GiftCertificateServices {
     // Fullfilment Services
     public static Map giftCertificateProcessor(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         BigDecimal amount = (BigDecimal) context.get("processAmount");
@@ -428,7 +428,7 @@ public class GiftCertificateServices {
 
     public static Map giftCertificateAuthorize(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         GenericValue giftCard = (GenericValue) context.get("giftCard");
@@ -566,7 +566,7 @@ public class GiftCertificateServices {
 
     private static Map giftCertificateRestore(DispatchContext dctx, GenericValue userLogin, GenericValue paymentPref, BigDecimal amount, String currency, String resultPrefix) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         // get the orderId for tracking
         String orderId = paymentPref.getString("orderId");
@@ -635,7 +635,7 @@ public class GiftCertificateServices {
     public static Map giftCertificatePurchase(DispatchContext dctx, Map context) {
         // this service should always be called via FULFILLMENT_EXTASYNC
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue orderItem = (GenericValue) context.get("orderItem");
         Locale locale = (Locale) context.get("locale");
@@ -700,7 +700,7 @@ public class GiftCertificateServices {
             giftCertSettings = delegator.findByPrimaryKeyCache("ProductStoreFinActSetting", UtilMisc.toMap("productStoreId", productStoreId, "finAccountTypeId", FinAccountHelper.giftCertFinAccountTypeId));
         } catch (GenericEntityException e) {
             Debug.logError(e, "Unable to get Product Store FinAccount settings for " + FinAccountHelper.giftCertFinAccountTypeId, module);
-            ServiceUtil.returnError("Unable to get Product Store FinAccount settings for " + FinAccountHelper.giftCertFinAccountTypeId + ": " + e.getMessage());
+            return ServiceUtil.returnError("Unable to get Product Store FinAccount settings for " + FinAccountHelper.giftCertFinAccountTypeId + ": " + e.getMessage());
         }
 
         // survey information
@@ -872,7 +872,7 @@ public class GiftCertificateServices {
     public static Map giftCertificateReload(DispatchContext dctx, Map context) {
         // this service should always be called via FULFILLMENT_EXTSYNC
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue orderItem = (GenericValue) context.get("orderItem");
         Locale locale = (Locale) context.get("locale");
@@ -1093,7 +1093,7 @@ public class GiftCertificateServices {
 
     // Tracking Service
     public static Map createFulfillmentRecord(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         // create the fulfillment record
         GenericValue gcFulFill = delegator.makeValue("GiftCardFulfillment");
@@ -1123,7 +1123,7 @@ public class GiftCertificateServices {
     // Refund Service
     public static Map refundGcPurchase(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         GenericValue orderItem = (GenericValue) context.get("orderItem");
         String partyId = (String) context.get("partyId");
@@ -1249,7 +1249,7 @@ public class GiftCertificateServices {
     }
 
     // Private worker methods
-    private static boolean validatePin(GenericDelegator delegator, String cardNumber, String pinNumber) {
+    private static boolean validatePin(Delegator delegator, String cardNumber, String pinNumber) {
         GenericValue finAccount = null;
         try {
             finAccount = delegator.findByPrimaryKey("FinAccount", UtilMisc.toMap("finAccountId", cardNumber));
@@ -1268,7 +1268,7 @@ public class GiftCertificateServices {
         return false;
     }
 
-    private static String createTransaction(GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, BigDecimal amount,
+    private static String createTransaction(Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, BigDecimal amount,
             String productStoreId, String partyId, String currencyUom, String txType, String finAccountId) throws GeneralException {
         final String coParty = getPayToPartyId(delegator, productStoreId);
         final String paymentMethodType = "GIFT_CERTIFICATE";
@@ -1349,7 +1349,7 @@ public class GiftCertificateServices {
         return txId;
     }
 
-    private static String generateNumber(GenericDelegator delegator, int length, boolean isId) throws GenericEntityException {
+    private static String generateNumber(Delegator delegator, int length, boolean isId) throws GenericEntityException {
         if (length > 19) {
             length = 19;
         }
@@ -1380,7 +1380,7 @@ public class GiftCertificateServices {
         return number;
     }
 
-    private static boolean checkNumberInDatabase(GenericDelegator delegator, String number) throws GenericEntityException {
+    private static boolean checkNumberInDatabase(Delegator delegator, String number) throws GenericEntityException {
         GenericValue finAccount = delegator.findByPrimaryKey("FinAccount", UtilMisc.toMap("finAccountId", number));
         if (finAccount == null) {
             return true;
@@ -1393,7 +1393,7 @@ public class GiftCertificateServices {
         return UtilValidate.sumIsMod10(UtilValidate.getLuhnSum(number));
     }
 
-    private static String getPayToPartyId(GenericDelegator delegator, String productStoreId) {
+    private static String getPayToPartyId(Delegator delegator, String productStoreId) {
         String payToPartyId = "Company"; // default value
         GenericValue productStore = null;
         try {

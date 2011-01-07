@@ -23,7 +23,7 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
@@ -54,7 +54,7 @@ public final class AgreementServices {
      * @return Map
      */
     public static Map<String, Object> autoCreateAgreementItemsAndTerms(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         Locale locale = UtilCommon.getLocale(context);
         String agreementId = (String) context.get("agreementId");
@@ -156,7 +156,7 @@ public final class AgreementServices {
     }
 
     public static Map<String, Object> removeAgreementItemAndTerms(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         Locale locale = UtilCommon.getLocale(context);
 

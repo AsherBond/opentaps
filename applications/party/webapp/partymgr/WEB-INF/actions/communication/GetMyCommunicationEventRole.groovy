@@ -19,6 +19,8 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 
 import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.component.ComponentConfig;
 
 if (parameters.communicationEventId) {
     context.communicationEventRole = delegator.findByPrimaryKey("CommunicationEventRole",
@@ -27,4 +29,5 @@ if (parameters.communicationEventId) {
             "roleTypeId" : parameters.roleTypeId
            ]);
 
+    context.projectMgrExists = ComponentConfig.componentExists("projectmgr");
 }

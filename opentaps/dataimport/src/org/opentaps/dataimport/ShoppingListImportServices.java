@@ -24,7 +24,7 @@ import java.util.Map;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -46,7 +46,7 @@ public final class ShoppingListImportServices {
     private ShoppingListImportServices() { }
 
     public static Map<String, Object> importShoppingLists(DispatchContext dctx, Map<String, Object> context) {
-        GenericDelegator delegator = dctx.getDelegator();
+        Delegator delegator = dctx.getDelegator();
 
         String productStoreId = (String) context.get("productStoreId");
         Timestamp now = UtilDateTime.nowTimestamp();
@@ -122,7 +122,7 @@ public final class ShoppingListImportServices {
      * If for some reason obtaining data via the delegator fails, this service throws that exception.
      * Note that everything is done with the delegator for maximum efficiency.
      */
-    private static List<GenericValue> decodeShoppingList(GenericValue data, Timestamp now, String productStoreId, GenericDelegator delegator) throws GenericEntityException, Exception {
+    private static List<GenericValue> decodeShoppingList(GenericValue data, Timestamp now, String productStoreId, Delegator delegator) throws GenericEntityException, Exception {
         Map<String, Object> input;
         List<GenericValue> toStore = FastList.newInstance();
         String partyId = data.getString("partyId");

@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.ofbiz.content.content.ContentWrapper;
 import org.ofbiz.content.content.ContentWorker;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.entity.model.ModelUtil;
 import org.ofbiz.entity.model.ModelEntity;
@@ -53,7 +53,7 @@ public class WorkEffortContentWrapper implements ContentWrapper {
     public static final String module = WorkEffortContentWrapper.class.getName();
     public static final String CACHE_KEY_SEPARATOR = "::";
 
-    public static UtilCache<String, String> workEffortContentCache = new UtilCache<String, String>("workeffort.content.rendered", true);
+    public static UtilCache<String, String> workEffortContentCache = UtilCache.createUtilCache("workeffort.content.rendered", true);
 
     protected LocalDispatcher dispatcher;
     protected GenericValue workEffort;
@@ -176,7 +176,7 @@ public class WorkEffortContentWrapper implements ContentWrapper {
     }
 
     public String getTypeDescription(String contentTypeId) {
-        GenericDelegator delegator = null;
+        Delegator delegator = null;
         if (workEffort != null) {
             delegator = workEffort.getDelegator();
         }
@@ -216,12 +216,12 @@ public class WorkEffortContentWrapper implements ContentWrapper {
     }
 
     public static String getWorkEffortContentAsText(GenericValue workEffort, String workEffortContentTypeId,
-            Locale locale, String mimeTypeId, GenericDelegator delegator, LocalDispatcher dispatcher, boolean useCache) {
+            Locale locale, String mimeTypeId, Delegator delegator, LocalDispatcher dispatcher, boolean useCache) {
         return getWorkEffortContentAsText(workEffort, null, workEffortContentTypeId, locale, mimeTypeId, delegator, dispatcher, useCache);
     }
 
     public static String getWorkEffortContentAsText(GenericValue workEffort, String contentId, String workEffortContentTypeId,
-            Locale locale, String mimeTypeId, GenericDelegator delegator, LocalDispatcher dispatcher, boolean useCache) {
+            Locale locale, String mimeTypeId, Delegator delegator, LocalDispatcher dispatcher, boolean useCache) {
         if (workEffort == null) {
             return null;
         }
@@ -264,7 +264,7 @@ public class WorkEffortContentWrapper implements ContentWrapper {
         }
     }
 
-    public static void getWorkEffortContentAsText(String contentId, String workEffortId, GenericValue workEffort, String workEffortContentTypeId, Locale locale, String mimeTypeId, GenericDelegator delegator, LocalDispatcher dispatcher, Writer outWriter) throws GeneralException, IOException {
+    public static void getWorkEffortContentAsText(String contentId, String workEffortId, GenericValue workEffort, String workEffortContentTypeId, Locale locale, String mimeTypeId, Delegator delegator, LocalDispatcher dispatcher, Writer outWriter) throws GeneralException, IOException {
         if (workEffortId == null && workEffort != null) {
             workEffortId = workEffort.getString("workEffortId");
         }
@@ -309,11 +309,11 @@ public class WorkEffortContentWrapper implements ContentWrapper {
             Map<String, Object> inContext = FastMap.newInstance();
             inContext.put("workEffort", workEffort);
             inContext.put("workEffortContent", workEffortContent);
-            ContentWorker.renderContentAsText(dispatcher, delegator, workEffortContent.getString("contentId"), outWriter, inContext, locale, mimeTypeId, false);
+            ContentWorker.renderContentAsText(dispatcher, delegator, workEffortContent.getString("contentId"), outWriter, inContext, locale, mimeTypeId, null, null, false);
         }
     }
 
-    public static List<String> getWorkEffortContentTextList(GenericValue workEffort, String workEffortContentTypeId, Locale locale, String mimeTypeId, GenericDelegator delegator, LocalDispatcher dispatcher) throws GeneralException, IOException {
+    public static List<String> getWorkEffortContentTextList(GenericValue workEffort, String workEffortContentTypeId, Locale locale, String mimeTypeId, Delegator delegator, LocalDispatcher dispatcher) throws GeneralException, IOException {
         List<GenericValue> partyContentList = delegator.findByAndCache("WorkEffortContent", UtilMisc.toMap("workEffortId", workEffort.getString("partyId"), "workEffortContentTypeId", workEffortContentTypeId), UtilMisc.toList("-fromDate"));
         partyContentList = EntityUtil.filterByDate(partyContentList);
 
@@ -324,7 +324,7 @@ public class WorkEffortContentWrapper implements ContentWrapper {
                 Map<String, Object> inContext = FastMap.newInstance();
                 inContext.put("workEffort", workEffort);
                 inContext.put("workEffortContent", workEffortContent);
-                ContentWorker.renderContentAsText(dispatcher, delegator, workEffortContent.getString("contentId"), outWriter, inContext, locale, mimeTypeId, false);
+                ContentWorker.renderContentAsText(dispatcher, delegator, workEffortContent.getString("contentId"), outWriter, inContext, locale, mimeTypeId, null, null, false);
                 contentList.add(outWriter.toString());
             }
         }
@@ -332,7 +332,7 @@ public class WorkEffortContentWrapper implements ContentWrapper {
         return contentList;
     }
 
-    public static GenericValue getFirstWorkEffortContentByType(String workEffortId, GenericValue workEffort, String workEffortContentTypeId, GenericDelegator delegator) {
+    public static GenericValue getFirstWorkEffortContentByType(String workEffortId, GenericValue workEffort, String workEffortContentTypeId, Delegator delegator) {
         if (workEffortId == null && workEffort != null) {
             workEffortId = workEffort.getString("workEffortId");
         }
@@ -342,7 +342,7 @@ public class WorkEffortContentWrapper implements ContentWrapper {
         }
 
         if (delegator == null) {
-            throw new IllegalArgumentException("GenericDelegator missing");
+            throw new IllegalArgumentException("Delegator missing");
         }
 
         List<GenericValue> workEffortContentList = null;

@@ -23,12 +23,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtext.client.data.Converter;
@@ -39,7 +41,6 @@ import com.gwtext.client.widgets.form.Field;
 import com.gwtext.client.widgets.layout.FormLayoutData;
 import org.opentaps.gwt.common.client.messages.CommonMessages;
 import org.opentaps.gwt.common.client.suggest.EntityAutocomplete;
-import com.google.gwt.user.client.Window.Location;
 
 /**
  * Defines some utility methods.
@@ -51,6 +52,8 @@ public abstract class UtilUi {
     // used to convert date field values
     private static final String DATE_FORMAT = "MM/dd/yy";
     private static final String DATE_TIME_FORMAT = "MM/dd/yy HH:mm:ss.S";
+
+    private static final Logger LOG = Logger.getLogger("OpentapsGwt");
 
     private UtilUi() { }
 
@@ -479,7 +482,7 @@ public abstract class UtilUi {
      * @param method the method name of the object from which the log is from
      */
     public static void logDebug(String message, String module, String method) {
-        Log.debug(formatLog(message, module, method));
+        LOG.log(Level.FINE, formatLog(message, module, method));
     }
 
     /**
@@ -490,7 +493,7 @@ public abstract class UtilUi {
      * @param method the method name of the object from which the log is from
      */
     public static void logDebug(String message, Throwable t, String module, String method) {
-        Log.debug(formatLog(message, module, method), t);
+        LOG.log(Level.FINE, formatLog(message, module, method), t);
     }
 
     /**
@@ -500,7 +503,7 @@ public abstract class UtilUi {
      * @param method the method name of the object from which the log is from
      */
     public static void logInfo(String message, String module, String method) {
-        Log.info(formatLog(message, module, method));
+        LOG.log(Level.INFO, formatLog(message, module, method));
     }
 
     /**
@@ -511,7 +514,7 @@ public abstract class UtilUi {
      * @param method the method name of the object from which the log is from
      */
     public static void logInfo(String message,  Throwable t, String module, String method) {
-        Log.info(formatLog(message, module, method), t);
+        LOG.log(Level.INFO, formatLog(message, module, method), t);
     }
 
     /**
@@ -521,7 +524,7 @@ public abstract class UtilUi {
      * @param method the method name of the object from which the log is from
      */
     public static void logWarning(String message, String module, String method) {
-        Log.warn(formatLog(message, module, method));
+        LOG.log(Level.WARNING, formatLog(message, module, method));
     }
 
     /**
@@ -532,7 +535,7 @@ public abstract class UtilUi {
      * @param method the method name of the object from which the log is from
      */
     public static void logWarning(String message, Throwable t, String module, String method) {
-        Log.warn(formatLog(message, module, method), t);
+        LOG.log(Level.WARNING, formatLog(message, module, method), t);
     }
 
     /**
@@ -542,7 +545,7 @@ public abstract class UtilUi {
      * @param method the method name of the object from which the log is from
      */
     public static void logError(String message, String module, String method) {
-        Log.error(formatLog(message, module, method));
+        LOG.log(Level.SEVERE, formatLog(message, module, method));
     }
 
     /**
@@ -553,7 +556,7 @@ public abstract class UtilUi {
      * @param method the method name of the object from which the log is from
      */
     public static void logError(String message, Throwable t, String module, String method) {
-        Log.error(formatLog(message, module, method), t);
+        LOG.log(Level.SEVERE, formatLog(message, module, method), t);
     }
 
     /**

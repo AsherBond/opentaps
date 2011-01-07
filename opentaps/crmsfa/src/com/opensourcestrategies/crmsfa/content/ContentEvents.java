@@ -35,7 +35,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.content.data.DataResourceWorker;
-import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -65,7 +65,7 @@ public final class ContentEvents {
      */
     public static String downloadPartyContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Security security = (Security) request.getAttribute("security");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         Locale locale = UtilHttp.getLocale(request);
@@ -113,7 +113,7 @@ public final class ContentEvents {
      */
     public static String downloadCaseContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Security security = (Security) request.getAttribute("security");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         Locale locale = UtilHttp.getLocale(request);
@@ -155,7 +155,7 @@ public final class ContentEvents {
      */
     public static String downloadOpportunityContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Security security = (Security) request.getAttribute("security");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         Locale locale = UtilHttp.getLocale(request);
@@ -198,7 +198,7 @@ public final class ContentEvents {
      */
     public static String downloadActivityContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Security security = (Security) request.getAttribute("security");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         Locale locale = UtilHttp.getLocale(request);
@@ -236,7 +236,7 @@ public final class ContentEvents {
 
     /** Get the contentId and verify that we have something to download */
     private static GenericValue getDataResource(HttpServletRequest request) throws GenericEntityException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
 
         GenericValue content = delegator.findByPrimaryKey("Content", UtilMisc.toMap("contentId", request.getParameter("contentId")));
         if (content == null) {
@@ -252,7 +252,7 @@ public final class ContentEvents {
 
     /** Find the file and write it to the client stream. */
     private static String serveDataResource(HttpServletRequest request, HttpServletResponse response, GenericValue dataResource) {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         HttpSession session = request.getSession();
         Locale locale = UtilHttp.getLocale(request);
         ServletContext application = session.getServletContext();
@@ -298,7 +298,7 @@ public final class ContentEvents {
      */
     public static String downloadOrderContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Security security = (Security) request.getAttribute("security");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         Locale locale = UtilHttp.getLocale(request);
@@ -340,7 +340,7 @@ public final class ContentEvents {
      */
     public static String downloadQuoteContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
         Security security = (Security) request.getAttribute("security");
         Locale locale = UtilHttp.getLocale(request);
 
