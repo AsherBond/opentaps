@@ -429,6 +429,8 @@ public abstract class EntityLookupService {
             // note +1 because the iterator starts at 1
             setResults(iterator.getPartialList(pager.getPageStart() + 1, pager.getPageSize()));
             // do not use getResultsSizeAfterPartialList, instead go to last and take the index
+            // getResultsSizeAfterPartialList tries to do a select count by incorrectly uses distinct on the first field
+            // of the entity, instead of the PK, leading to incorrect count on some entities
             iterator.last();
             setResultTotalCount(iterator.currentIndex());
         }
