@@ -22,6 +22,7 @@ under the License.
 <entity-engine-xml>
     <UserLogin userLoginId="system" enabled="N" isSystem="Y"/>
     <UserLogin userLoginId="anonymous" enabled="N"/>
-    <UserLogin userLoginId="admin" currentPassword="{SHA}47ca69ebb4bdc9ae0adec130880165d2cc05db1a"/>
+    <!-- customized the password to match 'opentaps' -->
+    <UserLogin userLoginId="admin" currentPassword="{SHA}a8c323ed5c6d3c9b5ba5fa13e75939de954de085"/>
 </entity-engine-xml>
 
