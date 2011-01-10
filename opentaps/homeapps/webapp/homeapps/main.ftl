@@ -170,12 +170,14 @@ border: 1px solid #999999;
                 <a href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>">
                    <img src="${app.imageUrl}" onmouseover="this.src='${app.imageHoverUrl}'" onmouseout="this.src='${app.imageUrl}'" />
                 </a>
+                <div id="label" style="margin-left: 32px;" for="${app.applicationId}">${app.shortName}</div>
             </div>
+
                 <#if !app_has_next>
                    </div> <#-- close row-->
                 <#elseif appIndex % 4 == 0>
                    </div> <#-- close row-->
-                   <div id="row"> <#-- create a new row-->
+                   <div id="row" style="margin-top: 3px;" > <#-- create a new row-->
                 </#if>
         </#list>
     </#if>
