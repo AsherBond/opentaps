@@ -7,6 +7,7 @@ Overall changes
 ---------------
 applications/securityext/data/PasswordSecurityData.xml
 ad00f3895b1f Set the admin accounts default passwords to opentaps
+7a33f581bbd5 Change the login test accordingly
 
 Commented out various webapps and components which duplicate or are superseded by opentaps.
 r13679, 13743, 13753
