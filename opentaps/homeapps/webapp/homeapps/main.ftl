@@ -170,7 +170,11 @@ border: 1px solid #999999;
                 <a href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>">
                    <img src="${app.imageUrl}" onmouseover="this.src='${app.imageHoverUrl}'" onmouseout="this.src='${app.imageUrl}'" />
                 </a>
-                <div id="label" style="margin-left: 32px;" for="${app.applicationId}">${app.shortName}</div>
+                <div id="label" style="margin-left: 34px;" for="${app.applicationId}">
+                  <a style="color: black;" href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>" >
+                    ${app.shortName}
+                  </a>
+                </div>
             </div>
 
                 <#if !app_has_next>
