@@ -103,7 +103,13 @@ public abstract class CommonHandlers {
         String valueToCheck = vars[1];
         String defaultValue = (vars.length > 2) ? vars[2] : null;
 
-        Map viewPreferences = ViewPrefWorker.getViewPreferencesByLocation((GenericValue) context.get("userLogin"), "crmsfa", (String) context.get("sectionName"));
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        // the following does not handle null users
+        if (userLogin == null) {
+            return null;
+        }
+
+        Map viewPreferences = ViewPrefWorker.getViewPreferencesByLocation(userLogin, (String) context.get("opentapsApplicationName"), (String) context.get("sectionName"));
         String prefValue = (String) viewPreferences.get(prefType);
         if (UtilValidate.isEmpty(prefValue)) {
             prefValue = defaultValue;
