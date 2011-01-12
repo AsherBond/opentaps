@@ -96,9 +96,11 @@ Logging in, applications will be displayed if-and-only-if the authenticated user
 
 <OpentapsShortcutGroup applicationId="crmsfa" tabId="accounts" groupId="crmsfaAccounts" sequenceNum="010"/>
 <OpentapsShortcut shortcutId="myAccounts" groupId="crmsfaAccounts" sequenceNum="010" uiLabel="CrmMyAccounts"
-                        linkUrl="myAccounts" securityModule="" securityAction="" />
+                        linkUrl="myAccounts" securityModule="" securityAction=""
+                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ACCOUNTS:MY_VALUES:TEAM_VALUES"/>
 <OpentapsShortcut shortcutId="teamAccounts" groupId="crmsfaAccounts" sequenceNum="010" uiLabel="CrmTeamAccounts"
-                        linkUrl="myAccounts" securityModule="" securityAction="" />
+                        linkUrl="myAccounts" securityModule="" securityAction=""
+                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ACCOUNTS:TEAM_VALUES:TEAM_VALUES"/>
 <OpentapsShortcut shortcutId="createAccount" groupId="crmsfaAccounts" sequenceNum="030" uiLabel="CrmCreateAccount"
                         linkUrl="createAccountForm" securityModule="CRMSFA_ACCOUNT" securityAction="CREATE" />
 <OpentapsShortcut shortcutId="findAccounts" groupId="crmsfaAccounts" sequenceNum="040" uiLabel="CrmFindAccounts"

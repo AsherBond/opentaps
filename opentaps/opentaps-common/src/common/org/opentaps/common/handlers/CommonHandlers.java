@@ -21,6 +21,9 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.opentaps.common.party.ViewPrefWorker;
 import org.opentaps.foundation.entity.EntityInterface;
 
 public abstract class CommonHandlers {
@@ -58,7 +61,7 @@ public abstract class CommonHandlers {
     }
 
     /**
-     * A generin handler method, checks a variable indicated by the handler parameter.
+     * A generic handler method, checks a variable indicated by the handler parameter.
      * @param <T> an <code>EntityInterface</code> that has an handlerParameter field
      * @param context a <code>Map</code> value
      * @param obj any object
@@ -70,6 +73,43 @@ public abstract class CommonHandlers {
             if ("Y".equals(context.get(varName)) || "y".equals(context.get(varName)) || Boolean.TRUE.equals(context.get(varName))) {
                 return obj;
             }
+        }
+
+        return null;
+    }
+
+    /**
+     * A generic handler method, checks an user preference as specified in the handlerParameter.
+     * Split the handlerParameter as <code>prefType:valueToCheck:default</code>
+     *   prefType is the preference name (like: MY_OR_TEAM_ACCOUNTS)
+     *   valueToCheck is the value to test agains (eg: TEAM_VALUES or MY_VALUES)
+     *   default is optional and used to set the value when empty
+     * @param <T> an <code>EntityInterface</code> that has an handlerParameter field
+     * @param context a <code>Map</code> value
+     * @param obj any object
+     * @return a T value or null
+     * @throws GenericEntityException if an error occurs
+     */
+    public static <T extends EntityInterface> T checkViewPreferenceForTab(Map<String, Object> context, T obj) throws GenericEntityException {
+        String varName = obj.getString("handlerParameter");
+        if (UtilValidate.isEmpty(varName)) {
+            return null;
+        }
+        String[] vars = varName.split(":");
+        if (vars.length < 2) {
+            return null;
+        }
+        String prefType = vars[0];
+        String valueToCheck = vars[1];
+        String defaultValue = (vars.length > 2) ? vars[2] : null;
+
+        Map viewPreferences = ViewPrefWorker.getViewPreferencesByLocation((GenericValue) context.get("userLogin"), "crmsfa", (String) context.get("sectionName"));
+        String prefValue = (String) viewPreferences.get(prefType);
+        if (UtilValidate.isEmpty(prefValue)) {
+            prefValue = defaultValue;
+        }
+        if (valueToCheck.equals(prefValue)) {
+            return obj;
         }
 
         return null;
