@@ -117,11 +117,9 @@ if (webapp != null) {
     context.put("applicationSections", webappRepository.getWebAppTabs(webapp, user, context));
 
     tab = webappRepository.getTabById(opentapsApplicationName, sectionName);
-    Debug.logError("Found tab = " + tab, "");
     // look at the available shortcut groups matching the appId / tabId
     if (tab != null) {
         groups = webappRepository.getShortcutGroups(tab, user, context);
-        Debug.logError("Found groups = " + groups, "");
         globalContext.put("shortcutGroups", groups);
     }
 }

@@ -52,7 +52,6 @@
                 <set field="sectionName" value="accounts" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_ACCOUNTS"/>
-                <set field="isAccountView" value="Y"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>
@@ -161,6 +160,7 @@
                 <set field="sectionHeaderUiLabel" value="CrmUpdateAccount"/>
                 <set field="hasModulePermission" value="CRMSFA_ACCOUNT"/>
                 <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="isAccountView" value="Y"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/viewAccount.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/createOrUpdateAccount.bsh"/>
@@ -208,6 +208,7 @@
                 <set field="editContactMechPage" value="accountsEditContactMech"/>
                 <set field="donePage" value="viewAccount"/>
                 <set field="findActivitiesKey" value="partyId"/>  <!-- we want activities based on the partyId parameter -->
+                <set field="isAccountView" value="Y"/>
                 <!-- target for order by and pagination links -->
                 <set field="listSortTarget" value="viewAccount"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
