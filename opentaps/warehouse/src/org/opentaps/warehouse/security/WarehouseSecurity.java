@@ -19,7 +19,9 @@ package org.opentaps.warehouse.security;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
@@ -33,6 +35,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.opentaps.common.security.OpentapsSecurity;
+import org.opentaps.foundation.entity.EntityInterface;
 
 /**
  * Security methods for the Warehouse application.
@@ -177,5 +180,40 @@ public class WarehouseSecurity extends OpentapsSecurity {
     public boolean checkSectionSecurity(String section, String module, HttpServletRequest request) {
         GenericValue userLogin = (GenericValue) request.getAttribute("userLogin");
         return hasFacilityPermission(getFacilityId(), userLogin, module + "_VIEW");
+    }
+
+    /**
+     * An <code>OpentapsWebAppTab</code> handler method, checks the tab securityAction against the facility permission for the current user.
+     * Uses the handler parameter to specify the facility permission to check.
+     * @param <T> an <code>EntityInterface</code>
+     * @param context a <code>Map</code> value
+     * @param obj any object
+     * @return an <code>OpentapsWebAppTab</code> value
+     */
+    public static <T extends EntityInterface> T checkFacilityPermission(Map<String, Object> context, T obj) {
+        String permission = obj.getString("handlerParameter");
+        if (UtilValidate.isEmpty(permission)) {
+            return obj;
+        }
+
+        WarehouseSecurity security = null;
+        HttpSession session = (HttpSession) context.get("session");
+        if (session != null) {
+            security = (WarehouseSecurity) session.getAttribute("warehouseSecurity");
+        } else {
+            security = (WarehouseSecurity) context.get("warehouseSecurity");
+        }
+
+        if (security == null) {
+            // without a security instance we cannot perform the check
+            Debug.logError("Missing WarehouseSecurity instance in the session or context to perform the permission check", MODULE);
+            return null;
+        }
+
+        if (security.hasFacilityPermission(permission)) {
+            return obj;
+        }
+
+        return null;
     }
 }

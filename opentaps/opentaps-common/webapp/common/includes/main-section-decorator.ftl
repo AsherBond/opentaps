@@ -37,7 +37,7 @@ If "twoColumn" is used for sectionStyle, then the following options are also ava
 
 <#if !singleColumn>
   <div id="${leftBarClass?default("left-content-column")}">
-  <#if shortcuts?exists && shortcuts.size() != 0>
+  <#if shortcutGroups?has_content>
     <#include "shortcuts.ftl">
   </#if>
   <#if leftBarScreen?exists>

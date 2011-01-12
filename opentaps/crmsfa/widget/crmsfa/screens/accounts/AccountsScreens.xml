@@ -52,7 +52,7 @@
                 <set field="sectionName" value="accounts" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_ACCOUNTS"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/shortcuts.bsh"/>
+                <set field="isAccountView" value="Y"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>
@@ -64,9 +64,6 @@
     <screen name="leftBarScreen">
         <section>
             <widgets>
-                <platform-specific>
-                    <html><html-template location="component://crmsfa/webapp/crmsfa/accounts/screenlets/accountShortcuts.ftl"/></html>
-                </platform-specific>
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/common/screenlets/quickCreateForms.ftl"/></html>
                 </platform-specific>

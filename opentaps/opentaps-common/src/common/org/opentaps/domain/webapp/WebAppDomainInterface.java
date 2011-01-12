@@ -18,16 +18,16 @@ package org.opentaps.domain.webapp;
 
 import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.ServiceException;
 
 /**
  * This is the interface of the webpp domain.
  */
 public interface WebAppDomainInterface extends DomainInterface {
+
     /**
      * Returns the voip service instance.
      * @return an <code>VoipServiceInterface</code> value
-     * @throws ServiceException if an error occurs
+     * @throws RepositoryException if an error occurs
      */
     public WebAppRepositoryInterface getWebAppRepository() throws RepositoryException;
 }
