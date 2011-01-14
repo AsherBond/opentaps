@@ -285,7 +285,7 @@ public class ShippingHelper {
                         EntityCondition.makeCondition(ShipmentPackageRouteDetail.Fields.labelPrinted.name(), "N"),
                         EntityCondition.makeCondition(ShipmentPackageRouteDetail.Fields.labelPrinted.name(), null)
                 ), EntityOperator.OR),
-                EntityCondition.makeCondition(ShipmentPackageRouteDetail.Fields.carrierServiceStatusId.name(), EntityOperator.IN, UtilMisc.<String>toList(StatusItemConstants.ShprtsgCsStatus.SHRSCS_ACCEPTED, StatusItemConstants.ShprtsgCsStatus.SHRSCS_CONFIRMED, "SHRSCS_NOT_STARTED"))
+                EntityCondition.makeCondition(ShipmentPackageRouteDetail.Fields.carrierServiceStatusId.name(), EntityOperator.IN, UtilMisc.<String>toList(StatusItemConstants.ShprtsgCsStatus.SHRSCS_ACCEPTED, StatusItemConstants.ShprtsgCsStatus.SHRSCS_CONFIRMED))
         );
     }
 }
