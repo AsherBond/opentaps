@@ -77,6 +77,8 @@ public class ShippingActions {
                     break;
                 }
             }
+
+            routes.close();
         }
     }
 }
