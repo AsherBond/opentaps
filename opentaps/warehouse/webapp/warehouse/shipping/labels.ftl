@@ -66,7 +66,7 @@
     <@displayCell text=row.shipmentPackageSeqId />
     <@displayCell text=row.carrierName />
     <@displayCell text=row.shipmentMethod />
-    <@displayLinkCell href="viewShipmentPackageRouteSegLabelImage?shipmentId=${row.shipmentId}&shipmentRouteSegmentId=${row.shipmentRouteSegmentId}&shipmentPackageSeqId=${row.shipmentPackageSeqId}" text=uiLabelMap.ProductLabel />
+    <@displayLinkCell href="shipmentLabelViewer?shipmentId=${row.shipmentId}&shipmentRouteSegmentId=${row.shipmentRouteSegmentId}&shipmentPackageSeqId=${row.shipmentPackageSeqId}&amp;navigation=Y" text=uiLabelMap.ProductLabel />
     <#if pageSize != 0>
       <@inputMultiCheckCell index=row_index />
     </#if>

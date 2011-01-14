@@ -20,18 +20,14 @@ import org.ofbiz.entity.condition.*;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.warehouse.shipment.ShippingHelper;
 
 // make a list builder of segments to be printed
 
 labelsListBuilder() {
   entityName = "ShipmentPackageRouteDetail";
-  where = UtilMisc.toList(
-      new EntityConditionList( UtilMisc.toList(
-          new EntityExpr("labelPrinted", EntityOperator.EQUALS, "N"),
-          new EntityExpr("labelPrinted", EntityOperator.EQUALS, null)
-      ), EntityOperator.OR),
-      new EntityExpr("carrierServiceStatusId", EntityOperator.IN, UtilMisc.toList("SHRSCS_ACCEPTED", "SHRSCS_CONFIRMED"))
-  );
+  where = ShippingHelper.printLabelsConditions();
+  orderBy = UtilMisc.toList("shipmentId", "shipmentRouteSegmentId", "shipmentPackageSeqId");
 
   build(page) {
       newPage = FastList.newInstance();

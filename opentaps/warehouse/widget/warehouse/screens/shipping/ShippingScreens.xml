@@ -241,6 +241,20 @@ under the License.
         </section>
     </screen>
 
+    <screen name="viewShipmentLabel">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PageTitleLabelPrinting"/>
+                <java location="org.opentaps.warehouse.shipment.ShippingActions" invoke="viewShipmentLabel"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://warehouse/webapp/warehouse/shipping/viewShipmentLabel.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
     <!-- Open Picklists -->
     <screen name="picklistDetails">
         <section>

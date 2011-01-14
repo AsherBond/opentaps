@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.opentaps.warehouse.shipment;
 
 import java.math.BigDecimal;
@@ -34,11 +33,13 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.ShipmentPackageRouteDetail;
 import org.opentaps.common.util.UtilCommon;
 
 /**
  * Helper for Warehouse application Shipping section.
- * Principaly focused on picked list.
+ * Principally focused on picked list.
  *
  * @author     Fabien Carrion
  */
@@ -50,7 +51,7 @@ public class ShippingHelper {
     private int ordersTotalSize = -1;
 
     /**
-     * Constructor initialisations.
+     * Constructor initializations.
      *
      * @param delegator the delegator object to access to the database
      * @param facilityId The id of the warehouse to work on
@@ -275,4 +276,16 @@ public class ShippingHelper {
         return orders;
     }
 
+    /**
+     * Build condition list to find shipping labels to print.
+     */
+    public static List<EntityCondition> printLabelsConditions() {
+        return UtilMisc.<EntityCondition>toList(
+                EntityCondition.makeCondition(UtilMisc.toList(
+                        EntityCondition.makeCondition(ShipmentPackageRouteDetail.Fields.labelPrinted.name(), "N"),
+                        EntityCondition.makeCondition(ShipmentPackageRouteDetail.Fields.labelPrinted.name(), null)
+                ), EntityOperator.OR),
+                EntityCondition.makeCondition(ShipmentPackageRouteDetail.Fields.carrierServiceStatusId.name(), EntityOperator.IN, UtilMisc.<String>toList(StatusItemConstants.ShprtsgCsStatus.SHRSCS_ACCEPTED, StatusItemConstants.ShprtsgCsStatus.SHRSCS_CONFIRMED, "SHRSCS_NOT_STARTED"))
+        );
+    }
 }

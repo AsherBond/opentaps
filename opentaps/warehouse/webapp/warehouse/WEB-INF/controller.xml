@@ -1086,6 +1086,10 @@ under the License.
         <security https="true" auth="true"/>
         <response name="success" type="view" value="BatchPrintShippingLabels"/>
     </request-map>
+        <request-map uri="shipmentLabelViewer">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shipmentLabelViewer"/>
+    </request-map>
     <request-map uri="viewShipmentLabel">
         <event type="java" path="org.ofbiz.shipment.shipment.ShipmentEvents" invoke="viewShipmentPackageRouteSegLabelImage"/>
         <response name="success" type="none" value=""/>
@@ -1602,6 +1606,7 @@ under the License.
     <!-- Print Labels -->
     <view-map name="Labels" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#Labels"/>
     <view-map name="BatchPrintShippingLabels" type="screenfop" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#BatchPrintShippingLabels" content-type="application/pdf" encoding="none"/>
+    <view-map name="shipmentLabelViewer" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#viewShipmentLabel" />
 
     <!-- Quick-Schedule a Shipment -->
     <view-map name="QuickScheduleShipmentRouteSegment" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#QuickScheduleShipmentRouteSegment"/>
