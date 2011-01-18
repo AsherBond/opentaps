@@ -37,14 +37,14 @@
 
         <field name="activityFactId" type="id-vlong"/>
         <field name="dateDimId" type="surrogate-key"/>
-        <field name="targetPartyId" type="id-vlong"/>
-        <field name="teamMemberPartyId" type="id-vlong"/>
+        <field name="targetPartyId" type="id-ne"/>
+        <field name="teamMemberPartyId" type="id-ne"/>
         <field name="emailActivityCount" type="numeric"/>
         <field name="phoneCallActivityCount" type="numeric"/>
         <field name="visitActivityCount" type="numeric"/>
         <field name="otherActivityCount" type="numeric"/>
-        <field name="targetPartyRoleTypeId" type="id-vlong"/>
-        <field name="teamMemberPartyRoleTypeId" type="id-vlong"/>
+        <field name="targetPartyRoleTypeId" type="id-ne"/>
+        <field name="teamMemberPartyRoleTypeId" type="id-ne"/>
         <field name="activityCompletedDatetime" type="date-time"></field>
         <prim-key field="activityFactId"/>
         
