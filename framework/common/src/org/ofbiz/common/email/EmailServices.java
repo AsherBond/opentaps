@@ -234,7 +234,9 @@ public class EmailServices {
                 mail.setHeader("In-Reply-To", messageId);
                 mail.setHeader("References", messageId);
             }
-            mail.setFrom(new InternetAddress(sendFrom));
+            InternetAddress sender = new InternetAddress(sendFrom, sendFrom);
+            mail.setFrom(sender);
+            mail.setReplyTo(new InternetAddress[] {sender});
             mail.setSubject(subject, "UTF-8");
             mail.setHeader("X-Mailer", "Apache OFBiz, The Apache Open For Business Project");
             mail.setSentDate(new Date());
