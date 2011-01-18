@@ -238,6 +238,9 @@ framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
 1058cb83555da17ac2d08b1c22d521a516dee293 Fix type : added deprecated methods for backwards compatibility.
 f4bb1060fb55056228b527ceab93806898c94f86 Clear runtime/tempfiles completely
 
+framework/common/src/org/ofbiz/common/email/EmailServices.java
+836a02bbdc Tweak the mail sending to set the sender name and reply-to to the sender email address, fixes the displayed sender when sending via GMail
+
 Applications changes
 --------------------
 
