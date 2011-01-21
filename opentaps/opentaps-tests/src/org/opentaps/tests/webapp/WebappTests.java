@@ -18,6 +18,8 @@
 
 package org.opentaps.tests.webapp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -114,6 +116,7 @@ public class WebappTests extends OpentapsTestCase {
      * OpentapsWebApps webapp1 = webappRepository.getWebAppById("testapp1")
      * tabs = webappRepository.getWebAppTabs(webapp1, map{})
      * -> check tabs includes testtab11, testtab12, testtab13 ...
+     * test that tabs include only the expected for this application tabs (and no extra one)
      * tab = webappRepository.getTabById(opentapsApplicationName, sectionName);
      * groups = webappRepository.getShortcutGroups(tab, user, context);
      * -> test groups includes the corresponding groups
@@ -132,6 +135,9 @@ public class WebappTests extends OpentapsTestCase {
         boolean hasTab2 = false;
         boolean hasTab3 = false;
 
+        List<String> expectedList = Arrays.asList("testtab11", "testtab12", "testtab13");
+        List<String> actualList = new ArrayList<String>();
+
         for (OpentapsWebAppTab tab : tabs) {
             if (tab.getTabId().equals("testtab11")) {
                 hasTab1 = true;
@@ -140,11 +146,14 @@ public class WebappTests extends OpentapsTestCase {
             } else if (tab.getTabId().equals("testtab13")) {
                 hasTab3 = true;
             }
+            actualList.add(tab.getTabId());
         }
 
         assertTrue("Could not find tab [testtab11] in the [testapp1] ", hasTab1);
         assertTrue("Could not find tab [testtab12] in the [testapp1] ", hasTab2);
         assertTrue("Could not find tab [testtab13] in the [testapp1] ", hasTab3);
+
+        assertEquals("Tabs not include only the expected tabs for [testapp1] ",actualList, expectedList, false);
 
         OpentapsWebAppTab tab = webappRepository.getTabById("testapp1", "testtab11");
         List<OpentapsShortcutGroup> groups = webappRepository.getShortcutGroups(tab, new User(admin), context);
@@ -168,16 +177,22 @@ public class WebappTests extends OpentapsTestCase {
         hasTab1 = false;
         hasTab2 = false;
 
+        expectedList = Arrays.asList("testtab21", "testtab22");
+        actualList.clear();
+
         for (OpentapsWebAppTab tab2 : tabs) {
             if (tab2.getTabId().equals("testtab21")) {
                 hasTab1 = true;
             } else if (tab2.getTabId().equals("testtab22")) {
                 hasTab2 = true;
             }
+            actualList.add(tab2.getTabId());
         }
 
         assertTrue("Could not find tab [testtab21] in the [testapp2] ", hasTab1);
         assertTrue("Could not find tab [testtab22] in the [testapp2] ", hasTab2);
+
+        assertEquals("Tabs not include only the expected tabs for [testapp2] ",actualList, expectedList, false);
 
         tab = webappRepository.getTabById("testapp2", "testtab21");
         groups = webappRepository.getShortcutGroups(tab, new User(admin), context);
