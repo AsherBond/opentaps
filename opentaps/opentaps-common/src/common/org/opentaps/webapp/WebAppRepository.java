@@ -61,6 +61,11 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
     }
 
     /** {@inheritDoc} */
+    public List<? extends OpentapsWebApps> getWebApps() throws RepositoryException {
+        return getWebApps(getUser());
+    }
+
+    /** {@inheritDoc} */
     public List<? extends OpentapsWebApps> getWebApps(User user) throws RepositoryException {
         List<OpentapsWebApps> opentapsWebapps = findAllCache(OpentapsWebApps.class, Arrays.asList(OpentapsWebApps.Fields.sequenceNum.asc()));
         //get all webapps defined in all the ofbiz-components
@@ -174,6 +179,11 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
     }
 
     /** {@inheritDoc} */
+    public List<? extends OpentapsWebAppTab> getWebAppTabs(OpentapsWebApps webapp, Map<String, Object> context) throws RepositoryException {
+        return getWebAppTabs(webapp, getUser(), context);
+    }
+
+    /** {@inheritDoc} */
     public List<? extends OpentapsWebAppTab> getWebAppTabs(OpentapsWebApps webapp, User user, Map<String, Object> context) throws RepositoryException {
         List<OpentapsWebAppTab> tabs = findListCache(OpentapsWebAppTab.class, map(OpentapsWebAppTab.Fields.applicationId, webapp.getApplicationId()), Arrays.asList(OpentapsWebAppTab.Fields.sequenceNum.asc()));
         List<OpentapsWebAppTab> allowedTabs = new ArrayList<OpentapsWebAppTab>();
@@ -196,6 +206,11 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
         }
 
         return allowedTabs;
+    }
+
+    /** {@inheritDoc} */
+    public List<OpentapsShortcutGroup> getShortcutGroups(OpentapsWebAppTab tab, Map<String, Object> context) throws RepositoryException {
+        return getShortcutGroups(tab, getUser(), context);
     }
 
     /** {@inheritDoc} */

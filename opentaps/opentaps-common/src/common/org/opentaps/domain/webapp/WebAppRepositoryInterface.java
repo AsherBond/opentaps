@@ -49,12 +49,28 @@ public interface WebAppRepositoryInterface extends RepositoryInterface {
     public OpentapsWebAppTab getTabById(String applicationId, String tabId) throws RepositoryException;
 
     /**
+     * Gets the get the list of available webapps for the current user.
+     * @return a List of <code>OpentapsWebApps</code> instance.
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OpentapsWebApps> getWebApps() throws RepositoryException;
+
+    /**
      * Gets the get the list of available webapps for given user.
      * @param user a <code>User</code> instance
      * @return a List of <code>OpentapsWebApps</code> instance.
      * @throws RepositoryException if an error occurs
      */
     public List<? extends OpentapsWebApps> getWebApps(User user) throws RepositoryException;
+
+    /**
+     * Gets the get the list of available tabs in the given webapp for the current user.
+     * @param webapp an <code>OpentapsWebApps</code> instance
+     * @param context the context Map
+     * @return a List of <code>OpentapsWebApps</code> instance.
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OpentapsWebAppTab> getWebAppTabs(OpentapsWebApps webapp, Map<String, Object> context) throws RepositoryException;
 
     /**
      * Gets the get the list of available tabs in the given webapp for given user.
@@ -65,6 +81,15 @@ public interface WebAppRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public List<? extends OpentapsWebAppTab> getWebAppTabs(OpentapsWebApps webapp, User user, Map<String, Object> context) throws RepositoryException;
+
+    /**
+     * Gets the get the list of available shortcut groups in the given tab for the current user.
+     * @param tab an <code>OpentapsWebAppTab</code> instance
+     * @param context the context Map
+     * @return a List of <code>OpentapsShortcutGroup</code> instance.
+     * @throws RepositoryException if an error occurs
+     */
+    public List<OpentapsShortcutGroup> getShortcutGroups(OpentapsWebAppTab tab, Map<String, Object> context) throws RepositoryException;
 
     /**
      * Gets the get the list of available shortcut groups in the given tab for given user.
