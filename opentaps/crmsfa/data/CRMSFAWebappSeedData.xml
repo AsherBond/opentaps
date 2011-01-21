@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<entity-engine-xml>
+
+<!-- The Web Application -->
+<OpentapsWebApps applicationId="crmsfa" shortName="CRM/SFA" sequenceNum="10" applicationName="CRM, Customer Service, Order Entry, Marketing"
+    description="Track leads, contacts, and accounts.  Email and calendars.  Manage customer service requests.  Enter quotes and sales orders.  Maintain marketing campaigns and contact lists, and print mailing labels or send emails.  Sales forecasts and reports." 
+             imageUrl="/opentaps_images/integratingweb/crm.png" imageHoverUrl="/opentaps_images/integratingweb/crmHover.png" linkUrl="/crmsfa/control/main"
+             lastUpdatedStamp="2009-07-16 19:49:23.679" lastUpdatedTxStamp="2009-07-16 19:49:23.679" createdStamp="2009-07-15 19:31:39.473" createdTxStamp="2009-07-15 19:31:39.473"/>
+
+<!-- Tabs -->
+<OpentapsWebAppTab applicationId="crmsfa" sequenceNum="010" tabId="myHome" uiLabel="CrmMyHome"
+                   linkUrl="myHomeMain"   securityModule="" securityAction="" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa" sequenceNum="020" tabId="leads" uiLabel="CrmLeads"
+                   linkUrl="leadsMain"    securityModule="CRMSFA_LEADS" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa" sequenceNum="030" tabId="contacts" uiLabel="CrmContacts"
+                   linkUrl="contactsMain" securityModule="CRMSFA_CONTACTS" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa" sequenceNum="040" tabId="accounts" uiLabel="CrmAccounts"
+                   linkUrl="accountsMain" securityModule="CRMSFA_ACCOUNTS" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa" sequenceNum="050" tabId="cases" uiLabel="CrmCases"
+                   linkUrl="casesMain"    securityModule="CRMSFA_CASES" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa" sequenceNum="060" tabId="activities" uiLabel="CrmActivities"
+                   linkUrl="activitiesMain" securityModule="" securityAction="" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa"  sequenceNum="070" tabId="opportunities" uiLabel="CrmOpportunities"
+                   linkUrl="opportunitiesMain" securityModule="CRMSFA_OPPS" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa"  sequenceNum="080" tabId="quotes" uiLabel="OrderOrderQuotes"
+                   linkUrl="quotesMain"    securityModule="CRMSFA_QUOTES" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa"  sequenceNum="090" tabId="orders" uiLabel="OrderOrders"
+                   linkUrl="ordersMain"    securityModule="CRMSFA_ORDER" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa"  sequenceNum="100" tabId="forecasts" uiLabel="CrmForecasts"
+                   linkUrl="forecastsMain" securityModule="CRMSFA_4C" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa"  sequenceNum="110" tabId="marketing" uiLabel="CrmMarketing"
+                   linkUrl="marketingMain" securityModule="CRMSFA_MKTG" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa"  sequenceNum="120" tabId="partners" uiLabel="OpentapsPartners"
+                   linkUrl="partnersMain"  securityModule="CRMSFA_PARTNER" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa"  sequenceNum="130" tabId="teams" uiLabel="CrmTeams"
+                   linkUrl="teamsMain"     securityModule="CRMSFA_TEAM" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa"  sequenceNum="140" tabId="reports" uiLabel="OpentapsReports"
+                   linkUrl="viewDashboard" securityModule="CRMSFA_RPT" securityAction="VIEW" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="crmsfa"  sequenceNum="500" tabId="ofbiz" uiLabel="opentaps"
+                   linkUrl="/opentaps" isExternal="Y" securityModule="" securityAction="" handlerMethod=""/>
+
+<!-- Shortcut groups -->
+
+<!-- Home shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="myHome" groupId="crmsfaHome" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="createLead" groupId="crmsfaHome" sequenceNum="010" uiLabel="CrmCreateLead"
+                        linkUrl="createLeadForm" securityModule="CRMSFA_LEAD" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="createAccount" groupId="crmsfaHome" sequenceNum="020" uiLabel="CrmCreateAccount"
+                        linkUrl="createAccountForm" securityModule="CRMSFA_ACCOUNT" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="createContact" groupId="crmsfaHome" sequenceNum="030" uiLabel="CrmCreateContact"
+                        linkUrl="createContactForm" securityModule="CRMSFA_CONTACT" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="createOpportunity" groupId="crmsfaHome" sequenceNum="040" uiLabel="CrmCreateOpportunity"
+                        linkUrl="createOpportunityForm" securityModule="CRMSFA_OPP" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="createQuote" groupId="crmsfaHome" sequenceNum="050" uiLabel="PartyCreateNewQuote"
+                        linkUrl="EditQuote" securityModule="CRMSFA_QUOTE" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="createCase" groupId="crmsfaHome" sequenceNum="060" uiLabel="CrmCreateCase"
+                        linkUrl="createCaseForm" securityModule="CRMSFA_CASE" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="createOrder" groupId="crmsfaHome" sequenceNum="070" uiLabel="OpentapsCreateOrder"
+                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkHasNoCart"
+                        linkUrl="createOrderMainScreen" securityModule="CRMSFA_ORDER" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="resumeOrder" groupId="crmsfaHome" sequenceNum="070" uiLabel="OpentapsResumeOrder"
+                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkHasCart"
+                        linkUrl="createOrderMainScreen" securityModule="CRMSFA_ORDER" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="writeEmail" groupId="crmsfaHome" sequenceNum="080" uiLabel="CrmWriteEmail"
+                        linkUrl="writeEmail"/>
+<OpentapsShortcut shortcutId="logCall" groupId="crmsfaHome" sequenceNum="090" uiLabel="CrmLogCall"
+                        linkUrl="logTaskForm?workEffortPurposeTypeId=WEPT_TASK_PHONE_CALL"/>
+<OpentapsShortcut shortcutId="createTask" groupId="crmsfaHome" sequenceNum="100" uiLabel="CrmCreateNewTask"
+                        linkUrl="createTaskForm?workEffortTypeId=TASK"/>
+<OpentapsShortcut shortcutId="createEvent" groupId="crmsfaHome" sequenceNum="110" uiLabel="CrmCreateNewEvent"
+                        linkUrl="createEventForm?workEffortTypeId=EVENT"/>
+
+
+<!-- Accounts shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="accounts" groupId="crmsfaAccounts" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="myAccounts" groupId="crmsfaAccounts" sequenceNum="010" uiLabel="CrmMyAccounts"
+                        linkUrl="myAccounts" securityModule="" securityAction=""
+                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ACCOUNTS:MY_VALUES:TEAM_VALUES"/>
+<OpentapsShortcut shortcutId="teamAccounts" groupId="crmsfaAccounts" sequenceNum="010" uiLabel="CrmTeamAccounts"
+                        linkUrl="myAccounts" securityModule="" securityAction=""
+                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ACCOUNTS:TEAM_VALUES:TEAM_VALUES"/>
+<OpentapsShortcut shortcutId="createAccount" groupId="crmsfaAccounts" sequenceNum="030" uiLabel="CrmCreateAccount"
+                        linkUrl="createAccountForm" securityModule="CRMSFA_ACCOUNT" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="findAccounts" groupId="crmsfaAccounts" sequenceNum="040" uiLabel="CrmFindAccounts"
+                        linkUrl="findAccounts"/>
+<OpentapsShortcut shortcutId="mergeAccounts" groupId="crmsfaAccounts" sequenceNum="050" uiLabel="CrmMergeAccounts"
+                        linkUrl="mergeAccountsForm" />
+
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="accounts" groupId="crmsfaViewAccount" sequenceNum="020" uiLabel="CrmAccountShortcuts"
+                       handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkBoolean" handlerParameter="isAccountView"/>
+<OpentapsShortcut shortcutId="resumeOrder" groupId="crmsfaViewAccount" sequenceNum="010" uiLabel="OpentapsResumeOrder"
+                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkHasCart"
+                        linkUrl="resumeOrder?partyId=${parameters.partyId}" securityModule="CRMSFA_ORDER" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="createOrder" groupId="crmsfaViewAccount" sequenceNum="010" uiLabel="OpentapsCreateOrder"
+                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkHasNoCart"
+                        linkUrl="newOrder?partyId=${parameters.partyId}" securityModule="CRMSFA_ORDER" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="findQuotes" groupId="crmsfaViewAccount" sequenceNum="020" uiLabel="OrderOrderQuotes"
+                        linkUrl="findQuotes?partyId=${parameters.partyId}&amp;performFind=Y" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="createQuote" groupId="crmsfaViewAccount" sequenceNum="030" uiLabel="CrmCreateQuote"
+                        linkUrl="EditQuote?partyId=${parameters.partyId}" securityModule="CRMSFA_QUOTE" securityAction="CREATE" />
+
+</entity-engine-xml>

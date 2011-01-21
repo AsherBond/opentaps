@@ -26,6 +26,7 @@
     
     <!-- seed data which will be loaded on "ant run-install" and "ant run-install-seed" -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/WarehouseSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/WarehouseWebappSeedData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/WarehouseSecurityData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ContextHelpResourceSeedData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/WarehouseScheduledServices.xml"/>

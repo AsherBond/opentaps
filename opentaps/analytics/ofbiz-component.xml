@@ -29,6 +29,7 @@
 
     <!-- data -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/AnalyticsSecurity.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/AnalyticsWebappSeedData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/CustomerAnalysisReports.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/SalesAnalysisReports.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/OtherReports.xml"/>

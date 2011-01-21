@@ -51,6 +51,7 @@
     <entity-resource type="data" reader-name="seed" loader="main" location="data/AccountingTypeData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/FinancialsSecurityData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/FinancialsSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/FinancialsWebappSeedData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/DefaultInvoiceItemTypeSequence.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ScheduledJobs.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ReportSeedData.xml"/>
