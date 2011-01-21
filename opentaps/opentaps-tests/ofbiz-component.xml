@@ -49,6 +49,7 @@
     <entity-resource type="data" reader-name="demo" loader="main" location="data/common/CommonTestData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/crmsfa/OrderTestData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/purchasing/OrderTestData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/webapp/WebappTestData.xml"/>
 
     <!-- Data required for tsung -->
     <entity-resource type="data" reader-name="demo" loader="main" location="data/TsungDemoData.xml"/>
