@@ -26,9 +26,10 @@ import javolution.util.FastMap;
 import org.opentaps.base.entities.OpentapsWebAppTab;
 import org.opentaps.base.entities.OpentapsWebApps;
 import org.opentaps.domain.webapp.OpentapsShortcutGroup;
+import org.opentaps.domain.webapp.WebAppDomainInterface;
+import org.opentaps.domain.webapp.WebAppRepositoryInterface;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.tests.OpentapsTestCase;
-import org.opentaps.webapp.WebAppRepository;
 
 /**
  * Webapp related tests.
@@ -111,7 +112,7 @@ public class WebappTests extends OpentapsTestCase {
     /**
      * test that the webapp repository gives the correct tab list in each application :
      * OpentapsWebApps webapp1 = webappRepository.getWebAppById("testapp1")
-     * tabs = webappRepository.getWebAppTabs(webapp1, admin, map{})
+     * tabs = webappRepository.getWebAppTabs(webapp1, map{})
      * -> check tabs includes testtab11, testtab12, testtab13 ...
      * tab = webappRepository.getTabById(opentapsApplicationName, sectionName);
      * groups = webappRepository.getShortcutGroups(tab, user, context);
@@ -120,11 +121,12 @@ public class WebappTests extends OpentapsTestCase {
      */
     public void testBasicGetTabList() throws Exception {
         // testapp1
-        WebAppRepository webappRepository = new WebAppRepository();
+        WebAppDomainInterface webAppDomain =  domainsDirectory.getWebAppDomain();
+        WebAppRepositoryInterface webappRepository = webAppDomain.getWebAppRepository();
         Map<String, Object> context = FastMap.newInstance();
 
         OpentapsWebApps webapp1 = webappRepository.getWebAppById("testapp1");
-        List<? extends OpentapsWebAppTab> tabs = webappRepository.getWebAppTabs(webapp1, new User(admin), context);
+        List<? extends OpentapsWebAppTab> tabs = webappRepository.getWebAppTabs(webapp1, context);
 
         boolean hasTab1 = false;
         boolean hasTab2 = false;
