@@ -18,7 +18,17 @@
 
 package org.opentaps.tests.webapp;
 
+import java.util.List;
+import java.util.Map;
+
+import javolution.util.FastMap;
+
+import org.opentaps.base.entities.OpentapsWebAppTab;
+import org.opentaps.base.entities.OpentapsWebApps;
+import org.opentaps.domain.webapp.OpentapsShortcutGroup;
+import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.tests.OpentapsTestCase;
+import org.opentaps.webapp.WebAppRepository;
 
 /**
  * Webapp related tests.
@@ -95,19 +105,111 @@ public class WebappTests extends OpentapsTestCase {
               shortcut1 label = "shortcut1${s1}"; linkUrl = "foo${s11}"
               shortcut2 label = "shortcut1${s2}"; linkUrl = "foo${s22}"
           testtab52 label = "testtab51 ${foo52}"; linkUrl = "foo${bar52}"
-          
+
      */
 
-    public void testBasicGetTabList() {
-        // test that the webapp repository gives the correct tab list in each application :
-        //  OpentapsWebApps webapp1 = webappRepository.getWebAppById("testapp1")
-        //  tabs = webappRepository.getWebAppTabs(webapp1, admin, map{})
-        //  -> check tabs includes testtab11, testtab12, testtab13 ...
-        //  tab = webappRepository.getTabById(opentapsApplicationName, sectionName);
-        //  groups = webappRepository.getShortcutGroups(tab, user, context);
-        //  -> test groups includes the corresponding groups
+    /**
+     * test that the webapp repository gives the correct tab list in each application :
+     * OpentapsWebApps webapp1 = webappRepository.getWebAppById("testapp1")
+     * tabs = webappRepository.getWebAppTabs(webapp1, admin, map{})
+     * -> check tabs includes testtab11, testtab12, testtab13 ...
+     * tab = webappRepository.getTabById(opentapsApplicationName, sectionName);
+     * groups = webappRepository.getShortcutGroups(tab, user, context);
+     * -> test groups includes the corresponding groups
+     * same for testapp2
+     */
+    public void testBasicGetTabList() throws Exception {
+        // testapp1
+        WebAppRepository webappRepository = new WebAppRepository();
+        Map<String, Object> context = FastMap.newInstance();
 
-        // same for testapp2
+        OpentapsWebApps webapp1 = webappRepository.getWebAppById("testapp1");
+        List<? extends OpentapsWebAppTab> tabs = webappRepository.getWebAppTabs(webapp1, new User(admin), context);
+
+        boolean hasTab1 = false;
+        boolean hasTab2 = false;
+        boolean hasTab3 = false;
+
+        for (OpentapsWebAppTab tab : tabs) {
+            if (tab.getTabId().equals("testtab11")) {
+                hasTab1 = true;
+            } else if (tab.getTabId().equals("testtab12")) {
+                hasTab2 = true;
+            } else if (tab.getTabId().equals("testtab13")) {
+                hasTab3 = true;
+            }
+        }
+
+        assertTrue("Could not find tab [testtab11] in the [testapp1] ", hasTab1);
+        assertTrue("Could not find tab [testtab12] in the [testapp1] ", hasTab2);
+        assertTrue("Could not find tab [testtab13] in the [testapp1] ", hasTab3);
+
+        OpentapsWebAppTab tab = webappRepository.getTabById("testapp1", "testtab11");
+        List<OpentapsShortcutGroup> groups = webappRepository.getShortcutGroups(tab, new User(admin), context);
+
+        assertEquals("The [testtab11] in the [testapp1] not have a group", groups.size(), 0);
+
+        tab = webappRepository.getTabById("testapp1", "testtab12");
+        groups = webappRepository.getShortcutGroups(tab, new User(admin), context);
+
+        assertEquals("The [testtab12] in the [testapp1] not have a group", groups.size(), 0);
+
+        tab = webappRepository.getTabById("testapp1", "testtab13");
+        groups = webappRepository.getShortcutGroups(tab, new User(admin), context);
+
+        assertEquals("The [testtab13] in the [testapp1] not have a group", groups.size(), 0);
+
+        // testapp2
+        OpentapsWebApps webapp2 = webappRepository.getWebAppById("testapp2");
+        tabs = webappRepository.getWebAppTabs(webapp2, new User(admin), context);
+
+        hasTab1 = false;
+        hasTab2 = false;
+
+        for (OpentapsWebAppTab tab2 : tabs) {
+            if (tab2.getTabId().equals("testtab21")) {
+                hasTab1 = true;
+            } else if (tab2.getTabId().equals("testtab22")) {
+                hasTab2 = true;
+            }
+        }
+
+        assertTrue("Could not find tab [testtab21] in the [testapp2] ", hasTab1);
+        assertTrue("Could not find tab [testtab22] in the [testapp2] ", hasTab2);
+
+        tab = webappRepository.getTabById("testapp2", "testtab21");
+        groups = webappRepository.getShortcutGroups(tab, new User(admin), context);
+
+        boolean hasGroup1 = false;
+        boolean hasGroup2 = false;
+
+        for (OpentapsShortcutGroup group : groups) {
+            if (group.getGroupId().equalsIgnoreCase("group2-21-1")) {
+                hasGroup1 = true;
+            } else if (group.getGroupId().equalsIgnoreCase("group2-21-2")) {
+                hasGroup2 = true;
+            }
+        }
+
+        assertTrue("Could not find group [group2-21-1] in the [testapp2] [testtab21]", hasGroup1);
+        assertTrue("Could not find group [group2-21-2] in the [testapp2] [testtab21]", hasGroup2);
+
+        tab = webappRepository.getTabById("testapp2", "testtab22");
+        groups = webappRepository.getShortcutGroups(tab, new User(admin), context);
+
+        hasGroup1 = false;
+        hasGroup2 = false;
+
+        for (OpentapsShortcutGroup group : groups) {
+            if (group.getGroupId().equalsIgnoreCase("group2-22-1")) {
+                hasGroup1 = true;
+            } else if (group.getGroupId().equalsIgnoreCase("group2-22-2")) {
+                hasGroup2 = true;
+            }
+        }
+
+        assertTrue("Could not find group [group2-22-1] in the [testapp2] [testtab22]", hasGroup1);
+        assertTrue("Could not find group [group2-22-2] in the [testapp2] [testtab22]", hasGroup2);
     }
 
     public void testPermissionCheckOnGetTabList() {
@@ -166,5 +268,5 @@ public class WebappTests extends OpentapsTestCase {
         // check that the values in the tab labels, links, group labels, shortcuts labels and links ... have the values
         //  in the return of getLinkUrl() / getUiLabel()
     }
-    
+
 }
