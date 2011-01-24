@@ -230,6 +230,19 @@
                         linkUrl="manageOrderQueue" securityModule="" securityAction="" />
 <OpentapsShortcut shortcutId="markServicePerformed" groupId="crmsfaOrders" sequenceNum="050" uiLabel="CrmMarkAsPerformed"
                         linkUrl="markServicePerformed" securityModule="" securityAction="" />
+<!-- returns group -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="orders" groupId="crmsfaReturns" sequenceNum="020" uiLabel="CrmReturns"/>
+<OpentapsShortcut shortcutId="pendingReturns" groupId="crmsfaReturns" sequenceNum="010" uiLabel="CrmPendingReturns"
+                        linkUrl="pendingReturns" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="findReturns" groupId="crmsfaReturns" sequenceNum="020" uiLabel="CrmFindReturns"
+                        linkUrl="findReturns" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="createReturn" groupId="crmsfaReturns" sequenceNum="030" uiLabel="CrmCreateReturn"
+                        linkUrl="createReturnForm" securityModule="CRMSFA_RETURN" securityAction="CREATE" />
+<!-- shopping lists group -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="orders" groupId="crmsfaShoppingLists" sequenceNum="030" uiLabel="CrmShoppingLists"
+                        securityModule="CRMSFA_SLT" securityAction="VIEW" />
+<OpentapsShortcut shortcutId="findShoppingList" groupId="crmsfaShoppingLists" sequenceNum="010" uiLabel="CrmFindShoppingList"
+                        linkUrl="findShoppingList" securityModule="" securityAction="" />
 
 
 <!-- Forecasts shortcuts -->

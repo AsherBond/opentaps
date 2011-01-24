@@ -64,13 +64,6 @@ under the License.
         <section>
             <widgets>
                 <platform-specific>
-                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/returnShortcuts.ftl"/></html>
-                </platform-specific>
-                <platform-specific>
-                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/shoppingListShortcuts.ftl"/></html>
-                </platform-specific>
-                
-                <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/quickCreateOrder.ftl"/></html>
                 </platform-specific>
                 <platform-specific>
