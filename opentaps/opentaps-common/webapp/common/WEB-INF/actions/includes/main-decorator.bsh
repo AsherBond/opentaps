@@ -114,12 +114,12 @@ domainsLoader = new DomainsLoader(infrastructure, user);
 webappRepository = domainsLoader.loadDomainsDirectory().getWebAppDomain().getWebAppRepository();
 webapp = webappRepository.getWebAppById(opentapsApplicationName);
 if (webapp != null) {
-    context.put("applicationSections", webappRepository.getWebAppTabs(webapp, user, context));
+    context.put("applicationSections", webappRepository.getWebAppTabs(webapp, context));
 
     tab = webappRepository.getTabById(opentapsApplicationName, sectionName);
     // look at the available shortcut groups matching the appId / tabId
     if (tab != null) {
-        groups = webappRepository.getShortcutGroups(tab, user, context);
+        groups = webappRepository.getShortcutGroups(tab, context);
         globalContext.put("shortcutGroups", groups);
     }
 }
