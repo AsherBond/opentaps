@@ -72,10 +72,10 @@
 <OpentapsShortcut shortcutId="createCase" groupId="crmsfaHome" sequenceNum="060" uiLabel="CrmCreateCase"
                         linkUrl="createCaseForm" securityModule="CRMSFA_CASE" securityAction="CREATE" />
 <OpentapsShortcut shortcutId="createOrder" groupId="crmsfaHome" sequenceNum="070" uiLabel="OpentapsCreateOrder"
-                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkHasNoCart"
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasNoCart"
                         linkUrl="createOrderMainScreen" securityModule="CRMSFA_ORDER" securityAction="CREATE" />
 <OpentapsShortcut shortcutId="resumeOrder" groupId="crmsfaHome" sequenceNum="070" uiLabel="OpentapsResumeOrder"
-                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkHasCart"
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasCart"
                         linkUrl="createOrderMainScreen" securityModule="CRMSFA_ORDER" securityAction="CREATE" />
 <OpentapsShortcut shortcutId="writeEmail" groupId="crmsfaHome" sequenceNum="080" uiLabel="CrmWriteEmail"
                         linkUrl="writeEmail"/>
@@ -91,10 +91,10 @@
 <OpentapsShortcutGroup applicationId="crmsfa" tabId="accounts" groupId="crmsfaAccounts" sequenceNum="010"/>
 <OpentapsShortcut shortcutId="myAccounts" groupId="crmsfaAccounts" sequenceNum="010" uiLabel="CrmMyAccounts"
                         linkUrl="myAccounts" securityModule="" securityAction=""
-                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ACCOUNTS:MY_VALUES:TEAM_VALUES"/>
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ACCOUNTS:MY_VALUES:TEAM_VALUES"/>
 <OpentapsShortcut shortcutId="teamAccounts" groupId="crmsfaAccounts" sequenceNum="010" uiLabel="CrmTeamAccounts"
                         linkUrl="myAccounts" securityModule="" securityAction=""
-                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ACCOUNTS:TEAM_VALUES:TEAM_VALUES"/>
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ACCOUNTS:TEAM_VALUES:TEAM_VALUES"/>
 <OpentapsShortcut shortcutId="createAccount" groupId="crmsfaAccounts" sequenceNum="030" uiLabel="CrmCreateAccount"
                         linkUrl="createAccountForm" securityModule="CRMSFA_ACCOUNT" securityAction="CREATE" />
 <OpentapsShortcut shortcutId="findAccounts" groupId="crmsfaAccounts" sequenceNum="040" uiLabel="CrmFindAccounts"
@@ -103,12 +103,12 @@
                         linkUrl="mergeAccountsForm" />
 
 <OpentapsShortcutGroup applicationId="crmsfa" tabId="accounts" groupId="crmsfaViewAccount" sequenceNum="020" uiLabel="CrmAccountShortcuts"
-                       handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkBoolean" handlerParameter="isAccountView"/>
+                       handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkBoolean" handlerParameter="isAccountView"/>
 <OpentapsShortcut shortcutId="resumeOrder" groupId="crmsfaViewAccount" sequenceNum="010" uiLabel="OpentapsResumeOrder"
-                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkHasCart"
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasCart"
                         linkUrl="resumeOrder?partyId=${parameters.partyId}" securityModule="CRMSFA_ORDER" securityAction="CREATE" />
 <OpentapsShortcut shortcutId="createOrder" groupId="crmsfaViewAccount" sequenceNum="010" uiLabel="OpentapsCreateOrder"
-                        handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkHasNoCart"
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasNoCart"
                         linkUrl="newOrder?partyId=${parameters.partyId}" securityModule="CRMSFA_ORDER" securityAction="CREATE" />
 <OpentapsShortcut shortcutId="findQuotes" groupId="crmsfaViewAccount" sequenceNum="020" uiLabel="OrderOrderQuotes"
                         linkUrl="findQuotes?partyId=${parameters.partyId}&amp;performFind=Y" securityModule="" securityAction="" />

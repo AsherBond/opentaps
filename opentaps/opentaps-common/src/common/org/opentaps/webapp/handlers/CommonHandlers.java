@@ -15,7 +15,7 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.opentaps.common.handlers;
+package org.opentaps.webapp.handlers;
 
 import java.util.Map;
 import javax.servlet.http.HttpSession;
