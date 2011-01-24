@@ -31,6 +31,38 @@ public abstract class CommonHandlers {
     private CommonHandlers() { }
 
     /**
+     * A generic handler method, checks the session does NOT have the given handlerParameter.
+     * @param <T> an <code>EntityInterface</code>
+     * @param context a <code>Map</code> value
+     * @param obj any object
+     * @return a T value or null
+     */
+    public static <T extends EntityInterface> T checkSessionValueAbsent(Map<String, Object> context, T obj) {
+        HttpSession session = (HttpSession) context.get("session");
+        String varName = obj.getString("handlerParameter");
+        if (session == null || session.getAttribute(varName) == null) {
+            return obj;
+        }
+        return null;
+    }
+
+    /**
+     * A generic handler method, checks the session does have the given handlerParameter (as a non null value).
+     * @param <T> an <code>EntityInterface</code>
+     * @param context a <code>Map</code> value
+     * @param obj any object
+     * @return a T value or null
+     */
+    public static <T extends EntityInterface> T checkSessionValuePresent(Map<String, Object> context, T obj) {
+        HttpSession session = (HttpSession) context.get("session");
+        String varName = obj.getString("handlerParameter");
+        if (session != null && session.getAttribute(varName) == null) {
+            return obj;
+        }
+        return null;
+    }
+
+    /**
      * A generic handler method, checks if there is NO cart in progress.
      * @param <T> an <code>EntityInterface</code>
      * @param context a <code>Map</code> value
