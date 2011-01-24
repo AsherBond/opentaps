@@ -111,7 +111,17 @@
                         linkUrl="findContacts" securityModule="" securityAction="" />
 <OpentapsShortcut shortcutId="mergeContacts" groupId="crmsfaContacts" sequenceNum="040" uiLabel="CrmMergeContacts"
                         linkUrl="mergeContactsForm" securityModule="" securityAction="" />
-
+<!-- view Contact shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="contacts" groupId="crmsfaViewContact" sequenceNum="020" uiLabel="CrmContactShortcuts"
+                       handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkBoolean" handlerParameter="isActiveContactView"/>
+<OpentapsShortcut shortcutId="resumeOrder" groupId="crmsfaViewContact" sequenceNum="010" uiLabel="OpentapsResumeOrder"
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasCart"
+                        linkUrl="resumeOrder?partyId=${parameters.partyId}" securityModule="CRMSFA_ORDER" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="createOrder" groupId="crmsfaViewContact" sequenceNum="010" uiLabel="OpentapsCreateOrder"
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasNoCart"
+                        linkUrl="newOrder?partyId=${parameters.partyId}" securityModule="CRMSFA_ORDER" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="findOrders" groupId="crmsfaViewContact" sequenceNum="020" uiLabel="OrderOrders"
+                        linkUrl="findOrders?partyIdSearch=${parameters.partyId}&amp;performFind=Y" securityModule="" securityAction="" />
 
 <!-- Accounts shortcuts -->
 <OpentapsShortcutGroup applicationId="crmsfa" tabId="accounts" groupId="crmsfaAccounts" sequenceNum="010"/>
@@ -127,7 +137,7 @@
                         linkUrl="findAccounts"/>
 <OpentapsShortcut shortcutId="mergeAccounts" groupId="crmsfaAccounts" sequenceNum="050" uiLabel="CrmMergeAccounts"
                         linkUrl="mergeAccountsForm" />
-
+<!-- view Account shortcuts -->
 <OpentapsShortcutGroup applicationId="crmsfa" tabId="accounts" groupId="crmsfaViewAccount" sequenceNum="020" uiLabel="CrmAccountShortcuts"
                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkBoolean" handlerParameter="isAccountView"/>
 <OpentapsShortcut shortcutId="resumeOrder" groupId="crmsfaViewAccount" sequenceNum="010" uiLabel="OpentapsResumeOrder"
