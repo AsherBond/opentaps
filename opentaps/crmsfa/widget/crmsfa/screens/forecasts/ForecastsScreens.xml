@@ -51,7 +51,6 @@
                 <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
                 <set field="sectionName" value="forecasts" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/forecasts/shortcuts.bsh"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/forecasts/ForecastsScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>

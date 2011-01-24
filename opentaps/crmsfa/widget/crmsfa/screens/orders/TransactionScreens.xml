@@ -45,7 +45,6 @@ under the License.
                 <set field="sectionName" value="orders" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_ORDERS"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/shortcuts.bsh"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/orders/TransactionScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>

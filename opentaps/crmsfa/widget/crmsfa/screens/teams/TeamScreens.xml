@@ -39,9 +39,6 @@
             <condition><if-has-permission permission="CRMSFA_TEAM" action="_VIEW"/></condition>
             <widgets>
                 <platform-specific>
-                    <html><html-template location="component://crmsfa/webapp/crmsfa/teams/screenlets/shortcuts.ftl"/></html>
-                </platform-specific>
-                <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/teams/screenlets/quickCreateTeam.ftl"/></html>
                 </platform-specific>
                 <platform-specific>

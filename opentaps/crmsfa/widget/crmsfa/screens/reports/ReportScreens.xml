@@ -28,24 +28,12 @@
             <actions>
                 <set field="sectionName" value="reports" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
-                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/reports/ReportScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>
                 <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
             </widgets>
         </section>
     </screen>
-
-    <screen name="leftBarScreen">
-        <section>
-            <widgets>
-                <platform-specific>
-                    <html><html-template location="component://crmsfa/webapp/crmsfa/reports/screenlets/shortcuts.ftl"/></html>
-                </platform-specific>
-            </widgets>
-        </section>
-    </screen>
-
 
     <screen name="manageReports">
         <section>

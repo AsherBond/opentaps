@@ -87,6 +87,32 @@
                         linkUrl="createEventForm?workEffortTypeId=EVENT"/>
 
 
+<!-- Leads shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="leads" groupId="crmsfaLeads" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="myLeads" groupId="crmsfaLeads" sequenceNum="010" uiLabel="CrmMyLeads" linkUrl="myLeads"/>
+<OpentapsShortcut shortcutId="createLead" groupId="crmsfaLeads" sequenceNum="020" uiLabel="CrmCreateLead" linkUrl="createLeadForm"
+                  securityModule="CRMSFA_LEAD" securityAction="CREATE"/>
+<OpentapsShortcut shortcutId="findLeads" groupId="crmsfaLeads" sequenceNum="030" uiLabel="CrmFindLeads" linkUrl="findLeads"/>
+<OpentapsShortcut shortcutId="mergeLeads" groupId="crmsfaLeads" sequenceNum="040" uiLabel="CrmMergeLeads" linkUrl="mergeLeadsForm"
+                  securityModule="CRMSFA_LEAD" securityAction="MERGE"/>
+<OpentapsShortcut shortcutId="uploadLeads" groupId="crmsfaLeads" sequenceNum="050" uiLabel="CrmUploadLeads" linkUrl="uploadLeadsForm"
+                  securityModule="CRMSFA_LEADS" securityAction="UPLOAD"/>
+<OpentapsShortcut shortcutId="createCatalogRequest" groupId="crmsfaLeads" sequenceNum="060" uiLabel="CrmCreateCatalogRequest" linkUrl="createCatalogRequestForm"
+                  securityModule="CRMSFA_CATALOG" securityAction="REQ"/>
+
+
+<!-- Contacts shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="contacts" groupId="crmsfaContacts" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="myContacts" groupId="crmsfaContacts" sequenceNum="010" uiLabel="CrmMyContacts"
+                        linkUrl="myContacts"/>
+<OpentapsShortcut shortcutId="createContact" groupId="crmsfaContacts" sequenceNum="020" uiLabel="CrmCreateContact"
+                        linkUrl="createContactForm" securityModule="CRMSFA_CONTACT" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="findContacts" groupId="crmsfaContacts" sequenceNum="030" uiLabel="CrmFindContacts"
+                        linkUrl="findContacts" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="mergeContacts" groupId="crmsfaContacts" sequenceNum="040" uiLabel="CrmMergeContacts"
+                        linkUrl="mergeContactsForm" securityModule="" securityAction="" />
+
+
 <!-- Accounts shortcuts -->
 <OpentapsShortcutGroup applicationId="crmsfa" tabId="accounts" groupId="crmsfaAccounts" sequenceNum="010"/>
 <OpentapsShortcut shortcutId="myAccounts" groupId="crmsfaAccounts" sequenceNum="010" uiLabel="CrmMyAccounts"
@@ -114,5 +140,137 @@
                         linkUrl="findQuotes?partyId=${parameters.partyId}&amp;performFind=Y" securityModule="" securityAction="" />
 <OpentapsShortcut shortcutId="createQuote" groupId="crmsfaViewAccount" sequenceNum="030" uiLabel="CrmCreateQuote"
                         linkUrl="EditQuote?partyId=${parameters.partyId}" securityModule="CRMSFA_QUOTE" securityAction="CREATE" />
+
+
+<!-- Cases shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="cases" groupId="crmsfaCases" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="myCases" groupId="crmsfaCases" sequenceNum="010" uiLabel="CrmMyCases"
+                        linkUrl="myCases" securityModule="" securityAction=""
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_CASES:MY_VALUES:TEAM_VALUES"/>
+<OpentapsShortcut shortcutId="teamCases" groupId="crmsfaCases" sequenceNum="010" uiLabel="CrmTeamCases"
+                        linkUrl="myCases" securityModule="" securityAction=""
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_CASES:TEAM_VALUES:TEAM_VALUES"/>
+<OpentapsShortcut shortcutId="createCase" groupId="crmsfaCases" sequenceNum="020" uiLabel="CrmCreateCase"
+                        linkUrl="createCaseForm" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="findCases" groupId="crmsfaCases" sequenceNum="030" uiLabel="CrmFindCases"
+                        linkUrl="findCases" securityModule="" securityAction="" />
+
+
+<!-- Activities shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="activities" groupId="crmsfaActivities" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="myHome" groupId="crmsfaActivities" sequenceNum="010" uiLabel="CrmMyCalendar"
+                        linkUrl="myHome" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="pendingEmails" groupId="crmsfaActivities" sequenceNum="020" uiLabel="CrmActivitiesPendingEmails"
+                        linkUrl="pendingEmails" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="createEvent" groupId="crmsfaActivities" sequenceNum="030" uiLabel="CrmCreateEvent"
+                        linkUrl="createEventForm" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="createTask" groupId="crmsfaActivities" sequenceNum="040" uiLabel="CrmCreateTask"
+                        linkUrl="createTaskForm" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="findActivities" groupId="crmsfaActivities" sequenceNum="050" uiLabel="CrmFindActivities"
+                        linkUrl="activitiesMain" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="logEmail" groupId="crmsfaActivities" sequenceNum="060" uiLabel="CrmLogEmail"
+                        linkUrl="logTaskForm?workEffortPurposeTypeId=WEPT_TASK_EMAIL" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="logCall" groupId="crmsfaActivities" sequenceNum="070" uiLabel="CrmLogCall"
+                        linkUrl="logTaskForm?workEffortPurposeTypeId=WEPT_TASK_PHONE_CALL" securityModule="" securityAction="" />
+
+
+<!-- Opportunities shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="opportunities" groupId="crmsfaOpportunities" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="myOpportunities" groupId="crmsfaOpportunities" sequenceNum="010" uiLabel="CrmMyOpportunities"
+                        linkUrl="myOpportunities" securityModule="" securityAction=""
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_OPPS:MY_VALUES:TEAM_VALUES"/>
+<OpentapsShortcut shortcutId="teamOpportunities" groupId="crmsfaOpportunities" sequenceNum="010" uiLabel="CrmTeamOpportunities"
+                        linkUrl="myOpportunities" securityModule="" securityAction=""
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_OPPS:TEAM_VALUES:TEAM_VALUES"/>
+<OpentapsShortcut shortcutId="createOpportunity" groupId="crmsfaOpportunities" sequenceNum="020" uiLabel="CrmCreateOpportunity"
+                        linkUrl="createOpportunityForm" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="findOpportunities" groupId="crmsfaOpportunities" sequenceNum="030" uiLabel="CrmFindOpportunities"
+                        linkUrl="findOpportunities" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="createQuote" groupId="crmsfaOpportunities" sequenceNum="040" uiLabel="PartyCreateNewQuote"
+                        linkUrl="EditQuote" securityModule="CRMSFA_QUOTE" securityAction="CREATE" />
+
+
+<!-- Quotes shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="quotes" groupId="crmsfaQuotes" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="myQuotes" groupId="crmsfaQuotes" sequenceNum="010" uiLabel="CrmMyQuotes"
+                        linkUrl="myQuotes" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="createQuote" groupId="crmsfaQuotes" sequenceNum="020" uiLabel="PartyCreateNewQuote"
+                        linkUrl="EditQuote" securityModule="CRMSFA_QUOTE" securityAction="CREATE" />
+<OpentapsShortcut shortcutId="findQuotes" groupId="crmsfaQuotes" sequenceNum="030" uiLabel="CrmFindQuotes"
+                        linkUrl="findQuotes" securityModule="" securityAction="" />
+
+
+<!-- Orders shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="orders" groupId="crmsfaOrders" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="myOrders" groupId="crmsfaOrders" sequenceNum="010" uiLabel="CrmMyOrders"
+                        linkUrl="myOrders" securityModule="" securityAction=""
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ORDERS:MY_VALUES:MY_VALUES"/>
+<OpentapsShortcut shortcutId="openOrders" groupId="crmsfaOrders" sequenceNum="010" uiLabel="CrmOpenOrders"
+                        linkUrl="myOrders" securityModule="" securityAction=""
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ORDERS:TEAM_VALUES:MY_VALUES"/>
+<OpentapsShortcut shortcutId="createOrder" groupId="crmsfaOrders" sequenceNum="020" uiLabel="OpentapsResumeOrder"
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasCart"
+                        linkUrl="createOrderMainScreen" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="createOrder" groupId="crmsfaOrders" sequenceNum="020" uiLabel="OpentapsCreateOrder"
+                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasNoCart"
+                        linkUrl="createOrderMainScreen" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="findOrders" groupId="crmsfaOrders" sequenceNum="030" uiLabel="OrderFindOrder"
+                        linkUrl="findOrders" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="manageOrderQueue" groupId="crmsfaOrders" sequenceNum="040" uiLabel="CrmOrderQueue"
+                        linkUrl="manageOrderQueue" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="markServicePerformed" groupId="crmsfaOrders" sequenceNum="050" uiLabel="CrmMarkAsPerformed"
+                        linkUrl="markServicePerformed" securityModule="" securityAction="" />
+
+
+<!-- Forecasts shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="forecasts" groupId="crmsfaForecasts" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="findForecasts" groupId="crmsfaForecasts" sequenceNum="010" uiLabel="CrmFindForecasts"
+                        linkUrl="findForecasts" securityModule="CRMSFA_4C" securityAction="VIEWALL" />
+<OpentapsShortcut shortcutId="myOpportunities" groupId="crmsfaForecasts" sequenceNum="020" uiLabel="CrmMyOpportunities"
+                        linkUrl="myOpportunities" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="findOpportunities" groupId="crmsfaForecasts" sequenceNum="030" uiLabel="CrmFindOpportunities"
+                        linkUrl="findOpportunities" securityModule="" securityAction="" />
+
+
+<!-- Marketing shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="marketing" groupId="crmsfaMarketing" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="createMarketingCampaign" groupId="crmsfaMarketing" sequenceNum="010" uiLabel="CrmCreateMarketingCampaign"
+                        linkUrl="createMarketingCampaignForm" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="findMarketingCampaigns" groupId="crmsfaMarketing" sequenceNum="020" uiLabel="CrmFindMarketingCampaigns"
+                        linkUrl="findMarketingCampaigns" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="createContactList" groupId="crmsfaMarketing" sequenceNum="030" uiLabel="CrmCreateContactList"
+                        linkUrl="createContactListForm" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="findContactLists" groupId="crmsfaMarketing" sequenceNum="040" uiLabel="CrmFindContactLists"
+                        linkUrl="findContactLists" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="listSurveys" groupId="crmsfaMarketing" sequenceNum="050" uiLabel="CrmMarketingSurveyResults"
+                        linkUrl="listSurveys" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="marketingReports" groupId="crmsfaMarketing" sequenceNum="060" uiLabel="CommonReports"
+                        linkUrl="marketingReports" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="manageMergeForms" groupId="crmsfaMarketing" sequenceNum="070" uiLabel="CrmFormLetterTemplates"
+                        linkUrl="ManageMergeForms" securityModule="CRMSFA_CAMP" securityAction="CREATE" />
+
+
+<!-- Partners shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="partners" groupId="crmsfaPartners" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="findPartners" groupId="crmsfaPartners" sequenceNum="010" uiLabel="OpentapsFindPartners"
+                        linkUrl="findPartners" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="createPartnerForm" groupId="crmsfaPartners" sequenceNum="020" uiLabel="OpentapsCreatePartner"
+                        linkUrl="createPartnerForm" securityModule="" securityAction="" />
+
+
+<!-- Teams shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="teams" groupId="crmsfaTeams" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="findTeams" groupId="crmsfaTeams" sequenceNum="010" uiLabel="CrmFindTeams"
+                        linkUrl="findTeams" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="createTeamForm" groupId="crmsfaTeams" sequenceNum="020" uiLabel="CrmCreateTeam"
+                        linkUrl="createTeamForm" securityModule="" securityAction="" />
+
+
+<!-- Reports shortcuts -->
+<OpentapsShortcutGroup applicationId="crmsfa" tabId="reports" groupId="crmsfaReports" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="viewDashboard" groupId="crmsfaReports" sequenceNum="010" uiLabel="CrmDashboard"
+                        linkUrl="viewDashboard" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="manageReports" groupId="crmsfaReports" sequenceNum="020" uiLabel="OpentapsReports"
+                        linkUrl="manageReports" securityModule="" securityAction="" />
 
 </entity-engine-xml>

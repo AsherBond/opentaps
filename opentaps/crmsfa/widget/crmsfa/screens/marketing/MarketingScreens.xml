@@ -53,7 +53,6 @@
                 <set field="sectionName" value="marketing" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_MKTG"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/shortcuts.bsh"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>
