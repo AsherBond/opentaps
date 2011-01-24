@@ -131,7 +131,7 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
             // if the permission check fails
             try {
                 if (user == null || !user.hasPermission(secModule, secAction) && !user.hasAdminPermissionsForModule(secModule)) {
-                    Debug.logWarning("Permission [" + secModule + " / " + secAction + "] denied for user [" + user.getUserId() + "]", MODULE);
+                    Debug.logWarning("Permission [" + secModule + " / " + secAction + "] denied for user [" + ((user != null) ? user.getUserId() : user) + "]", MODULE);
                     return false;
                 }
             } catch (InfrastructureException e) {
