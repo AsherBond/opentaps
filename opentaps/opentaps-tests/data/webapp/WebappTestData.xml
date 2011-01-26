@@ -103,4 +103,7 @@
     <UserLoginSecurityGroup userLoginId="testuser1" groupId="TESTAPP3T3" fromDate="2005-12-01 00:00:00"/>
     <UserLoginSecurityGroup userLoginId="testuser2" groupId="TESTAPP3T2" fromDate="2005-12-01 00:00:00"/>
 
+    <ViewPrefType viewPrefTypeId="TEST_HANDLER" application="test" applicationSection="test"/>
+    <ViewPreference viewPrefTypeId="TEST_HANDLER" userLoginId="admin" viewPrefValueTypeId="VPREF_VALTYPE_STRING" viewPrefString="VALUE_2"/>    
+
 </entity-engine-xml>

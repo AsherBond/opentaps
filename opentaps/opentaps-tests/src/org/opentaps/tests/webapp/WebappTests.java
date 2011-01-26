@@ -27,6 +27,7 @@ import javolution.util.FastMap;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.base.entities.OpentapsShortcut;
 import org.opentaps.base.entities.OpentapsWebAppTab;
 import org.opentaps.base.entities.OpentapsWebApps;
 import org.opentaps.domain.DomainsLoader;
@@ -523,35 +524,252 @@ public class WebappTests extends OpentapsTestCase {
 
     }
 
-    public void testHandlerMethods() {
+    /**
+     * test with testapp4
+     * will an empty context map:
+     * testtab41 / group2 / shortcut1 should not appear
+     *    testtab42 / group1 should not appear
+     *    testtab42 / group2 / shortcut3 should not appear
+     *
+     *  setting the context shoppingCart to a non null value
+     *     testtab41 / group2 / shortcut1 should appear
+     *     testtab41 / group2 / shortcut2 should not appear
+     *   rest unchanged
+     *
+     *   setting the context hasGroup1 to "Y"
+     *     testtab42 / group1 should appear, but without shortcuts inside
+     *   rest unchanged
+     *
+     *   setting the context hasGroup1 to "Y" and hasShortcut2 to Boolean.TRUE
+     *     testtab42 / group1 should appear
+     *     testtab42 / group1 / shortcut1 should not appear
+     *     testtab42 / group1 / shortcut2 should appear
+     *   rest unchanged
+     *
+     *  setting the context opentapsApplicationName "test" sectionName to "test" and setting a view preference (ViewPrefAndLocation entity)
+     *   for user = admin, application = test, applicationSection = test, viewPrefTypeId = TEST_HANDLER, viewPrefString = VALUE_2
+     *     testtab42 / group1 should not appear
+     *     testtab42 / group2 / shortcut2 should not appear
+     *     testtab42 / group2 / shortcut3 should appear
+     *   rest unchanged
+     *
+     * @throws Exception
+     */
+    public void testHandlerMethods() throws Exception {
         // test with testapp4
+        WebAppDomainInterface webAppDomain = domainsDirectory.getWebAppDomain();
+        WebAppRepositoryInterface webappRepository = webAppDomain.getWebAppRepository();
+        Map<String, Object> context = FastMap.newInstance();
 
         // will an empty context map:
-        //   testtab41 / group2 / shortcut1 should not appear
-        //   testtab42 / group1 should not appear
-        //   testtab42 / group2 / shortcut3 should not appear
+
+        // testtab41 / group2 / shortcut1 should not appear
+        OpentapsWebAppTab tab = webappRepository.getTabById("testapp4", "testtab41");
+        List<OpentapsShortcutGroup> groups = webappRepository.getShortcutGroups(tab, context);
+
+        boolean hasGroup1 = false;
+        boolean hasGroup2 = false;
+
+        boolean hasShortcut1 = false;
+        boolean hasShortcut2 = false;
+        boolean hasShortcut3 = false;
+
+        for (OpentapsShortcutGroup group : groups) {
+            if (group.getGroupId().equalsIgnoreCase("group4-41-2")) {
+                hasGroup2 = true;
+
+                List<? extends OpentapsShortcut> shortcuts = group.getAllowedShortcuts();
+
+                for (OpentapsShortcut shortcut : shortcuts) {
+                    if (shortcut.getShortcutId().equalsIgnoreCase("shortcut1")) {
+                        hasShortcut1 = true;
+                    }
+                }
+
+                assertFalse("Found shortcut [shortcut1] in the [testapp4] [testtab41] [group4-41-2]", hasShortcut1);
+            }
+        }
+
+        assertTrue("Could not find group [group4-41-2] in the [testapp4] [testtab41]", hasGroup2);
+
+        // testtab42 / group1 should not appear
+        tab = webappRepository.getTabById("testapp4", "testtab42");
+        groups = webappRepository.getShortcutGroups(tab, context);
+
+        hasGroup1 = false;
+
+        for (OpentapsShortcutGroup group : groups) {
+            if (group.getGroupId().equalsIgnoreCase("group4-42-1")) {
+                hasGroup1 = true;
+            }
+        }
+
+        assertFalse("Found group [group4-42-1] in the [testapp4] [testtab42]", hasGroup1);
+
+        // testtab42 / group2 / shortcut3 should not appear
+        tab = webappRepository.getTabById("testapp4", "testtab42");
+        groups = webappRepository.getShortcutGroups(tab, context);
+                                ;
+        hasGroup2 = false;
+        hasShortcut3 = false;
+
+        for (OpentapsShortcutGroup group : groups) {
+            if (group.getGroupId().equalsIgnoreCase("group4-42-2")) {
+                hasGroup2 = true;
+
+                List<? extends OpentapsShortcut> shortcuts = group.getAllowedShortcuts();
+
+                for (OpentapsShortcut shortcut : shortcuts) {
+                    if (shortcut.getShortcutId().equalsIgnoreCase("shortcut3")) {
+                        hasShortcut3 = true;
+                    }
+                }
+
+                assertFalse("Found shortcut [shortcut3] in the [testapp4] [testtab42] [group4-42-2]", hasShortcut3);
+            }
+        }
+
+        assertTrue("Could not find group [group4-42-2] in the [testapp4] [testtab42]", hasGroup2);
 
         // setting the context shoppingCart to a non null value
-        //   testtab41 / group2 / shortcut1 should appear
-        //   testtab41 / group2 / shortcut2 should not appear
-        // rest unchanged
+        context.put("shoppingCart", "myCart");
+
+        // testtab41 / group2 / shortcut1 should appear
+        // testtab41 / group2 / shortcut2 should not appear
+        tab = webappRepository.getTabById("testapp4", "testtab41");
+        groups = webappRepository.getShortcutGroups(tab, context);
+
+        hasGroup2 = false;
+        hasShortcut1 = false;
+        hasShortcut2 = false;
+
+        for (OpentapsShortcutGroup group : groups) {
+            if (group.getGroupId().equalsIgnoreCase("group4-41-2")) {
+                hasGroup2 = true;
+
+                List<? extends OpentapsShortcut> shortcuts = group.getAllowedShortcuts();
+
+                for (OpentapsShortcut shortcut : shortcuts) {
+                    if (shortcut.getShortcutId().equalsIgnoreCase("shortcut1")) {
+                        hasShortcut1 = true;
+                    } else if (shortcut.getShortcutId().equalsIgnoreCase("shortcut2")) {
+                        hasShortcut2 = true;
+                    }
+                }
+
+                assertTrue("Could not find shortcut [shortcut1] in the [testapp4] [testtab41] [group4-41-2]", hasShortcut1);
+                assertFalse("Found shortcut [shortcut2] in the [testapp4] [testtab41] [group4-41-2]", hasShortcut2);
+            }
+        }
+
+        assertTrue("Could not find group [group4-41-2] in the [testapp4] [testtab41]", hasGroup2);
 
         // setting the context hasGroup1 to "Y"
-        //   testtab42 / group1 should appear, but without shortcuts inside
-        // rest unchanged
+        context.clear();
+        context.put("hasGroup1", "Y");
+
+        // testtab42 / group1 should appear, but without shortcuts inside
+        tab = webappRepository.getTabById("testapp4", "testtab42");
+        groups = webappRepository.getShortcutGroups(tab, context);
+
+        hasGroup1 = false;
+        hasShortcut1 = false;
+        hasShortcut2 = false;
+
+        for (OpentapsShortcutGroup group : groups) {
+            if (group.getGroupId().equalsIgnoreCase("group4-42-1")) {
+                hasGroup1 = true;
+
+                List<? extends OpentapsShortcut> shortcuts = group.getAllowedShortcuts();
+
+                for (OpentapsShortcut shortcut : shortcuts) {
+                    if (shortcut.getShortcutId().equalsIgnoreCase("shortcut1")) {
+                        hasShortcut1 = true;
+                    } else if (shortcut.getShortcutId().equalsIgnoreCase("shortcut2")) {
+                        hasShortcut2 = true;
+                    }
+                }
+
+                assertFalse("Found shortcut [shortcut1] in the [testapp4] [testtab42] [group4-42-1]", hasShortcut1);
+                assertFalse("Found shortcut [shortcut2] in the [testapp4] [testtab42] [group4-42-1]", hasShortcut2);
+            }
+        }
+
+        assertTrue("Could not find group [group4-42-1] in the [testapp4] [testtab42]", hasGroup1);
 
         // setting the context hasGroup1 to "Y" and hasShortcut2 to Boolean.TRUE
+        context.put("hasShortcut2", new Boolean(true));
+
         //   testtab42 / group1 should appear
         //   testtab42 / group1 / shortcut1 should not appear
         //   testtab42 / group1 / shortcut2 should appear
-        // rest unchanged
+        tab = webappRepository.getTabById("testapp4", "testtab42");
+        groups = webappRepository.getShortcutGroups(tab, context);
 
-        // setting the context opentapsApplicationName "test" sectionName to "test" and setting a view preference (ViewPrefAndLocation entity)
-        // for user = admin, application = test, applicationSection = test, viewPrefTypeId = TEST_HANDLER, viewPrefString = VALUE_2
-        //   testtab42 / group1 should not appear
-        //   testtab42 / group2 / shortcut2 should not appear
-        //   testtab42 / group2 / shortcut3 should appear
-        // rest unchanged
+        hasGroup1 = false;
+        hasShortcut1 = false;
+        hasShortcut2 = false;
+
+        for (OpentapsShortcutGroup group : groups) {
+            if (group.getGroupId().equalsIgnoreCase("group4-42-1")) {
+                hasGroup1 = true;
+
+                List<? extends OpentapsShortcut> shortcuts = group.getAllowedShortcuts();
+
+                for (OpentapsShortcut shortcut : shortcuts) {
+                    if (shortcut.getShortcutId().equalsIgnoreCase("shortcut1")) {
+                        hasShortcut1 = true;
+                    } else if (shortcut.getShortcutId().equalsIgnoreCase("shortcut2")) {
+                        hasShortcut2 = true;
+                    }
+                }
+
+                assertFalse("Found shortcut [shortcut1] in the [testapp4] [testtab42] [group4-42-1]", hasShortcut1);
+                assertTrue("Could not find shortcut [shortcut2] in the [testapp4] [testtab42] [group4-42-1]", hasShortcut2);
+            }
+        }
+
+        assertTrue("Could not find group [group4-42-1] in the [testapp4] [testtab42]", hasGroup1);
+
+        // setting the context opentapsApplicationName "test" sectionName to "test"
+        context.clear();
+        context.put("opentapsApplicationName", "test");
+        context.put("sectionName", "test");
+
+        // testtab42 / group1 should not appear
+        // testtab42 / group2 / shortcut2 should not appear
+        // testtab42 / group2 / shortcut3 should appear
+        tab = webappRepository.getTabById("testapp4", "testtab42");
+        groups = webappRepository.getShortcutGroups(tab, context);
+
+        hasGroup1 = false;
+        hasGroup2 = false;
+        hasShortcut2 = false;
+        hasShortcut3 = false;
+
+        for (OpentapsShortcutGroup group : groups) {
+            if (group.getGroupId().equalsIgnoreCase("group4-42-1")) {
+                hasGroup1 = true;
+            } else if (group.getGroupId().equalsIgnoreCase("group4-42-2")) {
+                hasGroup2 = true;
+
+                List<? extends OpentapsShortcut> shortcuts = group.getAllowedShortcuts();
+
+                for (OpentapsShortcut shortcut : shortcuts) {
+                    if (shortcut.getShortcutId().equalsIgnoreCase("shortcut2")) {
+                        hasShortcut2 = true;
+                    } else if (shortcut.getShortcutId().equalsIgnoreCase("shortcut3")) {
+                        hasShortcut3 = true;
+                    }
+                }
+
+                assertFalse("Found shortcut [shortcut2] in the [testapp4] [testtab42] [group4-42-2]", hasShortcut2);
+                assertTrue("Could not find shortcut [shortcut3] in the [testapp4] [testtab42] [group4-42-2]", hasShortcut3);
+            }
+        }
+
+        assertFalse("Found group [group4-42-1] in the [testapp4] [testtab42]", hasGroup1);
+        assertTrue("Could not find group [group4-42-2] in the [testapp4] [testtab42]", hasGroup2);
     }
 
     public void testTabAndShortcutsExpansions() {
