@@ -46,7 +46,6 @@ under the License.
                 <set field="sectionName" value="bom" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="PRCH_MFG"/>
-                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/bom/shortcuts.bsh"/>
             </actions>
             <widgets>
                 <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
