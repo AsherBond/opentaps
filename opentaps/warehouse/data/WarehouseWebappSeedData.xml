@@ -36,5 +36,76 @@
 <OpentapsWebAppTab applicationId="warehouse"  sequenceNum="500" tabId="ofbiz" uiLabel="opentaps"
                    linkUrl="/opentaps" isExternal="Y" securityModule="" securityAction="" handlerMethod=""/>
 
+
+<!-- Inventory shortcuts -->
+<OpentapsShortcutGroup applicationId="warehouse" tabId="inventory" groupId="warehouseInventory" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="backOrderedItems" groupId="warehouseInventory" sequenceNum="010" uiLabel="WarehouseBackOrderedItems"
+                  linkUrl="backOrderedItems"/>
+<OpentapsShortcut shortcutId="findInventoryItem" groupId="warehouseInventory" sequenceNum="020" uiLabel="WarehouseFindInventoryItem"
+                  linkUrl="findInventoryItem"/>
+<OpentapsShortcut shortcutId="receiveInventoryItem" groupId="warehouseInventory" sequenceNum="030" uiLabel="WarehouseReceiveInventoryItem"
+                  linkUrl="receiveInventoryItem"/>
+<OpentapsShortcut shortcutId="receiveInventoryAgainstPurchaseOrder" groupId="warehouseInventory" sequenceNum="010" uiLabel="WarehouseReceivePurchaseOrder"
+                  linkUrl="ReceiveInventoryAgainstPurchaseOrder"/>
+<OpentapsShortcut shortcutId="findShipmentReceipt" groupId="warehouseInventory" sequenceNum="040" uiLabel="WarehouseFindShipmentReceipts"
+                  linkUrl="findShipmentReceipt"/>
+<OpentapsShortcut shortcutId="physicalInventory" groupId="warehouseInventory" sequenceNum="050" uiLabel="WarehouseInventoryAdjustQuantities"
+                  linkUrl="physicalInventory"/>
+<OpentapsShortcut shortcutId="stockMoves" groupId="warehouseInventory" sequenceNum="060" uiLabel="WarehouseStockMoves"
+                  linkUrl="stockMoves"/>
+<OpentapsShortcut shortcutId="findFacilityTransfers" groupId="warehouseInventory" sequenceNum="070" uiLabel="WarehouseInventoryTransfer"
+                  linkUrl="FindFacilityTransfers?facilityId=${facilityId}"/>
+<OpentapsShortcut shortcutId="manageLots" groupId="warehouseInventory" sequenceNum="080" uiLabel="WarehouseManageLots"
+                  linkUrl="manageLots"/>
+<OpentapsShortcut shortcutId="traceInventory" groupId="warehouseInventory" sequenceNum="090" uiLabel="WarehouseTraceInventory"
+                  linkUrl="traceInventory"/>
+
+<!-- Shipping shortcuts -->
+<OpentapsShortcutGroup applicationId="warehouse" tabId="shipping" groupId="warehouseShipping" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="readyToShip" groupId="warehouseShipping" sequenceNum="010" uiLabel="WarehouseReadyToShip"
+                  linkUrl="readyToShip"/>
+<OpentapsShortcut shortcutId="incomingShipments" groupId="warehouseShipping" sequenceNum="020" uiLabel="WarehouseIncomingShipments"
+                  linkUrl="IncomingShipments?lookupFlag=Y&amp;formShipmentTypeId=INCOMING_SHIPMENT"/>
+<OpentapsShortcut shortcutId="outgoingShipments" groupId="warehouseShipping" sequenceNum="030" uiLabel="WarehouseOutgoingShipments"
+                  linkUrl="OutgoingShipments?lookupFlag=Y&amp;formShipmentTypeId=OUTGOING_SHIPMENT"/>
+<OpentapsShortcut shortcutId="createPicklist" groupId="warehouseShipping" sequenceNum="040" uiLabel="WarehouseCreatePicklist"
+                  linkUrl="createPicklist?maxNumberOfOrders=30"/>
+<OpentapsShortcut shortcutId="openPicklists" groupId="warehouseShipping" sequenceNum="050" uiLabel="WarehouseOpenPicklists"
+                  linkUrl="openPicklists"/>
+<OpentapsShortcut shortcutId="pickedPicklists" groupId="warehouseShipping" sequenceNum="060" uiLabel="WarehousePickedPicklists"
+                  linkUrl="pickedPicklists"/>
+<OpentapsShortcut shortcutId="packOrder" groupId="warehouseShipping" sequenceNum="070" uiLabel="WarehousePackOrder"
+                  linkUrl="PackOrder"/>
+<OpentapsShortcut shortcutId="quickScheduleShipment" groupId="warehouseShipping" sequenceNum="080" uiLabel="WarehouseScheduleAShipment"
+                  linkUrl="QuickScheduleShipmentRouteSegment"/>
+<OpentapsShortcut shortcutId="scheduleShipments" groupId="warehouseShipping" sequenceNum="090" uiLabel="WarehouseScheduleShipments"
+                  linkUrl="ScheduleShipmentRouteSegment"/>
+<OpentapsShortcut shortcutId="printShippingLabels" groupId="warehouseShipping" sequenceNum="100" uiLabel="WarehousePrintLabels"
+                  linkUrl="Labels"/>
+
+<!-- Manufacturing shortcuts -->
+<OpentapsShortcutGroup applicationId="warehouse" tabId="manufacturing" groupId="warehouseManufacturing" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="manufacturingCalendar" groupId="warehouseManufacturing" sequenceNum="010" uiLabel="WarehouseManufacturingCalendar"
+                  linkUrl="manufacturingCalendar"/>
+<OpentapsShortcut shortcutId="findProductionRun" groupId="warehouseManufacturing" sequenceNum="020" uiLabel="WarehouseFindProductionRun"
+                  linkUrl="FindProductionRun"/>
+<OpentapsShortcut shortcutId="createProductionRun" groupId="warehouseManufacturing" sequenceNum="030" uiLabel="WarehouseCreateProductionRun"
+                  linkUrl="CreateProductionRun"/>
+<OpentapsShortcut shortcutId="createReverseAssembly" groupId="warehouseManufacturing" sequenceNum="040" uiLabel="WarehouseCreateReverseAssembly"
+                  linkUrl="createReverseAssemblyForm"/>
+<OpentapsShortcut shortcutId="createInventoryTransfersForProduction" groupId="warehouseManufacturing" sequenceNum="050" uiLabel="WarehouseCreateProductionTransfers"
+                  linkUrl="CreateInventoryTransfersForProduction"/>
+<OpentapsShortcut shortcutId="receiveOutsourcedPO" groupId="warehouseManufacturing" sequenceNum="060" uiLabel="WarehouseReceiveOutsourcedPO"
+                  linkUrl="receiveOutsourcedPO"/>
+
+<!-- Configuration shortcuts -->
+<OpentapsShortcutGroup applicationId="warehouse" tabId="configuration" groupId="warehouseConfiguration" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="viewWarehouse" groupId="warehouseConfiguration" sequenceNum="010" uiLabel="WarehouseViewWarehouse"
+                  linkUrl="viewWarehouse"/>
+<OpentapsShortcut shortcutId="findFacilityLocation" groupId="warehouseConfiguration" sequenceNum="020" uiLabel="WarehouseLocations"
+                  linkUrl="FindFacilityLocation"/>
+<OpentapsShortcut shortcutId="viewTeamMembers" groupId="warehouseConfiguration" sequenceNum="030" uiLabel="OpentapsTeamMembers"
+                  linkUrl="viewTeamMembers"/>
+
 </entity-engine-xml>
 

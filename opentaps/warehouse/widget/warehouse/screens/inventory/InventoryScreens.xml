@@ -46,8 +46,6 @@ under the License.
                 <set field="gwtScripts[]" value="warehousegwt/org.opentaps.gwt.warehouse.inventory.inventory" global="true"/>
                 <set field="sectionName" value="inventory" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
-
-                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/shortcuts.bsh"/>
             </actions>
             <widgets>
                 <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>

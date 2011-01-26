@@ -24,8 +24,6 @@
                 <set field="sectionName" value="configuration" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="WRHS_CONFIG"/>
-
-                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/configuration/shortcuts.bsh"/>
             </actions>
             <widgets>
                 <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
