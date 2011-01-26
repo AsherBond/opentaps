@@ -183,12 +183,12 @@ public class WarehouseSecurity extends OpentapsSecurity {
     }
 
     /**
-     * An <code>OpentapsWebAppTab</code> handler method, checks the tab securityAction against the facility permission for the current user.
+     * A handler method, checks the facility permission for the current user.
      * Uses the handler parameter to specify the facility permission to check.
      * @param <T> an <code>EntityInterface</code>
      * @param context a <code>Map</code> value
      * @param obj any object
-     * @return an <code>OpentapsWebAppTab</code> value
+     * @return an <code>EntityInterface</code> value
      */
     public static <T extends EntityInterface> T checkFacilityPermission(Map<String, Object> context, T obj) {
         String permission = obj.getString("handlerParameter");
