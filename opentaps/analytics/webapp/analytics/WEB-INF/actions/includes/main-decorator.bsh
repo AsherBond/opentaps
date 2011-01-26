@@ -66,9 +66,3 @@ if (extLogin != null) {
 
 // context path
 context{"contextPath"} = request.getContextPath();
-
-//define sections in tab order from left to right
-sections = new ArrayList();
-sections.add(UtilMisc.toMap("uiLabel", "OpentapsReports", "uri", "/manageReports", "sectionName", "Reports", "hasPermission", true));
-
-context.put("applicationSections", sections);
