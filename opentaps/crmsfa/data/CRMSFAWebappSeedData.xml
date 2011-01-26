@@ -218,7 +218,7 @@
 <OpentapsShortcut shortcutId="openOrders" groupId="crmsfaOrders" sequenceNum="010" uiLabel="CrmOpenOrders"
                         linkUrl="myOrders" securityModule="" securityAction=""
                         handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_ORDERS:TEAM_VALUES:MY_VALUES"/>
-<OpentapsShortcut shortcutId="createOrder" groupId="crmsfaOrders" sequenceNum="020" uiLabel="OpentapsResumeOrder"
+<OpentapsShortcut shortcutId="resumeOrder" groupId="crmsfaOrders" sequenceNum="020" uiLabel="OpentapsResumeOrder"
                         handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasCart"
                         linkUrl="createOrderMainScreen" securityModule="" securityAction="" />
 <OpentapsShortcut shortcutId="createOrder" groupId="crmsfaOrders" sequenceNum="020" uiLabel="OpentapsCreateOrder"
