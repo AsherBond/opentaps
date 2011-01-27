@@ -2506,17 +2506,32 @@ public class ShoppingCartItem implements java.io.Serializable {
     }
 
     public static String getPurchaseOrderItemDescription(GenericValue product, GenericValue supplierProduct, Locale locale) {
-
-        String itemDescription = null;
+        StringBuilder itemDescription = new StringBuilder();
+        String productId = product.getString("productId");
+        String supplierProductName = null;
 
         if (supplierProduct != null) {
-            itemDescription = supplierProduct.getString("supplierProductName");
+            supplierProductName = supplierProduct.getString("supplierProductName");
         }
-
-        if (UtilValidate.isEmpty(itemDescription)) {
-            itemDescription = ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, null);
+        if (UtilValidate.isEmpty(supplierProductName)) {
+            supplierProductName = ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, null);
         }
-
-        return itemDescription;
+        itemDescription.append(supplierProductName);
+        // add the product standard features
+        Delegator delegator = product.getDelegator();
+        if (delegator != null) {
+            try {
+                List<GenericValue> productFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "STANDARD_FEATURE"), UtilMisc.toList("sequenceNum", "productFeatureTypeId"));
+                if (UtilValidate.isNotEmpty(productFeatures)) {
+                    itemDescription.append(" -");
+                    for (GenericValue feature : productFeatures) {
+                        itemDescription.append(" ").append(feature.get("description"));
+                    }
+                }
+            } catch (GenericEntityException e) {
+                Debug.logError(e, "Cannot get the product features to build the item description", module);
+            }
+        }
+        return itemDescription.toString();
     }
 }
