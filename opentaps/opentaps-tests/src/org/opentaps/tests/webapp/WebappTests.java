@@ -111,8 +111,8 @@ public class WebappTests extends OpentapsTestCase {
           testtab51 label = "testtab51 ${foo51}"; linkUrl = "foo${bar51}"
             group1 label = "group1${foo511}";
               shortcut1 label = "shortcut1${s1}"; linkUrl = "foo${s11}"
-              shortcut2 label = "shortcut1${s2}"; linkUrl = "foo${s22}"
-          testtab52 label = "testtab51 ${foo52}"; linkUrl = "foo${bar52}"
+              shortcut2 label = "shortcut2${s2}"; linkUrl = "foo${s22}"
+          testtab52 label = "testtab52 ${foo52}"; linkUrl = "foo${bar52}"
 
      */
 
@@ -772,12 +772,79 @@ public class WebappTests extends OpentapsTestCase {
         assertTrue("Could not find group [group4-42-2] in the [testapp4] [testtab42]", hasGroup2);
     }
 
-    public void testTabAndShortcutsExpansions() {
-        // get for the app testapp5 set context values for foo51, bar51, etc ...
-        //  some set to ""
-        //  some set to some arbitrary strings or numbers
-        // check that the values in the tab labels, links, group labels, shortcuts labels and links ... have the values
-        //  in the return of getLinkUrl() / getUiLabel()
-    }
+    /**
+     * get for the app testapp5 set context values for foo51, bar51, etc ...
+     * some set to ""
+     * some set to some arbitrary strings or numbers
+     * check that the values in the tab labels, links, group labels, shortcuts labels and links ... have the values
+     * in the return of getLinkUrl() / getUiLabel()
+     *
+     * @throws Exception
+     */
+    public void testTabAndShortcutsExpansions() throws Exception {
+        // testtab51
+        WebAppDomainInterface webAppDomain = domainsDirectory.getWebAppDomain();
+        WebAppRepositoryInterface webappRepository = webAppDomain.getWebAppRepository();
+        Map<String, Object> context = FastMap.newInstance();
 
+        context.put("foo51", "foo51_label");
+        context.put("bar51", "bar51_linkUrl");
+        context.put("foo52", "foo52_label");
+        context.put("bar52", "");
+        context.put("foo511", "foo511_label");
+        context.put("s1", "s1_label");
+        context.put("s11", "s11_linkUrl");
+        context.put("s2", "s2_label");
+        context.put("s22", "s22_linkUrl");
+
+        boolean hasGroup1 = false;
+        boolean hasShortcut1 = false;
+        boolean hasShortcut2 = false;
+
+        OpentapsWebApps webapp5 = webappRepository.getWebAppById("testapp5");
+        List<? extends OpentapsWebAppTab> tabs = webappRepository.getWebAppTabs(webapp5, context);
+
+        for (OpentapsWebAppTab tab : tabs) {
+            if (tab.getTabId().equals("testtab51")) {
+                assertEquals("UiLabels for [testtab51] is not equal to the expected value ", tab.getUiLabel(), "testtab51 foo51_label");
+                assertEquals("LinkUrl for [testtab51] is not equal to the expected value ", tab.getLinkUrl(), "foobar51_linkUrl");
+
+                List<OpentapsShortcutGroup> groups = webappRepository.getShortcutGroups(tab, context);
+
+                for (OpentapsShortcutGroup group : groups) {
+                    if (group.getGroupId().equalsIgnoreCase("group5-51-1")) {
+                        hasGroup1 = true;
+
+                        assertEquals("UiLabels for [testtab51] [group5-51-1] is not equal to the expected value ", group.getUiLabel(), "group1foo511_label");
+
+                        List<? extends OpentapsShortcut> shortcuts = group.getAllowedShortcuts();
+
+                        for (OpentapsShortcut shortcut : shortcuts) {
+                            if (shortcut.getShortcutId().equalsIgnoreCase("shortcut1")) {
+                                hasShortcut1 = true;
+
+                                assertEquals("UiLabels for [testtab51] [group5-51-1] [shortcut1] is not equal to the expected value ", shortcut.getUiLabel(), "shortcut1s1_label");
+                                assertEquals("LinkUrl for [testtab51] [group5-51-1] [shortcut1] is not equal to the expected value ", shortcut.getLinkUrl(), "foos11_linkUrl");
+
+                            } else if (shortcut.getShortcutId().equalsIgnoreCase("shortcut2")) {
+                                hasShortcut2 = true;
+
+                                assertEquals("UiLabels for [testtab51] [group5-51-1] [shortcut2] is not equal to the expected value ", shortcut.getUiLabel(), "shortcut2s2_label");
+                                assertEquals("LinkUrl for [testtab51] [group5-51-1] [shortcut2] is not equal to the expected value ", shortcut.getLinkUrl(), "foos22_linkUrl");
+                            }
+                        }
+
+                        assertTrue("Could not find shortcut [shortcut1] in the [testapp5] [testtab51] [group5-51-1]", hasShortcut1);
+                        assertTrue("Could not find shortcut [shortcut2] in the [testapp5] [testtab51] [group5-51-1]", hasShortcut2);
+                    }
+                }
+
+                assertTrue("Could not find group [group5-51-1] in the [testapp5] [testtab51]", hasGroup1);
+
+            } else if (tab.getTabId().equals("testtab52")) {
+                assertEquals("UiLabels for [testtab52] is not equal to the expected value ", tab.getUiLabel(), "testtab52 foo52_label");
+                assertEquals("LinkUrl for [testtab52] is not equal to the expected value ", tab.getLinkUrl(), "foo");
+            }
+        }
+    }
 }
