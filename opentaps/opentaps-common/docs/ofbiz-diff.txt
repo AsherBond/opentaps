@@ -444,6 +444,9 @@ fix createReturnItemOrAdjustment to not skip adjustments when calling createRetu
 applications/order/script/org/ofbiz/order/quote/QuoteServices.xml
 d2c8c0182906683965bc69e5d9386dff3a8227a9 Use modified product description in quote item.
 
+applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCartItem.java
+323807b20cf1d1e799e670f45ae8fc7500189def #1917 Change order item name for purchase order, append the product standard features
+
 Other API Changes
 -----------------
 
