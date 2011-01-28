@@ -16,13 +16,14 @@
  */
 package org.opentaps.domain.product;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.opentaps.base.entities.GoodIdentification;
+import org.opentaps.base.entities.ProductFeatureAndAppl;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * Repository for Products to handle interaction of Product-related domain with the entity engine (database) and the service engine.
@@ -119,5 +120,23 @@ public interface ProductRepositoryInterface extends RepositoryInterface {
      * @return the base price for the given currency
      * @throws RepositoryException if an error occurs
      */
-    public BigDecimal getBasePrice(Product product, String currencyUomId) throws RepositoryException; 
+    public BigDecimal getBasePrice(Product product, String currencyUomId) throws RepositoryException;
+
+    /**
+     * Gets the list of all the <code>ProductFeatureAndAppl</code> related to the given product.
+     * @param product a <code>Product</code> value
+     * @return a list of <code>ProductFeatureAndAppl</code> values
+     * @exception RepositoryException if an error occurs
+     */
+    public List<ProductFeatureAndAppl> getProductFeatures(Product product) throws RepositoryException;
+
+    /**
+     * Gets the list of <code>ProductFeatureAndAppl</code> related to the given product being of the given type.
+     * @param product a <code>Product</code> value
+     * @param productFeatureApplTypeId an optional feature type ID to filter by
+     * @return a list of <code>ProductFeatureAndAppl</code> values
+     * @exception RepositoryException if an error occurs
+     */
+    public List<ProductFeatureAndAppl> getProductFeatures(Product product, String productFeatureApplTypeId) throws RepositoryException;
+
 }

@@ -17,6 +17,7 @@
 package org.opentaps.common.domain.product;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 import org.ofbiz.base.util.UtilMisc;
@@ -29,6 +30,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.base.constants.ProductAssocTypeConstants;
 import org.opentaps.base.entities.GoodIdentification;
 import org.opentaps.base.entities.ProductAssoc;
+import org.opentaps.base.entities.ProductFeatureAndAppl;
 import org.opentaps.base.entities.ProductPrice;
 import org.opentaps.base.services.CalculateProductPriceService;
 import org.opentaps.base.services.GetProductByComprehensiveSearchService;
@@ -188,5 +190,18 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
         } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
-    }   
+    }
+
+    /** {@inheritDoc} */
+    public List<ProductFeatureAndAppl> getProductFeatures(Product product) throws RepositoryException {
+        return getProductFeatures(product, null);
+    }
+
+    /** {@inheritDoc} */
+    public List<ProductFeatureAndAppl> getProductFeatures(Product product, String productFeatureApplTypeId) throws RepositoryException {
+        return findListCache(ProductFeatureAndAppl.class, map(ProductFeatureAndAppl.Fields.productId, product.getProductId(),
+                                                              ProductFeatureAndAppl.Fields.productFeatureApplTypeId, productFeatureApplTypeId),
+                             Arrays.asList(ProductFeatureAndAppl.Fields.sequenceNum.asc(),
+                                           ProductFeatureAndAppl.Fields.productFeatureApplTypeId.asc()));
+    }
 }

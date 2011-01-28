@@ -16,16 +16,20 @@
  */
 package org.opentaps.domain.product;
 
-import org.opentaps.base.entities.ProductType;
-import org.opentaps.foundation.repository.RepositoryException;
-
 import java.math.BigDecimal;
 import java.util.List;
+
+import org.opentaps.base.entities.ProductFeatureAndAppl;
+import org.opentaps.base.entities.ProductType;
+import org.opentaps.foundation.repository.RepositoryException;
 
 /**
  * Product entity, encapsulate product specific functionality.
  */
 public class Product extends org.opentaps.base.entities.Product {
+
+    private List<ProductFeatureAndAppl> features;
+    private List<ProductFeatureAndAppl> stdFeatures;
 
     /**
      * Default public constructor.
@@ -113,6 +117,32 @@ public class Product extends org.opentaps.base.entities.Product {
      */
     public BigDecimal getBasePrice(String currencyUomId) throws RepositoryException {
         return getRepository().getBasePrice(this, currencyUomId);
+    }
+
+    /**
+     * Gets all the features of this product.
+     * @return a list of <code>ProductFeatureAndAppl</code> values
+     * @exception RepositoryException if an error occurs
+     * @see #getStandardFeatures()
+     */
+    public List<ProductFeatureAndAppl> getFeatures() throws RepositoryException {
+        if (features == null) {
+            features = getRepository().getProductFeatures(this);
+        }
+        return features;
+    }
+
+    /**
+     * Gets the standard features of this product.
+     * @return a list of <code>ProductFeatureAndAppl</code> values
+     * @exception RepositoryException if an error occurs
+     * @see #getFeatures()
+     */
+    public List<ProductFeatureAndAppl> getStandardFeatures() throws RepositoryException {
+        if (stdFeatures == null) {
+            stdFeatures = getRepository().getProductFeatures(this, "STANDARD_FEATURE");
+        }
+        return stdFeatures;
     }
 }
 
