@@ -632,7 +632,9 @@ public class WebappTests extends OpentapsTestCase {
         assertTrue("Could not find group [group4-42-2] in the [testapp4] [testtab42]", hasGroup2);
 
         // setting the context shoppingCart to a non null value
-        context.put("shoppingCart", "myCart");
+        FakeHttpSession session = new FakeHttpSession();
+        session.setAttribute("shoppingCart", "myCart");
+        context.put("session", session);
 
         // testtab41 / group2 / shortcut1 should appear
         // testtab41 / group2 / shortcut2 should not appear
@@ -735,6 +737,7 @@ public class WebappTests extends OpentapsTestCase {
         context.clear();
         context.put("opentapsApplicationName", "test");
         context.put("sectionName", "test");
+        context.put("userLogin", admin);
 
         // testtab42 / group1 should not appear
         // testtab42 / group2 / shortcut2 should not appear
