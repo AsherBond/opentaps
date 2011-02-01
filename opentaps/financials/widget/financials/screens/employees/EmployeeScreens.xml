@@ -24,30 +24,11 @@
         <section>
             <actions>
                 <set field="sectionName" value="employees" global="true"/>
-                <set field="sectionStyle" value="singleColumn"/>
+                <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="FINANCIALS_EMP"/>
             </actions>
             <widgets>
                 <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="employees">
-        <section>
-            <actions>
-                <set field="pageTitleLabel" value="FinancialsEmployees"/>
-                <set field="sectionHeaderUiLabel" value="FinancialsEmployees"/>
-                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
-            </actions>
-            <widgets>
-                <decorator-screen name="main-section-decorator">
-                    <decorator-section name="section-body">
-                        <platform-specific><html>
-                            <html-template location="component://financials/webapp/financials/employees/employees.ftl"/></html>
-                        </platform-specific>
-                    </decorator-section>
-                </decorator-screen>
             </widgets>
         </section>
     </screen>

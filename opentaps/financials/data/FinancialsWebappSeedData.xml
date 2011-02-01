@@ -45,6 +45,33 @@
 
 <!-- Shortcut groups -->
 
+<!-- Receivables shortcuts -->
+
+<!-- Employees shortcuts -->
+<OpentapsShortcutGroup applicationId="financials" tabId="employees" groupId="financialsEmployees" sequenceNum="010" uiLabel="FinancialsPaychecks"/>
+<OpentapsShortcut shortcutId="findPaychecks" groupId="financialsEmployees" sequenceNum="010" uiLabel="FinancialsFindPaycheck"
+                  linkUrl="findPaycheck" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createPaychecks" groupId="financialsEmployees" sequenceNum="020" uiLabel="FinancialsCreatePaycheck"
+                  linkUrl="createPaycheckForm" securityModule="" securityAction=""/>
+
+<!-- Partners shortcuts -->
+<!-- Invoices group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="partners" groupId="financialsPartnersInvoices" sequenceNum="010" uiLabel="AccountingInvoices"/>
+<OpentapsShortcut shortcutId="findPartnerInvoices" groupId="financialsPartnersInvoices" sequenceNum="010" uiLabel="FinancialsFindPartnerInvoices"
+                  linkUrl="findPartnerInvoices" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createPartnerInvoices" groupId="financialsPartnersInvoices" sequenceNum="020" uiLabel="FinancialsCreatePartnerInvoice"
+                  linkUrl="createPartnerInvoiceForm" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="invoicePartners" groupId="financialsPartnersInvoices" sequenceNum="030" uiLabel="FinancialsInvoicePartners"
+                  linkUrl="invoicePartnersForm" securityModule="" securityAction=""/>
+
+<!-- Agreements group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="partners" groupId="financialsPartnersAgreements" sequenceNum="020" uiLabel="AccountingAgreements"/>
+<OpentapsShortcut shortcutId="findPartnerAgreements" groupId="financialsPartnersAgreements" sequenceNum="010" uiLabel="FinancialsFindPartnerAgreements"
+                  linkUrl="findPartnerAgreements" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createPartnerAgreements" groupId="financialsPartnersAgreements" sequenceNum="020" uiLabel="FinancialsCreatePartnerAgreement"
+                  linkUrl="createPartnerAgreement" securityModule="" securityAction=""/>
+
+
 <!-- Transactions shortcuts -->
 <OpentapsShortcutGroup applicationId="financials" tabId="transactions" groupId="financialsTransactions" sequenceNum="010"/>
 <OpentapsShortcut shortcutId="findTransactions" groupId="financialsTransactions" sequenceNum="010" uiLabel="FinancialsFindTransactions"

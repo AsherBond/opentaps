@@ -1995,8 +1995,8 @@
     <view-map name="myHomeMain" type="screen" page="component://financials/widget/financials/screens/myhome/MyHomeScreens.xml#myHome"/>
     <view-map name="receivablesMain" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#receivables"/>
     <view-map name="payablesMain" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#payables"/>
-    <view-map name="employeesMain" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#employees"/>
-    <view-map name="partnersMain" type="screen" page="component://financials/widget/financials/screens/partners/PartnerScreens.xml#partners"/>
+    <view-map name="employeesMain" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#findPaycheck"/>
+    <view-map name="partnersMain" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#findPartnerInvoices"/>
     <view-map name="transactionsMain" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#transactions"/>
     <view-map name="reportsMain" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#reports"/>
     <view-map name="configurationMain" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#listGlAccounts"/>
