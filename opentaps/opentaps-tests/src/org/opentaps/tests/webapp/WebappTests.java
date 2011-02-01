@@ -130,7 +130,7 @@ public class WebappTests extends OpentapsTestCase {
      * @throws Exception
      */
     public void testBasicGetTabList() throws Exception {
-        // testapp1
+        // 1. testapp1
         WebAppDomainInterface webAppDomain = domainsDirectory.getWebAppDomain();
         WebAppRepositoryInterface webappRepository = webAppDomain.getWebAppRepository();
         Map<String, Object> context = FastMap.newInstance();
@@ -138,102 +138,39 @@ public class WebappTests extends OpentapsTestCase {
         OpentapsWebApps webapp1 = webappRepository.getWebAppById("testapp1");
         List<? extends OpentapsWebAppTab> tabs = webappRepository.getWebAppTabs(webapp1, context);
 
-        boolean hasTab1 = false;
-        boolean hasTab2 = false;
-        boolean hasTab3 = false;
+        // the tabs list for testapp1 includes testtab11, testtab12 and testtab13
+        checkTabs(tabs, Arrays.asList("testtab11", "testtab12", "testtab13"), "testapp1");
 
-        List<String> expectedList = Arrays.asList("testtab11", "testtab12", "testtab13");
-        List<String> actualList = new ArrayList<String>();
-
-        for (OpentapsWebAppTab tab : tabs) {
-            if (tab.getTabId().equals("testtab11")) {
-                hasTab1 = true;
-            } else if (tab.getTabId().equals("testtab12")) {
-                hasTab2 = true;
-            } else if (tab.getTabId().equals("testtab13")) {
-                hasTab3 = true;
-            }
-            actualList.add(tab.getTabId());
-        }
-
-        assertTrue("Could not find tab [testtab11] in the [testapp1] ", hasTab1);
-        assertTrue("Could not find tab [testtab12] in the [testapp1] ", hasTab2);
-        assertTrue("Could not find tab [testtab13] in the [testapp1] ", hasTab3);
-
-        assertEquals("Tabs includes not only the expected tabs of the [testapp1] ",actualList, expectedList, false);
-
+        // testtab11 not have a group
         OpentapsWebAppTab tab = webappRepository.getTabById("testapp1", "testtab11");
         List<OpentapsShortcutGroup> groups = webappRepository.getShortcutGroups(tab, context);
 
         assertEquals("The [testtab11] in the [testapp1] not have a group", groups.size(), 0);
 
+        // testtab12 not have a group
         tab = webappRepository.getTabById("testapp1", "testtab12");
         groups = webappRepository.getShortcutGroups(tab, context);
 
         assertEquals("The [testtab12] in the [testapp1] not have a group", groups.size(), 0);
 
+        // testtab13 not have a group
         tab = webappRepository.getTabById("testapp1", "testtab13");
         groups = webappRepository.getShortcutGroups(tab, context);
 
         assertEquals("The [testtab13] in the [testapp1] not have a group", groups.size(), 0);
 
-        // testapp2
+        // 2. testapp2
         OpentapsWebApps webapp2 = webappRepository.getWebAppById("testapp2");
         tabs = webappRepository.getWebAppTabs(webapp2, context);
 
-        hasTab1 = false;
-        hasTab2 = false;
-
-        expectedList = Arrays.asList("testtab21", "testtab22");
-        actualList.clear();
-
-        for (OpentapsWebAppTab tab2 : tabs) {
-            if (tab2.getTabId().equals("testtab21")) {
-                hasTab1 = true;
-            } else if (tab2.getTabId().equals("testtab22")) {
-                hasTab2 = true;
-            }
-            actualList.add(tab2.getTabId());
-        }
-
-        assertTrue("Could not find tab [testtab21] in the [testapp2] ", hasTab1);
-        assertTrue("Could not find tab [testtab22] in the [testapp2] ", hasTab2);
-
-        assertEquals("Tabs includes not only the expected tabs of the [testapp2] ",actualList, expectedList, false);
-
-        tab = webappRepository.getTabById("testapp2", "testtab21");
-        groups = webappRepository.getShortcutGroups(tab, context);
-
-        boolean hasGroup1 = false;
-        boolean hasGroup2 = false;
-
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group2-21-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group2-21-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group2-21-1] in the [testapp2] [testtab21]", hasGroup1);
-        assertTrue("Could not find group [group2-21-2] in the [testapp2] [testtab21]", hasGroup2);
+        // the tabs list for testapp2 includes testtab21 and testtab22
+        checkTabs(tabs, Arrays.asList("testtab21", "testtab22"), "testapp2");
 
         tab = webappRepository.getTabById("testapp2", "testtab22");
         groups = webappRepository.getShortcutGroups(tab, context);
 
-        hasGroup1 = false;
-        hasGroup2 = false;
-
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group2-22-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group2-22-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group2-22-1] in the [testapp2] [testtab22]", hasGroup1);
-        assertTrue("Could not find group [group2-22-2] in the [testapp2] [testtab22]", hasGroup2);
+        // the groups list for testtab22 appears group1 and group2
+        checkGroups(groups, Arrays.asList("group2-22-1", "group2-22-2"), "testtab22");
     }
 
     /**
@@ -256,7 +193,7 @@ public class WebappTests extends OpentapsTestCase {
      * @throws Exception
      */
     public void testPermissionCheckOnGetTabList() throws Exception {
-        // testuser1
+        // 1. testuser1
         GenericValue testuser1 = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "testuser1"));
 
         DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(testuser1));
@@ -268,260 +205,99 @@ public class WebappTests extends OpentapsTestCase {
         OpentapsWebApps webapp3 = webappRepository.getWebAppById("testapp3");
         List<? extends OpentapsWebAppTab> tabs = webappRepository.getWebAppTabs(webapp3, context);
 
-        boolean hasTab1 = false;
-        boolean hasTab2 = false;
-        boolean hasTab3 = false;
-
-        List<String> expectedList = Arrays.asList("testtab31", "testtab33");
-        List<String> actualList = new ArrayList<String>();
-
-        for (OpentapsWebAppTab tab : tabs) {
-            if (tab.getTabId().equals("testtab31")) {
-                hasTab1 = true;
-            } else if (tab.getTabId().equals("testtab32")) {
-                hasTab2 = true;
-            } else if (tab.getTabId().equals("testtab33")) {
-                hasTab3 = true;
-            }
-            actualList.add(tab.getTabId());
-        }
-
-        assertTrue("Could not find tab [testtab31] in the [testapp3] for [testuser1]", hasTab1);
-        assertFalse("Found tab [testtab32] in the [testapp3] for [testuser1]", hasTab2);
-        assertTrue("Could not find tab [testtab33] in the [testapp3] for [testuser1]", hasTab3);
-
-        assertEquals("Tabs includes not only the expected tabs of the [testapp3] for [testuser1]",actualList, expectedList, false);
+        // the tabs list for testapp3 includes testtab31 and testtab33
+        checkTabs(tabs, Arrays.asList("testtab31", "testtab33"), "testapp3");
 
         // test groups for testuser1 tab1
         OpentapsWebAppTab tab1 = webappRepository.getTabById("testapp3", "testtab31");
         List<OpentapsShortcutGroup> groups = webappRepository.getShortcutGroups(tab1, context);
 
-        boolean hasGroup1 = false;
-        boolean hasGroup2 = false;
-
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group3-31-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group3-31-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group3-31-1] in the [testapp3] [testtab31] for [testuser1]", hasGroup1);
-        assertTrue("Could not find group [group3-31-2] in the [testapp3] [testtab31] for [testuser1]", hasGroup2);
+        // the groups list for testtab31 appears group1 and group2
+        checkGroups(groups, Arrays.asList("group3-31-1", "group3-31-2"), "testtab31");
 
         // test groups for testuser1 tab2
         OpentapsWebAppTab tab2 = webappRepository.getTabById("testapp3", "testtab32");
         groups = webappRepository.getShortcutGroups(tab2, context);
 
-        hasGroup1 = false;
-        hasGroup2 = false;
-
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group3-32-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group3-32-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group3-32-1] in the [testapp3] [testtab32] for [testuser1]", hasGroup1);
-        assertFalse("Found group [group3-32-2] in the [testapp3] [testtab32] for [testuser1]", hasGroup2);
+        // the groups list for testtab32 appears only group1
+        checkGroups(groups, Arrays.asList("group3-32-1"), "testtab32");
 
         // test groups for testuser1 tab3
         OpentapsWebAppTab tab3 = webappRepository.getTabById("testapp3", "testtab33");
         groups = webappRepository.getShortcutGroups(tab3, context);
 
-        hasGroup1 = false;
-        hasGroup2 = false;
+        // the groups list for testtab33 appears group1 and group2
+        checkGroups(groups, Arrays.asList("group3-33-1", "group3-33-2"), "testtab33");
 
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group3-33-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group3-33-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group3-33-1] in the [testapp3] [testtab33] for [testuser1]", hasGroup1);
-        assertTrue("Could not find group [group3-33-2] in the [testapp3] [testtab33] for [testuser1]", hasGroup2);
-
-        // test tab for testuser2
+        // 2. testuser2
         GenericValue testuser2 = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "testuser2"));
 
         domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(testuser2));
         webAppDomain = domainLoader.loadDomainsDirectory().getWebAppDomain();
         webappRepository = webAppDomain.getWebAppRepository();
 
+        // test tab for testuser2
         webapp3 = webappRepository.getWebAppById("testapp3");
         tabs = webappRepository.getWebAppTabs(webapp3, context);
 
-        hasTab1 = false;
-        hasTab2 = false;
-        hasTab3 = false;
-
-        expectedList = Arrays.asList("testtab31", "testtab32");
-        actualList.clear();
-
-        for (OpentapsWebAppTab tab : tabs) {
-            if (tab.getTabId().equals("testtab31")) {
-                hasTab1 = true;
-            } else if (tab.getTabId().equals("testtab32")) {
-                hasTab2 = true;
-            } else if (tab.getTabId().equals("testtab33")) {
-                hasTab3 = true;
-            }
-            actualList.add(tab.getTabId());
-        }
-
-        assertTrue("Could not find tab [testtab31] in the [testapp3] for [testuser2]", hasTab1);
-        assertTrue("Could not find tab [testtab32] in the [testapp3] for [testuser2]", hasTab2);
-        assertFalse("Found tab [testtab33] in the [testapp3] for [testuser2]", hasTab3);
-
-        assertEquals("Tabs includes not only the expected tabs of the [testapp3] for [testuser2]",actualList, expectedList, false);
+        // the tabs list for testapp3 includes testtab31 and testtab32
+        checkTabs(tabs, Arrays.asList("testtab31", "testtab32"), "testapp3");
 
         // test groups for testuser2 tab1
         tab1 = webappRepository.getTabById("testapp3", "testtab31");
         groups = webappRepository.getShortcutGroups(tab1, context);
 
-        hasGroup1 = false;
-        hasGroup2 = false;
-
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group3-31-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group3-31-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group3-31-1] in the [testapp3] [testtab31] for [testuser2]", hasGroup1);
-        assertFalse("Found group [group3-31-2] in the [testapp3] [testtab31] for [testuser2]", hasGroup2);
+        // the groups list for testtab31 appears only group1
+        checkGroups(groups, Arrays.asList("group3-31-1"), "testtab31");
 
         // test groups for testuser2 tab2
         tab2 = webappRepository.getTabById("testapp3", "testtab32");
         groups = webappRepository.getShortcutGroups(tab2, context);
 
-        hasGroup1 = false;
-        hasGroup2 = false;
-
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group3-32-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group3-32-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group3-32-1] in the [testapp3] [testtab32] for [testuser2]", hasGroup1);
-        assertTrue("Could not find group [group3-32-2] in the [testapp3] [testtab32] for [testuser2]", hasGroup2);
+        // the groups list for testtab32 appears group1 and group2
+        checkGroups(groups, Arrays.asList("group3-32-1", "group3-32-2"), "testtab32");
 
         // test groups for testuser2 tab3
         tab3 = webappRepository.getTabById("testapp3", "testtab33");
         groups = webappRepository.getShortcutGroups(tab3, context);
 
-        hasGroup1 = false;
-        hasGroup2 = false;
+        // the groups list for testtab33 appears only group1
+        checkGroups(groups, Arrays.asList("group3-33-1"), "testtab33");
 
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group3-33-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group3-33-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group3-33-1] in the [testapp3] [testtab33] for [testuser2]", hasGroup1);
-        assertFalse("Found group [group3-33-2] in the [testapp3] [testtab33] for [testuser2]", hasGroup2);
-
-        // test tab for testuser3
+        // 3. testuser3
         GenericValue testuser3 = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "testuser3"));
 
         domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(testuser3));
         webAppDomain = domainLoader.loadDomainsDirectory().getWebAppDomain();
         webappRepository = webAppDomain.getWebAppRepository();
 
+        // test tab for testuser3
         webapp3 = webappRepository.getWebAppById("testapp3");
         tabs = webappRepository.getWebAppTabs(webapp3, context);
 
-        hasTab1 = false;
-        hasTab2 = false;
-        hasTab3 = false;
-
-        expectedList = Arrays.asList("testtab31");
-        actualList.clear();
-
-        for (OpentapsWebAppTab tab : tabs) {
-            if (tab.getTabId().equals("testtab31")) {
-                hasTab1 = true;
-            } else if (tab.getTabId().equals("testtab32")) {
-                hasTab2 = true;
-            } else if (tab.getTabId().equals("testtab33")) {
-                hasTab3 = true;
-            }
-            actualList.add(tab.getTabId());
-        }
-
-        assertTrue("Could not find tab [testtab31] in the [testapp3] for [testuser3]", hasTab1);
-        assertFalse("Found tab [testtab32] in the [testapp3] for [testuser3]", hasTab2);
-        assertFalse("Found tab [testtab33] in the [testapp3] for [testuser3]", hasTab3);
-
-        assertEquals("Tabs includes not only the expected tabs of the [testapp3] for [testuser3]",actualList, expectedList, false);
+        // the tabs list for testapp3 includes only testtab31
+        checkTabs(tabs, Arrays.asList("testtab31"), "testapp3");
 
         // test groups for testuser3 tab1
         tab1 = webappRepository.getTabById("testapp3", "testtab31");
         groups = webappRepository.getShortcutGroups(tab1, context);
 
-        hasGroup1 = false;
-        hasGroup2 = false;
-
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group3-31-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group3-31-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group3-31-1] in the [testapp3] [testtab31] for [testuser3]", hasGroup1);
-        assertFalse("Found group [group3-31-2] in the [testapp3] [testtab31] for [testuser3]", hasGroup2);
+        // the groups list for testtab31 appears only group1
+        checkGroups(groups, Arrays.asList("group3-31-1"), "testtab31");
 
         // test groups for testuser3 tab2
         tab2 = webappRepository.getTabById("testapp3", "testtab32");
         groups = webappRepository.getShortcutGroups(tab2, context);
 
-        hasGroup1 = false;
-        hasGroup2 = false;
-
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group3-32-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group3-32-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group3-32-1] in the [testapp3] [testtab32] for [testuser3]", hasGroup1);
-        assertFalse("Found group [group3-32-2] in the [testapp3] [testtab32] for [testuser3]", hasGroup2);
+        // the groups list for testtab32 appears only group1
+        checkGroups(groups, Arrays.asList("group3-32-1"), "testtab32");
 
         // test groups for testuser3 tab3
         tab3 = webappRepository.getTabById("testapp3", "testtab33");
         groups = webappRepository.getShortcutGroups(tab3, context);
 
-        hasGroup1 = false;
-        hasGroup2 = false;
-
-        for (OpentapsShortcutGroup group : groups) {
-            if (group.getGroupId().equalsIgnoreCase("group3-33-1")) {
-                hasGroup1 = true;
-            } else if (group.getGroupId().equalsIgnoreCase("group3-33-2")) {
-                hasGroup2 = true;
-            }
-        }
-
-        assertTrue("Could not find group [group3-33-1] in the [testapp3] [testtab33] for [testuser3]", hasGroup1);
-        assertFalse("Found group [group3-33-2] in the [testapp3] [testtab33] for [testuser3]", hasGroup2);
-
+        // the groups list for testtab33 appears only group1
+        checkGroups(groups, Arrays.asList("group3-33-1"), "testtab33");
     }
 
     /**
@@ -675,7 +451,7 @@ public class WebappTests extends OpentapsTestCase {
     /**
      * Comparison of actual and expected shortcuts group
      *
-     * @param groups groups List of the <code>OpentapsShortcutGroup</code>
+     * @param groups List of the <code>OpentapsShortcutGroup</code>
      * @param expectedGroups List of the expected Groups Id
      * @param tabId an <code>OpentapsWebAppTab</code> Id
      */
@@ -687,6 +463,23 @@ public class WebappTests extends OpentapsTestCase {
         }
 
         assertEquals("Actual groups do not match the expected in the ["+tabId+"] ",actualGroups, expectedGroups, false);
+    }
+
+    /**
+     * Comparison of actual and expected tabs
+     *
+     * @param tabs List of the <code>OpentapsWebAppTab</code>
+     * @param expectedTabs List of the expected Tabs Id
+     * @param appId an <code>OpentapsWebApps</code> Id
+     */
+    private void checkTabs(List<? extends OpentapsWebAppTab> tabs, List<String> expectedTabs, String appId) {
+        List<String> actualTabs = new ArrayList<String>();
+
+        for (OpentapsWebAppTab tab : tabs) {
+            actualTabs.add(tab.getTabId());
+        }
+
+        assertEquals("Actual tabs do not match the expected in the ["+appId+"] ",actualTabs, expectedTabs, false);
     }
 
     /**
