@@ -2511,6 +2511,9 @@ public class ShoppingCartItem implements java.io.Serializable {
         String supplierProductName = null;
 
         if (supplierProduct != null) {
+            if (UtilValidate.isNotEmpty(supplierProduct.getString("supplierProductId"))) {
+                itemDescription.append(supplierProduct.getString("supplierProductId")).append(" ");
+            }
             supplierProductName = supplierProduct.getString("supplierProductName");
         }
         if (UtilValidate.isEmpty(supplierProductName)) {
