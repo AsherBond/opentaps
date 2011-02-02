@@ -18,66 +18,69 @@
 -->
 
 <entity-engine-xml>
-    <!-- This is necessary so that can runing WebappTests -->
+    <!-- Test seed data for the WebappTests -->
+
     <OpentapsWebApps applicationId="testapp1"/>
+      <OpentapsWebAppTab applicationId="testapp1" tabId="testtab11"/>
+      <OpentapsWebAppTab applicationId="testapp1" tabId="testtab12"/>
+      <OpentapsWebAppTab applicationId="testapp1" tabId="testtab13"/>
+
     <OpentapsWebApps applicationId="testapp2"/>
+      <OpentapsWebAppTab applicationId="testapp2" tabId="testtab21"/>
+        <OpentapsShortcutGroup groupId="group2-21-1" applicationId="testapp2" tabId="testtab21"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group2-21-1"/>
+        <OpentapsShortcutGroup groupId="group2-21-2" applicationId="testapp2" tabId="testtab21"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group2-21-2"/>
+          <OpentapsShortcut shortcutId="shortcut2" groupId="group2-21-2"/>
+      <OpentapsWebAppTab applicationId="testapp2" tabId="testtab22"/>
+        <OpentapsShortcutGroup groupId="group2-22-1" applicationId="testapp2" tabId="testtab22"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group2-22-1"/>
+          <OpentapsShortcut shortcutId="shortcut2" groupId="group2-22-1"/>
+        <OpentapsShortcutGroup groupId="group2-22-2" applicationId="testapp2" tabId="testtab22"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group2-22-2"/>
+          <OpentapsShortcut shortcutId="shortcut2" groupId="group2-22-2"/>
+          <OpentapsShortcut shortcutId="shortcut3" groupId="group2-22-2"/>
+
     <OpentapsWebApps applicationId="testapp3"/>
+      <OpentapsWebAppTab applicationId="testapp3" tabId="testtab31"/>
+        <OpentapsShortcutGroup groupId="group3-31-1" applicationId="testapp3" tabId="testtab31"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group3-31-1"/>
+        <OpentapsShortcutGroup groupId="group3-31-2" applicationId="testapp3" tabId="testtab31" securityModule="TESTAPP3T1G2" securityAction="VIEW"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group3-31-2"/>
+      <OpentapsWebAppTab applicationId="testapp3" tabId="testtab32" securityModule="TESTAPP3T2" securityAction="VIEW"/>
+        <OpentapsShortcutGroup groupId="group3-32-1" applicationId="testapp3" tabId="testtab32"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group3-32-1"/>
+        <OpentapsShortcutGroup groupId="group3-32-2" applicationId="testapp3" tabId="testtab32" securityModule="TESTAPP3T2G2" securityAction="VIEW"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group3-32-2"/>
+      <OpentapsWebAppTab applicationId="testapp3" tabId="testtab33" securityModule="TESTAPP3T3" securityAction="VIEW"/>
+        <OpentapsShortcutGroup groupId="group3-33-1" applicationId="testapp3" tabId="testtab33"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group3-33-1"/>
+        <OpentapsShortcutGroup groupId="group3-33-2" applicationId="testapp3" tabId="testtab33" securityModule="TESTAPP3T3G2" securityAction="VIEW"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group3-33-2"/>
+
     <OpentapsWebApps applicationId="testapp4"/>
+      <OpentapsWebAppTab applicationId="testapp4" tabId="testtab41"/>
+        <OpentapsShortcutGroup groupId="group4-41-1" applicationId="testapp4" tabId="testtab41"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group4-41-1"/>
+        <OpentapsShortcutGroup groupId="group4-41-2" applicationId="testapp4" tabId="testtab41"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group4-41-2" handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasCart"/>
+          <OpentapsShortcut shortcutId="shortcut2" groupId="group4-41-2" handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasNoCart"/>
+      <OpentapsWebAppTab applicationId="testapp4" tabId="testtab42"/>
+        <OpentapsShortcutGroup groupId="group4-42-1" applicationId="testapp4" tabId="testtab42" handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkBoolean" handlerParameter="hasGroup1"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group4-42-1" handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkBoolean" handlerParameter="hasShortcut1"/>
+          <OpentapsShortcut shortcutId="shortcut2" groupId="group4-42-1" handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkBoolean" handlerParameter="hasShortcut2"/>
+        <OpentapsShortcutGroup groupId="group4-42-2" applicationId="testapp4" tabId="testtab42"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group4-42-2"/>
+          <OpentapsShortcut shortcutId="shortcut2" groupId="group4-42-2" handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="TEST_HANDLER:VALUE_1:VALUE_1"/>
+          <OpentapsShortcut shortcutId="shortcut3" groupId="group4-42-2" handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="TEST_HANDLER:VALUE_2:VALUE_1"/>
+
     <OpentapsWebApps applicationId="testapp5"/>
+      <OpentapsWebAppTab applicationId="testapp5" tabId="testtab51" uiLabel="testtab51 ${foo51}" linkUrl="foo${bar51}"/>
+        <OpentapsShortcutGroup groupId="group5-51-1" applicationId="testapp5" tabId="testtab51" uiLabel="group1${foo511}"/>
+          <OpentapsShortcut shortcutId="shortcut1" groupId="group5-51-1" uiLabel="shortcut1${s1}" linkUrl="foo${s11}"/>
+          <OpentapsShortcut shortcutId="shortcut2" groupId="group5-51-1" uiLabel="shortcut2${s2}" linkUrl="foo${s22}"/>
+      <OpentapsWebAppTab applicationId="testapp5" tabId="testtab52" uiLabel="testtab52 ${foo52}" linkUrl="foo${bar52}"/>
 
-    <OpentapsWebAppTab applicationId="testapp1" tabId="testtab11"/>
-    <OpentapsWebAppTab applicationId="testapp1" tabId="testtab12"/>
-    <OpentapsWebAppTab applicationId="testapp1" tabId="testtab13"/>
-    <OpentapsWebAppTab applicationId="testapp2" tabId="testtab21"/>
-    <OpentapsWebAppTab applicationId="testapp2" tabId="testtab22"/>
-    <OpentapsWebAppTab applicationId="testapp3" tabId="testtab31"/>
-    <OpentapsWebAppTab applicationId="testapp3" tabId="testtab32" securityModule="TESTAPP3T2" securityAction="VIEW"/>
-    <OpentapsWebAppTab applicationId="testapp3" tabId="testtab33" securityModule="TESTAPP3T3" securityAction="VIEW"/>
-    <OpentapsWebAppTab applicationId="testapp4" tabId="testtab41"/>
-    <OpentapsWebAppTab applicationId="testapp4" tabId="testtab42"/>
-    <OpentapsWebAppTab applicationId="testapp5" tabId="testtab51" uiLabel="testtab51 ${foo51}" linkUrl="foo${bar51}"/>
-    <OpentapsWebAppTab applicationId="testapp5" tabId="testtab52" uiLabel="testtab52 ${foo52}" linkUrl="foo${bar52}"/>
-
-    <OpentapsShortcutGroup groupId="group2-21-1" applicationId="testapp2" tabId="testtab21"/>
-    <OpentapsShortcutGroup groupId="group2-21-2" applicationId="testapp2" tabId="testtab21"/>
-    <OpentapsShortcutGroup groupId="group2-22-1" applicationId="testapp2" tabId="testtab22"/>
-    <OpentapsShortcutGroup groupId="group2-22-2" applicationId="testapp2" tabId="testtab22"/>
-    <OpentapsShortcutGroup groupId="group3-31-1" applicationId="testapp3" tabId="testtab31"/>
-    <OpentapsShortcutGroup groupId="group3-31-2" applicationId="testapp3" tabId="testtab31" securityModule="TESTAPP3T1G2" securityAction="VIEW"/>
-    <OpentapsShortcutGroup groupId="group3-32-1" applicationId="testapp3" tabId="testtab32"/>
-    <OpentapsShortcutGroup groupId="group3-32-2" applicationId="testapp3" tabId="testtab32" securityModule="TESTAPP3T2G2" securityAction="VIEW"/>
-    <OpentapsShortcutGroup groupId="group3-33-1" applicationId="testapp3" tabId="testtab33"/>
-    <OpentapsShortcutGroup groupId="group3-33-2" applicationId="testapp3" tabId="testtab33" securityModule="TESTAPP3T3G2" securityAction="VIEW"/>
-    <OpentapsShortcutGroup groupId="group4-41-1" applicationId="testapp4" tabId="testtab41"/>
-    <OpentapsShortcutGroup groupId="group4-41-2" applicationId="testapp4" tabId="testtab41"/>
-    <OpentapsShortcutGroup groupId="group4-42-1" applicationId="testapp4" tabId="testtab42" handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkBoolean" handlerParameter="hasGroup1"/>
-    <OpentapsShortcutGroup groupId="group4-42-2" applicationId="testapp4" tabId="testtab42"/>
-    <OpentapsShortcutGroup groupId="group5-51-1" applicationId="testapp5" tabId="testtab51" uiLabel="group1${foo511}"/>
-
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group2-21-1"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group2-21-2"/>
-    <OpentapsShortcut shortcutId="shortcut2" groupId="group2-21-2"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group2-22-1"/>
-    <OpentapsShortcut shortcutId="shortcut2" groupId="group2-22-1"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group2-22-2"/>
-    <OpentapsShortcut shortcutId="shortcut2" groupId="group2-22-2"/>
-    <OpentapsShortcut shortcutId="shortcut3" groupId="group2-22-2"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group3-31-1"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group3-31-2"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group3-32-1"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group3-32-2"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group3-33-1"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group3-33-2"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group4-41-1"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group4-41-2" handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkHasCart"/>
-    <OpentapsShortcut shortcutId="shortcut2" groupId="group4-41-2" handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkHasNoCart"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group4-42-1" handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkBoolean" handlerParameter="hasShortcut1"/>
-    <OpentapsShortcut shortcutId="shortcut2" groupId="group4-42-1" handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkBoolean" handlerParameter="hasShortcut2"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group4-42-2"/>
-    <OpentapsShortcut shortcutId="shortcut2" groupId="group4-42-2" handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="TEST_HANDLER:VALUE_1:VALUE_1"/>
-    <OpentapsShortcut shortcutId="shortcut3" groupId="group4-42-2" handlerMethod="org.opentaps.common.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="TEST_HANDLER:VALUE_2:VALUE_1"/>
-    <OpentapsShortcut shortcutId="shortcut1" groupId="group5-51-1" uiLabel="shortcut1${s1}" linkUrl="foo${s11}"/>
-    <OpentapsShortcut shortcutId="shortcut2" groupId="group5-51-1" uiLabel="shortcut2${s2}" linkUrl="foo${s22}"/>
 
     <SecurityPermission permissionId="TESTAPP3T1G2_VIEW"/>
     <SecurityPermission permissionId="TESTAPP3T2_VIEW"/>
@@ -85,23 +88,21 @@
     <SecurityPermission permissionId="TESTAPP3T3_VIEW"/>
     <SecurityPermission permissionId="TESTAPP3T3G2_VIEW"/>
     
-    <SecurityGroup groupId="TESTAPP3T1"/>
-    <SecurityGroup groupId="TESTAPP3T2"/>
-    <SecurityGroup groupId="TESTAPP3T3"/>
+    <SecurityGroup groupId="TESTAPP3_U1"/>
+    <SecurityGroup groupId="TESTAPP3_U2"/>
 
-    <SecurityGroupPermission groupId="TESTAPP3T1" permissionId="TESTAPP3T1G2_VIEW"/>
-    <SecurityGroupPermission groupId="TESTAPP3T2" permissionId="TESTAPP3T2_VIEW"/>
-    <SecurityGroupPermission groupId="TESTAPP3T2" permissionId="TESTAPP3T2G2_VIEW"/>
-    <SecurityGroupPermission groupId="TESTAPP3T3" permissionId="TESTAPP3T3_VIEW"/>
-    <SecurityGroupPermission groupId="TESTAPP3T3" permissionId="TESTAPP3T3G2_VIEW"/>
+    <SecurityGroupPermission groupId="TESTAPP3_U1" permissionId="TESTAPP3T3_VIEW"/>
+    <SecurityGroupPermission groupId="TESTAPP3_U1" permissionId="TESTAPP3T1G2_VIEW"/>
+
+    <SecurityGroupPermission groupId="TESTAPP3_U2" permissionId="TESTAPP3T2_VIEW"/>
+    <SecurityGroupPermission groupId="TESTAPP3_U2" permissionId="TESTAPP3T2G2_VIEW"/>
 
     <UserLogin userLoginId="testuser1" partyId="admin"/>
     <UserLogin userLoginId="testuser2" partyId="admin"/>
     <UserLogin userLoginId="testuser3" partyId="admin"/>
 
-    <UserLoginSecurityGroup userLoginId="testuser1" groupId="TESTAPP3T1" fromDate="2005-12-01 00:00:00"/>
-    <UserLoginSecurityGroup userLoginId="testuser1" groupId="TESTAPP3T3" fromDate="2005-12-01 00:00:00"/>
-    <UserLoginSecurityGroup userLoginId="testuser2" groupId="TESTAPP3T2" fromDate="2005-12-01 00:00:00"/>
+    <UserLoginSecurityGroup userLoginId="testuser1" groupId="TESTAPP3_U1" fromDate="2005-12-01 00:00:00"/>
+    <UserLoginSecurityGroup userLoginId="testuser2" groupId="TESTAPP3_U2" fromDate="2005-12-01 00:00:00"/>
 
     <ViewPrefType viewPrefTypeId="TEST_HANDLER" application="test" applicationSection="test"/>
     <ViewPreference viewPrefTypeId="TEST_HANDLER" userLoginId="admin" viewPrefValueTypeId="VPREF_VALTYPE_STRING" viewPrefString="VALUE_2"/>    

@@ -20,11 +20,11 @@ package org.opentaps.tests.webapp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.base.entities.OpentapsShortcut;
@@ -40,10 +40,13 @@ import org.opentaps.tests.OpentapsTestCase;
 
 /**
  * Webapp related tests.
+ * See WebappTestData.xml seed.
  */
 public class WebappTests extends OpentapsTestCase {
 
     private static final String MODULE = WebappTests.class.getName();
+
+    private static final List<String> EMPTY_SHORTCUTS_LIST = (List<String>) new ArrayList<String>();
 
     @Override
     public void setUp() throws Exception {
@@ -55,68 +58,93 @@ public class WebappTests extends OpentapsTestCase {
         super.tearDown();
     }
 
-    /*
-      Those test assume some test seed data has been added:
-        testapp1
-          testtab11
-          testtab12
-          testtab13
-        testapp2
-          testtab21
-            group1
-              shortcut 1
-            group2
-              shortcut 1
-              shortcut 2
-          testtab22
-            group1
-              shortcut 1
-              shortcut 2
-            group2
-              shortcut 1
-              shortcut 2
-              shortcut 3
-        testapp3 (see permission test)
-          testtab31
-            group1
-              shortcut 1
-            group2
-              shortcut 1
-          testtab32
-            group1
-              shortcut 1
-            group2
-              shortcut 1
-          testtab33
-            group1
-              shortcut 1
-            group2
-              shortcut 1
-        testapp4 (see handler test)
-          testtab41
-            group1
-              shortcut 1
-            group2
-              shortcut 1 org.opentaps.common.handlers.CommonHandlers.checkHasCart
-              shortcut 2 org.opentaps.common.handlers.CommonHandlers.checkHasNoCart
-          testtab42
-            group1 org.opentaps.common.handlers.CommonHandlers.checkBoolean hasGroup1
-              shortcut 1 org.opentaps.common.handlers.CommonHandlers.checkBoolean hasShortcut1
-              shortcut 2 org.opentaps.common.handlers.CommonHandlers.checkBoolean hasShortcut2
-            group2
-              shortcut 1
-              shortcut 2 org.opentaps.common.handlers.CommonHandlers.checkViewPreferenceForTab TEST_HANDLER:VALUE_1:VALUE_1
-              shortcut 3 org.opentaps.common.handlers.CommonHandlers.checkViewPreferenceForTab TEST_HANDLER:VALUE_2:VALUE_1
-        testapp5 (See expansion test)
-          testtab51 label = "testtab51 ${foo51}"; linkUrl = "foo${bar51}"
-            group1 label = "group1${foo511}";
-              shortcut1 label = "shortcut1${s1}"; linkUrl = "foo${s11}"
-              shortcut2 label = "shortcut2${s2}"; linkUrl = "foo${s22}"
-          testtab52 label = "testtab52 ${foo52}"; linkUrl = "foo${bar52}"
-
-     */
+    // Utility methods
 
     /**
+     * Comparison of actual and expected shortcuts group.
+     *
+     * @param groups List of <code>OpentapsShortcutGroup</code>
+     * @param expectedGroups List of the expected Groups Id
+     * @param tabId an <code>OpentapsWebAppTab</code> Id
+     */
+    private void checkGroups(List<OpentapsShortcutGroup> groups, List<String> expectedGroups) {
+        if (expectedGroups == null) {
+            expectedGroups = new ArrayList<String>();
+        }
+        List<String> actualGroups = new ArrayList<String>();
+        for (OpentapsShortcutGroup group : groups) {
+            actualGroups.add(group.getGroupId());
+        }
+        assertEquals("Actual groups do not match the expected", actualGroups, expectedGroups, false);
+    }
+
+    /**
+     * Comparison of actual and expected tabs.
+     *
+     * @param tabs List of <code>OpentapsWebAppTab</code>
+     * @param expectedTabs List of the expected Tabs Id
+     * @param appId an <code>OpentapsWebApps</code> Id
+     */
+    private void checkTabs(List<? extends OpentapsWebAppTab> tabs, List<String> expectedTabs) {
+        if (expectedTabs == null) {
+            expectedTabs = new ArrayList<String>();
+        }
+        List<String> actualTabs = new ArrayList<String>();
+        for (OpentapsWebAppTab tab : tabs) {
+            actualTabs.add(tab.getTabId());
+        }
+        assertEquals("Actual tabs do not match the expected", actualTabs, expectedTabs, false);
+    }
+
+    /**
+     * Comparison of actual and expected shortcuts.
+     *
+     * @param groups List of <code>OpentapsShortcutGroup</code>
+     * @param expectedShortcuts Map of the <code>OpentapsShortcutGroup</code> Id and List of the expected Shortcuts Id
+     * @param appId an <code>OpentapsWebApps</code> Id
+     */
+    private void checkShortcuts(List<OpentapsShortcutGroup> groups, Map<String, List<String>> expectedShortcuts) {
+        if (expectedShortcuts == null) {
+            expectedShortcuts = new HashMap<String, List<String>>();
+        }
+
+        List<String> expectedShortcutsIds;
+        List<String> actualShortcutsIds = new ArrayList<String>();
+
+        for (OpentapsShortcutGroup group : groups) {
+            expectedShortcutsIds =  expectedShortcuts.get(group.getGroupId());
+            if (expectedShortcutsIds == null) {
+                expectedShortcutsIds = new ArrayList<String>();
+            }
+            actualShortcutsIds.clear();
+            List<? extends OpentapsShortcut> actualShortcuts = group.getAllowedShortcuts();
+
+            for (OpentapsShortcut shortcut : actualShortcuts) {
+                actualShortcutsIds.add(shortcut.getShortcutId());
+            }
+            assertEquals("Actual shortcuts do not match the expected in group [" + group.getGroupId() + "]", actualShortcutsIds, expectedShortcutsIds, false);
+        }
+    }
+
+    /**
+     * Loads a <code>WebAppRepositoryInterface</code> for a given user.
+     *
+     * @param userLoginId a <code>String</code> value
+     * @return a <code>WebAppRepositoryInterface</code> value
+     * @exception Exception if an error occurs
+     */
+    private WebAppRepositoryInterface getWebappRepository(String userLoginId) throws Exception {
+        GenericValue testuser1 = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", userLoginId));
+        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(testuser1));
+        WebAppDomainInterface webAppDomain = domainLoader.getDomainsDirectory().getWebAppDomain();
+        return webAppDomain.getWebAppRepository();
+    }
+
+    // Tests
+
+    /**
+     * Test basic functionality.
+     *
      * test that the webapp repository gives the correct tab list in each application :
      * OpentapsWebApps webapp1 = webappRepository.getWebAppById("testapp1")
      * tabs = webappRepository.getWebAppTabs(webapp1, map{})
@@ -127,7 +155,7 @@ public class WebappTests extends OpentapsTestCase {
      * -> test groups includes the corresponding groups
      * same for testapp2
      *
-     * @throws Exception
+     * @throws Exception if an error occurs
      */
     public void testBasicGetTabList() throws Exception {
         // 1. testapp1
@@ -138,43 +166,44 @@ public class WebappTests extends OpentapsTestCase {
         OpentapsWebApps webapp1 = webappRepository.getWebAppById("testapp1");
         List<? extends OpentapsWebAppTab> tabs = webappRepository.getWebAppTabs(webapp1, context);
 
-        // the tabs list for testapp1 includes testtab11, testtab12 and testtab13
-        checkTabs(tabs, Arrays.asList("testtab11", "testtab12", "testtab13"), "testapp1");
+        // check that the tabs for testapp1 are: testtab11, testtab12 and testtab13
+        checkTabs(tabs, Arrays.asList("testtab11", "testtab12", "testtab13"));
 
-        // testtab11 not have a group
+        // check the shortcut groups of each tab, here they all have no shortcut group
+        // testtab11
         OpentapsWebAppTab tab = webappRepository.getTabById("testapp1", "testtab11");
         List<OpentapsShortcutGroup> groups = webappRepository.getShortcutGroups(tab, context);
+        assertEquals("The [testtab11] in the [testapp1] should not have any shortcut group", groups.size(), 0);
 
-        assertEquals("The [testtab11] in the [testapp1] not have a group", groups.size(), 0);
-
-        // testtab12 not have a group
+        // testtab12
         tab = webappRepository.getTabById("testapp1", "testtab12");
         groups = webappRepository.getShortcutGroups(tab, context);
+        assertEquals("The [testtab12] in the [testapp1] should not have any shortcut group", groups.size(), 0);
 
-        assertEquals("The [testtab12] in the [testapp1] not have a group", groups.size(), 0);
-
-        // testtab13 not have a group
+        // testtab13
         tab = webappRepository.getTabById("testapp1", "testtab13");
         groups = webappRepository.getShortcutGroups(tab, context);
-
-        assertEquals("The [testtab13] in the [testapp1] not have a group", groups.size(), 0);
+        assertEquals("The [testtab13] in the [testapp1] should not have any shortcut group", groups.size(), 0);
 
         // 2. testapp2
         OpentapsWebApps webapp2 = webappRepository.getWebAppById("testapp2");
         tabs = webappRepository.getWebAppTabs(webapp2, context);
 
-        // the tabs list for testapp2 includes testtab21 and testtab22
-        checkTabs(tabs, Arrays.asList("testtab21", "testtab22"), "testapp2");
+        // check that the tabs for testapp2 are: testtab21 and testtab22
+        checkTabs(tabs, Arrays.asList("testtab21", "testtab22"));
 
         tab = webappRepository.getTabById("testapp2", "testtab22");
         groups = webappRepository.getShortcutGroups(tab, context);
 
-        // the groups list for testtab22 appears group1 and group2
-        checkGroups(groups, Arrays.asList("group2-22-1", "group2-22-2"), "testtab22");
+        // check that the groups for testtab22 are: group1 and group2, and check the shortcuts of each group
+        checkGroups(groups, Arrays.asList("group2-22-1", "group2-22-2"));
+        checkShortcuts(groups, UtilMisc.toMap("group2-22-1", Arrays.asList("shortcut1", "shortcut2"),
+                                              "group2-22-2", Arrays.asList("shortcut1", "shortcut2", "shortcut3")));
     }
 
     /**
-     * same as above but test for testapp3
+     * Test permission checking with testapp2.
+     *
      * the tab 1 requires no permission so it should always be listed
      *   group 1 requires no permission so it should always be listed
      *   group 2 requires TESTAPP3T1G2_VIEW
@@ -186,122 +215,99 @@ public class WebappTests extends OpentapsTestCase {
      *   group 2 requires TESTAPP3T3G2_VIEW
      *
      * test with various users:
-     * one having TESTAPP3T1G2_VIEW TESTAPP3T3G2_VIEW - testuser1
-     * one having TESTAPP3T2G2_VIEW                   - testuser2
-     * one having no specific permission              - testuser3
+     * one having TESTAPP3T1G2_VIEW, TESTAPP3T3_VIEW - testuser1
+     * one having TESTAPP3T2_VIEW, TESTAPP3T2G2_VIEW - testuser2
+     * one having no specific permission - testuser3
      *
-     * @throws Exception
+     * @throws Exception if an error occurs
      */
     public void testPermissionCheckOnGetTabList() throws Exception {
-        // 1. testuser1
-        GenericValue testuser1 = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "testuser1"));
-
-        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(testuser1));
-        WebAppDomainInterface webAppDomain = domainLoader.loadDomainsDirectory().getWebAppDomain();
-        WebAppRepositoryInterface webappRepository = webAppDomain.getWebAppRepository();
         Map<String, Object> context = FastMap.newInstance();
 
-        // test tab for testuser1
+        // 1. testuser1
+        WebAppRepositoryInterface webappRepository = getWebappRepository("testuser1");
         OpentapsWebApps webapp3 = webappRepository.getWebAppById("testapp3");
         List<? extends OpentapsWebAppTab> tabs = webappRepository.getWebAppTabs(webapp3, context);
 
-        // the tabs list for testapp3 includes testtab31 and testtab33
-        checkTabs(tabs, Arrays.asList("testtab31", "testtab33"), "testapp3");
+        // check that the tabs for testapp3 are: testtab31 and testtab33, this user does not have permission for testtab32
+        checkTabs(tabs, Arrays.asList("testtab31", "testtab33"));
 
         // test groups for testuser1 tab1
         OpentapsWebAppTab tab1 = webappRepository.getTabById("testapp3", "testtab31");
         List<OpentapsShortcutGroup> groups = webappRepository.getShortcutGroups(tab1, context);
+        checkGroups(groups, Arrays.asList("group3-31-1", "group3-31-2"));
+        checkShortcuts(groups, UtilMisc.toMap("group3-31-1", Arrays.asList("shortcut1"),
+                                              "group3-31-2", Arrays.asList("shortcut1")));
 
-        // the groups list for testtab31 appears group1 and group2
-        checkGroups(groups, Arrays.asList("group3-31-1", "group3-31-2"), "testtab31");
-
-        // test groups for testuser1 tab2
+        // test groups for testuser1 tab2, should be empty since this user does not have permission for testtab32
         OpentapsWebAppTab tab2 = webappRepository.getTabById("testapp3", "testtab32");
         groups = webappRepository.getShortcutGroups(tab2, context);
+        checkGroups(groups, null);
 
-        // the groups list for testtab32 appears only group1
-        checkGroups(groups, Arrays.asList("group3-32-1"), "testtab32");
-
-        // test groups for testuser1 tab3
+        // test groups for testuser1 tab3, only group 1 as this user does not have permission for the group 2
         OpentapsWebAppTab tab3 = webappRepository.getTabById("testapp3", "testtab33");
         groups = webappRepository.getShortcutGroups(tab3, context);
-
-        // the groups list for testtab33 appears group1 and group2
-        checkGroups(groups, Arrays.asList("group3-33-1", "group3-33-2"), "testtab33");
+        checkGroups(groups, Arrays.asList("group3-33-1"));
+        checkShortcuts(groups, UtilMisc.toMap("group3-33-1", Arrays.asList("shortcut1")));
 
         // 2. testuser2
-        GenericValue testuser2 = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "testuser2"));
-
-        domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(testuser2));
-        webAppDomain = domainLoader.loadDomainsDirectory().getWebAppDomain();
-        webappRepository = webAppDomain.getWebAppRepository();
+        webappRepository = getWebappRepository("testuser2");
 
         // test tab for testuser2
         webapp3 = webappRepository.getWebAppById("testapp3");
         tabs = webappRepository.getWebAppTabs(webapp3, context);
 
-        // the tabs list for testapp3 includes testtab31 and testtab32
-        checkTabs(tabs, Arrays.asList("testtab31", "testtab32"), "testapp3");
+        // check that the tabs for testapp3 are: testtab31 and testtab32, this user does not have permission for testtab33
+        checkTabs(tabs, Arrays.asList("testtab31", "testtab32"));
 
-        // test groups for testuser2 tab1
+        // test groups for testuser2 tab1, only group 1 has this user does not have permission for the group 2
         tab1 = webappRepository.getTabById("testapp3", "testtab31");
         groups = webappRepository.getShortcutGroups(tab1, context);
+        checkGroups(groups, Arrays.asList("group3-31-1"));
+        checkShortcuts(groups, UtilMisc.toMap("group3-31-1", Arrays.asList("shortcut1")));
 
-        // the groups list for testtab31 appears only group1
-        checkGroups(groups, Arrays.asList("group3-31-1"), "testtab31");
-
-        // test groups for testuser2 tab2
+        // test groups for testuser2 tab2, all groups are visible
         tab2 = webappRepository.getTabById("testapp3", "testtab32");
         groups = webappRepository.getShortcutGroups(tab2, context);
+        checkGroups(groups, Arrays.asList("group3-32-1", "group3-32-2"));
+        checkShortcuts(groups, UtilMisc.toMap("group3-32-1", Arrays.asList("shortcut1"),
+                                              "group3-32-2", Arrays.asList("shortcut1")));
 
-        // the groups list for testtab32 appears group1 and group2
-        checkGroups(groups, Arrays.asList("group3-32-1", "group3-32-2"), "testtab32");
-
-        // test groups for testuser2 tab3
+        // test groups for testuser2 tab3, empty since this user does not have permission
         tab3 = webappRepository.getTabById("testapp3", "testtab33");
         groups = webappRepository.getShortcutGroups(tab3, context);
-
-        // the groups list for testtab33 appears only group1
-        checkGroups(groups, Arrays.asList("group3-33-1"), "testtab33");
+        checkGroups(groups, null);
 
         // 3. testuser3
-        GenericValue testuser3 = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "testuser3"));
-
-        domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(testuser3));
-        webAppDomain = domainLoader.loadDomainsDirectory().getWebAppDomain();
-        webappRepository = webAppDomain.getWebAppRepository();
+        webappRepository = getWebappRepository("testuser3");
 
         // test tab for testuser3
         webapp3 = webappRepository.getWebAppById("testapp3");
         tabs = webappRepository.getWebAppTabs(webapp3, context);
 
-        // the tabs list for testapp3 includes only testtab31
-        checkTabs(tabs, Arrays.asList("testtab31"), "testapp3");
+        // check that the tabs for testapp3 are: only testtab31, this user does not have permission for testtab32 and testtab33
+        checkTabs(tabs, Arrays.asList("testtab31"));
 
-        // test groups for testuser3 tab1
+        // test groups for testuser3 tab1, includes only group 1 since the user has not permission for the group 2
         tab1 = webappRepository.getTabById("testapp3", "testtab31");
         groups = webappRepository.getShortcutGroups(tab1, context);
+        checkGroups(groups, Arrays.asList("group3-31-1"));
+        checkShortcuts(groups, UtilMisc.toMap("group3-31-1", Arrays.asList("shortcut1")));
 
-        // the groups list for testtab31 appears only group1
-        checkGroups(groups, Arrays.asList("group3-31-1"), "testtab31");
-
-        // test groups for testuser3 tab2
+        // test groups for testuser3 tab2, empty since the user has not permission for this tab
         tab2 = webappRepository.getTabById("testapp3", "testtab32");
         groups = webappRepository.getShortcutGroups(tab2, context);
+        checkGroups(groups, null);
 
-        // the groups list for testtab32 appears only group1
-        checkGroups(groups, Arrays.asList("group3-32-1"), "testtab32");
-
-        // test groups for testuser3 tab3
+        // test groups for testuser3 tab3, empty since the user has not permission for this tab
         tab3 = webappRepository.getTabById("testapp3", "testtab33");
         groups = webappRepository.getShortcutGroups(tab3, context);
-
-        // the groups list for testtab33 appears only group1
-        checkGroups(groups, Arrays.asList("group3-33-1"), "testtab33");
+        checkGroups(groups, null);
     }
 
     /**
-     * test with testapp4
+     * Test handler methods with testapp4.
+     *
      * will an empty context map:
      *    testtab41 / group2 / shortcut1 should not appear
      *    testtab42 / group1 should not appear
@@ -329,7 +335,7 @@ public class WebappTests extends OpentapsTestCase {
      *     testtab42 / group2 / shortcut3 should appear
      *   rest unchanged
      *
-     * @throws Exception
+     * @throws Exception if an error occurs
      */
     public void testHandlerMethods() throws Exception {
         // test with testapp4
@@ -340,26 +346,22 @@ public class WebappTests extends OpentapsTestCase {
 
         Map<String, Object> context = FastMap.newInstance();
 
-        // testtab41 / group2 / shortcut1 should not appear
+        // testtab41
         OpentapsWebAppTab tab = webappRepository.getTabById("testapp4", "testtab41");
         List<OpentapsShortcutGroup> groups = webappRepository.getShortcutGroups(tab, context);
+        // includes group1 and group2
+        checkGroups(groups, Arrays.asList("group4-41-1", "group4-41-2"));
+        // in group 2, shortcut 1 should not appear (needs a cart)
+        checkShortcuts(groups, UtilMisc.toMap("group4-41-1", Arrays.asList("shortcut1"),
+                                              "group4-41-2", Arrays.asList("shortcut2")));
 
-        // the shortcuts list for group4-41-2 should be empty
-        checkShortcuts(groups,  UtilMisc.toMap("group4-41-2", (List<String>) new ArrayList<String>()));
-
-        // testtab42 / group1 should not appear
+        // testtab42
         tab = webappRepository.getTabById("testapp4", "testtab42");
         groups = webappRepository.getShortcutGroups(tab, context);
-
-        // the groups list for testtab42 appears only group2
-        checkGroups(groups, Arrays.asList("group4-42-2"), "testtab42");
-
-        // testtab42 / group2 / shortcut3 should not appear
-        tab = webappRepository.getTabById("testapp4", "testtab42");
-        groups = webappRepository.getShortcutGroups(tab, context);
-
-        // the shortcuts list for group4-42-2 includes only shortcut1
-        checkShortcuts(groups,  UtilMisc.toMap("group4-42-2", Arrays.asList("shortcut1")));
+        // group1 should not appear (needs a hasGroup1 context value)
+        checkGroups(groups, Arrays.asList("group4-42-2"));
+        // in group2 / shortcut3 should not appear as it needs a view pref value, and shortcut2 needs a UserLogin in context
+        checkShortcuts(groups, UtilMisc.toMap("group4-42-2", Arrays.asList("shortcut1")));
 
         // 2. Not empty context map:
 
@@ -368,13 +370,12 @@ public class WebappTests extends OpentapsTestCase {
         session.setAttribute("shoppingCart", "myCart");
         context.put("session", session);
 
-        // testtab41 / group2 / shortcut1 should appear
-        // testtab41 / group2 / shortcut2 should not appear
         tab = webappRepository.getTabById("testapp4", "testtab41");
         groups = webappRepository.getShortcutGroups(tab, context);
 
-        // the shortcuts list for group4-41-2 includes only shortcut1
-        checkShortcuts(groups,  UtilMisc.toMap("group4-41-2", Arrays.asList("shortcut1")));
+        // this changed the group 2, now shortcut 1 is visible and shortcut 2 is hidden
+        checkShortcuts(groups, UtilMisc.toMap("group4-41-1", Arrays.asList("shortcut1"),
+                                              "group4-41-2", Arrays.asList("shortcut1")));
 
         // setting the context hasGroup1 to "Y"
         context.clear();
@@ -384,28 +385,25 @@ public class WebappTests extends OpentapsTestCase {
         tab = webappRepository.getTabById("testapp4", "testtab42");
         groups = webappRepository.getShortcutGroups(tab, context);
 
-        // the groups list for testtab42 appears group1 and group2
-        checkGroups(groups, Arrays.asList("group4-42-1", "group4-42-2"), "testtab42");
-
-        // the shortcuts list for group4-42-1 should be empty
-        checkShortcuts(groups,  UtilMisc.toMap("group4-42-1", (List<String>) new ArrayList<String>()));
+        // now group 1 and 2 are present
+        checkGroups(groups, Arrays.asList("group4-42-1", "group4-42-2"));
+        // the shortcuts list for group4-42-1 should be empty, group 2 contains shortcuts 1
+        checkShortcuts(groups, UtilMisc.toMap("group4-42-1", EMPTY_SHORTCUTS_LIST,
+                                              "group4-42-2", Arrays.asList("shortcut1")));
 
         // setting the context hasGroup1 to "Y" and hasShortcut2 to Boolean.TRUE
         context.put("hasShortcut2", new Boolean(true));
+        // setting the userLogin,  to allow the view preference to take effect, it will then use the default value (since the section name is missing from context)
+        context.put("userLogin", admin);
 
-        //   testtab42 / group1 should appear
-        //   testtab42 / group1 / shortcut1 should not appear
-        //   testtab42 / group1 / shortcut2 should appear
+        // same as before but now group 1 shortcut 2 and group 2 shortcut 2 are present
         tab = webappRepository.getTabById("testapp4", "testtab42");
         groups = webappRepository.getShortcutGroups(tab, context);
+        checkGroups(groups, Arrays.asList("group4-42-1", "group4-42-2"));
+        checkShortcuts(groups,  UtilMisc.toMap("group4-42-1", Arrays.asList("shortcut2"),
+                                               "group4-42-2", Arrays.asList("shortcut1", "shortcut2")));
 
-        // the groups list for testtab42 appears group1 and group2
-        checkGroups(groups, Arrays.asList("group4-42-1", "group4-42-2"), "testtab42");
-
-        // the shortcuts list for group4-42-1 includes only shortcut2
-        checkShortcuts(groups,  UtilMisc.toMap("group4-42-1", Arrays.asList("shortcut2")));
-
-        // setting the context opentapsApplicationName "test" sectionName to "test"
+        // setting the context opentapsApplicationName "test" sectionName to "test" to allow the view preference to take effect with the test value
         context.clear();
         context.put("opentapsApplicationName", "test");
         context.put("sectionName", "test");
@@ -418,68 +416,10 @@ public class WebappTests extends OpentapsTestCase {
         groups = webappRepository.getShortcutGroups(tab, context);
 
         // the groups list for testtab42 appears only group2
-        checkGroups(groups, Arrays.asList("group4-42-2"), "testtab42");
+        checkGroups(groups, Arrays.asList("group4-42-2"));
 
         // the shortcuts list for group4-42-2 includes shortcut1 and shortcut3
         checkShortcuts(groups,  UtilMisc.toMap("group4-42-2", Arrays.asList("shortcut1", "shortcut3")));
-    }
-
-    /**
-     * Comparison of actual and expected shortcuts
-     *
-     * @param groups List of the <code>OpentapsShortcutGroup</code>
-     * @param expectedShortcuts Map of the <code>OpentapsShortcutGroup</code> Id and List of the expected Shortcuts Id
-     */
-    private void checkShortcuts(List<OpentapsShortcutGroup> groups, Map<String, List<String>> expectedShortcuts) {
-        List<String> expectedShortcutsIds;
-        List<String> actualShortcutsIds = new ArrayList<String>();
-
-        for (OpentapsShortcutGroup group : groups) {
-            expectedShortcutsIds =  expectedShortcuts.get(group.getGroupId());
-            if (expectedShortcutsIds != null) {
-                actualShortcutsIds.clear();
-                List<? extends OpentapsShortcut> actualShortcuts = group.getAllowedShortcuts();
-
-                for (OpentapsShortcut shortcut : actualShortcuts) {
-                    actualShortcutsIds.add(shortcut.getShortcutId());
-                }
-                assertEquals("Actual shortcuts do not match the expected in the ["+group.getGroupId()+"] ",actualShortcutsIds, expectedShortcutsIds, false);
-            }
-        }
-    }
-
-    /**
-     * Comparison of actual and expected shortcuts group
-     *
-     * @param groups List of the <code>OpentapsShortcutGroup</code>
-     * @param expectedGroups List of the expected Groups Id
-     * @param tabId an <code>OpentapsWebAppTab</code> Id
-     */
-    private void checkGroups(List<OpentapsShortcutGroup> groups, List<String> expectedGroups, String tabId) {
-        List<String> actualGroups = new ArrayList<String>();
-
-        for (OpentapsShortcutGroup group : groups) {
-            actualGroups.add(group.getGroupId());
-        }
-
-        assertEquals("Actual groups do not match the expected in the ["+tabId+"] ",actualGroups, expectedGroups, false);
-    }
-
-    /**
-     * Comparison of actual and expected tabs
-     *
-     * @param tabs List of the <code>OpentapsWebAppTab</code>
-     * @param expectedTabs List of the expected Tabs Id
-     * @param appId an <code>OpentapsWebApps</code> Id
-     */
-    private void checkTabs(List<? extends OpentapsWebAppTab> tabs, List<String> expectedTabs, String appId) {
-        List<String> actualTabs = new ArrayList<String>();
-
-        for (OpentapsWebAppTab tab : tabs) {
-            actualTabs.add(tab.getTabId());
-        }
-
-        assertEquals("Actual tabs do not match the expected in the ["+appId+"] ",actualTabs, expectedTabs, false);
     }
 
     /**
@@ -489,7 +429,7 @@ public class WebappTests extends OpentapsTestCase {
      * check that the values in the tab labels, links, group labels, shortcuts labels and links ... have the values
      * in the return of getLinkUrl() / getUiLabel()
      *
-     * @throws Exception
+     * @throws Exception if an error occurs
      */
     public void testTabAndShortcutsExpansions() throws Exception {
         // testtab51
@@ -514,6 +454,7 @@ public class WebappTests extends OpentapsTestCase {
         OpentapsWebApps webapp5 = webappRepository.getWebAppById("testapp5");
         List<? extends OpentapsWebAppTab> tabs = webappRepository.getWebAppTabs(webapp5, context);
 
+        // check the correct expansion of labels and links
         for (OpentapsWebAppTab tab : tabs) {
             if (tab.getTabId().equals("testtab51")) {
                 assertEquals("UiLabels for [testtab51] is not equal to the expected value ", tab.getUiLabel(), "testtab51 foo51_label");
