@@ -46,10 +46,9 @@ organization = organizationRepository.getOrganizationById(organizationPartyId);
 context.put("allocatePaymentTagsToApplications", organization.allocatePaymentTagsToApplications());
 
 
-// find all check payment methods for this organization which are still current
+// find all payment methods for this organization which are still current.  The name "checkPaymentMethods" is out of date: it is now intended to include other payment methods as well
 checkPaymentMethods = delegator.findByAnd("PaymentMethod", UtilMisc.toList(
             EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, organizationPartyId),
-            EntityCondition.makeCondition("paymentMethodTypeId", EntityOperator.EQUALS, "COMPANY_CHECK"),
             EntityUtil.getFilterByDateExpr()));
 context.put("checkPaymentMethods", checkPaymentMethods);
 
@@ -92,7 +91,6 @@ if ("Y".equals(isPaycheck)) {
 // build the main condition
 conditionList = EntityCondition.makeCondition(UtilMisc.toList(
                    paymentCond,
-                   paymentMethodTypeCond,
                    paymentTypeCond), EntityOperator.AND);
 
 if (organization.allocatePaymentTagsToApplications()) {

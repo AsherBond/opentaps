@@ -47,10 +47,9 @@ InvoiceRepositoryInterface invoiceRepository = dd.getBillingDomain().getInvoiceR
 Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
 invoiceRepository = dd.getBillingDomain().getInvoiceRepository();
 
-// Find all current check payment methods for the organization
+// Find all current payment methods for the organization.  As of 2011-02-02, this includes those which are not checks
 checkPaymentMethods = delegator.findByAnd("PaymentMethod", UtilMisc.toList(
             new EntityExpr("partyId", EntityOperator.EQUALS, organizationPartyId),
-            new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "COMPANY_CHECK"),
             EntityUtil.getFilterByDateExpr()));
 context.put("checkPaymentMethods", checkPaymentMethods);
 
