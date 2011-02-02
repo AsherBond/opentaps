@@ -60,7 +60,9 @@ UtilAccountingTags.addTagParameters(request, context, "acctgTagEnumId");
 
 // get the default bank settlement account's payment method
 defaultPaymentMethod = organization.getDefaultPaymentMethod();
-context.put("defaultPaymentMethodId", defaultPaymentMethod.getPaymentMethodId());
+if (defaultPaymentMethod != null) {
+    context.put("defaultPaymentMethodId", defaultPaymentMethod.getPaymentMethodId());
+}
 
 // Populate the initial check number from the request attribute first, in case it's been updated and returned by the
 //  processing service

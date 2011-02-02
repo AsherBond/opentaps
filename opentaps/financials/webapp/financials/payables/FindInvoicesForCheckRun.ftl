@@ -22,7 +22,7 @@
 
     <form method="post" action="checkRun" onSubmit="javascript:submitFormDisableSubmits(this)" name="FindInvoicesForCheckRun">
         <table class="twoColumnForm">
-            <@inputSelectRow title=uiLabelMap.FinancialsPaymentMethod name="paymentMethodId" list=checkPaymentMethods key="paymentMethodId" displayField="description" default="${defaultPaymentMethodId}" titleClass="requiredField"/>
+            <@inputSelectRow title=uiLabelMap.FinancialsPaymentMethod name="paymentMethodId" list=checkPaymentMethods key="paymentMethodId" displayField="description" default="${defaultPaymentMethodId?if_exists}" titleClass="requiredField"/>
             <@inputTextRow title=uiLabelMap.FinancialsInitialCheckNumber name="initialCheckNumber" size="20" titleClass="requiredField"/>
             <#if tagTypes?has_content>
                 <@accountingTagsSelectRows tags=tagTypes prefix="acctgTagEnumId" entity=paymentValue! />
