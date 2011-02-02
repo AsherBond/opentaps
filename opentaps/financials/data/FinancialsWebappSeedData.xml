@@ -44,8 +44,98 @@
                    linkUrl="/opentaps" isExternal="Y" securityModule="" securityAction="" handlerMethod=""/>
 
 <!-- Shortcut groups -->
-
 <!-- Receivables shortcuts -->
+<!-- Invoices group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivablesInvoices" sequenceNum="010" uiLabel="AccountingInvoices"/>
+<OpentapsShortcut shortcutId="findSalesInvoices" groupId="financialsReceivablesInvoices" sequenceNum="010" uiLabel="FinancialsFindSalesInvoices"
+                  linkUrl="findSalesInvoices" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createSalesInvoices" groupId="financialsReceivablesInvoices" sequenceNum="020" uiLabel="FinancialsCreateSalesInvoice"
+                  linkUrl="createInvoiceForm?invoiceTypeId=SALES_INVOICE" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="invoicePerformedOrderItems" groupId="financialsReceivablesInvoices" sequenceNum="030" uiLabel="FinancialsInvoiceServiceItems"
+                  linkUrl="invoicePerformedOrderItems" securityModule="" securityAction=""/>
+
+<!-- Payments group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivablesPayments" sequenceNum="010" uiLabel="AccountingPayment"/>
+<OpentapsShortcut shortcutId="findPayment" groupId="financialsReceivablesPayments" sequenceNum="010" uiLabel="FinancialsFindPayment"
+                  linkUrl="findPayment?findPaymentTypeId=RECEIPT" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="receivePayment" groupId="financialsReceivablesPayments" sequenceNum="020" uiLabel="FinancialsReceivablesPayment"
+                  linkUrl="editPayment?paymentTypeId=RECEIPT" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="receiveCODStatment" groupId="financialsReceivablesPayments" sequenceNum="030" uiLabel="FinancialsReceiveCODStatement"
+                  linkUrl="CODReceipt" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="manageCashDrawers" groupId="financialsReceivablesPayments" sequenceNum="040" uiLabel="OpentapsCashDrawerManage"
+                  linkUrl="manageCashDrawers" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="manageLockboxBatches" groupId="financialsReceivablesPayments" sequenceNum="050" uiLabel="FinancialsManageLockboxBatches"
+                  linkUrl="manageLockboxBatches" securityModule="" securityAction=""/>
+
+<!-- Agreements group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivablesAgreements" sequenceNum="010" uiLabel="AccountingAgreements"/>
+<OpentapsShortcut shortcutId="findSalesAgreements" groupId="financialsReceivablesAgreements" sequenceNum="010" uiLabel="FinancialsFindCustomerAgreements"
+                  linkUrl="findSalesAgreements" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createSalesAgreement" groupId="financialsReceivablesAgreements" sequenceNum="020" uiLabel="FinancialsCreateCustomerAgreement"
+                  linkUrl="createSalesAgreement" securityModule="" securityAction=""/>
+
+<!-- Customer Credits group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivablesCustomerCredits" sequenceNum="010" uiLabel="FinancialsCustomerBillingAccounts"/>
+<OpentapsShortcut shortcutId="findCustomerBillAcct" groupId="financialsReceivablesCustomerCredits" sequenceNum="010" uiLabel="FinancialsFindCustomerBillingAccount"
+                  linkUrl="findCustomerBillAcct" securityModule="" securityAction=""/>
+
+<!-- Finance Charges group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivablesFinanceCharges" sequenceNum="010" uiLabel="FinancialsFinanceCharges"/>
+<OpentapsShortcut shortcutId="findFinanceCharges" groupId="financialsReceivablesFinanceCharges" sequenceNum="010" uiLabel="FinancialsFindFinanceCharges"
+                  linkUrl="findFinanceCharges" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="assessFinanceChargesForm" groupId="financialsReceivablesFinanceCharges" sequenceNum="020" uiLabel="FinancialsAssessFinanceCharges"
+                  linkUrl="assessFinanceChargesForm" securityModule="" securityAction=""/>
+
+<!-- Reports group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivableReports" sequenceNum="010" uiLabel="AccountingReports"/>
+<OpentapsShortcut shortcutId="receivableReports" groupId="financialsReceivableReports" sequenceNum="010" uiLabel="FinancialsReceivableReports"
+                  linkUrl="receivableReports" securityModule="" securityAction=""/>
+
+
+<!-- Payables shortcuts -->
+<!-- Invoices group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="payables" groupId="financialsPayablesInvoices" sequenceNum="010" uiLabel="AccountingInvoices"/>
+<OpentapsShortcut shortcutId="findPurchaseInvoices" groupId="financialsPayablesInvoices" sequenceNum="010" uiLabel="FinancialsFindPurchaseInvoices"
+                  linkUrl="findPurchaseInvoices" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createPurchaseInvoices" groupId="financialsPayablesInvoices" sequenceNum="020" uiLabel="FinancialsCreatePurchaseInvoice"
+                  linkUrl="createInvoiceForm?invoiceTypeId=PURCHASE_INVOICE" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="findCustomerReturnInvoices" groupId="financialsPayablesInvoices" sequenceNum="030" uiLabel="FinancialsFindCustomerReturnInvoices"
+                  linkUrl="findCustomerReturnInvoices" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createCustomerReturnInvoice" groupId="financialsPayablesInvoices" sequenceNum="040" uiLabel="FinancialsCreateCustomerReturnInvoice"
+                  linkUrl="createInvoiceForm?invoiceTypeId=CUST_RTN_INVOICE" securityModule="" securityAction=""/>
+
+<!-- Payments group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="payables" groupId="financialsPayablesPayments" sequenceNum="010" uiLabel="AccountingPayment"/>
+<OpentapsShortcut shortcutId="findPayment" groupId="financialsPayablesPayments" sequenceNum="010" uiLabel="FinancialsFindPayment"
+                  linkUrl="findPayment?findPaymentTypeId=DISBURSEMENT" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="makePayment" groupId="financialsPayablesPayments" sequenceNum="020" uiLabel="FinancialsPayablesPayment"
+                  linkUrl="editPayment?paymentTypeId=DISBURSEMENT" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="checkRun" groupId="financialsPayablesPayments" sequenceNum="030" uiLabel="FinancialsCheckRun"
+                  linkUrl="checkRun" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="printChecks" groupId="financialsPayablesPayments" sequenceNum="040" uiLabel="FinancialsPrintChecks"
+                  linkUrl="listChecksToPrint" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="confirmSentPayments" groupId="financialsPayablesPayments" sequenceNum="050" uiLabel="FinancialsConfirmSentPayments"
+                  linkUrl="confirmSentPaymentsForm" securityModule="" securityAction=""/>
+
+<!-- Commissions group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="payables" groupId="financialsPayablesCommissions" sequenceNum="010" uiLabel="FinancialsCommissions"/>
+<OpentapsShortcut shortcutId="findCommissionAgreements" groupId="financialsPayablesCommissions" sequenceNum="010" uiLabel="FinancialsFindCommissionAgreements"
+                  linkUrl="findCommissionAgreements" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createCommissionAgreement" groupId="financialsPayablesCommissions" sequenceNum="020" uiLabel="FinancialsCreateCommissionAgreement"
+                  linkUrl="createCommissionAgreement" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="findCommissionInvoices" groupId="financialsPayablesCommissions" sequenceNum="030" uiLabel="FinancialsFindCommissionInvoices"
+                  linkUrl="findCommissionInvoices" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createCommissionInvoice" groupId="financialsPayablesCommissions" sequenceNum="040" uiLabel="FinancialsCreateCommissionInvoice"
+                  linkUrl="createInvoiceForm?invoiceTypeId=COMMISSION_INVOICE" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="commissionBalancesReport" groupId="financialsPayablesCommissions" sequenceNum="050" uiLabel="FinancialsCommissionBalancesReport"
+                  linkUrl="commissionBalancesReport" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="commissionsStatement" groupId="financialsPayablesCommissions" sequenceNum="060" uiLabel="FinancialsCommissionsStatement"
+                  linkUrl="commissionsStatement" securityModule="" securityAction=""/>
+
+<!-- Reports group -->
+<OpentapsShortcutGroup applicationId="financials" tabId="payables" groupId="financialsPayableReports" sequenceNum="010" uiLabel="AccountingReports"/>
+<OpentapsShortcut shortcutId="payableReports" groupId="financialsPayableReports" sequenceNum="010" uiLabel="FinancialsPayableReports"
+                  linkUrl="payableReports" securityModule="" securityAction=""/>
 
 <!-- Employees shortcuts -->
 <OpentapsShortcutGroup applicationId="financials" tabId="employees" groupId="financialsEmployees" sequenceNum="010" uiLabel="FinancialsPaychecks"/>
@@ -109,6 +199,12 @@
                   linkUrl="accountingTagsUsage" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="configureOrganization" groupId="financialsConfiguration" sequenceNum="070" uiLabel="FinancialsViewConfiguration"
                   linkUrl="configureOrganization" securityModule="" securityAction=""/>
+
+<!-- Reports shortcuts -->
+<OpentapsShortcutGroup applicationId="financials" tabId="reports" groupId="financialsReports" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="financialsReportsMain" groupId="financialsReports" sequenceNum="010" uiLabel="CommonReports"
+                  linkUrl="reportsMain" securityModule="" securityAction=""/>
+
 
 </entity-engine-xml>
 

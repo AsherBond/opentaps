@@ -24,7 +24,7 @@
         <section>
             <actions>
                 <set field="sectionName" value="reports" global="true"/>
-                <set field="sectionStyle" value="singleColumn"/>
+                <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="FINANCIALS_RPT"/>
             </actions>
             <widgets>

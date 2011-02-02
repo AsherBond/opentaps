@@ -496,6 +496,14 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="CommissionReport"/>
     </request-map>
+    <request-map uri="payableReports">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="payableReports"/>
+    </request-map>
+    <request-map uri="receivableReports">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="receivableReports"/>
+    </request-map>
     <request-map uri="CommissionReport.pdf">
         <security https="true" auth="true"/>
         <event type="java" path="com.opensourcestrategies.financials.reports.CommissionReports" invoke="jasperCommissionReport"/>
@@ -1993,8 +2001,8 @@
 
     <!-- main screens for each section -->
     <view-map name="myHomeMain" type="screen" page="component://financials/widget/financials/screens/myhome/MyHomeScreens.xml#myHome"/>
-    <view-map name="receivablesMain" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#receivables"/>
-    <view-map name="payablesMain" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#payables"/>
+    <view-map name="receivablesMain" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#findSalesInvoices"/>
+    <view-map name="payablesMain" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#findPurchaseInvoices"/>
     <view-map name="employeesMain" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#findPaycheck"/>
     <view-map name="partnersMain" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#findPartnerInvoices"/>
     <view-map name="transactionsMain" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#transactions"/>
@@ -2032,6 +2040,8 @@
     <view-map name="viewSalesAgreement" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#ViewSalesAgreement"/>
     <view-map name="editSalesAgreement" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#EditSalesAgreement"/>
 
+    <view-map name="receivableReports" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#receivableReports"/>
+
     <!-- payables -->
     <view-map name="payablesBalancesReport" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#payablesBalancesReport"/>
     <view-map name="commissionBalancesReport" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#commissionBalancesReport"/>
@@ -2048,6 +2058,7 @@
     <view-map name="editAgreement" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#EditAgreement"/>
     <view-map name="confirmSentPaymentsForm" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#confirmSentPaymentsForm"/>
     <view-map name="CommissionReport" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#CommissionReport"/>
+    <view-map name="payableReports" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#payableReports"/>
 
     <!-- employees -->
     <view-map name="findPaycheck" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#findPaycheck"/>
