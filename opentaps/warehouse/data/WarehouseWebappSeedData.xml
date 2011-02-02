@@ -45,19 +45,19 @@
                   linkUrl="findInventoryItem"/>
 <OpentapsShortcut shortcutId="receiveInventoryItem" groupId="warehouseInventory" sequenceNum="030" uiLabel="WarehouseReceiveInventoryItem"
                   linkUrl="receiveInventoryItem"/>
-<OpentapsShortcut shortcutId="receiveInventoryAgainstPurchaseOrder" groupId="warehouseInventory" sequenceNum="010" uiLabel="WarehouseReceivePurchaseOrder"
+<OpentapsShortcut shortcutId="receiveInventoryAgainstPurchaseOrder" groupId="warehouseInventory" sequenceNum="040" uiLabel="WarehouseReceivePurchaseOrder"
                   linkUrl="ReceiveInventoryAgainstPurchaseOrder"/>
-<OpentapsShortcut shortcutId="findShipmentReceipt" groupId="warehouseInventory" sequenceNum="040" uiLabel="WarehouseFindShipmentReceipts"
+<OpentapsShortcut shortcutId="findShipmentReceipt" groupId="warehouseInventory" sequenceNum="050" uiLabel="WarehouseFindShipmentReceipts"
                   linkUrl="findShipmentReceipt"/>
-<OpentapsShortcut shortcutId="physicalInventory" groupId="warehouseInventory" sequenceNum="050" uiLabel="WarehouseInventoryAdjustQuantities"
+<OpentapsShortcut shortcutId="physicalInventory" groupId="warehouseInventory" sequenceNum="060" uiLabel="WarehouseInventoryAdjustQuantities"
                   linkUrl="physicalInventory"/>
-<OpentapsShortcut shortcutId="stockMoves" groupId="warehouseInventory" sequenceNum="060" uiLabel="WarehouseStockMoves"
+<OpentapsShortcut shortcutId="stockMoves" groupId="warehouseInventory" sequenceNum="070" uiLabel="WarehouseStockMoves"
                   linkUrl="stockMoves"/>
-<OpentapsShortcut shortcutId="findFacilityTransfers" groupId="warehouseInventory" sequenceNum="070" uiLabel="WarehouseInventoryTransfer"
+<OpentapsShortcut shortcutId="findFacilityTransfers" groupId="warehouseInventory" sequenceNum="080" uiLabel="WarehouseInventoryTransfer"
                   linkUrl="FindFacilityTransfers?facilityId=${facilityId}"/>
-<OpentapsShortcut shortcutId="manageLots" groupId="warehouseInventory" sequenceNum="080" uiLabel="WarehouseManageLots"
+<OpentapsShortcut shortcutId="manageLots" groupId="warehouseInventory" sequenceNum="090" uiLabel="WarehouseManageLots"
                   linkUrl="manageLots"/>
-<OpentapsShortcut shortcutId="traceInventory" groupId="warehouseInventory" sequenceNum="090" uiLabel="WarehouseTraceInventory"
+<OpentapsShortcut shortcutId="traceInventory" groupId="warehouseInventory" sequenceNum="100" uiLabel="WarehouseTraceInventory"
                   linkUrl="traceInventory"/>
 
 <!-- Shipping shortcuts -->
