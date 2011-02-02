@@ -15,8 +15,6 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// finds all cases for all accounts that the userLogin is a member of or all contacts that the user is responsible for
-
 import java.math.BigDecimal;
 import javolution.util.FastList;
 import javolution.util.FastMap;
