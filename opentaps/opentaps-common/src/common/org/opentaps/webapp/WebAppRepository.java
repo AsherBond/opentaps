@@ -215,9 +215,20 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
 
     /** {@inheritDoc} */
     public List<OpentapsShortcutGroup> getShortcutGroups(OpentapsWebAppTab tab, User user, Map<String, Object> context) throws RepositoryException {
+        List<OpentapsShortcutGroup> allowedGroups = new ArrayList<OpentapsShortcutGroup>();
+        // check if the user has permission on the tab, else do not return any group
+        if (tab == null || !hasPermission(user, tab.getSecurityModule(), tab.getSecurityAction())) {
+            return allowedGroups;
+        }
+        // if there is a handler, pass the OpentapsWebAppTab to it
+        tab = callHandler(tab, tab.getHandlerMethod(), context);
+        if (tab == null) {
+            return allowedGroups;
+        }
+
+
         List<OpentapsShortcutGroup> groups = findListCache(OpentapsShortcutGroup.class, map(OpentapsShortcutGroup.Fields.applicationId, tab.getApplicationId(), OpentapsShortcutGroup.Fields.tabId, tab.getTabId()), Arrays.asList(OpentapsShortcutGroup.Fields.sequenceNum.asc()));
         Debug.logInfo("Found group candidates " + groups, MODULE);
-        List<OpentapsShortcutGroup> allowedGroups = new ArrayList<OpentapsShortcutGroup>();
         // check permission on each group
         for (OpentapsShortcutGroup group : groups) {
             // check permission or skip this group
