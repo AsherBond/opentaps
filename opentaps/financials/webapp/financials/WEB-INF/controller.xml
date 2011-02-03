@@ -266,6 +266,11 @@
         <response name="error" type="view" value="assessFinanceChargesForm"/>
     </request-map>
 
+    <request-map uri="invoiceServiceItems">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="invoiceServiceItems"/>
+    </request-map>
+
     <request-map uri="updateBillingAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateBillingAccount"/>        
@@ -2041,6 +2046,7 @@
     <view-map name="editSalesAgreement" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#EditSalesAgreement"/>
 
     <view-map name="receivableReports" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#receivableReports"/>
+    <view-map name="invoiceServiceItems" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#invoiceServiceItems"/>
 
     <!-- payables -->
     <view-map name="payablesBalancesReport" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#payablesBalancesReport"/>

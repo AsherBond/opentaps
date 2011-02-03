@@ -28,8 +28,8 @@
                 <set field="requiredPermission" value="FINANCIALS_AR"/>
             </actions>
             <widgets>
-                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
-            </widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>                
+            </widgets>           
         </section>
     </screen>
 
@@ -48,6 +48,25 @@
                                     <html-template location="component://financials/webapp/financials/receivables/receivableReports.ftl"/></html>
                             </platform-specific>
                         </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>       
+    </screen>
+
+    <screen name="invoiceServiceItems">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsInvoiceServiceItems"/>  
+                <set field="sectionHeaderUiLabel" value="FinancialsInvoiceServiceItems"/>  
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">                        
+                            <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/receivables/invoiceService.ftl"/></html>
+                            </platform-specific>                        
                     </decorator-section>
                 </decorator-screen>
             </widgets>

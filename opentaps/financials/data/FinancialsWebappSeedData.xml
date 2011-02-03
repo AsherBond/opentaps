@@ -52,7 +52,7 @@
 <OpentapsShortcut shortcutId="createSalesInvoices" groupId="financialsReceivablesInvoices" sequenceNum="020" uiLabel="FinancialsCreateSalesInvoice"
                   linkUrl="createInvoiceForm?invoiceTypeId=SALES_INVOICE" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="invoicePerformedOrderItems" groupId="financialsReceivablesInvoices" sequenceNum="030" uiLabel="FinancialsInvoiceServiceItems"
-                  linkUrl="invoicePerformedOrderItems" securityModule="" securityAction=""/>
+                  linkUrl="invoiceServiceItems" securityModule="" securityAction=""/>
 
 <!-- Payments group -->
 <OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivablesPayments" sequenceNum="010" uiLabel="AccountingPayment"/>
