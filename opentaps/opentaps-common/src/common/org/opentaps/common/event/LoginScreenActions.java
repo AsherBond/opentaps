@@ -45,13 +45,13 @@ import com.sun.syndication.io.XmlReader;
  * The actions used to support the features on login screen.
  */
 public class LoginScreenActions {
-    
+
     private static final String MODULE = LoginScreenActions.class.getName();
     private static final String RSS_URL = "http://www.opentaps.org/news/rss";
     private static final String NEWS_URL = "http://www.opentaps.org/news";
     private static int MAX_DISPLAY_CHARS = 100;
     private static int MAX_DISPLAY_RECORDS = 5;
-    
+
     /**
      * Action for the display latest news feature.
      * @param context the screen context
@@ -59,7 +59,7 @@ public class LoginScreenActions {
      */
     public static void getLatestNews(Map<String, Object> context) throws GeneralException {
         final ActionContext ac = new ActionContext(context);
-        
+
         try {
             URL url = new URL(RSS_URL);
             XmlReader reader = new XmlReader(url);
@@ -85,7 +85,7 @@ public class LoginScreenActions {
                 ac.put("latestnews", latestnews);
                 ac.put("newsUrl", NEWS_URL);
             }
-            
+
         } catch (UnknownHostException e) {
             // we cannot connect the internet, so just ignore the exception
             Debug.logError(e, MODULE);
@@ -96,14 +96,12 @@ public class LoginScreenActions {
         } catch (IllegalArgumentException e) {
             throw new GeneralException(e);
         } catch (FeedException e) {
-            throw new GeneralException(e);
+            Debug.logError(e.getMessage(), MODULE);
         }
-        
-     
     }
-    
+
     /**
-     * Returns thee first 100 characters of the news body 
+     * Returns first 100 characters of the news body 
      */
     public static String getIntro(String description) {
         if (UtilValidate.isEmpty(description)) {
