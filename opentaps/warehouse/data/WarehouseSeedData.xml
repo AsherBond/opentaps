@@ -70,4 +70,7 @@
     <InventoryItemUsageType inventoryItemUsageTypeId="UNKNOWN" description="Unknown"/>
     <InventoryItemUsageType inventoryItemUsageTypeId="VARIANCE" description="Adjustment"/>
 
+    <!-- Configuration value definitions -->
+    <OpentapsConfigurationType configTypeId="WRHS_RECVPO_QTY_DEFAULT" description="Default quantity to receive from PO (valid values 0 or PO_AVAIL_QTY" defaultValue="0"/>
+
 </entity-engine-xml>

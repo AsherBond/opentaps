@@ -98,7 +98,8 @@ if (UtilValidate.isNotEmpty(supplierParty)) {
 }
 
 // load up the org domain
-dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+i = new Infrastructure(dispatcher);
+dl = new DomainsLoader(i, new User(userLogin));
 orgDomain = dl.loadDomainsDirectory().getOrganizationDomain();
 orgRepos = orgDomain.getOrganizationRepository();
 org = orgRepos.getOrganizationById(orderHeader.get("billToPartyId"));
@@ -264,12 +265,13 @@ while (orderItemIter.hasNext()) {
     if (availableToReceive > 0) itemsAvailableToReceive = true;
     totalAvailableToReceive += availableToReceive;
     orderItemData.put("availableToReceive", availableToReceive);
+    orderItemData.put("receiveDefQty", "PO_AVAIL_QTY".equals(i.getConfigurationValue("WRHS_RECVPO_QTY_DEFAULT", "0")) ? availableToReceive : 0);
     orderItemData.put("totalQuantityReceived", totalReceived);
     orderItemData.put("shipGroupSeqId", orderItemAndShipGroupAssoc.get("shipGroupSeqId"));
     orderItemData.put("orderItem", orderItem);
     orderItemData.put("product", product);
     orderItemData.put("productId", product.get("productId"));
-    
+
     // Add the supplier productId and name
     supplierProducts = delegator.findByAnd("SupplierProduct", UtilMisc.toMap("productId", product.get("productId"), "partyId", supplierPartyId), UtilMisc.toList("lastUpdatedStamp DESC"));
     supplierProducts = EntityUtil.filterByDate(supplierProducts, now, "availableFromDate", "availableThruDate", true);

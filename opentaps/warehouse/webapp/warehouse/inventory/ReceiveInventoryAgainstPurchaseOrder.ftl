@@ -211,7 +211,7 @@ under the License.
                                 <input type="hidden" name="productId_o_${orderItemData_index}" value="${(product.productId)?if_exists}"/>
                                 <input type="hidden" name="unitCost_o_${orderItemData_index}" value="${orderItem.unitPrice?default(0)}"/>
                                 <input type="hidden" name="quantityRejected_o_${orderItemData_index}" value="0"/>
-                                <input type="text" class='inputBox' size="5" name="quantityAccepted_o_${orderItemData_index}" id="quantityAccepted_o_${orderItemData_index}" value="${quantityToReceive}" onchange="rowClassChange(this, ${orderItemData_index})"/>
+                                <input type="text" class='inputBox' size="5" name="quantityAccepted_o_${orderItemData_index}" id="quantityAccepted_o_${orderItemData_index}" value="${orderItemData.receiveDefQty?default(0)}" onchange="rowClassChange(this, ${orderItemData_index})"/>
                             </td>
                             <td>              
                                 <select name="inventoryItemTypeId_o_${orderItemData_index}" class="selectBox">
