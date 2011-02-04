@@ -22,6 +22,16 @@
     <title>Opentaps Webapps Entity Definitions</title>
     <copyright>Copyright (c) Open Source Strategies Inc.</copyright>
 
+    <entity entity-name="ControllerInjection"
+            package-name="org.opentaps.common.webapp"
+            title="Controller Injection Entity">
+      <field name="injectUrl" type="long-varchar"></field>
+      <field name="injectIntoUrl" type="long-varchar"></field>
+      <field name="sequenceNum" type="numeric"/>
+      <prim-key field="injectUrl"/>
+      <prim-key field="injectIntoUrl"/>
+    </entity>
+
     <entity entity-name="OpentapsWebApps"
             package-name="org.opentaps.common.webapp"
             title="Opentaps Home Web Applications Entity">
