@@ -498,4 +498,27 @@ public class WebappTests extends OpentapsTestCase {
             }
         }
     }
+
+    /**
+     * Tests the controller injection.
+     * @exception Exception if an error occurs
+     */
+    public void testControllerInjection() throws Exception {
+        // assuming we have a test injection seed date, for example
+        //  <ControllerInjection injectUrl="component://opentaps-tests/webapp/data/test-injected-controller.xml" injectIntoUrl="component://crmsfa/webapp/crmsfa/WEB-INF/controller.xml" />
+
+        // 1. get the ControllerConfig object from ConfigXMLReader.getControllerConfig("component://crmsfa/webapp/crmsfa/WEB-INF/controller.xml");
+        // 2. call getRequestMapMap
+        //  a. you should find the new injected requests (for uri defined in the injected controller that did not exist in the target controller)
+        //  b. you should get the overridden requests (for uri defined in the injected controller that also existed in the target controller)
+        // 3. same for the view map from getViewMapMap
+        // 4. same for getPreprocessorEventList (<preprocessor>..</preprocessor> in the controller)
+        // 5. same for getPostprocessorEventList
+        // 6. same for getAfterLoginEventList
+        // 7. same for getFirstVisitEventList
+
+
+        // second test for a more complicated scenario, with the seed data to inject 3 different controllers into a target controller
+        // do the same test but also make sure that the controller injection sequence is respected (with sequenceNum), so the last injected controller has its requests / views / etc... that overrides those of the first 2
+    }
 }
