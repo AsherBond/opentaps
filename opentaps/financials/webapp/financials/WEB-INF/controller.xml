@@ -270,6 +270,14 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="invoiceServiceItems"/>
     </request-map>
+    <request-map uri="receivePayment">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="receivePayment"/>
+    </request-map>
+    <request-map uri="makePayment">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="makePayment"/>
+    </request-map>
 
     <request-map uri="updateBillingAccount">
         <security https="true" auth="true"/>
@@ -1774,8 +1782,8 @@
         <response name="success" type="request-redirect" value="viewInvoice">
           <redirect-parameter name="invoiceId"/>
         </response>
-        <response name="failure" type="view" value="receivablesMain"/>
-        <response name="error" type="view" value="receivablesMain"/>
+        <response name="failure" type="view" value="invoiceServiceItems"/>
+        <response name="error" type="view" value="invoiceServiceItems"/>
     </request-map>
     <request-map uri="viewInvoice">
         <security auth="true" https="true"/>
@@ -2047,6 +2055,8 @@
 
     <view-map name="receivableReports" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#receivableReports"/>
     <view-map name="invoiceServiceItems" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#invoiceServiceItems"/>
+    <view-map name="receivePayment" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#receivePayment"/>
+
 
     <!-- payables -->
     <view-map name="payablesBalancesReport" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#payablesBalancesReport"/>
@@ -2065,6 +2075,7 @@
     <view-map name="confirmSentPaymentsForm" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#confirmSentPaymentsForm"/>
     <view-map name="CommissionReport" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#CommissionReport"/>
     <view-map name="payableReports" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#payableReports"/>
+    <view-map name="makePayment" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#makePayment"/>
 
     <!-- employees -->
     <view-map name="findPaycheck" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#findPaycheck"/>

@@ -59,7 +59,7 @@
 <OpentapsShortcut shortcutId="findPayment" groupId="financialsReceivablesPayments" sequenceNum="010" uiLabel="FinancialsFindPayment"
                   linkUrl="findPayment?findPaymentTypeId=RECEIPT" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="receivePayment" groupId="financialsReceivablesPayments" sequenceNum="020" uiLabel="FinancialsReceivablesPayment"
-                  linkUrl="editPayment?paymentTypeId=RECEIPT" securityModule="" securityAction=""/>
+                  linkUrl="receivePayment" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="receiveCODStatment" groupId="financialsReceivablesPayments" sequenceNum="030" uiLabel="FinancialsReceiveCODStatement"
                   linkUrl="CODReceipt" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="manageCashDrawers" groupId="financialsReceivablesPayments" sequenceNum="040" uiLabel="OpentapsCashDrawerManage"
@@ -109,7 +109,7 @@
 <OpentapsShortcut shortcutId="findPayment" groupId="financialsPayablesPayments" sequenceNum="010" uiLabel="FinancialsFindPayment"
                   linkUrl="findPayment?findPaymentTypeId=DISBURSEMENT" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="makePayment" groupId="financialsPayablesPayments" sequenceNum="020" uiLabel="FinancialsPayablesPayment"
-                  linkUrl="editPayment?paymentTypeId=DISBURSEMENT" securityModule="" securityAction=""/>
+                  linkUrl="makePayment" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="checkRun" groupId="financialsPayablesPayments" sequenceNum="030" uiLabel="FinancialsCheckRun"
                   linkUrl="checkRun" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="printChecks" groupId="financialsPayablesPayments" sequenceNum="040" uiLabel="FinancialsPrintChecks"

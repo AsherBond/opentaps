@@ -19,16 +19,14 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <div class="subSectionBlock">
     <table class="twoColumnForm">     
-    <tr>        
-        <form action="<@ofbizUrl>invoicePerformedOrderItems</@ofbizUrl>" method="post" name="invoicePerformedOrderItems">
-          <@displayTitleCell title=uiLabelMap.FinancialsInvoicePerformedOrderItemsForOrder />
-          
-          <@inputLookupCell name="orderId" lookup="LookupSalesOrders?statusId=ORDER_APPROVED" form="invoicePerformedOrderItems"/>
-          
-          <@inputSubmitRow title="${uiLabelMap.CommonSubmit}"/>
+    <tr>
+        <form action="<@ofbizUrl>editPayment</@ofbizUrl>" method="get" name="makePaymentForm">
+            <@displayTitleCell title=uiLabelMap.FinancialsPayablesPaymentToPartyId />           
+            <@inputAutoCompletePartyCell name="partyId" id="makePaymentFormPartyId" />
+            <@inputHidden name="paymentTypeId" value="DISBURSEMENT" />
+            <@inputSubmitRow title="${uiLabelMap.CommonSubmit}"/>
         </form>
+
     </tr>
-
-
    </table>
 </div>

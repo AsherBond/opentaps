@@ -76,6 +76,27 @@
         </section>
     </screen>
 
+    <screen name="makePayment">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsPayablesPayment"/>  
+                <set field="sectionHeaderUiLabel" value="FinancialsPayablesPayment"/>  
+                <!-- TODO: see if removing this will work, we now have main-decorator.bsh that does this -->
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">                        
+                            <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/payables/makePayment.ftl"/></html>
+                            </platform-specific>                        
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
     <screen name="listChecksToPrint">
         <section>
             <actions>
