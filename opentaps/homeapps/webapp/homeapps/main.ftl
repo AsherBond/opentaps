@@ -160,10 +160,11 @@ border: 1px solid #999999;
 
 
 
-<#if apps?exists>
+    <#if apps?exists>
          <div id="row">
         <#assign appIndex = 0 />
         <#list apps as app>
+        <#if app.linkUrl?exists>
             <#assign appIndex = appIndex + 1 />
             <div id="button" class="${app.applicationId}" onmouseover="javascript:writeAppDetails('${app.shortName}','${app.applicationName}','${app.description}')">
 
@@ -183,6 +184,7 @@ border: 1px solid #999999;
                    </div> <#-- close row-->
                    <div id="row" style="margin-top: 3px;" > <#-- create a new row-->
                 </#if>
+        </#if>
         </#list>
     </#if>
          </div> <#-- end of the latest row-->
