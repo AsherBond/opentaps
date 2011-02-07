@@ -1,0 +1,42 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilMisc;
+import org.opentaps.common.util.UtilConfig;
+
+
+// Get userLogin
+userLogin = request.getAttribute("userLogin");
+if (userLogin == null) { // this should *never* happen
+    return;
+}
+context{"userLogin"} = userLogin;
+
+// security
+security = request.getAttribute("security"); 
+context{"security"} = security;
+
+// external login key
+extLogin = request.getAttribute("externalLoginKey"); 
+if (extLogin != null) {
+    context{"externalKeyParam"} = "externalLoginKey=" + requestAttributes.get("externalLoginKey");
+}
+
+// context path
+context{"contextPath"} = request.getContextPath();

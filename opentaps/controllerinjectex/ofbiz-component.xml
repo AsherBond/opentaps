@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ofbiz-component name="controllerinjectex"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
+    <resource-loader name="main" type="component"/>
+    <classpath type="jar" location="build/lib/*"/>
+    <classpath type="dir" location="script"/>
+    <classpath type="dir" location="config"/>
+
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
+
+    <!-- uncomment for direct access to the webapp (non-injected) -->
+    <!-- <webapp name="controllerinjectex" -->
+    <!--     title="Controller Injection Example" -->
+    <!--     server="default-server" -->
+    <!--     location="webapp/controllerinjectex" -->
+    <!--     base-permission="" -->
+    <!--     mount-point="/controllerinjectex" -->
+    <!--     app-bar-display="true"/> -->
+
+</ofbiz-component>
+

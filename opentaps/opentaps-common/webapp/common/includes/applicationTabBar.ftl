@@ -47,7 +47,7 @@
 
 <#if userLogin?exists && applicationSections?exists>
 <ul class="sectionTabBar">
-  <#list applicationSections as section> 
+  <#list applicationSections as section>
     <#if section.isExternal?exists && "Y" == section.isExternal?upper_case>
       <#assign url=section.linkUrl + "?" + response.encodeURL(externalKeyParam)/>
     <#else>
