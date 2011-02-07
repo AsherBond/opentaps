@@ -548,10 +548,8 @@ public final class InvoiceActions {
 
         if (enableFindByOrder && orderId != null) {
             List<OrderItemBilling> orderItemBillings = repository.findList(OrderItemBilling.class, repository.map(OrderItemBilling.Fields.orderId, orderId));
-            if (UtilValidate.isNotEmpty(orderItemBillings)) {
-                Set<String> invoiceIds = Entity.getDistinctFieldValues(String.class, orderItemBillings, OrderItemBilling.Fields.invoiceId);
-                search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.invoiceId.name(), EntityOperator.IN, invoiceIds));
-            }
+            Set<String> invoiceIds = Entity.getDistinctFieldValues(String.class, orderItemBillings, OrderItemBilling.Fields.invoiceId);
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.invoiceId.name(), EntityOperator.IN, invoiceIds));
         }
 
         if (tagsType != null) {
