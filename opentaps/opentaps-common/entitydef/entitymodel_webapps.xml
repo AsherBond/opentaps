@@ -44,9 +44,6 @@
       <field name="linkUrl" type="long-varchar"></field>
       <field name="sequenceNum" type="numeric"/>
       <prim-key field="applicationId"/>
-      <relation type="many" rel-entity-name="OpentapsWebAppTab">
-        <key-map field-name="applicationId"/>
-      </relation>
     </entity>
 
     <entity entity-name="OpentapsWebAppTab"
@@ -64,9 +61,8 @@
       <field name="handlerParameter" type="long-varchar"></field>
       <prim-key field="applicationId"/>
       <prim-key field="tabId"/>
-      <relation type="many" rel-entity-name="OpentapsWebAppTab">
+      <relation type="one" rel-entity-name="OpentapsWebApps" fk-name="OWA_TAB_OWA">
         <key-map field-name="applicationId"/>
-        <key-map field-name="tabId"/>
       </relation>
     </entity>
 
@@ -83,11 +79,11 @@
       <field name="handlerMethod" type="long-varchar"></field>
       <field name="handlerParameter" type="long-varchar"></field>
       <prim-key field="groupId"/>
-      <prim-key field="applicationId"/>
-      <prim-key field="tabId"/>
-      <relation type="many" rel-entity-name="OpentapsShortcut">
-        <key-map field-name="groupId"/>
-      </relation>
+      <index name="OWA_SHRCT_UNQ" unique="true">
+        <index-field name="groupId"/>
+        <index-field name="applicationId"/>
+        <index-field name="tabId"/>
+      </index>
     </entity>
 
     <entity entity-name="OpentapsShortcut"
@@ -105,6 +101,9 @@
       <field name="handlerParameter" type="long-varchar"></field>
       <prim-key field="shortcutId"/>
       <prim-key field="groupId"/>
+      <relation type="one" rel-entity-name="OpentapsShortcutGroup" fk-name="OWA_SHRCT_OSG">
+        <key-map field-name="groupId"/>
+      </relation>
     </entity>
     
 </entitymodel>
