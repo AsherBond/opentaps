@@ -164,7 +164,7 @@ border: 1px solid #999999;
          <div id="row">
         <#assign appIndex = 0 />
         <#list apps as app>
-        <#if app.linkUrl?exists>
+        <#if !app.hide?exists || app.hide != "Y">
             <#assign appIndex = appIndex + 1 />
             <div id="button" class="${app.applicationId}" onmouseover="javascript:writeAppDetails('${app.shortName}','${app.applicationName}','${app.description}')">
 
