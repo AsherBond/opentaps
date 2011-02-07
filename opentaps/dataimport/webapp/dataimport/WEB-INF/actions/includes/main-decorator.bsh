@@ -84,18 +84,3 @@ if (organizationPartyId != null) {
     context{"hasAdminPermission"} = (Boolean)hasAdminPermission;
 }
 
-//define sections in tab order from left to right
-sections = new ArrayList();
-sections.add(UtilMisc.toMap("uiLabel", "DataImportHome", "uri", "/myHomeMain", "sectionName", "myHome", "hasPermission", true));
-
-//show the ofbiz tab last if so desired
-showOfbizTab = UtilConfig.getPropertyBoolean("dataimport", "dataimport.tab.ofbiz.show", false);
-if (showOfbizTab) {
-    ofbizTabLabel = UtilConfig.getPropertyValue("dataimport", "dataimport.tab.ofbiz.label");
-    ofbizTabTarget = UtilConfig.getPropertyValue("dataimport", "dataimport.tab.ofbiz.target");
-    if (ofbizTabLabel != null && ofbizTabTarget != null) {
-        sections.add(UtilMisc.toMap("uiLabel", ofbizTabLabel, "uri", ofbizTabTarget, "sectionName", "ofbiz", "hasPermission", true, "isExternal", true));
-    }
-}
-
-context.put("applicationSections", sections);

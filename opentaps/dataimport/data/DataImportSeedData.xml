@@ -43,11 +43,4 @@
     <OpentapsConfigurationType configTypeId="importOrders::purchaseOrderShipToContactMechId" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Enter PostalAddress.contactMechId to set as Purchase Orders' destination ship-to address."/>
     <OpentapsConfigurationType configTypeId="importOrders::reserveInventory" parentConfigTypeId="DATAIMPORT_SERVICE_PARAM_DEFAULTS" description="Enter TRUE to reserve inventory for open sales orders imported or FALSE to skip them." defaultValue="TRUE"/>
 
- 
-    <OpentapsWebApps applicationId="dataimport" shortName="Data Import" sequenceNum="120" applicationName="Data Import"
-             description="Import your data into opentaps" 
-             imageUrl="/opentaps_images/homeapps/dataimport.png" imageHoverUrl="/opentaps_images/homeapps/dataimport_hover.png" linkUrl="/dataimport/control/main"
-             lastUpdatedStamp="2009-07-16 19:49:23.679" lastUpdatedTxStamp="2009-07-16 19:49:23.679" createdStamp="2009-07-15 19:31:39.473" createdTxStamp="2009-07-15 19:31:39.473"/>
-
-    
 </entity-engine-xml>
