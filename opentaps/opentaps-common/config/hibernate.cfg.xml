@@ -628,6 +628,7 @@
   <mapping class="org.opentaps.base.entities.ProductStoreFacility"/>
   <mapping class="org.opentaps.base.entities.CostComponentTypeAttr"/>
   <mapping class="org.opentaps.base.entities.RateType"/>
+  <mapping class="org.opentaps.base.entities.OpentapsShortcutGroup"/>
   <mapping class="org.opentaps.base.entities.ShipmentType"/>
   <mapping class="org.opentaps.base.entities.ShipmentPackage"/>
   <mapping class="org.opentaps.base.entities.AmazonProductBulletPoint"/>
@@ -669,6 +670,7 @@
   <mapping class="org.opentaps.base.entities.InvoiceItemAttribute"/>
   <mapping class="org.opentaps.base.entities.InventoryEventPlanned"/>
   <mapping class="org.opentaps.base.entities.InvoiceItemType"/>
+  <mapping class="org.opentaps.base.entities.OpentapsWebAppTab"/>
   <mapping class="org.opentaps.base.entities.OrderReportView"/>
   <mapping class="org.opentaps.base.entities.CustRequestStatus"/>
   <mapping class="org.opentaps.base.entities.Container"/>
@@ -1065,6 +1067,7 @@
   <mapping class="org.opentaps.base.entities.ProdCatalogRole"/>
   <mapping class="org.opentaps.base.entities.WorkEffortPartyAssignByRole"/>
   <mapping class="org.opentaps.base.entities.ShipmentRouteSegmentDetail"/>
+  <mapping class="org.opentaps.base.entities.OpentapsShortcut"/>
   <mapping class="org.opentaps.base.entities.ContentMetaData"/>
   <mapping class="org.opentaps.base.entities.ExampleFeatureApplAndTypeDesired"/>
   <mapping class="org.opentaps.base.entities.PartyTaxAuthInfo"/>

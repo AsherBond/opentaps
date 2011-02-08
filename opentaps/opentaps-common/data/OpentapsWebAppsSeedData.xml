@@ -25,29 +25,11 @@ More infos in opentaps/homeapps/webapp/WEB-INF/actions/getHomeApplications.bsh
 Logging in, applications will be displayed if-and-only-if the authenticated user has VIEW permissions to view them.
 
 @author: Michele Orru' (michele.orru@integratingweb.com)
+
+Note: each application defines it own seed data, only the external ones are defined here
+like the ofbiz Party, Catalog, Webtools, etc ...
 -->
 <entity-engine-xml>
-
-<OpentapsWebApps applicationId="crmsfa" shortName="CRM/SFA" sequenceNum="10" applicationName="CRM, Customer Service, Order Entry, Marketing"
-    description="Track leads, contacts, and accounts.  Email and calendars.  Manage customer service requests.  Enter quotes and sales orders.  Maintain marketing campaigns and contact lists, and print mailing labels or send emails.  Sales forecasts and reports." 
-             imageUrl="/opentaps_images/integratingweb/crm.png" imageHoverUrl="/opentaps_images/integratingweb/crmHover.png" linkUrl="/crmsfa/control/main"
-             lastUpdatedStamp="2009-07-16 19:49:23.679" lastUpdatedTxStamp="2009-07-16 19:49:23.679" createdStamp="2009-07-15 19:31:39.473" createdTxStamp="2009-07-15 19:31:39.473"/>
-
-<OpentapsWebApps applicationId="financials" shortName="Financials" sequenceNum="20" applicationName="AR, AP, General Ledger, Financial Reports" description="Invoices and Payments for your customers and suppliers.  AR/AP statements and reports.  Sales commissions.  General ledger entries and reconciliations.  Financial reports."
-             imageUrl="/opentaps_images/integratingweb/financials.png" imageHoverUrl="/opentaps_images/integratingweb/financialsHover.png" linkUrl="/financials/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
-             lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
-
-<OpentapsWebApps applicationId="purchasing" shortName="Purchasing" sequenceNum="30" applicationName="Suppliers, Planning, and Purchasing" description="Maintain supplier contact information.  Set up products for manufacturing, including routings and bills of material.  Use Materials Resources Planning (MRP) and requirements to plan and automate purchasing.  Create and manage purchase orders"
-             imageUrl="/opentaps_images/integratingweb/purchasing.png" imageHoverUrl="/opentaps_images/integratingweb/purchasingHover.png" linkUrl="/purchasing/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
-             lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
-
-<OpentapsWebApps applicationId="warehouse" shortName="Warehouse" sequenceNum="40" applicationName="Inventory, Shipping, Manufacturing" description="Manage serialized, lot-level, or non-serialized inventory.  Receive purchase orders.  Pick, pack, and ship your orders.  Manufacture your products."
-             imageUrl="/opentaps_images/integratingweb/warehouse.png" imageHoverUrl="/opentaps_images/integratingweb/warehouseHover.png" linkUrl="/warehouse/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
-             lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
-
-<OpentapsWebApps applicationId="analytics" shortName="Analytics" sequenceNum="50" applicationName="Business Intelligence Analytics" description="Customer and Sales Analysis with Pre-built Data Warehouse and Reports"
-             imageUrl="/opentaps_images/integratingweb/analytics.png" imageHoverUrl="/opentaps_images/integratingweb/analyticsHover.png" linkUrl="/analytics/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
-             lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
 
 <OpentapsWebApps applicationId="party" shortName="Party Admin" sequenceNum="60" applicationName="Parties and Users" description="Set up Parties, Users, and Security Permissions"
              imageUrl="/opentaps_images/integratingweb/party.png" imageHoverUrl="/opentaps_images/integratingweb/partyHover.png" linkUrl="/partymgr/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"

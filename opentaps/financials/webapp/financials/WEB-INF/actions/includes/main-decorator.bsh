@@ -64,7 +64,6 @@ hasFinancialsARPaymentApplyPermission = false;
 hasViewAgreementPermission = false;
 hasUpdateAgreementPermission = false;
 hasCreateAgreementPermission = false;
-hasPartnerViewPermission = false;
 
 if (security != null && userLogin != null) {
   // check for financials view permission
@@ -156,8 +155,6 @@ if (security != null && userLogin != null) {
       security.hasEntityPermission("ACCOUNTING", "_UPDATE", userLogin)) {
       hasUpdateAgreementPermission = true;
   }
-
-  hasPartnerViewPermission = fsecurity.hasViewPartnerPermission();
 }
 
 parameters.put("hasFinancialsViewPermission", hasFinancialsViewPermission);
@@ -195,27 +192,3 @@ parameters.put("organizationName", PartyHelper.getPartyName(delegator, organizat
 baseCurrencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
 context.put("orgCurrencyUomId", baseCurrencyUomId);
 parameters.put("orgCurrencyUomId", baseCurrencyUomId);
-
-// define sections in tab order from left to right
-sections = new ArrayList();
-sections.add(UtilMisc.toMap("uiLabel", "OpentapsMyHome", "uri", "/myHomeMain", "sectionName", "myHome", "hasPermission", true));
-sections.add(UtilMisc.toMap("uiLabel", "FinancialsReceivables", "uri", "/receivablesMain", "sectionName", "receivables", "hasPermission", hasFinancialsReceivablesPermission));
-sections.add(UtilMisc.toMap("uiLabel", "FinancialsPayables", "uri", "/payablesMain", "sectionName", "payables", "hasPermission", hasFinancialsPayablesPermission));
-sections.add(UtilMisc.toMap("uiLabel", "FinancialsEmployees", "uri", "/employeesMain", "sectionName", "employees", "hasPermission", hasFinancialsEmployeesPermission));
-sections.add(UtilMisc.toMap("uiLabel", "OpentapsPartners", "uri", "/partnersMain", "sectionName", "partners", "hasPermission", hasPartnerViewPermission));
-sections.add(UtilMisc.toMap("uiLabel", "FinancialsLedger", "uri", "/transactionsMain", "sectionName", "transactions", "hasPermission", hasFinancialsTransactionPermission));
-sections.add(UtilMisc.toMap("uiLabel", "CommonReports", "uri", "/reportsMain", "sectionName", "reports", "hasPermission", hasFinancialsReportsPermission));
-sections.add(UtilMisc.toMap("uiLabel", "FinancialsConfigure", "uri", "/configurationMain", "sectionName", "configuration", "hasPermission", hasFinancialsConfigPermission));
-
-// show the ofbiz tab last if so desired
-showOfbizTab = UtilConfig.getPropertyBoolean("financials", "financials.tab.ofbiz.show", false);
-if (showOfbizTab) {
-    ofbizTabLabel = UtilConfig.getPropertyValue("financials", "financials.tab.ofbiz.label");
-    ofbizTabTarget = UtilConfig.getPropertyValue("financials", "financials.tab.ofbiz.target");
-    if (ofbizTabLabel != null && ofbizTabTarget != null) {
-        sections.add(UtilMisc.toMap("uiLabel", ofbizTabLabel, "uri", ofbizTabTarget, "sectionName", "ofbiz", "hasPermission", true, "isExternal", true));
-    }
-}
-
-//NOTE: ModelScreenWidget.java:545 uses context.get("sections"), so this would crash if we put "sections" into the map.  Hence the name "applicationSections"
-context.put("applicationSections", sections);

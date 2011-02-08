@@ -51,7 +51,6 @@
                 <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
                 <set field="sectionName" value="myHome" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/myhome/shortcuts.bsh"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/myhome/MyHomeScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>

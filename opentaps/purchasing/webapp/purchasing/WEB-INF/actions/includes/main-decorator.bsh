@@ -66,6 +66,7 @@ context.put("userLogin", userLogin);
 security = request.getAttribute("security"); 
 context.put("security", security);
 purchasingSecurity = new PurchasingSecurity(security, userLogin);
+context.put("purchasingSecurity", purchasingSecurity);
 
 // external login key
 extLogin = request.getAttribute("externalLoginKey"); 
@@ -75,40 +76,3 @@ if (extLogin != null) {
 
 // context path
 context.put("contextPath", request.getContextPath());
-
-
-// tab permissions
-supplierView = false;
-bomView = false;
-planningView = false;
-orderView = false;
-reportView = false;
-if (organizationPartyId != null) {
-    supplierView = purchasingSecurity.hasPartyRelationSecurity("PRCH_SPLR", "_VIEW", organizationPartyId);
-    bomView = purchasingSecurity.hasPartyRelationSecurity("PRCH_MFG", "_VIEW", organizationPartyId);
-    planningView = purchasingSecurity.hasPartyRelationSecurity("PRCH_PLAN", "_VIEW", organizationPartyId);
-    orderView = purchasingSecurity.hasPartyRelationSecurity("PRCH_PO", "_VIEW", organizationPartyId);
-    reportView = purchasingSecurity.hasPartyRelationSecurity("PRCH_RPT", "_VIEW", organizationPartyId);
-}
-
-// define sections in tab order from left to right
-sections = new ArrayList();
-sections.add(UtilMisc.toMap("uiLabel", "OpentapsMyHome", "uri", "/myHomeMain", "sectionName", "myHome", "hasPermission", true));
-sections.add(UtilMisc.toMap("uiLabel", "PurchSuppliers", "uri", "/supplierMain", "sectionName", "supplier", "hasPermission", supplierView));
-sections.add(UtilMisc.toMap("uiLabel", "ProductManufacturing", "uri", "/bomMain", "sectionName", "bom", "hasPermission", bomView));
-sections.add(UtilMisc.toMap("uiLabel", "PurchPlanning", "uri", "/planningMain", "sectionName", "planning", "hasPermission", planningView));
-sections.add(UtilMisc.toMap("uiLabel", "OpentapsOrders", "uri", "/orderMain", "sectionName", "order", "hasPermission", orderView));
-sections.add(UtilMisc.toMap("uiLabel", "OpentapsReports", "uri", "/manageReports", "sectionName", "reports", "hasPermission", reportView));
-
-// show the ofbiz tab last if so desired
-showOfbizTab = UtilConfig.getPropertyBoolean("purchasing", "purchasing.tab.ofbiz.show", false);
-if (showOfbizTab) {
-    ofbizTabLabel = UtilConfig.getPropertyValue("purchasing", "purchasing.tab.ofbiz.label");
-    ofbizTabTarget = UtilConfig.getPropertyValue("purchasing", "purchasing.tab.ofbiz.target");
-    if (ofbizTabLabel != null && ofbizTabTarget != null) {
-        sections.add(UtilMisc.toMap("uiLabel", ofbizTabLabel, "uri", ofbizTabTarget, "sectionName", "ofbiz", "hasPermission", true, "isExternal", true));
-    }
-}
-
-//NOTE: ModelScreenWidget.java:545 uses context.get("sections"), so this would crash if we put "sections" into the map.  Hence the name "applicationSections"
-context.put("applicationSections", sections);

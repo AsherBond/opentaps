@@ -101,7 +101,6 @@ under the License.
             <actions>
                 <!-- Any data that is used for the screenlets in the left bar (order header, etc.) should be retrieved in this bsh. -->
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/createOrderLeftBar.bsh"/>
-                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/shortcuts.bsh"/>
             </actions>
             <widgets>
                 <platform-specific>

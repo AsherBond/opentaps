@@ -40,13 +40,12 @@
 /* main-decorator.bsh populates the global context with objects used by all opentaps-common applications */
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
-
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.security.SecurityUser;
 import org.opentaps.foundation.infrastructure.Infrastructure;
@@ -54,10 +53,13 @@ import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 
 // set an infrastructure object
-globalContext.put("infrastructure", new Infrastructure(dispatcher));
+infrastructure = new Infrastructure(dispatcher);
+globalContext.put("infrastructure", infrastructure);
 
+user = null;
 if (userLogin != null) {
-    globalContext.put("user", new User(userLogin, delegator));
+    user = new User(userLogin, delegator);
+    globalContext.put("user", user);
 }
 
 // Instead of using screens to define the uiLabelMap, grab it from UtilMessage
@@ -106,3 +108,18 @@ globalContext.put("internalMessageCheckFrequencySeconds", configProperties.get("
 // get the shortcuts
 shortcuts = UtilCommon.getKeyboardShortcuts(userLogin, opentapsApplicationName, screenName, delegator);
 globalContext.put("keyboardShortcuts", EntityUtil.orderBy(shortcuts, UtilMisc.toList("screenName", "applicationName", "sequenceNum")));
+
+// get the tabs for the current application
+domainsLoader = new DomainsLoader(infrastructure, user);
+webappRepository = domainsLoader.loadDomainsDirectory().getWebAppDomain().getWebAppRepository();
+webapp = webappRepository.getWebAppById(opentapsApplicationName);
+if (webapp != null) {
+    context.put("applicationSections", webappRepository.getWebAppTabs(webapp, context));
+    sectionName = context.get("sectionName");
+    tab = webappRepository.getTabById(webapp.getApplicationId(), sectionName);
+    // look at the available shortcut groups matching the appId / tabId
+    if (tab != null) {
+        groups = webappRepository.getShortcutGroups(tab, context);
+        globalContext.put("shortcutGroups", groups);
+    }
+}

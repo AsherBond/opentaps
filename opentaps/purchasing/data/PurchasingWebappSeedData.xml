@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<entity-engine-xml>
+
+<!-- The Web Application -->
+<OpentapsWebApps applicationId="purchasing" shortName="Purchasing" sequenceNum="30" applicationName="Suppliers, Planning, and Purchasing" description="Maintain supplier contact information.  Set up products for manufacturing, including routings and bills of material.  Use Materials Resources Planning (MRP) and requirements to plan and automate purchasing.  Create and manage purchase orders"
+             imageUrl="/opentaps_images/integratingweb/purchasing.png" imageHoverUrl="/opentaps_images/integratingweb/purchasingHover.png" linkUrl="/purchasing/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
+             lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
+
+<!-- Tabs -->
+<OpentapsWebAppTab applicationId="purchasing" sequenceNum="010" tabId="myHome" uiLabel="OpentapsMyHome"
+                   linkUrl="myHomeMain"       securityModule="" securityAction="" handlerMethod="" handlerParameter=""/>
+<OpentapsWebAppTab applicationId="purchasing" sequenceNum="020" tabId="supplier" uiLabel="PurchSuppliers"
+                   linkUrl="supplierMain"     securityModule="" securityAction=""
+                   handlerMethod="org.opentaps.purchasing.security.PurchasingSecurity.checkOrganizationPermission" handlerParameter="PRCH_SPLR_VIEW"/>
+<OpentapsWebAppTab applicationId="purchasing" sequenceNum="030" tabId="bom" uiLabel="ProductManufacturing"
+                   linkUrl="bomMain"          securityModule="" securityAction=""
+                   handlerMethod="org.opentaps.purchasing.security.PurchasingSecurity.checkOrganizationPermission" handlerParameter="PRCH_MFG_VIEW"/>
+<OpentapsWebAppTab applicationId="purchasing" sequenceNum="040" tabId="planning" uiLabel="PurchPlanning"
+                   linkUrl="planningMain"     securityModule="" securityAction=""
+                   handlerMethod="org.opentaps.purchasing.security.PurchasingSecurity.checkOrganizationPermission" handlerParameter="PRCH_PLAN_VIEW"/>
+<OpentapsWebAppTab applicationId="purchasing" sequenceNum="050" tabId="order" uiLabel="OpentapsOrders"
+                   linkUrl="orderMain"        securityModule="" securityAction=""
+                   handlerMethod="org.opentaps.purchasing.security.PurchasingSecurity.checkOrganizationPermission" handlerParameter="PRCH_PO_VIEW"/>
+<OpentapsWebAppTab applicationId="purchasing" sequenceNum="060" tabId="reports" uiLabel="OpentapsReports"
+                   linkUrl="manageReports"    securityModule="" securityAction=""
+                   handlerMethod="org.opentaps.purchasing.security.PurchasingSecurity.checkOrganizationPermission" handlerParameter="PRCH_RPT_VIEW"/>
+<OpentapsWebAppTab applicationId="purchasing" sequenceNum="500" tabId="ofbiz" uiLabel="opentaps"
+                   linkUrl="/opentaps" isExternal="Y" securityModule="" securityAction="" handlerMethod=""/>
+
+<!-- Suppliers shortcuts -->
+<OpentapsShortcutGroup applicationId="purchasing" tabId="supplier" groupId="purchasingSupplier" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="findSuppliers" groupId="purchasingSupplier" sequenceNum="010" uiLabel="PurchFindSuppliers"
+                  linkUrl="findSuppliers" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createSupplier" groupId="purchasingSupplier" sequenceNum="020" uiLabel="PurchCreateSupplier"
+                  linkUrl="createSupplier" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="mergeSuppliers" groupId="purchasingSupplier" sequenceNum="030" uiLabel="PurchMergeSuppliers"
+                  linkUrl="mergeSuppliersForm" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="outsourceRoutingTask" groupId="purchasingSupplier" sequenceNum="040" uiLabel="PurchOutsourceRoutingTask"
+                  linkUrl="outsourceRoutingTaskForm" securityModule="" securityAction=""/>
+
+<!-- BOM shortcuts -->
+<OpentapsShortcutGroup applicationId="purchasing" tabId="bom" groupId="purchasingBom" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="bomSimulation" groupId="purchasingBom" sequenceNum="010" uiLabel="ManufacturingBomSimulation"
+                  linkUrl="BomSimulation" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="editProductBom" groupId="purchasingBom" sequenceNum="020" uiLabel="ManufacturingEditProductBom"
+                  linkUrl="EditProductBom" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="newRouting" groupId="purchasingBom" sequenceNum="030" uiLabel="ManufacturingNewRouting"
+                  linkUrl="NewRouting" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="findRouting" groupId="purchasingBom" sequenceNum="040" uiLabel="ManufacturingFindRouting"
+                  linkUrl="FindRouting" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="newRoutingTask" groupId="purchasingBom" sequenceNum="050" uiLabel="ManufacturingNewRoutingTask"
+                  linkUrl="NewRoutingTask" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="findRoutingTask" groupId="purchasingBom" sequenceNum="060" uiLabel="ManufacturingFindRoutingTasks"
+                  linkUrl="FindRoutingTask" securityModule="" securityAction=""/>
+
+<!-- Planning shortcuts -->
+<OpentapsShortcutGroup applicationId="purchasing" tabId="planning" groupId="purchasingPlanning" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="viewFacilityInventoryByProduct" groupId="purchasingPlanning" sequenceNum="010" uiLabel="WarehouseInventory"
+                  linkUrl="ViewFacilityInventoryByProduct" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="findRequirements" groupId="purchasingPlanning" sequenceNum="020" uiLabel="PurchFindRequirements"
+                  linkUrl="findRequirements" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="openRequirements" groupId="purchasingPlanning" sequenceNum="030" uiLabel="PurchOpenRequirements"
+                  linkUrl="openRequirements" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="approvedProductRequirementsByVendor" groupId="purchasingPlanning" sequenceNum="040" uiLabel="OrderApprovedProductRequirements"
+                  linkUrl="ApprovedProductRequirementsByVendor" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="approvedInternalRequirements" groupId="purchasingPlanning" sequenceNum="050" uiLabel="PurchApprovedInternalRequirements"
+                  linkUrl="ApprovedInternalRequirements" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="approvedTransferRequirements" groupId="purchasingPlanning" sequenceNum="060" uiLabel="PurchApprovedTransferRequirements"
+                  linkUrl="ApprovedTransferRequirements" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="runMRP" groupId="purchasingPlanning" sequenceNum="070" uiLabel="PurchRunMRP"
+                  linkUrl="runMRP" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="viewMRP" groupId="purchasingPlanning" sequenceNum="080" uiLabel="PurchViewMRP"
+                  linkUrl="viewMRP" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="viewBackupWarehouses" groupId="purchasingPlanning" sequenceNum="090" uiLabel="PurchConfigureWarehouses"
+                  linkUrl="viewBackupWarehouses" securityModule="PRCH_WRHS" securityAction="CONFIG"/>
+
+<!-- Orders shortcuts -->
+<OpentapsShortcutGroup applicationId="purchasing" tabId="order" groupId="purchasingOrders" sequenceNum="010"/>
+<OpentapsShortcut shortcutId="openOrders" groupId="purchasingOrders" sequenceNum="010" uiLabel="PurchOpenOrders"
+                  linkUrl="openOrders" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="findOrders" groupId="purchasingOrders" sequenceNum="020" uiLabel="OpentapsFindOrders"
+                  linkUrl="findOrders" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="createOrder" groupId="purchasingOrders" sequenceNum="030" uiLabel="OpentapsCreateOrder"
+                  handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasNoCart"
+                  linkUrl="orderentry" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="resumeOrder" groupId="purchasingOrders" sequenceNum="030" uiLabel="OpentapsResumeOrder"
+                  handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkHasCart"
+                  linkUrl="createOrderMainScreen" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="invoiceSupplies" groupId="purchasingOrders" sequenceNum="040" uiLabel="PurchInvoiceSupplies"
+                  linkUrl="invoiceSupplies" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="editProductDeliveryDate" groupId="purchasingOrders" sequenceNum="050" uiLabel="PurchEstimatedDeliveryDate"
+                  linkUrl="editProductDeliveryDate" securityModule="" securityAction=""/>
+
+</entity-engine-xml>

@@ -2522,20 +2522,6 @@ under the License.
       </relation>
     </view-entity>
 
-    <entity entity-name="OpentapsWebApps"
-            package-name="org.opentaps.common.webapp"
-            title="Opentaps Home Web Applications Entity">
-      <field name="applicationId" type="id-long-ne"></field>
-      <field name="shortName" type="name"></field>
-      <field name="applicationName" type="long-varchar"></field>
-      <field name="description" type="description"></field>
-      <field name="imageUrl" type="long-varchar"></field>
-      <field name="imageHoverUrl" type="long-varchar"></field>
-      <field name="linkUrl" type="long-varchar"></field>
-      <field name="sequenceNum" type="numeric"/>
-      <prim-key field="applicationId"/>
-    </entity>   
-
     <entity package-name="org.opentaps.common.config" entity-name="OpentapsConfiguration"
         title="All purpose entity for entering configuration.  A replacement for .properties">
         <field name="configTypeId" type="id-vlong"/>

@@ -426,6 +426,7 @@ public class OpentapsTestCase extends TestCase {
 
         for (int i = 0; i < expected.size(); i++) {
             Object expectedObj = expected.get(i);
+            assertTrue(message + " for index [" + i + "] expected [" + expectedObj + "] but there is no more values", i < actual.size());
             Object actualObj = actual.get(i);
             if (expectedObj == null) {
                 assertNull(message + " for index [" + i + "]", actualObj);

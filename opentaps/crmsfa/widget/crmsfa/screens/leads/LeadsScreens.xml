@@ -52,7 +52,6 @@
                 <set field="sectionName" value="leads" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_LEADS"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/leads/shortcuts.bsh"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>

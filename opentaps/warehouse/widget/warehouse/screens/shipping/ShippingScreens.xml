@@ -46,7 +46,6 @@ under the License.
             <actions>
                 <set field="sectionName" value="shipping" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
-                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/shortcuts.bsh"/>
             </actions>
             <widgets>
                 <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>

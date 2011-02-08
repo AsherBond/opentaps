@@ -30,7 +30,6 @@
                 <set field="sectionName" value="quotes" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_QUOTES"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/quotes/shortcuts.bsh"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>

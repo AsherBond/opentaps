@@ -58,6 +58,8 @@ if (!contactActive) {
     context.put("contactDeactivated", true);
     context.put("contactDeactivatedDate", contactDeactivationDate);
     context.put("validView", true);  // can still view history of deactivated contacts
+} else {
+    context.put("isActiveContactView", true);
 }
 
 dispatcher = request.getAttribute("dispatcher");

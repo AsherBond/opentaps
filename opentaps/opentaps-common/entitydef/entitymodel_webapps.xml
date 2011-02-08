@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->        
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <title>Opentaps Webapps Entity Definitions</title>
+    <copyright>Copyright (c) Open Source Strategies Inc.</copyright>
+
+    <entity entity-name="ControllerInjection"
+            package-name="org.opentaps.common.webapp"
+            title="Controller Injection Entity">
+      <field name="injectUrl" type="long-varchar"></field>
+      <field name="injectIntoUrl" type="long-varchar"></field>
+      <field name="sequenceNum" type="numeric"/>
+      <prim-key field="injectUrl"/>
+      <prim-key field="injectIntoUrl"/>
+    </entity>
+
+    <entity entity-name="OpentapsWebApps"
+            package-name="org.opentaps.common.webapp"
+            title="Opentaps Home Web Applications Entity">
+      <field name="applicationId" type="id-long-ne"></field>
+      <field name="shortName" type="name"></field>
+      <field name="applicationName" type="long-varchar"></field>
+      <field name="description" type="description"></field>
+      <field name="imageUrl" type="long-varchar"></field>
+      <field name="imageHoverUrl" type="long-varchar"></field>
+      <field name="linkUrl" type="long-varchar"></field>
+      <field name="sequenceNum" type="numeric"/>
+      <field name="hide" type="indicator">
+          <description>Set Y to hide application in the main menu screen and in the top level menu</description>
+      </field>
+      <prim-key field="applicationId"/>
+    </entity>
+
+    <entity entity-name="OpentapsWebAppTab"
+            package-name="org.opentaps.common.webapp"
+            title="Opentaps Home Web Application Tab Entity">
+      <field name="applicationId" type="id-long-ne"></field>
+      <field name="tabId" type="id-long-ne"></field>
+      <field name="uiLabel" type="long-varchar"></field>
+      <field name="sequenceNum" type="numeric"/>
+      <field name="linkUrl" type="long-varchar"></field>
+      <field name="isExternal" type="indicator"></field>
+      <field name="securityModule" type="id-long-ne"></field>
+      <field name="securityAction" type="id-long-ne"></field>
+      <field name="handlerMethod" type="long-varchar"></field>
+      <field name="handlerParameter" type="long-varchar"></field>
+      <prim-key field="applicationId"/>
+      <prim-key field="tabId"/>
+      <relation type="one" rel-entity-name="OpentapsWebApps" fk-name="OWA_TAB_OWA">
+        <key-map field-name="applicationId"/>
+      </relation>
+    </entity>
+
+    <entity entity-name="OpentapsShortcutGroup"
+            package-name="org.opentaps.common.webapp"
+            title="Opentaps Home Web Application Shortcut group Entity">
+      <field name="groupId" type="id-long-ne"></field>
+      <field name="applicationId" type="id-long-ne"></field>
+      <field name="tabId" type="id-long-ne"></field>
+      <field name="uiLabel" type="long-varchar"></field>
+      <field name="sequenceNum" type="numeric"/>
+      <field name="securityModule" type="id-long-ne"></field>
+      <field name="securityAction" type="id-long-ne"></field>
+      <field name="handlerMethod" type="long-varchar"></field>
+      <field name="handlerParameter" type="long-varchar"></field>
+      <prim-key field="groupId"/>
+      <index name="OWA_SHRCT_UNQ" unique="true">
+        <index-field name="groupId"/>
+        <index-field name="applicationId"/>
+        <index-field name="tabId"/>
+      </index>
+    </entity>
+
+    <entity entity-name="OpentapsShortcut"
+            package-name="org.opentaps.common.webapp"
+            title="Opentaps Home Web Application Shortcut Entity">
+      <field name="shortcutId" type="id-long-ne"></field>
+      <field name="groupId" type="id-long-ne"></field>
+      <field name="uiLabel" type="long-varchar"></field>
+      <field name="linkUrl" type="long-varchar"></field>
+      <field name="isExternal" type="indicator"></field>
+      <field name="sequenceNum" type="numeric"/>
+      <field name="securityModule" type="id-long-ne"></field>
+      <field name="securityAction" type="id-long-ne"></field>
+      <field name="handlerMethod" type="long-varchar"></field>
+      <field name="handlerParameter" type="long-varchar"></field>
+      <prim-key field="shortcutId"/>
+      <prim-key field="groupId"/>
+      <relation type="one" rel-entity-name="OpentapsShortcutGroup" fk-name="OWA_SHRCT_OSG">
+        <key-map field-name="groupId"/>
+      </relation>
+    </entity>
+    
+</entitymodel>

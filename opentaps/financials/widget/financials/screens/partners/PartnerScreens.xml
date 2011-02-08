@@ -24,7 +24,7 @@
         <section>
             <actions>
                 <set field="sectionName" value="partners" global="true"/>
-                <set field="sectionStyle" value="singleColumn"/>
+                <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="FINANCIALS_PARTNER"/>
             </actions>
             <widgets>
@@ -33,25 +33,7 @@
         </section>
     </screen>
 
-     <screen name="partners">
-        <section>
-            <actions>
-                <set field="pageTitleLabel" value="OpentapsPartners"/>
-                <set field="sectionHeaderUiLabel" value="OpentapsPartners"/>
-            </actions>
-            <widgets>
-                <decorator-screen name="main-section-decorator">
-                    <decorator-section name="section-body">
-                        <platform-specific><html>
-                            <html-template location="component://financials/webapp/financials/partners/partners.ftl"/></html>
-                        </platform-specific>
-                    </decorator-section>
-                </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
-     <screen name="createPartnerInvoiceForm">
+    <screen name="createPartnerInvoiceForm">
         <section>
             <actions>
                 <set field="pageTitleLabel" value="FinancialsCreatePartnerInvoice"/>
@@ -70,7 +52,7 @@
         </section>
     </screen>
 
-     <screen name="invoicePartnersForm">
+    <screen name="invoicePartnersForm">
         <section>
             <actions>
                 <set field="pageTitleLabel" value="FinancialsInvoicePartners"/>

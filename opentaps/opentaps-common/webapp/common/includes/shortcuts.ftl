@@ -17,12 +17,15 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<@frameSection title=uiLabelMap.OpentapsShortcuts>
-  <ul class="shortcuts">
-    <#list shortcuts as shortcut>
-      <#assign shortcutClass = (parameters.thisRequestUri?default("") == shortcut.uri)?string("class=\"selected\"", "")/>
-      <#assign shortcutParameters = shortcut.parameters?default("")/>
-      <li><a href="<@ofbizUrl>${shortcut.uri}${shortcutParameters}</@ofbizUrl>" ${shortcutClass}>${uiLabelMap.get(shortcut.uiLabel)}</a></li>
-    </#list>
-  </ul>
-</@frameSection>
+<#if shortcutGroups?has_content>
+  <#list shortcutGroups as sg>
+    <@frameSection title=uiLabelMap.get(sg.uiLabel?default("OpentapsShortcuts"))>
+      <ul class="shortcuts">
+        <#list sg.allowedShortcuts as shortcut>
+          <#assign shortcutClass = (parameters.thisRequestUri?default("") == shortcut.linkUrl!)?string("class=\"selected\"", "")/>
+          <li><a href="<@ofbizUrl>${shortcut.linkUrl}</@ofbizUrl>" ${shortcutClass}>${uiLabelMap.get(shortcut.uiLabel!)}</a></li>
+        </#list>
+      </ul>
+    </@frameSection>
+  </#list>
+</#if>

@@ -47,7 +47,8 @@ public class WebAppsMenu extends BaseEntry {
                 new StringFieldDef(WebAppLookupConfiguration.OUT_APPLICATION_ID),
                 new StringFieldDef(WebAppLookupConfiguration.OUT_LINK_URL),
                 new StringFieldDef(WebAppLookupConfiguration.OUT_SEQUENCE_NUM),
-                new StringFieldDef(WebAppLookupConfiguration.OUT_SHORT_NAME)
+                new StringFieldDef(WebAppLookupConfiguration.OUT_SHORT_NAME),
+                new StringFieldDef(WebAppLookupConfiguration.OUT_HIDE)
             }
     );
 
@@ -102,12 +103,17 @@ public class WebAppsMenu extends BaseEntry {
             Record record = records[i];
             String applicationId = record.getAsString(WebAppLookupConfiguration.OUT_APPLICATION_ID);
             String shortName = record.getAsString(WebAppLookupConfiguration.OUT_SHORT_NAME);
+            String hide = record.getAsString(WebAppLookupConfiguration.OUT_HIDE);
+            
+            if(hide == null) {
+                hide = "N";
+            }
             // in case the app has no shortName set, display the applicationId
             if (shortName == null) {
                 shortName = applicationId;
             }
             final String linkUrl = record.getAsString(WebAppLookupConfiguration.OUT_LINK_URL);
-            if (applicationId != null) {
+            if (applicationId != null && !"Y".equalsIgnoreCase(hide)) {
                 Command command = new Command() { public void execute() { } };
                 String menuStyle = "";
                 String menuText = "";
