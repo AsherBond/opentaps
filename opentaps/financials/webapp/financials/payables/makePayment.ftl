@@ -24,9 +24,8 @@
             <@displayTitleCell title=uiLabelMap.FinancialsPayablesPaymentToPartyId />           
             <@inputAutoCompletePartyCell name="partyId" id="makePaymentFormPartyId" />
             <@inputHidden name="paymentTypeId" value="DISBURSEMENT" />
-            <@inputSubmitRow title="${uiLabelMap.CommonSubmit}"/>
+            <@inputSubmitRow title="${uiLabelMap.CommonContinue}"/>
         </form>
-
     </tr>
    </table>
 </div>
