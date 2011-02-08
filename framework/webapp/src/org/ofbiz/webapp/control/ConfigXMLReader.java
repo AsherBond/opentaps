@@ -69,6 +69,59 @@ public class ConfigXMLReader {
         }
     }
 
+    private static ControllerConfig injectControllerIfNeeded(URL url, ControllerConfig controllerConfig) {
+        // include the controllers to be injected
+        try {
+            Delegator delegator = DelegatorFactory.getDelegator("default");
+            // we need a way to get the injects from the DB, we assume most controllers are after WEB-INF, the corresponding app is one level down eg:
+            // /home/foo/opentaps/opentaps/dataimport/webapp/dataimport/WEB-INF/controller.xml
+            // /dataimport/WEB-INF/controller.xml -> dataimport
+            String app = null;
+            String search = null;
+            for (String a : url.toString().split(File.separator)) {
+                if (a.equals("WEB-INF")) {
+                    app = search;
+                    break;
+                }
+                search = a;
+            }
+            if (app == null) {
+                Debug.logError("Could not find the application for location [" + url + "]", module);
+            } else {
+                // get the list of urls to inject
+                List<GenericValue> injects = delegator.findAllCache("ControllerInjection", UtilMisc.toList("sequenceNum"));
+                for (GenericValue inject : injects) {
+                    URL current = null;
+                    try {
+                        // only consider those matching the current controller
+                        current = FlexibleLocation.resolveLocation(inject.getString("injectIntoUrl"));
+                    } catch (MalformedURLException e) {
+                        Debug.logError(e, "Error reading potential injection target [" + inject.getString("injectIntoUrl") + "]", module);
+                    }
+                    if (!current.equals(url)) {
+                        continue;
+                    }
+                    String injectUrl = inject.getString("injectUrl");
+                    try {
+                        URL urlLocation = FlexibleLocation.resolveLocation(injectUrl);
+                        controllerConfig = getControllerConfig(urlLocation);
+                        if (!controllerConfig.includes.contains(url)) {
+                            // to avoid an infinite recursion, add #injected to the url included in this way (the URL still resolve to same file)
+                            // this is because if we inject A into B, B becomes A include(B), which still needs to get B to read the included objects, which will be A(B) again ...
+                            // instead B becomes A include B#injected, and get B#injected will be just the real B instead of A(B)
+                            controllerConfig.includes.add(new URL(url.toString() + "#injected"));
+                        }
+                    } catch (MalformedURLException e) {
+                        Debug.logError(e, "Error reading getting controller to inject [" + injectUrl + "]", module);
+                    }
+                }
+            }
+        } catch (GenericEntityException e) {
+            Debug.logError(e, "Cannot find controller injection for url [" + url + "]", module);
+        }
+        return controllerConfig;
+    }
+
     public static ControllerConfig getControllerConfig(URL url) {
         ControllerConfig controllerConfig = controllerCache.get(url);
         if (controllerConfig == null) { // don't want to block here
@@ -77,55 +130,7 @@ public class ConfigXMLReader {
                 controllerConfig = controllerCache.get(url);
                 if (controllerConfig == null) {
                     controllerConfig = new ControllerConfig(url);
-                    // include the controllers to be injected
-                    try {
-                        Delegator delegator = DelegatorFactory.getDelegator("default");
-                        // we need a way to get the injects from the DB, we assume most controllers are after WEB-INF, the corresponding app is one level down eg:
-                        // /home/foo/opentaps/opentaps/dataimport/webapp/dataimport/WEB-INF/controller.xml
-                        // /dataimport/WEB-INF/controller.xml -> dataimport
-                        String app = null;
-                        String search = null;
-                        for (String a : url.toString().split(File.separator)) {
-                            if (a.equals("WEB-INF")) {
-                                app = search;
-                                break;
-                            }
-                            search = a;
-                        }
-                        if (app == null) {
-                            Debug.logError("Could not find the application for location [" + url + "]", module);
-                        } else {
-                            // get the list of urls to inject
-                            List<GenericValue> injects = delegator.findAllCache("ControllerInjection", UtilMisc.toList("sequenceNum"));
-                            for (GenericValue inject : injects) {
-                                URL current = null;
-                                try {
-                                    // only consider those matching the current controller
-                                    current = FlexibleLocation.resolveLocation(inject.getString("injectIntoUrl"));
-                                } catch (MalformedURLException e) {
-                                    Debug.logError(e, "Error reading potential injection target [" + inject.getString("injectIntoUrl") + "]", module);
-                                }
-                                if (!current.equals(url)) {
-                                    continue;
-                                }
-                                String injectUrl = inject.getString("injectUrl");
-                                try {
-                                    URL urlLocation = FlexibleLocation.resolveLocation(injectUrl);
-                                    controllerConfig = getControllerConfig(urlLocation);
-                                    if (!controllerConfig.includes.contains(url)) {
-                                        // to avoid an infinite recursion, add #injected to the url included in this way (the URL still resolve to same file)
-                                        // this is because if we inject A into B, B becomes A include(B), which still needs to get B to read the included objects, which will be A(B) again ...
-                                        // instead B becomes A include B#injected, and get B#injected will be just the real B instead of A(B)
-                                        controllerConfig.includes.add(new URL(url.toString() + "#injected"));
-                                    }
-                                } catch (MalformedURLException e) {
-                                    Debug.logError(e, "Error reading getting controller to inject [" + injectUrl + "]", module);
-                                }
-                            }
-                        }
-                    } catch (GenericEntityException e) {
-                        Debug.logError(e, "Cannot find controller injection for url [" + url + "]", module);
-                    }
+                    controllerConfig = injectControllerIfNeeded(url, controllerConfig);
                     controllerCache.put(url, controllerConfig);
                 }
             }
