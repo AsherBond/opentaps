@@ -56,7 +56,7 @@ public abstract class CommonHandlers {
     public static <T extends EntityInterface> T checkSessionValuePresent(Map<String, Object> context, T obj) {
         HttpSession session = (HttpSession) context.get("session");
         String varName = obj.getString("handlerParameter");
-        if (session != null && session.getAttribute(varName) == null) {
+        if (session != null && session.getAttribute(varName) != null) {
             return obj;
         }
         return null;
