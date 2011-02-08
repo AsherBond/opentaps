@@ -238,6 +238,9 @@ framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
 1058cb83555da17ac2d08b1c22d521a516dee293 Fix type : added deprecated methods for backwards compatibility.
 f4bb1060fb55056228b527ceab93806898c94f86 Clear runtime/tempfiles completely
 
+framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
+b3088905fce89fd282dc0e2a8d8cd1253701798c Implementation of controller injection
+
 Applications changes
 --------------------
 
