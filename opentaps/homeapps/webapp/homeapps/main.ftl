@@ -164,18 +164,19 @@ border: 1px solid #999999;
          <div id="row">
         <#assign appIndex = 0 />
         <#list apps as app>
-        <#if !app.hide?exists || app.hide != "Y">
+        <#if (!app.hide?exists || app.hide != "Y") && app.linkUrl?has_content>
             <#assign appIndex = appIndex + 1 />
-            <div id="button" class="${app.applicationId}" onmouseover="javascript:writeAppDetails('${app.shortName}','${app.applicationName}','${app.description}')">
-
+            <div id="button" class="${app.applicationId}" onmouseover="javascript:writeAppDetails('${app.shortName!app.applicationId}','${app.applicationName!app.applicationId}','${app.description!app.applicationId}')">
+              <#if app.imageUrl?has_content>
                 <a href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>">
-                   <img src="${app.imageUrl}" onmouseover="this.src='${app.imageHoverUrl}'" onmouseout="this.src='${app.imageUrl}'" />
+                   <img src="${app.imageUrl}" onmouseover="this.src='${app.imageHoverUrl!app.imageUrl}'" onmouseout="this.src='${app.imageUrl}'" />
                 </a>
-                <div id="label" style="margin-left: 34px;" for="${app.applicationId}">
-                  <a style="color: black;" href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>" >
-                    ${app.shortName}
-                  </a>
-                </div>
+              </#if>
+              <div id="label" style="margin-left: 34px;" for="${app.applicationId}">
+                <a style="color: black;" href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>" >
+                  ${app.shortName!app.applicationId}
+                </a>
+              </div>
             </div>
 
                 <#if !app_has_next>
