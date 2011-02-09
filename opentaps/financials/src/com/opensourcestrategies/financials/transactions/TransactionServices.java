@@ -172,7 +172,7 @@ public final class TransactionServices {
                 return ServiceUtil.returnError(UtilProperties.getMessage("FinancialsUiLabels", "FinancialsServiceErrorReverseTransactionNoEntries", locale) + ":" + acctgTransId);
             }
 
-            // Toggle the debit/credit flag, set the reconcileStatusId and remove the acctgTransId from each AcctgTransEntry
+            // Toggle the debit/credit flag, set the reconcileStatusId and move the acctgTransId to the parent fields from each AcctgTransEntry
             String organizationPartyId = null;
             for (GenericValue acctgTransEntry : acctgTransEntries) {
                 if (acctgTransEntry.getString("debitCreditFlag").equals("C")) {
@@ -180,6 +180,8 @@ public final class TransactionServices {
                 } else if (acctgTransEntry.getString("debitCreditFlag").equals("D")) {
                     acctgTransEntry.set("debitCreditFlag", "C");
                 }
+                acctgTransEntry.set("parentAcctgTransId", acctgTransId);
+                acctgTransEntry.set("parentAcctgTransEntrySeqId", acctgTransEntry.get("acctgTransEntrySeqId"));
                 acctgTransEntry.set("reconcileStatusId", "AES_NOT_RECONCILED");
                 acctgTransEntry.remove("acctgTransId");
                 if (organizationPartyId == null) {
@@ -190,6 +192,7 @@ public final class TransactionServices {
             // Assemble the context for the service that creates and posts AcctgTrans and AcctgTransEntry records
             Map<String, Object> serviceMap = acctgTrans.getAllFields();
             serviceMap.remove("acctgTransId");
+            serviceMap.put("parentAcctgTransId", acctgTransId);
             serviceMap.remove("createdStamp");
             serviceMap.remove("createdTxStamp");
             serviceMap.remove("lastUpdatedStamp");
