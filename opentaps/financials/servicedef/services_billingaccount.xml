@@ -105,7 +105,7 @@ under the License.
         <description>Calculate the balance of a Billing Account.  Note this also overrides the one in ofbiz accounting by pointing
         to the methods in financials.  It basically causes the CheckOutHelper to respect our billing account balance calculations.</description>
         <attribute name="billingAccountId" type="String" mode="IN" optional="false"/>
-        <attribute name="accountBalance" type="Double" mode="OUT" optional="false"/>
+        <attribute name="accountBalance" type="BigDecimal" mode="OUT" optional="false"/>
         <attribute name="billingAccount" type="GenericValue" mode="OUT" optional="false"/>
     </service>
 

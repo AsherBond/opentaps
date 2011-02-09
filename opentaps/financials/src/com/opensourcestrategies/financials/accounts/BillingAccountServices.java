@@ -64,6 +64,8 @@ import org.opentaps.common.util.UtilMessage;
  */
 public final class BillingAccountServices {
 
+    private BillingAccountServices() { }
+
     private static String MODULE = BillingAccountServices.class.getName();
 
     public static Map<String, Object> createCustomerBillingAccount(DispatchContext dctx, Map<String, ?> context) {
@@ -263,7 +265,7 @@ public final class BillingAccountServices {
             }
 
             result.put("billingAccount", billingAccount);
-            result.put("accountBalance", new Double(com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(billingAccount).doubleValue()));
+            result.put("accountBalance", com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(billingAccount));
 
             return result;
         } catch (GenericEntityException e) {
