@@ -41,7 +41,7 @@ import org.opentaps.gwt.common.client.lookup.configuration.WebAppLookupConfigura
 public class WebAppsMenu extends BaseEntry {
     private static final String WEBAPPS_MENU_ID = "webAppsMenu";
     private static final String MODULE = WebAppsMenu.class.getName();
-    private static int DISPLAY_MENU_ITEMS = 5;
+    private static final int DISPLAY_MENU_ITEMS = 5;
     private static final RecordDef WEB_APPS_RECORD_DEF = new RecordDef(
             new FieldDef[]{
                 new StringFieldDef(WebAppLookupConfiguration.OUT_APPLICATION_ID),
@@ -99,45 +99,53 @@ public class WebAppsMenu extends BaseEntry {
         // More menu - vertical=true
         MenuBar menuMore = new MenuBar(true);
 
+        // count the actually inserted items
+        int n = 0;
+
         for (int i = 0; i < records.length; i++) {
             Record record = records[i];
             String applicationId = record.getAsString(WebAppLookupConfiguration.OUT_APPLICATION_ID);
-            String shortName = record.getAsString(WebAppLookupConfiguration.OUT_SHORT_NAME);
             String hide = record.getAsString(WebAppLookupConfiguration.OUT_HIDE);
-            
-            if(hide == null) {
+
+            if (hide == null) {
                 hide = "N";
             }
+
+            if (UtilUi.isEmpty(applicationId) || "Y".equalsIgnoreCase(hide)) {
+                // skip this application
+                continue;
+            }
+
+            final String linkUrl = record.getAsString(WebAppLookupConfiguration.OUT_LINK_URL);
+            String shortName = record.getAsString(WebAppLookupConfiguration.OUT_SHORT_NAME);
             // in case the app has no shortName set, display the applicationId
             if (shortName == null) {
                 shortName = applicationId;
             }
-            final String linkUrl = record.getAsString(WebAppLookupConfiguration.OUT_LINK_URL);
-            if (applicationId != null && !"Y".equalsIgnoreCase(hide)) {
-                Command command = new Command() { public void execute() { } };
-                String menuStyle = "";
-                String menuText = "";
-                if (linkUrl != null && !"".equals(linkUrl)) {
-                    menuStyle = i <= DISPLAY_MENU_ITEMS ? "linkMenu" : "textMenu";
-                    menuText =  "<a href=\"" + linkUrl + "\">" + shortName + "</a>";
-                } else {
-                    menuStyle = "textMenu";
-                    menuText = shortName;
-                }
-
-                MenuItem menuItem = new MenuItem(menuText, true, command);
-                menuItem.addStyleName(menuStyle);
-                if (i <= DISPLAY_MENU_ITEMS) {
-                    // The top 5 should be shown above logo.
-                    menuTop.addItem(menuItem);
-                } else {
-                    // The rest show be under "More"
-                    menuMore.addItem(menuItem);
-                }
+            Command command = new Command() { public void execute() { } };
+            String menuStyle;
+            String menuText;
+            if (!UtilUi.isEmpty(linkUrl)) {
+                menuStyle = (i <= DISPLAY_MENU_ITEMS ? "linkMenu" : "textMenu");
+                menuText = "<a href=\"" + linkUrl + "\">" + shortName + "</a>";
+            } else {
+                menuStyle = "textMenu";
+                menuText = shortName;
             }
+
+            MenuItem menuItem = new MenuItem(menuText, true, command);
+            menuItem.addStyleName(menuStyle);
+            if (n <= DISPLAY_MENU_ITEMS) {
+                // The top 5 should be shown above logo.
+                menuTop.addItem(menuItem);
+            } else {
+                // The rest show be under "More"
+                menuMore.addItem(menuItem);
+            }
+            n++;
         }
         // add "more" second level menu for contain more link
-        if (records.length > DISPLAY_MENU_ITEMS + 1) {
+        if (n > DISPLAY_MENU_ITEMS) {
             menuTop.addItem("<span class=\"moreMenu\">more</span>", true, menuMore);
         }
         // add menu to the root panel.
