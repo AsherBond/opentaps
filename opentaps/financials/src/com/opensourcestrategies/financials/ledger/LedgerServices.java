@@ -555,7 +555,7 @@ public final class LedgerServices {
 
         // if still no GL account, then it is an error
         if (UtilValidate.isEmpty(invoiceItemPostingGlAccountId)) {
-            return ServiceUtil.returnError("Cannot find posting GL account for invoice item " + invoiceItem);
+            return ServiceUtil.returnError("Cannot find posting GL account for invoice " + invoiceItem.get("invoiceId") + " item " + invoiceItem.get("invoiceItemSeqId"));
         }
 
         // default variance is either postingAmount - orderAmount or postingAmount - standardCost
@@ -812,12 +812,15 @@ public final class LedgerServices {
             return invoiceItem.getString("overrideGlAccountId");
         }
         GenericValue invoiceItemType = invoiceItem.getRelatedOne("InvoiceItemType");
-        GenericValue orgInvoiceItemTypeGlAccount = EntityUtil.getFirst(invoiceItemType.getRelatedByAnd("InvoiceItemTypeGlAccount", UtilMisc.toMap("organizationPartyId", organizationPartyId)));
-        if (orgInvoiceItemTypeGlAccount != null) {
-            return orgInvoiceItemTypeGlAccount.getString("glAccountId");
-        } else {
-            return invoiceItemType.getString("defaultGlAccountId");
+        if (invoiceItemType != null) {
+            GenericValue orgInvoiceItemTypeGlAccount = EntityUtil.getFirst(invoiceItemType.getRelatedByAnd("InvoiceItemTypeGlAccount", UtilMisc.toMap("organizationPartyId", organizationPartyId)));
+            if (orgInvoiceItemTypeGlAccount != null) {
+                return orgInvoiceItemTypeGlAccount.getString("glAccountId");
+            } else {
+                return invoiceItemType.getString("defaultGlAccountId");
+            }
         }
+        return null;
     }
 
 
