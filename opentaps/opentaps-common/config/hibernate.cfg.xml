@@ -944,6 +944,7 @@
   <mapping class="org.opentaps.base.entities.EnumerationType"/>
   <mapping class="org.opentaps.base.entities.QuoteTermAttribute"/>
   <mapping class="org.opentaps.base.entities.DataImportGlAccount"/>
+  <mapping class="org.opentaps.base.entities.ControllerInjection"/>
   <mapping class="org.opentaps.base.entities.BenefitTypeAndParty"/>
   <mapping class="org.opentaps.base.entities.UserLoginSecurityGroup"/>
   <mapping class="org.opentaps.base.entities.PartyRelationshipAndCaseRole"/>
