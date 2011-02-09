@@ -594,9 +594,10 @@ public class EmailServices {
         result.put("messageWrapper", sendMailResult.get("messageWrapper"));
         result.put("body", bodyWriter.toString());
         result.put("subject", subject);
+        result.put("communicationEventId", sendMailResult.get("communicationEventId"));
         if (UtilValidate.isNotEmpty(orderId)) {
             result.put("orderId", orderId);
-        }
+        }            
         return result;
     }
 

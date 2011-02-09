@@ -41,10 +41,10 @@ under the License.
                 for (var i = 0; i < latlng.length; i++) {
                   latlngbounds.extend(latlng[i]);
                 }
-                map.setCenter(latlngbounds.getCenter(), map.getBoundsZoomLevel(latlngbounds) - 1);//reduce bounds zoom level to see all markers
+                map.setCenter(latlngbounds.getCenter(), Math.min (15, map.getBoundsZoomLevel(latlngbounds)));//reduce bounds zoom level to see all markers
               <#else>
-                //map.setCenter(new GLatLng(37.4419, -122.1419), 12);
                 map.setCenter(new GLatLng(0, 0), 1);
+                map.setZoom(15); // 0=World, 19=max zoom in
               </#if>
             </#if>
             <#if geoChart.controlUI?has_content && geoChart.controlUI == "small">
@@ -85,6 +85,7 @@ under the License.
               map.setUIToDefault();
               map.setCenter(point, 13);
               map.addOverlay(new GMarker(point));
+              map.setZoom(15); // 0=World, 19=max zoom in
             });
           }
         --></script>

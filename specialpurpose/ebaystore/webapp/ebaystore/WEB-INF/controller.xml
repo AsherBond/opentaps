@@ -272,7 +272,7 @@
     <request-map uri="retrieveEbayCategoryByParent">
         <security https="true" auth="true"/>
         <event type="java" path="org.ofbiz.ebaystore.EbayStoreOptions" invoke="retrieveEbayCategoryByParent"/>
-        <response name="success" type="view" value="main"/>
+        <response name="success" type="request" value="json"/>
     </request-map>
     <request-map uri="retrieveEbayStoreCategoryByParent">
         <security https="true" auth="true"/>
@@ -302,10 +302,10 @@
         <response name="success" type="view" value="prepareProductListing"/>
         <response name="error" type="view" value="exportProductListing"/>
     </request-map>
-    <request-map uri="verifyItem">
+    <request-map uri="verifyItemBeforeAddAndExportToEbay">
         <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.ebaystore.EbayEvents" invoke="verifyItemBeforeAdd"/>
-        <response name="success" type="view" value="prepareProductListing"/>
+        <event type="java" path="org.ofbiz.ebaystore.EbayEvents" invoke="verifyItemBeforeAddAndExportToEbay"/>
+        <response name="success" type="request" value="clearExpListing"/>
         <response name="error" type="view" value="exportProductListing"/>
     </request-map>
     <request-map uri="exportListingToEbay">

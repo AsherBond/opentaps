@@ -300,8 +300,10 @@ public class ProductsExportToEbay {
                 if (categoryCode != null) {
                     if (categoryCode.indexOf("_") != -1) {
                         String[] params = categoryCode.split("_");
-                        if (params == null || params.length != 3) {
+                        if (UtilValidate.isEmpty(params) || params[1].length() == 0) {
                             ServiceUtil.returnFailure(UtilProperties.getMessage(resource, "productsExportToEbay.parametersNotCorrectInGetEbayCategories", locale));
+                        } else {
+                            primaryCategoryId = params[1];
                         }
                     }else{
                         primaryCategoryId = categoryCode;
@@ -315,6 +317,11 @@ public class ProductsExportToEbay {
 
                 Element primaryCatElem = UtilXml.addChildElement(itemElem, "PrimaryCategory", itemDocument);
                 UtilXml.addChildElementValue(primaryCatElem, "CategoryID", primaryCategoryId, itemDocument);
+                UtilXml.addChildElementValue(itemElem, "ConditionID", "1000", itemDocument);
+                Element itemSpecificsElem = UtilXml.addChildElement(itemElem, "ItemSpecifics", itemDocument);
+                Element nameValueListElem = UtilXml.addChildElement(itemSpecificsElem, "NameValueList", itemDocument);
+                UtilXml.addChildElementValue(nameValueListElem, "Name", "Condition", itemDocument);
+                UtilXml.addChildElementValue(nameValueListElem, "Value", "New: With Tags", itemDocument);
 
                 //Debug.logInfo("The generated string is ======= " + UtilXml.writeXmlDocument(itemDocument), module);
                 dataItemsXml.append(UtilXml.writeXmlDocument(itemDocument));
