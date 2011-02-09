@@ -35,6 +35,8 @@ import com.opensourcestrategies.financials.util.UtilCOGS;
 import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastSet;
+
+import org.apache.batik.dom.GenericEntity;
 import org.ofbiz.accounting.AccountingException;
 import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.accounting.util.UtilAccounting;
@@ -66,8 +68,10 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
+import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.InvoiceAdjustment;
 import org.opentaps.base.entities.PaymentApplication;
+import org.opentaps.base.services.GetTrialBalanceForDateService;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.payment.Payment;
@@ -2984,52 +2988,95 @@ public final class LedgerServices {
 
         String organizationPartyId = (String) context.get("organizationPartyId");
         String customTimePeriodId = (String) context.get("customTimePeriodId");
-
+        Infrastructure infrastructure = new Infrastructure(dispatcher);
+        
         try {
             // figure out the current time period's type (year, quarter, month)
             GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
             if (timePeriod == null) {
                 return ServiceUtil.returnError("Cannot find a time period for " + organizationPartyId + " and time period id " + customTimePeriodId);
             }
-            String periodTypeId = timePeriod.getString("periodTypeId");
 
             // get the organization's accounts for profit and loss (net income) and retained earnings
             String retainedEarningsGlAccountId = UtilAccounting.getProductOrgGlAccountId(null, "RETAINED_EARNINGS", organizationPartyId, delegator);
             String profitLossGlAccountId =  UtilAccounting.getProductOrgGlAccountId(null, "PROFIT_LOSS_ACCOUNT", organizationPartyId, delegator);
 
-            // figure out the profit and loss since the last closed time period
-            BigDecimal netIncome = BigDecimal.ZERO;
-            Map tmpResult = dispatcher.runSync("getActualNetIncomeSinceLastClosing", UtilMisc.toMap("organizationPartyId", organizationPartyId, "periodTypeId", periodTypeId,
-                        "thruDate", UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")), "userLogin", userLogin), -1, false);
-            if (tmpResult.get("netIncome") != null) {
-                netIncome = ((BigDecimal) tmpResult.get("netIncome"));
-            } else {
-               return ServiceUtil.returnError("Cannot calculate a net income for" + organizationPartyId + " and time period id " + customTimePeriodId);
+            // get a trial balance as of ending date of time period
+            GetTrialBalanceForDateService trialBalanceService = new GetTrialBalanceForDateService();
+            trialBalanceService.setInAsOfDate(UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")));  // must convert thruDate from Date to Timestamp first
+            trialBalanceService.setInOrganizationPartyId(organizationPartyId);
+            trialBalanceService.setInUserLogin(userLogin);
+            trialBalanceService.runSyncNoNewTransaction(infrastructure);
+            
+            // debit REVENUE, credit EXPENSE accounts, and put the net into the retained earnings account
+            Map<GenericValue, BigDecimal> accountBalancesToDebit = new HashMap();                           // in case revenue account balances are null
+            accountBalancesToDebit.putAll(trialBalanceService.getOutRevenueAccountBalances());
+            Map<GenericValue, BigDecimal> accountBalancesToCredit = new HashMap();
+            accountBalancesToCredit.putAll(trialBalanceService.getOutExpenseAccountBalances());
+            
+            // also will debit INCOME accounts
+            accountBalancesToDebit.putAll(trialBalanceService.getOutIncomeAccountBalances());
+            
+            // will ignore the OTHER accounts
+            
+            // this is the amount to enter into retained earnings
+            BigDecimal closingNetIncome = BigDecimal.ZERO;
+            int seq = 0;
+            Set<GenericValue> debitAccounts = accountBalancesToDebit.keySet();
+            Set<GenericValue> creditAccounts = accountBalancesToCredit.keySet();
+            List<GenericValue> closingEntries = new ArrayList();
+
+            // create a Debit transaction entry for each debit account item
+            for (GenericValue debitAccount: debitAccounts) {
+                BigDecimal amount = accountBalancesToDebit.get(debitAccount);
+                if (amount == null) {
+                    Debug.logWarning("Debit account [" + debitAccount.getString("glAccountId") + "] has a null amount and will be skipped", MODULE);
+                    continue;
+                }
+                // IMPORTANT: Must skip the net income account or this entry would cause the trial balance to be unbalanced
+                if (debitAccount.getString("glAccountId").equals(profitLossGlAccountId)) {
+                    Debug.logWarning("Credit account [" + debitAccount.getString("glAccountId") + "] will be skipped because it is the net income/profit loss account", MODULE);
+                    continue;
+                }
+                AcctgTransEntry entry = new AcctgTransEntry();
+                entry.setGlAccountId(debitAccount.getString("glAccountId"));
+                entry.setDebitCreditFlag("D");
+                entry.setAmount(amount);
+                entry.setOrganizationPartyId(organizationPartyId);
+                entry.setAcctgTransEntryTypeId("_NA_");
+                entry.setAcctgTransEntrySeqId(Integer.toString(seq++));
+                closingEntries.add(delegator.makeValue("AcctgTransEntry", entry.toMap()));  // convert back to GenericValue for the createAcctgTransAndEntries service call below
+                closingNetIncome = closingNetIncome.add(amount);
             }
-            Debug.logVerbose("Net income since last closing = [ " + netIncome + "]", MODULE);
 
-            // make sure that the posted net income and retained earnings of this time period are correct (vs the calculated numbers).  If not, we'll need to create accounting transaction entries
-            GenericValue postedNetIncome = delegator.findByPrimaryKey("GlAccountHistory", UtilMisc.toMap("organizationPartyId", organizationPartyId,
-                 "customTimePeriodId", timePeriod.getString("customTimePeriodId"), "glAccountId", profitLossGlAccountId));
+            // create a Credit transaction entry for each credit account item
+            for (GenericValue creditAccount: creditAccounts) {
+                BigDecimal amount = accountBalancesToCredit.get(creditAccount);
+                if (amount == null) {
+                    Debug.logWarning("Credit account [" + creditAccount.getString("glAccountId") + "] has a null amount and will be skipped", MODULE);
+                    continue;
+                }
+                AcctgTransEntry entry = new AcctgTransEntry();
+                entry.setGlAccountId(creditAccount.getString("glAccountId"));
+                entry.setDebitCreditFlag("C");
+                entry.setAmount(amount);
+                entry.setOrganizationPartyId(organizationPartyId);
+                entry.setAcctgTransEntryTypeId("_NA_");
+                entry.setAcctgTransEntrySeqId(Integer.toString(seq++));
+                closingEntries.add(delegator.makeValue("AcctgTransEntry", entry.toMap()));
+                closingNetIncome = closingNetIncome.subtract(amount);
+            }
 
-            if (postedNetIncome == null) {
-                Debug.logInfo("No posted net income.  Will be posting [" + netIncome + "] to retained earnings account [" + retainedEarningsGlAccountId + "] and [" + profitLossGlAccountId + "]", MODULE);
-                // no earnings and net income have been posted to this period, we'll have to create acctg transaction entries
-                GenericValue retainedEarningsTransaction = delegator.makeValue("AcctgTransEntry", UtilMisc.toMap("glAccountId", retainedEarningsGlAccountId, "debitCreditFlag", "C",
-                      "amount", netIncome, "acctgTransEntrySeqId", Integer.toString(0), "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_"));
-                GenericValue netIncomeTransaction = delegator.makeValue("AcctgTransEntry", UtilMisc.toMap("glAccountId", profitLossGlAccountId, "debitCreditFlag", "D",
-                      "amount", netIncome, "acctgTransEntrySeqId", Integer.toString(1), "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_"));
-
-                // this is subtle - the transactionDate must be right before the thruDate, or the transaction will actually overlap into the next time period.  We subtract 1 second (1000 milliseconds) to move it before
-                tmpResult = dispatcher.runSync("createAcctgTransAndEntries", UtilMisc.toMap("acctgTransEntries", UtilMisc.toList(retainedEarningsTransaction, netIncomeTransaction),
+            closingNetIncome = closingNetIncome.setScale(decimals, rounding); // round after all the add/subtract is done
+            
+            // add an entry to credit the retained earnings account
+            closingEntries.add(delegator.makeValue("AcctgTransEntry", UtilMisc.toMap("glAccountId", retainedEarningsGlAccountId, "debitCreditFlag", "C",
+                      "amount", closingNetIncome, "acctgTransEntrySeqId", Integer.toString(seq), "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_")));
+            
+            // this is subtle - the transactionDate must be right before the thruDate, or the transaction will actually overlap into the next time period.  We subtract 1 second (1000 milliseconds) to move it before
+            Map tmpResult = dispatcher.runSync("createAcctgTransAndEntries", UtilMisc.toMap("acctgTransEntries", closingEntries,
                       "glFiscalTypeId", "ACTUAL", "transactionDate", new Timestamp(timePeriod.getDate("thruDate").getTime() - 1000), "acctgTransTypeId", "PERIOD_CLOSING", "userLogin", userLogin));
-            } else if (UtilAccounting.getNetBalance(postedNetIncome, MODULE).subtract(netIncome).abs().compareTo(EPSILON) < 0) {
-                // this is ok too - send a message to the user
-                Debug.logInfo("Net income and earnings already posted.  Not posting again", MODULE);
-            } else {
-                // this is bad.  somehow, earnings have been posted but don't add up
-                return ServiceUtil.returnError("Calculated a net income of " + netIncome + " but found posted net income of " + UtilAccounting.getNetBalance(postedNetIncome, MODULE));
-            }
+            
 
             // find the previous closed time period, in case we need to carry a balance forward.
             // NOTE: It is very important that we specify the same periodTypeId.  Otherwise, when each transaction entry is posted, it will update the
@@ -3112,6 +3159,8 @@ public final class LedgerServices {
         } catch (GenericEntityException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         } catch (GenericServiceException ex) {
+            return ServiceUtil.returnError(ex.getMessage());
+        } catch (ServiceException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         }
     }

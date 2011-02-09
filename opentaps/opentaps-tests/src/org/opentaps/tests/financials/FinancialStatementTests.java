@@ -252,9 +252,33 @@ public class FinancialStatementTests extends FinancialsTestCase {
         assertEquals("Total credit balance not correct", (BigDecimal) results.get("totalCredits"), new BigDecimal("1442593.22"));
         assertEquals("Net balance is not zero", (BigDecimal) results.get("totalBalances"), BigDecimal.ZERO);
         
-        // now close FY 2009 and check again.  There should be no revenue, expense, income, or other accounts, and the total debit/credit should have changed
-        // also run the trial balance at the end of 6/30/09 to make sure the right time period is found
-    
+        // now close FY 2009 and check again as of 7/1/09.  There should be no revenue, expense, income, or other accounts, and the total debit/credit should have changed
+        closeFiscalYear(trialBalanceOrganizationPartyId, UtilDateTime.toTimestamp(1, 1, 2009, 0, 0, 0));
+       
+        results = dispatcher.runSync("getTrialBalanceForDate", params);
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("assetAccountBalances")), expectedAssetAccountBalances);
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("liabilityAccountBalances")), expectedLiabilityAccountBalances);
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("equityAccountBalances")), expectedEquityAccountBalances);
+
+        assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("revenueAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("expenseAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        
+        expectedIncomeAccountBalances = new HashMap<String, BigDecimal>();
+        expectedIncomeAccountBalances.put("800000", BigDecimal.ZERO);
+        
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("incomeAccountBalances")), expectedIncomeAccountBalances);
+        assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("otherAccountBalances")).keySet().size()), BigDecimal.ZERO);
+
+        // also run the trial balance at the end of 6/30/09 to make sure the right time period is found -- same results should apply
+        params.put("asOfDate", UtilDateTime.toTimestamp(6, 30, 2009, 23, 59, 59));
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("assetAccountBalances")), expectedAssetAccountBalances);
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("liabilityAccountBalances")), expectedLiabilityAccountBalances);
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("equityAccountBalances")), expectedEquityAccountBalances);
+        assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("revenueAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("expenseAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("incomeAccountBalances")), expectedIncomeAccountBalances);
+        assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("otherAccountBalances")).keySet().size()), BigDecimal.ZERO);
+
     }
 
     /**
