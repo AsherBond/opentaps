@@ -675,6 +675,8 @@ public final class CrmsfaOrderEvents {
             ShoppingCartItem item = (ShoppingCartItem) iter.next();
             cart.clearItemShipInfo(item);
         }
+        // remove any empty ship groups
+        cart.cleanUpShipGroups();
         ShoppingCart.CartShipInfo newShipInfo = (ShoppingCart.CartShipInfo) cart.getShipGroups().get(cart.addShipInfo());
         int newIndex = cart.getShipGroups().indexOf(newShipInfo);
         for (Iterator iter = cart.items().iterator(); iter.hasNext();) {
