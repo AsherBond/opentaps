@@ -168,8 +168,8 @@
 
 <!-- Activities shortcuts -->
 <OpentapsShortcutGroup applicationId="crmsfa" tabId="activities" groupId="crmsfaActivities" sequenceNum="010"/>
-<OpentapsShortcut shortcutId="myHome?calendarView=month" groupId="crmsfaActivities" sequenceNum="010" uiLabel="CrmMyCalendar"
-                        linkUrl="myHome" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="myHome" groupId="crmsfaActivities" sequenceNum="010" uiLabel="CrmMyCalendar"
+                        linkUrl="myHome?calendarView=month" securityModule="" securityAction="" />
 <OpentapsShortcut shortcutId="pendingEmails" groupId="crmsfaActivities" sequenceNum="020" uiLabel="CrmActivitiesPendingEmails"
                         linkUrl="pendingEmails" securityModule="" securityAction="" />
 <OpentapsShortcut shortcutId="createEvent" groupId="crmsfaActivities" sequenceNum="030" uiLabel="CrmCreateEvent"
