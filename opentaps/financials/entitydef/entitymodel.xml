@@ -65,7 +65,7 @@ under the License.
         <field name="acctgTagEnumId8" type="id-ne"/>
         <field name="acctgTagEnumId9" type="id-ne"/>
         <field name="acctgTagEnumId10" type="id-ne"/>
-        <relation type="one" rel-entity-name="AcctgTransEntry" fk-name="ATE_PATE" title="parent">
+        <relation type="one" rel-entity-name="AcctgTransEntry" fk-name="ATE_PATE" title="Parent">
             <key-map field-name="parentAcctgTransId" rel-field-name="acctgTransId"/>
             <key-map field-name="parentAcctgTransEntrySeqId" rel-field-name="acctgTransEntrySeqId"/>
         </relation>
@@ -259,7 +259,7 @@ under the License.
         <field name="invoiceAdjustmentId" type="id"/>
         <field name="paymentApplicationId" type="id"/>
         <field name="postedAmount" type="currency-precise"/>
-        <relation type="one" rel-entity-name="AcctgTrans" fk-name="AT_PAT" title="parent">
+        <relation type="one" rel-entity-name="AcctgTrans" fk-name="AT_PAT" title="Parent">
             <key-map field-name="parentAcctgTransId" rel-field-name="acctgTransId"/>
         </relation>
         <relation type="one" rel-entity-name="InvoiceAdjustment">
