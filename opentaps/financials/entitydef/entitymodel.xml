@@ -54,7 +54,7 @@ under the License.
 
     <extend-entity entity-name="AcctgTransEntry">
         <field name="parentAcctgTransId" type="id-ne"/>
-        <field name="parentAcctgTransEntrySeqId" type="id-ne"/>
+        <field name="parentAcctgTransEntrySeqId" type="id-ne" col-name="P_ACCTG_TRANS_ENTRY_SEQ_ID"/>
         <field name="acctgTagEnumId1" type="id-ne"/>
         <field name="acctgTagEnumId2" type="id-ne"/>
         <field name="acctgTagEnumId3" type="id-ne"/>
