@@ -37,7 +37,13 @@ import org.opentaps.foundation.service.ServiceException;
 import com.opensourcestrategies.crmsfa.activities.UtilActivity;
 import com.opensourcestrategies.crmsfa.teams.TeamHelper;
 
+/**
+ * Actions for the opentpas calendar display .
+ * Not the popup calendar.
+ */
 public final class CalendarAction {
+
+    private CalendarAction() { }
 
     public static void day(Map<String, Object> context) throws ServiceException {
         final ActionContext ac = new ActionContext(context);
@@ -72,10 +78,10 @@ public final class CalendarAction {
 
         Timestamp now = UtilDateTime.getDayStart(UtilDateTime.nowTimestamp(), timeZone, locale);
         Timestamp start = null;
-        if(startParam != null) {
+        if (startParam != null) {
             start = new Timestamp(Long.parseLong(startParam));
         }
-        if(start == null) {
+        if (start == null) {
             start = now;
         } else {
             start = UtilDateTime.getDayStart(start, timeZone, locale);
@@ -128,15 +134,15 @@ public final class CalendarAction {
 
         Timestamp now = UtilDateTime.getWeekStart(UtilDateTime.nowTimestamp(), timeZone, locale);
         Timestamp start = null;
-        if(startParam != null) 
+        if (startParam != null) {
             start = new Timestamp(Long.parseLong(startParam));
-            
-        if(start == null) {
+        }
+        if (start == null) {
             start = now;
         } else {
             start = UtilDateTime.getWeekStart(start, timeZone, locale);
         }
-            
+
         Timestamp prev = UtilDateTime.getDayStart(start, -7, timeZone, locale);
         Timestamp next = UtilDateTime.getDayStart(start, 7, timeZone, locale);
         Timestamp end = UtilDateTime.getDayStart(start, 6, timeZone, locale);
@@ -187,10 +193,10 @@ public final class CalendarAction {
 
         Timestamp now = UtilDateTime.getMonthStart(UtilDateTime.nowTimestamp(), timeZone, locale);
         Timestamp start = null;
-        if(startParam != null) {
+        if (startParam != null) {
             start = new Timestamp(Long.parseLong(startParam));
         }
-        if(start == null) {
+        if (start == null) {
             start = now;
         } else {
             start = UtilDateTime.getMonthStart(start, timeZone, locale);
@@ -201,21 +207,23 @@ public final class CalendarAction {
         Integer numDays = tempCal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         Timestamp prev = UtilDateTime.getMonthStart(start, -1, timeZone, locale);
-        Timestamp next = UtilDateTime.getDayStart(start, numDays+1, timeZone, locale);
+        Timestamp next = UtilDateTime.getDayStart(start, numDays + 1, timeZone, locale);
         Timestamp end = UtilDateTime.getDayStart(start, numDays, timeZone, locale);
 
         //Find out what date to get from
         Timestamp getFrom = null;
         Integer prevMonthDays =  tempCal.get(Calendar.DAY_OF_WEEK) - tempCal.getFirstDayOfWeek();
-        if(prevMonthDays < 0) prevMonthDays = 7 + prevMonthDays;
-        tempCal.add(Calendar.DATE,-(prevMonthDays));
+        if (prevMonthDays < 0) {
+            prevMonthDays = 7 + prevMonthDays;
+        }
+        tempCal.add(Calendar.DATE, -(prevMonthDays));
         numDays += prevMonthDays;
         getFrom = new Timestamp(tempCal.getTime().getTime());
 
         GetWorkEffortEventsByPeriodService getEvntsSrvc = new GetWorkEffortEventsByPeriodService(ac.getUser());
         getEvntsSrvc.setInStart(getFrom);
         getEvntsSrvc.setInNumPeriods(Integer.valueOf(numDays));
-        List<String> partyIds = UtilGenerics.checkList(context.get("partyIds"), String.class);
+        List<String> partyIds = UtilGenerics.checkList(ac.get("partyIds"), String.class);
         getEvntsSrvc.setInPartyIds(partyIds);
         getEvntsSrvc.setInEntityExprList(UtilActivity.getDefaultCalendarExprList(partyIds));
         getEvntsSrvc.setInFacilityId(facilityId);
