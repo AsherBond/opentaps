@@ -18,12 +18,15 @@
 package org.opentaps.crmsfa.calendar;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import com.opensourcestrategies.crmsfa.activities.UtilActivity;
+import com.opensourcestrategies.crmsfa.teams.TeamHelper;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
@@ -33,9 +36,6 @@ import org.opentaps.base.services.GetWorkEffortEventsByPeriodService;
 import org.opentaps.common.party.ViewPrefWorker;
 import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.service.ServiceException;
-
-import com.opensourcestrategies.crmsfa.activities.UtilActivity;
-import com.opensourcestrategies.crmsfa.teams.TeamHelper;
 
 /**
  * Actions for the opentpas calendar display .
@@ -94,7 +94,7 @@ public final class CalendarAction {
         getEvntsSrvc.setInStart(start);
         getEvntsSrvc.setInNumPeriods(Integer.valueOf(24));
         getEvntsSrvc.setInFilterOutCanceledEvents(Boolean.TRUE);
-        List<String> partyIds = UtilGenerics.checkList(ac.get("partyIds"), String.class);
+        List<String> partyIds = new ArrayList<String>(UtilGenerics.checkCollection(ac.get("partyIds"), String.class));
         getEvntsSrvc.setInEntityExprList(UtilActivity.getDefaultCalendarExprList(partyIds));
         getEvntsSrvc.setInPartyIds(partyIds);
         getEvntsSrvc.setInFacilityId(facilityId);
@@ -150,7 +150,7 @@ public final class CalendarAction {
         GetWorkEffortEventsByPeriodService getEvntsSrvc = new GetWorkEffortEventsByPeriodService(ac.getUser());
         getEvntsSrvc.setInStart(start);
         getEvntsSrvc.setInNumPeriods(Integer.valueOf(7));
-        List<String> partyIds = UtilGenerics.checkList(ac.get("partyIds"), String.class);
+        List<String> partyIds = new ArrayList<String>(UtilGenerics.checkCollection(ac.get("partyIds"), String.class));
         getEvntsSrvc.setInEntityExprList(UtilActivity.getDefaultCalendarExprList(partyIds));
         getEvntsSrvc.setInPartyIds(partyIds);
         getEvntsSrvc.setInFacilityId(facilityId);
@@ -223,7 +223,7 @@ public final class CalendarAction {
         GetWorkEffortEventsByPeriodService getEvntsSrvc = new GetWorkEffortEventsByPeriodService(ac.getUser());
         getEvntsSrvc.setInStart(getFrom);
         getEvntsSrvc.setInNumPeriods(Integer.valueOf(numDays));
-        List<String> partyIds = UtilGenerics.checkList(ac.get("partyIds"), String.class);
+        List<String> partyIds = new ArrayList<String>(UtilGenerics.checkCollection(ac.get("partyIds"), String.class));
         getEvntsSrvc.setInPartyIds(partyIds);
         getEvntsSrvc.setInEntityExprList(UtilActivity.getDefaultCalendarExprList(partyIds));
         getEvntsSrvc.setInFacilityId(facilityId);
