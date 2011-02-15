@@ -40,9 +40,7 @@
           <@displayTitleCell title=uiLabelMap.FinancialsOverrideGlAccount />
           <td ><@inputAutoCompleteGlAccount name="overrideGlAccountId" id="overrideGlAccountId" default=invoiceItem.overrideGlAccountId/></td>
           </tr>
-        <#if invoice.invoiceTypeId == "SALES_INVOICE" || invoice.invoiceTypeId == "PURCHASE_INVOICE">
           <@inputAutoCompleteProductRow name="productId" title=uiLabelMap.ProductProductId default=invoiceItem.productId />
-        </#if>
       </table>
       <table>
         <tr>
@@ -76,9 +74,7 @@
           <@displayTitleCell title=uiLabelMap.FinancialsOverrideGlAccount />
           <td ><@inputAutoCompleteGlAccount name="overrideGlAccountId" id="overrideGlAccountId" default=glAccountId/></td>
         </tr>
-        <#if invoice.invoiceTypeId == "SALES_INVOICE" || invoice.invoiceTypeId == "PURCHASE_INVOICE">
-          <@inputAutoCompleteProductRow name="productId" title=uiLabelMap.ProductProductId />
-        </#if>
+        <@inputAutoCompleteProductRow name="productId" title=uiLabelMap.ProductProductId />
       </table>
       <table>
         <tr>
