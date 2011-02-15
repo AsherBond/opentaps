@@ -1109,11 +1109,14 @@ under the License.
             title="Links orderheader/role/item to inventory item either via OISGIR for searching pending orders">
       <member-entity entity-alias="OT" entity-name="OrderRole"/>
       <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+      <member-entity entity-alias="TCO" entity-name="TrackingCodeOrder"/>
       <member-entity entity-alias="OI" entity-name="OrderItem"/>
       <member-entity entity-alias="OISGIR" entity-name="OrderItemShipGrpInvRes"/>
       <member-entity entity-alias="II" entity-name="InventoryItem"/>
       <alias entity-alias="OH" name="orderName"/>
       <alias entity-alias="OH" name="orderId"/>
+      <alias entity-alias="TCO" name="trackingCodeTypeId"/>
+      <alias entity-alias="TCO" name="trackingCodeId"/>
       <alias entity-alias="OT" name="partyId"/>
       <alias entity-alias="OT" name="roleTypeId"/>
       <alias entity-alias="OH" name="orderTypeId"/>
@@ -1145,6 +1148,9 @@ under the License.
       <alias entity-alias="II" name="lotId"/>
 
       <view-link entity-alias="OT" rel-entity-alias="OH">
+        <key-map field-name="orderId"/>
+      </view-link>
+      <view-link entity-alias="OH" rel-entity-alias="TCO" rel-optional="true">
         <key-map field-name="orderId"/>
       </view-link>
       <view-link entity-alias="OH" rel-entity-alias="OI" rel-optional="true">
