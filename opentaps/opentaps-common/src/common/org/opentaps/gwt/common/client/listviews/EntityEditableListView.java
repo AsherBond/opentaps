@@ -802,6 +802,8 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
             col = new ColumnConfig(label, definition.getName());
         }
 
+        col.setId(definition.getName());
+
         if (editor != null) {
             col.setEditor(editor);
         }
@@ -834,6 +836,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
 
         CurrencyColumnConfig col = new CurrencyColumnConfig(label, valueDefinition.getName());
         col.setCurrencyCode(currencyCode);
+        col.setId(valueDefinition.getName());
         columnConfigs.add(col);
         return col;
     }
@@ -861,6 +864,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
         fieldDefinitions.add(currencyDefinition);
 
         CurrencyColumnConfig col = new CurrencyColumnConfig(label, currencyDefinition.getName(), valueDefinition.getName());
+        col.setId(valueDefinition.getName());
         columnConfigs.add(col);
         return col;
     }
@@ -931,6 +935,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
         fieldDefinitions.add(idDefinition);
 
         LinkColumnConfig col = new LinkColumnConfig(label, idDefinition.getName(), valueDefinition.getName(), url, lookup);
+        col.setId(valueDefinition.getName());
         if (lookup) {
             lookupColumns.add(col);
         }
