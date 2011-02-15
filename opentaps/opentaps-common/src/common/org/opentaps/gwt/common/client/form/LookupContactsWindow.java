@@ -28,8 +28,9 @@ import com.gwtext.client.core.Position;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.Window;
+import com.gwtext.client.widgets.grid.ColumnModel;
 import com.gwtext.client.widgets.grid.GridPanel;
-import com.gwtext.client.widgets.grid.event.GridRowListenerAdapter;
+import com.gwtext.client.widgets.grid.event.GridCellListenerAdapter;
 import com.gwtext.client.widgets.layout.FitLayout;
 
 public class LookupContactsWindow extends Window {
@@ -69,15 +70,18 @@ public class LookupContactsWindow extends Window {
         innerPanel.setPaddings(15);
         innerPanel.setBaseCls("x-plain");
 
-        findContactsForm.getListView().addGridRowListener(new GridRowListenerAdapter() {
+        findContactsForm.getListView().addGridCellListener(new GridCellListenerAdapter() {
 
             /** {@inheritDoc} */
             @Override
-            public void onRowClick(GridPanel grid, int rowIndex, EventObject e) {
-                Record record = findContactsForm.getListView().getStore().getRecordAt(rowIndex);
-                if (record != null) {
-                    // retrieve selected record and call event handler
-                    LookupContactsWindow.this.onSelection(record.getAsString(PartyLookupConfiguration.INOUT_PARTY_ID));
+            public void onCellClick(GridPanel grid, int row, int col, EventObject e) {
+                Record record = findContactsForm.getListView().getStore().getRecordAt(row);
+                ColumnModel model = grid.getColumnModel();
+                if (!PartyLookupConfiguration.INOUT_EMAIL.equals(model.getColumnId(col))) {
+                    if (record != null) {
+                        // retrieve selected record and call event handler
+                        LookupContactsWindow.this.onSelection(record.getAsString(PartyLookupConfiguration.INOUT_PARTY_ID));
+                    }
                 }
             }
         });

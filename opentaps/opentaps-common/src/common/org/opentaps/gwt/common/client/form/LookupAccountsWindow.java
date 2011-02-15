@@ -28,11 +28,14 @@ import com.gwtext.client.core.Position;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.Window;
+import com.gwtext.client.widgets.grid.ColumnModel;
 import com.gwtext.client.widgets.grid.GridPanel;
-import com.gwtext.client.widgets.grid.event.GridRowListenerAdapter;
+import com.gwtext.client.widgets.grid.event.GridCellListenerAdapter;
 import com.gwtext.client.widgets.layout.FitLayout;
 
+
 public class LookupAccountsWindow extends Window {
+    private static final String MODULE = LookupAccountsWindow.class.getName();
 
     private static final int FORM_WIDTH  = 800;
     private static final int FORM_HEIGHT = 680;
@@ -69,18 +72,23 @@ public class LookupAccountsWindow extends Window {
         innerPanel.setPaddings(15);
         innerPanel.setBaseCls("x-plain");
 
-        findAccountsForm.getListView().addGridRowListener(new GridRowListenerAdapter() {
+        findAccountsForm.getListView().addGridCellListener(new GridCellListenerAdapter() {
 
             /** {@inheritDoc} */
             @Override
-            public void onRowClick(GridPanel grid, int rowIndex, EventObject e) {
-                Record record = findAccountsForm.getListView().getStore().getRecordAt(rowIndex);
-                if (record != null) {
-                    // retrieve selected record and call event handler
-                    LookupAccountsWindow.this.onSelection(record.getAsString(PartyLookupConfiguration.INOUT_PARTY_ID));
+            public void onCellClick(GridPanel grid, int row, int col, EventObject e) {
+                ColumnModel model = grid.getColumnModel();
+                if (!PartyLookupConfiguration.INOUT_EMAIL.equals(model.getColumnId(col))) {
+                    Record record = findAccountsForm.getListView().getStore().getRecordAt(row);
+                    if (record != null) {
+                        // retrieve selected record and call event handler
+                        LookupAccountsWindow.this.onSelection(record.getAsString(PartyLookupConfiguration.INOUT_PARTY_ID));
+                    }
                 }
             }
+            
         });
+
     }
 
     /**

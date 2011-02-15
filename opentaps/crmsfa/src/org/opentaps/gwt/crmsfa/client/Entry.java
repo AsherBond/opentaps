@@ -559,7 +559,7 @@ public class Entry extends BaseEntry {
         final LookupAccountsWindow window = new LookupAccountsWindow(true, true);
         window.create();
 
-        // register listener to be notified when user selects a contact
+        // register listener to be notified when user selects an account
         window.register(new FormNotificationInterface<String>() {
 
             /** {@inheritDoc} */
