@@ -295,17 +295,13 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="findCustomerBillAcct"/>
     </request-map>
-    <request-map uri="payInvoiceWithBillingAccountForm">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="payInvoiceWithBillingAccountForm"/>
-    </request-map>
     <request-map uri="payInvoiceWithBillingAccount">
         <security https="true" auth="true"/>
-        <event type="service" invoke="captureBillingAccountPayment"/>
+        <event type="service" invoke="captureBillingAccountPayments"/>
         <response name="success" type="request-redirect" value="viewCustomerBillAcct">
           <redirect-parameter name="billingAccountId"/>
         </response>
-        <response name="error" type="view" value="payInvoiceWithBillingAccountForm"/>
+        <response name="error" type="view" value="viewCustomerBillAcct"/>
     </request-map>
 
     <request-map uri="customerVendorStatement.pdf">
@@ -2038,7 +2034,6 @@
 
     <view-map name="viewCustomerBillAcct" type="screen" page="component://financials/widget/financials/screens/receivables/BillingAccountScreens.xml#viewCustomerBillAcct"/>
     <view-map name="findCustomerBillAcct" type="screen" page="component://financials/widget/financials/screens/receivables/BillingAccountScreens.xml#findCustomerBillAcct"/>
-    <view-map name="payInvoiceWithBillingAccountForm" type="screen" page="component://financials/widget/financials/screens/receivables/BillingAccountScreens.xml#payInvoiceWithBillingAccountForm"/>
 
     <view-map name="CustomerVendorStatementPDF" type="screenfop" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#CustomerVendorStatementPDF" content-type="application/pdf" encoding="none"/>
     <view-map name="CODReceipt" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#CODReceipt"/>

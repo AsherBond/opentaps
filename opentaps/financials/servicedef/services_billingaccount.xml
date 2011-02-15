@@ -92,10 +92,12 @@ under the License.
         Note that this is the ofbiz "deprecated" captureBillingAccountPayment service, but because its replacement captureBillingAccountPayments
         broke billing account functionality as a real billing account, the original captureBillingAccountPayment service is brought back and
         maintained here.  This name overrides the one defined in ofbiz accounting.</description>
+        <implements service="accountingTagsEntityInterface"/>
         <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
         <attribute name="billingAccountId" type="String" mode="IN" optional="false"/>
-        <attribute name="captureAmount" type="Double" mode="INOUT" optional="false"/>
+        <attribute name="captureAmount" type="BigDecimal" mode="INOUT" optional="false"/>
         <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="limitToAvailableBalance" type="String" mode="IN" optional="true"/>
         <attribute name="paymentId" type="String" mode="OUT" optional="false"/>
         <attribute name="paymentGatewayResponseId" type="String" mode="OUT" optional="true"/>
     </service>

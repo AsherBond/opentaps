@@ -39,12 +39,16 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package com.opensourcestrategies.financials.accounts;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.ofbiz.accounting.payment.PaymentGatewayServices;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.Delegator;
@@ -56,8 +60,16 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
+import org.opentaps.domain.organization.Organization;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Billing accounts related services.
@@ -171,19 +183,47 @@ public final class BillingAccountServices {
     public static Map<String, Object> captureBillingAccountPayment(DispatchContext dctx, Map<String, ?> context) {
         Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String invoiceId = (String) context.get("invoiceId");
         String billingAccountId = (String) context.get("billingAccountId");
-        Double captureAmount = (Double) context.get("captureAmount");
+        BigDecimal captureAmount = (BigDecimal) context.get("captureAmount");
+        String limitToAvailableBalance = (String) context.get("limitToAvailableBalance");
         String orderId = (String) context.get("orderId");
         Map<String, Object> results = ServiceUtil.returnSuccess();
 
         try {
-            // Note that the partyIdFrom of the Payment should be the partyIdTo of the invoice, since you're receiving a payment from the party you billed
+            // check the amount against the billing account balance if required
+            if ("Y".equalsIgnoreCase(limitToAvailableBalance)) {
+                BigDecimal balance = com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, billingAccountId);
+                if (balance.compareTo(captureAmount) < 0) {
+                    return UtilMessage.createAndLogServiceError("Insufficient balance on billing account [" + billingAccountId + "], remaining balance is " + balance + " but tried to capture " + captureAmount, MODULE);
+                }
+            }
+
+            // get the invoice
             GenericValue invoice = delegator.findByPrimaryKey("Invoice", UtilMisc.toMap("invoiceId", invoiceId));
+
+            DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+            DomainsDirectory domains = domainLoader.loadDomainsDirectory();
+            OrganizationRepositoryInterface ori =  domains.getOrganizationDomain().getOrganizationRepository();
+            Organization organization = ori.getOrganizationById(invoice.getString("partyIdFrom"));
+            // note: tags are set on the Payment if !allocatePaymentTagsToApplications, else they are set on the PaymentApplication
+            // so tags are always required here, validate them
+            Map<String, String> tags = new HashMap<String, String>();
+            UtilAccountingTags.putAllAccountingTags(context, tags);
+            List<AccountingTagConfigurationForOrganizationAndUsage> missings = ori.validateTagParameters(tags, organization.getPartyId(), UtilAccountingTags.RECEIPT_PAYMENT_TAG, UtilAccountingTags.ENTITY_TAG_PREFIX);
+            if (!missings.isEmpty()) {
+                return UtilMessage.createAndLogServiceError("OpentapsError_ServiceErrorRequiredTagNotFound", UtilMisc.toMap("tagName", missings.get(0).getDescription()), locale, MODULE);
+            }
+
+            // Note that the partyIdFrom of the Payment should be the partyIdTo of the invoice, since you're receiving a payment from the party you billed
             Map<String, Object> paymentParams = UtilMisc.<String, Object>toMap("paymentTypeId", "CUSTOMER_PAYMENT", "paymentMethodTypeId", "EXT_BILLACT",
                     "partyIdFrom", invoice.getString("partyId"), "partyIdTo", invoice.getString("partyIdFrom"),
-                    "statusId", "PMNT_RECEIVED", "effectiveDate", UtilDateTime.nowTimestamp());
+                    "statusId", "PMNT_NOT_PAID", "effectiveDate", UtilDateTime.nowTimestamp());
+            if (!organization.allocatePaymentTagsToApplications()) {
+                UtilAccountingTags.putAllAccountingTags(context, paymentParams);
+            }
             paymentParams.put("amount", captureAmount);
             paymentParams.put("currencyUomId", invoice.getString("currencyUomId"));
             paymentParams.put("userLogin", userLogin);
@@ -193,22 +233,31 @@ public final class BillingAccountServices {
             }
 
             String paymentId = (String) tmpResult.get("paymentId");
-            tmpResult = dispatcher.runSync("createPaymentApplication", UtilMisc.toMap("paymentId", paymentId, "invoiceId", invoiceId, "billingAccountId", billingAccountId,
-                    "amountApplied", captureAmount, "userLogin", userLogin));
+            Map<String, Object> input = UtilMisc.toMap("paymentId", paymentId, "invoiceId", invoiceId, "billingAccountId", billingAccountId, "amountApplied", captureAmount, "checkForOverApplication", Boolean.TRUE, "userLogin", userLogin);
+            if (organization.allocatePaymentTagsToApplications()) {
+                UtilAccountingTags.putAllAccountingTags(context, input);
+            }
+            tmpResult = dispatcher.runSync("createPaymentApplication", input);
             if (ServiceUtil.isError(tmpResult)) {
                 return tmpResult;
             }
             if (paymentId == null) {
-                return ServiceUtil.returnError("No payment created for invoice [" + invoiceId + "] and billing account [" + billingAccountId + "]");
+                return UtilMessage.createAndLogServiceError("No payment created for invoice [" + invoiceId + "] and billing account [" + billingAccountId + "]", MODULE);
             }
             results.put("paymentId", paymentId);
             results.put("captureAmount", captureAmount);
 
-            if (orderId != null && captureAmount.doubleValue() > 0) {
+            // now set the payment to received
+            tmpResult = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("paymentId", paymentId, "statusId", "PMNT_RECEIVED", "userLogin", userLogin));
+            if (ServiceUtil.isError(tmpResult)) {
+                return tmpResult;
+            }
+
+            if (orderId != null && captureAmount.signum() > 0) {
                 // Create a paymentGatewayResponse, if necessary
                 GenericValue order = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
                 if (order == null) {
-                    return ServiceUtil.returnError("No paymentGatewayResponse created for invoice [" + invoiceId + "] and billing account [" + billingAccountId + "]: Order with ID [" + orderId + "] not found!");
+                    return UtilMessage.createAndLogServiceError("No paymentGatewayResponse created for invoice [" + invoiceId + "] and billing account [" + billingAccountId + "]: Order with ID [" + orderId + "] not found!", MODULE);
                 }
                 // See if there's an orderPaymentPreference - there should be only one OPP for EXT_BILLACT per order
                 List<GenericValue> orderPaymentPreferences = delegator.findByAnd("OrderPaymentPreference", UtilMisc.toMap("orderId", orderId, "paymentMethodTypeId", "EXT_BILLACT"));
@@ -244,10 +293,8 @@ public final class BillingAccountServices {
                     }
                 }
             }
-        } catch (GenericEntityException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        } catch (GenericServiceException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
+        } catch (GeneralException ex) {
+            return UtilMessage.createAndLogServiceError(ex, MODULE);
         }
 
         return results;

@@ -19,5 +19,4 @@
 
 <div class="subSectionHeader">
   <div class="subSectionTitle">${uiLabelMap.FinancialsCustomerBillingAccount} ${uiLabelMap.OrderNbr}${billingAccount.billingAccountId}</div>
-  <div class="subMenuBar"><a class="subMenuButton" href="<@ofbizUrl>payInvoiceWithBillingAccountForm?billingAccountId=${billingAccount.billingAccountId}</@ofbizUrl>">${uiLabelMap.FinancialsPayInvoice}</a></div>
 </div>

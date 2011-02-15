@@ -76,20 +76,6 @@
         <field name="availableBalance"><display description="${groovy:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, context.get(&quot;billingAccountId&quot;))}" type="currency" currency="${accountCurrencyUomId}"/></field>
     </form>
 
-    <form name="payInvoiceWithBillingAccountForm" type="single" target="payInvoiceWithBillingAccount"
-        default-title-style="tableheadtext" default-tooltip-style="tabletext" default-widget-style="inputBox">
-
-        <field name="billingAccountId" title="${uiLabelMap.FinancialsCustomerBillingAccountID}" widget-style="tabletext">
-            <display description="${parameters.billingAccountId}"/>
-        </field>
-        <field name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}"><text/></field>
-        <field name="captureAmount" title="${uiLabelMap.CommonAmount}">
-            <text size="10"/> 
-        </field>
-
-        <field name="submitButton" title="${uiLabelMap.FinancialsMakePayment}" widget-style="smallSubmit"><submit button-type="button"/></field>
-    </form>
-
     <form name="EditBillingAccount" type="single" target="updateBillingAccount" title=""
           default-map-name="billingAccount" default-title-style="tableheadtext" >
         <alt-target use-when="billingAccount==null" target="createBillingAccount"/>
