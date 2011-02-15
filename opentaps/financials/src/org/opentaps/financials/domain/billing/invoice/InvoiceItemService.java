@@ -431,14 +431,16 @@ public class InvoiceItemService extends DomainService implements InvoiceItemServ
             // load product and invoice domain object
             Product product = productRepository.getProductById(productId);
             Invoice invoice = invoiceRepository.getInvoiceById(invoiceId);
+
+            // If invoiceItemTypeId is null, then use the ProductInvoiceItemType
+            // to fill in the invoiceItemTypeId (see below for this entity)
+            if (invoiceItemTypeId == null) {
+                String newInvoiceItemTypeId = invoiceRepository.getInvoiceItemTypeIdForProduct(invoice, product);
+                Debug.logInfo("set new InvoiceItemTypeId [" + newInvoiceItemTypeId + "]", MODULE);
+                setInvoiceItemTypeId(newInvoiceItemTypeId);
+            }
+
             if (invoice.isSalesInvoice()) {
-                // If invoiceItemTypeId is null, then use the ProductInvoiceItemType
-                // to fill in the invoiceItemTypeId (see below for this entity)
-                if (invoiceItemTypeId == null) {
-                    String newInvoiceItemTypeId = invoiceRepository.getInvoiceItemTypeIdForProduct(invoice, product);
-                    Debug.logInfo("set new InvoiceItemTypeId [" + newInvoiceItemTypeId + "]", MODULE);
-                    setInvoiceItemTypeId(newInvoiceItemTypeId);
-                }
                 // If description is null, then use Product productName to fill in
                 // the description
                 if (description == null) {
@@ -466,11 +468,6 @@ public class InvoiceItemService extends DomainService implements InvoiceItemServ
                 // if the type is purchase invoice, then use the getSupplierProduct and set:
                 // 1. amount = SupplierProduct.lastPrice
                 // 2. description = SupplierProduct.supplierProductId + " " + SuppierProduct.supplierProductName
-                if (invoiceItemTypeId == null) {
-                    String newInvoiceItemTypeId = invoiceRepository.getInvoiceItemTypeIdForProduct(invoice, product);
-                    Debug.logVerbose("set new InvoiceItemTypeId [" + newInvoiceItemTypeId + "]", MODULE);
-                    setInvoiceItemTypeId(newInvoiceItemTypeId);
-                }
                 SupplierProduct supplierProduct = purchasingRepository.getSupplierProduct(invoice.getPartyIdFrom(), productId, invoice.convertToBigDecimal(quantity), invoice.getCurrencyUomId());
                 //if supplierProduct not null
                 if (supplierProduct != null) {
