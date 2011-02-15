@@ -195,7 +195,10 @@
         <input type="text" class="inputBox" name="amount" value="<#if paymentValue?has_content>${paymentValue.amount?if_exists}<#elseif parameters.amount?exists>${parameters.amount}</#if>"/>
         <select name="currencyUomId" class="selectBox">
           <#list currencyUoms as currencyUom>
-            <option value="${currencyUom.uomId}" <#if currencyUomId == currencyUom.uomId>selected="selected"</#if>>${currencyUom.abbreviation}</option>
+            <#if !currencyUomId?has_content>
+              <option value="" selected="selected"></option>
+            </#if>
+            <option value="${currencyUom.uomId}" <#if currencyUomId?has_content && currencyUomId == currencyUom.uomId>selected="selected"</#if>>${currencyUom.abbreviation}</option>
           </#list>
         </select>
       </td>
