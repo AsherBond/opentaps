@@ -25,6 +25,7 @@
         <#if hasCreateAccountPermission?exists>
             <@displayLink href="createAccountForm?contactPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="subMenuButton"/>
         </#if>
+        <#-- another button "Assign Account" is a GWT widget -->
     </div>
   </#if>
 </@sectionHeader>
