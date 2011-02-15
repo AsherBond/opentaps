@@ -364,7 +364,7 @@ under the License.
                 <decorator-screen name="order-entry-decorator">
                     <decorator-section name="order-entry-body">
                         <platform-specific>
-                            <html><html-template location="component://party/webapp/partymgr/party/editeftaccount.ftl"/></html>
+                            <html><html-template location="component://opentaps-common/webapp/common/payment/editEftAccount.ftl"/></html>
                         </platform-specific>
                     </decorator-section>
                 </decorator-screen>
