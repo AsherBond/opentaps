@@ -74,11 +74,6 @@
 <OpentapsShortcut shortcutId="createSalesAgreement" groupId="financialsReceivablesAgreements" sequenceNum="020" uiLabel="FinancialsCreateCustomerAgreement"
                   linkUrl="createSalesAgreement" securityModule="" securityAction=""/>
 
-<!-- Customer Credits group -->
-<OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivablesCustomerCredits" sequenceNum="040" uiLabel="FinancialsCustomerBillingAccounts"/>
-<OpentapsShortcut shortcutId="findCustomerBillAcct" groupId="financialsReceivablesCustomerCredits" sequenceNum="010" uiLabel="FinancialsFindCustomerBillingAccount"
-                  linkUrl="findCustomerBillAcct" securityModule="" securityAction=""/>
-
 <!-- Finance Charges group -->
 <OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivablesFinanceCharges" sequenceNum="050" uiLabel="FinancialsFinanceCharges"/>
 <OpentapsShortcut shortcutId="findFinanceCharges" groupId="financialsReceivablesFinanceCharges" sequenceNum="010" uiLabel="FinancialsFindFinanceCharges"
