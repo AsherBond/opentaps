@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.ofbiz.base.util.*;
+import org.ofbiz.common.CommonWorkers;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -277,11 +278,14 @@ public final class InventoryServices {
     @SuppressWarnings("unchecked")
     public static Map checkInventoryAlreadyReserved(DispatchContext dctx, Map context) {
         Delegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
         String orderItemSeqId = (String) context.get("orderItemSeqId");
-        double reserving = (Double) context.get("quantity");
+        String productId = (String) context.get("productId");
+        BigDecimal reserving = BigDecimal.valueOf((Double) context.get("quantity"));
+
         try {
             // applies only to sales orders
             GenericValue order = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
@@ -291,32 +295,88 @@ public final class InventoryServices {
             }
 
             // count quantity ordered
-            double ordered = 0.0;
+            BigDecimal ordered = BigDecimal.ZERO;
             Map input = UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId);
             GenericValue item = delegator.findByPrimaryKey("OrderItem", input);
             if (item == null) {
                 return UtilMessage.createServiceError("OrderErrorOrderItemNotFound", locale);
             }
-            ordered = item.getDouble("quantity");
-            ordered -= (item.get("cancelQuantity") == null ? 0 : item.getDouble("cancelQuantity"));
+            ordered = item.getBigDecimal("quantity");
+            if (item.get("cancelQuantity") != null) {
+                ordered = ordered.subtract(item.getBigDecimal("cancelQuantity"));
+            }
+
+            GenericValue product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", item.get("productId")));
+            if (product == null) {
+                return UtilMessage.createAndLogServiceError("Cannot reserve " + reserving + " of Product [" + item.get("productId") + "], product not found.", MODULE);
+            }
+
+            // check if the item is a marketing package (MARKETING_PKG_PICK) as the products reserved for this item would be the components
+            // if this is the case we get the total quantity of components ordered (which is the quantity of package item times quantity of component) matching the given productId
+            boolean productIsMarketingPkgPick;
+            // special case, if productId is the product id of the package, always do as if it is a normal product
+            if (item.get("productId").equals(productId)) {
+                productIsMarketingPkgPick = false;
+            } else {
+                productIsMarketingPkgPick = CommonWorkers.hasParentType(delegator, "ProductType", "productTypeId", product.getString("productTypeId"), "parentTypeId", "MARKETING_PKG_PICK");
+            }
+
+            if (productIsMarketingPkgPick) {
+                if (UtilValidate.isEmpty(productId)) {
+                    return UtilMessage.createAndLogServiceError("Cannot reserve " + reserving + " of Product [" + productId + "], not found as a component of MARKETING_PKG_PICK product [" + item.get("productId") + "].", MODULE);
+                }
+
+                Debug.logInfo("Product [" + product.get("productId") + "] is a MARKETING_PKG_PICK, actually trying to reserve [" + productId + "] ...", MODULE);
+                Map componentsRes = dispatcher.runSync("getAssociatedProducts", UtilMisc.toMap("productId", item.getString("productId"), "type", "PRODUCT_COMPONENT"));
+                if (ServiceUtil.isError(componentsRes)) {
+                    return UtilMessage.createAndLogServiceError(componentsRes, MODULE);
+                } else {
+                    // get the total quantity to be reserved for the given productId
+                    BigDecimal compToReserve = null;
+                    List<GenericValue> assocProducts = (List<GenericValue>) componentsRes.get("assocProducts");
+                    for (GenericValue productAssoc : assocProducts) {
+                        // only interested in the product we are trying to reserve
+                        if (!productId.equals(productAssoc.get("productIdTo"))) {
+                            continue;
+                        } else {
+                            BigDecimal compQty = productAssoc.getBigDecimal("quantity");
+                            if (compQty == null) {
+                                compQty = BigDecimal.ZERO;
+                            }
+                            compToReserve = compQty.multiply(ordered);
+                        }
+                    }
+                    // if the component was not found return an error
+                    if (compToReserve == null) {
+                        return UtilMessage.createAndLogServiceError("Cannot reserve " + reserving + " of Product [" + productId + "], not found as a component of MARKETING_PKG_PICK product [" + item.get("productId") + "].", MODULE);
+                    }
+                    ordered = compToReserve;
+                }
+            }
 
             // count up the quantity already reserved for this item  (note that canceling a reservation deletes it, thus this data represents what's actually reserved)
-            double reserved = 0.0;
-            List<GenericValue> reservations = delegator.findByAnd("OrderItemShipGrpInvRes", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
+            BigDecimal reserved = BigDecimal.ZERO;
+            Map<String, String> resFind = UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId);
+            if (productIsMarketingPkgPick) {
+                // filter the reservation to get the ones corresponding to the component we are trying to reserve
+                resFind.put("productId", productId);
+            }
+
+            List<GenericValue> reservations = delegator.findByAnd("OrderItemShipGrpInvResAndItem", resFind);
             for (GenericValue reservation : reservations) {
                 if (reservation.get("quantity") == null) {
                     continue; // paranoia
                 }
-                reserved += reservation.getDouble("quantity");
+                reserved = reserved.add(reservation.getBigDecimal("quantity"));
             }
 
             // make sure we're not over reserving the item TODO label
-            if (reserving > (ordered - reserved)) {
-                return ServiceUtil.returnError("Cannot reserve " + reserving + " of Product [" + item.get("productId") + "].  There are already " + reserved + " reserved out of " + ordered + " ordered for order [" + orderId + "] line item [" + orderItemSeqId + "].");
+            if (reserving.compareTo(ordered.subtract(reserved)) > 0) {
+                return UtilMessage.createAndLogServiceError("Cannot reserve " + reserving + " of Product [" + item.get("productId") + "].  There are already " + reserved + " reserved out of " + ordered + " ordered for order [" + orderId + "] line item [" + orderItemSeqId + "].", MODULE);
             }
 
             return ServiceUtil.returnSuccess();
-        } catch (GenericEntityException e) {
+        } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, locale, MODULE);
         }
     }

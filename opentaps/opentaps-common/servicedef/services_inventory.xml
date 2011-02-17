@@ -93,6 +93,8 @@
             This should be run as an invoke SECA on all reserveProductInventory services.</description>
         <attribute name="orderId" type="String" mode="IN" optional="false"/>
         <attribute name="orderItemSeqId" type="String" mode="IN" optional="false"/>
+        <!-- productId is used when the order item is a marketing package (MARKETING_PKG_PICK) as the product reserved for this item would be one of the components -->
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
         <attribute name="quantity" type="Double" mode="IN" optional="false"/>
     </service>
 
