@@ -23,8 +23,13 @@
     <!-- Set up supplemental data for company, which is required for some features such as PDF printing to work. -->
     <PartySupplementalData partyId="Company" companyName="Your Company Name Here" currencyUomId="USD" primaryPostalAddressId="9000" />
 
+    <!-- Set store credits to be handled by billing accounts -->
+    <ProductStore productStoreId="9000" storeCreditAccountEnumId="BILLING_ACCOUNT"/>
+    <!-- note: this one is from DemoEbayStoreDate -->
+    <ProductStore productStoreId="90100" storeCreditAccountEnumId="BILLING_ACCOUNT"/>
+
     <!-- Turn this off so the demo store could add additional shipping charges during order packing -->
-    <ProductStore productStoreId="9000" prorateShipping="N"/>
+    <ProductStore productStoreId="9000" prorateShipping="N" />
 
     <!-- Give the admin user an email -->
     <ContactMech contactMechId="admin_email" contactMechTypeId="EMAIL_ADDRESS" infoString="admin@opentaps.org"/>
