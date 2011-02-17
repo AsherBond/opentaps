@@ -2033,6 +2033,9 @@ public class PaymentGatewayServices {
 
         ModelService model = dctx.getModelService("processCaptureResult");
         Map<String, Object> context = model.makeValid(result, ModelService.IN_PARAM);
+        if (context.get("captureRefNum") == null) {
+            context.put("captureRefNum", ""); // FIXME: this is an hack to avoid a service validation error for processCaptureResult (captureRefNum is mandatory, but it is not used for billing accounts)
+        }
         Map<String, Object> capRes;
         try {
             capRes = dispatcher.runSync("processCaptureResult", context);
