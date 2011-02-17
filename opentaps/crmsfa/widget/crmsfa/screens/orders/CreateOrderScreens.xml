@@ -134,6 +134,7 @@ under the License.
         <section>
             <actions>
                 <set field="pageTitleLabel" value="OrderCreateOrder"/>
+                <set field="skipGlobalShortcuts" value="Y" global="true"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/getPartyReader.bsh"/>

@@ -113,12 +113,13 @@ globalContext.put("keyboardShortcuts", EntityUtil.orderBy(shortcuts, UtilMisc.to
 domainsLoader = new DomainsLoader(infrastructure, user);
 webappRepository = domainsLoader.loadDomainsDirectory().getWebAppDomain().getWebAppRepository();
 webapp = webappRepository.getWebAppById(opentapsApplicationName);
+skipGlobalShortcuts = globalContext.get("skipGlobalShortcuts");
 if (webapp != null) {
     context.put("applicationSections", webappRepository.getWebAppTabs(webapp, context));
     sectionName = context.get("sectionName");
     tab = webappRepository.getTabById(webapp.getApplicationId(), sectionName);
     // look at the available shortcut groups matching the appId / tabId
-    if (tab != null) {
+    if (tab != null && !"Y".equalsIgnoreCase(skipGlobalShortcuts)) {
         groups = webappRepository.getShortcutGroups(tab, context);
         globalContext.put("shortcutGroups", groups);
     }

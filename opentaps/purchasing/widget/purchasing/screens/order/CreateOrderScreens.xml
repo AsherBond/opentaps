@@ -118,6 +118,7 @@ under the License.
         <section>
             <actions>
                 <set field="pageTitleLabel" value="OrderCreateOrder"/>
+                <set field="skipGlobalShortcuts" value="Y" global="true"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/createOrderInitialization.bsh"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/getOrderAccountingTags.bsh"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/getOrderEntryPreference.bsh"/>
