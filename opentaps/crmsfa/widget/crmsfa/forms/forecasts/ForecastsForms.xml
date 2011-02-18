@@ -67,22 +67,22 @@
         <field name="internalPartyId" title="${uiLabelMap.CrmTeamMember}">
             <display-entity entity-name="PartySummaryCRMView" description="${groupName} ${firstName} ${lastName} (${partyId})" key-field-name="partyId"/>
         </field>
-        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" widget-area-style="tabletextright">
+        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="closedAmount" title="${uiLabelMap.CrmForecastClosedAmount}"  widget-area-style="tabletextright">
+        <field name="closedAmount" title="${uiLabelMap.CrmForecastClosedAmount}"  widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}"  widget-area-style="tabletextright">
+        <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}"  widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}"  widget-area-style="tabletextright">
+        <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}"  widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}"  widget-area-style="tabletextright">
+        <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}"  widget-area-style="tabletextright" title-area-style="textright">
             <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
         </field>
-        <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}"  widget-area-style="tabletextright">
+        <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}"  widget-area-style="tabletextright" title-area-style="textright">
             <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
         </field>
     </form>   
@@ -102,22 +102,22 @@
         <field name="internalPartyId" title="${uiLabelMap.CrmTeamMember}">
             <display-entity entity-name="PartySummaryCRMView" description="${groupName} ${firstName} ${lastName} (${partyId})" key-field-name="partyId"/>
         </field>
-        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" widget-area-style="tabletextright">
+        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="closedAmount" title="${uiLabelMap.CrmForecastClosedAmount}"  widget-area-style="tabletextright">
+        <field name="closedAmount" title="${uiLabelMap.CrmForecastClosedAmount}"  widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}"  widget-area-style="tabletextright">
+        <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}"  widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}"  widget-area-style="tabletextright">
+        <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}"  widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}"  widget-area-style="tabletextright">
+        <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}"  widget-area-style="tabletextright" title-area-style="textright">
             <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
         </field>
-        <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}"  widget-area-style="tabletextright">
+        <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}"  widget-area-style="tabletextright" title-area-style="textright">
             <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
         </field>
     </form>   
@@ -175,22 +175,22 @@
         <field name="modifiedTimestamp" title="${uiLabelMap.CommonLastUpdated}">
             <display/>
         </field>
-        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" widget-area-style="tabletextright">
+        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="closedAmount" title="${uiLabelMap.CrmForecastClosedAmount}" widget-area-style="tabletextright">
+        <field name="closedAmount" title="${uiLabelMap.CrmForecastClosedAmount}" widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}" widget-area-style="tabletextright">
+        <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}" widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}" widget-area-style="tabletextright">
+        <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}" widget-area-style="tabletextright" title-area-style="textright">
             <display type="currency" currency="${currencyUomId}"/>
         </field>
-        <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}" widget-area-style="tabletextright">
+        <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}" widget-area-style="tabletextright" title-area-style="textright">
             <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
         </field>
-        <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}" widget-area-style="tabletextright">
+        <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}" widget-area-style="tabletextright" title-area-style="textright">
             <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
         </field>
         <field name="modifiedByUserLoginId">
