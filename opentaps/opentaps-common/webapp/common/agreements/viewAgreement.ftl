@@ -378,7 +378,7 @@ function onItemTypeChanged() {
 <div class="subSectionBlock">
     <#assign agreementItemTitle = item.get("description")/>
     <#if agreementItemTypeId == "AGREEMENT_PRICING_PR">
-       <#assign agreementItemTitle = agreementItemTitle + " " + uiLabelMap.CommonIn + " " + item.get("currencyUomId")/>
+       <#assign agreementItemTitle = agreementItemTitle + " " + uiLabelMap.CommonIn + " " + item.get("currencyUomId")!/>
     </#if>
     <@sectionHeader title=agreementItemTitle>
       <#if isEditable>

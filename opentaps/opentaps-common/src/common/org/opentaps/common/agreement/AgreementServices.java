@@ -23,6 +23,7 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -31,6 +32,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilConfig;
 import org.opentaps.common.util.UtilMessage;
 
 /**
@@ -69,6 +71,14 @@ public final class AgreementServices {
                 return UtilMessage.createAndLogServiceError("OpentapsError_AgreementNotFound", UtilMisc.toMap("agreementId", agreementId), locale, MODULE);
             }
 
+            // ensure currency is set
+            if (UtilValidate.isEmpty(currencyUomId)) {
+                currencyUomId = agreement.getString("defaultCurrencyUomId");
+                if (UtilValidate.isEmpty(currencyUomId)) {
+                    currencyUomId = UtilConfig.getPropertyValue("opentaps-common", "defaultCurrencyUomId");
+                }
+            }
+
             List<GenericValue> agreementItems = FastList.newInstance();
 
             if (agreementItemTypeId == null) {
@@ -78,7 +88,7 @@ public final class AgreementServices {
                     GenericValue item = delegator.makeValue("AgreementItem");
                     item.set("agreementId", agreementId);
                     item.set("agreementItemTypeId", mapping.get("agreementItemTypeId"));
-                    item.set("currencyUomId", agreement.get("defaultCurrencyUomId"));
+                    item.set("currencyUomId", UtilValidate.isNotEmpty(agreement.getString("defaultCurrencyUomId")) ? agreement.get("defaultCurrencyUomId") : currencyUomId);
                     item.set("agreementItemSeqId", ((Long) mapping.get("sequenceNum")).toString());
                     item.create();
                     agreementItems.add(item);
