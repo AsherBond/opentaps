@@ -383,8 +383,8 @@ function onItemTypeChanged() {
     <@sectionHeader title=agreementItemTitle>
       <#if isEditable>
         <#assign removeItemTargetAction = removeItemAction?default("processRemoveAgreementItem")/>
-        <@form name="${removeItemTargetAction}Action" url=removeItemTargetAction agreementId=agreementId agreementItemSeqId=agreementItemSeqId />
-        <div class="subMenuBar"><@submitFormLinkConfirm form="${removeItemTargetAction}Action" text=uiLabelMap.CommonRemove class="subMenuButtonDangerous" /></div>
+        <@form name="${removeItemTargetAction}Action_${item_index}" url=removeItemTargetAction agreementId=agreementId agreementItemSeqId=agreementItemSeqId />
+        <div class="subMenuBar"><@submitFormLinkConfirm form="${removeItemTargetAction}Action_${item_index}" text=uiLabelMap.CommonRemove class="subMenuButtonDangerous" /></div>
       </#if>
     </@sectionHeader>
     <table class="listTable" cellspacing="0" cellpadding="2">
