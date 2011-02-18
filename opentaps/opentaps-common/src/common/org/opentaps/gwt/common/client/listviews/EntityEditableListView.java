@@ -1123,7 +1123,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
                             try {
                                 url += "&_" + m.getDataIndex(i) + "_idx=" + i;
                             } catch (Exception ex) {
-                                UtilUi.logWarning("Column with index "+ Integer.valueOf(i).toString() + " was skipped due to an exception.",MODULE, "exportToExcelButton.onClick");
+                                UtilUi.logWarning("Column with index " + Integer.valueOf(i).toString() + " was skipped due to an exception.", MODULE, "exportToExcelButton.onClick");
                                 continue;
                             }
                         }
@@ -1474,7 +1474,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
             // set the submit flag
             sb.append(UtilLookup.ROW_SUBMIT_PREFIX).append(index).append("=").append("Y");
             // add the action, so the service knows what to do with the data
-            sb.append("&").append(UtilLookup.PARAM_CUD_ACTION).append(UtilLookup.MULTI_ROW_DELIMITER).append(index).append("=").append(URL.encodeComponent(action));
+            sb.append("&").append(UtilLookup.PARAM_CUD_ACTION).append(UtilLookup.MULTI_ROW_DELIMITER).append(index).append("=").append(URL.encodeQueryString(action));
             for (String field : record.getFields()) {
                 // remove client-side permissions
                 if (Permissions.isPermissionField(field)) {
@@ -1482,13 +1482,13 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
                 }
                 sb.append("&").append(field).append(UtilLookup.MULTI_ROW_DELIMITER).append(index).append("=");
                 if (!record.isEmpty(field)) {
-                    sb.append(record.getAsString(field));
+                    sb.append(URL.encodeQueryString(record.getAsString(field)));
                 }
             }
             // add additional fields that may be required in the service
             if (additionalBatchData != null) {
                 for (String extraField : additionalBatchData.keySet()) {
-                    sb.append("&").append(extraField).append(UtilLookup.MULTI_ROW_DELIMITER).append(index).append("=").append(additionalBatchData.get(extraField));
+                    sb.append("&").append(extraField).append(UtilLookup.MULTI_ROW_DELIMITER).append(index).append("=").append(URL.encodeQueryString(additionalBatchData.get(extraField)));
                 }
             }
             index++;
