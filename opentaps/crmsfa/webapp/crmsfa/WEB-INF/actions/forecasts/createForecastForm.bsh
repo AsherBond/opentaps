@@ -24,15 +24,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilMessage;
 
 customTimePeriodId = parameters.get("customTimePeriodId");
 if (customTimePeriodId == null) return;
 
 periods = delegator.findByAndCache("CustomTimePeriod", UtilMisc.toMap("parentPeriodId", customTimePeriodId), UtilMisc.toList("thruDate"));
-context.put("periods", periods);
 
 // get those from the first matched period (they are the same for the whole list)
 firstPeriod = EntityUtil.getFirst(periods);
+if (firstPeriod == null) {
+    UtilMessage.addError(request, "No Custom Time Period found with parent [" + customTimePeriodId + "]");
+    return;
+}
+
+context.put("periods", periods);
 context.put("parentPeriodId", firstPeriod.get("parentPeriodId"));
 context.put("organizationPartyId", firstPeriod.get("organizationPartyId"));
 

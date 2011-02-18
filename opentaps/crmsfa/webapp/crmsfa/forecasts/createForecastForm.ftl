@@ -17,6 +17,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+<#if periods?has_content>
 <@form name="createForecastForm" url="createForecast">
 
   <@inputHidden name="parentPeriodId" value=parentPeriodId/>
@@ -53,3 +54,4 @@
   </table>
   <@inputHiddenRowCount list=periods />
 </@form>
+</#if>
