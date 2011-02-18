@@ -20,6 +20,7 @@
 
     <form name="findForecastsForm" type="single" target="${findForecastsTarget}" title="" 
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="performFind"><hidden value="Y"/></field>
         <field name="internalPartyId" title="${uiLabelMap.CrmTeamMember}">
             <lookup target-form-name="LookupTeamMembers" size="20" maxlength="20"/>
         </field>

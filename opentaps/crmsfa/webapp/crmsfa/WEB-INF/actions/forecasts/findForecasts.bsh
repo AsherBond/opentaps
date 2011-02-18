@@ -41,7 +41,9 @@ if (customTimePeriodId != null && !customTimePeriodId.equals("")) {
 if (internalPartyId != null && !internalPartyId.equals("")) {
     searchConditions.add(new EntityExpr("internalPartyId", EntityOperator.EQUALS, internalPartyId));
 }
-if (searchConditions.size() == 0) return;
+if (searchConditions.size() == 0 && !"Y".equals(parameters.get("performFind"))) {
+    return;
+}
 
 // make sure no null forecasts come out
 searchConditions.add(new EntityExpr("salesForecastId", EntityOperator.NOT_EQUAL, null));
@@ -53,10 +55,11 @@ searchConditionList = new EntityConditionList(searchConditions, EntityOperator.A
 
 listIt = delegator.findListIteratorByCondition("SalesForecastAndCustomTimePeriod", searchConditionList, null, 
         null, // get all fields
-        null, // fields to order by
+        UtilMisc.toList("-thruDate", "fromDate"), // fields to order by, reverse chronological order
         // the first true here is for "specifyTypeAndConcur"
         // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
         new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
 
 // for now juts get the complete list, becaues the forecast list form doesn't use an iterator
 context.put("forecasts", listIt.getCompleteList());
+listIt.close();
