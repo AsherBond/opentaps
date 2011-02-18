@@ -284,6 +284,7 @@ r13651 Fix to calculate adjustment with source percentage and no amount set.
 
 applications/accounting/src/org/ofbiz/accounting/payment/PaymentGatewayServices.java
 r13205 Fix potential NPE if the OPP maxAmount is null
+53c3aefe05fdd052b56c18ac9d99297b96a2c885 Fix bug in ofbiz processCaptureResult with billing account (JIRA OFBIZ-4185)
 
 applicatioins/content/entitydef/entitymodel.xml
 ofbiz remove contentPurposeEnumId from entity PartyContent, also add partyContentTypeId as part of primary key.
