@@ -33,7 +33,7 @@ context.put("periods", periods);
 
 // get those from the first matched period (they are the same for the whole list)
 firstPeriod = EntityUtil.getFirst(periods);
-context.put("parentPeriodId", firstPeriod.get("customTimePeriodId"));
+context.put("parentPeriodId", firstPeriod.get("parentPeriodId"));
 context.put("organizationPartyId", firstPeriod.get("organizationPartyId"));
 
 // for checking if this time period already has forecasts
