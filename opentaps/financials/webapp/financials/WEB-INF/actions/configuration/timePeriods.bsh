@@ -22,10 +22,10 @@ import org.opentaps.common.util.UtilCommon;
 
 organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
-openTimePeriods = delegator.findByAnd("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId, "isClosed", "N"), UtilMisc.toList("periodTypeId", "periodNum", "thruDate")); 
+openTimePeriods = delegator.findByAnd("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId, "isClosed", "N"), UtilMisc.toList("thruDate", "-fromDate")); 
 openTimePeriodsSortedByThruDate = delegator.findByAnd("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId, "isClosed", "N"), UtilMisc.toList("thruDate")); 
 closedTimePeriods = delegator.findByAnd("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId, "isClosed", "Y"), 
-        UtilMisc.toList("periodTypeId", "periodNum", "thruDate")); 
+                                        UtilMisc.toList("thruDate", "-fromDate")); 
 
 context.put("openTimePeriods", openTimePeriods);
 context.put("openTimePeriodsSortedByThruDate", openTimePeriodsSortedByThruDate);
