@@ -22,6 +22,7 @@ import java.util.*;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
@@ -89,7 +90,7 @@ public final class AgreementServices {
                     item.set("agreementId", agreementId);
                     item.set("agreementItemTypeId", mapping.get("agreementItemTypeId"));
                     item.set("currencyUomId", UtilValidate.isNotEmpty(agreement.getString("defaultCurrencyUomId")) ? agreement.get("defaultCurrencyUomId") : currencyUomId);
-                    item.set("agreementItemSeqId", ((Long) mapping.get("sequenceNum")).toString());
+                    item.set("agreementItemSeqId", UtilFormatOut.padString(((Long) mapping.get("sequenceNum")).toString(), 5, false, '0'));
                     item.create();
                     agreementItems.add(item);
                 }
