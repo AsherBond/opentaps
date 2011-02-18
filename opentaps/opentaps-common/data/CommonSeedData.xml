@@ -70,6 +70,7 @@ under the License.
 
     <!-- Define missing InvoiceItemTypeMap entries.  These are required, otherwise return invoices cannot be generated. -->
     <InvoiceItemTypeMap invoiceItemMapKey="RET_PROD_ITEM" invoiceTypeId="CUST_RTN_INVOICE" invoiceItemTypeId="CRT_PROD_ITEM"/>
+    <InvoiceItemTypeMap invoiceItemMapKey="RET_SERV_ITEM" invoiceTypeId="CUST_RTN_INVOICE" invoiceItemTypeId="CRT_SPROD_ITEM"/>
 
     <!-- Special product types -->
     <!-- This is necessary or orders for products of the SERVICE type will get inventory reserved.
@@ -108,6 +109,13 @@ under the License.
     <ProductInvoiceItemType productTypeId="FINISHED_GOOD" invoiceTypeId="SALES_INVOICE" invoiceItemTypeId="INV_FPROD_ITEM"/>
     <ProductInvoiceItemType productTypeId="FINDIG_GOOD" invoiceTypeId="SALES_INVOICE" invoiceItemTypeId="INV_FDPROD_ITEM"/>
     <!-- all other product types for SALES_INVOICE set to INV_FPROD_ITEM for now -->
+
+    <ProductInvoiceItemType productTypeId="FINISHED_GOOD" invoiceTypeId="CUST_RTN_INVOICE" invoiceItemTypeId="CRT_FPROD_ITEM"/>
+    <ProductInvoiceItemType productTypeId="FINDIG_GOOD" invoiceTypeId="CUST_RTN_INVOICE" invoiceItemTypeId="CRT_FDPROD_ITEM"/>
+    <ProductInvoiceItemType productTypeId="DIGITAL_GOOD" invoiceTypeId="CUST_RTN_INVOICE" invoiceItemTypeId="CRT_DPROD_ITEM"/>
+    <ProductInvoiceItemType productTypeId="SERVICE" invoiceTypeId="CUST_RTN_INVOICE" invoiceItemTypeId="CRT_SPROD_ITEM"/>
+
+
 
     <!-- Service items for ordering, along with map data for invoice item type -->
     <OrderItemType orderItemTypeId="SERVICE_ORDER_ITEM" description="Service Item"/>
