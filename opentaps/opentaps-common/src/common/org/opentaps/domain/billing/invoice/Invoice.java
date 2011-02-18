@@ -32,6 +32,7 @@ import org.opentaps.base.entities.PaymentAndApplication;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.base.constants.InvoiceItemTypeConstants;
 
 /**
  * Object representing an Invoice.  This is an Entity extension of the Invoice GenericValue and offers you object methods in addition
@@ -141,6 +142,13 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
         return (getDueDate() != null) && (getDueDate().before(asOfDateTime));
     }
 
+    private static final List<String> SALES_TAX_TYPES = Arrays.asList(InvoiceItemTypeConstants.ITM_SALES_TAX,
+                                                                      InvoiceItemTypeConstants.PINV_SALES_TAX,
+                                                                      InvoiceItemTypeConstants.SRT_SALES_TAX_ADJ,
+                                                                      InvoiceItemTypeConstants.CRT_SALES_TAX_ADJ,
+                                                                      InvoiceItemTypeConstants.INV_SALES_TAX,
+                                                                      InvoiceItemTypeConstants.PITM_SALES_TAX);
+
     /**
      * Helpful internal method to calculate cached totals for this invoice.
      * Sets <code>invoiceTotal</code> to the sum of all <code>InvoiceItem</code> including Sales Tax items.
@@ -154,7 +162,7 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
         for (InvoiceItem item : getInvoiceItems()) {
             BigDecimal amount = (item.get("amount") == null ? BigDecimal.ZERO : item.getBigDecimal("amount"));
             BigDecimal quantity = (item.get("quantity") == null ? BigDecimal.ONE : item.getBigDecimal("quantity"));
-            if ("ITM_SALES_TAX".equals(item.get("invoiceItemTypeId"))) {
+            if (SALES_TAX_TYPES.contains(item.getInvoiceItemTypeId())) {
                 salesTaxTotal = salesTaxTotal.add(amount.multiply(quantity)).setScale(TAX_DECIMALS, TAX_ROUNDING);
                 // round the intermediate values to one more decimal place than the final values.
                 invoiceTotal = invoiceTotal.add(amount.multiply(quantity).setScale(TAX_DECIMALS, TAX_ROUNDING)).setScale(DECIMALS + 1, ROUNDING);
