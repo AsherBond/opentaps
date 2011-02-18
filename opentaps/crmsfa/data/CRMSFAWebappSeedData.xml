@@ -247,11 +247,13 @@
 
 <!-- Forecasts shortcuts -->
 <OpentapsShortcutGroup applicationId="crmsfa" tabId="forecasts" groupId="crmsfaForecasts" sequenceNum="010"/>
-<OpentapsShortcut shortcutId="findForecasts" groupId="crmsfaForecasts" sequenceNum="010" uiLabel="CrmFindForecasts"
+<OpentapsShortcut shortcutId="myForecasts" groupId="crmsfaForecasts" sequenceNum="010" uiLabel="CrmForecasts"
+                        linkUrl="forecastsMain" securityModule="" securityAction="" />
+<OpentapsShortcut shortcutId="findForecasts" groupId="crmsfaForecasts" sequenceNum="020" uiLabel="CrmFindForecasts"
                         linkUrl="findForecasts" securityModule="CRMSFA_4C" securityAction="VIEWALL" />
-<OpentapsShortcut shortcutId="myOpportunities" groupId="crmsfaForecasts" sequenceNum="020" uiLabel="CrmMyOpportunities"
+<OpentapsShortcut shortcutId="myOpportunities" groupId="crmsfaForecasts" sequenceNum="030" uiLabel="CrmMyOpportunities"
                         linkUrl="myOpportunities" securityModule="" securityAction="" />
-<OpentapsShortcut shortcutId="findOpportunities" groupId="crmsfaForecasts" sequenceNum="030" uiLabel="CrmFindOpportunities"
+<OpentapsShortcut shortcutId="findOpportunities" groupId="crmsfaForecasts" sequenceNum="040" uiLabel="CrmFindOpportunities"
                         linkUrl="findOpportunities" securityModule="" securityAction="" />
 
 
