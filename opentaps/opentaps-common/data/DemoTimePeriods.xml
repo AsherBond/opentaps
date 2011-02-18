@@ -183,9 +183,145 @@
                        periodTypeId="FISCAL_MONTH" fromDate="2010-06-01" thruDate="2010-07-01" isClosed="N" periodNum="12" periodName="Month"/>
 
 
+     <!-- Fiscal Year 2011 -->
      <CustomTimePeriod customTimePeriodId="9400" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2010-07-01" thruDate="2011-07-01" isClosed="N" periodNum="2011" periodName="Fiscal Year"/>
+     <!-- First Quarter 2011 -->
+     <CustomTimePeriod customTimePeriodId="9410" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2010-07-01" thruDate="2010-10-01" isClosed="N" periodNum="1" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9410-1" parentPeriodId="9410" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2010-07-01" thruDate="2010-08-01" isClosed="N" periodNum="1" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9410-2" parentPeriodId="9410" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2010-08-01" thruDate="2010-09-01" isClosed="N" periodNum="2" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9410-3" parentPeriodId="9410" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2010-09-01" thruDate="2010-10-01" isClosed="N" periodNum="3" periodName="Month"/>
+     <!-- Second Quarter 2011 -->
+     <CustomTimePeriod customTimePeriodId="9411" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2010-10-01" thruDate="2011-01-01" isClosed="N" periodNum="2" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9411-1" parentPeriodId="9411" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2010-10-01" thruDate="2010-11-01" isClosed="N" periodNum="4" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9411-2" parentPeriodId="9411" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2010-11-01" thruDate="2010-12-01" isClosed="N" periodNum="5" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9411-3" parentPeriodId="9411" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2010-12-01" thruDate="2011-01-01" isClosed="N" periodNum="6" periodName="Month"/>
+     <!-- Third Quarter 2011 -->
+     <CustomTimePeriod customTimePeriodId="9412" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2011-01-01" thruDate="2011-04-01" isClosed="N" periodNum="3" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9412-1" parentPeriodId="9412" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-01-01" thruDate="2011-02-01" isClosed="N" periodNum="7" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9412-2" parentPeriodId="9412" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-02-01" thruDate="2011-03-01" isClosed="N" periodNum="8" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9412-3" parentPeriodId="9412" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-03-01" thruDate="2011-04-01" isClosed="N" periodNum="9" periodName="Month"/>
+     <!-- Fourth Quarter 2011 -->
+     <CustomTimePeriod customTimePeriodId="9413" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2011-04-01" thruDate="2011-07-01" isClosed="N" periodNum="4" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9413-1" parentPeriodId="9413" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-04-01" thruDate="2011-05-01" isClosed="N" periodNum="10" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9413-2" parentPeriodId="9413" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-05-01" thruDate="2011-06-01" isClosed="N" periodNum="11" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9413-3" parentPeriodId="9413" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-06-01" thruDate="2011-07-01" isClosed="N" periodNum="12" periodName="Month"/>
+
+     <!-- Fiscal Year 2012 -->
      <CustomTimePeriod customTimePeriodId="9500" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2011-07-01" thruDate="2012-07-01" isClosed="N" periodNum="2012" periodName="Fiscal Year"/>
+     <!-- First Quarter 2012 -->
+     <CustomTimePeriod customTimePeriodId="9510" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2011-07-01" thruDate="2011-10-01" isClosed="N" periodNum="1" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9510-1" parentPeriodId="9510" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-07-01" thruDate="2011-08-01" isClosed="N" periodNum="1" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9510-2" parentPeriodId="9510" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-08-01" thruDate="2011-09-01" isClosed="N" periodNum="2" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9510-3" parentPeriodId="9510" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-09-01" thruDate="2011-10-01" isClosed="N" periodNum="3" periodName="Month"/>
+     <!-- Second Quarter 2012 -->
+     <CustomTimePeriod customTimePeriodId="9511" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2011-10-01" thruDate="2012-01-01" isClosed="N" periodNum="2" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9511-1" parentPeriodId="9511" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-10-01" thruDate="2011-11-01" isClosed="N" periodNum="4" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9511-2" parentPeriodId="9511" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-11-01" thruDate="2011-12-01" isClosed="N" periodNum="5" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9511-3" parentPeriodId="9511" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2011-12-01" thruDate="2012-01-01" isClosed="N" periodNum="6" periodName="Month"/>
+     <!-- Third Quarter 2012 -->
+     <CustomTimePeriod customTimePeriodId="9512" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2012-01-01" thruDate="2012-04-01" isClosed="N" periodNum="3" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9512-1" parentPeriodId="9512" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-01-01" thruDate="2012-02-01" isClosed="N" periodNum="7" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9512-2" parentPeriodId="9512" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-02-01" thruDate="2012-03-01" isClosed="N" periodNum="8" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9512-3" parentPeriodId="9512" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-03-01" thruDate="2012-04-01" isClosed="N" periodNum="9" periodName="Month"/>
+     <!-- Fourth Quarter 2012 -->
+     <CustomTimePeriod customTimePeriodId="9513" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2012-04-01" thruDate="2012-07-01" isClosed="N" periodNum="4" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9513-1" parentPeriodId="9513" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-04-01" thruDate="2012-05-01" isClosed="N" periodNum="10" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9513-2" parentPeriodId="9513" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-05-01" thruDate="2012-06-01" isClosed="N" periodNum="11" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9513-3" parentPeriodId="9513" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-06-01" thruDate="2012-07-01" isClosed="N" periodNum="12" periodName="Month"/>
+
+     <!-- Fiscal Year 2013 -->
      <CustomTimePeriod customTimePeriodId="9600" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2012-07-01" thruDate="2013-07-01" isClosed="N" periodNum="2013" periodName="Fiscal Year"/>
+     <!-- First Quarter 2013 -->
+     <CustomTimePeriod customTimePeriodId="9610" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2012-07-01" thruDate="2012-10-01" isClosed="N" periodNum="1" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9610-1" parentPeriodId="9610" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-07-01" thruDate="2012-08-01" isClosed="N" periodNum="1" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9610-2" parentPeriodId="9610" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-08-01" thruDate="2012-09-01" isClosed="N" periodNum="2" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9610-3" parentPeriodId="9610" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-09-01" thruDate="2012-10-01" isClosed="N" periodNum="3" periodName="Month"/>
+     <!-- Second Quarter 2013 -->
+     <CustomTimePeriod customTimePeriodId="9611" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2012-10-01" thruDate="2013-01-01" isClosed="N" periodNum="2" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9611-1" parentPeriodId="9611" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-10-01" thruDate="2012-11-01" isClosed="N" periodNum="4" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9611-2" parentPeriodId="9611" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-11-01" thruDate="2012-12-01" isClosed="N" periodNum="5" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9611-3" parentPeriodId="9611" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2012-12-01" thruDate="2013-01-01" isClosed="N" periodNum="6" periodName="Month"/>
+     <!-- Third Quarter 2013 -->
+     <CustomTimePeriod customTimePeriodId="9612" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2013-01-01" thruDate="2013-04-01" isClosed="N" periodNum="3" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9612-1" parentPeriodId="9612" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-01-01" thruDate="2013-02-01" isClosed="N" periodNum="7" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9612-2" parentPeriodId="9612" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-02-01" thruDate="2013-03-01" isClosed="N" periodNum="8" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9612-3" parentPeriodId="9612" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-03-01" thruDate="2013-04-01" isClosed="N" periodNum="9" periodName="Month"/>
+     <!-- Fourth Quarter 2013 -->
+     <CustomTimePeriod customTimePeriodId="9613" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2013-04-01" thruDate="2013-07-01" isClosed="N" periodNum="4" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9613-1" parentPeriodId="9613" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-04-01" thruDate="2013-05-01" isClosed="N" periodNum="10" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9613-2" parentPeriodId="9613" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-05-01" thruDate="2013-06-01" isClosed="N" periodNum="11" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9613-3" parentPeriodId="9613" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-06-01" thruDate="2013-07-01" isClosed="N" periodNum="12" periodName="Month"/>
+
+     <!-- Fiscal Year 2014 -->
      <CustomTimePeriod customTimePeriodId="9700" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2013-07-01" thruDate="2014-07-01" isClosed="N" periodNum="2014" periodName="Fiscal Year"/>
+     <!-- First Quarter 2014 -->
+     <CustomTimePeriod customTimePeriodId="9710" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2013-07-01" thruDate="2013-10-01" isClosed="N" periodNum="1" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9710-1" parentPeriodId="9710" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-07-01" thruDate="2013-08-01" isClosed="N" periodNum="1" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9710-2" parentPeriodId="9710" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-08-01" thruDate="2013-09-01" isClosed="N" periodNum="2" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9710-3" parentPeriodId="9710" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-09-01" thruDate="2013-10-01" isClosed="N" periodNum="3" periodName="Month"/>
+     <!-- Second Quarter 2014 -->
+     <CustomTimePeriod customTimePeriodId="9711" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2013-10-01" thruDate="2014-01-01" isClosed="N" periodNum="2" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9711-1" parentPeriodId="9711" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-10-01" thruDate="2013-11-01" isClosed="N" periodNum="4" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9711-2" parentPeriodId="9711" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-11-01" thruDate="2013-12-01" isClosed="N" periodNum="5" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9711-3" parentPeriodId="9711" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2013-12-01" thruDate="2014-01-01" isClosed="N" periodNum="6" periodName="Month"/>
+     <!-- Third Quarter 2014 -->
+     <CustomTimePeriod customTimePeriodId="9712" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2014-01-01" thruDate="2014-04-01" isClosed="N" periodNum="3" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9712-1" parentPeriodId="9712" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2014-01-01" thruDate="2014-02-01" isClosed="N" periodNum="7" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9712-2" parentPeriodId="9712" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2014-02-01" thruDate="2014-03-01" isClosed="N" periodNum="8" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9712-3" parentPeriodId="9712" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2014-03-01" thruDate="2014-04-01" isClosed="N" periodNum="9" periodName="Month"/>
+     <!-- Fourth Quarter 2014 -->
+     <CustomTimePeriod customTimePeriodId="9713" organizationPartyId="Company" periodTypeId="FISCAL_QUARTER" fromDate="2014-04-01" thruDate="2014-07-01" isClosed="N" periodNum="4" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="9713-1" parentPeriodId="9713" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2014-04-01" thruDate="2014-05-01" isClosed="N" periodNum="10" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9713-2" parentPeriodId="9713" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2014-05-01" thruDate="2014-06-01" isClosed="N" periodNum="11" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="9713-3" parentPeriodId="9713" organizationPartyId="Company"
+                       periodTypeId="FISCAL_MONTH" fromDate="2014-06-01" thruDate="2014-07-01" isClosed="N" periodNum="12" periodName="Month"/>
+
 
 </entity-engine-xml>
