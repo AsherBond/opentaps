@@ -66,12 +66,12 @@ forecasts = delegator.findByAnd("SalesForecastAndCustomTimePeriod",
 
 // the sum row at the bottom of My Forecasts has to be computed by hand because there is no one superperiod for a set of arbitrary quarters
 if (forecasts.size() > 0) {
-    quotaSum = UtilForecast.ZERO;
-    closedSum = UtilForecast.ZERO;
-    forecastSum = UtilForecast.ZERO;
-    bestCaseSum = UtilForecast.ZERO;
-    percentOfQuotaForecast = UtilForecast.ZERO;
-    percentOfQuotaClosed = UtilForecast.ZERO;
+    quotaSum = BigDecimal.ZERO;
+    closedSum = BigDecimal.ZERO;
+    forecastSum = BigDecimal.ZERO;
+    bestCaseSum = BigDecimal.ZERO;
+    percentOfQuotaForecast = BigDecimal.ZERO;
+    percentOfQuotaClosed = BigDecimal.ZERO;
 
     // add up the amounts
     for (iter = forecasts.iterator(); iter.hasNext(); ) {
