@@ -54,6 +54,7 @@ opentaps/amazon/build/
 opentaps/analytics/build/
 opentaps/analytics/webapp/analyticsgwt/
 opentaps/asterisk/build/
+opentaps/controllerinjectex/build/
 opentaps/crmsfa/build/
 opentaps/crmsfa/webapp/crmsfagwt/
 opentaps/dataimport/build/
