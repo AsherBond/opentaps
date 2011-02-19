@@ -78,18 +78,28 @@ function handleAgreements(/*Array*/ data) {
   Send AJAX request if supplier id is changed.
 */
 function supplierChanged() {
-    var supplierInput = document.getElementById("ComboBox_supplierPartyId");
-    if (!supplierInput) return;
 
     if (skipReqForAgreements) {
         skipReqForAgreements = false;
         return;
     }
 
-    prevSupplierId = supplierInput.value;
+    var partyId;
+    var supplierInput = document.getElementById("ComboBox_supplierPartyId");
+    if (supplierInput) {
+        partyId = prevSupplierId = supplierInput.value;
+    } else {
+        <#if parameters.partyId?has_content>
+        partyId = prevSupplierId = '${parameters.partyId}';
+        if (!partyId) {
+            return;
+        }
+        <#else>
+        return;
+        </#if>
+    };
 
-    
-    opentaps.sendRequest('getSupplierAgreementsJSON', {'partyId' : supplierInput.value, 'organizationPartyId' : '${organizationPartyId}'}, handleAgreements);
+    opentaps.sendRequest('getSupplierAgreementsJSON', {'partyId' : partyId, 'organizationPartyId' : '${organizationPartyId}'}, handleAgreements);
 }
 
 /* disable/enable currency box depending on agreement selection */
@@ -106,6 +116,8 @@ function agreementChanged() {
 }
 
 var onLookupReturn = function() { supplierChanged(); skipReqForAgreements = true; };
+
+opentaps.addOnLoad(supplierChanged());
 /*]]>*/
 </script>
 
