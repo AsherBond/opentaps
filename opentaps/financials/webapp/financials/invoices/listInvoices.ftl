@@ -19,37 +19,6 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<script type="text/javascript">
-/*<![CDATA[*/
-function showButtons() {
-    var show = false;
-    var buttons = document.getElementById('buttonsBar');
-    if (!buttons) {
-        return;
-    }
-
-    var cform = document['listInvoices'];
-    var len = cform.elements.length;
-    for (var i = 0; i < len; i++) {
-        var element = cform.elements[i];                   
-        if (element.name.substring(0, 10) == "_rowSubmit" && element.checked) {
-            show = true;
-            break;
-        }
-    }
-
-    if (show) {
-        opentaps.removeClass(buttons, 'hidden');
-    } else {
-        opentaps.addClass(buttons, 'hidden');
-        if (cform.selectAll.checked) {
-            cform.selectAll.checked = false;
-        }
-    }
-}
-/*]]>*/
-</script>
-
 <#assign showFromParty = !isReceivable/>
 <#assign showToParty = !isPayable/>
 <#assign showOrderIds = isReceivable || isPayable/>
