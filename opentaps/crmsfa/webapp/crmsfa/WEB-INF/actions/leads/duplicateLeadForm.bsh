@@ -75,6 +75,7 @@ currentLead.put("primaryWebUrl", url);
 // GENERAL_LOCATION postal address
 address = PartyContactHelper.getPostalAddressValueByPurpose(partyId, "GENERAL_LOCATION", true, delegator);
 if (address != null) {
+    currentLead.put("address", address);
     currentLead.put("generalToName", address.getString("toName"));
     currentLead.put("generalAttnName", address.getString("attnName"));
     currentLead.put("generalAddress1", address.getString("address1"));
