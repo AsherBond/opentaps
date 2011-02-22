@@ -92,7 +92,7 @@
     <service name="crmsfa.convertLead" engine="java" location="com.opensourcestrategies.crmsfa.leads.LeadsServices" invoke="convertLead">
         <description>Converts a Lead into an Account and a Contact.</description>
         <attribute name="leadPartyId" type="String" mode="IN" optional="false"/>
-        <attribute name="accountPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="accountPartyId" type="String" mode="INOUT" optional="true"/>
         <!-- the output partyId is whichever one is needed on the display form you route it to next.  in our case,
             since the controller routes it to viewContact, we make it the lead/cotactPartyId -->
         <attribute name="partyId" type="String" mode="OUT" optional="false"/>

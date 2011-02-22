@@ -477,6 +477,7 @@ public final class LeadsServices {
         // put leadPartyId as partyId
         Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("partyId", leadPartyId);
+        results.put("accountPartyId", accountPartyId);
         return results;
     }
 
