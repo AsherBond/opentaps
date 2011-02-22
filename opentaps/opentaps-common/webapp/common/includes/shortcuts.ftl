@@ -22,8 +22,12 @@
     <@frameSection title=uiLabelMap.get(sg.uiLabel?default("OpentapsShortcuts"))>
       <ul class="shortcuts">
         <#list sg.allowedShortcuts as shortcut>
-          <#assign shortcutClass = (parameters.thisRequestUri?default("") == shortcut.linkUrl!)?string("class=\"selected\"", "")/>
-          <li><a href="<@ofbizUrl>${shortcut.linkUrl}</@ofbizUrl>" ${shortcutClass}>${uiLabelMap.get(shortcut.uiLabel!)}</a></li>
+          <#if sg.showAsDisabled() || shortcut.showAsDisabled()>
+            <li class="disabled"><div>${uiLabelMap.get(shortcut.uiLabel!)}</div></li>
+          <#else>
+            <#assign shortcutClass = (parameters.thisRequestUri?default("") == shortcut.linkUrl!)?string("class=\"selected\"", "")/>
+            <li><a href="<@ofbizUrl>${shortcut.linkUrl}</@ofbizUrl>" ${shortcutClass}>${uiLabelMap.get(shortcut.uiLabel!)}</a></li>
+          </#if>
         </#list>
       </ul>
     </@frameSection>

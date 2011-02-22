@@ -35,6 +35,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.opentaps.common.security.OpentapsSecurity;
+import org.opentaps.domain.webapp.WebElementInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 
 /**
@@ -185,12 +186,13 @@ public class WarehouseSecurity extends OpentapsSecurity {
     /**
      * A handler method, checks the facility permission for the current user.
      * Uses the handler parameter to specify the facility permission to check.
-     * @param <T> an <code>EntityInterface</code>
+     * If the security check fails, the web element is set a disabled (instead of hidden) and may still display if its showIfDisabled is set.
+     * @param <T> an <code>EntityInterface & WebElementInterface</code>
      * @param context a <code>Map</code> value
      * @param obj any object
-     * @return an <code>EntityInterface</code> value
+     * @return an <code>EntityInterface & WebElementInterface</code> value
      */
-    public static <T extends EntityInterface> T checkFacilityPermission(Map<String, Object> context, T obj) {
+    public static <T extends EntityInterface & WebElementInterface> T checkFacilityPermission(Map<String, Object> context, T obj) {
         String permission = obj.getString("handlerParameter");
         if (UtilValidate.isEmpty(permission)) {
             return obj;
@@ -207,13 +209,13 @@ public class WarehouseSecurity extends OpentapsSecurity {
         if (security == null) {
             // without a security instance we cannot perform the check
             Debug.logError("Missing WarehouseSecurity instance in the session or context to perform the permission check", MODULE);
-            return null;
-        }
-
-        if (security.hasFacilityPermission(permission)) {
+            obj.setDisabled(true);
             return obj;
         }
 
-        return null;
+        if (!security.hasFacilityPermission(permission)) {
+            obj.setDisabled(true);
+        }
+        return obj;
     }
 }

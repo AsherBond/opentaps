@@ -26,6 +26,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
 import org.opentaps.common.security.OpentapsSecurity;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.domain.webapp.WebElementInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 
 /**
@@ -66,12 +67,13 @@ public class PurchasingSecurity extends OpentapsSecurity {
     /**
      * A handler method, checks the permission for the selected organization and the current user.
      * Uses the handler parameter to specify the permission to check, can be given as <module>:<action> or <module>_<action>.
-     * @param <T> an <code>EntityInterface</code>
+     * If the security check fails, the web element is set a disabled (instead of hidden) and may still display if its showIfDisabled is set.
+     * @param <T> an <code>EntityInterface & WebElementInterface</code>
      * @param context a <code>Map</code> value
      * @param obj any object
-     * @return an <code>OpentapsWebAppTab</code> value
+     * @return an <code>EntityInterface & WebElementInterface</code> value
      */
-    public static <T extends EntityInterface> T checkOrganizationPermission(Map<String, Object> context, T obj) {
+    public static <T extends EntityInterface & WebElementInterface> T checkOrganizationPermission(Map<String, Object> context, T obj) {
         String permission = obj.getString("handlerParameter");
         if (UtilValidate.isEmpty(permission)) {
             return obj;
@@ -89,6 +91,7 @@ public class PurchasingSecurity extends OpentapsSecurity {
             // if still no organization found at this point, give up
             if (organizationParty == null) {
                 Debug.logError("Missing Organization party ID in the session or context to perform the permission check", MODULE);
+                // returning null in that case
                 return null;
             }
             organizationPartyId = organizationParty.getString("partyId");
@@ -114,7 +117,8 @@ public class PurchasingSecurity extends OpentapsSecurity {
         if (security == null) {
             // without a security instance we cannot perform the check
             Debug.logError("Missing PurchasingSecurity instance in the session or context to perform the permission check", MODULE);
-            return null;
+            obj.setDisabled(true);
+            return obj;
         }
 
         // now split the given permission into module + action
@@ -136,10 +140,10 @@ public class PurchasingSecurity extends OpentapsSecurity {
             }
         }
 
-        if (security.hasPartyRelationSecurity(module, action, organizationPartyId)) {
-            return obj;
+        if (!security.hasPartyRelationSecurity(module, action, organizationPartyId)) {
+            obj.setDisabled(true);
         }
 
-        return null;
+        return obj;
     }
 }

@@ -62,6 +62,7 @@
       <field name="securityAction" type="id-long-ne"></field>
       <field name="handlerMethod" type="long-varchar"></field>
       <field name="handlerParameter" type="long-varchar"></field>
+      <field name="showIfDisabled" type="indicator"/>
       <prim-key field="applicationId"/>
       <prim-key field="tabId"/>
       <relation type="one" rel-entity-name="OpentapsWebApps" fk-name="OWA_TAB_OWA">
@@ -81,6 +82,7 @@
       <field name="securityAction" type="id-long-ne"></field>
       <field name="handlerMethod" type="long-varchar"></field>
       <field name="handlerParameter" type="long-varchar"></field>
+      <field name="showIfDisabled" type="indicator"/>
       <prim-key field="groupId"/>
       <index name="OWA_SHRCT_UNQ" unique="true">
         <index-field name="groupId"/>
@@ -102,6 +104,7 @@
       <field name="securityAction" type="id-long-ne"></field>
       <field name="handlerMethod" type="long-varchar"></field>
       <field name="handlerParameter" type="long-varchar"></field>
+      <field name="showIfDisabled" type="indicator"/>
       <prim-key field="shortcutId"/>
       <prim-key field="groupId"/>
       <relation type="one" rel-entity-name="OpentapsShortcutGroup" fk-name="OWA_SHRCT_OSG">

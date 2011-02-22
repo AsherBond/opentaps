@@ -21,7 +21,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javolution.util.FastList;
@@ -30,12 +29,11 @@ import org.ofbiz.base.component.ComponentConfig;
 import org.ofbiz.base.component.ComponentConfig.WebappInfo;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.opentaps.base.entities.OpentapsShortcut;
-import org.opentaps.base.entities.OpentapsWebAppTab;
-import org.opentaps.base.entities.OpentapsWebApps;
-import org.opentaps.domain.webapp.OpentapsShortcutGroup;
+import org.opentaps.domain.webapp.Shortcut;
+import org.opentaps.domain.webapp.ShortcutGroup;
+import org.opentaps.domain.webapp.Tab;
 import org.opentaps.domain.webapp.WebAppRepositoryInterface;
+import org.opentaps.domain.webapp.Webapp;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
@@ -50,24 +48,24 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
     private static final String MODULE = WebAppRepository.class.getName();
 
     /** {@inheritDoc} */
-    public OpentapsWebApps getWebAppById(String applicationId) throws RepositoryException {
-        return findOneCache(OpentapsWebApps.class, map(OpentapsWebApps.Fields.applicationId, applicationId));
+    public Webapp getWebAppById(String applicationId) throws RepositoryException {
+        return findOneCache(Webapp.class, map(Webapp.Fields.applicationId, applicationId));
     }
 
     /** {@inheritDoc} */
-    public OpentapsWebAppTab getTabById(String applicationId, String tabId) throws RepositoryException {
-        return findOneCache(OpentapsWebAppTab.class, map(OpentapsWebAppTab.Fields.applicationId, applicationId,
-                                                         OpentapsWebAppTab.Fields.tabId, tabId));
+    public Tab getTabById(String applicationId, String tabId) throws RepositoryException {
+        return findOneCache(Tab.class, map(Tab.Fields.applicationId, applicationId,
+                                                         Tab.Fields.tabId, tabId));
     }
 
     /** {@inheritDoc} */
-    public List<? extends OpentapsWebApps> getWebApps() throws RepositoryException {
+    public List<? extends Webapp> getWebApps() throws RepositoryException {
         return getWebApps(getUser());
     }
 
     /** {@inheritDoc} */
-    public List<? extends OpentapsWebApps> getWebApps(User user) throws RepositoryException {
-        List<OpentapsWebApps> opentapsWebapps = findAllCache(OpentapsWebApps.class, Arrays.asList(OpentapsWebApps.Fields.sequenceNum.asc()));
+    public List<? extends Webapp> getWebApps(User user) throws RepositoryException {
+        List<Webapp> opentapsWebapps = findAllCache(Webapp.class, Arrays.asList(Webapp.Fields.sequenceNum.asc()));
         //get all webapps defined in all the ofbiz-components
         List<WebappInfo> webapps = ComponentConfig.getAllWebappResourceInfos();
         Debug.logVerbose("number of webapps found = " + webapps.size(), MODULE);
@@ -76,9 +74,9 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
         for (WebappInfo webapp : webapps) {
             webappsMap.put(webapp.getName() , webapp.getBasePermission());
         }
-        List<OpentapsWebApps> apps = FastList.newInstance();
+        List<Webapp> apps = FastList.newInstance();
         if (UtilValidate.isNotEmpty(opentapsWebapps)) {
-            for (OpentapsWebApps webapp : opentapsWebapps) {
+            for (Webapp webapp : opentapsWebapps) {
                 String[] permissions = webappsMap.get(webapp.getApplicationId());
                 if (user != null) {
                     Debug.logVerbose("Checking permissions for user [" + user + "]", MODULE);
@@ -165,99 +163,98 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
         return obj;
     }
 
-    private <T extends EntityInterface> void expandFields(T obj, Map<String, Object> context) {
-        // expand the uiLabel
-        String s = obj.getString("uiLabel");
-        if (UtilValidate.isNotEmpty(s)) {
-            obj.set("uiLabel", FlexibleStringExpander.expandString(s, context, Locale.getDefault()));
-        }
-        // expand the link
-        s = obj.getString("linkUrl");
-        if (UtilValidate.isNotEmpty(s)) {
-            obj.set("linkUrl", FlexibleStringExpander.expandString(s, context, Locale.getDefault()));
-        }
-    }
-
     /** {@inheritDoc} */
-    public List<? extends OpentapsWebAppTab> getWebAppTabs(OpentapsWebApps webapp, Map<String, Object> context) throws RepositoryException {
+    public List<? extends Tab> getWebAppTabs(Webapp webapp, Map<String, Object> context) throws RepositoryException {
         return getWebAppTabs(webapp, getUser(), context);
     }
 
     /** {@inheritDoc} */
-    public List<? extends OpentapsWebAppTab> getWebAppTabs(OpentapsWebApps webapp, User user, Map<String, Object> context) throws RepositoryException {
-        List<OpentapsWebAppTab> tabs = findListCache(OpentapsWebAppTab.class, map(OpentapsWebAppTab.Fields.applicationId, webapp.getApplicationId()), Arrays.asList(OpentapsWebAppTab.Fields.sequenceNum.asc()));
-        List<OpentapsWebAppTab> allowedTabs = new ArrayList<OpentapsWebAppTab>();
+    public List<? extends Tab> getWebAppTabs(Webapp webapp, User user, Map<String, Object> context) throws RepositoryException {
+        List<Tab> tabs = findListCache(Tab.class, map(Tab.Fields.applicationId, webapp.getApplicationId()), Arrays.asList(Tab.Fields.sequenceNum.asc()));
+        List<Tab> allowedTabs = new ArrayList<Tab>();
         // check permission on each tab
-        for (OpentapsWebAppTab tab : tabs) {
+        for (Tab tab : tabs) {
             String secModule = tab.getSecurityModule();
             String secAction = tab.getSecurityAction();
             // check permission or skip this tab
             if (!hasPermission(user, secModule, secAction)) {
-                continue;
+                tab.setDisabled(true);
+                if (tab.isHidden()) {
+                    continue;
+                }
             }
-            // if there is a handler, pass the OpentapsWebAppTab to it
+            // if there is a handler, pass the Tab to it
             tab = callHandler(tab, tab.getHandlerMethod(), context);
 
-            // handler may have set the tab to null
-            if (tab != null) {
-                expandFields(tab, context);
-                allowedTabs.add(tab);
+            // handler may have set the tab to null, or set is as hidden
+            if (tab == null || tab.isHidden()) {
+                continue;
             }
+            tab.expandFields(context);
+            allowedTabs.add(tab);
         }
 
         return allowedTabs;
     }
 
     /** {@inheritDoc} */
-    public List<OpentapsShortcutGroup> getShortcutGroups(OpentapsWebAppTab tab, Map<String, Object> context) throws RepositoryException {
+    public List<ShortcutGroup> getShortcutGroups(Tab tab, Map<String, Object> context) throws RepositoryException {
         return getShortcutGroups(tab, getUser(), context);
     }
 
     /** {@inheritDoc} */
-    public List<OpentapsShortcutGroup> getShortcutGroups(OpentapsWebAppTab tab, User user, Map<String, Object> context) throws RepositoryException {
-        List<OpentapsShortcutGroup> allowedGroups = new ArrayList<OpentapsShortcutGroup>();
+    public List<ShortcutGroup> getShortcutGroups(Tab tab, User user, Map<String, Object> context) throws RepositoryException {
+        List<ShortcutGroup> allowedGroups = new ArrayList<ShortcutGroup>();
         // check if the user has permission on the tab, else do not return any group
-        if (tab == null || !hasPermission(user, tab.getSecurityModule(), tab.getSecurityAction())) {
+        if (tab == null || tab.isHidden() || !hasPermission(user, tab.getSecurityModule(), tab.getSecurityAction())) {
             return allowedGroups;
         }
-        // if there is a handler, pass the OpentapsWebAppTab to it
+        // if there is a handler, pass the Tab to it
         tab = callHandler(tab, tab.getHandlerMethod(), context);
-        if (tab == null) {
+        if (tab == null || tab.isHidden()) {
             return allowedGroups;
         }
 
-
-        List<OpentapsShortcutGroup> groups = findListCache(OpentapsShortcutGroup.class, map(OpentapsShortcutGroup.Fields.applicationId, tab.getApplicationId(), OpentapsShortcutGroup.Fields.tabId, tab.getTabId()), Arrays.asList(OpentapsShortcutGroup.Fields.sequenceNum.asc()));
+        List<ShortcutGroup> groups = findListCache(ShortcutGroup.class, map(ShortcutGroup.Fields.applicationId, tab.getApplicationId(), ShortcutGroup.Fields.tabId, tab.getTabId()), Arrays.asList(ShortcutGroup.Fields.sequenceNum.asc()));
         Debug.logInfo("Found group candidates " + groups, MODULE);
         // check permission on each group
-        for (OpentapsShortcutGroup group : groups) {
-            // check permission or skip this group
+        for (ShortcutGroup group : groups) {
+            // check permission
             if (!hasPermission(user, group.getSecurityModule(), group.getSecurityAction())) {
-                continue;
+                group.setDisabled(true);
+                if (group.isHidden()) {
+                    continue;
+                }
             }
-            // if there is a handler, pass the OpentapsShortcutGroup to it
+            // if there is a handler, pass the ShortcutGroup to it
             group = callHandler(group, group.getHandlerMethod(), context);
 
-            // handler may have set the tab to null
-            if (group != null) {
-                // load the allowed shortcuts in each group
-                List<OpentapsShortcut> allowedShortcuts = new ArrayList<OpentapsShortcut>();
-                for (OpentapsShortcut shortcut : findListCache(OpentapsShortcut.class, map(OpentapsShortcut.Fields.groupId, group.getGroupId()), Arrays.asList(OpentapsShortcut.Fields.sequenceNum.asc()))) {
-                    // check permission or skip this group
-                    if (!hasPermission(user, shortcut.getSecurityModule(), shortcut.getSecurityAction())) {
+            // handler may have set the group to null or hidden
+            if (group == null || group.isHidden()) {
+                continue;
+            }
+
+            // load the allowed shortcuts in each group
+            List<Shortcut> allowedShortcuts = new ArrayList<Shortcut>();
+            for (Shortcut shortcut : findListCache(Shortcut.class, map(Shortcut.Fields.groupId, group.getGroupId()), Arrays.asList(Shortcut.Fields.sequenceNum.asc()))) {
+                // check permission
+                if (group.isDisabled() || !hasPermission(user, shortcut.getSecurityModule(), shortcut.getSecurityAction())) {
+                    shortcut.setDisabled(true);
+                    if (shortcut.isHidden()) {
                         continue;
                     }
-                    // if there is a handler, pass the OpentapsShortcutGroup to it
-                    shortcut = callHandler(shortcut, shortcut.getHandlerMethod(), context);
-                    if (shortcut != null) {
-                        expandFields(shortcut, context);
-                        allowedShortcuts.add(shortcut);
-                    }
                 }
-                group.setAllowedShortcuts(allowedShortcuts);
-                expandFields(group, context);
-                allowedGroups.add(group);
+                // if there is a handler, pass the ShortcutGroup to it
+                shortcut = callHandler(shortcut, shortcut.getHandlerMethod(), context);
+                if (shortcut == null || shortcut.isHidden()) {
+                    continue;
+                }
+                shortcut.expandFields(context);
+                allowedShortcuts.add(shortcut);
             }
+            group.setAllowedShortcuts(allowedShortcuts);
+            group.expandFields(context);
+            allowedGroups.add(group);
         }
 
         return allowedGroups;

@@ -48,17 +48,26 @@
 <#if userLogin?exists && applicationSections?exists>
 <ul class="sectionTabBar">
   <#list applicationSections as section>
+
     <#if section.isExternal?exists && "Y" == section.isExternal?upper_case>
       <#assign url=section.linkUrl + "?" + response.encodeURL(externalKeyParam)/>
     <#else>
       <#assign url="/" + opentapsApplicationName + "/control/" + section.linkUrl/>
     </#if>
+
     <#if sectionName?exists && section.tabId == sectionName>
       <#assign tabClass = "sectionTabButtonSelected"/>
     <#else>
       <#assign tabClass = "sectionTabButtonUnselected"/>
     </#if>
-    <li class="${tabClass}"><@frameSectionHeader title="<a href=\"${url}\">${uiLabelMap.get(section.uiLabel)}</a>" /></li>
+    
+    <#if section.showAsDisabled()>
+      <#assign title="<span class=\"disabled\">${uiLabelMap.get(section.uiLabel)}</span>" />
+    <#else>
+      <#assign title="<a href=\"${url}\">${uiLabelMap.get(section.uiLabel)}</a>" />
+    </#if>
+
+    <li class="${tabClass}"><@frameSectionHeader title=title/></li>
   </#list>
 </ul>
 <div class="sectionTabBorder"></div>
