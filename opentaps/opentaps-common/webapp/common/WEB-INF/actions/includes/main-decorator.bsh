@@ -113,7 +113,7 @@ globalContext.put("keyboardShortcuts", EntityUtil.orderBy(shortcuts, UtilMisc.to
 domainsLoader = new DomainsLoader(infrastructure, user);
 webappRepository = domainsLoader.loadDomainsDirectory().getWebAppDomain().getWebAppRepository();
 webapp = webappRepository.getWebAppById(opentapsApplicationName);
-globalContext.put("webapp", webapp);
+globalContext.put("opentapsWebapp", webapp);
 skipGlobalShortcuts = globalContext.get("skipGlobalShortcuts");
 if (webapp != null) {
     context.put("applicationSections", webappRepository.getWebAppTabs(webapp, context));
