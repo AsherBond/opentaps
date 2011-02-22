@@ -46,6 +46,7 @@
       <field name="hide" type="indicator">
           <description>Set Y to hide application in the main menu screen and in the top level menu</description>
       </field>
+      <field name="alternativeCssFile" type="long-varchar"/>
       <prim-key field="applicationId"/>
     </entity>
 

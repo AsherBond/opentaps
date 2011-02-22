@@ -50,6 +50,9 @@
 
     <#assign appName = Static["org.ofbiz.base.util.UtilHttp"].getApplicationName(request)/>
 
+  <#if opentapsWebapp?has_content && opentapsWebapp.alternativeCssFile?has_content>
+      <link rel="stylesheet" href="${StringUtil.wrapString(opentapsWebapp.alternativeCssFile)}" type="text/css"/>
+  <#else>
     <#list Static["org.opentaps.common.util.UtilConfig"].getStylesheetFiles(opentapsApplicationName) as stylesheet>
       <link rel="stylesheet" href="<@ofbizContentUrl>${StringUtil.wrapString(stylesheet)}</@ofbizContentUrl>" type="text/css"/>
     </#list>
@@ -76,6 +79,7 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
         var bgColor = '${bgcolor?default("")?replace("#", "")}';
       </script>
     </#if>
+  </#if>
       <script src="/${appName}/control/javascriptUiLabels.js" type="text/javascript"></script>
 
       <#assign javascripts = Static["org.opentaps.common.util.UtilConfig"].getJavascriptFiles(opentapsApplicationName, locale)/>
