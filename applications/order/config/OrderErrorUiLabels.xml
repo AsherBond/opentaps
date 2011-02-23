@@ -617,7 +617,7 @@
     </property>
     <property key="OrderErrorCouldNotFindConversion">
         <value xml:lang="en">Error  Could  Not  Find  Conversion</value>
-        <value xml:lang="es">ERROR: No se pudo obtener un conversión entre ${uomid} y ${uomidto}</value>
+        <value xml:lang="es">ERROR: No se pudo obtener un conversión</value>
         <value xml:lang="fr">Erreur:  impossible de trouver la conversion</value>
         <value xml:lang="it">Errore : non è possibile trovare la conversione</value>
         <value xml:lang="pt_BR">ERRO : Não foi possível encontrar conversão</value>
