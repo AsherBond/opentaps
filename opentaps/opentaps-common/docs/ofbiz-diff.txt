@@ -239,7 +239,7 @@ framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
 f4bb1060fb55056228b527ceab93806898c94f86 Clear runtime/tempfiles completely
 
 framework/common/src/org/ofbiz/common/email/EmailServices.java
-836a02bbdc Tweak the mail sending to set the sender name and reply-to to the sender email address, fixes the displayed sender when sending via GMail
+836a02bbdc 589c7895dc Tweak the mail sending to set the sender name and reply-to to the sender email address, fixes the displayed sender when sending via GMail
 
 framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
 b3088905fce89fd282dc0e2a8d8cd1253701798c Implementation of controller injection
