@@ -21,7 +21,6 @@
     <screen name="main-section-decorator">
         <section>
             <actions>
-                <set field="gwtScripts[]" value="analyticsgwt/org.opentaps.analytics.gwt.query.query" global="true"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/report/setupSectionName.bsh"/>
                 <set field="sectionName" value="${parameters.sectionName}" global="true"/>
             </actions>
