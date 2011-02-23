@@ -36,7 +36,6 @@ under the License.
     <load-component component-location="amazon"/>
     <load-component component-location="activities"/>
     <load-component component-location="translations"/>
-    <load-component component-location="analytics"/>
     <!-- <load-component component-location="opentaps-osgi"/> -->
     <!-- Uncomment these to load the Funambol Data Synchronization or Pentaho BI 
     <load-component component-location="pentaho"/>        
