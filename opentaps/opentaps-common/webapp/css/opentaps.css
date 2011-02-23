@@ -3332,12 +3332,15 @@ ul.shortcuts li {
     margin: 0;
     margin-bottom: 2px;
 }
+ul.shortcuts li.disabled div,
 ul.shortcuts li a {
     display: block; /* this is how we make the whole block clickable, but note html>body hack below */
     text-decoration: none;
     padding: .25em;
     border: solid 1px #AAAAAA;
-    width: 100%;
+}
+ul.shortcuts li a{
+    width:100%;
 }
 /* see http://www.alistapart.com/articles/taminglists/ for explanation */
 html>body ul.shortcuts li a {
