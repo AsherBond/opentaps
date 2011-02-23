@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.Message;
@@ -44,6 +43,7 @@ import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -51,9 +51,9 @@ import javax.mail.internet.MimeMultipart;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 
+import com.sun.mail.smtp.SMTPAddressFailedException;
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.MimeConstants;
@@ -78,8 +78,6 @@ import org.ofbiz.widget.fo.FoScreenRenderer;
 import org.ofbiz.widget.html.HtmlScreenRenderer;
 import org.ofbiz.widget.screen.ScreenRenderer;
 import org.xml.sax.SAXException;
-
-import com.sun.mail.smtp.SMTPAddressFailedException;
 
 /**
  * Email Services
@@ -234,7 +232,22 @@ public class EmailServices {
                 mail.setHeader("In-Reply-To", messageId);
                 mail.setHeader("References", messageId);
             }
-            InternetAddress sender = new InternetAddress(sendFrom, sendFrom);
+            InternetAddress sender = new InternetAddress(sendFrom);
+            // when using GMail and an empty personal part, it will display the GMail account name
+            // so force it to the sender email address
+            if (UtilValidate.isEmpty(sender.getPersonal()) && !sendFrom.contains("<")) {
+                sender.setPersonal(sendFrom);
+            }
+
+            // add some validation
+            try {
+                sender.validate();
+            } catch (AddressException e) {
+                String err = "Invalid sender address [" + sender + "]";
+                Debug.logError(e, err, module);
+                return ServiceUtil.returnError(err);
+            }
+
             mail.setFrom(sender);
             mail.setReplyTo(new InternetAddress[] {sender});
             mail.setSubject(subject, "UTF-8");
