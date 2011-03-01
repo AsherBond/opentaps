@@ -18,6 +18,7 @@ package org.opentaps.tests.financials;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Map;
 
 import com.opensourcestrategies.financials.accounts.AccountsHelper;
@@ -198,7 +199,8 @@ public class PaymentTests extends FinancialsTestCase {
         ctxt.put("userLogin", demofinadmin);
         ctxt.put("cardNumber", "340000000000009");
         ctxt.put("cardType", "AmericanExpress");
-        ctxt.put("expireDate", "02/2011");
+        // set the expire date to this year + 2
+        ctxt.put("expireDate", "02/" + (Calendar.getInstance().get(Calendar.YEAR) + 2));
         ctxt.put("firstNameOnCard", "For");
         ctxt.put("lastNameOnCard", "Test");
         ctxt.put("partyId", customerId);
