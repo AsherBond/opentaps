@@ -66,6 +66,7 @@ import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.payment.Payment;
+import org.opentaps.domain.order.Order;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.domain.party.Party;
@@ -314,16 +315,18 @@ public final class InvoiceActions {
         for (OrderItemBilling billing : orderItemBillings) {
             orderIds.add(billing.getOrderId());
         }
-        String ordersList = null;
+        StringBuilder ordersList = null;
         for (String id : orderIds) {
             List<OrderItem> orderItems = invoiceRepository.findList(OrderItem.class, invoiceRepository.map(OrderItem.Fields.orderId, id));
             if (orderItems == null) {
                 continue;
             }
+            Order order = invoiceRepository.findOneCache(Order.class, invoiceRepository.map(Order.Fields.orderId, id));
+            String display = id + " " + ac.getUiLabel("CommonCreatedBy") + " " + order.getCreatedBy();
             if (ordersList == null) {
-                ordersList = id;
+                ordersList = new StringBuilder(display);
             } else {
-                ordersList += (", " + id);
+                ordersList.append(", ").append(display);
             }
             if (orderItems != null && orderItems.size() > 0) {
                 // collect unique PO id
@@ -335,23 +338,23 @@ public final class InvoiceActions {
                     }
                 }
                 if (UtilValidate.isNotEmpty(orderCorrespondingPOs)) {
-                    ordersList += "(";
+                    ordersList.append("(");
                     boolean first = true;
                     for (String poId : orderCorrespondingPOs) {
                         if (first) {
-                            ordersList += ac.getUiLabel("OpentapsPONumber") + ":";
+                            ordersList.append(ac.getUiLabel("OpentapsPONumber")).append(":");
                         } else {
-                            ordersList += ", ";
+                            ordersList.append(", ");
                         }
-                        ordersList += poId;
+                        ordersList.append(poId);
                         first = false;
                     }
-                    ordersList += ")";
+                    ordersList.append(")");
                 }
             }
         }
         if (ordersList != null) {
-            ac.put("ordersList", ordersList);
+            ac.put("ordersList", ordersList.toString());
         }
 
         // billing accounts of the from party for Accounts Payable invoices
