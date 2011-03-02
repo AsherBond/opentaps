@@ -572,6 +572,8 @@ public final class LedgerServices {
         acctgTransEntry.put("acctgTransEntryTypeId", "_NA_");
         acctgTransEntry.put("productId", invoiceItem.getString("productId"));
         UtilAccountingTags.putAllAccountingTags(invoiceItem, acctgTransEntry);   // for all invoice items, put all the accounting tags from InvoiceItem to AcctgTransEntry
+            
+        String productId = invoiceItem.getString("productId");
 
         // if the organization uses standard costing this will be postingAmount - standard cost
         try {
@@ -579,7 +581,6 @@ public final class LedgerServices {
             OrganizationRepositoryInterface organizationRepository = dl.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
             ProductRepositoryInterface productRepository = dl.loadDomainsDirectory().getProductDomain().getProductRepository();
             Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
-            String productId = invoiceItem.getString("productId");
 
             // if the invoice item is for a purchased product and has a productId, and the organization uses standard costing,
             // then check whether purchase price variance should be vs. standard cost or purchase order cost
@@ -610,7 +611,7 @@ public final class LedgerServices {
         if (varianceAmount.signum() != 0) {
 
             // get the inventory price variance gl account
-            String varianceGlAccountId = UtilAccounting.getDefaultAccountId("PURCHASE_PRICE_VAR", organizationPartyId, delegator);
+            String varianceGlAccountId = UtilAccounting.getProductOrgGlAccountId(productId, "PURCHASE_PRICE_VAR", organizationPartyId, delegator);
 
             // and debit the variance account
             acctgTransEntry = new HashMap<String, Object>(acctgTransEntry);
