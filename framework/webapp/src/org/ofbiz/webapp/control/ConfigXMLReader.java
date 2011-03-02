@@ -78,7 +78,12 @@ public class ConfigXMLReader {
             // /dataimport/WEB-INF/controller.xml -> dataimport
             String app = null;
             String search = null;
-            for (String a : url.toString().split(File.separator)) {
+            String sep = File.separator;
+            // because this should be a valid regex
+            if ("\\".equals(sep)) {
+                sep = "\\\\";
+            }
+            for (String a : url.toString().split(sep)) {
                 if (a.equals("WEB-INF")) {
                     app = search;
                     break;
