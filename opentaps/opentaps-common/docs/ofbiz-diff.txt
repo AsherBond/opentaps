@@ -112,6 +112,7 @@ framework/entity/fieldtype/fieldtypeoracle.xml
 framework/entity/fieldtype/fieldtypepostgres.xml
 framework/entity/fieldtype/fieldtypepostnew.xml
 r13031 add field types for pentaho integration
+2bf88af7135bf63291efec7bd50ff9d03fb4b56a Add extra precision in the Double mysql type so the entity test will not fail
 
 framework/entity/src/org/ofbiz/entity/GenericEntity.java
 framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
