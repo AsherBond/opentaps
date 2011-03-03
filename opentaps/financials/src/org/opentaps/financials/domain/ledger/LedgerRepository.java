@@ -162,6 +162,11 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
 
     /** {@inheritDoc} */
     public AccountingTransaction createSimpleTransaction(AccountingTransaction acctgTrans, GeneralLedgerAccount debitAccount, GeneralLedgerAccount creditAccount, String organizationPartyId, BigDecimal amount, String transactionPartyId) throws RepositoryException, ServiceException {
+        return createSimpleTransaction(acctgTrans, debitAccount, creditAccount, organizationPartyId, amount, transactionPartyId, null, null, null, null, null, null, null, null, null, null);
+    }
+
+    /** {@inheritDoc} */
+    public AccountingTransaction createSimpleTransaction(AccountingTransaction acctgTrans, GeneralLedgerAccount debitAccount, GeneralLedgerAccount creditAccount, String organizationPartyId, BigDecimal amount, String transactionPartyId, String acctgTagEnumId1, String acctgTagEnumId2, String acctgTagEnumId3, String acctgTagEnumId4, String acctgTagEnumId5, String acctgTagEnumId6, String acctgTagEnumId7, String acctgTagEnumId8, String acctgTagEnumId9, String acctgTagEnumId10) throws RepositoryException, ServiceException {
 
         LedgerSpecificationInterface specification = getSpecification();
 
@@ -170,12 +175,32 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
         creditEntry.setOrganizationPartyId(organizationPartyId);
         creditEntry.setDebitCreditFlag(specification.getCreditFlag());
         creditEntry.setAmount(amount);
+        creditEntry.setAcctgTagEnumId1(acctgTagEnumId1);
+        creditEntry.setAcctgTagEnumId2(acctgTagEnumId2);
+        creditEntry.setAcctgTagEnumId3(acctgTagEnumId3);
+        creditEntry.setAcctgTagEnumId4(acctgTagEnumId4);
+        creditEntry.setAcctgTagEnumId5(acctgTagEnumId5);
+        creditEntry.setAcctgTagEnumId6(acctgTagEnumId6);
+        creditEntry.setAcctgTagEnumId7(acctgTagEnumId7);
+        creditEntry.setAcctgTagEnumId8(acctgTagEnumId8);
+        creditEntry.setAcctgTagEnumId9(acctgTagEnumId9);
+        creditEntry.setAcctgTagEnumId10(acctgTagEnumId10);
 
         AcctgTransEntry debitEntry = new AcctgTransEntry();
         debitEntry.setGlAccountId(debitAccount.getGlAccountId());
         debitEntry.setOrganizationPartyId(organizationPartyId);
         debitEntry.setDebitCreditFlag(specification.getDebitFlag());
         debitEntry.setAmount(amount);
+        debitEntry.setAcctgTagEnumId1(acctgTagEnumId1);
+        debitEntry.setAcctgTagEnumId2(acctgTagEnumId2);
+        debitEntry.setAcctgTagEnumId3(acctgTagEnumId3);
+        debitEntry.setAcctgTagEnumId4(acctgTagEnumId4);
+        debitEntry.setAcctgTagEnumId5(acctgTagEnumId5);
+        debitEntry.setAcctgTagEnumId6(acctgTagEnumId6);
+        debitEntry.setAcctgTagEnumId7(acctgTagEnumId7);
+        debitEntry.setAcctgTagEnumId8(acctgTagEnumId8);
+        debitEntry.setAcctgTagEnumId9(acctgTagEnumId9);
+        debitEntry.setAcctgTagEnumId10(acctgTagEnumId10);
 
         if (transactionPartyId != null) {
             debitEntry.setPartyId(transactionPartyId);

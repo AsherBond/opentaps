@@ -26,10 +26,14 @@
     These should roughly mirror the invoice type, GL account type, etc. but they don't have to -->
     <AcctgTagUsageType acctgTagUsageTypeId="FINANCIALS_REPORTS" description="Reports in financials, including financial statements"/>
     <AcctgTagUsageType acctgTagUsageTypeId="BALANCE_REPORTS" description="Tags printed in the Balance Statement Reports in financials"/>
-    <AcctgTagUsageType acctgTagUsageTypeId="PRCH_INV_ITEMS" description="Purchase invoice"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="PRCH_INV_ITEMS" description="Purchase invoice items"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="PRCH_INV_ADJS" description="Purchase invoice adjustments"/>
     <AcctgTagUsageType acctgTagUsageTypeId="SALES_INV_ITEMS" description="Sales invoice items"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="SALES_INV_ADJS" description="Sales invoice adjustments"/>
     <AcctgTagUsageType acctgTagUsageTypeId="COMM_INV_ITEMS" description="Commission invoice items"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="COMM_INV_ADJS" description="Commission invoice adjustments"/>
     <AcctgTagUsageType acctgTagUsageTypeId="RETN_INV_ITEMS" description="Return invoice items"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="RETN_INV_ADJS" description="Return invoice adjustments"/>
     <AcctgTagUsageType acctgTagUsageTypeId="PRCH_INV_L_ITEMS" description="Lookup Purchase invoice"/>
     <AcctgTagUsageType acctgTagUsageTypeId="SALES_INV_L_ITEMS" description="Lookup Sales invoice items"/>
     <AcctgTagUsageType acctgTagUsageTypeId="COMM_INV_L_ITEMS" description="Lookup Commission invoice items"/>

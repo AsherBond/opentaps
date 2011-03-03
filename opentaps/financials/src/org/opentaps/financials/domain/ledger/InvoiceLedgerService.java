@@ -106,7 +106,11 @@ public class InvoiceLedgerService extends DomainService implements InvoiceLedger
             // ie a cash discount which reduces the invoice amount by $3 is -3.0
             transactionAmount = transactionAmount.negate();
 
-            acctgTrans = ledgerRepository.createSimpleTransaction(acctgTrans, debitGlAccount, creditGlAccount, organizationPartyId, transactionAmount, transactionPartyId);
+            acctgTrans = ledgerRepository.createSimpleTransaction(acctgTrans, debitGlAccount, creditGlAccount, organizationPartyId, transactionAmount, transactionPartyId,
+                                                                  invoiceAdjustment.getAcctgTagEnumId1(), invoiceAdjustment.getAcctgTagEnumId2(), invoiceAdjustment.getAcctgTagEnumId3(),
+                                                                  invoiceAdjustment.getAcctgTagEnumId4(), invoiceAdjustment.getAcctgTagEnumId5(), invoiceAdjustment.getAcctgTagEnumId6(),
+                                                                  invoiceAdjustment.getAcctgTagEnumId7(), invoiceAdjustment.getAcctgTagEnumId8(), invoiceAdjustment.getAcctgTagEnumId9(),
+                                                                  invoiceAdjustment.getAcctgTagEnumId10());
 
         } catch (Exception ex) {
             throw new ServiceException(ex);

@@ -55,6 +55,17 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
     protected String comment;
     protected String invoiceAdjustmentId;
 
+    protected String acctgTagEnumId1;
+    protected String acctgTagEnumId2;
+    protected String acctgTagEnumId3;
+    protected String acctgTagEnumId4;
+    protected String acctgTagEnumId5;
+    protected String acctgTagEnumId6;
+    protected String acctgTagEnumId7;
+    protected String acctgTagEnumId8;
+    protected String acctgTagEnumId9;
+    protected String acctgTagEnumId10;
+
     private InvoiceRepositoryInterface invoiceRepository = null;
     private Invoice invoice = null;
 
@@ -98,6 +109,56 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
     }
 
     /** {@inheritDoc} */
+    public void setAcctgTagEnumId1(String acctgTagEnumId1) {
+        this.acctgTagEnumId1 = acctgTagEnumId1;
+    }
+
+    /** {@inheritDoc} */
+    public void setAcctgTagEnumId10(String acctgTagEnumId10) {
+        this.acctgTagEnumId10 = acctgTagEnumId10;
+    }
+
+    /** {@inheritDoc} */
+    public void setAcctgTagEnumId2(String acctgTagEnumId2) {
+        this.acctgTagEnumId2 = acctgTagEnumId2;
+    }
+
+    /** {@inheritDoc} */
+    public void setAcctgTagEnumId3(String acctgTagEnumId3) {
+        this.acctgTagEnumId3 = acctgTagEnumId3;
+    }
+
+    /** {@inheritDoc} */
+    public void setAcctgTagEnumId4(String acctgTagEnumId4) {
+        this.acctgTagEnumId4 = acctgTagEnumId4;
+    }
+
+    /** {@inheritDoc} */
+    public void setAcctgTagEnumId5(String acctgTagEnumId5) {
+        this.acctgTagEnumId5 = acctgTagEnumId5;
+    }
+
+    /** {@inheritDoc} */
+    public void setAcctgTagEnumId6(String acctgTagEnumId6) {
+        this.acctgTagEnumId6 = acctgTagEnumId6;
+    }
+
+    /** {@inheritDoc} */
+    public void setAcctgTagEnumId7(String acctgTagEnumId7) {
+        this.acctgTagEnumId7 = acctgTagEnumId7;
+    }
+
+    /** {@inheritDoc} */
+    public void setAcctgTagEnumId8(String acctgTagEnumId8) {
+        this.acctgTagEnumId8 = acctgTagEnumId8;
+    }
+
+    /** {@inheritDoc} */
+    public void setAcctgTagEnumId9(String acctgTagEnumId9) {
+        this.acctgTagEnumId9 = acctgTagEnumId9;
+    }
+
+    /** {@inheritDoc} */
     public void createInvoiceAdjustment() throws ServiceException {
         try {
             invoiceRepository = getInvoiceRepository();
@@ -118,6 +179,16 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
             invoiceAdjustment.setComment(comment);
             invoiceAdjustment.setInvoiceAdjustmentId(invoiceAdjustmentId);
             invoiceAdjustment.setEffectiveDate(UtilDateTime.nowTimestamp());
+            invoiceAdjustment.setAcctgTagEnumId1(acctgTagEnumId1);
+            invoiceAdjustment.setAcctgTagEnumId2(acctgTagEnumId2);
+            invoiceAdjustment.setAcctgTagEnumId3(acctgTagEnumId3);
+            invoiceAdjustment.setAcctgTagEnumId4(acctgTagEnumId4);
+            invoiceAdjustment.setAcctgTagEnumId5(acctgTagEnumId5);
+            invoiceAdjustment.setAcctgTagEnumId6(acctgTagEnumId6);
+            invoiceAdjustment.setAcctgTagEnumId7(acctgTagEnumId7);
+            invoiceAdjustment.setAcctgTagEnumId8(acctgTagEnumId8);
+            invoiceAdjustment.setAcctgTagEnumId9(acctgTagEnumId9);
+            invoiceAdjustment.setAcctgTagEnumId10(acctgTagEnumId10);
             invoiceRepository.createOrUpdate(invoiceAdjustment);
 
             // if the invoice is already posted, then we need to post the adjustment as well

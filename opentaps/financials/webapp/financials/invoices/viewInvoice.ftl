@@ -474,6 +474,15 @@ function notifyInvoiceItemsCount(n) {
               <@displayCell text=adjustment.comment />
               <@displayCurrencyCell amount=adjustment.amount currencyUomId=invoice.currencyUomId />
             </tr>
+            <#-- display accounting tags associated with this invoice adjustment -->
+            <#if adjTagTypes?has_content>
+              <tr class="${tableRowClass(adjustment_index)}">
+                <td colspan="2">&nbsp;</td>
+                <td colspan="4">
+                  <i><@accountingTagsDisplay tags=adjTagTypes entity=adjustment /></i>
+                </td>
+              </tr>
+            </#if>
           </#list>
         </tbody>
       </table>
@@ -487,6 +496,9 @@ function notifyInvoiceItemsCount(n) {
         <@inputSelectRow name="invoiceAdjustmentTypeId" title=uiLabelMap.CommonType list=invoiceAdjustmentTypes displayField="description" />
         <@inputCurrencyRow title=uiLabelMap.CommonAmount name="adjustmentAmount" defaultCurrencyUomId=invoice.currencyUomId disableCurrencySelect=true />
         <@inputTextRow name="comment" title=uiLabelMap.CommonComment size=60 />
+        <#if !disableTags?exists && adjTagTypes?has_content>
+          <@accountingTagsSelectRows tags=adjTagTypes prefix="acctgTagEnumId" />
+        </#if>
         <@inputSubmitRow title=uiLabelMap.CommonAdd />
       </table>
     </form>

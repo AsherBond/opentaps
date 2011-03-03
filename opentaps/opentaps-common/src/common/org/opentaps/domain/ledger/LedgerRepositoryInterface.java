@@ -126,9 +126,35 @@ public interface LedgerRepositoryInterface extends RepositoryInterface {
      * @param transactionPartyId the party ID for the transactions
      * @return the created accounting transaction
      * @exception RepositoryException if an error occurs
+     * @exception ServiceException if an error occurs
      * @see #storeAcctgTransAndEntries
      */
     public AccountingTransaction createSimpleTransaction(AccountingTransaction acctgTrans, GeneralLedgerAccount debitAccount, GeneralLedgerAccount creditAccount, String organizationPartyId, BigDecimal amount, String transactionPartyId) throws RepositoryException, ServiceException;
+
+    /**
+     * Creates a simple transaction consisting of two transaction entries representing a transfer between two accounts.
+     * @param acctgTrans an <code>AccountingTransaction</code> value
+     * @param debitAccount the <code>GeneralLedgerAccount</code> to debit
+     * @param creditAccount the <code>GeneralLedgerAccount</code> to credit
+     * @param organizationPartyId the organization owning the transaction accounts
+     * @param amount the amount transferred
+     * @param transactionPartyId the party ID for the transactions
+     * @param acctgTagEnumId1 a <code>String</code> value
+     * @param acctgTagEnumId2 a <code>String</code> value
+     * @param acctgTagEnumId3 a <code>String</code> value
+     * @param acctgTagEnumId4 a <code>String</code> value
+     * @param acctgTagEnumId5 a <code>String</code> value
+     * @param acctgTagEnumId6 a <code>String</code> value
+     * @param acctgTagEnumId7 a <code>String</code> value
+     * @param acctgTagEnumId8 a <code>String</code> value
+     * @param acctgTagEnumId9 a <code>String</code> value
+     * @param acctgTagEnumId10 a <code>String</code> value
+     * @return the created accounting transaction
+     * @exception RepositoryException if an error occurs
+     * @exception ServiceException if an error occurs
+     * @see #storeAcctgTransAndEntries
+     */
+    public AccountingTransaction createSimpleTransaction(AccountingTransaction acctgTrans, GeneralLedgerAccount debitAccount, GeneralLedgerAccount creditAccount, String organizationPartyId, BigDecimal amount, String transactionPartyId, String acctgTagEnumId1, String acctgTagEnumId2, String acctgTagEnumId3, String acctgTagEnumId4, String acctgTagEnumId5, String acctgTagEnumId6, String acctgTagEnumId7, String acctgTagEnumId8, String acctgTagEnumId9, String acctgTagEnumId10) throws RepositoryException, ServiceException;
 
     /**
      * Finds the <code>GlAccountHistory</code> for the given glAccountId, organizationPartyId and customTimePeriodId if one exists.

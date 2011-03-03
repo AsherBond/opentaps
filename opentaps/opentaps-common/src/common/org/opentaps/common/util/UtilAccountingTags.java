@@ -65,12 +65,20 @@ public final class UtilAccountingTags {
     public static final String BALANCE_REPORTS_TAG = "BALANCE_REPORTS";
     /** Tags for purchase invoices. */
     public static final String PURCHASE_INVOICES_TAG = "PRCH_INV_ITEMS";
+    /** Tags for purchase invoices adjustments. */
+    public static final String PURCHASE_INVOICES_ADJ_TAG = "PRCH_INV_ADJS";
     /** Tags for sales invoices. */
     public static final String SALES_INVOICES_TAG = "SALES_INV_ITEMS";
+    /** Tags for sales invoices adjustments. */
+    public static final String SALES_INVOICES_ADJ_TAG = "SALES_INV_ADJS";
     /** Tags for return invoices. */
     public static final String RETURN_INVOICES_TAG = "RETN_INV_ITEMS";
+    /** Tags for return invoices adjustments. */
+    public static final String RETURN_INVOICES_ADJ_TAG = "RETN_INV_ADJS";
     /** Tags for commission invoices. */
     public static final String COMMISSION_INVOICES_TAG = "COMM_INV_ITEMS";
+    /** Tags for commission invoices adjustments. */
+    public static final String COMMISSION_INVOICES_ADJ_TAG = "COMM_INV_ADJS";
     /** Tags for lookup purchase invoices. */
     public static final String LOOKUP_PURCHASE_INVOICES_TAG = "PRCH_INV_L_ITEMS";
     /** Tags for lookup sales invoices. */

@@ -273,6 +273,7 @@
     <service name="createInvoiceAdjustment" engine="pojo"
             location="org.opentaps.financials.domain.billing.invoice.InvoiceService" invoke="createInvoiceAdjustment">
         <description>Create an adjustment to an invoice.  It will be posted if the invoice has already been posted.</description> 
+        <implements service="accountingTagsEntityInterface"/>
         <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
         <attribute name="invoiceAdjustmentTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="adjustmentAmount" type="BigDecimal" mode="IN" optional="false"/>

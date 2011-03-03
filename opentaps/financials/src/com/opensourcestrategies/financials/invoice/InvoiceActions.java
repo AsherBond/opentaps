@@ -204,12 +204,16 @@ public final class InvoiceActions {
         // get the accounting tags for the invoice
         if (invoice.isCommissionInvoice()) {
             ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.COMMISSION_INVOICES_TAG, delegator));
+            ac.put("adjTagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.COMMISSION_INVOICES_ADJ_TAG, delegator));
         } else if (invoice.isSalesInvoice()) {
             ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.SALES_INVOICES_TAG, delegator));
+            ac.put("adjTagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.SALES_INVOICES_ADJ_TAG, delegator));
         } else if (invoice.isPurchaseInvoice()) {
             ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, delegator));
+            ac.put("adjTagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_ADJ_TAG, delegator));
         } else if (invoice.isReturnInvoice()) {
             ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.RETURN_INVOICES_TAG, delegator));
+            ac.put("adjTagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.RETURN_INVOICES_ADJ_TAG, delegator));
         }
 
         Party transactionParty = partyRepository.getPartyById(invoice.getTransactionPartyId());

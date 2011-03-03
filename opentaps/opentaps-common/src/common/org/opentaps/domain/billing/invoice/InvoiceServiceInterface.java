@@ -58,6 +58,66 @@ public interface InvoiceServiceInterface extends ServiceInterface {
     public void setComment(String comment);
 
     /**
+     * Sets the required input parameter for service.
+     * @param acctgTagEnumId1 input parameter
+     */
+    public void setAcctgTagEnumId1(String acctgTagEnumId1);
+
+    /**
+     * Sets the required input parameter for service.
+     * @param acctgTagEnumId2 input parameter
+     */
+    public void setAcctgTagEnumId2(String acctgTagEnumId2);
+
+    /**
+     * Sets the required input parameter for service.
+     * @param acctgTagEnumId3 input parameter
+     */
+    public void setAcctgTagEnumId3(String acctgTagEnumId3);
+
+    /**
+     * Sets the required input parameter for service.
+     * @param acctgTagEnumId4 input parameter
+     */
+    public void setAcctgTagEnumId4(String acctgTagEnumId4);
+
+    /**
+     * Sets the required input parameter for service.
+     * @param acctgTagEnumId5 input parameter
+     */
+    public void setAcctgTagEnumId5(String acctgTagEnumId5);
+
+    /**
+     * Sets the required input parameter for service.
+     * @param acctgTagEnumId6 input parameter
+     */
+    public void setAcctgTagEnumId6(String acctgTagEnumId6);
+
+    /**
+     * Sets the required input parameter for service.
+     * @param acctgTagEnumId7 input parameter
+     */
+    public void setAcctgTagEnumId7(String acctgTagEnumId7);
+
+    /**
+     * Sets the required input parameter for service.
+     * @param acctgTagEnumId8 input parameter
+     */
+    public void setAcctgTagEnumId8(String acctgTagEnumId8);
+
+    /**
+     * Sets the required input parameter for service.
+     * @param acctgTagEnumId9 input parameter
+     */
+    public void setAcctgTagEnumId9(String acctgTagEnumId9);
+
+    /**
+     * Sets the required input parameter for service.
+     * @param acctgTagEnumId10 input parameter
+     */
+    public void setAcctgTagEnumId10(String acctgTagEnumId10);
+
+    /**
      * Get the invoiceAdjustmentId of the invoiceAdjustment created by {@link #createInvoiceAdjustment}.
      * @return the invoiceAdjustmentId
      */
