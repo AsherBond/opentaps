@@ -23,9 +23,13 @@ If you have come this far, payment should be a valid Payment Object.
 <#if payment?has_content>
 
 <#assign paymentStatusChangeAction = "">
-
+<#if isDisbursement>
+  <#assign createLink = "partyId=${payment.partyIdTo}" />
+<#else>
+  <#assign createLink = "partyId=${payment.partyIdFrom}" />
+</#if>
 <#if hasCreatePermission>
-  <#assign paymentStatusChangeAction><a class="subMenuButton" href="<@ofbizUrl>editPayment?paymentTypeId=${addPaymentTypeId}</@ofbizUrl>">${uiLabelMap.CommonCreateNew}</a></#assign>
+  <#assign paymentStatusChangeAction><a class="subMenuButton" href="<@ofbizUrl>editPayment?paymentTypeId=${addPaymentTypeId}&amp;${createLink}</@ofbizUrl>">${uiLabelMap.CommonCreateNew}</a></#assign>
 </#if>
 <#if hasUpdatePermission>
   <#if payment.isNotPaid() || payment.isSent() || payment.isReceived()>

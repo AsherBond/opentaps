@@ -23,31 +23,37 @@
   <#assign whichPartyTitle = uiLabelMap.AccountingToParty />
   <#assign whichPartyId = invoice.partyId />
   <#assign partyLink = "customerStatement?partyId=${invoice.partyId}" />
+  <#assign createLink = "partyId=${invoice.partyId}" />
   <#assign sampleInvoiceLink><a href="sampleInvoice.pdf?invoiceId=${invoice.invoiceId}" class="subMenuButton">Sample Invoice PDF</a></#assign>
 <#elseif invoice.isPurchaseInvoice()>
   <#assign title = uiLabelMap.FinancialsPurchaseInvoice />
   <#assign whichPartyTitle = uiLabelMap.AccountingFromParty />
   <#assign whichPartyId = invoice.partyIdFrom />
+  <#assign createLink = "partyIdFrom=${invoice.partyIdFrom}" />
   <#assign partyLink = "vendorStatement?partyId=${invoice.partyIdFrom}" />
 <#elseif invoice.isReturnInvoice()>
   <#assign title = uiLabelMap.FinancialsCustomerReturnInvoice />
   <#assign whichPartyTitle = uiLabelMap.AccountingFromParty />
   <#assign whichPartyId = invoice.partyIdFrom />
+  <#assign createLink = "partyIdFrom=${invoice.partyIdFrom}" />
   <#assign partyLink = "customerStatement?partyId=${invoice.partyIdFrom}" />
 <#elseif invoice.isCommissionInvoice()>
   <#assign title = uiLabelMap.FinancialsCommissionInvoice />
   <#assign whichPartyTitle = uiLabelMap.AccountingFromParty />
   <#assign whichPartyId = invoice.partyIdFrom />
+  <#assign createLink = "partyIdFrom=${invoice.partyIdFrom}" />
   <#assign partyLink = "commissionsStatement?partyId=${invoice.partyIdFrom}" />
 <#elseif invoice.isInterestInvoice()>
   <#assign title = uiLabelMap.FinancialsInterestInvoice />
   <#assign whichPartyTitle = uiLabelMap.AccountingToParty />
   <#assign whichPartyId = invoice.partyId />
+  <#assign createLink = "partyId=${invoice.partyId}" />
   <#assign partyLink = "customerStatement?partyId=${invoice.partyId}" />
 <#elseif invoice.isPartnerInvoice()>
   <#assign title = uiLabelMap.OpentapsPartnerInvoice />
   <#assign whichPartyTitle = uiLabelMap.AccountingFromParty />
   <#assign whichPartyId = invoice.partyIdFrom />
+  <#assign createLink = "partyIdFrom=${invoice.partyIdFrom}" />
 </#if>
 
 
@@ -93,7 +99,7 @@ function notifyInvoiceItemsCount(n) {
 </#if>
 
 <#if hasCreatePermission>
-  <#assign createPartnerInvoiceLink><a href="<@ofbizUrl><#if invoice.isPartnerInvoice()>createPartnerInvoiceForm<#else>createInvoiceForm?invoiceTypeId=${invoice.invoiceTypeId}</#if></@ofbizUrl>" class="subMenuButton">${uiLabelMap.CommonCreateNew}</a></#assign>
+  <#assign createPartnerInvoiceLink><a href="<@ofbizUrl><#if invoice.isPartnerInvoice()>createPartnerInvoiceForm<#else>createInvoiceForm?invoiceTypeId=${invoice.invoiceTypeId}&amp;${createLink}</#if></@ofbizUrl>" class="subMenuButton">${uiLabelMap.CommonCreateNew}</a></#assign>
   <#assign stateChangeLinks = stateChangeLinks?default("") + createPartnerInvoiceLink />
 </#if>
 
