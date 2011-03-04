@@ -348,6 +348,25 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     }
 
     /** {@inheritDoc} */
+    public List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(Invoice invoice, InvoiceAdjustment adjustment) throws RepositoryException {
+        String organizationPartyId = null;
+        String accountingTagUsageTypeId = null;
+        if (invoice.getInvoiceTypeId().equals(InvoiceTypeConstants.SALES_INVOICE)) {
+            accountingTagUsageTypeId = UtilAccountingTags.SALES_INVOICES_ADJ_TAG;
+            organizationPartyId = invoice.getPartyIdFrom();
+        } else if (invoice.getInvoiceTypeId().equals(InvoiceTypeConstants.PURCHASE_INVOICE)) {
+            accountingTagUsageTypeId = UtilAccountingTags.SALES_INVOICES_ADJ_TAG;
+            organizationPartyId = invoice.getPartyId();
+        } else if (invoice.getInvoiceTypeId().equals(InvoiceTypeConstants.COMMISSION_INVOICE)) {
+            accountingTagUsageTypeId = UtilAccountingTags.COMMISSION_INVOICES_ADJ_TAG;
+            organizationPartyId = invoice.getPartyId();
+        } else {
+            return new ArrayList<AccountingTagConfigurationForOrganizationAndUsage>();
+        }
+        return getOrganizationRepository().validateTagParameters(adjustment, organizationPartyId, accountingTagUsageTypeId);
+    }
+
+    /** {@inheritDoc} */
     @SuppressWarnings("deprecation")
     public InvoiceItemType getInvoiceItemType(OrderItem orderItem, String invoiceTypeId) throws RepositoryException {
         org.opentaps.base.entities.Product itemProduct = orderItem.getProduct();

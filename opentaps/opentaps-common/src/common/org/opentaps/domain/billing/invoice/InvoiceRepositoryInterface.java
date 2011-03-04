@@ -208,6 +208,15 @@ public interface InvoiceRepositoryInterface extends RepositoryInterface {
     public List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(Invoice invoice, InvoiceItem item) throws RepositoryException;
 
     /**
+     * Validates the accounting tags for an <code>InvoiceAdjustment</code>.
+     * @param invoice an <code>Invoice</code> value
+     * @param adjustment an <code>InvoiceAdjustment</code> value
+     * @return a list of <code>AccountingTagConfigurationForOrganizationAndUsage</code> that are missing
+     * @throws RepositoryException if an exception occurs
+     */
+    public List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(Invoice invoice, InvoiceAdjustment adjustment) throws RepositoryException;
+
+    /**
      * Returns invoice item type based on order item and invoice type.
      * @param orderItem An instance of <code>OrderItem</code>
      * @param invoiceTypeId a <code>String</code> value

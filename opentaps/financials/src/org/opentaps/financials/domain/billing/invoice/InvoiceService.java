@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -40,6 +41,7 @@ import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.ledger.InvoiceLedgerServiceInterface;
 import org.opentaps.domain.ledger.LedgerSpecificationInterface;
+import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.util.EntityListIterator;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -189,6 +191,11 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
             invoiceAdjustment.setAcctgTagEnumId8(acctgTagEnumId8);
             invoiceAdjustment.setAcctgTagEnumId9(acctgTagEnumId9);
             invoiceAdjustment.setAcctgTagEnumId10(acctgTagEnumId10);
+            // validate tags parameters if necessary
+            List<AccountingTagConfigurationForOrganizationAndUsage> missings = invoiceRepository.validateTagParameters(invoice, invoiceAdjustment);
+            if (!missings.isEmpty()) {
+                throw new ServiceException("OpentapsError_ServiceErrorRequiredTagNotFound", UtilMisc.toMap("tagName", missings.get(0).getDescription()));
+            }
             invoiceRepository.createOrUpdate(invoiceAdjustment);
 
             // if the invoice is already posted, then we need to post the adjustment as well
