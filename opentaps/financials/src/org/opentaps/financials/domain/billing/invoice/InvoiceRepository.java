@@ -31,8 +31,6 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.base.constants.AgreementTypeConstants;
 import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.base.constants.InvoiceItemTypeConstants;
@@ -51,9 +49,13 @@ import org.opentaps.base.entities.PaymentAndApplication;
 import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.ProductInvoiceItemType;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.invoice.InvoiceSpecificationInterface;
+import org.opentaps.domain.ledger.LedgerRepositoryInterface;
+import org.opentaps.domain.ledger.LedgerSpecificationInterface;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
@@ -72,9 +74,12 @@ import org.opentaps.foundation.repository.ofbiz.Repository;
  * Repository for Invoices to handle interaction of Invoice-related domain with the entity engine (database) and the service engine.
  */
 public class InvoiceRepository extends Repository implements InvoiceRepositoryInterface {
-	 private static final String MODULE = InvoiceRepository.class.getName();
+
+    private static final String MODULE = InvoiceRepository.class.getName();
+
     private InvoiceSpecificationInterface invoiceSpecification = new InvoiceSpecification();
     private OrganizationRepositoryInterface organizationRepository;
+    private LedgerRepositoryInterface ledgerRepository;
 
     /**
      * Default constructor.
@@ -351,14 +356,27 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     public List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(Invoice invoice, InvoiceAdjustment adjustment) throws RepositoryException {
         String organizationPartyId = null;
         String accountingTagUsageTypeId = null;
+        LedgerSpecificationInterface spec = getLedgerRepository().getSpecification();
         if (invoice.getInvoiceTypeId().equals(InvoiceTypeConstants.SALES_INVOICE)) {
-            accountingTagUsageTypeId = UtilAccountingTags.SALES_INVOICES_ADJ_TAG;
+            if (spec.getAdjustmentTypeIdForWriteOff().equals(adjustment.getInvoiceAdjustmentTypeId())) {
+                accountingTagUsageTypeId = UtilAccountingTags.SALES_INVOICES_WRITE_OFF_TAG;
+            } else {
+                accountingTagUsageTypeId = UtilAccountingTags.SALES_INVOICES_ADJ_TAG;
+            }
             organizationPartyId = invoice.getPartyIdFrom();
         } else if (invoice.getInvoiceTypeId().equals(InvoiceTypeConstants.PURCHASE_INVOICE)) {
-            accountingTagUsageTypeId = UtilAccountingTags.SALES_INVOICES_ADJ_TAG;
+            if (spec.getAdjustmentTypeIdForWriteOff().equals(adjustment.getInvoiceAdjustmentTypeId())) {
+                accountingTagUsageTypeId = UtilAccountingTags.SALES_INVOICES_WRITE_OFF_TAG;
+            } else {
+                accountingTagUsageTypeId = UtilAccountingTags.SALES_INVOICES_ADJ_TAG;
+            }
             organizationPartyId = invoice.getPartyId();
         } else if (invoice.getInvoiceTypeId().equals(InvoiceTypeConstants.COMMISSION_INVOICE)) {
-            accountingTagUsageTypeId = UtilAccountingTags.COMMISSION_INVOICES_ADJ_TAG;
+            if (spec.getAdjustmentTypeIdForWriteOff().equals(adjustment.getInvoiceAdjustmentTypeId())) {
+                accountingTagUsageTypeId = UtilAccountingTags.COMMISSION_INVOICES_WRITE_OFF_TAG;
+            } else {
+                accountingTagUsageTypeId = UtilAccountingTags.COMMISSION_INVOICES_ADJ_TAG;
+            }
             organizationPartyId = invoice.getPartyId();
         } else {
             return new ArrayList<AccountingTagConfigurationForOrganizationAndUsage>();
@@ -381,6 +399,12 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
         return organizationRepository;
     }
 
+    protected LedgerRepositoryInterface getLedgerRepository() throws RepositoryException {
+        if (ledgerRepository == null) {
+            ledgerRepository = DomainsDirectory.getDomainsDirectory(this).getLedgerDomain().getLedgerRepository();
+        }
+        return ledgerRepository;
+    }
 
     /** {@inheritDoc} */
     public List<InvoiceAdjustmentType> getInvoiceAdjustmentTypes(Organization organization, Invoice invoice) throws RepositoryException {
