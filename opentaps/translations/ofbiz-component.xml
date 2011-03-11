@@ -26,5 +26,6 @@ for your language as well and plug it into opentaps -->
 
     <classpath type="dir" location="config/Bulgarian"/>
     <classpath type="dir" location="config/Chinese"/>
+    <classpath type="dir" location="config/Spanish"/>
 </ofbiz-component>
 
