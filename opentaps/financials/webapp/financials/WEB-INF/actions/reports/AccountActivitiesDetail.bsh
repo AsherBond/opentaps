@@ -83,8 +83,14 @@ transactionThruDate = UtilDateTime.getDayEnd(UtilDate.toTimestamp(UtilHttp.makeP
 
 organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 
+performFind = UtilCommon.getParameter(request, "performFind");
+
 /* pass the query builder for pagination */
-context.put("accountActivitiesDetailsBuilder", accountActivitiesDetailsBuilder(organizationPartyId, transactionFromDate, transactionThruDate));
+if (performFind == null || !"Y".equals(performFind)) {
+    context.put("accountActivitiesDetailsBuilder", null);
+} else {
+    context.put("accountActivitiesDetailsBuilder", accountActivitiesDetailsBuilder(organizationPartyId, transactionFromDate, transactionThruDate));
+}
 
 // list of acctg trans types for dropdown
 acctgTransTypes = delegator.findAllCache("AcctgTransType", UtilMisc.toList("description"));

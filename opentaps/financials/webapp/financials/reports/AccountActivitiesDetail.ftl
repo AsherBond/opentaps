@@ -21,7 +21,7 @@
 </#macro>
 
 <div style="margin-bottom: 15px">
-  <#assign findFormState = ("Y" == parameters.performFind?default(""))?string("closed", "open") />
+  <#assign findFormState = ("N" == parameters.performFind?default(""))?string("closed", "open") />
   <@flexArea targetId="findAccountActivitiesDetail" title=uiLabelMap.FinancialsFindAccountActivitiesDetail save=false state=findFormState >
     <form method="post" action="<@ofbizUrl>AccountActivitiesDetail</@ofbizUrl>" name="findAccountActivitiesDetail">
       <table>
