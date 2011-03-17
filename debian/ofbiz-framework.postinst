@@ -20,7 +20,7 @@ set -e
 
 : "$0" "$@"
 JAVA_HOME=""
-JAVA_HOMES="/usr/lib/jvm/java-6-openjdk"
+JAVA_HOMES="/usr/lib/jvm/java-6-openjdk /usr/lib/jvm/java-6-sun"
 OFBIZ_HOME="/usr/share/ofbiz"
 for possible in $JAVA_HOMES; do
 	if [ -e "$possible/bin/java" ]; then
@@ -62,6 +62,14 @@ munge_conffile() {
 configure_ofbiz() {
 	extra="-readers=seed"
 	for file in "/var/lib/ofbiz/import/"*.xml; do
+		if [ -e "$file" ]; then
+			extra="$extra -file=\"$file\""
+		fi
+	done
+	#
+	# Dirty hack that imports mycompany data in the same order that they appear in 'ofbiz-component.xml'.
+	#
+	for file in $(grep 'entity-resource type="data" reader-name="ext" loader="main"' "/usr/share/ofbiz/opentaps/mycompany/ofbiz-component.xml" | sed -e 's|.\+location="|/usr/share/ofbiz/opentaps/mycompany/|g' -e 's|"[[:space:]]*/>||g'); do
 		if [ -e "$file" ]; then
 			extra="$extra -file=\"$file\""
 		fi

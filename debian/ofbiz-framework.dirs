@@ -16,8 +16,9 @@
 # specific language governing permissions and limitations
 # under the License.
 #####################################################################
-usr/share/ofbiz/support
 etc/ofbiz
+usr/share/ofbiz/support
 var/cache/ofbiz
+var/lib/ofbiz-framework/runtime/tempfiles
 var/lib/ofbiz/runtime/uploads
 var/log/ofbiz

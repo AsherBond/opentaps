@@ -37,8 +37,9 @@ PATH=/bin:/usr/bin:/sbin:/usr/sbin
 # set defaults
 DEFAULT=/etc/default/ofbiz
 JAVA_HOME=""
-JAVA_HOMES="/usr/lib/jvm/java-6-openjdk"
+JAVA_HOMES="/usr/lib/jvm/java-6-openjdk /usr/lib/jvm/java-6-sun"
 MEMIF=""
+TINY_MEMIF=""
 UMASK=002
 
 . /lib/lsb/init-functions
@@ -91,7 +92,7 @@ CLASSPATH="$OFBIZ_HOME/ofbiz.jar:/usr/share/java/commons-daemon.jar"
 run_ofbiz_cmd() {
 	(
 		cd "$OFBIZ_HOME"
-		"$JAVA" $PROPS -jar ofbiz.jar "$1"
+		"$JAVA" $PROPS $TINY_MEMIF -jar ofbiz.jar "$1"
 	)
 }
 

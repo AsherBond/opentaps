@@ -1,3 +1,58 @@
+ofbiz (1.5.0-0dedalo2) unstable; urgency=low
+
+  * ofbiz-framework.ofbiz.default: Memory requirements for production environment have been reduced.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Wed, 16 Mar 2011 12:12:25 +0100
+
+ofbiz (1.5.0-0dedalo1) unstable; urgency=low
+
+  * ofbiz-framework.postrm: Added two more overrides.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Fri, 11 Mar 2011 14:38:01 +0100
+
+ofbiz (1.5.0-0dedalo0) unstable; urgency=low
+
+  * First try to package new upstream version (1.5.0). First try to use git.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Wed, 09 Mar 2011 13:26:49 +0100
+
+ofbiz (1.5.M3-0dedalo5) unstable; urgency=low
+
+  * ofbiz-framework.ofbiz.default: Production settings for the Java Virtual Machine have been extended.
+	
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Fri, 18 Feb 2011 11:23:59 +0100
+
+ofbiz (1.5.M3-0dedalo4) unstable; urgency=low
+
+  * debian/ofbiz-framework.postinst: Added a dirty hack to install 'mycompany' data in the right order.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Fri, 18 Feb 2011 11:23:59 +0100
+
+ofbiz (1.5.M3-0dedalo3) unstable; urgency=low
+
+  * debian/ofbiz-framework.postinst: Added support for installing 'mycompany' data.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Mon, 14 Feb 2011 15:12:40 +0100
+
+ofbiz (1.5.M3-0dedalo2) unstable; urgency=low
+
+  * Correcciones en el uso de dpkg-statoverride.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Mon, 07 Feb 2011 15:08:15 +0100
+
+ofbiz (1.5.M3-0dedalo1) unstable; urgency=low
+
+  * debian/ofbiz-framework.dirs: Added a missing directory.
+  * debian/ofbiz-framework.postrm: Added deletion of user 'ofbiz' on purge.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Fri, 04 Feb 2011 14:42:23 +0100
+
+ofbiz (1.5.M3-0dedalo0) unstable; urgency=low
+
+  * First try to package new upstream version (1.5.M3).
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Wed, 02 Feb 2011 14:13:12 +0100
+
 ofbiz (UNRELEASED) unstable; urgency=low
 
   * Increase start timeout from 40 seconds to 120.
@@ -10,6 +65,79 @@ ofbiz (UNRELEASED) unstable; urgency=low
   * Bump Standards-Version to 3.8.3.
 
  -- Adam Heath <doogie@brainfood.com>  Fri, 04 Sep 2009 16:41:32 -0500
+
+ofbiz (1.4.1-0dedalo10) unstable; urgency=low
+
+  * debian/move-files.pl: Added support for fixing the owner of "runtime/tempfiles".
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Fri, 03 Sep 2010 10:26:00 +0200
+
+ofbiz (1.4.1-0dedalo9) unstable; urgency=low
+
+  * debian/ofbiz-framework.ofbiz.default, ofbiz-framework.ofbiz.init: Minor fix in memory requirements
+    to let it run in a VPS. Added a new variable to execute "run_ofbiz_cmd" with lower memory
+    requirements for the same reason (before the "status" command failed with a memory exception).
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Thu, 02 Sep 2010 09:04:20 +0200
+
+ofbiz (1.4.1-0dedalo8) unstable; urgency=low
+
+  * debian/ofbiz-framework.ofbiz.default: Added memory settings for Java from 
+    web page at http://www.opentaps.org/docs/index.php/Recommended_Memory_Settings
+  * debian/move-files.pl: Included 'ant' and 'build.xml'.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Wed, 04 Aug 2010 13:07:47 +0200
+
+ofbiz (1.4.1-0dedalo7) unstable; urgency=low
+
+  * debian/rules: Added a link to a 'var' folder from usr/share/ofbiz/runtime/tempfiles.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Tue, 03 Aug 2010 12:50:32 +0200
+
+ofbiz (1.4.1-0dedalo6) unstable; urgency=low
+
+  * debian/ofbiz-framework.postinst: Updates package overrides for
+    /var/lib/ofbiz only if there was no override previously.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Tue, 03 Aug 2010 09:22:19 +0200
+
+ofbiz (1.4.1-0dedalo5) unstable; urgency=low
+
+  * debian/move-files.pl: Fixes in debhelper generation.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Fri, 30 Jul 2010 14:39:30 +0200
+
+ofbiz (1.4.1-0dedalo4) unstable; urgency=low
+
+  * debian/move-files.pl: Fixes in debhelper generation.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Fri, 30 Jul 2010 12:44:27 +0200
+
+ofbiz (1.4.1-0dedalo3) unstable; urgency=low
+
+  * debian/move-files.pl: Added support for including code in debhelper generated scripts for
+    fixing lucene indexes directory permissions.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Fri, 30 Jul 2010 11:26:25 +0200
+
+ofbiz (1.4.1-0dedalo2) unstable; urgency=low
+
+  * Some fixes in packaging to make lucene indexes folder writable for user ofbiz.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Wed, 28 Jul 2010 13:32:01 +0200
+
+ofbiz (1.4.1-0dedalo1) unstable; urgency=low
+
+  * Added initial support for lucene indexes in package.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Fri, 23 Jul 2010 11:48:40 +0200
+
+ofbiz (1.4.1-0dedalo0) unstable; urgency=low
+
+  * Added support for Sun Java packages.
+  * debian/move-files.pl: Fixed the symbolic link handling to make them relative instead of absolute.
+
+ -- Constructor del sistema de empaquetado de Skynet <builder@builder.dedaloingenieros.com>  Fri, 02 Jul 2010 14:03:42 +0200
 
 ofbiz (684378) unstable; urgency=low
 

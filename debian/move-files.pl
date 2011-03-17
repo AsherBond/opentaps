@@ -21,6 +21,7 @@ use warnings;
 
 use Data::Dumper;
 use File::Copy;
+use Cwd;
 
 my %dirs;
 
@@ -33,7 +34,6 @@ my $appDirsRe = qw/(applications|framework|specialpurpose)/;
 my @ignore = qw(
 OPTIONAL_LIBRARIES
 NOTICE
-ant
 LICENSE
 hot-deploy/README.txt
 .project
@@ -56,6 +56,7 @@ ij.ofbiz
 KEYS
 APACHE2_HEADER
 rc.ofbiz
+rc.ofbiz.for.debian
 );
 #startofbiz.sh
 
@@ -65,6 +66,12 @@ my @unknown;
 my %scripts;
 
 sub basename($) {
+	my $target = $_[0];
+	$target =~ s,.+/,,;
+	return $target;
+}
+
+sub dirname($) {
 	my $target = $_[0];
 	$target =~ s,/[^/]+$,,;
 	return $target;
@@ -77,16 +84,25 @@ sub _mkdir($) {
 sub copylink($$$) {
 	my ($base, $destdir, $file) = @_;
 	my $target = "$base$destdir/$file";
+	my $cwd = cwd();
+
 	#print("Symlinking ($file) ($target)\n");
 	if (-f $file) {
-		_mkdir(basename($target)) || die("a");
+		_mkdir(dirname($target)) || die("a");
 		link($file, $target) || die("b");
 	} else {
 		_mkdir($target) || die("c");
 	}
 	my $symlink = "$base/usr/share/ofbiz/$file";
-	_mkdir(basename($symlink));
-	symlink("$destdir/$file", $symlink) || die("f: $symlink: $!");
+        my $relative_path = "../../../" . dirname ($file);
+        $relative_path =~ s,[^/]+/,../,g;
+        $relative_path =~ s,/[^/]+$,/..,g;
+	_mkdir(dirname($symlink));
+	chdir(dirname($symlink));
+	symlink("$relative_path$destdir/$file", basename($symlink)) || die("f: $symlink: $!");
+	chdir($cwd);
+#	_mkdir(dirname($symlink));
+#	symlink("$destdir/$file", $symlink) || die("f: $symlink: $!");
 }
 system('rm', '-rf', 'debian/ofbiz', 'debian/ofbiz-specialpurpose');
 
@@ -98,7 +114,6 @@ while (<FIND>) {
 	next if (m,^debian/,);
 	next if (exists($ignore{$_}));
 #	next if (m,^(LICENSE|NOTICE|OPTIONAL_LIBRARIES|ant(\.bat)?|\.(project|classpath)|(stop|start)ofbiz\.sh|startofbiz\.bat|(ij|rc)\.ofbiz)$,);
-	next if (m,(^|.*/)build\.xml$,);
 	#print("1\n");
 	next if (m,^$appDirsRe/[^/]+/(build/classes|src|testdef)/.*,);
 	next if (m,^runtime/(catalina/work|data/derby|logs)/.*,);
@@ -143,6 +158,10 @@ while (<FIND>) {
 		$type = 'conffile';
 	} elsif ($_ eq 'applications/content/template/survey/genericsurvey.ftl') {
 		$type = 'code';
+	} elsif ($_ eq 'ant') {
+		$type = 'code';
+	} elsif ($_ eq 'build.xml') {
+		$type = 'code';
 	} elsif ($_ eq 'ofbiz.jar') {
 		$type = 'code';
 	} elsif (-f && m,^runtime/(logs|catalina|data)/README$,) {
@@ -180,13 +199,13 @@ while (<FIND>) {
 	if ($type eq 'code') {
 		my $target = "$base/usr/share/ofbiz/$file";
 		#print("Copying ($file) ($target)\n");
-		_mkdir(basename($target)) || die("1");
+		_mkdir(dirname($target)) || die("1");
 		link($file, $target) || die("2");
 	} elsif ($type eq 'conffile') { # && $file =~ m,^.*/(ofbiz-component|component-load|data/.*)\.xml$,) {
 		copylink($base, '/etc/ofbiz', $file);
 	} elsif ($type eq 'ucf') {
 		copylink($base, '/etc/ofbiz', $file);
-		_mkdir(basename("$base/usr/share/ofbiz/ucf/$file"));
+		_mkdir(dirname("$base/usr/share/ofbiz/ucf/$file"));
 		rename("$base/etc/ofbiz/$file", "$base/usr/share/ofbiz/ucf/$file");
 		my $postinst = <<_EOF_;
 trap 'rm -f "\$tmpconffile"' EXIT
@@ -196,6 +215,18 @@ ucf --debconf-ok "\$tmpconffile" /etc/ofbiz/$file
 ucfr ofbiz /etc/ofbiz/$file
 rm -f "\$tmpconffile"
 trap '' EXIT
+
+if ! dpkg-statoverride --list "/var/cache/ofbiz-framework/runtime/lucene/indexes" > /dev/null; then
+	dpkg-statoverride --add ofbiz ofbiz 2775 "/var/cache/ofbiz-framework/runtime/lucene/indexes"
+	chown ofbiz:ofbiz "/var/cache/ofbiz-framework/runtime/lucene/indexes"
+	chmod 2755 "/var/cache/ofbiz-framework/runtime/lucene/indexes"
+fi
+
+if ! dpkg-statoverride --list "/var/lib/ofbiz-framework/runtime/tempfiles" > /dev/null; then
+	dpkg-statoverride --add ofbiz ofbiz 2775 "/var/lib/ofbiz-framework/runtime/tempfiles"
+	chown ofbiz:ofbiz "/var/lib/ofbiz-framework/runtime/tempfiles"
+	chmod 2755 "/var/lib/ofbiz-framework/runtime/tempfiles"
+fi
 _EOF_
 		push(@{$scripts{$pkg}->{'postinst'}->{'configure'}}, $postinst);
 		my $postrm = <<_EOF_;

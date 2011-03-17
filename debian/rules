@@ -21,7 +21,8 @@ SHELL		:= /bin/bash -O extglob
 
 export DH_VERBOSE
 
-JAVA_HOME	:= /usr/lib/jvm/java-6-openjdk
+JAVA_HOMES	:= /usr/lib/jvm/java-6-openjdk /usr/lib/jvm/java-6-sun
+JAVA_HOME	:= $(shell for possible in $(JAVA_HOMES); do if [ -e "$$possible/bin/java" ]; then echo "$$possible"; break; fi; done)
 JAVAC		:= $(JAVA_HOME)/bin/javac
 JAVA		:= $(JAVA_HOME)/bin/java
 
@@ -75,6 +76,7 @@ clean-debian:
 
 clean: clean-debian
 	$(SHELL) ant clean-all
+	$(SHELL) ant refresh-hibernatecfg
 	debconf-updatepo
 	rm -rf debian/orig-work
 
@@ -102,7 +104,11 @@ binary-indep: debian/copyright
 	mkdir -p runtime/catalina/work
 	perl debian/move-files.pl
 	dh_installdirs -v
+	mkdir -p debian/ofbiz-framework/var/cache/ofbiz-framework/runtime/lucene/indexes
+	mkdir -p debian/ofbiz-framework/var/lib/ofbiz-framework/runtime
 	cp -a debian/*.xslt debian/*.class debian/ofbiz-framework/usr/share/ofbiz/support
+	$(SHELL) ant refresh-hibernatecfg
+	sed --in-place -e "s|$(CURDIR)|/usr/share/ofbiz|g" debian/ofbiz-framework/usr/share/ofbiz/opentaps/opentaps-common/config/*.cfg.xml
 	dh_link
 #	tar -c . --exclude debian --exclude src --exclude build.xml --exclude build/classes --exclude framework/example | tar -C debian/ofbiz-svn-$(UPSTREAM_VERSION)/var/lib/ofbiz/$(UPSTREAM_VERSION) -x
 #	dh_strip

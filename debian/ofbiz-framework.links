@@ -1,5 +1,7 @@
 #####################################################################
 # Licensed to the Apache Software Foundation (ASF) under one
+var/cache/ofbiz-framework/runtime/lucene usr/share/ofbiz/runtime/lucene
+var/lib/ofbiz-framework/runtime/tempfiles usr/share/ofbiz/runtime/tempfiles
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
 # regarding copyright ownership.  The ASF licenses this file

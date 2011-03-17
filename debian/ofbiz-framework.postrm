@@ -33,8 +33,22 @@ case "$1" in
 		if which ucf >/dev/null; then ucf --purge /etc/ofbiz/dbc-debconf.cfg; fi
 		if which ucfr >/dev/null; then ucfr --purge ofbiz /etc/ofbiz/dbc-debconf.cfg; fi
 		find /var/log/ofbiz -mindepth 1 -maxdepth 1 -print0 | xargs -0 --no-run-if-empty rm -rf
-		dpkg-statoverride --remove /var/lib/ofbiz
-		dpkg-statoverride --remove /var/lib/ofbiz/runtime/uploads
+		if dpkg-statoverride --list /var/lib/ofbiz > /dev/null; then 
+		    dpkg-statoverride --remove /var/lib/ofbiz
+		fi
+		if dpkg-statoverride --list /var/lib/ofbiz/runtime/uploads > /dev/null; then 
+		    dpkg-statoverride --remove /var/lib/ofbiz/runtime/uploads
+		fi
+		if dpkg-statoverride --list /var/cache/ofbiz-framework/runtime/lucene/indexes > /dev/null; then 
+		    dpkg-statoverride --remove /var/cache/ofbiz-framework/runtime/lucene/indexes
+		fi
+		if dpkg-statoverride --list /var/lib/ofbiz-framework/runtime/tempfiles > /dev/null; then 
+		    dpkg-statoverride --remove /var/lib/ofbiz-framework/runtime/tempfiles
+		fi
+		if getent passwd ofbiz 2>/dev/null >/dev/null; then
+			deluser --quiet --system ofbiz || true
+			deluser --quiet --group --system ofbiz || true
+		fi
 	;;
 esac
 
