@@ -17,6 +17,9 @@
 
 package org.opentaps.gwt.common.client.lookup;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.opentaps.gwt.common.client.UtilUi;
 
 /**
@@ -61,6 +64,30 @@ public abstract class UtilLookup {
     public static final String PARAM_CUD_ACTION_CREATE = "CREATE";
     /** The value of the parameter for specifying the Update action. */
     public static final String PARAM_CUD_ACTION_UPDATE = "UPDATE";
+
+    /** The Equal filter operator. */
+    public static final String OP_EQUALS = "EQUALS";
+    /** The Not Equal filter operator. */
+    public static final String OP_NOT_EQUALS = "NOT_EQUALS";
+    /** The Contain filter operator. */
+    public static final String OP_CONTAINS = "CONTAINS";
+    /** The Greater Than Or Equal filter operator. */
+    public static final String OP_GTE = "GTE";
+    /** The Lesser Than Or Equal filter operator. */
+    public static final String OP_LTE = "LTE";
+    /** The Lesser Than operator. */
+    public static final String OP_LT = "LT";
+    /** The Greater Than filter operator. */
+    public static final String OP_GT = "GT";
+    /** The Between filter operator. */
+    public static final String OP_BETWEEN = "BETWEEN";
+    /** The valid operators for filters. */
+    public static final List<String> VALID_FILTER_OPERATORS = Arrays.asList(OP_EQUALS, OP_NOT_EQUALS, OP_CONTAINS, OP_GTE, OP_LTE, OP_LT, OP_GT, OP_BETWEEN);
+
+    /** The suffix of the name of the parameter for specifying a filter operator. */
+    public static final String PARAM_FILTER_OPERATOR = "_operator";
+    /** The suffix of the name of the parameter for specifying a filter from value. */
+    public static final String PARAM_FILTER_TO = "_to";
 
     /** Identify the array used to feed list views and autocompleters. */
     public static final String JSON_ROOT = "items";

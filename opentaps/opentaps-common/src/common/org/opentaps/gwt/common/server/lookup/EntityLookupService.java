@@ -492,7 +492,32 @@ public abstract class EntityLookupService {
     protected <T extends EntityInterface> List<T> findListWithFilters(Class<T> entityName, List<EntityCondition> conds, List<String> filters) {
         for (String filter : filters) {
             if (provider.parameterIsPresent(filter)) {
-                conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(filter), EntityOperator.LIKE, EntityFunction.UPPER("%" + provider.getParameter(filter) + "%")));
+                // support operator based filters, get the optional the 'to' and 'operator' values
+                String op = provider.getParameter(filter + UtilLookup.PARAM_FILTER_OPERATOR);
+                String from = provider.getParameter(filter);
+                String to = provider.getParameter(filter + UtilLookup.PARAM_FILTER_TO);
+                // contains is the default
+                if (UtilLookup.OP_CONTAINS.equals(op) || op == null || "".equals(op)) {
+                    conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(filter), EntityOperator.LIKE, EntityFunction.UPPER("%" + from + "%")));
+                } else if (UtilLookup.OP_EQUALS.equals(op)) {
+                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.EQUALS, from));
+                } else if (UtilLookup.OP_NOT_EQUALS.equals(op)) {
+                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.NOT_EQUAL, from));
+                } else if (UtilLookup.OP_GTE.equals(op)) {
+                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.GREATER_THAN_EQUAL_TO, from));
+                } else if (UtilLookup.OP_GT.equals(op)) {
+                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.GREATER_THAN, from));
+                } else if (UtilLookup.OP_LTE.equals(op)) {
+                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.LESS_THAN_EQUAL_TO, from));
+                } else if (UtilLookup.OP_LT.equals(op)) {
+                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.LESS_THAN, from));
+                } else if (UtilLookup.OP_BETWEEN.equals(op)) {
+                    // this uses the to value
+                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.GREATER_THAN_EQUAL_TO, from));
+                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.LESS_THAN_EQUAL_TO, to));
+                } else {
+                    Debug.logError("Operator [" + op + "] not supported.", MODULE);
+                }
             }
         }
 
