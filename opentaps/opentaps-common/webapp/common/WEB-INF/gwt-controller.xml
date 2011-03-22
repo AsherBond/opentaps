@@ -124,6 +124,12 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
+    <request-map uri="gwtSuggestSalesRep">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="suggestSalesRepParties"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
     <request-map uri="gwtSuggestContacts">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="suggestContacts"/>

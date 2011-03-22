@@ -41,6 +41,7 @@ import org.opentaps.base.constants.PartyRelationshipTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
+import org.opentaps.base.entities.PartyRoleAndPartyDetail;
 import org.opentaps.base.entities.PartyRoleNameDetailSupplementalData;
 import org.opentaps.base.entities.PartyToSummaryByRelationship;
 import org.opentaps.base.entities.SalesOpportunityRole;
@@ -68,6 +69,13 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     protected static final EntityCondition LEAD_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PROSPECT);
     protected static final EntityCondition PARTNER_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.PARTNER);
     protected static final EntityCondition SUPPLIER_CONDITIONS = EntityCondition.makeCondition("roleTypeId", RoleTypeConstants.SUPPLIER);
+    protected static final EntityCondition SALES_REP_CONDITIONS = EntityCondition.makeCondition("roleTypeId",
+                                                                                              EntityOperator.IN,
+                                                                                              Arrays.asList(RoleTypeConstants.ACCOUNT_REP,
+                                                                                                            RoleTypeConstants.EMPLOYEE,
+                                                                                                            RoleTypeConstants.ACCOUNT_MANAGER,
+                                                                                                            RoleTypeConstants.ACCOUNT_TEAM,
+                                                                                                            RoleTypeConstants.SALES_REP));
     protected static final EntityCondition CUSTOMER_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
                                                                     EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.ACCOUNT),
                                                                     EntityCondition.makeCondition("roleTypeIdFrom", RoleTypeConstants.CONTACT),
@@ -125,6 +133,15 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             setRepository(getDomainsDirectory().getPartyDomain().getPartyRepository());
             return PartyRepositoryInterface.class.cast(getRepository());
         }
+    }
+
+    /**
+     * Creates a new <code>PartyLookupService</code> instance.
+     * @param provider an <code>InputProviderInterface</code> value
+     * @param fields an alternate list of fields
+     */
+    public PartyLookupService(InputProviderInterface provider, List<String> fields) {
+        super(provider, fields);
     }
 
     /**
@@ -434,6 +451,113 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         return getResults();
     }
 
+    /**
+     * AJAX event to suggest Sales Rep.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String suggestSalesRepParties(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        PartyLookupService service = new PartyLookupService(provider, PartyLookupConfiguration.SIMPLE_LIST_OUT_FIELDS);
+        service.setActiveOnly(true);
+        service.suggestPartiesByRole(SALES_REP_CONDITIONS);
+        return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
+    }
+
+    private List<PartyRoleAndPartyDetail> suggestPartiesByRole(EntityCondition roleCondition) {
+
+        List<EntityCondition> conditions = FastList.newInstance();
+        conditions.add(roleCondition);
+
+        // add filter by date and status if active only is set
+        if (activeOnly) {
+            conditions.add(EntityCondition.makeCondition(EntityOperator.OR,
+                                                         EntityCondition.makeCondition(PartyRoleAndPartyDetail.Fields.statusId.name(), EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
+                                                         EntityCondition.makeCondition(PartyRoleAndPartyDetail.Fields.statusId.name(), EntityOperator.EQUALS, null)));
+        }
+
+        if (getSuggestQuery() == null) {
+            return findList(PartyRoleAndPartyDetail.class, EntityCondition.makeCondition(conditions, EntityOperator.AND));
+        }
+
+
+        try {
+
+            // format the search string for matching
+            String searchString = getSuggestQuery().toUpperCase();
+
+            List<PartyRoleAndPartyDetail> r = getRepository().findList(PartyRoleAndPartyDetail.class, EntityCondition.makeCondition(conditions, EntityOperator.AND), getFields(), getPager().getSortList());
+
+            List<PartyRoleAndPartyDetail> parties = new ArrayList<PartyRoleAndPartyDetail>();
+
+            // counts the number of records found matching the query
+            int matchCount = 0;
+
+            String fullName, firstName, lastName, groupName, compositeName;
+
+            for (PartyRoleAndPartyDetail party : r) {
+                if (matchCount > UtilLookup.SUGGEST_MAX_RESULTS) {
+                    break;
+                }
+
+                // search the full name
+                fullName = "";
+                firstName = party.getFirstName();
+                if (firstName != null) {
+                    fullName = firstName;
+                }
+
+                lastName = party.getLastName();
+                if (lastName != null) {
+                    fullName = fullName + " " + lastName;
+                }
+
+                fullName = fullName.toUpperCase();
+                if (fullName.indexOf(searchString) > -1) {
+                    parties.add(party);
+                    matchCount++;
+                    continue;
+                }
+
+                // search the group name
+                groupName = party.getGroupName();
+                if (groupName == null) {
+                    groupName = "";
+                }
+                groupName = groupName.toUpperCase();
+                if (groupName.indexOf(searchString) > -1) {
+                    parties.add(party);
+                    matchCount++;
+                    continue;
+                }
+
+                // search the composite name (incidentally, this also matches partyId)
+                compositeName = groupName;
+                if (fullName.trim().length() > 0) {
+                    compositeName = compositeName + " " + fullName;
+                }
+                compositeName = compositeName + " (" + party.getPartyId().toUpperCase() + ")";
+                if (compositeName.indexOf(searchString) > -1) {
+                    parties.add(party);
+                    matchCount++;
+                    continue;
+                }
+            }
+
+            // get paginated results
+            paginateResults(parties);
+
+        } catch (RepositoryException e) {
+            Debug.logError(e, MODULE);
+            return null;
+        }
+
+        return getResults();
+    }
+
     @Override
     public String makeSuggestDisplayedText(EntityInterface party) {
         StringBuffer sb = new StringBuffer();
@@ -615,6 +739,23 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                 }
             } else {
                 Debug.logError("Current session do not have any UserLogin set.", MODULE);
+            }
+        } else if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_RELATED_PARTY_ID)) {
+            if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_RELATED_PARTY_RELATIONSHIP_TYPE_ID)) {
+                condition = EntityCondition.makeCondition(
+                               Arrays.asList(
+                                             condition,
+                                             EntityCondition.makeCondition("partyIdTo", getProvider().getParameter(PartyLookupConfiguration.IN_RELATED_PARTY_ID)),
+                                             EntityCondition.makeCondition("partyRelationshipTypeId", getProvider().getParameter(PartyLookupConfiguration.IN_RELATED_PARTY_RELATIONSHIP_TYPE_ID))
+                                             ),
+                               EntityOperator.AND);
+            } else {
+                condition = EntityCondition.makeCondition(
+                               Arrays.asList(
+                                             condition,
+                                             EntityCondition.makeCondition("partyIdTo", getProvider().getParameter(PartyLookupConfiguration.IN_RELATED_PARTY_ID))
+                                             ),
+                               EntityOperator.AND);
             }
         }
 
