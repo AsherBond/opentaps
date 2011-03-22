@@ -78,6 +78,7 @@
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="ACCOUNTS_PAYABLE" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="ACCOUNTS_RECEIVABLE" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="COMMISSIONS_PAYABLE" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="CUSTOMER_CREDIT" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="TRANSACTION_ENTRY" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="CHECK_RUN" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
 
