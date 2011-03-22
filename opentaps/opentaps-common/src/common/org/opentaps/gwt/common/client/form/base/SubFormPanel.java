@@ -46,6 +46,14 @@ public class SubFormPanel extends Panel {
     }
 
     /**
+     * Gets the <code>submit on enter key press</code> handler to add manually on custom fields.
+     * @return a <code>FieldListenerAdapter</code> value
+     */
+    public FieldListenerAdapter getSubmitOnEnterHandler() {
+        return submitOnEnterKey;
+    }
+
+    /**
      * Adds a field to the form.
      * This also automatically sets the submit on enter event handler.
      * @param field a <code>Field</code> value
