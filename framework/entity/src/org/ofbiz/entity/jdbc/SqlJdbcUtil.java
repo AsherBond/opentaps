@@ -172,6 +172,12 @@ public class SqlJdbcUtil {
                         condBuffer.append(viewLink.getRelEntityAlias());
                         condBuffer.append(".");
                         condBuffer.append(filterColName(relLinkField.getColName()));
+
+                        if (UtilValidate.isNotEmpty(keyMap.getAdditionalCondition())) {
+                            condBuffer.append(" AND ");
+                            condBuffer.append(keyMap.getAdditionalCondition());
+                        }
+
                     }
                     if (condBuffer.length() == 0) {
                         throw new GenericModelException("No view-link/join key-maps found for the " + viewLink.getEntityAlias() + " and the " + viewLink.getRelEntityAlias() + " member-entities of the " + modelViewEntity.getEntityName() + " view-entity.");
@@ -353,6 +359,11 @@ public class SqlJdbcUtil {
                         whereString.append(viewLink.getRelEntityAlias());
                         whereString.append(".");
                         whereString.append(filterColName(relLinkField.getColName()));
+
+                        if (UtilValidate.isNotEmpty(keyMap.getAdditionalCondition())) {
+                            whereString.append(" AND ");
+                            whereString.append(keyMap.getAdditionalCondition());
+                        }
                    }
                 }
             } else {

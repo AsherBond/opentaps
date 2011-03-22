@@ -21,11 +21,10 @@ package org.ofbiz.entity.model;
 
 import java.util.List;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilXml;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 
 /**
@@ -39,6 +38,8 @@ public class ModelKeyMap implements java.io.Serializable {
 
     /** name of the field in related entity */
     protected String relFieldName = "";
+
+    protected String additionalCondition;
 
     /** Default Constructor */
     public ModelKeyMap() {}
@@ -54,6 +55,7 @@ public class ModelKeyMap implements java.io.Serializable {
         this.fieldName = UtilXml.checkEmpty(keyMapElement.getAttribute("field-name")).intern();
         // if no relFieldName is specified, use the fieldName; this is convenient for when they are named the same, which is often the case
         this.relFieldName = UtilXml.checkEmpty(keyMapElement.getAttribute("rel-field-name"), this.fieldName).intern();
+        this.additionalCondition = UtilXml.checkEmpty(keyMapElement.getAttribute("additional-condition")).intern();
     }
 
     /** name of the field in this entity */
@@ -72,6 +74,10 @@ public class ModelKeyMap implements java.io.Serializable {
 
     public void setRelFieldName(String relFieldName) {
         this.relFieldName = relFieldName;
+    }
+
+    public String getAdditionalCondition() {
+        return this.additionalCondition;
     }
 
     // ======= Some Convenience Oriented Factory Methods =======
