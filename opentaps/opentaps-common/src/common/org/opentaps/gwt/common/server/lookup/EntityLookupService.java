@@ -96,6 +96,7 @@ public abstract class EntityLookupService {
     private List<String> fields;
     private Set<String> fieldsForHavingCondition;
     private List<Map<String, ConvertMapToString>> calculatedFields = FastList.newInstance();
+    private Map<String, String> excelColumnHeaders = new HashMap<String, String>();
 
     private Boolean isExportToExcel = false;
     private Boolean noPager = false;
@@ -257,6 +258,26 @@ public abstract class EntityLookupService {
      */
     public List<Map<String, ConvertMapToString>> getCalculatedFields() {
         return calculatedFields;
+    }
+
+    /**
+     * Returns the Map used to customized the excel export column header labels.
+     * The map defines the field -> label to use in the excel export, if not mapping is given for a field it will default to the field name.
+     * @return a <code>Map</codE>
+     */
+    public Map<String, String> getExcelColumnHeadersMapping() {
+        return excelColumnHeaders;
+    }
+
+    /**
+     * Returns the label to be used in the excel export column header for the given field.
+     * If this returns null then the header label will default to the field.
+     * This can be reimplemented if needed for more flexibility.
+     * @param field the name of the field
+     * @return the label to use as the column header for the given field
+     */
+    public String getExcelColumnHeaderLabel(String field) {
+        return getExcelColumnHeadersMapping().get(field);
     }
 
     /**

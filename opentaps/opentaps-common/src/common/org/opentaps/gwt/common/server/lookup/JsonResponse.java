@@ -99,7 +99,7 @@ public class JsonResponse {
         }
 
         if (service.isExportToExcel()) {
-            return makeExcelExport(results, service.getFieldsOrdered(), servletContext);
+            return makeExcelExport(results, service, servletContext);
         } else {
             return makeResponse(results, entityIdFieldName, service);
         }
@@ -203,17 +203,23 @@ public class JsonResponse {
     /**
      * Exports a list of <code>GenericValue</code> in an Excel spreadsheet.
      * @param entities the <code>List</code> of <code>GenericValue</code> to export
-     * @param fields the <code>List</code> of fields that are exported from the entities, in order
+     * @param service        an <code>EntityLookupService</code> value
      * @param servletContext a <code>ServletContext</code> used to determine where the file will be generated
      * @return the response string
      */
     @SuppressWarnings("unchecked")
-    public String makeExcelExport(List<? extends EntityInterface> entities, List<String> fields, ServletContext servletContext) {
+    public String makeExcelExport(List<? extends EntityInterface> entities, EntityLookupService service, ServletContext servletContext) {
+
+        List<String> fields = service.getFieldsOrdered();
 
         // create a map for column header labels
         Map<String, String> columnHeaderMap = new HashMap<String, String>();
         for (String key : fields) {
-            columnHeaderMap.put(key, key);
+            String h = key;
+            if (service.getExcelColumnHeadersMapping() != null && service.getExcelColumnHeadersMapping().containsKey(key)) {
+                h = service.getExcelColumnHeadersMapping().get(key);
+            }
+            columnHeaderMap.put(key, h);
         }
         // using random string as part of file name, avoid multi user operate in same time.
         String fileName = "data_" + String.valueOf((int) (Math.random() * 100000)) + ".xls";
