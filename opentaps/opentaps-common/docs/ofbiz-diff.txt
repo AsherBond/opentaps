@@ -246,6 +246,11 @@ framework/common/src/org/ofbiz/common/email/EmailServices.java
 framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
 b3088905fce89fd282dc0e2a8d8cd1253701798c Implementation of controller injection
 
+framework/entity/dtd/entitymodel.xsd
+framework/entity/src/org/ofbiz/entity/jdbc/SqlJdbcUtil.java
+framework/entity/src/org/ofbiz/entity/model/ModelKeyMap.java
+ab28328b1b Patch to ofbiz entity engine to allow specifying a raw additional condition on the JOIN for view entities
+
 
 Applications changes
 --------------------
