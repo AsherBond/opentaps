@@ -251,6 +251,10 @@ framework/entity/src/org/ofbiz/entity/jdbc/SqlJdbcUtil.java
 framework/entity/src/org/ofbiz/entity/model/ModelKeyMap.java
 ab28328b1b Patch to ofbiz entity engine to allow specifying a raw additional condition on the JOIN for view entities
 
+framework/entity/dtd/entitymodel.xsd
+framework/entity/src/org/ofbiz/entity/model/ModelViewEntity.java
+2b3c043abb Ofbiz patch to add GROUP_CONCAT as a view entity alias function
+
 
 Applications changes
 --------------------
