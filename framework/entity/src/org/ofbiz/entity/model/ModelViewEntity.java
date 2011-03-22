@@ -67,6 +67,8 @@ public class ModelViewEntity extends ModelEntity {
         functionPrefixMap.put("count-distinct", "COUNT(DISTINCT ");
         functionPrefixMap.put("upper", "UPPER(");
         functionPrefixMap.put("lower", "LOWER(");
+        functionPrefixMap.put("group-concat", "GROUP_CONCAT(");
+        functionPrefixMap.put("group-concat-distinct", "GROUP_CONCAT(DISTINCT ");
     }
 
     /** Contains member-entity alias name definitions: key is alias, value is ModelMemberEntity */
@@ -494,7 +496,7 @@ public class ModelViewEntity extends ModelEntity {
             if (UtilValidate.isNotEmpty(alias.function)) {
                 String prefix = functionPrefixMap.get(alias.function);
                 if (prefix == null) {
-                    Debug.logWarning("Specified alias function [" + alias.function + "] not valid; must be: min, max, sum, avg, count or count-distinct; using a column name with no function function", module);
+                    Debug.logWarning("Specified alias function [" + alias.function + "] not valid; must be: min, max, sum, avg, count, count-distinct, group-concat, group-concat-distinct; using a column name with no function", module);
                 } else {
                     field.colName = prefix + field.colName + ")";
                 }
@@ -991,7 +993,7 @@ public class ModelViewEntity extends ModelEntity {
             if (UtilValidate.isNotEmpty(function)) {
                 String prefix = functionPrefixMap.get(function);
                 if (prefix == null) {
-                    Debug.logWarning("Specified alias function [" + function + "] not valid; must be: min, max, sum, avg, count or count-distinct; using a column name with no function function", module);
+                    Debug.logWarning("Specified alias function [" + function + "] not valid; must be: min, max, sum, avg, count, count-distinct group-concat or group-concat-distinct; using a column name with no function", module);
                 } else {
                     colName = prefix + colName + ")";
                 }

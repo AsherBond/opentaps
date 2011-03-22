@@ -40,6 +40,8 @@ under the License.
             <xs:enumeration value="count-distinct"/>
             <xs:enumeration value="upper"/>
             <xs:enumeration value="lower"/>
+            <xs:enumeration value="group-concat"/>
+            <xs:enumeration value="group-concat-distinct"/>
         </xs:restriction>
     </xs:simpleType>
 
