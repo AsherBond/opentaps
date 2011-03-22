@@ -80,7 +80,7 @@ public abstract class UtilLookup {
     public static final String JSON_ERROR_MESSAGE = "msg";
     /** Identify the array of exception raised by a service. */
     public static final String JSON_ERROR_EXCEPTION = "exception";
-    /** Identify the OfBiz error message */
+    /** Identify the OfBiz error message. */
     public static final String JSON_SERVICE_ERROR_MESSAGE = "_ERROR_MESSAGE_";
 
     /** Error message associated to missing fields. */
