@@ -25,6 +25,14 @@
 
     <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
 
+    <!-- Generic Enumeration lookup -->
+    <request-map uri="gwtSuggestEnumerations">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.EnumerationLookupService" invoke="suggestEnumerations"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
     <!-- Accounting tag configuration loader requests -->
     <request-map uri="gwtFindAccountingTagsConfiguration">
         <security https="true" auth="true"/>
@@ -266,7 +274,7 @@
         <event type="java" path="org.opentaps.gwt.common.server.lookup.OpportunityTypeLookupService" invoke="suggestOpportunityTypes"/>
         <response name="success" type="none"/>
         <response name="error" type="none"/>
-    </request-map>   
+    </request-map>
 
     <request-map uri="gwtSuggestLeads">
         <security https="true" auth="true"/>
