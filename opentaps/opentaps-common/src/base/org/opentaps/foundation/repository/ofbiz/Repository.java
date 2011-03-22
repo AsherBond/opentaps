@@ -1337,6 +1337,11 @@ public class Repository implements RepositoryInterface  {
         return findIterator(entityName, getEntityBaseName(entityName), condition, fields, orderBy);
     }
 
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, EntityCondition condition, EntityCondition having, List<String> fields, List<String> orderBy) throws RepositoryException {
+        return findIterator(entityName, getEntityBaseName(entityName), condition, having, fields, orderBy);
+    }
+
     /**
      * Find entities by conditions.
      * @param <T> the entity class
@@ -1383,6 +1388,26 @@ public class Repository implements RepositoryInterface  {
     private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> fields, List<String> orderBy) throws RepositoryException {
         try {
             return new EntityListIterator<T>(entityName, getDelegator().find(genericValueName, condition, null, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS), this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    /**
+     * Find entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param condition the EntityCondition used to find the entities
+     * @param having the EntityCondition used as HAVING
+     * @param fields the list of field to select
+     * @param orderBy list of fields to order by
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, EntityCondition condition, EntityCondition having, List<String> fields, List<String> orderBy) throws RepositoryException {
+        try {
+            return new EntityListIterator<T>(entityName, getDelegator().find(genericValueName, condition, having, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS), this);
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);
         }
@@ -1501,6 +1526,11 @@ public class Repository implements RepositoryInterface  {
         return findList(entityName, getEntityBaseName(entityName), condition, fields, orderBy);
     }
 
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition, EntityCondition having, List<String> fields, List<String> orderBy) throws RepositoryException {
+        return findList(entityName, getEntityBaseName(entityName), condition, having, fields, orderBy);
+    }
+
     /**
      * Find entities by conditions.
      * @param <T> the entity class
@@ -1548,6 +1578,27 @@ public class Repository implements RepositoryInterface  {
     private <T extends EntityInterface> List<T> findList(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> fields, List<String> orderBy) throws RepositoryException {
         try {
             List<GenericValue> gv = getDelegator().findByCondition(genericValueName, condition, null, fields, orderBy, DISTINCT_FIND_OPTIONS);
+            return Repository.loadFromGeneric(entityName, gv, this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    /**
+     * Find entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param condition the EntityCondition used to find the entities
+     * @param having the EntityCondition used as HAVING
+     * @param fields the list of field to select
+     * @param orderBy list of fields to order by
+     * @return the list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> List<T> findList(Class<T> entityName, String genericValueName, EntityCondition condition, EntityCondition having, List<String> fields, List<String> orderBy) throws RepositoryException {
+        try {
+            List<GenericValue> gv = getDelegator().findByCondition(genericValueName, condition, having, fields, orderBy, DISTINCT_FIND_OPTIONS);
             return Repository.loadFromGeneric(entityName, gv, this);
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);

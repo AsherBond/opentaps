@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javolution.util.FastList;
 import org.ofbiz.base.util.Debug;
@@ -45,6 +46,7 @@ import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.gwt.common.client.lookup.Permissions;
 import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.server.InputProviderInterface;
+import java.util.HashSet;
 
 /**
  * The base service to perform entity lookups.
@@ -92,6 +94,7 @@ public abstract class EntityLookupService {
     // fields to retreive from the database
     // the fields will also be returned in the JSON
     private List<String> fields;
+    private Set<String> fieldsForHavingCondition;
     private List<Map<String, ConvertMapToString>> calculatedFields = FastList.newInstance();
 
     private Boolean isExportToExcel = false;
@@ -324,6 +327,40 @@ public abstract class EntityLookupService {
     }
 
     /**
+     * Determines whether a given field should be filter in the WHERE or HAVING part of the query.
+     * Checks the given field agains the fieldsForHavingCondition Set.
+     * @param field a <code>String</code> value
+     * @return a <code>boolean</code> value
+     * @see #addFieldForHavingCondition
+     * @see #addFieldsForHavingCondition
+     */
+    public boolean isFieldForHavingCondition(String field) {
+        return fieldsForHavingCondition != null && fieldsForHavingCondition.contains(field);
+    }
+
+    /**
+     * Marks a field as being in the HAVING part of the query when building the filter conditions.
+     * @param field a <code>String</code> value
+     */
+    public void addFieldForHavingCondition(String field) {
+        if (fieldsForHavingCondition == null) {
+            fieldsForHavingCondition = new HashSet<String>();
+        }
+        fieldsForHavingCondition.add(field);
+    }
+
+    /**
+     * Marks a list of field as being in the HAVING part of the query when building the filter conditions.
+     * @param fields a List of <code>String</code> value
+     */
+    public void addFieldsForHavingCondition(List<String> fields) {
+        if (fieldsForHavingCondition == null) {
+            fieldsForHavingCondition = new HashSet<String>();
+        }
+        fieldsForHavingCondition.addAll(fields);
+    }
+
+    /**
      * Gets the list of fields to be retrieved from the database for the given entity.
      * @return the list of field names
      * @see #getFieldsOrdered
@@ -490,38 +527,65 @@ public abstract class EntityLookupService {
      * @return the list of entities found, or <code>null</code> if an error occurred
      */
     protected <T extends EntityInterface> List<T> findListWithFilters(Class<T> entityName, List<EntityCondition> conds, List<String> filters) {
+        return findListWithFilters(entityName, conds, null, filters);
+    }
+
+    /**
+     * Builds the query from the given list of <code>EntityCondition</code> and a list of filters that should
+     *  be taken from the request parameters.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conds initial list of conditions
+     * @param havings intital list of conditions used as HAVING
+     * @param filters list of parameter names to retrieve
+     * @return the list of entities found, or <code>null</code> if an error occurred
+     */
+    protected <T extends EntityInterface> List<T> findListWithFilters(Class<T> entityName, List<EntityCondition> conds, List<EntityCondition> havings, List<String> filters) {
+        if (havings == null) {
+            havings = new ArrayList<EntityCondition>();
+        }
+
         for (String filter : filters) {
             if (provider.parameterIsPresent(filter)) {
+                EntityCondition newCond = null;
                 // support operator based filters, get the optional the 'to' and 'operator' values
                 String op = provider.getParameter(filter + UtilLookup.PARAM_FILTER_OPERATOR);
                 String from = provider.getParameter(filter);
                 String to = provider.getParameter(filter + UtilLookup.PARAM_FILTER_TO);
                 // contains is the default
                 if (UtilLookup.OP_CONTAINS.equals(op) || op == null || "".equals(op)) {
-                    conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(filter), EntityOperator.LIKE, EntityFunction.UPPER("%" + from + "%")));
+                    newCond = EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(filter), EntityOperator.LIKE, EntityFunction.UPPER("%" + from + "%"));
                 } else if (UtilLookup.OP_EQUALS.equals(op)) {
-                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.EQUALS, from));
+                    newCond = EntityCondition.makeCondition(filter, EntityOperator.EQUALS, from);
                 } else if (UtilLookup.OP_NOT_EQUALS.equals(op)) {
-                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.NOT_EQUAL, from));
+                    newCond = EntityCondition.makeCondition(filter, EntityOperator.NOT_EQUAL, from);
                 } else if (UtilLookup.OP_GTE.equals(op)) {
-                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.GREATER_THAN_EQUAL_TO, from));
+                    newCond = EntityCondition.makeCondition(filter, EntityOperator.GREATER_THAN_EQUAL_TO, from);
                 } else if (UtilLookup.OP_GT.equals(op)) {
-                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.GREATER_THAN, from));
+                    newCond = EntityCondition.makeCondition(filter, EntityOperator.GREATER_THAN, from);
                 } else if (UtilLookup.OP_LTE.equals(op)) {
-                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.LESS_THAN_EQUAL_TO, from));
+                    newCond = EntityCondition.makeCondition(filter, EntityOperator.LESS_THAN_EQUAL_TO, from);
                 } else if (UtilLookup.OP_LT.equals(op)) {
-                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.LESS_THAN, from));
+                    newCond = EntityCondition.makeCondition(filter, EntityOperator.LESS_THAN, from);
                 } else if (UtilLookup.OP_BETWEEN.equals(op)) {
                     // this uses the to value
-                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.GREATER_THAN_EQUAL_TO, from));
-                    conds.add(EntityCondition.makeCondition(filter, EntityOperator.LESS_THAN_EQUAL_TO, to));
+                    newCond = EntityCondition.makeCondition(EntityOperator.AND,
+                                                            EntityCondition.makeCondition(filter, EntityOperator.GREATER_THAN_EQUAL_TO, from),
+                                                            EntityCondition.makeCondition(filter, EntityOperator.LESS_THAN_EQUAL_TO, to));
                 } else {
                     Debug.logError("Operator [" + op + "] not supported.", MODULE);
+                }
+                if (newCond != null) {
+                    if (isFieldForHavingCondition(filter)) {
+                        havings.add(newCond);
+                    } else {
+                        conds.add(newCond);
+                    }
                 }
             }
         }
 
-        return findList(entityName, EntityCondition.makeCondition(conds, EntityOperator.AND));
+        return findList(entityName, EntityCondition.makeCondition(conds, EntityOperator.AND), EntityCondition.makeCondition(havings, EntityOperator.AND));
     }
 
     // some common find methods
@@ -596,15 +660,28 @@ public abstract class EntityLookupService {
      * @return the list of entities found, <code>null</code> if an error occurs
      */
     public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition, boolean paginate) {
+        return findList(entityName, condition, null, paginate);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param condition the EntityCondition used to find the entities
+     * @param having the EntityCondition used as HAVING
+     * @param paginate if the results should be paginated
+     * @return the list of entities found, <code>null</code> if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition, EntityCondition having, boolean paginate) {
         try {
             if (paginate) {
                 boolean t = TransactionUtil.begin();
-                paginateResults(getRepository().findIterator(entityName, condition, getFields(), getOrderBy()));
+                paginateResults(getRepository().findIterator(entityName, condition, having, getFields(), getOrderBy()));
                 TransactionUtil.commit(t);
             } else {
                 boolean p = noPager;
                 noPager = true;
-                setResults(getRepository().findList(entityName, condition, getFields(), getOrderBy()));
+                setResults(getRepository().findList(entityName, condition, having, getFields(), getOrderBy()));
                 setResultTotalCount(getResults().size());
                 noPager = p;
             }
@@ -619,7 +696,6 @@ public abstract class EntityLookupService {
             storeException(e);
             return null;
         }
-
     }
 
     /**
@@ -630,6 +706,18 @@ public abstract class EntityLookupService {
      * @return the list of entities found, <code>null</code> if an error occurs
      */
     public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition) {
-        return findList(entityName, condition, true);
+        return findList(entityName, condition, null, true);
+    }
+
+    /**
+     * Find entities by conditions and paginate.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param condition the EntityCondition used to find the entities
+     * @param having the EntityCondition used as HAVING
+     * @return the list of entities found, <code>null</code> if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition, EntityCondition having) {
+        return findList(entityName, condition, having, true);
     }
 }

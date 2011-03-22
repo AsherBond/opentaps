@@ -647,6 +647,19 @@ public interface RepositoryInterface extends DomainContextInterface {
      */
     public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, EntityCondition condition, List<String> fields, List<String> orderBy) throws RepositoryException;
 
+    /**
+     * Find a iterator of entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find
+     * @param condition the EntityCondition used to find the entities
+     * @param having the EntityCondition used as HAVING
+     * @param fields the list of field to select
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, EntityCondition condition, EntityCondition having, List<String> fields, List<String> orderBy) throws RepositoryException;
+
     /* findPage by list of Conditions */
 
     /**
@@ -815,6 +828,19 @@ public interface RepositoryInterface extends DomainContextInterface {
      * @throws RepositoryException if an error occurs
      */
     public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition, List<String> fields, List<String> orderBy) throws RepositoryException;
+
+    /**
+     * Find entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find
+     * @param condition the EntityCondition used to find the entities
+     * @param having the EntityCondition used as HAVING
+     * @param fields the list of field to select
+     * @param orderBy list of fields to order by
+     * @return the list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition, EntityCondition having, List<String> fields, List<String> orderBy) throws RepositoryException;
 
     /**
      * Find entities by conditions using the cache.
