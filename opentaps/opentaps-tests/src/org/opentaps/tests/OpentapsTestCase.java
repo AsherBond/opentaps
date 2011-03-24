@@ -170,7 +170,7 @@ public class OpentapsTestCase extends TestCase {
         organizationDomain = domainsDirectory.getOrganizationDomain();
         purchasingDomain = domainsDirectory.getPurchasingDomain();
         organizationRepository = organizationDomain.getOrganizationRepository();
-        organization = organizationRepository.getOrganizationById(organizationPartyId);
+        organization = organizationRepository.getOrganizationById(getOrganizationPartyId());
         // there might be some special uses where this is not configured or needed
         if ((organization != null) && (organization.getPartyAcctgPreference() != null)) {
             defaultOrganizationCostingMethodId = organization.getPartyAcctgPreference().getCostingMethodId();
@@ -180,7 +180,7 @@ public class OpentapsTestCase extends TestCase {
     @Override
     public void tearDown() throws Exception {
         // reset some parameters back to default
-        setOrganizationCostingMethodId(organizationPartyId, defaultOrganizationCostingMethodId);
+        setOrganizationCostingMethodId(getOrganizationPartyId(), defaultOrganizationCostingMethodId);
 
         delegator = null;
         dispatcher = null;
@@ -2005,7 +2005,7 @@ public class OpentapsTestCase extends TestCase {
         } else {
             retval.put("completePurchaseOrder", "N");
         }
-        retval.put("ownerPartyId", organizationPartyId);
+        retval.put("ownerPartyId", getOrganizationPartyId());
         retval.put("shipGroupSeqId", shipGroupSeqId);
         retval.put("userLogin", userLogin);
 
@@ -2081,7 +2081,7 @@ public class OpentapsTestCase extends TestCase {
         retval.put("purchaseOrderId", purchaseOrderId);
         retval.put("facilityId", facilityId);
         retval.put("completePurchaseOrder", "N");
-        retval.put("ownerPartyId", organizationPartyId);
+        retval.put("ownerPartyId", getOrganizationPartyId());
         retval.put("shipGroupSeqId", shipGroupSeqId);
         retval.put("userLogin", userLogin);
 
