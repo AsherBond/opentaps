@@ -23,23 +23,26 @@
     <!-- these are discrete security permissions which are associated with specific operations, typically either a service call or a UI view request -->
     <SecurityPermission description="Access to the Accounts function of the application." permissionId="CRMSFA_ACCOUNTS_VIEW"/>
     <SecurityPermission description="View any Account." permissionId="CRMSFA_ACCOUNT_VIEW"/>
-    <SecurityPermission description="Create a new account." permissionId="CRMSFA_ACCOUNT_CREATE"/>    
-    <SecurityPermission description="Update any existing account." permissionId="CRMSFA_ACCOUNT_UPDATE"/>    
+    <SecurityPermission description="Create a new account." permissionId="CRMSFA_ACCOUNT_CREATE"/>
+    <SecurityPermission description="Update any existing account." permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityPermission description="Merge any existing account." permissionId="CRMSFA_ACCOUNT_MERGE"/>
     <SecurityPermission description="Deactivate any existing account." permissionId="CRMSFA_ACCOUNT_DEACTIVATE"/>    
     <SecurityPermission description="Reassign owner of an existing account." permissionId="CRMSFA_ACCOUNT_REASSIGN"/>    
 
     <SecurityPermission description="Access to the Contacts function of the application." permissionId="CRMSFA_CONTACTS_VIEW"/>
     <SecurityPermission description="View any Contact." permissionId="CRMSFA_CONTACT_VIEW"/>
-    <SecurityPermission description="Create a new Contact." permissionId="CRMSFA_CONTACT_CREATE"/>    
-    <SecurityPermission description="Update any existing Contact." permissionId="CRMSFA_CONTACT_UPDATE"/>    
+    <SecurityPermission description="Create a new Contact." permissionId="CRMSFA_CONTACT_CREATE"/>
+    <SecurityPermission description="Update any existing Contact." permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityPermission description="Merge any existing Contact." permissionId="CRMSFA_CONTACT_MERGE"/>
     <SecurityPermission description="Deactivate any existing Contact." permissionId="CRMSFA_CONTACT_DEACTIVATE"/>    
     <SecurityPermission description="Reassign owner of an existing contact." permissionId="CRMSFA_CONTACT_REASSIGN"/>    
 
     <SecurityPermission description="Access to the Leads function of the application." permissionId="CRMSFA_LEADS_VIEW"/>
     <SecurityPermission description="Upload a spreadsheet of leads." permissionId="CRMSFA_LEADS_UPLOAD"/>
     <SecurityPermission description="View any Lead." permissionId="CRMSFA_LEAD_VIEW"/>
-    <SecurityPermission description="Create a new Lead." permissionId="CRMSFA_LEAD_CREATE"/>    
-    <SecurityPermission description="Update any existing Lead." permissionId="CRMSFA_LEAD_UPDATE"/>    
+    <SecurityPermission description="Create a new Lead." permissionId="CRMSFA_LEAD_CREATE"/>
+    <SecurityPermission description="Update any existing Lead." permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityPermission description="Merge any existing Lead." permissionId="CRMSFA_LEAD_MERGE"/>  
     <SecurityPermission description="Deactivate any existing Lead." permissionId="CRMSFA_LEAD_DEACTIVATE"/>    
     <SecurityPermission description="Reassign owner of an existing lead." permissionId="CRMSFA_LEAD_REASSIGN"/>    
     <SecurityPermission description="Delete a lead that hasn't been converted." permissionId="CRMSFA_LEAD_DELETE"/>    
@@ -152,17 +155,20 @@
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_VIEW"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_CREATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_MERGE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_DEACTIVATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_REASSIGN"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_VIEW"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_CREATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_MERGE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_DEACTIVATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_REASSIGN"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEADS_UPLOAD"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_CREATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_MERGE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_DEACTIVATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_REASSIGN"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_DELETE"/>
@@ -289,12 +295,15 @@
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACTS_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACCOUNT_CREATE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACCOUNT_MERGE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACCOUNT_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CONTACT_CREATE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CONTACT_MERGE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CONTACT_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_CREATE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_MERGE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CATALOG_REQ"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_FORMLTR_VIEW"/>
@@ -491,12 +500,15 @@
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACCOUNT_VIEW"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACCOUNT_CREATE"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACCOUNT_MERGE"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CONTACT_VIEW"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CONTACT_CREATE"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CONTACT_MERGE"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_CREATE"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_MERGE"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CATALOG_REQ"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_FORMLTR_VIEW"/>
     <!-- should customer service reps be able to do anything with opportunities? if so, add them here -->
@@ -587,12 +599,15 @@
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACCOUNT_VIEW"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACCOUNT_CREATE"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACCOUNT_MERGE"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CONTACT_VIEW"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CONTACT_CREATE"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CONTACT_MERGE"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_CREATE"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_MERGE"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CATALOG_REQ"/>
     <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_FORMLTR_VIEW"/>
 
@@ -669,10 +684,12 @@
     <SecurityGroup groupId="ACCOUNT_OWNER" description="Permissions granted to account owners, including view and update on the contacts of the account"/>        
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACCOUNT_VIEW"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACCOUNT_MERGE"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACCOUNT_DEACTIVATE"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACCOUNT_REASSIGN"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_CONTACT_VIEW"/>
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_CONTACT_MERGE"/>
     <!-- these give the account owner, in addition to the sales manager and sales leader(s) on the account,
          permission to assign/update/remove team members from an account.  remove these if this is not what you want -->
     <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_TEAM_ASSIGN"/>
@@ -695,6 +712,7 @@
     <SecurityGroup groupId="CONTACT_OWNER" description="Permissions granted to conact owners"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_VIEW"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_MERGE"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_DEACTIVATE"/>
     <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_REASSIGN"/>
     <!-- in case normal sales reps don't have permission to view activities -->
@@ -710,6 +728,7 @@
     <SecurityGroup groupId="LEAD_OWNER" description="Permissions granted to lead owners"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_VIEW"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_MERGE"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_DEACTIVATE"/>    
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_REASSIGN"/>
     <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_DELETE"/>
@@ -753,6 +772,7 @@
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_VIEW"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_CREATE"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_MERGE"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_DEACTIVATE"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_REASSIGN"/>
     <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_STS_UPDATE"/>

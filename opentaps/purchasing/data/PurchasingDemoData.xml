@@ -33,6 +33,7 @@
     <SecurityGroupPermission groupId="PRCH_TEST" permissionId="PRCH_SPLR_VIEW"/>
     <SecurityGroupPermission groupId="PRCH_TEST" permissionId="PRCH_SPLR_CREATE"/>
     <SecurityGroupPermission groupId="PRCH_TEST" permissionId="PRCH_SPLR_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_TEST" permissionId="PRCH_SPLR_MERGE"/>
     <!--
     <SecurityGroupPermission groupId="PRCH_TEST" permissionId="PRCH_PLAN_VIEW"/>
     <SecurityGroupPermission groupId="PRCH_TEST" permissionId="PRCH_PLAN_APRV"/>

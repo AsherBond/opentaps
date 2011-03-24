@@ -85,19 +85,19 @@ public class PartyMergeService extends DomainService implements PartyMergeServic
             // convert ACCOUNT/CONTACT/PROSPECT/SUPPLIER to ACCOUNT/CONTACT/LEAD/SUPPLIER
             String partyType = (fromPartyType.equals(RoleTypeConstants.PROSPECT) ? RoleTypeConstants.LEAD : fromPartyType);
 
-            // make sure user has CRMSFA_${partyType}_UPDATE (or PRCH_SPLR_UPDATE for SUPPLIER) permission for both parties
+            // make sure user has CRMSFA_${partyType}_MERGE (or PRCH_SPLR_MERGE for SUPPLIER) permission for both parties
             // TODO: and delete, check security config
             if (RoleTypeConstants.SUPPLIER.equals(partyType)) {
                 OpentapsSecurity s = new OpentapsSecurity(getSecurity(), getUser().getOfbizUserLogin());
-                if (!s.hasPartyRelationSecurity("PRCH_SPLR", "_UPDATE", partyIdFrom)
-                        || !s.hasPartyRelationSecurity("PRCH_SPLR", "_UPDATE", partyIdTo)) {
-                    throw new ServiceException(UtilMessage.expandLabel("CrmErrorPermissionDenied", locale) + ": PRCH_SPLR_UPDATE");
+                if (!s.hasPartyRelationSecurity("PRCH_SPLR", "_MERGE", partyIdFrom)
+                        || !s.hasPartyRelationSecurity("PRCH_SPLR", "_MERGE", partyIdTo)) {
+                    throw new ServiceException(UtilMessage.expandLabel("CrmErrorPermissionDenied", locale) + ": PRCH_SPLR_MERGE");
                 }
             } else {
                 OpentapsSecurity s = new OpentapsSecurity(getSecurity(), getUser().getOfbizUserLogin()); 
-                if (!s.hasPartyRelationSecurity(String.format("CRMSFA_%1$s", partyType), "_UPDATE", partyIdFrom)
-                        || !s.hasPartyRelationSecurity(String.format("CRMSFA_%1$s", partyType), "_UPDATE", partyIdTo)) {
-                    throw new ServiceException(UtilMessage.expandLabel("CrmErrorPermissionDenied", locale) + ": CRMSFA_" + partyType + "_UPDATE");
+                if (!s.hasPartyRelationSecurity(String.format("CRMSFA_%1$s", partyType), "_MERGE", partyIdFrom)
+                        || !s.hasPartyRelationSecurity(String.format("CRMSFA_%1$s", partyType), "_MERGE", partyIdTo)) {
+                    throw new ServiceException(UtilMessage.expandLabel("CrmErrorPermissionDenied", locale) + ": CRMSFA_" + partyType + "_MERGE");
                 }
             }
         } catch (GenericEntityException e) {

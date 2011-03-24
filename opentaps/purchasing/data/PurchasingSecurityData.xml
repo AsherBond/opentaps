@@ -23,6 +23,7 @@
     <SecurityPermission description="Basic permission to use the Supplier tab" permissionId="PRCH_SPLR_VIEW"/>
     <SecurityPermission description="Permission to create suppliers" permissionId="PRCH_SPLR_CREATE"/>
     <SecurityPermission description="Permission to modify suppliers" permissionId="PRCH_SPLR_UPDATE"/>
+    <SecurityPermission description="Permission to merge suppliers" permissionId="PRCH_SPLR_MERGE"/>
 
     <SecurityPermission description="Basic permission to view the Manufacturing" permissionId="PRCH_MFG_VIEW"/>
     <SecurityPermission description="Basic permission to create and update Manufacturing" permissionId="PRCH_MFG_ADMIN"/>
@@ -43,6 +44,7 @@
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_SPLR_VIEW"/>
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_SPLR_CREATE"/>
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_SPLR_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_SPLR_MERGE"/>
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_MFG_VIEW"/>
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_MFG_ADMIN"/>
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_PLAN_VIEW"/>
@@ -84,6 +86,7 @@
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_SPLR_VIEW"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_SPLR_CREATE"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_SPLR_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_SPLR_MERGE"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_PO_VIEW"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_PO_CREATE"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="ORDERMGR_ADMIN"/>
