@@ -110,7 +110,7 @@
 <OpentapsShortcut shortcutId="findContacts" groupId="crmsfaContacts" sequenceNum="030" uiLabel="CrmFindContacts"
                         linkUrl="findContacts" securityModule="" securityAction="" />
 <OpentapsShortcut shortcutId="mergeContacts" groupId="crmsfaContacts" sequenceNum="040" uiLabel="CrmMergeContacts"
-                        linkUrl="mergeContactsForm" securityModule="" securityAction="" />
+                        linkUrl="mergeContactsForm" securityModule="CRMSFA_CONTACT" securityAction="MERGE" />
 <!-- view Contact shortcuts -->
 <OpentapsShortcutGroup applicationId="crmsfa" tabId="contacts" groupId="crmsfaViewContact" sequenceNum="020" uiLabel="CrmContactShortcuts"
                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkBoolean" handlerParameter="isActiveContactView"/>
@@ -136,7 +136,7 @@
 <OpentapsShortcut shortcutId="findAccounts" groupId="crmsfaAccounts" sequenceNum="040" uiLabel="CrmFindAccounts"
                         linkUrl="findAccounts"/>
 <OpentapsShortcut shortcutId="mergeAccounts" groupId="crmsfaAccounts" sequenceNum="050" uiLabel="CrmMergeAccounts"
-                        linkUrl="mergeAccountsForm" />
+                        linkUrl="mergeAccountsForm" securityModule="CRMSFA_ACCOUNT" securityAction="MERGE" />
 <!-- view Account shortcuts -->
 <OpentapsShortcutGroup applicationId="crmsfa" tabId="accounts" groupId="crmsfaViewAccount" sequenceNum="020" uiLabel="CrmAccountShortcuts"
                        handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkBoolean" handlerParameter="isAccountView"/>
