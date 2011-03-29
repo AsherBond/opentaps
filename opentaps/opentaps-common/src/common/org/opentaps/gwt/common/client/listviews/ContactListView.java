@@ -18,6 +18,7 @@
 package org.opentaps.gwt.common.client.listviews;
 
 import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 
 /**
@@ -69,11 +70,19 @@ public class ContactListView extends PartyListView {
         setFilter(PartyLookupConfiguration.INOUT_LAST_NAME, lastName);
     }
 
+    /**
+     * Filters the records of the list by account partyId matching the exact given string.
+     * @param accountPartyId a <code>String</code> value
+     */
     public void filterByAccount(String accountPartyId) {
-        setFilter("partyIdTo", accountPartyId);
+        setFilter(PartyLookupConfiguration.IN_PARTY_ID_TO, accountPartyId, UtilLookup.OP_EQUALS);
     }
 
+    /**
+     * Filters the records of the list by salesOpportunityId matching the exact given string.
+     * @param salesOpportunityId a <code>String</code> value
+     */
     public void filterByOpportunity(String salesOpportunityId) {
-        setFilter("salesOpportunityId", salesOpportunityId);
+        setFilter(PartyLookupConfiguration.IN_SALES_OPPORTUNITY_ID, salesOpportunityId, UtilLookup.OP_EQUALS);
     }
 }
