@@ -175,7 +175,7 @@ if (contactActive) {
     isUserLoginContactOwner = false;
     if (responsibleParty != null && request.getAttribute("userLogin") != null) {
     	isUserLoginContactOwner = request.getAttribute("userLogin").getString("partyId").equals(responsibleParty.getString("partyId"));
-    }    
+    }
     isUserLoginNotContactOwner = !isUserLoginContactOwner;
     
     // assign to me link should be rendered only if, 1)the user got the right, 2)the contact party is not currently disabled,
@@ -189,8 +189,8 @@ if (contactActive) {
     context.put("isUnassignLinkRendered", isUnassignLinkRendered);
     
     // Reassign RESPONSIBLE_FOR should be rendered only if, 1)the user got the right, 2)the contact party is not currently disabled,
-    // 3)the user is the contact owner.
-    isReassignRendered = isReassignAllowed && contactActive && isUserLoginContactOwner;
+    // 3)the user is the contact owner OR if the contact has no owner.
+    isReassignRendered = isReassignAllowed && contactActive && (isUserLoginContactOwner || responsibleParty == null);
     context.put("isReassignRendered", isReassignRendered);
 }
 
