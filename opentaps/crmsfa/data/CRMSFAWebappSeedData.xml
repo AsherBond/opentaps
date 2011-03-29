@@ -161,7 +161,7 @@
                         linkUrl="myCases" securityModule="" securityAction=""
                         handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_CASES:TEAM_VALUES:TEAM_VALUES"/>
 <OpentapsShortcut shortcutId="createCase" groupId="crmsfaCases" sequenceNum="020" uiLabel="CrmCreateCase"
-                        linkUrl="createCaseForm" securityModule="" securityAction="" />
+                        linkUrl="createCaseForm" securityModule="CRMSFA_CASE" securityAction="CREATE" />
 <OpentapsShortcut shortcutId="findCases" groupId="crmsfaCases" sequenceNum="030" uiLabel="CrmFindCases"
                         linkUrl="findCases" securityModule="" securityAction="" />
 
@@ -193,7 +193,7 @@
                         linkUrl="myOpportunities" securityModule="" securityAction=""
                         handlerMethod="org.opentaps.webapp.handlers.CommonHandlers.checkViewPreferenceForTab" handlerParameter="MY_OR_TEAM_OPPS:TEAM_VALUES:TEAM_VALUES"/>
 <OpentapsShortcut shortcutId="createOpportunity" groupId="crmsfaOpportunities" sequenceNum="020" uiLabel="CrmCreateOpportunity"
-                        linkUrl="createOpportunityForm" securityModule="" securityAction="" />
+                        linkUrl="createOpportunityForm" securityModule="CRMSFA_OPP" securityAction="CREATE" />
 <OpentapsShortcut shortcutId="findOpportunities" groupId="crmsfaOpportunities" sequenceNum="030" uiLabel="CrmFindOpportunities"
                         linkUrl="findOpportunities" securityModule="" securityAction="" />
 <OpentapsShortcut shortcutId="createQuote" groupId="crmsfaOpportunities" sequenceNum="040" uiLabel="PartyCreateNewQuote"
