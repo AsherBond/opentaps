@@ -639,9 +639,9 @@ public class Entry extends BaseEntry {
      */
     private void loadContactCases() {
         // setup case list view as subsection
-        CaseSublistView cases = new CaseSublistView(getPartyId());
+        CaseSublistView cases = new CaseSublistView();
         // limit cases to the contact
-        cases.filterForContact();
+        cases.filterForContact(getPartyId());
         cases.applyFilters();
 
         // add widget to page
@@ -889,9 +889,9 @@ public class Entry extends BaseEntry {
      */
     private void loadAccountCases() {
         // setup case list view as subsection
-        CaseSublistView cases = new CaseSublistView(getPartyId());
+        CaseSublistView cases = new CaseSublistView();
         // limit cases to the account
-        cases.filterForAccount();
+        cases.filterForAccount(getPartyId());
         cases.applyFilters();
 
         // add widget to page

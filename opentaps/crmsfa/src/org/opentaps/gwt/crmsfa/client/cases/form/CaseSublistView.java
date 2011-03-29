@@ -16,11 +16,6 @@
  */
 package org.opentaps.gwt.crmsfa.client.cases.form;
 
-import org.opentaps.base.constants.RoleTypeConstants;
-import org.opentaps.gwt.common.client.UtilUi;
-import org.opentaps.gwt.common.client.listviews.CaseListView;
-import org.opentaps.gwt.common.client.lookup.configuration.CaseLookupConfiguration;
-
 import com.gwtext.client.core.SortDir;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.data.Store;
@@ -28,14 +23,16 @@ import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.widgets.grid.CellMetadata;
 import com.gwtext.client.widgets.grid.ColumnConfig;
 import com.gwtext.client.widgets.grid.Renderer;
+import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.listviews.CaseListView;
+import org.opentaps.gwt.common.client.lookup.UtilLookup;
+import org.opentaps.gwt.common.client.lookup.configuration.CaseLookupConfiguration;
 
 public class CaseSublistView extends CaseListView {
 
-    private String partyId;
-
-    public CaseSublistView(String partyId) {
+    public CaseSublistView() {
         super();
-        this.partyId = partyId;
         init();
     }
 
@@ -132,13 +129,21 @@ public class CaseSublistView extends CaseListView {
 
     }
 
-    public void filterForContact() {
-        setFilter(CaseLookupConfiguration.IN_PARTY_ID_FROM, partyId);
+    /**
+     * Filters the list of cases for the given contact partyId.
+     * @param partyId a <code>String</code> value
+     */
+    public void filterForContact(String partyId) {
+        setFilter(CaseLookupConfiguration.IN_PARTY_ID_FROM, partyId, UtilLookup.OP_EQUALS);
         setFilter(CaseLookupConfiguration.IN_ROLE_TYPE_FROM, RoleTypeConstants.CONTACT);
     }
 
-    public void filterForAccount() {
-        setFilter(CaseLookupConfiguration.IN_PARTY_ID_FROM, partyId);
+    /**
+     * Filters the list of cases for the given account partyId.
+     * @param partyId a <code>String</code> value
+     */
+    public void filterForAccount(String partyId) {
+        setFilter(CaseLookupConfiguration.IN_PARTY_ID_FROM, partyId, UtilLookup.OP_EQUALS);
         setFilter(CaseLookupConfiguration.IN_ROLE_TYPE_FROM, RoleTypeConstants.ACCOUNT);
     }
 }
