@@ -69,6 +69,13 @@ function notifyInvoiceItemsCount(n) {
   }
 </#if>
 }
+
+function submitMarkAsReady(label) {
+  var button = document.getElementById('markAsReadyButton');
+  button.href = "javascript:";
+  button.innerHTML = label;
+  opentaps.submitForm('markInvoiceReadyAction',null,null);
+}
 /*]]>*/
 </script>
 
@@ -77,7 +84,7 @@ function notifyInvoiceItemsCount(n) {
   <@form name="markInvoiceReadyAction" url="setInvoiceReady" invoiceId=invoice.invoiceId />
   <@form name="cancelInvoiceReadyAction" url="setInvoiceStatus" invoiceId=invoice.invoiceId statusId="INVOICE_CANCELLED" />
 
-  <#assign stateChangeLinks><@submitFormLink form="markInvoiceReadyAction" text=uiLabelMap.FinancialsPaymentStatusToReady id="markAsReadyButton" class="subMenuButton" style=(invoiceItems.size() == 0)?string("visibility:hidden", "")/></#assign>
+  <#assign stateChangeLinks><a id="markAsReadyButton" href="javascript:submitMarkAsReady('${uiLabelMap.OpentapsOrderSubmittingLabel}')" class="subMenuButton" style=(invoiceItems.size() == 0)?string("visibility:hidden", "")>${uiLabelMap.FinancialsPaymentStatusToReady}</a></#assign>
   <#assign stateChangeLinks>${stateChangeLinks!}<@submitFormLink form="cancelInvoiceReadyAction" text=uiLabelMap.CommonCancel class="subMenuButton"/></#assign>
 <#elseif (invoice.isReady() || invoice.isPaid()) && (hasWriteoffPermission)>
   <#if (invoice.isSalesInvoice() && invoice.isReady() && invoice.processingStatusId?default("") != "INVOICE_PRINTED")>

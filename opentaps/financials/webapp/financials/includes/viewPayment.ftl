@@ -23,6 +23,25 @@ If you have come this far, payment should be a valid Payment Object.
 <#if payment?has_content>
 
 <#assign paymentStatusChangeAction = "">
+
+<script type="text/javascript">
+/*<![CDATA[*/
+function submitMarkAsReceived(label) {
+  var button = document.getElementById('markAsReceivedButton');
+  button.href = "javascript:";
+  button.innerHTML = label;
+  javascript:opentaps.submitForm('paymentReceivedAction',null,null);
+}
+
+function submitMarkAsSent(label) {
+  var button = document.getElementById('markAsSentButton');
+  button.href = "javascript:";
+  button.innerHTML = label;
+  javascript:opentaps.submitForm('paymentSentAction',null,null);
+}
+/*]]>*/
+</script>
+
 <#if isDisbursement>
   <#assign createLink = "partyId=${payment.partyIdTo}" />
 <#else>
@@ -37,11 +56,11 @@ If you have come this far, payment should be a valid Payment Object.
   </#if>
   <#if isDisbursement && payment.isNotPaid() && payment.isReadyToPost()>
     <@form name="paymentSentAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_SENT" />
-    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentSentAction" text=uiLabelMap.FinancialsPaymentStatusToSent class="subMenuButton" /></#assign>
+    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<a id="markAsSentButton" href="javascript:submitMarkAsSent('${uiLabelMap.OpentapsOrderSubmittingLabel}')" class="subMenuButton" >${uiLabelMap.FinancialsPaymentStatusToSent}</a></#assign>
   </#if>
   <#if !isDisbursement && payment.isNotPaid() && payment.isReadyToPost()>
     <@form name="paymentReceivedAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_RECEIVED" />
-    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentReceivedAction" text=uiLabelMap.FinancialsPaymentStatusToReceived class="subMenuButton" /></#assign>
+    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<a id="markAsReceivedButton" href="javascript:submitMarkAsReceived('${uiLabelMap.OpentapsOrderSubmittingLabel}')" class="subMenuButton" >${uiLabelMap.FinancialsPaymentStatusToReceived}</a></#assign>
   </#if>
   <#if payment.isNotPaid()>
     <@form name="paymentCancelledAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_CANCELLED" />
