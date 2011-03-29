@@ -625,9 +625,9 @@ public class Entry extends BaseEntry {
      */
     private void loadContactOrders() {
         // setup order list view subsection
-        SalesOrdersSublistView orders = new SalesOrdersSublistView(getPartyId());
+        SalesOrdersSublistView orders = new SalesOrdersSublistView();
         // limit orders to particular account
-        orders.filterForParty();
+        orders.filterByParty(getPartyId());
         orders.applyFilters();
 
         // add widget to page
@@ -875,9 +875,9 @@ public class Entry extends BaseEntry {
      */
     private void loadAccountOrders() {
         // setup order list view subsection
-        SalesOrdersSublistView orders = new SalesOrdersSublistView(getPartyId());
+        SalesOrdersSublistView orders = new SalesOrdersSublistView();
         // limit orders to particular account
-        orders.filterForParty();
+        orders.filterByParty(getPartyId());
         orders.applyFilters();
 
         // add widget to page

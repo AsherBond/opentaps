@@ -17,25 +17,29 @@
 package org.opentaps.gwt.crmsfa.client.orders.form;
 
 import org.opentaps.gwt.common.client.listviews.SalesOrderListView;
+import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.client.lookup.configuration.SalesOrderLookupConfiguration;
 
+/**
+ * A list of orders for a given party.
+ */
 public class SalesOrdersSublistView extends SalesOrderListView {
-
-    String partyId = null;
 
     /**
      * Public constructor.
-     * @param partyId related contact or account identifier
      */
-    public SalesOrdersSublistView(String partyId) {
+    public SalesOrdersSublistView() {
         super();
-        this.partyId = partyId;
         init();
     }
 
-    public void filterForParty() {
-        filterByCustomerId(partyId);
+    /**
+     * Sets the partyId for which to list the orders.
+     * @param partyId a <code>String</code> value
+     */
+    public void filterByParty(String partyId) {
+        setFilter(SalesOrderLookupConfiguration.INOUT_PARTY_ID, partyId, UtilLookup.OP_EQUALS);
         setFilter(SalesOrderLookupConfiguration.IN_DESIRED, "Y");
-    };
+    }
 
 }
