@@ -480,6 +480,19 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
         filters.put(columnName, value);
     }
 
+    protected void setFilter(String columnName, String value, String operator) {
+        filters.put(columnName, value);
+        filters.put(columnName + UtilLookup.PARAM_FILTER_OPERATOR, operator);
+    }
+
+    protected void setFilter(String columnName, String value, String operator, boolean sticky) {
+        setFilter(columnName, value, operator);
+        if (sticky) {
+            stickyFilters.put(columnName, value);
+            stickyFilters.put(columnName + UtilLookup.PARAM_FILTER_OPERATOR, operator);
+        }
+    }
+
     protected void setFilter(String columnName, String value, boolean sticky) {
         setFilter(columnName, value);
         if (sticky) {
