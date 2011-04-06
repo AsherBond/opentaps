@@ -20,6 +20,8 @@
 <#if findPartyWidget?has_content>
   <#if viewPreferences?has_content && viewPreferences.MY_OR_TEAM_ACCOUNTS?has_content> 
       <@gwtWidget id=findPartyWidget class="subSectionBlock" viewPref="${viewPreferences.MY_OR_TEAM_ACCOUNTS}"/>
+  <#elseif defaultViewPref?has_content>
+      <@gwtWidget id=findPartyWidget class="subSectionBlock" viewPref="${defaultViewPref}"/>
   <#else>
       <@gwtWidget id=findPartyWidget class="subSectionBlock"/>
   </#if>

@@ -90,6 +90,7 @@
                 <set field="pageTitleLabel" value="CrmAccounts" />    <!-- this is uiLabelMap property for the title of the HTML page -->
                 <set field="sectionHeaderUiLabel" value="CrmAccounts" />  <!-- this is for the main section of this page, ie <h2> -->
                 <set field="findPartyWidget" value="myAccounts" />
+                <set field="defaultViewPref" value="TEAM_VALUES" />
                 <set field="sectionHeaderScreen" value="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#sectionHeaderScreen"/>
             </actions>
             <widgets>
