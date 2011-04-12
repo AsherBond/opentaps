@@ -331,16 +331,6 @@ public class TestObjectGenerator {
     }
 
     /**
-     * Creates a number of orders at current time.
-     * @see org.opentaps.tests.analytics.tests.TestObjectGenerator#getOrders(int count, String organizationPartyId, Timestamp fromDate, Timestamp thruDate, List productIds)
-     * @throws GenericServiceException if an error occurs
-     * @throws GenericEntityException if an error occurs
-     */
-    public List<String> getOrders(int count, String organizationPartyId) throws GenericEntityException, GenericServiceException {
-        return getOrders(count, organizationPartyId, null, null, null);
-    }
-
-    /**
      * Creates <code>count</code> of orders and approve it. All these orders will be in time range from
      * <code>fromDate</code> to <code>thruDate</code> and between <code>organizationPartyId</code> and
      * an random account which is created by calling <code>getAccounts</code> method.
@@ -370,7 +360,7 @@ public class TestObjectGenerator {
             Debug.logInfo("*** Generating order " + c + " out of " + count, MODULE);
 
             // Ensure used account has date less or equals to order date.
-            Timestamp orderDate = UtilDateTime.nowTimestamp();
+            Timestamp orderDate = getRandomTime(fromDate, thruDate);
             String selectedPartyId = null;
             Timestamp tempDate = getRandomTime(fromDate, thruDate);
             List<GenericValue> filteredParties = EntityUtil.filterByCondition(parties, EntityCondition.makeCondition("createdDate", EntityOperator.LESS_THAN_EQUAL_TO, tempDate));
