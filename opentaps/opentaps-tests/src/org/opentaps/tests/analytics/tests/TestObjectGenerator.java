@@ -238,6 +238,7 @@ public class TestObjectGenerator {
             callCtxt.putAll(getPhone());
             callCtxt.putAll(getAddress());
             callCtxt.put("generalToName", companyName);
+            callCtxt.put("forceComplete", "Y");   // in case name has already been used
 
             Map<String, Object> results = dispatcher.runSync("crmsfa.createAccount", callCtxt);
             if (ServiceUtil.isError(results)) {
