@@ -77,6 +77,7 @@
                 <set field="pageTitleLabel" value="CrmOpportunities"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
                 <set field="sectionHeaderUiLabel" value="CrmOpportunities"/>  <!-- this is for the main section of this page, ie <h2> -->
                 <set field="findOpportunityWidget" value="myOpportunities"/>
+                <set field="defaultViewPref" value="TEAM_VALUES" />
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">

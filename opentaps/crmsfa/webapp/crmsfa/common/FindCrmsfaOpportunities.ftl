@@ -18,9 +18,8 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <#if viewPreferences?has_content && viewPreferences.MY_OR_TEAM_OPPS?has_content> 
     <@gwtWidget id=findOpportunityWidget class="subSectionBlock" viewPref="${viewPreferences.MY_OR_TEAM_OPPS}"/>
-<#elseif findOpportunityWidget?has_content && "myOpportunities" == findOpportunityWidget> 
-    <!-- using MY_VALUE as default viewPref -->    
-    <@gwtWidget id=findOpportunityWidget class="subSectionBlock" viewPref="MY_VALUES"/>    
+<#elseif defaultViewPref?has_content>
+    <@gwtWidget id=findOpportunityWidget class="subSectionBlock" viewPref="${defaultViewPref}"/> 
 <#else>
     <@gwtWidget id=findOpportunityWidget class="subSectionBlock"/>
 </#if>
