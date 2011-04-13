@@ -18,6 +18,8 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <#if viewPreferences?has_content && viewPreferences.MY_OR_TEAM_CASES?has_content> 
     <@gwtWidget id=findCaseWidget class="subSectionBlock" viewPref="${viewPreferences.MY_OR_TEAM_CASES}"/>
+<#elseif defaultViewPref?has_content>
+    <@gwtWidget id=findCaseWidget class="subSectionBlock" viewPref="${defaultViewPref}"/>
 <#else>
     <@gwtWidget id=findCaseWidget class="subSectionBlock"/>
 </#if>

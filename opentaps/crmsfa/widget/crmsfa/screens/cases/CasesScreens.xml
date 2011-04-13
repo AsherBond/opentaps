@@ -76,6 +76,7 @@
                 <set field="pageTitleLabel" value="CrmCases"/>
                 <set field="sectionHeaderUiLabel" value="CrmCases"/>
                 <set field="findCaseWidget" value="myCases"/>
+                <set field="defaultViewPref" value="TEAM_VALUES" />
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
