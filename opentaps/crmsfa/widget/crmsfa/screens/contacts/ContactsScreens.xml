@@ -77,8 +77,8 @@
     <screen name="myContacts">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="CrmContacts"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
-                <set field="sectionHeaderUiLabel" value="CrmContacts"/>  <!-- this is for the main section of this page, ie <h2> -->
+                <set field="pageTitleLabel" value="CrmMyContacts"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
+                <set field="sectionHeaderUiLabel" value="CrmMyContacts"/>  <!-- this is for the main section of this page, ie <h2> -->
                 <set field="findPartyWidget" value="myContacts"/>
             </actions>
             <widgets>
