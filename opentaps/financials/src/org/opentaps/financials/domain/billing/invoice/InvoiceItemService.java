@@ -46,7 +46,7 @@ import org.opentaps.foundation.service.ServiceException;
 public class InvoiceItemService extends DomainService implements InvoiceItemServiceInterface {
 
     private static final String MODULE = InvoiceItemService.class.getName();
-    private static int INVOICE_ITEM_PADDING = 4;
+    private static int INVOICE_ITEM_PADDING = 5;
     private String invoiceId;
     private Boolean validateAccountingTags = false;
 
