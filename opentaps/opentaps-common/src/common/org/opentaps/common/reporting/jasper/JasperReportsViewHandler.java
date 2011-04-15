@@ -45,13 +45,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.lowagie.text.pdf.BaseFont;
 import javolution.util.FastMap;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -70,11 +70,11 @@ import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRTextExporter;
 import net.sf.jasperreports.engine.export.JRTextExporterParameter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.export.PdfFont;
 import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 import net.sf.jasperreports.engine.util.JRProperties;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
@@ -94,8 +94,6 @@ import org.opentaps.common.reporting.UtilReports.ContentType;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
-
-import com.lowagie.text.pdf.BaseFont;
 
 /**
  * Class renders Jasper Reports of any supported content type.
@@ -327,6 +325,15 @@ public class JasperReportsViewHandler extends AbstractViewHandler {
             exporter = new JExcelApiExporter();
             exporterParameters.put(JRExporterParameter.JASPER_PRINT, jasperPrint);
             exporterParameters.put(JRExporterParameter.OUTPUT_STREAM, os);
+            exporterParameters.put(JRXlsExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.TRUE);
+            exporterParameters.put(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
+            exporterParameters.put(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+            exporterParameters.put(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+            // fix for percentage if there is a space before the % sign
+            Map<String,String> numberFormats = new HashMap<String, String>();
+            numberFormats.put("#,##0.0 %", "#,##0.0%");
+            exporterParameters.put(JRXlsExporterParameter.FORMAT_PATTERNS_MAP, numberFormats);
+            Debug.logInfo("Set XLS exporter parameters : " + exporterParameters, MODULE);
         } else if (contentType.equals(ContentType.XML)) {
             response.setHeader(HEADER_CONTENT_DISPOSITION, String.format("attachment; filename=\"%1$s.xls\"", reportName));
             exporter = new JRXmlExporter();
@@ -338,12 +345,12 @@ public class JasperReportsViewHandler extends AbstractViewHandler {
             exporter = new JRCsvExporter();
             exporterParameters.put(JRExporterParameter.JASPER_PRINT, jasperPrint);
             exporterParameters.put(JRExporterParameter.OUTPUT_STREAM, os);
-        } else if (contentType.equals(ContentType.RTF)){
+        } else if (contentType.equals(ContentType.RTF)) {
             response.setHeader(HEADER_CONTENT_DISPOSITION, String.format("attachment; filename=\"%1$s.rtf\"", reportName));
             exporter = new JRRtfExporter();
             exporterParameters.put(JRExporterParameter.JASPER_PRINT, jasperPrint);
             exporterParameters.put(JRExporterParameter.OUTPUT_STREAM, os);
-        } else if (contentType.equals(ContentType.TXT)){
+        } else if (contentType.equals(ContentType.TXT)) {
             response.setHeader(HEADER_CONTENT_DISPOSITION, String.format("attachment; filename=\"%1$s.txt\"", reportName));
             exporter = new JRTextExporter();
             exporterParameters.put(JRExporterParameter.JASPER_PRINT, jasperPrint);
