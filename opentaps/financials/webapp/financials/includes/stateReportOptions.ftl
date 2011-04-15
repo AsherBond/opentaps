@@ -36,6 +36,7 @@ Make sure you call parseReportOptions.bsh so that this form can work.
 <#-- this form needs no action since it returns to the same page, allowing multiple different views to use it in the same pattern -->
 <form method="POST" name="stateReportForm" action="">
   <@inputHidden name="reportFormType" value="state" />
+  <@inputHidden name="performFind" value="Y"/>
 
   <#-- some forms need a partyId, they should define this map which contains a "label" for the label -->
   <#if partyIdInputRequested?exists>

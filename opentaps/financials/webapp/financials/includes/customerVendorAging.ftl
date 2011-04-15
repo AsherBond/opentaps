@@ -49,7 +49,7 @@
   </tr>
 </#macro>
 
-<#if daysOutstandingBreakPoints?exists>
+<#if parameters.performFind?exists && parameters.performFind == "Y" && daysOutstandingBreakPoints?exists>
 <div style="border: 1px solid #999999; margin-top: 20px; margin-bottom: 20px;"></div>
 <table border="0" cellpadding="0">
   <tr>

@@ -34,6 +34,9 @@ timeZone = UtilCommon.getTimeZone(request);
 partyId = UtilCommon.getParameter(request, "partyId");
 context.put("partyId", partyId);
 
+performFind = UtilCommon.getParameter(request, "performFind");
+if (performFind == null || !"Y".equals(performFind)) return;
+
 // get the form data from the helper script
 organizationPartyId = context.get("organizationPartyId");
 glFiscalTypeId = context.get("glFiscalTypeId");
