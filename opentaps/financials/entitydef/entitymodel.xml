@@ -299,7 +299,17 @@ under the License.
       <member-entity entity-alias="GLA" entity-name="GlAccount"/>
       <member-entity entity-alias="GLAC" entity-name="GlAccountClass"/>
       <member-entity entity-alias="PER" entity-name="Person"/>
-      <member-entity entity-alias="PTYGRP" entity-name="PartyGroup"/>      
+      <member-entity entity-alias="PTYGRP" entity-name="PartyGroup"/>
+      <member-entity entity-alias="T1" entity-name="Enumeration"/>
+      <member-entity entity-alias="T2" entity-name="Enumeration"/>
+      <member-entity entity-alias="T3" entity-name="Enumeration"/>
+      <member-entity entity-alias="T4" entity-name="Enumeration"/>
+      <member-entity entity-alias="T5" entity-name="Enumeration"/>
+      <member-entity entity-alias="T6" entity-name="Enumeration"/>
+      <member-entity entity-alias="T7" entity-name="Enumeration"/>
+      <member-entity entity-alias="T8" entity-name="Enumeration"/>
+      <member-entity entity-alias="T9" entity-name="Enumeration"/>
+      <member-entity entity-alias="T10" entity-name="Enumeration"/>
       <alias entity-alias="ATR" name="isPosted"/>
       <alias entity-alias="ATR" name="glFiscalTypeId"/>
       <alias entity-alias="ATR" name="acctgTransTypeId"/>
@@ -329,19 +339,39 @@ under the License.
       <alias entity-alias="ATE" name="reconcileStatusId"/>
       <alias entity-alias="ATE" name="acctgTransEntryTypeId"/>
       <alias entity-alias="ATE" name="acctgTagEnumId1" />
+      <alias entity-alias="T1" name="acctgTagCode1" field="enumCode"/>
+      <alias entity-alias="T1" name="acctgTagDescription1" field="description"/>
       <alias entity-alias="ATE" name="acctgTagEnumId2" />
+      <alias entity-alias="T2" name="acctgTagCode2" field="enumCode"/>
+      <alias entity-alias="T2" name="acctgTagDescription2" field="description"/>
       <alias entity-alias="ATE" name="acctgTagEnumId3" />
+      <alias entity-alias="T3" name="acctgTagCode3" field="enumCode"/>
+      <alias entity-alias="T3" name="acctgTagDescription3" field="description"/>
       <alias entity-alias="ATE" name="acctgTagEnumId4" />
+      <alias entity-alias="T4" name="acctgTagCode4" field="enumCode"/>
+      <alias entity-alias="T4" name="acctgTagDescription4" field="description"/>
       <alias entity-alias="ATE" name="acctgTagEnumId5" />
+      <alias entity-alias="T5" name="acctgTagCode5" field="enumCode"/>
+      <alias entity-alias="T5" name="acctgTagDescription5" field="description"/>
       <alias entity-alias="ATE" name="acctgTagEnumId6" />
+      <alias entity-alias="T6" name="acctgTagCode6" field="enumCode"/>
+      <alias entity-alias="T6" name="acctgTagDescription6" field="description"/>
       <alias entity-alias="ATE" name="acctgTagEnumId7" />
+      <alias entity-alias="T7" name="acctgTagCode7" field="enumCode"/>
+      <alias entity-alias="T7" name="acctgTagDescription7" field="description"/>
       <alias entity-alias="ATE" name="acctgTagEnumId8" />
+      <alias entity-alias="T8" name="acctgTagCode8" field="enumCode"/>
+      <alias entity-alias="T8" name="acctgTagDescription8" field="description"/>
       <alias entity-alias="ATE" name="acctgTagEnumId9" />
+      <alias entity-alias="T9" name="acctgTagCode9" field="enumCode"/>
+      <alias entity-alias="T9" name="acctgTagDescription9" field="description"/>
       <alias entity-alias="ATE" name="acctgTagEnumId10" />
+      <alias entity-alias="T10" name="acctgTagCode10" field="enumCode"/>
+      <alias entity-alias="T10" name="acctgTagDescription10" field="description"/>
       <alias entity-alias="PER" name="firstName"/>
       <alias entity-alias="PER" name="lastName"/> 
       <alias entity-alias="PTYGRP" name="groupName"/>
-      <alias entity-alias="PTYGRP" name="requires1099"/>      
+      <alias entity-alias="PTYGRP" name="requires1099"/>
       <view-link entity-alias="ATR" rel-entity-alias="ATE">
         <key-map field-name="acctgTransId"/>
       </view-link>
@@ -359,7 +389,37 @@ under the License.
       </view-link>
       <view-link entity-alias="ATE" rel-entity-alias="PTYGRP" rel-optional="true">
         <key-map field-name="partyId"/>
-      </view-link>      
+      </view-link> 
+      <view-link entity-alias="ATE" rel-entity-alias="T1" rel-optional="true">
+        <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="T2" rel-optional="true">
+        <key-map field-name="acctgTagEnumId2" rel-field-name="enumId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="T3" rel-optional="true">
+        <key-map field-name="acctgTagEnumId3" rel-field-name="enumId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="T4" rel-optional="true">
+        <key-map field-name="acctgTagEnumId4" rel-field-name="enumId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="T5" rel-optional="true">
+        <key-map field-name="acctgTagEnumId5" rel-field-name="enumId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="T6" rel-optional="true">
+        <key-map field-name="acctgTagEnumId6" rel-field-name="enumId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="T7" rel-optional="true">
+        <key-map field-name="acctgTagEnumId7" rel-field-name="enumId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="T8" rel-optional="true">
+        <key-map field-name="acctgTagEnumId8" rel-field-name="enumId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="T9" rel-optional="true">
+        <key-map field-name="acctgTagEnumId9" rel-field-name="enumId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="T10" rel-optional="true">
+        <key-map field-name="acctgTagEnumId10" rel-field-name="enumId"/>
+      </view-link>     
       <relation type="one" fk-name="ATAE_GLACT" rel-entity-name="GlAccount">
         <key-map field-name="glAccountId"/>
       </relation>
