@@ -168,6 +168,13 @@ public final class PaymentActions {
 
         // construct search conditions
         List<EntityCondition> searchConditions = new FastList<EntityCondition>();
+
+        // always filter out payments of type "CUSTOMER_REFUND" and payment method type "EXT_BILLACT"
+        searchConditions.add(EntityCondition.makeCondition(EntityOperator.OR,
+                                                           EntityCondition.makeCondition(Payment.Fields.paymentTypeId.name(), EntityOperator.NOT_EQUAL, "CUSTOMER_REFUND"),
+                                                           EntityCondition.makeCondition(Payment.Fields.paymentMethodTypeId.name(), EntityOperator.NOT_EQUAL, "EXT_BILLACT")));
+
+
         if (paymentId != null) {
             searchConditions.add(EntityCondition.makeCondition(Payment.Fields.paymentId.name(), EntityOperator.EQUALS, paymentId));
         }
