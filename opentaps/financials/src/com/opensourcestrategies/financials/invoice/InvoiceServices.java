@@ -1011,7 +1011,7 @@ public final class InvoiceServices {
             Map input = UtilMisc.toMap("userLogin", userLogin, "partyIdFrom", invoice.get("partyId"), "partyIdTo", invoice.get("partyIdFrom"), "paymentTypeId", paymentTypeId);
             input.put("currencyUomId", invoice.getString("currencyUomId"));
             input.put("paymentMethodTypeId", "EXT_BILLACT");
-            input.put("statusId", "PMNT_NOT_PAID");
+            input.put("statusId", "PMNT_CONFIRMED");
             input.put("amount", amount);
             Map results = dispatcher.runSync("createPayment", input);
             if (ServiceUtil.isError(results)) {
@@ -1019,7 +1019,7 @@ public final class InvoiceServices {
             }
             String paymentId = (String) results.get("paymentId");
 
-            // make application to invoie for invoice total
+            // make application to invoice for invoice total
             input = UtilMisc.toMap("userLogin", userLogin, "invoiceId", invoiceId, "paymentId", paymentId, "amountApplied", amount);
             results = dispatcher.runSync("createPaymentApplication", input);
             if (ServiceUtil.isError(results)) {
@@ -1029,12 +1029,6 @@ public final class InvoiceServices {
             // make application to billing account for input amount
             input = UtilMisc.toMap("userLogin", userLogin, "billingAccountId", billingAccountId, "paymentId", paymentId, "amountApplied", amount);
             results = dispatcher.runSync("createPaymentApplication", input);
-            if (ServiceUtil.isError(results)) {
-                return results;
-            }
-
-            // send the payment, so that the SECA will trigger the invoice as paid if fully paid
-            results = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_SENT"));
             if (ServiceUtil.isError(results)) {
                 return results;
             }
