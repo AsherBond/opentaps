@@ -89,6 +89,7 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.service.calendar.RecurrenceInfo;
 import org.ofbiz.service.calendar.RecurrenceInfoException;
+import org.opentaps.base.entities.InvoiceItem;
 import org.opentaps.base.entities.InvoiceRole;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.common.agreement.AgreementInvoiceFactory;
@@ -957,10 +958,14 @@ public final class InvoiceServices {
             if (!security.hasEntityPermission("FINANCIALS", "_AP_INUPDT", userLogin)) {
                 return UtilMessage.createAndLogServiceError("OpentapsError_PermissionDenied", locale, MODULE);
             }
-            GenericValue invoice = delegator.findByPrimaryKey("Invoice", UtilMisc.toMap("invoiceId", invoiceId));
+
+            DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+            DomainsDirectory dd = domainLoader.getDomainsDirectory();
+            InvoiceRepositoryInterface invoiceRepository = dd.getBillingDomain().getInvoiceRepository();
+            Invoice invoice = invoiceRepository.getInvoiceById(invoiceId);
 
             // verify that the invoice has value
-            BigDecimal total = InvoiceWorker.getInvoiceNotApplied(invoice);
+            BigDecimal total = invoice.getOpenAmount();
             if (total.signum() != 1) {
                 return UtilMessage.createAndLogServiceError("FinancialsErrorNoInvoiceValue", UtilMisc.toMap("invoiceId", invoiceId), locale, MODULE);
             }
@@ -970,21 +975,21 @@ public final class InvoiceServices {
 
             // verify that the invoice type is supported
             String paymentTypeId = null;
-            if ("PURCHASE_INVOICE".equals(invoice.get("invoiceTypeId"))) {
+            if ("PURCHASE_INVOICE".equals(invoice.getInvoiceTypeId())) {
                 paymentTypeId = "VENDOR_PAYMENT";
-            } else if ("COMMISSION_INVOICE".equals(invoice.get("invoiceTypeId"))) {
+            } else if ("COMMISSION_INVOICE".equals(invoice.getInvoiceTypeId())) {
                 paymentTypeId = "COMMISSION_PAYMENT";
-            } else if ("CUST_RTN_INVOICE".equals(invoice.get("invoiceTypeId"))) {
+            } else if ("CUST_RTN_INVOICE".equals(invoice.getInvoiceTypeId())) {
                 paymentTypeId = "CUSTOMER_REFUND";
             }
             if (paymentTypeId == null) {
-                return UtilMessage.createAndLogServiceError("FinancialsErrorInvoiceTypeNotSupported", UtilMisc.toMap("invoiceTypeId", invoice.get("invoiceTypeId")), locale, MODULE);
+                return UtilMessage.createAndLogServiceError("FinancialsErrorInvoiceTypeNotSupported", UtilMisc.toMap("invoiceTypeId", invoice.getInvoiceTypeId()), locale, MODULE);
             }
 
             // create a billing account if none specified (the service should create the appropriate role)
             if (billingAccountId == null) {
-                Map input = UtilMisc.toMap("userLogin", userLogin, "fromDate", now, "roleTypeId", "BILL_TO_CUSTOMER", "partyId", invoice.get("partyIdFrom"));
-                input.put("accountCurrencyUomId", invoice.get("currencyUomId"));
+                Map input = UtilMisc.toMap("userLogin", userLogin, "fromDate", now, "roleTypeId", "BILL_TO_CUSTOMER", "partyId", invoice.getPartyIdFrom());
+                input.put("accountCurrencyUomId", invoice.getCurrencyUomId());
                 input.put("accountLimit", new BigDecimal(0.0));
                 input.put("description", UtilMessage.expandLabel("FinancialsCreditForInvoice", UtilMisc.toMap("invoiceId", invoiceId), locale));
                 Map results = dispatcher.runSync("createBillingAccount", input);
@@ -999,20 +1004,29 @@ public final class InvoiceServices {
                     return UtilMessage.createAndLogServiceError("FinancialsErrorBillingAccountNotFound", UtilMisc.toMap("billingAccountId", billingAccountId), locale, MODULE);
                 } else {
                     // converting the currency would be complicated so just throw an error for now
-                    if (!billingAccount.getString("accountCurrencyUomId").equals(invoice.getString("currencyUomId"))) {
+                    if (!billingAccount.getString("accountCurrencyUomId").equals(invoice.getCurrencyUomId())) {
                         return UtilMessage.createAndLogServiceError("FinancialsErrorBillingAccountCurrencyDifferent",
                                            UtilMisc.toMap("billingAccountId", billingAccountId, "billingAccountCurrency", billingAccount.getString("accountCurrencyUomId"),
-                                                          "invoiceId", invoiceId, "invoiceCurrencyUomId", invoice.getString("currencyUomId")), locale, MODULE);
+                                                          "invoiceId", invoiceId, "invoiceCurrencyUomId", invoice.getCurrencyUomId()), locale, MODULE);
                     }
                 }
             }
 
+            // get the accounting tags from the first invoice item
+            // we'll tag both the payment and application here
+            InvoiceItem item = invoice.getInvoiceItems().get(0);
+
             // create a payment
-            Map input = UtilMisc.toMap("userLogin", userLogin, "partyIdFrom", invoice.get("partyId"), "partyIdTo", invoice.get("partyIdFrom"), "paymentTypeId", paymentTypeId);
+            Map input = UtilMisc.toMap("userLogin", userLogin, "partyIdFrom", invoice.getPartyId(), "partyIdTo", invoice.getPartyIdFrom(), "paymentTypeId", paymentTypeId);
+            input.put("currencyUomId", invoice.getCurrencyUomId());
             input.put("currencyUomId", invoice.getString("currencyUomId"));
             input.put("paymentMethodTypeId", "EXT_BILLACT");
             input.put("statusId", "PMNT_CONFIRMED");
             input.put("amount", amount);
+            if (item != null) {
+                // tag the payment
+                UtilAccountingTags.putAllAccountingTags(item, input);
+            }
             Map results = dispatcher.runSync("createPayment", input);
             if (ServiceUtil.isError(results)) {
                 return results;
@@ -1021,6 +1035,10 @@ public final class InvoiceServices {
 
             // make application to invoice for invoice total
             input = UtilMisc.toMap("userLogin", userLogin, "invoiceId", invoiceId, "paymentId", paymentId, "amountApplied", amount);
+            if (item != null) {
+                // tag the payment
+                UtilAccountingTags.putAllAccountingTags(item, input);
+            }
             results = dispatcher.runSync("createPaymentApplication", input);
             if (ServiceUtil.isError(results)) {
                 return results;
@@ -1036,10 +1054,7 @@ public final class InvoiceServices {
             results = ServiceUtil.returnSuccess();
             results.put("billingAccountId", billingAccountId);
             return results;
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-            return ServiceUtil.returnError(e.getMessage());
-        } catch (GenericServiceException e) {
+        } catch (GeneralException e) {
             Debug.logError(e, MODULE);
             return ServiceUtil.returnError(e.getMessage());
         }
