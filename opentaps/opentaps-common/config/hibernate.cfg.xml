@@ -46,6 +46,7 @@
   <mapping class="org.opentaps.base.entities.AgreementPartyApplic"/>
   <mapping class="org.opentaps.base.entities.ShipmentPackageRouteDetail"/>
   <mapping class="org.opentaps.base.entities.ShipmentPackageItemIssuance"/>
+  <mapping class="org.opentaps.base.entities.PaymentAndPaymentApplicationSums"/>
   <mapping class="org.opentaps.base.entities.EbayProductListing"/>
   <mapping class="org.opentaps.base.entities.ContentApproval"/>
   <mapping class="org.opentaps.base.entities.InventoryItemDetailSummary"/>

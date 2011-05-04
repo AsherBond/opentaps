@@ -1600,6 +1600,29 @@ under the License.
         <key-map field-name="applInvoiceItemSeqId" rel-field-name="invoiceItemSeqId"/>
       </relation>
     </view-entity>
+    <view-entity entity-name="PaymentAndPaymentApplicationSums"
+            package-name="org.ofbiz.accounting.payment"
+            never-cache="true"
+            title="Payment and Payment Applications Amount Sum View Entity">
+      <member-entity entity-alias="PY" entity-name="Payment"/>
+      <member-entity entity-alias="PA" entity-name="PaymentApplication"/>
+      <member-entity entity-alias="ST" entity-name="StatusItem"/>
+      <alias-all entity-alias="PY"/>
+      <alias-all entity-alias="PA" prefix="appl"/>
+      <alias-all entity-alias="PY">
+        <exclude field="statusId"/>
+        <exclude field="amount"/>
+      </alias-all>
+      <alias entity-alias="PY" name="statusId" field="statusId" group-by="true"/>
+      <alias entity-alias="PY" name="totalAmount" field="amount" function="sum"/>
+      <alias entity-alias="ST" name="statusDescription" field="description" group-by="true"/>
+      <view-link entity-alias="PY" rel-entity-alias="PA" rel-optional="true">
+        <key-map field-name="paymentId"/>
+      </view-link>
+      <view-link entity-alias="PY" rel-entity-alias="ST">
+        <key-map field-name="statusId"/>
+      </view-link>
+    </view-entity>
 
     <!-- These entities are to refactor the entity which defined in ofbiz. in this new entity we will use productAverageCostId auto sequenced as primary key
     -->

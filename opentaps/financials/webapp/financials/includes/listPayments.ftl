@@ -53,3 +53,26 @@
     </table>
   </#noparse>
 </@paginate>
+
+<#if overallSum?has_content>
+  <table class="listTable" style="width:auto;margin-left:auto;margin-right:0;margin-top:15px;">
+    <tr class="listTableHeader">
+      <@displayCell text=uiLabelMap.CommonStatus/>
+      <@displayCell text=uiLabelMap.AccountingAmount blockClass="textright"/>
+    </tr>
+    <#assign idx = 0/>
+    <#if sumsPerStatus?has_content>
+      <#assign idx = sumsPerStatus?size/>
+      <#list sumsPerStatus as sum>
+        <tr class="${tableRowClass(sum_index)}">
+          <@displayCell text=sum.statusDescription! />
+          <@displayCurrencyCell amount=sum.totalAmount currencyUomId=sum.currencyUomId! />
+        </tr>
+      </#list>
+    </#if>
+    <tr class="${tableRowClass(idx)}">
+      <@displayTitleCell title=uiLabelMap.FinancialsTotalAmount />
+      <@displayCurrencyCell amount=overallSum />
+    </tr>
+  </table>
+</#if>

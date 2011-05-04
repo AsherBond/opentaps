@@ -41,8 +41,10 @@ import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.base.constants.PaymentTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.constants.StatusTypeConstants;
 import org.opentaps.base.entities.PaymentAndPaymentApplication;
+import org.opentaps.base.entities.PaymentAndPaymentApplicationSums;
 import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.base.entities.PaymentMethodType;
 import org.opentaps.base.entities.PaymentType;
@@ -244,6 +246,29 @@ public final class PaymentActions {
                 searchConditions.addAll(UtilAccountingTags.buildTagConditions(organizationPartyId, tagsType, delegator, request));
             }
         }
+
+        // get the sums, used the same conditions, but filter out voided and canceled payments unless that status was explicitly selected in the filter
+        List<EntityCondition> sumConditions = new FastList<EntityCondition>(searchConditions);
+        if (statusId == null) {
+            sumConditions.add(EntityCondition.makeCondition(Payment.Fields.statusId.name(), EntityOperator.NOT_IN, Arrays.asList(StatusItemConstants.PmntStatus.PMNT_CANCELLED, StatusItemConstants.PmntStatus.PMNT_VOID)));
+        }
+        List<PaymentAndPaymentApplicationSums> sums = paymentRepository.findList(PaymentAndPaymentApplicationSums.class, EntityCondition.makeCondition(sumConditions, EntityOperator.AND),
+                                                                                 Arrays.asList(PaymentAndPaymentApplicationSums.Fields.statusId.name(),
+                                                                                               PaymentAndPaymentApplicationSums.Fields.statusDescription.name(),
+                                                                                               PaymentAndPaymentApplicationSums.Fields.totalAmount.name()),
+                                                                                 Arrays.asList(PaymentAndPaymentApplicationSums.Fields.statusDescription.asc()));
+        ac.put("sumsPerStatus", sums);
+
+        // get the sums total
+        BigDecimal bigTotal = BigDecimal.ZERO;
+        for (PaymentAndPaymentApplicationSums sum : sums) {
+            BigDecimal am = sum.getTotalAmount();
+            if (am == null) {
+                continue;
+            }
+            bigTotal = bigTotal.add(am);
+        }
+        ac.put("overallSum", bigTotal);
 
         // Pagination
         Set<String> fieldsToSelect = new HashSet<String>(new Payment().getAllFieldsNames());
