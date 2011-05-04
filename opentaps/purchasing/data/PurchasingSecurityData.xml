@@ -81,7 +81,7 @@
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="ASSETMAINT_ADMIN"/>
     
     <!-- PRCH_CLERK is a group which have create/update/view supplier and create/view/admin order rights -->
-    <SecurityGroup groupId="PRCH_CLERK" description="Purchasing Clerk with permissions to create purchasing orders"/>
+    <SecurityGroup groupId="PRCH_CLERK" description="Purchasing Clerk with permissions to create suppliers and purchase orders"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_VIEW"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_SPLR_VIEW"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_SPLR_CREATE"/>
@@ -103,5 +103,31 @@
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_CME_UPDATE"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_CME_DELETE"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_SRC_CREATE"/>
-    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_NOTE"/>    
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_NOTE"/>   
+
+    <SecurityGroup groupId="PRCH_SUPPLIER" description="Purchasing Supplier Maintenance with permissions to work with suppliers"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PRCH_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PRCH_SPLR_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PRCH_SPLR_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PRCH_SPLR_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_DELETE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_STS_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_GRP_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_REL_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_REL_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_ROLE_DELETE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_PCM_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_PCM_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_PCM_DELETE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_CME_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_CME_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_CME_DELETE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_SRC_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_SUPPLIER" permissionId="PARTYMGR_NOTE"/>   
+
+
+ 
 </entity-engine-xml>
