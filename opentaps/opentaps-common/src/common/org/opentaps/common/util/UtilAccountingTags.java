@@ -547,6 +547,22 @@ public final class UtilAccountingTags {
 
     /**
      * Copy all the acctgTagEnumId_ fields from a <code>Map</code> to an <code>EntityInterface</code>.
+     * @param from the input <code>EntityInterface</code>
+     * @param to the output <code>EntityInterface</code>
+     */
+    public static void putAllAccountingTags(EntityInterface from, EntityInterface to) {
+        for (int i = 1; i <= TAG_COUNT; i++) {
+            String tag = from.getString(ENTITY_TAG_PREFIX + i);
+            // make sure not to set empty strings
+            if (UtilValidate.isEmpty(tag)) {
+                tag = null;
+            }
+            to.set(ENTITY_TAG_PREFIX + i, tag);
+        }
+    }
+
+    /**
+     * Copy all the acctgTagEnumId_ fields from a <code>Map</code> to an <code>EntityInterface</code>.
      * @param map the input <code>Map</code>
      * @param value the output <code>EntityInterface</code>
      * @param mapPrefix the prefix used in the input map, defaults to ENTITY_TAG_PREFIX

@@ -55,6 +55,7 @@ under the License.
     <extend-entity entity-name="AcctgTransEntry">
         <field name="parentAcctgTransId" type="id-ne"/>
         <field name="parentAcctgTransEntrySeqId" type="id-ne" col-name="P_ACCTG_TRANS_ENTRY_SEQ_ID"/>
+        <field name="paymentApplicationId" type="id-ne"/>
         <field name="acctgTagEnumId1" type="id-ne"/>
         <field name="acctgTagEnumId2" type="id-ne"/>
         <field name="acctgTagEnumId3" type="id-ne"/>
@@ -68,6 +69,9 @@ under the License.
         <relation type="one" rel-entity-name="AcctgTransEntry" fk-name="ATE_PATE" title="Parent">
             <key-map field-name="parentAcctgTransId" rel-field-name="acctgTransId"/>
             <key-map field-name="parentAcctgTransEntrySeqId" rel-field-name="acctgTransEntrySeqId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="PaymentApplication">
+            <key-map field-name="paymentApplicationId"/>
         </relation>
         <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG1" title="tag1">
             <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>

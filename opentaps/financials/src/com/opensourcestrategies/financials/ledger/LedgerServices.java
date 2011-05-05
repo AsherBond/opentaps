@@ -1277,12 +1277,12 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     private static List makePaymentEntries(PaymentApplication paymentApplication, Map creditGlAccountAmounts, Map debitGlAccountAmounts,
-            String organizationPartyId, String transactionPartyId, Delegator delegator) throws GenericEntityException {
+                                           String organizationPartyId, String transactionPartyId, Delegator delegator) throws GenericEntityException {
         List acctgTransEntries = new LinkedList();
         int itemSeq = 1;
         for (Iterator ai = creditGlAccountAmounts.keySet().iterator(); ai.hasNext();) {
             String creditGlAccountId = (String) ai.next();
-            Map tmpMap = UtilMisc.toMap("glAccountId", creditGlAccountId, "debitCreditFlag", "C",
+            Map tmpMap = UtilMisc.toMap("glAccountId", creditGlAccountId, "debitCreditFlag", "C", "paymentApplicationId", paymentApplication.getPaymentApplicationId(),
                     "amount", creditGlAccountAmounts.get(creditGlAccountId), "acctgTransEntrySeqId", Integer.toString(itemSeq),
                     "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_");
             tmpMap.put("partyId", transactionPartyId);
@@ -1294,7 +1294,7 @@ public final class LedgerServices {
 
         for (Iterator ai = debitGlAccountAmounts.keySet().iterator(); ai.hasNext();) {
             String debitGlAccountId = (String) ai.next();
-            Map tmpMap = UtilMisc.toMap("glAccountId", debitGlAccountId, "debitCreditFlag", "D",
+            Map tmpMap = UtilMisc.toMap("glAccountId", debitGlAccountId, "debitCreditFlag", "D", "paymentApplicationId", paymentApplication.getPaymentApplicationId(),
                     "amount", debitGlAccountAmounts.get(debitGlAccountId), "acctgTransEntrySeqId", Integer.toString(itemSeq),
                     "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_");
             tmpMap.put("partyId", transactionPartyId);
