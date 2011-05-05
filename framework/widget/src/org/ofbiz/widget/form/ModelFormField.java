@@ -2805,6 +2805,7 @@ public class ModelFormField {
         protected FlexibleStringExpander defaultValue;
         protected SubHyperlink subHyperlink;
         protected boolean disabled;
+        protected boolean readonly;
         protected boolean clientAutocompleteField;
 
         protected TextField() {
@@ -2843,6 +2844,7 @@ public class ModelFormField {
             }
 
             this.disabled = "true".equals(element.getAttribute("disabled"));
+            this.readonly = "true".equals(element.getAttribute("read-only"));
 
             this.clientAutocompleteField = !"false".equals(element.getAttribute("client-autocomplete-field"));
 
@@ -2872,6 +2874,15 @@ public class ModelFormField {
         public void setDisabled(boolean b) {
             this.disabled = b;
         }
+
+        public boolean getReadonly() {
+            return this.disabled;
+        }
+
+        public void setReadonly(boolean b) {
+            this.readonly = b;
+        }
+
 
         public boolean getClientAutocompleteField() {
             return this.clientAutocompleteField;

@@ -123,7 +123,7 @@ function lookup_popup2(view_name) {
     if (this.args != null) {
         if (this.args.length > 2) {
             for (var i = 2; i < this.args.length; i++) {
-                argString += "&parm" + (i - 2) + "=" + this.args[i];
+                argString += "&parm" + (i - 3) + "=" + this.args[i];
             }
         }
     }
@@ -205,9 +205,9 @@ var FieldLookupPopup = Class.create({
     initialize: function (target, viewName, lookupWidth, lookupHeight, position, fadeBackground, args) {
         if (args != null) {
             var argString = "";
-            if (args.length > 7) {
-                for (var i = 7; i < args.length; i++) {
-                    if ((viewName.indexOf("?") == -1) && (i - 6) == 1) {
+            if (args.length > 6) {
+                for (var i = 6; i < args.length; i++) {
+                    if ((viewName.indexOf("?") == -1) && (i - 6) == 0) {
                         sep = "?";
                     } else {
                         sep = "&";

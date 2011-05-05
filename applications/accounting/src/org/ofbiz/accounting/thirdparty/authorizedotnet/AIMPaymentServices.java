@@ -355,6 +355,7 @@ public class AIMPaymentServices {
         String login = getPaymentGatewayConfigValue(delegator, paymentGatewayConfigId, "userId", configStr, "payment.authorizedotnet.login");
         String password = getPaymentGatewayConfigValue(delegator, paymentGatewayConfigId, "pwd", configStr, "payment.authorizedotnet.password");
         String transDescription = getPaymentGatewayConfigValue(delegator, paymentGatewayConfigId, "transDescription", configStr, "payment.authorizedotnet.transdescription");
+        String duplicateWindow = getPaymentGatewayConfigValue(delegator, paymentGatewayConfigId, "duplicateWindow", configStr, "payment.authorizedotnet.duplicateWindow");
         if (UtilValidate.isEmpty(ver)) {
             ver = "3.0";
         }
@@ -385,6 +386,7 @@ public class AIMPaymentServices {
         props.put("login", login);
         props.put("password", password);
         props.put("trankey", tranKey);
+        props.put("duplicateWindow", duplicateWindow);
         if (cc != null) {
             props.put("cardtype", (String)cc.get("cardType"));
         }
@@ -405,6 +407,10 @@ public class AIMPaymentServices {
         }
         AIMRequest.put("x_Password",props.getProperty("password"));
         AIMRequest.put("x_Version", props.getProperty("ver"));
+        String duplicateWindow = props.getProperty("duplicateWindow");
+        if (UtilValidate.isNotEmpty(duplicateWindow)) {
+            AIMRequest.put("x_duplicate_window", props.getProperty("duplicateWindow"));
+        }
     }
 
     private static void buildGatewayResponeConfig(Map<String, Object> params, Properties props, Map<String, Object> AIMRequest) {

@@ -21,6 +21,11 @@
 import org.ofbiz.entity.condition.*
 
 String priceRuleId = request.getParameter("productPriceRuleId");
+
+if (!priceRuleId) {
+    priceRuleId = parameters.get("productPriceRuleId");
+}
+
 if (priceRuleId) {
     context.productPriceRule = delegator.findOne("ProductPriceRule", [productPriceRuleId : priceRuleId], false);
 }
