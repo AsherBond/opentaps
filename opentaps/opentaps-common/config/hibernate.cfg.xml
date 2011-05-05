@@ -46,7 +46,6 @@
   <mapping class="org.opentaps.base.entities.AgreementPartyApplic"/>
   <mapping class="org.opentaps.base.entities.ShipmentPackageRouteDetail"/>
   <mapping class="org.opentaps.base.entities.ShipmentPackageItemIssuance"/>
-  <mapping class="org.opentaps.base.entities.PaymentAndPaymentApplicationSums"/>
   <mapping class="org.opentaps.base.entities.EbayProductListing"/>
   <mapping class="org.opentaps.base.entities.ContentApproval"/>
   <mapping class="org.opentaps.base.entities.InventoryItemDetailSummary"/>
@@ -384,6 +383,7 @@
   <mapping class="org.opentaps.base.entities.TaxAuthorityGlAccountBalance"/>
   <mapping class="org.opentaps.base.entities.RoleTypeAndParty"/>
   <mapping class="org.opentaps.base.entities.ProductStorePaymentSetting"/>
+  <mapping class="org.opentaps.base.entities.PaymentSum"/>
   <mapping class="org.opentaps.base.entities.AgreementEmploymentAppl"/>
   <mapping class="org.opentaps.base.entities.ProductStoreRole"/>
   <mapping class="org.opentaps.base.entities.AmazonOrderItemImport"/>

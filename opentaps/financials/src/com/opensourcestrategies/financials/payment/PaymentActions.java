@@ -35,6 +35,7 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
@@ -44,9 +45,9 @@ import org.opentaps.base.constants.PaymentTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.constants.StatusTypeConstants;
 import org.opentaps.base.entities.PaymentAndPaymentApplication;
-import org.opentaps.base.entities.PaymentAndPaymentApplicationSums;
 import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.base.entities.PaymentMethodType;
+import org.opentaps.base.entities.PaymentSum;
 import org.opentaps.base.entities.PaymentType;
 import org.opentaps.base.entities.StatusItem;
 import org.opentaps.common.builder.EntityListBuilder;
@@ -61,6 +62,7 @@ import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
+import org.opentaps.foundation.entity.Entity;
 
 /**
  * PaymentActions - Java Actions for payments.
@@ -237,31 +239,44 @@ public final class PaymentActions {
             searchConditions.add(EntityCondition.makeCondition(Payment.Fields.openAmount.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(openAmountThru)));
         }
 
+        // prepare the sum conditions, using the same conditions as for the search but tags must be handled separately
+        List<EntityCondition> sumConditions = new FastList<EntityCondition>();
+        sumConditions.addAll(searchConditions);
+
         if (tagsType != null) {
             // if the organization is using allocatePaymentTagsToApplications then the tags are on the payment applications,
             // else they are on the Payments
             if (organization.allocatePaymentTagsToApplications()) {
-                searchConditions.addAll(UtilAccountingTags.buildTagConditions(organizationPartyId, tagsType, delegator, request, UtilAccountingTags.TAG_PARAM_PREFIX, "applAcctgTagEnumId"));
+                List<EntityCondition> tagConditions = UtilAccountingTags.buildTagConditions(organizationPartyId, tagsType, delegator, request, UtilAccountingTags.TAG_PARAM_PREFIX, "applAcctgTagEnumId");
+                if (UtilValidate.isNotEmpty(tagConditions)) {
+                    searchConditions.addAll(tagConditions);
+                }
             } else {
-                searchConditions.addAll(UtilAccountingTags.buildTagConditions(organizationPartyId, tagsType, delegator, request));
+                List<EntityCondition> tagConditions = UtilAccountingTags.buildTagConditions(organizationPartyId, tagsType, delegator, request);
+                if (UtilValidate.isNotEmpty(tagConditions)) {
+                    searchConditions.addAll(tagConditions);
+                }
             }
         }
 
-        // get the sums, used the same conditions, but filter out voided and canceled payments unless that status was explicitly selected in the filter
-        List<EntityCondition> sumConditions = new FastList<EntityCondition>(searchConditions);
+        // for the tag condition we filter by the payment ID that matches the search filters
+        Set<String> payIds = Entity.getDistinctFieldValues(String.class, paymentRepository.findList(PaymentAndPaymentApplication.class, searchConditions), PaymentAndPaymentApplication.Fields.paymentId);
+        sumConditions.add(EntityCondition.makeCondition(PaymentSum.Fields.paymentId.name(), EntityOperator.IN, payIds));
+
+        // filter out voided and canceled payments
         if (statusId == null) {
             sumConditions.add(EntityCondition.makeCondition(Payment.Fields.statusId.name(), EntityOperator.NOT_IN, Arrays.asList(StatusItemConstants.PmntStatus.PMNT_CANCELLED, StatusItemConstants.PmntStatus.PMNT_VOID)));
         }
-        List<PaymentAndPaymentApplicationSums> sums = paymentRepository.findList(PaymentAndPaymentApplicationSums.class, EntityCondition.makeCondition(sumConditions, EntityOperator.AND),
-                                                                                 Arrays.asList(PaymentAndPaymentApplicationSums.Fields.statusId.name(),
-                                                                                               PaymentAndPaymentApplicationSums.Fields.statusDescription.name(),
-                                                                                               PaymentAndPaymentApplicationSums.Fields.totalAmount.name()),
-                                                                                 Arrays.asList(PaymentAndPaymentApplicationSums.Fields.statusDescription.asc()));
+        List<PaymentSum> sums = paymentRepository.findList(PaymentSum.class, EntityCondition.makeCondition(sumConditions, EntityOperator.AND),
+                                                           Arrays.asList(PaymentSum.Fields.statusId.name(),
+                                                                         PaymentSum.Fields.statusDescription.name(),
+                                                                         PaymentSum.Fields.totalAmount.name()),
+                                                           Arrays.asList(PaymentSum.Fields.statusDescription.asc()));
         ac.put("sumsPerStatus", sums);
 
         // get the sums total
         BigDecimal bigTotal = BigDecimal.ZERO;
-        for (PaymentAndPaymentApplicationSums sum : sums) {
+        for (PaymentSum sum : sums) {
             BigDecimal am = sum.getTotalAmount();
             if (am == null) {
                 continue;
