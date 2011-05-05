@@ -35,8 +35,6 @@ import com.opensourcestrategies.financials.util.UtilCOGS;
 import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
-import org.apache.batik.dom.GenericEntity;
 import org.ofbiz.accounting.AccountingException;
 import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.accounting.util.UtilAccounting;
@@ -60,7 +58,10 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.workeffort.workeffort.WorkEffortSearch;
-import org.opentaps.domain.manufacturing.OpentapsProductionRun;
+import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.InvoiceAdjustment;
+import org.opentaps.base.entities.PaymentApplication;
+import org.opentaps.base.services.GetTrialBalanceForDateService;
 import org.opentaps.common.party.PartyHelper;
 import org.opentaps.common.product.UtilProduct;
 import org.opentaps.common.util.UtilAccountingTags;
@@ -68,10 +69,6 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.base.entities.AcctgTransEntry;
-import org.opentaps.base.entities.InvoiceAdjustment;
-import org.opentaps.base.entities.PaymentApplication;
-import org.opentaps.base.services.GetTrialBalanceForDateService;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.payment.Payment;
@@ -79,13 +76,13 @@ import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
 import org.opentaps.domain.ledger.InvoiceLedgerServiceInterface;
+import org.opentaps.domain.manufacturing.OpentapsProductionRun;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
@@ -103,10 +100,14 @@ public final class LedgerServices {
     private LedgerServices() { }
 
     private static final String MODULE = LedgerServices.class.getName();
-    public static final String INVOICE_PRODUCT_ITEM_TYPE = "INV_FPROD_ITEM";    // invoiceTypeId for invoice items which are products
-    public static final String PURCHINV_PRODUCT_ITEM_TYPE = "PINV_FPROD_ITEM";    // invoiceTypeId for invoice items which are products
-    public static final String RETINV_PRODUCT_ITEM_TYPE = "RINV_FPROD_ITEM";    // invoiceTypeId for invoice items which are products
-    public static final String PURCHNV_SUPPLIES_ITEM_TYPE = "PINV_SUPLPRD_ITEM";   // supplies on purchase invoices
+    /** InvoiceTypeId for invoice items which are products. */
+    public static final String INVOICE_PRODUCT_ITEM_TYPE = "INV_FPROD_ITEM";
+    /** InvoiceTypeId for purchase invoice items which are products. */
+    public static final String PURCHINV_PRODUCT_ITEM_TYPE = "PINV_FPROD_ITEM";
+    /** InvoiceTypeId for return invoice items which are products. */
+    public static final String RETINV_PRODUCT_ITEM_TYPE = "RINV_FPROD_ITEM";
+    /** Supplies on purchase invoices. */
+    public static final String PURCHNV_SUPPLIES_ITEM_TYPE = "PINV_SUPLPRD_ITEM";
 
     // TODO: replace code that uses epsilon with BigDecimal and also set BigDecimal config in some common class/properties file
     private static final BigDecimal EPSILON = new BigDecimal("0.000001");   // smallest allowable rounding error in accounting transactions
@@ -148,7 +149,7 @@ public final class LedgerServices {
 
             // this domain driven architecture code is used only for posting invoice adjustments right now, but later we'll refactor rest of this method
             DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
-            InvoiceRepositoryInterface invoiceRepository = dl.loadDomainsDirectory().getBillingDomain().getInvoiceRepository();
+            InvoiceRepositoryInterface invoiceRepository = dl.getDomainsDirectory().getBillingDomain().getInvoiceRepository();
             Invoice invoiceObj = invoiceRepository.getInvoiceById(invoiceId);
 
             // accounting data
@@ -253,7 +254,7 @@ public final class LedgerServices {
             // this needs to broken out by the accounting tags
 
             // first, get the list of eligible tags, which should be keyed by offsettingGlAccountTypeId by organization
-            OrganizationRepositoryInterface orgRepo = dl.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+            OrganizationRepositoryInterface orgRepo = dl.getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
             Organization organization = orgRepo.getOrganizationById(organizationPartyId);
             Map<Integer, String> accountingTags = organization.getAccountingTagTypes(offsettingGlAccountTypeId);
             Set<Integer> validTagEnumIds = accountingTags.keySet();  // this is the set 1,2,3,4 of the accountingTagEnumIds
@@ -326,7 +327,7 @@ public final class LedgerServices {
             // check if there are any adjustments and post them too
             List<InvoiceAdjustment> invoiceAdjustments = invoiceRepository.getAdjustmentsApplied(invoiceObj, UtilDateTime.nowTimestamp());
             for (InvoiceAdjustment adjustment : invoiceAdjustments) {
-                InvoiceLedgerServiceInterface invoiceLedgerService = dl.loadDomainsDirectory().getLedgerDomain().getInvoiceLedgerService();
+                InvoiceLedgerServiceInterface invoiceLedgerService = dl.getDomainsDirectory().getLedgerDomain().getInvoiceLedgerService();
                 invoiceLedgerService.setInvoiceAdjustmentId(adjustment.getInvoiceAdjustmentId());
                 invoiceLedgerService.postInvoiceAdjustmentToLedger();
             }
@@ -572,14 +573,14 @@ public final class LedgerServices {
         acctgTransEntry.put("acctgTransEntryTypeId", "_NA_");
         acctgTransEntry.put("productId", invoiceItem.getString("productId"));
         UtilAccountingTags.putAllAccountingTags(invoiceItem, acctgTransEntry);   // for all invoice items, put all the accounting tags from InvoiceItem to AcctgTransEntry
-            
+
         String productId = invoiceItem.getString("productId");
 
         // if the organization uses standard costing this will be postingAmount - standard cost
         try {
             DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
-            OrganizationRepositoryInterface organizationRepository = dl.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
-            ProductRepositoryInterface productRepository = dl.loadDomainsDirectory().getProductDomain().getProductRepository();
+            OrganizationRepositoryInterface organizationRepository = dl.getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+            ProductRepositoryInterface productRepository = dl.getDomainsDirectory().getProductDomain().getProductRepository();
             Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
 
             // if the invoice item is for a purchased product and has a productId, and the organization uses standard costing,
@@ -845,7 +846,7 @@ public final class LedgerServices {
         String paymentId = (String) context.get("paymentId");
         try {
             DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
-            DomainsDirectory domains = domainLoader.loadDomainsDirectory();
+            DomainsDirectory domains = domainLoader.getDomainsDirectory();
             PaymentRepositoryInterface paymentRepository = domains.getBillingDomain().getPaymentRepository();
             Payment payment = paymentRepository.getPaymentById(paymentId);
             OrganizationRepositoryInterface ori =  domains.getOrganizationDomain().getOrganizationRepository();
@@ -2394,15 +2395,15 @@ public final class LedgerServices {
             // Get the last recorded unitCost for the inventoryItem which is *earlier* than the modification date of the InventoryItem
             // domain repository
             DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
-            InventoryRepositoryInterface inventoryRepository = dl.loadDomainsDirectory().getInventoryDomain().getInventoryRepository();
+            InventoryRepositoryInterface inventoryRepository = dl.getDomainsDirectory().getInventoryDomain().getInventoryRepository();
             InventoryItem domainInventoryItem = Repository.loadFromGeneric(InventoryItem.class, inventoryItem, inventoryRepository);
             BigDecimal inventoryItemOldUnitCost = domainInventoryItem.getOldUnitCost();
             BigDecimal oldUnitCost = inventoryItemOldUnitCost == null ? null : inventoryItemOldUnitCost.setScale(4, BigDecimal.ROUND_HALF_UP);
 
             // If there's no record of the previous unit cost, throw an error
             if (UtilValidate.isEmpty(oldUnitCost)) {
-            	UtilMessage.logServiceWarning("FinancialsServiceWarning_InventoryItemValueAdj_NoPreviousUnitCost", context, locale, MODULE);
-            	return result;
+                UtilMessage.logServiceWarning("FinancialsServiceWarning_InventoryItemValueAdj_NoPreviousUnitCost", context, locale, MODULE);
+                return result;
             }
 
             // Return if the unitCost hasn't changed
@@ -2900,7 +2901,7 @@ public final class LedgerServices {
 
             // domain repository
             DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
-            InventoryRepositoryInterface inventoryRepository = dl.loadDomainsDirectory().getInventoryDomain().getInventoryRepository();
+            InventoryRepositoryInterface inventoryRepository = dl.getDomainsDirectory().getInventoryDomain().getInventoryRepository();
 
             GenericValue workEffort = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
             GenericValue facility = workEffort.getRelatedOne("Facility");
@@ -2993,7 +2994,7 @@ public final class LedgerServices {
         String organizationPartyId = (String) context.get("organizationPartyId");
         String customTimePeriodId = (String) context.get("customTimePeriodId");
         Infrastructure infrastructure = new Infrastructure(dispatcher);
-        
+
         try {
             // figure out the current time period's type (year, quarter, month)
             GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
@@ -3011,18 +3012,18 @@ public final class LedgerServices {
             trialBalanceService.setInOrganizationPartyId(organizationPartyId);
             trialBalanceService.setInUserLogin(userLogin);
             trialBalanceService.runSyncNoNewTransaction(infrastructure);
-            
+
             // debit REVENUE, credit EXPENSE accounts, and put the net into the retained earnings account
             Map<GenericValue, BigDecimal> accountBalancesToDebit = new HashMap();                           // in case revenue account balances are null
             accountBalancesToDebit.putAll(trialBalanceService.getOutRevenueAccountBalances());
             Map<GenericValue, BigDecimal> accountBalancesToCredit = new HashMap();
             accountBalancesToCredit.putAll(trialBalanceService.getOutExpenseAccountBalances());
-            
+
             // also will debit INCOME accounts
             accountBalancesToDebit.putAll(trialBalanceService.getOutIncomeAccountBalances());
-            
+
             // will ignore the OTHER accounts
-            
+
             // this is the amount to enter into retained earnings
             BigDecimal closingNetIncome = BigDecimal.ZERO;
             int seq = 0;
@@ -3031,7 +3032,7 @@ public final class LedgerServices {
             List<GenericValue> closingEntries = new ArrayList();
 
             // create a Debit transaction entry for each debit account item
-            for (GenericValue debitAccount: debitAccounts) {
+            for (GenericValue debitAccount : debitAccounts) {
                 BigDecimal amount = accountBalancesToDebit.get(debitAccount);
                 if (amount == null) {
                     Debug.logWarning("Debit account [" + debitAccount.getString("glAccountId") + "] has a null amount and will be skipped", MODULE);
@@ -3054,7 +3055,7 @@ public final class LedgerServices {
             }
 
             // create a Credit transaction entry for each credit account item
-            for (GenericValue creditAccount: creditAccounts) {
+            for (GenericValue creditAccount : creditAccounts) {
                 BigDecimal amount = accountBalancesToCredit.get(creditAccount);
                 if (amount == null) {
                     Debug.logWarning("Credit account [" + creditAccount.getString("glAccountId") + "] has a null amount and will be skipped", MODULE);
@@ -3072,15 +3073,15 @@ public final class LedgerServices {
             }
 
             closingNetIncome = closingNetIncome.setScale(decimals, rounding); // round after all the add/subtract is done
-            
+
             // add an entry to credit the retained earnings account
             closingEntries.add(delegator.makeValue("AcctgTransEntry", UtilMisc.toMap("glAccountId", retainedEarningsGlAccountId, "debitCreditFlag", "C",
                       "amount", closingNetIncome, "acctgTransEntrySeqId", Integer.toString(seq), "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_")));
-            
+
             // this is subtle - the transactionDate must be right before the thruDate, or the transaction will actually overlap into the next time period.  We subtract 1 second (1000 milliseconds) to move it before
             Map tmpResult = dispatcher.runSync("createAcctgTransAndEntries", UtilMisc.toMap("acctgTransEntries", closingEntries,
                       "glFiscalTypeId", "ACTUAL", "transactionDate", new Timestamp(timePeriod.getDate("thruDate").getTime() - 1000), "acctgTransTypeId", "PERIOD_CLOSING", "userLogin", userLogin));
-            
+
 
             // find the previous closed time period, in case we need to carry a balance forward.
             // NOTE: It is very important that we specify the same periodTypeId.  Otherwise, when each transaction entry is posted, it will update the
