@@ -1,0 +1,203 @@
+/*
+ * This scripts look for Accounting transaction entries that can be linked back to a
+ *  Payment application object.
+ * The paymentApplicationId field was added to Accounting transaction entry to fix the join
+ *  in reporting which assumed we could get the exact application from the PaymentId, GLAccountId, Amount.
+ *
+ * The first pass attempt that simple join, and set the link where only one payment application is found.
+ *
+ * NOTE: the second pass only works on MySQL (TODO: port it to other DB if needed).
+ *
+ * From beanshell (telnet 9990)
+ * source("opentaps/opentaps-common/scripts/tools/populateAcctgEntryToPaymentAppLinks.bsh");
+ *
+ */
+
+import java.util.*;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.service.GenericDispatcher;
+import org.opentaps.common.query.QueryFactory;
+import org.opentaps.common.util.UtilAccountingTags;
+
+// find unassigned transaction entries can be linked back to a unique payment application
+
+/*
+NOTE: make sure the payment application ID is indexed:
+
+ ALTER TABLE ACCTG_TRANS_ENTRY ADD CONSTRAINT `ATE_PAYAPP` FOREIGN KEY (`PAYMENT_APPLICATION_ID`) REFERENCES `PAYMENT_APPLICATION` (`PAYMENT_APPLICATION_ID`);
+
+ */
+
+delegator = GenericDelegator.getGenericDelegator("default");
+qf = new QueryFactory(delegator);
+
+/*
+UPDATE ACCTG_TRANS_ENTRY ATE_U,
+(SELECT
+  ATE.ACCTG_TRANS_ID,
+  ATE.ACCTG_TRANS_ENTRY_SEQ_ID,
+  COUNT(ATE.ACCTG_TRANS_ENTRY_SEQ_ID) AS ENTRY_COUNT,
+  APP.PAYMENT_APPLICATION_ID
+FROM
+  ACCTG_TRANS_ENTRY ATE
+LEFT OUTER JOIN ACCTG_TRANS AT ON
+  ATE.ACCTG_TRANS_ID = AT.ACCTG_TRANS_ID
+LEFT OUTER JOIN PAYMENT P ON
+  P.PAYMENT_ID = AT.PAYMENT_ID
+LEFT OUTER JOIN PAYMENT_APPLICATION APP ON
+  P.PAYMENT_ID = APP.PAYMENT_ID
+  AND APP.OVERRIDE_GL_ACCOUNT_ID = ATE.GL_ACCOUNT_ID
+  AND APP.AMOUNT_APPLIED = ATE.AMOUNT
+WHERE
+  P.STATUS_ID != 'PMNT_VOID'
+  AND APP.PAYMENT_APPLICATION_ID IS NOT NULL
+  AND ATE.PAYMENT_APPLICATION_ID IS NULL
+GROUP BY ATE.ACCTG_TRANS_ID, ATE.ACCTG_TRANS_ENTRY_SEQ_ID
+HAVING ENTRY_COUNT = 1
+ORDER BY
+  ATE.ACCTG_TRANS_ID,
+  ATE.ACCTG_TRANS_ENTRY_SEQ_ID,
+  AT.PAYMENT_ID,
+  APP.PAYMENT_APPLICATION_ID) S
+
+SET ATE_U.PAYMENT_APPLICATION_ID = S.PAYMENT_APPLICATION_ID
+
+WHERE
+ ATE_U.ACCTG_TRANS_ID = S.ACCTG_TRANS_ID
+ AND ATE_U.ACCTG_TRANS_ENTRY_SEQ_ID = S.ACCTG_TRANS_ENTRY_SEQ_ID;
+*/
+
+query = qf.createQuery("UPDATE ACCTG_TRANS_ENTRY ATE_U, (SELECT ATE.ACCTG_TRANS_ID, ATE.ACCTG_TRANS_ENTRY_SEQ_ID, COUNT(ATE.ACCTG_TRANS_ENTRY_SEQ_ID) AS ENTRY_COUNT,  APP.PAYMENT_APPLICATION_ID FROM  ACCTG_TRANS_ENTRY ATE LEFT OUTER JOIN ACCTG_TRANS AT ON ATE.ACCTG_TRANS_ID = AT.ACCTG_TRANS_ID LEFT OUTER JOIN PAYMENT P ON P.PAYMENT_ID = AT.PAYMENT_ID LEFT OUTER JOIN PAYMENT_APPLICATION APP ON P.PAYMENT_ID = APP.PAYMENT_ID AND APP.OVERRIDE_GL_ACCOUNT_ID = ATE.GL_ACCOUNT_ID AND APP.AMOUNT_APPLIED = ATE.AMOUNT WHERE P.STATUS_ID != 'PMNT_VOID' AND APP.PAYMENT_APPLICATION_ID IS NOT NULL AND ATE.PAYMENT_APPLICATION_ID IS NULL GROUP BY ATE.ACCTG_TRANS_ID, ATE.ACCTG_TRANS_ENTRY_SEQ_ID HAVING ENTRY_COUNT = 1 ORDER BY ATE.ACCTG_TRANS_ID, ATE.ACCTG_TRANS_ENTRY_SEQ_ID, AT.PAYMENT_ID, APP.PAYMENT_APPLICATION_ID) S SET ATE_U.PAYMENT_APPLICATION_ID = S.PAYMENT_APPLICATION_ID WHERE ATE_U.ACCTG_TRANS_ID = S.ACCTG_TRANS_ID AND ATE_U.ACCTG_TRANS_ENTRY_SEQ_ID = S.ACCTG_TRANS_ENTRY_SEQ_ID;");
+query.doQuery();
+query.clearQueryResults();
+
+/*
+ Now look at the entries that would link to multiple payment applications:
+
+SELECT
+  ATE.ACCTG_TRANS_ID,
+  ATE.ACCTG_TRANS_ENTRY_SEQ_ID,
+  GROUP_CONCAT(APP.PAYMENT_APPLICATION_ID) AS CAND_APPS,
+  COUNT(ATE.ACCTG_TRANS_ENTRY_SEQ_ID) AS ENTRY_COUNT
+FROM
+  ACCTG_TRANS_ENTRY ATE
+LEFT OUTER JOIN ACCTG_TRANS AT ON
+  ATE.ACCTG_TRANS_ID = AT.ACCTG_TRANS_ID
+LEFT OUTER JOIN PAYMENT P ON
+  P.PAYMENT_ID = AT.PAYMENT_ID
+LEFT OUTER JOIN PAYMENT_APPLICATION APP ON
+  P.PAYMENT_ID = APP.PAYMENT_ID
+  AND APP.OVERRIDE_GL_ACCOUNT_ID = ATE.GL_ACCOUNT_ID
+  AND APP.AMOUNT_APPLIED = ATE.AMOUNT
+WHERE
+  P.STATUS_ID != 'PMNT_VOID'
+  AND APP.PAYMENT_APPLICATION_ID IS NOT NULL
+  AND ATE.PAYMENT_APPLICATION_ID IS NULL
+GROUP BY ATE.ACCTG_TRANS_ID, ATE.ACCTG_TRANS_ENTRY_SEQ_ID
+HAVING ENTRY_COUNT > 1
+ORDER BY
+  ATE.ACCTG_TRANS_ID,
+  ATE.ACCTG_TRANS_ENTRY_SEQ_ID;
+
+ */
+
+query = qf.createQuery("SELECT ATE.ACCTG_TRANS_ID, ATE.ACCTG_TRANS_ENTRY_SEQ_ID, GROUP_CONCAT(APP.PAYMENT_APPLICATION_ID) AS CAND_APPS, COUNT(ATE.ACCTG_TRANS_ENTRY_SEQ_ID) AS ENTRY_COUNT FROM ACCTG_TRANS_ENTRY ATE LEFT OUTER JOIN ACCTG_TRANS AT ON ATE.ACCTG_TRANS_ID = AT.ACCTG_TRANS_ID LEFT OUTER JOIN PAYMENT P ON P.PAYMENT_ID = AT.PAYMENT_ID LEFT OUTER JOIN PAYMENT_APPLICATION APP ON P.PAYMENT_ID = APP.PAYMENT_ID AND APP.OVERRIDE_GL_ACCOUNT_ID = ATE.GL_ACCOUNT_ID AND APP.AMOUNT_APPLIED = ATE.AMOUNT WHERE P.STATUS_ID != 'PMNT_VOID' AND APP.PAYMENT_APPLICATION_ID IS NOT NULL AND ATE.PAYMENT_APPLICATION_ID IS NULL GROUP BY ATE.ACCTG_TRANS_ID, ATE.ACCTG_TRANS_ENTRY_SEQ_ID HAVING ENTRY_COUNT > 1 ORDER BY ATE.ACCTG_TRANS_ID, ATE.ACCTG_TRANS_ENTRY_SEQ_ID;");
+list = query.list();
+
+Set matchedAppIds = new HashSet();
+if (UtilValidate.isEmpty(list)) {
+    Debug.logInfo("No AcctgTransEntry found with unassigned payment application and multiple candidates.", "");
+}
+
+for (map : list) {
+    // get the AcctgTransEntry
+    String transId = map.get("acctgTransId");
+    String entryId = map.get("acctgTransEntrySeqId");
+    String candAppIds = map.get("candApps");
+    Debug.logInfo("Got AcctgTransEntry [" + transId + " / " + entryId + "] with more than one candidate payment applications : " + candAppIds, "");
+    GenericValue acctgTransEntry = delegator.findByPrimaryKey("AcctgTransEntry", UtilMisc.toMap("acctgTransId", transId, "acctgTransEntrySeqId", entryId));
+    // get the candidates payment applications
+    List apps = delegator.findByCondition("PaymentApplication", new EntityExpr("paymentApplicationId", EntityOperator.IN, Arrays.asList(candAppIds.split(","))), null, null);
+    // try to resolve the conflict by matching the accounting tags
+    List matchingAppIds = new ArrayList();
+    for (app : apps) {
+        String m = app.getString("paymentApplicationId");
+        if (!UtilAccountingTags.sameAccountingTags(app, acctgTransEntry)) {
+            Debug.logWarning("AcctgTransEntry [" + transId + " / " + entryId + "] accounting tags not matching candidate payment application [" + m + "]", "");
+            continue;
+        }
+        // that's a potential match
+        matchingAppIds.add(m);
+    }
+
+    List matchingAppIdsInit = new ArrayList(matchingAppIds);
+
+    // multiple match, remove those that we previously already matched
+    if (matchingAppIds.size() > 1) {
+        matchingAppIds.removeAll(matchedAppIds);
+    }
+    Debug.logInfo("For AcctgTransEntry [" + transId + " / " + entryId + "] remaining candidate payment applications : " + matchingAppIds, "");
+
+    // consider the match to be the first ID remaining
+    if (matchingAppIds.size() > 0) {
+        String match = matchingAppIds.get(0);
+        matchedAppIds.add(match);
+        acctgTransEntry.set("paymentApplicationId", match);
+        Debug.logInfo("Assigned match for AcctgTransEntry [" + transId + " / " + entryId + "] = [" + match + "]", "");
+        delegator.store(acctgTransEntry);
+    } else {
+        // no match ?
+        Debug.logError("No match for AcctgTransEntry [" + transId + " / " + entryId + "], all potential candidates [" + matchingAppIdsInit + "] exhausted", "");
+    }
+
+}
+
+/*
+-- Can be checked with:
+
+SELECT
+  ATE.ACCTG_TRANS_ID,
+  ATE.ACCTG_TRANS_ENTRY_SEQ_ID,
+  ATE.GL_ACCOUNT_ID,
+  ATE.AMOUNT,
+  APP.PAYMENT_ID,
+  APP.PAYMENT_APPLICATION_ID,
+  APP.AMOUNT_APPLIED
+FROM
+  ACCTG_TRANS_ENTRY ATE
+LEFT OUTER JOIN ACCTG_TRANS AT ON
+  ATE.ACCTG_TRANS_ID = AT.ACCTG_TRANS_ID
+LEFT OUTER JOIN PAYMENT P ON
+  P.PAYMENT_ID = AT.PAYMENT_ID
+LEFT OUTER JOIN PAYMENT_APPLICATION APP ON
+  APP.PAYMENT_APPLICATION_ID = ATE.PAYMENT_APPLICATION_ID
+WHERE
+  APP.PAYMENT_APPLICATION_ID IS NOT NULL
+ORDER BY
+  ATE.ACCTG_TRANS_ID,
+  ATE.ACCTG_TRANS_ENTRY_SEQ_ID,
+  AT.PAYMENT_ID,
+  APP.PAYMENT_APPLICATION_ID;
+
+-- Can check if multiple entries share the same PaymentApplication
+
+SELECT
+  COUNT(DISTINCT ATE.ACCTG_TRANS_ID, ATE.ACCTG_TRANS_ENTRY_SEQ_ID) AS ENTRY_COUNT,
+  ATE.PAYMENT_APPLICATION_ID
+FROM
+  ACCTG_TRANS_ENTRY ATE
+WHERE
+  ATE.PAYMENT_APPLICATION_ID IS NOT NULL
+GROUP BY ATE.ACCTG_TRANS_ID, ATE.ACCTG_TRANS_ENTRY_SEQ_ID
+HAVING ENTRY_COUNT > 1
+ORDER BY
+  ATE.ACCTG_TRANS_ID,
+  ATE.ACCTG_TRANS_ENTRY_SEQ_ID,
+  ATE.PAYMENT_APPLICATION_ID;
+
+*/
