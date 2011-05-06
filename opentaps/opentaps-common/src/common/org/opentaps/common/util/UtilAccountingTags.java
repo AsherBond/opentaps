@@ -579,6 +579,25 @@ public final class UtilAccountingTags {
     }
 
     /**
+     * Compare the tags in the two given entities.
+     * @param e1 the first <code>GenericValue</code>
+     * @param e2 the second <code>GenericValue</code>
+     * @return <code>true</code> if all tags are equal
+     */
+    public static boolean sameAccountingTags(GenericValue e1, GenericValue e2) {
+        for (int i = 1; i <= TAG_COUNT; i++) {
+            String v1 = e1.getString(ENTITY_TAG_PREFIX + i);
+            String v2 = e1.getString(ENTITY_TAG_PREFIX + i);
+            // we do not use UtilObject.equalsHelper has we can consider empty and null as the same
+            // both empty or null:
+            if (!sameTagValue(v1, v2)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Compare the tags in the given entity and the tags in the given map.
      * @param value the <code>GenericValue</code>
      * @param map the map of tags
@@ -591,20 +610,29 @@ public final class UtilAccountingTags {
             String entityValue = value.getString(ENTITY_TAG_PREFIX + i);
             // we do not use UtilObject.equalsHelper has we can consider empty and null as the same
             // both empty or null:
-            if (UtilValidate.isEmpty(entityValue) && UtilValidate.isEmpty(mapValue)) {
-                continue;
-            }
-            // one is empty or null:
-            if (UtilValidate.isEmpty(entityValue) && UtilValidate.isNotEmpty(mapValue)) {
+            if (!sameTagValue(entityValue, mapValue)) {
                 return false;
             }
-            if (UtilValidate.isNotEmpty(entityValue) && UtilValidate.isEmpty(mapValue)) {
-                return false;
-            }
-            // none is empty or null:
-            if (!entityValue.equals(mapValue)) {
-                return false;
-            }
+        }
+        return true;
+    }
+
+    private static boolean sameTagValue(String v1, String v2) {
+        // we do not use UtilObject.equalsHelper has we can consider empty and null as the same
+        // both empty or null:
+        if (UtilValidate.isEmpty(v1) && UtilValidate.isEmpty(v2)) {
+            return true;
+        }
+        // one is empty or null:
+        if (UtilValidate.isEmpty(v1) && UtilValidate.isNotEmpty(v2)) {
+            return false;
+        }
+        if (UtilValidate.isNotEmpty(v1) && UtilValidate.isEmpty(v2)) {
+            return false;
+        }
+        // none is empty or null:
+        if (!v1.equals(v2)) {
+            return false;
         }
         return true;
     }
