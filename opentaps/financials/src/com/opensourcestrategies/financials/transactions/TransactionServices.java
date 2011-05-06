@@ -293,6 +293,13 @@ public final class TransactionServices {
                     }
                 }
 
+                // Remove the assoc to the AcctgTransEntry to avoid FK errors
+                List<GenericValue> acctgEntries = delegator.getRelated("AcctgTransEntry", paymentApplication);
+                for (GenericValue entry : acctgEntries) {
+                    entry.set("paymentApplicationId", null);
+                    delegator.store(entry);
+                }
+
                 // Remove the PaymentApplication
                 delegator.removeValue(paymentApplication);
             }

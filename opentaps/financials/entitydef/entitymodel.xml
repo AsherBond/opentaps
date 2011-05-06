@@ -70,7 +70,7 @@ under the License.
             <key-map field-name="parentAcctgTransId" rel-field-name="acctgTransId"/>
             <key-map field-name="parentAcctgTransEntrySeqId" rel-field-name="acctgTransEntrySeqId"/>
         </relation>
-        <relation type="one-nofk" rel-entity-name="PaymentApplication">
+        <relation type="one" rel-entity-name="PaymentApplication" fk-name="ATE_PAYAPP">
             <key-map field-name="paymentApplicationId"/>
         </relation>
         <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG1" title="tag1">
