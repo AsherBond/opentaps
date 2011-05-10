@@ -898,6 +898,12 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                                                          EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null)));
         }
         conditions.add(roleCondition);
+
+        // filter out expired classifications
+        if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_CLASSIFICATION)) {
+            conditions.add(EntityUtil.getFilterByDateExpr("classificationFromDate", "classificationThruDate"));
+        }
+
         return findListWithFilters(entity, conditions, filters);
     }
 
