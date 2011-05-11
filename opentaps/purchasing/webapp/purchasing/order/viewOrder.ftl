@@ -29,24 +29,27 @@ The whole idea is to keep things simple and not use the screen widget where unne
 -->
 
 <#if orderHeader?has_content && orderHeader.orderTypeId == "PURCHASE_ORDER">
+  <#if !hasPermission>
+    <p class="tableheadtext">${uiLabelMap.OpentapsError_PermissionDenied}</p>
+  <#else>
+      
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="50%" valign="top">
+          <@include location="component://opentaps-common/webapp/common/order/orderInfo.ftl"/>
+          <@include location="component://opentaps-common/webapp/common/order/orderTerms.ftl"/>
+        </td>
+        <td width="10" nowrap="nowrap">&nbsp;</td>
+        <td width="50%" valign="top">
+          <@include location="component://purchasing/webapp/purchasing/order/orderview/orderContactInfo.ftl"/>
+        </td>
+      </tr>
+    </table>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td width="50%" valign="top">
-      <@include location="component://opentaps-common/webapp/common/order/orderInfo.ftl"/>
-      <@include location="component://opentaps-common/webapp/common/order/orderTerms.ftl"/>
-    </td>
-    <td width="10" nowrap="nowrap">&nbsp;</td>
-    <td width="50%" valign="top">
-      <@include location="component://purchasing/webapp/purchasing/order/orderview/orderContactInfo.ftl"/>
-    </td>
-  </tr>
-</table>
-
-<#include "orderview/orderitems.ftl"/>
-<#include "orderview/ordernotes.ftl"/>
-<#include "orderview/transitions.ftl"/>
-
+    <#include "orderview/orderitems.ftl"/>
+    <#include "orderview/ordernotes.ftl"/>
+    <#include "orderview/transitions.ftl"/>
+  </#if>
 <#else>
-<p class="tableheadtext">${uiLabelMap.OrderNoOrderFound}</p>
+  <p class="tableheadtext">${uiLabelMap.CrmOrderNotFound}</p>
 </#if>

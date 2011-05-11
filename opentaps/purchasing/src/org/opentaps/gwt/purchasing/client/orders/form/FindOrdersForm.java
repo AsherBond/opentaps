@@ -28,6 +28,7 @@ import org.opentaps.gwt.common.client.form.base.SubFormPanel;
 import org.opentaps.gwt.common.client.form.field.CheckboxField;
 import org.opentaps.gwt.common.client.form.field.DateField;
 import org.opentaps.gwt.common.client.listviews.PurchaseOrderListView;
+import org.opentaps.gwt.common.client.security.Permission;
 import org.opentaps.gwt.common.client.suggest.OrderStatusAutocomplete;
 import org.opentaps.gwt.common.client.suggest.ProductAutocomplete;
 import org.opentaps.gwt.common.client.suggest.SupplierAutocomplete;
@@ -136,8 +137,11 @@ public class FindOrdersForm extends FindEntityForm<PurchaseOrderListView> {
         columnOnePanel.addField(fromDateInput);
         columnTwoPanel.addField(thruDateInput);
 
-        columnOnePanel.addField(createdByInput);
-        columnTwoPanel.add(UtilUi.makeBlankFormCell());
+        // only add this if the user as the PRCH_PO_VIEWALL permission
+        if (Permission.hasPermission(Permission.PRCH_PO_VIEWALL)) {
+            columnOnePanel.addField(createdByInput);
+            columnTwoPanel.add(UtilUi.makeBlankFormCell());
+        }
 
         columnOnePanel.addField(findAllInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());

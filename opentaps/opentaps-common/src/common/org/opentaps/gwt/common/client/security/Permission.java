@@ -508,6 +508,8 @@ public enum Permission {
     PRCH_PO_CREATE("PRCH_PO_CREATE"),
     /** Basic permission to use the Purchase Order tab. */
     PRCH_PO_VIEW("PRCH_PO_VIEW"),
+    /** Permission to view Purchase Orders created by other users. */
+    PRCH_PO_VIEWALL("PRCH_PO_VIEWALL"),
     /** View operations in the  [Reports] tab and all of the reports inside it. */
     PRCH_RPT_VIEW("PRCH_RPT_VIEW"),
     /** Permission to create suppliers. */

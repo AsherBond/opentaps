@@ -21,15 +21,14 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
 import org.opentaps.domain.order.OrderViewForListing;
 import org.opentaps.domain.order.PurchaseOrderLookupRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
-import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
-import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.client.lookup.configuration.PurchaseOrderLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
@@ -121,9 +120,15 @@ public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
             if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_STATUS_ID))) {
                 purchaseOrderLookupRepository.setStatusId(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_STATUS_ID));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_CREATED_BY))) {
-                purchaseOrderLookupRepository.setCreatedBy(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_CREATED_BY));
+            // check if the user has permission to find orders by other users
+            if (getProvider().getUser().hasPermission("PRCH_PO", "VIEWALL")) {
+                if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_CREATED_BY))) {
+                    purchaseOrderLookupRepository.setCreatedBy(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_CREATED_BY));
+                }
+            } else {
+                purchaseOrderLookupRepository.setCreatedBy(getProvider().getUser().getUserId());
             }
+
             if (UtilValidate.isEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FIND_ALL)) || "N".equals(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FIND_ALL))) {
                 purchaseOrderLookupRepository.setFindDesiredOnly(true);
             }
@@ -144,10 +149,7 @@ public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
             setResults(results);
             setResultTotalCount(purchaseOrderLookupRepository.getResultSize());
             return results;
-        } catch (RepositoryException e) {
-            storeException(e);
-            return null;
-        } catch (EntityNotFoundException e) {
+        } catch (GeneralException e) {
             storeException(e);
             return null;
         }

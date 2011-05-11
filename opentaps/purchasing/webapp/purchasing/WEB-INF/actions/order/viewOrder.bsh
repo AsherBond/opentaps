@@ -14,33 +14,31 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-import javolution.util.FastMap;
 import javolution.util.FastList;
-
-import org.opentaps.common.util.UtilMessage;
-import org.opentaps.common.util.UtilCommon;
-
+import javolution.util.FastMap;
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.party.contact.ContactMechWorker;
-
+import org.opentaps.base.entities.Shipment;
+import org.opentaps.common.party.PartyContactHelper;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.order.Order;
-import org.opentaps.base.entities.Shipment;
 import org.opentaps.foundation.exception.FoundationException;
-import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
-import org.opentaps.common.party.PartyContactHelper;
+import org.opentaps.foundation.repository.ofbiz.Repository;
 
-
-domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+user = new User(userLogin);
+domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), user);
 orderDomain = domainsLoader.loadDomainsDirectory().getOrderDomain();
 orderRepository = orderDomain.getOrderRepository();
 
@@ -54,6 +52,13 @@ if (UtilValidate.isNotEmpty(orderId)) {
     } catch (FoundationException e) {
         return;
     }
+}
+
+// check permission
+if (user == null || (!user.getUserId().equals(order.getCreatedBy()) && !user.hasPermission("PRCH_PO", "VIEWALL"))) {
+    Debug.logError("Permission denied to view order [" + orderId + "], created by [" + order.getCreatedBy() + "] for user [" + user.getUserId() + "]", "");
+    context.put("hasPermission", false);
+    return;
 }
 
 // Make and store in context entry for navigation history

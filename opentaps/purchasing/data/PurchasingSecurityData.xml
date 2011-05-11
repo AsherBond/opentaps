@@ -33,6 +33,7 @@
 
     <SecurityPermission description="Basic permission to use the Purchase Order tab" permissionId="PRCH_PO_VIEW"/>
     <SecurityPermission description="Permission to create Purchase Orders" permissionId="PRCH_PO_CREATE"/>
+    <SecurityPermission description="Permission to view Purchase Orders created by other users" permissionId="PRCH_PO_VIEWALL"/>
 
     <SecurityPermission description="Permission to configure backup warehouses." permissionId="PRCH_WRHS_CONFIG"/>
     
@@ -50,6 +51,7 @@
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_PLAN_VIEW"/>
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_PLAN_APRV"/>
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_PO_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_PO_VIEWALL"/>
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_PO_CREATE"/>
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_WRHS_CONFIG"/>
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_RPT_VIEW"/>    
