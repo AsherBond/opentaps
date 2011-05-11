@@ -132,11 +132,11 @@ public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
             purchaseOrderLookupRepository.setOrderBy(getOrderBy());
 
             // set the pagination
-            if (!"Y".equals(getProvider().getParameter(UtilLookup.PARAM_EXPORT_EXCEL))) { 
-            	purchaseOrderLookupRepository.setPageStart(getPager().getPageStart());
-            	purchaseOrderLookupRepository.setPageSize(getPager().getPageSize());
+            if (!"Y".equals(getProvider().getParameter(UtilLookup.PARAM_EXPORT_EXCEL))) {
+                purchaseOrderLookupRepository.setPageStart(getPager().getPageStart());
+                purchaseOrderLookupRepository.setPageSize(getPager().getPageSize());
             } else {
-            	purchaseOrderLookupRepository.enablePagination(false);
+                purchaseOrderLookupRepository.enablePagination(false);
             }
 
             // return the matching result
