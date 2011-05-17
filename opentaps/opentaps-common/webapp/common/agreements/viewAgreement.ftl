@@ -524,7 +524,7 @@ function onItemTypeChanged() {
                   <tr>
                       <@displayCell text="Term Type" blockClass="titleCell" class="tableheadtext"/>
                       <td>
-                          <select id="termType_${agreementItemSeqId}" name="termTypeId" class="inputBox" onchange="onTermTypeChanged(${agreementItemSeqId});">
+                          <select id="termType_${agreementItemSeqId}" name="termTypeId" class="inputBox" onchange="onTermTypeChanged('${agreementItemSeqId?js_string}');">
                           <#list listTermTypes?default([]) as termType>
                               <option value="${termType.get("termTypeId")}">${termType.get("description", locale)}</option>
                           </#list>
