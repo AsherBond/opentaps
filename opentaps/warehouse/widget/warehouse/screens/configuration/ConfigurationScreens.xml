@@ -35,6 +35,9 @@
         <section>
             <actions>
                 <!-- override the select facility screen with a form to create a warehouse -->
+                <set field="removeAppCtx" value="${groovy:session.setAttribute(&quot;applicationContextSet&quot;, Boolean.FALSE)}"/>
+                <set field="removeWarehouse" value="${groovy:session.removeAttribute(&quot;facility&quot;)}"/>
+                <set field="removeWarehouseId" value="${groovy:session.removeAttribute(&quot;facilityId&quot;)}"/>
                 <set field="applicationSetupScreen" value="component://warehouse/widget/warehouse/screens/configuration/ConfigurationScreens.xml#createOrEditWarehouse"/>
                 <set field="pageTitleLabel" value="WarehouseCreateNewWarehouse"/>
             </actions>
