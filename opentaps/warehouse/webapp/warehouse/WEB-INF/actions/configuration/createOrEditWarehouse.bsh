@@ -69,3 +69,5 @@ if (weightUomList2 != null) {
 }
 
 context.put("weightUomList", weightUomList);
+
+context.put("sizeUomList", delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "AREA_MEASURE")));

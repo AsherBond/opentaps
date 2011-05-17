@@ -38,7 +38,12 @@
 
     <@inputTextRow name="facilityName" title=uiLabelMap.CommonName titleClass="requiredField" size=40 default=(facility.facilityName)! />
     <@inputSelectRow name="facilityTypeId" title=uiLabelMap.ProductFacilityType titleClass="requiredField" list=facilityTypes key="facilityTypeId" displayField="description" default=(facility.facilityTypeId)! />
-    <@inputTextRow name="squareFootage" title=uiLabelMap.ProductSquareFootage size=6 default=(facility.squareFootage)! />
+    <#if facility.oldSquareFootage?has_content && !facility.facilitySize?has_content>
+      <@inputTextRow name="oldSquareFootage" title="${uiLabelMap.ProductSqFt} (deprecated)" size=6 default=(facility.oldSquareFootage)! />
+      <tr><td/><td><i>Note: ${uiLabelMap.ProductSqFt} is a deprecated field, please use the migrateFacilitySquareFootage service or manually set the new size below.</i></td></tr>
+    </#if>
+    <@inputTextRow name="facilitySize" title=uiLabelMap.ProductFacilitySize size=6 default=(facility.facilitySize)! />
+    <@inputSelectRow name="facilitySizeUomId" title=uiLabelMap.ProductFacilityDefaultAreaUnit list=sizeUomList key="uomId" displayField="description" default=(facility.facilitySizeUomId)!"AREA_ft2" />
     <@inputAutoCompletePartyGroupRow name="ownerPartyId" title=uiLabelMap.ProductFacilityOwner titleClass="requiredField" size=30 default=(facility.ownerPartyId)! />
     <@inputSelectRow name="defaultInventoryItemTypeId" title=uiLabelMap.ProductInventoryItemType titleClass="requiredField" list=inventoryItemTypes key="inventoryItemTypeId" displayField="description" default=(facility.defaultInventoryItemTypeId)! />
     <@inputSelectRow name="defaultWeightUomId" title=uiLabelMap.ProductFacilityDefaultWeightUnit list=weightUomList key="uomId" displayField="description" default=(facility.defaultWeightUomId)! />

@@ -163,7 +163,7 @@ under the License.
     <request-map uri="updateWarehouse">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="updateFacility"/>
-        <response name="success" type="view" value="viewWarehouse"/>
+        <response name="success" type="request-redirect" value="viewWarehouse"/>
         <response name="error" type="view" value="viewWarehouse"/>
     </request-map>
 
