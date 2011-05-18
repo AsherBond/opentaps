@@ -46,8 +46,14 @@ public interface CommonMessages extends Messages {
     String accountingAccountLimit();
     @DefaultMessage("Account Number")
     String accountingAccountNumber();
+    @DefaultMessage("Account Number is missing")
+    String accountingAccountNumberMissing();
+    @DefaultMessage("Account Transaction Id")
+    String accountingAccountTransactionId();
     @DefaultMessage("Account Type")
     String accountingAccountType();
+    @DefaultMessage("Account Type is missing")
+    String accountingAccountTypeMissing();
     @DefaultMessage("Accounting")
     String accountingAccounting();
     @DefaultMessage("Accounts")
@@ -60,16 +66,22 @@ public interface CommonMessages extends Messages {
     String accountingAcctgTrans();
     @DefaultMessage("Accounting Transactions Entries")
     String accountingAcctgTransEntries();
+    @DefaultMessage("Accounting Transaction Entries For")
+    String accountingAcctgTransEntriesFor();
+    @DefaultMessage("Accounting Transactions For")
+    String accountingAcctgTransFor();
     @DefaultMessage("Actual Currency Amount")
     String accountingActualCurrencyAmount();
     @DefaultMessage("Actual Currency Uom Id")
     String accountingActualCurrencyUomId();
-    @DefaultMessage("Add Agreement Work Effort Appl")
-    String accountingAddAgreementWorkEffortAppl();
+    @DefaultMessage("Add Agreement Work Effort Applic")
+    String accountingAddAgreementWorkEffortApplic();
     @DefaultMessage("Add Category GL Account")
     String accountingAddCategoryGlAccount();
     @DefaultMessage("Add Custom Time Period")
     String accountingAddCustomTimePeriod();
+    @DefaultMessage("AccountingAddFinAccountReconciliations")
+    String accountingAddFinAccountReconciliations(String finAccount_finAccountName, String finAccountId);
     @DefaultMessage("Add FinAccount Type Gl Account")
     String accountingAddFinAccountTypeGlAccount();
     @DefaultMessage("Add Fixed Asset Identification")
@@ -94,6 +106,8 @@ public interface CommonMessages extends Messages {
     String accountingAddNewGiftCard();
     @DefaultMessage("Add Party Gl Account")
     String accountingAddPartyGlAccount();
+    @DefaultMessage("Add Payment Group Member")
+    String accountingAddPaymentGroupMember();
     @DefaultMessage("Add TaxAuthority GL Account")
     String accountingAddTaxAuthorityGlAccount();
     @DefaultMessage("AccountingAdditionalShippingChargeForShipment")
@@ -136,10 +150,10 @@ public interface CommonMessages extends Messages {
     String accountingAgreementTerms();
     @DefaultMessage("Agreement Type Id")
     String accountingAgreementTypeId();
-    @DefaultMessage("Agreement Work Effort Appl Already Exists")
-    String accountingAgreementWorkEffortApplAlreadyExists();
-    @DefaultMessage("Agreement Work Effort Appls")
-    String accountingAgreementWorkEffortAppls();
+    @DefaultMessage("Agreement Work Effort Applic Already Exists")
+    String accountingAgreementWorkEffortApplicAlreadyExists();
+    @DefaultMessage("Agreement Work Effort Applics")
+    String accountingAgreementWorkEffortApplics();
     @DefaultMessage("Agreements")
     String accountingAgreements();
     @DefaultMessage("Amount")
@@ -160,6 +174,8 @@ public interface CommonMessages extends Messages {
     String accountingAp();
     @DefaultMessage("OFBiz: AP Manager")
     String accountingApCompanyName();
+    @DefaultMessage("Account Payable Manager")
+    String accountingApManager();
     @DefaultMessage("Account Payable Manager Application")
     String accountingApManagerApplication();
     @DefaultMessage("Edit Vendor")
@@ -170,6 +186,8 @@ public interface CommonMessages extends Messages {
     String accountingApPageTitleFindVendors();
     @DefaultMessage("List Vendors")
     String accountingApPageTitleListVendors();
+    @DefaultMessage("AP Payment Groups")
+    String accountingApPaymentGroupMenu();
     @DefaultMessage("AccountingApplicationSuccess")
     String accountingApplicationSuccess(String isoCode, String paymentId, String toMessage);
     @DefaultMessage("AccountingApplicationToBillingAccount")
@@ -192,14 +210,20 @@ public interface CommonMessages extends Messages {
     String accountingApplyServiceCredit();
     @DefaultMessage("Apply to Invoice Items")
     String accountingApplyToInvoiceItems();
+    @DefaultMessage("Approved Grand Total")
+    String accountingApprovedGrandTotal();
     @DefaultMessage("Main Page Account Receivable")
     String accountingAr();
     @DefaultMessage("OFBiz: AR Manager")
     String accountingArCompanyName();
+    @DefaultMessage("Account Receivable Manager")
+    String accountingArManager();
     @DefaultMessage("Account Receivable Manager Application")
     String accountingArManagerApplication();
     @DefaultMessage("List Reports")
     String accountingArPageTitleListReports();
+    @DefaultMessage("AR Payment Groups")
+    String accountingArPaymentGroupMenu();
     @DefaultMessage("Arithmetic properties for Invoice services not configured properly. Cannot proceed.")
     String accountingAritmeticPropertiesNotConfigured();
     @DefaultMessage("Assets")
@@ -210,20 +234,52 @@ public interface CommonMessages extends Messages {
     String accountingAssignPurchaseInvoiceToRevenue();
     @DefaultMessage("Assign Sales Invoice type to Revenue GL Account Number")
     String accountingAssignSalesInvoiceToRevenue();
+    @DefaultMessage("Assign to Reconciliation")
+    String accountingAssignToReconciliation();
     @DefaultMessage("Authorize")
     String accountingAuthorize();
+    @DefaultMessage("Authorize Dot Net API Version")
+    String accountingAuthorizeNetApiVersion();
+    @DefaultMessage("Delimited Data")
+    String accountingAuthorizeNetDelimitedData();
+    @DefaultMessage("Delimited Char")
+    String accountingAuthorizeNetDelimiterChar();
+    @DefaultMessage("Email to Customer")
+    String accountingAuthorizeNetEmailCustomer();
+    @DefaultMessage("Email to Merchant")
+    String accountingAuthorizeNetEmailMerchant();
+    @DefaultMessage("Method (only CC supported)")
+    String accountingAuthorizeNetMethod();
+    @DefaultMessage("CC")
+    String accountingAuthorizeNetMethodCC();
+    @DefaultMessage("Relay Response")
+    String accountingAuthorizeNetRelayResponse();
+    @DefaultMessage("Test Mode")
+    String accountingAuthorizeNetTestMode();
+    @DefaultMessage("Transaction Key")
+    String accountingAuthorizeNetTransKey();
+    @DefaultMessage("Transaction URL")
+    String accountingAuthorizeNetTransactionUrl();
     @DefaultMessage("Available Internal Organizations")
     String accountingAvailableInternalOrganizations();
     @DefaultMessage("Back to Admin")
     String accountingBackToAdmin();
     @DefaultMessage("Balance Due")
     String accountingBalanceDue();
+    @DefaultMessage("Balance Of The Account")
+    String accountingBalanceOfTheAccount();
     @DefaultMessage("Balance Sheet")
     String accountingBalanceSheet();
     @DefaultMessage("Bank")
     String accountingBank();
+    @DefaultMessage("Bank Account")
+    String accountingBankAccount();
     @DefaultMessage("Bank Name")
     String accountingBankName();
+    @DefaultMessage("Bank Name is missing")
+    String accountingBankNameMissing();
+    @DefaultMessage("Bank Reconciliation")
+    String accountingBankReconciliation();
     @DefaultMessage("Bill-To Address1")
     String accountingBillToAddress1();
     @DefaultMessage("Bill-To Address2")
@@ -282,32 +338,70 @@ public interface CommonMessages extends Messages {
     String accountingByAccount();
     @DefaultMessage("By Date")
     String accountingByDate();
+    @DefaultMessage("Cancel Bank Reconciliation")
+    String accountingCancelBankReconciliation();
+    @DefaultMessage("Cancel Batch Payments")
+    String accountingCancelBatchPayments();
+    @DefaultMessage("AccountingCancelBatchPaymentsError")
+    String accountingCancelBatchPaymentsError(String paymentGroupId, String glReconciliationId);
+    @DefaultMessage("Cancel Check Run")
+    String accountingCancelCheckRun();
+    @DefaultMessage("Cancel Transaction Status")
+    String accountingCancelTransactionStatus();
+    @DefaultMessage("Cannot add incoming payment to paymentGroup type Check Run")
+    String accountingCannotCreateIncomingPaymentError();
+    @DefaultMessage("Cannot add outgoing payment to paymentGroup type Batch Of Payments")
+    String accountingCannotCreateOutgoingPaymentError();
     @DefaultMessage("AccountingCannotGetPaymentForApplication")
     String accountingCannotGetPaymentForApplication(String payAppl, String msg);
+    @DefaultMessage("AccountingCannotIncludeApPaymentError")
+    String accountingCannotIncludeApPaymentError(String disbursementPaymentIds);
     @DefaultMessage("Capture")
     String accountingCapture();
     @DefaultMessage("The credit card specified does not belong to you, you may not view or edit it")
     String accountingCardInfoNotBelongToYou();
     @DefaultMessage("Card Number")
     String accountingCardNumber();
+    @DefaultMessage("Card Number is missing")
+    String accountingCardNumberMissing();
     @DefaultMessage("Card Security Code")
     String accountingCardSecurityCode();
     @DefaultMessage("Card Type")
     String accountingCardType();
+    @DefaultMessage("Card Type is missing")
+    String accountingCardTypeMissing();
+    @DefaultMessage("Cash Balance")
+    String accountingCashBalance();
+    @DefaultMessage("Cash Flow Statement")
+    String accountingCashFlowStatement();
+    @DefaultMessage("Chart of accounts for")
+    String accountingChartOfAcctsFor();
     @DefaultMessage("Chart of Accounts")
     String accountingChartOfAcctsMenu();
     @DefaultMessage("Check Amount")
     String accountingCheckAmount();
     @DefaultMessage("Check If You Have A Gift Card To Use Today")
     String accountingCheckGiftCard();
+    @DefaultMessage("Check Is Already Issued")
+    String accountingCheckIsAlreadyIssued();
+    @DefaultMessage("Check Number")
+    String accountingCheckNumber();
     @DefaultMessage("Checks")
     String accountingChecks();
     @DefaultMessage("Child Periods")
     String accountingChildPeriods();
     @DefaultMessage("Closed Time Periods")
     String accountingClosedTimePeriods();
+    @DefaultMessage("Closing Cash Balance")
+    String accountingClosingCashBalance();
     @DefaultMessage("Comments")
     String accountingComments();
+    @DefaultMessage("Commission Amount")
+    String accountingCommissionAmount();
+    @DefaultMessage("Commission Report")
+    String accountingCommissionReport();
+    @DefaultMessage("Commission Run")
+    String accountingCommissionRun();
     @DefaultMessage("Companies")
     String accountingCompanies();
     @DefaultMessage("OFBiz: Accounting Manager")
@@ -324,8 +418,14 @@ public interface CommonMessages extends Messages {
     String accountingCompanySubtitle();
     @DefaultMessage("Comparative Balance Sheet")
     String accountingComparativeBalanceSheet();
+    @DefaultMessage("Comparative Cash Flow Statement")
+    String accountingComparativeCashFlowStatement();
+    @DefaultMessage("Comparative Income Statement")
+    String accountingComparativeIncomeStatement();
     @DefaultMessage("Complete transaction fields")
     String accountingCompleteAcctgTransFields();
+    @DefaultMessage("AccountingConsolidatedDataFromDivisions")
+    String accountingConsolidatedDataFromDivisions(String partyNameList);
     @DefaultMessage("Copy Agreement")
     String accountingCopyAgreement();
     @DefaultMessage("Could not find GlAccount with ID")
@@ -338,6 +438,8 @@ public interface CommonMessages extends Messages {
     String accountingCreateAnAccountingTransaction();
     @DefaultMessage("Create Assignment")
     String accountingCreateAssignment();
+    @DefaultMessage("Create Batch")
+    String accountingCreateBatch();
     @DefaultMessage("Create Billing Account")
     String accountingCreateBillingAccount();
     @DefaultMessage("Create Billing Account Role")
@@ -350,16 +452,34 @@ public interface CommonMessages extends Messages {
     String accountingCreateFixedAssetMaintOrderPermissionError();
     @DefaultMessage("Create New Credit Card")
     String accountingCreateNewCreditCard();
+    @DefaultMessage("Create New Deposit Payment")
+    String accountingCreateNewDepositPayment();
+    @DefaultMessage("AccountingCreateNewDepositPaymentFor")
+    String accountingCreateNewDepositPaymentFor(String finAccount_finAccountName, String finAccountId);
+    @DefaultMessage("Create New Deposit Slip")
+    String accountingCreateNewDepositSlip();
+    @DefaultMessage("AccountingCreateNewDepositSlipForFinancialAccount")
+    String accountingCreateNewDepositSlipForFinancialAccount(String finAccount_finAccountName, String finAccountId);
     @DefaultMessage("Create New EFT Account")
     String accountingCreateNewEftAccount();
+    @DefaultMessage("Create New Financial Account")
+    String accountingCreateNewFinAccount();
+    @DefaultMessage("Create New Financial Account Reconciliations")
+    String accountingCreateNewFinAccountReconciliations();
     @DefaultMessage("Create New Gift Card")
     String accountingCreateNewGiftCard();
     @DefaultMessage("Create New Invoice")
     String accountingCreateNewInvoice();
+    @DefaultMessage("Create New Payment Group")
+    String accountingCreateNewPaymentGroup();
     @DefaultMessage("New Purchase Invoice")
     String accountingCreateNewPurchaseInvoice();
     @DefaultMessage("New Sales Invoice")
     String accountingCreateNewSalesInvoice();
+    @DefaultMessage("Create New Withdrawal Payment")
+    String accountingCreateNewWithdrawalPayment();
+    @DefaultMessage("AccountingCreateNewWithdrawalPaymentFor")
+    String accountingCreateNewWithdrawalPaymentFor(String finAccount_finAccountName, String finAccountId);
     @DefaultMessage("Create Payment")
     String accountingCreatePayment();
     @DefaultMessage("Create Payment Accounting Transaction")
@@ -370,40 +490,126 @@ public interface CommonMessages extends Messages {
     String accountingCreatePermissionError();
     @DefaultMessage("Create Sales Accounting Transaction")
     String accountingCreateSalesAcctgTrans();
+    @DefaultMessage("Created/Approved Grand Total")
+    String accountingCreatedApprovedGrandTotal();
+    @DefaultMessage("Created Grand Total")
+    String accountingCreatedGrandTotal();
+    @DefaultMessage("Credit Amount")
+    String accountingCreditAmount();
     @DefaultMessage("Credit Card")
     String accountingCreditCard();
     @DefaultMessage("Billing Address associated with Credit Card not found.")
     String accountingCreditCardBillingAddNotFoundError();
+    @DefaultMessage("Could not create credit card (id generation failure)")
+    String accountingCreditCardCreateIdGenerationFailure();
+    @DefaultMessage("Could not create credit card (write failure) :")
+    String accountingCreditCardCreateWriteFailure();
     @DefaultMessage("Bill To Email Address not found.")
     String accountingCreditCardEmailAddNotFoundError();
+    @DefaultMessage("AccountingCreditCardExpireDateBeforeToday")
+    String accountingCreditCardExpireDateBeforeToday(String expireDate);
     @DefaultMessage("Credit Card Information")
     String accountingCreditCardInformation();
     @DefaultMessage("Not creating credit card.  Credit card not verified, authentication failed.")
     String accountingCreditCardManualAuthFailedError();
+    @DefaultMessage("AccountingCreditCardNumberInvalid")
+    String accountingCreditCardNumberInvalid(String cardNumber, String cardType, String validCardType);
+    @DefaultMessage("Credit Card Payment Method ID is missing")
+    String accountingCreditCardPaymentMethodIdMissing();
     @DefaultMessage("Credit Card Type GlAccount")
     String accountingCreditCardTypeGlAccount();
+    @DefaultMessage("Could not update credit card info (id generation failure)")
+    String accountingCreditCardUpdateIdGenerationFailure();
+    @DefaultMessage("Could not get credit card to update (read error) :")
+    String accountingCreditCardUpdateReadFailure();
+    @DefaultMessage("ERROR: Could not find credit card to update with payment method id")
+    String accountingCreditCardUpdateWithPaymentMethodId();
+    @DefaultMessage("AccountingCreditCardUpdateWithoutPermission")
+    String accountingCreditCardUpdateWithoutPermission(String partyId, String paymentMethodId);
+    @DefaultMessage("Could not update credit card (write failure) :")
+    String accountingCreditCardUpdateWriteFailure();
+    @DefaultMessage("Cr/Dr")
+    String accountingCreditDebitFlag();
+    @DefaultMessage("Cr")
+    String accountingCreditFlag();
     @DefaultMessage("Currency")
     String accountingCurrency();
+    @DefaultMessage("Current Asset")
+    String accountingCurrentAsset();
     @DefaultMessage("Your current balance is:")
     String accountingCurrentBalance();
     @DefaultMessage("Problem checking you balance; check your card and pin number and try again")
     String accountingCurrentBalanceProblem();
+    @DefaultMessage("Current Bank Reconciliation")
+    String accountingCurrentBankReconciliation();
     @DefaultMessage("Current Custom Time Period")
     String accountingCurrentCustomTimePeriod();
     @DefaultMessage("Cust.Nr")
     String accountingCustNr();
     @DefaultMessage("Customer")
     String accountingCustomer();
+    @DefaultMessage("CyberSource API Version")
+    String accountingCyberSourceApiVersion();
+    @DefaultMessage("Auto-Bill In Authorization (Capture)")
+    String accountingCyberSourceAutoBill();
+    @DefaultMessage("Avs Decline Codes -- May not be supported any longer")
+    String accountingCyberSourceAvsDeclineCodes();
+    @DefaultMessage("Disable AVS for Capture -- May not be supported any longer")
+    String accountingCyberSourceDisableBillAvs();
+    @DefaultMessage("Use DAV In Authorization -- May not be supported any longer")
+    String accountingCyberSourceEnableDav();
+    @DefaultMessage("Use Fraud Scoring In Authorization -- May not be supported any longer")
+    String accountingCyberSourceFraudScore();
+    @DefaultMessage("Ignore AVS Results")
+    String accountingCyberSourceIgnoreAvs();
+    @DefaultMessage("Directory of the keys from CyberSource (Generate using online tools)")
+    String accountingCyberSourceKeysDir();
+    @DefaultMessage("Name of the keystore (if different then \"merchantID.p12\")")
+    String accountingCyberSourceKeysFile();
+    @DefaultMessage("Log directory")
+    String accountingCyberSourceLogDir();
+    @DefaultMessage("Log transaction information")
+    String accountingCyberSourceLogEnable();
+    @DefaultMessage("Log File Name")
+    String accountingCyberSourceLogFile();
+    @DefaultMessage("Max log size (megabytes)")
+    String accountingCyberSourceLogSize();
+    @DefaultMessage("Merchant Contact")
+    String accountingCyberSourceMerchantContact();
+    @DefaultMessage("Merchant Description")
+    String accountingCyberSourceMerchantDescr();
+    @DefaultMessage("Enable Production Mode")
+    String accountingCyberSourceProduction();
     @DefaultMessage("Data Exchange")
     String accountingDataExchange();
     @DefaultMessage("Field dateAcquired is empty in FixedAsset data.")
     String accountingDateAcquiredIsEmpty();
     @DefaultMessage("Date Filter")
     String accountingDateFilter();
+    @DefaultMessage("Debit Amount")
+    String accountingDebitAmount();
     @DefaultMessage("Debit and Credit Totals must be equal to post to GL.")
     String accountingDebitCreditMustEqual();
+    @DefaultMessage("Dr")
+    String accountingDebitFlag();
+    @DefaultMessage("Debit Or Credit Of The Balance")
+    String accountingDebitOrCreditOfBalance();
     @DefaultMessage("Security Error: to run deleteFixedAssetMaintOrder you must have the ACCOUNTING_DELETE or ACCOUNTING_ADMIN permission, or the limited ACCOUNTING_ROLE_UPDATE permission")
     String accountingDeleteFixedAssetMaintOrderPermissionError();
+    @DefaultMessage("Deposit")
+    String accountingDeposit();
+    @DefaultMessage("AccountingDepositOrWithdrawPayments")
+    String accountingDepositOrWithdrawPayments(String finAccount_finAccountName, String finAccountId);
+    @DefaultMessage("AccountingDepositPaymentInFinAccount")
+    String accountingDepositPaymentInFinAccount(String finAccount_finAccountName);
+    @DefaultMessage("Deposit Slip")
+    String accountingDepositSlip();
+    @DefaultMessage("Deposit Slip Id")
+    String accountingDepositSlipId();
+    @DefaultMessage("Deposit Slips")
+    String accountingDepositSlips();
+    @DefaultMessage("Deposit/Withdraw")
+    String accountingDepositWithdraw();
     @DefaultMessage("Descr")
     String accountingDescr();
     @DefaultMessage("Due Date")
@@ -414,6 +620,8 @@ public interface CommonMessages extends Messages {
     String accountingEFTAccount();
     @DefaultMessage("EFT Account Information")
     String accountingEFTAccountInformation();
+    @DefaultMessage("EFT Account Payment Method ID is missing")
+    String accountingEFTAccountPaymentMethodIdMissing();
     @DefaultMessage("The EFT Account specified does not belong to you, you may not view or edit it")
     String accountingEFTNotBelongToYou();
     @DefaultMessage("Edit Account Reconciliation")
@@ -422,12 +630,28 @@ public interface CommonMessages extends Messages {
     String accountingEditCreditCard();
     @DefaultMessage("Edit Custom Time Periods")
     String accountingEditCustomTimePeriods();
-    @DefaultMessage("Create/Update Financial Account")
-    String accountingEditFinAccount();
+    @DefaultMessage("AccountingEditFinAccount")
+    String accountingEditFinAccount(String finAccount_finAccountName, String finAccountId);
+    @DefaultMessage("AccountingEditFinAccountAuthorityFor")
+    String accountingEditFinAccountAuthorityFor(String finAccount_finAccountName, String finAccountId);
+    @DefaultMessage("AccountingEditFinAccountReconciliations")
+    String accountingEditFinAccountReconciliations(String finAccount_finAccountName, String finAccountId);
+    @DefaultMessage("AccountingEditFinAccountRoleFor")
+    String accountingEditFinAccountRoleFor(String finAccount_finAccountName, String finAccountId);
+    @DefaultMessage("AccountingEditFinAccountTransactionFor")
+    String accountingEditFinAccountTransactionFor(String finAccount_finAccountName, String finAccountId);
     @DefaultMessage("Edit Gift Card")
     String accountingEditGiftCard();
     @DefaultMessage("Edit Payment")
     String accountingEditPayment();
+    @DefaultMessage("Edit Payment Group")
+    String accountingEditPaymentGroup();
+    @DefaultMessage("AccountingEditPaymentGroupFor")
+    String accountingEditPaymentGroupFor(String finAccount_finAccountName, String finAccountId);
+    @DefaultMessage("Edit Payment Group Member")
+    String accountingEditPaymentGroupMember();
+    @DefaultMessage("AccountingEditPaymentGroupMemberFor")
+    String accountingEditPaymentGroupMemberFor(String finAccount_finAccountName, String finAccountId);
     @DefaultMessage("Edit TaxAuthority GL Accounts")
     String accountingEditTaxAuthorityGlAccounts();
     @DefaultMessage("Effective")
@@ -438,6 +662,10 @@ public interface CommonMessages extends Messages {
     String accountingEmailScheduledToSend(String parameters_invoiceId);
     @DefaultMessage("Leave empty for maximum amount")
     String accountingEmptyForMaxAmount();
+    @DefaultMessage("Ending Balance")
+    String accountingEndingBalance();
+    @DefaultMessage("Ending Cash Balance")
+    String accountingEndingCashBalance();
     @DefaultMessage("Enter your physical and virtual card and pin number to link your account")
     String accountingEnterGiftCardLink();
     @DefaultMessage("Enter your gift card number and PIN to check the balance")
@@ -468,8 +696,20 @@ public interface CommonMessages extends Messages {
     String accountingErrorCreatingOrderItemBillingFromOrder();
     @DefaultMessage("Field expectedEndOfLife is empty in FixedAsset data.")
     String accountingExpEndOfLifeIsEmpty();
+    @DefaultMessage("Expenses")
+    String accountingExpenses();
     @DefaultMessage("Expiration Date")
     String accountingExpirationDate();
+    @DefaultMessage("The expiration date is before today")
+    String accountingExpirationDateIsBeforeToday();
+    @DefaultMessage("Expiration Month is missing")
+    String accountingExpirationMonthMissing();
+    @DefaultMessage("Expiration Year is missing")
+    String accountingExpirationYearMissing();
+    @DefaultMessage("Export as CSV")
+    String accountingExportAsCsv();
+    @DefaultMessage("Export as PDF")
+    String accountingExportAsPdf();
     @DefaultMessage("Accounting External Account Id")
     String accountingExternalAccountId();
     @DefaultMessage("Foreign Exchange Rates")
@@ -478,22 +718,52 @@ public interface CommonMessages extends Messages {
     String accountingFinAccount();
     @DefaultMessage("Authorizations")
     String accountingFinAccountAuth();
+    @DefaultMessage("FinAccountTrans must be in created status.")
+    String accountingFinAccountTransInvalidStatusError();
+    @DefaultMessage("Financial Account Transaction")
+    String accountingFinAccountTransaction();
     @DefaultMessage("Transactions")
     String accountingFinAccountTransations();
     @DefaultMessage("FinAccount Type Gl Account")
     String accountingFinAccountTypeGlAccount();
     @DefaultMessage("Financial Accounts")
     String accountingFinAccounts();
+    @DefaultMessage("Fin Account Trans Associated To Gl Reconciliation")
+    String accountingFinAcctTransAssociatedToGlReconciliation();
+    @DefaultMessage("Find AP Invoices")
+    String accountingFindApInvoices();
+    @DefaultMessage("Find AP Payment Groups")
+    String accountingFindApPaymentGroups();
+    @DefaultMessage("Find AP Payments")
+    String accountingFindApPayments();
+    @DefaultMessage("Find AR Invoices")
+    String accountingFindArInvoices();
+    @DefaultMessage("Find AR Payment Groups")
+    String accountingFindArPaymentGroups();
+    @DefaultMessage("Find AR Payments")
+    String accountingFindArPayments();
+    @DefaultMessage("AccountingFindDepositSlip")
+    String accountingFindDepositSlip(String finAccount_finAccountName, String finAccountId);
+    @DefaultMessage("Find Financial Account Reconciliations")
+    String accountingFindFinAccountReconciliations();
     @DefaultMessage("Find Fixed Assets")
     String accountingFindFixedAssets();
     @DefaultMessage("Find Invoices")
     String accountingFindInvoices();
+    @DefaultMessage("Find Payment Group")
+    String accountingFindPaymentGroup();
+    @DefaultMessage("Find Purchase Invoices")
+    String accountingFindPurchaseInvoices();
     @DefaultMessage("Find Purchase Invoices By Due Date")
     String accountingFindPurchaseInvoicesByDueDate();
     @DefaultMessage("Find Sales Invoices By Due Date")
     String accountingFindSalesInvoicesByDueDate();
+    @DefaultMessage("Find Sales Invoices For Commission Run")
+    String accountingFindSalesInvoicesForCommissionRun();
     @DefaultMessage("First Name Card")
     String accountingFirstNameCard();
+    @DefaultMessage("First Name on Card is missing")
+    String accountingFirstNameOnCardMissing();
     @DefaultMessage("01-Jan")
     String accountingFiscalMonth01();
     @DefaultMessage("02-Feb")
@@ -560,7 +830,7 @@ public interface CommonMessages extends Messages {
     String accountingFixedAssetMaintMessage2();
     @DefaultMessage("If Maintenance Template is specified with Product Maintenance, this will be set/reset automatically")
     String accountingFixedAssetMaintMessage3();
-    @DefaultMessage("Maintenace Name")
+    @DefaultMessage("Maintenance Name")
     String accountingFixedAssetMaintName();
     @DefaultMessage("Purchase Orders")
     String accountingFixedAssetMaintOrders();
@@ -612,6 +882,8 @@ public interface CommonMessages extends Messages {
     String accountingFixedAssetStdCostTypeId();
     @DefaultMessage("Standard Costs")
     String accountingFixedAssetStdCosts();
+    @DefaultMessage("Fixed Asset Type Gl Mappings")
+    String accountingFixedAssetTypeGlAccounts();
     @DefaultMessage("Asset Type")
     String accountingFixedAssetTypeId();
     @DefaultMessage("Fixed Assets")
@@ -650,6 +922,12 @@ public interface CommonMessages extends Messages {
     String accountingGlAccountDefault();
     @DefaultMessage("GL Account ID")
     String accountingGlAccountId();
+    @DefaultMessage("Gl account code and Gl account name")
+    String accountingGlAccountNameAndGlAccountCode();
+    @DefaultMessage("GL Account Trial Balance")
+    String accountingGlAccountTrialBalance();
+    @DefaultMessage("GL Account Trial Balance Report")
+    String accountingGlAccountTrialBalanceReport();
     @DefaultMessage("GL Account Type Defaults")
     String accountingGlAccountTypeDefaults();
     @DefaultMessage("GL Accounts")
@@ -658,8 +936,14 @@ public interface CommonMessages extends Messages {
     String accountingGlAccs();
     @DefaultMessage("Journals")
     String accountingGlJournals();
+    @DefaultMessage("AccountingGlReconciliationFor")
+    String accountingGlReconciliationFor(String finAccount_finAccountName, String finAccountId);
     @DefaultMessage("Global GL Settings")
     String accountingGlobalGLSettings();
+    @DefaultMessage("Group in one Transaction")
+    String accountingGroupInOneTransaction();
+    @DefaultMessage("Group Members")
+    String accountingGroupMembers();
     @DefaultMessage("Hide Fields")
     String accountingHideFields();
     @DefaultMessage("Ignore Invoice Items")
@@ -668,6 +952,8 @@ public interface CommonMessages extends Messages {
     String accountingIgnoringAdditionalShipCharges(String productStoreId);
     @DefaultMessage("Illegal values passed to create invoice service")
     String accountingIllegalValuesPassedToCreateInvoiceService();
+    @DefaultMessage("Income")
+    String accountingIncome();
     @DefaultMessage("Income Statement")
     String accountingIncomeStatement();
     @DefaultMessage("Information")
@@ -678,6 +964,14 @@ public interface CommonMessages extends Messages {
     String accountingInstanceOfProductId();
     @DefaultMessage("Inv.Nr")
     String accountingInvNr();
+    @DefaultMessage("AccountingInvalidGlReconciliation")
+    String accountingInvalidGlReconciliation(String glReconciliationId);
+    @DefaultMessage("Invalid Gl Reconciliation Assignement: You can not assign FinAccountTrans in Approved or Cancel Status. FinAccount Transaction need to be in Created status only.")
+    String accountingInvalidGlReconciliationAssignment();
+    @DefaultMessage("Inventory Valuation")
+    String accountingInventoryValuation();
+    @DefaultMessage("Inventory Valuation List")
+    String accountingInventoryValuationList();
     @DefaultMessage("Invoice")
     String accountingInvoice();
     @DefaultMessage("AccountingInvoiceCancelledCannotApplyTo")
@@ -758,8 +1052,6 @@ public interface CommonMessages extends Messages {
     String accountingInvoiceRoles();
     @DefaultMessage("Sales Invoice")
     String accountingInvoiceSales();
-    @DefaultMessage("Status")
-    String accountingInvoiceStatus();
     @DefaultMessage("Status History")
     String accountingInvoiceStatusHistory();
     @DefaultMessage("Status to ''Approved''")
@@ -788,22 +1080,32 @@ public interface CommonMessages extends Messages {
     String accountingInvoices();
     @DefaultMessage("Payments applied to Invoices")
     String accountingInvoicesApplPayments();
+    @DefaultMessage("Invoices Due Soon")
+    String accountingInvoicesDueSoon();
     @DefaultMessage("Invoices Found")
     String accountingInvoicesFound();
     @DefaultMessage("Invoices")
     String accountingInvoicesMenu();
+    @DefaultMessage("All Invoices should be in READY status for Check Run process.")
+    String accountingInvoicesRequiredInReadyStatus();
+    @DefaultMessage("Issue Check")
+    String accountingIssueCheck();
     @DefaultMessage("ItemNr")
     String accountingItemNr();
     @DefaultMessage("Last Name Card")
     String accountingLastNameCard();
+    @DefaultMessage("Last Name on Card is missing")
+    String accountingLastNameOnCardMissing();
     @DefaultMessage("Leave empty for maximum amount")
     String accountingLeaveEmptyForMaximumAmount();
     @DefaultMessage("Liabilities")
     String accountingLiabilities();
+    @DefaultMessage("Licensed Product")
+    String accountingLicensedProduct();
     @DefaultMessage("Line Total")
     String accountingLineTotal();
-    @DefaultMessage("List Agreement Work Effort Appls")
-    String accountingListAgreementWorkEffortAppls();
+    @DefaultMessage("List Agreement Work Effort Applics")
+    String accountingListAgreementWorkEffortApplics();
     @DefaultMessage("Invoice Item Type List")
     String accountingListInvoiceItemType();
     @DefaultMessage("List Invoices")
@@ -818,6 +1120,8 @@ public interface CommonMessages extends Messages {
     String accountingLookupAgreement();
     @DefaultMessage("Lookup Agreement Item")
     String accountingLookupAgreementItem();
+    @DefaultMessage("Lookup Gl Reconciliations")
+    String accountingLookupGlReconciliations();
     @DefaultMessage("Lookup Invoices")
     String accountingLookupInvoices();
     @DefaultMessage("Lookup Payment")
@@ -828,6 +1132,8 @@ public interface CommonMessages extends Messages {
     String accountingMainPage();
     @DefaultMessage("Welcome to the Accounting Manager!")
     String accountingMainPageNote();
+    @DefaultMessage("Accounting Manager")
+    String accountingManager();
     @DefaultMessage("Accounting Manager Application")
     String accountingManagerApplication();
     @DefaultMessage("Manual Journal Entry")
@@ -840,16 +1146,22 @@ public interface CommonMessages extends Messages {
     String accountingMethod();
     @DefaultMessage("Middle Name Card")
     String accountingMiddleNameCard();
+    @DefaultMessage("Monthly Trial Balance")
+    String accountingMonthlyTrialBalance();
     @DefaultMessage("Name Account")
     String accountingNameAccount();
     @DefaultMessage("Name on Account")
     String accountingNameOnAccount();
+    @DefaultMessage("Name on Account is missing")
+    String accountingNameOnAccountMissing();
     @DefaultMessage("Name on Card")
     String accountingNameOnCard();
     @DefaultMessage("Account #")
     String accountingNb();
     @DefaultMessage("Net Income")
     String accountingNetIncome();
+    @DefaultMessage("Net Sale")
+    String accountingNetSale();
     @DefaultMessage("New Account")
     String accountingNewAccount();
     @DefaultMessage("Create Agreement")
@@ -878,6 +1190,8 @@ public interface CommonMessages extends Messages {
     String accountingNewFixedAssetStdCost();
     @DefaultMessage("New Payment")
     String accountingNewPayment();
+    @DefaultMessage("New Payment Group")
+    String accountingNewPaymentGroup();
     @DefaultMessage("New incoming payment")
     String accountingNewPaymentIncoming();
     @DefaultMessage("New outgoing payment")
@@ -888,6 +1202,8 @@ public interface CommonMessages extends Messages {
     String accountingNewTaxAuthorityPartyInfo();
     @DefaultMessage("No Account")
     String accountingNoAccount();
+    @DefaultMessage("No Accounting Transactions Found.")
+    String accountingNoAcctgTransFound();
     @DefaultMessage("Amount requested to apply is zero or not provided: no amount applied/n")
     String accountingNoAmount();
     @DefaultMessage("No Billing Account")
@@ -898,14 +1214,22 @@ public interface CommonMessages extends Messages {
     String accountingNoBillingAccountRole();
     @DefaultMessage("No billing account terms exist.")
     String accountingNoBillingAccountTerm();
+    @DefaultMessage("No changes made, not updating credit card")
+    String accountingNoChangesMadeNotUpdatingCreditCard();
+    @DefaultMessage("No changes made, not updating EFT Account")
+    String accountingNoChangesMadeNotUpdatingEftAccount();
     @DefaultMessage("No child periods found")
     String accountingNoChildPeriodsFound();
     @DefaultMessage("No Current Custom Time Period Selected; \"Children\" below have no Parent Period.")
     String accountingNoCurrentCustomTimePeriodSelected();
     @DefaultMessage("No general/billing address found for party:")
     String accountingNoGenBilAddressFound();
+    @DefaultMessage("No Gl Reconciliation Exists, To Create New Gl Reconciliation")
+    String accountingNoGlReconciliationExists();
     @DefaultMessage("No Invoices Found")
     String accountingNoInvoicesFound();
+    @DefaultMessage("Either no selected invoices in ready state or selected invoices outstanding amount equals to zero.")
+    String accountingNoInvoicesReadyOrOutstandingAmountZero();
     @DefaultMessage("AccountingNoKnownInvoiceItemTypeReturnAdjustmentType")
     String accountingNoKnownInvoiceItemTypeReturnAdjustmentType(String returnAdjustmentTypeId);
     @DefaultMessage("AccountingNoKnownInvoiceItemTypeReturnItemType")
@@ -926,16 +1250,32 @@ public interface CommonMessages extends Messages {
     String accountingNocontactinformationset();
     @DefaultMessage("No current invoice line items")
     String accountingNocurrentinvoicelineitems();
+    @DefaultMessage("Not a adjustment financial account transaction.")
+    String accountingNotAdjustmentFinAccountTrans();
+    @DefaultMessage("Not a deposit financial account transaction.")
+    String accountingNotDepositFinAccountTrans();
     @DefaultMessage("This cannot be changed without re-creating the GL Account.")
     String accountingNotModificationRecrationGlAccount();
+    @DefaultMessage("Not a withdrawal financial account transaction.")
+    String accountingNotWithdrawalFinAccountTrans();
     @DefaultMessage("Number")
     String accountingNumber();
+    @DefaultMessage("Number of Orders")
+    String accountingNumberOfOrders();
+    @DefaultMessage("Number of Transaction")
+    String accountingNumberOfTransaction();
     @DefaultMessage("Offline Payment")
     String accountingOfflinePayment();
     @DefaultMessage("Open")
     String accountingOpenPayments();
     @DefaultMessage("Open Time Periods")
     String accountingOpenTimePeriods();
+    @DefaultMessage("Opening Balance")
+    String accountingOpeningBalance();
+    @DefaultMessage("Opening Cash Balance")
+    String accountingOpeningCashBalance();
+    @DefaultMessage("Operational Cash")
+    String accountingOperationalCash();
     @DefaultMessage("AccountingOrderItemWithIdNotFound")
     String accountingOrderItemWithIdNotFound(String orderItemSeqId);
     @DefaultMessage("Order #")
@@ -952,6 +1292,8 @@ public interface CommonMessages extends Messages {
     String accountingOrgPartyId();
     @DefaultMessage("Organization Party Id")
     String accountingOrganizationPartyId();
+    @DefaultMessage("Original Currency")
+    String accountingOriginalCurrency();
     @DefaultMessage("Override Revenue Gl Account Id")
     String accountingOverrideRevenueGlAccountId();
     @DefaultMessage("PIN")
@@ -988,6 +1330,8 @@ public interface CommonMessages extends Messages {
     String accountingPartyRoleAdd();
     @DefaultMessage("Party Role List")
     String accountingPartyRoleList();
+    @DefaultMessage("Past Due Invoices")
+    String accountingPastDueInvoices();
     @DefaultMessage("Pay only with Billing Account")
     String accountingPayOnlyWithBillingAccount();
     @DefaultMessage("Pay With PayPal")
@@ -1010,6 +1354,8 @@ public interface CommonMessages extends Messages {
     String accountingPayment();
     @DefaultMessage("AccountingPaymentAlreadyApplied")
     String accountingPaymentAlreadyApplied(String paymentId);
+    @DefaultMessage("AccountingPaymentAlreadyAssociatedToFinAccountError")
+    String accountingPaymentAlreadyAssociatedToFinAccountError(String paymentId);
     @DefaultMessage("Payment Already Received")
     String accountingPaymentAlreadyReceived();
     @DefaultMessage("Payment Amount")
@@ -1038,6 +1384,8 @@ public interface CommonMessages extends Messages {
     String accountingPaymentDate();
     @DefaultMessage("Approve")
     String accountingPaymentGatewayApprove();
+    @DefaultMessage("Payment Gateway Config")
+    String accountingPaymentGatewayConfig();
     @DefaultMessage("Payment Gateway Config Description")
     String accountingPaymentGatewayConfigDescription();
     @DefaultMessage("Payment Gateway Config Id")
@@ -1046,10 +1394,8 @@ public interface CommonMessages extends Messages {
     String accountingPaymentGatewayConfigTypeDescription();
     @DefaultMessage("Payment Gateway Config Type Id")
     String accountingPaymentGatewayConfigTypeId();
-    @DefaultMessage("Payment Gateway Configuration Types")
-    String accountingPaymentGatewayConfigurationTypes();
-    @DefaultMessage("Payment Gateway Configurations")
-    String accountingPaymentGatewayConfigurations();
+    @DefaultMessage("Payment Gateway Config Types")
+    String accountingPaymentGatewayConfigTypes();
     @DefaultMessage("Decline")
     String accountingPaymentGatewayDecline();
     @DefaultMessage("Production")
@@ -1058,6 +1404,18 @@ public interface CommonMessages extends Messages {
     String accountingPaymentGatewayRandom();
     @DefaultMessage("Accounting Payment Gateway Response Id")
     String accountingPaymentGatewayResponseId();
+    @DefaultMessage("Payment Group")
+    String accountingPaymentGroup();
+    @DefaultMessage("Payment Group Id")
+    String accountingPaymentGroupId();
+    @DefaultMessage("Payment Group Members")
+    String accountingPaymentGroupMembers();
+    @DefaultMessage("Payment Group Name")
+    String accountingPaymentGroupName();
+    @DefaultMessage("Payment Group Overview")
+    String accountingPaymentGroupOverview();
+    @DefaultMessage("Payment Group Overview For")
+    String accountingPaymentGroupOverviewFor();
     @DefaultMessage("Payment Header")
     String accountingPaymentHeader();
     @DefaultMessage("PaymentID")
@@ -1076,6 +1434,8 @@ public interface CommonMessages extends Messages {
     String accountingPaymentMethodAssignAccountType();
     @DefaultMessage("Payment Method Id")
     String accountingPaymentMethodId();
+    @DefaultMessage("Payment Method ID is missing")
+    String accountingPaymentMethodIdMissing();
     @DefaultMessage("No values are passed for paymentMethodId or paymentMethodTypeId. At least pass paymentMethodId.")
     String accountingPaymentMethodIdPaymentMethodTypeIdNullError();
     @DefaultMessage("AccountingPaymentMethodId........")
@@ -1094,10 +1454,18 @@ public interface CommonMessages extends Messages {
     String accountingPaymentProperties();
     @DefaultMessage("Payment receive via PayPal")
     String accountingPaymentReceiveViaPayPal();
+    @DefaultMessage("Payment receive via WorldPay")
+    String accountingPaymentReceiveViaWorldPay();
     @DefaultMessage("AccountingPaymentRecordNotFound")
     String accountingPaymentRecordNotFound(String paymentId);
     @DefaultMessage("sent from")
     String accountingPaymentSentForm();
+    @DefaultMessage("Payment Status")
+    String accountingPaymentStatus();
+    @DefaultMessage("Payment status must be received or sent")
+    String accountingPaymentStatusIsNotReceivedOrSentError();
+    @DefaultMessage("Status to \"Not Paid\"")
+    String accountingPaymentStatusToNotPaid();
     @DefaultMessage("Applications")
     String accountingPaymentTabApplications();
     @DefaultMessage("Header")
@@ -1112,6 +1480,8 @@ public interface CommonMessages extends Messages {
     String accountingPaymentTabStatusToReceived();
     @DefaultMessage("Status to ''Sent''")
     String accountingPaymentTabStatusToSent();
+    @DefaultMessage("Status to ''Void''")
+    String accountingPaymentTabStatusToVoid();
     @DefaultMessage("Payment Type")
     String accountingPaymentType();
     @DefaultMessage("Payment Type Assign Account Type")
@@ -1120,16 +1490,38 @@ public interface CommonMessages extends Messages {
     String accountingPaymentVia();
     @DefaultMessage("Payments Applied")
     String accountingPaymentsApplied();
+    @DefaultMessage("AccountingPaymentsAreAlreadyBatchedError")
+    String accountingPaymentsAreAlreadyBatchedError(String batchPaymentIds);
+    @DefaultMessage("Associated Payments with FinAccountTrans has invalid status")
+    String accountingPaymentsAssociateWithFinAccountHasInvalidStatusError();
     @DefaultMessage("Payment(s) Found")
     String accountingPaymentsFound();
     @DefaultMessage("Payments")
     String accountingPaymentsMenu();
-    @DefaultMessage("Payments received")
+    @DefaultMessage("Payments Received")
     String accountingPaymentsReceived();
     @DefaultMessage("Payments send")
     String accountingPaymentsSend();
     @DefaultMessage("Payments Sent")
     String accountingPaymentsSent();
+    @DefaultMessage("Period 1 Credit(Disbursement)")
+    String accountingPeriod1Credit_Disbursement();
+    @DefaultMessage("Period 1 Debit(Receipts)")
+    String accountingPeriod1Debit_Receipts();
+    @DefaultMessage("Period1 Net Income")
+    String accountingPeriod1NetIncome();
+    @DefaultMessage("Period1 Total Amount")
+    String accountingPeriod1TotalAmount();
+    @DefaultMessage("Period 2 Credit(Disbursement)")
+    String accountingPeriod2Credit_Disbursement();
+    @DefaultMessage("Period 2 Debit(Receipts)")
+    String accountingPeriod2Debit_Receipts();
+    @DefaultMessage("Period2 Net Income")
+    String accountingPeriod2NetIncome();
+    @DefaultMessage("Period2 Total Amount")
+    String accountingPeriod2TotalAmount();
+    @DefaultMessage("Period Cash Balance")
+    String accountingPeriodCashBalance();
     @DefaultMessage("Period Name")
     String accountingPeriodName();
     @DefaultMessage("Period Number")
@@ -1148,18 +1540,26 @@ public interface CommonMessages extends Messages {
     String accountingPleaseSendPaymentTo();
     @DefaultMessage("Post Transaction")
     String accountingPostTransaction();
+    @DefaultMessage("Posted And Unposted Totals")
+    String accountingPostedAndUnpostedTransactionTotals();
     @DefaultMessage("Posted Totals")
     String accountingPostedTransactionTotals();
     @DefaultMessage("Accounting Preferences")
     String accountingPreference();
     @DefaultMessage("Prefix Card")
     String accountingPrefixCard();
+    @DefaultMessage("Previous Bank Reconciliation")
+    String accountingPreviousBankReconciliation();
     @DefaultMessage("Print As Check")
     String accountingPrintAsCheck();
     @DefaultMessage("Checks to Print")
     String accountingPrintChecks();
     @DefaultMessage("Security Error: to print checks, you must have the ACCOUNTING_PRINT_CHECKS permission")
     String accountingPrintChecksPermissionError();
+    @DefaultMessage("Print Deposit Slip")
+    String accountingPrintDepositSlip();
+    @DefaultMessage("Print Invoices")
+    String accountingPrintInvoices();
     @DefaultMessage("AccountingProblemChangingInvoiceStatusTo")
     String accountingProblemChangingInvoiceStatusTo(String newStatus);
     @DefaultMessage("Problem getting issued items from shipments")
@@ -1170,6 +1570,8 @@ public interface CommonMessages extends Messages {
     String accountingProblemGettingOrderPaymentPreferences();
     @DefaultMessage("AccountingProblemGettingPaymentApplication")
     String accountingProblemGettingPaymentApplication(String invoiceId);
+    @DefaultMessage("Problem getting ShipmentItemBilling records")
+    String accountingProblemGettingShipmentItemBilling();
     @DefaultMessage("AccountingProblemLookingUpOrderItemBilling")
     String accountingProblemLookingUpOrderItemBilling(String billFields);
     @DefaultMessage("AccountingProblemStoringOrderAdjustments")
@@ -1186,16 +1588,32 @@ public interface CommonMessages extends Messages {
     String accountingProductRates();
     @DefaultMessage("Purchase Invoice type to Revenue GL Account Number assignment list")
     String accountingPurchaseInvoiceToRevenue();
+    @DefaultMessage("Purchase Invoices")
+    String accountingPurchaseInvoices();
     @DefaultMessage("Quantity")
     String accountingQuantity();
+    @DefaultMessage("Quick Search")
+    String accountingQuickSearch();
     @DefaultMessage("Rate Amounts")
     String accountingRateAmounts();
     @DefaultMessage("Rates")
     String accountingRates();
     @DefaultMessage("Receive Payment")
     String accountingReceivePayment();
+    @DefaultMessage("Reconcile")
+    String accountingReconcile();
+    @DefaultMessage("AccountingReconcileFinAccountTransFor")
+    String accountingReconcileFinAccountTransFor(String finAccount_finAccountName, String finAccountId);
+    @DefaultMessage("Reconciliation")
+    String accountingReconciliation();
+    @DefaultMessage("Reconciliation Date")
+    String accountingReconciliationDate();
+    @DefaultMessage("AccountingReconciliationError")
+    String accountingReconciliationError(String finAccountTrans_finAccountTransId);
     @DefaultMessage("Reference Number")
     String accountingReferenceNumber();
+    @DefaultMessage("Remove From GlReconciliation")
+    String accountingRemoveFromGlReconciliation();
     @DefaultMessage("Reports")
     String accountingReports();
     @DefaultMessage("Revert Accounting Transaction")
@@ -1208,10 +1626,54 @@ public interface CommonMessages extends Messages {
     String accountingRoleTypeIdTo();
     @DefaultMessage("Routing Number")
     String accountingRoutingNumber();
+    @DefaultMessage("Routing Number is missing")
+    String accountingRoutingNumberMissing();
+    @DefaultMessage("Running Total")
+    String accountingRunningTotal();
+    @DefaultMessage("Running Total (Outstanding)")
+    String accountingRunningTotalOutstanding();
+    @DefaultMessage("Authentication Type")
+    String accountingSagePayAuthenticationTransType();
+    @DefaultMessage("Authentication Url")
+    String accountingSagePayAuthenticationUrl();
+    @DefaultMessage("Authorisation Type")
+    String accountingSagePayAuthorisationTransType();
+    @DefaultMessage("Authorisation Url")
+    String accountingSagePayAuthorisationUrl();
+    @DefaultMessage("Mode")
+    String accountingSagePayMode();
+    @DefaultMessage("Production")
+    String accountingSagePayProduction();
+    @DefaultMessage("Production Host")
+    String accountingSagePayProductionHost();
+    @DefaultMessage("Protocol Version")
+    String accountingSagePayProtocolVersion();
+    @DefaultMessage("Refund Url")
+    String accountingSagePayRefundUrl();
+    @DefaultMessage("Release Type")
+    String accountingSagePayReleaseTransType();
+    @DefaultMessage("Release Url")
+    String accountingSagePayReleaseUrl();
+    @DefaultMessage("Test")
+    String accountingSagePayTest();
+    @DefaultMessage("Testing Host")
+    String accountingSagePayTestingHost();
+    @DefaultMessage("Vendor Name")
+    String accountingSagePayVendor();
+    @DefaultMessage("Void Url")
+    String accountingSagePayVoidUrl();
+    @DefaultMessage("Sales Agents")
+    String accountingSalesAgents();
     @DefaultMessage("Sales Invoice type to Revenue GL Account Number assignment list")
     String accountingSalesInvoiceToRevenue();
+    @DefaultMessage("Sales Invoices")
+    String accountingSalesInvoices();
     @DefaultMessage("Card Security Code")
     String accountingSecurityCodeCard();
+    @DefaultMessage("Select Action")
+    String accountingSelectAction();
+    @DefaultMessage("Select The Parties For Commission Invoice")
+    String accountingSelectPartiesForCommissionInvoice();
     @DefaultMessage("Mark Checks Sent")
     String accountingSendChecks();
     @DefaultMessage("Service Credit")
@@ -1260,6 +1722,8 @@ public interface CommonMessages extends Messages {
     String accountingSplitPayment();
     @DefaultMessage("Accounting Status")
     String accountingStatus();
+    @DefaultMessage("Subsidiary Ledger")
+    String accountingSubsidiaryLedger();
     @DefaultMessage("successfull")
     String accountingSuccessFull();
     @DefaultMessage("Suffix on Card")
@@ -1280,10 +1744,14 @@ public interface CommonMessages extends Messages {
     String accountingTaxAuthorityRateProductUseThisProductCategory();
     @DefaultMessage("Tax Summary Report")
     String accountingTaxSummary();
+    @DefaultMessage("Term Amount")
+    String accountingTermAmount();
     @DefaultMessage("Term Type Id")
     String accountingTermTypeId();
     @DefaultMessage("Text Data")
     String accountingTextData();
+    @DefaultMessage("The balance of last year")
+    String accountingTheBalanceOfLastYear();
     @DefaultMessage("Thru Date")
     String accountingThruDate();
     @DefaultMessage("Time Period")
@@ -1294,14 +1762,52 @@ public interface CommonMessages extends Messages {
     String accountingToParty();
     @DefaultMessage("To Party Id")
     String accountingToPartyId();
+    @DefaultMessage("Total amountPercentage is not equal 100.")
+    String accountingTotalAmountPercentageIsNotEqualOneHundred();
     @DefaultMessage("TOTAL")
     String accountingTotalCapital();
+    @DefaultMessage("Total Cash Balance")
+    String accountingTotalCashBalance();
+    @DefaultMessage("Total Closing Cash Balance")
+    String accountingTotalClosingCashBalance();
+    @DefaultMessage("Total Commission Amount")
+    String accountingTotalCommissionAmount();
+    @DefaultMessage("Cost center amount percentage saved successfully")
+    String accountingTotalCostCenterAmount();
+    @DefaultMessage("Total Credit(Disbursement)")
+    String accountingTotalCredit_Disbursement();
+    @DefaultMessage("Total Current Asset Balance")
+    String accountingTotalCurrentAssetBalance();
+    @DefaultMessage("Total Debit(Receipts)")
+    String accountingTotalDebit_Receipts();
+    @DefaultMessage("Total Ending Cash Balance")
+    String accountingTotalEndingCashBalance();
     @DefaultMessage("Total excl. tax")
     String accountingTotalExclTax();
+    @DefaultMessage("Total Net Sales")
+    String accountingTotalNetSales();
+    @DefaultMessage("Total Number of Orders")
+    String accountingTotalNumberOfOrders();
+    @DefaultMessage("Total of the current month")
+    String accountingTotalOfTheCurrentMonth();
+    @DefaultMessage("Total of Year To Date")
+    String accountingTotalOfYearToDate();
+    @DefaultMessage("Total Opening Cash Balance")
+    String accountingTotalOpeningCashBalance();
+    @DefaultMessage("Total Operational Cash Balance")
+    String accountingTotalOperationalCashBalance();
+    @DefaultMessage("Total Period Cash Balance")
+    String accountingTotalPeriodCashBalance();
+    @DefaultMessage("Total Quantity On Hand")
+    String accountingTotalQuantityOnHand();
     @DefaultMessage("Transaction has been already posted")
     String accountingTransactionHasBeenAlreadyPosted();
+    @DefaultMessage("Transaction Is already Reconciled")
+    String accountingTransactionIsAlreadyReconciled();
     @DefaultMessage("Transaction Totals")
     String accountingTransactionTotals();
+    @DefaultMessage("Transaction Totals Report")
+    String accountingTransactionTotalsReport();
     @DefaultMessage("Transaction Type")
     String accountingTransactionType();
     @DefaultMessage("This transaction type is not yet supported")
@@ -1334,6 +1840,8 @@ public interface CommonMessages extends Messages {
     String accountingTroubleGettingShipmentEntity(String tmpShipmentId);
     @DefaultMessage("Type")
     String accountingType();
+    @DefaultMessage("Type of the Currency")
+    String accountingTypeOfTheCurrency();
     @DefaultMessage("UnPosted Totals")
     String accountingUnPostedTransactionTotals();
     @DefaultMessage("AccountingUnableToAuthAdditionalShipCharges")
@@ -1358,6 +1866,10 @@ public interface CommonMessages extends Messages {
     String accountingValidationPattern();
     @DefaultMessage("Variance Reason Gl Accounts")
     String accountingVarianceReasonGlAccounts();
+    @DefaultMessage("Vendor Party")
+    String accountingVendorParty();
+    @DefaultMessage("Vendor Payment Method")
+    String accountingVendorPaymentMethod();
     @DefaultMessage("Verify Transaction")
     String accountingVerifyTransaction();
     @DefaultMessage("You do not have permission to view this page. (\"ACCOUNTING_VIEW\" or \"ACCOUNTING_ADMIN\" needed)")
@@ -1366,6 +1878,36 @@ public interface CommonMessages extends Messages {
     String accountingVirtualCard();
     @DefaultMessage("Credit Card: Visa/Mastercard/Amex/Discover")
     String accountingVisaMastercardAmexDiscover();
+    @DefaultMessage("AccountingWithdrawalPaymentInFinAccount")
+    String accountingWithdrawalPaymentInFinAccount(String finAccount_finAccountName);
+    @DefaultMessage("Approve")
+    String accountingWorldPayApprove();
+    @DefaultMessage("Authorization Mode")
+    String accountingWorldPayAuthMode();
+    @DefaultMessage("Cancelled")
+    String accountingWorldPayCancelled();
+    @DefaultMessage("Contact details non-editable")
+    String accountingWorldPayFixContact();
+    @DefaultMessage("Full-authorize")
+    String accountingWorldPayFullAuth();
+    @DefaultMessage("Contact details to be hidden")
+    String accountingWorldPayHideContact();
+    @DefaultMessage("Currency drop-down to be hidden")
+    String accountingWorldPayHideCurrency();
+    @DefaultMessage("WorldPay instance Id")
+    String accountingWorldPayInstId();
+    @DefaultMessage("Shopper language Id")
+    String accountingWorldPayLangId();
+    @DefaultMessage("Live")
+    String accountingWorldPayLive();
+    @DefaultMessage("Suppress Language Menu")
+    String accountingWorldPayNoLanguageMenu();
+    @DefaultMessage("Pre-Auth")
+    String accountingWorldPayPreAuth();
+    @DefaultMessage("Test Mode")
+    String accountingWorldPayTestMode();
+    @DefaultMessage("Delivery Address Editable")
+    String accountingWorldPayWithDelivery();
     @DefaultMessage("Assign GL Account")
     String acctgAssignGlAccount();
     @DefaultMessage("Chart of Accounts")
@@ -1432,8 +1974,6 @@ public interface CommonMessages extends Messages {
     String agreementType_description_PURCHASE_AGREEMENT();
     @DefaultMessage("Customer")
     String agreementType_description_SALES_AGREEMENT();
-    @DefaultMessage("opentaps Analytics Login")
-    String analyticsLoginGreeting();
     @DefaultMessage("Arabic")
     String ar();
     @DefaultMessage("As Of")
@@ -1454,8 +1994,130 @@ public interface CommonMessages extends Messages {
     String cMS_Site();
     @DefaultMessage("callInDisplayMessage")
     String callInDisplayMessage(String icon, String link);
+    @DefaultMessage("Choose Variation Before Adding to Cart")
+    String cart_addToCart_chooseVariationBeforeAddingToCart();
+    @DefaultMessage("Configure Product Before Adding to Cart")
+    String cart_addToCart_configureProductBeforeAddingToCart();
+    @DefaultMessage("Error: a dependency to another feature has not been resolved.")
+    String cart_addToCart_dependencyVariantFeature();
+    @DefaultMessage("Enter Amount Before Adding to Cart")
+    String cart_addToCart_enterAmountBeforeAddingToCart();
+    @DefaultMessage("Enter Booking Information Before Adding to Cart")
+    String cart_addToCart_enterBookingInforamtionBeforeAddingToCart();
+    @DefaultMessage("Sorry, selected options are incompatible.")
+    String cart_addToCart_incompatibilityVariantFeature();
+    @DefaultMessage("No product information passed, not adding anything to cart.")
+    String cart_addToCart_noProductInfoPassed();
+    @DefaultMessage("Configuration Is Not Valid")
+    String cart_addToCart_productConfigurationIsNotValid();
+    @DefaultMessage("Problems parsing Reservation end string.")
+    String cart_addToCart_rental_endDate();
+    @DefaultMessage("Problems parsing Reservation start string.")
+    String cart_addToCart_rental_startDate();
+    @DefaultMessage("cart.add_category_defaults")
+    String cart_add_category_defaults(String totalQuantity);
+    @DefaultMessage("No agreement specified to add from.")
+    String cart_agreement_not_specified_to_add_from();
+    @DefaultMessage("Amount must be a positive number")
+    String cart_amount_not_positive_number();
+    @DefaultMessage("Cart is in read only mode")
+    String cart_cart_is_in_read_only_mode();
+    @DefaultMessage("No category specified to add from.")
+    String cart_category_not_specified_to_add_from();
+    @DefaultMessage("cart.could_not_add_product_to_cart")
+    String cart_could_not_add_product_to_cart(String productId);
+    @DefaultMessage("cart.could_not_get_agreement")
+    String cart_could_not_get_agreement(String agreementId, String message);
+    @DefaultMessage("cart.could_not_get_products_in_category")
+    String cart_could_not_get_products_in_category(String categorieId);
+    @DefaultMessage("cart.could_not_get_products_in_category_cart")
+    String cart_could_not_get_products_in_category_cart(String categorieId, String message);
+    @DefaultMessage("No order specified to add from")
+    String cart_order_not_specified_to_add_from();
+    @DefaultMessage("Price must be a positive number")
+    String cart_price_not_positive_number();
+    @DefaultMessage("This product cannot be purchased from the chosen supplier for the given quantity and currency.")
+    String cart_product_not_valid_for_supplier();
+    @DefaultMessage("Quantity must be a positive number")
+    String cart_quantity_not_positive_number();
     @DefaultMessage("Catalog")
     String catalog();
+    @DefaultMessage("Web Analytics")
+    String catalogWebAnalytics();
+    @DefaultMessage("Web Analytics Configuration")
+    String catalogWebAnalyticsConfigs();
+    @DefaultMessage("Web Analytics Types")
+    String catalogWebAnalyticsTypes();
+    @DefaultMessage("Cannot cancel item at this time; please try again.")
+    String checkevents_cannot_cancel_item();
+    @DefaultMessage("Cart is empty.")
+    String checkevents_cart_empty();
+    @DefaultMessage("Insufficient credit available on accounts.")
+    String checkevents_insufficient_credit_available_on_account();
+    @DefaultMessage("checkevents.invalid_amount_set_for_billing_account")
+    String checkevents_invalid_amount_set_for_billing_account(String billingAccountId);
+    @DefaultMessage("Invalid amount set for Payment method.")
+    String checkevents_invalid_amount_set_for_payment_method();
+    @DefaultMessage("Not enough available on account #[billingAccountId].")
+    String checkevents_not_enough_available_on_account();
+    @DefaultMessage("Selected payment methods will not cover this order.")
+    String checkevents_payment_not_cover_this_order();
+    @DefaultMessage("The change returned cannot be greater than the cash given.")
+    String checkhelper_change_returned_cannot_be_greater_than_cash();
+    @DefaultMessage("checkhelper.could_not_create_order_invoking_service")
+    String checkhelper_could_not_create_order_invoking_service(String service);
+    @DefaultMessage("ERROR: Could not create order (problem parsing order totals).")
+    String checkhelper_could_not_create_order_parsing_totals();
+    @DefaultMessage("Database error.")
+    String checkhelper_database_error();
+    @DefaultMessage("Did not complete the order, the following occurred:")
+    String checkhelper_did_not_complete_order_following_occurred();
+    @DefaultMessage("Please enter the amount to place on your gift card.")
+    String checkhelper_enter_amount_to_place_on_gift_card();
+    @DefaultMessage("Please enter your gift card number.")
+    String checkhelper_enter_gift_card_number();
+    @DefaultMessage("Please enter your gift card pin number.")
+    String checkhelper_enter_gift_card_pin_number();
+    @DefaultMessage("Please enter a shipping address.")
+    String checkhelper_enter_shipping_address();
+    @DefaultMessage("This gift card does not exist.")
+    String checkhelper_gift_card_does_not_exist();
+    @DefaultMessage("This gift card no longer has any value.")
+    String checkhelper_gift_card_has_no_value();
+    @DefaultMessage("Insufficient credit available on account.")
+    String checkhelper_insufficient_credit_available_on_account();
+    @DefaultMessage("Invalid amount for gift card entered.")
+    String checkhelper_invalid_amount_for_gift_card();
+    @DefaultMessage("There are no items in the cart.")
+    String checkhelper_no_items_in_cart();
+    @DefaultMessage("Problem with gift card information.")
+    String checkhelper_problem_with_gift_card_information();
+    @DefaultMessage("Problems getting order header. Cannot check external gateways!")
+    String checkhelper_problems_getting_order_header();
+    @DefaultMessage("Problems getting payment preference. Cannot check external gateways!")
+    String checkhelper_problems_getting_payment_preference();
+    @DefaultMessage("Problems parsing amount.")
+    String checkhelper_problems_parsing_amount();
+    @DefaultMessage("Problems reading the database, please try again.")
+    String checkhelper_problems_reading_database();
+    @DefaultMessage("Error : sales order lines lookup failed")
+    String checkhelper_sales_order_lines_lookup_failed();
+    @DefaultMessage("Please select a method of payment.")
+    String checkhelper_select_method_of_payment();
+    @DefaultMessage("Please Select a Shipping Destination.")
+    String checkhelper_select_shipping_destination();
+    @DefaultMessage("Please Select a Shipping Method.")
+    String checkhelper_select_shipping_method();
+    @DefaultMessage("Please Select a Splitting Preference.")
+    String checkhelper_select_splitting_preference();
+    @DefaultMessage("Please Specify Whether or Not This Order is a Gift.")
+    String checkhelper_specify_if_order_is_gift();
+    @DefaultMessage("Please specify ship after date as a date.")
+    String checkhelper_specify_if_shipAfterDate_is_date();
+    @DefaultMessage("Please specify a ship before date as a date.")
+    String checkhelper_specify_if_shipBeforeDate_is_date();
+    @DefaultMessage("Totals do not match order total.")
+    String checkhelpertotalsdonotmatchordertotal();
     @DefaultMessage("City")
     String city();
     @DefaultMessage("Classification")
@@ -1482,6 +2144,8 @@ public interface CommonMessages extends Messages {
     String commonAddId();
     @DefaultMessage("Add New")
     String commonAddNew();
+    @DefaultMessage("Add a portlet to portal page")
+    String commonAddPortletToPage();
     @DefaultMessage("Add Problem")
     String commonAddProblem();
     @DefaultMessage("Address 1")
@@ -1504,8 +2168,6 @@ public interface CommonMessages extends Messages {
     String commonAllMethods();
     @DefaultMessage("All Week")
     String commonAllWeek();
-    @DefaultMessage("(allow solicitation?)")
-    String commonAllowSolicitation();
     @DefaultMessage("Always Include")
     String commonAlwaysInclude();
     @DefaultMessage("Amount")
@@ -1514,10 +2176,6 @@ public interface CommonMessages extends Messages {
     String commonAnd();
     @DefaultMessage("Any")
     String commonAny();
-    @DefaultMessage("Any Order Status")
-    String commonAnyOrderStatus();
-    @DefaultMessage("Any Order Type")
-    String commonAnyOrderType();
     @DefaultMessage("Any return status")
     String commonAnyReturnStatus();
     @DefaultMessage("Any Role Type")
@@ -1558,6 +2216,8 @@ public interface CommonMessages extends Messages {
     String commonAutoAssignedId();
     @DefaultMessage("Available")
     String commonAvailable();
+    @DefaultMessage("Available Portlets")
+    String commonAvailablePortlets();
     @DefaultMessage("Average")
     String commonAverage();
     @DefaultMessage("Back")
@@ -1634,8 +2294,12 @@ public interface CommonMessages extends Messages {
     String commonConfiguration();
     @DefaultMessage("Configure:")
     String commonConfigure();
-    @DefaultMessage("Confirm")
+    @DefaultMessage("Do you confirm ?")
     String commonConfirm();
+    @DefaultMessage("Do you confirm the addition?")
+    String commonConfirmAdd();
+    @DefaultMessage("Do you confirm the suppression?")
+    String commonConfirmDelete();
     @DefaultMessage("ContactMechId")
     String commonContactMechID();
     @DefaultMessage("Contact Purpose")
@@ -1712,6 +2376,8 @@ public interface CommonMessages extends Messages {
     String commonDetail();
     @DefaultMessage("Details")
     String commonDetails();
+    @DefaultMessage("Dimension")
+    String commonDimension();
     @DefaultMessage("Disabled")
     String commonDisabled();
     @DefaultMessage("CommonDisplaying")
@@ -1786,6 +2452,16 @@ public interface CommonMessages extends Messages {
     String commonExport();
     @DefaultMessage("ext")
     String commonExt();
+    @DefaultMessage("Definition, what is it?")
+    String commonExtHelpDefinition();
+    @DefaultMessage("What''s on the screen?")
+    String commonExtHelpOnScreen();
+    @DefaultMessage("Help screen.")
+    String commonExtHelpTitle();
+    @DefaultMessage("What is it used for?")
+    String commonExtHelpUsedFor();
+    @DefaultMessage("Index")
+    String commonExtIndex();
     @DefaultMessage("False")
     String commonFalse();
     @DefaultMessage("February")
@@ -1854,7 +2530,7 @@ public interface CommonMessages extends Messages {
     String commonGenericPermissionError(String resourceDescription, String primaryPermission, String mainAction, String altPermissionList);
     @DefaultMessage("Geo")
     String commonGeo();
-    @DefaultMessage("Geolocation")
+    @DefaultMessage("Geo Location")
     String commonGeoLocation();
     @DefaultMessage("Geos")
     String commonGeos();
@@ -1878,6 +2554,8 @@ public interface CommonMessages extends Messages {
     String commonHeld();
     @DefaultMessage("Help")
     String commonHelp();
+    @DefaultMessage("Help file or URL not found")
+    String commonHelpNotFound();
     @DefaultMessage("Hide Fields")
     String commonHideFields();
     @DefaultMessage("High")
@@ -1926,6 +2604,8 @@ public interface CommonMessages extends Messages {
     String commonItem();
     @DefaultMessage("Items")
     String commonItems();
+    @DefaultMessage("Items per page")
+    String commonItemsPerPage();
     @DefaultMessage("January")
     String commonJanuary();
     @DefaultMessage("July")
@@ -1938,10 +2618,14 @@ public interface CommonMessages extends Messages {
     String commonLarge();
     @DefaultMessage("Last")
     String commonLast();
+    @DefaultMessage("Last system notes")
+    String commonLastSytemNotes();
     @DefaultMessage("Last Updated")
     String commonLastUpdated();
     @DefaultMessage("Latitude:")
     String commonLatitude();
+    @DefaultMessage("Length")
+    String commonLength();
     @DefaultMessage("less than")
     String commonLessThan();
     @DefaultMessage("Line")
@@ -1992,6 +2676,8 @@ public interface CommonMessages extends Messages {
     String commonMarch();
     @DefaultMessage("Matched")
     String commonMatched();
+    @DefaultMessage("250 Chars Maximum")
+    String commonMax250Chars();
     @DefaultMessage("May")
     String commonMay();
     @DefaultMessage("Create")
@@ -2008,6 +2694,8 @@ public interface CommonMessages extends Messages {
     String commonMessages();
     @DefaultMessage("Method")
     String commonMethod();
+    @DefaultMessage("Millisecond")
+    String commonMilliSecond();
     @DefaultMessage("Minute")
     String commonMinute();
     @DefaultMessage("Minutely")
@@ -2082,12 +2770,18 @@ public interface CommonMessages extends Messages {
     String commonNoDetailImageAvailableToDisplay();
     @DefaultMessage("No element found")
     String commonNoElementFound();
-    @DefaultMessage("No Geolocation Available (for a demo you may try using DemoCustomer party profil)")
+    @DefaultMessage("No Geolocation Available (for a demo you may try using DemoCustomer party profile)")
     String commonNoGeolocationAvailable();
     @DefaultMessage("No Parent")
     String commonNoParent();
+    @DefaultMessage("No portal page data found. You may not have the necessary seed or other data for it.")
+    String commonNoPortalPageDataFound();
+    @DefaultMessage("Please, choose new category again, No portlet in this category.")
+    String commonNoPortletsInCategory();
     @DefaultMessage("No Postal Address")
     String commonNoPostalAddress();
+    @DefaultMessage("No Record Found.")
+    String commonNoRecordFound();
     @DefaultMessage("No tasks currently require your attention.")
     String commonNoTaskAssigned();
     @DefaultMessage("UOM Conversion Relationship Not Found")
@@ -2098,6 +2792,8 @@ public interface CommonMessages extends Messages {
     String commonNormal();
     @DefaultMessage("Not")
     String commonNot();
+    @DefaultMessage("Not Assigned")
+    String commonNotAssigned();
     @DefaultMessage("cannot change without re-creating")
     String commonNotModifRecreat();
     @DefaultMessage("Not Set")
@@ -2144,8 +2840,6 @@ public interface CommonMessages extends Messages {
     String commonOrderBy();
     @DefaultMessage("Orders")
     String commonOrders();
-    @DefaultMessage("Orders Status")
-    String commonOrdersStatus();
     @DefaultMessage("Other")
     String commonOther();
     @DefaultMessage("(overrides either of the above selections.)")
@@ -2188,6 +2882,8 @@ public interface CommonMessages extends Messages {
     String commonPermissionThisOperation();
     @DefaultMessage("Person")
     String commonPerson();
+    @DefaultMessage("Please enter a valid number in this field.")
+    String commonPleaseEnterValidNumberInThisField();
     @DefaultMessage("Category of portlet pages for application")
     String commonPortalCategoryPage();
     @DefaultMessage("Edit portal page")
@@ -2260,6 +2956,8 @@ public interface CommonMessages extends Messages {
     String commonRed();
     @DefaultMessage("Refine")
     String commonRefine();
+    @DefaultMessage("Refine Search")
+    String commonRefineSearch();
     @DefaultMessage("Refresh")
     String commonRefresh();
     @DefaultMessage("Registered User")
@@ -2268,6 +2966,8 @@ public interface CommonMessages extends Messages {
     String commonRejected();
     @DefaultMessage("Related Information")
     String commonRelatedInformation();
+    @DefaultMessage("Release Date")
+    String commonReleaseDate();
     @DefaultMessage("Release Version")
     String commonReleaseVersion();
     @DefaultMessage("Remove")
@@ -2276,6 +2976,8 @@ public interface CommonMessages extends Messages {
     String commonRemoveExpired();
     @DefaultMessage("Remove Portlet")
     String commonRemovePortlet();
+    @DefaultMessage("Report")
+    String commonReport();
     @DefaultMessage("Reports")
     String commonReports();
     @DefaultMessage("Required")
@@ -2446,6 +3148,8 @@ public interface CommonMessages extends Messages {
     String commonTelephoneAbbr();
     @DefaultMessage("Tell-A-Friend")
     String commonTellAFriend();
+    @DefaultMessage("Tenant ID")
+    String commonTenantId();
     @DefaultMessage("Test")
     String commonTest();
     @DefaultMessage("Text")
@@ -2912,7 +3616,7 @@ public interface CommonMessages extends Messages {
     String crmCreateTrackingCode();
     @DefaultMessage("Create Web URL")
     String crmCreateWebUrl();
-    @DefaultMessage("Key")
+    @DefaultMessage("Field")
     String crmCustomFieldName();
     @DefaultMessage("Value")
     String crmCustomFieldValue();
@@ -3832,6 +4536,8 @@ public interface CommonMessages extends Messages {
     String crmProductWarning();
     @DefaultMessage("WARNING!")
     String crmProductWarningConfirmMessage();
+    @DefaultMessage("Purchased from Shopping List")
+    String crmPurchasedFromShoppingList();
     @DefaultMessage("Purpose")
     String crmPurpose();
     @DefaultMessage("Qualify Lead")
@@ -3892,6 +4598,8 @@ public interface CommonMessages extends Messages {
     String crmReturnCustomerWillReturn();
     @DefaultMessage("Estimated Weight")
     String crmReturnEstimatedWeight();
+    @DefaultMessage("Return From")
+    String crmReturnFrom();
     @DefaultMessage("Return From Customer")
     String crmReturnFromCustomer();
     @DefaultMessage("Schedule Pickup")
@@ -3902,6 +4610,8 @@ public interface CommonMessages extends Messages {
     String crmReturnShipment();
     @DefaultMessage("Return Shipment Tracking Code")
     String crmReturnShipmentTrackingCode();
+    @DefaultMessage("Return To")
+    String crmReturnTo();
     @DefaultMessage("Returned From")
     String crmReturnedFrom();
     @DefaultMessage("Returned To")
@@ -4132,6 +4842,8 @@ public interface CommonMessages extends Messages {
     String crmsfa_sendCrmNotificationEmailsErrorNoAddress(String partyId);
     @DefaultMessage("Czeck")
     String cz();
+    @DefaultMessage("Danish")
+    String da();
     @DefaultMessage("Copy Ledger Setup")
     String dataImportCopyLedgerSetup();
     @DefaultMessage("Customers Import Report")
@@ -4274,6 +4986,8 @@ public interface CommonMessages extends Messages {
     String ebay();
     @DefaultMessage("a new")
     String ecommerceANew();
+    @DefaultMessage("About Us")
+    String ecommerceAboutUs();
     @DefaultMessage("Account Information")
     String ecommerceAccountInformation();
     @DefaultMessage("Your account login is:")
@@ -4346,6 +5060,8 @@ public interface CommonMessages extends Messages {
     String ecommerceBronze();
     @DefaultMessage("Cart has")
     String ecommerceCartHas();
+    @DefaultMessage("Google Checkout")
+    String ecommerceCartToGoogleCheckout();
     @DefaultMessage("Cart Total")
     String ecommerceCartTotal();
     @DefaultMessage("Change Payment Info")
@@ -4426,7 +5142,7 @@ public interface CommonMessages extends Messages {
     String ecommerceFactoids();
     @DefaultMessage("File Manager")
     String ecommerceFileManager();
-    @DefaultMessage("has requested we send you this link with the following message:")
+    @DefaultMessage("has requested us to send you this link with the following message:")
     String ecommerceFollowingMessage();
     @DefaultMessage("From Parent Article")
     String ecommerceFromParentArticle();
@@ -4600,6 +5316,8 @@ public interface CommonMessages extends Messages {
     String ecommercePostAnonymous();
     @DefaultMessage("Price")
     String ecommercePrice();
+    @DefaultMessage("Price Range")
+    String ecommercePriceRange();
     @DefaultMessage("Primary Billing Address")
     String ecommercePrimaryBillingAddress();
     @DefaultMessage("Primary Shipping Address")
@@ -4756,7 +5474,7 @@ public interface CommonMessages extends Messages {
     String ecommerceYouHave();
     @DefaultMessage("You Have Been Sent")
     String ecommerceYouHaveBeenSent();
-    @DefaultMessage("You Might Also Intrested")
+    @DefaultMessage("You Might Also Be Interested In")
     String ecommerceYouMightAlsoIntrested();
     @DefaultMessage("You Might Like")
     String ecommerceYouMightLike();
@@ -4810,12 +5528,16 @@ public interface CommonMessages extends Messages {
     String exportToExcel();
     @DefaultMessage("Facility")
     String facility();
+    @DefaultMessage("Actual shipping charges")
+    String facilityActualShippingCharges();
     @DefaultMessage("Billing address is the same as the shipping address")
     String facilityBillingAddressSameShipping();
     @DefaultMessage("OFBiz: Facility Manager")
     String facilityCompanyName();
     @DefaultMessage("Part of the Open For Business Family of Open Source Software")
     String facilityCompanySubtitle();
+    @DefaultMessage("Estimated shipping charges")
+    String facilityEstimatedShippingCharges();
     @DefaultMessage("Facility")
     String facilityFacility();
     @DefaultMessage("Group by number of order items")
@@ -4830,12 +5552,18 @@ public interface CommonMessages extends Messages {
     String facilityGroupType_description_MGMT_STRUCTURE();
     @DefaultMessage("Pricing Group")
     String facilityGroupType_description_PRICING_GROUP();
+    @DefaultMessage("Hold Shipment")
+    String facilityHoldShipment();
     @DefaultMessage("Inventory")
     String facilityInventory();
+    @DefaultMessage("Inventory History Report")
+    String facilityInventoryHistoryReport();
     @DefaultMessage("Multiple Locations")
     String facilityMultipleLocations();
     @DefaultMessage("No Facility")
     String facilityNoFacility();
+    @DefaultMessage("No Grouping")
+    String facilityNoGrouping();
     @DefaultMessage("Use Default: No other shipping methods available.")
     String facilityNoOtherShippingMethods();
     @DefaultMessage("Items less than 3")
@@ -4846,10 +5574,204 @@ public interface CommonMessages extends Messages {
     String facilitySelectOptionsToGroupBy();
     @DefaultMessage("Facility Selection")
     String facilitySelection();
+    @DefaultMessage("Ship")
+    String facilityShip();
     @DefaultMessage("Please ship items I ordered as they become available (you may incur additional shipping charges).")
     String facilityShipAvailable();
     @DefaultMessage("Ship all at once, or ''as available''?")
     String facilityShipOnceOrAvailable();
+    @DefaultMessage("Config Properties (deprecated use)")
+    String facilityShipmentConfigProps();
+    @DefaultMessage("FacilityShipmentCreatedAndMarkedAsPacked")
+    String facilityShipmentCreatedAndMarkedAsPacked(String shipmentId);
+    @DefaultMessage("Shipment Custom Method")
+    String facilityShipmentCustomMethod();
+    @DefaultMessage("Your DHL ShipIT Account Number")
+    String facilityShipmentDhlAccessAccountNbr();
+    @DefaultMessage("Your DHL ShipIT Access Password")
+    String facilityShipmentDhlAccessPassword();
+    @DefaultMessage("Your DHL ShipIT Shipping Key")
+    String facilityShipmentDhlAccessShippingKey();
+    @DefaultMessage("Your DHL ShipIT User Id")
+    String facilityShipmentDhlAccessUserId();
+    @DefaultMessage("Conntect Timeout")
+    String facilityShipmentDhlConnectTimeout();
+    @DefaultMessage("Conntect URL")
+    String facilityShipmentDhlConnectUrl();
+    @DefaultMessage("Head action attribute")
+    String facilityShipmentDhlHeadAction();
+    @DefaultMessage("Request")
+    String facilityShipmentDhlHeadActionRequest();
+    @DefaultMessage("Head version attribute")
+    String facilityShipmentDhlHeadVersion();
+    @DefaultMessage("Label Image Format")
+    String facilityShipmentDhlLabelImageFormat();
+    @DefaultMessage("PNG")
+    String facilityShipmentDhlLabelImageFormatPng();
+    @DefaultMessage("Rate Estimate API schema")
+    String facilityShipmentDhlRateEstimate();
+    @DefaultMessage("Access Account Number")
+    String facilityShipmentFedexAccessAccountNumber();
+    @DefaultMessage("Access Meter Number")
+    String facilityShipmentFedexAccessMeterNumber();
+    @DefaultMessage("Access User Key")
+    String facilityShipmentFedexAccessUserKey();
+    @DefaultMessage("Access User Password")
+    String facilityShipmentFedexAccessUserPwd();
+    @DefaultMessage("Conntect Soap URL")
+    String facilityShipmentFedexConnectSoapUrl();
+    @DefaultMessage("Conntect Timeout")
+    String facilityShipmentFedexConnectTimeout();
+    @DefaultMessage("Conntect URL")
+    String facilityShipmentFedexConnectUrl();
+    @DefaultMessage("Dropoff Type")
+    String facilityShipmentFedexDropoffType();
+    @DefaultMessage("Business Service Center")
+    String facilityShipmentFedexDropoffTypeBusinessService();
+    @DefaultMessage("Drop-Box")
+    String facilityShipmentFedexDropoffTypeDropBox();
+    @DefaultMessage("Regular Pickup")
+    String facilityShipmentFedexDropoffTypeRegularPickup();
+    @DefaultMessage("Request Courier")
+    String facilityShipmentFedexDropoffTypeRequestCourier();
+    @DefaultMessage("Station")
+    String facilityShipmentFedexDropoffTypeStation();
+    @DefaultMessage("Label Image Type")
+    String facilityShipmentFedexLabelImageType();
+    @DefaultMessage("PDF")
+    String facilityShipmentFedexLabelImageTypePdf();
+    @DefaultMessage("PNG")
+    String facilityShipmentFedexLabelImageTypePng();
+    @DefaultMessage("10KG Box")
+    String facilityShipmentFedexPackingBox10Kg();
+    @DefaultMessage("25KG Box")
+    String facilityShipmentFedexPackingBox25Kg();
+    @DefaultMessage("Box Large")
+    String facilityShipmentFedexPackingBoxLarge();
+    @DefaultMessage("Box Medium")
+    String facilityShipmentFedexPackingBoxMedium();
+    @DefaultMessage("Box Small")
+    String facilityShipmentFedexPackingBoxSmall();
+    @DefaultMessage("Enveloper")
+    String facilityShipmentFedexPackingEnveloper();
+    @DefaultMessage("Enveloper Legal")
+    String facilityShipmentFedexPackingEnveloperLegal();
+    @DefaultMessage("Pak Large")
+    String facilityShipmentFedexPackingPakLarge();
+    @DefaultMessage("Pak Small")
+    String facilityShipmentFedexPackingPakSmall();
+    @DefaultMessage("Tube")
+    String facilityShipmentFedexPackingTube();
+    @DefaultMessage("Packing Type")
+    String facilityShipmentFedexPackingType();
+    @DefaultMessage("Your Packaging")
+    String facilityShipmentFedexPackingYour();
+    @DefaultMessage("Rate Estimate Template Location")
+    String facilityShipmentFedexRateEstimateTemplateLocation();
+    @DefaultMessage("Shipment Template Location")
+    String facilityShipmentFedexShipmentTemplateLocation();
+    @DefaultMessage("Subscription Template Location")
+    String facilityShipmentFedexSubscriptionTemplateLocation();
+    @DefaultMessage("Shipment Gateway Config")
+    String facilityShipmentGatewayConfig();
+    @DefaultMessage("Shipment Gateway Config Description")
+    String facilityShipmentGatewayConfigDescription();
+    @DefaultMessage("Shipment Gateway Config Id")
+    String facilityShipmentGatewayConfigId();
+    @DefaultMessage("Shipment Gateway Config Type Description")
+    String facilityShipmentGatewayConfigTypeDescription();
+    @DefaultMessage("Shipment Gateway Config Type Id")
+    String facilityShipmentGatewayConfigTypeId();
+    @DefaultMessage("Shipment Gateway Config Types")
+    String facilityShipmentGatewayConfigTypes();
+    @DefaultMessage("FacilityShipmentIdCreated")
+    String facilityShipmentIdCreated(String param_0, String param_1, String param_2);
+    @DefaultMessage("No ProductStore associated with order; cannot use Quick Ship")
+    String facilityShipmentMissingProductStore();
+    @DefaultMessage("FacilityShipmentNoItemsAvailableToShip")
+    String facilityShipmentNoItemsAvailableToShip(String param_0);
+    @DefaultMessage("Warning: no shipments created; could not find anything ready and needing to be shipped.")
+    String facilityShipmentNotCreated();
+    @DefaultMessage("FacilityShipmentNotCreatedForExplodesOrderItems")
+    String facilityShipmentNotCreatedForExplodesOrderItems(String param_0);
+    @DefaultMessage("FacilityShipmentNotCreatedForNotReserveInventory")
+    String facilityShipmentNotCreatedForNotReserveInventory(String param_0);
+    @DefaultMessage("Shipment Service Name (deprecated use)")
+    String facilityShipmentServiceName();
+    @DefaultMessage("Access License Number")
+    String facilityShipmentUpsAccessLicenseNumber();
+    @DefaultMessage("Access Password")
+    String facilityShipmentUpsAccessPassword();
+    @DefaultMessage("Access User Id")
+    String facilityShipmentUpsAccessUserId();
+    @DefaultMessage("Allow Cash On Delivery")
+    String facilityShipmentUpsAllowCod();
+    @DefaultMessage("Bill Shipper Account Number")
+    String facilityShipmentUpsBillShipperAccountNumber();
+    @DefaultMessage("Conntect Timeout")
+    String facilityShipmentUpsConnectTimeout();
+    @DefaultMessage("Conntect URL")
+    String facilityShipmentUpsConnectUrl();
+    @DefaultMessage("Default Return Label Memo")
+    String facilityShipmentUpsDefaultReturnLabelMemo();
+    @DefaultMessage("Default Return Label Subject")
+    String facilityShipmentUpsDefaultReturnLabelSubject();
+    @DefaultMessage("Funds for Cash on Delivery")
+    String facilityShipmentUpsFundsCode();
+    @DefaultMessage("Max weight per package")
+    String facilityShipmentUpsMaxEstimateWeight();
+    @DefaultMessage("Minimum weight for a package")
+    String facilityShipmentUpsMinEstimateWeight();
+    @DefaultMessage("Air Service Center")
+    String facilityShipmentUpsPickupAirServiceCenter();
+    @DefaultMessage("Customer Counter")
+    String facilityShipmentUpsPickupCustomerCounter();
+    @DefaultMessage("Daily Pickup")
+    String facilityShipmentUpsPickupDaily();
+    @DefaultMessage("Letter Center")
+    String facilityShipmentUpsPickupLetterCenter();
+    @DefaultMessage("On Call Air Pickup")
+    String facilityShipmentUpsPickupOnCallAir();
+    @DefaultMessage("One Time Pickup")
+    String facilityShipmentUpsPickupOneTime();
+    @DefaultMessage("Suggested Retail Rates")
+    String facilityShipmentUpsPickupSuggestedRetailRates();
+    @DefaultMessage("Save Cert Info")
+    String facilityShipmentUpsSaveCertInfo();
+    @DefaultMessage("Save Cert Path")
+    String facilityShipmentUpsSaveCertPath();
+    @DefaultMessage("Secured Funds Only")
+    String facilityShipmentUpsSecuredFundsOnly();
+    @DefaultMessage("Shipper Number")
+    String facilityShipmentUpsShipperNumber();
+    @DefaultMessage("Shipper Pickup Type")
+    String facilityShipmentUpsShipperPickupType();
+    @DefaultMessage("Surcharge amount will be applied to each shipment package")
+    String facilityShipmentUpsSurchargeAll();
+    @DefaultMessage("Surcharge Amount for Cash On Delivery")
+    String facilityShipmentUpsSurchargeAmount();
+    @DefaultMessage("Surcharge Apply to Package")
+    String facilityShipmentUpsSurchargeApplyToPackage();
+    @DefaultMessage("Surcharge Currency")
+    String facilityShipmentUpsSurchargeCurrencyUomId();
+    @DefaultMessage("Surcharge amount will be applied to the first package in the shipment")
+    String facilityShipmentUpsSurchargeFirst();
+    @DefaultMessage("Surcharge will not be applied to any packages")
+    String facilityShipmentUpsSurchargeNone();
+    @DefaultMessage("Surcharge amount will be split between shipment packages")
+    String facilityShipmentUpsSurchargeSplit();
+    @DefaultMessage("Unsecured Funds Allowed")
+    String facilityShipmentUpsUnsecuredFundsAllowed();
+    @DefaultMessage("Access Password")
+    String facilityShipmentUspsAccessPassword();
+    @DefaultMessage("Access User Id")
+    String facilityShipmentUspsAccessUserId();
+    @DefaultMessage("Conntect Timeout")
+    String facilityShipmentUspsConnectTimeout();
+    @DefaultMessage("Conntect URL")
+    String facilityShipmentUspsConnectUrl();
+    @DefaultMessage("Estimate split into packages")
+    String facilityShipmentUspsMaxEstimateWeight();
     @DefaultMessage("Shipments")
     String facilityShipments();
     @DefaultMessage("Shipping")
@@ -4858,6 +5780,8 @@ public interface CommonMessages extends Messages {
     String facilityShippingAndHandling();
     @DefaultMessage("Special Instructions")
     String facilitySpecialInstructions();
+    @DefaultMessage("There is problem occured in payment capture, shipment is still in PICKED status")
+    String facilityThereIsProblemOccuredInPaymentCapture();
     @DefaultMessage("Building")
     String facilityType_description_BUILDING();
     @DefaultMessage("Call Center")
@@ -4876,6 +5800,168 @@ public interface CommonMessages extends Messages {
     String facilityType_description_WAREHOUSE();
     @DefaultMessage("Please wait until the entire order is ready before shipping.")
     String facilityWaitEntireOrderReady();
+    @DefaultMessage("There is much difference in shipping charges")
+    String facilityWarningMessageThereIsMuchDifferenceInShippingCharges();
+    @DefaultMessage("This will be shown to your customers, so think of image when giving your catalog a name.")
+    String fieldDescription_ProdCatalog_catalogName();
+    @DefaultMessage("If specified will be prepended to image and other content paths. Should start with a slash but not end with one.")
+    String fieldDescription_ProdCatalog_contentPathPrefix();
+    @DefaultMessage("This will be seen by your customers. Maintain your image and message with the logo presented.")
+    String fieldDescription_ProdCatalog_headerLogo();
+    @DefaultMessage("This cannot be changed without re-creating the Product Catalog.")
+    String fieldDescription_ProdCatalog_prodCatalogId();
+    @DefaultMessage("If Y, administrators can only add products to ''Purchase Allow'' categories if they have the permission CATALOG_VIEW_ALLOW")
+    String fieldDescription_ProdCatalog_purchaseAllowPermReqd();
+    @DefaultMessage("The path to your distinctive style sheet which will govern the appearance of your catalog goes here.")
+    String fieldDescription_ProdCatalog_styleSheet();
+    @DefaultMessage("If specified will be prepended to template paths. Should start with a slash but not end with one.")
+    String fieldDescription_ProdCatalog_templatePathPrefix();
+    @DefaultMessage("Set this to Y if you want to give users the option to quick add products.")
+    String fieldDescription_ProdCatalog_useQuickAdd();
+    @DefaultMessage("If Y, administrators can only add products to ''View Allow'' categories if they have the permission CATALOG_VIEW_ALLOW")
+    String fieldDescription_ProdCatalog_viewAllowPermReqd();
+    @DefaultMessage("If Y then on add to cart remove all products in cart with a ProductAssoc record related to or from the product and with the PRODUCT_INCOMPATABLE type.")
+    String fieldDescription_ProductStore_addToCartRemoveIncompat();
+    @DefaultMessage("If Y then on add to cart remove all products in cart with a ProductAssoc record related from the product and with the PRODUCT_UPGRADE type.")
+    String fieldDescription_ProductStore_addToCartReplaceUpsell();
+    @DefaultMessage("If No, when a customer creates an account they will not be asked for a password and they have to wait for their account to be enabled and a password to be sent to them.")
+    String fieldDescription_ProductStore_allowPassword();
+    @DefaultMessage("Message shown when payment authorization is declined.")
+    String fieldDescription_ProductStore_authDeclinedMessage();
+    @DefaultMessage("Message sent when a processing error is encountered.")
+    String fieldDescription_ProductStore_authErrorMessage();
+    @DefaultMessage("Message sent when fraud is suspected.")
+    String fieldDescription_ProductStore_authFraudMessage();
+    @DefaultMessage("If Y or empty, sales invoices created from orders will be marked ready.")
+    String fieldDescription_ProductStore_autoApproveInvoice();
+    @DefaultMessage("If N, orders will not be automatically approved when payment is authorized.")
+    String fieldDescription_ProductStore_autoApproveOrder();
+    @DefaultMessage("If the site allows users to enter product reviews, this controls whether the reviews must be approved, or whether they are automatically shown on the site.")
+    String fieldDescription_ProductStore_autoApproveReviews();
+    @DefaultMessage("If Y, digital items will be immediately invoiced when the order is placed.")
+    String fieldDescription_ProductStore_autoInvoiceDigitalItems();
+    @DefaultMessage("For auto-orders try other Credit Card expiration dates (if date is wrong or general failure where type not known).")
+    String fieldDescription_ProductStore_autoOrderCcTryExp();
+    @DefaultMessage("For auto-orders if Credit Cards fails for NSF try again how many times.")
+    String fieldDescription_ProductStore_autoOrderCcTryLaterMax();
+    @DefaultMessage("For auto-orders if Credit Cards fails for NSF (Not Sufficient Funds) try again later.")
+    String fieldDescription_ProductStore_autoOrderCcTryLaterNsf();
+    @DefaultMessage("For auto-orders try other Credit Cards for the customer.")
+    String fieldDescription_ProductStore_autoOrderCcTryOtherCards();
+    @DefaultMessage("Drop-down Y/N box on the question of automatically saving the contents of the shopping cart.")
+    String fieldDescription_ProductStore_autoSaveCart();
+    @DefaultMessage("If set to Y, when a new sales order is created with backordered items, then reservations on the facility/product are reassigned according to the priority given by the shipBeforeDate field.")
+    String fieldDescription_ProductStore_balanceResOnOrderCreation();
+    @DefaultMessage("This determines whether the system checks inventory levels when processing an order.")
+    String fieldDescription_ProductStore_checkInventory();
+    @DefaultMessage("This is the name of the company that this catalog represents.")
+    String fieldDescription_ProductStore_companyName();
+    @DefaultMessage("Triggers cancellation of orders for non-payment after the number of days entered here.")
+    String fieldDescription_ProductStore_daysToCancelNonPay();
+    @DefaultMessage("Which national currency will be used if none is specified. Use webtools to find codes for non-US locations.")
+    String fieldDescription_ProductStore_defaultCurrencyUomId();
+    @DefaultMessage("Default locale, for language, number, and currency formats.")
+    String fieldDescription_ProductStore_defaultLocaleString();
+    @DefaultMessage("If you allow others access with a password, what is the default password that anyone could use if they knew it?")
+    String fieldDescription_ProductStore_defaultPassword();
+    @DefaultMessage("Unless the sales channel has been specified in the transaction, it will be assumed that the sale came in through the selected path.")
+    String fieldDescription_ProductStore_defaultSalesChannelEnumId();
+    @DefaultMessage("Which Category of Digital Products may be uploaded?")
+    String fieldDescription_ProductStore_digProdUploadCategoryId();
+    @DefaultMessage("What to set order items status to when Digital Item orders are approved, declined, or canceled. Based on the standard defined status codes in Open for Business.")
+    String fieldDescription_ProductStore_digitalItemApprovedStatus();
+    @DefaultMessage("The auto-suggestion list is a special ShoppingList that the addSuggestionsToShoppingList service will maintain for cross-sells of ordered items.")
+    String fieldDescription_ProductStore_enableAutoSuggestionList();
+    @DefaultMessage("Unless this is set to Yes, the sale of Digital Products from your Store will not be permitted.")
+    String fieldDescription_ProductStore_enableDigProdUpload();
+    @DefaultMessage("If set to Y then any shopping cart item with a quantity greater than one will be split into separate order items with a quantity of 1 each.")
+    String fieldDescription_ProductStore_explodeOrderItems();
+    @DefaultMessage("This is the message you want your customers to see when their order is approved.")
+    String fieldDescription_ProductStore_headerApprovedStatus();
+    @DefaultMessage("This is the message that you want the client to see when their order is cancelled.")
+    String fieldDescription_ProductStore_headerCancelStatus();
+    @DefaultMessage("This is the message you want your customers to see when their order is declined. Based on the standard defined status codes in Open for Business.")
+    String fieldDescription_ProductStore_headerDeclinedStatus();
+    @DefaultMessage("This is where the stock levels are drawn from.")
+    String fieldDescription_ProductStore_inventoryFacilityId();
+    @DefaultMessage("If Yes, any orders created will not be sent, credit card charges will not be made, etc.")
+    String fieldDescription_ProductStore_isDemoStore();
+    @DefaultMessage("If Yes, the order will be immediately fulfilled through system-generated processes in ofbiz (e.g. for POS sales).  If no, it will be held for manual review.")
+    String fieldDescription_ProductStore_isImmediatelyFulfilled();
+    @DefaultMessage("What to set order items status to when orders are approved, declined, or canceled. Based on the standard defined status codes in Open for Business.")
+    String fieldDescription_ProductStore_itemApprovedStatus();
+    @DefaultMessage("The message shown when an item they ordered is cancelled.")
+    String fieldDescription_ProductStore_itemCancelStatus();
+    @DefaultMessage("This is the message you want the customer to see when one of their items is declined for some reason.")
+    String fieldDescription_ProductStore_itemDeclinedStatus();
+    @DefaultMessage("Drop-down Y/N box on the question of whether a Manual Authorization is captured.")
+    String fieldDescription_ProductStore_manualAuthIsCapture();
+    @DefaultMessage("If this is a ''Single Inventory'' facility. With newer or less complex businesses, you will find the Single Inventory concept much easier to work with.")
+    String fieldDescription_ProductStore_oneInventoryFacility();
+    @DefaultMessage("All orders will be prefixed by this. For example, if you wished accounting to be able to quickly differentiate orders between stores.")
+    String fieldDescription_ProductStore_orderNumberPrefix();
+    @DefaultMessage("Note that this corresponds with the organizationPartyId that GL transactions will be posted to.")
+    String fieldDescription_ProductStore_payToPartyId();
+    @DefaultMessage("What group this store belongs to. Stores can be grouped together with a price for each store group. It can be left blank if there are no store groups set up.")
+    String fieldDescription_ProductStore_primaryStoreGroupId();
+    @DefaultMessage("If set to Y an additional constraint will of isVariant!=Y will be added to all product searches for the store.")
+    String fieldDescription_ProductStore_prodSearchExcludeVariants();
+    @DefaultMessage("The id for the product store..")
+    String fieldDescription_ProductStore_productStoreId();
+    @DefaultMessage("When some share of the cost of shipping is covered under an account other than the bill-to.")
+    String fieldDescription_ProductStore_prorateShipping();
+    @DefaultMessage("If set to Y return will automatically go to the Received status when Accepted instead of waiting for actual receipt of the return.")
+    String fieldDescription_ProductStore_reqReturnInventoryReceive();
+    @DefaultMessage("Require Shipping Address for Digital Items? Note this only has an effect if there are ONLY digital goods in the cart.")
+    String fieldDescription_ProductStore_reqShipAddrForDigItems();
+    @DefaultMessage("If set to Y then the customer must be associated with the store in the Customer role in order to be able to login (e.g. B2B)")
+    String fieldDescription_ProductStore_requireCustomerRole();
+    @DefaultMessage("If sufficient inventory not on hand, order will not be processed when this flag is set to Yes.")
+    String fieldDescription_ProductStore_requireInventory();
+    @DefaultMessage("Refers to warehouse stocking level triggers.")
+    String fieldDescription_ProductStore_requirementMethodEnumId();
+    @DefaultMessage("Causes inventory to be reserved for items ordered in the store. The inventory may still be on hand but will no longer be available for other orders.")
+    String fieldDescription_ProductStore_reserveInventory();
+    @DefaultMessage("Choose how inventory should be reserved.")
+    String fieldDescription_ProductStore_reserveOrderEnumId();
+    @DefaultMessage("How many times can an unsuccessful attempt to authorize an order be allowed?")
+    String fieldDescription_ProductStore_retryFailedAuths();
+    @DefaultMessage("If Yes, allows customer to pay for some order items with one payment type, others with another type.")
+    String fieldDescription_ProductStore_selectPaymentTypePerItem();
+    @DefaultMessage("If Y or empty, set the inventory item owner upon issuance.")
+    String fieldDescription_ProductStore_setOwnerUponIssuance();
+    @DefaultMessage("If N, the captureOrderPayments will cause a service error if credit card capture fails.")
+    String fieldDescription_ProductStore_shipIfCaptureFails();
+    @DefaultMessage("If set to N the options related to gifts (the ''is gift'' and ''gift message'' options) will not be shown during checkout.")
+    String fieldDescription_ProductStore_showCheckoutGiftOptions();
+    @DefaultMessage("If N then out of stock products will not be displayed on site")
+    String fieldDescription_ProductStore_showOutOfStockProducts();
+    @DefaultMessage("Should the displayed prices include (Y) or not include (N) the VAT Tax amount?")
+    String fieldDescription_ProductStore_showPricesWithVatTax();
+    @DefaultMessage("Will it be appropriate to indicate when an item is exempt from tax?")
+    String fieldDescription_ProductStore_showTaxIsExempt();
+    @DefaultMessage("If Y then before the order is stored the OrderPaymentPreference record will be split, one for each OrderItemShipGroup.")
+    String fieldDescription_ProductStore_splitPayPrefPerShpGrp();
+    @DefaultMessage("Specify the type (Billing Account or Financial Account) of Store Credit Account used for refund return.")
+    String fieldDescription_ProductStore_storeCreditAccountEnumId();
+    @DefaultMessage("How many days that store credit is valid for. Null value implies no expiration.")
+    String fieldDescription_ProductStore_storeCreditValidDays();
+    @DefaultMessage("This is the name of the store that this catalog represents.")
+    String fieldDescription_ProductStore_storeName();
+    @DefaultMessage("This value gets displayed in the header section of the ecommerce store.")
+    String fieldDescription_ProductStore_subtitle();
+    @DefaultMessage("This value gets displayed in the header section of the ecommerce store.")
+    String fieldDescription_ProductStore_title();
+    @DefaultMessage("If set to Y then in the create customer form no entry box will be presented for a username - the primary email address will be used for username.")
+    String fieldDescription_ProductStore_usePrimaryEmailUsername();
+    @DefaultMessage("What is the Geographical ID for the VAT taxing authority?")
+    String fieldDescription_ProductStore_vatTaxAuthGeoId();
+    @DefaultMessage("What is the Party ID of the Vat Taxing Authority?")
+    String fieldDescription_ProductStore_vatTaxAuthPartyId();
+    @DefaultMessage("Controls whether the user is taken to the shopping cart immediately after adding a product to his cart.")
+    String fieldDescription_ProductStore_viewCartOnAdd();
+    @DefaultMessage("For controlling the look and feel and a web-based store.")
+    String fieldDescription_ProductStore_visualThemeId();
     @DefaultMessage("Payment Term")
     String financialPaymentTerm();
     @DefaultMessage("Select a Payment Method")
@@ -4992,6 +6078,8 @@ public interface CommonMessages extends Messages {
     String financialsBeginningOn();
     @DefaultMessage("Maximum which can be charged to the credit account in the currency of the organization")
     String financialsBillingAccountAccountLimitTip();
+    @DefaultMessage("This account has been fully used")
+    String financialsBillingAccountFullyUsed();
     @DefaultMessage("Paycheck ID is missing")
     String financialsBshErrorPaycheckIdIsMissing();
     @DefaultMessage("FinancialsBshErrorPaycheckNotFound")
@@ -5136,6 +6224,8 @@ public interface CommonMessages extends Messages {
     String financialsCustomer();
     @DefaultMessage("Customer Credit Account")
     String financialsCustomerBillingAccount();
+    @DefaultMessage("Apply Credit Account to Invoices")
+    String financialsCustomerBillingAccountApplyToInvoices();
     @DefaultMessage("Credit Account ID")
     String financialsCustomerBillingAccountID();
     @DefaultMessage("New Customer Credit Account")
@@ -5432,6 +6522,8 @@ public interface CommonMessages extends Messages {
     String financialsInvoicePerformedOrderItemsForOrder();
     @DefaultMessage("Invoice Selected Invoices")
     String financialsInvoiceSelectedInvoices();
+    @DefaultMessage("Invoice Service Items")
+    String financialsInvoiceServiceItems();
     @DefaultMessage("Invoice Terms")
     String financialsInvoiceTerms();
     @DefaultMessage("Invoices Total")
@@ -5582,6 +6674,8 @@ public interface CommonMessages extends Messages {
     String financialsPayTax();
     @DefaultMessage("Pay to Party")
     String financialsPayToParty();
+    @DefaultMessage("Payable Reports")
+    String financialsPayableReports();
     @DefaultMessage("Payables")
     String financialsPayables();
     @DefaultMessage("Accounts Payables Aging")
@@ -5700,6 +6794,8 @@ public interface CommonMessages extends Messages {
     String financialsPurchaseInvoice();
     @DefaultMessage("Qty")
     String financialsQty();
+    @DefaultMessage("Receivable Reports")
+    String financialsReceivableReports();
     @DefaultMessage("Receivables")
     String financialsReceivables();
     @DefaultMessage("Accounts Receivables Aging")
@@ -5908,14 +7004,22 @@ public interface CommonMessages extends Messages {
     String financialsServiceWarning_InventoryItemValueAdj_ZeroOnHand(String inventoryItemId);
     @DefaultMessage("Settle")
     String financialsSettle();
+    @DefaultMessage("Payment Method")
+    String financialsSettlePaymentMethod();
     @DefaultMessage("Settle Payments")
     String financialsSettlePayments();
     @DefaultMessage("Settle Payments From")
     String financialsSettlePaymentsFrom();
+    @DefaultMessage("Preview")
+    String financialsSettlePreview();
     @DefaultMessage("Settle Refunds From")
     String financialsSettleRefundsFrom();
     @DefaultMessage("Settle Undeposited Receipts")
     String financialsSettleUndepositedReceipts();
+    @DefaultMessage("Settlement Account")
+    String financialsSettlementAccount();
+    @DefaultMessage("Settlement Type")
+    String financialsSettlementType();
     @DefaultMessage("Settlements")
     String financialsSettlements();
     @DefaultMessage("FinancialsShippedVia")
@@ -6086,8 +7190,14 @@ public interface CommonMessages extends Messages {
     String findSuppliers();
     @DefaultMessage("First Name")
     String firstName();
+    @DefaultMessage("fixed_asset_product_not_found")
+    String fixed_asset_product_not_found(String param_0);
     @DefaultMessage("Abbrev")
     String formFieldTitle_abbrev();
+    @DefaultMessage("Accumulated depreciation GL account")
+    String formFieldTitle_accDepGlAccountId();
+    @DefaultMessage("Accept")
+    String formFieldTitle_acceptButton();
     @DefaultMessage("Accommodation Map Id")
     String formFieldTitle_accommodationMapId();
     @DefaultMessage("Accommodation Spot Id")
@@ -6110,6 +7220,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_acctgTransEntryTypeId();
     @DefaultMessage("Acctg Trans Id")
     String formFieldTitle_acctgTransId();
+    @DefaultMessage("Acctg Trans Type")
+    String formFieldTitle_acctgTransType();
     @DefaultMessage("Acctg Trans Type Id")
     String formFieldTitle_acctgTransTypeId();
     @DefaultMessage("Acquire Order Id")
@@ -6158,6 +7270,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_agreementImage();
     @DefaultMessage("Agreement Item Seq Id")
     String formFieldTitle_agreementItemSeqId();
+    @DefaultMessage("Agreement Item Type")
+    String formFieldTitle_agreementItemType();
     @DefaultMessage("Agreement Item Type Id")
     String formFieldTitle_agreementItemTypeId();
     @DefaultMessage("Agreement Text")
@@ -6190,7 +7304,7 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_amount();
     @DefaultMessage("Amount Applied")
     String formFieldTitle_amountApplied();
-    @DefaultMessage("Amount to Apply")
+    @DefaultMessage("Outstanding amount")
     String formFieldTitle_amountToApply();
     @DefaultMessage("Amount Total")
     String formFieldTitle_amountTotal();
@@ -6206,6 +7320,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_approvedByUserLoginId();
     @DefaultMessage("Area Id")
     String formFieldTitle_areaId();
+    @DefaultMessage("Asset GL account")
+    String formFieldTitle_assetGlAccountId();
     @DefaultMessage("Attr Name")
     String formFieldTitle_attrName();
     @DefaultMessage("Attr Type")
@@ -6246,7 +7362,7 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_autoOrderShoppingListId();
     @DefaultMessage("Auto Save Cart")
     String formFieldTitle_autoSaveCart();
-    @DefaultMessage("Automatic Extend")
+    @DefaultMessage("The subscription will be extended at the end of the subscription period with a new order")
     String formFieldTitle_automaticExtend();
     @DefaultMessage("Availability")
     String formFieldTitle_availabilityStatusId();
@@ -6302,7 +7418,7 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_cancelReturnUrl();
     @DefaultMessage("The time period (before the end of the thruedate) after which the automatic extension of the subscription will be executed.")
     String formFieldTitle_canclAutmExtTime();
-    @DefaultMessage("The subscription will be extended at the end of the subscription period with a new order")
+    @DefaultMessage("Unit Of Measure used for the automatic extension of the subscription.")
     String formFieldTitle_canclAutmExtTimeUomId();
     @DefaultMessage("Capture")
     String formFieldTitle_capture();
@@ -6354,6 +7470,12 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_clientPartyId();
     @DefaultMessage("Closed Date Time")
     String formFieldTitle_closedDateTime();
+    @DefaultMessage("Closing Balance")
+    String formFieldTitle_closingBalance();
+    @DefaultMessage("Closing Balance Credit")
+    String formFieldTitle_closingBalanceCredit();
+    @DefaultMessage("Closing Balance Debit")
+    String formFieldTitle_closingBalanceDebit();
     @DefaultMessage("Contach Mech Detail")
     String formFieldTitle_cmDetail();
     @DefaultMessage("Coeff. Value")
@@ -6408,12 +7530,16 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_containerId();
     @DefaultMessage("Content Mime Type Id")
     String formFieldTitle_contentMimeTypeId();
+    @DefaultMessage("content Type")
+    String formFieldTitle_contentType();
     @DefaultMessage("Rate")
     String formFieldTitle_conversionFactor();
     @DefaultMessage("Corresponding Product Id")
     String formFieldTitle_correspondingProductId();
     @DefaultMessage("Cost")
     String formFieldTitle_cost();
+    @DefaultMessage("Cost Centers")
+    String formFieldTitle_costCenters();
     @DefaultMessage("Cost Component Calc Id")
     String formFieldTitle_costComponentCalcId();
     @DefaultMessage("Cost Component Id")
@@ -6516,6 +7642,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_debitCreditFlag();
     @DefaultMessage("Debit Gl Account Id")
     String formFieldTitle_debitGlAccountId();
+    @DefaultMessage("Deceased Date")
+    String formFieldTitle_deceasedDate();
     @DefaultMessage("Default Amount")
     String formFieldTitle_defaultAmount();
     @DefaultMessage("Default Config Option Id")
@@ -6548,8 +7676,12 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_deleteSelectedButton();
     @DefaultMessage("Deliverable Id")
     String formFieldTitle_deliverableId();
+    @DefaultMessage("Depreciation GL account")
+    String formFieldTitle_depGlAccountId();
     @DefaultMessage("Depreciation")
     String formFieldTitle_depreciation();
+    @DefaultMessage("Depreciation custom method")
+    String formFieldTitle_depreciationCustomMethodId();
     @DefaultMessage("Description")
     String formFieldTitle_description();
     @DefaultMessage("Destination Facility Id")
@@ -6572,17 +7704,21 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_editContent();
     @DefaultMessage("Edit Data Resource")
     String formFieldTitle_editDataResource();
+    @DefaultMessage("Edit GL Account Category")
+    String formFieldTitle_editGlAccountCategory();
+    @DefaultMessage("Edit GL Account Category Member")
+    String formFieldTitle_editGlAccountCategoryMember();
     @DefaultMessage("effective Alias")
     String formFieldTitle_effectiveAlias();
     @DefaultMessage("Effective Date")
     String formFieldTitle_effectiveDate();
     @DefaultMessage("Email Address")
     String formFieldTitle_emailAddress();
-    @DefaultMessage("Copy Emailadress")
+    @DefaultMessage("Copy Email Address")
     String formFieldTitle_emailAddressCc();
-    @DefaultMessage("From Emailadress")
+    @DefaultMessage("From Email Address")
     String formFieldTitle_emailAddressFrom();
-    @DefaultMessage("To Emailadress")
+    @DefaultMessage("To Email Address")
     String formFieldTitle_emailAddressTo();
     @DefaultMessage("Empl Position Type Id")
     String formFieldTitle_emplPositionTypeId();
@@ -6640,6 +7776,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_expectedItemStatus();
     @DefaultMessage("Explode Order Items")
     String formFieldTitle_explodeOrderItems();
+    @DefaultMessage("External Account Id")
+    String formFieldTitle_externalAccountId();
     @DefaultMessage("External Id")
     String formFieldTitle_externalId();
     @DefaultMessage("External Subscription Id")
@@ -6678,10 +7816,16 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_finAccountPin();
     @DefaultMessage("Fin Account Trans Id")
     String formFieldTitle_finAccountTransId();
+    @DefaultMessage("Fin Account Trans Type")
+    String formFieldTitle_finAccountTransType();
     @DefaultMessage("Fin Account Trans Type Id")
     String formFieldTitle_finAccountTransTypeId();
+    @DefaultMessage("Fin Account Type")
+    String formFieldTitle_finAccountType();
     @DefaultMessage("Fin Account Type Id")
     String formFieldTitle_finAccountTypeId();
+    @DefaultMessage("Find Gl Account Category")
+    String formFieldTitle_findGlAccountCategory();
     @DefaultMessage("Finish Date Time")
     String formFieldTitle_finishDateTime();
     @DefaultMessage("First Attempt Order Id")
@@ -6708,6 +7852,10 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_fridayStartTime();
     @DefaultMessage("From Date")
     String formFieldTitle_fromDate();
+    @DefaultMessage("From Due Date")
+    String formFieldTitle_fromDueDate();
+    @DefaultMessage("From Invoice Date")
+    String formFieldTitle_fromInvoiceDate();
     @DefaultMessage("From Party Id")
     String formFieldTitle_fromPartyId();
     @DefaultMessage("From Quantity")
@@ -6732,14 +7880,30 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_generalComments();
     @DefaultMessage("Geo Id")
     String formFieldTitle_geoId();
+    @DefaultMessage("GL Account Category")
+    String formFieldTitle_glAccountCategory();
+    @DefaultMessage("GL Account Category Id")
+    String formFieldTitle_glAccountCategoryId();
+    @DefaultMessage("GL Account Category Member")
+    String formFieldTitle_glAccountCategoryMember();
+    @DefaultMessage("GL Account Category Type")
+    String formFieldTitle_glAccountCategoryType();
+    @DefaultMessage("GL Account Category Type Id")
+    String formFieldTitle_glAccountCategoryTypeId();
     @DefaultMessage("Gl Account Class Id")
     String formFieldTitle_glAccountClassId();
     @DefaultMessage("Gl Account Id")
     String formFieldTitle_glAccountId();
+    @DefaultMessage("Gl Account Type")
+    String formFieldTitle_glAccountType();
     @DefaultMessage("Gl Account Type Id")
     String formFieldTitle_glAccountTypeId();
+    @DefaultMessage("Fiscal Gl Type")
+    String formFieldTitle_glFiscalType();
     @DefaultMessage("Fiscal Gl Type Id")
     String formFieldTitle_glFiscalTypeId();
+    @DefaultMessage("Gl Journal")
+    String formFieldTitle_glJournal();
     @DefaultMessage("Gl Journal Id")
     String formFieldTitle_glJournalId();
     @DefaultMessage("Gl Journal Name")
@@ -6750,6 +7914,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_glReconciliationName();
     @DefaultMessage("Gl Resource Type Id")
     String formFieldTitle_glResourceTypeId();
+    @DefaultMessage("Gl Transactions")
+    String formFieldTitle_glTransactions();
     @DefaultMessage("Gl Xbrl Class Id")
     String formFieldTitle_glXbrlClassId();
     @DefaultMessage("Grand Total")
@@ -6760,6 +7926,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_groupName();
     @DefaultMessage("Group Name Local")
     String formFieldTitle_groupNameLocal();
+    @DefaultMessage("Group Status")
+    String formFieldTitle_groupStatus();
     @DefaultMessage("Group Status Id")
     String formFieldTitle_groupStatusId();
     @DefaultMessage("Has Table")
@@ -6804,6 +7972,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_infoString();
     @DefaultMessage("Info Url")
     String formFieldTitle_infoUrl();
+    @DefaultMessage("Initial View")
+    String formFieldTitle_initialView();
     @DefaultMessage("Instance Of Product Id")
     String formFieldTitle_instanceOfProductId();
     @DefaultMessage("Internal Code")
@@ -6856,6 +8026,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_invoiceProcessing();
     @DefaultMessage("Invoice Sequence")
     String formFieldTitle_invoiceSequenceEnumId();
+    @DefaultMessage("Invoice Term Id")
+    String formFieldTitle_invoiceTermId();
     @DefaultMessage("Invoice Type")
     String formFieldTitle_invoiceTypeId();
     @DefaultMessage("Is Active")
@@ -6974,6 +8146,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_logoImageUrl();
     @DefaultMessage("Long Description")
     String formFieldTitle_longDescription();
+    @DefaultMessage("Loss GL account")
+    String formFieldTitle_lossGlAccountId();
     @DefaultMessage("Lot Id")
     String formFieldTitle_lotId();
     @DefaultMessage("Maint Hist Seq Id")
@@ -7020,6 +8194,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_maximumAmountUomId();
     @DefaultMessage("Member Id")
     String formFieldTitle_memberId();
+    @DefaultMessage("Merchant Id")
+    String formFieldTitle_merchantId();
     @DefaultMessage("Message Id")
     String formFieldTitle_messageId();
     @DefaultMessage("Meter Name")
@@ -7054,6 +8230,10 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_mondayCapacity();
     @DefaultMessage("Monday Start Time")
     String formFieldTitle_mondayStartTime();
+    @DefaultMessage("Month Amount Credit")
+    String formFieldTitle_monthAmountCredit();
+    @DefaultMessage("Month Amount Debit")
+    String formFieldTitle_monthAmountDebit();
     @DefaultMessage("Months In Past Limit")
     String formFieldTitle_monthsInPastLimit();
     @DefaultMessage("Months With Employer")
@@ -7074,6 +8254,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_needsInventoryReceive();
     @DefaultMessage("New Credit Card")
     String formFieldTitle_newCreditCard();
+    @DefaultMessage("New GL Account Category")
+    String formFieldTitle_newGlAccountCategory();
     @DefaultMessage("New Password")
     String formFieldTitle_newPassword();
     @DefaultMessage("New Password Verify")
@@ -7082,6 +8264,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_nickname();
     @DefaultMessage("Not Applied")
     String formFieldTitle_notApplied();
+    @DefaultMessage("Not valid total")
+    String formFieldTitle_notValidTotal();
     @DefaultMessage("Note")
     String formFieldTitle_note();
     @DefaultMessage("Note Date Time")
@@ -7110,6 +8294,10 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_oneInventoryFacility();
     @DefaultMessage("Open Date Time")
     String formFieldTitle_openDateTime();
+    @DefaultMessage("Opening Balance Credit")
+    String formFieldTitle_openingBalanceCredit();
+    @DefaultMessage("Opening Balance Debit")
+    String formFieldTitle_openingBalanceDebit();
     @DefaultMessage("Opt-in Code")
     String formFieldTitle_optInVerifyCode();
     @DefaultMessage("Order Date")
@@ -7132,6 +8320,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_orderNumberPrefix();
     @DefaultMessage("Order Payment Preference Id")
     String formFieldTitle_orderPaymentPreferenceId();
+    @DefaultMessage("Pick Sheet Printed Date")
+    String formFieldTitle_orderPickSheetPrintedDate();
     @DefaultMessage("Order Price Percent")
     String formFieldTitle_orderPricePercent();
     @DefaultMessage("Order Qty Increments")
@@ -7228,6 +8418,10 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_partyIdFrom();
     @DefaultMessage("To Party ID")
     String formFieldTitle_partyIdTo();
+    @DefaultMessage("Identification Type")
+    String formFieldTitle_partyIdentTypeDesc();
+    @DefaultMessage("Identification Type")
+    String formFieldTitle_partyIdentificationTypeId();
     @DefaultMessage("Party Invitation Id")
     String formFieldTitle_partyInvitationId();
     @DefaultMessage("Party Need Id")
@@ -7248,12 +8442,22 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_passwordHint();
     @DefaultMessage("Pay To Party Id")
     String formFieldTitle_payToPartyId();
+    @DefaultMessage("Payment Application Id")
+    String formFieldTitle_paymentApplicationId();
     @DefaultMessage("Already Applied")
     String formFieldTitle_paymentApplied();
     @DefaultMessage("Amount to Apply")
     String formFieldTitle_paymentApplyNow();
     @DefaultMessage("Payment Gateway Response Id")
     String formFieldTitle_paymentGatewayResponseId();
+    @DefaultMessage("Payment Group Id")
+    String formFieldTitle_paymentGroupId();
+    @DefaultMessage("Payment Group Name")
+    String formFieldTitle_paymentGroupName();
+    @DefaultMessage("Payment Group Type")
+    String formFieldTitle_paymentGroupType();
+    @DefaultMessage("Payment Group Type Id")
+    String formFieldTitle_paymentGroupTypeId();
     @DefaultMessage("Payment Id")
     String formFieldTitle_paymentId();
     @DefaultMessage("Payment Method Id")
@@ -7282,10 +8486,14 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_percentageUsed();
     @DefaultMessage("Performed By Party Id")
     String formFieldTitle_performedByPartyId();
+    @DefaultMessage("Period1 From Date")
+    String formFieldTitle_period1FromDate();
     @DefaultMessage("Period1 Gl Fiscal Type Id")
     String formFieldTitle_period1GlFiscalTypeId();
     @DefaultMessage("Period1 Thru Date")
     String formFieldTitle_period1ThruDate();
+    @DefaultMessage("Period2 From Date")
+    String formFieldTitle_period2FromDate();
     @DefaultMessage("Period2 Gl Fiscal Type Id")
     String formFieldTitle_period2GlFiscalTypeId();
     @DefaultMessage("Period2 Thru Date")
@@ -7312,6 +8520,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_postToGlAccountId();
     @DefaultMessage("Postal Code")
     String formFieldTitle_postalCode();
+    @DefaultMessage("Posted")
+    String formFieldTitle_posted();
     @DefaultMessage("Posted Anonymous")
     String formFieldTitle_postedAnonymous();
     @DefaultMessage("Posted Balance")
@@ -7338,6 +8548,10 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_primaryProductCategoryId();
     @DefaultMessage("Primary Store Group Id")
     String formFieldTitle_primaryStoreGroupId();
+    @DefaultMessage("Print Pick Sheet")
+    String formFieldTitle_printPickSheet();
+    @DefaultMessage("Print First")
+    String formFieldTitle_printPickSheetFirst();
     @DefaultMessage("Priority")
     String formFieldTitle_priority();
     @DefaultMessage("processMode")
@@ -7414,6 +8628,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_productionRuns();
     @DefaultMessage("Product Id")
     String formFieldTitle_produtId();
+    @DefaultMessage("Profit GL account")
+    String formFieldTitle_profitGlAccountId();
     @DefaultMessage("Promised Datetime")
     String formFieldTitle_promisedDatetime();
     @DefaultMessage("Promo Name")
@@ -7520,6 +8736,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_receiveDate();
     @DefaultMessage("Received By User Login Id")
     String formFieldTitle_receivedByUserLoginId();
+    @DefaultMessage("Reconcile Status")
+    String formFieldTitle_reconcileStatus();
     @DefaultMessage("Reconcile Status Id")
     String formFieldTitle_reconcileStatusId();
     @DefaultMessage("Reconciled Amount")
@@ -7530,8 +8748,6 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_reconciledDate();
     @DefaultMessage("Recurrence Info Id")
     String formFieldTitle_recurrenceInfoId();
-    @DefaultMessage("Recurrence Offset")
-    String formFieldTitle_recurrenceOffset();
     @DefaultMessage("Redirect Url")
     String formFieldTitle_redirectUrl();
     @DefaultMessage("Reference Num")
@@ -7550,6 +8766,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_remainingSubTotal();
     @DefaultMessage("Reminder Date Time")
     String formFieldTitle_reminderDateTime();
+    @DefaultMessage("Reminder Offset")
+    String formFieldTitle_reminderOffset();
     @DefaultMessage("remove")
     String formFieldTitle_remove();
     @DefaultMessage("Remove")
@@ -7652,6 +8870,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_returnUrl();
     @DefaultMessage("Review Date")
     String formFieldTitle_reviewDate();
+    @DefaultMessage("Review Orders Not Picked-Packed")
+    String formFieldTitle_reviewOrdersNotPickedOrPacked();
     @DefaultMessage("Review Text")
     String formFieldTitle_reviewText();
     @DefaultMessage("Revision Number")
@@ -7728,7 +8948,7 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_sequenceNumber();
     @DefaultMessage("Serial Number")
     String formFieldTitle_serialNumber();
-    @DefaultMessage("serverURL")
+    @DefaultMessage("Server URL")
     String formFieldTitle_serverURL();
     @DefaultMessage("Service Loader Name")
     String formFieldTitle_serviceLoaderName();
@@ -7902,6 +9122,10 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_theirAcctgTransId();
     @DefaultMessage("Thru Date")
     String formFieldTitle_thruDate();
+    @DefaultMessage("Thru Due Date")
+    String formFieldTitle_thruDueDate();
+    @DefaultMessage("Thru Invoice Date")
+    String formFieldTitle_thruInvoiceDate();
     @DefaultMessage("Thru Quantity")
     String formFieldTitle_thruQuantity();
     @DefaultMessage("Thursday Capacity")
@@ -7964,6 +9188,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_totalMilliSecondsAllowed();
     @DefaultMessage("Total Money Allowed")
     String formFieldTitle_totalMoneyAllowed();
+    @DefaultMessage("Total of Current Fiscal Period")
+    String formFieldTitle_totalOfCurrentFiscalPeriod();
     @DefaultMessage("Total Payment Not Applied")
     String formFieldTitle_totalPaymentNotApplied();
     @DefaultMessage("Total Payments In")
@@ -8056,6 +9282,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_userLoginId();
     @DefaultMessage("username")
     String formFieldTitle_username();
+    @DefaultMessage("Valid total")
+    String formFieldTitle_validTotal();
     @DefaultMessage("Validate GC Fin Acct")
     String formFieldTitle_validateGCFinAcct();
     @DefaultMessage("Variable Cost")
@@ -8118,12 +9346,18 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_workReqFulfTypeDescription();
     @DefaultMessage("Work Req Fulf Type Id")
     String formFieldTitle_workReqFulfTypeId();
+    @DefaultMessage("Year To Date Balance Credit")
+    String formFieldTitle_yearToDateBalanceCredit();
+    @DefaultMessage("Year To Date Balance Debit")
+    String formFieldTitle_yearToDateBalanceDebit();
     @DefaultMessage("Years With Employer")
     String formFieldTitle_yearsWithEmployer();
     @DefaultMessage("French")
     String fr();
     @DefaultMessage("From Date")
     String fromDate();
+    @DefaultMessage("Frisian")
+    String fy();
     @DefaultMessage("Google Id")
     String goodIdentificationType_description_GOOGLE_ID();
     @DefaultMessage("ISBN")
@@ -8160,6 +9394,38 @@ public interface CommonMessages extends Messages {
     String inventoryItemType_description_SERIALIZED_INV_ITEM();
     @DefaultMessage("Italian")
     String it();
+    @DefaultMessage("OK")
+    String item_availableOk();
+    @DefaultMessage("item.availableQnt")
+    String item_availableQnt(String quantityReq, String quantityAvail);
+    @DefaultMessage("item.cannot_add_product_no_longer_available")
+    String item_cannot_add_product_no_longer_available(String productName, String productId);
+    @DefaultMessage("item.cannot_add_product_not_configured_correctly")
+    String item_cannot_add_product_not_configured_correctly(String productName, String productId);
+    @DefaultMessage("item.cannot_add_product_not_yet_available")
+    String item_cannot_add_product_not_yet_available(String productName, String productId);
+    @DefaultMessage("item.cannot_add_product_virtual")
+    String item_cannot_add_product_virtual(String productName, String productId);
+    @DefaultMessage("item.cannot_find_Fixed_Asset")
+    String item_cannot_find_Fixed_Asset(String productId);
+    @DefaultMessage("item.fixed_Asset_not_found")
+    String item_fixed_Asset_not_found(String fixedAssetId);
+    @DefaultMessage("item.maximum_number_of_person_renting")
+    String item_maximum_number_of_person_renting(String reservMaxPersons, String reservPersons);
+    @DefaultMessage("The starting date of the reservation is missing....")
+    String item_missing_reservation_starting_date();
+    @DefaultMessage("item.notAvailable")
+    String item_notAvailable(String resultMessage);
+    @DefaultMessage("Please enter a number of days, 1, or more....")
+    String item_number_of_days();
+    @DefaultMessage("item.product_not_available")
+    String item_product_not_available(String productId, String availableMessage);
+    @DefaultMessage("item.product_not_found")
+    String item_product_not_found(String productId);
+    @DefaultMessage("You can only make reservation starting tomorrow....")
+    String item_reservation_from_tomorrow();
+    @DefaultMessage("ERROR: There are no items to order")
+    String items_none();
     @DefaultMessage("Last Name")
     String lastName();
     @DefaultMessage("Lead Id")
@@ -8388,6 +9654,8 @@ public interface CommonMessages extends Messages {
     String manufacturingFormula();
     @DefaultMessage("From Date")
     String manufacturingFromDate();
+    @DefaultMessage("Generate Production Runs")
+    String manufacturingGenerateProductionRuns();
     @DefaultMessage("Hardware")
     String manufacturingHardware();
     @DefaultMessage("Implosion")
@@ -8460,6 +9728,8 @@ public interface CommonMessages extends Messages {
     String manufacturingMainPageNote();
     @DefaultMessage("Manage Cost Component Calc Entries")
     String manufacturingManageCostComponentCalc();
+    @DefaultMessage("Manufacturing Manager")
+    String manufacturingManager();
     @DefaultMessage("Manufacturing Manager Application")
     String manufacturingManagerApplication();
     @DefaultMessage("The following production runs must be completed before this production run")
@@ -8516,7 +9786,7 @@ public interface CommonMessages extends Messages {
     String manufacturingNote1();
     @DefaultMessage(", association has not started yet; if Thru Date is")
     String manufacturingNote2();
-    @DefaultMessage(", association has expired (<u>and should probably be deleted</u>).")
+    @DefaultMessage(", association has expired (and should probably be deleted).")
     String manufacturingNote3();
     @DefaultMessage("On Hand Quantity")
     String manufacturingOnHandQuantity();
@@ -9784,6 +11054,8 @@ public interface CommonMessages extends Messages {
     String opentapsWebUrl();
     @DefaultMessage("Order")
     String order();
+    @DefaultMessage("A Product Store MUST be selected for a Sales Order.")
+    String orderAProductStoreMustBeSelectedForASalesOrder();
     @DefaultMessage("Actions")
     String orderActions();
     @DefaultMessage("Add All to Cart")
@@ -9792,6 +11064,8 @@ public interface CommonMessages extends Messages {
     String orderAddCheckedToCart();
     @DefaultMessage("Add Code")
     String orderAddCode();
+    @DefaultMessage("Add Gift Certificate")
+    String orderAddGiftCertificate();
     @DefaultMessage("Add Note")
     String orderAddNote();
     @DefaultMessage("Add Order Items to Shopping List")
@@ -9808,6 +11082,8 @@ public interface CommonMessages extends Messages {
     String orderAddedItemToOrder();
     @DefaultMessage("Address")
     String orderAddress();
+    @DefaultMessage("Address Verification (AVS)")
+    String orderAddressVerification();
     @DefaultMessage("Adjustment")
     String orderAdjustment();
     @DefaultMessage("Adjustment Type")
@@ -9818,6 +11094,8 @@ public interface CommonMessages extends Messages {
     String orderAffiliate();
     @DefaultMessage("Order Agent")
     String orderAgent();
+    @DefaultMessage("(allow solicitation?)")
+    String orderAllowSolicitation();
     @DefaultMessage("Allow Split")
     String orderAllowSplit();
     @DefaultMessage("Always List")
@@ -9828,8 +11106,20 @@ public interface CommonMessages extends Messages {
     String orderAmountAlreadyCredited();
     @DefaultMessage("Amount Already Refunded")
     String orderAmountAlreadyRefunded();
+    @DefaultMessage("OrderAnAlternateGwpProductIdWasInPlaceButWasEitherNotValidOrIsNoLongerInStockForId")
+    String orderAnAlternateGwpProductIdWasInPlaceButWasEitherNotValidOrIsNoLongerInStockForId(String alternateGwpProductId);
+    @DefaultMessage("OrderAnUnSupportedProductPromoCondCondition")
+    String orderAnUnSupportedProductPromoCondCondition(String operatorEnumId);
+    @DefaultMessage("OrderAnUnSupportedProductPromoCondInputParameterLhs")
+    String orderAnUnSupportedProductPromoCondInputParameterLhs(String inputParamEnumId);
+    @DefaultMessage("An unit price can''t be lesser than zero")
+    String orderAnUnitPriceCantBeLesserThanZero();
     @DefaultMessage("Anonymous")
     String orderAnonymous();
+    @DefaultMessage("Any Order Status")
+    String orderAnyOrderStatus();
+    @DefaultMessage("Any Order Type")
+    String orderAnyOrderType();
     @DefaultMessage("Approve Order")
     String orderApproveOrder();
     @DefaultMessage("Approve Requirements")
@@ -9838,8 +11128,8 @@ public interface CommonMessages extends Messages {
     String orderApproved();
     @DefaultMessage("Approved Product Requirements")
     String orderApprovedProductRequirements();
-    @DefaultMessage("Approved Requirements By vendor")
-    String orderApprovedProductRequirementsByVendor();
+    @DefaultMessage("Associated Products")
+    String orderAssociatedProducts();
     @DefaultMessage("Auth Service")
     String orderAuthService();
     @DefaultMessage("Auto Assign")
@@ -9854,11 +11144,13 @@ public interface CommonMessages extends Messages {
     String orderBackOrdered();
     @DefaultMessage("Backorders")
     String orderBackOrders();
+    @DefaultMessage("Back to order")
+    String orderBackToOrder();
     @DefaultMessage("Back to Shopping Cart")
     String orderBacktoShoppingCart();
     @DefaultMessage("Be sure to include your order")
     String orderBeSureIncludeOrder();
-    @DefaultMessage("Bill To")
+    @DefaultMessage("Bill Up To")
     String orderBillUpTo();
     @DefaultMessage("Billing Address")
     String orderBillingAddress();
@@ -9876,26 +11168,62 @@ public interface CommonMessages extends Messages {
     String orderCancelAllItems();
     @DefaultMessage("Cancel Order")
     String orderCancelOrder();
+    @DefaultMessage("Cancel Remaining PO Items")
+    String orderCancelRemainingPOItems();
+    @DefaultMessage("Cancel Selected Items")
+    String orderCancelSelectedItems();
     @DefaultMessage("Cancelled")
     String orderCancelled();
+    @DefaultMessage("Cancelled item to order:")
+    String orderCancelledItemToOrder();
+    @DefaultMessage("My Cancelled Customer Requests")
+    String orderCancelledMyCustomerRequests();
     @DefaultMessage("(cannot be changed without clearing order.)")
     String orderCannotBeChanged();
     @DefaultMessage("You cannot cancel this customer request, work has already started on it.")
     String orderCannotCancelRequestAlreadyWorkedOn();
     @DefaultMessage("OrderCannotChangeQuantityInPromotion")
     String orderCannotChangeQuantityInPromotion(String productName, String productId);
+    @DefaultMessage("Cannot get order header :")
+    String orderCannotGetOrderHeader();
+    @DefaultMessage("Cannot read the order item entity")
+    String orderCannotReadTheOrderItemEntity();
+    @DefaultMessage("Cannot remove items once return is approved")
+    String orderCannotRemoveItemsOnceReturnIsApproved();
+    @DefaultMessage("Cannot update; No available group(s) to change")
+    String orderCannotUpdateNoAvailableGroupsToChange();
+    @DefaultMessage("OrderCannotUpdateNullOrderHeader")
+    String orderCannotUpdateNullOrderHeader(String orderId);
+    @DefaultMessage("Cannot update; Problem getting OrderShipmentPreference")
+    String orderCannotUpdateProblemGettingOrderShipmentPreference();
+    @DefaultMessage("Cannot update; Problem setting OrderShipmentPreference")
+    String orderCannotUpdateProblemSettingOrderShipmentPreference();
     @DefaultMessage("Service capture")
     String orderCaptureService();
     @DefaultMessage("Card Security Code")
     String orderCardSecurityCode();
     @DefaultMessage("Cart Item Use in Promotions")
     String orderCartItemUseinPromotions();
+    @DefaultMessage("OrderCartShipGroupNotFound")
+    String orderCartShipGroupNotFound(String groupIndex);
     @DefaultMessage("Cart Summary")
     String orderCartSummary();
     @DefaultMessage("Cart Total")
     String orderCartTotal();
     @DefaultMessage("Cartons")
     String orderCartons();
+    @DefaultMessage("Caught exception on cart update.")
+    String orderCaughtExceptionOnCartUpdate();
+    @DefaultMessage("Caught generic service exception while getting order Id")
+    String orderCaughtGenericServiceExceptionWhileGettingOrderId();
+    @DefaultMessage("Caught number format exception on cart update.")
+    String orderCaughtNumberFormatExceptionOnCartUpdate();
+    @DefaultMessage("Caught parse exception on cart update.")
+    String orderCaughtParseExceptionOnCartUpdate();
+    @DefaultMessage("OrderCheckCustRequest")
+    String orderCheckCustRequest(String custRequest_statusId);
+    @DefaultMessage("OrderCheckCustRequestDraftStatusForDelete")
+    String orderCheckCustRequestDraftStatusForDelete(String custRequest_statusId);
     @DefaultMessage("Check out")
     String orderCheckout();
     @DefaultMessage("Quick Checkout")
@@ -9926,6 +11254,8 @@ public interface CommonMessages extends Messages {
     String orderCompleteOrder();
     @DefaultMessage("Completed")
     String orderCompleted();
+    @DefaultMessage("My Completed customer requests")
+    String orderCompletedMyCustomerRequests();
     @DefaultMessage("Configure")
     String orderConfigure();
     @DefaultMessage("Contact Information")
@@ -9940,12 +11270,38 @@ public interface CommonMessages extends Messages {
     String orderCopyCustRequestItem();
     @DefaultMessage("Duplicate Quote")
     String orderCopyQuote();
+    @DefaultMessage("OrderCouldNotFindOrderHeaderForOrderIdInGetProductStoreFromOrderReturningNull")
+    String orderCouldNotFindOrderHeaderForOrderIdInGetProductStoreFromOrderReturningNull(String orderId);
+    @DefaultMessage("OrderCouldNotFindRelatedFixedAssetForTheProduct")
+    String orderCouldNotFindRelatedFixedAssetForTheProduct(String productId);
+    @DefaultMessage("OrderCouldNotGetAgreement")
+    String orderCouldNotGetAgreement(String agreementId);
+    @DefaultMessage("OrderCouldNotGetAgreementItemsThrough")
+    String orderCouldNotGetAgreementItemsThrough(String agreementId);
+    @DefaultMessage("OrderCouldNotGetAgreementTermsThrough")
+    String orderCouldNotGetAgreementTermsThrough(String agreementId);
+    @DefaultMessage("Could not init an empty purchase order.")
+    String orderCouldNotInitPurchaseOrder();
+    @DefaultMessage("Could not locate the selected party.")
+    String orderCouldNotLocateTheSelectedParty();
+    @DefaultMessage("Could not select alternate gift, alternateGwpLine is not a valid number.")
+    String orderCouldNotSelectAlternateGiftAlternateGwpLineIsNotAValidNumber();
+    @DefaultMessage("Could not select alternate gift, no alternateGwpLine passed.")
+    String orderCouldNotSelectAlternateGiftNoAlternateGwpLinePassed();
+    @DefaultMessage("Could not select alternate gift, no alternateGwpProductId passed.")
+    String orderCouldNotSelectAlternateGiftNoAlternateGwpProductIdPassed();
+    @DefaultMessage("OrderCouldNotSelectAlternateGiftNoCartLineItemFoundFor")
+    String orderCouldNotSelectAlternateGiftNoCartLineItemFoundFor(String alternateGwpLine);
     @DefaultMessage("Create As New Order")
     String orderCreateAsNewOrder();
+    @DefaultMessage("Create Communication Event Product Permission Error")
+    String orderCreateCommunicationEventProductPermissionError();
     @DefaultMessage("Create a Request For Quote")
     String orderCreateCustRequestFromCart();
     @DefaultMessage("Create a Request For Quote")
     String orderCreateCustRequestFromShoppingList();
+    @DefaultMessage("Create Exchange Order")
+    String orderCreateExchangeOrder();
     @DefaultMessage("Create new return")
     String orderCreateNewReturn();
     @DefaultMessage("Create Order")
@@ -9972,14 +11328,22 @@ public interface CommonMessages extends Messages {
     String orderCreateQuoteFromShoppingList();
     @DefaultMessage("Create new Quote Workeffort")
     String orderCreateQuoteWorkEffort();
-    @DefaultMessage("Create return")
+    @DefaultMessage("Create Replacement Order")
+    String orderCreateReplacementOrder();
+    @DefaultMessage("Create Return")
     String orderCreateReturn();
+    @DefaultMessage("OrderCreateReturnAdjustment")
+    String orderCreateReturnAdjustment(String seqId);
+    @DefaultMessage("Failed to store returnAdjustment")
+    String orderCreateReturnAdjustmentFailed();
+    @DefaultMessage("OrderCreateReturnAdjustmentNotFoundOrderAdjustment")
+    String orderCreateReturnAdjustmentNotFoundOrderAdjustment(String orderAdjustmentId);
     @DefaultMessage("Create return shipment")
     String orderCreateReturnShipment();
     @DefaultMessage("Create New Shipping Address")
     String orderCreateShippingAddress();
-    @DefaultMessage("Created by")
-    String orderCreatedBy();
+    @DefaultMessage("Created")
+    String orderCreated();
     @DefaultMessage("Cubic Measurement")
     String orderCubicMeasurement();
     @DefaultMessage("Current Status")
@@ -9988,6 +11352,12 @@ public interface CommonMessages extends Messages {
     String orderCustRequestNotificationMailCompleted();
     @DefaultMessage("Customer Request Creation Notification Mail")
     String orderCustRequestNotificationMailCreation();
+    @DefaultMessage("Customer Request Note added Notification")
+    String orderCustRequestNotificationMailNoteAdded();
+    @DefaultMessage("Customer Request should have a ''Name'' if not in the draft status")
+    String orderCustRequestShouldHaveCustRequestNameIfNotDraft();
+    @DefaultMessage("Customer Request should have a ''from'' partyId if not in the draft status")
+    String orderCustRequestShouldHaveFromPartyIdIfNotDraft();
     @DefaultMessage("Customer Request Status List")
     String orderCustRequestStatusList();
     @DefaultMessage("Customer")
@@ -10012,12 +11382,18 @@ public interface CommonMessages extends Messages {
     String orderDestination();
     @DefaultMessage("Digital Product Files")
     String orderDigitalProductFiles();
+    @DefaultMessage("Dispatcher or Delegator or Cart argument is null")
+    String orderDispatcherOrDelegatorOrCartArgumentIsNull();
     @DefaultMessage("Distributor")
     String orderDistributor();
     @DefaultMessage("OrderDoNotHaveEnoughProducts")
     String orderDoNotHaveEnoughProducts(String requestedQuantity, String productName, String productId);
+    @DefaultMessage("Do Not Include")
+    String orderDoNotInclude();
     @DefaultMessage("Run Promotions")
     String orderDoPromotions();
+    @DefaultMessage("does not appear to be a valid promotional gift.")
+    String orderDoesNotAppearToBeAValidPromotionalGift();
     @DefaultMessage("Download Files Title")
     String orderDownloadFilesTitle();
     @DefaultMessage("Drop Shipped")
@@ -10034,6 +11410,8 @@ public interface CommonMessages extends Messages {
     String orderEmailAccepted();
     @DefaultMessage("Customer Service")
     String orderEmailCustomerService();
+    @DefaultMessage("Email Fulfillment type not yet implemented")
+    String orderEmailFulfillmentTypeNotYetImplemented();
     @DefaultMessage("This email is to inform you that your payment for order #")
     String orderEmailPaymentOK();
     @DefaultMessage("At this time your order has been cancelled and will not be processed. Please contact customer service if you have any questions.")
@@ -10050,14 +11428,148 @@ public interface CommonMessages extends Messages {
     String orderEntityExceptionSeeLogs();
     @DefaultMessage("Entry Date")
     String orderEntryDate();
+    @DefaultMessage("ERROR :")
+    String orderError();
+    @DefaultMessage("OrderErrorAllItemsOfOrderAreAlreadyVerified")
+    String orderErrorAllItemsOfOrderAreAlreadyVerified(String orderId);
+    @DefaultMessage("OrderErrorAttemptToVerifyOrderFailed")
+    String orderErrorAttemptToVerifyOrderFailed(String orderId);
+    @DefaultMessage("Error calling countProductQuantityOrdered service :")
+    String orderErrorCallingCountProductQuantityOrderedService();
+    @DefaultMessage("Error calling createOrderAdjustment service")
+    String orderErrorCallingCreateOrderAdjustmentService();
+    @DefaultMessage("OrderErrorCannotCancelItemItemNotFound")
+    String orderErrorCannotCancelItemItemNotFound(String itemMsgInfo);
+    @DefaultMessage("ERROR : Cannot change item status; item not found.")
+    String orderErrorCannotChangeItemStatusItemNotFound();
+    @DefaultMessage("ERROR : Cannot check for fulfillment; item not found.")
+    String orderErrorCannotCheckForFulfillmentItemNotFound();
+    @DefaultMessage("ERROR: Cannot check for fulfillment; product not found.")
+    String orderErrorCannotCheckForFulfillmentProductNotFound();
+    @DefaultMessage("ERROR : Cannot create adjustment")
+    String orderErrorCannotCreateAdjustment();
+    @DefaultMessage("ERROR : Cannot get OrderHeader entity :")
+    String orderErrorCannotGetOrderHeaderEntity();
+    @DefaultMessage("OrderErrorCannotGetOrderItemAssocEntity")
+    String orderErrorCannotGetOrderItemAssocEntity(String itemMsgInfo);
+    @DefaultMessage("ERROR: Cannot get OrderItem entity :")
+    String orderErrorCannotGetOrderItemEntity();
+    @DefaultMessage("OrderErrorCannotGetOrderRoleEntity")
+    String orderErrorCannotGetOrderRoleEntity(String itemMsgInfo);
+    @DefaultMessage("ERROR : Cannot get Product entity :")
+    String orderErrorCannotGetProductEntity();
+    @DefaultMessage("Error:  Cannot  Have  Uom  Without  Default  Uom")
+    String orderErrorCannotHaveUomWithoutDefaultUom();
+    @DefaultMessage("OrderErrorCannotResetOrderTotals")
+    String orderErrorCannotResetOrderTotals(String orderId, String resetResult);
+    @DefaultMessage("ERROR : Cannot store status changes :")
+    String orderErrorCannotStoreStatusChanges();
+    @DefaultMessage("ERROR: Could not change item status :")
+    String orderErrorCouldNotChangeItemStatus();
+    @DefaultMessage("ERROR : Could not change order status (")
+    String orderErrorCouldNotChangeOrderStatus();
+    @DefaultMessage("ERROR : Could not change order status; order cannot be found.")
+    String orderErrorCouldNotChangeOrderStatusOrderCannotBeFound();
+    @DefaultMessage("ERROR : Could not change order status; status is not a valid change.")
+    String orderErrorCouldNotChangeOrderStatusStatusIsNotAValidChange();
+    @DefaultMessage("ERROR : Could not create OrderPaymentPreference (id generation failure)")
+    String orderErrorCouldNotCreateOrderPaymentPreferenceIdGenerationFailure();
+    @DefaultMessage("ERROR : Could not create order (write error :")
+    String orderErrorCouldNotCreateOrderWriteError();
+    @DefaultMessage("Error  Could  Not  Find  Conversion")
+    String orderErrorCouldNotFindConversion();
+    @DefaultMessage("OrderErrorCouldNotFindProductStoreWithID")
+    String orderErrorCouldNotFindProductStoreWithID(String productStoreId);
+    @DefaultMessage("ERROR : Could not get next sequence id for OrderAdjustment, cannot create order.")
+    String orderErrorCouldNotGetNextSequenceIdForOrderAdjustmentCannotCreateOrder();
+    @DefaultMessage("ERROR : Could not get next sequence id for OrderItemPriceInfo, cannot create order.")
+    String orderErrorCouldNotGetNextSequenceIdForOrderItemPriceInfoCannotCreateOrder();
+    @DefaultMessage("ERROR : Could not get order information (")
+    String orderErrorCouldNotGetOrderInformation();
+    @DefaultMessage("OrderErrorCustRequestWithIdDoesntExist")
+    String orderErrorCustRequestWithIdDoesntExist(String custRequestId);
     @DefaultMessage("Error : the facility does not have addresses")
     String orderErrorFacilityHaveNoAdress();
+    @DefaultMessage("Error getting next order Id while creating order")
+    String orderErrorGettingNextOrderIdWhileCreatingOrder();
+    @DefaultMessage("Error getting order header information; null")
+    String orderErrorGettingOrderHeaderInformationNull();
+    @DefaultMessage("Error getting ReturnHeader/Item information")
+    String orderErrorGettingReturnHeaderItemInformation();
+    @DefaultMessage("OrderErrorInvalidOrderTypeWithID")
+    String orderErrorInvalidOrderTypeWithID(String orderTypeId);
+    @DefaultMessage("ERROR : No order items found.")
+    String orderErrorNoOrderItemsFound();
     @DefaultMessage("ERROR: No promotion found with ID")
     String orderErrorNoPromotionFoundWithID();
+    @DefaultMessage("OrderErrorNoValidOrderHeaderFoundForOrderId")
+    String orderErrorNoValidOrderHeaderFoundForOrderId(String orderId);
+    @DefaultMessage("OrderErrorOrderHasBeenAlreadyVerified")
+    String orderErrorOrderHasBeenAlreadyVerified(String orderId);
+    @DefaultMessage("OrderErrorOrderIdNotFound")
+    String orderErrorOrderIdNotFound(String orderId);
+    @DefaultMessage("ERROR : OrderItem and/or OrderHeader don''t exist")
+    String orderErrorOrderItemAndOrOrderHeaderDontExist();
+    @DefaultMessage("ERROR : OrderItem can''t be modified")
+    String orderErrorOrderItemCantBeModified();
+    @DefaultMessage("OrderErrorOrderItemNotFound")
+    String orderErrorOrderItemNotFound(String orderId, String orderItemSeqId);
+    @DefaultMessage("OrderErrorOrderNotApprovedForPacking")
+    String orderErrorOrderNotApprovedForPacking(String orderId);
+    @DefaultMessage("OrderErrorOrderNotApprovedForPicking")
+    String orderErrorOrderNotApprovedForPicking(String orderId);
+    @DefaultMessage("OrderErrorOrderNotPurchaseOrder")
+    String orderErrorOrderNotPurchaseOrder(String orderId);
+    @DefaultMessage("OrderErrorOrderNotVerified")
+    String orderErrorOrderNotVerified(String orderId);
+    @DefaultMessage("OrderErrorOrderNotVerifiedForPacking")
+    String orderErrorOrderNotVerifiedForPacking(String orderId);
+    @DefaultMessage("ERROR : OrderType lookup failed :")
+    String orderErrorOrderTypeLookupFailed();
+    @DefaultMessage("Error processing offline payments.")
+    String orderErrorProcessingOfflinePayments();
+    @DefaultMessage("OrderErrorReturnHeaderItemStatusNotChangedIsNotAValidChange")
+    String orderErrorReturnHeaderItemStatusNotChangedIsNotAValidChange(String statusId, String statusIdTo);
     @DefaultMessage("Error : Select  Customer")
     String orderErrorSelectCustomer();
     @DefaultMessage("ERROR: Shopping cart empty, please start over")
     String orderErrorShoppingCartEmpty();
+    @DefaultMessage("ERROR: The productStoreId can only be null for purchase orders")
+    String orderErrorTheProductStoreIdCanOnlyBeNullForPurchaseOrders();
+    @DefaultMessage("ERROR : Unable to create ReturnStatus history")
+    String orderErrorUnableToCreateReturnStatusHistory();
+    @DefaultMessage("ERROR : Unable to find order header.")
+    String orderErrorUnableToFindOrderHeader();
+    @DefaultMessage("ERROR : Unable to get order adjustments from item")
+    String orderErrorUnableToGetOrderAdjustmentsFromItem();
+    @DefaultMessage("OrderErrorUnableToGetOrderHeaderForOrderId")
+    String orderErrorUnableToGetOrderHeaderForOrderId(String orderId);
+    @DefaultMessage("ERROR : Unable to get OrderHeader from ReturnItem")
+    String orderErrorUnableToGetOrderHeaderFromReturnItem();
+    @DefaultMessage("ERROR : Unable to get order information.")
+    String orderErrorUnableToGetOrderInformation();
+    @DefaultMessage("ERROR : Unable to get order item information.")
+    String orderErrorUnableToGetOrderItemInformation();
+    @DefaultMessage("OrderErrorUnableToGetOrderItemListForOrderId")
+    String orderErrorUnableToGetOrderItemListForOrderId(String orderId);
+    @DefaultMessage("OrderErrorUnableToGetReturnHeaderForID")
+    String orderErrorUnableToGetReturnHeaderForID(String returnId);
+    @DefaultMessage("ERROR : Unable to get return header from item")
+    String orderErrorUnableToGetReturnHeaderFromItem();
+    @DefaultMessage("ERROR : Unable to get return item information")
+    String orderErrorUnableToGetReturnItemInformation();
+    @DefaultMessage("ERROR : Unable to get ReturnItem records from ReturnHeader")
+    String orderErrorUnableToGetReturnItemRecordsFromReturnHeader();
+    @DefaultMessage("ERROR : Unable to get the item returnable product.")
+    String orderErrorUnableToGetTheItemReturnableProduct();
+    @DefaultMessage("ERROR : Unable to get the item returnable quantity.")
+    String orderErrorUnableToGetTheItemReturnableQuantity();
+    @DefaultMessage("Error with createBillingAccount :")
+    String orderErrorWithCreateBillingAccount();
+    @DefaultMessage("Error with createBillingAccountRole :")
+    String orderErrorWithCreateBillingAccountRole();
+    @DefaultMessage("Error writing record(s) to the database")
+    String orderErrorWritingRecordsToTheDatabase();
     @DefaultMessage("Estimated Ready Date")
     String orderEstimatedReadyDate();
     @DefaultMessage("Estimated Ship Date")
@@ -10068,6 +11580,12 @@ public interface CommonMessages extends Messages {
     String orderExemptAmount();
     @DefaultMessage("External ID")
     String orderExternalId();
+    @DefaultMessage("Failed")
+    String orderFailed();
+    @DefaultMessage("Failed to invoke the wfAcceptRoleAssignment service.")
+    String orderFailedToInvokeTheWfAcceptRoleAssignmentService();
+    @DefaultMessage("Failed to invoke the wfDelegateAndAcceptAssignment service.")
+    String orderFailedToInvokeTheWfDelegateAndAcceptAssignmentService();
     @DefaultMessage("Authorisation Problems")
     String orderFilterAuthProblems();
     @DefaultMessage("Inventory problems")
@@ -10104,8 +11622,12 @@ public interface CommonMessages extends Messages {
     String orderFindRequirementsForSupplier();
     @DefaultMessage("Find Returns")
     String orderFindReturn();
+    @DefaultMessage("OrderFixedAssetNotFoundFixedAssetId")
+    String orderFixedAssetNotFoundFixedAssetId(String fixedAssetId);
     @DefaultMessage("Force Complete Purchase Order")
     String orderForceCompletePurchaseOrder();
+    @DefaultMessage("Frequency or interval was not specified")
+    String orderFrequencyOrIntervalWasNotSpecified();
     @DefaultMessage("From Monday To Tuesday")
     String orderFromMondayToTuesday();
     @DefaultMessage("Gift")
@@ -10124,12 +11646,20 @@ public interface CommonMessages extends Messages {
     String orderGrossItemsSoldIncludesPromotionsAndPendingOrders();
     @DefaultMessage("You might also be interested in :")
     String orderHelpAlsoInterestedIn();
+    @DefaultMessage("History not available")
+    String orderHistoryNotAvailable();
     @DefaultMessage("Hold Order")
     String orderHold();
     @DefaultMessage("How shall we ship it")
     String orderHowShallWeShipIt();
     @DefaultMessage("How shall you pay")
     String orderHowShallYouPay();
+    @DefaultMessage("Order Id already exists please choose another")
+    String orderIdAlreadyExistsPleaseChooseAnother();
+    @DefaultMessage("Illegal character in selectedItem field")
+    String orderIllegalCharacterInSelectedItemField();
+    @DefaultMessage("OrderIllegalReturnItemTypePassed")
+    String orderIllegalReturnItemTypePassed(String orderId, String orderItemSeqId);
     @DefaultMessage("Image")
     String orderImage();
     @DefaultMessage("In Production")
@@ -10154,6 +11684,16 @@ public interface CommonMessages extends Messages {
     String orderInternalNote();
     @DefaultMessage("If yes is selected, this note doesn''t appear on the print documents")
     String orderInternalNoteMessage();
+    @DefaultMessage("OrderInvalidAmountSetForBillingAccount")
+    String orderInvalidAmountSetForBillingAccount(String billingAccountId);
+    @DefaultMessage("OrderInvalidCancelQuantityCannotCancel")
+    String orderInvalidCancelQuantityCannotCancel(String thisCancelQty);
+    @DefaultMessage("Invalid date format for fromDate")
+    String orderInvalidDateFormatForFromDate();
+    @DefaultMessage("Invalid Desired Delivery Date : Syntax Error")
+    String orderInvalidDesiredDeliveryDateSyntaxError();
+    @DefaultMessage("Invalid frequency for shopping list recurrence")
+    String orderInvalidFrequencyForShoppingListRecurrence();
     @DefaultMessage("Invoiced")
     String orderInvoiced();
     @DefaultMessage("Invoices")
@@ -10178,6 +11718,8 @@ public interface CommonMessages extends Messages {
     String orderItemN();
     @DefaultMessage("Item Status")
     String orderItemStatus();
+    @DefaultMessage("OrderItemStatusNotChangedIsNotAValidChange")
+    String orderItemStatusNotChangedIsNotAValidChange(String orderStatusId, String statusId);
     @DefaultMessage("Item Total")
     String orderItemTotal();
     @DefaultMessage("Items")
@@ -10220,16 +11762,24 @@ public interface CommonMessages extends Messages {
     String orderMTD();
     @DefaultMessage("Make Booking")
     String orderMakeBooking();
+    @DefaultMessage("Order Manager")
+    String orderManager();
     @DefaultMessage("Order Manager Application")
     String orderManagerApplication();
     @DefaultMessage("Manual Promotions")
     String orderManualPromotions();
+    @DefaultMessage("Mark Viewed")
+    String orderMarkViewed();
+    @DefaultMessage("Marketing Package Composed by:")
+    String orderMarketingPackageComposedBy();
     @DefaultMessage("Method")
     String orderMethod();
     @DefaultMessage("Mail Check/Money Order")
     String orderMoneyOrder();
     @DefaultMessage("More options available in drop down")
     String orderMoreOptionsAvailable();
+    @DefaultMessage("OrderMoreThenOneWorkflowFoundForDefinedOrder")
+    String orderMoreThenOneWorkflowFoundForDefinedOrder(String orderId);
     @DefaultMessage("Move Qty")
     String orderMoveQty();
     @DefaultMessage("NOTE: Multiple shipments exist, use Split Shipment.")
@@ -10266,6 +11816,8 @@ public interface CommonMessages extends Messages {
     String orderNewShipment();
     @DefaultMessage("New Shipment For Ship Group")
     String orderNewShipmentForShipGroup();
+    @DefaultMessage("New Shipping Address")
+    String orderNewShippingAddress();
     @DefaultMessage("New Shopping List")
     String orderNewShoppingList();
     @DefaultMessage("No Addresses Available")
@@ -10274,10 +11826,24 @@ public interface CommonMessages extends Messages {
     String orderNoAgreementFoundWithIdNotDoingPromotions();
     @DefaultMessage("No Agreement Item Found With Id Not Doing Promotions")
     String orderNoAgreementItemFoundForAgreementWithIdNotDoingPromotions();
+    @DefaultMessage("No agreement specified")
+    String orderNoAgreementSpecified();
+    @DefaultMessage("No available billing account")
+    String orderNoAvailableBillingAccount();
+    @DefaultMessage("No available fin account")
+    String orderNoAvailableFinAccount();
+    @DefaultMessage("No category specified to add from.")
+    String orderNoCategorySpecifiedToAddFrom();
     @DefaultMessage("No Channel")
     String orderNoChannel();
+    @DefaultMessage("OrderNoComboTaxRateInField")
+    String orderNoComboTaxRateInField(String fieldName, String zipCode, String city, String itemAmount);
+    @DefaultMessage("No Gift Certificates Found")
+    String orderNoGiftCertificatesFound();
     @DefaultMessage("No Gift Wrap")
     String orderNoGiftWrap();
+    @DefaultMessage("No items found to add.")
+    String orderNoItemsFoundToAdd();
     @DefaultMessage("No notes for this order")
     String orderNoNotes();
     @DefaultMessage("No Notes For This Request Item")
@@ -10288,10 +11854,18 @@ public interface CommonMessages extends Messages {
     String orderNoOrderFound();
     @DefaultMessage("No orders found for partyId")
     String orderNoOrderFoundForParty();
+    @DefaultMessage("No order header, cannot create payment")
+    String orderNoOrderHeaderCannotCreatePayment();
     @DefaultMessage("No order items to display.")
     String orderNoOrderItemsToDisplay();
     @DefaultMessage("No payment preferences with this order.")
     String orderNoOrderPaymentPreferences();
+    @DefaultMessage("OrderNoPayToPartyIdSetOnProductStore")
+    String orderNoPayToPartyIdSetOnProductStore(String productStoreId);
+    @DefaultMessage("No product store, cannot create payment")
+    String orderNoProductStoreCannotCreatePayment();
+    @DefaultMessage("No Product Store FinAcccount Settings found")
+    String orderNoProductStoreFinAccountSettingsFound();
     @DefaultMessage("No Purchase Order Specified")
     String orderNoPurchaseOrderSpecified();
     @DefaultMessage("No Purchase Payment Method Information Found.")
@@ -10310,14 +11884,34 @@ public interface CommonMessages extends Messages {
     String orderNoReturnFoundWithId();
     @DefaultMessage("No item(s) in return.")
     String orderNoReturnItemsFound();
+    @DefaultMessage("No return quantity available; previous returns may exist.")
+    String orderNoReturnQuantityAvailablePreviousReturnsMayExist();
     @DefaultMessage("No returnable items found for order")
     String orderNoReturnableItems();
     @DefaultMessage("No Roles Associated With This Customer Request")
     String orderNoRolesAssociatedRequest();
+    @DefaultMessage("No sendTo email address found")
+    String orderNoSendToEmailAddressFound();
     @DefaultMessage("No ship groups defined")
     String orderNoShipGroupsDefined();
+    @DefaultMessage("No shopping list available")
+    String orderNoShoppingListAvailable();
+    @DefaultMessage("OrderNoStoreFoundWithIdNotDoingPromotions")
+    String orderNoStoreFoundWithIdNotDoingPromotions(String producStoreId);
+    @DefaultMessage("No Supplier Found For This Product")
+    String orderNoSupplierFoundForThisProduct();
+    @DefaultMessage("OrderNoTaxEntryFoundFor")
+    String orderNoTaxEntryFoundFor(String zipCode, String city, String itemAmount);
+    @DefaultMessage("No userLogin found for userLoginId :")
+    String orderNoUserLoginFoundForUserLoginId();
+    @DefaultMessage("OrderNoWFFoundForOrderId")
+    String orderNoWFFoundForOrderId(String orderId);
+    @DefaultMessage("No  settings  Found")
+    String orderNosettingsFound();
     @DefaultMessage("Not A Gift")
     String orderNotAGift();
+    @DefaultMessage("OrderNotApplyingGwpBecauseProductIdIsOutOfStockForProductPromoAction")
+    String orderNotApplyingGwpBecauseProductIdIsOutOfStockForProductPromoAction(String productId, String productPromoAction);
     @DefaultMessage("Internal Note (Not Printed)")
     String orderNotPrintableNote();
     @DefaultMessage("Not Shipped")
@@ -10346,6 +11940,8 @@ public interface CommonMessages extends Messages {
     String orderNothingToDoHere();
     @DefaultMessage("Number of persons")
     String orderNumberOfPersons();
+    @DefaultMessage("Number of persons should be ''one'' or larger")
+    String orderNumberOfPersonsShouldBeOneOrLarger();
     @DefaultMessage("Of Promotion")
     String orderOfPromotion();
     @DefaultMessage("Offline: Check Money")
@@ -10356,10 +11952,20 @@ public interface CommonMessages extends Messages {
     String orderOnOrder();
     @DefaultMessage("On Sale")
     String orderOnSale();
+    @DefaultMessage("OrderOnUserChangePromoCodeWasRemovedBecause")
+    String orderOnUserChangePromoCodeWasRemovedBecause(String checkResult);
+    @DefaultMessage("Online UPS Shipping estimates based on weight and dimensions of packages")
+    String orderOnlineUPSShippingEstimates();
+    @DefaultMessage("Only Include")
+    String orderOnlyInclude();
+    @DefaultMessage("Open Customer requests from my Colleques")
+    String orderOpenCollequeCustomerRequests();
     @DefaultMessage("Other Customer Requests from the same company")
     String orderOpenCompanyCustomerRequests();
     @DefaultMessage("My Open Customer Requests")
     String orderOpenMyCustomerRequests();
+    @DefaultMessage("Opportunities")
+    String orderOpportunities();
     @DefaultMessage("Order options")
     String orderOptions();
     @DefaultMessage("Order")
@@ -10370,6 +11976,8 @@ public interface CommonMessages extends Messages {
     String orderOrderBillToParty();
     @DefaultMessage("Order Confirmation")
     String orderOrderConfirmation();
+    @DefaultMessage("Order creation failed; please notify customer service.")
+    String orderOrderCreationFailedPleaseNotifyCustomerService();
     @DefaultMessage("Order Date")
     String orderOrderDate();
     @DefaultMessage("Order Entry")
@@ -10392,18 +12000,20 @@ public interface CommonMessages extends Messages {
     String orderOrderFound();
     @DefaultMessage("Order Header Info")
     String orderOrderHeaderInfo();
+    @DefaultMessage("Order History")
+    String orderOrderHistory();
     @DefaultMessage("Order Id")
     String orderOrderId();
     @DefaultMessage("Include")
     String orderOrderInclude();
     @DefaultMessage("Item Type")
     String orderOrderItemType();
+    @DefaultMessage("Order item type not exist")
+    String orderOrderItemTypeNotExist();
     @DefaultMessage("Order Items")
     String orderOrderItems();
     @DefaultMessage("Order List")
     String orderOrderList();
-    @DefaultMessage("Order Manager Application")
-    String orderOrderManagerApplication();
     @DefaultMessage("Order Name")
     String orderOrderName();
     @DefaultMessage("Orders Needing Attention")
@@ -10524,6 +12134,8 @@ public interface CommonMessages extends Messages {
     String orderOrderQuoteWorkEfforts();
     @DefaultMessage("Quotes")
     String orderOrderQuotes();
+    @DefaultMessage("Order Received On")
+    String orderOrderReceivedOn();
     @DefaultMessage("Return")
     String orderOrderReturn();
     @DefaultMessage("Returns")
@@ -10536,16 +12148,26 @@ public interface CommonMessages extends Messages {
     String orderOrderTasks();
     @DefaultMessage("Term Days")
     String orderOrderTermDays();
+    @DefaultMessage("OrderOrderTermDaysError")
+    String orderOrderTermDaysError(String orderTermDays);
+    @DefaultMessage("Order Term Days is required for this term type.")
+    String orderOrderTermDaysIsRequired();
     @DefaultMessage("Term Type")
     String orderOrderTermType();
+    @DefaultMessage("Order Term Type is required.")
+    String orderOrderTermTypeIsRequired();
     @DefaultMessage("Term Value")
     String orderOrderTermValue();
+    @DefaultMessage("OrderOrderTermValueError")
+    String orderOrderTermValueError(String orderTermValue);
     @DefaultMessage("Order Terms")
     String orderOrderTerms();
     @DefaultMessage("Order Total")
     String orderOrderTotal();
     @DefaultMessage("Order Type")
     String orderOrderType();
+    @DefaultMessage("Order type not exist")
+    String orderOrderTypeNotExist();
     @DefaultMessage("Ordered")
     String orderOrdered();
     @DefaultMessage("Orders")
@@ -10576,6 +12198,8 @@ public interface CommonMessages extends Messages {
     String orderPaidItemsSoldIncludesPromotions();
     @DefaultMessage("I do not wish to add additional parties.")
     String orderPartyDontWish();
+    @DefaultMessage("partyId and/or roleTypeId not defined.")
+    String orderPartyIdAndOrRoleTypeIdNotDefined();
     @DefaultMessage("Name Not Found")
     String orderPartyNameNotFound();
     @DefaultMessage("Select Role For Party")
@@ -10618,6 +12242,8 @@ public interface CommonMessages extends Messages {
     String orderPercentageMarkup();
     @DefaultMessage("Pick Orders")
     String orderPickOrders();
+    @DefaultMessage("Picked By")
+    String orderPickedBy();
     @DefaultMessage("Pieces")
     String orderPieces();
     @DefaultMessage("Received quantity")
@@ -10626,6 +12252,10 @@ public interface CommonMessages extends Messages {
     String orderPlannedInShipment();
     @DefaultMessage("Rejected quantity")
     String orderPlannedRejected();
+    @DefaultMessage("Please contact customer service; payment return code unknown.")
+    String orderPleaseContactCustomerServicePaymentReturnCodeUnknown();
+    @DefaultMessage("Please select either sale or purchase order.")
+    String orderPleaseSelectEitherSaleOrPurchaseOrder();
     @DefaultMessage("Please ship items I ordered as they become available (you may incur additional shipping charges)")
     String orderPleaseShipItemsBecomeAvailable();
     @DefaultMessage("Please wait until the entire order is ready before shipping")
@@ -10638,6 +12268,84 @@ public interface CommonMessages extends Messages {
     String orderPrice();
     @DefaultMessage("Public Note (Printed)")
     String orderPrintableNote();
+    @DefaultMessage("Problem creating FinAccountRole record")
+    String orderProblemCreatingFinAccountRoleRecord();
+    @DefaultMessage("Problem creating FinAccountTrans record")
+    String orderProblemCreatingFinAccountTransRecord();
+    @DefaultMessage("Problem creating PaymentApplication record")
+    String orderProblemCreatingPaymentApplicationRecord();
+    @DefaultMessage("Problem creating Payment record")
+    String orderProblemCreatingPaymentRecord();
+    @DefaultMessage("Problem creating ReturnItemResponse record")
+    String orderProblemCreatingReturnItemResponseRecord();
+    @DefaultMessage("Problem creating the note, no noteId returned.")
+    String orderProblemCreatingTheNoteNoNoteIdReturned();
+    @DefaultMessage("OrderProblemGettingItemDesiredDeliveryDateFor")
+    String orderProblemGettingItemDesiredDeliveryDateFor(String productId);
+    @DefaultMessage("OrderProblemGettingItemShipAfterDateFor")
+    String orderProblemGettingItemShipAfterDateFor(String productId);
+    @DefaultMessage("OrderProblemGettingItemShipBeforeDateFor")
+    String orderProblemGettingItemShipBeforeDateFor(String productId);
+    @DefaultMessage("Problem getting OrderItem records")
+    String orderProblemGettingOrderItemRecords();
+    @DefaultMessage("Problem getting ProductStore records")
+    String orderProblemGettingProductStoreRecords();
+    @DefaultMessage("Problem getting the Record Iterator")
+    String orderProblemGettingTheRecordIterator();
+    @DefaultMessage("Problem occurred in tax service")
+    String orderProblemOccurredInTaxService();
+    @DefaultMessage("Problem sending email")
+    String orderProblemSendingEmail();
+    @DefaultMessage("Problem storing received payment information.")
+    String orderProblemStoringReceivedPaymentInformation();
+    @DefaultMessage("Problem storing ReturnItem updates")
+    String orderProblemStoringReturnItemUpdates();
+    @DefaultMessage("Problem updating ReturnItem (returnItemResponseId)")
+    String orderProblemUpdatingReturnItemReturnItemResponseId();
+    @DefaultMessage("Problem with entity lookup")
+    String orderProblemWithEntityLookup();
+    @DefaultMessage("Problem with entity lookup, see error log")
+    String orderProblemWithEntityLookupSeeErrorLog();
+    @DefaultMessage("Problem with invoice creation; digital items not fulfilled.")
+    String orderProblemWithInvoiceCreationDigitalItemsNotFulfilled();
+    @DefaultMessage("Problem with invoice creation service items")
+    String orderProblemWithInvoiceCreationServiceItems();
+    @DefaultMessage("Problems adding item from list to cart")
+    String orderProblemsAddingItemFromListToCart();
+    @DefaultMessage("Problems creating billing account")
+    String orderProblemsCreatingBillingAccount();
+    @DefaultMessage("Problems creating FinAccount for Store")
+    String orderProblemsCreatingFinAccountForStore();
+    @DefaultMessage("Problems creating ReturnItemResponse entity")
+    String orderProblemsCreatingReturnItemResponseEntity();
+    @DefaultMessage("Problems getting contact mech from order contact mech")
+    String orderProblemsGettingContactMechFromOrderContactMech();
+    @DefaultMessage("Problems getting order contact mechs")
+    String orderProblemsGettingOrderContactMechs();
+    @DefaultMessage("OrderProblemsGettingOrderItemTypeFor")
+    String orderProblemsGettingOrderItemTypeFor(String orderItemTypeId);
+    @DefaultMessage("Problems getting Party record")
+    String orderProblemsGettingPartyRecord();
+    @DefaultMessage("Problems getting the cart item by index")
+    String orderProblemsGettingTheCartItemByIndex();
+    @DefaultMessage("Problems invoking the complete assignment service")
+    String orderProblemsInvokingTheCompleteAssignmentService();
+    @DefaultMessage("Problems payment parsing amount.")
+    String orderProblemsPaymentParsingAmount();
+    @DefaultMessage("Problems reading order header information.")
+    String orderProblemsReadingOrderHeaderInformation();
+    @DefaultMessage("Problems storing order email contact information")
+    String orderProblemsStoringOrderEmailContactInformation();
+    @DefaultMessage("Problems with check payment amount for refund")
+    String orderProblemsWithCheckPaymentAmountForRefund();
+    @DefaultMessage("Problems with getting PartyAcctgPreference.")
+    String orderProblemsWithGetPartyAcctgPreferences();
+    @DefaultMessage("Problems with getting return amount by order")
+    String orderProblemsWithGetReturnAmountByOrder();
+    @DefaultMessage("Problems with PaymentType lookup.")
+    String orderProblemsWithPaymentTypeLookup();
+    @DefaultMessage("Problems with the refund; see logs")
+    String orderProblemsWithTheRefundSeeLogs();
     @DefaultMessage("Process Order")
     String orderProcessOrder();
     @DefaultMessage("This order is currently in a ''Active'' state.")
@@ -10652,8 +12360,14 @@ public interface CommonMessages extends Messages {
     String orderProcessingTransitions();
     @DefaultMessage("Product")
     String orderProduct();
+    @DefaultMessage("Product not exist")
+    String orderProductNotExist();
+    @DefaultMessage("Product not found !")
+    String orderProductNotFound();
     @DefaultMessage("Product Store")
     String orderProductStore();
+    @DefaultMessage("Product store not exist")
+    String orderProductStoreNotExist();
     @DefaultMessage("Products For Promotion")
     String orderProductsForPromotion();
     @DefaultMessage("Promotion")
@@ -10694,6 +12408,8 @@ public interface CommonMessages extends Messages {
     String orderQuantity();
     @DefaultMessage("Qty Cncld")
     String orderQuantityCancelled();
+    @DefaultMessage("Item Quantity History")
+    String orderQuantityHistory();
     @DefaultMessage("In Group")
     String orderQuantityInShipGroup();
     @DefaultMessage("Total In Group")
@@ -10710,6 +12426,8 @@ public interface CommonMessages extends Messages {
     String orderQuickAdd();
     @DefaultMessage("Order Item Quick Add")
     String orderQuickAddOrderItem();
+    @DefaultMessage("Quick  Add  Order  Item")
+    String orderQuickAddOrderItemError();
     @DefaultMessage("Quick Finalize Order")
     String orderQuickFinalizeOrder();
     @DefaultMessage("Quick Lookup")
@@ -10722,6 +12440,8 @@ public interface CommonMessages extends Messages {
     String orderQuickShipEntireOrder();
     @DefaultMessage("Quote")
     String orderQuote();
+    @DefaultMessage("Quote Percent")
+    String orderQuotePercent();
     @DefaultMessage("Quote Price Permission Error")
     String orderQuotePricePermissionError();
     @DefaultMessage("Ranking")
@@ -10744,8 +12464,18 @@ public interface CommonMessages extends Messages {
     String orderReceiveReturn();
     @DefaultMessage("On Other Delivery Order")
     String orderReceivedInOtherReceive();
+    @DefaultMessage("OrderReceivedNullForOrderItemRecordsOrderId")
+    String orderReceivedNullForOrderItemRecordsOrderId(String orderId);
+    @DefaultMessage("Received Quantity History")
+    String orderReceivedQtyHistory();
+    @DefaultMessage("Recipient''s Email:")
+    String orderRecipientEmailAdd();
+    @DefaultMessage("Recipient''s Name:")
+    String orderRecipientName();
     @DefaultMessage("Reference")
     String orderReference();
+    @DefaultMessage("Refund Amount Exceeds Order Total")
+    String orderRefundAmountExceedsOrderTotal();
     @DefaultMessage("Refund Service")
     String orderRefundService();
     @DefaultMessage("Reject Order")
@@ -10758,8 +12488,12 @@ public interface CommonMessages extends Messages {
     String orderRemaining();
     @DefaultMessage("Remaining SubTotal")
     String orderRemainingSubTotal();
+    @DefaultMessage("Remove Communication Event Order Permission Error")
+    String orderRemoveCommunicationEventOrderPermissionError();
     @DefaultMessage("Remove Selected")
     String orderRemoveSelected();
+    @DefaultMessage("Rental order items in the order, however no workEfforts with start/end date and number of persons")
+    String orderRentalOrderItems();
     @DefaultMessage("From Date(Order Date>=)")
     String orderReportFromDate();
     @DefaultMessage("Open Order Items Report")
@@ -10782,6 +12516,8 @@ public interface CommonMessages extends Messages {
     String orderRequestContent();
     @DefaultMessage("Created Date")
     String orderRequestCreatedDate();
+    @DefaultMessage("Request created from shopping cart")
+    String orderRequestCreatedFromShoppingCart();
     @DefaultMessage("Request Date")
     String orderRequestDate();
     @DefaultMessage("Request Item")
@@ -10814,6 +12550,8 @@ public interface CommonMessages extends Messages {
     String orderRequestTaker();
     @DefaultMessage("Requested Response")
     String orderRequestedResponse();
+    @DefaultMessage("OrderRequestedReturnQuantityNotAvailablePreviousReturnsMayExist")
+    String orderRequestedReturnQuantityNotAvailablePreviousReturnsMayExist(String parameters_returnQuantity, String returnableQuantity);
     @DefaultMessage("Requesting Party")
     String orderRequestingParty();
     @DefaultMessage("Requests")
@@ -10840,6 +12578,8 @@ public interface CommonMessages extends Messages {
     String orderRequirementsList();
     @DefaultMessage("Requires code to use.")
     String orderRequiresCodeToUse();
+    @DefaultMessage("Reservation length should be a positive number")
+    String orderReservationLengthShouldBeAPositiveNumber();
     @DefaultMessage("Accept Return")
     String orderReturnAccept();
     @DefaultMessage("Return Order Adjustment(s) From Order")
@@ -10848,8 +12588,6 @@ public interface CommonMessages extends Messages {
     String orderReturnCannotBeChanged();
     @DefaultMessage("Could not find Return with ID")
     String orderReturnCannotBeFound();
-    @DefaultMessage("Create Return")
-    String orderReturnCreate();
     @DefaultMessage("Destination Facility")
     String orderReturnDestinationFacility();
     @DefaultMessage("Return Enum Id")
@@ -10864,6 +12602,8 @@ public interface CommonMessages extends Messages {
     String orderReturnFromParty();
     @DefaultMessage("Return Header")
     String orderReturnHeader();
+    @DefaultMessage("Return History")
+    String orderReturnHistory();
     @DefaultMessage("Return ID")
     String orderReturnId();
     @DefaultMessage("Inventory Status")
@@ -10872,6 +12612,8 @@ public interface CommonMessages extends Messages {
     String orderReturnItems();
     @DefaultMessage("Return Item(s) From Order")
     String orderReturnItemsFromOrder();
+    @DefaultMessage("Return shipping label email successfully sent")
+    String orderReturnLabelEmailSuccessful();
     @DefaultMessage("Load order items for return")
     String orderReturnLoadItems();
     @DefaultMessage("Manual Return Adjustment For Order")
@@ -10882,14 +12624,28 @@ public interface CommonMessages extends Messages {
     String orderReturnNeedsAutoReceive();
     @DefaultMessage("No returnable items found for order")
     String orderReturnNoReturnableItems();
+    @DefaultMessage("A payment method must be set for this type of return")
+    String orderReturnPaymentMethodNeededForThisTypeOfReturn();
     @DefaultMessage("Return Price")
     String orderReturnPrice();
+    @DefaultMessage("OrderReturnPriceCannotExceedTheOrderTotal")
+    String orderReturnPriceCannotExceedTheOrderTotal(String returnTotal, String orderTotal);
+    @DefaultMessage("OrderReturnPriceCannotExceedThePurchasePrice")
+    String orderReturnPriceCannotExceedThePurchasePrice(String parameters_returnPrice, String returnablePrice);
+    @DefaultMessage("Return Price History")
+    String orderReturnPriceHistory();
     @DefaultMessage("Price not includes tax  adjustments")
     String orderReturnPriceNotIncludeTax();
     @DefaultMessage("Return Qty")
     String orderReturnQty();
+    @DefaultMessage("Return Quantity History")
+    String orderReturnQtyHistory();
+    @DefaultMessage("OrderReturnQuantityCannotExceedTheOrderedQuantity")
+    String orderReturnQuantityCannotExceedTheOrderedQuantity(String parameters_returnQuantity, String orderItem_quantity);
     @DefaultMessage("Reason")
     String orderReturnReason();
+    @DefaultMessage("Return Reason History")
+    String orderReturnReasonHistory();
     @DefaultMessage("Receive Return")
     String orderReturnReceive();
     @DefaultMessage("Response")
@@ -10906,8 +12662,12 @@ public interface CommonMessages extends Messages {
     String orderReturnToFacility();
     @DefaultMessage("Return Total")
     String orderReturnTotal();
+    @DefaultMessage("OrderReturnTotalCannotLessThanZero")
+    String orderReturnTotalCannotLessThanZero(String returnTotalAmount);
     @DefaultMessage("Type")
     String orderReturnType();
+    @DefaultMessage("Return Type History")
+    String orderReturnTypeHistory();
     @DefaultMessage("Returned")
     String orderReturned();
     @DefaultMessage("Current Returns")
@@ -10916,6 +12676,10 @@ public interface CommonMessages extends Messages {
     String orderReviewOrder();
     @DefaultMessage("Run Action")
     String orderRunAction();
+    @DefaultMessage("Run service [getInventoryAvailableByFacility] error :")
+    String orderRunServiceGetInventoryAvailableByFacilityError();
+    @DefaultMessage("Run service [getSuppliersForProduct] error :")
+    String orderRunServiceGetSuppliersForProductError();
     @DefaultMessage("Run Store Promotions")
     String orderRunStorePromotions();
     @DefaultMessage("Sales Channel")
@@ -10928,16 +12692,138 @@ public interface CommonMessages extends Messages {
     String orderSalesOrderLookupFailed();
     @DefaultMessage("Sales Tax")
     String orderSalesTax();
+    @DefaultMessage("Of which Sales Tax included")
+    String orderSalesTaxIncluded();
     @DefaultMessage("Save")
     String orderSave();
     @DefaultMessage("Schedule Delivery")
     String orderScheduleDelivery();
     @DefaultMessage("Score")
     String orderScore();
+    @DefaultMessage("Security Error: to run addPaymentMethodToOrder you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunAddPaymentMethodToOrder();
+    @DefaultMessage("Security Error To Run Auto Create Order Adjustments")
+    String orderSecurityErrorToRunAutoCreateOrderAdjustments();
+    @DefaultMessage("Security Error To Run Auto Create Quote Adjustments")
+    String orderSecurityErrorToRunAutoCreateQuoteAdjustments();
+    @DefaultMessage("Security Error : to run autoUpdateQuotePrice you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunAutoUpdateQuotePrice();
+    @DefaultMessage("Security Error : to run cancelReturnItems you must have the ORDERMGR_DELETE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCancelReturnItems();
+    @DefaultMessage("Security Error : to run createCustRequest you must have the ORDERMGR_CRQ_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCheckCreateCustRequest();
+    @DefaultMessage("Security Error : to run checkCreateOrderRequirement you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCheckCreateOrderRequirement();
+    @DefaultMessage("Security Error: to run createOrderRequirementCommitment you must have ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCheckCreateOrderRequirementCommitment();
+    @DefaultMessage("Security Error : to run checkCreateStockRequirement you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCheckCreateStockRequirement();
+    @DefaultMessage("Security Error To Run Check Update Quote Status")
+    String orderSecurityErrorToRunCheckUpdateQuoteStatus();
+    @DefaultMessage("Security Error To Run Copy Cust Request Item")
+    String orderSecurityErrorToRunCopyCustRequestItem();
+    @DefaultMessage("Security Error To Run Copy Quote")
+    String orderSecurityErrorToRunCopyQuote();
+    @DefaultMessage("Security Error To Run Copy Quote Item")
+    String orderSecurityErrorToRunCopyQuoteItem();
+    @DefaultMessage("Security Error To Run Create Cust Request")
+    String orderSecurityErrorToRunCreateCustRequest();
+    @DefaultMessage("Security Error : to run createOrderAdjustment you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateOrderAdjustement();
+    @DefaultMessage("Security Error: to run createOrderContactMech you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateOrderContactMech();
+    @DefaultMessage("Security Error : to run createOrderShipment you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateOrderShipment();
+    @DefaultMessage("Security Error To Run Create Order Term")
+    String orderSecurityErrorToRunCreateOrderTerm();
+    @DefaultMessage("Security Error To Run Create Quantity Break")
+    String orderSecurityErrorToRunCreateQuantityBreak();
+    @DefaultMessage("Security Error : to run createQuote you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateQuote();
+    @DefaultMessage("Security Error To Run Create Quote Adjustment")
+    String orderSecurityErrorToRunCreateQuoteAdjustment();
+    @DefaultMessage("Security Error : to run createQuoteAndQuoteItemForRequest you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateQuoteAndQuoteItemForRequest();
+    @DefaultMessage("Security Error : to run createQuoteAttribute you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateQuoteAttribute();
+    @DefaultMessage("Security Error : to run createQuoteCoefficient you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateQuoteCoefficient();
+    @DefaultMessage("Security Error To Run Create Quote From Cart")
+    String orderSecurityErrorToRunCreateQuoteFromCart();
+    @DefaultMessage("Security Error To Run Create Quote From Cust Request")
+    String orderSecurityErrorToRunCreateQuoteFromCustRequest();
+    @DefaultMessage("Security Error : to run createQuoteItem you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateQuoteItem();
+    @DefaultMessage("Security Error: to run createRequirementFromItemATP you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateRequirementFromItemATP();
+    @DefaultMessage("Security Error : to run createReturnHeader you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateReturnHeader();
+    @DefaultMessage("Security Error : to run createReturnItem you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateReturnItem();
+    @DefaultMessage("Security Error To Run Create Return Item Shipment")
+    String orderSecurityErrorToRunCreateReturnItemShipment();
+    @DefaultMessage("Security Error : to run createShoppingList for another party you must have the PARTYMGR_CREATE or PARTYMGR_ADMIN permission")
+    String orderSecurityErrorToRunCreateShoppingListForAnotherParty();
+    @DefaultMessage("Security Error : to run createTaxRate you must have the TAXRATE_CREATE or TAXRATE_ADMIN permission")
+    String orderSecurityErrorToRunCreateTaxRate();
+    @DefaultMessage("Security Error : to run deleteOrderAdjustment you must have the ORDERMGR_DELETE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunDeleteOrderAdjustement();
+    @DefaultMessage("Security Error : to run deleteOrderShipment you must have the ORDERMGR_DELETE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunDeleteOrderShipment();
+    @DefaultMessage("OrderSecurityErrorToRunForAnotherParty")
+    String orderSecurityErrorToRunForAnotherParty(String parentMethodName, String permissionAction);
+    @DefaultMessage("Security Error : to run quickReturnFromOrder you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunQuickReturnFromOrder();
+    @DefaultMessage("Security Error: to run removeOrderContactMech you must have the ORDERMGR_DELETE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunRemoveOrderContactMech();
+    @DefaultMessage("Security Error while running removeOrderTerm")
+    String orderSecurityErrorToRunRemoveOrderTerm();
+    @DefaultMessage("Security Error while running removeQuantityBreak")
+    String orderSecurityErrorToRunRemoveQuantityBreak();
+    @DefaultMessage("Security Error while running removeQuoteAdjustment")
+    String orderSecurityErrorToRunRemoveQuoteAdjustment();
+    @DefaultMessage("Security Error : to run removeQuoteAttribute you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunRemoveQuoteAttribute();
+    @DefaultMessage("Security Error : to run removeQuoteCoefficient you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunRemoveQuoteCoefficient();
+    @DefaultMessage("Security Error : to run removeQuoteItem you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunRemoveQuoteItem();
+    @DefaultMessage("Security Error : to run removeReturnItem you must have the ORDERMGR_DELETE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunRemoveReturnItem();
+    @DefaultMessage("Security Error : to run RemoveTaxRate you must have the TAXRATE_DELETE or TAXRATE_ADMIN permission")
+    String orderSecurityErrorToRunRemoveTaxRate();
+    @DefaultMessage("Security Error : to run updateOrderAdjustment you must have the ORDERMGR_UPDATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunUpdateOrderAdjustement();
+    @DefaultMessage("Security Error: to run updateOrderContactMech you must have the ORDERMGR_UPDATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunUpdateOrderContactMech();
+    @DefaultMessage("Security Error: to run updateOrderItemShipGroup you must have the ORDERMGR_UPDATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunUpdateOrderItemShipGroup();
+    @DefaultMessage("Error in toggling notes to Private/Public")
+    String orderSecurityErrorToRunUpdateOrderNote();
+    @DefaultMessage("Security Error : to run updateOrderStatusFromReceipt you must have the ORDERMGR_UPDATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunUpdateOrderStatusFromReceipt();
+    @DefaultMessage("Security Error while running service updateOrderTerm")
+    String orderSecurityErrorToRunUpdateOrderTerm();
+    @DefaultMessage("Security Error while running service updateQuantityBreak")
+    String orderSecurityErrorToRunUpdateQuantityBreak();
+    @DefaultMessage("Security Error : to run updateQuote you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunUpdateQuote();
+    @DefaultMessage("Security Error while running service updateQuoteAdjustment")
+    String orderSecurityErrorToRunUpdateQuoteAdjustment();
+    @DefaultMessage("Security Error : to run updateQuoteAttribute you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunUpdateQuoteAttribute();
+    @DefaultMessage("Security Error : to run updateQuoteCoefficient you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunUpdateQuoteCoefficient();
+    @DefaultMessage("Security Error : to run updateQuoteItem you must have the ORDERMGR_CREATE or ORDERMGR_ADMIN permission")
+    String orderSecurityErrorToRunUpdateQuoteItem();
+    @DefaultMessage("Security Error : to run")
+    String orderSecurityErrorToRunUpdateReturnHeader();
     @DefaultMessage("Sel. amount")
     String orderSelAmount();
     @DefaultMessage("Select A Shipping Address")
     String orderSelectAShippingAddress();
+    @DefaultMessage("Select A Suplier Or A Product")
+    String orderSelectASuplierOrAProduct();
     @DefaultMessage("Select Address First")
     String orderSelectAddressFirst();
     @DefaultMessage("Select an agreement for this order")
@@ -10948,6 +12834,10 @@ public interface CommonMessages extends Messages {
     String orderSelectCurrency();
     @DefaultMessage("Or set a currency for this order")
     String orderSelectCurrencyOr();
+    @DefaultMessage("Select The Gift Amount")
+    String orderSelectGiftAmount();
+    @DefaultMessage("Select Only Supplier Or Product")
+    String orderSelectOnlySupplierOrProduct();
     @DefaultMessage("Select type of party to associate to order")
     String orderSelectPartyToOrder();
     @DefaultMessage("Select Payment Method")
@@ -10982,10 +12872,20 @@ public interface CommonMessages extends Messages {
     String orderSendConfirmationEmailSubject();
     @DefaultMessage("Send Email")
     String orderSendEmail();
+    @DefaultMessage("SendMail service failed :")
+    String orderSendMailServiceFailed();
     @DefaultMessage("Send me this every month")
     String orderSendMeThisEveryMonth();
     @DefaultMessage("Please Send Payment To")
     String orderSendPaymentTo();
+    @DefaultMessage("Sender''s Name:")
+    String orderSenderName();
+    @DefaultMessage("Service exception; see logs")
+    String orderServiceExceptionSeeLogs();
+    @DefaultMessage("Service not yet implemented")
+    String orderServiceNotYetImplemented();
+    @DefaultMessage("Set currency error :")
+    String orderSetCurrencyError();
     @DefaultMessage("Ship After Date")
     String orderShipAfterDate();
     @DefaultMessage("Default Ship After Date")
@@ -11014,12 +12914,16 @@ public interface CommonMessages extends Messages {
     String orderShipTo();
     @DefaultMessage("Ship to Another Party")
     String orderShipToAnotherParty();
+    @DefaultMessage("Ship to Country")
+    String orderShipToCountry();
     @DefaultMessage("Ship to Party")
     String orderShipToParty();
     @DefaultMessage("Ship Via")
     String orderShipVia();
     @DefaultMessage("Shipment Information")
     String orderShipmentInformation();
+    @DefaultMessage("Shipment Method History")
+    String orderShipmentMethodHistory();
     @DefaultMessage("Shipment Received")
     String orderShipmentReceived();
     @DefaultMessage("Shipper")
@@ -11030,6 +12934,8 @@ public interface CommonMessages extends Messages {
     String orderShippingAndHandling();
     @DefaultMessage("Shipping Information")
     String orderShippingInformation();
+    @DefaultMessage("Shipping Notes")
+    String orderShippingNotes();
     @DefaultMessage("Shipment Date Hope")
     String orderShippmentDateHope();
     @DefaultMessage("Shopping Cart")
@@ -11042,6 +12948,10 @@ public interface CommonMessages extends Messages {
     String orderShowAllNotes();
     @DefaultMessage("Show This Item''s Notes")
     String orderShowThisItemsNotes();
+    @DefaultMessage("Sizes Available")
+    String orderSizeAvailableMultiple();
+    @DefaultMessage("Size")
+    String orderSizeAvailableSingle();
     @DefaultMessage("Skids Pallets")
     String orderSkidsPallets();
     @DefaultMessage("Special Instructions")
@@ -11062,6 +12972,8 @@ public interface CommonMessages extends Messages {
     String orderStatusChanges();
     @DefaultMessage("Status History")
     String orderStatusHistory();
+    @DefaultMessage("Status id not exist")
+    String orderStatusIdNotExist();
     @DefaultMessage("Stock event planned")
     String orderStockEventPlanned();
     @DefaultMessage("Sub Total")
@@ -11072,16 +12984,28 @@ public interface CommonMessages extends Messages {
     String orderSubmittingOrder();
     @DefaultMessage("Supplier Data")
     String orderSupplierData();
+    @DefaultMessage("SupplierData")
+    String orderSupplierDataError();
     @DefaultMessage("Supplier Financial Data")
     String orderSupplierFinancialData();
+    @DefaultMessage("Supplier Financial Data")
+    String orderSupplierFinancialDataError();
     @DefaultMessage("Survey")
     String orderSurvey();
     @DefaultMessage("The  Open  Hours  To  Receive  Products  Are")
     String orderTheOpenHoursToReceiveProductsAre();
+    @DefaultMessage("OrderTheQuoteIsAlreadyInTheCartNotAdding")
+    String orderTheQuoteIsAlreadyInTheCartNotAdding(String quoteId);
+    @DefaultMessage("OrderTheRequirementIsAlreadyInTheCartNotAdding")
+    String orderTheRequirementIsAlreadyInTheCartNotAdding(String requirementId);
+    @DefaultMessage("This  Cannot  Be  Changed  Without Recreating The Setting")
+    String orderThisCannotBeChangedWithoutRecreatingTheSetting();
     @DefaultMessage("This order is a gift")
     String orderThisIsGift();
     @DefaultMessage("This order is not a gift")
     String orderThisIsNotGift();
+    @DefaultMessage("This order does not have shipping instructions")
+    String orderThisOrderDoesNotHaveShippingInstructions();
     @DefaultMessage("This order is a gift")
     String orderThisOrderGift();
     @DefaultMessage("This order is not a gift")
@@ -11096,6 +13020,8 @@ public interface CommonMessages extends Messages {
     String orderTotalCubicSize();
     @DefaultMessage("Total Due")
     String orderTotalDue();
+    @DefaultMessage("Total No. of Items")
+    String orderTotalNoOfItems();
     @DefaultMessage("Total Other Order Adjustments")
     String orderTotalOtherOrderAdjustments();
     @DefaultMessage("Total Qty")
@@ -11120,12 +13046,74 @@ public interface CommonMessages extends Messages {
     String orderTrackingCode();
     @DefaultMessage("Tracking Number")
     String orderTrackingNumber();
+    @DefaultMessage("OrderTriedToSetOrderStatusWithTheSameStatusIdforOrderWithId")
+    String orderTriedToSetOrderStatusWithTheSameStatusIdforOrderWithId(String statusId, String orderId);
+    @DefaultMessage("Trouble getting ItemIssuance(s)")
+    String orderTroubleGettingItemIssuances();
+    @DefaultMessage("Trouble Getting Order Item Ship Grp Inv Res List")
+    String orderTroubleGettingOrderItemShipGrpInvResList();
+    @DefaultMessage("OrderUnableToAddItemToShoppingList")
+    String orderUnableToAddItemToShoppingList(String shoppingListId);
+    @DefaultMessage("Unable to cancel item inventory reservation")
+    String orderUnableToCancelItemInventoryReservation();
+    @DefaultMessage("Unable to cancel order Item :")
+    String orderUnableToCancelOrderItem();
+    @DefaultMessage("OrderUnableToCancelOrderLine")
+    String orderUnableToCancelOrderLine(String itemMsgInfo);
+    @DefaultMessage("Unable to create new shopping list")
+    String orderUnableToCreateNewShoppingList();
+    @DefaultMessage("OrderUnableToCreateShoppingListRecurrenceInformation")
+    String orderUnableToCreateShoppingListRecurrenceInformation(String shoppingListId);
+    @DefaultMessage("Unable to find OrderHeader; cannot get shipping amount")
+    String orderUnableToFindOrderHeaderCannotGetShippingAmount();
+    @DefaultMessage("OrderUnableToLoadOrderReadHelper")
+    String orderUnableToLoadOrderReadHelper(String orderId);
+    @DefaultMessage("OrderUnableToLocateOrder")
+    String orderUnableToLocateOrder(String orderId);
+    @DefaultMessage("OrderUnableToLocateRuleFileFromLocation")
+    String orderUnableToLocateRuleFileFromLocation(String ruleFileLocation);
+    @DefaultMessage("OrderUnableToLocateTaxFileAtLocation")
+    String orderUnableToLocateTaxFileAtLocation(String taxFileLocation);
+    @DefaultMessage("Unable to read ZipSales DataFile")
+    String orderUnableToReadZipSalesDataFile();
+    @DefaultMessage("Unable to remove SALES_TAX adjustments")
+    String orderUnableToRemoveSalesTaxAdjustments();
+    @DefaultMessage("Unable to reserve inventory")
+    String orderUnableToReserveInventory();
+    @DefaultMessage("Unable to reset order grand total")
+    String orderUnableToResetOrderGrandTotal();
+    @DefaultMessage("Unable to retrieve SALES_TAX adjustments")
+    String orderUnableToRetrieveSalesTaxAdjustments();
+    @DefaultMessage("OrderUnableToSetCancelQuantity")
+    String orderUnableToSetCancelQuantity(String itemMsgInfo);
+    @DefaultMessage("Unable to store auto-save cart")
+    String orderUnableToStoreAutoSaveCart();
+    @DefaultMessage("Unable to update cancel quantity of item")
+    String orderUnableToUpdateCancelQuantityOfItem();
+    @DefaultMessage("Unable to update comments of item")
+    String orderUnableToUpdateCommentsOfItem();
+    @DefaultMessage("OrderUnableToUpdateInventoryReservations")
+    String orderUnableToUpdateInventoryReservations(String itemMsgInfo);
+    @DefaultMessage("Unable to update item''s estimated delivery date")
+    String orderUnableToUpdateItemsEstimatedDeliveryDate();
+    @DefaultMessage("OrderUnableToUpdateOrderTaxInformation")
+    String orderUnableToUpdateOrderTaxInformation(String orderId);
+    @DefaultMessage("Unable to update ordered quantity of item")
+    String orderUnableToUpdateOrderedQuantityOfItem();
+    @DefaultMessage("OrderUnableToUpdateShoppingListInformation")
+    String orderUnableToUpdateShoppingListInformation(String shoppinListId);
+    @DefaultMessage("Unable to update unit price of item")
+    String orderUnableToUpdateUnitPriceOfItem();
     @DefaultMessage("Unit / List")
     String orderUnitList();
     @DefaultMessage("Unit Price")
     String orderUnitPrice();
     @DefaultMessage("Unit  Price  HT")
     String orderUnitPriceHT();
+    @DefaultMessage("Item Unit Price History")
+    String orderUnitPriceHistory();
+    @DefaultMessage("OrderUnitPriceOrQuantityAreNullUsingForTheItemBasePrice")
+    String orderUnitPriceOrQuantityAreNullUsingForTheItemBasePrice(String getOrderItemTotal);
     @DefaultMessage("Units  Pieces")
     String orderUnitsPieces();
     @DefaultMessage("Unplanned")
@@ -11134,6 +13122,8 @@ public interface CommonMessages extends Messages {
     String orderUpdateEmailAddress();
     @DefaultMessage("Update Items")
     String orderUpdateItems();
+    @DefaultMessage("OrderUpdateReturnAdjustment")
+    String orderUpdateReturnAdjustment(String returnAdjustmentId, String amount);
     @DefaultMessage("Use Default: No other shipping methods available")
     String orderUseDefault();
     @DefaultMessage("Use as default comment for next entry")
@@ -11160,7 +13150,9 @@ public interface CommonMessages extends Messages {
     String orderViewImage();
     @DefaultMessage("View Order")
     String orderViewOrder();
-    @DefaultMessage("You do not have permission to view this page (it needs \"ORDERMGR_VIEW\" or \"ORDERMGR_ADMIN\").")
+    @DefaultMessage("View Order History")
+    String orderViewOrderHistory();
+    @DefaultMessage("You do not have permission to view this page (it needs \"ORDERMGR_VIEW\", \"ORDERMGR_PURCHASE_VIEW\" or \"ORDERMGR_ADMIN\").")
     String orderViewPermissionError();
     @DefaultMessage("View Quote")
     String orderViewQuote();
@@ -11168,6 +13160,8 @@ public interface CommonMessages extends Messages {
     String orderViewQuoteProfit();
     @DefaultMessage("View Request")
     String orderViewRequest();
+    @DefaultMessage("Viewed")
+    String orderViewed();
     @DefaultMessage("WTD")
     String orderWTD();
     @DefaultMessage("Waiting Approval")
@@ -11192,6 +13186,14 @@ public interface CommonMessages extends Messages {
     String orderYTD();
     @DefaultMessage("Yes, Is A Gift")
     String orderYesIsAGift();
+    @DefaultMessage("You do not have permission to change this order''s status.")
+    String orderYouDoNotHavePermissionToChangeThisOrdersStatus();
+    @DefaultMessage("You do not have permission to load tax tables")
+    String orderYouDoNotHavePermissionToLoadTaxTables();
+    @DefaultMessage("You do not have permission to take orders for this store.")
+    String orderYouDoNotHavePermissionToTakeOrdersForThisStore();
+    @DefaultMessage("You  Do  Not  Have  Permission  To View This Page")
+    String orderYouDoNotHavePermissionToViewThisPage();
     @DefaultMessage("You Must")
     String orderYouMust();
     @DefaultMessage("Your Price")
@@ -11268,6 +13270,8 @@ public interface CommonMessages extends Messages {
     String pageTitleAddProductSupplier();
     @DefaultMessage("Add Product Work Effort")
     String pageTitleAddProductWorkEffort();
+    @DefaultMessage("Add Related Company")
+    String pageTitleAddRelatedCompany();
     @DefaultMessage("Add Response")
     String pageTitleAddResponse();
     @DefaultMessage("Add Shipment Route Segment")
@@ -11352,6 +13356,8 @@ public interface CommonMessages extends Messages {
     String pageTitleApprovedProductRequirements();
     @DefaultMessage("Approved Product Requirements By Vendor")
     String pageTitleApprovedProductRequirementsByVendor();
+    @DefaultMessage("Batch Payments")
+    String pageTitleBatchPayments();
     @DefaultMessage("Billing Information")
     String pageTitleBillingInformation();
     @DefaultMessage("Calendar Day")
@@ -11376,7 +13382,7 @@ public interface CommonMessages extends Messages {
     String pageTitleChooseTopCategory();
     @DefaultMessage("Communication Events")
     String pageTitleCommEvents();
-    @DefaultMessage("GeoLocation of requested element")
+    @DefaultMessage("Geo Location of requested element")
     String pageTitleCommonGeoLocation();
     @DefaultMessage("Content Page")
     String pageTitleContentPage();
@@ -11406,6 +13412,8 @@ public interface CommonMessages extends Messages {
     String pageTitleCreateVirtualWithVariants();
     @DefaultMessage("Create Timesheet for This Week")
     String pageTitleCreateWeekTimesheet();
+    @DefaultMessage("Deposit Payments And Create Batch")
+    String pageTitleDepositPaymentsAndCreateBatch();
     @DefaultMessage("Edit My Digital Product")
     String pageTitleDigitalProductEdit();
     @DefaultMessage("List My Digital Products")
@@ -11432,8 +13440,8 @@ public interface CommonMessages extends Messages {
     String pageTitleEditAgreementPromoAppl();
     @DefaultMessage("Edit Agreement Term")
     String pageTitleEditAgreementTerm();
-    @DefaultMessage("Edit Agreement Work Effort Appls")
-    String pageTitleEditAgreementWorkEffortAppls();
+    @DefaultMessage("Edit Agreement Work Effort Applics")
+    String pageTitleEditAgreementWorkEffortApplics();
     @DefaultMessage("Edit AVS Override")
     String pageTitleEditAvsOverride();
     @DefaultMessage("Edit Billing Account")
@@ -11502,6 +13510,8 @@ public interface CommonMessages extends Messages {
     String pageTitleEditEftAccount();
     @DefaultMessage("PageTitleEditFacilityContactMech")
     String pageTitleEditFacilityContactMech(String facility_facilityName, String facility_facilityId);
+    @DefaultMessage("PageTitleEditFacilityContent")
+    String pageTitleEditFacilityContent(String facility_facilityName, String facility_facilityId);
     @DefaultMessage("Edit Facility Group")
     String pageTitleEditFacilityGroup();
     @DefaultMessage("Edit Facility Group Members")
@@ -11676,6 +13686,8 @@ public interface CommonMessages extends Messages {
     String pageTitleEditProductPriceRules();
     @DefaultMessage("Edit Product Prices")
     String pageTitleEditProductPrices();
+    @DefaultMessage("Edit Product Promo Content")
+    String pageTitleEditProductPromoContent();
     @DefaultMessage("Edit Promo Rules")
     String pageTitleEditProductPromoRules();
     @DefaultMessage("Edit Product Promo Stores")
@@ -11806,6 +13818,10 @@ public interface CommonMessages extends Messages {
     String pageTitleEditUserLoginSecurityGroups();
     @DefaultMessage("Edit Vendor Product")
     String pageTitleEditVendorProduct();
+    @DefaultMessage("Edit Web Analytics Configuration")
+    String pageTitleEditWebAnalyticsConfigs();
+    @DefaultMessage("Edit Web Analytics Types")
+    String pageTitleEditWebAnalyticsTypes();
     @DefaultMessage("Edit Work Effort")
     String pageTitleEditWorkEffort();
     @DefaultMessage("Edit Work Effort Assoc")
@@ -11830,6 +13846,8 @@ public interface CommonMessages extends Messages {
     String pageTitleEditWorkEffortRequestItem();
     @DefaultMessage("Edit Work Effort Requirement")
     String pageTitleEditWorkEffortRequirement();
+    @DefaultMessage("Facility Geo Location")
+    String pageTitleFacilityGeoLocation();
     @DefaultMessage("Facility Location GeoLocation")
     String pageTitleFacilityLocationGeoLocation();
     @DefaultMessage("Field lookup")
@@ -11844,8 +13862,8 @@ public interface CommonMessages extends Messages {
     String pageTitleFindAgreementRoles();
     @DefaultMessage("Find Approved Product Requirements")
     String pageTitleFindApprovedProductRequirements();
-    @DefaultMessage("Find Approved Requirements By Vendor")
-    String pageTitleFindApprovedRequirementsByVendor();
+    @DefaultMessage("Find Approved Requirements By Supplier")
+    String pageTitleFindApprovedRequirementsBySupplier();
     @DefaultMessage("Find Billing Account(s)")
     String pageTitleFindBillingAccount();
     @DefaultMessage("Find Bill Of Materials")
@@ -11872,6 +13890,10 @@ public interface CommonMessages extends Messages {
     String pageTitleFindFacilityTransfers();
     @DefaultMessage("Find Financial Account")
     String pageTitleFindFinAccount();
+    @DefaultMessage("PageTitleFindFinAccountReconciliations")
+    String pageTitleFindFinAccountReconciliations(String finAccount_finAccountName, String finAccountId);
+    @DefaultMessage("PageTitleFindFinAccountTrans")
+    String pageTitleFindFinAccountTrans(String finAccount_finAccountName, String finAccountId);
     @DefaultMessage("Find Gateway Responses")
     String pageTitleFindGatewayResponses();
     @DefaultMessage("Find Gl Account")
@@ -11898,10 +13920,10 @@ public interface CommonMessages extends Messages {
     String pageTitleFindPartyInvitation();
     @DefaultMessage("Find Payment")
     String pageTitleFindPayment();
-    @DefaultMessage("Find Payment Gateway Configuration Types")
-    String pageTitleFindPaymentGatewayConfigurationTypes();
-    @DefaultMessage("Find Payment Gateway Configurations")
-    String pageTitleFindPaymentGatewayConfigurations();
+    @DefaultMessage("Find Payment Gateway Config")
+    String pageTitleFindPaymentGatewayConfig();
+    @DefaultMessage("Find Payment Gateway Config Types")
+    String pageTitleFindPaymentGatewayConfigTypes();
     @DefaultMessage("Find Product Catalog")
     String pageTitleFindProductCatalog();
     @DefaultMessage("Find Product Price Rule")
@@ -11912,6 +13934,8 @@ public interface CommonMessages extends Messages {
     String pageTitleFindProductPromotionCode();
     @DefaultMessage("Find Product Stocktake")
     String pageTitleFindProductStocktake();
+    @DefaultMessage("Find Product Store Roles")
+    String pageTitleFindProductStoreRoles();
     @DefaultMessage("Quick Return")
     String pageTitleFindQuickReturn();
     @DefaultMessage("Find Requirements")
@@ -11924,6 +13948,10 @@ public interface CommonMessages extends Messages {
     String pageTitleFindRoutingTask();
     @DefaultMessage("Find Security Group")
     String pageTitleFindSecurityGroup();
+    @DefaultMessage("Find Shipment Gateway Config")
+    String pageTitleFindShipmentGatewayConfig();
+    @DefaultMessage("Find Shipment Gateway Config Types")
+    String pageTitleFindShipmentGatewayConfigTypes();
     @DefaultMessage("Find Subscription")
     String pageTitleFindSubscription();
     @DefaultMessage("Find Subscription Resource")
@@ -11932,12 +13960,22 @@ public interface CommonMessages extends Messages {
     String pageTitleFindTaxAuthority();
     @DefaultMessage("Find Timesheet")
     String pageTitleFindTimesheet();
+    @DefaultMessage("Find Web Analytics Configuration")
+    String pageTitleFindWebAnalyticsConfigs();
+    @DefaultMessage("Find Web Analytics Types")
+    String pageTitleFindWebAnalyticsTypes();
     @DefaultMessage("Find Work Effort")
     String pageTitleFindWorkEffort();
+    @DefaultMessage("Fixed Asset Depreciation Method")
+    String pageTitleFixedAssetDepreciationMethod();
     @DefaultMessage("Fixed Asset Depreciation Report")
     String pageTitleFixedAssetDepreciationReport();
-    @DefaultMessage("Fixed Asset GeoLocation")
+    @DefaultMessage("Fixed Asset Geo Location")
     String pageTitleFixedAssetGeoLocation();
+    @DefaultMessage("Global Mappings")
+    String pageTitleFixedAssetGlobalMappings();
+    @DefaultMessage("Fixed Asset Mappings")
+    String pageTitleFixedAssetMappings();
     @DefaultMessage("Forum Article")
     String pageTitleForumArticle();
     @DefaultMessage("Forum Response")
@@ -11992,6 +14030,8 @@ public interface CommonMessages extends Messages {
     String pageTitleListCommWorkEfforts();
     @DefaultMessage("List Communications")
     String pageTitleListCommunications();
+    @DefaultMessage("List Communications of related parties")
+    String pageTitleListCommunicationsRelatedParties();
     @DefaultMessage("List Data Source")
     String pageTitleListDataSource();
     @DefaultMessage("List Data Source Type")
@@ -12034,6 +14074,8 @@ public interface CommonMessages extends Messages {
     String pageTitleListOrderHeaders();
     @DefaultMessage("List Party Fixed Asset Assignments")
     String pageTitleListPartyFixedAssetAssignments();
+    @DefaultMessage("List Identification Number")
+    String pageTitleListPartyIdentifications();
     @DefaultMessage("List Payment Applications")
     String pageTitleListPaymentApplications();
     @DefaultMessage("List Product Feature Appl Attrs")
@@ -12298,16 +14340,36 @@ public interface CommonMessages extends Messages {
     String pageTitleTreeWorkEfforts();
     @DefaultMessage("Un-posted Accounting Transactions")
     String pageTitleUnpostedTransactions();
-    @DefaultMessage("Update Payment Gateway Configuration")
-    String pageTitleUpdatePaymentGatewayConfiguration();
-    @DefaultMessage("Update Payment Gateway Configuration Clear Commerce")
-    String pageTitleUpdatePaymentGatewayConfigurationClearCommerce();
-    @DefaultMessage("Update Payment Gateway Configuration PayPal")
-    String pageTitleUpdatePaymentGatewayConfigurationPayPal();
-    @DefaultMessage("Update Payment Gateway Configuration Payflow Pro")
-    String pageTitleUpdatePaymentGatewayConfigurationPayflowPro();
-    @DefaultMessage("Update Payment Gateway Configuration Type")
-    String pageTitleUpdatePaymentGatewayConfigurationType();
+    @DefaultMessage("Update Payment Gateway Config")
+    String pageTitleUpdatePaymentGatewayConfig();
+    @DefaultMessage("Update Payment Gateway Config Authorize Dot Net")
+    String pageTitleUpdatePaymentGatewayConfigAuthorizeNet();
+    @DefaultMessage("Update Payment Gateway Config Clear Commerce")
+    String pageTitleUpdatePaymentGatewayConfigClearCommerce();
+    @DefaultMessage("Update Payment Gateway Config CyberSource")
+    String pageTitleUpdatePaymentGatewayConfigCyberSource();
+    @DefaultMessage("Update Payment Gateway Config PayPal")
+    String pageTitleUpdatePaymentGatewayConfigPayPal();
+    @DefaultMessage("Update Payment Gateway Config Payflow Pro")
+    String pageTitleUpdatePaymentGatewayConfigPayflowPro();
+    @DefaultMessage("Update Payment Gateway Config SagePay")
+    String pageTitleUpdatePaymentGatewayConfigSagePay();
+    @DefaultMessage("Update Payment Gateway Config Type")
+    String pageTitleUpdatePaymentGatewayConfigType();
+    @DefaultMessage("Update Payment Gateway Config RBS WorldPay")
+    String pageTitleUpdatePaymentGatewayConfigWorldPay();
+    @DefaultMessage("Update Shipment Gateway Config")
+    String pageTitleUpdateShipmentGatewayConfig();
+    @DefaultMessage("Update Shipment Gateway Config DHL")
+    String pageTitleUpdateShipmentGatewayConfigDhl();
+    @DefaultMessage("Update Shipment Gateway Config FedEx")
+    String pageTitleUpdateShipmentGatewayConfigFedex();
+    @DefaultMessage("Update Shipment Gateway Config Type")
+    String pageTitleUpdateShipmentGatewayConfigType();
+    @DefaultMessage("Update Shipment Gateway Config UPS")
+    String pageTitleUpdateShipmentGatewayConfigUps();
+    @DefaultMessage("Update Shipment Gateway Config USPS")
+    String pageTitleUpdateShipmentGatewayConfigUsps();
     @DefaultMessage("View Accounting Transaction")
     String pageTitleViewAccountingTransaction();
     @DefaultMessage("View Activity and Task List")
@@ -12348,6 +14410,8 @@ public interface CommonMessages extends Messages {
     String pageTitleViewProductAgreements();
     @DefaultMessage("View Product Manufacturing")
     String pageTitleViewProductManufacturing();
+    @DefaultMessage("View Product Orders")
+    String pageTitleViewProductOrders();
     @DefaultMessage("View Product Store Segments")
     String pageTitleViewProductStoreSegments();
     @DefaultMessage("View Profile")
@@ -12422,6 +14486,10 @@ public interface CommonMessages extends Messages {
     String partyAddChildListsToCart();
     @DefaultMessage("Add Communication Content")
     String partyAddCommContent();
+    @DefaultMessage("Add Communication Event Order")
+    String partyAddCommEventOrder();
+    @DefaultMessage("Add Communication Event Product")
+    String partyAddCommEventProduct();
     @DefaultMessage("Add List To Cart")
     String partyAddListToCart();
     @DefaultMessage("New Address")
@@ -12588,6 +14656,12 @@ public interface CommonMessages extends Messages {
     String partyCommCustRequests();
     @DefaultMessage("Comm Event")
     String partyCommEvent();
+    @DefaultMessage("Create Opportunity")
+    String partyCommEventCreateOpportunity();
+    @DefaultMessage("Communication Event Orders")
+    String partyCommEventOrders();
+    @DefaultMessage("Communication Event Products")
+    String partyCommEventProducts();
     @DefaultMessage("Communication Event Purposes")
     String partyCommEventPurposes();
     @DefaultMessage("Communication Event Roles")
@@ -12748,10 +14822,12 @@ public interface CommonMessages extends Messages {
     String partyCurrentShoppingCart();
     @DefaultMessage("Customer Request")
     String partyCustomerRequest();
-    @DefaultMessage("Customer will receive a temporary password by email.")
-    String partyCustomerTemporaryPassword();
     @DefaultMessage("Cyber source AVS Over")
     String partyCybersourceAvsOver();
+    @DefaultMessage("Deceased Date")
+    String partyDeceasedDate();
+    @DefaultMessage("Deceaseddate is not formatted correctly: must be yyyy-mm-dd, like 1982-07-21")
+    String partyDeceasedDateMissingError();
     @DefaultMessage("Delete Email")
     String partyDeleteEmail();
     @DefaultMessage("Security Error: to run deletePartyRole you must have the PARTYMGR_DELETE or PARTYMGR_ADMIN permission")
@@ -12814,8 +14890,6 @@ public interface CommonMessages extends Messages {
     String partyEmailMessage();
     @DefaultMessage("Email to")
     String partyEmailTo();
-    @DefaultMessage("Emails from known origin")
-    String partyEmailsFromKnownOrigin();
     @DefaultMessage("Emails from UN-known origin")
     String partyEmailsFromUnknownOrigin();
     @DefaultMessage("ENABLED")
@@ -12846,6 +14920,8 @@ public interface CommonMessages extends Messages {
     String partyFinancialSummary();
     @DefaultMessage("Find Communication Events")
     String partyFindCommunicationEvents();
+    @DefaultMessage("Find Communications by Order")
+    String partyFindCommunicationsByOrder();
     @DefaultMessage("Find Parties")
     String partyFindParties();
     @DefaultMessage("Find Party")
@@ -12854,7 +14930,7 @@ public interface CommonMessages extends Messages {
     String partyFindPartyInvitations();
     @DefaultMessage("First name")
     String partyFirstName();
-    @DefaultMessage("Firstname is Missing")
+    @DefaultMessage("First Name is Missing")
     String partyFirstNameMissing();
     @DefaultMessage("First name on card is missing")
     String partyFirstNameOnCardMissingError();
@@ -12868,6 +14944,8 @@ public interface CommonMessages extends Messages {
     String partyFromContactMech();
     @DefaultMessage("From Email Address")
     String partyFromEmailAddress();
+    @DefaultMessage("Full Name")
+    String partyFullName();
     @DefaultMessage("Gender")
     String partyGender();
     @DefaultMessage("General Correspondence Address")
@@ -12904,6 +14982,8 @@ public interface CommonMessages extends Messages {
     String partyHomePhoneAreaCodeMissing();
     @DefaultMessage("Home Phone Contact Number is missing.")
     String partyHomePhoneContactNumberMissing();
+    @DefaultMessage("Emails scheduled to be sent")
+    String partyInProgresstEmails();
     @DefaultMessage("This information does not belong to you and you do not have permission to view it")
     String partyInformationNotBelongToYou();
     @DefaultMessage("Information Not Found")
@@ -12954,7 +15034,7 @@ public interface CommonMessages extends Messages {
     String partyIsUsps();
     @DefaultMessage("Last name")
     String partyLastName();
-    @DefaultMessage("Lastname is Missing")
+    @DefaultMessage("Last Name is Missing")
     String partyLastNameMissingError();
     @DefaultMessage("Last name on card is missing")
     String partyLastNameOnCardMissingError();
@@ -12990,6 +15070,10 @@ public interface CommonMessages extends Messages {
     String partyLookupContact();
     @DefaultMessage("Lookup Contact Mech")
     String partyLookupContactMech();
+    @DefaultMessage("Lookup Internal Organization")
+    String partyLookupInternalOrganization();
+    @DefaultMessage("Lookup Party with the role Lead")
+    String partyLookupLead();
     @DefaultMessage("Lookup Party")
     String partyLookupParty();
     @DefaultMessage("Lookup PartyAndUserLoginAndPerson")
@@ -13010,6 +15094,10 @@ public interface CommonMessages extends Messages {
     String partyLoyaltyPoints();
     @DefaultMessage("Mothers Maiden Name")
     String partyMaidenName();
+    @DefaultMessage("Main Role")
+    String partyMainRole();
+    @DefaultMessage("Party Manager")
+    String partyManager();
     @DefaultMessage("Party Manager Application")
     String partyManagerApplication();
     @DefaultMessage("Manifest Company Name")
@@ -13144,6 +15232,8 @@ public interface CommonMessages extends Messages {
     String partyNoPartyRolesFound();
     @DefaultMessage("No payment method information on file.")
     String partyNoPaymentMethodInformation();
+    @DefaultMessage("No product store(s) found for this party.")
+    String partyNoProductStoreFoundForThisParty();
     @DefaultMessage("No Server Hits found for this Visit")
     String partyNoServerHitsFound();
     @DefaultMessage("No shopping cart saved for party")
@@ -13176,6 +15266,8 @@ public interface CommonMessages extends Messages {
     String partyOpenEvents();
     @DefaultMessage("Optional")
     String partyOptional();
+    @DefaultMessage("Order Add")
+    String partyOrderAdd();
     @DefaultMessage("order(s) in the last")
     String partyOrderInLast();
     @DefaultMessage("Organization Party")
@@ -13184,6 +15276,8 @@ public interface CommonMessages extends Messages {
     String partyOrganizationPartyId();
     @DefaultMessage("Origin Email address not known!")
     String partyOriginEmailNotKnown();
+    @DefaultMessage("Others and General Communication Events")
+    String partyOtherAndGeneralCommunicationEvents();
     @DefaultMessage("Override Default Rate Amount")
     String partyOverrideDefaultRateAmount();
     @DefaultMessage("Page Push/Following")
@@ -13216,6 +15310,12 @@ public interface CommonMessages extends Messages {
     String partyPartyId();
     @DefaultMessage("Party ID missing")
     String partyPartyIdMissing();
+    @DefaultMessage("Identification Number")
+    String partyPartyIdentification();
+    @DefaultMessage("List Identification Number")
+    String partyPartyIdentificationList();
+    @DefaultMessage("Identification Numbers")
+    String partyPartyIdentifications();
     @DefaultMessage("in the role of")
     String partyPartyInTheRoleOf();
     @DefaultMessage("Party not defined")
@@ -13306,6 +15406,8 @@ public interface CommonMessages extends Messages {
     String partyPrimaryPhone();
     @DefaultMessage("Product")
     String partyProduct();
+    @DefaultMessage("Product Add")
+    String partyProductAdd();
     @DefaultMessage("Product Id")
     String partyProductId();
     @DefaultMessage("Profile")
@@ -13338,6 +15440,8 @@ public interface CommonMessages extends Messages {
     String partyRateNotSpecified();
     @DefaultMessage("You will receive a password by email when your new account is approved")
     String partyReceivePasswordByEmail();
+    @DefaultMessage("Related Company")
+    String partyRelatedCompany();
     @DefaultMessage("Party Relationship Security")
     String partyRelationSecurity();
     @DefaultMessage("Valid From Role Type")
@@ -13366,6 +15470,8 @@ public interface CommonMessages extends Messages {
     String partyRepeatPassword();
     @DefaultMessage("Reply")
     String partyReply();
+    @DefaultMessage("Reply All")
+    String partyReplyAll();
     @DefaultMessage("RE:")
     String partyReplyPrefix();
     @DefaultMessage("Request a New Account")
@@ -13434,6 +15540,8 @@ public interface CommonMessages extends Messages {
     String partyServicemgntCustRequestId();
     @DefaultMessage("Shipper Account")
     String partyShipperAccount();
+    @DefaultMessage("Shipping Address")
+    String partyShippingAddress();
     @DefaultMessage("Shopping List Detail")
     String partyShoppingListDetail();
     @DefaultMessage("Empty Shopping List")
@@ -13466,8 +15574,6 @@ public interface CommonMessages extends Messages {
     String partyStateInUsMissing();
     @DefaultMessage("State is missing")
     String partyStateMissingError();
-    @DefaultMessage("Status")
-    String partyStatus();
     @DefaultMessage("Still Active")
     String partyStillActive();
     @DefaultMessage("Subject")
@@ -13494,6 +15600,8 @@ public interface CommonMessages extends Messages {
     String partyTelecomNumberSuccessfullyCreated();
     @DefaultMessage("Telecom Number successfully updated.")
     String partyTelecomNumberSuccessfullyUpdated();
+    @DefaultMessage("The person will receive a temporary password by email.")
+    String partyTemporaryPassword();
     @DefaultMessage("Term")
     String partyTerm();
     @DefaultMessage("Term Type")
@@ -13566,6 +15674,8 @@ public interface CommonMessages extends Messages {
     String partyUserLoginsForSecurityGroup();
     @DefaultMessage("User Name(s)")
     String partyUserName();
+    @DefaultMessage("Username in use, please choose another.")
+    String partyUserNameInUse();
     @DefaultMessage("Username is missing")
     String partyUserNameMissing();
     @DefaultMessage("Value from party level")
@@ -13580,6 +15690,10 @@ public interface CommonMessages extends Messages {
     String partyVendorInformation();
     @DefaultMessage("View Cert")
     String partyViewCert();
+    @DefaultMessage("View Communication Orders")
+    String partyViewCommOrders();
+    @DefaultMessage("View Communication Products")
+    String partyViewCommProducts();
     @DefaultMessage("View Communication Event")
     String partyViewCommunicationEvent();
     @DefaultMessage("View Image")
@@ -13696,6 +15810,8 @@ public interface CommonMessages extends Messages {
     String productActualTotal();
     @DefaultMessage("Actual Transport")
     String productActualTransport();
+    @DefaultMessage("Add Additional Images")
+    String productAddAdditionalImages();
     @DefaultMessage("Add a Category to this Catalog (select Category and Type, then enter optional From Date)")
     String productAddCatalogProdCat();
     @DefaultMessage("Add a Catalog to this Category (select Catalog and Type, then enter optional From Date)")
@@ -13706,6 +15822,8 @@ public interface CommonMessages extends Messages {
     String productAddCategoryGlAccount();
     @DefaultMessage("Add Category Parent")
     String productAddCategoryParent();
+    @DefaultMessage("Add Communication Event")
+    String productAddCommunicationEvent();
     @DefaultMessage("Add Content to Category")
     String productAddContentCategory();
     @DefaultMessage("Add Content to Product")
@@ -13718,6 +15836,8 @@ public interface CommonMessages extends Messages {
     String productAddEmail();
     @DefaultMessage("Add Facility")
     String productAddFacility();
+    @DefaultMessage("Add Facility Content")
+    String productAddFacilityContent();
     @DefaultMessage("Add Facility Group Member")
     String productAddFacilityGroupMember();
     @DefaultMessage("Add Facility Group Party Role")
@@ -13792,6 +15912,10 @@ public interface CommonMessages extends Messages {
     String productAddStorePromoOptionalDate();
     @DefaultMessage("Add to Category")
     String productAddToCategory();
+    @DefaultMessage("Add To Compare")
+    String productAddToCompare();
+    @DefaultMessage("ProductAddToCompareListSuccess")
+    String productAddToCompareListSuccess(String name);
     @DefaultMessage("Add to Package")
     String productAddToPackage();
     @DefaultMessage("Add to shopping list")
@@ -13822,6 +15946,8 @@ public interface CommonMessages extends Messages {
     String productAllowUSPS();
     @DefaultMessage("Allow USPS Addr (PO Box, RR, etc)")
     String productAllowUSPSAddr();
+    @DefaultMessage("Customers who bought this item also bought:")
+    String productAlsoBought();
     @DefaultMessage("Alternate")
     String productAlternate();
     @DefaultMessage("Alternate KeyWord Thesaurus")
@@ -13950,6 +16076,8 @@ public interface CommonMessages extends Messages {
     String productAvailablePromiseQuantityHand();
     @DefaultMessage("Available thru date")
     String productAvailableThruDate();
+    @DefaultMessage("Available To Promise")
+    String productAvailableToPromise();
     @DefaultMessage("Average Cost")
     String productAverageCost();
     @DefaultMessage("Back Orders")
@@ -13964,6 +16092,8 @@ public interface CommonMessages extends Messages {
     String productBasePrc();
     @DefaultMessage("Be The First To Review This Product!")
     String productBeTheFirstToReviewThisProduct();
+    @DefaultMessage("Best Selling Products of")
+    String productBestSellingProductsOf();
     @DefaultMessage("Billing Weight & UOM")
     String productBillingWeightUom();
     @DefaultMessage("Bin Num")
@@ -14020,6 +16150,8 @@ public interface CommonMessages extends Messages {
     String productCatalogDetailList();
     @DefaultMessage("Catalog [ID]")
     String productCatalogId();
+    @DefaultMessage("Catalog Manager")
+    String productCatalogManager();
     @DefaultMessage("Catalog Manager Application")
     String productCatalogManagerApplication();
     @DefaultMessage("This application is primarily intended for those responsible for the maintenance of product catalog related information")
@@ -14110,6 +16242,8 @@ public interface CommonMessages extends Messages {
     String productCategoryWithNoParent();
     @DefaultMessage("Category [ID]")
     String productCategory_Id();
+    @DefaultMessage("If you change Per Unit Price then it will also get update in Supplier product last price and order item price, would you like to continue.")
+    String productChangePerUnitPrice();
     @DefaultMessage("This cannot be changed without re-creating the Product Catalog.")
     String productChangeWithoutProductCatalog();
     @DefaultMessage("Channel")
@@ -14138,6 +16272,8 @@ public interface CommonMessages extends Messages {
     String productChooseQuickAddCategory();
     @DefaultMessage("Choose Top Category")
     String productChooseTopCategory();
+    @DefaultMessage("Compare list successfully cleared")
+    String productClearCompareListSuccess();
     @DefaultMessage("Comments")
     String productComments();
     @DefaultMessage("Commissions")
@@ -14146,6 +16282,8 @@ public interface CommonMessages extends Messages {
     String productCompanySubtitle();
     @DefaultMessage("Compare At")
     String productCompareAtPrice();
+    @DefaultMessage("Compare Products")
+    String productCompareProducts();
     @DefaultMessage("Complete")
     String productComplete();
     @DefaultMessage("Force Complete")
@@ -14286,6 +16424,8 @@ public interface CommonMessages extends Messages {
     String productCouldNotFindProductShipmentWithId();
     @DefaultMessage("Country")
     String productCountry();
+    @DefaultMessage("Country of Origin")
+    String productCountryOfOrigin();
     @DefaultMessage("Create a Product Feature Category")
     String productCreateAProductFeatureCategory();
     @DefaultMessage("Create information for new supplier")
@@ -14340,8 +16480,6 @@ public interface CommonMessages extends Messages {
     String productCreateSimpleTextContentForAlternateLocale();
     @DefaultMessage("Create Virtual Product")
     String productCreateVirtualProduct();
-    @DefaultMessage("Created By")
-    String productCreatedBy();
     @DefaultMessage("Created By User Login")
     String productCreatedByUserLogin();
     @DefaultMessage("Created Date")
@@ -14414,6 +16552,8 @@ public interface CommonMessages extends Messages {
     String productDetailScreenMessage();
     @DefaultMessage("example: component://ecommerce/widget/CatalogScreens.xml#categorydetail")
     String productDetailSubScreenTooltip();
+    @DefaultMessage("Diameter Uom Id")
+    String productDiameterUomId();
     @DefaultMessage("Items with different currencies")
     String productDifferentCurrencies();
     @DefaultMessage("Discount")
@@ -14444,6 +16584,8 @@ public interface CommonMessages extends Messages {
     String productEditContent();
     @DefaultMessage("Edit Facility")
     String productEditFacility();
+    @DefaultMessage("Edit Facility Geo Location")
+    String productEditFacilityGeoLocation();
     @DefaultMessage("Edit Feature")
     String productEditFeature();
     @DefaultMessage("Product Feature Group Applications")
@@ -14464,6 +16606,8 @@ public interface CommonMessages extends Messages {
     String productEditProductWithProductId();
     @DefaultMessage("Edit Shipment")
     String productEditShipment();
+    @DefaultMessage("Email Return Shipping Label (UPS)")
+    String productEmailReturnShippingLabelUPS();
     @DefaultMessage("Entire Catalog")
     String productEntireCatalog();
     @DefaultMessage("Error: facility")
@@ -14556,6 +16700,8 @@ public interface CommonMessages extends Messages {
     String productFacilityContainerId();
     @DefaultMessage("You do not have permission to view this page. (\"FACILITY_CREATE\" or \"FACILITY_ADMIN\" needed)")
     String productFacilityCreatePermissionError();
+    @DefaultMessage("Area Unit")
+    String productFacilityDefaultAreaUnit();
     @DefaultMessage("Default Inventory Item Type")
     String productFacilityDefaultInventoryItemType();
     @DefaultMessage("Default Weight Unit")
@@ -14584,6 +16730,8 @@ public interface CommonMessages extends Messages {
     String productFacilityLocation();
     @DefaultMessage("Facility Locations")
     String productFacilityLocations();
+    @DefaultMessage("Facility Manager")
+    String productFacilityManager();
     @DefaultMessage("Facility Manager Application")
     String productFacilityManagerApplication();
     @DefaultMessage("Movement")
@@ -14596,6 +16744,8 @@ public interface CommonMessages extends Messages {
     String productFacilityPermissionError(String resourceDescription, String mainAction);
     @DefaultMessage("Facility Role Member Maintenance")
     String productFacilityRoleMemberMaintenance();
+    @DefaultMessage("Area")
+    String productFacilitySize();
     @DefaultMessage("Facility Type")
     String productFacilityType();
     @DefaultMessage("Facility Type ID")
@@ -14754,6 +16904,8 @@ public interface CommonMessages extends Messages {
     String productFindRule();
     @DefaultMessage("Find Shipment(s)")
     String productFindShipment();
+    @DefaultMessage("Find Shipment(s)")
+    String productFindShipmentTitle();
     @DefaultMessage("Fl. Oz.")
     String productFlOz();
     @DefaultMessage("Flag picking started")
@@ -14846,6 +16998,8 @@ public interface CommonMessages extends Messages {
     String productHideGrid();
     @DefaultMessage("High to Low")
     String productHighToLow();
+    @DefaultMessage("date/time entries denote that the current time is before the From Date or after the Thru Date. If the From Date is red, association has not started yet; if Thru Date is red, association has expired (and should probably be deleted).")
+    String productHighlightedExplanation();
     @DefaultMessage("Host")
     String productHost();
     @DefaultMessage("HTML Search Parameters")
@@ -15166,14 +17320,24 @@ public interface CommonMessages extends Messages {
     String productMeterType_description_COPY_COUNT();
     @DefaultMessage("Distance Meter")
     String productMeterType_description_DISTANCE();
+    @DefaultMessage("Use Event Data Recorder")
+    String productMeterType_description_EVENT_DATA_RECORDER();
     @DefaultMessage("Motor Time Meter")
     String productMeterType_description_MOTOR_TIME();
     @DefaultMessage("Odometer")
     String productMeterType_description_ODOMETER();
+    @DefaultMessage("Use Pedometer")
+    String productMeterType_description_PEDOMETER();
     @DefaultMessage("Speedometer")
     String productMeterType_description_SPEEDOMETER();
+    @DefaultMessage("Use Tacograph")
+    String productMeterType_description_TACHOGRAPH();
     @DefaultMessage("Tachometer")
     String productMeterType_description_TACHOMETER();
+    @DefaultMessage("Use Taximeter")
+    String productMeterType_description_TAXIMETER();
+    @DefaultMessage("Use Trip Meter")
+    String productMeterType_description_TRIP_METER();
     @DefaultMessage("Use Count Meter")
     String productMeterType_description_USE_COUNT();
     @DefaultMessage("Meters")
@@ -15252,6 +17416,8 @@ public interface CommonMessages extends Messages {
     String productNewFacility();
     @DefaultMessage("New Facility Location")
     String productNewFacilityLocation();
+    @DefaultMessage("New Feature Category")
+    String productNewFeatureCategory();
     @DefaultMessage("New Feature InterAction")
     String productNewFeatureInterAction();
     @DefaultMessage("New Feature Type")
@@ -15272,7 +17438,7 @@ public interface CommonMessages extends Messages {
     String productNewProductCreate();
     @DefaultMessage("New Product ID")
     String productNewProductId();
-    @DefaultMessage("New ProductPromo")
+    @DefaultMessage("New Product Promo")
     String productNewProductPromo();
     @DefaultMessage("New Product Store")
     String productNewProductStore();
@@ -15346,10 +17512,14 @@ public interface CommonMessages extends Messages {
     String productNoPicksStarted();
     @DefaultMessage("No Price Rules found")
     String productNoPriceRulesFound();
+    @DefaultMessage("No Product Found")
+    String productNoProductFound();
     @DefaultMessage("No products in category")
     String productNoProductsInCategory();
     @DefaultMessage("There are no products in this category")
     String productNoProductsInThisCategory();
+    @DefaultMessage("You have no products to compare.")
+    String productNoProductsToCompare();
     @DefaultMessage("No results found")
     String productNoResultsFound();
     @DefaultMessage("No selectable Features found . Please create some and try again.")
@@ -15370,8 +17540,6 @@ public interface CommonMessages extends Messages {
     String productNotFindInventoryItemWithId();
     @DefaultMessage("Could not find product with ID")
     String productNotFindProductId();
-    @DefaultMessage("This cannot be changed without re-creating the category")
-    String productNotModificationRecrationCategory();
     @DefaultMessage("This cannot be changed without re-creating the facility")
     String productNotModificationRecrationFacility();
     @DefaultMessage("This cannot be changed without re-creating the facility group")
@@ -15390,6 +17558,8 @@ public interface CommonMessages extends Messages {
     String productNotModificationRecreatingProductShipment();
     @DefaultMessage("This cannot be changed without re-creating the Product Store")
     String productNotModificationRecreatingProductStore();
+    @DefaultMessage("This cannot be changed without re-creating the category")
+    String productNotModificationRecreationCategory();
     @DefaultMessage("Not In Origin Facility")
     String productNotOriginFacility();
     @DefaultMessage("but this is NOT a Purchase Shipment")
@@ -15426,6 +17596,8 @@ public interface CommonMessages extends Messages {
     String productNtWt();
     @DefaultMessage("number")
     String productNumber();
+    @DefaultMessage("Number of Order Items")
+    String productNumberOfOrderItems();
     @DefaultMessage("Number / Quantity")
     String productNumberQuantity();
     @DefaultMessage("makes these products obsolete:")
@@ -15464,6 +17636,8 @@ public interface CommonMessages extends Messages {
     String productOrderItem();
     @DefaultMessage("Order Items")
     String productOrderItems();
+    @DefaultMessage("Order not ready for picking, needs stock move")
+    String productOrderNotReadyForPickNeedStockMove();
     @DefaultMessage("Order Number")
     String productOrderNumber();
     @DefaultMessage("Order qty increments")
@@ -15474,6 +17648,8 @@ public interface CommonMessages extends Messages {
     String productOrderTotal();
     @DefaultMessage("Ordered Quantity")
     String productOrderedQuantity();
+    @DefaultMessage("Orders Status")
+    String productOrdersStatus();
     @DefaultMessage("Organization")
     String productOrganization();
     @DefaultMessage("Origin")
@@ -15526,6 +17702,8 @@ public interface CommonMessages extends Messages {
     String productPackQty();
     @DefaultMessage("Package")
     String productPackage();
+    @DefaultMessage("Package input box")
+    String productPackageInputBox();
     @DefaultMessage("Package Qty")
     String productPackageQty();
     @DefaultMessage("Packages")
@@ -15566,6 +17744,10 @@ public interface CommonMessages extends Messages {
     String productPendingReviewUpdateAndApprove();
     @DefaultMessage("Per Unit Price")
     String productPerUnitPrice();
+    @DefaultMessage("Per Unit Price (Facility)")
+    String productPerUnitPriceFacility();
+    @DefaultMessage("Per Unit Price (Order)")
+    String productPerUnitPriceOrder();
     @DefaultMessage("percent")
     String productPercent();
     @DefaultMessage("ProductPermissionError")
@@ -15716,10 +17898,14 @@ public interface CommonMessages extends Messages {
     String productProductCatalogsList();
     @DefaultMessage("Product Category")
     String productProductCategory();
+    @DefaultMessage("Product Category Description")
+    String productProductCategoryDescription();
     @DefaultMessage("Product Category ID")
     String productProductCategoryId();
     @DefaultMessage("Product Category Member Maintenance")
     String productProductCategoryMemberMaintenance();
+    @DefaultMessage("Product Category Name")
+    String productProductCategoryName();
     @DefaultMessage("Product Category Type")
     String productProductCategoryType();
     @DefaultMessage("Product Config Item Content Type Id")
@@ -15730,6 +17916,8 @@ public interface CommonMessages extends Messages {
     String productProductDepth();
     @DefaultMessage("Product Description")
     String productProductDescription();
+    @DefaultMessage("Product Diameter")
+    String productProductDiameter();
     @DefaultMessage("Product Feature Categories")
     String productProductFeatureCategories();
     @DefaultMessage("Product Feature Maintenance")
@@ -15762,6 +17950,10 @@ public interface CommonMessages extends Messages {
     String productProductNumber();
     @DefaultMessage("Product Page")
     String productProductPage();
+    @DefaultMessage("Product Promo Content List")
+    String productProductPromoContentList();
+    @DefaultMessage("Product Promo Content Type")
+    String productProductPromoContentType();
     @DefaultMessage("Product Promotions List")
     String productProductPromotionsList();
     @DefaultMessage("Product QOH")
@@ -15794,6 +17986,8 @@ public interface CommonMessages extends Messages {
     String productProductStoreWebSites();
     @DefaultMessage("Product Type")
     String productProductType();
+    @DefaultMessage("Product Weight")
+    String productProductWeight();
     @DefaultMessage("Product Width")
     String productProductWidth();
     @DefaultMessage("Products")
@@ -15900,12 +18094,18 @@ public interface CommonMessages extends Messages {
     String productQuantityNotAvailable();
     @DefaultMessage("Quantity Not Set")
     String productQuantityNotSet();
+    @DefaultMessage("Quantity in this package")
+    String productQuantityOfPackage();
+    @DefaultMessage("Quantity On Hand")
+    String productQuantityOnHand();
     @DefaultMessage("Quantity Rejected")
     String productQuantityRejected();
     @DefaultMessage("Quantity Requested")
     String productQuantityRequested();
     @DefaultMessage("Quantity Shipped")
     String productQuantityShipped();
+    @DefaultMessage("Quantity in this Shipment")
+    String productQuantityShippedOfPackage();
     @DefaultMessage("Quantity charge")
     String productQuantityTitle1();
     @DefaultMessage("Quantity To Bin")
@@ -15980,10 +18180,6 @@ public interface CommonMessages extends Messages {
     String productReceived();
     @DefaultMessage("(You must re-create the association to change this.)")
     String productRecreateAssociation();
-    @DefaultMessage("<b style=\"color: red;\">Red</b> date/time entries denote that the current time is before the From Date or after the Thru Date. If the From Date is <b style=\"color: red;\">red</b>, association has not started yet; if Thru Date is <b style=\"color: red;\">red</b>, association has expired (<u>and should probably be deleted</u>).")
-    String productRedExplanation();
-    @DefaultMessage("Refine Search")
-    String productRefineSearch();
     @DefaultMessage("Regular Price")
     String productRegularPrice();
     @DefaultMessage("Rejected Reason")
@@ -16000,6 +18196,8 @@ public interface CommonMessages extends Messages {
     String productRemoveFeature();
     @DefaultMessage("Remove Feature from Results")
     String productRemoveFeatureFromResults();
+    @DefaultMessage("ProductRemoveFromCompareListSuccess")
+    String productRemoveFromCompareListSuccess(String name);
     @DefaultMessage("Remove From Site")
     String productRemoveFromSite();
     @DefaultMessage("Remove Results From")
@@ -16106,7 +18304,7 @@ public interface CommonMessages extends Messages {
     String productSalesShipmentStatus();
     @DefaultMessage("Sales Tax")
     String productSalesTax();
-    @DefaultMessage("Sales discontinuation Thru Date")
+    @DefaultMessage("Sales Discontinuation Thru Date")
     String productSalesThruDate();
     @DefaultMessage("Schedule")
     String productSchedule();
@@ -16262,6 +18460,8 @@ public interface CommonMessages extends Messages {
     String productShipmentQty();
     @DefaultMessage("Quick Complete Drop Shipment")
     String productShipmentQuickComplete();
+    @DefaultMessage("Shipment Receipts")
+    String productShipmentReceipts();
     @DefaultMessage("Shipment Receipts for")
     String productShipmentReceiptsFor();
     @DefaultMessage("Third Party Account Number")
@@ -16278,6 +18478,8 @@ public interface CommonMessages extends Messages {
     String productShipmentType();
     @DefaultMessage("Shipment type Id")
     String productShipmentTypeId();
+    @DefaultMessage("in")
+    String productShipmentUomAbbreviation_LEN_in();
     @DefaultMessage("kg")
     String productShipmentUomAbbreviation_WT_kg();
     @DefaultMessage("lbs")
@@ -16342,8 +18544,6 @@ public interface CommonMessages extends Messages {
     String productSpecialPromoPrice();
     @DefaultMessage("SqFt")
     String productSqFt();
-    @DefaultMessage("Square Footage")
-    String productSquareFootage();
     @DefaultMessage("Standard")
     String productStandard();
     @DefaultMessage("Standard Features")
@@ -16352,8 +18552,6 @@ public interface CommonMessages extends Messages {
     String productStandardLeadTimeDays();
     @DefaultMessage("State")
     String productState();
-    @DefaultMessage("Status")
-    String productStatus();
     @DefaultMessage("Status Id")
     String productStatusId();
     @DefaultMessage("Stock Moves")
@@ -16551,6 +18749,8 @@ public interface CommonMessages extends Messages {
     @DefaultMessage("Good")
     String productType_description_GOOD();
     @DefaultMessage("Marketing Package")
+    String productType_description_MARKETING_PKG();
+    @DefaultMessage("Marketing Package: Auto Manufactured")
     String productType_description_MARKETING_PKG_AUTO();
     @DefaultMessage("Marketing Package: Pick Assembly")
     String productType_description_MARKETING_PKG_PICK();
@@ -16674,6 +18874,8 @@ public interface CommonMessages extends Messages {
     String productVoidUpsShipment();
     @DefaultMessage("Void UPS Shipment Confirmation")
     String productVoidUpsShipmentConfirmation();
+    @DefaultMessage("Warehouse Area")
+    String productWarehouseArea();
     @DefaultMessage("WARNING: Order Status is")
     String productWarningOrderStatus();
     @DefaultMessage("WARNING: Order Type is")
@@ -16688,6 +18890,8 @@ public interface CommonMessages extends Messages {
     String productWebSiteId();
     @DefaultMessage("Web Sites")
     String productWebSites();
+    @DefaultMessage("Weigh Packages Only")
+    String productWeighPackageOnly();
     @DefaultMessage("Weight")
     String productWeight();
     @DefaultMessage("WeightBreakId")
@@ -16714,6 +18918,28 @@ public interface CommonMessages extends Messages {
     String productWorkItem();
     @DefaultMessage("you searched for")
     String productYouSearchedFor();
+    @DefaultMessage("product.no_longer_for_sale")
+    String product_no_longer_for_sale(String param_0, String param_1);
+    @DefaultMessage("product.not_found")
+    String product_not_found(String param_0);
+    @DefaultMessage("product.not_yet_for_sale")
+    String product_not_yet_for_sale(String param_0, String param_1);
+    @DefaultMessage("product.out_of_stock")
+    String product_out_of_stock(String param_0, String param_1);
+    @DefaultMessage("productpromoworker.promotion_code_already_been_entered")
+    String productpromoworker_promotion_code_already_been_entered(String productPromoCodeId);
+    @DefaultMessage("productpromoworker.promotion_code_error_lookup")
+    String productpromoworker_promotion_code_error_lookup(String productPromoCodeId);
+    @DefaultMessage("productpromoworker.promotion_code_is_expired_at")
+    String productpromoworker_promotion_code_is_expired_at(String productPromoCodeId, String thruDate);
+    @DefaultMessage("productpromoworker.promotion_code_maximum_limit")
+    String productpromoworker_promotion_code_maximum_limit(String productPromoCodeId);
+    @DefaultMessage("productpromoworker.promotion_code_no_account_or_email")
+    String productpromoworker_promotion_code_no_account_or_email(String productPromoCodeId);
+    @DefaultMessage("productpromoworker.promotion_code_not_valid")
+    String productpromoworker_promotion_code_not_valid(String productPromoCodeId);
+    @DefaultMessage("productpromoworker.promotion_code_will_be_activated_at")
+    String productpromoworker_promotion_code_will_be_activated_at(String productPromoCodeId);
     @DefaultMessage("Project")
     String project();
     @DefaultMessage("Actual Hours")
@@ -17044,6 +19270,8 @@ public interface CommonMessages extends Messages {
     String serverHttpError(String code, String resource);
     @DefaultMessage("Shark")
     String shark();
+    @DefaultMessage("Trouble getting OrderItemShipGrpInvRes List")
+    String shipBeforeDateOrderTroubleGettingOrderItemShipGrpInvResList();
     @DefaultMessage("Ship From Address")
     String shipmentContactMechType_description_SHIP_FROM_ADDRESS();
     @DefaultMessage("Ship From Telecom")
@@ -17072,10 +19300,40 @@ public interface CommonMessages extends Messages {
     String shipmentType_description_SALES_SHIPMENT();
     @DefaultMessage("Transfer")
     String shipmentType_description_TRANSFER();
-    @DefaultMessage("Sizes Available")
-    String sizeAvailableMultiple();
-    @DefaultMessage("Size")
-    String sizeAvailableSingle();
+    @DefaultMessage("Could not select alternate gift, alternateGwpLine is not a valid number")
+    String shoppingCartEvents_invalid_alternateGwpLine();
+    @DefaultMessage("Could not select alternate gift, no alternateGwpLine passed")
+    String shoppingCartEvents_no_alternateGwpLine();
+    @DefaultMessage("Could not select alternate gift, no alternateGwpProductId passed")
+    String shoppingCartEvents_no_alternateGwpProductId();
+    @DefaultMessage("Could not select alternate gift, no cart line item found for S")
+    String shoppingCartEvents_no_cartline_item_01();
+    @DefaultMessage("does not appear to be a valid promotional gift")
+    String shoppingCartEvents_no_cartline_item_02();
+    @DefaultMessage("Problem in parsing item desired delivery date string")
+    String shoppingCartEvents_problem_parsing_item_desiredDeliveryDate_string();
+    @DefaultMessage("No items found to add")
+    String shoppingCartHelper_no_items_found_to_add();
+    @DefaultMessage("Error calling the updateShoppingListItem in handleShoppingListItemVariant")
+    String shoppingListEvents_error_calling_update();
+    @DefaultMessage("shoppinglistevents.added_product_to_cart")
+    String shoppinglistevents_added_product_to_cart(String productId);
+    @DefaultMessage("Cannot create new shopping list.")
+    String shoppinglistevents_cannot_create_new_shopping_list();
+    @DefaultMessage("Please choose a shopping list.")
+    String shoppinglistevents_choose_shopping_list();
+    @DefaultMessage("Error adding item to shopping list.")
+    String shoppinglistevents_error_adding_item_to_shopping_list();
+    @DefaultMessage("Error getting shopping list and items.")
+    String shoppinglistevents_error_getting_shopping_list_and_items();
+    @DefaultMessage("No items were added.")
+    String shoppinglistevents_no_items_added();
+    @DefaultMessage("shoppinglistevents.problem_adding_product_to_cart")
+    String shoppinglistevents_problem_adding_product_to_cart(String productId);
+    @DefaultMessage("Please select item(s) to add to the shopping list.")
+    String shoppinglistevents_select_items_to_add_to_list();
+    @DefaultMessage("shoppingListId is a required parameter.")
+    String shoppinglistevents_shoppingListId_is_required_parameter();
     @DefaultMessage("State / Province")
     String stateOrProvince();
     @DefaultMessage("Newsgroup")
@@ -17319,7 +19577,7 @@ public interface CommonMessages extends Messages {
     @DefaultMessage("WarehouseError_CannotFindOutsourcedTask")
     String warehouseError_CannotFindOutsourcedTask(String workEffortId);
     @DefaultMessage("WarehouseError_CannotFindProductionRunTemplate")
-    String warehouseError_CannotFindProductionRunTemplate(String productId);
+    String warehouseError_CannotFindProductionRunTemplate(String productId, String defaultRoutingId);
     @DefaultMessage("This task is not running, so materials cannot be issued to this task.")
     String warehouseError_CannotIssueProductionRunTask();
     @DefaultMessage("WarehouseError_CannotOutsourceNonRoutingTask")
@@ -17340,6 +19598,8 @@ public interface CommonMessages extends Messages {
     String warehouseError_MissingRoutingTask(String workEffortId);
     @DefaultMessage("WarehouseError_MissingRoutingTaskDisassemble")
     String warehouseError_MissingRoutingTaskDisassemble(String productId, String productionRunId);
+    @DefaultMessage("There is no label image for current route segment.")
+    String warehouseError_NoLabelImage();
     @DefaultMessage("WarehouseError_OrderHaveUnknownAddress")
     String warehouseError_OrderHaveUnknownAddress(String orderId, String shipGroupSeqId);
     @DefaultMessage("WarehouseError_OrderNotApprovedPacking")
@@ -17431,7 +19691,7 @@ public interface CommonMessages extends Messages {
     @DefaultMessage("WarehouseNavHistoryLot")
     String warehouseNavHistoryLot(String lotId);
     @DefaultMessage("WarehouseNavHistoryShipment")
-    String warehouseNavHistoryShipment(String shipmentId, String fromParty, String toParty);
+    String warehouseNavHistoryShipment(String shipmentId);
     @DefaultMessage("Order Net")
     String warehouseNetOrdered();
     @DefaultMessage("WarehouseNoOutsourcedRequirementsForProductionRun")
@@ -17624,6 +19884,8 @@ public interface CommonMessages extends Messages {
     String workEffortActivityName();
     @DefaultMessage("Activity Status")
     String workEffortActivityStatus();
+    @DefaultMessage("Add/modify a calendar event")
+    String workEffortAddCalendarEvent();
     @DefaultMessage("Add New WorkEffort Child")
     String workEffortAddChild();
     @DefaultMessage("Add An Existing Task (WorkEffortId)")
@@ -17692,14 +19954,14 @@ public interface CommonMessages extends Messages {
     String workEffortCalendarUpComingEventsView();
     @DefaultMessage("Calendar Week View")
     String workEffortCalendarWeekView();
+    @DefaultMessage("Cancel a calendar event")
+    String workEffortCancelCalendarEvent();
     @DefaultMessage("Comm Event Id")
     String workEffortCommEventId();
     @DefaultMessage("Communications")
     String workEffortCommEvents();
     @DefaultMessage("Comments")
     String workEffortComments();
-    @DefaultMessage("Company events")
-    String workEffortCompanyEvents();
     @DefaultMessage("OFBiz: WorkEffort Manager")
     String workEffortCompanyName();
     @DefaultMessage("Part of the Open For Business Family of Open Source Software")
@@ -17778,6 +20040,34 @@ public interface CommonMessages extends Messages {
     String workEffortGeneral();
     @DefaultMessage("Good Standard")
     String workEffortGoodStandard();
+    @DefaultMessage("iCalendar")
+    String workEffortICalendar();
+    @DefaultMessage("Add iCalendar")
+    String workEffortICalendarAdd();
+    @DefaultMessage("Add iCalendar Fixed Asset")
+    String workEffortICalendarAddFixedAsset();
+    @DefaultMessage("Add iCalendar Party")
+    String workEffortICalendarAddParty();
+    @DefaultMessage("Data")
+    String workEffortICalendarData();
+    @DefaultMessage("Edit iCalendar")
+    String workEffortICalendarEdit();
+    @DefaultMessage("Edit iCalendar Data")
+    String workEffortICalendarEditData();
+    @DefaultMessage("Find iCalendars")
+    String workEffortICalendarFind();
+    @DefaultMessage("iCalendar Help")
+    String workEffortICalendarHelp();
+    @DefaultMessage("http://docs.ofbiz.org/x/piE")
+    String workEffortICalendarHelpUrl();
+    @DefaultMessage("Calendar Name")
+    String workEffortICalendarName();
+    @DefaultMessage("Calendar Owner")
+    String workEffortICalendarOwner();
+    @DefaultMessage("iCalendar Url")
+    String workEffortICalendarUrl();
+    @DefaultMessage("Calendar Visibility")
+    String workEffortICalendarVisibility();
     @DefaultMessage("Work Effort ID is missing.")
     String workEffortIdMissing();
     @DefaultMessage("Include all Sub-WorkEfforts")
@@ -17814,8 +20104,16 @@ public interface CommonMessages extends Messages {
     String workEffortLocation();
     @DefaultMessage("Lookup")
     String workEffortLookup();
+    @DefaultMessage("Work Effort Manager")
+    String workEffortManager();
+    @DefaultMessage("Work Effort Manager Application")
+    String workEffortManagerApplication();
     @DefaultMessage("Max Amount")
     String workEffortMaxAmount();
+    @DefaultMessage("Max # of Events")
+    String workEffortMaxNumberOfEvents();
+    @DefaultMessage("Max # of Persons")
+    String workEffortMaxNumberOfPersons();
     @DefaultMessage("Month View")
     String workEffortMonthView();
     @DefaultMessage("Must RSVP")
@@ -17838,8 +20136,6 @@ public interface CommonMessages extends Messages {
     String workEffortName();
     @DefaultMessage("Work Effort Name is missing.")
     String workEffortNameIsMissing();
-    @DefaultMessage("New Event")
-    String workEffortNewEvent();
     @DefaultMessage("New Note")
     String workEffortNewNote();
     @DefaultMessage("New Phase")
@@ -17896,6 +20192,8 @@ public interface CommonMessages extends Messages {
     String workEffortOrganizer();
     @DefaultMessage("override Default Rate amount")
     String workEffortOverrideDefaultRateAmount();
+    @DefaultMessage("Participants")
+    String workEffortParticipants();
     @DefaultMessage("Parties")
     String workEffortParties();
     @DefaultMessage("WorkEffortPartyAssignmentError")
@@ -18110,8 +20408,6 @@ public interface CommonMessages extends Messages {
     String workEffortWorkEffortId();
     @DefaultMessage("WorkEffort Id is empty")
     String workEffortWorkEffortIdEmpty();
-    @DefaultMessage("Work Effort Manager Application")
-    String workEffortWorkEffortManagerApplication();
     @DefaultMessage("Work Effort Manager Main Page")
     String workEffortWorkEffortManagerMainPage();
     @DefaultMessage("Work Effort - Review already exist")
