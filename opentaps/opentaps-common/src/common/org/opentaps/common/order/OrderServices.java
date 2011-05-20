@@ -1230,9 +1230,13 @@ public final class OrderServices {
                 return returnResults;
             } else {
                 // add item without modifying it
+                DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+                DomainsDirectory dd = domainLoader.getDomainsDirectory();
+                OrderRepositoryInterface orderRepository = dd.getOrderDomain().getOrderRepository();
 
                 String orderId = (String) context.get("orderId");
                 String prodCatalogId = (String) context.get("prodCatalogId");
+                Order order = orderRepository.getOrderById(orderId);
 
                 ModelService service = dctx.getModelService("opentaps.appendOrderItemBasic");
                 Map appendItemParams = service.makeValid(context, "IN");
@@ -1245,19 +1249,36 @@ public final class OrderServices {
                 }
 
                 OrderReadHelper orh = new OrderReadHelper(delegator, orderId);
-                input = UtilMisc.toMap("product", product, "prodCatalogId", prodCatalogId, "productStoreId", orh.getProductStoreId(), "quantity", context.get("quantity"),
-                        "currencyUomId", orh.getCurrency(), "userLogin", userLogin);
-                if (orh.getBillToParty() != null) {
-                    input.put("partyId", orh.getBillToParty().getString("partyId"));
-                }
-                results = dispatcher.runSync("calculateProductPrice", input);
-                if (ServiceUtil.isError(results)) {
-                    return results;
-                }
 
-                // list price is always from calculateProductPrice
-                if (results.get("listPrice") != null) {
-                    appendItemParams.put("listPrice", results.get("listPrice"));
+                // get the prices
+                BigDecimal price = null;
+
+                // for purchase order use calculatePurchasePrice
+                if (order.isPurchaseOrder()) {
+                    input = UtilMisc.toMap("product", product, "currencyUomId", order.getCurrencyUom(), "partyId", order.getSupplierAgentPartyId(), "quantity", context.get("quantity"), "userLogin", userLogin);
+                    results = dispatcher.runSync("calculatePurchasePrice", input);
+                    if (ServiceUtil.isError(results)) {
+                        return results;
+                    }
+                    price = (BigDecimal) results.get("price");
+                } else {
+
+                    input = UtilMisc.toMap("product", product, "prodCatalogId", prodCatalogId, "productStoreId", orh.getProductStoreId(), "quantity", context.get("quantity"),
+                                           "currencyUomId", orh.getCurrency(), "userLogin", userLogin);
+                    if (orh.getBillToParty() != null) {
+                        input.put("partyId", orh.getBillToParty().getString("partyId"));
+                    }
+                    results = dispatcher.runSync("calculateProductPrice", input);
+                    if (ServiceUtil.isError(results)) {
+                        return results;
+                    }
+
+                    // list price is always from calculateProductPrice
+                    if (results.get("listPrice") != null) {
+                        appendItemParams.put("listPrice", results.get("listPrice"));
+                    }
+
+                    price = (BigDecimal) results.get("price");
                 }
 
                 // calculate price
@@ -1270,8 +1291,10 @@ public final class OrderServices {
                     if (basePrice != null) {
                         Debug.logWarning("Override price was NOT selected. Input price of [" + basePrice + "] will be ignored, using the result of calculateProductPrice [" + results.get("price") + "] instead", MODULE);
                     }
-                    appendItemParams.put("unitPrice", results.get("price"));
-                    appendItemParams.put("isSalePrice", results.get("isSale"));
+                    appendItemParams.put("unitPrice", price);
+                    if (results.get("isSalePrice") != null) {
+                        appendItemParams.put("isSalePrice", results.get("isSale"));
+                    }
                 }
 
                 results = dispatcher.runSync(service.name, appendItemParams);
@@ -1284,9 +1307,7 @@ public final class OrderServices {
                 return returnResults;
 
             }
-        } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, locale, MODULE);
-        } catch (GenericServiceException e) {
+        } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, locale, MODULE);
         }
     }
