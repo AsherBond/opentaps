@@ -60,6 +60,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
+import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.common.DataModelConstants;
 import org.ofbiz.entity.Delegator;
@@ -103,6 +104,7 @@ import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.repository.ofbiz.Repository;
 
 /**
  * Common order services.
@@ -114,6 +116,8 @@ public final class OrderServices {
     private static String MODULE = OrderServices.class.getName();
     private static int decimals = UtilNumber.getBigDecimalScale("order.decimals");
     private static int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
+    private static final String PURCHASING_LABEL = "PurchasingUiLabels";
+
 
     private static int ORDER_ITEM_PADDING = 5;
 
@@ -603,7 +607,15 @@ public final class OrderServices {
             }
             orderItem.setIsModifiedPrice("N");   // I think this means the price has not been changed
             if (UtilValidate.isEmpty(description)) {
-                orderItem.setItemDescription(ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher));
+                // use the same method as during order entry, for a PO this takes either the supplierProductId + name or the product name, and adds the feature description
+                if (order.isPurchaseOrder()) {
+                    // same as add item to cart, create a SupplierProduct if there is none
+                    PurchasingRepositoryInterface purchasingRepository = domainLoader.loadDomainsDirectory().getPurchasingDomain().getPurchasingRepository();
+                    SupplierProduct supplierProduct = purchasingRepository.getSupplierProduct(order.getMainExternalPartyId(), productId, quantity, order.getCurrencyUom());
+                    orderItem.setItemDescription(ShoppingCartItem.getPurchaseOrderItemDescription(product, Repository.genericValueFromEntity(supplierProduct), locale));
+                } else {
+                    orderItem.setItemDescription(ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher));
+                }
             } else {
                 orderItem.setItemDescription(description);
             }
@@ -1198,6 +1210,7 @@ public final class OrderServices {
         String productId = (String) context.get("productId");
         String recalcOrder = (String) context.get("recalcOrder");
         BigDecimal basePrice = (BigDecimal) context.get("basePrice");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
 
         try {
             // get the productId, which could be
@@ -1255,16 +1268,28 @@ public final class OrderServices {
 
                 // for purchase order use calculatePurchasePrice
                 if (order.isPurchaseOrder()) {
-                    input = UtilMisc.toMap("product", product, "currencyUomId", order.getCurrencyUom(), "partyId", order.getSupplierAgentPartyId(), "quantity", context.get("quantity"), "userLogin", userLogin);
-                    results = dispatcher.runSync("calculatePurchasePrice", input);
-                    if (ServiceUtil.isError(results)) {
-                        return results;
+                    // same as add item to cart, create a SupplierProduct if there is none
+                    PurchasingRepositoryInterface purchasingRepository = domainLoader.loadDomainsDirectory().getPurchasingDomain().getPurchasingRepository();
+                    SupplierProduct supplierProduct = purchasingRepository.getSupplierProduct(order.getMainExternalPartyId(), productId, quantity, order.getCurrencyUom());
+                    if (supplierProduct == null) {
+                        // create a supplier product
+                        supplierProduct = new SupplierProduct();
+                        supplierProduct.setProductId(productId);
+                        supplierProduct.setSupplierProductId(productId);
+                        supplierProduct.setPartyId(order.getMainExternalPartyId());
+                        supplierProduct.setMinimumOrderQuantity(BigDecimal.ZERO);
+                        supplierProduct.setLastPrice(BigDecimal.ZERO);
+                        supplierProduct.setCurrencyUomId(order.getCurrencyUom());
+                        supplierProduct.setAvailableFromDate(UtilDateTime.nowTimestamp());
+                        supplierProduct.setComments(UtilProperties.getMessage(PURCHASING_LABEL, "PurchOrderCreateSupplierProductByUserLogin", UtilMisc.toMap("userLoginId", userLogin.getString("userLoginId")), locale));
+                        //use purchasingRepository to create new SupplierProduct
+                        purchasingRepository.createSupplierProduct(supplierProduct);
+                        Debug.logInfo("created for purchase order entry by " + userLogin.getString("userLoginId") + ", productId is [" + productId + "], partyId is [" + order.getMainExternalPartyId() + "]", MODULE);
                     }
-                    price = (BigDecimal) results.get("price");
+                    price = supplierProduct.getLastPrice();
                 } else {
 
-                    input = UtilMisc.toMap("product", product, "prodCatalogId", prodCatalogId, "productStoreId", orh.getProductStoreId(), "quantity", context.get("quantity"),
-                                           "currencyUomId", orh.getCurrency(), "userLogin", userLogin);
+                    input = UtilMisc.toMap("product", product, "prodCatalogId", prodCatalogId, "productStoreId", orh.getProductStoreId(), "quantity", context.get("quantity"), "currencyUomId", orh.getCurrency(), "userLogin", userLogin);
                     if (orh.getBillToParty() != null) {
                         input.put("partyId", orh.getBillToParty().getString("partyId"));
                     }
