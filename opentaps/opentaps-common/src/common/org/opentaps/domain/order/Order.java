@@ -1123,6 +1123,20 @@ public class Order extends org.opentaps.base.entities.OrderHeader {
     }
 
     /**
+     * Gets the main external <code>Party</code> ID for this order.
+     * @return the <code>Party</code> for the "supplier agent" in case of a Purchase Order, or the "placing customer" for a Sales Order, or <code>null</code> is no party is found
+     * @throws RepositoryException if an error occurs
+      */
+    public String getMainExternalPartyId() throws RepositoryException {
+        Party p = getMainExternalParty();
+        if (p != null) {
+            return p.getPartyId();
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Gets the "commission agents" parties for this order.
      * @return the list of <code>Party</code> with the "commission agent" role
      * @throws RepositoryException if an error occurs
