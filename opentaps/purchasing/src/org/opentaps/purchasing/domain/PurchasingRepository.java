@@ -64,7 +64,9 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
             return null;
         }
 
-        return loadFromGeneric(SupplierProduct.class, supplierProduct);
+        SupplierProduct sp = loadFromGeneric(SupplierProduct.class, supplierProduct);
+        sp.initRepository(this);
+        return sp;
     }
 
     /** {@inheritDoc} */
