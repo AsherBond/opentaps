@@ -31,6 +31,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.order.order.OrderReadHelper;
+import org.ofbiz.party.contact.ContactHelper;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.*;
 import org.opentaps.common.util.UtilCommon;
@@ -127,6 +128,7 @@ public final class ReturnServices {
             if (order == null) {
                 return UtilMessage.createServiceError("OpentapsError_OrderNotFound", locale, UtilMisc.toMap("orderId", orderId));
             }
+
             OrderReadHelper orh = new OrderReadHelper(order);
             GenericValue fromParty = orh.getBillToParty();
             GenericValue productStore = orh.getProductStore();
@@ -135,6 +137,14 @@ public final class ReturnServices {
             if (UtilValidate.isEmpty(destinationFacilityId)) {
                 destinationFacilityId = productStore.getString("inventoryFacilityId");
             }
+
+            List<GenericValue> shippingAddress = (List) ContactHelper.getContactMech(fromParty, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false);
+            String originContactMechId = null;
+
+            if (shippingAddress != null && shippingAddress.size() > 0) {
+                originContactMechId = shippingAddress.get(0).getString("contactMechId");
+            }
+
             boolean autoReceiveOnAccept = UtilConfig.getPropertyBoolean("crmsfa", "crmsfa.order.return.autoReceiveOnAccept", true);
 
             Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin, "returnHeaderTypeId", "CUSTOMER_RETURN", "statusId", "RETURN_REQUESTED");
@@ -146,6 +156,9 @@ public final class ReturnServices {
             input.put("destinationFacilityId", destinationFacilityId);
             input.put("primaryOrderId", orderId); // this is a field that is extended in opentaps
             input.put("comments", context.get("comments")); // this one as well
+            if (!UtilValidate.isEmpty(originContactMechId)) {
+                input.put("originContactMechId", originContactMechId);
+            }
 
             return dispatcher.runSync("createReturnHeader", input);
         } catch (GeneralException e) {
