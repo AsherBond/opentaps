@@ -1941,6 +1941,7 @@ public class OrderTests extends OrderTestCase {
         // 8.  Manually set each invoice to READY, and verify that the invoice is automatically set to PAID
         List<Invoice> invoices = order.getInvoices();
         for (Invoice invoice : invoices) {
+            pause("Workaround pause for MySQL");
             // this special method will check for payments applied to invoice and mark it after it has been PAID
             // otherwise, setting invoice to READY won't do it.
             SetInvoiceReadyAndCheckIfPaidService setInvoiceReadyAndCheckIfPaid = new SetInvoiceReadyAndCheckIfPaidService();
