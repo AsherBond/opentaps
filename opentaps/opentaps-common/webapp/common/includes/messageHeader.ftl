@@ -34,7 +34,7 @@
         <#assign javascripts = javascripts + layoutSettings.javaScripts/>
     </#if>
     
-    <#list javascriptFiles as javascript>
+    <#list javascripts as javascript>
       <#if javascript?matches(".*dojo.*")>
         <#-- Unfortunately, due to Dojo's module-loading behaviour, it must be served locally -->
         <script src="${javascript}" type="text/javascript"></script>
