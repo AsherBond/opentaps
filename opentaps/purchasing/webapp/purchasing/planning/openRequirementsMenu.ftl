@@ -18,11 +18,12 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+<@form name="approveAllOpenRequirements" url="approveAllOpenRequirements" organizationPartyId=parameters.organizationPartyId />
+
 <div class="subSectionHeader">
-    <div class="subSectionTitle sectionHeaderTitle" id="sectionHeaderTitle_planning">${uiLabelMap.PurchOpenRequirements}</div>
-    <div class="subMenuBar">
-       <@inputConfirm class="subMenuButtonDangerous" title=uiLabelMap.OpentapsApproveAll href="approveAllOpenRequirements?organizationPartyId=${parameters.organizationPartyId}" />
-    </div>
-    <div class="spacer"></div>
+  <div class="subSectionTitle sectionHeaderTitle" id="sectionHeaderTitle_planning">${uiLabelMap.PurchOpenRequirements}</div>
+  <div class="subMenuBar">
+    <@inputConfirm class="subMenuButtonDangerous" title=uiLabelMap.OpentapsApproveAll form="approveAllOpenRequirements" />
+  </div>
+  <div class="spacer"></div>
 </div>
-	
