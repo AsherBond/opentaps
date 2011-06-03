@@ -318,6 +318,8 @@ public final class FinancialServices {
             glFiscalTypeId = "ACTUAL";
             context.put("glFiscalTypeId", glFiscalTypeId);
         }
+        Debug.logVerbose("Running trial balance for [" + organizationPartyId + "] as of [" + asOfDate + "] with fiscal type [" + glFiscalTypeId + "]", MODULE);
+
         User user = new User(userLogin);
         Infrastructure infrastructure = new Infrastructure(dispatcher);
         DomainsLoader dl = new DomainsLoader(infrastructure, user);
@@ -398,6 +400,7 @@ public final class FinancialServices {
                 getIncomeStatement.setUser(user);
                 getIncomeStatement.runSyncNoNewTransaction(infrastructure);
                 
+                Debug.logVerbose("Net income as of [" + asOfDate + "] since last closing date [" + lastClosedDate + "] is [" + netIncomeSinceLastClosing, MODULE);
                 netIncomeSinceLastClosing = getIncomeStatement.getOutNetIncome();
                 
                 GetBalanceSheetForDateService getBalanceSheet = new GetBalanceSheetForDateService();
@@ -421,6 +424,8 @@ public final class FinancialServices {
                 balanceSheetAccountBalances.putAll(getBalanceSheet.getOutLiabilityAccountBalances());
                 balanceSheetAccountBalances.putAll(getBalanceSheet.getOutEquityAccountBalances());
             }
+            Debug.logVerbose("Balances after get balance sheet service", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(balanceSheetAccountBalances), MODULE);
             Debug.logInfo("Last closed date is [" + lastClosedDate + "] net income [" + netIncomeSinceLastClosing + "] profit loss account is [" + profitLossGlAccount.getGlAccountId() + "] and retained earnings account [" + retainedEarningsGlAccount.getGlAccountId() + "]", MODULE);
             
             //  a little bit of a hack, using this method with a "null" for GL account class  causes it to return the sum of the transaction entries for all the GL accounts
@@ -430,7 +435,9 @@ public final class FinancialServices {
             if (balanceSheetAccountBalances != null) {
                 Set<GenericValue> balanceSheetGlAccounts = balanceSheetAccountBalances.keySet();
                 for (GenericValue glAccount: balanceSheetGlAccounts) {
+                    Debug.logVerbose("For gl account [" + glAccount.get("glAccountId" ) + " Adding [" + accountBalances.get(glAccount) + "] to balance of [" + balanceSheetAccountBalances.get(glAccount) + "]", MODULE);
                     UtilCommon.addInMapOfBigDecimal(accountBalances, glAccount, (BigDecimal) balanceSheetAccountBalances.get(glAccount));
+                    Debug.logVerbose("Now balance of gl account [" + glAccount.get("glAccountId") + "] is [" + accountBalances.get(glAccount) + "]", MODULE);
                 }
             }
 
@@ -525,6 +532,22 @@ public final class FinancialServices {
             // add it to the retained earnings account and profit and loss account
 
             Map<String, Object> results = ServiceUtil.returnSuccess();
+
+            Debug.logVerbose("***asset account balances***", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(assetAccountBalances), MODULE);
+            Debug.logVerbose("***liability account balances***", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(liabilityAccountBalances), MODULE);
+            Debug.logVerbose("***equity account balances***", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(equityAccountBalances), MODULE);
+            Debug.logVerbose("***revenue account balances***", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(revenueAccountBalances), MODULE);
+            Debug.logVerbose("***expense account balances***", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(expenseAccountBalances), MODULE);
+            Debug.logVerbose("***income account balances***", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(incomeAccountBalances), MODULE);
+            Debug.logVerbose("***other account balances***", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(otherAccountBalances), MODULE);
+            
             results.put("assetAccountBalances", assetAccountBalances);
             results.put("liabilityAccountBalances", liabilityAccountBalances);
             results.put("equityAccountBalances", equityAccountBalances);
@@ -582,6 +605,8 @@ public final class FinancialServices {
             glFiscalTypeId = "ACTUAL";
             context.put("glFiscalTypeId", glFiscalTypeId);
         }
+        
+        Debug.logVerbose("Running get balance sheet as of [" + asOfDate + "]", MODULE);
 
         // balances of the asset, liability, and equity GL accounts, initially empty
         Map<GenericValue, BigDecimal> assetAccountBalances = new HashMap<GenericValue, BigDecimal>();
@@ -639,6 +664,14 @@ public final class FinancialServices {
             liabilityAccountBalances = getAcctgTransAndEntriesForClass(liabilityAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "LIABILITY", tags, true, userLogin, dispatcher);
             equityAccountBalances = getAcctgTransAndEntriesForClass(equityAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "EQUITY", tags, true, userLogin, dispatcher);
 
+            Debug.logVerbose("***Asset account balances****", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(assetAccountBalances), MODULE);
+            Debug.logVerbose("***Liability account balances****", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(liabilityAccountBalances), MODULE);
+            Debug.logVerbose("***Equity account balances****", MODULE);
+            Debug.logVerbose(UtilFinancial.printGlAccountBalanceMap(equityAccountBalances), MODULE);
+            
+            
             // calculate a net income since the last closed date and add it to our equity account balances
             Map input = new HashMap(context);
             input.put("fromDate", lastClosedDate);
@@ -654,6 +687,7 @@ public final class FinancialServices {
             if (accountingTagsUsed) {
                 equityAccountBalances.put(retainedEarningsGlAccount, interimNetIncome);
             } else {
+                Debug.logVerbose("Adding interim net income of [" + interimNetIncome + "] to " + retainedEarningsGlAccount, MODULE);
                 UtilCommon.addInMapOfBigDecimal(equityAccountBalances, retainedEarningsGlAccount, interimNetIncome);
             }
 

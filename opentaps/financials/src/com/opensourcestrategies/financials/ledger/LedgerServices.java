@@ -58,6 +58,7 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.workeffort.workeffort.WorkEffortSearch;
+import org.opentaps.base.constants.GlFiscalTypeConstants;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.InvoiceAdjustment;
 import org.opentaps.base.entities.PaymentApplication;
@@ -3001,16 +3002,23 @@ public final class LedgerServices {
             if (timePeriod == null) {
                 return ServiceUtil.returnError("Cannot find a time period for " + organizationPartyId + " and time period id " + customTimePeriodId);
             }
-
+            if (timePeriod.get("thruDate") == null) {
+                return ServiceUtil.returnError("Time period [" + customTimePeriodId + "] does not have a thru date configured");
+            }
+            
             // get the organization's accounts for profit and loss (net income) and retained earnings
             String retainedEarningsGlAccountId = UtilAccounting.getProductOrgGlAccountId(null, "RETAINED_EARNINGS", organizationPartyId, delegator);
             String profitLossGlAccountId =  UtilAccounting.getProductOrgGlAccountId(null, "PROFIT_LOSS_ACCOUNT", organizationPartyId, delegator);
 
             // get a trial balance as of ending date of time period
             GetTrialBalanceForDateService trialBalanceService = new GetTrialBalanceForDateService();
-            trialBalanceService.setInAsOfDate(UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")));  // must convert thruDate from Date to Timestamp first
+            // very important: the CustomTimePeriod is a Date, ie 2011-01-01, but the time period actually ends at the end of the day before it, ie 2010-12-31 23:59:59.999
+            // so we need to change the asOfDate
+            Timestamp asOfDate = UtilDateTime.getDayEnd(UtilDateTime.addDaysToTimestamp(UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")), -1));
+            trialBalanceService.setInAsOfDate(asOfDate);  // must convert thruDate from Date to Timestamp first
             trialBalanceService.setInOrganizationPartyId(organizationPartyId);
             trialBalanceService.setInUserLogin(userLogin);
+            trialBalanceService.setInGlFiscalTypeId(GlFiscalTypeConstants.ACTUAL);  // make sure only ACTUAL transactions show up
             trialBalanceService.runSyncNoNewTransaction(infrastructure);
 
             // debit REVENUE, credit EXPENSE accounts, and put the net into the retained earnings account
@@ -3102,7 +3110,10 @@ public final class LedgerServices {
 
             List<GenericValue> glAccountHistories = delegator.findByAnd("GlAccountHistory", UtilMisc.toMap("organizationPartyId", organizationPartyId,
                             "customTimePeriodId", timePeriod.getString("customTimePeriodId")));
-
+            
+            Debug.logVerbose("Initial GlAccountHistories", MODULE);
+            Debug.logVerbose(UtilCommon.printMapFromListByFields(glAccountHistories, "glAccountId", "endingBalance"), MODULE);
+            
             // now make a map of glAccountId -> GlAccountHistory, with the correct endingBalance in the GlAccountHistory values
             Map<String, GenericValue> updatedGlAccountHistories = new HashMap<String, GenericValue>();
             for (GenericValue glAccountHistory : glAccountHistories) {
@@ -3111,6 +3122,9 @@ public final class LedgerServices {
                 updatedGlAccountHistories.put(glAccountHistory.getString("glAccountId"), glAccountHistory);
             }
 
+            Debug.logVerbose("GL Account Histories with updated balances", MODULE);
+            Debug.logVerbose(UtilCommon.printMapFromListByFields(updatedGlAccountHistories.values(), "glAccountId", "endingBalance"), MODULE);
+            
             // is there a previously closed time period?  If so, then find all of its GlAccountHistory and add their ending balances in
             if (lastClosedTimePeriodId != null) {
                 // find the previous period GL account histories.  We are ONLY carrying forward ASSET, LIABILITY, EQUITY accounts
@@ -3125,6 +3139,9 @@ public final class LedgerServices {
                 List<GenericValue> previousGlAccountHistories = delegator.findByCondition("GlAccountAndHistory", previousPeriodConditions,
                     UtilMisc.toList("organizationPartyId", "customTimePeriodId", "glAccountId", "postedDebits", "postedCredits", "endingBalance"), UtilMisc.toList("glAccountId"));
 
+                Debug.logVerbose("GL Account Histories from previous time period", MODULE);
+                Debug.logVerbose(UtilCommon.printMapFromListByFields(updatedGlAccountHistories.values(), "glAccountId", "endingBalance"), MODULE);
+                
                 // loop and check them against current period
                 for (GenericValue previousGlAccountAndHistory : previousGlAccountHistories) {
                     GenericValue previousGlAccountHistory = previousGlAccountAndHistory.getRelatedOne("GlAccountHistory");
@@ -3145,6 +3162,9 @@ public final class LedgerServices {
                 }
             }
 
+            Debug.logVerbose("GL Account Histories updated with balances from previous time period", MODULE);
+            Debug.logVerbose(UtilCommon.printMapFromListByFields(updatedGlAccountHistories.values(), "glAccountId", "endingBalance"), MODULE);
+            
             // store all of these
             List<GenericValue> toBeStored = new ArrayList<GenericValue>();
             toBeStored.addAll(updatedGlAccountHistories.values());

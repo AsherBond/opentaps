@@ -45,6 +45,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -1927,5 +1928,22 @@ public abstract class UtilCommon {
             return url;
         }
         
+    }
+
+    /**
+     * Converts a Collection of GenericValues such as a List or Set into a Map based on key and value fields
+     * and pretty prints it.
+     * Adds a new line character at beginning for convenience
+     * @param listOfValues
+     * @param keyFieldName
+     * @param valueFieldName
+     * @return
+     */
+    public static String printMapFromListByFields(Collection<GenericValue> listOfValues, String keyFieldName, String valueFieldName) {
+        Map values = new TreeMap();
+        for (GenericValue value: listOfValues) {
+            values.put(value.get(keyFieldName), value.get(valueFieldName));
+        }
+        return System.getProperty("line.separator") + UtilMisc.printMap(values);
     }
 }

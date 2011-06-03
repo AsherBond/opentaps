@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -759,5 +760,21 @@ public final class UtilFinancial {
     public static boolean glAccountAndTransactionEntryInverted(GenericValue glAccount, GenericValue transactionEntry) throws GenericEntityException {
         return ((UtilAccounting.isDebitAccount(glAccount) && "C".equals(transactionEntry.get("debitCreditFlag")))
                 || (UtilAccounting.isCreditAccount(glAccount) && "D".equals(transactionEntry.get("debitCreditFlag"))));
+    }
+    
+    /**
+     * Converts a Map <GenericValue with glAccountId field> -> BigDecimal balances
+     * to a pretty printed glAccountId -> balance,
+     * with glAccountId sorted using Java TreeMap.  Adds a new line character at beginning for convenience
+     * @param accountBalances
+     * @return
+     */
+    public static String printGlAccountBalanceMap(Map<GenericValue, BigDecimal> accountBalances) {
+        Map accountBalancesById = new TreeMap();
+        Set<GenericValue> glAccounts = accountBalances.keySet();
+        for (GenericValue glAccount:glAccounts) {
+            accountBalancesById.put(glAccount.getString("glAccountId"), accountBalances.get(glAccount));
+        }
+        return System.getProperty("line.separator") + UtilMisc.printMap(accountBalancesById);
     }
 }
