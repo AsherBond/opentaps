@@ -1615,7 +1615,10 @@ public final class InvoiceServices {
                     return ServiceUtil.returnError("Person entity not found with id [" + invoice.getString("partyId") + "] related to invoice [" + invoice.getString("invoiceId") + "]");
                 }
 
-                StringBuffer descriptionPrefix = new StringBuffer(person.getString("firstName")).append(" ").append(person.getString("lastName")).append(" - ");
+                String firstName = person.getString("firstName") != null ? person.getString("firstName") : "";
+                String lastName  = person.getString("lastName") != null ? person.getString("lastName") : "";
+
+                StringBuffer descriptionPrefix = new StringBuffer(firstName).append(" ").append(lastName).append(" - ");
                 for (Iterator iter = invoiceItems.iterator(); iter.hasNext();) {
                     GenericValue item = (GenericValue) iter.next();
 
