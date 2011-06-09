@@ -488,7 +488,7 @@ public final class EmailServices {
                 PartyReader partyReader = new PartyReader(party);
                 toEmail = partyReader.getEmail();
                 if (UtilValidate.isEmpty(toEmail)) {
-                    throw new GenericServiceException("Cannot find any email address for [" + party.getString("partyId") + "], please create it first.");
+                    parameters.putAll(UtilMessage.createServiceError("Cannot find any email address for [" + party.getString("partyId") + "], please enter it manually.", locale));
                 }
             }
         }
