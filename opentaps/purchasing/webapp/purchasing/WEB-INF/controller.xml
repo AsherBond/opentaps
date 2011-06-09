@@ -899,6 +899,12 @@
         <event type="service" invoke="opentaps.preparePurchasingOrderEmail"/>
         <response name="success" type="request" value="writeEmail"/>
     </request-map>
+    <request-map uri="removeEmailAttachment">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeEmailAttachment"/>
+        <response name="error" type="view" value="writeEmail"/>
+        <response name="success" type="view" value="writeEmail"/>
+    </request-map>
 
     <request-map uri="mergeSuppliersForm">
         <security https="true" auth="true"/>
