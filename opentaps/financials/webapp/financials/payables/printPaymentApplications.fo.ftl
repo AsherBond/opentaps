@@ -48,7 +48,7 @@ under the License.
     <fo:table-row height="${height}">
       <fo:table-cell>
 
-        <fo:table height="${height}" table-layout="fixed" margin-left="8pt" margin-right="8pt">
+        <fo:table height="${height}" table-layout="fixed" margin-left="8pt" margin-right="8pt" margin-top="1.6cm">
           <fo:table-column/>
           <fo:table-column/>
           <fo:table-column/>

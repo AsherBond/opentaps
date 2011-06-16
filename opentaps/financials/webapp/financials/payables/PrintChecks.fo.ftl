@@ -37,7 +37,7 @@ by hand from a real template using a ruler.
 
     <#-- define the margins of the check layout here -->
     <fo:simple-page-master master-name="checks" page-height="27.9cm" page-width="21.6cm">
-      <fo:region-body margin-top="2.2cm"/>
+      <fo:region-body margin-top="1.9cm"/>
     </fo:simple-page-master>
 
   </fo:layout-master-set>
@@ -62,7 +62,7 @@ by hand from a real template using a ruler.
             <fo:table table-layout="fixed">
               <fo:table-column column-width="100%"/>
               <fo:table-body>
-              <fo:table-row height="7.2cm">
+              <fo:table-row height="6.2cm">
               <fo:table-cell>
               
             <fo:table table-layout="fixed">
@@ -139,6 +139,7 @@ by hand from a real template using a ruler.
     
             </fo:table-cell>
             </fo:table-row>
+
             </fo:table-body>
             </fo:table>
     
