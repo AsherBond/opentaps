@@ -17,28 +17,58 @@
 package org.opentaps.purchasing.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.base.services.CreateSupplierProductService;
 import org.opentaps.base.services.GetSuppliersForProductService;
+import org.opentaps.domain.DomainRepository;
+import org.opentaps.domain.party.Party;
+import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.service.ServiceException;
 
-/** {@inheritDoc} */
-public class PurchasingRepository extends Repository implements PurchasingRepositoryInterface {
+/**
+ * Repository for Suppliers and Purchase orders.
+ */
+public class PurchasingRepository extends DomainRepository implements PurchasingRepositoryInterface {
 
     private static final String MODULE = PurchasingRepository.class.getName();
+
+    private PartyRepositoryInterface partyRepository;
 
     /**
      * Default constructor.
      */
     public PurchasingRepository() {
         super();
+    }
+
+    /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
+    public List<Party> getSuppliers(String productId) throws RepositoryException {
+        try {
+            GetSuppliersForProductService service = new GetSuppliersForProductService();
+            service.setInProductId(productId);
+            service.runSync(getInfrastructure());
+            List<GenericValue> productSuppliers = service.getOutSupplierProducts();
+            if (UtilValidate.isNotEmpty(productSuppliers)) {
+                List<Party> ps = getPartyRepository().findList(Party.class, EntityCondition.makeCondition(Party.Fields.partyId.name(), EntityOperator.IN, EntityUtil.getFieldListFromEntityList(productSuppliers, SupplierProduct.Fields.partyId.name(), true)));
+                return ps;
+            }
+        } catch (ServiceException e) {
+            Debug.logError(e.getMessage(), MODULE);
+        }
+        // if no supplier return an empty list
+        return new ArrayList<Party>();
     }
 
     /** {@inheritDoc} */
@@ -118,5 +148,12 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
         } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
+    }
+
+    protected PartyRepositoryInterface getPartyRepository() throws RepositoryException {
+        if (partyRepository == null) {
+            partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
+        }
+        return partyRepository;
     }
 }

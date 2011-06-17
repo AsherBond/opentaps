@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.ContactMech;
 import org.opentaps.base.entities.PartyClassification;
@@ -441,7 +442,12 @@ public class Party extends org.opentaps.base.entities.Party {
      * @throws RepositoryException if an error occurs
      */
     public Boolean hasClassification(String classificationId) throws RepositoryException {
+        Timestamp now = UtilDateTime.nowTimestamp();
         for (PartyClassification c : getClassifications()) {
+            // only consider active classifications
+            if ((c.getFromDate() != null && c.getFromDate().after(now)) || (c.getThruDate() != null && c.getThruDate().before(now))) {
+                continue;
+            }
             if (classificationId.equals(c.getPartyClassificationGroupId())) {
                 return true;
             }

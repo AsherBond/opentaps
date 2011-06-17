@@ -367,6 +367,14 @@ public abstract class UtilCommon {
     }
 
     /**
+     * Gets the default currency uom ID as configured in <code>opentaps.properties</code>.
+     * @return the configured default currency uom ID
+     */
+    public static String getDefaultCurrencyUomId() {
+        return UtilConfig.getPropertyValue("opentaps", "defaultCurrencyUomId");
+    }
+
+    /**
      * Gets a list of currencies.
      * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> of currencies <code>GenericValue</code>

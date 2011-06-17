@@ -17,8 +17,10 @@
 package org.opentaps.domain.purchasing;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.opentaps.base.entities.SupplierProduct;
+import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 
@@ -26,6 +28,14 @@ import org.opentaps.foundation.repository.RepositoryInterface;
  * Repository for Purchasing to handle interaction of Purchasing-related domain with the entity engine (database) and the service engine.
  */
 public interface PurchasingRepositoryInterface extends RepositoryInterface {
+
+    /**
+     * Finds the list of supplier <code>Party</code> for the given product.
+     * @param productId a <code>String</code> value
+     * @return the list of suppliers <code>Party</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<Party> getSuppliers(String productId) throws RepositoryException;
 
     /**
      * Finds the <code>SupplierProduct</code> for this combination of parameters.
