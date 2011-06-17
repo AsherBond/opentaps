@@ -48,20 +48,15 @@
             <actions>
             	<set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
                 <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
-            	
-                <script location="component://financials/webapp/financials/WEB-INF/actions/receivables/findCustomerBillAcct.bsh"/>
+            	<set field="sectionHeaderUiLabel" value="FinancialsFindCustomerBillingAccount"/>
+                <java location="com.opensourcestrategies.financials.accounts.AccountsActions" invoke="findCustomerBillAccount"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsFindCustomerBillingAccount}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="findCustomerBillingAccount" location="component://financials/widget/financials/forms/receivables/BillingAccountForms.xml"/>
-                            </container>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://financials/webapp/financials/receivables/findCustomerBillingAccount.ftl"/></html>
+                        </platform-specific>
                         <include-form name="listCustomerBillingAccounts" location="component://financials/widget/financials/forms/receivables/BillingAccountForms.xml"/>
                     </decorator-section>
                 </decorator-screen>

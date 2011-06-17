@@ -67,7 +67,10 @@
     	paginate-target="findCustomerBillAcct" paginate-index-field="viewIndex" paginate-size-field="viewSize"
     	 default-title-style="boxhead" default-tooltip-style="tabletext" default-widget-style="tabletext" header-row-style="boxtop"
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true" >
-    	<field name="billingAccountId" title="${uiLabelMap.FinancialsCustomerBillingAccountID}"><hyperlink target="viewCustomerBillAcct?billingAccountId=${billingAccountId}" description="${billingAccountId}" /> </field>   
+    	<field name="billingAccountId" title="${uiLabelMap.FinancialsCustomerBillingAccountID}"><hyperlink target="viewCustomerBillAcct?billingAccountId=${billingAccountId}" description="${billingAccountId}" /> </field>
+    	<field name="partyName" title="${uiLabelMap.FinancialsCustomer}">
+            <display  description="${partyName} (${partyId})" />
+        </field>
     	<field name="description"><display/></field>
     	<field name="accountFromDate"><display/></field>    	
         <field name="accountThruDate"><display/></field>
