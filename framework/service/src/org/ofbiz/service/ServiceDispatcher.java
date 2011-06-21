@@ -117,7 +117,7 @@ public class ServiceDispatcher {
         }
 
         // make sure we haven't disabled these features from running
-        if (enableJMS) {
+        if (enableJMS && this.delegator.getEnabledJMS()) {
             this.jlf = new JmsListenerFactory(this);
         }
 
@@ -1091,7 +1091,7 @@ public class ServiceDispatcher {
     }
 
     /**
-     * Enabled/Disables the Job Manager/Scheduler globally
+     * Enables/Disables the Job Manager/Scheduler globally
      * (this will not effect any dispatchers already running)
      * @param enable
      */
@@ -1100,7 +1100,7 @@ public class ServiceDispatcher {
     }
 
     /**
-     * Enabled/Disables the JMS listeners globally
+     * Enables/Disables the JMS listeners globally
      * (this will not effect any dispatchers already running)
      * @param enable
      */
@@ -1108,8 +1108,17 @@ public class ServiceDispatcher {
         ServiceDispatcher.enableJMS = enable;
     }
 
+
     /**
-     * Enabled/Disables the startup services globally
+     * Get Enabled/Disabled JMS listeners status
+     * @return boolean true is JMS listeners are enabled
+     */
+    public static boolean getEnableJMS() {
+        return ServiceDispatcher.enableJMS;
+    }
+
+    /**
+     * Enables/Disables the startup services globally
      * (this will not effect any dispatchers already running)
      * @param enable
      */
