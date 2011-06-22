@@ -149,7 +149,7 @@
         title="List Contact Lists"  default-title-style="tableheadtext" target=""
         default-widget-style="tabletext" default-tooltip-style="tabletext"
         default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
-        paginate-target="${listSortTarget}"  paginate-target-anchor="ListContactLists"
+        paginate="true" paginate-target="${listSortTarget}"  paginate-target-anchor="ListContactLists"
         paginate-size-field="contactListsSize" paginate-index-field="contactListsIndex"
         list-name="contactLists">
 
@@ -190,7 +190,7 @@
                 <parameter param-name="contactListId" from-field="contactListId"/>
             </hyperlink>
         </field>
-        <field name="contactListId" title="List" widget-area-style="fieldWidth300" widget-style="linktext" use-when="parentContactListId==null">
+        <field name="contactListId" title="Segment" widget-area-style="fieldWidth300" widget-style="linktext" use-when="parentContactListId==null">
           <display description=" "/>
         </field>
         <field name="contactMechTypeId" title="${uiLabelMap.CrmContactType}">
@@ -213,7 +213,7 @@
         title="Contact List Parties"  default-title-style="tableheadtext" target="${listContactListPartiesTarget}?contactListId=${parameters.contactListId}"
         default-widget-style="tabletext" default-tooltip-style="tabletext"
         default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
-        paginate-target="${listSortTarget}" paginate-target-anchor="ListContactListParties" 
+        paginate="true" paginate-target="${listSortTarget}" paginate-target-anchor="ListContactListParties" 
         paginate-size-field="contactListPartiesSize" paginate-index-field="contactListPartiesIndex"
         list-name="contactListParties">
 
@@ -279,7 +279,7 @@
             </hyperlink>
         </field>
         <!-- another dummy field to compensate for create order column -->
-        <field name="dummyField2" title="  " use-when="isRemoveForm==false">
+        <field name="dummyField2" title=" " use-when="isRemoveForm==false">
             <display description=" "/>
         </field>
 
@@ -331,35 +331,35 @@
 
     <form name="ListUSPSSortBySortResult" type="list" list-name="sortResultRows"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-table-style="crmsfaListTable"
-        paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
+        paginate="true" paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
         even-row-style="rowWhite" odd-row-style="rowLightGray">
         <field name="sortResult" widget-area-style="fieldWidth300"><display/></field>
         <field name="contactMechId" title="Number"><display/></field>
     </form>
     <form name="ListUSPSSortByZip5" type="list" list-name="zip5Rows"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-table-style="crmsfaListTable"
-        paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
+        paginate="true" paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
         even-row-style="rowWhite" odd-row-style="rowLightGray">
         <field name="zip5" widget-area-style="fieldWidth300"><display/></field>
         <field name="contactMechId" title="Number"><display/></field>
     </form>
     <form name="ListUSPSSortByZip3" type="list" list-name="zip3Rows"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-table-style="crmsfaListTable"
-        paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
+        paginate="true" paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
         even-row-style="rowWhite" odd-row-style="rowLightGray">
         <field name="zip3" widget-area-style="fieldWidth300"><display/></field>
         <field name="contactMechId" title="Number"><display/></field>
     </form>
     <form name="ListUSPSSortByBMC" type="list" list-name="bmcRows"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-table-style="crmsfaListTable"
-        paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
+        paginate="true" paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
         even-row-style="rowWhite" odd-row-style="rowLightGray">
         <field name="bmcCode" widget-area-style="fieldWidth300"><display/></field>
         <field name="contactMechId" title="Number"><display/></field>
     </form>
     <form name="ListUSPSSortByOTHER" type="list" list-name="otherRows"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-table-style="crmsfaListTable"
-        paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
+        paginate="true" paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
         even-row-style="rowWhite" odd-row-style="rowLightGray">
         <field name="bmcCode" widget-area-style="fieldWidth300"><display/></field>
         <field name="contactMechId" title="Number"><display/></field>
