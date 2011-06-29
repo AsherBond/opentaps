@@ -188,7 +188,15 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
     </#if>
     <#if applicationSetupOrganization?has_content>
       <div class="insideHeaderSubtext">
-        <b>${uiLabelMap.ProductOrganization}</b>:&nbsp;${applicationSetupOrganization.groupName}&nbsp; (<@displayLink text="${uiLabelMap.CommonChange}" href="selectOrganizationForm"/>)
+  			<form id="selectOrganizationForm" action="setOrganization" method="post">
+  				<b>${uiLabelMap.ProductOrganization}</b>:&nbsp;  				
+  				<select id="organizationPartyId" name="organizationPartyId" class="inputBox" onchange="document.forms['selectOrganizationForm'].submit();">
+  					<option value="">${uiLabelMap.OpentapsDefaultActionPrompt}</option>
+  					<#list configuredOrganizations as option>						  						
+  						<option value="${option.partyId}">${option.groupName}</option>
+  					</#list> 
+  				</select>
+  			</form> 			
       </div>
     </#if>
   
