@@ -47,6 +47,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilConfig;
 import org.opentaps.purchasing.security.PurchasingSecurity;
+import org.ofbiz.entity.condition.*;
 
 // organization party
 organizationPartyId = UtilCommon.getOrganizationPartyId(request);
@@ -54,6 +55,19 @@ organizationParty = session.getAttribute("organizationParty");
 if (UtilValidate.isNotEmpty(organizationParty)) {
     context.put("applicationSetupOrganization", organizationParty);
 }
+context.put("organizationPartyId", organizationPartyId);
+parameters.put("organizationPartyId", organizationPartyId);
+
+// selectOrganization dropdown list
+options = UtilCommon.DISTINCT_READ_OPTIONS;
+orderBy = UtilMisc.toList("groupName");
+
+conditions = new EntityConditionList( UtilMisc.toList(
+            new EntityExpr("roleTypeId", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
+            new EntityExpr("ptyAcctgPrefPartyId", EntityOperator.NOT_EQUAL, null)
+            ), EntityOperator.AND);
+configuredOrganizations = delegator.findByCondition("PartyAcctgPreferenceRoleAndDetail", conditions, null, null, orderBy, options);
+context.put("configuredOrganizations", configuredOrganizations);
 
 // userLogin
 userLogin = request.getAttribute("userLogin");
