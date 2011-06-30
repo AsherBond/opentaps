@@ -104,7 +104,12 @@
         <response name="selectOrganization" type="view" value="selectOrganizationForm"/>
         <response name="success" type="url" value="/purchasing/control/myHomeMain"/>
     </request-map>
-
+    <request-map uri="setUserOrganization">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="setOrganization" />
+        <response name="selectOrganization" type="view" value="selectOrganizationForm"/>
+        <response name="success" type="request-redirect" value="myHomeMain"/>
+    </request-map>
 
     <!-- ================== -->
     <!-- Main Request Maps  -->
