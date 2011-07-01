@@ -93,6 +93,11 @@ padding:4px;
 border: 1px solid #999999;
 }
 
+/* forgotPassword CSS*/
+#forgotpasswd{
+    display:none;
+}
+
 </style>
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
@@ -102,6 +107,7 @@ border: 1px solid #999999;
 
   <div align="center">
     <@frameSection title="${uiLabelMap.get(greetingLabel)}" style="width: 300px; margin-left: auto; margin-right: auto;text-align: center;" innerStyle="text-align: center;">
+      <div>
         <form method="post" action="<@ofbizUrl>login${previousParams?if_exists}</@ofbizUrl>" name="loginform" style="margin: 0;">
           <table width="100%" border="0" cellpadding="0" cellspacing="2">
             <tr>
@@ -125,20 +131,23 @@ border: 1px solid #999999;
                 <input type="submit" value="${uiLabelMap.CommonLogin}" class="loginButton"/>
               </td>
             </tr>
+            <tr>
+              <td colspan="2" align="center">
+                <a href="javascript:forgotPasswd()" class="tabletext" style="text-decoration: underline;">${uiLabelMap.CommonForgotYourPassword}?</a>
+              </td>
+            </tr>
           </table>
         </form>
-    </@frameSection>
-  </div>
-
-  <div align="center">
-    <@frameSection title="${uiLabelMap.CommonForgotYourPassword}?" style="width: 300px; margin-left: auto; margin-right: auto; margin-top: 20px;" innerStyle="text-align: center;">
+      </div>
+      <div id="forgotpasswd">
         <form method="post" action="<@ofbizUrl>forgotpassword${previousParams}</@ofbizUrl>" name="forgotpassword" style="margin: 0;">
           <span class="tabletext">${uiLabelMap.CommonUsername}&nbsp;</span><input type="text" size="20" class="inputBox" name="USERNAME" value="<#if requestParameters.USERNAME?has_content>${requestParameters.USERNAME}<#elseif autoUserLogin?has_content>${autoUserLogin.userLoginId}</#if>"/>
           <div style="margin-top: 3px;"><input type="submit" name="EMAIL_PASSWORD" class="loginButton" value="${uiLabelMap.CommonEmailPassword}"/></div>
         </form>
+      </div>
     </@frameSection>
   </div>
-
+  
   <script type="text/javascript">
   /*<![CDATA[*/
     <#if focusName>

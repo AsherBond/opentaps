@@ -100,6 +100,10 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
     <script type="text/javascript">
         // This code set the timeout default value for opentaps.sendRequest
         var ajaxDefaultTimeOut = ${configProperties.get("opentaps.ajax.defaultTimeout")};
+        
+        function forgotPasswd(){
+            document.getElementById('forgotpasswd').style.display='block';
+        }
     </script>        
     <#if gwtScripts?exists>
       <meta name="gwt:property" content="locale=${locale}"/>
