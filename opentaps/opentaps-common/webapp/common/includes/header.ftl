@@ -190,11 +190,7 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
       <div class="insideHeaderSubtext">
         <form id="selectOrganizationForm" action="setUserOrganization" method="post">
           <b>${uiLabelMap.ProductOrganization}</b>:&nbsp;
-          <select id="organizationPartyId" name="organizationPartyId" class="inputBox" onchange="document.forms['selectOrganizationForm'].submit();">
-            <#list configuredOrganizations as option>
-              <option value="${option.partyId}">${option.groupName}</option>
-            </#list>
-          </select>
+          <@inputSelect name="organizationPartyId" list=configuredOrganizations?default([]) key="partyId" displayField="groupName" default="${organizationPartyId?if_exists}" onChange="document.forms['selectOrganizationForm'].submit();"/>
         </form>
       </div>
     </#if>
