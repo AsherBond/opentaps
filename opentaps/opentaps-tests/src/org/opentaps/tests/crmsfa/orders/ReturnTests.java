@@ -549,6 +549,19 @@ public class ReturnTests extends ReturnTestCase {
     }
 
     /**
+     * Verify return's from address is the same as original order's shipping location.
+     * @throws Exception
+     */
+    public void testReturnFromAddress() throws GeneralException {
+        // 1.  Create a product
+        // 2.  Receive 5 units of it
+        // 3.  Create a sales order for 5 units to DemoAccount1
+        // 4.  Ship entire order (use the testShipOrder service)
+        // 5.  Create a return from the order for 5.0 of the items
+        // 6.  Verify shipping destination address from the sales order was used for return's from address
+    }
+
+    /**
      * Test what happens when there is a manual payment is required
      * Same steps as the testManualRefundPayment, except
      * 3c. Receive payment from the customer
