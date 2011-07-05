@@ -103,6 +103,7 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
         
         function forgotPasswd(){
             document.getElementById('forgotpasswd').style.display='block';
+            document.getElementById('forgotPasswordLink').style.display='none';
         }
     </script>        
     <#if gwtScripts?exists>

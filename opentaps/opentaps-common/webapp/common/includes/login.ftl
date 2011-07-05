@@ -133,19 +133,36 @@ border: 1px solid #999999;
             </tr>
             <tr>
               <td colspan="2" align="center">
-                <a href="javascript:forgotPasswd()" class="tabletext" style="text-decoration: underline;">${uiLabelMap.CommonForgotYourPassword}?</a>
+                <div id="forgotPasswordLink" style="padding-top: 10px;">
+                  <a href="javascript:forgotPasswd()" class="tabletext" style="text-decoration: underline;">${uiLabelMap.CommonForgotYourPassword}?</a>
+                </div>
               </td>
             </tr>
           </table>
         </form>
       </div>
-      <div id="forgotpasswd">
-        <form method="post" action="<@ofbizUrl>forgotpassword${previousParams}</@ofbizUrl>" name="forgotpassword" style="margin: 0;">
-          <span class="tabletext">${uiLabelMap.CommonUsername}&nbsp;</span><input type="text" size="20" class="inputBox" name="USERNAME" value="<#if requestParameters.USERNAME?has_content>${requestParameters.USERNAME}<#elseif autoUserLogin?has_content>${autoUserLogin.userLoginId}</#if>"/>
-          <div style="margin-top: 3px;"><input type="submit" name="EMAIL_PASSWORD" class="loginButton" value="${uiLabelMap.CommonEmailPassword}"/></div>
-        </form>
-      </div>
     </@frameSection>
+    <div id="forgotpasswd" align="center">
+      <@frameSection title="${uiLabelMap.CommonForgotYourPassword}?" style="width: 300px; margin-left: auto; margin-right: auto;margin-top: 20px;" innerStyle="text-align: center;">
+        <form method="post" action="<@ofbizUrl>forgotpassword${previousParams}</@ofbizUrl>" name="forgotpassword" style="margin: 0;">
+          <table width="100%" border="0" cellpadding="0" cellspacing="2">
+            <tr>
+              <td align="right">
+                <span class="tabletext">${uiLabelMap.CommonEnterYourEmail}&nbsp;</span>
+              </td>
+              <td align="left">
+                <input type="text" class="inputBox" name="USERNAME" value="<#if requestParameters.USERNAME?has_content>${requestParameters.USERNAME}<#elseif autoUserLogin?has_content>${autoUserLogin.userLoginId}</#if>" size="20"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center">
+                <input type="submit" name="EMAIL_PASSWORD" class="loginButton" value="${uiLabelMap.CommonGetPassword}"/>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </@frameSection>
+    </div>
   </div>
   
   <script type="text/javascript">

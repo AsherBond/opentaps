@@ -2414,6 +2414,8 @@ public interface CommonMessages extends Messages {
     String commonEndDate();
     @DefaultMessage("End Date/Time")
     String commonEndDateTime();
+    @DefaultMessage("Enter your email")
+    String commonEnterYourEmail();
     @DefaultMessage("Children")
     String commonEntityChildren();
     @DefaultMessage("Entries")
@@ -2534,6 +2536,8 @@ public interface CommonMessages extends Messages {
     String commonGeoLocation();
     @DefaultMessage("Geos")
     String commonGeos();
+    @DefaultMessage("Get password")
+    String commonGetPassword();
     @DefaultMessage("Get Password Hint")
     String commonGetPasswordHint();
     @DefaultMessage("Global")

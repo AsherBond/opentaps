@@ -2728,6 +2728,12 @@
         <value xml:lang="zh">忘记密码</value>
         <value xml:lang="zh_CN">忘记密码</value>
     </property>
+    <property key="CommonEnterYourEmail">
+        <value xml:lang="en">Enter your email</value>
+    </property>
+    <property key="CommonGetPassword">
+        <value xml:lang="en">Get password</value>
+    </property>	
     <property key="CommonFormatDate">
         <value xml:lang="ar">النمط: ي ي-ش ش-ع ع ع ع</value>
         <value xml:lang="en">Format: yyyy-MM-dd</value>
