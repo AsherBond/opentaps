@@ -148,7 +148,7 @@ border: 1px solid #999999;
           <table width="100%" border="0" cellpadding="0" cellspacing="2">
             <tr>
               <td align="right">
-                <span class="tabletext">${uiLabelMap.CommonEnterYourEmail}&nbsp;</span>
+                <span class="tabletext">${uiLabelMap.CommonUsername}&nbsp;</span>
               </td>
               <td align="left">
                 <input type="text" class="inputBox" name="USERNAME" value="<#if requestParameters.USERNAME?has_content>${requestParameters.USERNAME}<#elseif autoUserLogin?has_content>${autoUserLogin.userLoginId}</#if>" size="20"/>
@@ -156,7 +156,7 @@ border: 1px solid #999999;
             </tr>
             <tr>
               <td colspan="2" align="center">
-                <input type="submit" name="EMAIL_PASSWORD" class="loginButton" value="${uiLabelMap.CommonGetPassword}"/>
+                <input type="submit" name="EMAIL_PASSWORD" class="loginButton" value="${uiLabelMap.CommonEmailPassword}"/>
               </td>
             </tr>
           </table>
