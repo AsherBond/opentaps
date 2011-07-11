@@ -95,24 +95,12 @@ public abstract class FreemarkerUtil {
         errorMessage = UtilProperties.getMessage(errorResource, "OpentapsError_FreemarkerUtilImportError", UtilMisc.toMap("location", location), locale);
         Environment.Namespace importNamespace = null;
         try {
-            importNamespace = env.importLib(template, template.getName());
+
+            importNamespace = env.importLib(template, template.getName(), true);
         } catch (TemplateException e) {
             Debug.logError(errorMessage + e.getMessage(), module);
         } catch (IOException e) {
             Debug.logError(errorMessage + e.getMessage(), module);
-        }
-
-        // Add each macro in the imported template to the global namespace of the parent template, for convenience. Note that this
-        //  only works because the macros now exist in their own namespace in the parent template, so by adding them to the global
-        //  namespace we're actually referencing the macro in the new namespace. Skipping the step above results in macros which
-        //  are unable to access the data model.
-        Environment.Namespace globalNamespace = env.getGlobalNamespace();
-        Map macros = template.getMacros();
-        Iterator macroIt = macros.keySet().iterator();
-        while (macroIt.hasNext()) {
-            String macroName = (String) macroIt.next();
-            Macro macro = (Macro) macros.get(macroName);
-            globalNamespace.put(macroName, macro);
         }
     }
 
@@ -173,7 +161,7 @@ public abstract class FreemarkerUtil {
             cfg = FreeMarkerWorker.getDefaultOfbizConfig();
             template = new Template(templateName, locationReader, cfg);
             if (env != null) {
-                env.importLib(template, templateName);  // env is the current executing template, and importLib will import the template into it and will map namespace -> macro.
+                env.importLib(template, templateName, true);  // env is the current executing template, and importLib will import the template into it and will map namespace -> macro.
             }
         } catch (TemplateException e) {
             Debug.logError(errorMessage + e.getMessage(), module);
