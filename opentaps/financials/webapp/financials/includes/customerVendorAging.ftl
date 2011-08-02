@@ -21,8 +21,8 @@
   <#list invoicesWithBalances as invoice>
   <#-- each invoice is an org.opentaps.domain.billing.invoice.Invoice object -->
       <#assign isPastDue = invoice.isPastDue()>
-      <#assign openAmount = invoice.getOpenAmount() >
-      <#assign invoiceTotal = invoice.getInvoiceTotal() >
+      <#assign openAmount = invoice.getPendingOpenAmount() >
+      <#assign invoiceTotal = invoice.getInvoiceAdjustedTotal() >
   <tr>
      <td class="tabletext" width="30%">${getLocalizedDate(invoice.invoiceDate, "DATE")}</td>
      <td class="tabletext" width="50%">
