@@ -153,6 +153,17 @@ public abstract class GenericCUDService extends GenericService {
         Collection<Map<String, Object>> data = UtilHttp.parseMultiFormData(getProvider().getParameterMap());
         // sort the collection by row field
         List<Map<String, Object>> records = new FastList<Map<String, Object>>();
+
+
+        // check if a row have product Id equals to null. It causes strange behaviour to cart.
+        // this code prevent it
+        for (Map<String, Object> objectMap : data) {
+            if (UtilValidate.isEmpty(objectMap.get("productId"))) {
+                throw new GenericServiceException("ProductId cannot be null");
+            }
+        }
+
+
         records.addAll(data);
         Collections.sort(records, new RowOrderComparator(true));
         
