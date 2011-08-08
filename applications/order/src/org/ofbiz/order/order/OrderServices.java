@@ -1939,7 +1939,14 @@ public class OrderServices {
                     Debug.logError(e, module);
                     return ServiceUtil.returnError(UtilProperties.getMessage(resource_error,"OrderErrorCannotGetOrderItemAssocEntity", UtilMisc.toMap("itemMsgInfo",itemMsgInfo), locale));
                 }
-                availableQuantity = availableQuantity.subtract(issuedQuantity).max(BigDecimal.ZERO);
+
+                BigDecimal invoicedQuantity = OrderReadHelper.getOrderItemInvoicedQuantity(orderItem);
+                if (invoicedQuantity == null) {
+                    invoicedQuantity = BigDecimal.ZERO;
+                }
+
+                BigDecimal canNotBeCanceledQuantity = invoicedQuantity.max(issuedQuantity);
+                availableQuantity = availableQuantity.subtract(canNotBeCanceledQuantity).max(BigDecimal.ZERO);
 
                 BigDecimal itemCancelQuantity = orderItem.getBigDecimal("cancelQuantity");
                 if (itemCancelQuantity == null) {
