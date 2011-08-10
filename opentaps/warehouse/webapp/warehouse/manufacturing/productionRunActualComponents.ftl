@@ -66,7 +66,7 @@
         <@inputHidden name="productId" value=component.productId index=component_index />
         <tr class="${tableRowClass(component_index)}">
             <@displayCell text="${component.workEffortName} [${component.workEffortId}]"/>
-            <@displayCell text="${component.internalName} [${component.productId}]"/>
+            <@displayCell text="${component.internalName?default('')} [${component.productId}]"/>
             <@displayCell text=component.qoh?default(0)/>
             <td>
                 ${component.issuedQuantity}
