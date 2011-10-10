@@ -168,6 +168,7 @@ public final class PartyServices {
             List<EntityExpr> emailAddressMergeCandidateConditions = new ArrayList<EntityExpr>();
             emailAddressMergeCandidateConditions.add(EntityCondition.makeCondition("contactMechTypeId", EntityOperator.EQUALS, "EMAIL_ADDRESS"));
             emailAddressMergeCandidateConditions.add(EntityCondition.makeCondition("infoString", EntityOperator.NOT_EQUAL, null));
+            emailAddressMergeCandidateConditions.add(EntityCondition.makeCondition("partyId", EntityOperator.NOT_EQUAL, "_NA_"));
 
             TransactionUtil.begin();
             EntityListIterator partyAndEmailAddresses = delegator.findListIteratorByCondition("PartyAndContactMech", EntityCondition.makeCondition(emailAddressMergeCandidateConditions, EntityOperator.AND), null, null);

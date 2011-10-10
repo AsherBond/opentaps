@@ -178,8 +178,9 @@ public final class ActivitiesServices {
             }
 
             // Search for contactMechIdTo using the passed in To email addresses - use the first found
-            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("infoString", EntityOperator.IN, UtilMisc.toList(toAddresses)));
-            GenericValue partyContactMechTo = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByCondition("PartyAndContactMech", conditions, null, null)));
+            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("infoString", EntityOperator.IN, UtilMisc.toList(toAddresses)),
+                                            EntityCondition.makeCondition("partyId", EntityOperator.NOT_EQUAL, "_NA_"));
+            GenericValue partyContactMechTo = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByCondition("PartyAndContactMech", conditions, null, UtilMisc.toList("fromDate DESC"))));
             if (UtilValidate.isNotEmpty(partyContactMechTo)) {
                 input.put("contactMechIdTo", partyContactMechTo.getString("contactMechId"));
                 input.put("partyIdTo", partyContactMechTo.getString("partyId"));
