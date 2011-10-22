@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -56,6 +57,7 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -78,6 +80,7 @@ import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
+import org.ofbiz.party.contact.ContactHelper;
 import org.ofbiz.party.party.PartyHelper;
 import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.config.ProductConfigWrapper;
@@ -136,7 +139,7 @@ public final class OrderEvents {
 
     /**
      * Custom cart destroy method to avoid null pointer exception with ShoppingCartEvent.destroyCart().
-     * The reson is because ShoppingCartEvent.destroyCart() uses clearCart(), which
+     * The reason is because ShoppingCartEvent.destroyCart() uses clearCart(), which
      * is bad logic:  The clearCart() method calls getCartObject(), which will create a cart if
      * none is found, thus leading to a situation where an empty cart is created and then destroyed
      * when there is no cart to begin with. Normally this would be fine except that creating a cart
@@ -380,7 +383,6 @@ public final class OrderEvents {
      * @throws GenericServiceException if an exception occur
      * @throws GenericEntityException if an exception occur
      */
-    @SuppressWarnings("unchecked")
     public static int addItemToOrder(ShoppingCart cart, String productId, Double selectedAmountDbl, double quantity, Timestamp reservStart, Double reservLengthDbl, Double reservPersonsDbl,
             Timestamp shipBeforeDate, Timestamp shipAfterDate, Map features, Map attributes, String prodCatalogId,
             ProductConfigWrapper configWrapper, String itemType, String itemGroupNumber, String parentProductId, HttpServletRequest request) throws CartItemModifyException, ItemNotFoundException, RepositoryException, InfrastructureException, GenericServiceException, GenericEntityException {
@@ -678,13 +680,21 @@ public final class OrderEvents {
             cart.setShipmentMethodTypeId(shipGroupSeqId, "NO_SHIPPING");
         } else if ("NO_SHIPPING".equals(shipmentMethodTypeId)) {
             if (!cart.shippingApplies()) {
-                if (productStore.get("inventoryFacilityId") != null) {
+                GenericValue orderParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", cart.getPartyId()));
+                if (UtilValidate.isNotEmpty(orderParty)) {
+                    // use first found order party's shipping address, otherwise billing address
+                    GenericValue shippingAddress = EntityUtil.getFirst(new FastList<GenericValue>(ContactHelper.getContactMech(orderParty, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false)));
+                    if (shippingAddress == null) {
+                        shippingAddress = EntityUtil.getFirst(new FastList<GenericValue>(ContactHelper.getContactMech(orderParty, "BILLING_LOCATION", "POSTAL_ADDRESS", false)));
+                        if (shippingAddress == null && productStore.get("inventoryFacilityId") != null) {
+                            List<GenericValue> facilityMechPurps = delegator.findByAndCache("FacilityContactMechPurpose", UtilMisc.toMap("facilityId", productStore.get("inventoryFacilityId"), "contactMechPurposeTypeId", "SHIP_ORIG_LOCATION"));
+                            facilityMechPurps = EntityUtil.filterByDate(facilityMechPurps);
+                            shippingAddress = EntityUtil.getFirst(facilityMechPurps);
+                        }
+                    }
 
-                    // Use the address of the productStore's facility
-                    List facilityMechPurps = delegator.findByAndCache("FacilityContactMechPurpose", UtilMisc.toMap("facilityId", productStore.get("inventoryFacilityId"), "contactMechPurposeTypeId", "SHIP_ORIG_LOCATION"));
-                    facilityMechPurps = EntityUtil.filterByDate(facilityMechPurps);
-                    if (UtilValidate.isNotEmpty(facilityMechPurps)) {
-                        contactMechId = EntityUtil.getFirst(facilityMechPurps).getString("contactMechId");
+                    if (shippingAddress != null) {
+                        contactMechId = shippingAddress.getString("contactMechId");
                     }
                 }
             }
@@ -870,7 +880,6 @@ public final class OrderEvents {
      * @param shipGroupSeqId an <code>int</code> value
      * @return a <code>List</code> value
      */
-    @SuppressWarnings("unchecked")
     public static List getCartShipEstimates(HttpServletRequest request, int shipGroupSeqId) {
         List shipEstimates = new ArrayList();
         ShoppingCart cart = getOrInitializeCart(request);
@@ -1266,7 +1275,6 @@ public final class OrderEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return the event response string
      */
-    @SuppressWarnings("unchecked")
     public static String modifyCart(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
@@ -1310,7 +1318,6 @@ public final class OrderEvents {
      * @param request the servlet request instance to set the error messages in
      * @return one of NON_CRITICAL_ERROR, ERROR or NO_ERROR.
      */
-    @SuppressWarnings("unchecked")
     private static String processResult(Map result, HttpServletRequest request) {
         // Check for errors
         StringBuffer errMsg = new StringBuffer();
@@ -1582,7 +1589,6 @@ public final class OrderEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return the event response <code>String</code>
      */
-    @SuppressWarnings("unchecked")
     public static String prepareOrderReport(HttpServletRequest request, HttpServletResponse response) {
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
