@@ -549,7 +549,13 @@ public final class LedgerServices {
 
         // if still no GL account, then it is an error
         if (UtilValidate.isEmpty(invoiceItemPostingGlAccountId)) {
-            return ServiceUtil.returnError("Cannot find posting GL account for invoice " + invoiceItem.get("invoiceId") + " item " + invoiceItem.get("invoiceItemSeqId"));
+            String errorMsg = "Cannot find posting GL account for invoice " + invoiceItem.get("invoiceId") + ", item " + invoiceItem.get("invoiceItemSeqId");
+            if (UtilValidate.isEmpty(invoiceItem.getString("invoiceItemTypeId"))) {
+                errorMsg += " the Invoice Item Type must be set.";
+            } else if (UtilValidate.isEmpty(invoiceItem.getString("overrideGlAccountId"))) {
+                errorMsg += " the Override GL Account must be set.";
+            }
+            return UtilMessage.createAndLogServiceError(errorMsg, MODULE);
         }
 
         // default variance is either postingAmount - orderAmount or postingAmount - standardCost
@@ -669,9 +675,13 @@ public final class LedgerServices {
 
         // if still no GL account, then it is an error
         if ((invoiceItemPostingGlAccountId == null) || (invoiceItemPostingGlAccountId.equals(""))) {
-            Debug.logError("Canot find GL account to post for this invoice item " + invoiceItem, MODULE);
-            return ServiceUtil.returnError("Cannot find posting GL account for invoice " + invoiceItem.getString("invoiceId")
-                    + ", item " + invoiceItem.getString("invoiceItemSeqId"));
+            String errorMsg = "Cannot find posting GL account for invoice " + invoiceItem.get("invoiceId") + ", item " + invoiceItem.get("invoiceItemSeqId");
+            if (UtilValidate.isEmpty(invoiceItem.getString("invoiceItemTypeId"))) {
+                errorMsg += " the Invoice Item Type must be set.";
+            } else if (UtilValidate.isEmpty(invoiceItem.getString("overrideGlAccountId"))) {
+                errorMsg += " the Override GL Account must be set.";
+            }
+            return UtilMessage.createAndLogServiceError(errorMsg, MODULE);
         }
 
         // prepare a transaction entry
@@ -767,9 +777,13 @@ public final class LedgerServices {
 
         // if still no GL account, then it is an error
         if ((invoiceItemPostingGlAccountId == null) || (invoiceItemPostingGlAccountId.equals(""))) {
-            Debug.logError("Canot find GL account to post for this invoice item " + invoiceItem, MODULE);
-            return ServiceUtil.returnError("Cannot find posting GL account for invoice " + invoiceItem.getString("invoiceId")
-                    + ", item " + invoiceItem.getString("invoiceItemSeqId"));
+            String errorMsg = "Cannot find posting GL account for invoice " + invoiceItem.get("invoiceId") + ", item " + invoiceItem.get("invoiceItemSeqId");
+            if (UtilValidate.isEmpty(invoiceItem.getString("invoiceItemTypeId"))) {
+                errorMsg += " the Invoice Item Type must be set.";
+            } else if (UtilValidate.isEmpty(invoiceItem.getString("overrideGlAccountId"))) {
+                errorMsg += " the Override GL Account must be set.";
+            }
+            return UtilMessage.createAndLogServiceError(errorMsg, MODULE);
         }
 
         // create the transaction entry
