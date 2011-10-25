@@ -32,6 +32,7 @@ import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.w3c.dom.Element;
+import org.ofbiz.entity.transaction.TransactionUtil;
 
 /**
  * ServiceEcaRule
@@ -122,6 +123,17 @@ public class ServiceEcaRule implements java.io.Serializable {
             Debug.logInfo("Service ECA [" + this.serviceName + "] on [" + this.eventName + "] is disabled; not running.", module);
             return;
         }
+        // Note: force isError if the current transaction in place is marked for rollback
+        try {
+            if (!isError && TransactionUtil.isTransactionInPlace() && javax.transaction.Status.STATUS_MARKED_ROLLBACK == TransactionUtil.getStatus()) {
+                Debug.logError("Current transaction is marked for rollback, forcing the isError flag", module);
+                isError = true;
+            }
+        } catch (Exception e) {
+            Debug.logError(e, module);
+        }
+
+
         if (isFailure && !this.runOnFailure) {
             return;
         }
