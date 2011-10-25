@@ -256,6 +256,15 @@ framework/entity/dtd/entitymodel.xsd
 framework/entity/src/org/ofbiz/entity/model/ModelViewEntity.java
 2b3c043abb Ofbiz patch to add GROUP_CONCAT as a view entity alias function
 
+framework/service/dtd/service-eca.xsd
+framework/service/src/org/ofbiz/service/eca/ServiceEcaRule.java 
+Change the SECA logic to stop on error.
+The default behavior would have the all seca being called after an error and the transaction marked for rollback, which causes every seca to fail.
+The original service would then have a very big and confusing error message, mostly due to other seca trying to operate in a rollback transaction.
+This stops the seca chain as soon as an error occurred, so that the error reported is only the actual cause of the error.
+This can be overidden setting the ignore-error="true" in the seca XML.
+c006d9d90b1f7f85c3277be57b7a3c9cfd8089bc
+
 
 Applications changes
 --------------------
