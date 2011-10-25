@@ -342,16 +342,8 @@ public final class LedgerServices {
 
             // otherwise we have an error, which we pass up
             return tmpResult;
-        } catch (GenericEntityException ee) {
-            return ServiceUtil.returnError(ee.getMessage());
-        } catch (GenericServiceException se) {
-            return ServiceUtil.returnError(se.getMessage());
-        } catch (RepositoryException e) {
-            return ServiceUtil.returnError(e.getMessage());
-        } catch (EntityNotFoundException e) {
-            return ServiceUtil.returnError(e.getMessage());
-        } catch (ServiceException e) {
-            return ServiceUtil.returnError(e.getMessage());
+        } catch (Exception e) {
+            return UtilMessage.createAndLogServiceError(e, "Cannot post the Invoice [" + invoiceId + "] to GL : ", MODULE);
         }
     }
 
@@ -714,6 +706,10 @@ public final class LedgerServices {
         // next, if an invoice item is a product, then we will need to post COGS and INVENTORY as well.
 
         // Must check invoiceItemTypeId or you'd end up posting to COGS for adjustment entries, sales tax, etc.
+        if (UtilValidate.isEmpty(invoiceItem.getString("invoiceItemTypeId"))) {
+            throw new GenericServiceException("Invoice Item Type is missing for item [" + invoiceItem.getString("invoiceItemSeqId") + "]");
+        }
+
         if (!(invoiceItem.getString("invoiceItemTypeId").equals("INV_FPROD_ITEM") && (invoiceItem.getString("productId") != null))) {
             return UtilMisc.toMap("postingTotal", postingTotal);
         }
