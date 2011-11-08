@@ -390,6 +390,12 @@ public final class TransactionServices {
             entry.initRepository(ledgerRepository);
             entry.setAllFields(context);
 
+            // avoid to put glAccount with leading and trailing whitespace
+            String glAccountId = (String) context.get("glAccountId");
+            if (UtilValidate.isNotEmpty(glAccountId)) {
+                entry.setGlAccountId(glAccountId.trim());
+            }
+
             // validate the accounting tags
             List<AccountingTagConfigurationForOrganizationAndUsage> missings = ledgerRepository.validateTagParameters(entry);
             if (!missings.isEmpty()) {
@@ -436,6 +442,12 @@ public final class TransactionServices {
             pk.setPKFields(context);
             AcctgTransEntry entry = ledgerRepository.findOneNotNull(AcctgTransEntry.class, ledgerRepository.map(AcctgTransEntry.Fields.acctgTransId, pk.getAcctgTransId(), AcctgTransEntry.Fields.acctgTransEntrySeqId, pk.getAcctgTransEntrySeqId()));
             entry.setNonPKFields(context);
+
+            // avoid to put glAccount with leading and trailing whitespace
+            String glAccountId = (String) context.get("glAccountId");
+            if (UtilValidate.isNotEmpty(glAccountId)) {
+                entry.setGlAccountId(glAccountId.trim());
+            }
 
             // validate the accounting tags
             List<AccountingTagConfigurationForOrganizationAndUsage> missings = ledgerRepository.validateTagParameters(entry);
