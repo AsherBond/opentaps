@@ -74,6 +74,7 @@ public class FinancialReportServices extends DomainService implements FinancialR
 
             session = infrastructure.getSession();
             tx = session.beginTransaction();
+            tx.setTimeout(600);
 
             // clear entity first
             Query query = session.createQuery("DELETE FROM GlAccountTransEntryFact");
