@@ -198,17 +198,24 @@ td.blue2 { background:  #EEEEFF; }
 
             <#-- special form data for service-multi updateAcctTransEntries -->
             <@inputHidden name="acctgTransId" index=rowCount value=entry.acctgTransId />
-            <@inputHidden name="acctgTransEntrySeqId" index=rowCount value=entry.acctgTransEntrySeqId />
+            <@inputHidden name="acctgTransEntrySeqId" index=rowCount value=entry.acctgTransEntrySeqId!"_ALL_" />
+            <@inputHidden name="debitCreditFlag" index=rowCount value=entry.debitCreditFlag! />
             <@inputHidden name="amount" index=rowCount value=entry.amount?string("0.00") />
             <@inputHidden name="reconcileStatusId" index=rowCount value=entry.reconcileStatusId! />
 
+            <#if entry.acctgTransEntrySeqId?has_content>
+              <#assign reconcileEntrySeqId = entry.acctgTransEntrySeqId />
+            <#else/>
+              <#assign reconcileEntrySeqId = "_ALL_|" + entry.debitCreditFlag! />
+            </#if>
+
             <#-- special form data for reconcileGlAccount: entry_id_(index) stores the transaction ID pair -->
-            <@inputHidden name="entry_id_${rowCount}" value="${entry.acctgTransId}|${entry.acctgTransEntrySeqId}"/>
+            <@inputHidden name="entry_id_${rowCount}" value="${entry.acctgTransId}|${reconcileEntrySeqId}"/>
 
             <#-- check entry by default if partly reconciled and set special input fields _atei to transaction IDs if checked -->
             <#if entry.reconcileStatusId?exists && (entry.reconcileStatusId == "AES_PARTLY_RECON")>
               <#assign checked="checked"/>
-              <@inputHidden name="${rowCount}_atei" value="${entry.acctgTransId}|${entry.acctgTransEntrySeqId}"/>
+              <@inputHidden name="${rowCount}_atei" value="${entry.acctgTransId}|${reconcileEntrySeqId}"/>
             <#else>
               <#assign checked=""/>
               <@inputHidden name="${rowCount}_atei" value=""/>

@@ -322,15 +322,15 @@ under the License.
     </service>
 
     <!-- these services were copied from accounting/script/org/ofbiz/accounting/ledger/AcctgTransServices.xml and General LedgerServices.xml of opentaps 1.0 trunk so that GL account reconciliation continues to work -->    
-    <service name="updateAcctgTransEntry" default-entity-name="AcctgTransEntry" engine="simple"
-            location="component://financials/script/com/opensourcestrategies/financials/ledger/AcctgTransServices.xml" invoke="updateAcctgTransEntry" auth="true">
+    <service name="updateAcctgTransEntry" default-entity-name="AcctgTransEntry" engine="java"
+            location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="updateAcctgTransEntry" auth="true">
         <description>Update an Entry to a AcctgTrans record</description>
         <required-permissions join-type="OR">
             <check-permission permission="ACCOUNTING" action="_ATX_UPDATE"/>
         </required-permissions>
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
-    </service>   
+    </service>
     <service name="createGlReconciliationEntry" default-entity-name="GlReconciliationEntry" engine="simple"
         location="component://financials/script/com/opensourcestrategies/financials/ledger/AcctgTransServices.xml" invoke="createGlReconciliationEntry" auth="true">
         <description>Add an Entry to a GlReconciliation</description>

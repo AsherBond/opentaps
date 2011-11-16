@@ -51,6 +51,7 @@
   <mapping class="org.opentaps.base.entities.InventoryItemDetailSummary"/>
   <mapping class="org.opentaps.base.entities.ShoppingListItem"/>
   <mapping class="org.opentaps.base.entities.ProductAverageCost"/>
+  <mapping class="org.opentaps.base.entities.ArApTransEntrySumByInvoice"/>
   <mapping class="org.opentaps.base.entities.QuoteTerm"/>
   <mapping class="org.opentaps.base.entities.ProductMaint"/>
   <mapping class="org.opentaps.base.entities.PackedQtyVsOrderItemQuantity"/>
@@ -105,6 +106,7 @@
   <mapping class="org.opentaps.base.entities.OrderItemTypeAttr"/>
   <mapping class="org.opentaps.base.entities.PaymentAndType"/>
   <mapping class="org.opentaps.base.entities.WebUserPreference"/>
+  <mapping class="org.opentaps.base.entities.AcctgTransAndEntriesForReconciliationSum"/>
   <mapping class="org.opentaps.base.entities.EmplPosition"/>
   <mapping class="org.opentaps.base.entities.FacilityAttribute"/>
   <mapping class="org.opentaps.base.entities.Visit"/>
@@ -366,6 +368,7 @@
   <mapping class="org.opentaps.base.entities.PartyAndUserLogin"/>
   <mapping class="org.opentaps.base.entities.CustRequestInfoAndWorkEffortAndPartyRel"/>
   <mapping class="org.opentaps.base.entities.CustRequestType"/>
+  <mapping class="org.opentaps.base.entities.AcctgTransTempSum"/>
   <mapping class="org.opentaps.base.entities.PicklistItemAndOdrItmShipGrp"/>
   <mapping class="org.opentaps.base.entities.ProductFeatureGroupAndAppl"/>
   <mapping class="org.opentaps.base.entities.BudgetReviewResultType"/>
@@ -717,6 +720,7 @@
   <mapping class="org.opentaps.base.entities.ProductFeatureAppl"/>
   <mapping class="org.opentaps.base.entities.PaymentReceiptsDetail"/>
   <mapping class="org.opentaps.base.entities.OrderHeaderNote"/>
+  <mapping class="org.opentaps.base.entities.ArApAcctgTransFact"/>
   <mapping class="org.opentaps.base.entities.GeoType"/>
   <mapping class="org.opentaps.base.entities.CommEventContentDataResource"/>
   <mapping class="org.opentaps.base.entities.InvoiceAndRole"/>
@@ -1002,6 +1006,7 @@
   <mapping class="org.opentaps.base.entities.InventoryItem"/>
   <mapping class="org.opentaps.base.entities.InvoiceAndType"/>
   <mapping class="org.opentaps.base.entities.CartAbandonedLine"/>
+  <mapping class="org.opentaps.base.entities.ArApTransEntry"/>
   <mapping class="org.opentaps.base.entities.CarrierShipmentBoxType"/>
   <mapping class="org.opentaps.base.entities.UserLoginViewPreference"/>
   <mapping class="org.opentaps.base.entities.ProductConfigOptionIactn"/>
@@ -1235,6 +1240,7 @@
   <mapping class="org.opentaps.base.entities.Party"/>
   <mapping class="org.opentaps.base.entities.SegmentGroupClassification"/>
   <mapping class="org.opentaps.base.entities.TaxAuthorityCategoryView"/>
+  <mapping class="org.opentaps.base.entities.ArApInvoiceFact"/>
   <mapping class="org.opentaps.base.entities.OrderItemShipGroupAssoc"/>
   <mapping class="org.opentaps.base.entities.SubscriptionTypeAttr"/>
   <mapping class="org.opentaps.base.entities.AmazonProductUsedFor"/>

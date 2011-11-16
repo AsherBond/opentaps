@@ -106,28 +106,28 @@ if (UtilValidate.isEmpty(orderByStr)) {
 
 orderBy = new ArrayList();
 if ("transactionDate".equals(orderByStr)) {
-    orderBy = UtilMisc.toList("transactionDate", "acctgTransId", "acctgTransEntrySeqId");
+    orderBy = UtilMisc.toList("transactionDate", "acctgTransId", "debitCreditFlag");
 } else if ("acctgTransId".equals(orderByStr)) {
-    orderBy = UtilMisc.toList("acctgTransId", "acctgTransEntrySeqId");
+    orderBy = UtilMisc.toList("acctgTransId", "debitCreditFlag");
 } else if ("acctgTransTypeId".equals(orderByStr)) {
-    orderBy = UtilMisc.toList("acctgTransTypeId", "transactionDate", "acctgTransId", "acctgTransEntrySeqId");
+    orderBy = UtilMisc.toList("acctgTransTypeId", "transactionDate", "acctgTransId");
 } else if ("refNum".equals(orderByStr)) {
-    orderBy = UtilMisc.toList("refNum", "transactionDate", "acctgTransId", "acctgTransEntrySeqId");
+    orderBy = UtilMisc.toList("refNum", "transactionDate", "acctgTransId");
 } else if ("debitASC".equals(orderByStr)) {
-    orderBy = UtilMisc.toList("debitCreditFlag DESC", "amount ASC", "transactionDate");
+    orderBy = UtilMisc.toList("debitCreditFlag DESC", "amount ASC", "transactionDate", "acctgTransId");
 } else if ("debitDESC".equals(orderByStr)) {
-    orderBy = UtilMisc.toList("debitCreditFlag DESC", "amount DESC", "transactionDate");
+    orderBy = UtilMisc.toList("debitCreditFlag DESC", "amount DESC", "transactionDate", "acctgTransId");
 } else if ("creditASC".equals(orderByStr)) {
-    orderBy = UtilMisc.toList("debitCreditFlag ASC", "amount ASC", "transactionDate");
+    orderBy = UtilMisc.toList("debitCreditFlag ASC", "amount ASC", "transactionDate", "acctgTransId");
 } else if ("creditDESC".equals(orderByStr)) {
-    orderBy = UtilMisc.toList("debitCreditFlag ASC", "amount DESC", "transactionDate");
+    orderBy = UtilMisc.toList("debitCreditFlag ASC", "amount DESC", "transactionDate", "acctgTransId");
 } else if ("reconcileStatusId".equals(orderByStr)) {
-    orderBy = UtilMisc.toList("reconcileStatusId", "transactionDate", "acctgTransId", "acctgTransEntrySeqId");
+    orderBy = UtilMisc.toList("reconcileStatusId", "transactionDate", "acctgTransId", "debitCreditFlag");
 } else if ("partyId".equals(orderByStr)) {
-    orderBy = UtilMisc.toList("partyId", "transactionDate", "acctgTransId", "acctgTransEntrySeqId");
+    orderBy = UtilMisc.toList("partyId", "transactionDate", "acctgTransId", "debitCreditFlag");
 }
 
-entries = delegator.findListIteratorByCondition("AcctgTransAndEntriesForReconciliation", condition, null, orderBy);
+entries = delegator.findListIteratorByCondition("AcctgTransAndEntriesForReconciliationSum", condition, null, orderBy);
 
 context.put("entries", entries.getCompleteList());
 entries.close();

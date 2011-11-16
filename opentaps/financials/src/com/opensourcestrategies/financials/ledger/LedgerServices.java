@@ -3312,6 +3312,57 @@ public final class LedgerServices {
     }
 
     /**
+     * Service to update AcctgTransEntry, if the acctgTransEntrySeqId is set to "_ALL_" will update all the entries for the corresponding transaction.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
+    @SuppressWarnings("unchecked")
+    public static Map updateAcctgTransEntry(DispatchContext dctx, Map context) {
+        String acctgTransEntrySeqId = (String) context.get("acctgTransEntrySeqId");
+        Delegator delegator = dctx.getDelegator();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        try {
+
+            GenericValue transaction = delegator.findOne("AcctgTrans", UtilMisc.toMap("acctgTransId", context.get("acctgTransId")), false);
+            if (transaction == null) {
+                return ServiceUtil.returnError("AcctgTrans [" + context.get("acctgTransId") + "] not found.");
+            }
+
+
+            if ("_ALL_".equals(acctgTransEntrySeqId)) {
+                // update all related entries from the grouped fields
+                List<GenericValue> entries = delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", context.get("acctgTransId"),
+                                                                                                   "debitCreditFlag", context.get("debitCreditFlag"),
+                                                                                                   "glAccountId", context.get("glAccountId")));
+                // note: skip the amount because the amount value is the sum of the group
+                Map values = new HashMap(context);
+                values.remove("amount");
+                for (GenericValue entry : entries) {
+                    entry.setNonPKFields(values);
+                    entry.store();
+                }
+            } else {
+                // normal update
+                GenericValue tempVal = delegator.makeValue("AcctgTransEntry");
+                tempVal.setPKFields(context);
+                GenericValue entry = delegator.findOne("AcctgTransEntry", tempVal, false);
+                entry.setNonPKFields(context);
+                entry.store();
+            }
+
+            // also set the last modified by on the parent transaction
+            transaction.set("lastModifiedByUserLogin", userLogin.get("userLoginId"));
+            transaction.store();
+
+            return ServiceUtil.returnSuccess();
+
+        } catch (GenericEntityException ex) {
+           return ServiceUtil.returnError(ex.getMessage());
+        }
+    }
+
+    /**
      * Service to reconcile a GlAccount.
      * @param dctx a <code>DispatchContext</code> value
      * @param context a <code>Map</code> value
@@ -3373,46 +3424,30 @@ public final class LedgerServices {
                 List tokens = StringUtil.split(entry, "|");
 
                 // continue if data isn't our pair of IDs
-                if ((tokens == null) || (tokens.size() != 2)) {
+                if ((tokens == null) || (tokens.size() < 2)) {
                     continue;
                 }
 
                 String acctgTransId = (String) tokens.get(0);
                 String acctgTransEntrySeqId = (String) tokens.get(1);
-
-                // Grab our transaction entry
-                GenericValue acctgTransEntry = delegator.findByPrimaryKey("AcctgTransEntry", UtilMisc.toMap("acctgTransId", acctgTransId, "acctgTransEntrySeqId", acctgTransEntrySeqId));
-
-                // to prevent doubleposts, we validate that we don't have AES_RECONCILED entries
-                if (acctgTransEntry.getString("reconcileStatusId").equals("AES_RECONCILED")) {
-                    return ServiceUtil.returnError("Cannot reconcile account: Submitted transaction entry is already reconciled (acctgTransId=" + acctgTransId
-                            + ", acctgTransEntrySeqId=" + acctgTransEntrySeqId + ").");
-                }
-
-                // update AcctgTransEntry status to AES_RECONCILED
-                params = UtilMisc.toMap("acctgTransId", acctgTransId, "acctgTransEntrySeqId", acctgTransEntrySeqId);
-                params.put("userLogin", userLogin);
-                params.put("reconcileStatusId", "AES_RECONCILED");
-                results = dispatcher.runSync("updateAcctgTransEntry", params);
-                if (ServiceUtil.isError(results)) {
-                    throw new GenericServiceException("Failed to update AcctgTransEntry (acctgTransId=" + acctgTransId
-                            + ", acctgTransEntrySeqId=" + acctgTransEntrySeqId + ")");
-                }
-
-                // need amount of trans entry for gl reconcile entry
-                BigDecimal amount = acctgTransEntry.getBigDecimal("amount");
-
-                // prepare input for and call createGlReconciliationEntry
-                params = UtilMisc.toMap("glReconciliationId", glReconciliationId);
-                params.put("userLogin", userLogin);
-                params.put("acctgTransId", acctgTransId);
-                params.put("acctgTransEntrySeqId", acctgTransEntrySeqId);
-                params.put("reconciledAmount", amount);
-                results = dispatcher.runSync("createGlReconciliationEntry", params);
-                if (ServiceUtil.isError(results)) {
-                    throw new GenericServiceException("Failed to create GlReconciliationEntry (glReconciliationId=" + glReconciliationId
-                            + ", acctgTransId=" + acctgTransId
-                            + ", acctgTransEntrySeqId=" + acctgTransEntrySeqId + ")");
+                if ("_ALL_".equals(acctgTransEntrySeqId)) {
+                    Debug.logWarning("Updating a grouped transaction entry", MODULE);
+                    // in that case there is an extra token for the debitCreditFlag
+                    String debitCreditFlag = null;
+                    if (tokens.size() == 3) {
+                        debitCreditFlag = (String) tokens.get(2);
+                    }
+                    // update all related entries from the grouped fields
+                    List<GenericValue> entries = delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", acctgTransId,
+                                                                                                       "debitCreditFlag", debitCreditFlag,
+                                                                                                       "glAccountId", glAccountId));
+                    for (GenericValue acctgTransEntry : entries) {
+                        markEntryReconciled(acctgTransEntry, userLogin, glReconciliationId, dispatcher);
+                    }
+                } else {
+                    // Grab our transaction entry
+                    GenericValue acctgTransEntry = delegator.findByPrimaryKey("AcctgTransEntry", UtilMisc.toMap("acctgTransId", acctgTransId, "acctgTransEntrySeqId", acctgTransEntrySeqId));
+                    markEntryReconciled(acctgTransEntry, userLogin, glReconciliationId, dispatcher);
                 }
             }
 
@@ -3424,6 +3459,40 @@ public final class LedgerServices {
            return ServiceUtil.returnError(ex.getMessage());
         } catch (GenericServiceException ex) {
            return ServiceUtil.returnError(ex.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void markEntryReconciled(GenericValue acctgTransEntry, GenericValue userLogin, String glReconciliationId, LocalDispatcher dispatcher) throws GenericServiceException {
+        // to prevent doubleposts, we validate that we don't have AES_RECONCILED entries
+        if (acctgTransEntry.getString("reconcileStatusId").equals("AES_RECONCILED")) {
+            throw new GenericServiceException("Cannot reconcile account: Submitted transaction entry is already reconciled (acctgTransId=" + acctgTransEntry.get("acctgTransId")
+                                              + ", acctgTransEntrySeqId=" + acctgTransEntry.get("acctgTransEntrySeqId") + ").");
+        }
+
+        // update AcctgTransEntry status to AES_RECONCILED
+        Map params = UtilMisc.toMap("acctgTransId", acctgTransEntry.get("acctgTransId"), "acctgTransEntrySeqId", acctgTransEntry.get("acctgTransEntrySeqId"));
+        params.put("userLogin", userLogin);
+        params.put("reconcileStatusId", "AES_RECONCILED");
+        Map results = dispatcher.runSync("updateAcctgTransEntry", params);
+        if (ServiceUtil.isError(results)) {
+            throw new GenericServiceException("Failed to update AcctgTransEntry (acctgTransId=" + acctgTransEntry.get("acctgTransId") + ", acctgTransEntrySeqId=" + acctgTransEntry.get("acctgTransEntrySeqId") + ")");
+        }
+
+        // need amount of trans entry for gl reconcile entry
+        BigDecimal amount = acctgTransEntry.getBigDecimal("amount");
+
+        // prepare input for and call createGlReconciliationEntry
+        params = UtilMisc.toMap("glReconciliationId", glReconciliationId);
+        params.put("userLogin", userLogin);
+        params.put("acctgTransId", acctgTransEntry.get("acctgTransId"));
+        params.put("acctgTransEntrySeqId", acctgTransEntry.get("acctgTransEntrySeqId"));
+        params.put("reconciledAmount", amount);
+        results = dispatcher.runSync("createGlReconciliationEntry", params);
+        if (ServiceUtil.isError(results)) {
+            throw new GenericServiceException("Failed to create GlReconciliationEntry (glReconciliationId=" + glReconciliationId
+                                              + ", acctgTransId=" + acctgTransEntry.get("acctgTransId")
+                                              + ", acctgTransEntrySeqId=" + acctgTransEntry.get("acctgTransEntrySeqId") + ")");
         }
     }
 
