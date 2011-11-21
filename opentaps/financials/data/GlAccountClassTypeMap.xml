@@ -29,8 +29,9 @@
     <GlAccountClassTypeMap glAccountClassTypeKey="INVENTORY_ACCOUNT" glAccountClassId="INVENTORY_ASSET" glAccountTypeId="INVENTORY_ACCOUNT" description="INVENTORY"/>
     <GlAccountClassTypeMap glAccountClassTypeKey="LIABILITY" glAccountClassId="LIABILITY" glAccountTypeId="LIABILITY" description="LIABILITY"/>
     <GlAccountClassTypeMap glAccountClassTypeKey="LONG_TERM_LIABILITY" glAccountClassId="LONGTERM_LIABILITY" glAccountTypeId="LONG_TERM_LIABILITY" description="LONG TERM LIABILITY"/>
-    <GlAccountClassTypeMap glAccountClassTypeKey="OPERATING_EXPENSE" glAccountClassId="AMORTIZATION" glAccountTypeId="OPERATING_EXPENSE" description="AMORTIZATION EXPENSE"/>
-    <GlAccountClassTypeMap glAccountClassTypeKey="OTHER_EXPENSE" glAccountClassId="INTEREST_EXPENSE" glAccountTypeId="OTHER_EXPENSE" description="INTEREST EXPENSE"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="AMORTIZE_EXPENSE" glAccountClassId="AMORTIZATION" glAccountTypeId="OPERATING_EXPENSE" description="AMORTIZATION EXPENSE"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="OPERATING_EXPENSE" glAccountClassId="EXPENSE" glAccountTypeId="OPERATING_EXPENSE" description="OPERATING EXPENSE"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="OTHER_EXPENSE" glAccountClassId="EXPENSE" glAccountTypeId="OTHER_EXPENSE" description="OTHER EXPENSE"/>
     <GlAccountClassTypeMap glAccountClassTypeKey="OTHER_INCOME" glAccountClassId="CASH_INCOME" glAccountTypeId="OTHER_INCOME" description="CASH INCOME"/>
     <GlAccountClassTypeMap glAccountClassTypeKey="OWNERS_EQUITY" glAccountClassId="OWNERS_EQUITY" glAccountTypeId="OWNERS_EQUITY" description="EQUITY"/>
     <GlAccountClassTypeMap glAccountClassTypeKey="RAWMAT_INVENTORY" glAccountClassId="INVENTORY_ASSET" glAccountTypeId="RAWMAT_INVENTORY" description="RAW MATERIALS"/>
