@@ -17,7 +17,7 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
   <table>
     <#if product?exists>
-        <@displayRow title=uiLabelMap.ProductProductName text="${product.internalName} (${product.productId})"/>
+        <@displayRow title=uiLabelMap.ProductProductName text="${product.internalName!} (${product.productId})"/>
         <@displayRow title=uiLabelMap.CommonStatus text=statusItem.description/>
         
         <#assign toProduceMap = opentapsProductionRun.getProductsToProduce()/>
