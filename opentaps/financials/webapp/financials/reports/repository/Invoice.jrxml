@@ -546,7 +546,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Invoice) $P{invoice}).getOpenAmount()]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-41" x="360" y="30" width="80" height="13"/>
+				<reportElement key="textField-41" x="350" y="30" width="90" height="13"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -559,7 +559,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAmountPaidCapital}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-42" x="360" y="43" width="80" height="13"/>
+				<reportElement key="textField-42" x="350" y="43" width="90" height="13"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -572,7 +572,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAmountOutstandingCapital}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-43" x="360" y="4" width="80" height="13"/>
+				<reportElement key="textField-43" x="350" y="4" width="90" height="13"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -618,7 +618,7 @@
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/InvoiceAdjustments.jrxml")]]></subreportExpression>
 			</subreport>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-44" x="360" y="17" width="80" height="13"/>
+				<reportElement key="textField-44" x="350" y="17" width="90" height="13"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
