@@ -54,7 +54,7 @@ Make sure you call parseReportOptions.bsh so that this form can work.
   <@dateRangeInputRow byDateChecked=byDateChecked! defaultFromDate=defaultFromDate defaultThruDate=defaultThruDate/>
 
   <#if customTimePeriods?has_content>
-    <@timePeriodInputRow customTimePeriods=customTimePeriods defaultTimePeriodId=customTimePeriodId! />
+    <@timePeriodInputRow customTimePeriods=customTimePeriods defaultTimePeriodId=customTimePeriodId! byTimePeriodChecked=byTimePeriodChecked!/>
   </#if>
 
   <#if reportRequiresGlFiscalType?default(true) && glFiscalTypes?has_content>
