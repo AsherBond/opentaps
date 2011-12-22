@@ -51,6 +51,7 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
@@ -2998,6 +2999,7 @@ public final class LedgerServices {
      */
     @SuppressWarnings("unchecked")
     public static Map closeTimePeriod(DispatchContext dctx, Map context) {
+        int timeout = 6000;
         Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -3029,7 +3031,7 @@ public final class LedgerServices {
             trialBalanceService.setInOrganizationPartyId(organizationPartyId);
             trialBalanceService.setInUserLogin(userLogin);
             trialBalanceService.setInGlFiscalTypeId(GlFiscalTypeConstants.ACTUAL);  // make sure only ACTUAL transactions show up
-            trialBalanceService.runSyncNoNewTransaction(infrastructure);
+            trialBalanceService.runSync(infrastructure);
 
             // debit REVENUE, credit EXPENSE accounts, and put the net into the retained earnings account
             Map<GenericValue, BigDecimal> accountBalancesToDebit = new HashMap();                           // in case revenue account balances are null
@@ -3048,6 +3050,8 @@ public final class LedgerServices {
             Set<GenericValue> debitAccounts = accountBalancesToDebit.keySet();
             Set<GenericValue> creditAccounts = accountBalancesToCredit.keySet();
             List<GenericValue> closingEntries = new ArrayList();
+
+            TransactionUtil.begin(timeout);
 
             // create a Debit transaction entry for each debit account item
             for (GenericValue debitAccount : debitAccounts) {
@@ -3188,6 +3192,8 @@ public final class LedgerServices {
             if (!UtilFinancial.areAllTrialBalancesEqual(organizationPartyId, delegator, decimals, RoundingMode.valueOf(rounding))) {
                 return ServiceUtil.returnError("Cannot close time period [" + timePeriod.getString("customTimePeriodId") + "] : resulting trial balances are not equal");
             }
+
+            TransactionUtil.commit();
 
             return ServiceUtil.returnSuccess();
 

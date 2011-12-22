@@ -277,7 +277,7 @@ under the License.
 
     <!-- ====== Services for closing out accounting time periods ====== -->
     <service name="closeTimePeriod" engine="java"
-        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="closeTimePeriod">
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="closeTimePeriod" use-transaction="false">
         <description>
             Closes a particular time period for an organization.  Generally, use closeAllTimePeriods.
         </description>
