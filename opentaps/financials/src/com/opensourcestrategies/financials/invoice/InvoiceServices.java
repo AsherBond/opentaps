@@ -796,7 +796,7 @@ public final class InvoiceServices {
 
                 // Ignore invoiceRecurrences with future next recurrences
                 Timestamp nextRecurrenceDate = new Timestamp(recurrenceInfo.next(UtilValidate.isEmpty(lastRecurrenceDate) ? now.getTime() : lastRecurrenceDate.getTime()));
-                if (UtilDateTime.getDayStart(nextRecurrenceDate, timeZone, locale).after(now)) {
+                if (nextRecurrenceDate.after(now)) {
                     UtilMessage.logServiceInfo("FinancialsServiceErrorRunInvoiceRecurrenceIgnoreFutureNextRecurrence", locale, MODULE);
                     continue;
                 }
