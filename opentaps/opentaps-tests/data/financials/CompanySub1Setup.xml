@@ -62,4 +62,7 @@
     <CustomTimePeriod customTimePeriodId="TEST003" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2009-01-01" thruDate="2010-01-01" isClosed="N" periodNum="2009" periodName="Fiscal Year"/>
     <CustomTimePeriod customTimePeriodId="TEST004" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2010-01-01" thruDate="2011-01-01" isClosed="N" periodNum="2010" periodName="Fiscal Year"/>
     <CustomTimePeriod customTimePeriodId="TEST005" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2011-01-01" thruDate="2012-01-01" isClosed="N" periodNum="2011" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="TEST006" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2012-01-01" thruDate="2013-01-01" isClosed="N" periodNum="2012" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="TEST007" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2013-01-01" thruDate="2014-01-01" isClosed="N" periodNum="2013" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="TEST008" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2014-01-01" thruDate="2015-01-01" isClosed="N" periodNum="2014" periodName="Fiscal Year"/>
 </entity-engine-xml>
