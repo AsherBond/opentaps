@@ -27,9 +27,9 @@
 
     <!-- Flat Grey - Old OFBiz Standard Floating Layout -->
     <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/opentaps_js/jscalendar-1.0/calendar-system.css" sequenceId="99"/>
-    <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar.j" sequenceId="97"/>
+    <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar.js" sequenceId="97"/>
     <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/lang/calendar-en.js" sequenceId="98"/>
-    <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="jscalendar-1.0/calendar-setup.js" sequenceId="99"/>
+    <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar-setup.js" sequenceId="99"/>
     <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
     <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/opentaps_images/favicon.ico" sequenceId="01"/>
 
