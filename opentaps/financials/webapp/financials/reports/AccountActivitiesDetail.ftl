@@ -64,7 +64,7 @@
         <#-- List possible tags -->
         <@accountingTagsInputRow tagTypes=tagTypes/>
         <@inputHidden          name="performFind" value="Y" />
-        <@inputSubmitRow       title=uiLabelMap.CommonFind />
+        <@inputSubmitRow       title=uiLabelMap.CommonFind onClick="" />
       </table>
     </form>
   </@flexArea>
