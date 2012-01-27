@@ -32,6 +32,12 @@
         </tr>
     </#if>
 </#macro>
+<#macro tagTypeDescriptionRow index>
+    <#if tagTypes?has_content && index &lt; tagTypes.size()>
+        <#assign tag = tagTypes.get(index)/>
+        <@inputHidden name="tagTypeDescription${index+1}" value=tag.description />
+    </#if>
+</#macro>
 
 <#if useQueryBuilder?has_content && useQueryBuilder == true>
 
@@ -87,6 +93,26 @@
                     <@tagRow index=8 />
                 <#elseif param.name == "tag10">
                     <@tagRow index=9 />
+                <#elseif param.name == "tagTypeDescription1"> <#-- accounting tags decription handling -->
+                    <@tagTypeDescriptionRow index=0 />
+                <#elseif param.name == "tagTypeDescription2">
+                    <@tagTypeDescriptionRow index=1 />
+                <#elseif param.name == "tagTypeDescription3">
+                    <@tagTypeDescriptionRow index=2 />
+                <#elseif param.name == "tagTypeDescription4">
+                    <@tagTypeDescriptionRow index=3 />
+                <#elseif param.name == "tagTypeDescription5">
+                    <@tagTypeDescriptionRow index=4 />
+                <#elseif param.name == "tagTypeDescription6">
+                    <@tagTypeDescriptionRow index=5 />
+                <#elseif param.name == "tagTypeDescription7">
+                    <@tagRow index=6 />
+                <#elseif TypeDescriptionparam.name == "tagTypeDescription8">
+                    <@tagTypeDescriptionRow index=7 />
+                <#elseif param.name == "tagTypeDescription9">
+                    <@tagTypeDescriptionRow index=8 />
+                <#elseif param.name == "tagTypeDescription10">
+                    <@tagTypeDescriptionRow index=9 />
                 <#else>
                     <#-- Default case, simple text input --> 
                     <@inputTextRow title="${uiLabelMap.get(param.name)}" name="${param.name}" default=context.get("${param.name}")?default(parameters.get("${param.name}"))?if_exists/>
