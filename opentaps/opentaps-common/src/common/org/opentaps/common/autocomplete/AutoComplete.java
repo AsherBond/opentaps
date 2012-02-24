@@ -324,7 +324,7 @@ public final class AutoComplete {
         List<GenericValue> products = null;
 
         try {
-           
+
             products = getProductSelection(keyword, false, delegator);
 
         } catch (GenericEntityException e) {
