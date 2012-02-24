@@ -43,8 +43,13 @@ under the License.
         <#assign javaScriptsSet = Static["org.ofbiz.base.util.UtilMisc"].toSet(layoutSettings.javaScripts)/>
         <#list layoutSettings.javaScripts as javaScript>
             <#if javaScriptsSet.contains(javaScript)>
-                <#assign nothing = javaScriptsSet.remove(javaScript)/>
+              <#assign nothing = javaScriptsSet.remove(javaScript)/>
+              <#if javaScript?matches(".*dojo.*")>
+                <#-- Unfortunately, due to Dojo's module-loading behaviour, it must be served locally -->
+                <script src="${StringUtil.wrapString(javaScript)}" type="text/javascript" djConfig="isDebug: false, parseOnLoad: true <#if Static["org.ofbiz.base.util.UtilHttp"].getLocale(request)?exists>, locale: '${Static["org.ofbiz.base.util.UtilHttp"].getLocale(request).getLanguage()}'</#if>"></script>
+              <#else>
                 <script src="<@ofbizContentUrl>${StringUtil.wrapString(javaScript)}</@ofbizContentUrl>" type="text/javascript"></script>
+              </#if>
             </#if>
         </#list>
     </#if>
