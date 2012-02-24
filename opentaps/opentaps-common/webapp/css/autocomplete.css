@@ -1,0 +1,32 @@
+/**
+ * Extract of the opentaps.css for integration autocompleters in ofbiz applications.
+ */
+fieldset.inputAutoCompleteQuick input.XdijitInputField {
+    background:white none repeat scroll 0%;
+    border:1px solid #999999;
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-size:8pt;
+    font-weight:normal;
+    padding:1px;
+}
+.dijitComboBoxNoArrow {
+    border:1px solid yellow;
+}
+.dijitComboBoxInput {
+    border:1px solid #999999;
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-size:8pt;
+    font-weight:normal;
+    padding:0pt;
+}
+.dijitComboBoxInput input {
+    background: #FFFFFF url("/opentaps_images/text-bg.gif") repeat-x scroll 0 0;
+}
+.dijitMenuItem {
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-size:8pt;
+    font-weight:normal;
+    text-decoration:none;
+    padding:0.1em 0.2em;
+    white-space:nowrap;
+}
