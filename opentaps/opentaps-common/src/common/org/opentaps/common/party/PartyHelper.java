@@ -143,6 +143,15 @@ public final class PartyHelper {
             return false;
         }
 
+        // check the party / role from
+        GenericValue roleFrom = delegator.findByPrimaryKey("PartyRole", UtilMisc.toMap("partyId", partyIdFrom, "roleTypeId", roleTypeIdFrom));
+        if (roleFrom == null) {
+            Map<String, Object> createPartyRoleResult = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", partyIdFrom, "roleTypeId", roleTypeIdFrom, "userLogin", userLogin));
+            if (ServiceUtil.isError(createPartyRoleResult)) {
+                return false;
+            }
+        } 
+
         /*
          * if expireExistingRelationships is true, then find all existing PartyRelationships with partyIdFrom and partyRelationshipTypeId which
          * are not expired on the fromDate and then expire them
