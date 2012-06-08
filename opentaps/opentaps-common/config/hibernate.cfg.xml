@@ -231,6 +231,7 @@
   <mapping class="org.opentaps.base.entities.CustomMethod"/>
   <mapping class="org.opentaps.base.entities.AmazonProductImageAndAck"/>
   <mapping class="org.opentaps.base.entities.FacilityPartyPermissionDetail"/>
+  <mapping class="org.opentaps.base.entities.AcctgTransEntryExport"/>
   <mapping class="org.opentaps.base.entities.WorkEffortGoodStandardType"/>
   <mapping class="org.opentaps.base.entities.PlatformType"/>
   <mapping class="org.opentaps.base.entities.WebAnalyticsType"/>
@@ -1078,6 +1079,7 @@
   <mapping class="org.opentaps.base.entities.ContentMetaData"/>
   <mapping class="org.opentaps.base.entities.ExampleFeatureApplAndTypeDesired"/>
   <mapping class="org.opentaps.base.entities.PartyTaxAuthInfo"/>
+  <mapping class="org.opentaps.base.entities.GlAccountsForExport"/>
   <mapping class="org.opentaps.base.entities.OrderPurchasePaymentSummary"/>
   <mapping class="org.opentaps.base.entities.SurveyResponseAnswer"/>
   <mapping class="org.opentaps.base.entities.EncumbranceDetail"/>
@@ -1100,6 +1102,7 @@
   <mapping class="org.opentaps.base.entities.AgreementItemAttribute"/>
   <mapping class="org.opentaps.base.entities.ExampleFeatureApplType"/>
   <mapping class="org.opentaps.base.entities.ProductPromoCodeEmailParty"/>
+  <mapping class="org.opentaps.base.entities.AcctgTransExportBatch"/>
   <mapping class="org.opentaps.base.entities.GlAccountGroupMember"/>
   <mapping class="org.opentaps.base.entities.CommunicationEventWorkEff"/>
   <mapping class="org.opentaps.base.entities.ProjectAndPhaseAndTask"/>
@@ -1159,6 +1162,7 @@
   <mapping class="org.opentaps.base.entities.PartyInvitation"/>
   <mapping class="org.opentaps.base.entities.FacilityTeamRoleSecurity"/>
   <mapping class="org.opentaps.base.entities.ProductFeatureApplAttr"/>
+  <mapping class="org.opentaps.base.entities.GlAccountsToQuickbooks"/>
   <mapping class="org.opentaps.base.entities.PhysicalInventoryAndVariance"/>
   <mapping class="org.opentaps.base.entities.WorkEffortFindView"/>
   <mapping class="org.opentaps.base.entities.ProductPaymentMethodType"/>
