@@ -452,14 +452,14 @@ public class OrderItem extends org.opentaps.base.entities.OrderItem {
 
     /**
      * Gets the number of shipped items in the given ship group.
-     * @param shipGroup the ship group
+     * @param shipGroupSeqId the ship group id
      * @return  the number of shipped items
      * @throws RepositoryException if an error occurs
      */
-    public BigDecimal getShippedQuantity(OrderItemShipGroup shipGroup) throws RepositoryException {
+    public BigDecimal getShippedQuantity(String shipGroupSeqId) throws RepositoryException {
         BigDecimal qty = BigDecimal.ZERO;
         for (ItemIssuance issue : getItemIssuances()) {
-            if (shipGroup.getShipGroupSeqId().equals(issue.getShipGroupSeqId())) {
+            if (shipGroupSeqId.equals(issue.getShipGroupSeqId())) {
                 BigDecimal issueQty = issue.getQuantity();
                 if (issueQty != null) {
                     qty = qty.add(issueQty);
@@ -467,6 +467,16 @@ public class OrderItem extends org.opentaps.base.entities.OrderItem {
             }
         }
         return qty;
+    }
+
+    /**
+     * Gets the number of shipped items in the given ship group.
+     * @param shipGroup the ship group
+     * @return  the number of shipped items
+     * @throws RepositoryException if an error occurs
+     */
+    public BigDecimal getShippedQuantity(OrderItemShipGroup shipGroup) throws RepositoryException {
+        return getShippedQuantity(shipGroup.getShipGroupSeqId());
     }
 
     /**

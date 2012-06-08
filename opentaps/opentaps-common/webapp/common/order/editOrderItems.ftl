@@ -239,10 +239,10 @@ under the License.
                 <#assign shipGroupQty = shipGroupAssoc.quantity - shipGroupAssoc.cancelQuantity?default(0) />
                 <#if shipGroupQty gt 0>
                   <tr>
-                    <td align="right" colspan="2">
+                    <td align="right" valign="top" colspan="2">
                       <div class="tabletext" style="font-size: xx-small;"><b><i>${uiLabelMap.OrderShipGroup}</i>:</b> [${shipGroup.shipGroupSeqId}] ${shipGroupAddress.address1?default("${uiLabelMap.OrderNotShipped}")}</div>
                     </td>
-                    <td align="center">
+                    <td align="center" valign="top">
                       <div class="tabletext" style="font-size: xx-small;">
                         <#if item.isCompleted()>
                           ${shipGroupQty}
@@ -250,6 +250,11 @@ under the License.
                           <input type="text" class="inputBox" name="iqm_${shipGroupAssoc.orderItemSeqId}:${shipGroupAssoc.shipGroupSeqId}" size="6" value="${shipGroupQty}"/>
                         </#if>
                       </div>
+                      <#if item.shippedQuantity gt 0>
+                        <div class="tabletext" style="font-size: xx-small;">
+                          Shipped: ${item.shippedQuantity!}
+                        </div>
+                      </#if>
                     </td>
                     <td colspan="3">&nbsp;</td>
                     <td align="right" valign="top" nowrap="nowrap">

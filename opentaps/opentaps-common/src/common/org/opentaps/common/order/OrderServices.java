@@ -771,21 +771,33 @@ public final class OrderServices {
         Iterator i = itemQtyMap.keySet().iterator();
         while (i.hasNext()) {
             String key = (String) i.next();
-            String quantityStr = (String) itemQtyMap.get(key);
-            double groupQty = 0.0;
+            String[] itemInfo = key.split(":");
+            String itemId = itemInfo[0];
+            String shipGroupSeqId = itemInfo[1];
+            OrderItem item = null;
+            BigDecimal shipped = BigDecimal.ZERO;
             try {
-                groupQty = Double.parseDouble(quantityStr);
-            } catch (NumberFormatException e) {
-                Debug.logError(e, MODULE);
-                return ServiceUtil.returnError(e.getMessage());
+                item = orderRepository.getOrderItem(order, itemId);
+                shipped = item.getShippedQuantity(shipGroupSeqId);
+            } catch (Exception e) {
+                return UtilMessage.createAndLogServiceError(e, MODULE);
             }
 
-            if (groupQty == 0) {
+            String quantityStr = (String) itemQtyMap.get(key);
+            BigDecimal groupQty = BigDecimal.ZERO;
+            try {
+                groupQty = new BigDecimal(quantityStr);
+            } catch (NumberFormatException e) {
+                return UtilMessage.createAndLogServiceError(e, MODULE);
+            }
+
+            if (groupQty.signum() == 0) {
                 cancelItems.add(key);
+            } else if (groupQty.compareTo(shipped) < 0) {
+                // if we change the item quantity to less than what was already shipped, throw an error
+                return UtilMessage.createAndLogServiceError("Cannot change quantity to " + groupQty.stripTrailingZeros().toPlainString() + " for Order Item in ship group [" + shipGroupSeqId + "] as its quantity already shipped is : " + shipped.stripTrailingZeros().toPlainString(), MODULE);
             } else {
                 filteredItemQtyMap.put(key, quantityStr);
-                String[] itemInfo = key.split(":");
-                String itemId = itemInfo[0];
                 if (itemPriceMap.get(itemId) != null) {
                     filteredItemPriceMap.put(itemId, (String) itemPriceMap.get(itemId));
                 }
@@ -847,7 +859,7 @@ public final class OrderServices {
                     try {
                         dispatcher.runSync("cancelOrderItem", callCtx);
                     } catch (GenericServiceException e) {
-                        return ServiceUtil.returnError(e.getMessage());
+                        return UtilMessage.createAndLogServiceError(e, MODULE);
                     }
                 }
             } else {
@@ -858,7 +870,7 @@ public final class OrderServices {
                 try {
                     dispatcher.runSync("cancelOrderItem", callCtx);
                 } catch (GenericServiceException e) {
-                    return ServiceUtil.returnError(e.getMessage());
+                    return UtilMessage.createAndLogServiceError(e, MODULE);
                 }
             }
         }
@@ -882,7 +894,7 @@ public final class OrderServices {
             try {
                 results = dispatcher.runSync(serviceName, callCtx);
             } catch (GenericServiceException e) {
-                return ServiceUtil.returnError(e.getMessage());
+                return UtilMessage.createAndLogServiceError(e, MODULE);
             }
             if (ServiceUtil.isError(results) || ServiceUtil.isFailure(results)) {
                 return results;
@@ -890,7 +902,7 @@ public final class OrderServices {
 
             // check if all the order items are now completed
             try {
-            	i = filteredItemQtyMap.keySet().iterator();
+                i = filteredItemQtyMap.keySet().iterator();
                 while (i.hasNext()) {
                     // the filteredItemQtyMap key is orderItemSeqId:shipGroupSeqId or 00001:00001
                     String key = (String) i.next();
@@ -899,18 +911,16 @@ public final class OrderServices {
                     OrderItem item = orderRepository.getOrderItem(order, orderItemSeqId);
                     Debug.logVerbose("item [" + item.getOrderId() + "/" + item.getOrderItemSeqId() + "] remaining to ship [" + item.getRemainingToShipQuantity() + "]", MODULE);
                     if (item.getRemainingToShipQuantity().signum() == 0) {
-                    	Map tmpResults = dispatcher.runSync("changeOrderItemStatus", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId, "fromStatusId", item.getStatusId(), "statusId", "ITEM_COMPLETED", "userLogin", userLogin), -1, false);
-                    	if (ServiceUtil.isError(tmpResults) || ServiceUtil.isFailure(tmpResults)) {
+                        Map tmpResults = dispatcher.runSync("changeOrderItemStatus", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId, "fromStatusId", item.getStatusId(), "statusId", "ITEM_COMPLETED", "userLogin", userLogin), -1, false);
+                        if (ServiceUtil.isError(tmpResults) || ServiceUtil.isFailure(tmpResults)) {
                             return tmpResults;
                         }
-                    } 
-                    
+                    }
                 }
-                
             } catch (Exception e) {
-            	return ServiceUtil.returnError(e.getMessage());
+                return UtilMessage.createAndLogServiceError(e, MODULE);
             }
-            
+
             // manually updates the accounting tags since the ofbiz service does not support them
             try {
                 for (String itemId : filteredTagsMap.keySet()) {
@@ -932,7 +942,7 @@ public final class OrderServices {
                     }
                 }
             } catch (GeneralException e) {
-                return ServiceUtil.returnError(e.getMessage());
+                return UtilMessage.createAndLogServiceError(e, MODULE);
             }
         } else {
             results = ServiceUtil.returnSuccess();
