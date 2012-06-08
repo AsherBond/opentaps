@@ -142,7 +142,11 @@ under the License.
                       <#elseif item.type?exists>
                         ${item.type.description}
                       </#if>
-                      <input class="inputBox" type="text" size="50" name="idm_${item.orderItemSeqId}" value="${item.itemDescription?if_exists}"/>
+                      <#if item.isCompleted()>
+                        ${item.itemDescription?if_exists}
+                      <#else>
+                        <input class="inputBox" type="text" size="50" name="idm_${item.orderItemSeqId}" value="${item.itemDescription?if_exists}"/>
+                      </#if>
                     </#if>
                   </div>
                 </td>
@@ -155,8 +159,13 @@ under the License.
                 <#-- Unit Price -->
                 <td align="right" valign="top" nowrap="nowrap">
                   <div class="tabletext">
+                    <div class="tabletext"><@ofbizCurrency amount=item.subTotal isoCode=order.currencyUom/></div>
+                  <#if item.isCompleted()>
+                    <div class="tabletext"><@ofbizCurrency amount=item.unitPrice isoCode=order.currencyUom/></div>
+                  <#else>
                     <input class="inputBox" type="text" size="8" name="ipm_${item.orderItemSeqId}" value="<@ofbizAmount amount=item.unitPrice/>"/>
                     &nbsp;<input type="checkbox" name="opm_${item.orderItemSeqId}" value="Y"/>
+                  </#if>
                   </div>
                 </td>
 
@@ -234,7 +243,13 @@ under the License.
                       <div class="tabletext" style="font-size: xx-small;"><b><i>${uiLabelMap.OrderShipGroup}</i>:</b> [${shipGroup.shipGroupSeqId}] ${shipGroupAddress.address1?default("${uiLabelMap.OrderNotShipped}")}</div>
                     </td>
                     <td align="center">
-                      <div class="tabletext" style="font-size: xx-small;"><input type="text" class="inputBox" name="iqm_${shipGroupAssoc.orderItemSeqId}:${shipGroupAssoc.shipGroupSeqId}" size="6" value="${shipGroupQty}"/></div>
+                      <div class="tabletext" style="font-size: xx-small;">
+                        <#if item.isCompleted()>
+                          ${shipGroupQty}
+                        <#else>
+                          <input type="text" class="inputBox" name="iqm_${shipGroupAssoc.orderItemSeqId}:${shipGroupAssoc.shipGroupSeqId}" size="6" value="${shipGroupQty}"/>
+                        </#if>
+                      </div>
                     </td>
                     <td colspan="3">&nbsp;</td>
                     <td align="right" valign="top" nowrap="nowrap">
